@@ -417,7 +417,7 @@
     "loadingProgress": "Loading progress...",
     "noLevel": "No level set yet.",
     "completeAssessment": "Take assessment",
-    "allCaughtUp": "All caught up.",
+    "allCaughtUp": "Your plan, at your pace",
     "startWithAssessment": "Start with an assessment.",
     "takeAssessmentArrow": "Take Assessment →",
     "goToMyPlan": "My Plan →",
@@ -427,9 +427,10 @@
     "pendingLessons": "pending lessons",
     "nextStep": "Next step",
     "assessmentCreatesPlan": "The assessment finds your level and creates a personalised plan for your active language.",
-    "lessonReady": "Lesson ready",
+    "lessonReady": "Your next step, at your pace",
     "pendingStillAvailable": "You have {count} previous lessons waiting in your plan.",
-    "noPendingToday": "You have completed today's lessons. You can review your plan or practise another activity.",
+    "noPendingToday": "Check your plan to see how to continue.",
+    "planDayGoal": "Goal for this day of your plan",
     "lessonsCompleted": "Lessons",
     "accuracy": "Accuracy",
     "exerciseStats": "{correct}/{total} exercises",
@@ -574,6 +575,7 @@
     "startAssessment": "Take assessment first",
     "week": "Week",
     "currentLesson": "Current Lesson",
+    "currentUnit": "Current unit",
     "startLesson": "Start Lesson",
     "completed": "Completed",
     "generating": "Generating lesson...",
@@ -613,6 +615,7 @@
     "levelTestResult": "Level Test Result",
     "testScore": "Score:",
     "pendingLessons": "Pending lessons",
+    "pendingReassurance": "You can pick them up again whenever it suits you.",
     "resume": "Resume",
     "lessonsHeader": "Lessons · {count}",
     "reviewLesson": "Review",
@@ -643,7 +646,8 @@
     "vocabulary": "Vocabulary",
     "label": "Lesson",
     "submitAnswer": "Submit Answer",
-    "lessonDone": "Lesson Done",
+    "lessonDone": "Good work. Lesson completed.",
+    "exerciseSummary": "Exercises assessed: {completed} of {total}",
     "score": "Score",
     "showNativeExplanation": "Show in",
     "hint": "Hint",
@@ -666,7 +670,7 @@
     "exitConfirmTitle": "Exit lesson?",
     "exitConfirmMessage": "Your progress on this lesson will be lost.",
     "dayComplete": "Day complete!",
-    "dayCompleteMsg": "All today's lessons are done."
+    "dayCompleteMsg": "You have completed this day of your plan. Continue whenever it suits you."
   },
   "flashcards": {
     "title": "Flashcards",
@@ -1449,6 +1453,10 @@
     "version": "v1.8.50",
     "cta": "Got it",
     "entry1": {
+      "label": "Learning, a little easier",
+      "desc": "It's now easier to see your progress, find your next step and pick up where you left off in your lessons. We've also improved readability and light and dark modes, while keeping the design you already know."
+    },
+    "entry2": {
       "label": "A smoother experience",
       "desc": "Bug fixes and small improvements make FreeLingo more reliable and enjoyable to use."
     }

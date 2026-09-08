@@ -348,7 +348,7 @@ From the today response it reads:
 - `progress_day` / `total_days` → renders a plan-progress block, percentage, days remaining, progress bar, and a "Day X of Y" label (`dayProgress` i18n key).  
   The label shows `Math.min(progress_day + 1, total_days)` as the current day number (1-based display of a 0-indexed value).
 - `pending_count` → shows contextual pending copy in the next-step card and a "N pending lessons →" button linking to `/plan` when > 0.
-- `lessons` → chooses the first incomplete lesson as the next step, renders today's lesson cards with "Start" buttons, and shows an "N/M done" daily completion counter.
+- `lessons` → chooses the first incomplete lesson with an available ID as the next step and renders the current plan day's lesson cards with "Start" buttons. The existing "N/M done" counter appears beside the next-step action, not again in the lesson-list heading, and is hidden when there is no plan or no lesson slots. Its label explicitly refers to the current plan day rather than a calendar-day quota.
 
 The **"Skip today"** button is shown when `lessons.length > 0`. It calls `POST /api/study-plan/skip-day` then refreshes the page data.
 
@@ -364,11 +364,15 @@ The plan page combines the scheduled slots from `generated_plan` with persisted 
 
 The unit drawer shows **Start** for the current lesson, **Resume** for a generated lesson left pending after a skipped day, **Review** for a completed lesson, and no action for a future slot that has not been generated. All actions open the existing lesson route by ID. The drawer reuses the plan overview's solid primary action style, includes a localized lesson-count heading, gives lesson rows slightly more vertical space, and keeps its close action visible while scrolling.
 
+The active curriculum unit has an explicit localized **Current unit** label; the final level-test pseudo-unit does not receive it. Pending lessons remain fully available below the unit list and before the level-test banner, with neutral styling, brief reassurance, and the same Resume navigation. Unit selection, prerequisites, completion thresholds, and unlocking rules are unchanged.
+
 ### Lesson player (`frontend/src/app/(app)/lesson/[id]/page.tsx`)
 
 On mount, stores the current `progress_day` (fetched from `GET /today`) in `progressDayAtStart`.
 
 After `POST /lessons/{id}/complete` succeeds, calls `GET /today` again. If the returned `progress_day > progressDayAtStart`, it means the auto-advance fired — the day is complete. A **"Day complete"** banner is shown to the user.
+
+The successful-completion panel includes the lesson title and, when exercises exist, the assessed/total count derived from non-null exercise scores, including zero scores. Its primary action opens My Plan; returning to Dashboard remains a secondary link. Supportive completion copy refers to the completed plan day without promising another day or additional rewards. These presentation changes add no requests and do not alter completion or review-prompt conditions.
 
 When `GET /lessons/{id}` returns `is_completed=true`, the player enters review mode: saved answers, scores, feedback, explanations, vocabulary, and navigation remain visible, but answering and regeneration controls are disabled, quota UI is hidden, and the final action returns to My Plan without calling the completion endpoint.
 
@@ -386,7 +390,7 @@ The completion button is guarded by both an immediate in-memory lock and a disab
 
 - LLM unavailable during lesson generation — Lesson slot returns `id: null`; dashboard shows the slot but without a "Start" link. Retry on next `/today` call.
 - Concurrent `/today` requests for the same user — `IntegrityError` on the unique `(plan_id, week, day, title)` constraint → rollback → re-fetch the existing row.
-- `progress_day >= total_days` — `/today` returns empty `lessons` array. Dashboard shows "all caught up" message.
+- `progress_day >= total_days` — `/today` returns an empty `lessons` array. Dashboard shows neutral plan-navigation copy, also suitable when no next lesson ID is available; it does not infer completion solely from the absence of a next lesson.
 - Skip past the last day — `progress_day` is capped at `total_days`.
 - Plan with no generated lessons for the current day — Auto-advance does **not** fire. The loop stops when `lessons_by_wday.get((week, day), [])` returns `[]`.
 - Lesson with no exercises returned by LLM — Rolled back and excluded from today response.

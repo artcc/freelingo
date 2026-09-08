@@ -417,7 +417,7 @@
     "loadingProgress": "Chargement des progrès...",
     "noLevel": "Aucun niveau défini pour l'instant.",
     "completeAssessment": "Faire l'évaluation",
-    "allCaughtUp": "Tout à jour.",
+    "allCaughtUp": "Votre plan, à votre rythme",
     "startWithAssessment": "Commencez par une évaluation.",
     "takeAssessmentArrow": "Passer l'évaluation →",
     "goToMyPlan": "Mon plan →",
@@ -427,9 +427,10 @@
     "pendingLessons": "leçons en attente",
     "nextStep": "Prochaine étape",
     "assessmentCreatesPlan": "L'évaluation détermine votre niveau et crée un plan personnalisé pour votre langue active.",
-    "lessonReady": "Leçon prête",
+    "lessonReady": "Votre prochaine étape, à votre rythme",
     "pendingStillAvailable": "Vous avez {count} anciennes leçons en attente dans votre plan.",
-    "noPendingToday": "Vous avez terminé les leçons du jour. Vous pouvez revoir votre plan ou pratiquer une autre activité.",
+    "noPendingToday": "Consultez votre plan pour voir comment poursuivre.",
+    "planDayGoal": "Objectif de cette journée du plan",
     "lessonsCompleted": "Leçons",
     "accuracy": "Précision",
     "exerciseStats": "{correct}/{total} exercices",
@@ -574,6 +575,7 @@
     "startAssessment": "Faites d'abord l'évaluation",
     "week": "Semaine",
     "currentLesson": "Leçon actuelle",
+    "currentUnit": "Unité actuelle",
     "startLesson": "Commencer la leçon",
     "completed": "Terminé",
     "generating": "Génération de la leçon...",
@@ -613,6 +615,7 @@
     "levelTestResult": "Résultat du test de niveau",
     "testScore": "Score :",
     "pendingLessons": "Leçons en attente",
+    "pendingReassurance": "Vous pouvez les reprendre quand cela vous convient.",
     "resume": "Reprendre",
     "lessonsHeader": "Leçons · {count}",
     "reviewLesson": "Revoir",
@@ -643,7 +646,8 @@
     "vocabulary": "Vocabulaire",
     "label": "Leçon",
     "submitAnswer": "Soumettre la réponse",
-    "lessonDone": "Leçon terminée",
+    "lessonDone": "Beau travail. Leçon terminée.",
+    "exerciseSummary": "Exercices évalués : {completed} sur {total}",
     "score": "Score",
     "showNativeExplanation": "Voir en",
     "hint": "Indice",
@@ -666,7 +670,7 @@
     "exitConfirmTitle": "Quitter la leçon ?",
     "exitConfirmMessage": "Votre progression sur cette leçon sera perdue.",
     "dayComplete": "Journée terminée !",
-    "dayCompleteMsg": "Toutes les leçons d'aujourd'hui sont terminées."
+    "dayCompleteMsg": "Vous avez terminé cette journée du plan. Poursuivez quand cela vous convient."
   },
   "flashcards": {
     "title": "Fiches",
@@ -1449,6 +1453,10 @@
     "version": "v1.8.50",
     "cta": "Compris",
     "entry1": {
+      "label": "Apprendre, un peu plus facilement",
+      "desc": "Il est désormais plus facile de suivre tes progrès, de trouver la prochaine étape et de reprendre tes leçons. Nous avons aussi amélioré la lisibilité et les modes clair et sombre, tout en conservant le design que tu connais déjà."
+    },
+    "entry2": {
       "label": "Une expérience plus fluide",
       "desc": "Des corrections de bugs et de petites améliorations rendent FreeLingo plus fiable et agréable à utiliser."
     }

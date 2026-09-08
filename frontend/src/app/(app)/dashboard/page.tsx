@@ -271,9 +271,22 @@ export default function DashboardPage() {
 
         {/* Next step */}
         <div className="border-fl-border bg-fl-surface mb-8 border p-5">
-          <p className="text-fl-label text-fl-muted-2 mb-3 font-mono tracking-widest uppercase">
-            {t('nextStep')}
-          </p>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+              {t('nextStep')}
+            </p>
+            {hasPlan && todayLessons.length > 0 && (
+              <div className="text-fl-caption font-mono">
+                <p className="text-fl-muted-1">{t('planDayGoal')}</p>
+                <p className="text-fl-fg mt-1">
+                  {t('completedToday', {
+                    completed: completedLessonCount,
+                    total: todayLessons.length,
+                  })}
+                </p>
+              </div>
+            )}
+          </div>
           {!hasPlan ? (
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -458,14 +471,6 @@ export default function DashboardPage() {
                   {t('today')}
                 </span>
               </div>
-              {todayLessons.length > 0 && (
-                <span className="text-fl-hint text-fl-muted-3 font-mono tracking-widest">
-                  {t('completedToday', {
-                    completed: completedLessonCount,
-                    total: todayLessons.length,
-                  })}
-                </span>
-              )}
             </div>
 
             {todayLessons.length > 0 ? (

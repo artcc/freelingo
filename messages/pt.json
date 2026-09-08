@@ -417,7 +417,7 @@
     "loadingProgress": "Carregando progresso...",
     "noLevel": "Nenhum nível definido ainda.",
     "completeAssessment": "Fazer avaliação",
-    "allCaughtUp": "Em dia.",
+    "allCaughtUp": "Seu plano, no seu ritmo",
     "startWithAssessment": "Comece com uma avaliação.",
     "takeAssessmentArrow": "Fazer avaliação →",
     "goToMyPlan": "Meu plano →",
@@ -427,9 +427,10 @@
     "pendingLessons": "lições pendentes",
     "nextStep": "Próximo passo",
     "assessmentCreatesPlan": "A avaliação identifica seu nível e cria um plano personalizado para o idioma ativo.",
-    "lessonReady": "Lição pronta",
+    "lessonReady": "Seu próximo passo, no seu ritmo",
     "pendingStillAvailable": "Você tem {count} lições anteriores pendentes no seu plano.",
-    "noPendingToday": "Você concluiu as lições de hoje. Pode revisar seu plano ou praticar outra atividade.",
+    "noPendingToday": "Consulte seu plano para ver como continuar.",
+    "planDayGoal": "Objetivo deste dia do plano",
     "lessonsCompleted": "Lições",
     "accuracy": "Precisão",
     "exerciseStats": "{correct}/{total} exercícios",
@@ -574,6 +575,7 @@
     "startAssessment": "Faça a avaliação primeiro",
     "week": "Semana",
     "currentLesson": "Aula atual",
+    "currentUnit": "Unidade atual",
     "startLesson": "Iniciar aula",
     "completed": "Concluído",
     "generating": "Gerando aula...",
@@ -613,6 +615,7 @@
     "levelTestResult": "Resultado do teste de nível",
     "testScore": "Pontuação:",
     "pendingLessons": "Lições pendentes",
+    "pendingReassurance": "Você pode retomá-las quando for conveniente.",
     "resume": "Retomar",
     "lessonsHeader": "Aulas · {count}",
     "reviewLesson": "Rever",
@@ -643,7 +646,8 @@
     "vocabulary": "Vocabulário",
     "label": "Lição",
     "submitAnswer": "Enviar resposta",
-    "lessonDone": "Lição concluída",
+    "lessonDone": "Bom trabalho. Lição concluída.",
+    "exerciseSummary": "Exercícios avaliados: {completed} de {total}",
     "score": "Pontuação",
     "showNativeExplanation": "Ver em",
     "hint": "Pista",
@@ -666,7 +670,7 @@
     "exitConfirmTitle": "Sair da lição?",
     "exitConfirmMessage": "O seu progresso nesta lição será perdido.",
     "dayComplete": "Dia concluído!",
-    "dayCompleteMsg": "Todas as lições de hoje estão concluídas."
+    "dayCompleteMsg": "Você concluiu este dia do plano. Continue quando for conveniente."
   },
   "flashcards": {
     "title": "Cartões",
@@ -1449,6 +1453,10 @@
     "version": "v1.8.50",
     "cta": "Entendido",
     "entry1": {
+      "label": "Aprender, um pouco mais fácil",
+      "desc": "Agora é mais fácil ver o teu progresso, encontrar o próximo passo e retomar as tuas lições. Também melhorámos a legibilidade e os modos claro e escuro, mantendo o design que já conheces."
+    },
+    "entry2": {
       "label": "Uma experiência mais fluida",
       "desc": "Correções de erros e pequenas melhorias tornam o FreeLingo mais fiável e agradável de utilizar."
     }

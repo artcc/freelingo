@@ -302,40 +302,6 @@ export default function PlanPage() {
         </div>
       </div>
 
-      {/* ── Pending lessons ── */}
-      {pendingLessons.length > 0 && (
-        <div className="border-fl-accent/30 bg-fl-surface border">
-          <div className="border-fl-accent/20 flex items-center gap-2 border-b px-6 py-4">
-            <span className="text-fl-label text-fl-accent">●</span>
-            <span className="text-fl-label text-fl-accent font-mono tracking-widest uppercase">
-              {pendingLessons.length} {t('pendingLessons')}
-            </span>
-          </div>
-          <div className="divide-fl-border divide-y">
-            {pendingLessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="flex items-center justify-between px-6 py-3"
-              >
-                <div>
-                  <p className="text-fl-fg font-mono text-xs">{lesson.title}</p>
-                  <p className="text-fl-hint text-fl-muted-3 mt-0.5 font-mono tracking-widest uppercase">
-                    W{lesson.week_number} D{lesson.day_number} ·{' '}
-                    {lesson.lesson_type}
-                  </p>
-                </div>
-                <button
-                  onClick={() => router.push(`/lesson/${lesson.id}`)}
-                  className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-3 py-1 font-mono tracking-widest uppercase transition-colors"
-                >
-                  {t('resume')}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* ── Unit list ── */}
       <div className="space-y-2">
         {units.length === 0 && (
@@ -415,6 +381,45 @@ export default function PlanPage() {
           />
         )}
       </div>
+
+      {/* ── Pending lessons ── */}
+      {pendingLessons.length > 0 && (
+        <div className="border-fl-border bg-fl-surface border">
+          <div className="border-fl-border space-y-2 border-b px-6 py-4">
+            <div className="flex items-center gap-2">
+              <span className="text-fl-label text-fl-muted-3">●</span>
+              <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+                {pendingLessons.length} {t('pendingLessons')}
+              </span>
+            </div>
+            <p className="text-fl-caption text-fl-muted-1 font-mono">
+              {t('pendingReassurance')}
+            </p>
+          </div>
+          <div className="divide-fl-border divide-y">
+            {pendingLessons.map((lesson) => (
+              <div
+                key={lesson.id}
+                className="flex flex-wrap items-center justify-between gap-3 px-6 py-3"
+              >
+                <div>
+                  <p className="text-fl-fg font-mono text-xs">{lesson.title}</p>
+                  <p className="text-fl-hint text-fl-muted-3 mt-0.5 font-mono tracking-widest uppercase">
+                    W{lesson.week_number} D{lesson.day_number} ·{' '}
+                    {lesson.lesson_type}
+                  </p>
+                </div>
+                <button
+                  onClick={() => router.push(`/lesson/${lesson.id}`)}
+                  className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-3 py-1 font-mono tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {t('resume')}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Level test banner ── */}
       {allUnitsCompleted && !plan.completion_test_taken && (

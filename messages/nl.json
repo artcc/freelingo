@@ -417,7 +417,7 @@
     "loadingProgress": "Voortgang laden...",
     "noLevel": "Nog geen niveau ingesteld.",
     "completeAssessment": "Neem beoordeling",
-    "allCaughtUp": "Alles bijgewerkt.",
+    "allCaughtUp": "Jouw plan, op jouw tempo",
     "startWithAssessment": "Begin met een beoordeling.",
     "takeAssessmentArrow": "Beoordeling nemen →",
     "goToMyPlan": "Mijn plan →",
@@ -427,9 +427,10 @@
     "pendingLessons": "lopende lessen",
     "nextStep": "Volgende stap",
     "assessmentCreatesPlan": "De beoordeling bepaalt je niveau en maakt een persoonlijk plan voor je actieve taal.",
-    "lessonReady": "Les klaar",
+    "lessonReady": "Jouw volgende stap, op jouw tempo",
     "pendingStillAvailable": "Je hebt {count} eerdere lessen openstaan in je plan.",
-    "noPendingToday": "Je hebt de lessen van vandaag afgerond. Je kunt je plan bekijken of een andere activiteit oefenen.",
+    "noPendingToday": "Bekijk je plan om te zien hoe je verder kunt.",
+    "planDayGoal": "Doel voor deze dag van je plan",
     "lessonsCompleted": "Lessen",
     "accuracy": "Nauwkeurigheid",
     "exerciseStats": "{correct}/{total} oefeningen",
@@ -574,6 +575,7 @@
     "startAssessment": "Neem eerst een beoordeling",
     "week": "Week",
     "currentLesson": "Huidige les",
+    "currentUnit": "Huidige eenheid",
     "startLesson": "Les starten",
     "completed": "Voltooid",
     "generating": "Les genereren...",
@@ -613,6 +615,7 @@
     "levelTestResult": "Niveautestresultaat",
     "testScore": "Score:",
     "pendingLessons": "Openstaande lessen",
+    "pendingReassurance": "Je kunt ze hervatten wanneer het jou uitkomt.",
     "resume": "Hervatten",
     "lessonsHeader": "Lessen · {count}",
     "reviewLesson": "Bekijken",
@@ -643,7 +646,8 @@
     "vocabulary": "Woordenschat",
     "label": "Les",
     "submitAnswer": "Antwoord versturen",
-    "lessonDone": "Les voltooid",
+    "lessonDone": "Goed gedaan. Les voltooid.",
+    "exerciseSummary": "Beoordeelde oefeningen: {completed} van {total}",
     "score": "Score",
     "showNativeExplanation": "Toon in",
     "hint": "Hint",
@@ -666,7 +670,7 @@
     "exitConfirmTitle": "Les afsluiten?",
     "exitConfirmMessage": "Je voortgang in deze les gaat verloren.",
     "dayComplete": "Dag voltooid!",
-    "dayCompleteMsg": "Alle lessen van vandaag zijn klaar."
+    "dayCompleteMsg": "Je hebt deze dag van je plan afgerond. Ga verder wanneer het jou uitkomt."
   },
   "flashcards": {
     "title": "Flashcards",
@@ -1449,6 +1453,10 @@
     "version": "v1.8.50",
     "cta": "Begrepen",
     "entry1": {
+      "label": "Leren, een beetje makkelijker",
+      "desc": "Je kunt nu makkelijker je voortgang bekijken, je volgende stap vinden en verdergaan met je lessen. We hebben ook de leesbaarheid en de lichte en donkere modus verbeterd, met behoud van het vertrouwde ontwerp."
+    },
+    "entry2": {
       "label": "Een soepelere ervaring",
       "desc": "Bugfixes en kleine verbeteringen maken FreeLingo betrouwbaarder en prettiger in gebruik."
     }

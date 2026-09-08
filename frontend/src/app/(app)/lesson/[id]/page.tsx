@@ -460,13 +460,25 @@ export default function LessonPage() {
     return (
       <>
         <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 p-6">
-          <div className="border-fl-border bg-fl-surface border px-10 py-10 text-center">
+          <div className="border-fl-border bg-fl-surface w-full max-w-xl border px-6 py-10 text-center sm:px-10">
             <p className="text-fl-label text-fl-muted-2 mb-4 font-mono tracking-widest uppercase">
               ● {tCommon('complete')}
             </p>
             <p className="text-fl-fg font-mono text-xl font-bold tracking-widest">
               {t('lessonDone')}
             </p>
+            <p className="text-fl-muted-1 mt-3 font-mono text-sm">
+              {lesson?.title}
+            </p>
+            {exercises.length > 0 && (
+              <p className="text-fl-caption text-fl-muted-1 mt-4 font-mono">
+                {t('exerciseSummary', {
+                  completed: exercises.filter((item) => item.score != null)
+                    .length,
+                  total: exercises.length,
+                })}
+              </p>
+            )}
             {dayComplete && (
               <div className="border-fl-accent/30 bg-fl-accent/5 mt-6 border px-6 py-4">
                 <p className="text-fl-accent font-mono text-sm font-bold tracking-widest">
@@ -477,12 +489,20 @@ export default function LessonPage() {
                 </p>
               </div>
             )}
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 mt-8 px-8 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
-            >
-              {tCommon('backToDashboard')}
-            </button>
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <Link
+                href="/plan"
+                className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-8 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {t('backToPlan')}
+              </Link>
+              <Link
+                href="/dashboard"
+                className="text-fl-muted-1 hover:text-fl-fg focus-visible:outline-fl-fg font-mono text-xs underline underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {tCommon('backToDashboard')}
+              </Link>
+            </div>
           </div>
         </div>
         <ReviewPrompt
