@@ -1136,7 +1136,7 @@
     "sessionEnded": "Sesiune încheiată",
     "tapToStart": "Vorbește când ești gata",
     "you": "Tu",
-    "assistant": "FreeLingo",
+    "assistant": "Lingu",
     "quotaSessions": "Sesiuni această săptămână",
     "quotaMinutes": "Minute azi",
     "quotaUnlimited": "Nelimitat",
@@ -1468,6 +1468,10 @@
       "desc": "Acum îți este mai ușor să îți urmărești progresul, să găsești următorul pas și să îți reiei lecțiile. Am îmbunătățit și lizibilitatea, precum și modurile luminos și întunecat, păstrând designul pe care îl cunoști deja."
     },
     "entry2": {
+      "label": "Conversații vocale mai stabile",
+      "desc": "Am îmbunătățit stabilitatea schimburilor de replici și revenirea după erori. De asemenea, am făcut starea conversației mai vizibilă și am redus animațiile din istoric, ca să te poți concentra pe conversația cu Lingu"
+    },
+    "entry3": {
       "label": "O experiență mai fluidă",
       "desc": "Remedierile de erori și micile îmbunătățiri fac FreeLingo mai stabil și mai plăcut de utilizat."
     }

@@ -284,6 +284,13 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `tour/` — `OnboardingTour` step-by-step walkthrough
 - `whats-new/` — Version-aware changelog overlay modal
 
+### Voice conversation presentation
+
+- `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
+- `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
+- Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
+- Within v1.8.50, What's New keeps the learning-experience highlight as `entry1`, adds voice stability and visual improvements as `entry2`, and preserves the former `entry2` unchanged as `entry3` in all ten locales. Dynamic entry rendering, the version constant, and modal dismissal behavior remain unchanged.
+
 ### App shell notifications
 
 - `frontend/src/app/(app)/layout.tsx` fetches `GET /api/feedback/unread-summary` after authenticated initialization and renders a fixed circular red badge on the Feedback navigation item in both desktop and mobile menus. The display is capped at `99+` and hidden at zero. The sidebar also shows a trial countdown badge when the user has an active freemium trial.

@@ -1136,7 +1136,7 @@
     "sessionEnded": "Sitzung beendet",
     "tapToStart": "Sprich wenn du bereit bist",
     "you": "Du",
-    "assistant": "FreeLingo",
+    "assistant": "Lingu",
     "quotaSessions": "Sitzungen diese Woche",
     "quotaMinutes": "Minuten heute",
     "quotaUnlimited": "Unbegrenzt",
@@ -1468,6 +1468,10 @@
       "desc": "Du kannst jetzt leichter deinen Fortschritt sehen, den nächsten Schritt finden und deine Lektionen fortsetzen. Außerdem haben wir die Lesbarkeit sowie den hellen und dunklen Modus verbessert. Das vertraute Design bleibt dabei erhalten."
     },
     "entry2": {
+      "label": "Stabilere Sprachgespräche",
+      "desc": "Wir haben die Stabilität der Gesprächsbeiträge und die Wiederherstellung nach Fehlern verbessert. Außerdem haben wir den Gesprächsstatus besser sichtbar gemacht und die Animationen im Verlauf reduziert, damit du dich auf das Sprechen mit Lingu konzentrieren kannst"
+    },
+    "entry3": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Fehlerbehebungen und kleine Verbesserungen machen FreeLingo zuverlässiger und angenehmer in der Nutzung."
     }

@@ -1136,7 +1136,7 @@
     "sessionEnded": "Sessie beëindigd",
     "tapToStart": "Spreek wanneer je klaar bent",
     "you": "Jij",
-    "assistant": "FreeLingo",
+    "assistant": "Lingu",
     "quotaSessions": "Sessies deze week",
     "quotaMinutes": "Minuten vandaag",
     "quotaUnlimited": "Onbeperkt",
@@ -1468,6 +1468,10 @@
       "desc": "Je kunt nu makkelijker je voortgang bekijken, je volgende stap vinden en verdergaan met je lessen. We hebben ook de leesbaarheid en de lichte en donkere modus verbeterd, met behoud van het vertrouwde ontwerp."
     },
     "entry2": {
+      "label": "Stabielere spraakgesprekken",
+      "desc": "We hebben de stabiliteit van de gespreksbeurten en het herstel na fouten verbeterd. Ook hebben we de gespreksstatus duidelijker zichtbaar gemaakt en de animaties in de geschiedenis verminderd, zodat je je kunt concentreren op het praten met Lingu"
+    },
+    "entry3": {
       "label": "Een soepelere ervaring",
       "desc": "Bugfixes en kleine verbeteringen maken FreeLingo betrouwbaarder en prettiger in gebruik."
     }

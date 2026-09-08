@@ -86,9 +86,14 @@ Automatic barge-in is disabled by default in the frontend (`ENABLE_CONVERSATION_
 
 Each turn (user speech and AI response) is rendered as a `TranscriptBubble` in a scrollable list. Shows:
 
-- Role label ("You" / "AI Tutor")
+- Role label (localized "You" / "Lingu" in all ten UI locales)
 - Spoken/preview text (streaming indicator while AI is generating)
 - Bubbles are color-coded: user (accent) / AI (muted background)
+- Idle avatar halos are static; only speaking halos animate. Local reduced-motion utilities disable halo animations, border/opacity transitions, and the streaming cursor pulse without changing global animation styles.
+
+### Status readability
+
+`StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing. Status precedence and pulse conditions are unchanged. These visual improvements and the transcript adjustments do not alter session lifecycle, turn handling, audio playback, or conversation flow.
 
 ### Session timeout UI
 

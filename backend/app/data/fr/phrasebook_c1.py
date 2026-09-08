@@ -10,19 +10,19 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
         icon="📝",
         phrases=[
             PhrasebookEntry(
-                text="Cette étude se propose d'examiner…",
+                text="Cette étude se propose d'examiner...",
                 context="Énoncer l'objectif d'un article académique",
                 register="formal",
                 unit_ref="c1-unit-1",
             ),
             PhrasebookEntry(
-                text="Il ressort de cette analyse que…",
+                text="Il ressort de cette analyse que...",
                 context="Présenter une conclusion tirée de l'analyse — il ressort que = il apparaît que",
                 register="formal",
                 unit_ref="c1-unit-1",
             ),
             PhrasebookEntry(
-                text="L'hypothèse selon laquelle… se trouve ainsi confirmée.",
+                text="L'hypothèse selon laquelle... se trouve ainsi confirmée.",
                 context="Confirmer une hypothèse dans un écrit académique",
                 register="formal",
                 unit_ref="c1-unit-1",
@@ -34,7 +34,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="c1-unit-1",
             ),
             PhrasebookEntry(
-                text="À la lumière de ces résultats, on peut avancer que…",
+                text="À la lumière de ces résultats, on peut avancer que...",
                 context="Tirer des conclusions à partir des résultats — à la lumière de = au regard de",
                 register="formal",
                 unit_ref="c1-unit-1",
@@ -64,7 +64,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="c1-unit-1",
             ),
             PhrasebookEntry(
-                text="Sans prétendre à l'exhaustivité, cet article aborde…",
+                text="Sans prétendre à l'exhaustivité, cet article aborde...",
                 context="Délimiter modestement le champ de l'article — « sans prétendre à l'exhaustivité »",
                 register="formal",
                 unit_ref="c1-unit-1",
@@ -126,25 +126,25 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="c1-unit-2",
             ),
             PhrasebookEntry(
-                text="Qu'on ne s'y méprenne pas : il ne s'agit nullement de…",
+                text="Qu'on ne s'y méprenne pas : il ne s'agit nullement de...",
                 context="Prévenir un malentendu — « qu'on ne s'y trompe pas : il ne s'agit pas de »",
                 register="formal",
                 unit_ref="c1-unit-2",
             ),
             PhrasebookEntry(
-                text="Je m'en voudrais de ne pas mentionner…",
+                text="Je m'en voudrais de ne pas mentionner...",
                 context="Introduire un point qu'on s'en voudrait d'omettre",
                 register="formal",
                 unit_ref="c1-unit-2",
             ),
             PhrasebookEntry(
-                text="Pour reprendre les termes de…",
+                text="Pour reprendre les termes de...",
                 context="Citer quelqu'un — « pour reprendre les mots de »",
                 register="formal",
                 unit_ref="c1-unit-2",
             ),
             PhrasebookEntry(
-                text="Au risque de me répéter, je soulignerai que…",
+                text="Au risque de me répéter, je soulignerai que...",
                 context="Insister sur un point — « au risque de me répéter »",
                 register="formal",
                 unit_ref="c1-unit-2",
@@ -168,7 +168,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="c1-unit-2",
             ),
             PhrasebookEntry(
-                text="Vous me pardonnerez ce raccourci, mais…",
+                text="Vous me pardonnerez ce raccourci, mais...",
                 context="Reconnaître qu'on simplifie pour l'effet rhétorique",
                 register="formal",
                 unit_ref="c1-unit-2",

@@ -844,7 +844,7 @@ Redensart vs Sprichwort: Redensart ist satzintegriert, Sprichwort ist vollständ
         level="C1",
         category="Orthographie",
         summary="Deutsche Orthotypographie – Anführungszeichen, ß/ss-Regeln, Kommaregeln.",
-        explanation="""Anführungszeichen: Deutsch „…" (99 unten, 66 oben), Schweiz «…» (Guillemets nach innen). Falsch: Englische "…".
+        explanation="""Anführungszeichen: Deutsch „..." (99 unten, 66 oben), Schweiz «...» (Guillemets nach innen). Falsch: Englische "...".
 ß vs ss: ß nach langem Vokal/Diphthong (Straße, heißen), ss nach kurzem Vokal (Kuss, Fluss, muss).
 Kommaregeln: Immer vor Nebensätzen, vor Infinitivgruppen mit zu, bei Aufzählungen, vor aber/sondern/jedoch/doch.
 Kein Apostroph bei Genitiv: Peters Auto (nicht: Peter's Auto). Apostroph nur bei Auslassungen: Wie geht's?""",

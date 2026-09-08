@@ -188,7 +188,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="c2-unit-3",
             ),
             PhrasebookEntry(
-                text="Si j'ai bien saisi l'essentiel de votre intervention…",
+                text="Si j'ai bien saisi l'essentiel de votre intervention...",
                 context="Résumer l'intervention d'un autre intervenant avant de répondre",
                 register="formal",
                 unit_ref="c2-unit-3",
@@ -254,7 +254,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="c2-unit-3",
             ),
             PhrasebookEntry(
-                text="Loin de moi l'idée d'imposer une solution, mais peut-être pourrions-nous explorer…",
+                text="Loin de moi l'idée d'imposer une solution, mais peut-être pourrions-nous explorer...",
                 context="Faire une suggestion humblement — « loin de moi l'idée d'imposer une solution »",
                 register="formal",
                 unit_ref="c2-unit-3",
