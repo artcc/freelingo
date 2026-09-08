@@ -173,6 +173,10 @@ frontend/
 - Dashboard plan, vocabulary, and skill bars, `UnitCard` progress, and lesson exercise progress use rectangular 4px tracks (`h-1`) with `h-full` fills. Width changes transition over 300ms using `transition-[width]`; `motion-reduce:transition-none` disables these transitions for reduced-motion preferences. Progress calculations and ordinary separators are unchanged.
 - Lesson, Reading, and Listening answer feedback uses theme-aware `fl-success` and `fl-error-fg` colors, including translucent borders and option/result backgrounds. `fl-success` is `#4ade80` in dark mode and `#15803d` in light mode. Incorrect comprehension answers remain struck through without reduced text opacity.
 - Unit metadata and exercise-page headers can wrap to accommodate narrow screens and longer localized labels.
+- The dashboard places the existing completed/total lesson counter beside the next-step action, labels it as the goal for the current plan day, and hides it when no plan or lesson slots are available. It is not a calendar-day target, and the lesson list does not duplicate the counter. When no next lesson is available, neutral copy invites users to consult their plan rather than assuming every slot is complete.
+- `UnitCard` labels the active curriculum unit explicitly, excluding the final level-test pseudo-unit. Pending lessons appear below the unit list with neutral styling and reassurance that they can be resumed later; all existing Resume actions remain available.
+- Successful lesson completion shows the lesson title and assessed/total exercise count when exercises exist, counting non-null scores including zero. My Plan is the primary next action and Dashboard remains secondary. Saved-lesson review, completion requests, rewards, and review-prompt triggers are unchanged.
+- Dashboard, lesson-completion, and pending-lesson copy uses concise, supportive wording in all ten UI locales without changing generated tutor feedback or technical errors.
 
 ### Public (auth) routes — `(auth)/`
 

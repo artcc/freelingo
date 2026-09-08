@@ -81,6 +81,7 @@ describe('UnitCard', () => {
   it('renders completed unit with checkmark icon', () => {
     renderUnitCard({ status: { completed: true }, competency: 1 })
     expect(screen.getByText('✓')).toBeInTheDocument()
+    expect(screen.queryByText('currentUnit')).not.toBeInTheDocument()
   })
 
   it('renders active unit with pulsing dot icon', () => {
@@ -88,6 +89,7 @@ describe('UnitCard', () => {
     const dot = screen.getByText('●')
     expect(dot).toBeInTheDocument()
     expect(dot.className).toContain('animate-pulse')
+    expect(screen.getByText('currentUnit')).toBeInTheDocument()
   })
 
   it('renders locked unit with empty circle icon and opacity', () => {
@@ -99,9 +101,10 @@ describe('UnitCard', () => {
   })
 
   it('renders level-test unit with special icon and badge', () => {
-    renderUnitCard({ status: { isLevelTest: true } })
+    renderUnitCard({ status: { isLevelTest: true, active: true } })
     expect(screen.getByText('⊞')).toBeInTheDocument()
     expect(screen.getByText('levelTestLabel')).toBeInTheDocument()
+    expect(screen.queryByText('currentUnit')).not.toBeInTheDocument()
   })
 
   it('renders default state (none of the flags) with hollow dot', () => {

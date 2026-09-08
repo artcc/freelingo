@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Learning interface readability**: selected dashboard metrics, unit titles and counts, exercise controls, and reading instructions now use larger, clearer text while preserving the monochrome design.
 - **Primary learning actions**: dashboard, unit-card, and exercise submission buttons now share a solid monochrome treatment with visible keyboard focus.
 - **Learning progress bars**: dashboard, unit-card, and lesson progress bars now use rectangular 4px tracks with width-only transitions that respect reduced-motion preferences.
+- **Plan-day guidance**: the dashboard now places the existing lesson completion counter beside the next step, explicitly identifies it as a plan-day goal, and uses neutral guidance when no next lesson is available.
+- **Lesson completion summary**: completed lessons now show their title and assessed exercise count, with My Plan as the primary next action and Dashboard still available without changing rewards or saved-lesson review.
+- **Study-plan orientation**: the active curriculum unit now has an explicit label, while pending lessons remain resumable below the unit list with quieter styling and supportive copy across all ten UI languages.
+- **What's New highlights**: v1.8.50 now opens with a localized summary of learning-experience improvements, preserving the previous first entry as the second entry.
 
 ### Fixed
 

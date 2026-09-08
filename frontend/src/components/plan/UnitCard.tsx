@@ -88,6 +88,11 @@ export default function UnitCard({
               </span>
             </div>
             <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+              {status.active && !status.isLevelTest && (
+                <span className="text-fl-hint text-fl-accent border-fl-accent/30 border px-1.5 py-0.5 font-mono tracking-widest uppercase">
+                  {t('currentUnit')}
+                </span>
+              )}
               <span className="text-fl-caption text-fl-muted-1 font-mono">
                 {t('nLessons', { count: lessonCount })}
               </span>
