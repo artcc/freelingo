@@ -16,7 +16,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b1-unit-1",
             ),
             PhrasebookEntry(
-                text="Personnellement, je pense que…",
+                text="Personnellement, je pense que...",
                 context="Exprimer son point de vue personnel",
                 register="neutral",
                 unit_ref="b1-unit-1",
@@ -52,7 +52,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b1-unit-1",
             ),
             PhrasebookEntry(
-                text="D'un côté… de l'autre côté…",
+                text="D'un côté... de l'autre côté...",
                 context="Présenter les deux aspects d'un argument",
                 register="neutral",
                 unit_ref="b1-unit-1",
@@ -88,7 +88,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b1-unit-1",
             ),
             PhrasebookEntry(
-                text="Honnêtement, je trouve que…",
+                text="Honnêtement, je trouve que...",
                 context="Introduire un avis franc — honnêtement = franchement",
                 register="neutral",
                 unit_ref="b1-unit-1",
@@ -414,7 +414,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b1-unit-2",
             ),
             PhrasebookEntry(
-                text="Je vois ce que tu veux dire, mais…",
+                text="Je vois ce que tu veux dire, mais...",
                 context="Reconnaître un argument avant d'exprimer un désaccord",
                 register="informal",
                 unit_ref="b1-unit-2",
@@ -444,7 +444,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b1-unit-2",
             ),
             PhrasebookEntry(
-                text="Si je peux me permettre…",
+                text="Si je peux me permettre...",
                 context="Introduire une opinion potentiellement audacieuse avec politesse",
                 register="formal",
                 unit_ref="b1-unit-2",
@@ -474,13 +474,13 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b1-unit-2",
             ),
             PhrasebookEntry(
-                text="Il me semble au contraire que…",
+                text="Il me semble au contraire que...",
                 context="Introduire une opinion contraire avec une formule de politesse",
                 register="formal",
                 unit_ref="b1-unit-2",
             ),
             PhrasebookEntry(
-                text="En résumé, je dirais que…",
+                text="En résumé, je dirais que...",
                 context="Résumer sa position à la fin d'un débat",
                 register="neutral",
                 unit_ref="b1-unit-2",

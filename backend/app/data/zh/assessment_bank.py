@@ -863,7 +863,7 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         id="zh-g-b2-001",
         skill="grammar",
         difficulty="B2",
-        question="哪一句正确使用从……来看？",
+        question="哪一句正确使用从......来看？",
         options=[
             "从长期来看，这个决定有积极意义。",
             "从长期，这个决定来看有积极意义。",

@@ -76,7 +76,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="a1-unit-1",
             ),
             PhrasebookEntry(
-                text="Je m'appelle…",
+                text="Je m'appelle...",
                 context="Se présenter en donnant son nom",
                 register="neutral",
                 unit_ref="a1-unit-1",
@@ -266,7 +266,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="a1-unit-1",
             ),
             PhrasebookEntry(
-                text="J'ai … ans.",
+                text="J'ai ... ans.",
                 context="Indiquer son âge — compléter avec le nombre",
                 register="neutral",
                 unit_ref="a1-unit-1",

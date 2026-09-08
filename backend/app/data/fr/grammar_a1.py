@@ -586,7 +586,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="negation-simple",
-        title="La négation simple : ne…pas",
+        title="La négation simple : ne...pas",
         level="A1",
         category="Phrase",
         summary="La structure de base de la négation en français.",
