@@ -19,8 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Plan-day guidance**: the dashboard now places the existing lesson completion counter beside the next step, explicitly identifies it as a plan-day goal, and uses neutral guidance when no next lesson is available.
 - **Lesson completion summary**: completed lessons now show their title and assessed exercise count, with My Plan as the primary next action and Dashboard still available without changing rewards or saved-lesson review.
 - **Study-plan orientation**: the active curriculum unit now has an explicit label, while pending lessons remain resumable below the unit list with quieter styling and supportive copy across all ten UI languages.
-- **What's New highlights**: v1.8.50 now opens with a localized summary of learning-experience improvements, preserving the previous first entry as the second entry.
+- **What's New highlights**: v1.8.50 opens with the unchanged localized summary of learning-experience improvements, followed by a new voice stability and visual-improvements highlight in all ten UI languages. The former second entry is preserved unchanged as the third entry, without changing the version or modal mechanism.
 - **Consistent learning indicators**: plan-unit and lesson states, dashboard completion marks, and lesson answer feedback now use Lucide icons with localized accessible state labels where needed. The active-unit pulse respects reduced-motion preferences, with existing state rules and actions preserved.
+- **Voice conversation visuals**: status labels use stronger contrast and weight with tighter tracking, idle avatar halos stay static, transcript motion respects reduced-motion preferences, and the tutor label reads Lingu in all ten UI languages.
 
 ### Fixed
 

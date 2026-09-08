@@ -39,7 +39,7 @@ UNIT_VOCABULARY_LIMIT = 40
 
 def _compact(value: Any, limit: int) -> str:
     text = " ".join(str(value or "").split())
-    return f"{text[: limit - 1].rstrip()}..." if len(text) > limit else text
+    return f"{text[: limit - 3].rstrip()}..." if len(text) > limit else text
 
 
 def _as_list(value: Any) -> list[Any]:

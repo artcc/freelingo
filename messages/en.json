@@ -1136,7 +1136,7 @@
     "sessionEnded": "Session ended",
     "tapToStart": "Speak when ready",
     "you": "You",
-    "assistant": "FreeLingo",
+    "assistant": "Lingu",
     "quotaSessions": "Sessions this week",
     "quotaMinutes": "Minutes today",
     "quotaUnlimited": "Unlimited",
@@ -1468,6 +1468,10 @@
       "desc": "It's now easier to see your progress, find your next step and pick up where you left off in your lessons. We've also improved readability and light and dark modes, while keeping the design you already know."
     },
     "entry2": {
+      "label": "More stable voice conversations",
+      "desc": "We've improved turn stability and recovery from errors. We've also made the conversation status more visible and reduced animations in the history so you can focus on talking with Lingu"
+    },
+    "entry3": {
       "label": "A smoother experience",
       "desc": "Bug fixes and small improvements make FreeLingo more reliable and enjoyable to use."
     }

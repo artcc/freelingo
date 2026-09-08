@@ -5,7 +5,9 @@
 > Canonical project version. Update this file when bumping.
 > Full history in [CHANGELOG.md](../CHANGELOG.md).
 
-The voice lifecycle reliability improvement is included in the existing 1.8.50 release under `Fixed`, without a version bump or changes to the sidebar, version badge, What's New, or locales. Its 13 frontend test cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 frontend files. These tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending.
+The voice lifecycle reliability improvement is included in the existing 1.8.50 release under `Fixed`, without a version bump or changes to the sidebar or version badge. Its 13 frontend test cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 frontend files. These tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending.
+
+The same 1.8.50 release includes clearer voice status labels, static idle transcript halos, local reduced-motion support, and the Lingu role label in all ten UI locales. What's New has now been revised across all ten locales: `entry1` remains intact, the new `entry2` covers voice stability, error recovery, and visual improvements, and the former `entry2` is preserved unchanged as `entry3`. `WhatsNew.tsx`, its version constant, and its dynamic rendering and dismissal mechanism remain unchanged, so this content revision does not reopen an already-dismissed v1.8.50 modal. No new validation was run for these visual and content changes.
 
 ## Sync rule
 

@@ -32,10 +32,10 @@ export default function TranscriptBubble({
       {/* Avatar */}
       <div className="relative mb-0.5 flex-shrink-0">
         <span
-          className={`pointer-events-none absolute inset-[-5px] rounded-full border-2 transition-[border-color,opacity] duration-700 ${
+          className={`pointer-events-none absolute inset-[-5px] rounded-full border-2 transition-[border-color,opacity] duration-700 motion-reduce:animate-none motion-reduce:transition-none ${
             speaking
               ? 'border-fl-accent/65 animate-halo-speaking'
-              : 'border-fl-accent/15 animate-halo-idle'
+              : 'border-fl-accent/15'
           }`}
         />
         <div className="border-fl-border h-7 w-7 overflow-hidden rounded-full border">
@@ -89,7 +89,7 @@ export default function TranscriptBubble({
         >
           {text}
           {streaming && (
-            <span className="ml-1 inline-block h-3 w-1 animate-pulse bg-current align-middle" />
+            <span className="ml-1 inline-block h-3 w-1 animate-pulse bg-current align-middle motion-reduce:animate-none" />
           )}
         </TargetLanguageText>
       </div>
