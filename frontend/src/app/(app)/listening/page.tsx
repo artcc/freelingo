@@ -477,8 +477,8 @@ function ListeningPage() {
                 key={q.index}
                 className={`border p-4 ${
                   isCorrect
-                    ? 'border-green-600/50 bg-green-950/30'
-                    : 'border-red-600/50 bg-red-950/30'
+                    ? 'border-fl-success/50 bg-fl-success/5'
+                    : 'border-fl-error-fg/50 bg-fl-error-fg/5'
                 }`}
               >
                 <TargetLanguageText
@@ -494,9 +494,9 @@ function ListeningPage() {
                       key={k}
                       className={`px-3 py-1.5 ${
                         k === correctKey
-                          ? 'font-bold text-green-400'
+                          ? 'text-fl-success font-bold'
                           : k === userAnswer && !isCorrect
-                            ? 'text-red-400 line-through opacity-70'
+                            ? 'text-fl-error-fg line-through'
                             : 'text-fl-muted-3'
                       }`}
                     >
@@ -571,7 +571,9 @@ function ListeningPage() {
         </div>
 
         {error && (
-          <p className="text-fl-label mb-4 font-mono text-red-500">{error}</p>
+          <p className="text-fl-caption text-fl-error-fg mb-4 font-mono">
+            {error}
+          </p>
         )}
 
         <FreemiumQuotaBanner feature="listening" className="mb-4" />
@@ -601,7 +603,7 @@ function ListeningPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-5 px-4 py-6 md:px-8">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-fl-fg font-mono text-sm font-bold tracking-widest uppercase">
             {t('title')}
@@ -700,14 +702,16 @@ function ListeningPage() {
 
           {/* Error */}
           {error && (
-            <p className="text-fl-label font-mono text-red-500">{error}</p>
+            <p className="text-fl-caption text-fl-error-fg font-mono">
+              {error}
+            </p>
           )}
 
           {/* Submit */}
           <button
             onClick={handleSubmit}
             disabled={!allAnswered || submitting}
-            className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 w-full border py-3 font-mono text-xs tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {submitting ? tCommon('checking') : t('submit')}
           </button>

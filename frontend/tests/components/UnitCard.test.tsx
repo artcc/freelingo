@@ -141,7 +141,7 @@ describe('UnitCard', () => {
   it('renders progress bar for non-locked units', () => {
     const { container } = renderUnitCard({ competency: 0.42 })
     expect(screen.getByText('42%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-px') as HTMLElement
+    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar).toBeInTheDocument()
     expect(bar.style.width).toBe('42%')
   })
@@ -149,7 +149,7 @@ describe('UnitCard', () => {
   it('renders 0% progress bar when competency is 0', () => {
     const { container } = renderUnitCard({ competency: 0 })
     expect(screen.getByText('0%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-px') as HTMLElement
+    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar.style.width).toBe('0%')
   })
 
@@ -159,13 +159,13 @@ describe('UnitCard', () => {
       status: { completed: true },
     })
     expect(screen.getByText('100%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-px') as HTMLElement
+    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar.style.width).toBe('100%')
   })
 
   it('does not render progress bar for locked units', () => {
     const { container } = renderUnitCard({ status: { locked: true } })
-    expect(container.querySelector('.bg-fl-fg.h-px')).toBeNull()
+    expect(container.querySelector('.bg-fl-fg.h-full')).toBeNull()
     expect(screen.queryByText(/%$/)).toBeNull()
   })
 

@@ -164,6 +164,15 @@ frontend/
 
 - Public surfaces use `bg-dot-grid` over `bg-fl-bg`: the `/` landing page, `(auth)` routes, and `(legal)` routes.
 - The authenticated `(app)` shell uses a solid `bg-fl-bg` without `bg-dot-grid`. Its route-level loading fallback and session-initialization loading state follow the same solid treatment so hydration and authentication do not flash a different background pattern.
+- The root `body` uses `bg-background text-foreground` so its base colors follow the semantic theme tokens rather than fixed Zinc utilities.
+
+### Learning interface styling
+
+- Selected dashboard metrics, unit titles/counts/percentages, lesson exercise counters and regeneration controls, and Reading word-selection instructions use the existing 12px `text-fl-caption` token with stronger local text colors; global font-size tokens and target-language typography remain unchanged.
+- Dashboard next-step and highlighted lesson actions, the `UnitCard` Start action, and lesson/Reading/Listening submission buttons use solid monochrome `bg-fl-fg text-fl-bg` styling with `hover:bg-fl-fg/90` and visible keyboard-focus outlines. Existing submission and disabled-state conditions are unchanged.
+- Dashboard plan, vocabulary, and skill bars, `UnitCard` progress, and lesson exercise progress use rectangular 4px tracks (`h-1`) with `h-full` fills. Width changes transition over 300ms using `transition-[width]`; `motion-reduce:transition-none` disables these transitions for reduced-motion preferences. Progress calculations and ordinary separators are unchanged.
+- Lesson, Reading, and Listening answer feedback uses theme-aware `fl-success` and `fl-error-fg` colors, including translucent borders and option/result backgrounds. `fl-success` is `#4ade80` in dark mode and `#15803d` in light mode. Incorrect comprehension answers remain struck through without reduced text opacity.
+- Unit metadata and exercise-page headers can wrap to accommodate narrow screens and longer localized labels.
 
 ### Public (auth) routes — `(auth)/`
 
@@ -272,6 +281,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 ### Shared/generic components
 
 - **`ThemeProvider.tsx`** — Dark/light/system theme via the persisted Zustand `theme` store. The root `src/app/layout.tsx` also injects a small head script that reads `localStorage.fl-theme` and `prefers-color-scheme` before first paint, applying `html[data-theme='light']` when needed so light-system users do not see a dark initial flash on public or authenticated pages.
+- **Theme utilities** — Dark is the default when `html` does not have `data-theme='light'`; the Tailwind `dark:` variant targets that same condition and its descendants instead of requiring a separate `.dark` class. Theme persistence and the pre-paint script retain their existing behavior.
 - **`TargetLanguageSelector.tsx`** — Language picker dropdown with flags. It renders entries from `TARGET_LANGUAGE_CATALOG` after filtering by `availableCodes` when that operator-provided list is present.
 - **`TargetLanguageText.tsx`** — Reusable wrapper for content in the learner's target language. It applies `lang`, language-aware typography classes from `target-languages.ts`, and optional secondary reading/translation lines for future romanisation/pinyin support.
 - **`LanguageSwitcher.tsx`** — UI locale switcher

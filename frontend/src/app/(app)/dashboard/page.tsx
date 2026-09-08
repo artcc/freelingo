@@ -285,7 +285,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href="/assessment">
-                <button className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+                <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                   {t('takeAssessmentArrow')}
                 </button>
               </Link>
@@ -305,7 +305,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href={`/lesson/${nextLesson.id}`}>
-                <button className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+                <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                   {t('startLesson')}
                 </button>
               </Link>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href="/plan">
-                <button className="text-fl-label text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+                <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                   {t('goToMyPlan')}
                 </button>
               </Link>
@@ -356,7 +356,7 @@ export default function DashboardPage() {
             },
           ].map((stat) => (
             <div key={stat.label} className="bg-fl-surface px-5 py-5">
-              <p className="text-fl-hint text-fl-muted-2 mb-2 font-mono tracking-widest uppercase">
+              <p className="text-fl-caption text-fl-muted-1 mb-2 font-mono tracking-widest uppercase">
                 {stat.label}
               </p>
               <p
@@ -365,7 +365,7 @@ export default function DashboardPage() {
                 {stat.value}
               </p>
               {'detail' in stat && stat.detail && (
-                <p className="text-fl-hint text-fl-muted-3 mt-2 font-mono tracking-widest uppercase">
+                <p className="text-fl-caption text-fl-muted-1 mt-2 font-mono">
                   {stat.detail}
                 </p>
               )}
@@ -384,16 +384,16 @@ export default function DashboardPage() {
                 </span>
               </div>
               {hasPlan && totalDays > 0 && (
-                <span className="text-fl-hint text-fl-muted-3 font-mono tracking-widest">
+                <span className="text-fl-caption text-fl-muted-1 shrink-0 font-mono tracking-widest">
                   {planCompletion}%
                 </span>
               )}
             </div>
             {hasPlan && totalDays > 0 ? (
               <>
-                <div className="bg-fl-border mb-4 h-px w-full">
+                <div className="bg-fl-border mb-4 h-1 w-full">
                   <div
-                    className="bg-fl-accent h-px transition-all duration-500"
+                    className="bg-fl-accent h-full transition-[width] duration-300 motion-reduce:transition-none"
                     style={{ width: `${planCompletion}%` }}
                   />
                 </div>
@@ -427,15 +427,15 @@ export default function DashboardPage() {
                         {vocabularyProgressPct}%
                       </p>
                     </div>
-                    <p className="text-fl-hint text-fl-muted-3 mt-2 font-mono tracking-widest uppercase">
+                    <p className="text-fl-caption text-fl-muted-1 mt-2 font-mono">
                       {t('vocabularyWords', {
                         mastered: vocabularyMastered,
                         total: vocabularyTotal,
                       })}
                     </p>
-                    <div className="bg-fl-border mt-2 h-px w-full">
+                    <div className="bg-fl-border mt-2 h-1 w-full">
                       <div
-                        className="bg-fl-accent h-px transition-all duration-500"
+                        className="bg-fl-accent h-full transition-[width] duration-300 motion-reduce:transition-none"
                         style={{ width: `${vocabularyProgressPct}%` }}
                       />
                     </div>
@@ -502,9 +502,9 @@ export default function DashboardPage() {
                         ) : lesson.id ? (
                           <Link href={`/lesson/${lesson.id}`}>
                             <button
-                              className={`text-fl-label px-3 py-1 font-mono tracking-widest uppercase transition-colors ${
+                              className={`text-fl-caption focus-visible:outline-fl-fg px-3 py-1 font-mono tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
                                 isNext
-                                  ? 'text-fl-bg bg-fl-fg hover:bg-fl-accent/90'
+                                  ? 'text-fl-bg bg-fl-fg hover:bg-fl-fg/90 font-bold'
                                   : 'text-fl-fg border-fl-border hover:border-fl-border-2 border'
                               }`}
                             >
@@ -538,7 +538,7 @@ export default function DashboardPage() {
                 </p>
                 {!hasPlan && (
                   <Link href="/assessment">
-                    <button className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+                    <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                       {t('takeAssessmentArrow')}
                     </button>
                   </Link>
@@ -577,9 +577,9 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </div>
-                    <div className="bg-fl-border h-px w-full">
+                    <div className="bg-fl-border h-1 w-full">
                       <div
-                        className="bg-fl-accent h-px"
+                        className="bg-fl-accent h-full transition-[width] duration-300 motion-reduce:transition-none"
                         style={{ width: `${value * 100}%` }}
                       />
                     </div>

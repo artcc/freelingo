@@ -58,7 +58,7 @@ export default function UnitCard({
       <button
         onClick={onClick}
         disabled={status.locked}
-        className={`group w-full text-left ${
+        className={`group focus-visible:outline-fl-fg w-full text-left focus-visible:outline-2 focus-visible:outline-offset-2 ${
           status.locked
             ? 'cursor-default'
             : status.active
@@ -78,21 +78,21 @@ export default function UnitCard({
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span
-                className={`text-fl-label truncate font-mono ${
+                className={`text-fl-caption truncate font-mono ${
                   status.locked
                     ? 'text-fl-muted-3'
-                    : 'text-fl-muted-1 group-hover:text-fl-fg'
+                    : 'text-fl-fg-2 group-hover:text-fl-fg'
                 }`}
               >
                 {title}
               </span>
             </div>
-            <div className="mt-1 flex items-center gap-3">
-              <span className="text-fl-hint text-fl-muted-3 font-mono">
+            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="text-fl-caption text-fl-muted-1 font-mono">
                 {t('nLessons', { count: lessonCount })}
               </span>
               {grammarCount > 0 && (
-                <span className="text-fl-hint text-fl-muted-3 font-mono">
+                <span className="text-fl-caption text-fl-muted-1 font-mono">
                   {t('nGrammar', { count: grammarCount })}
                 </span>
               )}
@@ -104,7 +104,7 @@ export default function UnitCard({
             </div>
           </div>
           {!status.locked && (
-            <span className="text-fl-hint text-fl-muted-3 shrink-0 font-mono">
+            <span className="text-fl-caption text-fl-muted-1 shrink-0 font-mono">
               {barWidth}%
             </span>
           )}
@@ -112,9 +112,9 @@ export default function UnitCard({
 
         {/* Progress bar */}
         {!status.locked && (
-          <div className="bg-fl-border h-px">
+          <div className="bg-fl-border h-1">
             <div
-              className="bg-fl-fg h-px transition-all duration-500"
+              className="bg-fl-fg h-full transition-[width] duration-300 motion-reduce:transition-none"
               style={{ width: `${barWidth}%` }}
             />
           </div>
@@ -126,7 +126,7 @@ export default function UnitCard({
         <div className="border-fl-fg/30 flex justify-end border-t px-4 py-2.5">
           <button
             onClick={onStartLesson}
-            className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 px-4 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+            className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             {tCommon('start')} →
           </button>
