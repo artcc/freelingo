@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Voice session reliability**: microphone permission and VAD startup now finish before warmup. Denied permissions can be retried, session cleanup releases microphone and audio resources, stale callbacks cannot affect restarted sessions, pending turns block duplicate speech submissions, recoverable speech-service errors keep the session open, and VAD misfires reset the speaking indicator.
 - **Localized landing prices**: monthly and yearly prices now display the currency symbol once, preserving its locale-specific position before or after the amount.
 - **Theme consistency**: dark-mode utilities now follow the existing theme attribute, and the root page background and text use semantic theme colors.
 - **Exercise feedback contrast**: lesson, Reading, and Listening success and error feedback now use theme-aware colors, with incorrect comprehension answers retaining their strikethrough without reduced text opacity.

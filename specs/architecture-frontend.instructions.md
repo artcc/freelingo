@@ -118,7 +118,7 @@ frontend/
 │   │
 │   └── middleware.ts            # Auth guard (redirect to /login) + locale detection
 │
-├── tests/                       # Vitest suite (49 test files, 481 tests; coverage not configured)
+├── tests/                       # Vitest suite (50 files, 494 passed; includes 13 ConversationMode cases)
 │   ├── setup.ts                 # Global mocks: localStorage, next/navigation, next-intl
 │   ├── middleware.test.ts
 │   ├── components/
@@ -383,6 +383,10 @@ Word selection is disabled on the active assistant placeholder while a response 
 ```
 User opens /conversation → load VAD WASM models
     ↓
+User starts → create AudioContext → acquire microphone permission/stream → await vad.start()
+    ↓
+POST /api/conversation/warmup (only after permission and VAD startup succeed)
+    ↓
 WebSocket connects: new WebSocket(`/ws/conversation`)
     ↓
 Client sends first JSON auth frame with access token, voice preference, target language, and optional chat context
@@ -396,9 +400,15 @@ Receive MP3 binary frames via WS → AudioQueue schedules playback in order
 AudioQueue drains → clear assistant speaking state from playback `onIdle`
 ```
 
-`ConversationMode` guards the session lifecycle with a per-start attempt id. If microphone startup fails, the user stops the session, or the component unmounts while the warmup request is still pending, the pending attempt is invalidated so it cannot open a stale WebSocket afterwards.
+`ConversationMode` owns the microphone stream and supplies it through VAD `getStream`/`resumeStream`. Permission is requested outside VAD so denial does not permanently error the installed VAD instance and can be retried. VAD start/pause operations are serialized; streams granted after cancellation or unmount are stopped immediately without starting VAD or opening a socket.
 
-The voice UI does not clear `assistantSpeaking` from `turn_complete` or `status=listening`; it waits for the audio queue idle callback so the visible speaking state follows actual playback. A separate assistant-turn guard ignores VAD detections while the tutor is generating or sending chunked audio, so automatic frontend barge-in remains disabled for stable turn completion while the backend `barge_in` protocol stays available.
+Idempotent `finalizeSession` invalidates the start attempt, detaches and closes the socket, stops microphone tracks, queues VAD pause, cancels playback, and closes the AudioContext even during unmount or transport exceptions. State updates are limited to mounted components. WebSocket callbacks and delayed Blob audio handling check both attempt and socket identity; playback idle callbacks check the attempt so obsolete work cannot affect a restarted session.
+
+The pending-turn guard is set synchronously before WAV encoding/sending and on `status=transcribing` or `thinking`, blocking further speech before the backend acknowledges the turn. `turn_complete` and `status=listening` release that guard but do not clear `assistantSpeaking`; normal playback clears it only when the audio queue drains. Automatic frontend barge-in remains disabled.
+
+Recoverable `stt_failed`, `llm_failed`, and `tts_failed` messages release the turn guard, cancel playback, clear assistant speaking/streaming state, and keep the session live with a visible error. The next successful WAV send clears that error. Other server errors and transport/startup failures finalize the session. `onVADMisfire` clears the speech-start timestamp and user-speaking indicator, discarding the unfinished segment.
+
+`tests/components/ConversationMode.test.tsx` has 13 lifecycle cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 files. These tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending.
 
 ## Tests
 
