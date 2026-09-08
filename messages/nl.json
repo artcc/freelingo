@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Zo helpt Lingu je",
+      "exampleLabel": "Voorbeeld van een Engelse oefening",
+      "questionLabel": "Lingu · Vraag",
+      "answerLabel": "Jij · Antwoord",
+      "correctionLabel": "Lingu · Correctie",
+      "explanation": "Als je over gisteren praat, gebruik je 'went', de verleden tijd van 'go'."
+    },
     "hero": "Leer talen met een echte gesprekspartner via spraak",
     "heroSub": "Praat. Luister. Verbeter.",
     "signIn": "Inloggen",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Eenheid vergrendeld",
+    "unitAvailable": "Eenheid beschikbaar",
+    "lessonPending": "Openstaande les",
     "title": "Mijn plan",
     "subtitle": "Studieplan",
     "noPlan": "Geen actief studieplan gevonden.",

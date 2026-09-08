@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "É assim que o Lingu te ajuda",
+      "exampleLabel": "Exemplo de prática em inglês",
+      "questionLabel": "Lingu · Pergunta",
+      "answerLabel": "Tu · Resposta",
+      "correctionLabel": "Lingu · Correção",
+      "explanation": "Para falar de ontem, usa «went», o passado de «go»."
+    },
     "hero": "Aprenda idiomas com um parceiro de conversa por voz real",
     "heroSub": "Fale. Ouça. Melhore.",
     "signIn": "Entrar",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Unidade bloqueada",
+    "unitAvailable": "Unidade disponível",
+    "lessonPending": "Lição pendente",
     "title": "Meu plano",
     "subtitle": "Plano de estudos",
     "noPlan": "Nenhum plano de estudos ativo encontrado.",

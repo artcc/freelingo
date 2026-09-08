@@ -5,6 +5,8 @@
 > Canonical project version. Update this file when bumping.
 > Full history in [CHANGELOG.md](../CHANGELOG.md).
 
+The voice lifecycle reliability improvement is included in the existing 1.8.50 release under `Fixed`, without a version bump or changes to the sidebar, version badge, What's New, or locales. Its 13 frontend test cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 frontend files. These tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending.
+
 ## Sync rule
 
 When bumping the version, update these locations in sync:

@@ -1,5 +1,5 @@
 ---
-description: "Testing strategy for FreeLingo: backend pytest suite (45 test files, 1019 tests, 85.56% last measured coverage, with SQLite in-memory DB and Redis mocking), frontend Vitest suite (48 test files, 479 tests, no configured coverage, covering stores, components, lib, hooks, app pages, i18n, Stripe-aware admin subscription visibility, dashboard announcements, billing paywall UI, billing success verification, feedback unread labels, SSE parsing, memory toasts, chat stream resets, and middleware), E2E plan (Playwright, pending), CI integration, and coverage requirements."
+description: "Testing strategy for FreeLingo: backend pytest suite (45 test files, 1019 tests, 85.56% last measured coverage, with SQLite in-memory DB and Redis mocking), frontend Vitest suite (50 test files, 494 passed, including 13 ConversationMode cases passed in the confirmed pre-push run, no configured coverage, covering stores, components, lib, hooks, app pages, the landing preview and CTAs, accessible plan states, i18n, Stripe-aware admin subscription visibility, dashboard announcements, billing paywall UI, billing success verification, feedback unread labels, SSE parsing, memory toasts, chat stream resets, and middleware), E2E plan (Playwright, pending), CI integration, and coverage requirements."
 applyTo: "**/*.test.*, **/*.spec.*, **/tests/**, **/__tests__/**"
 ---
 
@@ -11,7 +11,7 @@ applyTo: "**/*.test.*, **/*.spec.*, **/tests/**, **/__tests__/**"
 - Frontend unit — Framework: Vitest; Scope: Stores, components, hooks, lib, middleware; Coverage: Not configured; Status: Implemented
 - E2E — Framework: Playwright; Scope: Critical user flows; Coverage: Smoke; Status: Pending
 
-All tests pass on every push. Backend coverage threshold configured at 70%, last measured at 85.56%. Frontend tests cover stores, critical components (VoiceRecorder, AudioPlayer, ProfileSection, UnitCard/UnitDrawer, LanguageSwitcher, TargetLanguageSelector, DashboardAnnouncement, review UI, LanguageBubbles, billing paywall UI, memory toast), Stripe-aware admin subscription visibility, the admin announcement editor, billing success verification, app pages, hooks, lib modules, SSE framing and reset handling, i18n, and middleware. Frontend coverage is not currently reported because Vitest coverage is not configured and `@vitest/coverage-v8` is not installed.
+CI requires all tests to pass on every push. The already-executed pre-push run confirmed successful formatting with `./scripts/format.sh`, backend pytest with 1019 passed and 137 warnings (85.56% coverage), successful frontend `npm run lint` and `tsc --noEmit`, and Vitest with 494 passed across 50 files, including all 13 ConversationMode cases (6.58 s). No checks were rerun for this documentation update. Backend coverage threshold configured at 70%, last measured at 85.56%. Frontend tests cover stores, critical components (VoiceRecorder, AudioPlayer, ProfileSection, UnitCard/UnitDrawer, LanguageSwitcher, TargetLanguageSelector, DashboardAnnouncement, review UI, LanguageBubbles, billing paywall UI, memory toast), Stripe-aware admin subscription visibility, the admin announcement editor, billing success verification, app pages, hooks, lib modules, SSE framing and reset handling, i18n, and middleware. Frontend coverage is not currently reported because Vitest coverage is not configured and `@vitest/coverage-v8` is not installed.
 
 ---
 
@@ -195,13 +195,14 @@ pytest --cov-report=html
 - **`tests/components/AudioPlayer.test.tsx`** — Tests: 36. What it covers: AudioPlayer: idle/loading/playing/error states, TTS API call, play/pause/stop, voice resolution (prop > localStorage > default), audio queue, unmount safety
 - **`tests/components/ProfileSection.test.tsx`** — Tests: 48. What it covers: ProfileSection: form fields, save flow, avatar upload/remove (File/FileReader mock), password change (validation, mismatch), locale change with reload, API error states
 - **`tests/components/BillingPaywall.test.tsx`** — Tests: 11. What it covers: Billing UI: Settings payment-recovery states via Customer Portal, canceled/incomplete/unsubscribed plan buttons, dashboard recovery banner, gated-page paywall recovery copy, and logged-in landing pricing direct Checkout
-- **`tests/components/UnitCard.test.tsx`** — Tests: 41. What it covers: UnitCard: all 5 status states (completed/active/locked/level-test/default), progress bar, click interactions. UnitDrawer: grammar points, lesson list, Start/Continue/Review actions, completion states, escape/outside-click dismiss
+- **`tests/components/UnitCard.test.tsx`** — Tests: 41. What it covers: UnitCard: all 5 status states (completed/active/locked/level-test/default), accessible icon labels, active-unit description linkage and reduced-motion styling, progress bar, click interactions. UnitDrawer: grammar points, lesson list, Start/Continue/Review actions, accessible completion states, escape/outside-click dismiss
 - **`tests/store/progress.test.ts`** — Tests: 48. What it covers: Progress store: 10 initial state fields, setProgress/setTodayLessons/completeLesson/setCurrentUnit/setPlanDuration/updateUnitProgress/unlockLevelTest/setLevelTestResult, state transition isolation
 - **`tests/lib/reviews.test.ts`** — Tests: 6. What it covers: Review API client helpers for my-review, create/update/delete, public, admin update, and delete calls
 - **`tests/lib/review-prompt-triggers.test.ts`** — Tests: 7. What it covers: Review prompt trigger helpers for voice sessions and unit completion: 5-minute voice threshold, unit-completed gate, dismissal cooldown expiry, and maximum dismissal count
 - **`tests/components/ReviewPrompt.test.tsx`** — Tests: 6. What it covers: Review prompt status check, rating validation, rating-only and commented submission, dismissal, duplicate-review suppression, status-check failure guard
 - **`tests/components/LandingReviewsCarousel.test.tsx`** — Tests: 3. What it covers: Landing reviews carousel rendering with comments, rating-only fallback text, empty list behavior
 - **`tests/app/billing-success.test.tsx`** — Tests: 3. What it covers: Billing success page: shows Premium-active copy only after `/me` confirms `active`/`trialing`, refreshes the session when no access token is in memory, and keeps pending-confirmation copy when the subscription is not yet synced.
+- **`tests/app/landing.test.tsx`** — Tests: 2. What it covers: server-rendered static demo region and heading, three English phrases with `lang="en-GB"`, absence of simulated buttons/inputs, anonymous registration CTA, session-aware dashboard CTA, and preserved `#features` link. Requests, translations, and child components are mocked; this is not a visual or translation-quality check.
 - **`tests/app/admin-overview.test.tsx`** — Tests: 3. What it covers: Admin overview rendering and Stripe-enabled/disabled subscription metrics and alerts
 - **`tests/app/admin-query-params.test.tsx`** — Tests: 4. What it covers: Admin query param parsing, state handling, suppression of hidden subscription filters when Stripe is disabled, and stale-response protection while Stripe configuration hydrates
 - **`tests/app/admin-user-detail.test.tsx`** — Tests: 2. What it covers: Admin user-detail subscription status, tab, and controls in Stripe-enabled and Stripe-disabled modes
@@ -213,7 +214,9 @@ pytest --cov-report=html
 - **`tests/components/DashboardAnnouncement.test.tsx`** — Tests: 3. What it covers: current-locale rendering, successful account-persistent dismissal, compact dismissal error, and suppression of an already-dismissed revision
 - **`tests/i18n/admin-messages.test.ts`** — Tests: 1. What it covers: Admin message bundle integrity
 
-**Total: 479 tests across 48 files. Frontend coverage is not configured/reported.**
+- **`tests/components/ConversationMode.test.tsx`**: 13 cases passed in the confirmed pre-push run (6.58 s): permission-denial retry (1), permission granted after unmount (1), cleanup and obsolete callbacks for JSON error/onerror/onclose (3), immediate turn blocking and release on listening/turn_complete/STT/LLM/TTS error (5), VAD misfire (1), stale Blob decoding (1), and WAV-send exception with restart (1). VAD, browser media, WebSocket, and playback are mocked; this does not verify real microphone/device behavior in a browser. Manual validation against the remote deployment remains pending.
+
+**Confirmed pre-push result: 494 passed across 50 files, including all 13 ConversationMode cases. Frontend coverage is not configured/reported.**
 
 ### Running tests
 
@@ -268,7 +271,7 @@ CI runs on GitHub Actions, triggered on pushes and pull requests. The project is
 - Backend tests — Steps: `pytest -v`; Threshold: >= 70% coverage
 - Frontend lint — Steps: `npm run lint`; Threshold: Zero errors
 - Frontend typecheck — Steps: `npx tsc --noEmit`; Threshold: Clean output
-- Frontend tests — Steps: `npm run test:run`; Threshold: All 479 tests pass
+- Frontend tests — Steps: `npm run test:run`; Threshold: All tests pass (confirmed pre-push result: 494 passed across 50 files, including 13 ConversationMode cases)
 
 **Note**: The backend test job uses SQLite (same as local tests), not PostgreSQL. No Docker services are required for the backend test job.
 

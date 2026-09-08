@@ -6,6 +6,8 @@
 
 ## Architecture at a glance
 
+Voice conversation acquires microphone permission and awaits VAD startup before warmup, then connects the WebSocket. The component owns the stream, serializes VAD start/pause, and uses idempotent cleanup plus attempt/socket identity guards to isolate restarts and late callbacks. A pending-turn guard starts before WAV submission; `stt_failed`, `llm_failed`, and `tts_failed` release it without closing the session, while fatal errors release session resources. VAD misfires clear the speaking indicator and unfinished segment.
+
 Administrative subscription UI follows the public Stripe runtime flag. When Stripe is disabled, the overview hides paid-access and past-due subscription signals, the user list hides and ignores subscription filtering and values, and user detail hides subscription status and override controls; quota administration remains available.
 
 Pronunciation exercises and flashcard speaking mode capture their resource-owned `study_plan_id` when recording starts and include it in every STT upload. The frontend stops late microphone streams, propagates request cancellation through its STT proxy, and serializes flashcard reviews while voice-result handling is pending. The backend verifies plan ownership, derives the target language from that plan, converts it to the provider's ISO code, and requires every STT service call to declare a language explicitly; there is no implicit English fallback. Generated flashcards likewise derive their target language from the active persisted plan rather than client state, and reviews credit progress to the persisted card plan rather than whichever language is currently active.

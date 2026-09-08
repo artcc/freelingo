@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
 import {
   isSubscribed,
@@ -501,8 +502,12 @@ export default function DashboardPage() {
                           </p>
                         </div>
                         {isDone ? (
-                          <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
-                            ✓ {t('lessonDone')}
+                          <span className="text-fl-label text-fl-muted-2 inline-flex items-center gap-1.5 font-mono tracking-widest uppercase">
+                            <Check
+                              className="size-4 shrink-0"
+                              aria-hidden="true"
+                            />
+                            {t('lessonDone')}
                           </span>
                         ) : lesson.id ? (
                           <Link href={`/lesson/${lesson.id}`}>

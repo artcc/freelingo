@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Tak pomaga Ci Lingu",
+      "exampleLabel": "Przykład ćwiczenia z angielskiego",
+      "questionLabel": "Lingu · Pytanie",
+      "answerLabel": "Ty · Odpowiedź",
+      "correctionLabel": "Lingu · Korekta",
+      "explanation": "Mówiąc o wczoraj, użyj „went”, czyli formy przeszłej czasownika „go”."
+    },
     "hero": "Ucz się języków z prawdziwym partnerem do rozmowy głosowej",
     "heroSub": "Mów. Słuchaj. Rozwijaj się.",
     "signIn": "Zaloguj się",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Jednostka zablokowana",
+    "unitAvailable": "Jednostka dostępna",
+    "lessonPending": "Zaległa lekcja",
     "title": "Mój plan",
     "subtitle": "Plan nauki",
     "noPlan": "Nie znaleziono aktywnego planu nauki.",
