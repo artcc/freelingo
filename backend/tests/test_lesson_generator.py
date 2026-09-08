@@ -496,7 +496,7 @@ class TestBuildPreviousLessonsSummary:
         explained = next(line for line in summary.splitlines() if "explained:" in line)
         assert "\n" not in explained
         assert len(explained.strip()) <= PREVIOUS_LESSON_FOCUS_CHARS + len("explained: ")
-        assert explained.endswith("…")
+        assert explained.endswith("...")
 
     def test_tolerates_missing_and_malformed_content(self):
         from app.services.lesson_generator import build_previous_lessons_summary

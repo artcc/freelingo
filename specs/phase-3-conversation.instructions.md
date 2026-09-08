@@ -62,6 +62,17 @@ These are set globally in `next.config.ts` via the `headers()` function.
 
 **VAD model files**: ONNX WASM binaries (`.wasm`) and model files are copied from `node_modules` to `public/vad/` by the `copy-vad-models.js` postinstall script. The script runs automatically after `npm install` and is re-executed in the Docker builder stage to ensure files are present at build time.
 
+### Session lifecycle and recovery
+
+- Startup order: create AudioContext from the Start gesture, obtain microphone permission/stream, await `vad.start()`, request `POST /api/conversation/warmup`, then connect/authenticate the WebSocket. Warmup does not run before permission and VAD startup succeed.
+- The component owns the stream and supplies VAD `getStream`/`resumeStream`; permission denial happens outside VAD so it can be retried without permanently erroring that instance. VAD start/pause operations are serialized, and streams granted after cancellation or unmount are stopped immediately.
+- Idempotent cleanup invalidates the attempt, detaches/closes the socket, stops microphone tracks, queues VAD pause, cancels playback, and closes the AudioContext, including on unmount and transport exceptions. React state is updated only while mounted.
+- WebSocket callbacks and delayed Blob audio handling require the current attempt and socket identity; playback idle callbacks require the current attempt. Obsolete callbacks cannot mutate a restarted session.
+- The pending-turn guard is set before WAV encoding/sending and on `transcribing`/`thinking`, blocking duplicate submissions before backend acknowledgement. `turn_complete` or `listening` releases it; normal assistant-speaking UI still waits for playback to drain.
+- `stt_failed`, `llm_failed`, and `tts_failed` release the guard, cancel playback, clear assistant speaking/streaming state, and keep the session live with a visible error; the next successful WAV send clears it. Other server errors and transport/startup failures finalize the session.
+- `onVADMisfire` clears the speech-start timestamp and user-speaking indicator, discarding the unfinished segment.
+- `frontend/tests/components/ConversationMode.test.tsx` has 13 lifecycle cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 frontend files. These tests use mocks and do not validate real microphone/device behavior in a browser; manual validation against the remote deployment remains pending.
+
 ### Audio processing
 
 - `float32ToWav(samples, sampleRate)`: encodes Float32Array PCM audio (16kHz mono from VAD) to WAV ArrayBuffer format for STT ingestion
@@ -75,9 +86,14 @@ Automatic barge-in is disabled by default in the frontend (`ENABLE_CONVERSATION_
 
 Each turn (user speech and AI response) is rendered as a `TranscriptBubble` in a scrollable list. Shows:
 
-- Role label ("You" / "AI Tutor")
+- Role label (localized "You" / "Lingu" in all ten UI locales)
 - Spoken/preview text (streaming indicator while AI is generating)
 - Bubbles are color-coded: user (accent) / AI (muted background)
+- Idle avatar halos are static; only speaking halos animate. Local reduced-motion utilities disable halo animations, border/opacity transitions, and the streaming cursor pulse without changing global animation styles.
+
+### Status readability
+
+`StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing. Status precedence and pulse conditions are unchanged. These visual improvements and the transcript adjustments do not alter session lifecycle, turn handling, audio playback, or conversation flow.
 
 ### Session timeout UI
 

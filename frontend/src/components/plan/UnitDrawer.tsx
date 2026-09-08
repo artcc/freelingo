@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
+import { Check, Circle } from 'lucide-react'
 import type { CurriculumUnit } from '@/data/curriculum'
 
 interface Lesson {
@@ -125,9 +126,17 @@ export default function UnitDrawer({
                   className={`flex items-center gap-3 px-6 py-4 transition-colors ${lesson.action ? 'hover:bg-fl-surface-2' : ''}`}
                 >
                   <span
+                    role="img"
+                    aria-label={t(
+                      lesson.completed ? 'completed' : 'lessonPending'
+                    )}
                     className={`w-4 shrink-0 font-mono text-base ${lesson.completed ? 'text-fl-fg' : 'text-fl-muted-3'}`}
                   >
-                    {lesson.completed ? '✓' : '○'}
+                    {lesson.completed ? (
+                      <Check className="size-4" aria-hidden="true" />
+                    ) : (
+                      <Circle className="size-4" aria-hidden="true" />
+                    )}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p

@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Iată cum te ajută Lingu",
+      "exampleLabel": "Exemplu de exercițiu în engleză",
+      "questionLabel": "Lingu · Întrebare",
+      "answerLabel": "Tu · Răspuns",
+      "correctionLabel": "Lingu · Corectare",
+      "explanation": "Pentru a vorbi despre ieri, folosește „went”, forma de trecut a verbului „go”."
+    },
     "hero": "Învață limbi străine cu un partener de conversație real prin voce",
     "heroSub": "Vorbește. Ascultă. Îmbunătățește-te.",
     "signIn": "Conectare",
@@ -417,7 +425,7 @@
     "loadingProgress": "Se încarcă progresul...",
     "noLevel": "Niciun nivel setat încă.",
     "completeAssessment": "Fă evaluarea",
-    "allCaughtUp": "Ești la zi.",
+    "allCaughtUp": "Planul tău, în ritmul tău",
     "startWithAssessment": "Începe cu o evaluare.",
     "takeAssessmentArrow": "Fă evaluarea →",
     "goToMyPlan": "Planul meu →",
@@ -427,9 +435,10 @@
     "pendingLessons": "lecții în așteptare",
     "nextStep": "Pasul următor",
     "assessmentCreatesPlan": "Evaluarea îți găsește nivelul și creează un plan personalizat pentru limba activă.",
-    "lessonReady": "Lecție pregătită",
+    "lessonReady": "Următorul tău pas, în ritmul tău",
     "pendingStillAvailable": "Ai {count} lecții anterioare în așteptare în plan.",
-    "noPendingToday": "Ai terminat lecțiile de azi. Poți verifica planul sau exersa o altă activitate.",
+    "noPendingToday": "Consultă planul pentru a vedea cum să continui.",
+    "planDayGoal": "Obiectivul acestei zile din plan",
     "lessonsCompleted": "Lecții",
     "accuracy": "Acuratețe",
     "exerciseStats": "{correct}/{total} exerciții",
@@ -568,12 +577,16 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Unitate blocată",
+    "unitAvailable": "Unitate disponibilă",
+    "lessonPending": "Lecție restantă",
     "title": "Planul meu",
     "subtitle": "Plan de studiu",
     "noPlan": "Nu a fost găsit niciun plan de studiu activ.",
     "startAssessment": "Fă mai întâi o evaluare",
     "week": "Săptămâna",
     "currentLesson": "Lecția curentă",
+    "currentUnit": "Unitatea curentă",
     "startLesson": "Începe lecția",
     "completed": "Finalizat",
     "generating": "Se generează lecția...",
@@ -613,6 +626,7 @@
     "levelTestResult": "Rezultatul testului de nivel",
     "testScore": "Scor:",
     "pendingLessons": "Lecții restante",
+    "pendingReassurance": "Le poți relua când îți este convenabil.",
     "resume": "Reia",
     "lessonsHeader": "Lecții · {count}",
     "reviewLesson": "Revizuiește",
@@ -643,7 +657,8 @@
     "vocabulary": "Vocabular",
     "label": "Lecție",
     "submitAnswer": "Trimite răspunsul",
-    "lessonDone": "Lecție finalizată",
+    "lessonDone": "Bună treabă. Lecție finalizată.",
+    "exerciseSummary": "Exerciții evaluate: {completed} din {total}",
     "score": "Scor",
     "showNativeExplanation": "Arată în",
     "hint": "Indiciu",
@@ -666,7 +681,7 @@
     "exitConfirmTitle": "Ieșiți din lecție?",
     "exitConfirmMessage": "Progresul dvs. la această lecție va fi pierdut.",
     "dayComplete": "Ziua finalizată!",
-    "dayCompleteMsg": "Toate lecțiile de astăzi sunt finalizate."
+    "dayCompleteMsg": "Ai finalizat această zi din plan. Continuă când îți este convenabil."
   },
   "flashcards": {
     "title": "Carduri flash",
@@ -1121,7 +1136,7 @@
     "sessionEnded": "Sesiune încheiată",
     "tapToStart": "Vorbește când ești gata",
     "you": "Tu",
-    "assistant": "FreeLingo",
+    "assistant": "Lingu",
     "quotaSessions": "Sesiuni această săptămână",
     "quotaMinutes": "Minute azi",
     "quotaUnlimited": "Nelimitat",
@@ -1427,7 +1442,7 @@
     "openSourceCta": "Vezi pe GitHub",
     "planFreeBadge": "Gratuit pentru totdeauna",
     "priceAmount": "{amount} lei",
-    "pricePerPeriod": " lei/{period}",
+    "pricePerPeriod": "/ {period}",
     "priceOriginal": "{price} lei / {period}",
     "planFreeDesc": "Probă completă de 7 zile, apoi gratuit cu limite zilnice și săptămânale",
     "planFreeCta": "Începe",
@@ -1446,21 +1461,17 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.8.45",
+    "version": "v1.8.50",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Amintiri care te însoțesc",
-      "desc": "Lingu poate acum să rețină detalii utile în toate limbile pe care le studiezi, atât în chat, cât și în conversațiile vocale."
+      "label": "Învățarea, puțin mai ușoară",
+      "desc": "Acum îți este mai ușor să îți urmărești progresul, să găsești următorul pas și să îți reiei lecțiile. Am îmbunătățit și lizibilitatea, precum și modurile luminos și întunecat, păstrând designul pe care îl cunoști deja."
     },
     "entry2": {
-      "label": "Tu deții controlul",
-      "desc": "Adaugă propriile amintiri sau consultă-le, șterge-le și golește-le oricând din Setări. Eliminarea unei limbi îți păstrează amintirile."
+      "label": "Conversații vocale mai stabile",
+      "desc": "Am îmbunătățit stabilitatea schimburilor de replici și revenirea după erori. De asemenea, am făcut starea conversației mai vizibilă și am redus animațiile din istoric, ca să te poți concentra pe conversația cu Lingu"
     },
     "entry3": {
-      "label": "Lecțiile tale, mereu accesibile",
-      "desc": "În Planul meu poți începe lecția curentă, continua lecțiile omise sau revizui lecțiile finalizate cu răspunsurile și feedbackul salvate."
-    },
-    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Remedierile de erori și micile îmbunătățiri fac FreeLingo mai stabil și mai plăcut de utilizat."
     }

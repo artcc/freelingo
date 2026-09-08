@@ -64,7 +64,7 @@ export default function StatusIndicator({
       >
         ●
       </span>
-      <span className="text-fl-muted-2 font-mono text-xs tracking-widest uppercase">
+      <span className="text-fl-fg font-mono text-xs font-semibold tracking-wide uppercase">
         {label}
       </span>
     </div>

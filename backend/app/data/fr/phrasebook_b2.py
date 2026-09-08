@@ -10,7 +10,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
         icon="🧠",
         phrases=[
             PhrasebookEntry(
-                text="Il convient de souligner que…",
+                text="Il convient de souligner que...",
                 context="Introduire un point important — argumentation formelle",
                 register="formal",
                 unit_ref="b2-unit-1",
@@ -34,13 +34,13 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-1",
             ),
             PhrasebookEntry(
-                text="Tout bien considéré, je pense que…",
+                text="Tout bien considéré, je pense que...",
                 context="Présenter une opinion réfléchie — « tout bien considéré »",
                 register="formal",
                 unit_ref="b2-unit-1",
             ),
             PhrasebookEntry(
-                text="Il serait plus judicieux de…",
+                text="Il serait plus judicieux de...",
                 context="Suggérer une action plus sage",
                 register="formal",
                 unit_ref="b2-unit-1",
@@ -52,13 +52,13 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-1",
             ),
             PhrasebookEntry(
-                text="Dans quelle mesure peut-on affirmer que… ?",
+                text="Dans quelle mesure peut-on affirmer que... ?",
                 context="Questionner la portée d'une affirmation",
                 register="formal",
                 unit_ref="b2-unit-1",
             ),
             PhrasebookEntry(
-                text="Admettons que vous ayez raison…",
+                text="Admettons que vous ayez raison...",
                 context="Concéder un point pour les besoins de l'argumentation",
                 register="formal",
                 unit_ref="b2-unit-1",
@@ -88,7 +88,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-1",
             ),
             PhrasebookEntry(
-                text="En définitive, ce qui importe c'est…",
+                text="En définitive, ce qui importe c'est...",
                 context="Aller au cœur de l'argument — « en définitive, ce qui compte c'est »",
                 register="formal",
                 unit_ref="b2-unit-1",
@@ -108,19 +108,19 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-2",
             ),
             PhrasebookEntry(
-                text="Je me permets de vous contacter au sujet de…",
+                text="Je me permets de vous contacter au sujet de...",
                 context="Ouvrir un courriel formel — « je me permets de vous contacter concernant »",
                 register="formal",
                 unit_ref="b2-unit-2",
             ),
             PhrasebookEntry(
-                text="Suite à notre entretien du 12 mars…",
+                text="Suite à notre entretien du 12 mars...",
                 context="Faire référence à un entretien ou une conversation antérieure",
                 register="formal",
                 unit_ref="b2-unit-2",
             ),
             PhrasebookEntry(
-                text="Je vous prie de bien vouloir trouver ci-joint…",
+                text="Je vous prie de bien vouloir trouver ci-joint...",
                 context="Indiquer une pièce jointe — formule très standard dans les courriels professionnels",
                 register="formal",
                 unit_ref="b2-unit-2",
@@ -168,7 +168,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-2",
             ),
             PhrasebookEntry(
-                text="Je fais suite à votre courriel du…",
+                text="Je fais suite à votre courriel du...",
                 context="Donner suite à un courriel précédent",
                 register="formal",
                 unit_ref="b2-unit-2",
@@ -206,7 +206,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-3",
             ),
             PhrasebookEntry(
-                text="Dans une certaine mesure, oui, mais…",
+                text="Dans une certaine mesure, oui, mais...",
                 context="Accepter partiellement avant d'introduire une réserve",
                 register="neutral",
                 unit_ref="b2-unit-3",
@@ -218,14 +218,14 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-3",
             ),
             PhrasebookEntry(
-                text="Je dirais plutôt que…",
+                text="Je dirais plutôt que...",
                 context="Proposer une formulation alternative — « je dirais plutôt que »",
                 register="neutral",
                 unit_ref="b2-unit-3",
             ),
             PhrasebookEntry(
-                text="Il ne s'agit pas tant de… que de…",
-                context="Recadrer un problème — « il s'agit moins de… que de… »",
+                text="Il ne s'agit pas tant de... que de...",
+                context="Recadrer un problème — « il s'agit moins de... que de... »",
                 register="formal",
                 unit_ref="b2-unit-3",
             ),
@@ -242,7 +242,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-3",
             ),
             PhrasebookEntry(
-                text="On pourrait retourner l'argument en disant que…",
+                text="On pourrait retourner l'argument en disant que...",
                 context="Retourner un argument — « on pourrait le renverser en disant que »",
                 register="formal",
                 unit_ref="b2-unit-3",
@@ -272,7 +272,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 unit_ref="b2-unit-3",
             ),
             PhrasebookEntry(
-                text="Sans aller jusque-là, on peut dire que…",
+                text="Sans aller jusque-là, on peut dire que...",
                 context="Modérer une affirmation forte — « sans aller jusque-là, on peut dire que »",
                 register="formal",
                 unit_ref="b2-unit-3",
@@ -298,7 +298,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
         icon="📰",
         phrases=[
             PhrasebookEntry(
-                text="D'après un article paru dans Le Monde…",
+                text="D'après un article paru dans Le Monde...",
                 context="Citer un article de journal — Le Monde est le quotidien de référence en France",
                 register="formal",
                 unit_ref="b2-unit-4",

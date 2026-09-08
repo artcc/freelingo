@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Así te ayuda Lingu",
+      "exampleLabel": "Ejemplo de práctica en inglés",
+      "questionLabel": "Lingu · Pregunta",
+      "answerLabel": "Tú · Respuesta",
+      "correctionLabel": "Lingu · Corrección",
+      "explanation": "Para hablar de ayer, usa «went», el pasado de «go»."
+    },
     "hero": "Aprende idiomas con un compañero de conversación por voz real",
     "heroSub": "Habla. Escucha. Mejora.",
     "signIn": "Iniciar sesión",
@@ -417,7 +425,7 @@
     "loadingProgress": "Cargando progreso...",
     "noLevel": "Aún no tienes nivel asignado.",
     "completeAssessment": "Hacer evaluación",
-    "allCaughtUp": "Al día.",
+    "allCaughtUp": "Tu plan, a tu ritmo",
     "startWithAssessment": "Comienza con una evaluación.",
     "takeAssessmentArrow": "Hacer evaluación →",
     "goToMyPlan": "Mi plan →",
@@ -427,9 +435,10 @@
     "pendingLessons": "lecciones pendientes",
     "nextStep": "Siguiente paso",
     "assessmentCreatesPlan": "La evaluación calcula tu nivel y crea un plan personalizado para tu idioma activo.",
-    "lessonReady": "Lección lista",
+    "lessonReady": "Tu siguiente paso, a tu ritmo",
     "pendingStillAvailable": "Tienes {count} lecciones anteriores pendientes en tu plan.",
-    "noPendingToday": "Has completado las lecciones de hoy. Puedes revisar tu plan o practicar con otra actividad.",
+    "noPendingToday": "Consulta tu plan para ver cómo continuar.",
+    "planDayGoal": "Objetivo de este día del plan",
     "lessonsCompleted": "Lecciones",
     "accuracy": "Precisión",
     "exerciseStats": "{correct}/{total} ejercicios",
@@ -568,12 +577,16 @@
     "voiceTrialSkip": "Saltar por ahora"
   },
   "plan": {
+    "unitLocked": "Unidad bloqueada",
+    "unitAvailable": "Unidad disponible",
+    "lessonPending": "Lección pendiente",
     "title": "Mi plan",
     "subtitle": "Plan de estudio",
     "noPlan": "No se encontró ningún plan de estudio activo.",
     "startAssessment": "Hacer la evaluación primero",
     "week": "Semana",
     "currentLesson": "Lección actual",
+    "currentUnit": "Unidad actual",
     "startLesson": "Iniciar lección",
     "completed": "Completado",
     "generating": "Generando lección...",
@@ -613,6 +626,7 @@
     "levelTestResult": "Resultado del test de nivel",
     "testScore": "Puntuación:",
     "pendingLessons": "Lecciones pendientes",
+    "pendingReassurance": "Puedes retomarlas cuando te venga bien.",
     "resume": "Reanudar",
     "lessonsHeader": "Lecciones · {count}",
     "reviewLesson": "Revisar",
@@ -643,7 +657,8 @@
     "vocabulary": "Vocabulario",
     "label": "Lección",
     "submitAnswer": "Enviar respuesta",
-    "lessonDone": "Lección completada",
+    "lessonDone": "Buen trabajo. Lección completada.",
+    "exerciseSummary": "Ejercicios evaluados: {completed} de {total}",
     "score": "Puntuación",
     "showNativeExplanation": "Ver en",
     "hint": "Pista",
@@ -666,7 +681,7 @@
     "exitConfirmTitle": "¿Salir de la lección?",
     "exitConfirmMessage": "Perderás el progreso de esta lección.",
     "dayComplete": "¡Día completado!",
-    "dayCompleteMsg": "Has completado todas las lecciones de hoy."
+    "dayCompleteMsg": "Has completado este día del plan. Continúa cuando te venga bien."
   },
   "flashcards": {
     "title": "Tarjetas",
@@ -1121,7 +1136,7 @@
     "sessionEnded": "Sesión finalizada",
     "tapToStart": "Habla cuando estés listo",
     "you": "Tú",
-    "assistant": "FreeLingo",
+    "assistant": "Lingu",
     "quotaSessions": "Sesiones esta semana",
     "quotaMinutes": "Minutos hoy",
     "quotaUnlimited": "Ilimitado",
@@ -1427,7 +1442,7 @@
     "openSourceCta": "Ver en GitHub",
     "planFreeBadge": "Gratis para siempre",
     "priceAmount": "{amount} €",
-    "pricePerPeriod": " €/{period}",
+    "pricePerPeriod": "/ {period}",
     "priceOriginal": "{price} € / {period}",
     "planFreeDesc": "Prueba completa de 7 días, luego gratis con límites diarios y semanales",
     "planFreeCta": "Empieza",
@@ -1446,21 +1461,17 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.8.45",
+    "version": "v1.8.50",
     "cta": "Entendido",
     "entry1": {
-      "label": "Memorias que te acompañan",
-      "desc": "Lingu ahora puede recordar detalles útiles en todos los idiomas que estudias, tanto en el chat como por voz."
+      "label": "Aprender, un poco más fácil",
+      "desc": "Ahora es más fácil ver tu progreso, encontrar el siguiente paso y retomar tus lecciones. También hemos mejorado la legibilidad y los modos claro y oscuro, manteniendo el diseño que ya conoces."
     },
     "entry2": {
-      "label": "Tú tienes el control",
-      "desc": "Añade tus propias memorias o revísalas, elimínalas y bórralas todas cuando quieras desde Ajustes. Eliminar un idioma conserva tus memorias."
+      "label": "Conversaciones de voz más estables",
+      "desc": "Hemos mejorado la estabilidad de los turnos y la recuperación ante errores. También hemos hecho más visible el estado de la conversación y reducido las animaciones del historial para que puedas centrarte en hablar con Lingu"
     },
     "entry3": {
-      "label": "Tus lecciones, siempre accesibles",
-      "desc": "En Mi plan puedes comenzar la lección actual, continuar las que saltaste o revisar las completadas con tus respuestas y comentarios guardados."
-    },
-    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "Hemos corregido errores y añadido pequeñas mejoras para que FreeLingo sea más estable y agradable de usar."
     }

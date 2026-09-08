@@ -118,7 +118,7 @@ frontend/
 │   │
 │   └── middleware.ts            # Auth guard (redirect to /login) + locale detection
 │
-├── tests/                       # Vitest suite (48 test files, 479 tests; coverage not configured)
+├── tests/                       # Vitest suite (50 files, 494 passed; includes 13 ConversationMode cases)
 │   ├── setup.ts                 # Global mocks: localStorage, next/navigation, next-intl
 │   ├── middleware.test.ts
 │   ├── components/
@@ -164,6 +164,26 @@ frontend/
 
 - Public surfaces use `bg-dot-grid` over `bg-fl-bg`: the `/` landing page, `(auth)` routes, and `(legal)` routes.
 - The authenticated `(app)` shell uses a solid `bg-fl-bg` without `bg-dot-grid`. Its route-level loading fallback and session-initialization loading state follow the same solid treatment so hydration and authentication do not flash a different background pattern.
+- The root `body` uses `bg-background text-foreground` so its base colors follow the semantic theme tokens rather than fixed Zinc utilities.
+
+### Learning interface styling
+
+- Selected dashboard metrics, unit titles/counts/percentages, lesson exercise counters and regeneration controls, and Reading word-selection instructions use the existing 12px `text-fl-caption` token with stronger local text colors; global font-size tokens and target-language typography remain unchanged.
+- Dashboard next-step and highlighted lesson actions, the `UnitCard` Start action, and lesson/Reading/Listening submission buttons use solid monochrome `bg-fl-fg text-fl-bg` styling with `hover:bg-fl-fg/90` and visible keyboard-focus outlines. Existing submission and disabled-state conditions are unchanged.
+- Dashboard plan, vocabulary, and skill bars, `UnitCard` progress, and lesson exercise progress use rectangular 4px tracks (`h-1`) with `h-full` fills. Width changes transition over 300ms using `transition-[width]`; `motion-reduce:transition-none` disables these transitions for reduced-motion preferences. Progress calculations and ordinary separators are unchanged.
+- Lesson, Reading, and Listening answer feedback uses theme-aware `fl-success` and `fl-error-fg` colors, including translucent borders and option/result backgrounds. `fl-success` is `#4ade80` in dark mode and `#15803d` in light mode. Incorrect comprehension answers remain struck through without reduced text opacity.
+- Unit metadata and exercise-page headers can wrap to accommodate narrow screens and longer localized labels.
+- The dashboard places the existing completed/total lesson counter beside the next-step action, labels it as the goal for the current plan day, and hides it when no plan or lesson slots are available. It is not a calendar-day target, and the lesson list does not duplicate the counter. When no next lesson is available, neutral copy invites users to consult their plan rather than assuming every slot is complete.
+- `UnitCard` labels the active curriculum unit explicitly, excluding the final level-test pseudo-unit. Pending lessons appear below the unit list with neutral styling and reassurance that they can be resumed later; all existing Resume actions remain available.
+- Successful lesson completion shows the lesson title and assessed/total exercise count when exercises exist, counting non-null scores including zero. My Plan is the primary next action and Dashboard remains secondary. Saved-lesson review, completion requests, rewards, and review-prompt triggers are unchanged.
+- Dashboard, lesson-completion, and pending-lesson copy uses concise, supportive wording in all ten UI locales without changing generated tutor feedback or technical errors.
+- Learning-state indicators use the existing Lucide dependency: `Check` for completion/correct answers, `X` for incorrect answers, and `Circle`/`SquarePlus` for unit states. `UnitCard` preserves level-test/completed/active/locked/default precedence and associates its localized status description with the card button through `aria-describedby`. Unit and drawer state icons and answer-only feedback indicators have localized accessible names; decorative SVGs are hidden from assistive technology. The active-unit pulse uses `motion-reduce:animate-none`. Flags, decorative heading dots, state conditions, and action handlers are unchanged.
+
+### Public landing preview
+
+- `/` renders a compact static Lingu practice example between the hero and feature grid, directly in the server-rendered page with no new client component, request, or animation.
+- The example contains an English question, an intentionally incorrect learner answer, and a correction with an explanation. All three English phrases use `lang="en-GB"`; labels and explanation come from `landing.microDemo` in all ten UI locales. The section has an associated heading and explicitly identifies itself as an example, without simulated inputs, playback controls, or live-chat semantics.
+- The preview uses existing theme tokens, rectangular borders, responsive padding, and a restrained accent on the correction. Hero CTA destinations (`/register` or `/dashboard`) and `#features` remain unchanged.
 
 ### Public (auth) routes — `(auth)/`
 
@@ -201,6 +221,7 @@ frontend/
 - `/admin/reviews` — Admin-only review moderation with 10 reviews per page, status/rating filters, approve/unapprove, and delete confirmation.
 - Onboarding Checkout — If a user reloads onboarding after registration and the refresh cookie exists but no access token is in memory, onboarding refreshes `/api/auth/refresh` before creating the Stripe Checkout session for the selected monthly/yearly plan.
 - Landing page — The primary CTA sends anonymous visitors to registration and authenticated visitors to the dashboard. Pricing plan CTAs for hosted subscriptions preserve monthly/yearly intent with `plan=monthly|yearly` through registration and onboarding before Stripe Checkout for anonymous visitors; authenticated unsubscribed visitors start Stripe Checkout directly from the selected monthly/yearly pricing button, refreshing the access token from the session cookie first when needed. The pricing and trial copy separates the free-trial promise from the later paid price, highlights yearly as the best-value option with two months free, labels monthly as the flexible alternative, and repeats no-charge-today/cancel-anytime reassurance only when trial eligibility is unknown or `trial_used=false`; authenticated users with `trial_used=true` see neutral plan-selection and amount-confirmation copy instead. The bottom pricing CTA defaults to yearly intent and starts yearly Checkout directly for authenticated unsubscribed users. `/billing/canceled` uses neutral no-charge-in-this-session copy and sends users back to the dashboard or settings plans without promising future trial availability. The shared paywall detects premium-gated route context for chat, voice conversation, listening, and reading so the upgrade message matches the user's attempted action; its free-path exit remains available but visually secondary. The top navigation includes a Reviews anchor between Features and Pricing when approved public reviews are available; the same conditional link appears in the mobile menu. The Features, Reviews, Pricing, and FAQ anchor targets use `scroll-mt-16` so their content clears the sticky `h-14` navigation bar. Public landing sections for features, reviews, pricing, open source, and FAQ share `max-w-5xl` content width for consistent horizontal rhythm; the hero and footer keep their own composition. The reviews section requests up to 100 approved reviews, shows a compact average-rating and total-review-count badge below the subtitle, uses localized formatting and public-facing copy, and presents the results in an unpaginated carousel. Review cards keep a consistent height and clamp long comments to 6 lines.
+- Landing pricing localization — Current monthly and yearly prices keep the currency marker only with the amount, positioned according to the active UI locale; crossed-out total prices use the same locale-specific placement.
 - `/feedback` — Feature requests and bug reports board (community), paginated at 10 entries per page. Entry list metadata, entry detail metadata, and comment headers render the shared gold `AdminAuthorBadge` beside the display name only when the embedded author role is `admin`.
 - `/admin` — Admin overview with aggregated metrics including pending feedback and pending review approvals, operational alerts, quick links to users/feedback/reviews, and a read-only maintenance-mode status whose System Controls action links to `/admin/system` (admin only). Active/trialing subscription metrics and past-due alerts render only when Stripe is enabled.
 - `/admin/users` — User management with responsive table/cards, search, filters, invite copy workflow, and a create-user sheet with required email (admin only). When Stripe is enabled, the desktop table uses fixed column widths: user 25%, email 25%, role 12.5%, status 12.5%, subscription 15%, actions 10%; subscription badges stay on one line and truncate with an ellipsis when localized labels exceed the available width. When Stripe is disabled, the subscription filter, desktop column, and mobile badge are hidden, URL subscription parameters are ignored, and the remaining columns expand to use the available width. Invite and create-user action buttons rely on their icons for the leading action affordance and do not include a duplicate `+` in localized labels.
@@ -263,6 +284,13 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `tour/` — `OnboardingTour` step-by-step walkthrough
 - `whats-new/` — Version-aware changelog overlay modal
 
+### Voice conversation presentation
+
+- `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
+- `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
+- Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
+- Within v1.8.50, What's New keeps the learning-experience highlight as `entry1`, adds voice stability and visual improvements as `entry2`, and preserves the former `entry2` unchanged as `entry3` in all ten locales. Dynamic entry rendering, the version constant, and modal dismissal behavior remain unchanged.
+
 ### App shell notifications
 
 - `frontend/src/app/(app)/layout.tsx` fetches `GET /api/feedback/unread-summary` after authenticated initialization and renders a fixed circular red badge on the Feedback navigation item in both desktop and mobile menus. The display is capped at `99+` and hidden at zero. The sidebar also shows a trial countdown badge when the user has an active freemium trial.
@@ -271,6 +299,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 ### Shared/generic components
 
 - **`ThemeProvider.tsx`** — Dark/light/system theme via the persisted Zustand `theme` store. The root `src/app/layout.tsx` also injects a small head script that reads `localStorage.fl-theme` and `prefers-color-scheme` before first paint, applying `html[data-theme='light']` when needed so light-system users do not see a dark initial flash on public or authenticated pages.
+- **Theme utilities** — Dark is the default when `html` does not have `data-theme='light'`; the Tailwind `dark:` variant targets that same condition and its descendants instead of requiring a separate `.dark` class. Theme persistence and the pre-paint script retain their existing behavior.
 - **`TargetLanguageSelector.tsx`** — Language picker dropdown with flags. It renders entries from `TARGET_LANGUAGE_CATALOG` after filtering by `availableCodes` when that operator-provided list is present.
 - **`TargetLanguageText.tsx`** — Reusable wrapper for content in the learner's target language. It applies `lang`, language-aware typography classes from `target-languages.ts`, and optional secondary reading/translation lines for future romanisation/pinyin support.
 - **`LanguageSwitcher.tsx`** — UI locale switcher
@@ -361,6 +390,10 @@ Word selection is disabled on the active assistant placeholder while a response 
 ```
 User opens /conversation → load VAD WASM models
     ↓
+User starts → create AudioContext → acquire microphone permission/stream → await vad.start()
+    ↓
+POST /api/conversation/warmup (only after permission and VAD startup succeed)
+    ↓
 WebSocket connects: new WebSocket(`/ws/conversation`)
     ↓
 Client sends first JSON auth frame with access token, voice preference, target language, and optional chat context
@@ -374,9 +407,15 @@ Receive MP3 binary frames via WS → AudioQueue schedules playback in order
 AudioQueue drains → clear assistant speaking state from playback `onIdle`
 ```
 
-`ConversationMode` guards the session lifecycle with a per-start attempt id. If microphone startup fails, the user stops the session, or the component unmounts while the warmup request is still pending, the pending attempt is invalidated so it cannot open a stale WebSocket afterwards.
+`ConversationMode` owns the microphone stream and supplies it through VAD `getStream`/`resumeStream`. Permission is requested outside VAD so denial does not permanently error the installed VAD instance and can be retried. VAD start/pause operations are serialized; streams granted after cancellation or unmount are stopped immediately without starting VAD or opening a socket.
 
-The voice UI does not clear `assistantSpeaking` from `turn_complete` or `status=listening`; it waits for the audio queue idle callback so the visible speaking state follows actual playback. A separate assistant-turn guard ignores VAD detections while the tutor is generating or sending chunked audio, so automatic frontend barge-in remains disabled for stable turn completion while the backend `barge_in` protocol stays available.
+Idempotent `finalizeSession` invalidates the start attempt, detaches and closes the socket, stops microphone tracks, queues VAD pause, cancels playback, and closes the AudioContext even during unmount or transport exceptions. State updates are limited to mounted components. WebSocket callbacks and delayed Blob audio handling check both attempt and socket identity; playback idle callbacks check the attempt so obsolete work cannot affect a restarted session.
+
+The pending-turn guard is set synchronously before WAV encoding/sending and on `status=transcribing` or `thinking`, blocking further speech before the backend acknowledges the turn. `turn_complete` and `status=listening` release that guard but do not clear `assistantSpeaking`; normal playback clears it only when the audio queue drains. Automatic frontend barge-in remains disabled.
+
+Recoverable `stt_failed`, `llm_failed`, and `tts_failed` messages release the turn guard, cancel playback, clear assistant speaking/streaming state, and keep the session live with a visible error. The next successful WAV send clears that error. Other server errors and transport/startup failures finalize the session. `onVADMisfire` clears the speech-start timestamp and user-speaking indicator, discarding the unfinished segment.
+
+`tests/components/ConversationMode.test.tsx` has 13 lifecycle cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 files. These tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending.
 
 ## Tests
 

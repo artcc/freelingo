@@ -160,6 +160,67 @@ export default async function Home() {
         </div>
       </section>
 
+      <section
+        aria-labelledby="lingu-demo-title"
+        className="mx-auto w-full max-w-5xl px-6 pb-12"
+      >
+        <div className="border-fl-border bg-fl-surface mx-auto max-w-xl border">
+          <div className="border-fl-border border-b px-5 py-4 sm:px-6">
+            <h2
+              id="lingu-demo-title"
+              className="text-fl-fg font-mono text-base font-bold"
+            >
+              {t('microDemo.title')}
+            </h2>
+            <p className="text-fl-caption text-fl-muted-1 mt-1 font-mono">
+              {t('microDemo.exampleLabel')}
+            </p>
+          </div>
+          <div className="space-y-5 p-5 sm:p-6">
+            <div>
+              <p className="text-fl-caption text-fl-muted-1 mb-2 font-mono">
+                {t('microDemo.questionLabel')}
+              </p>
+              <p
+                lang="en-GB"
+                className="text-fl-fg font-mono text-sm leading-relaxed"
+              >
+                What did you do yesterday?
+              </p>
+            </div>
+            <div className="border-fl-border border-l-2 pl-4">
+              <p className="text-fl-caption text-fl-muted-1 mb-2 font-mono">
+                {t('microDemo.answerLabel')}
+              </p>
+              <p
+                lang="en-GB"
+                className="text-fl-fg-2 font-mono text-sm leading-relaxed"
+              >
+                Yesterday I go to the park.
+              </p>
+            </div>
+            <div className="border-fl-accent/40 border-l-2 pl-4">
+              <p className="text-fl-caption text-fl-muted-1 mb-2 font-mono">
+                {t('microDemo.correctionLabel')}
+              </p>
+              <p
+                lang="en-GB"
+                className="text-fl-fg font-mono text-sm leading-relaxed"
+              >
+                Yesterday I{' '}
+                <strong className="font-bold underline underline-offset-4">
+                  went
+                </strong>{' '}
+                to the park.
+              </p>
+              <p className="text-fl-muted-1 mt-2 font-mono text-sm leading-relaxed">
+                {t('microDemo.explanation')}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <ScrollReveal>
         <section

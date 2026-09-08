@@ -63,7 +63,7 @@ freelingo/
 │   │   ├── lib/                 # Shared API, media, locale, mapping, review, billing, and language utilities (11)
 │   │   ├── i18n/                # next-intl locale resolver
 │   │   └── middleware.ts        # Auth guard + locale detection
-│   ├── tests/                   # Vitest suite (48 test files, 479 tests)
+│   ├── tests/                   # Vitest suite (50 files, 494 passed; includes 13 ConversationMode cases)
 │   ├── public/                  # Static assets (flags/, vad/ WASM models)
 │   └── scripts/                 # Postinstall helpers (copy-vad-models.js)
 │
@@ -116,6 +116,8 @@ User opens /conversation
     ↓
 Frontend: ConversationMode loads VAD (onnxruntime-web WASM)
     ↓
+Start: AudioContext → microphone permission/stream → await vad.start() → warmup
+    ↓
 WebSocket connects to /ws/conversation
     ↓
 Client sends first JSON auth frame with access token
@@ -134,6 +136,8 @@ MP3 chunks sent back via WebSocket
     ↓
 Stable turn guard: frontend ignores user speech while the tutor turn is active
 ```
+
+Warmup runs only after microphone permission and VAD startup succeed. Component-owned streams, serialized VAD operations, idempotent cleanup, and attempt/socket identity guards isolate restarts and late callbacks. The turn guard starts before WAV submission; recoverable STT/LLM/TTS errors release it without disconnecting, while fatal failures release session resources. VAD misfires discard unfinished speech and reset its indicator.
 
 Pronunciation exercises and flashcard speaking mode use the authenticated REST STT flow instead of the conversation WebSocket. `VoiceRecorder` captures the owning lesson or flashcard `study_plan_id` when recording starts, stops microphone streams that resolve after cancellation or unmount, uploads the plan with the WAV, and awaits the resource-specific transcription handler before becoming available again. Browser cancellation propagates through the Next.js proxy to the backend request, and flashcard review controls remain locked until voice-result handling finishes. The backend verifies ownership, resolves the plan's BCP-47 target language, converts it to ISO 639-1, and passes that language explicitly to the configured STT provider. Missing or foreign plan context is rejected, and the service contract has no implicit English fallback.
 
@@ -182,5 +186,5 @@ Testing infrastructure and strategy are documented in [testing.instructions.md](
 **Summary:**
 
 - **Backend**: pytest + pytest-asyncio, 45 test files, 1019 tests, 85.56% last measured coverage (target: 70%)
-- **Frontend**: Vitest, 48 test files, 479 tests covering stores, components, hooks, lib, i18n, app pages, Stripe-aware admin subscription visibility, dashboard announcements, billing paywall UI, billing success verification, feedback unread labels, SSE parsing, memory toasts, chat stream resets, and middleware; coverage is not configured/reported
+- **Frontend**: Confirmed pre-push Vitest result of 494 passed across 50 test files, including all 13 `ConversationMode` lifecycle cases (6.58 s). These lifecycle tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending. Existing areas include stores, components, hooks, lib, i18n, app pages, the static landing preview and session-aware CTAs, accessible plan-state indicators, Stripe-aware admin subscription visibility, dashboard announcements, billing paywall UI, billing success verification, feedback unread labels, SSE parsing, memory toasts, chat stream resets, and middleware; coverage is not configured/reported
 - **E2E**: Playwright (planned, not yet implemented)

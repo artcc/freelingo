@@ -80,33 +80,42 @@ describe('UnitCard', () => {
 
   it('renders completed unit with checkmark icon', () => {
     renderUnitCard({ status: { completed: true }, competency: 1 })
-    expect(screen.getByText('✓')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'completed' })).toBeInTheDocument()
+    expect(screen.queryByText('currentUnit')).not.toBeInTheDocument()
   })
 
   it('renders active unit with pulsing dot icon', () => {
     renderUnitCard({ status: { active: true } })
-    const dot = screen.getByText('●')
+    const dot = screen.getByRole('img', { name: 'currentUnit' })
     expect(dot).toBeInTheDocument()
-    expect(dot.className).toContain('animate-pulse')
+    expect(dot.querySelector('svg')).toHaveClass('animate-pulse')
+    expect(dot.querySelector('svg')).toHaveClass('motion-reduce:animate-none')
+    expect(dot.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByRole('button', { name: 'unitAriaLabel' })).toHaveAttribute(
+      'aria-describedby',
+      dot.id
+    )
+    expect(screen.getByText('currentUnit')).toBeInTheDocument()
   })
 
   it('renders locked unit with empty circle icon and opacity', () => {
     const { container } = renderUnitCard({ status: { locked: true } })
-    expect(screen.getByText('○')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'unitLocked' })).toBeInTheDocument()
     // outer wrapper should have opacity-40
     const outer = container.firstChild as HTMLElement
     expect(outer.className).toContain('opacity-40')
   })
 
   it('renders level-test unit with special icon and badge', () => {
-    renderUnitCard({ status: { isLevelTest: true } })
-    expect(screen.getByText('⊞')).toBeInTheDocument()
+    renderUnitCard({ status: { isLevelTest: true, active: true } })
+    expect(screen.getByRole('img', { name: 'levelTestLabel' })).toBeInTheDocument()
     expect(screen.getByText('levelTestLabel')).toBeInTheDocument()
+    expect(screen.queryByText('currentUnit')).not.toBeInTheDocument()
   })
 
   it('renders default state (none of the flags) with hollow dot', () => {
     renderUnitCard()
-    expect(screen.getByText('◦')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'unitAvailable' })).toBeInTheDocument()
   })
 
   // ── Card content ───────────────────────────────────────────────────────
@@ -141,7 +150,7 @@ describe('UnitCard', () => {
   it('renders progress bar for non-locked units', () => {
     const { container } = renderUnitCard({ competency: 0.42 })
     expect(screen.getByText('42%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-px') as HTMLElement
+    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar).toBeInTheDocument()
     expect(bar.style.width).toBe('42%')
   })
@@ -149,7 +158,7 @@ describe('UnitCard', () => {
   it('renders 0% progress bar when competency is 0', () => {
     const { container } = renderUnitCard({ competency: 0 })
     expect(screen.getByText('0%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-px') as HTMLElement
+    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar.style.width).toBe('0%')
   })
 
@@ -159,13 +168,13 @@ describe('UnitCard', () => {
       status: { completed: true },
     })
     expect(screen.getByText('100%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-px') as HTMLElement
+    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar.style.width).toBe('100%')
   })
 
   it('does not render progress bar for locked units', () => {
     const { container } = renderUnitCard({ status: { locked: true } })
-    expect(container.querySelector('.bg-fl-fg.h-px')).toBeNull()
+    expect(container.querySelector('.bg-fl-fg.h-full')).toBeNull()
     expect(screen.queryByText(/%$/)).toBeNull()
   })
 
@@ -363,14 +372,14 @@ describe('UnitDrawer', () => {
     expect(screen.getByText('Verb Conjugation').className).toContain(
       'line-through'
     )
-    // the ✓ icon next to it
-    const checkmarks = screen.getAllByText('✓')
+    // the completed status icon next to it
+    const checkmarks = screen.getAllByRole('img', { name: 'completed' })
     expect(checkmarks.length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows incomplete lessons with empty circle', () => {
     renderUnitDrawer()
-    const circles = screen.getAllByText('○')
+    const circles = screen.getAllByRole('img', { name: 'lessonPending' })
     // 2 incomplete lessons (id:2 and id:3)
     expect(circles.length).toBe(2)
   })

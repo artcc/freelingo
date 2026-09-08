@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.50] - 2026-09-08
+
+### Added
+
+- **Lingu practice preview**: the landing page now includes a static English question, learner answer, and correction, with labels and explanation in all ten UI languages, without simulated controls or additional API requests.
+
+### Changed
+
+- **Learning interface readability**: selected dashboard metrics, unit titles and counts, exercise controls, and reading instructions now use larger, clearer text while preserving the monochrome design.
+- **Primary learning actions**: dashboard, unit-card, and exercise submission buttons now share a solid monochrome treatment with visible keyboard focus.
+- **Learning progress bars**: dashboard, unit-card, and lesson progress bars now use rectangular 4px tracks with width-only transitions that respect reduced-motion preferences.
+- **Plan-day guidance**: the dashboard now places the existing lesson completion counter beside the next step, explicitly identifies it as a plan-day goal, and uses neutral guidance when no next lesson is available.
+- **Lesson completion summary**: completed lessons now show their title and assessed exercise count, with My Plan as the primary next action and Dashboard still available without changing rewards or saved-lesson review.
+- **Study-plan orientation**: the active curriculum unit now has an explicit label, while pending lessons remain resumable below the unit list with quieter styling and supportive copy across all ten UI languages.
+- **What's New highlights**: v1.8.50 opens with the unchanged localized summary of learning-experience improvements, followed by a new voice stability and visual-improvements highlight in all ten UI languages. The former second entry is preserved unchanged as the third entry, without changing the version or modal mechanism.
+- **Consistent learning indicators**: plan-unit and lesson states, dashboard completion marks, and lesson answer feedback now use Lucide icons with localized accessible state labels where needed. The active-unit pulse respects reduced-motion preferences, with existing state rules and actions preserved.
+- **Voice conversation visuals**: status labels use stronger contrast and weight with tighter tracking, idle avatar halos stay static, transcript motion respects reduced-motion preferences, and the tutor label reads Lingu in all ten UI languages.
+
+### Fixed
+
+- **Voice session reliability**: microphone permission and VAD startup now finish before warmup. Denied permissions can be retried, session cleanup releases microphone and audio resources, stale callbacks cannot affect restarted sessions, pending turns block duplicate speech submissions, recoverable speech-service errors keep the session open, and VAD misfires reset the speaking indicator.
+- **Localized landing prices**: monthly and yearly prices now display the currency symbol once, preserving its locale-specific position before or after the amount.
+- **Theme consistency**: dark-mode utilities now follow the existing theme attribute, and the root page background and text use semantic theme colors.
+- **Exercise feedback contrast**: lesson, Reading, and Listening success and error feedback now use theme-aware colors, with incorrect comprehension answers retaining their strikethrough without reduced text opacity.
+
 ## [1.8.45] - 2026-08-26
 
 ### Added
