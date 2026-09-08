@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Вот как Lingu помогает вам",
+      "exampleLabel": "Пример практики английского",
+      "questionLabel": "Lingu · Вопрос",
+      "answerLabel": "Вы · Ответ",
+      "correctionLabel": "Lingu · Исправление",
+      "explanation": "Чтобы рассказать о вчерашнем дне, используйте «went», форму прошедшего времени глагола «go»."
+    },
     "hero": "Учите языки с настоящим собеседником через голос",
     "heroSub": "Говорите. Слушайте. Совершенствуйтесь.",
     "signIn": "Войти",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Модуль заблокирован",
+    "unitAvailable": "Модуль доступен",
+    "lessonPending": "Незавершённый урок",
     "title": "Мой план",
     "subtitle": "Учебный план",
     "noPlan": "Активный учебный план не найден.",

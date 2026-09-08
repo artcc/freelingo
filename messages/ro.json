@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Iată cum te ajută Lingu",
+      "exampleLabel": "Exemplu de exercițiu în engleză",
+      "questionLabel": "Lingu · Întrebare",
+      "answerLabel": "Tu · Răspuns",
+      "correctionLabel": "Lingu · Corectare",
+      "explanation": "Pentru a vorbi despre ieri, folosește „went”, forma de trecut a verbului „go”."
+    },
     "hero": "Învață limbi străine cu un partener de conversație real prin voce",
     "heroSub": "Vorbește. Ascultă. Îmbunătățește-te.",
     "signIn": "Conectare",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Unitate blocată",
+    "unitAvailable": "Unitate disponibilă",
+    "lessonPending": "Lecție restantă",
     "title": "Planul meu",
     "subtitle": "Plan de studiu",
     "noPlan": "Nu a fost găsit niciun plan de studiu activ.",

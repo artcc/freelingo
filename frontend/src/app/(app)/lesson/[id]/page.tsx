@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
+import { Check, X } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
 import { useProgressStore } from '@/store/progress'
 import { useLanguageStore } from '@/store/language'
@@ -461,8 +462,9 @@ export default function LessonPage() {
       <>
         <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 p-6">
           <div className="border-fl-border bg-fl-surface w-full max-w-xl border px-6 py-10 text-center sm:px-10">
-            <p className="text-fl-label text-fl-muted-2 mb-4 font-mono tracking-widest uppercase">
-              ● {tCommon('complete')}
+            <p className="text-fl-label text-fl-muted-2 mb-4 flex items-center justify-center gap-2 font-mono tracking-widest uppercase">
+              <Check className="size-4 shrink-0" aria-hidden="true" />
+              {tCommon('complete')}
             </p>
             <p className="text-fl-fg font-mono text-xl font-bold tracking-widest">
               {t('lessonDone')}
@@ -917,13 +919,21 @@ export default function LessonPage() {
                           {opt}
                         </TargetLanguageText>
                         {isCorrect && (
-                          <span className="text-fl-success font-mono text-xs">
-                            ✓
+                          <span
+                            role="img"
+                            aria-label={t('correct')}
+                            className="text-fl-success shrink-0"
+                          >
+                            <Check className="size-4" aria-hidden="true" />
                           </span>
                         )}
                         {isWrongSelection && (
-                          <span className="text-fl-error-fg font-mono text-xs">
-                            ✕
+                          <span
+                            role="img"
+                            aria-label={t('incorrect')}
+                            className="text-fl-error-fg shrink-0"
+                          >
+                            <X className="size-4" aria-hidden="true" />
                           </span>
                         )}
                       </button>
@@ -984,11 +994,19 @@ export default function LessonPage() {
                   />
                   {isEvaluated && (
                     <span
-                      className={`absolute top-3 right-3 font-mono text-xs ${
+                      role="img"
+                      aria-label={
+                        isAnswerCorrect ? t('correct') : t('incorrect')
+                      }
+                      className={`absolute top-3 right-3 ${
                         isAnswerCorrect ? 'text-fl-success' : 'text-fl-error-fg'
                       }`}
                     >
-                      {isAnswerCorrect ? '✓' : '✕'}
+                      {isAnswerCorrect ? (
+                        <Check className="size-4" aria-hidden="true" />
+                      ) : (
+                        <X className="size-4" aria-hidden="true" />
+                      )}
                     </span>
                   )}
                 </div>

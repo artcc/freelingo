@@ -118,7 +118,7 @@ frontend/
 │   │
 │   └── middleware.ts            # Auth guard (redirect to /login) + locale detection
 │
-├── tests/                       # Vitest suite (48 test files, 479 tests; coverage not configured)
+├── tests/                       # Vitest suite (49 test files, 481 tests; coverage not configured)
 │   ├── setup.ts                 # Global mocks: localStorage, next/navigation, next-intl
 │   ├── middleware.test.ts
 │   ├── components/
@@ -177,6 +177,13 @@ frontend/
 - `UnitCard` labels the active curriculum unit explicitly, excluding the final level-test pseudo-unit. Pending lessons appear below the unit list with neutral styling and reassurance that they can be resumed later; all existing Resume actions remain available.
 - Successful lesson completion shows the lesson title and assessed/total exercise count when exercises exist, counting non-null scores including zero. My Plan is the primary next action and Dashboard remains secondary. Saved-lesson review, completion requests, rewards, and review-prompt triggers are unchanged.
 - Dashboard, lesson-completion, and pending-lesson copy uses concise, supportive wording in all ten UI locales without changing generated tutor feedback or technical errors.
+- Learning-state indicators use the existing Lucide dependency: `Check` for completion/correct answers, `X` for incorrect answers, and `Circle`/`SquarePlus` for unit states. `UnitCard` preserves level-test/completed/active/locked/default precedence and associates its localized status description with the card button through `aria-describedby`. Unit and drawer state icons and answer-only feedback indicators have localized accessible names; decorative SVGs are hidden from assistive technology. The active-unit pulse uses `motion-reduce:animate-none`. Flags, decorative heading dots, state conditions, and action handlers are unchanged.
+
+### Public landing preview
+
+- `/` renders a compact static Lingu practice example between the hero and feature grid, directly in the server-rendered page with no new client component, request, or animation.
+- The example contains an English question, an intentionally incorrect learner answer, and a correction with an explanation. All three English phrases use `lang="en-GB"`; labels and explanation come from `landing.microDemo` in all ten UI locales. The section has an associated heading and explicitly identifies itself as an example, without simulated inputs, playback controls, or live-chat semantics.
+- The preview uses existing theme tokens, rectangular borders, responsive padding, and a restrained accent on the correction. Hero CTA destinations (`/register` or `/dashboard`) and `#features` remain unchanged.
 
 ### Public (auth) routes — `(auth)/`
 

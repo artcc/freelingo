@@ -1,7 +1,8 @@
 'use client'
 
-import { type ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import { Check, Circle, SquarePlus } from 'lucide-react'
 
 interface UnitStatus {
   completed: boolean
@@ -22,12 +23,51 @@ interface Props {
   onStartLesson?: () => void
 }
 
-function StatusIcon({ status }: { status: UnitStatus }): ReactNode {
-  if (status.isLevelTest) return <span className="text-fl-muted-1">⊞</span>
-  if (status.completed) return <span className="text-fl-fg">✓</span>
-  if (status.active) return <span className="text-fl-fg animate-pulse">●</span>
-  if (status.locked) return <span className="text-fl-muted-3">○</span>
-  return <span className="text-fl-muted-2">◦</span>
+function StatusIcon({
+  status,
+  id,
+}: {
+  status: UnitStatus
+  id: string
+}): ReactNode {
+  const t = useTranslations('plan')
+  const { label, Icon, className } = status.isLevelTest
+    ? {
+        label: 'levelTestLabel',
+        Icon: SquarePlus,
+        className: 'text-fl-muted-1 size-4',
+      }
+    : status.completed
+      ? { label: 'completed', Icon: Check, className: 'text-fl-fg size-4' }
+      : status.active
+        ? {
+            label: 'currentUnit',
+            Icon: Circle,
+            className:
+              'text-fl-fg size-2 animate-pulse fill-current motion-reduce:animate-none',
+          }
+        : status.locked
+          ? {
+              label: 'unitLocked',
+              Icon: Circle,
+              className: 'text-fl-muted-3 size-4',
+            }
+          : {
+              label: 'unitAvailable',
+              Icon: Circle,
+              className: 'text-fl-muted-2 size-2',
+            }
+
+  return (
+    <span
+      id={id}
+      role="img"
+      aria-label={t(label)}
+      className="inline-flex w-4 shrink-0 items-center justify-center"
+    >
+      <Icon className={className} aria-hidden="true" />
+    </span>
+  )
 }
 
 export default function UnitCard({
@@ -42,6 +82,7 @@ export default function UnitCard({
 }: Props) {
   const t = useTranslations('plan')
   const tCommon = useTranslations('common')
+  const statusId = useId()
   const barWidth = Math.round(competency * 100)
 
   return (
@@ -66,12 +107,11 @@ export default function UnitCard({
               : 'hover:border-fl-border-2'
         }`}
         aria-label={t('unitAriaLabel', { index: index + 1, title })}
+        aria-describedby={statusId}
       >
         {/* Top bar: status + index + title */}
         <div className="flex items-center gap-3 px-4 py-3">
-          <span className="w-4 shrink-0 font-mono text-base">
-            <StatusIcon status={status} />
-          </span>
+          <StatusIcon status={status} id={statusId} />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <span className="text-fl-hint text-fl-muted-3 shrink-0 font-mono tracking-widest uppercase">

@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "So hilft dir Lingu",
+      "exampleLabel": "Beispiel einer Englischübung",
+      "questionLabel": "Lingu · Frage",
+      "answerLabel": "Du · Antwort",
+      "correctionLabel": "Lingu · Korrektur",
+      "explanation": "Wenn du über gestern sprichst, verwende „went“, die Vergangenheitsform von „go“."
+    },
     "hero": "Lerne Sprachen mit einem echten Sprachgesprächspartner",
     "heroSub": "Sprechen. Zuhören. Verbessern.",
     "signIn": "Anmelden",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Einheit gesperrt",
+    "unitAvailable": "Einheit verfügbar",
+    "lessonPending": "Ausstehende Lektion",
     "title": "Mein Plan",
     "subtitle": "Lernplan",
     "noPlan": "Kein aktiver Lernplan gefunden.",

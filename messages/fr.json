@@ -1,5 +1,13 @@
 {
   "landing": {
+    "microDemo": {
+      "title": "Voici comment Lingu vous aide",
+      "exampleLabel": "Exemple de pratique en anglais",
+      "questionLabel": "Lingu · Question",
+      "answerLabel": "Vous · Réponse",
+      "correctionLabel": "Lingu · Correction",
+      "explanation": "Pour parler d'hier, utilisez « went », le prétérit de « go »."
+    },
     "hero": "Apprenez les langues avec un vrai partenaire de conversation vocale",
     "heroSub": "Parlez. Écoutez. Progressez.",
     "signIn": "Se connecter",
@@ -569,6 +577,9 @@
     "voiceTrialSkip": "Skip for now"
   },
   "plan": {
+    "unitLocked": "Unité verrouillée",
+    "unitAvailable": "Unité disponible",
+    "lessonPending": "Leçon en attente",
     "title": "Mon plan",
     "subtitle": "Plan d'étude",
     "noPlan": "Aucun plan d'étude actif trouvé.",
