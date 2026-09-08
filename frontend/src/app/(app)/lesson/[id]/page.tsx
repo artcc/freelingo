@@ -780,14 +780,14 @@ export default function LessonPage() {
         {/* Exercise */}
         {exercise && (
           <div className="border-fl-border bg-fl-surface border">
-            <div className="border-fl-border flex items-center justify-between border-b px-6 py-4">
+            <div className="border-fl-border flex flex-wrap items-center justify-between gap-3 border-b px-6 py-4">
               <div className="flex items-center gap-2">
                 <span className="text-fl-label text-fl-muted-2">●</span>
-                <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+                <span className="text-fl-caption text-fl-muted-1 font-mono tracking-widest uppercase">
                   {t('exercise')} {currentExercise + 1} / {exercises.length}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-3">
                 <span className="text-fl-hint text-fl-muted-2 border-fl-border border px-2 py-1 font-mono tracking-widest uppercase">
                   {(
                     {
@@ -803,7 +803,7 @@ export default function LessonPage() {
                     type="button"
                     onClick={regenerateCurrentExercise}
                     disabled={regeneratingExercise}
-                    className="text-fl-hint text-fl-muted-3 hover:text-fl-fg border-fl-border hover:border-fl-border-2 border px-2 py-1 font-mono tracking-widest uppercase transition-colors disabled:opacity-50"
+                    className="text-fl-caption text-fl-muted-1 hover:text-fl-fg border-fl-border hover:border-fl-border-2 border px-2 py-1 font-mono tracking-widest uppercase transition-colors disabled:opacity-50"
                   >
                     {regeneratingExercise
                       ? t('regeneratingExercise')
@@ -814,9 +814,9 @@ export default function LessonPage() {
             </div>
 
             {/* Progress bar */}
-            <div className="bg-fl-border h-px">
+            <div className="bg-fl-border h-1">
               <div
-                className="bg-fl-accent h-px transition-all duration-300"
+                className="bg-fl-accent h-full transition-[width] duration-300 motion-reduce:transition-none"
                 style={{
                   width: `${Math.round(((currentExercise + 1) / exercises.length) * 100)}%`,
                 }}
@@ -882,9 +882,9 @@ export default function LessonPage() {
                         onClick={() => setAnswer(opt)}
                         className={`flex w-full items-center justify-between gap-3 border px-4 py-3 text-left transition-colors disabled:opacity-100 ${
                           isCorrect
-                            ? 'text-fl-fg border-green-500/40 bg-green-500/5'
+                            ? 'text-fl-fg border-fl-success/50 bg-fl-success/5'
                             : isWrongSelection
-                              ? 'text-fl-fg border-red-500/40 bg-red-500/5'
+                              ? 'text-fl-fg border-fl-error-fg/50 bg-fl-error-fg/5'
                               : isSelected
                                 ? 'border-fl-accent bg-fl-accent text-fl-accent-fg'
                                 : 'border-fl-border text-fl-muted-1 hover:border-fl-border-2 hover:text-fl-fg'
@@ -897,12 +897,12 @@ export default function LessonPage() {
                           {opt}
                         </TargetLanguageText>
                         {isCorrect && (
-                          <span className="font-mono text-xs text-green-400">
+                          <span className="text-fl-success font-mono text-xs">
                             ✓
                           </span>
                         )}
                         {isWrongSelection && (
-                          <span className="font-mono text-xs text-red-400">
+                          <span className="text-fl-error-fg font-mono text-xs">
                             ✕
                           </span>
                         )}
@@ -954,8 +954,8 @@ export default function LessonPage() {
                       isEvaluated && 'pr-10',
                       isEvaluated &&
                         (isAnswerCorrect
-                          ? 'border-green-500/40'
-                          : 'border-red-500/40')
+                          ? 'border-fl-success/50'
+                          : 'border-fl-error-fg/50')
                     )}
                     placeholder={t('yourAnswer')}
                     value={answer}
@@ -965,7 +965,7 @@ export default function LessonPage() {
                   {isEvaluated && (
                     <span
                       className={`absolute top-3 right-3 font-mono text-xs ${
-                        isAnswerCorrect ? 'text-green-400' : 'text-red-400'
+                        isAnswerCorrect ? 'text-fl-success' : 'text-fl-error-fg'
                       }`}
                     >
                       {isAnswerCorrect ? '✓' : '✕'}
@@ -980,7 +980,7 @@ export default function LessonPage() {
                     <button
                       onClick={() => submitAnswer()}
                       disabled={evaluating || !answer.trim()}
-                      className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+                      className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-40"
                     >
                       {evaluating ? tCommon('checking') : t('submitAnswer')}
                     </button>

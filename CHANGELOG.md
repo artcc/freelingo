@@ -5,11 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.8.50] - 2026-09-08
+
+### Changed
+
+- **Learning interface readability**: selected dashboard metrics, unit titles and counts, exercise controls, and reading instructions now use larger, clearer text while preserving the monochrome design.
+- **Primary learning actions**: dashboard, unit-card, and exercise submission buttons now share a solid monochrome treatment with visible keyboard focus.
+- **Learning progress bars**: dashboard, unit-card, and lesson progress bars now use rectangular 4px tracks with width-only transitions that respect reduced-motion preferences.
 
 ### Fixed
 
 - **Localized landing prices**: monthly and yearly prices now display the currency symbol once, preserving its locale-specific position before or after the amount.
+- **Theme consistency**: dark-mode utilities now follow the existing theme attribute, and the root page background and text use semantic theme colors.
+- **Exercise feedback contrast**: lesson, Reading, and Listening success and error feedback now use theme-aware colors, with incorrect comprehension answers retaining their strikethrough without reduced text opacity.
 
 ## [1.8.45] - 2026-08-26
 

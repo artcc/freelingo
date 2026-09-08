@@ -427,6 +427,9 @@ submission (the text was already visible).
   for long passages).
 - Passage is rendered in a scrollable `<div>` with a subtle border to visually separate
   it from the question form.
+- The exercise header wraps on narrow screens. The word-selection instruction uses 12px `text-fl-caption` with `text-fl-muted-1`; inline errors use the same size with theme-aware `text-fl-error-fg`.
+- The main Submit button uses solid monochrome `bg-fl-fg text-fl-bg` styling, a `hover:bg-fl-fg/90` state, bold text, and a visible keyboard-focus outline; answer-completion and submission-in-progress disabling are unchanged.
+- Result cards use `fl-success` or `fl-error-fg` borders at 50% opacity and backgrounds at 5% opacity, with matching theme-aware answer text. Incorrect selected answers retain their strikethrough without reduced text opacity. Scoring, XP, and result conditions are unchanged.
 
 ### 3.3 i18n keys
 

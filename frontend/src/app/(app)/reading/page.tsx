@@ -435,8 +435,8 @@ function ReadingPage() {
                 key={q.index}
                 className={`border p-4 ${
                   isCorrect
-                    ? 'border-green-600/50 bg-green-950/30'
-                    : 'border-red-600/50 bg-red-950/30'
+                    ? 'border-fl-success/50 bg-fl-success/5'
+                    : 'border-fl-error-fg/50 bg-fl-error-fg/5'
                 }`}
               >
                 <TargetLanguageText
@@ -452,9 +452,9 @@ function ReadingPage() {
                       key={k}
                       className={`px-3 py-1.5 ${
                         k === correctKey
-                          ? 'font-bold text-green-400'
+                          ? 'text-fl-success font-bold'
                           : k === userAnswer && !isCorrect
-                            ? 'text-red-400 line-through opacity-70'
+                            ? 'text-fl-error-fg line-through'
                             : 'text-fl-muted-3'
                       }`}
                     >
@@ -513,7 +513,9 @@ function ReadingPage() {
         </div>
 
         {error && (
-          <p className="text-fl-label mb-4 font-mono text-red-500">{error}</p>
+          <p className="text-fl-caption text-fl-error-fg mb-4 font-mono">
+            {error}
+          </p>
         )}
 
         <FreemiumQuotaBanner feature="reading" className="mb-4" />
@@ -543,7 +545,7 @@ function ReadingPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 md:px-8">
       {/* Header */}
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-fl-fg font-mono text-sm font-bold tracking-widest uppercase">
             {t('title')}
@@ -592,7 +594,7 @@ function ReadingPage() {
                   </TargetLanguageText>
                 </div>
               </div>
-              <p className="text-fl-label text-fl-muted-4 mt-2 text-center font-mono tracking-widest uppercase">
+              <p className="text-fl-caption text-fl-muted-1 mt-2 text-center font-mono tracking-widest uppercase">
                 {t('selectWordHint')}
               </p>
             </div>
@@ -653,7 +655,7 @@ function ReadingPage() {
               </div>
 
               {error && (
-                <p className="text-fl-label mt-3 font-mono text-red-500">
+                <p className="text-fl-caption text-fl-error-fg mt-3 font-mono">
                   {error}
                 </p>
               )}
@@ -661,7 +663,7 @@ function ReadingPage() {
               <button
                 onClick={handleSubmit}
                 disabled={!allAnswered || submitting}
-                className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 mt-4 w-full border py-3 font-mono text-xs tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg mt-4 w-full border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {submitting ? '...' : t('submit')}
               </button>

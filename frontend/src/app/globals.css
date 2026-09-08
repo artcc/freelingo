@@ -2,7 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(html:not([data-theme='light']), html:not([data-theme='light']) *));
 
 @theme inline {
   --color-background: var(--background);
@@ -35,6 +35,7 @@
   --color-fl-error-fg: var(--fl-error-fg);
   --color-fl-error-dim: var(--fl-error-dim);
   --color-fl-error-hover: var(--fl-error-hover);
+  --color-fl-success: var(--fl-success);
   /* FreeLingo accent tokens */
   --color-fl-accent: var(--fl-accent);
   --color-fl-accent-fg: var(--fl-accent-fg);
@@ -92,6 +93,7 @@
   --fl-error-fg: #ff6b6b;
   --fl-error-dim: #cc6666;
   --fl-error-hover: #ff5555;
+  --fl-success: #4ade80;
   --fl-accent: #c9943a;
   --fl-accent-fg: #0a0a0a;
   /* shadcn tokens */
@@ -214,6 +216,7 @@ html[data-theme='light'] {
   --fl-error-fg: #cc3333;
   --fl-error-dim: #994444;
   --fl-error-hover: #c02020;
+  --fl-success: #15803d;
   --fl-accent: #b07e28;
   --fl-accent-fg: #0a0a0a;
   /* shadcn token overrides (light) */

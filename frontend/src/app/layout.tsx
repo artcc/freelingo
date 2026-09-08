@@ -127,7 +127,7 @@ export default async function RootLayout({
           />
         )}
       </head>
-      <body className="min-h-full bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
+      <body className="bg-background text-foreground min-h-full">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>{children}</ThemeProvider>
           <CookieBanner />
