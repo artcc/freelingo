@@ -256,6 +256,7 @@ All configuration is environment-driven. Variables are defined in `app/core/conf
 ### LLM
 
 - LLM_PROVIDER — Default: ollama; Purpose: `ollama` / `openai` / `anthropic` / `deepseek`
+- LLM_REQUEST_TIMEOUT — Default: 120; Purpose: Per-request LLM timeout in seconds (all providers); raise for slow local models
 - OLLAMA_BASE_URL — Default: http://host.docker.internal:11434; Purpose: Ollama API endpoint
 - OLLAMA_MODEL — Default: gemma4:e4b; Purpose: Model tag to use with Ollama
 - OPENAI_API_KEY — Default: ``; Purpose: OpenAI API key (also reused for TTS/STT when provider is `openai`)

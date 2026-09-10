@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/store/auth'
 import { useLoadingStore } from '@/store/loading'
 
-const BASE_URL = ''
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/$/, '')
 
 let isRefreshing = false
 let refreshPromise: Promise<string | null> | null = null

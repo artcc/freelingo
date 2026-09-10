@@ -72,7 +72,7 @@ Files most commonly affected by code changes:
 These describe what was built — they are the reference documentation:
 
 - `specs/architecture.instructions.md` — Repository structure, data flows, auth design, test summary
-- `specs/architecture-backend.instructions.md` — Backend architecture: models (21), services (20), routers (23), schemas (15), env vars (57), Python code standards
+- `specs/architecture-backend.instructions.md` — Backend architecture: models (21), services (20), routers (23), schemas (15), env vars (58), Python code standards
 - `specs/architecture-frontend.instructions.md` — Frontend architecture: pages, components, stores (6), lib modules (9), TypeScript code standards
 - `specs/add-target-language.instructions.md` — Canonical checklist for adding new target languages, based on the British English (`en-GB`) data package structure and current dispatchers
 - `specs/database-models.instructions.md` — **22 SQLAlchemy ORM models**: full schema details, relationships, constraints, business rules

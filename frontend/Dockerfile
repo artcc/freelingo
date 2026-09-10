@@ -10,6 +10,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/ .
 COPY messages/ ./messages/
+# NEXT_PUBLIC_* constants are inlined into the client bundle at build time.
+# Set to the browser-reachable API origin when serving the API on a different
+# origin than the frontend (empty default = same-origin / proxy mode).
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 # Re-run postinstall to ensure all ORT WASM + .mjs loaders are present in public/vad/
 # (deps stage generates them but COPY frontend/ . above overwrites public/vad from source)
 RUN node scripts/copy-vad-models.js

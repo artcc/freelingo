@@ -22,7 +22,7 @@ logger = get_logger(__name__)
 
 MAX_RETRIES = 2
 RETRY_DELAY_SECONDS = 2
-REQUEST_TIMEOUT = 120.0
+REQUEST_TIMEOUT = float(settings.LLM_REQUEST_TIMEOUT)
 
 MAX_CONTEXT_TOKENS = {
     "openai": 128000,
