@@ -111,7 +111,7 @@ Exercises belong to a lesson (1:N). Generated alongside the lesson and stored in
 Plan generation is **fully deterministic** — no LLM call. The service:
 
 1. Fetches curriculum units for the requested CEFR level from `backend/app/data/curriculum.py`.
-2. Calls `distribute_units()` to spread units across the total weeks × days grid.
+2. Calls `distribute_units()` to spread units across the total weeks × days grid using deterministic fair quotas: every unit receives a base share of lesson slots (remainder spread one each across the earliest, prerequisite-first units), each unit's allocation walks its curriculum `lesson_types` in order (cycling), truncation only trims a unit's own tail, and consecutive lessons within a unit rotate through the unit's competency checklist, grammar points, and vocabulary sets so their generation inputs differ.
 3. Builds a list of `WeekPlan` objects, each containing a list of `DayPlan` objects.
 4. Returns a `GeneratedPlan` Pydantic model, which is stored as JSON in `study_plans.generated_plan`.
 
@@ -175,7 +175,7 @@ It returns a structured JSON with:
 
 ### Variety within a unit
 
-All lessons of a unit share the same `grammar_points` and `vocabulary_set_ids`, so the prompt needs two extra signals to keep them from converging on the same content:
+Since the allocator fix for issue #316, lessons within a unit rotate through the unit's `grammar_points`, `vocabulary_set_ids`, and competency checklist per lesson visit, so generation inputs already differ between siblings. The prompt adds two further signals to keep content from converging:
 
 - **Sibling-lesson context.** `build_previous_lessons_summary()` condenses the siblings into a capped summary (at most the 6 most recent lessons, each with its title, type, a truncated explanation excerpt, up to 3 example sentences, up to 6 vocabulary words, and up to 2 common traps). The vocabulary list that closes the summary is collected from every sibling, not only from the 6 described in detail, and is capped at 40 words. The summary is injected as delimited data the model must not reuse. Siblings are every lesson of the unit that already has generated content, whether or not the student has completed it, so the block is worded as material the unit already covers rather than as material the student knows. Lessons with no siblings yet get no block at all.
 - **Per-type behaviour.** The declared `lesson_type` (`grammar`, `vocabulary`, `reading`, `writing`, `listening`, `speaking`, `review`) selects an instruction block describing what the explanation, the exercise mix, and the vocabulary of that type must emphasise. Speaking focuses on oral production with model exchanges, response frames, turn-taking phrases, pronunciation, and natural spoken replies. Unknown types fall back to a generic block. `review` keeps recycling the unit's material by design, but still has to do it with new sentences and contexts. The same `lesson_type` also scopes the minimum share of exercises that must target the unit grammar points: 70% for `grammar`, `review`, and unknown types, 30% for the types whose focus block asks for lexical, comprehension, or production exercises, including `speaking`.
