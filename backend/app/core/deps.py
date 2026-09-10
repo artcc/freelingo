@@ -31,7 +31,7 @@ async def get_current_user(
     try:
         payload = decode_access_token(token)
         user_id = int(payload["sub"])
-    except JWTError, KeyError, ValueError:
+    except (JWTError, KeyError, ValueError):
         raise HTTPException(status_code=401, detail="Invalid token") from None
 
     user = await db.get(User, user_id)

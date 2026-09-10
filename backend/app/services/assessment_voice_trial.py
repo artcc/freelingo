@@ -106,7 +106,7 @@ async def validate_assessment_voice_trial_token(
             cefr_level=str(payload["cefr_level"]),
             duration_seconds=int(payload.get("duration_seconds", TRIAL_DURATION_SECONDS)),
         )
-    except KeyError, TypeError, ValueError, json.JSONDecodeError:
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
         await redis.delete(_token_key(user.id, token))
         return None
 

@@ -110,7 +110,7 @@ class ConversationPipeline:
                 goals = _json.loads(learning_goals)
                 if isinstance(goals, list) and goals:
                     _ctx_parts.append(f"Learning goals: {', '.join(goals)}")
-            except ValueError, TypeError:
+            except (ValueError, TypeError):
                 pass
         if bio and bio.strip():
             _ctx_parts.append(f"About the student: {bio.strip()}")
