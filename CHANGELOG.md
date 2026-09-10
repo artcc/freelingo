@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **Study plan unit distribution (#316)**: plans no longer front-load the first unit (15 of 47 lessons on one grammar topic in the reported 12-week × 4-day case) or truncate the final consolidation unit. Units now receive deterministic fair quotas, keep their full lesson-type cycles, and consecutive lessons within a unit rotate objectives, grammar points, and vocabulary instead of being generated from byte-identical inputs.
 ## [1.8.50] - 2026-09-08
 
 ### Added

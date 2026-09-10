@@ -157,59 +157,78 @@ def distribute_units(
     i18n = _I18N.get(target_language) or _I18N.get(target_language.split("-")[0], _I18N["en-GB"])
 
     total_slots = total_weeks * days_per_week
+    # Completion test always owns exactly the final slot.
     lesson_slots = max(1, total_slots - 1)
+    test_slot = total_slots - 1
 
-    lesson_types_per_unit = [lt for u in units for lt in u.lesson_types]
-
-    if not lesson_types_per_unit:
+    # ── Fair unit quotas (issue #316) ────────────────────────────────
+    # Every unit gets a base share of the lesson slots; the remainder is
+    # spread one each across the earliest (prerequisite-first) units. No
+    # unit may accumulate surplus while later units are truncated.
+    n_units = len(units)
+    if n_units == 0:
         return []
+    base_quota = lesson_slots // n_units
+    remainder = lesson_slots % n_units
 
+    # ── Per-unit slot plans: full lesson-type cycles ─────────────────
+    # Each unit's allocation walks its curriculum lesson_types in order,
+    # cycling as many times as the quota allows. Truncation only trims
+    # the tail of a unit's own allocation (review last to go), never
+    # another unit's allocation.
+    unit_plans: list[list[str]] = []
+    for unit_index, unit in enumerate(units):
+        quota = base_quota + (1 if unit_index < remainder else 0)
+        lt_list = unit.lesson_types or ["grammar"]
+        cycle = max(1, len(lt_list))
+        types = [lt_list[i % cycle] for i in range(quota)]
+        unit_plans.append(types)
+
+    # ── Lay slots into the grid in curriculum order ──────────────────
     slots: list[dict] = []
-    unit_index = 0
-    type_index = 0
-
-    for slot in range(lesson_slots):
-        unit = units[min(unit_index, len(units) - 1)]
-        lt_list = unit.lesson_types
-        lt = lt_list[type_index % len(lt_list)] if lt_list else "grammar"
-
-        slots.append(
-            {
-                "week": slot // days_per_week + 1,
-                "day": slot % days_per_week + 1,
-                "unit_id": unit.id,
-                "unit_title": unit.title,
-                "lesson_type": lt,
-                "title": i18n["lesson_title"].format(title=unit.title, n=type_index + 1),
-                "objectives": (unit.competency_checklist[:2] if unit.competency_checklist else []),
-                "estimated_minutes": 25,
-                "grammar_points": (unit.grammar_points[:2] if unit.grammar_points else []),
-                "vocabulary_set_ids": (
-                    unit.vocabulary_set_ids[:1] if unit.vocabulary_set_ids else []
-                ),
-            }
-        )
-
-        type_index += 1
-        if type_index % len(lt_list) == 0 and unit_index < len(units) - 1:
-            remaining_slots = lesson_slots - slot - 1
-            remaining_units = len(units) - unit_index - 1
-            if remaining_slots <= remaining_units * len(units[unit_index + 1].lesson_types):
-                unit_index += 1
-
-    last_unit = units[-1]
     level = units[0].level
+    for unit_index, unit in enumerate(units):
+        lt_list = unit.lesson_types or ["grammar"]
+        gps = unit.grammar_points or []
+        checklist = unit.competency_checklist or []
+        vocab_ids = unit.vocabulary_set_ids or []
+        for per_unit_index, lt in enumerate(unit_plans[unit_index]):
+            slot = len(slots)
+            # Rotate content each visit so consecutive lessons on the
+            # same unit are not byte-identical (issue #316, cause 2).
+            objectives = (
+                [checklist[(per_unit_index + j) % len(checklist)] for j in range(2)]
+                if checklist
+                else []
+            )
+            grammar_points = [gps[(per_unit_index + j) % len(gps)] for j in range(2)] if gps else []
+            vocabulary_set_ids = [vocab_ids[per_unit_index % len(vocab_ids)]] if vocab_ids else []
+            slots.append(
+                {
+                    "week": slot // days_per_week + 1,
+                    "day": slot % days_per_week + 1,
+                    "unit_id": unit.id,
+                    "unit_title": unit.title,
+                    "lesson_type": lt,
+                    "title": i18n["lesson_title"].format(title=unit.title, n=per_unit_index + 1),
+                    "objectives": objectives,
+                    "estimated_minutes": 25,
+                    "grammar_points": grammar_points,
+                    "vocabulary_set_ids": vocabulary_set_ids,
+                }
+            )
+
     slots.append(
         {
-            "week": total_weeks,
-            "day": days_per_week,
+            "week": test_slot // days_per_week + 1,
+            "day": test_slot % days_per_week + 1,
             "unit_id": "completion-test",
             "unit_title": i18n["test_unit_title"].format(level=level),
             "lesson_type": "review",
             "title": i18n["test_title"].format(level=level),
             "objectives": i18n["test_objectives"],
             "estimated_minutes": 45,
-            "grammar_points": last_unit.grammar_points,
+            "grammar_points": units[-1].grammar_points,
             "vocabulary_set_ids": [],
         }
     )
