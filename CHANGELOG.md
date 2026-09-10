@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Configurable LLM request timeout**: `LLM_REQUEST_TIMEOUT` (seconds, default `120`) bounds each LLM request across all providers and passes through Docker Compose; raise it for slow local models.
+
+### Changed
+
+- **REST client API origin**: the frontend REST client now honors `NEXT_PUBLIC_API_URL` (previously WebSocket-only), letting the API be served on a different origin than the frontend; the frontend Dockerfile accepts `NEXT_PUBLIC_API_URL` as a build argument. Defaults are unchanged (same-origin proxy mode).
+
 ## [1.8.50] - 2026-09-08
 
 ### Added

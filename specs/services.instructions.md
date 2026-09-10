@@ -14,6 +14,7 @@ Singleton providing provider-agnostic LLM access. Supports four providers select
 - ollama — Client: AsyncOpenAI (openai SDK); Max tokens: 8192; Notes: Local, openai-compatible endpoint
 - openai — Client: AsyncOpenAI; Max tokens: 128K; Notes: —
 - deepseek — Client: AsyncOpenAI; Max tokens: 128K; Notes: openai-compatible endpoint
+- Shared — Request timeout: `LLM_REQUEST_TIMEOUT` (seconds, default 120; raise for slow local models)
 - anthropic — Client: AsyncAnthropic (anthropic SDK); Context window: 200K; Output limit: configurable with `ANTHROPIC_MAX_TOKENS` (default 8192); Notes: Separate code path; system message extracted
 
 **Key capabilities:**
