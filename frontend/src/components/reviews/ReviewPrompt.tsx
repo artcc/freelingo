@@ -121,7 +121,7 @@ export function ReviewForm({
         <div>
           <label
             htmlFor="review-comment"
-            className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase"
+            className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase"
           >
             {t('commentLabel')}
           </label>
@@ -144,7 +144,7 @@ export function ReviewForm({
           <button
             type="button"
             onClick={onCancel}
-            className="border-fl-border text-fl-label text-fl-muted-2 hover:text-fl-fg flex-1 border py-3 font-mono font-bold tracking-widest uppercase transition-colors"
+            className="border-fl-border text-fl-muted-2 hover:text-fl-fg flex-1 border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
           >
             {cancelLabel ?? t('cancel')}
           </button>
@@ -153,7 +153,7 @@ export function ReviewForm({
           type="button"
           onClick={handleSubmit}
           disabled={submitting}
-          className="bg-fl-accent text-fl-accent-fg text-fl-label hover:bg-fl-accent/90 flex flex-1 items-center justify-center gap-2 py-3 font-mono font-bold tracking-widest uppercase transition-colors disabled:opacity-60"
+          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 flex flex-1 items-center justify-center gap-2 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-60"
         >
           {submitting && <Loader2 className="size-3.5 animate-spin" />}
           {submitLabel ?? t('submit')}

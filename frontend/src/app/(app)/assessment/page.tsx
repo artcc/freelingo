@@ -427,7 +427,7 @@ export default function AssessmentPage() {
                 <button
                   onClick={requestVoiceTrial}
                   disabled={trialLoading}
-                  className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+                  className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
                 >
                   {trialLoading ? '...' : `${t('voiceTrialStart')} →`}
                 </button>
@@ -447,7 +447,7 @@ export default function AssessmentPage() {
               </button>
               <button
                 onClick={() => setStep('beginner-gate')}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 flex-[1.75] px-3 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 flex-[1.75] px-3 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {t('retake')}
               </button>
@@ -601,7 +601,7 @@ export default function AssessmentPage() {
             )}
             <button
               onClick={() => setStep('duration')}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
             >
               {t('createPlan')} →
             </button>
@@ -670,7 +670,7 @@ export default function AssessmentPage() {
             </div>
             <button
               onClick={startVoiceTrial}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
             >
               {t('voiceTrialStart')} →
             </button>

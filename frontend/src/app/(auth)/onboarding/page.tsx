@@ -222,7 +222,7 @@ export default function OnboardingPage() {
                 {isNewLanguage ? t('newLanguageSubtitle') : t('subtitle')}
               </p>
               <div>
-                <label className="text-fl-label text-fl-muted-2 mb-3 block font-mono tracking-widest uppercase">
+                <label className="text-fl-muted-2 mb-3 block font-mono text-xs tracking-widest uppercase">
                   {t('chooseVariant')}
                 </label>
                 {!languagesLoaded ? (
@@ -255,7 +255,7 @@ export default function OnboardingPage() {
               </div>
               <button
                 type="submit"
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {tCommon('next')}
               </button>
@@ -291,7 +291,7 @@ export default function OnboardingPage() {
                 type="button"
                 disabled={loading}
                 onClick={() => handleStep2()}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
               >
                 {loading ? (
                   <>
@@ -343,7 +343,7 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={() => router.push('/dashboard')}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {t('goToDashboard')}
               </button>
@@ -372,7 +372,7 @@ export default function OnboardingPage() {
                       type="button"
                       disabled={checkoutLoading !== null}
                       onClick={() => handleCheckout(plan)}
-                      className={`w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50 ${
+                      className={`w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50 ${
                         isPrimary
                           ? 'bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90'
                           : 'border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 border'
@@ -394,7 +394,7 @@ export default function OnboardingPage() {
                           <span>{yearlyCta.main}</span>
                           {yearlyCta.savings && (
                             <span
-                              className={`text-[0.68rem] ${
+                              className={`text-xs ${
                                 isPrimary
                                   ? 'text-fl-accent-fg'
                                   : 'text-fl-muted-3'

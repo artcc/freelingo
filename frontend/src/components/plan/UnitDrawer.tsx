@@ -153,7 +153,7 @@ export default function UnitDrawer({
                   {lesson.id != null && lesson.action && (
                     <button
                       onClick={() => onStartLesson(lesson.id!)}
-                      className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-fg/90 min-w-24 shrink-0 px-3 py-2 font-mono font-bold tracking-widest uppercase transition-colors"
+                      className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 min-w-24 shrink-0 px-3 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
                     >
                       {lesson.action === 'review'
                         ? t('reviewLesson')

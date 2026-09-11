@@ -79,11 +79,11 @@ Single-panel layout — no step pagination. All entries for the version are show
 
 ```
 ┌─────────────────────────────────────────┐
-│  ✦  WHAT'S NEW — v1.5.0                │
+│  WHAT'S NEW — v1.5.0          [Lingu]   │
 ├─────────────────────────────────────────┤
 │                                         │
 │  ◎  FEATURE LABEL                       │
-│     Short description of the feature.  │
+│     Short description of the feature.   │
 │                                         │
 │  ▣  ANOTHER FEATURE                     │
 │     Short description.                  │
@@ -101,6 +101,7 @@ Single-panel layout — no step pagination. All entries for the version are show
 - **Backdrop**: full-screen fixed overlay (`z-50`), semi-transparent with `backdrop-blur-sm`. Clicking it dismisses the modal.
 - **Modal card**: centered, `max-w-md`, same border/surface tokens as the tour (`border-fl-border bg-fl-surface`).
 - **Header**: the title uses Geist Sans with `tracking-widest uppercase text-fl-muted-2`; the version marker uses Geist Mono through `font-code`.
+- **Header illustration**: title and version sit on the left; transparent `/logo_update.png` shows Lingu on the right at a fixed 85 × 85px using `next/image`, replacing the sparkle icon. The decorative image has empty alt text and stays inside the card without a background or frame. Existing modal styling, entries, and dismissal behavior are preserved.
 - **Entry list**: each entry has a `CircleDot` icon, a 12px semibold sentence-case label in `text-fl-fg`, and a 14px Geist Sans description in `text-fl-muted-1` with relaxed line spacing. Rich-text emphasis uses `text-fl-fg`.
 - **Divider** between header, list, and footer using `border-fl-border`.
 - **Footer**: single `Got it →` button (filled `bg-fl-accent`) right-aligned.
@@ -136,7 +137,7 @@ The number of entries is variable per version. The component reads entries dynam
 
 **When shipping a new version: replace all existing `entry*` keys with the new version's entries.** Do not accumulate old entries — only the current version's changelog items should be present. The `version` key must also be updated to match `WHATS_NEW_VERSION` in the component.
 
-For v1.8.55, all ten locales show the approved visual-identity highlight first as `entry1`, describing the petroleum-blue tones and solid backgrounds while preserving the minimalist design. The former reading-comfort and clearer-translations/website/email highlights move intact to `entry2` and `entry3`. The general bug-fix entry is preserved unchanged as the final `entry4`. `WHATS_NEW_VERSION` and the localized version labels remain `v1.8.55`; the existing dynamic renderer handles the additional entry without component changes, and this content revision does not reopen an already-dismissed modal.
+For v1.9.0, all ten locales show the approved visual-identity highlight first as `entry1`, describing the petroleum-blue tones and solid backgrounds while preserving the minimalist design. The former reading-comfort and clearer-translations/website/email highlights move intact to `entry2` and `entry3`. The general bug-fix entry is preserved unchanged as the final `entry4`. `WHATS_NEW_VERSION` and the localized version labels remain `v1.9.0`; the existing dynamic renderer handles the additional entry without component changes, and this content revision does not reopen an already-dismissed modal.
 
 ---
 

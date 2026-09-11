@@ -174,7 +174,7 @@ function CreateModal({ type, onClose, onCreated }: CreateModalProps) {
             </div>
           )}
           <div>
-            <label className="text-fl-hint text-fl-muted-2 mb-1 block font-mono tracking-widest uppercase">
+            <label className="text-fl-muted-2 mb-1 block font-mono text-xs tracking-widest uppercase">
               {t('labelTitle')}
             </label>
             <input
@@ -193,7 +193,7 @@ function CreateModal({ type, onClose, onCreated }: CreateModalProps) {
             />
           </div>
           <div>
-            <label className="text-fl-hint text-fl-muted-2 mb-1 block font-mono tracking-widest uppercase">
+            <label className="text-fl-muted-2 mb-1 block font-mono text-xs tracking-widest uppercase">
               {t('labelDescription')}
             </label>
             <textarea
@@ -221,7 +221,7 @@ function CreateModal({ type, onClose, onCreated }: CreateModalProps) {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 flex-1 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 flex-1 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
             >
               {submitting ? t('submitting') : t('submit')}
             </button>
@@ -456,7 +456,7 @@ function DetailView({
           <button
             type="submit"
             disabled={postingComment || !commentBody.trim()}
-            className="border-fl-border text-fl-label text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 border px-4 py-2 font-mono tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-30"
+            className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 border px-4 py-2 font-mono text-sm tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-30"
           >
             {postingComment ? t('postingComment') : t('postComment')}
           </button>
@@ -657,7 +657,7 @@ export default function FeedbackPage() {
           <button
             key={tabOption}
             onClick={() => setTab(tabOption)}
-            className={`text-fl-label -mb-px border-b-2 px-5 py-2 font-mono tracking-widest uppercase transition-colors ${
+            className={`-mb-px border-b-2 px-5 py-2 font-mono text-xs tracking-widest uppercase transition-colors ${
               tab === tabOption
                 ? 'border-fl-fg text-fl-fg'
                 : 'text-fl-muted-2 hover:text-fl-fg border-transparent'
@@ -669,7 +669,7 @@ export default function FeedbackPage() {
         <div className="flex-1" />
         <button
           onClick={() => setShowCreate(true)}
-          className="text-fl-label text-fl-muted-1 hover:text-fl-fg px-4 py-2 font-mono tracking-widest uppercase transition-colors"
+          className="text-fl-muted-1 hover:text-fl-fg px-4 py-2 font-mono text-sm tracking-widest uppercase transition-colors"
         >
           {tab === 'feature' ? t('newFeature') : t('newBug')}
         </button>
@@ -792,7 +792,7 @@ export default function FeedbackPage() {
                         label={getStatusLabel(entry.status)}
                       />
                       {entry.unread_by_me && (
-                        <span className="border border-red-500/40 px-2 py-0.5 font-mono text-[10px] leading-none font-bold tracking-widest text-red-400 uppercase">
+                        <span className="text-fl-label border border-red-500/40 px-2 py-0.5 font-mono leading-none font-bold tracking-widest text-red-400 uppercase">
                           {t('unread')}
                         </span>
                       )}

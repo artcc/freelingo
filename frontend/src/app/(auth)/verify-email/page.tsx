@@ -79,7 +79,7 @@ function VerifyEmailContent() {
               <p className="text-fl-fg font-mono text-sm">{t('success')}</p>
               <Link
                 href="/login"
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {t('goToLogin')}
               </Link>
@@ -91,7 +91,7 @@ function VerifyEmailContent() {
               <p className="text-fl-error font-mono text-xs">{t('error')}</p>
               <button
                 onClick={verify}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {tCommon('retry')}
               </button>

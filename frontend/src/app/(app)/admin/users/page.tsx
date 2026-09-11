@@ -465,7 +465,7 @@ export default function AdminUsersPage() {
             </button>
             <button
               onClick={openCreateUser}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex items-center gap-2 px-3 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex items-center gap-2 px-3 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
             >
               <Plus className="size-3.5" aria-hidden="true" />
               {t('createUserBtn')}
@@ -951,7 +951,7 @@ export default function AdminUsersPage() {
                 },
               ].map(({ key, label, required, type }) => (
                 <label key={key} className="block">
-                  <span className="text-fl-label text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
+                  <span className="text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
                     {label}
                   </span>
                   <input
@@ -981,7 +981,7 @@ export default function AdminUsersPage() {
                 </label>
               ))}
               <label className="block">
-                <span className="text-fl-label text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
+                <span className="text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
                   {t('fieldNativeLanguage')}
                 </span>
                 <select
@@ -1001,7 +1001,7 @@ export default function AdminUsersPage() {
                 </select>
               </label>
               <label className="block">
-                <span className="text-fl-label text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
+                <span className="text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
                   {t('fieldTargetLanguage')}
                 </span>
                 <select
@@ -1019,7 +1019,7 @@ export default function AdminUsersPage() {
                 </select>
               </label>
               <label className="block">
-                <span className="text-fl-label text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
+                <span className="text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
                   {t('fieldRole')}
                 </span>
                 <select
@@ -1040,7 +1040,7 @@ export default function AdminUsersPage() {
               <button
                 type="button"
                 onClick={() => setShowCreate(false)}
-                className="border-fl-border text-fl-label text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg border py-3 font-mono font-bold tracking-widest uppercase transition-colors"
+                className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
               >
                 {tCommon('cancel')}
               </button>
@@ -1048,7 +1048,7 @@ export default function AdminUsersPage() {
                 type="submit"
                 form="admin-create-user-form"
                 disabled={createSaving}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex items-center justify-center gap-2 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex items-center justify-center gap-2 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
               >
                 {createSaving && (
                   <Loader2

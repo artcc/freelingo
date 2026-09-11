@@ -55,7 +55,7 @@ export default function GlobalError({
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <button
               onClick={reset}
-              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-1 px-6 py-3 font-mono text-xs tracking-widest uppercase transition-colors"
+              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-1 px-6 py-3 font-mono text-sm tracking-widest uppercase transition-colors"
             >
               {t('retry')}
             </button>

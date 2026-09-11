@@ -50,7 +50,7 @@ export function SettingsNav({
           <a
             key={item.href}
             href={item.href}
-            className="text-fl-label text-fl-muted-2 hover:bg-fl-bg hover:text-fl-fg focus:bg-fl-bg focus:text-fl-fg flex min-h-9 items-center gap-2 border-l-2 border-transparent px-3 py-2 font-mono tracking-widest uppercase transition-colors focus:outline-none"
+            className="text-fl-muted-2 hover:bg-fl-bg hover:text-fl-fg focus:bg-fl-bg focus:text-fl-fg flex min-h-9 items-center gap-2 border-l-2 border-transparent px-3 py-2 font-mono text-xs tracking-widest uppercase transition-colors focus:outline-none"
           >
             <Icon className="size-3.5" aria-hidden="true" />
             {item.label}
@@ -113,7 +113,7 @@ export function SettingsActionCard({
       <p className="text-fl-fg font-mono text-sm tracking-widest uppercase">
         {label}
       </p>
-      <p className="text-fl-muted-2 mt-2 font-mono text-xs leading-relaxed">
+      <p className="text-fl-muted-2 mt-2 font-mono text-sm leading-relaxed">
         {description}
       </p>
     </Link>

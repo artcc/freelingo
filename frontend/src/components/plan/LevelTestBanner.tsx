@@ -29,7 +29,7 @@ export default function LevelTestBanner({ planId, level }: Props) {
         </p>
         <button
           onClick={() => router.push(`/assessment/level-test?plan=${planId}`)}
-          className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright px-6 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+          className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright px-6 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
         >
           {t('beginLevelTest')} →
         </button>

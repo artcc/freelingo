@@ -106,7 +106,7 @@ export function ConfirmDialog({
         <div className="px-6 py-6">
           <p
             id={descriptionId}
-            className="text-fl-muted-0 font-mono text-xs leading-relaxed"
+            className="text-fl-muted-0 font-mono text-sm leading-relaxed"
           >
             {message}
           </p>
@@ -123,7 +123,7 @@ export function ConfirmDialog({
             ref={cancelRef}
             onClick={onCancel}
             disabled={confirming}
-            className="border-fl-border text-fl-label text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg flex-1 border py-3 font-mono font-bold tracking-widest uppercase transition-colors"
+            className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg flex-1 border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
           >
             {cancelLabel ?? tCommon('cancel')}
           </button>
@@ -131,7 +131,7 @@ export function ConfirmDialog({
             onClick={onConfirm}
             disabled={confirming}
             aria-busy={confirming}
-            className={`text-fl-label flex-1 py-3 font-mono font-bold tracking-widest uppercase transition-colors ${
+            className={`flex-1 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors ${
               danger
                 ? 'bg-fl-error text-fl-fg-bright hover:bg-fl-error-hover'
                 : 'bg-fl-fg text-fl-bg hover:bg-fl-fg-bright'

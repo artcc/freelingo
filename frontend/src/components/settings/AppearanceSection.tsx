@@ -34,7 +34,7 @@ export function AppearanceSection({ title }: { title?: string } = {}) {
             <button
               key={opt}
               onClick={() => setTheme(opt)}
-              className={`text-fl-label border px-3 py-2 font-mono tracking-widest uppercase transition-colors ${
+              className={`border px-3 py-2 font-mono text-xs tracking-widest uppercase transition-colors ${
                 theme === opt
                   ? 'border-fl-border-2 text-fl-fg bg-fl-surface-2'
                   : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg'
