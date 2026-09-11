@@ -1464,14 +1464,18 @@
     "version": "v1.8.55",
     "cta": "Am înțeles",
     "entry1": {
+      "label": "Un stil care ne reprezintă",
+      "desc": "Tonurile de albastru petrol și fundalurile uniforme dau mai multă personalitate FreeLingo, păstrând designul minimalist pe care îl cunoști deja."
+    },
+    "entry2": {
       "label": "O lectură mai confortabilă",
       "desc": "Un font mai clar și mici ajustări ale dimensiunii textului, spațierii și contrastului fac lecțiile, explicațiile și conversațiile tale mai ușor de citit."
     },
-    "entry2": {
+    "entry3": {
       "label": "Mai multă claritate în detalii",
       "desc": "Traducerile și notele de ajutor sunt mai ușor de citit. Site-ul nostru de prezentare și e-mailurile au, de asemenea, un aspect mai lizibil."
     },
-    "entry3": {
+    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Remedierile de erori și micile îmbunătățiri fac FreeLingo mai stabil și mai plăcut de utilizat."
     }

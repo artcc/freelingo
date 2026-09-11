@@ -109,7 +109,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="bg-fl-bg bg-dot-grid text-fl-fg flex min-h-screen flex-col">
+    <div className="bg-fl-bg text-fl-fg flex min-h-screen flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

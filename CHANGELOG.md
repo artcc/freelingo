@@ -13,7 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Reading comfort**: learning text and selected explanations use moderately larger sizes, clearer secondary text, restrained reading widths, and sentence-case instructions without enlarging the overall interface.
 - **Static website typography**: the `docs/` site now serves its own Geist Sans font with its license, uses 14px card paragraphs, and provides language-specific system font fallbacks for Asian greetings.
 - **Email readability**: all seven email templates use Arial/Helvetica for body text with 14px main copy and comfortable line spacing while retaining monospaced branding.
-- **What's New highlights**: v1.8.55 presents two readability highlights in all ten UI languages and preserves the general bug-fix entry as the final item.
+- **Visual identity**: the application and static website share a petroleum-blue accent, subtly blue-tinted backgrounds, panels, and borders, and solid page backgrounds instead of the dot grid. The PWA base colors follow the new dark background; layouts, typography, interactions, and functional status colors retain their existing behavior.
+- **Accent readability**: secondary subscription-button text uses the full foreground color to keep it readable when hovering over the new blue buttons in light mode, and the active-language badge in admin user detail uses a lighter tint for clearer small text.
+- **What's New highlights**: v1.8.55 opens with the new visual-identity highlight in all ten UI languages, followed by the two existing readability highlights and the preserved general bug-fix entry as the final item.
 
 ## [1.8.50] - 2026-09-08
 

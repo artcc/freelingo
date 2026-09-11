@@ -136,7 +136,7 @@ The number of entries is variable per version. The component reads entries dynam
 
 **When shipping a new version: replace all existing `entry*` keys with the new version's entries.** Do not accumulate old entries — only the current version's changelog items should be present. The `version` key must also be updated to match `WHATS_NEW_VERSION` in the component.
 
-For v1.8.55, all ten locales show the approved reading-comfort highlight first and the clearer-translations/website/email highlight second. At the maintainer's request, the general bug-fix entry is preserved unchanged as the final `entry3`. `WHATS_NEW_VERSION` and the localized version labels are `v1.8.55`.
+For v1.8.55, all ten locales show the approved visual-identity highlight first as `entry1`, describing the petroleum-blue tones and solid backgrounds while preserving the minimalist design. The former reading-comfort and clearer-translations/website/email highlights move intact to `entry2` and `entry3`. The general bug-fix entry is preserved unchanged as the final `entry4`. `WHATS_NEW_VERSION` and the localized version labels remain `v1.8.55`; the existing dynamic renderer handles the additional entry without component changes, and this content revision does not reopen an already-dismissed modal.
 
 ---
 

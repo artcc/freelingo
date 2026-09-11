@@ -1464,14 +1464,18 @@
     "version": "v1.8.55",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Styl z własnym charakterem",
+      "desc": "Stonowane niebieskozielone odcienie i jednolite tła nadają FreeLingo więcej charakteru, zachowując minimalistyczny wygląd, który już znasz."
+    },
+    "entry2": {
       "label": "Wygodniejsze czytanie",
       "desc": "Czytelniejsza czcionka i delikatne zmiany wielkości tekstu, odstępów oraz kontrastu ułatwiają czytanie lekcji, wyjaśnień i rozmów."
     },
-    "entry2": {
+    "entry3": {
       "label": "Czytelniejsze szczegóły",
       "desc": "Tłumaczenia i pomocne wskazówki są łatwiejsze do przeczytania. Nasza strona informacyjna i wiadomości e-mail również zyskały czytelniejszy wygląd."
     },
-    "entry3": {
+    "entry4": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawki błędów i drobne ulepszenia sprawiają, że FreeLingo działa stabilniej i jest przyjemniejsze w użyciu."
     }

@@ -577,7 +577,7 @@ export default function AdminUserStatsPage() {
                         {lang?.name ?? pl.target_language}
                       </span>
                       {isActive ? (
-                        <span className="text-fl-label bg-fl-accent/20 text-fl-accent shrink-0 px-2 py-0.5 font-mono text-xs tracking-widest uppercase">
+                        <span className="text-fl-label bg-fl-accent/10 text-fl-accent shrink-0 px-2 py-0.5 font-mono text-xs tracking-widest uppercase">
                           {pl.cefr_level} / {t('statsActive')}
                         </span>
                       ) : (

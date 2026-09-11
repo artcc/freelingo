@@ -173,7 +173,7 @@ export function PaywallBanner({
                 <span className="flex flex-col items-center gap-0.5 leading-relaxed">
                   <span>{yearlyCta.main}</span>
                   {yearlyCta.savings && (
-                    <span className="text-fl-accent-fg/80 text-[0.68rem]">
+                    <span className="text-fl-accent-fg text-[0.68rem]">
                       {yearlyCta.savings}
                     </span>
                   )}

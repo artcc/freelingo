@@ -1464,14 +1464,18 @@
     "version": "v1.8.55",
     "cta": "Got it",
     "entry1": {
+      "label": "A style of our own",
+      "desc": "Petrol-blue tones and solid backgrounds give FreeLingo more personality, while keeping the minimalist design you already know."
+    },
+    "entry2": {
       "label": "More comfortable reading",
       "desc": "A clearer typeface and gentle adjustments to text size, spacing and contrast make your lessons, explanations and conversations more comfortable to read."
     },
-    "entry2": {
+    "entry3": {
       "label": "Clearer details",
       "desc": "Translations and helpful notes are easier to read. Our information website and emails also have a more readable presentation."
     },
-    "entry3": {
+    "entry4": {
       "label": "A smoother experience",
       "desc": "Bug fixes and small improvements make FreeLingo more reliable and enjoyable to use."
     }

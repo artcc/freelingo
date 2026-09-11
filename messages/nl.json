@@ -1464,14 +1464,18 @@
     "version": "v1.8.55",
     "cta": "Begrepen",
     "entry1": {
+      "label": "Een eigen stijl",
+      "desc": "Petrolblauwe tinten en effen achtergronden geven FreeLingo meer karakter, met behoud van het minimalistische ontwerp dat je al kent."
+    },
+    "entry2": {
       "label": "Prettiger lezen",
       "desc": "Een duidelijker lettertype en subtiele aanpassingen aan tekstgrootte, afstand en contrast maken je lessen, uitleg en gesprekken prettiger om te lezen."
     },
-    "entry2": {
+    "entry3": {
       "label": "Duidelijkere details",
       "desc": "Vertalingen en handige toelichtingen zijn makkelijker te lezen. Ook onze informatieve website en e-mails hebben een beter leesbare vormgeving."
     },
-    "entry3": {
+    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "Bugfixes en kleine verbeteringen maken FreeLingo betrouwbaarder en prettiger in gebruik."
     }

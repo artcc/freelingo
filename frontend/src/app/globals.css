@@ -77,11 +77,11 @@
 
 :root {
   /* FreeLingo semantic tokens — dark (default) */
-  --fl-bg: #0a0a0a;
+  --fl-bg: #0c1316;
   --fl-bg-alt: #0d0d0d;
-  --fl-surface: #111111;
+  --fl-surface: #131d22;
   --fl-surface-2: #1a1a1a;
-  --fl-border: #2a2a2a;
+  --fl-border: #29383f;
   --fl-border-2: #444444;
   --fl-muted-4: #666666;
   --fl-muted-3: #777777;
@@ -91,23 +91,22 @@
   --fl-fg-2: #e0e0e0;
   --fl-fg: #f5f5f5;
   --fl-fg-bright: #ffffff;
-  --fl-dot: #2a2a2a;
   --fl-error: #ff3b3b;
   --fl-error-fg: #ff6b6b;
   --fl-error-dim: #cc6666;
   --fl-error-hover: #ff5555;
   --fl-success: #4ade80;
-  --fl-accent: #c9943a;
+  --fl-accent: #75b7c5;
   --fl-accent-fg: #0a0a0a;
   /* shadcn tokens */
-  --background: #0a0a0a;
+  --background: var(--fl-bg);
   --foreground: #f5f5f5;
-  --card: #111111;
+  --card: var(--fl-surface);
   --card-foreground: #f5f5f5;
-  --popover: #111111;
+  --popover: var(--fl-surface);
   --popover-foreground: #f5f5f5;
   --primary: #f5f5f5;
-  --primary-foreground: #0a0a0a;
+  --primary-foreground: var(--fl-bg);
   --secondary: #1a1a1a;
   --secondary-foreground: #f5f5f5;
   --muted: #1a1a1a;
@@ -115,17 +114,17 @@
   --accent: #1a1a1a;
   --accent-foreground: #f5f5f5;
   --destructive: #ff3b3b;
-  --border: #2a2a2a;
+  --border: var(--fl-border);
   --input: #1a1a1a;
   --ring: #444444;
   --radius: 0px;
-  --sidebar: #0a0a0a;
+  --sidebar: var(--fl-bg);
   --sidebar-foreground: #f5f5f5;
   --sidebar-primary: #f5f5f5;
-  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-primary-foreground: var(--fl-bg);
   --sidebar-accent: #1a1a1a;
   --sidebar-accent-foreground: #f5f5f5;
-  --sidebar-border: #2a2a2a;
+  --sidebar-border: var(--fl-border);
   --sidebar-ring: #444444;
 }
 
@@ -135,7 +134,7 @@
   }
 
   body {
-    @apply bg-background text-foreground bg-dot-grid font-sans;
+    @apply bg-background text-foreground font-sans;
   }
 
   html {
@@ -157,12 +156,6 @@
   h6 {
     letter-spacing: -0.02em;
   }
-}
-
-/* Reusable dot-grid background pattern — applies the same dots used on body */
-@utility bg-dot-grid {
-  background-image: radial-gradient(circle, var(--fl-dot) 1px, transparent 1px);
-  background-size: 24px 24px;
 }
 
 @utility font-target-latin {
@@ -211,11 +204,11 @@
 
 /* ── Light theme ── */
 html[data-theme='light'] {
-  --fl-bg: #f5f5f5;
+  --fl-bg: #f2f6f7;
   --fl-bg-alt: #f0f0f0;
-  --fl-surface: #fafafa;
+  --fl-surface: #fbfcfc;
   --fl-surface-2: #eeeeee;
-  --fl-border: #d4d4d4;
+  --fl-border: #d7e1e5;
   --fl-border-2: #aaaaaa;
   --fl-muted-4: #999999;
   --fl-muted-3: #888888;
@@ -225,39 +218,38 @@ html[data-theme='light'] {
   --fl-fg-2: #1a1a1a;
   --fl-fg: #0a0a0a;
   --fl-fg-bright: #000000;
-  --fl-dot: #cccccc;
   --fl-error: #e03030;
   --fl-error-fg: #cc3333;
   --fl-error-dim: #994444;
   --fl-error-hover: #c02020;
   --fl-success: #15803d;
-  --fl-accent: #b07e28;
-  --fl-accent-fg: #0a0a0a;
+  --fl-accent: #286779;
+  --fl-accent-fg: #ffffff;
   /* shadcn token overrides (light) */
-  --background: #f5f5f5;
+  --background: var(--fl-bg);
   --foreground: #0a0a0a;
-  --card: #fafafa;
+  --card: var(--fl-surface);
   --card-foreground: #0a0a0a;
-  --popover: #fafafa;
+  --popover: var(--fl-surface);
   --popover-foreground: #0a0a0a;
   --primary: #0a0a0a;
-  --primary-foreground: #f5f5f5;
+  --primary-foreground: var(--fl-bg);
   --secondary: #eeeeee;
   --secondary-foreground: #0a0a0a;
   --muted: #eeeeee;
   --muted-foreground: #666666;
   --accent: #eeeeee;
   --accent-foreground: #0a0a0a;
-  --border: #d4d4d4;
+  --border: var(--fl-border);
   --input: #eeeeee;
   --ring: #aaaaaa;
-  --sidebar: #f5f5f5;
+  --sidebar: var(--fl-bg);
   --sidebar-foreground: #0a0a0a;
   --sidebar-primary: #0a0a0a;
-  --sidebar-primary-foreground: #f5f5f5;
+  --sidebar-primary-foreground: var(--fl-bg);
   --sidebar-accent: #eeeeee;
   --sidebar-accent-foreground: #0a0a0a;
-  --sidebar-border: #d4d4d4;
+  --sidebar-border: var(--fl-border);
   --sidebar-ring: #aaaaaa;
 }
 
