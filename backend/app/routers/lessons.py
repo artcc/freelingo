@@ -394,7 +394,7 @@ async def answer_exercise(
             )
             exercise.score = sco
             exercise.feedback = fb
-        except LLMTimeoutError, LLMUnavailableError, LLMError:
+        except (LLMTimeoutError, LLMUnavailableError, LLMError):
             exercise.score = 0.5
             exercise.feedback = _answer_feedback(
                 current_user.native_language, "free_write_unavailable"
@@ -411,7 +411,7 @@ async def answer_exercise(
             )
             exercise.score = eval_result.score
             exercise.feedback = eval_result.feedback
-        except LLMTimeoutError, LLMUnavailableError, LLMError:
+        except (LLMTimeoutError, LLMUnavailableError, LLMError):
             # Fallback: normalised string comparison
             ua = data.answer.strip().lower().rstrip(".,!?")
             ca = exercise.correct_answer.strip().lower().rstrip(".,!?")
@@ -439,7 +439,7 @@ async def answer_exercise(
             )
             exercise.score = eval_result.score
             exercise.feedback = eval_result.feedback
-        except LLMTimeoutError, LLMUnavailableError, LLMError:
+        except (LLMTimeoutError, LLMUnavailableError, LLMError):
             # Fallback: normalised comparison stripping punctuation
             norm_target = re.sub(r"[^\w\s]", "", exercise.correct_answer).strip().lower()
             norm_answer = re.sub(r"[^\w\s]", "", transcription).strip().lower()
@@ -650,7 +650,7 @@ async def generate_exercise_native_explanation(
             NativeExerciseExplanationResponse,
         )
         native_exp = result_native.native_explanation
-    except LLMError, LLMTimeoutError, LLMUnavailableError:
+    except (LLMError, LLMTimeoutError, LLMUnavailableError):
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Could not generate native exercise explanation at this time",
@@ -708,7 +708,7 @@ async def generate_exercise_native_hint(
         native_hint = result_native.native_hint
         if hint_reveals_answer(native_hint, exercise.correct_answer):
             raise LLMError("Generated hint revealed the answer")
-    except LLMError, LLMTimeoutError, LLMUnavailableError:
+    except (LLMError, LLMTimeoutError, LLMUnavailableError):
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Could not generate native exercise hint at this time",
@@ -760,7 +760,7 @@ async def generate_native_explanation(
             NativeExplanationResponse,
         )
         native_exp: dict = result.model_dump() if hasattr(result, "model_dump") else result
-    except LLMError, LLMTimeoutError, LLMUnavailableError:
+    except (LLMError, LLMTimeoutError, LLMUnavailableError):
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Could not generate native explanation at this time",

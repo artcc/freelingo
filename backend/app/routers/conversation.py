@@ -224,7 +224,7 @@ async def conversation_ws(
             voice_pref = ""  # local TTS ignores voice param
         payload = decode_access_token(token)
         user_id = int(payload["sub"])
-    except TimeoutError, PyJWTError, KeyError, ValueError, Exception:  # noqa: BLE001
+    except (TimeoutError, PyJWTError, KeyError, ValueError, Exception):  # noqa: BLE001
         logger.warning("[conversation] Auth failed — closing WS 1008")
         await websocket.send_json(
             {"type": "error", "code": "auth_failed", "message": "Authentication failed"}

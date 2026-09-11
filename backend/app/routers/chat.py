@@ -307,7 +307,7 @@ async def chat(
             goals = _json.loads(current_user.learning_goals)
             if goals:
                 _ctx_parts.append(f"Learning goals: {', '.join(goals)}")
-        except ValueError, TypeError:
+        except (ValueError, TypeError):
             pass
     if current_user.bio and current_user.bio.strip():
         _ctx_parts.append(f"About the student: {current_user.bio.strip()}")
