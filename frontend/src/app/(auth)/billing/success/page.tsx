@@ -135,7 +135,7 @@ export default function BillingSuccessPage() {
         )}
         <Link
           href="/dashboard"
-          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
         >
           {t('successCta')}
         </Link>

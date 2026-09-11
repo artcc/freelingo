@@ -199,14 +199,14 @@ function TrialPremiumCta() {
       <h2 className="text-fl-fg mb-2 font-mono text-base font-bold">
         {tConversation('trialCtaTitle')}
       </h2>
-      <p className="text-fl-muted-1 mb-5 font-mono text-xs leading-relaxed">
+      <p className="text-fl-muted-1 mb-5 font-mono text-sm leading-relaxed">
         {tConversation('trialCtaDesc')}
       </p>
       <div className="flex flex-col gap-3">
         <button
           onClick={() => handleCheckout('yearly')}
           disabled={loading !== null}
-          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-50"
+          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
         >
           {loading === 'yearly' ? (
             '...'
@@ -214,7 +214,7 @@ function TrialPremiumCta() {
             <span className="flex flex-col items-center gap-0.5 leading-relaxed">
               <span>{yearlyCta.main}</span>
               {yearlyCta.savings && (
-                <span className="text-fl-accent-fg text-[0.68rem]">
+                <span className="text-fl-accent-fg text-xs">
                   {yearlyCta.savings}
                 </span>
               )}
@@ -224,7 +224,7 @@ function TrialPremiumCta() {
         <button
           onClick={() => handleCheckout('monthly')}
           disabled={loading !== null}
-          className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border px-4 py-3 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-50"
+          className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
         >
           {loading === 'monthly'
             ? '...'
@@ -236,7 +236,7 @@ function TrialPremiumCta() {
       )}
       <button
         onClick={() => router.push('/plan')}
-        className="text-fl-hint text-fl-muted-4 hover:text-fl-muted-2 mt-5 w-full font-mono tracking-widest uppercase transition-colors"
+        className="text-fl-muted-4 hover:text-fl-muted-2 mt-5 w-full font-mono text-xs tracking-widest uppercase transition-colors"
       >
         {t('paywallSkip')}
       </button>

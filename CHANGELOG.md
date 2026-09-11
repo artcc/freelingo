@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.8.55] - 2026-09-11
+## [1.9.0] - 2026-09-11
 
 ### Changed
 
@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Email readability**: all seven email templates use Arial/Helvetica for body text with 14px main copy and comfortable line spacing while retaining monospaced branding.
 - **Visual identity**: the application and static website share a petroleum-blue accent, subtly blue-tinted backgrounds, panels, and borders, and solid page backgrounds instead of the dot grid. The PWA base colors follow the new dark background; layouts, typography, interactions, and functional status colors retain their existing behavior.
 - **Accent readability**: secondary subscription-button text uses the full foreground color to keep it readable when hovering over the new blue buttons in light mode, and the active-language badge in admin user detail uses a lighter tint for clearer small text.
-- **What's New highlights**: v1.8.55 opens with the new visual-identity highlight in all ten UI languages, followed by the two existing readability highlights and the preserved general bug-fix entry as the final item.
+- **What's New highlights**: v1.9.0 opens with the new visual-identity highlight in all ten UI languages, followed by the two existing readability highlights and the preserved general bug-fix entry as the final item.
+- **What's New illustration**: Lingu now greets users from the right side of the modal header with a transparent 85 × 85px illustration, replacing the sparkle icon while preserving the existing modal styling and behavior.
 
 ## [1.8.50] - 2026-09-08
 

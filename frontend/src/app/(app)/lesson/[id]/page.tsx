@@ -494,7 +494,7 @@ export default function LessonPage() {
             <div className="mt-8 flex flex-col items-center gap-4">
               <Link
                 href="/plan"
-                className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-8 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-8 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 {t('backToPlan')}
               </Link>
@@ -1021,7 +1021,7 @@ export default function LessonPage() {
                     <button
                       onClick={() => submitAnswer()}
                       disabled={evaluating || !answer.trim()}
-                      className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-40"
+                      className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-40"
                     >
                       {evaluating ? tCommon('checking') : t('submitAnswer')}
                     </button>
@@ -1113,7 +1113,7 @@ export default function LessonPage() {
                     ) : isReview ? (
                       <button
                         onClick={() => router.push('/plan')}
-                        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-6 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-6 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
                       >
                         {t('backToPlan')}
                       </button>
@@ -1123,7 +1123,7 @@ export default function LessonPage() {
                       <button
                         onClick={completeLessonHandler}
                         disabled={completingLesson}
-                        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-6 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+                        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-6 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {t('completeLesson')}
                       </button>

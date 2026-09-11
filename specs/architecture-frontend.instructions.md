@@ -293,14 +293,14 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `plan/` — `LevelTestBanner`, `UnitCard`, `UnitDrawer`
 - `settings/` — `SettingsShell` primitives plus profile/avatar, appearance, billing, usage, conversation, voice, memory/language links, and review sections
 - `tour/` — `OnboardingTour` step-by-step walkthrough
-- `whats-new/` — Version-aware changelog overlay modal
+- `whats-new/` — Version-aware changelog overlay modal. The header places title/version on the left and the transparent `public/logo_update.png` Lingu illustration on the right, rendered with `next/image` at 85 × 85px with empty decorative alt text, replacing the sparkle icon. Existing modal styling and dismissal behavior are preserved.
 
 ### Voice conversation presentation
 
 - `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
 - `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
 - Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
-- What's New v1.8.55 shows the visual-identity highlight as `entry1`, the two existing readability highlights shifted intact to `entry2`/`entry3`, and the unchanged general bug-fix highlight as `entry4` in all ten locales. Dynamic entry rendering, the version constant, and dismissal behavior remain unchanged; this content revision does not reopen an already-dismissed v1.8.55 modal.
+- What's New v1.9.0 shows the visual-identity highlight as `entry1`, the two existing readability highlights shifted intact to `entry2`/`entry3`, and the unchanged general bug-fix highlight as `entry4` in all ten locales. Dynamic entry rendering, the version constant, and dismissal behavior remain unchanged; this content revision does not reopen an already-dismissed v1.9.0 modal.
 
 ### App shell notifications
 

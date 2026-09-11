@@ -196,7 +196,7 @@ export default function FlashcardsPage() {
           )}
           <form onSubmit={generateCards} className="space-y-3 p-5">
             <div>
-              <label className="text-fl-label text-fl-muted-3 mb-2 block font-mono tracking-widest uppercase">
+              <label className="text-fl-muted-3 mb-2 block font-mono text-xs tracking-widest uppercase">
                 {t('topic')}
               </label>
               <input
@@ -210,7 +210,7 @@ export default function FlashcardsPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-fl-label text-fl-muted-3 mb-2 block font-mono tracking-widest uppercase">
+                <label className="text-fl-muted-3 mb-2 block font-mono text-xs tracking-widest uppercase">
                   {t('count')}
                 </label>
                 <select
@@ -226,7 +226,7 @@ export default function FlashcardsPage() {
                 </select>
               </div>
               <div>
-                <label className="text-fl-label text-fl-muted-3 mb-2 block font-mono tracking-widest uppercase">
+                <label className="text-fl-muted-3 mb-2 block font-mono text-xs tracking-widest uppercase">
                   {t('level')}
                 </label>
                 <select
@@ -245,7 +245,7 @@ export default function FlashcardsPage() {
             <button
               type="submit"
               disabled={generating || !genTopic.trim()}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
             >
               {generating ? t('generating') : t('submit')}
             </button>

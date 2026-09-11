@@ -253,14 +253,14 @@ export default function PricingSection({
                   type="button"
                   disabled={checkoutLoading !== null}
                   onClick={() => startCheckout(plan.interval)}
-                  className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-6 py-2.5 text-center font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+                  className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-6 py-2.5 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
                 >
                   {checkoutLoading === plan.interval ? '...' : plan.cta}
                 </button>
               ) : (
                 <Link
                   href={plan.href}
-                  className={`inline-block px-6 py-2.5 text-center font-mono text-xs font-bold tracking-widest uppercase transition-colors ${
+                  className={`inline-block px-6 py-2.5 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors ${
                     plan.isFree
                       ? 'border-fl-border-2 text-fl-muted-1 hover:text-fl-fg hover:border-fl-border border'
                       : 'bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90'
@@ -282,13 +282,13 @@ export default function PricingSection({
               <th className="text-fl-label text-fl-muted-2 w-[42%] px-3 py-3 text-left font-mono tracking-widest uppercase sm:w-auto sm:px-5">
                 &nbsp;
               </th>
-              <th className="text-fl-hint text-fl-muted-2 sm:text-fl-label w-[19.333%] px-1 py-3 text-center font-mono tracking-[0.18em] uppercase sm:w-auto sm:px-4 sm:tracking-widest">
+              <th className="text-fl-muted-2 w-[19.333%] px-1 py-3 text-center font-mono text-xs tracking-normal wrap-anywhere uppercase sm:w-auto sm:px-4 sm:tracking-widest">
                 {tBilling('planFreeName')}
               </th>
-              <th className="text-fl-hint text-fl-muted-2 sm:text-fl-label w-[19.333%] px-1 py-3 text-center font-mono tracking-[0.18em] uppercase sm:w-auto sm:px-4 sm:tracking-widest">
+              <th className="text-fl-muted-2 w-[19.333%] px-1 py-3 text-center font-mono text-xs tracking-normal wrap-anywhere uppercase sm:w-auto sm:px-4 sm:tracking-widest">
                 {tBilling('planMonthlyName')}
               </th>
-              <th className="text-fl-hint text-fl-muted-2 sm:text-fl-label w-[19.333%] px-1 py-3 text-center font-mono tracking-[0.18em] uppercase sm:w-auto sm:px-4 sm:tracking-widest">
+              <th className="text-fl-muted-2 w-[19.333%] px-1 py-3 text-center font-mono text-xs tracking-normal wrap-anywhere uppercase sm:w-auto sm:px-4 sm:tracking-widest">
                 {tBilling('planYearlyName')}
               </th>
             </tr>
@@ -306,7 +306,7 @@ export default function PricingSection({
                 </td>
                 <td className="px-1 py-3 text-center sm:px-4">
                   {row.free === 'limited' ? (
-                    <span className="text-fl-muted-2 font-mono text-[0.6rem] tracking-widest uppercase">
+                    <span className="text-fl-muted-2 text-fl-label font-mono tracking-normal wrap-anywhere uppercase sm:tracking-widest">
                       {tBilling('limitedLabel')}
                     </span>
                   ) : row.free ? (
@@ -341,7 +341,7 @@ export default function PricingSection({
             type="button"
             disabled={checkoutLoading !== null}
             onClick={() => startCheckout('yearly')}
-            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-10 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-10 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
           >
             {checkoutLoading === 'yearly'
               ? '...'
@@ -350,7 +350,7 @@ export default function PricingSection({
         ) : (
           <Link
             href="/register?plan=yearly"
-            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-10 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-10 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
             {tBilling(trialUsed ? 'ctaRegisterTrialUsed' : 'ctaRegister')}
           </Link>

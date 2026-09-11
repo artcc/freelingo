@@ -113,7 +113,7 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div>
-              <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+              <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
                 {t('email')}
               </label>
               <input
@@ -128,7 +128,7 @@ function LoginForm() {
               />
             </div>
             <div>
-              <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+              <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
                 {t('password')}
               </label>
               <div className="relative">
@@ -188,7 +188,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 mt-2 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 mt-2 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
             >
               {loading ? (
                 <>

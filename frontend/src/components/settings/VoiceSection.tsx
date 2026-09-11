@@ -119,7 +119,7 @@ export function VoiceSection({ title }: { title?: string } = {}) {
           type="button"
           onClick={() => void togglePreview(selectedVoice)}
           disabled={loadingVoice === selectedVoice}
-          className="text-fl-hint text-fl-muted-3 hover:text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-3 font-mono tracking-widest whitespace-nowrap uppercase transition-colors disabled:opacity-40"
+          className="text-fl-muted-3 hover:text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-3 font-mono text-xs tracking-widest whitespace-nowrap uppercase transition-colors disabled:opacity-40"
         >
           {loadingVoice === selectedVoice
             ? '...'

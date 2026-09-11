@@ -411,7 +411,7 @@ export default function PlanPage() {
                 </div>
                 <button
                   onClick={() => router.push(`/lesson/${lesson.id}`)}
-                  className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-3 py-1 font-mono tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-3 py-1 font-mono text-sm tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                   {t('resume')}
                 </button>

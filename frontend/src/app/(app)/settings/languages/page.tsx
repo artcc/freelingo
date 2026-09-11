@@ -133,7 +133,7 @@ export default function MyLanguagesPage() {
         {unusedCodes.length > 0 && (
           <button
             onClick={() => setAddModalOpen(true)}
-            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-4 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
             + {t('addLanguage')}
           </button>
@@ -234,7 +234,7 @@ export default function MyLanguagesPage() {
                         <button
                           onClick={() => handleSwitch(ulang)}
                           disabled={switchingCode === ulang.target_language}
-                          className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-3 py-1 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-40"
+                          className="text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-3 py-1 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-40"
                         >
                           {switchingCode === ulang.target_language
                             ? '...'
@@ -279,7 +279,7 @@ export default function MyLanguagesPage() {
               <button
                 onClick={handleAdd}
                 disabled={!addingCode}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-4 py-2 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
               >
                 {t('addLanguage')}
               </button>

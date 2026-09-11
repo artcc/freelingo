@@ -144,7 +144,7 @@ export default function SettingsMemoriesPage() {
           </h2>
         </div>
 
-        <p className="text-fl-muted-2 mb-5 font-mono text-xs leading-relaxed">
+        <p className="text-fl-muted-2 mb-5 font-mono text-sm leading-relaxed">
           {t('memoryDescription')}
         </p>
 
@@ -155,7 +155,7 @@ export default function SettingsMemoriesPage() {
         >
           <label
             htmlFor="memory-content"
-            className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase"
+            className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase"
           >
             {t('memoryInputLabel')}
           </label>
@@ -171,16 +171,13 @@ export default function SettingsMemoriesPage() {
             className="border-fl-border bg-fl-bg text-fl-fg placeholder:text-fl-muted-4 focus:border-fl-border-2 mb-2 w-full resize-y border p-3 font-mono text-sm outline-none"
           />
           <div className="flex items-center justify-between gap-4">
-            <p
-              id="memory-hint"
-              className="text-fl-label text-fl-muted-3 font-mono"
-            >
+            <p id="memory-hint" className="text-fl-muted-3 font-mono text-xs">
               {t('memoryInputHint', { max: 200 })}
             </p>
             <button
               type="submit"
               disabled={loading || loadError || mutating || !content.trim()}
-              className="bg-fl-fg text-fl-bg text-fl-label hover:bg-fl-fg-bright flex min-w-28 items-center justify-center gap-2 px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex min-w-28 items-center justify-center gap-2 px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
               {adding && (
                 <Loader2
@@ -213,7 +210,7 @@ export default function SettingsMemoriesPage() {
             </p>
             <button
               onClick={() => void loadMemories()}
-              className="border-fl-border text-fl-label text-fl-muted-1 hover:text-fl-fg border px-4 py-2 font-mono tracking-widest uppercase"
+              className="border-fl-border text-fl-muted-1 hover:text-fl-fg border px-4 py-2 font-mono text-xs tracking-widest uppercase"
             >
               {tCommon('retry')}
             </button>

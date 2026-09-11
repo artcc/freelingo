@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import Image from 'next/image'
 import { useTranslations, useMessages } from 'next-intl'
-import { CircleDot, Sparkles } from 'lucide-react'
+import { CircleDot } from 'lucide-react'
 
-const WHATS_NEW_VERSION = 'v1.8.55'
+const WHATS_NEW_VERSION = 'v1.9.0'
 const STORAGE_KEY = `fl_whats_new_seen_${WHATS_NEW_VERSION}`
 const TOUR_KEY = 'fl_tour_done'
 
@@ -53,11 +54,7 @@ export default function WhatsNew() {
       {/* Modal */}
       <div className="border-fl-border bg-fl-surface relative z-10 w-full max-w-md border shadow-2xl">
         {/* Header */}
-        <div className="border-fl-border flex items-center gap-3 border-b px-5 pt-5 pb-4">
-          <Sparkles
-            className="text-fl-accent h-[1.125rem] w-[1.125rem]"
-            aria-hidden="true"
-          />
+        <div className="border-fl-border flex items-center justify-between gap-3 border-b px-5 pt-5 pb-4">
           <div>
             <p className="text-fl-label text-fl-muted-2 font-sans tracking-widest uppercase">
               {t('title')}
@@ -66,6 +63,13 @@ export default function WhatsNew() {
               {t('version')}
             </p>
           </div>
+          <Image
+            src="/logo_update.png"
+            alt=""
+            width={85}
+            height={85}
+            className="h-[85px] w-[85px] shrink-0 object-contain"
+          />
         </div>
 
         {/* Entries */}
@@ -77,7 +81,7 @@ export default function WhatsNew() {
                 aria-hidden="true"
               />
               <div>
-                <p className="text-fl-caption text-fl-fg mb-1 font-sans font-semibold">
+                <p className="text-fl-fg mb-1 font-sans text-sm font-semibold">
                   {entry.label}
                 </p>
                 <p className="text-fl-muted-1 font-sans text-sm leading-relaxed">
@@ -98,7 +102,7 @@ export default function WhatsNew() {
         <div className="border-fl-border flex justify-end border-t px-5 pt-3 pb-5">
           <button
             onClick={dismiss}
-            className="text-fl-label bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-5 py-2 font-mono tracking-widest uppercase transition-colors"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-5 py-2 font-mono text-sm tracking-widest uppercase transition-colors"
           >
             {t('cta')} →
           </button>
