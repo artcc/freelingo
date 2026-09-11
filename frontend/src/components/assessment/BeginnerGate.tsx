@@ -37,7 +37,7 @@ export default function BeginnerGate({
           <div className="flex flex-col gap-3">
             <button
               onClick={onBeginner}
-              className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg w-full border px-5 py-4 text-left font-mono text-xs tracking-widest uppercase transition-colors"
+              className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg w-full border px-5 py-4 text-left font-mono text-sm tracking-widest uppercase transition-colors"
             >
               <span className="text-fl-muted-3 mr-3">○</span>
               {t('beginnerOption')}
@@ -47,7 +47,7 @@ export default function BeginnerGate({
             </button>
             <button
               onClick={onHasExperience}
-              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright w-full px-5 py-4 text-left font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright w-full px-5 py-4 text-left font-mono text-sm font-bold tracking-widest uppercase transition-colors"
             >
               <span className="mr-3">●</span>
               {t('hasExperienceOption')}

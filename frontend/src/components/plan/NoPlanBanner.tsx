@@ -22,13 +22,13 @@ export default function NoPlanBanner() {
         <h2 className="text-fl-fg mb-3 font-mono text-base font-bold">
           {t('noPlanTitle')}
         </h2>
-        <p className="text-fl-muted-1 mb-6 font-mono text-xs leading-relaxed">
+        <p className="text-fl-muted-1 mb-6 font-mono text-sm leading-relaxed">
           {t('noPlanDesc')}
         </p>
 
         <button
           onClick={() => router.push('/assessment')}
-          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
         >
           {t('startAssessment')}
         </button>

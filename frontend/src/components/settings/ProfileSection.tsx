@@ -233,7 +233,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={avatarUploading}
-            className="text-fl-label text-fl-muted-2 hover:text-fl-fg block font-mono tracking-widest uppercase transition-colors disabled:opacity-40"
+            className="text-fl-muted-2 hover:text-fl-fg block font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-40"
           >
             {avatarUploading ? t('avatarUploading') : t('avatarChange')}
           </button>
@@ -241,7 +241,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
             <button
               type="button"
               onClick={handleAvatarRemove}
-              className="text-fl-label text-fl-muted-4 hover:text-fl-error block font-mono tracking-widest uppercase transition-colors"
+              className="text-fl-muted-4 hover:text-fl-error block font-mono text-xs tracking-widest uppercase transition-colors"
             >
               {t('avatarRemove')}
             </button>
@@ -271,7 +271,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
         { label: t('email'), value: email, onChange: setEmail, type: 'email' },
       ].map((field) => (
         <div key={field.label}>
-          <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+          <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
             {field.label}
           </label>
           <input
@@ -287,7 +287,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       ))}
 
       <div>
-        <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+        <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
           {t('bio')}
         </label>
         <textarea
@@ -304,7 +304,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       </div>
 
       <div>
-        <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+        <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
           {t('nativeLanguage')}
         </label>
         <select
@@ -323,7 +323,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       </div>
 
       <div>
-        <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+        <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
           {t('uiLocale')}
         </label>
         <select
@@ -345,7 +345,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       </div>
 
       <div>
-        <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+        <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
           {t('newPassword')}
         </label>
         <input
@@ -361,7 +361,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       </div>
 
       <div>
-        <label className="text-fl-label text-fl-muted-2 mb-2 block font-mono tracking-widest uppercase">
+        <label className="text-fl-muted-2 mb-2 block font-mono text-xs tracking-widest uppercase">
           {t('confirmPassword')}
         </label>
         <input
@@ -389,7 +389,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
       >
         {saving ? t('saving') : t('saveChanges')}
       </button>

@@ -109,7 +109,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="bg-fl-bg bg-dot-grid text-fl-fg flex min-h-screen flex-col">
+    <div className="bg-fl-bg text-fl-fg flex min-h-screen flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -147,7 +147,7 @@ export default async function Home() {
         <div className="flex flex-col items-center gap-3 sm:flex-row">
           <Link
             href={hasSession ? '/dashboard' : '/register'}
-            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-8 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-8 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
             {hasSession ? t('dashboard') : tCommon('start')}
           </Link>
@@ -324,7 +324,7 @@ export default async function Home() {
               </div>
             </div>
             <a
-              href="https://github.com/ArtCC/freelingo"
+              href="https://github.com/artcc/freelingo"
               target="_blank"
               rel="noopener noreferrer"
               className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 border px-6 py-2.5 font-mono text-xs font-bold tracking-widest whitespace-nowrap uppercase transition-colors"
@@ -352,7 +352,7 @@ export default async function Home() {
       <footer className="border-fl-border border-t px-6 py-10">
         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <span className="text-fl-hint text-fl-muted-3 block font-mono tracking-widest uppercase">
+            <span className="text-fl-hint text-fl-muted-3 font-code block tracking-widest uppercase">
               FreeLingo
             </span>
             <span className="text-fl-hint text-fl-muted-4 mt-2 block font-mono leading-relaxed">
@@ -365,7 +365,7 @@ export default async function Home() {
             </h4>
             <div className="flex flex-col gap-2">
               <a
-                href="https://github.com/ArtCC/freelingo"
+                href="https://github.com/artcc/freelingo"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-fl-hint text-fl-muted-3 hover:text-fl-muted-1 font-mono tracking-widest uppercase transition-colors"

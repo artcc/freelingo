@@ -315,7 +315,7 @@ function ListeningPage() {
           </h1>
           <button
             onClick={loadNext}
-            className="text-fl-label text-fl-muted-2 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors"
+            className="text-fl-muted-2 hover:text-fl-fg font-mono text-xs tracking-widest uppercase transition-colors"
           >
             {t('practiceMore')}
           </button>
@@ -372,7 +372,7 @@ function ListeningPage() {
                     setIsReplay(true)
                     setPageState('exercise')
                   }}
-                  className="text-fl-label text-fl-muted-2 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors"
+                  className="text-fl-muted-2 hover:text-fl-fg font-mono text-xs tracking-widest uppercase transition-colors"
                 >
                   {t('practiceAgain')}
                 </button>
@@ -451,7 +451,7 @@ function ListeningPage() {
             <TargetLanguageText
               as="p"
               languageCode={exercise.target_language}
-              className="text-fl-fg word-selectable cursor-text select-text"
+              className="text-fl-fg word-selectable max-w-[70ch] cursor-text select-text"
               onPointerUp={() =>
                 handleTextSelection(result.text, exercise?.level ?? 'B1')
               }
@@ -497,7 +497,7 @@ function ListeningPage() {
                           ? 'text-fl-success font-bold'
                           : k === userAnswer && !isCorrect
                             ? 'text-fl-error-fg line-through'
-                            : 'text-fl-muted-3'
+                            : 'text-fl-muted-1'
                       }`}
                     >
                       <span className="text-fl-label font-mono font-bold">
@@ -518,7 +518,7 @@ function ListeningPage() {
         <div className="flex gap-3 pt-1">
           <button
             onClick={loadNext}
-            className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 flex-1 border py-3 font-mono text-xs tracking-widest uppercase transition-colors"
+            className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 flex-1 border py-3 font-mono text-sm tracking-widest uppercase transition-colors"
           >
             {t('nextExercise')}
           </button>
@@ -564,7 +564,7 @@ function ListeningPage() {
           </h1>
           <button
             onClick={() => loadHistory(0)}
-            className="text-fl-label text-fl-muted-2 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors"
+            className="text-fl-muted-2 hover:text-fl-fg font-mono text-xs tracking-widest uppercase transition-colors"
           >
             {t('history')}
           </button>
@@ -587,7 +587,7 @@ function ListeningPage() {
             </p>
             <button
               onClick={handleGenerate}
-              className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 border px-8 py-3 font-mono text-xs tracking-widest uppercase transition-colors"
+              className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 border px-8 py-3 font-mono text-sm tracking-widest uppercase transition-colors"
             >
               {t('generate')}
             </button>
@@ -614,7 +614,7 @@ function ListeningPage() {
         </div>
         <button
           onClick={() => loadHistory(0)}
-          className="text-fl-label text-fl-muted-2 hover:text-fl-fg shrink-0 font-mono tracking-widest uppercase transition-colors"
+          className="text-fl-muted-2 hover:text-fl-fg shrink-0 font-mono text-xs tracking-widest uppercase transition-colors"
         >
           {t('history')}
         </button>
@@ -680,7 +680,7 @@ function ListeningPage() {
                           className={`w-full border px-3 py-2 text-left transition-colors ${
                             selected
                               ? 'border-fl-accent bg-fl-surface-2 text-fl-fg'
-                              : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg hover:bg-fl-surface-2'
+                              : 'border-fl-border text-fl-muted-1 hover:border-fl-border-2 hover:text-fl-fg hover:bg-fl-surface-2'
                           }`}
                         >
                           <span className="text-fl-label font-mono font-bold">
@@ -711,7 +711,7 @@ function ListeningPage() {
           <button
             onClick={handleSubmit}
             disabled={!allAnswered || submitting}
-            className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+            className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full border py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {submitting ? tCommon('checking') : t('submit')}
           </button>

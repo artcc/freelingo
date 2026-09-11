@@ -7,7 +7,7 @@ export default function BillingCanceledPage() {
   const t = useTranslations('billing')
 
   return (
-    <div className="bg-fl-bg bg-dot-grid flex min-h-screen items-center justify-center px-4">
+    <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">
       <div className="border-fl-border bg-fl-surface w-full max-w-sm space-y-5 border p-8 text-center">
         <div className="text-fl-muted-2 text-2xl">△</div>
         <p className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
@@ -22,7 +22,7 @@ export default function BillingCanceledPage() {
         <div className="flex flex-col gap-2">
           <Link
             href="/dashboard"
-            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
             {t('canceledCtaDashboard')}
           </Link>

@@ -68,7 +68,7 @@ export function DashboardAnnouncement() {
           <p className="text-fl-accent mt-1 font-mono text-xs font-bold tracking-wide whitespace-pre-wrap">
             {translation.subtitle}
           </p>
-          <p className="text-fl-muted-1 mt-3 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+          <p className="text-fl-muted-1 mt-3 max-w-[70ch] font-sans text-sm leading-relaxed whitespace-pre-wrap">
             {translation.description}
           </p>
           {error && (

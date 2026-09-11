@@ -214,7 +214,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Logo area */}
         <div className="border-fl-border flex items-center gap-2 border-b px-5 py-5">
           <span className="text-fl-label text-fl-muted-2">●</span>
-          <span className="text-fl-fg font-mono text-sm font-bold tracking-widest uppercase">
+          <span className="text-fl-fg font-code text-sm font-bold tracking-widest uppercase">
             FreeLingo
           </span>
         </div>
@@ -234,7 +234,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-5 py-3 font-mono text-xs tracking-widest transition-colors ${
+                className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
                   active
                     ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                     : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -257,7 +257,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="mt-2">
             <button
               onClick={() => setResourcesOpen((o) => !o)}
-              className="text-fl-muted-4 hover:text-fl-muted-2 flex w-full items-center justify-between border-l-2 border-transparent px-5 py-2 font-mono text-xs tracking-widest uppercase transition-colors"
+              className="text-fl-muted-4 hover:text-fl-muted-2 flex w-full items-center justify-between border-l-2 border-transparent px-5 py-2 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors"
             >
               <span>{tNav('resources')}</span>
               <span className="text-fl-label">{resourcesOpen ? '▴' : '▾'}</span>
@@ -270,7 +270,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-3 py-2.5 pr-5 pl-8 font-mono text-xs tracking-widest transition-colors ${
+                    className={`flex items-center gap-3 py-2.5 pr-5 pl-8 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
                       active
                         ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                         : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -296,7 +296,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 px-5 py-3 font-mono text-xs tracking-widest transition-colors ${
+                  className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
                     active
                       ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                       : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -309,7 +309,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   </span>
                   {item.label}
                   {item.href === '/feedback' && feedbackBadgeText && (
-                    <span className="ml-auto flex h-6 w-6 -translate-y-0.5 items-center justify-center rounded-full bg-red-600 text-[9px] leading-none font-bold text-white">
+                    <span className="text-fl-label ml-auto flex h-6 w-6 shrink-0 -translate-y-0.5 items-center justify-center rounded-full bg-red-600 leading-none font-bold tracking-normal text-white">
                       {feedbackBadgeText}
                     </span>
                   )}
@@ -321,7 +321,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {user?.role === 'admin' && (
             <Link
               href="/admin"
-              className={`flex items-center gap-3 px-5 py-3 font-mono text-xs tracking-widest transition-colors ${
+              className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
                 pathname.startsWith('/admin')
                   ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                   : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -378,18 +378,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               )}
             </div>
           </div>
-          <p className="text-fl-label text-fl-muted-4 mb-2 font-mono tracking-wider">
-            v1.8.50
+          <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
+            v1.9.0
           </p>
           <button
             onClick={() => setContactOpen(true)}
-            className="text-fl-label text-fl-muted-2 hover:text-fl-fg mb-1 w-full text-left font-mono tracking-widest uppercase transition-colors"
+            className="text-fl-muted-2 hover:text-fl-fg mb-1 w-full text-left font-mono text-xs tracking-widest uppercase transition-colors"
           >
             {tNav('contact')}
           </button>
           <button
             onClick={() => setLogoutConfirm(true)}
-            className="text-fl-label text-fl-muted-2 hover:text-fl-fg w-full text-left font-mono tracking-widest uppercase transition-colors"
+            className="text-fl-muted-2 hover:text-fl-fg w-full text-left font-mono text-xs tracking-widest uppercase transition-colors"
           >
             {tCommon('logout')}
           </button>
@@ -399,7 +399,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar */}
       <div className="border-fl-border bg-fl-bg fixed top-0 right-0 left-0 z-50 border-b md:hidden">
         <div className="flex items-center justify-between px-4 py-3">
-          <span className="text-fl-fg font-mono text-xs font-bold tracking-widest uppercase">
+          <span className="text-fl-fg font-code text-xs font-bold tracking-widest uppercase">
             FreeLingo
           </span>
           <button
@@ -427,7 +427,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-5 py-3 font-mono text-xs tracking-widest uppercase transition-colors ${
+                  className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
                     active
                       ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                       : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -450,7 +450,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <div>
               <button
                 onClick={() => setResourcesOpen((o) => !o)}
-                className="text-fl-muted-4 hover:text-fl-muted-2 flex w-full items-center justify-between border-l-2 border-transparent px-5 py-2 font-mono text-xs tracking-widest uppercase transition-colors"
+                className="text-fl-muted-4 hover:text-fl-muted-2 flex w-full items-center justify-between border-l-2 border-transparent px-5 py-2 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors"
               >
                 <span>{tNav('resources')}</span>
                 <span className="text-fl-label">
@@ -467,7 +467,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 py-2.5 pr-5 pl-8 font-mono text-xs tracking-widest uppercase transition-colors ${
+                      className={`flex items-center gap-3 py-2.5 pr-5 pl-8 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
                         active
                           ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                           : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -493,7 +493,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-5 py-3 font-mono text-xs tracking-widest uppercase transition-colors ${
+                  className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
                     active
                       ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                       : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -506,7 +506,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   </span>
                   {item.label}
                   {item.href === '/feedback' && feedbackBadgeText && (
-                    <span className="ml-auto flex h-6 w-6 -translate-y-0.5 items-center justify-center rounded-full bg-red-600 text-[9px] leading-none font-bold text-white">
+                    <span className="text-fl-label ml-auto flex h-6 w-6 shrink-0 -translate-y-0.5 items-center justify-center rounded-full bg-red-600 leading-none font-bold tracking-normal text-white">
                       {feedbackBadgeText}
                     </span>
                   )}
@@ -518,7 +518,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 href="/admin"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-5 py-3 font-mono text-xs tracking-widest uppercase transition-colors ${
+                className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
                   pathname.startsWith('/admin')
                     ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
                     : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
@@ -572,15 +572,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   ★ {tBilling('trialDays', { days: trialDaysLeft })}
                 </p>
               )}
-              <p className="text-fl-label text-fl-muted-4 mb-2 font-mono tracking-wider">
-                v1.8.50
+              <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
+                v1.9.0
               </p>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false)
                   setContactOpen(true)
                 }}
-                className="text-fl-label text-fl-muted-2 hover:text-fl-fg mb-1 block font-mono tracking-widest uppercase transition-colors"
+                className="text-fl-muted-2 hover:text-fl-fg mb-1 block font-mono text-xs tracking-widest uppercase transition-colors"
               >
                 {tNav('contact')}
               </button>
@@ -589,7 +589,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   setMobileMenuOpen(false)
                   setLogoutConfirm(true)
                 }}
-                className="text-fl-label text-fl-muted-2 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors"
+                className="text-fl-muted-2 hover:text-fl-fg font-mono text-xs tracking-widest uppercase transition-colors"
               >
                 {tCommon('logout')}
               </button>

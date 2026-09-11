@@ -384,7 +384,7 @@ export default function LevelTestPage() {
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => router.push(rec.nextAction)}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {rec.nextLabel}
               </button>
@@ -492,7 +492,7 @@ export default function LevelTestPage() {
             <button
               onClick={handleConfirmAnswer}
               disabled={!selectedOption}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             >
               Confirm Answer
             </button>
@@ -511,7 +511,7 @@ export default function LevelTestPage() {
               </div>
               <button
                 onClick={handleNext}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {currentIndex + 1 >= questions.length
                   ? 'Submit Test →'

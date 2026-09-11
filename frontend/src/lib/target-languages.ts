@@ -165,7 +165,7 @@ export function getTargetLanguageCapability(
 export function getTargetLanguageTextClass(code: string): string {
   const capability = getTargetLanguageCapability(code)
   if (capability.script === 'latin') {
-    return `${capability.fontClass} text-sm leading-relaxed tracking-normal normal-case`
+    return `${capability.fontClass} text-base leading-relaxed tracking-normal normal-case`
   }
   return `${capability.fontClass} text-base leading-loose tracking-normal normal-case`
 }
