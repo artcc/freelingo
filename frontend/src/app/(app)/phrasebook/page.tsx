@@ -116,7 +116,7 @@ function CategoryCard({
                 </p>
               ) : nativeHelp ? (
                 <>
-                  <p className="text-fl-muted-2 text-sm leading-relaxed">
+                  <p className="text-fl-muted-1 max-w-[70ch] text-base leading-relaxed">
                     {nativeHelp.summary}
                   </p>
 
@@ -127,7 +127,10 @@ function CategoryCard({
                       </p>
                       <ul className="space-y-1">
                         {nativeHelp.usage_tips.map((tip, i) => (
-                          <li key={i} className="text-fl-muted-2 text-sm">
+                          <li
+                            key={i}
+                            className="text-fl-muted-1 max-w-[70ch] text-sm leading-relaxed"
+                          >
                             <span className="text-fl-muted-3 mr-2">·</span>
                             {tip}
                           </li>
@@ -142,7 +145,10 @@ function CategoryCard({
                         {tCommon('nativeHelpRegisterNotes')}
                       </p>
                       {nativeHelp.register_notes.map((note, i) => (
-                        <p key={i} className="text-fl-muted-2 text-sm">
+                        <p
+                          key={i}
+                          className="text-fl-muted-1 max-w-[70ch] text-sm leading-relaxed"
+                        >
                           {note}
                         </p>
                       ))}
@@ -162,7 +168,9 @@ function CategoryCard({
                           >
                             {item.phrase}
                           </TargetLanguageText>
-                          <p className="text-fl-muted-3 text-sm">{item.note}</p>
+                          <p className="text-fl-muted-1 text-sm leading-relaxed">
+                            {item.note}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -178,7 +186,9 @@ function CategoryCard({
                           <p className="text-fl-muted-2 text-sm">
                             {trap.mistake}
                           </p>
-                          <p className="text-fl-muted-3 text-sm">{trap.fix}</p>
+                          <p className="text-fl-muted-1 text-sm leading-relaxed">
+                            {trap.fix}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -201,7 +211,7 @@ function CategoryCard({
                             {item.meaning}
                           </p>
                           {item.note && (
-                            <p className="text-fl-muted-3 text-sm">
+                            <p className="text-fl-muted-1 text-sm leading-relaxed">
                               {item.note}
                             </p>
                           )}
@@ -257,7 +267,7 @@ function CategoryCard({
               <TargetLanguageText
                 as="p"
                 languageCode={language}
-                className="text-fl-muted-3 italic"
+                className="text-fl-muted-1 italic"
               >
                 {phrase.context}
               </TargetLanguageText>

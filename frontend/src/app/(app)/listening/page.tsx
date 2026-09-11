@@ -451,7 +451,7 @@ function ListeningPage() {
             <TargetLanguageText
               as="p"
               languageCode={exercise.target_language}
-              className="text-fl-fg word-selectable cursor-text select-text"
+              className="text-fl-fg word-selectable max-w-[70ch] cursor-text select-text"
               onPointerUp={() =>
                 handleTextSelection(result.text, exercise?.level ?? 'B1')
               }
@@ -497,7 +497,7 @@ function ListeningPage() {
                           ? 'text-fl-success font-bold'
                           : k === userAnswer && !isCorrect
                             ? 'text-fl-error-fg line-through'
-                            : 'text-fl-muted-3'
+                            : 'text-fl-muted-1'
                       }`}
                     >
                       <span className="text-fl-label font-mono font-bold">
@@ -680,7 +680,7 @@ function ListeningPage() {
                           className={`w-full border px-3 py-2 text-left transition-colors ${
                             selected
                               ? 'border-fl-accent bg-fl-surface-2 text-fl-fg'
-                              : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg hover:bg-fl-surface-2'
+                              : 'border-fl-border text-fl-muted-1 hover:border-fl-border-2 hover:text-fl-fg hover:bg-fl-surface-2'
                           }`}
                         >
                           <span className="text-fl-label font-mono font-bold">

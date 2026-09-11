@@ -167,7 +167,7 @@ export default function OnboardingPage() {
   )
 
   return (
-    <div className="bg-fl-bg bg-dot-grid flex min-h-screen items-center justify-center px-4">
+    <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-10 flex flex-col items-center">
           <Image
@@ -177,7 +177,7 @@ export default function OnboardingPage() {
             height={80}
             className="mb-4"
           />
-          <h1 className="text-fl-fg font-mono text-xl font-bold tracking-widest uppercase">
+          <h1 className="text-fl-fg font-code text-xl font-bold tracking-widest uppercase">
             FreeLingo
           </h1>
           <p className="text-fl-caption text-fl-muted-2 mt-1 font-mono tracking-widest uppercase">
@@ -396,7 +396,7 @@ export default function OnboardingPage() {
                             <span
                               className={`text-[0.68rem] ${
                                 isPrimary
-                                  ? 'text-fl-accent-fg/80'
+                                  ? 'text-fl-accent-fg'
                                   : 'text-fl-muted-3'
                               }`}
                             >

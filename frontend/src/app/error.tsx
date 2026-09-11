@@ -25,7 +25,7 @@ export default function GlobalError({
         {/* Header */}
         <div className="border-fl-border flex items-center gap-3 border-b px-8 py-6">
           <span className="text-fl-muted-2 font-mono text-sm">●</span>
-          <span className="text-fl-muted-2 font-mono text-xs tracking-widest uppercase">
+          <span className="text-fl-muted-2 font-code text-xs tracking-widest uppercase">
             FreeLingo
           </span>
         </div>

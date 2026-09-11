@@ -162,13 +162,24 @@ frontend/
 
 ### Background policy
 
-- Public surfaces use `bg-dot-grid` over `bg-fl-bg`: the `/` landing page, `(auth)` routes, and `(legal)` routes.
-- The authenticated `(app)` shell uses a solid `bg-fl-bg` without `bg-dot-grid`. Its route-level loading fallback and session-initialization loading state follow the same solid treatment so hydration and authentication do not flash a different background pattern.
+- All public surfaces use a solid `bg-fl-bg`: the `/` landing page, `(auth)` routes, and `(legal)` routes. The dot-grid utility, its variables, and explicit page usages have been removed; there is no decorative replacement gradient.
+- The authenticated `(app)` shell, its route-level loading fallback, and session-initialization loading state use the same solid `bg-fl-bg`, so loading and loaded pages share the palette.
 - The root `body` uses `bg-background text-foreground` so its base colors follow the semantic theme tokens rather than fixed Zinc utilities.
+
+### Visual identity palette
+
+- The application and `docs/` share the approved flat, subtly blue-tinted palette. Dark/light values are: `fl-bg` = `#0c1316` / `#f2f6f7`, `fl-surface` = `#131d22` / `#fbfcfc`, and `fl-border` = `#29383f` / `#d7e1e5`.
+- The petroleum-blue identity accent uses `fl-accent` = `#75b7c5` / `#286779`, paired with `fl-accent-fg` = `#0a0a0a` / `#ffffff`. Existing accent buttons, selected controls, user conversation bubbles, voice indicators, level-test markers, and administrator author badges inherit these values. Background/border alpha variants retain their existing opacity levels except for the local contrast adjustments below.
+- Auxiliary yearly-savings text inside accent buttons uses full-opacity `text-fl-accent-fg` in onboarding, `PaywallBanner`, `SubscriptionPlanButtons`, and the conversation trial CTA. The former `/80` opacity would reduce light-theme hover contrast below 4.5:1 with the new accent; checkout behavior, labels, and disabled-state opacity are unchanged.
+- The active-language badge on admin user detail uses `bg-fl-accent/10` with `text-fl-accent` over its `bg-fl-bg` card, keeping normal-size text above 4.5:1 in both themes. The active-language badge in Settings remains at `/20` over the lighter `bg-fl-surface` card, where it retains sufficient contrast.
+- shadcn `background`/`sidebar`, `card`/`popover`, and `border`/`sidebar-border` reference the corresponding `fl-*` variables directly in both themes. `primary-foreground` and `sidebar-primary-foreground` reference `fl-bg`, keeping monochrome primary actions consistent with the page background. shadcn `accent` remains the neutral secondary surface, distinct from `fl-accent`.
+- Alternate backgrounds, secondary surfaces, stronger borders, text colors, spacing, radii, animation rules, and functional error/success/warning colors retain their existing definitions. Existing monochrome actions keep their treatment; the identity accent is not extended to additional controls.
+- `src/app/manifest.ts` uses `#0c1316` for both `background_color` and `theme_color`. This is the static dark PWA base; dark/light/system theme selection, persistence, and the pre-paint theme script retain their existing behavior.
+- The static website uses the same solid background and palette through `docs/css/style.css`, without the experimental hero gradient. Its system-driven theme selection remains automatic.
 
 ### Learning interface styling
 
-- Selected dashboard metrics, unit titles/counts/percentages, lesson exercise counters and regeneration controls, and Reading word-selection instructions use the existing 12px `text-fl-caption` token with stronger local text colors; global font-size tokens and target-language typography remain unchanged.
+- Selected dashboard metrics, unit titles/counts/percentages, lesson exercise counters and regeneration controls, and Reading word-selection instructions use the existing 12px `text-fl-caption` token with stronger local text colors. The 10px/11px/12px semantic tokens remain unchanged; learning typography follows the policy below.
 - Dashboard next-step and highlighted lesson actions, the `UnitCard` Start action, and lesson/Reading/Listening submission buttons use solid monochrome `bg-fl-fg text-fl-bg` styling with `hover:bg-fl-fg/90` and visible keyboard-focus outlines. Existing submission and disabled-state conditions are unchanged.
 - Dashboard plan, vocabulary, and skill bars, `UnitCard` progress, and lesson exercise progress use rectangular 4px tracks (`h-1`) with `h-full` fills. Width changes transition over 300ms using `transition-[width]`; `motion-reduce:transition-none` disables these transitions for reduced-motion preferences. Progress calculations and ordinary separators are unchanged.
 - Lesson, Reading, and Listening answer feedback uses theme-aware `fl-success` and `fl-error-fg` colors, including translucent borders and option/result backgrounds. `fl-success` is `#4ade80` in dark mode and `#15803d` in light mode. Incorrect comprehension answers remain struck through without reduced text opacity.
@@ -222,7 +233,7 @@ frontend/
 - Onboarding Checkout — If a user reloads onboarding after registration and the refresh cookie exists but no access token is in memory, onboarding refreshes `/api/auth/refresh` before creating the Stripe Checkout session for the selected monthly/yearly plan.
 - Landing page — The primary CTA sends anonymous visitors to registration and authenticated visitors to the dashboard. Pricing plan CTAs for hosted subscriptions preserve monthly/yearly intent with `plan=monthly|yearly` through registration and onboarding before Stripe Checkout for anonymous visitors; authenticated unsubscribed visitors start Stripe Checkout directly from the selected monthly/yearly pricing button, refreshing the access token from the session cookie first when needed. The pricing and trial copy separates the free-trial promise from the later paid price, highlights yearly as the best-value option with two months free, labels monthly as the flexible alternative, and repeats no-charge-today/cancel-anytime reassurance only when trial eligibility is unknown or `trial_used=false`; authenticated users with `trial_used=true` see neutral plan-selection and amount-confirmation copy instead. The bottom pricing CTA defaults to yearly intent and starts yearly Checkout directly for authenticated unsubscribed users. `/billing/canceled` uses neutral no-charge-in-this-session copy and sends users back to the dashboard or settings plans without promising future trial availability. The shared paywall detects premium-gated route context for chat, voice conversation, listening, and reading so the upgrade message matches the user's attempted action; its free-path exit remains available but visually secondary. The top navigation includes a Reviews anchor between Features and Pricing when approved public reviews are available; the same conditional link appears in the mobile menu. The Features, Reviews, Pricing, and FAQ anchor targets use `scroll-mt-16` so their content clears the sticky `h-14` navigation bar. Public landing sections for features, reviews, pricing, open source, and FAQ share `max-w-5xl` content width for consistent horizontal rhythm; the hero and footer keep their own composition. The reviews section requests up to 100 approved reviews, shows a compact average-rating and total-review-count badge below the subtitle, uses localized formatting and public-facing copy, and presents the results in an unpaginated carousel. Review cards keep a consistent height and clamp long comments to 6 lines.
 - Landing pricing localization — Current monthly and yearly prices keep the currency marker only with the amount, positioned according to the active UI locale; crossed-out total prices use the same locale-specific placement.
-- `/feedback` — Feature requests and bug reports board (community), paginated at 10 entries per page. Entry list metadata, entry detail metadata, and comment headers render the shared gold `AdminAuthorBadge` beside the display name only when the embedded author role is `admin`.
+- `/feedback` — Feature requests and bug reports board (community), paginated at 10 entries per page. Entry list metadata, entry detail metadata, and comment headers render the shared petroleum-blue `AdminAuthorBadge` beside the display name only when the embedded author role is `admin`.
 - `/admin` — Admin overview with aggregated metrics including pending feedback and pending review approvals, operational alerts, quick links to users/feedback/reviews, and a read-only maintenance-mode status whose System Controls action links to `/admin/system` (admin only). Active/trialing subscription metrics and past-due alerts render only when Stripe is enabled.
 - `/admin/users` — User management with responsive table/cards, search, filters, invite copy workflow, and a create-user sheet with required email (admin only). When Stripe is enabled, the desktop table uses fixed column widths: user 25%, email 25%, role 12.5%, status 12.5%, subscription 15%, actions 10%; subscription badges stay on one line and truncate with an ellipsis when localized labels exceed the available width. When Stripe is disabled, the subscription filter, desktop column, and mobile badge are hidden, URL subscription parameters are ignored, and the remaining columns expand to use the available width. Invite and create-user action buttons rely on their icons for the leading action affordance and do not include a duplicate `+` in localized labels.
 - `/admin/users/[id]` — Admin user detail with summary header and tabs for Profile, Languages, Activity, Quotas, and, when Stripe is enabled, Subscription. Quotas separate current usage from configured limits; email verification and subscription overrides use confirmation dialogs. Stripe-disabled deployments hide the subscription badge, tab, details, and override controls.
@@ -276,7 +287,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `chat/` — Message display, input, SSE stream handling
 - `conversation/` — `ConversationMode`, `MicButton`, `StatusIndicator`, `TranscriptBubble`, VAD integration
 - `memory/` — Shared accessible `MemorySavedToast` used by text and voice tutoring
-- `feedback/` — `AdminAuthorBadge`, a compact gold `ADMIN` marker rendered only for feedback authors whose embedded API role is `admin`
+- `feedback/` — `AdminAuthorBadge`, a compact petroleum-blue `ADMIN` marker rendered only for feedback authors whose embedded API role is `admin`
 - `flashcard/` — Flashcard flip animation, SM-2 rating buttons
 - `lesson/` — Exercise renderers (multiple choice, fill-in-blank, listening, reading)
 - `plan/` — `LevelTestBanner`, `UnitCard`, `UnitDrawer`
@@ -289,7 +300,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
 - `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
 - Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
-- Within v1.8.50, What's New keeps the learning-experience highlight as `entry1`, adds voice stability and visual improvements as `entry2`, and preserves the former `entry2` unchanged as `entry3` in all ten locales. Dynamic entry rendering, the version constant, and modal dismissal behavior remain unchanged.
+- What's New v1.8.55 shows the visual-identity highlight as `entry1`, the two existing readability highlights shifted intact to `entry2`/`entry3`, and the unchanged general bug-fix highlight as `entry4` in all ten locales. Dynamic entry rendering, the version constant, and dismissal behavior remain unchanged; this content revision does not reopen an already-dismissed v1.8.55 modal.
 
 ### App shell notifications
 
@@ -329,19 +340,33 @@ Page wrappers use `mx-auto` plus the canonical widths below. Avoid introducing n
 
 Full-screen interactive experiences (conversation, chat, listening, reading, assessment), auth cards, legal pages, the landing hero, and the landing footer are exempt because they manage their own layout internally.
 
-### Target-language typography
+### Interface and reading typography
 
-The global FreeLingo visual language remains mono-heavy: `Geist`/`Geist_Mono` are loaded in `src/app/layout.tsx`, and `globals.css` maps the default theme fonts to the mono variable. Do not change this globally when adding non-Latin target languages.
+- `Geist` and `Geist_Mono` are loaded through `next/font/google` in `src/app/layout.tsx`, alongside Noto Sans JP/KR/SC. Geist Sans is the default interface and heading font, including public, authenticated, administration, and legal pages.
+- `globals.css` maps `font-sans` and `font-heading` to `--font-geist-sans`. The existing `font-mono` utility is retained as a legacy interface alias to that same sans variable so existing controls consistently follow the new typography without a mass class-name migration. Use `font-sans` for new interface text.
+- Use the explicit `font-code` token (`--font-geist-mono`) for fixed-width text: the FreeLingo wordmark, version markers, and technical snippets. Base `code`, `pre`, `kbd`, and `samp` elements use it as well.
+- Learning paragraphs use 16px with `leading-relaxed` (1.625); selected auxiliary notes, translations, romanization, grammar rules, and FAQ answers use 14px. Existing control, title, table, and metadata sizes are preserved unless adjusted locally. The 10px/11px/12px global size tokens are unchanged.
+- Selected lesson explanations, native-language summaries, Reading passages, Listening result transcripts, chat/voice bubbles, and long informational copy have a `max-w-[70ch]` inner reading width. Page shells, table widths, and the Reading column layout are unchanged.
+- Essential explanatory text uses existing theme-aware `text-fl-muted-1` or foreground colors rather than faint border/muted tokens. Flashcard translations and instructional hints use normal casing and spacing. Short labels and branding can retain uppercase/wide tracking; colors follow the visual identity palette above.
+
+### Target-language typography
 
 Content that is part of the language being learned must use the language-aware rendering path instead of raw `font-mono` text:
 
 - `frontend/src/lib/target-languages.ts` stores `script`, `fontClass`, `usesWordSpacing`, and optional `romanization` metadata.
-- `getTargetLanguageTextClass(code)` returns Latin-compatible mono styling for current Latin-script languages and CJK-friendly `font-target-ja`, `font-target-ko`, or `font-target-zh` classes for `ja-JP`, `ko-KR`, and `zh-CN` content.
+- `getTargetLanguageTextClass(code)` returns Geist Sans at 16px with `leading-relaxed` for Latin-script languages through `font-target-latin`. CJK-friendly `font-target-ja`, `font-target-ko`, or `font-target-zh` classes retain Noto Sans and their existing 16px `leading-loose` treatment for `ja-JP`, `ko-KR`, and `zh-CN` content.
 - `TARGET_LANGUAGE_CATALOG` and `SUPPORTED_TARGET_LANGUAGES` include display metadata and flag paths for all 10 target languages, including `ja-JP`, `ko-KR`, and `zh-CN`. `TargetLanguageSelector`, Settings → My Languages, and Admin → Create User filter through operator-provided `availableCodes` / `availableLanguageCodes` when those values are available.
 - `frontend/src/components/TargetLanguageText.tsx` applies the correct class and `lang` attribute. Use it for lesson content, exercise prompts/options, flashcards, reading/listening transcripts, phrasebook entries, vocabulary examples, assessment questions, and chat/conversation transcript text.
+- Its optional reading/translation line uses Geist Sans at 14px, normal casing/spacing, and the inherited text color without an opacity reduction; glyphs not covered by the font use browser fallbacks.
 - `globals.css` defines `font-target-latin`, `font-target-ja`, `font-target-ko`, and `font-target-zh`. CJK classes use Noto variables when available plus platform fallbacks (`Hiragino Sans`/`Yu Gothic`/`Meiryo`, `Apple SD Gothic Neo`/`Malgun Gothic`, `PingFang SC`/`Microsoft YaHei`/`Noto Sans CJK SC`).
 
-UI labels, levels, controls, navigation, and admin chrome may continue using `font-mono`, `uppercase`, and wide tracking. Do not apply `uppercase`, `tracking-widest`, or small mono text to learned-language CJK content.
+Do not apply `uppercase`, `tracking-widest`, or small fixed-width text to learned-language CJK content. Local font-size overrides still take precedence where a surface requires a compact auxiliary term or a larger flashcard word.
+
+### Static website and email typography
+
+- `docs/index.html` loads `docs/css/style.css`, which self-hosts the variable Latin Geist Sans font from `docs/assets/fonts/geist-latin.woff2` using `font-display: swap`. The unmodified file comes from Google Fonts (`https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFU.woff2`); its SIL Open Font License is stored alongside it in `OFL.txt`. Browser visits make no font request to Google.
+- The static site's wordmark retains its system monospace stack. Card/source paragraphs use 14px text, 1.7 line height, and a 70ch maximum reading width; hero subtitle and heading sizes are unchanged. Japanese, Korean, and Chinese greeting bubbles have language attributes and platform-specific CJK font stacks without downloading Noto fonts.
+- All seven `backend/app/templates/email/*.html` templates use `Arial, Helvetica, sans-serif` body text with a 1.6 line height. Main greetings, values, and paragraphs use 14px; welcome steps retain 1.5 line height. The wordmark retains Courier New, and footers/metadata remain compact. Password-reset and verification fallback links use 12px. Emails do not depend on web fonts.
 
 ---
 

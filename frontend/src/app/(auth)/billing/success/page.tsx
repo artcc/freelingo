@@ -116,7 +116,7 @@ export default function BillingSuccessPage() {
   }[status]
 
   return (
-    <div className="bg-fl-bg bg-dot-grid flex min-h-screen items-center justify-center px-4">
+    <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">
       <div className="border-fl-border bg-fl-surface w-full max-w-sm space-y-5 border p-8 text-center">
         <div className="text-fl-accent text-2xl">{content.icon}</div>
         <p className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">

@@ -23,7 +23,7 @@ function renderExplanation(text: string) {
       return (
         <li
           key={i}
-          className="text-fl-muted-1 font-mono text-xs leading-relaxed"
+          className="text-fl-muted-1 font-sans text-base leading-relaxed"
         >
           <span className="text-fl-muted-3 mr-2">{'\u00b7'}</span>
           <RichText text={line.slice(2)} />
@@ -49,7 +49,10 @@ function renderExplanation(text: string) {
       )
     }
     return (
-      <p key={i} className="text-fl-muted-1 font-mono text-xs leading-relaxed">
+      <p
+        key={i}
+        className="text-fl-muted-1 font-sans text-base leading-relaxed"
+      >
         <RichText text={line} />
       </p>
     )
@@ -70,7 +73,7 @@ function RichText({ text }: { text: string }) {
         }
         if (part.startsWith('`') && part.endsWith('`')) {
           return (
-            <code key={i} className="bg-fl-surface-2 text-fl-fg px-1 font-mono">
+            <code key={i} className="bg-fl-surface-2 text-fl-fg font-code px-1">
               {part.slice(1, -1)}
             </code>
           )
@@ -222,7 +225,7 @@ export default function GrammarDetailPage({
           <h1 className="text-fl-fg font-mono text-xl font-bold tracking-wide">
             {topic.title}
           </h1>
-          <p className="text-fl-muted-2 font-mono text-xs leading-relaxed">
+          <p className="text-fl-muted-1 max-w-[70ch] font-sans text-sm leading-relaxed">
             {topic.summary}
           </p>
           {topic.structure && (
@@ -230,7 +233,9 @@ export default function GrammarDetailPage({
               <p className="text-fl-label text-fl-muted-3 mb-1 font-mono tracking-widest uppercase">
                 {t('structure')}
               </p>
-              <p className="text-fl-fg font-mono text-xs">{topic.structure}</p>
+              <p className="text-fl-fg font-sans text-sm leading-relaxed">
+                {topic.structure}
+              </p>
             </div>
           )}
         </div>
@@ -250,11 +255,11 @@ export default function GrammarDetailPage({
               </table>
             </div>
           ) : hasList ? (
-            <ul className="space-y-1">
+            <ul className="max-w-[70ch] space-y-1">
               {renderExplanation(topic.explanation)}
             </ul>
           ) : (
-            <div className="space-y-2">
+            <div className="max-w-[70ch] space-y-2">
               {renderExplanation(topic.explanation)}
             </div>
           )}
@@ -285,10 +290,10 @@ export default function GrammarDetailPage({
               ) : nativeHelp ? (
                 <>
                   <div className="space-y-2">
-                    <p className="text-fl-muted-2 text-sm leading-relaxed">
+                    <p className="text-fl-muted-1 max-w-[70ch] text-base leading-relaxed">
                       {nativeHelp.summary}
                     </p>
-                    <p className="text-fl-muted-1 text-sm leading-relaxed">
+                    <p className="text-fl-muted-1 max-w-[70ch] text-base leading-relaxed">
                       {nativeHelp.explanation}
                     </p>
                   </div>
@@ -300,7 +305,10 @@ export default function GrammarDetailPage({
                       </p>
                       <ul className="space-y-1">
                         {nativeHelp.key_points.map((point, i) => (
-                          <li key={i} className="text-fl-muted-2 text-sm">
+                          <li
+                            key={i}
+                            className="text-fl-muted-1 max-w-[70ch] text-sm leading-relaxed"
+                          >
                             <span className="text-fl-muted-3 mr-2">·</span>
                             {point}
                           </li>
@@ -322,7 +330,9 @@ export default function GrammarDetailPage({
                           >
                             {ex.sentence}
                           </TargetLanguageText>
-                          <p className="text-fl-muted-3 text-sm">{ex.note}</p>
+                          <p className="text-fl-muted-1 text-sm leading-relaxed">
+                            {ex.note}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -338,7 +348,9 @@ export default function GrammarDetailPage({
                           <p className="text-fl-muted-2 text-sm">
                             {trap.mistake}
                           </p>
-                          <p className="text-fl-muted-3 text-sm">{trap.fix}</p>
+                          <p className="text-fl-muted-1 text-sm leading-relaxed">
+                            {trap.fix}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -361,7 +373,7 @@ export default function GrammarDetailPage({
                             {item.meaning}
                           </p>
                           {item.note && (
-                            <p className="text-fl-muted-3 text-sm">
+                            <p className="text-fl-muted-1 text-sm leading-relaxed">
                               {item.note}
                             </p>
                           )}
@@ -403,7 +415,7 @@ export default function GrammarDetailPage({
                 <span className="text-fl-label text-fl-muted-3 mt-0.5 shrink-0 font-mono">
                   {i + 1}.
                 </span>
-                <p className="text-fl-muted-1 font-mono text-xs leading-relaxed">
+                <p className="text-fl-muted-1 max-w-[70ch] font-sans text-sm leading-relaxed">
                   {rule}
                 </p>
               </li>
@@ -425,9 +437,11 @@ export default function GrammarDetailPage({
                 key={i}
                 className="border-fl-border space-y-0.5 border-l-2 pl-4"
               >
-                <p className="text-fl-fg font-mono text-xs">{ex.text}</p>
+                <p className="text-fl-fg font-sans text-base leading-relaxed">
+                  {ex.text}
+                </p>
                 {ex.note && (
-                  <p className="text-fl-label text-fl-muted-3 font-mono italic">
+                  <p className="text-fl-muted-1 font-sans text-sm leading-relaxed italic">
                     {ex.note}
                   </p>
                 )}
@@ -452,7 +466,7 @@ export default function GrammarDetailPage({
                     <span className="text-fl-label shrink-0 font-mono text-red-500">
                       {'\u2717'}
                     </span>
-                    <p className="text-fl-muted-2 font-mono text-xs line-through">
+                    <p className="text-fl-muted-1 font-sans text-sm leading-relaxed line-through">
                       {m.wrong}
                     </p>
                   </div>
@@ -462,11 +476,13 @@ export default function GrammarDetailPage({
                     <span className="text-fl-label shrink-0 font-mono text-green-500">
                       {'\u2713'}
                     </span>
-                    <p className="text-fl-fg font-mono text-xs">{m.correct}</p>
+                    <p className="text-fl-fg font-sans text-sm leading-relaxed">
+                      {m.correct}
+                    </p>
                   </div>
                 )}
                 {m.note && (
-                  <p className="text-fl-label text-fl-muted-3 pl-5 font-mono">
+                  <p className="text-fl-muted-1 max-w-[70ch] pl-5 font-sans text-sm leading-relaxed">
                     {m.note}
                   </p>
                 )}

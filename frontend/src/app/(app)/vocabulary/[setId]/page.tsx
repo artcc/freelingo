@@ -225,7 +225,7 @@ export default function VocabularySetPage({
                 </p>
               ) : nativeHelp ? (
                 <>
-                  <p className="text-fl-muted-2 text-sm leading-relaxed">
+                  <p className="text-fl-muted-1 max-w-[70ch] text-base leading-relaxed">
                     {nativeHelp.summary}
                   </p>
 
@@ -236,7 +236,10 @@ export default function VocabularySetPage({
                       </p>
                       <ul className="space-y-1">
                         {nativeHelp.study_tips.map((tip, i) => (
-                          <li key={i} className="text-fl-muted-2 text-sm">
+                          <li
+                            key={i}
+                            className="text-fl-muted-1 max-w-[70ch] text-sm leading-relaxed"
+                          >
                             <span className="text-fl-muted-3 mr-2">·</span>
                             {tip}
                           </li>
@@ -261,7 +264,9 @@ export default function VocabularySetPage({
                           <p className="text-fl-muted-2 text-sm">
                             {item.meaning}
                           </p>
-                          <p className="text-fl-muted-3 text-sm">{item.note}</p>
+                          <p className="text-fl-muted-1 text-sm leading-relaxed">
+                            {item.note}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -277,7 +282,9 @@ export default function VocabularySetPage({
                           <p className="text-fl-muted-2 text-sm">
                             {trap.mistake}
                           </p>
-                          <p className="text-fl-muted-3 text-sm">{trap.fix}</p>
+                          <p className="text-fl-muted-1 text-sm leading-relaxed">
+                            {trap.fix}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -300,7 +307,7 @@ export default function VocabularySetPage({
                             {item.meaning}
                           </p>
                           {item.note && (
-                            <p className="text-fl-muted-3 text-sm">
+                            <p className="text-fl-muted-1 text-sm leading-relaxed">
                               {item.note}
                             </p>
                           )}
@@ -316,7 +323,10 @@ export default function VocabularySetPage({
                       </p>
                       <ul className="space-y-1">
                         {nativeHelp.practice_prompts.map((prompt, i) => (
-                          <li key={i} className="text-fl-muted-2 text-sm">
+                          <li
+                            key={i}
+                            className="text-fl-muted-1 max-w-[70ch] text-sm leading-relaxed"
+                          >
                             <span className="text-fl-muted-3 mr-2">·</span>
                             {prompt}
                           </li>
@@ -360,7 +370,7 @@ export default function VocabularySetPage({
                 {POS_LABELS[word.pos] ?? word.pos}
               </span>
               {word.ipa && (
-                <span className="text-fl-label text-fl-muted-3 font-mono">
+                <span className="text-fl-muted-1 font-sans text-sm">
                   {word.ipa}
                 </span>
               )}
@@ -373,14 +383,14 @@ export default function VocabularySetPage({
             <TargetLanguageText
               as="p"
               languageCode={targetLanguageCode}
-              className="text-fl-muted-2"
+              className="text-fl-muted-1"
             >
               {word.definition}
             </TargetLanguageText>
             <TargetLanguageText
               as="p"
               languageCode={targetLanguageCode}
-              className="text-fl-muted-3 italic"
+              className="text-fl-muted-1 italic"
             >
               &ldquo;{word.example}&rdquo;
             </TargetLanguageText>

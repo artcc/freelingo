@@ -1461,17 +1461,21 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.8.50",
+    "version": "v1.8.55",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Nauka, trochę łatwiejsza",
-      "desc": "Teraz łatwiej sprawdzisz swoje postępy, znajdziesz kolejny krok i wrócisz do swoich lekcji. Poprawiliśmy też czytelność oraz tryby jasny i ciemny, zachowując wygląd, który już znasz."
+      "label": "Styl z własnym charakterem",
+      "desc": "Stonowane niebieskozielone odcienie i jednolite tła nadają FreeLingo więcej charakteru, zachowując minimalistyczny wygląd, który już znasz."
     },
     "entry2": {
-      "label": "Stabilniejsze rozmowy głosowe",
-      "desc": "Poprawiliśmy stabilność tur rozmowy i przywracanie działania po błędach. Zwiększyliśmy też widoczność stanu rozmowy i ograniczyliśmy animacje w historii, aby ułatwić ci skupienie się na rozmowie z Lingu"
+      "label": "Wygodniejsze czytanie",
+      "desc": "Czytelniejsza czcionka i delikatne zmiany wielkości tekstu, odstępów oraz kontrastu ułatwiają czytanie lekcji, wyjaśnień i rozmów."
     },
     "entry3": {
+      "label": "Czytelniejsze szczegóły",
+      "desc": "Tłumaczenia i pomocne wskazówki są łatwiejsze do przeczytania. Nasza strona informacyjna i wiadomości e-mail również zyskały czytelniejszy wygląd."
+    },
+    "entry4": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawki błędów i drobne ulepszenia sprawiają, że FreeLingo działa stabilniej i jest przyjemniejsze w użyciu."
     }

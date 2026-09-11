@@ -133,7 +133,7 @@ Creates `feedback_read_states` with `entry_id` and `user_id` indexes plus the un
 - Pagination: 10 entries per page with the identical two-effect pattern as `admin/users/page.tsx` — one effect on `page`, one effect on filters that resets to page 0 before loading.
 - Default listing behavior: entries with `status=done` are hidden unless the status dropdown is set to Done.
 - Admin users see delete button on all entries in both list and detail views; regular users only see it on their own entries.
-- The shared `AdminAuthorBadge` renders a compact gold `ADMIN` marker beside the author name in entry lists, entry detail metadata, and comment headers only when `author.role == "admin"`; normal users receive no role label.
+- The shared `AdminAuthorBadge` renders a compact petroleum-blue `ADMIN` marker using `fl-accent` beside the author name in entry lists, entry detail metadata, and comment headers only when `author.role == "admin"`; normal users receive no role label.
 - Feedback list items show a red unread label immediately to the right of the status badge when `unread_by_me` is true. This is independent from the feedback status and only reflects the current user's read state.
 - Opening a detail view calls `POST /api/feedback/{entry_id}/read` and marks only that thread as read for the current user.
 
