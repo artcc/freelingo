@@ -1461,15 +1461,15 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.8.50",
+    "version": "v1.8.55",
     "cta": "Entendido",
     "entry1": {
-      "label": "Aprender, un poco más fácil",
-      "desc": "Ahora es más fácil ver tu progreso, encontrar el siguiente paso y retomar tus lecciones. También hemos mejorado la legibilidad y los modos claro y oscuro, manteniendo el diseño que ya conoces."
+      "label": "Una lectura más cómoda",
+      "desc": "Estrenamos una tipografía más clara y ajustes suaves de tamaño, espaciado y contraste para leer tus lecciones, explicaciones y conversaciones con más comodidad."
     },
     "entry2": {
-      "label": "Conversaciones de voz más estables",
-      "desc": "Hemos mejorado la estabilidad de los turnos y la recuperación ante errores. También hemos hecho más visible el estado de la conversación y reducido las animaciones del historial para que puedas centrarte en hablar con Lingu"
+      "label": "Más claridad en los detalles",
+      "desc": "Las traducciones y las ayudas se leen mejor. Nuestra web informativa y los correos también estrenan una presentación más legible."
     },
     "entry3": {
       "label": "Una experiencia más fluida",

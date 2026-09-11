@@ -514,7 +514,7 @@ export default function ChatPage() {
                     <TargetLanguageText
                       as="div"
                       languageCode={targetLanguageCode}
-                      className={`word-selectable border px-4 py-3 text-left ${
+                      className={`word-selectable max-w-[70ch] border px-4 py-3 text-left ${
                         msg.role === 'user'
                           ? 'bg-fl-accent text-fl-accent-fg border-fl-accent'
                           : 'bg-fl-surface text-fl-fg-2 border-fl-border'

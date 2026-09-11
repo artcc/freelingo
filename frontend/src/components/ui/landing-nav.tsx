@@ -106,7 +106,7 @@ export function LandingNav({
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="FreeLingo" width={28} height={28} />
-          <span className="text-fl-fg font-mono text-sm font-bold tracking-widest uppercase">
+          <span className="text-fl-fg font-code text-sm font-bold tracking-widest uppercase">
             FreeLingo
           </span>
         </div>

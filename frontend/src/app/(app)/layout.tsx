@@ -214,7 +214,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Logo area */}
         <div className="border-fl-border flex items-center gap-2 border-b px-5 py-5">
           <span className="text-fl-label text-fl-muted-2">●</span>
-          <span className="text-fl-fg font-mono text-sm font-bold tracking-widest uppercase">
+          <span className="text-fl-fg font-code text-sm font-bold tracking-widest uppercase">
             FreeLingo
           </span>
         </div>
@@ -378,8 +378,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               )}
             </div>
           </div>
-          <p className="text-fl-label text-fl-muted-4 mb-2 font-mono tracking-wider">
-            v1.8.50
+          <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
+            v1.8.55
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -399,7 +399,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar */}
       <div className="border-fl-border bg-fl-bg fixed top-0 right-0 left-0 z-50 border-b md:hidden">
         <div className="flex items-center justify-between px-4 py-3">
-          <span className="text-fl-fg font-mono text-xs font-bold tracking-widest uppercase">
+          <span className="text-fl-fg font-code text-xs font-bold tracking-widest uppercase">
             FreeLingo
           </span>
           <button
@@ -572,8 +572,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   ★ {tBilling('trialDays', { days: trialDaysLeft })}
                 </p>
               )}
-              <p className="text-fl-label text-fl-muted-4 mb-2 font-mono tracking-wider">
-                v1.8.50
+              <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
+                v1.8.55
               </p>
               <button
                 onClick={() => {

@@ -455,7 +455,7 @@ function ReadingPage() {
                           ? 'text-fl-success font-bold'
                           : k === userAnswer && !isCorrect
                             ? 'text-fl-error-fg line-through'
-                            : 'text-fl-muted-3'
+                            : 'text-fl-muted-1'
                       }`}
                     >
                       <span className="text-fl-label font-mono font-bold">
@@ -588,13 +588,13 @@ function ReadingPage() {
                   <TargetLanguageText
                     as="p"
                     languageCode={exercise.target_language}
-                    className="reading-text text-fl-fg word-selectable cursor-text whitespace-pre-wrap select-text"
+                    className="reading-text text-fl-fg word-selectable max-w-[70ch] cursor-text whitespace-pre-wrap select-text"
                   >
                     {exercise.text}
                   </TargetLanguageText>
                 </div>
               </div>
-              <p className="text-fl-caption text-fl-muted-1 mt-2 text-center font-mono tracking-widest uppercase">
+              <p className="text-fl-caption text-fl-muted-1 mt-2 text-center font-sans leading-relaxed">
                 {t('selectWordHint')}
               </p>
             </div>
@@ -635,7 +635,7 @@ function ReadingPage() {
                             className={`w-full border px-3 py-2 text-left transition-colors ${
                               selected
                                 ? 'border-fl-accent text-fl-fg bg-fl-surface-2'
-                                : 'border-fl-border text-fl-muted-2 hover:border-fl-muted-2 hover:text-fl-fg'
+                                : 'border-fl-border text-fl-muted-1 hover:border-fl-muted-2 hover:text-fl-fg'
                             }`}
                           >
                             <span className="text-fl-label font-mono font-bold">

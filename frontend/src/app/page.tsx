@@ -324,7 +324,7 @@ export default async function Home() {
               </div>
             </div>
             <a
-              href="https://github.com/ArtCC/freelingo"
+              href="https://github.com/artcc/freelingo"
               target="_blank"
               rel="noopener noreferrer"
               className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 border px-6 py-2.5 font-mono text-xs font-bold tracking-widest whitespace-nowrap uppercase transition-colors"
@@ -352,7 +352,7 @@ export default async function Home() {
       <footer className="border-fl-border border-t px-6 py-10">
         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <span className="text-fl-hint text-fl-muted-3 block font-mono tracking-widest uppercase">
+            <span className="text-fl-hint text-fl-muted-3 font-code block tracking-widest uppercase">
               FreeLingo
             </span>
             <span className="text-fl-hint text-fl-muted-4 mt-2 block font-mono leading-relaxed">
@@ -365,7 +365,7 @@ export default async function Home() {
             </h4>
             <div className="flex flex-col gap-2">
               <a
-                href="https://github.com/ArtCC/freelingo"
+                href="https://github.com/artcc/freelingo"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-fl-hint text-fl-muted-3 hover:text-fl-muted-1 font-mono tracking-widest uppercase transition-colors"

@@ -100,8 +100,8 @@ Single-panel layout — no step pagination. All entries for the version are show
 
 - **Backdrop**: full-screen fixed overlay (`z-50`), semi-transparent with `backdrop-blur-sm`. Clicking it dismisses the modal.
 - **Modal card**: centered, `max-w-md`, same border/surface tokens as the tour (`border-fl-border bg-fl-surface`).
-- **Header**: version label (`✦ WHAT'S NEW — vX.Y.Z`) in `font-mono tracking-widest uppercase text-fl-muted-2`.
-- **Entry list**: each entry has an icon (`◎ ▣ △ ◇ ✦ ▣` cycling), a label in `uppercase text-fl-muted-2`, and a description in `text-fl-muted-1`.
+- **Header**: the title uses Geist Sans with `tracking-widest uppercase text-fl-muted-2`; the version marker uses Geist Mono through `font-code`.
+- **Entry list**: each entry has a `CircleDot` icon, a 12px semibold sentence-case label in `text-fl-fg`, and a 14px Geist Sans description in `text-fl-muted-1` with relaxed line spacing. Rich-text emphasis uses `text-fl-fg`.
 - **Divider** between header, list, and footer using `border-fl-border`.
 - **Footer**: single `Got it →` button (filled `bg-fl-accent`) right-aligned.
 - **Max height**: `max-h-[50vh] overflow-y-auto` on the entries container to handle long lists gracefully.
@@ -135,6 +135,8 @@ Structure for each version's entries:
 The number of entries is variable per version. The component reads entries dynamically using `useMessages()` from `next-intl` — it inspects the raw `whatsNew` namespace object and filters keys matching `/^entry\d+$/`, sorted numerically. **Do not use `useTranslations` in a try/catch loop to detect missing keys** — `next-intl` does not throw on missing keys; it returns the key path as a string, which would cause an infinite loop.
 
 **When shipping a new version: replace all existing `entry*` keys with the new version's entries.** Do not accumulate old entries — only the current version's changelog items should be present. The `version` key must also be updated to match `WHATS_NEW_VERSION` in the component.
+
+For v1.8.55, all ten locales show the approved reading-comfort highlight first and the clearer-translations/website/email highlight second. At the maintainer's request, the general bug-fix entry is preserved unchanged as the final `entry3`. `WHATS_NEW_VERSION` and the localized version labels are `v1.8.55`.
 
 ---
 

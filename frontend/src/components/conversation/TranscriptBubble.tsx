@@ -75,13 +75,13 @@ export default function TranscriptBubble({
       <div
         className={`flex max-w-[75%] flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}
       >
-        <span className="text-fl-label text-fl-muted-4 font-mono tracking-widest uppercase">
+        <span className="text-fl-caption text-fl-muted-1 font-sans tracking-wide uppercase">
           {isUser ? t('you') : t('assistant')}
         </span>
         <TargetLanguageText
           as="div"
           languageCode={languageCode}
-          className={`border px-4 py-3 ${
+          className={`max-w-[70ch] border px-4 py-3 ${
             isUser
               ? 'bg-fl-accent text-fl-accent-fg border-fl-accent'
               : 'bg-fl-surface text-fl-fg border-fl-border'

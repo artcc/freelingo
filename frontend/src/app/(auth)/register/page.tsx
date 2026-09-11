@@ -153,7 +153,7 @@ function RegisterForm() {
             height={100}
             className="mb-4"
           />
-          <h1 className="text-fl-fg font-mono text-xl font-bold tracking-widest uppercase">
+          <h1 className="text-fl-fg font-code text-xl font-bold tracking-widest uppercase">
             FreeLingo
           </h1>
           <p className="text-fl-caption text-fl-muted-2 mt-1 font-mono tracking-widest uppercase">

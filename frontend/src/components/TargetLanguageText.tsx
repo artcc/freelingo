@@ -29,7 +29,7 @@ export function TargetLanguageText({
     >
       {children}
       {(reading || translation) && (
-        <span className="mt-1 block font-mono text-xs leading-relaxed tracking-normal normal-case opacity-70">
+        <span className="mt-1 block font-sans text-sm leading-relaxed tracking-normal normal-case">
           {[reading, translation].filter(Boolean).join(' · ')}
         </span>
       )}

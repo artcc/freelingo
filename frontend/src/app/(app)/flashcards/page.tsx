@@ -317,7 +317,7 @@ export default function FlashcardsPage() {
                       {flipped ? t('back') : t('front')}
                     </span>
                   </div>
-                  <span className="text-fl-hint text-fl-border-2 font-mono tracking-widest uppercase">
+                  <span className="text-fl-caption text-fl-muted-1 font-sans leading-relaxed">
                     {flipped ? t('tapToHide') : t('tapToReveal')}
                   </span>
                 </div>
@@ -355,7 +355,7 @@ export default function FlashcardsPage() {
                         </TargetLanguageText>
                       )}
                       {cards[current].translation && (
-                        <p className="text-fl-label text-fl-muted-3 border-fl-border mt-1 border-t pt-3 font-mono tracking-widest uppercase">
+                        <p className="text-fl-muted-1 border-fl-border mt-1 border-t pt-3 font-sans text-sm leading-relaxed">
                           {cards[current].translation}
                         </p>
                       )}
@@ -397,7 +397,7 @@ export default function FlashcardsPage() {
                     {t('speakingMode')}
                   </span>
                 </div>
-                <span className="text-fl-hint text-fl-border-2 font-mono tracking-widest uppercase">
+                <span className="text-fl-caption text-fl-muted-1 font-sans leading-relaxed">
                   {t('sayWord')}
                 </span>
               </div>
@@ -420,7 +420,7 @@ export default function FlashcardsPage() {
                   </TargetLanguageText>
                 )}
                 {cards[current].translation && (
-                  <p className="text-fl-label text-fl-muted-3 border-fl-border mt-1 border-t pt-3 font-mono tracking-widest uppercase">
+                  <p className="text-fl-muted-1 border-fl-border mt-1 border-t pt-3 font-sans text-sm leading-relaxed">
                     {cards[current].translation}
                   </p>
                 )}

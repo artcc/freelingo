@@ -1,13 +1,11 @@
 # Version
 
-**1.8.50**
+**1.8.55**
 
 > Canonical project version. Update this file when bumping.
 > Full history in [CHANGELOG.md](../CHANGELOG.md).
 
-The voice lifecycle reliability improvement is included in the existing 1.8.50 release under `Fixed`, without a version bump or changes to the sidebar or version badge. Its 13 frontend test cases passed in the confirmed pre-push run (6.58 s), included in the 494 passed across 50 frontend files. These tests use mocks and do not validate real microphone behavior in a browser; manual validation against the remote deployment remains pending.
-
-The same 1.8.50 release includes clearer voice status labels, static idle transcript halos, local reduced-motion support, and the Lingu role label in all ten UI locales. What's New has now been revised across all ten locales: `entry1` remains intact, the new `entry2` covers voice stability, error recovery, and visual improvements, and the former `entry2` is preserved unchanged as `entry3`. `WhatsNew.tsx`, its version constant, and its dynamic rendering and dismissal mechanism remain unchanged, so this content revision does not reopen an already-dismissed v1.8.50 modal. No new validation was run for these visual and content changes.
+Version 1.8.55 introduces Geist Sans for the application and Latin-script learning content, selective readability adjustments, a self-hosted Geist font for the static website, and Arial/Helvetica email body text. The sidebar, README badge, and What's New version are synchronized. All ten What's New locales contain two new readability highlights followed by the preserved general bug-fix entry. The typography review found no blocking issues. The confirmed `./scripts/pre-push.sh` run on 2026-09-11 completed successfully: auto-format, 1,019 backend tests (292.55 s, 85.56% coverage against the 70% minimum), frontend lint and TypeScript checks, and 494 frontend tests across 50 files (5.95 s). A targeted check also confirmed Tailwind font-family generation and local size overrides, compact size tokens, the static font URL/WOFF2 header and license, and all ten locale JSON files with their final bug-fix entry unchanged. Dependency deprecation warnings did not fail validation. Concurrent static-site theme/navigation edits and GitHub-link casing edits appeared after the initial typography review and are not covered by that review. The maintainer handles deployment-environment checks.
 
 ## Sync rule
 

@@ -168,7 +168,7 @@ frontend/
 
 ### Learning interface styling
 
-- Selected dashboard metrics, unit titles/counts/percentages, lesson exercise counters and regeneration controls, and Reading word-selection instructions use the existing 12px `text-fl-caption` token with stronger local text colors; global font-size tokens and target-language typography remain unchanged.
+- Selected dashboard metrics, unit titles/counts/percentages, lesson exercise counters and regeneration controls, and Reading word-selection instructions use the existing 12px `text-fl-caption` token with stronger local text colors. The 10px/11px/12px semantic tokens remain unchanged; learning typography follows the policy below.
 - Dashboard next-step and highlighted lesson actions, the `UnitCard` Start action, and lesson/Reading/Listening submission buttons use solid monochrome `bg-fl-fg text-fl-bg` styling with `hover:bg-fl-fg/90` and visible keyboard-focus outlines. Existing submission and disabled-state conditions are unchanged.
 - Dashboard plan, vocabulary, and skill bars, `UnitCard` progress, and lesson exercise progress use rectangular 4px tracks (`h-1`) with `h-full` fills. Width changes transition over 300ms using `transition-[width]`; `motion-reduce:transition-none` disables these transitions for reduced-motion preferences. Progress calculations and ordinary separators are unchanged.
 - Lesson, Reading, and Listening answer feedback uses theme-aware `fl-success` and `fl-error-fg` colors, including translucent borders and option/result backgrounds. `fl-success` is `#4ade80` in dark mode and `#15803d` in light mode. Incorrect comprehension answers remain struck through without reduced text opacity.
@@ -289,7 +289,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
 - `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
 - Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
-- Within v1.8.50, What's New keeps the learning-experience highlight as `entry1`, adds voice stability and visual improvements as `entry2`, and preserves the former `entry2` unchanged as `entry3` in all ten locales. Dynamic entry rendering, the version constant, and modal dismissal behavior remain unchanged.
+- What's New v1.8.55 shows two readability highlights as `entry1` and `entry2`, followed by the unchanged general bug-fix highlight as `entry3` in all ten locales. Dynamic entry rendering and dismissal behavior remain unchanged; the new version uses its own localStorage dismissal key.
 
 ### App shell notifications
 
@@ -329,19 +329,33 @@ Page wrappers use `mx-auto` plus the canonical widths below. Avoid introducing n
 
 Full-screen interactive experiences (conversation, chat, listening, reading, assessment), auth cards, legal pages, the landing hero, and the landing footer are exempt because they manage their own layout internally.
 
-### Target-language typography
+### Interface and reading typography
 
-The global FreeLingo visual language remains mono-heavy: `Geist`/`Geist_Mono` are loaded in `src/app/layout.tsx`, and `globals.css` maps the default theme fonts to the mono variable. Do not change this globally when adding non-Latin target languages.
+- `Geist` and `Geist_Mono` are loaded through `next/font/google` in `src/app/layout.tsx`, alongside Noto Sans JP/KR/SC. Geist Sans is the default interface and heading font, including public, authenticated, administration, and legal pages.
+- `globals.css` maps `font-sans` and `font-heading` to `--font-geist-sans`. The existing `font-mono` utility is retained as a legacy interface alias to that same sans variable so existing controls consistently follow the new typography without a mass class-name migration. Use `font-sans` for new interface text.
+- Use the explicit `font-code` token (`--font-geist-mono`) for fixed-width text: the FreeLingo wordmark, version markers, and technical snippets. Base `code`, `pre`, `kbd`, and `samp` elements use it as well.
+- Learning paragraphs use 16px with `leading-relaxed` (1.625); selected auxiliary notes, translations, romanization, grammar rules, and FAQ answers use 14px. Existing control, title, table, and metadata sizes are preserved unless adjusted locally. The 10px/11px/12px global size tokens are unchanged.
+- Selected lesson explanations, native-language summaries, Reading passages, Listening result transcripts, chat/voice bubbles, and long informational copy have a `max-w-[70ch]` inner reading width. Page shells, table widths, and the Reading column layout are unchanged.
+- Essential explanatory text uses existing theme-aware `text-fl-muted-1` or foreground colors rather than faint border/muted tokens. Flashcard translations and instructional hints use normal casing and spacing. Short labels and branding can retain uppercase/wide tracking; the global palette is unchanged.
+
+### Target-language typography
 
 Content that is part of the language being learned must use the language-aware rendering path instead of raw `font-mono` text:
 
 - `frontend/src/lib/target-languages.ts` stores `script`, `fontClass`, `usesWordSpacing`, and optional `romanization` metadata.
-- `getTargetLanguageTextClass(code)` returns Latin-compatible mono styling for current Latin-script languages and CJK-friendly `font-target-ja`, `font-target-ko`, or `font-target-zh` classes for `ja-JP`, `ko-KR`, and `zh-CN` content.
+- `getTargetLanguageTextClass(code)` returns Geist Sans at 16px with `leading-relaxed` for Latin-script languages through `font-target-latin`. CJK-friendly `font-target-ja`, `font-target-ko`, or `font-target-zh` classes retain Noto Sans and their existing 16px `leading-loose` treatment for `ja-JP`, `ko-KR`, and `zh-CN` content.
 - `TARGET_LANGUAGE_CATALOG` and `SUPPORTED_TARGET_LANGUAGES` include display metadata and flag paths for all 10 target languages, including `ja-JP`, `ko-KR`, and `zh-CN`. `TargetLanguageSelector`, Settings → My Languages, and Admin → Create User filter through operator-provided `availableCodes` / `availableLanguageCodes` when those values are available.
 - `frontend/src/components/TargetLanguageText.tsx` applies the correct class and `lang` attribute. Use it for lesson content, exercise prompts/options, flashcards, reading/listening transcripts, phrasebook entries, vocabulary examples, assessment questions, and chat/conversation transcript text.
+- Its optional reading/translation line uses Geist Sans at 14px, normal casing/spacing, and the inherited text color without an opacity reduction; glyphs not covered by the font use browser fallbacks.
 - `globals.css` defines `font-target-latin`, `font-target-ja`, `font-target-ko`, and `font-target-zh`. CJK classes use Noto variables when available plus platform fallbacks (`Hiragino Sans`/`Yu Gothic`/`Meiryo`, `Apple SD Gothic Neo`/`Malgun Gothic`, `PingFang SC`/`Microsoft YaHei`/`Noto Sans CJK SC`).
 
-UI labels, levels, controls, navigation, and admin chrome may continue using `font-mono`, `uppercase`, and wide tracking. Do not apply `uppercase`, `tracking-widest`, or small mono text to learned-language CJK content.
+Do not apply `uppercase`, `tracking-widest`, or small fixed-width text to learned-language CJK content. Local font-size overrides still take precedence where a surface requires a compact auxiliary term or a larger flashcard word.
+
+### Static website and email typography
+
+- `docs/index.html` loads `docs/css/style.css`, which self-hosts the variable Latin Geist Sans font from `docs/assets/fonts/geist-latin.woff2` using `font-display: swap`. The unmodified file comes from Google Fonts (`https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFU.woff2`); its SIL Open Font License is stored alongside it in `OFL.txt`. Browser visits make no font request to Google.
+- The static site's wordmark retains its system monospace stack. Card/source paragraphs use 14px text, 1.7 line height, and a 70ch maximum reading width; hero subtitle and heading sizes are unchanged. Japanese, Korean, and Chinese greeting bubbles have language attributes and platform-specific CJK font stacks without downloading Noto fonts.
+- All seven `backend/app/templates/email/*.html` templates use `Arial, Helvetica, sans-serif` body text with a 1.6 line height. Main greetings, values, and paragraphs use 14px; welcome steps retain 1.5 line height. The wordmark retains Courier New, and footers/metadata remain compact. Password-reset and verification fallback links use 12px. Emails do not depend on web fonts.
 
 ---
 

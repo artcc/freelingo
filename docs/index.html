@@ -28,17 +28,8 @@
 
   <script>
     (function () {
-      var storedMode = null
-      try {
-        storedMode = localStorage.getItem('freelingo-docs-theme-mode')
-      } catch (_error) {
-        storedMode = null
-      }
       var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches
-      document.documentElement.dataset.themeMode = storedMode || 'auto'
-      document.documentElement.dataset.theme = storedMode === 'light' || storedMode === 'dark'
-        ? storedMode
-        : prefersLight ? 'light' : 'dark'
+      document.documentElement.dataset.theme = prefersLight ? 'light' : 'dark'
     })()
   </script>
 </head>
@@ -68,42 +59,6 @@
           <a href="#source">Open Source</a>
           <a href="https://freelingo.app" target="_blank" rel="noopener noreferrer">Web</a>
         </div>
-        <div class="theme-menu">
-          <button class="theme-current" type="button" aria-label="Change color theme" aria-expanded="false">
-            <svg class="theme-current-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 5h16v10H4z" />
-              <path d="M9 19h6" />
-              <path d="M12 15v4" />
-            </svg>
-          </button>
-          <div class="theme-options" role="group" aria-label="Color theme">
-            <button type="button" data-theme-mode="auto" aria-label="Use system theme" aria-pressed="true">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 5h16v10H4z" />
-              <path d="M9 19h6" />
-              <path d="M12 15v4" />
-            </svg>
-            </button>
-            <button type="button" data-theme-mode="light" aria-label="Use light theme" aria-pressed="false">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 4v2" />
-              <path d="M12 18v2" />
-              <path d="M4 12h2" />
-              <path d="M18 12h2" />
-              <path d="m6.34 6.34 1.42 1.42" />
-              <path d="m16.24 16.24 1.42 1.42" />
-              <path d="m17.66 6.34-1.42 1.42" />
-              <path d="m7.76 16.24-1.42 1.42" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-            </button>
-            <button type="button" data-theme-mode="dark" aria-label="Use dark theme" aria-pressed="false">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M20 14.5A7.5 7.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" />
-            </svg>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </nav>
@@ -119,9 +74,9 @@
         <div class="language-bubble bubble-5"><span aria-hidden="true">🇵🇹</span> Ola</div>
         <div class="language-bubble bubble-6"><span aria-hidden="true">🇩🇪</span> Hallo</div>
         <div class="language-bubble bubble-7"><span aria-hidden="true">🇫🇷</span> Bonjour</div>
-        <div class="language-bubble bubble-8"><span aria-hidden="true">🇯🇵</span> こんにちは</div>
-        <div class="language-bubble bubble-9"><span aria-hidden="true">🇰🇷</span> 안녕하세요</div>
-        <div class="language-bubble bubble-10"><span aria-hidden="true">🇨🇳</span> 你好</div>
+        <div class="language-bubble bubble-8" lang="ja"><span aria-hidden="true">🇯🇵</span> こんにちは</div>
+        <div class="language-bubble bubble-9" lang="ko"><span aria-hidden="true">🇰🇷</span> 안녕하세요</div>
+        <div class="language-bubble bubble-10" lang="zh-CN"><span aria-hidden="true">🇨🇳</span> 你好</div>
       </div>
       <p class="eyebrow">AI language learning platform</p>
       <h1 id="hero-title">Learn with Lingu, your AI language tutor.</h1>
@@ -202,7 +157,7 @@
           <span>Self-hosted</span>
           <h3>Your server, your data</h3>
           <p>Deploy the AGPL-3.0 stack with PostgreSQL, Redis, FastAPI, Next.js, Ollama or external LLMs, TTS, and STT.</p>
-          <a href="https://github.com/ArtCC/freelingo" target="_blank" rel="noopener noreferrer">View repository</a>
+          <a href="https://github.com/artcc/freelingo" target="_blank" rel="noopener noreferrer">View repository</a>
         </article>
       </div>
     </section>
@@ -216,7 +171,7 @@
           without AGPL obligations can use the commercial licence option.
         </p>
       </div>
-      <a class="btn btn-secondary" href="https://github.com/ArtCC/freelingo" target="_blank" rel="noopener noreferrer"
+      <a class="btn btn-secondary" href="https://github.com/artcc/freelingo" target="_blank" rel="noopener noreferrer"
         aria-label="View FreeLingo on GitHub">
         View on GitHub
       </a>
@@ -232,84 +187,29 @@
       <div>
         <span class="footer-label">Product</span>
         <a href="https://freelingo.app" target="_blank" rel="noopener noreferrer">Hosted web</a>
-        <a href="https://github.com/ArtCC/freelingo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/artcc/freelingo" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
       <div>
         <span class="footer-label">Author</span>
         <a href="https://www.arturocarreterocalvo.com" target="_blank" rel="noopener noreferrer">Arturo Carretero Calvo</a>
-        <a href="https://github.com/ArtCC" target="_blank" rel="noopener noreferrer">ArtCC</a>
+        <a href="https://github.com/artcc" target="_blank" rel="noopener noreferrer">artcc</a>
       </div>
     </div>
   </footer>
 
   <script>
-    var themeButtons = document.querySelectorAll('[data-theme-mode]')
-    var themeMenu = document.querySelector('.theme-menu')
-    var themeCurrent = document.querySelector('.theme-current')
-    var themeCurrentIcon = document.querySelector('.theme-current-icon')
-    var themeOptions = document.querySelector('.theme-options')
     var menuToggle = document.querySelector('.menu-toggle')
     var navActions = document.querySelector('.nav-actions')
     var mediaQuery = window.matchMedia('(prefers-color-scheme: light)')
-
-    function resolveTheme(mode) {
-      if (mode === 'light' || mode === 'dark') return mode
-      return mediaQuery.matches ? 'light' : 'dark'
-    }
-
-    function setThemeMode(mode) {
-      document.documentElement.dataset.themeMode = mode
-      document.documentElement.dataset.theme = resolveTheme(mode)
-      try {
-        if (mode === 'auto') {
-          localStorage.removeItem('freelingo-docs-theme-mode')
-        } else {
-          localStorage.setItem('freelingo-docs-theme-mode', mode)
-        }
-      } catch (_error) {
-        // Theme still changes for the current page view if persistence is blocked.
-      }
-      syncThemeButtons()
-    }
-
-    function setThemeMenuOpen(open) {
-      themeMenu.classList.toggle('is-open', open)
-      themeCurrent.setAttribute('aria-expanded', String(open))
-    }
 
     function setNavMenuOpen(open) {
       navActions.classList.toggle('is-open', open)
       menuToggle.setAttribute('aria-expanded', String(open))
     }
 
-    function syncThemeButtons() {
-      var currentMode = document.documentElement.dataset.themeMode || 'auto'
-      themeButtons.forEach(function (button) {
-        var selected = button.dataset.themeMode === currentMode
-        button.setAttribute('aria-pressed', String(selected))
-        if (selected) {
-          themeCurrentIcon.innerHTML = button.querySelector('svg').innerHTML
-        }
-      })
-    }
-
-    themeCurrent.addEventListener('click', function (event) {
-      event.stopPropagation()
-      setThemeMenuOpen(!themeMenu.classList.contains('is-open'))
-    })
-
-    themeButtons.forEach(function (button) {
-      button.addEventListener('click', function (event) {
-        event.stopPropagation()
-        setThemeMode(button.dataset.themeMode)
-        setThemeMenuOpen(false)
-      })
-    })
-
     menuToggle.addEventListener('click', function (event) {
       event.stopPropagation()
       setNavMenuOpen(!navActions.classList.contains('is-open'))
-      setThemeMenuOpen(false)
     })
 
     navActions.querySelectorAll('a').forEach(function (link) {
@@ -319,9 +219,6 @@
     })
 
     document.addEventListener('click', function (event) {
-      if (!themeMenu.contains(event.target)) {
-        setThemeMenuOpen(false)
-      }
       if (!navActions.contains(event.target) && !menuToggle.contains(event.target)) {
         setNavMenuOpen(false)
       }
@@ -329,15 +226,12 @@
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
-        setThemeMenuOpen(false)
         setNavMenuOpen(false)
       }
     })
 
     function handleSystemThemeChange() {
-      if ((document.documentElement.dataset.themeMode || 'auto') === 'auto') {
-        document.documentElement.dataset.theme = resolveTheme('auto')
-      }
+      document.documentElement.dataset.theme = mediaQuery.matches ? 'light' : 'dark'
     }
 
     if (mediaQuery.addEventListener) {
@@ -346,7 +240,7 @@
       mediaQuery.addListener(handleSystemThemeChange)
     }
 
-    syncThemeButtons()
+    handleSystemThemeChange()
   </script>
 </body>
 

@@ -580,7 +580,7 @@ export default function LessonPage() {
               {lesson?.title}
             </p>
             {explanation && (
-              <div className="mt-4 space-y-3">
+              <div className="mt-4 max-w-[70ch] space-y-3">
                 {explanation.text != null && (
                   <TargetLanguageText
                     as="p"
@@ -599,7 +599,7 @@ export default function LessonPage() {
                 {(explanation.key_points as string[])?.length > 0 && (
                   <ul className="border-fl-border space-y-1 border-t pt-3">
                     {(explanation.key_points as string[]).map((kp, i) => (
-                      <li key={i} className="text-fl-muted-3">
+                      <li key={i} className="text-fl-muted-1">
                         <span className="text-fl-muted-2 mr-2">·</span>
                         <TargetLanguageText languageCode={targetLanguageCode}>
                           {kp}
@@ -633,7 +633,7 @@ export default function LessonPage() {
                             <AudioPlayer text={ex.sentence} size="sm" />
                           </div>
                           {ex.note && (
-                            <p className="text-fl-hint text-fl-muted-3 mt-0.5 font-mono">
+                            <p className="text-fl-muted-1 mt-0.5 font-sans text-sm leading-relaxed">
                               {ex.note}
                             </p>
                           )}
@@ -658,9 +658,9 @@ export default function LessonPage() {
                 </button>
                 {nativeExplanationOpen &&
                   (nativeExplanation ? (
-                    <div className="mt-3 space-y-3">
+                    <div className="mt-3 max-w-[70ch] space-y-3">
                       {String(nativeExplanation.text ?? '') && (
-                        <p className="text-fl-muted-2 text-sm">
+                        <p className="text-fl-muted-1 text-base leading-relaxed">
                           {String(nativeExplanation.text)}
                         </p>
                       )}
@@ -669,7 +669,10 @@ export default function LessonPage() {
                         <ul className="space-y-1">
                           {(nativeExplanation.key_points as string[]).map(
                             (kp, i) => (
-                              <li key={i} className="text-fl-muted-3 text-sm">
+                              <li
+                                key={i}
+                                className="text-fl-muted-1 text-base leading-relaxed"
+                              >
                                 <span className="text-fl-muted-2 mr-2">·</span>
                                 {kp}
                               </li>
@@ -705,7 +708,7 @@ export default function LessonPage() {
                                   {ex.sentence}
                                 </TargetLanguageText>
                                 {ex.note && (
-                                  <p className="text-fl-hint text-fl-muted-3 mt-0.5 text-sm">
+                                  <p className="text-fl-muted-1 mt-0.5 text-sm leading-relaxed">
                                     {ex.note}
                                   </p>
                                 )}
@@ -734,7 +737,7 @@ export default function LessonPage() {
                               <p className="text-fl-muted-2 text-sm">
                                 {trap.mistake}
                               </p>
-                              <p className="text-fl-hint text-fl-muted-3 text-sm">
+                              <p className="text-fl-muted-1 text-sm leading-relaxed">
                                 {trap.fix}
                               </p>
                             </div>
@@ -770,7 +773,7 @@ export default function LessonPage() {
                                 {item.meaning}
                               </p>
                               {item.note && (
-                                <p className="text-fl-hint text-fl-muted-3 text-sm">
+                                <p className="text-fl-muted-1 text-sm leading-relaxed">
                                   {item.note}
                                 </p>
                               )}
@@ -868,7 +871,7 @@ export default function LessonPage() {
                         <p className="text-fl-label text-fl-muted-3 font-mono tracking-widest">
                           {t('hint')}
                         </p>
-                        <p className="text-fl-muted-2 text-sm">
+                        <p className="text-fl-muted-1 max-w-[70ch] text-sm leading-relaxed">
                           {exercise.native_hint}
                         </p>
                       </div>
@@ -956,7 +959,7 @@ export default function LessonPage() {
                     <TargetLanguageText
                       as="p"
                       languageCode={targetLanguageCode}
-                      className="text-fl-muted-3"
+                      className="text-fl-muted-1"
                     >
                       {exercise.options[0]}
                     </TargetLanguageText>
@@ -1039,7 +1042,7 @@ export default function LessonPage() {
                       <TargetLanguageText
                         as="p"
                         languageCode={targetLanguageCode}
-                        className="text-fl-muted-1"
+                        className="text-fl-muted-1 max-w-[70ch]"
                       >
                         {exercise.feedback}
                       </TargetLanguageText>
@@ -1053,7 +1056,7 @@ export default function LessonPage() {
                       <TargetLanguageText
                         as="p"
                         languageCode={targetLanguageCode}
-                        className="text-fl-muted-1"
+                        className="text-fl-muted-1 max-w-[70ch]"
                       >
                         {exercise.explanation}
                       </TargetLanguageText>
@@ -1062,7 +1065,7 @@ export default function LessonPage() {
                           <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
                             {nativeLanguageName}
                           </p>
-                          <p className="text-fl-muted-2 text-sm">
+                          <p className="text-fl-muted-1 max-w-[70ch] text-base leading-relaxed">
                             {exercise.native_explanation}
                           </p>
                         </div>

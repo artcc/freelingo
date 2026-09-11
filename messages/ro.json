@@ -1461,15 +1461,15 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.8.50",
+    "version": "v1.8.55",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Învățarea, puțin mai ușoară",
-      "desc": "Acum îți este mai ușor să îți urmărești progresul, să găsești următorul pas și să îți reiei lecțiile. Am îmbunătățit și lizibilitatea, precum și modurile luminos și întunecat, păstrând designul pe care îl cunoști deja."
+      "label": "O lectură mai confortabilă",
+      "desc": "Un font mai clar și mici ajustări ale dimensiunii textului, spațierii și contrastului fac lecțiile, explicațiile și conversațiile tale mai ușor de citit."
     },
     "entry2": {
-      "label": "Conversații vocale mai stabile",
-      "desc": "Am îmbunătățit stabilitatea schimburilor de replici și revenirea după erori. De asemenea, am făcut starea conversației mai vizibilă și am redus animațiile din istoric, ca să te poți concentra pe conversația cu Lingu"
+      "label": "Mai multă claritate în detalii",
+      "desc": "Traducerile și notele de ajutor sunt mai ușor de citit. Site-ul nostru de prezentare și e-mailurile au, de asemenea, un aspect mai lizibil."
     },
     "entry3": {
       "label": "O experiență mai fluidă",

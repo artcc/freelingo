@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslations, useMessages } from 'next-intl'
 import { CircleDot, Sparkles } from 'lucide-react'
 
-const WHATS_NEW_VERSION = 'v1.8.50'
+const WHATS_NEW_VERSION = 'v1.8.55'
 const STORAGE_KEY = `fl_whats_new_seen_${WHATS_NEW_VERSION}`
 const TOUR_KEY = 'fl_tour_done'
 
@@ -59,10 +59,10 @@ export default function WhatsNew() {
             aria-hidden="true"
           />
           <div>
-            <p className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+            <p className="text-fl-label text-fl-muted-2 font-sans tracking-widest uppercase">
               {t('title')}
             </p>
-            <p className="text-fl-hint text-fl-muted-4 font-mono tracking-widest">
+            <p className="text-fl-hint text-fl-muted-4 font-code tracking-widest">
               {t('version')}
             </p>
           </div>
@@ -77,13 +77,13 @@ export default function WhatsNew() {
                 aria-hidden="true"
               />
               <div>
-                <p className="text-fl-label text-fl-muted-2 mb-1 font-mono tracking-widest uppercase">
+                <p className="text-fl-caption text-fl-fg mb-1 font-sans font-semibold">
                   {entry.label}
                 </p>
-                <p className="text-fl-muted-1 font-mono text-xs leading-relaxed">
+                <p className="text-fl-muted-1 font-sans text-sm leading-relaxed">
                   {t.rich(`${entry.key}.desc`, {
                     bold: (chunks) => (
-                      <strong className="text-fl-muted-2 font-semibold">
+                      <strong className="text-fl-fg font-semibold">
                         {chunks}
                       </strong>
                     ),
