@@ -577,7 +577,7 @@ export default function AdminUserStatsPage() {
                         {lang?.name ?? pl.target_language}
                       </span>
                       {isActive ? (
-                        <span className="text-fl-label bg-fl-accent/20 text-fl-accent shrink-0 px-2 py-0.5 font-mono text-xs tracking-widest uppercase">
+                        <span className="text-fl-label bg-fl-accent/10 text-fl-accent shrink-0 px-2 py-0.5 font-mono text-xs tracking-widest uppercase">
                           {pl.cefr_level} / {t('statsActive')}
                         </span>
                       ) : (
@@ -735,7 +735,7 @@ export default function AdminUserStatsPage() {
               <button
                 onClick={saveQuota}
                 disabled={quotaSaving || !quotaValuesValid}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex w-full items-center justify-center gap-2 px-4 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex w-full items-center justify-center gap-2 px-4 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
               >
                 {quotaSaving && (
                   <Loader2
@@ -767,7 +767,7 @@ export default function AdminUserStatsPage() {
           )}
           <div className="space-y-2 py-4">
             <label className="block">
-              <span className="text-fl-label text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
+              <span className="text-fl-muted-3 mb-1 block font-mono text-xs tracking-widest uppercase">
                 {t('subscriptionOverride')}
               </span>
               <select
@@ -845,7 +845,7 @@ function QuotaInput({
 
   return (
     <label className="grid gap-2 sm:grid-cols-[1fr_9rem] sm:items-center">
-      <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+      <span className="text-fl-muted-2 font-mono text-xs tracking-widest uppercase">
         {label}
       </span>
       <span className="flex">

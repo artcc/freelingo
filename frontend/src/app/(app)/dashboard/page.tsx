@@ -299,7 +299,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href="/assessment">
-                <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                   {t('takeAssessmentArrow')}
                 </button>
               </Link>
@@ -319,7 +319,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href={`/lesson/${nextLesson.id}`}>
-                <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                   {t('startLesson')}
                 </button>
               </Link>
@@ -337,7 +337,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href="/plan">
-                <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                   {t('goToMyPlan')}
                 </button>
               </Link>
@@ -548,7 +548,7 @@ export default function DashboardPage() {
                 </p>
                 {!hasPlan && (
                   <Link href="/assessment">
-                    <button className="text-fl-caption text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                    <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
                       {t('takeAssessmentArrow')}
                     </button>
                   </Link>
@@ -652,7 +652,7 @@ export default function DashboardPage() {
                   <button
                     onClick={handleManageSubscription}
                     disabled={portalLoading}
-                    className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-2.5 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50 sm:w-auto"
+                    className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-2.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50 sm:w-auto"
                   >
                     {portalLoading ? '...' : tBilling('updatePayment')}
                   </button>
@@ -672,30 +672,30 @@ export default function DashboardPage() {
         <div className="flex flex-wrap gap-2">
           {hasPlan && (
             <Link href="/plan">
-              <button className="text-fl-label text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+              <button className="text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-4 py-2 font-mono text-sm tracking-widest uppercase transition-colors">
                 {t('goToMyPlan')}
               </button>
             </Link>
           )}
           {pendingCount > 0 && (
             <Link href="/plan">
-              <button className="text-fl-label text-fl-fg border-fl-accent/50 hover:border-fl-accent border px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+              <button className="text-fl-fg border-fl-accent/50 hover:border-fl-accent border px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors">
                 {pendingCount} {t('pendingLessons')} →
               </button>
             </Link>
           )}
           <Link href="/flashcards">
-            <button className="text-fl-label text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+            <button className="text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors">
               {tNav('flashcards')}
             </button>
           </Link>
           <Link href="/chat">
-            <button className="text-fl-label text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+            <button className="text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors">
               {tNav('tutor')}
             </button>
           </Link>
           <Link href="/assessment">
-            <button className="text-fl-label text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono tracking-widest uppercase transition-colors">
+            <button className="text-fl-fg border-fl-border hover:border-fl-border-2 border px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors">
               {tNav('assessment')}
             </button>
           </Link>

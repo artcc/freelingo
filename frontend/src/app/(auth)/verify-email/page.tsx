@@ -57,10 +57,10 @@ function VerifyEmailContent() {
   }, [verify])
 
   return (
-    <div className="bg-fl-bg bg-dot-grid flex min-h-screen items-center justify-center px-4">
+    <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-10 flex flex-col items-center">
-          <h1 className="text-fl-fg font-mono text-xl font-bold tracking-widest uppercase">
+          <h1 className="text-fl-fg font-code text-xl font-bold tracking-widest uppercase">
             FreeLingo
           </h1>
         </div>
@@ -79,7 +79,7 @@ function VerifyEmailContent() {
               <p className="text-fl-fg font-mono text-sm">{t('success')}</p>
               <Link
                 href="/login"
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {t('goToLogin')}
               </Link>
@@ -91,7 +91,7 @@ function VerifyEmailContent() {
               <p className="text-fl-error font-mono text-xs">{t('error')}</p>
               <button
                 onClick={verify}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block w-full py-3 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {tCommon('retry')}
               </button>

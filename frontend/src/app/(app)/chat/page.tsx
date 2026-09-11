@@ -514,7 +514,7 @@ export default function ChatPage() {
                     <TargetLanguageText
                       as="div"
                       languageCode={targetLanguageCode}
-                      className={`word-selectable border px-4 py-3 text-left ${
+                      className={`word-selectable max-w-[70ch] border px-4 py-3 text-left ${
                         msg.role === 'user'
                           ? 'bg-fl-accent text-fl-accent-fg border-fl-accent'
                           : 'bg-fl-surface text-fl-fg-2 border-fl-border'
@@ -577,7 +577,7 @@ export default function ChatPage() {
                   <button
                     onClick={sendMessage}
                     disabled={sending || !input.trim() || loadingMsgs}
-                    className="bg-fl-accent text-fl-accent-fg text-fl-label hover:bg-fl-accent/90 px-5 font-mono font-bold tracking-widest uppercase transition-colors disabled:opacity-30"
+                    className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-5 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-30"
                   >
                     {sending ? '...' : t('send')}
                   </button>

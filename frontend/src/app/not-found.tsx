@@ -10,7 +10,7 @@ export default async function NotFound() {
         {/* Header */}
         <div className="border-fl-border flex items-center gap-3 border-b px-8 py-6">
           <span className="text-fl-muted-2 font-mono text-sm">●</span>
-          <span className="text-fl-muted-2 font-mono text-xs tracking-widest uppercase">
+          <span className="text-fl-muted-2 font-code text-xs tracking-widest uppercase">
             FreeLingo
           </span>
         </div>
@@ -33,7 +33,7 @@ export default async function NotFound() {
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <Link
               href="/dashboard"
-              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-1 px-6 py-3 text-center font-mono text-xs tracking-widest uppercase transition-colors"
+              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-1 px-6 py-3 text-center font-mono text-sm tracking-widest uppercase transition-colors"
             >
               {t('dashboard')}
             </Link>

@@ -80,7 +80,7 @@ Prepared capabilities and catalog entries live in `frontend/src/lib/target-langu
 - `ko-KR` — `name=한국어`, `nameEn=Korean`, `flagPath=/flags/south_korea.jpg`, `script=hangul`, `romanization=revised-romanization`
 - `zh-CN` — `name=中文（中国）`, `nameEn=Chinese (Mainland China)`, `flagPath=/flags/china.jpg`, `script=simplified-hanzi`, `romanization=pinyin`
 
-Learned-language content should render through `TargetLanguageText` rather than direct `font-mono` text. Current Latin-script languages keep the existing mono visual style via `font-target-latin`; CJK content receives larger, looser, non-uppercase typography with Noto/system CJK font fallbacks.
+Learned-language content should render through `TargetLanguageText` rather than direct interface text. Latin-script languages use Geist Sans at 16px with relaxed line spacing via `font-target-latin`. CJK content retains its existing 16px, loose, non-uppercase typography with Noto/system CJK font fallbacks. Optional reading/translation lines use 14px Geist Sans with normal casing and spacing. See the frontend architecture typography policy for the shared interface aliases and local size overrides.
 
 All 10 `messages/*.json` locale files include `targetLanguages` names, ISO aliases, descriptions, and landing greetings for `ja-JP`, `ko-KR`, and `zh-CN`.
 

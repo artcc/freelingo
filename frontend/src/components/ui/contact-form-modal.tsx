@@ -117,7 +117,7 @@ export function ContactFormModal({ open, onClose }: ContactFormModalProps) {
             <div className="flex flex-col gap-4 px-6 py-6">
               {/* Email */}
               <div className="flex flex-col gap-1">
-                <label className="text-fl-muted-3 font-mono text-[10px] tracking-widest uppercase">
+                <label className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
                   {t('labelEmail')}
                 </label>
                 <input
@@ -133,7 +133,7 @@ export function ContactFormModal({ open, onClose }: ContactFormModalProps) {
 
               {/* Subject */}
               <div className="flex flex-col gap-1">
-                <label className="text-fl-muted-3 font-mono text-[10px] tracking-widest uppercase">
+                <label className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
                   {t('labelSubject')}
                 </label>
                 <input
@@ -150,7 +150,7 @@ export function ContactFormModal({ open, onClose }: ContactFormModalProps) {
 
               {/* Description */}
               <div className="flex flex-col gap-1">
-                <label className="text-fl-muted-3 font-mono text-[10px] tracking-widest uppercase">
+                <label className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
                   {t('labelDescription')}
                 </label>
                 <textarea
@@ -179,14 +179,14 @@ export function ContactFormModal({ open, onClose }: ContactFormModalProps) {
                 type="button"
                 onClick={onClose}
                 disabled={isLoading}
-                className="border-fl-border text-fl-label text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg flex-1 border py-3 font-mono font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+                className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg flex-1 border py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
               >
                 {tCommon('cancel')}
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="bg-fl-fg text-fl-bg text-fl-label hover:bg-fl-fg-bright flex-1 py-3 font-mono font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+                className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-1 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
               >
                 {isLoading ? (
                   <>

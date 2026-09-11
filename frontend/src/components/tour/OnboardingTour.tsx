@@ -117,7 +117,7 @@ export default function OnboardingTour() {
           <h2 className="text-fl-fg mb-2 font-mono text-base font-bold">
             {t(`step${step + 1}.title`)}
           </h2>
-          <p className="text-fl-muted-1 font-mono text-xs leading-relaxed">
+          <p className="text-fl-muted-1 font-mono text-sm leading-relaxed">
             {t(`step${step + 1}.desc`)}
           </p>
         </div>
@@ -127,21 +127,21 @@ export default function OnboardingTour() {
           <button
             onClick={() => goTo(step - 1, 'prev')}
             disabled={isFirst}
-            className="text-fl-label text-fl-muted-2 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors disabled:opacity-0"
+            className="text-fl-muted-2 hover:text-fl-fg font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-0"
           >
             ← {t('prev')}
           </button>
           {isLast ? (
             <button
               onClick={dismiss}
-              className="text-fl-label bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-5 py-2 font-mono tracking-widest uppercase transition-colors"
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-5 py-2 font-mono text-sm tracking-widest uppercase transition-colors"
             >
               {t('done')}
             </button>
           ) : (
             <button
               onClick={() => goTo(step + 1, 'next')}
-              className="text-fl-label text-fl-muted-1 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors"
+              className="text-fl-muted-1 hover:text-fl-fg font-mono text-sm tracking-widest uppercase transition-colors"
             >
               {t('next')} →
             </button>

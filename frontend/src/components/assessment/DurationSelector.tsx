@@ -179,7 +179,7 @@ export default function DurationSelector({
             <button
               onClick={onConfirm}
               disabled={loading || selectedGoals.length === 0}
-              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-[2] py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+              className="bg-fl-fg text-fl-bg hover:bg-fl-fg-bright flex-[2] py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
             >
               {loading ? t('buildingPlan') : `${t('startMyPlan')} →`}
             </button>

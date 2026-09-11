@@ -115,7 +115,7 @@ export function BillingSection() {
             <p className="font-mono text-xs font-bold tracking-widest text-yellow-500 uppercase">
               {tBilling('pastDueTitle')}
             </p>
-            <p className="text-fl-muted-1 mt-2 font-mono text-xs leading-relaxed">
+            <p className="text-fl-muted-1 mt-2 font-mono text-sm leading-relaxed">
               {tBilling('pastDueDesc')}
             </p>
           </div>
@@ -126,7 +126,7 @@ export function BillingSection() {
           <button
             onClick={handleManageSubscription}
             disabled={portalLoading}
-            className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border py-2.5 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-50"
+            className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border py-2.5 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
           >
             {portalLoading
               ? '...'

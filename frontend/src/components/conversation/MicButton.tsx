@@ -57,7 +57,7 @@ export default function MicButton({ status, onStart, onStop }: Props) {
     return (
       <button
         onClick={onStart}
-        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-8 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors"
+        className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-8 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
       >
         {t('start')}
       </button>
@@ -83,7 +83,7 @@ export default function MicButton({ status, onStart, onStop }: Props) {
   return (
     <button
       onClick={onStart}
-      className="border-fl-border text-fl-muted-2 hover:text-fl-fg hover:border-fl-border-2 border px-8 py-3 font-mono text-xs tracking-widest uppercase transition-colors"
+      className="border-fl-border text-fl-muted-2 hover:text-fl-fg hover:border-fl-border-2 border px-8 py-3 font-mono text-sm tracking-widest uppercase transition-colors"
     >
       {t('startNew')}
     </button>

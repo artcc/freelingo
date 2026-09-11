@@ -34,7 +34,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="bg-fl-bg bg-dot-grid flex min-h-screen items-center justify-center px-4">
+    <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-10 flex flex-col items-center">
           <Image
@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
             height={100}
             className="mb-4"
           />
-          <h1 className="text-fl-fg font-mono text-xl font-bold tracking-widest uppercase">
+          <h1 className="text-fl-fg font-code text-xl font-bold tracking-widest uppercase">
             FreeLingo
           </h1>
         </div>
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
 
           {sent ? (
             <div className="space-y-4">
-              <p className="text-fl-muted-1 font-mono text-xs leading-relaxed">
+              <p className="text-fl-muted-1 font-mono text-sm leading-relaxed">
                 {t('sent')}
               </p>
               <Link
@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <p className="text-fl-muted-2 font-mono text-xs leading-relaxed">
+              <p className="text-fl-muted-2 font-mono text-sm leading-relaxed">
                 {t('description')}
               </p>
               {error && (
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
               >
                 {loading ? (
                   <>

@@ -384,7 +384,7 @@ export default function AdminSystemPage() {
                   type="button"
                   onClick={translateBanner}
                   disabled={translating || !sourceComplete}
-                  className="bg-fl-fg text-fl-bg hover:bg-fl-accent inline-flex items-center gap-2 px-4 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+                  className="bg-fl-fg text-fl-bg hover:bg-fl-accent inline-flex items-center gap-2 px-4 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
                 >
                   {translating && (
                     <Loader2
@@ -499,7 +499,7 @@ export default function AdminSystemPage() {
                     disabled={
                       saving || completedLocales !== BANNER_LOCALES.length
                     }
-                    className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex items-center justify-center gap-2 px-5 py-3 font-mono text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+                    className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-flex items-center justify-center gap-2 px-5 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
                   >
                     {saving && (
                       <Loader2

@@ -1461,17 +1461,21 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.8.50",
+    "version": "v1.9.0",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Leren, een beetje makkelijker",
-      "desc": "Je kunt nu makkelijker je voortgang bekijken, je volgende stap vinden en verdergaan met je lessen. We hebben ook de leesbaarheid en de lichte en donkere modus verbeterd, met behoud van het vertrouwde ontwerp."
+      "label": "Een eigen stijl",
+      "desc": "Petrolblauwe tinten en effen achtergronden geven FreeLingo meer karakter, met behoud van het minimalistische ontwerp dat je al kent."
     },
     "entry2": {
-      "label": "Stabielere spraakgesprekken",
-      "desc": "We hebben de stabiliteit van de gespreksbeurten en het herstel na fouten verbeterd. Ook hebben we de gespreksstatus duidelijker zichtbaar gemaakt en de animaties in de geschiedenis verminderd, zodat je je kunt concentreren op het praten met Lingu"
+      "label": "Prettiger lezen",
+      "desc": "Een duidelijker lettertype en subtiele aanpassingen aan tekstgrootte, afstand en contrast maken je lessen, uitleg en gesprekken prettiger om te lezen."
     },
     "entry3": {
+      "label": "Duidelijkere details",
+      "desc": "Vertalingen en handige toelichtingen zijn makkelijker te lezen. Ook onze informatieve website en e-mails hebben een beter leesbare vormgeving."
+    },
+    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "Bugfixes en kleine verbeteringen maken FreeLingo betrouwbaarder en prettiger in gebruik."
     }

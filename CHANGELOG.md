@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-09-11
+
+### Changed
+
+- **Interface typography**: Geist Sans now leads the application and Latin-script learning content, while Geist Mono remains reserved for branding and technical text and Noto Sans continues to serve Japanese, Korean, and Simplified Chinese content.
+- **Reading comfort**: learning text and selected explanations use moderately larger sizes, clearer secondary text, restrained reading widths, and sentence-case instructions without enlarging the overall interface.
+- **Static website typography**: the `docs/` site now serves its own Geist Sans font with its license, uses 14px card paragraphs, and provides language-specific system font fallbacks for Asian greetings.
+- **Email readability**: all seven email templates use Arial/Helvetica for body text with 14px main copy and comfortable line spacing while retaining monospaced branding.
+- **Visual identity**: the application and static website share a petroleum-blue accent, subtly blue-tinted backgrounds, panels, and borders, and solid page backgrounds instead of the dot grid. The PWA base colors follow the new dark background; layouts, typography, interactions, and functional status colors retain their existing behavior.
+- **Accent readability**: secondary subscription-button text uses the full foreground color to keep it readable when hovering over the new blue buttons in light mode, and the active-language badge in admin user detail uses a lighter tint for clearer small text.
+- **What's New highlights**: v1.9.0 opens with the new visual-identity highlight in all ten UI languages, followed by the two existing readability highlights and the preserved general bug-fix entry as the final item.
+- **What's New illustration**: Lingu now greets users from the right side of the modal header with a transparent 85 × 85px illustration, replacing the sparkle icon while preserving the existing modal styling and behavior.
+
 ## [1.8.50] - 2026-09-08
 
 ### Added
@@ -19,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Plan-day guidance**: the dashboard now places the existing lesson completion counter beside the next step, explicitly identifies it as a plan-day goal, and uses neutral guidance when no next lesson is available.
 - **Lesson completion summary**: completed lessons now show their title and assessed exercise count, with My Plan as the primary next action and Dashboard still available without changing rewards or saved-lesson review.
 - **Study-plan orientation**: the active curriculum unit now has an explicit label, while pending lessons remain resumable below the unit list with quieter styling and supportive copy across all ten UI languages.
-- **What's New highlights**: v1.8.50 opens with the unchanged localized summary of learning-experience improvements, followed by a new voice stability and visual-improvements highlight in all ten UI languages. The former second entry is preserved unchanged as the third entry, without changing the version or modal mechanism.
 - **Consistent learning indicators**: plan-unit and lesson states, dashboard completion marks, and lesson answer feedback now use Lucide icons with localized accessible state labels where needed. The active-unit pulse respects reduced-motion preferences, with existing state rules and actions preserved.
 - **Voice conversation visuals**: status labels use stronger contrast and weight with tighter tracking, idle avatar halos stay static, transcript motion respects reduced-motion preferences, and the tutor label reads Lingu in all ten UI languages.
 
@@ -830,7 +842,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `BLOCKED_EMAIL_DOMAINS` env var: JSON array of blocked email domain strings (e.g. disposable/temporary providers like `yopmail.com`). Registrations using a blocked domain are rejected with HTTP 422 before any DB access. Defaults to `[]` (no blocking). Configurable via `.env` and `docker-compose.yml`.
 - Password strength policy upgraded: minimum 10 characters, maximum 25, requires at least one uppercase letter, one number, and one symbol. Enforced in backend schemas (`RegisterRequest`, `UserUpdateRequest`, `ResetPasswordRequest`, `AdminUserCreate`) and client-side in the register form. `invalidPassword` i18n key updated in all 10 locales.
-- Landing footer: added GitHub link pointing to the project repository (`https://github.com/ArtCC/freelingo`), opens in a new tab. `github` i18n key added to all 10 locales.
+- Landing footer: added GitHub link pointing to the project repository (`https://github.com/artcc/freelingo`), opens in a new tab. `github` i18n key added to all 10 locales.
 
 ### Changed
 

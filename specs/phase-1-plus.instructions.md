@@ -228,7 +228,7 @@ When a user completes all curriculum units in their current CEFR level, an end-o
 ### Trigger
 
 - The `LevelTestBanner` component appears on the dashboard when `current_unit` surpasses the last unit of the level
-- The `/plan` roadmap shows a gold "Level Test" node at the end of the timeline
+- The `/plan` roadmap shows a petroleum-blue "Level Test" node using the shared `fl-accent` at the end of the timeline
 - Both are only clickable after ALL units in the level are completed
 
 ### Question generation
