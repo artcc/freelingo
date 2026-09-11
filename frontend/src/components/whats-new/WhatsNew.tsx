@@ -54,7 +54,14 @@ export default function WhatsNew() {
       {/* Modal */}
       <div className="border-fl-border bg-fl-surface relative z-10 w-full max-w-md border shadow-2xl">
         {/* Header */}
-        <div className="border-fl-border flex items-center justify-between gap-3 border-b px-5 pt-5 pb-4">
+        <div className="border-fl-border flex items-center gap-3 border-b px-5 pt-5 pb-4">
+          <Image
+            src="/logo_update.png"
+            alt=""
+            width={85}
+            height={85}
+            className="h-[85px] w-[85px] shrink-0 object-contain"
+          />
           <div>
             <p className="text-fl-label text-fl-muted-2 font-sans tracking-widest uppercase">
               {t('title')}
@@ -63,13 +70,6 @@ export default function WhatsNew() {
               {t('version')}
             </p>
           </div>
-          <Image
-            src="/logo_update.png"
-            alt=""
-            width={85}
-            height={85}
-            className="h-[85px] w-[85px] shrink-0 object-contain"
-          />
         </div>
 
         {/* Entries */}
