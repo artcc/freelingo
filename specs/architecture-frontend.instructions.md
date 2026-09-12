@@ -330,6 +330,14 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - shadcn/ui components installed: `button card input progress badge separator sheet tabs`.
 - The `shadcn` package is declared as `^4.21.0` and locked to `4.21.0`; it provides the CLI and the `shadcn/tailwind.css` import used by `src/app/globals.css`. The update from `4.9.0` preserves the existing CSS variants and adds upstream scroll-fade and shimmer utilities without regenerating application components. Its HTTP dependencies now use `undici` (locked to `7.29.1`); `node-fetch`, `fetch-blob`, `formdata-polyfill`, the deprecated `node-domexception`, and `msw` are no longer installed. Node 25 satisfies shadcn's `>=20.18.1` engine requirement. The npm install-script policy is unchanged.
 
+### Dependency maintenance
+
+- `package.json` declares dependencies and `package-lock.json` records the resolved versions. Install the committed dependency tree with `npm ci`.
+- Keep matching versions within these pairs: `next`/`eslint-config-next`, `react`/`react-dom`, and `tailwindcss`/`@tailwindcss/postcss`. Review React type definitions alongside the React pair and formatter-plugin compatibility alongside Prettier.
+- For conservative maintenance, prioritize patch releases within the existing major and minor branches. Major upgrades require explicit approval.
+- Review the lockfile diff, including indirect dependencies: a direct patch can require a newer indirect dependency. Preserve compatible existing branches where possible and avoid unrelated updates.
+- Check dependency engine requirements against the deployment's Node version, not only the machine used for validation. Validate the clean installation and the affected frontend checks before deployment.
+
 ### Page content width convention
 
 Page wrappers use `mx-auto` plus the canonical widths below. Avoid introducing new sizes unless a page has a distinct interaction model or public marketing composition.
