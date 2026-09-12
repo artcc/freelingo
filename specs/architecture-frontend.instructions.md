@@ -300,7 +300,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
 - `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
 - Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
-- What's New v1.9.0 shows the visual-identity highlight as `entry1`, the two existing readability highlights shifted intact to `entry2`/`entry3`, and the unchanged general bug-fix highlight as `entry4` in all ten locales. Dynamic entry rendering, the version constant, and dismissal behavior remain unchanged; this content revision does not reopen an already-dismissed v1.9.0 modal.
+- What's New v1.9.5 preserves all four existing entries in all ten locales: the visual-identity highlight as `entry1`, the readability highlights as `entry2`/`entry3`, and the general bug-fix highlight as `entry4`. Only `WHATS_NEW_VERSION` and the localized version labels advance to `v1.9.5`. The existing version-aware dismissal logic now uses `fl_whats_new_seen_v1.9.5`, so users who completed onboarding and have not dismissed this version see the modal on their next dashboard visit.
 
 ### App shell notifications
 
@@ -328,6 +328,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 
 - No semicolons, single quotes, 2-space tabs, trailing commas "es5".
 - shadcn/ui components installed: `button card input progress badge separator sheet tabs`.
+- The `shadcn` package is declared as `^4.21.0` and locked to `4.21.0`; it provides the CLI and the `shadcn/tailwind.css` import used by `src/app/globals.css`. The update from `4.9.0` preserves the existing CSS variants and adds upstream scroll-fade and shimmer utilities without regenerating application components. Its HTTP dependencies now use `undici` (locked to `7.29.1`); `node-fetch`, `fetch-blob`, `formdata-polyfill`, the deprecated `node-domexception`, and `msw` are no longer installed. Node 25 satisfies shadcn's `>=20.18.1` engine requirement. The npm install-script policy is unchanged.
 
 ### Page content width convention
 

@@ -1,36 +1,65 @@
 # AGENTS.md — FreeLingo
 
-## Project state
+**Current version: 1.9.5**
 
-**v1.9.0 — Typography and visual identity.** Phase 1 (platform), Phase 1+ (resources hub), Phase 2 (TTS/STT), Phase 3 (voice conversation), Phase 4 (multi-language support), Phase 5 (Stripe subscriptions), Phase 6 (Listening exercises), Phase 7 (Reading exercises), Phase 8 (Feedback board), Phase 9 (LLM Memory), Phase 10 (Multi-Language), and Phase 11 (User Reviews) are complete. Administrators can compose a dashboard announcement in any supported UI language, generate and edit all ten translations, save it active or inactive, and publish revisions that authenticated users dismiss persistently per account. Memories are global per user across learning languages, can be saved by Lingu through one native tool round in text or voice, and can be manually added, listed, deleted, or cleared by every authenticated user. Deleting a learning language preserves memories by setting nullable study-plan provenance to `NULL`. Paginated application lists show 10 results per page; Listening and Reading histories expose every attempt through the shared pagination controls, and Feedback uses deterministic tie-breaking between pages. The public landing review carousel requests up to 100 approved positive reviews and remains unpaginated. Public pages, the authenticated application, its loading states, and the static website use solid, subtly blue-tinted backgrounds with a petroleum-blue identity accent. The authenticated Feedback section shows per-user unread thread counters in the sidebar, red unread labels on specific feedback list items, and a petroleum-blue `ADMIN` badge beside administrator-authored suggestions, bug reports, and replies without sending comment emails. Administration exposes maintenance mode and dashboard announcement management in the System section. Japanese (`ja-JP`), Korean (`ko-KR`), and Mainland Chinese (`zh-CN`) have backend curriculum, grammar, vocabulary, phrasebook, and assessment data. Static grammar, phrasebook, vocabulary resources, lessons, newly generated lesson exercises, exercise hints, and newly generated lesson vocabulary include native-language learning support. Email verification and password reset are also included. Unsubscribed hosted users get one one-time post-assessment voice conversation demo, configurable via `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS` and defaulting to 5 minutes. Voice conversations are persisted as text transcripts alongside chat conversations. The AI tutor persona is named Lingu. The repo contains `backend/`, `frontend/`, `docker-compose.yml`, `.env.example`, and CI/CD via GitHub Actions. See [CHANGELOG.md](CHANGELOG.md) for the full version history.
+## Project overview
 
-## Architecture at a glance
+- Monorepo: `backend/` (Python 3.14 FastAPI) + `frontend/` (Next.js 16 App Router), deployed via Docker Compose with PostgreSQL 16 and Redis 7. The repository includes `docker-compose.yml`, `.env.example`, and CI/CD via GitHub Actions.
+- The backend proxies all external services (Ollama, Kokoro, Whisper) — the frontend never calls them directly.
+- Completed phases: platform, learning resources hub, TTS/STT, voice conversation, target-language support, Stripe subscriptions, Listening, Reading, Feedback, LLM Memory, simultaneous language learning, and User Reviews. Phase-specific specifications are listed below.
+- The AI tutor persona is named Lingu. Release history belongs in [CHANGELOG.md](CHANGELOG.md).
 
-The web palette is shared with `docs/`: dark/light backgrounds are `#0c1316`/`#f2f6f7`, surfaces `#131d22`/`#fbfcfc`, borders `#29383f`/`#d7e1e5`, and identity accents `#75b7c5`/`#286779`, paired with `#0a0a0a`/`#ffffff` text. shadcn background/card/popover/border/sidebar tokens reference the matching `fl-*` values. Monochrome controls and functional status colors retain their existing treatments. Page backgrounds are solid with no dot grid or hero gradient. The PWA uses `#0c1316` as its static base color. Theme selection and all interaction logic are unchanged.
+## Architecture and behavior
 
-Geist Sans is the default interface, heading, and Latin-script learning font. The legacy `font-mono` interface alias also resolves to Geist Sans; new interface text should use `font-sans`, while branding, versions, and technical text use the explicit Geist Mono `font-code` token. Learned-language text keeps the language-aware `TargetLanguageText` path: Latin content defaults to 16px with relaxed spacing, CJK retains Noto Sans and its existing loose spacing, and optional reading/translation lines use 14px. Readability changes are local: selected long copy is capped at 70ch, auxiliary learning text has stronger contrast, and global compact size tokens remain unchanged. The `docs/` website self-hosts its licensed Latin Geist Sans font; email bodies use Arial/Helvetica at 14px with monospaced wordmarks. What's New v1.9.0 opens with the visual-identity highlight as `entry1`, followed by the two preserved readability highlights as `entry2`/`entry3` and the unchanged general bug-fix entry as `entry4` in all ten locales. Deployment-environment checks are handled by the maintainer.
+### Visual identity and typography
 
-Voice conversation acquires microphone permission and awaits VAD startup before warmup, then connects the WebSocket. The component owns the stream, serializes VAD start/pause, and uses idempotent cleanup plus attempt/socket identity guards to isolate restarts and late callbacks. A pending-turn guard starts before WAV submission; `stt_failed`, `llm_failed`, and `tts_failed` release it without closing the session, while fatal errors release session resources. VAD misfires clear the speaking indicator and unfinished segment.
+- Public pages, the authenticated application, its loading states, and `docs/` share solid, subtly blue-tinted backgrounds and a petroleum-blue identity accent. There is no dot grid or hero gradient. The PWA uses `#0c1316` as its static base color.
+- Dark/light backgrounds are `#0c1316`/`#f2f6f7`, surfaces `#131d22`/`#fbfcfc`, borders `#29383f`/`#d7e1e5`, and identity accents `#75b7c5`/`#286779`, paired with `#0a0a0a`/`#ffffff` text. shadcn background/card/popover/border/sidebar tokens reference the matching `fl-*` values. Preserve monochrome controls, functional status colors, theme selection, and interaction logic when editing presentation.
+- Geist Sans is the default interface, heading, and Latin-script learning font. The legacy `font-mono` interface alias also resolves to Geist Sans; new interface text should use `font-sans`, while branding, versions, and technical text use the explicit Geist Mono `font-code` token.
+- Learned-language text uses `TargetLanguageText`: Latin content defaults to 16px with relaxed spacing, CJK retains Noto Sans and loose spacing, and optional reading/translation lines use 14px. Selected long copy is capped at 70ch, auxiliary learning text has stronger contrast, and global compact size tokens remain unchanged.
+- The `docs/` website self-hosts its licensed Latin Geist Sans font; email bodies use Arial/Helvetica at 14px with monospaced wordmarks.
 
-Administrative subscription UI follows the public Stripe runtime flag. When Stripe is disabled, the overview hides paid-access and past-due subscription signals, the user list hides and ignores subscription filtering and values, and user detail hides subscription status and override controls; quota administration remains available.
+### Learning resources and progress
 
-Pronunciation exercises and flashcard speaking mode capture their resource-owned `study_plan_id` when recording starts and include it in every STT upload. The frontend stops late microphone streams, propagates request cancellation through its STT proxy, and serializes flashcard reviews while voice-result handling is pending. The backend verifies plan ownership, derives the target language from that plan, converts it to the provider's ISO code, and requires every STT service call to declare a language explicitly; there is no implicit English fallback. Generated flashcards likewise derive their target language from the active persisted plan rather than client state, and reviews credit progress to the persisted card plan rather than whichever language is currently active.
+- Japanese (`ja-JP`), Korean (`ko-KR`), and Mainland Chinese (`zh-CN`) have backend curriculum, grammar, vocabulary, phrasebook, and assessment data. Static grammar, phrasebook, vocabulary resources, lessons, newly generated lesson exercises, exercise hints, and newly generated lesson vocabulary include native-language learning support.
+- Active Reading and Listening exercises let users select and save one word from question prompts through the shared flashcard lookup flow; answer options are not selectable vocabulary surfaces.
+- My Plan unit drawers offer Start for the current lesson, Resume for skipped pending lessons, and read-only Review for completed lessons without awarding progress again. Drawer actions share the solid primary button treatment used by the plan overview.
+- Lesson completion locks the lesson row, commits completion/progress/competencies atomically, returns completed retries before checking freemium quota, and refreshes frontend quota after success.
+- Every lesson type used by the static curricula has an explicit generation policy. Mainland Chinese B2-C2 `speaking` lessons use oral-production guidance and a 30% grammar-exercise minimum instead of the generic 70% fallback.
+- Generated flashcards derive their target language from the active persisted plan rather than client state, and reviews credit progress to the persisted card plan rather than whichever language is currently active.
 
-Active Reading and Listening exercises let users select and save one word from question prompts through the shared flashcard lookup flow; answer options are not selectable vocabulary surfaces.
+### Voice conversation and speech recognition
 
-My Plan unit drawers offer Start for the current lesson, Resume for skipped pending lessons, and read-only Review for completed lessons without awarding progress again. Drawer actions share the solid primary button treatment used by the plan overview.
+- Voice conversation acquires microphone permission and awaits VAD startup before warmup, then connects the WebSocket. The component owns the stream, serializes VAD start/pause, and uses idempotent cleanup plus attempt/socket identity guards to isolate restarts and late callbacks.
+- A pending-turn guard starts before WAV submission; `stt_failed`, `llm_failed`, and `tts_failed` release it without closing the session, while fatal errors release session resources. VAD misfires clear the speaking indicator and unfinished segment.
+- Pronunciation exercises and flashcard speaking mode capture their resource-owned `study_plan_id` when recording starts and include it in every STT upload. The frontend stops late microphone streams, propagates request cancellation through its STT proxy, and serializes flashcard reviews while voice-result handling is pending.
+- The backend verifies plan ownership, derives the target language from that plan, converts it to the provider's ISO code, and requires every STT service call to declare a language explicitly; there is no implicit English fallback.
+- Unsubscribed hosted users get one one-time post-assessment voice conversation demo, configurable via `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS` and defaulting to 5 minutes. Voice conversations are persisted as text transcripts alongside chat conversations.
 
-Lesson completion locks the lesson row, commits completion/progress/competencies atomically, returns completed retries before checking freemium quota, and refreshes frontend quota after success.
+### LLM memory and providers
 
-Automatic LLM memory is best-effort: text and voice continue without user-visible memory errors, only confirmed saves emit the memory toast, at most one memory tool call executes per turn, and explicit tool incompatibility is remembered only for the current voice WebSocket session. Tool-free retries omit memory-tool instructions, replace rather than append to any invalid partial response, and reject an empty fallback instead of persisting it as a successful answer.
+- Memories are global per user across learning languages. Lingu can save them through one native tool round in text or voice, and every authenticated user can manually add, list, delete, or clear them. Deleting a learning language preserves memories by setting nullable study-plan provenance to `NULL`.
+- Automatic LLM memory is best-effort: text and voice continue without user-visible memory errors, only confirmed saves emit the memory toast, at most one memory tool call executes per turn, and explicit tool incompatibility is remembered only for the current voice WebSocket session.
+- Tool-free retries omit memory-tool instructions, replace rather than append to any invalid partial response, and reject an empty fallback instead of persisting it as a successful answer.
+- Anthropic requests use the deployment-configurable `ANTHROPIC_MAX_TOKENS` output budget, defaulting to 8192, and non-streaming truncation is reported explicitly before structured JSON parsing.
 
-Anthropic requests use the deployment-configurable `ANTHROPIC_MAX_TOKENS` output budget, defaulting to 8192, and non-streaming truncation is reported explicitly before structured JSON parsing.
+### Administration and announcements
 
-Every lesson type used by the static curricula has an explicit generation policy. Mainland Chinese B2-C2 `speaking` lessons use oral-production guidance and a 30% grammar-exercise minimum instead of the generic 70% fallback.
+- Administration exposes maintenance mode and dashboard announcement management in the System section. Administrators can compose an announcement in any supported UI language, generate and edit all ten translations, and save it active or inactive.
+- The dashboard announcement is a global singleton. Public config exposes only active translations and the server revision; authenticated dismissal stores that revision on the user. Content or source-language edits increment the revision so a changed announcement reappears, while active-state-only changes do not.
+- Administrative subscription UI follows the public Stripe runtime flag. When Stripe is disabled, the overview hides paid-access and past-due subscription signals, the user list hides and ignores subscription filtering and values, and user detail hides subscription status and override controls; quota administration remains available.
 
-The dashboard announcement is a global singleton. Public config exposes only active translations and the server revision; authenticated dismissal stores that revision on the user, and content or source-language edits increment it so a changed announcement reappears while active-state-only changes do not.
+### Lists, reviews, and feedback
 
-Monorepo: `backend/` (Python 3.14 FastAPI) + `frontend/` (Next.js 16 App Router) deployed via Docker Compose with PostgreSQL 16 and Redis 7. The backend proxies all external services (Ollama, Kokoro, Whisper) — the frontend never calls them directly.
+- Paginated application lists show 10 results per page. Listening and Reading histories expose every attempt through the shared pagination controls, and Feedback uses deterministic tie-breaking between pages.
+- The public landing review carousel requests up to 100 approved positive reviews and remains unpaginated.
+- Authenticated Feedback shows per-user unread thread counters in the sidebar, red unread labels on specific feedback list items, and a petroleum-blue `ADMIN` badge beside administrator-authored suggestions, bug reports, and replies without sending comment emails.
+
+### What's New modal
+
+- Keep the README badge, desktop/mobile sidebar labels, modal version constant, and all ten localized version labels synchronized according to `specs/version.md`.
+- A version-only bump preserves all existing entries. The current four entries cover visual identity (`entry1`), readability (`entry2`/`entry3`), and general bug fixes (`entry4`); replace them only with explicit approval.
+- Dismissal uses `fl_whats_new_seen_<version>`. Updating the version allows the modal to appear again under the existing onboarding and dismissal conditions.
 
 ## Key constraints
 
@@ -50,7 +79,8 @@ Rules that apply without exception:
 1. **Proactively identify affected docs.** After every implementation change, review which of the files below are impacted and list them explicitly before closing the task.
 2. **Always inform and ask for confirmation.** Before updating any spec or MD file, state exactly what will change and wait for explicit user approval. Never silently update documentation.
 3. **No task is complete without docs in sync.** A feature or fix is considered unfinished if the relevant spec files, `README.md`, `AGENTS.md`, or `CHANGELOG.md` have not been updated (or the user has explicitly opted out).
-4. **Version and changelog.** Any user-visible change must be reflected in `CHANGELOG.md` and `specs/version.md` (with a version bump if warranted).
+4. **Version and changelog.** Record user-visible changes in `CHANGELOG.md`. When a version bump is warranted, update the canonical version and follow the synchronization rules in `specs/version.md`.
+5. **Keep specifications general.** Organize specifications and this file by structure, behavior, and operating rules. Do not add release-by-release narratives, session notes, or validation logs; keep release history in `CHANGELOG.md` and only the current project version in the initial version line here.
 
 Spec formatting rule:
 
@@ -115,6 +145,7 @@ These describe what was built — they are the reference documentation:
 - **No Docker locally.** The development machine does not have Docker installed. Never suggest `docker` or `docker compose` commands to run locally.
 - **Not deployed locally.** The application runs in a remote server; the dev machine is used only for editing and pushing code. CI/CD (GitHub Actions) builds and publishes the Docker images.
 - **Cannot test the running app locally.** The running app is on a remote server. Local validation is limited to backend unit tests/static checks and frontend lint/typecheck/unit tests. Use the `run-tests` skill for requested test/lint/typecheck runs and the `pre-push` skill for final full validation before pushing.
+- **Deployment-environment checks** are handled by the maintainer.
 - **Frontend runtime consistency.** `frontend/Dockerfile` (all three stages) and `frontend/Dockerfile.dev` use `node:25-alpine`; frontend PR checks select Node 25. Keep these Node versions aligned when upgrading. Both Dockerfiles install `npm@11` and use `npm ci`; keep their npm and installation policies aligned and review CI's bundled npm when updating. The current selectors fix major versions, not exact minor/patch releases.
 - **package-lock.json must be generated with npm 11.** Both frontend Dockerfiles explicitly install npm 11 before `npm ci`; frontend PR checks use the npm bundled with their selected Node release.
 - **Node TypeScript definitions.** Keep the major version of `@types/node` aligned with the frontend Node runtime, independently of npm's version. The current declaration is `^25`, matching Node 25. When upgrading, regenerate the lockfile with the project's npm version and check TypeScript compatibility with the updated definitions.
@@ -154,6 +185,8 @@ docker compose exec backend alembic upgrade head
 - **If any test fails after launching a suite, STOP and ask the user what to do.** Never modify production code or tests to make tests pass without explicit user approval. Report the failing test(s), include the relevant error summary, and wait for instructions before changing code or tests.
 
 ## Auth design (do not deviate)
+
+Email verification and password reset are supported.
 
 - `access_token` — Type: JWT HS256. Duration: 15 min. Storage: Zustand store (JS memory).
 - `refresh_token` — Type: Opaque UUID4. Duration: 30 days. Storage: httpOnly cookie + Redis (`refresh:{token}` → user_id).
