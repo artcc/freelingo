@@ -268,6 +268,7 @@ CI runs on GitHub Actions, triggered on pushes and pull requests. The project is
 
 ### Workflow
 
+- Backend setup selects Python 3.14, installs pip 26.2.1, and installs `backend/requirements.txt` with its included `backend/constraints.txt`. Both files participate in the pip cache key; test plugins use the same pins as the application environment.
 - Backend tests — Steps: `pytest -v`; Threshold: >= 70% coverage
 - Frontend lint — Steps: `npm run lint`; Threshold: Zero errors
 - Frontend typecheck — Steps: `npx tsc --noEmit`; Threshold: Clean output
@@ -279,13 +280,14 @@ CI runs on GitHub Actions, triggered on pushes and pull requests. The project is
 
 The `run-tests` opencode skill is available for requested test, lint, typecheck, or targeted verification runs.
 
-The `pre-push` opencode skill mirrors CI locally and also auto-formats before running checks. The canonical all-in-one command is `./scripts/pre-push.sh`; the canonical formatter-only command is `./scripts/format.sh`. Run order:
+The `pre-push` opencode skill mirrors CI locally. The canonical all-in-one command is `./scripts/pre-push.sh`; it synchronizes the backend dependencies and auto-formats before running checks. The canonical formatter-only command is `./scripts/format.sh`. Run order:
 
-1. Auto-format (`./scripts/format.sh`: ruff --fix, black, eslint --fix, prettier --write from fixed backend/frontend directories)
-2. Backend tests (pytest)
-3. Frontend lint (npm run lint)
-4. Frontend typecheck (tsc --noEmit)
-5. Frontend tests (vitest)
+1. Activate the project virtual environment, install pip 26.2.1, and synchronize backend dependencies using `backend/requirements.txt` and its included constraints.
+2. Auto-format (`./scripts/format.sh`: ruff --fix, black, eslint --fix, prettier --write from fixed backend/frontend directories)
+3. Backend tests (pytest)
+4. Frontend lint (npm run lint)
+5. Frontend typecheck (tsc --noEmit)
+6. Frontend tests (vitest)
 
 ---
 
