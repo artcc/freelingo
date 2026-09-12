@@ -65,7 +65,7 @@ deployed via Docker Compose with PostgreSQL 16 and Redis 7.
 The backend proxies all external services (Ollama, Kokoro, Whisper) —
 the frontend never calls them directly.
 
-Both frontend Dockerfiles use `node:25-alpine`, install `npm@11`, and install dependencies with `npm ci` from the committed lockfile. Frontend PR checks also use Node 25 and `npm ci`. Keep Node versions aligned across both Dockerfiles and CI, and keep the Dockerfiles' npm and dependency-installation policies aligned when upgrading; CI currently uses the npm bundled with its selected Node release.
+Both frontend Dockerfiles use `node:25-alpine`, install `npm@11`, and install dependencies with `npm ci` from the committed lockfile. Frontend PR checks also select Node 25, explicitly install `npm@11`, and run `npm ci`. Keep Node versions, npm versions, and dependency-installation policies aligned across both Dockerfiles and CI when upgrading.
 
 The `develop` and `main` publishing workflows build the same Dockerfile paths from their respective branches, publishing separate images for the development server and production VPS. Both use `frontend/Dockerfile`; `frontend/Dockerfile.dev` is reserved for the development compose setup. See [the Docker specification](specs/docker.instructions.md) for runtime and image-channel details.
 

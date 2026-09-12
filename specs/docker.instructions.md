@@ -31,8 +31,8 @@ Both publishing workflows use `frontend/Dockerfile` and `backend/Dockerfile` fro
 
 - `frontend/Dockerfile` uses `node:25-alpine` for its dependency, builder, and runner stages. `frontend/Dockerfile.dev` uses the same base image.
 - Both Dockerfiles install `npm@11` and use `npm ci` with the committed `frontend/package-lock.json`. Installation fails if the lockfile and `package.json` are inconsistent rather than updating the dependency resolution during the image build.
-- The PR checks in `.github/workflows/pr-develop-checks.yml` also select Node 25 and run `npm ci`; npm is the version bundled with the selected Node release, not an explicitly pinned version in that workflow.
-- Keep the Node version aligned across both frontend Dockerfiles and the PR checks when upgrading. Keep the npm installation policy aligned between both Dockerfiles and review CI's bundled npm at the same time. Generate the lockfile with npm 11 under the current policy.
+- The PR checks in `.github/workflows/pr-develop-checks.yml` select Node 25, explicitly install `npm@11`, log both runtime and package-manager versions, and then run `npm ci`.
+- Keep Node versions, npm versions, and dependency-installation policies aligned across both frontend Dockerfiles and the PR checks when upgrading. Generate the lockfile with npm 11 under the current policy.
 - `node:25-alpine` and `npm@11` select major release lines, not exact minor/patch versions or immutable image digests.
 - Production builds and runs the Next.js standalone server; the development compose configuration runs `npm run dev` with source mounts. These intentional differences do not require different Node or npm versions.
 - `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` controls the publishing workflows' JavaScript action runtime, not the Node version inside application images.
