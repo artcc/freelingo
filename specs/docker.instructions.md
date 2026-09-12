@@ -25,6 +25,25 @@ Ollama is assumed to run on the host machine for GPU access, reached from contai
 
 Both channels publish `:latest` and a short SHA tag on every push. The compose file uses production images by default.
 
+Both publishing workflows use `frontend/Dockerfile` and `backend/Dockerfile` from their respective branches and build Linux images for `amd64` and `arm64`. The develop workflow explicitly checks out `develop` and publishes separate `-develop` image names for deployment on the development server; production images are deployed on the production VPS after merging to `main`. `frontend/Dockerfile.dev` is used by `docker-compose.dev.yml`, not by either publishing workflow.
+
+### Backend runtime and dependency installation
+
+- `backend/Dockerfile` uses `python:3.14-slim` and installs pip 26.2.1 before application dependencies.
+- The dependency layer copies both `requirements.txt` and `constraints.txt` before running `python -m pip install --no-cache-dir -r requirements.txt`. Direct and indirect versions are fixed by those files.
+- Backend PR checks select Python 3.14, install the same pip version, and use the same requirements. Both files participate in the pip cache key. Test plugins are installed through these shared pins.
+- Pre-push synchronizes its backend environment with the same installer and dependency files. Keep Docker, CI, and pre-push aligned when updating the Python or pip versions or the dependency pins.
+
+### Frontend runtime and dependency installation
+
+- `frontend/Dockerfile` uses `node:25-alpine` for its dependency, builder, and runner stages. `frontend/Dockerfile.dev` uses the same base image.
+- Both Dockerfiles install `npm@11` and use `npm ci` with the committed `frontend/package-lock.json`. Installation fails if the lockfile and `package.json` are inconsistent rather than updating the dependency resolution during the image build.
+- The PR checks in `.github/workflows/pr-develop-checks.yml` select Node 25, explicitly install `npm@11`, log both runtime and package-manager versions, and then run `npm ci`.
+- Keep Node versions, npm versions, and dependency-installation policies aligned across both frontend Dockerfiles and the PR checks when upgrading. Generate the lockfile with npm 11 under the current policy.
+- `node:25-alpine` and `npm@11` select major release lines, not exact minor/patch versions or immutable image digests.
+- Production builds and runs the Next.js standalone server; the development compose configuration runs `npm run dev` with source mounts. These intentional differences do not require different Node or npm versions.
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` controls the publishing workflows' JavaScript action runtime, not the Node version inside application images.
+
 ---
 
 ## Docker Compose structure

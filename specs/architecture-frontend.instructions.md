@@ -300,7 +300,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 - `StatusIndicator` uses higher-contrast `text-fl-fg`, semibold 12px labels, and tighter `tracking-wide` spacing without changing status precedence or pulse conditions.
 - `TranscriptBubble` keeps idle avatar halos static and animates them only while speaking. Local `motion-reduce` utilities disable halo animation, border/opacity transitions, and the streaming cursor pulse; there is no global motion-policy change.
 - Transcript role labels identify the assistant as Lingu in all ten UI locales. Session lifecycle, turn handling, audio playback, and conversation flow are unchanged by these visual adjustments.
-- What's New v1.9.0 shows the visual-identity highlight as `entry1`, the two existing readability highlights shifted intact to `entry2`/`entry3`, and the unchanged general bug-fix highlight as `entry4` in all ten locales. Dynamic entry rendering, the version constant, and dismissal behavior remain unchanged; this content revision does not reopen an already-dismissed v1.9.0 modal.
+- What's New v1.9.5 preserves all four existing entries in all ten locales: the visual-identity highlight as `entry1`, the readability highlights as `entry2`/`entry3`, and the general bug-fix highlight as `entry4`. Only `WHATS_NEW_VERSION` and the localized version labels advance to `v1.9.5`. The existing version-aware dismissal logic now uses `fl_whats_new_seen_v1.9.5`, so users who completed onboarding and have not dismissed this version see the modal on their next dashboard visit.
 
 ### App shell notifications
 
@@ -322,11 +322,21 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 
 ## Code standards (TypeScript / Next.js 16)
 
+- Node API definitions use `@types/node: ^25`, aligned with the Node 25 runtime used by both frontend Dockerfiles and PR checks. The lockfile resolves `@types/node` to `25.9.6` and its `undici-types` dependency to `7.24.6`. These are TypeScript definitions, not runtime upgrades; their major version follows Node, independently of npm 11. Review the definitions alongside future Node upgrades and check TypeScript compatibility after synchronizing dependencies.
 - ESLint — TypeScript linting + Next.js rules
 - Prettier — Code formatting + `prettier-plugin-tailwindcss`
 
 - No semicolons, single quotes, 2-space tabs, trailing commas "es5".
 - shadcn/ui components installed: `button card input progress badge separator sheet tabs`.
+- The `shadcn` package is declared as `^4.21.0` and locked to `4.21.0`; it provides the CLI and the `shadcn/tailwind.css` import used by `src/app/globals.css`. The update from `4.9.0` preserves the existing CSS variants and adds upstream scroll-fade and shimmer utilities without regenerating application components. Its HTTP dependencies now use `undici` (locked to `7.29.1`); `node-fetch`, `fetch-blob`, `formdata-polyfill`, the deprecated `node-domexception`, and `msw` are no longer installed. Node 25 satisfies shadcn's `>=20.18.1` engine requirement. The npm install-script policy is unchanged.
+
+### Dependency maintenance
+
+- `package.json` declares dependencies and `package-lock.json` records the resolved versions. Install the committed dependency tree with `npm ci`.
+- Keep matching versions within these pairs: `next`/`eslint-config-next`, `react`/`react-dom`, and `tailwindcss`/`@tailwindcss/postcss`. Review React type definitions alongside the React pair and formatter-plugin compatibility alongside Prettier.
+- For conservative maintenance, prioritize patch releases within the existing major and minor branches. Major upgrades require explicit approval.
+- Review the lockfile diff, including indirect dependencies: a direct patch can require a newer indirect dependency. Preserve compatible existing branches where possible and avoid unrelated updates.
+- Check dependency engine requirements against the deployment's Node version, not only the machine used for validation. Validate the clean installation and the affected frontend checks before deployment.
 
 ### Page content width convention
 

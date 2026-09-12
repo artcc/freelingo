@@ -33,6 +33,8 @@ This launches 4 containers with hot-reload:
 
 ## How it works
 
+- `frontend/Dockerfile.dev` shares the production Dockerfile's `node:25-alpine` base, explicit `npm@11` installation, and `npm ci` dependency installation from the committed lockfile. Keep both Dockerfiles aligned when updating Node, npm, or the installation policy; the frontend PR checks also use Node 25 and `npm ci`.
+- The remote `develop` and `main` image-publishing workflows both use `frontend/Dockerfile` and `backend/Dockerfile` from their respective branches. They publish separate image names for the development server and production VPS. The development Dockerfile described here is only used by `docker-compose.dev.yml`.
 - `run-dev.sh` reads secrets from Keychain, exports them as env vars, and runs `docker compose -f docker-compose.dev.yml --env-file .env.dev up -d`
 - `.env.dev` holds non-sensitive config (LLM provider, TTS/STT mode, etc.). Secret values are left empty — the script provides them at runtime.
 - `docker-compose.dev.yml` builds backend and frontend locally with development Dockerfiles and mounts source code as volumes. Backend uses `uvicorn --reload`, frontend uses `npm run dev`.
