@@ -77,9 +77,18 @@ describe('ReviewPrompt', () => {
     render(<ReviewPrompt open onClose={() => {}} />)
     await screen.findByText('Rating required')
     fireEvent.click(screen.getByLabelText('4 stars'))
+    await waitFor(() =>
+      expect(screen.getByLabelText('4 stars')).toHaveAttribute(
+        'aria-checked',
+        'true'
+      )
+    )
     fireEvent.change(screen.getByLabelText('Comment optional'), {
       target: { value: 'Helpful app' },
     })
+    await waitFor(() =>
+      expect(screen.getByLabelText('Comment optional')).toHaveValue('Helpful app')
+    )
     fireEvent.click(screen.getByText('Submit'))
     await waitFor(() =>
       expect(mockCreateReview).toHaveBeenCalledWith({
