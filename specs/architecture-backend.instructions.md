@@ -142,8 +142,18 @@ backend/
 ├── alembic/
 │   └── versions/                # DB migrations (50 migrations)
 │
+├── requirements.txt             # Exact direct dependencies; loads constraints.txt
+├── constraints.txt              # Exact indirect dependency versions
 └── tests/                       # pytest suite (45 test files, 1019 tests)
 ```
+
+## Runtime and dependency installation
+
+- The backend uses Python 3.14. Docker, backend PR checks, and pre-push install pip 26.2.1 before installing application dependencies.
+- `requirements.txt` pins direct dependencies with `==` and loads `constraints.txt` through `-c constraints.txt`. The constraints pin indirect versions without making them additional direct dependencies.
+- Install through `python -m pip install -r requirements.txt` from the backend directory, or use the corresponding path from the repository root. Update direct pins and indirect constraints together when changing dependencies.
+- CI includes both files in its pip cache key. Test dependencies, including `pytest-cov`, come from the same pinned requirements rather than a separate unbounded installation.
+- `scripts/pre-push.sh` activates the project virtual environment and synchronizes pip and backend dependencies before formatting and testing. Preserve compatible deployed versions when aligning environments, and review dependency compatibility before changing pins.
 
 ## Database models
 

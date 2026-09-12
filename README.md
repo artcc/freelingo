@@ -67,6 +67,8 @@ the frontend never calls them directly.
 
 Both frontend Dockerfiles use `node:25-alpine`, install `npm@11`, and install dependencies with `npm ci` from the committed lockfile. Frontend PR checks also select Node 25, explicitly install `npm@11`, and run `npm ci`. Keep Node versions, npm versions, and dependency-installation policies aligned across both Dockerfiles and CI when upgrading.
 
+The backend uses Python 3.14 and pip 26.2.1. Direct dependencies are pinned in `backend/requirements.txt`, which loads `backend/constraints.txt` for indirect dependency versions. Docker, backend PR checks, and `scripts/pre-push.sh` use this shared installation policy; pre-push synchronizes its backend environment before formatting and testing. Update both dependency files together.
+
 The `develop` and `main` publishing workflows build the same Dockerfile paths from their respective branches, publishing separate images for the development server and production VPS. Both use `frontend/Dockerfile`; `frontend/Dockerfile.dev` is reserved for the development compose setup. See [the Docker specification](specs/docker.instructions.md) for runtime and image-channel details.
 
 ## Repository
