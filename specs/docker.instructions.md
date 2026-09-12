@@ -25,6 +25,18 @@ Ollama is assumed to run on the host machine for GPU access, reached from contai
 
 Both channels publish `:latest` and a short SHA tag on every push. The compose file uses production images by default.
 
+Both publishing workflows use `frontend/Dockerfile` and `backend/Dockerfile` from their respective branches and build Linux images for `amd64` and `arm64`. The develop workflow explicitly checks out `develop` and publishes separate `-develop` image names for deployment on the development server; production images are deployed on the production VPS after merging to `main`. `frontend/Dockerfile.dev` is used by `docker-compose.dev.yml`, not by either publishing workflow.
+
+### Frontend runtime and dependency installation
+
+- `frontend/Dockerfile` uses `node:25-alpine` for its dependency, builder, and runner stages. `frontend/Dockerfile.dev` uses the same base image.
+- Both Dockerfiles install `npm@11` and use `npm ci` with the committed `frontend/package-lock.json`. Installation fails if the lockfile and `package.json` are inconsistent rather than updating the dependency resolution during the image build.
+- The PR checks in `.github/workflows/pr-develop-checks.yml` also select Node 25 and run `npm ci`; npm is the version bundled with the selected Node release, not an explicitly pinned version in that workflow.
+- Keep the Node version aligned across both frontend Dockerfiles and the PR checks when upgrading. Keep the npm installation policy aligned between both Dockerfiles and review CI's bundled npm at the same time. Generate the lockfile with npm 11 under the current policy.
+- `node:25-alpine` and `npm@11` select major release lines, not exact minor/patch versions or immutable image digests.
+- Production builds and runs the Next.js standalone server; the development compose configuration runs `npm run dev` with source mounts. These intentional differences do not require different Node or npm versions.
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` controls the publishing workflows' JavaScript action runtime, not the Node version inside application images.
+
 ---
 
 ## Docker Compose structure

@@ -115,7 +115,10 @@ These describe what was built — they are the reference documentation:
 - **No Docker locally.** The development machine does not have Docker installed. Never suggest `docker` or `docker compose` commands to run locally.
 - **Not deployed locally.** The application runs in a remote server; the dev machine is used only for editing and pushing code. CI/CD (GitHub Actions) builds and publishes the Docker images.
 - **Cannot test the running app locally.** The running app is on a remote server. Local validation is limited to backend unit tests/static checks and frontend lint/typecheck/unit tests. Use the `run-tests` skill for requested test/lint/typecheck runs and the `pre-push` skill for final full validation before pushing.
-- **package-lock.json must be generated with npm 11** (the version installed locally). The Dockerfile upgrades npm to v11 before `npm ci` to stay in sync.
+- **Frontend runtime consistency.** `frontend/Dockerfile` (all three stages) and `frontend/Dockerfile.dev` use `node:25-alpine`; frontend PR checks select Node 25. Keep these Node versions aligned when upgrading. Both Dockerfiles install `npm@11` and use `npm ci`; keep their npm and installation policies aligned and review CI's bundled npm when updating. The current selectors fix major versions, not exact minor/patch releases.
+- **package-lock.json must be generated with npm 11.** Both frontend Dockerfiles explicitly install npm 11 before `npm ci`; frontend PR checks use the npm bundled with their selected Node release.
+- **Node TypeScript definitions.** Keep the major version of `@types/node` aligned with the frontend Node runtime, independently of npm's version. The current declaration is `^25`, matching Node 25. When upgrading, regenerate the lockfile with the project's npm version and check TypeScript compatibility with the updated definitions.
+- **Remote deployment channels.** The `develop` and `main` publishing workflows use the same Dockerfile paths (`frontend/Dockerfile` and `backend/Dockerfile`) from their respective branches and build for Linux `amd64` and `arm64`. Separate image names support deployment to the development server and production VPS. `frontend/Dockerfile.dev` is only used by `docker-compose.dev.yml`, but must follow the same frontend runtime and dependency-installation policy.
 
 ## Commands
 

@@ -322,6 +322,7 @@ Seven Zustand stores hold all client-side state. No React Context is used for gl
 
 ## Code standards (TypeScript / Next.js 16)
 
+- Node API definitions use `@types/node: ^25`, aligned with the Node 25 runtime used by both frontend Dockerfiles and PR checks. The lockfile resolves `@types/node` to `25.9.6` and its `undici-types` dependency to `7.24.6`. These are TypeScript definitions, not runtime upgrades; their major version follows Node, independently of npm 11. Review the definitions alongside future Node upgrades and check TypeScript compatibility after synchronizing dependencies.
 - ESLint — TypeScript linting + Next.js rules
 - Prettier — Code formatting + `prettier-plugin-tailwindcss`
 
