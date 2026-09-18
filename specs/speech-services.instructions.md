@@ -147,6 +147,9 @@ Voice conversation uses its own capture pipeline and WebSocket contract, describ
 `AudioPlayer` requests TTS, creates a Blob URL, and plays it with the browser Audio API. Voice
 precedence is explicit prop, stored `tts_voice`, then backend default. It supports loading, playing,
 stop, and error states and is used across lessons, flashcards, vocabulary, chat, and phrasebook.
+The standard TTS endpoint persists MP3 output under `{AUDIO_STORAGE_PATH}/tts/`, keyed by the exact
+text, provider, and effective synthesis settings. Repeated matching requests return the cached audio;
+the response exposes `X-TTS-Cache: HIT` or `MISS` for diagnostics.
 
 `VoiceRecorder`:
 
@@ -165,12 +168,14 @@ cookies, and propagates request cancellation to the backend.
 
 ## Persistent and transient audio
 
-`POST /api/tts`, STT recordings, and voice-conversation audio are transient.
+STT recordings and voice-conversation audio are transient. Standard `POST /api/tts` output is
+persistently cached under `{AUDIO_STORAGE_PATH}/tts/`.
 
 Persistent MP3 uses include:
 
 - Listening: `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
 - Phrasebook: hashed files below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`.
+- Standard TTS: hashed files below `{AUDIO_STORAGE_PATH}/tts/`.
 - OpenAI previews: `/app/tts_previews/{voice}.mp3`.
 
 The compose stack mounts persistent host storage for generated audio and previews. Local Kokoro and

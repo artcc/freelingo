@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Persistent standard TTS cache**: repeated playback of matching text and synthesis settings now reuses stored MP3 audio instead of generating it again.
 - **Selectable lesson and conversation vocabulary**: learners can save words from lesson exercise questions and completed tutor turns in voice transcripts, with a localized “Already saved” confirmation in all ten UI languages.
 - **Free-write corrections**: writing evaluations now persist structured corrections and display inline annotations plus a localized corrections list with explanations, including after reloads and in completed-lesson review.
 - **Partial-answer feedback**: free-write answers with corrections and a score between zero and one use an accessible partial-state icon and an amber border, while unavailable evaluations retain their existing fallback state.

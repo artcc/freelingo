@@ -1,6 +1,9 @@
+import hashlib
+import json
 import os
 import time
 import uuid
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import FileResponse, Response
@@ -26,6 +29,35 @@ _PREVIEW_TEXT = (
 )
 
 
+def _get_cache_path(text: str, voice: str | None) -> Path:
+    """Return the persistent cache location for one exact synthesis request."""
+    if settings.TTS_PROVIDER == "openai":
+        synthesis_settings = {
+            "model": settings.OPENAI_TTS_MODEL,
+            "speed": settings.OPENAI_TTS_SPEED,
+            "voice": voice or settings.OPENAI_TTS_VOICE,
+        }
+    else:
+        synthesis_settings = {"voice": settings.TTS_VOICE}
+
+    cache_input = json.dumps(
+        {"provider": settings.TTS_PROVIDER, "settings": synthesis_settings, "text": text},
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    cache_key = hashlib.sha256(cache_input.encode("utf-8")).hexdigest()
+    return Path(settings.AUDIO_STORAGE_PATH) / "tts" / f"{cache_key}.mp3"
+
+
+def _store_cached_audio(cache_path: Path, audio: bytes) -> None:
+    """Atomically persist audio so readers never receive a partial MP3."""
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = cache_path.with_suffix(".tmp")
+    temporary_path.write_bytes(audio)
+    os.replace(temporary_path, cache_path)
+
+
 @router.post("/tts")
 @limiter.limit("20/minute")
 async def text_to_speech(
@@ -44,13 +76,21 @@ async def text_to_speech(
             detail="TTS service is not enabled",
         )
 
-    synth_t0 = time.perf_counter()
     # For local Kokoro TTS, ignore the client voice param — only OpenAI voices
     # should be forwarded. Prevents 400 errors when user switches from OpenAI
     # to local and stale OpenAI voice names (e.g. "nova") remain in localStorage.
     voice = body.voice if settings.TTS_PROVIDER != "local" else None
-    audio = await tts_service.synthesize(body.text, voice)
-    synth_ms = (time.perf_counter() - synth_t0) * 1000
+    cache_path = _get_cache_path(body.text, voice)
+    cache_hit = cache_path.is_file() and cache_path.stat().st_size > 0
+
+    if cache_hit:
+        audio = cache_path.read_bytes()
+        synth_ms = 0.0
+    else:
+        synth_t0 = time.perf_counter()
+        audio = await tts_service.synthesize(body.text, voice)
+        synth_ms = (time.perf_counter() - synth_t0) * 1000
+        _store_cached_audio(cache_path, audio)
     total_ms = (time.perf_counter() - t0) * 1000
 
     logger.info(
@@ -60,6 +100,7 @@ async def text_to_speech(
         text_len=len(body.text),
         audio_bytes=len(audio),
         provider=type(tts_service).__name__,
+        cache_hit=cache_hit,
         synth_ms=round(synth_ms, 1),
         total_ms=round(total_ms, 1),
     )
@@ -71,6 +112,7 @@ async def text_to_speech(
             "X-TTS-Trace-ID": trace_id,
             "X-TTS-Backend-Synth-Ms": f"{synth_ms:.1f}",
             "X-TTS-Backend-Total-Ms": f"{total_ms:.1f}",
+            "X-TTS-Cache": "HIT" if cache_hit else "MISS",
         },
     )
 

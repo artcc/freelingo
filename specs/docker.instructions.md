@@ -49,7 +49,7 @@ The Compose files use bind mounts below `DATA_PATH`; they do not declare named v
 - PostgreSQL: `${DATA_PATH}/postgres`.
 - Redis: `${DATA_PATH}/redis`.
 - Avatars: `${DATA_PATH}/avatars`.
-- Generated audio: `${DATA_PATH}/audio`.
+- Generated audio, including Listening, Phrasebook, and standard TTS cache files: `${DATA_PATH}/audio`.
 - TTS previews: `${DATA_PATH}/tts_previews`.
 
 Avatar and media access remains controlled by backend endpoints; a host mount does not make files
