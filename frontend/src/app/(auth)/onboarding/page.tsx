@@ -34,6 +34,7 @@ function getSelectedPlan(plan: string | null): BillingInterval | null {
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tCommon = useTranslations('common')
+  const tLang = useTranslations('targetLanguages')
   const router = useRouter()
   const searchParams = useSearchParams()
   const setUser = useAuthStore((s) => s.setUser)
@@ -266,7 +267,9 @@ export default function OnboardingPage() {
           {step === 2 && (
             <div className="space-y-5">
               <p className="text-fl-fg font-mono text-sm">
-                {t('goals.subtitle')}
+                {t('goals.subtitle', {
+                  language: tLang(targetLanguage),
+                })}
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {LEARNING_GOALS.map((goal) => {

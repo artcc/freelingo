@@ -1295,7 +1295,7 @@
     "saveFailed": "Salvarea preferințelor a eșuat",
     "goals": {
       "title": "Obiectivele tale de învățare",
-      "subtitle": "Pentru ce vrei să folosești engleza? Selectează tot ce ți se potrivește.",
+      "subtitle": "Pentru ce vrei să folosești {language}? Selectează tot ce ți se potrivește.",
       "skip": "Sari",
       "travel": "Călătorii și turism",
       "work": "Muncă și carieră",

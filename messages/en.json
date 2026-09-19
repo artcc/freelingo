@@ -1295,7 +1295,7 @@
     "saveFailed": "Failed to save preferences",
     "goals": {
       "title": "Your Learning Goals",
-      "subtitle": "What do you want to use English for? Select all that apply.",
+      "subtitle": "What do you want to use {language} for? Select all that apply.",
       "skip": "Skip",
       "travel": "Travel & Tourism",
       "work": "Work & Professional",

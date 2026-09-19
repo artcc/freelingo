@@ -1295,7 +1295,7 @@
     "saveFailed": "Échec de l'enregistrement des préférences",
     "goals": {
       "title": "Vos objectifs d'apprentissage",
-      "subtitle": "Pour quoi voulez-vous utiliser l'anglais ? Sélectionnez tout ce qui s'applique.",
+      "subtitle": "Pour quoi voulez-vous utiliser {language} ? Sélectionnez tout ce qui s'applique.",
       "skip": "Passer",
       "travel": "Voyages et tourisme",
       "work": "Travail et carrière",

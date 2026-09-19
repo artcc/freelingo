@@ -1295,7 +1295,7 @@
     "saveFailed": "Impossibile salvare le preferenze",
     "goals": {
       "title": "I tuoi obiettivi",
-      "subtitle": "Per cosa vuoi usare l'inglese? Seleziona tutto ciò che si applica.",
+      "subtitle": "Per cosa vuoi usare {language}? Seleziona tutto ciò che si applica.",
       "skip": "Salta",
       "travel": "Viaggi e turismo",
       "work": "Lavoro e carriera",
