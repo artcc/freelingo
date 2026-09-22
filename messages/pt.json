@@ -1489,20 +1489,20 @@
     "version": "v1.9.15",
     "cta": "Entendido",
     "entry1": {
-      "label": "Um estilo mais nosso",
-      "desc": "Estreamos tons de azul-petróleo e fundos lisos para dar mais personalidade ao FreeLingo, mantendo o design minimalista que já conheces."
+      "label": "Planos mais equilibrados",
+      "desc": "Os novos planos distribuem melhor as lições por todas as unidades e dão mais espaço a diferentes atividades, mesmo nos planos mais curtos."
     },
     "entry2": {
-      "label": "Uma leitura mais confortável",
-      "desc": "Uma letra mais clara e pequenos ajustes de tamanho, espaçamento e contraste tornam as tuas lições, explicações e conversas mais confortáveis de ler."
+      "label": "Um teste para concluir o teu plano",
+      "desc": "Quando chegares ao último dia e terminares as lições pendentes, podes fazer o teste de fim de nível a partir do painel ou do teu plano e ver quanto aprendeste."
     },
     "entry3": {
-      "label": "Mais clareza nos detalhes",
-      "desc": "As traduções e as notas de ajuda são mais fáceis de ler. O nosso site informativo e os e-mails também têm uma apresentação mais legível."
+      "label": "Mais clareza nos próximos passos",
+      "desc": "Os resultados do teste e as recomendações estão agora no teu idioma, com indicações mais claras para dares o próximo passo ou reveres o que aprendeste."
     },
     "entry4": {
       "label": "Uma experiência mais fluida",
-      "desc": "Correções de erros e pequenas melhorias tornam o FreeLingo mais fiável e agradável de utilizar."
+      "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }
   },
   "contact": {

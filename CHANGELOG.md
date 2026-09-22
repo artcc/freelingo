@@ -5,18 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.15] - Unreleased
+## [1.9.15] - 2026-09-22
 
 ### Changed
 
-- **Short-plan lesson coverage**: new plans rotate each unit's lesson-type cycle so every declared modality is represented plan-wide whenever a rotation assignment can represent it. A 4-week × 5-day B1 Spanish plan now includes unit `writing` and `review` lessons, and a B2 Chinese plan at 12 weeks × 4 days keeps `review`. When capacity cannot represent every type, the allocator keeps the maximum coverage, preferring types declared by fewer units; the reserved completion-test slot does not count as teaching coverage. Existing plans keep their stored schedules.
+- **More variety in short plans**: new study plans make better room for different activities, including writing and review where the curriculum and available lessons allow. Existing plans keep their schedules.
 
 ### Fixed
 
-- **Completion slot and level test**: the reserved final plan slot no longer generates a substitute review lesson. `GET /api/study-plan/today` reports an end-of-plan `completion` state (`in_progress`, `ready`, or `taken`), and the dashboard and My Plan route eligible learners to the real level test or show the persisted result. The test unlocks by reaching the final plan day with no lesson from a passed day still pending (skipped lessons keep it locked until completed) and is enforced by the backend (403 before the final position or with pending lessons); legacy final-slot lessons and results are preserved, including plans that stored the slot with the pre-v1.7.0 `level-test` unit id. Once a result exists, pending lessons no longer list the legacy final-slot lesson and `pending_count` stays consistent with `GET /api/study-plan/pending-lessons`, and the dashboard and the level-test result present the next-level step as a retake-assessment action, shown only when the plan's level has a next level.
-- **Level-test result**: the level completion test result screen renders every label, message, and error through the ten-locale catalogs, and its recommendation copy now reflects the real action: advancing points to retaking the assessment to set up the next plan, while extend and repeat point to reviewing My Plan instead of claiming a plan was already created.
-- **Study-plan distribution**: new plans spread teaching lessons evenly across all curriculum units, preserve unit order, restart each unit's own lesson-type cycle, and reserve the final position for the completion test. Earlier units no longer consume slots needed by later units. Existing plans keep their stored schedules.
-- **Study-plan request validation**: plan creation and assessment completion reject non-positive dimensions, unknown CEFR levels, empty curricula, and schedules too short to cover every unit before creating language records or changing plans. Capacity guidance distinguishes teaching lessons from the completion test and gives a whole-week minimum that guarantees at least one lesson per unit.
+- **Better-balanced study plans**: lessons in new plans are spread more evenly across all units, in order, with the final slot reserved for the end-of-level test.
+- **A test to round off your plan**: Dashboard and My Plan now take you to the end-of-level test instead of an extra review lesson. It becomes available on the final plan day once earlier lessons are complete. Previous results are preserved, and completed tests no longer leave an old final lesson on your pending list.
+- **Clearer results and next steps**: test results, messages, and recommendations are now available in all ten interface languages. Guidance explains when to retake the assessment for the next level or return to My Plan to review what you've learned.
+- **Clearer plan setup**: plans that are too short to cover every unit now come with clearer minimum-duration guidance, including time for the final test. Invalid settings are caught before changing your plan.
+- Minor bug fixes and small improvements for a smoother everyday learning experience.
 
 ## [1.9.10] - 2026-09-15
 
