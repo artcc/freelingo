@@ -427,6 +427,10 @@
     "noLevel": "No level set yet.",
     "completeAssessment": "Take assessment",
     "allCaughtUp": "Your plan, at your pace",
+    "levelTestReady": "Your level test is ready.",
+    "levelTestReadyDesc": "You have reached the end of your plan. Take the level test to confirm your progress.",
+    "levelTestCompleted": "Level test completed.",
+    "levelTestScoreLine": "Final score: {score}. Your result is saved in My Plan.",
     "startWithAssessment": "Start with an assessment.",
     "takeAssessmentArrow": "Take Assessment →",
     "goToMyPlan": "My Plan →",
@@ -512,6 +516,25 @@
       "loading": "Loading questions...",
       "loadingTest": "Loading test...",
       "submittingTest": "Submitting answers...",
+      "quizTitle": "{level} Level Test",
+      "resultsTitle": "{level} Level Test — Results",
+      "finalScore": "Final Score",
+      "correctCount": "{correct} / {total} correct",
+      "correctAnswer": "✓ Correct",
+      "incorrectAnswer": "✗ Incorrect — correct answer: {answer}",
+      "nextLevelFallback": "NEXT LEVEL",
+      "advanceLabel": "READY FOR {level}",
+      "advanceMessage": "You demonstrated solid {level} mastery. Retake the assessment to set up your {next} plan.",
+      "extendLabel": "4-WEEK EXTENSION",
+      "extendMessage": "Weak areas detected: {areas}. We recommend 4 extra weeks of focused practice.",
+      "repeatLabel": "REPEAT {level}",
+      "repeatMessage": "Score below 55%. Several core {level} competencies need reinforcement.",
+      "reviewPlan": "Review My Plan →",
+      "goToPlan": "Go to Plan",
+      "invalidPlan": "Invalid plan ID. Access the level test from your plan page.",
+      "noQuestions": "No questions received from the server.",
+      "loadFailed": "Failed to load the level test.",
+      "submitFailed": "Submission failed.",
       "question": "Question",
       "of": "of",
       "confirm": "Confirm Answer",
@@ -615,7 +638,7 @@
       "level_test": "Level Test"
     },
     "levelComplete": "Level {level} Complete. Take the Level Test",
-    "levelCompleteDesc": "You have finished all units for level {level}. Take the level completion test to confirm your progress and unlock the next level.",
+    "levelCompleteDesc": "You have reached the end of your plan for level {level}. Take the level completion test to confirm your progress and unlock the next level.",
     "levelCompleteHint": "The test takes approximately 20 minutes and covers grammar, vocabulary, and reading.",
     "beginLevelTest": "Begin Level Test",
     "nLessons": "{count} lessons",
@@ -1463,23 +1486,23 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.9.10",
+    "version": "v1.9.15",
     "cta": "Got it",
     "entry1": {
-      "label": "A style of our own",
-      "desc": "Petrol-blue tones and solid backgrounds give FreeLingo more personality, while keeping the minimalist design you already know."
+      "label": "Better-balanced study plans",
+      "desc": "New plans spread lessons more evenly across all units and make room for a wider mix of activities, even in shorter plans."
     },
     "entry2": {
-      "label": "More comfortable reading",
-      "desc": "A clearer typeface and gentle adjustments to text size, spacing and contrast make your lessons, explanations and conversations more comfortable to read."
+      "label": "A test to round off your plan",
+      "desc": "Once you reach the final day and finish any outstanding lessons, you can take the end-of-level test from the dashboard or My Plan and see how much you've learned."
     },
     "entry3": {
-      "label": "Clearer details",
-      "desc": "Translations and helpful notes are easier to read. Our information website and emails also have a more readable presentation."
+      "label": "Clearer next steps",
+      "desc": "Test results and recommendations are now available in your language, with clearer guidance on taking the next step or reviewing what you've learned."
     },
     "entry4": {
       "label": "A smoother experience",
-      "desc": "Bug fixes and small improvements make FreeLingo more reliable and enjoyable to use."
+      "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }
   },
   "contact": {

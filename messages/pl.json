@@ -427,6 +427,10 @@
     "noLevel": "Poziom nie jest jeszcze ustawiony.",
     "completeAssessment": "Wykonaj ocenę poziomu",
     "allCaughtUp": "Twój plan, w Twoim tempie",
+    "levelTestReady": "Twój test poziomu jest gotowy.",
+    "levelTestReadyDesc": "Osiągnąłeś(-ęłaś) koniec swojego planu. Rozwiąż test poziomu, aby potwierdzić postępy.",
+    "levelTestCompleted": "Test poziomu ukończony.",
+    "levelTestScoreLine": "Wynik końcowy: {score}. Twój wynik jest zapisany w Mój plan.",
     "startWithAssessment": "Zacznij od oceny poziomu.",
     "takeAssessmentArrow": "Oceń poziom →",
     "goToMyPlan": "Mój plan →",
@@ -512,6 +516,25 @@
       "loading": "Ładowanie pytań...",
       "loadingTest": "Ładowanie testu...",
       "submittingTest": "Wysyłanie odpowiedzi...",
+      "quizTitle": "Test poziomu {level}",
+      "resultsTitle": "Test poziomu {level} — Wyniki",
+      "finalScore": "Wynik końcowy",
+      "correctCount": "{correct} / {total} poprawnych",
+      "correctAnswer": "✓ Poprawna",
+      "incorrectAnswer": "✗ Niepoprawna — poprawna odpowiedź: {answer}",
+      "nextLevelFallback": "NASTĘPNY POZIOM",
+      "advanceLabel": "GOTOWOŚĆ NA {level}",
+      "advanceMessage": "Wykazujesz solidną znajomość poziomu {level}. Powtórz ocenę, aby skonfigurować plan {next}.",
+      "extendLabel": "PRZEDŁUŻENIE O 4 TYGODNIE",
+      "extendMessage": "Wykryto słabe obszary: {areas}. Zalecamy 4 dodatkowe tygodnie ukierunkowanej praktyki.",
+      "repeatLabel": "POWTÓRZ {level}",
+      "repeatMessage": "Wynik poniżej 55%. Kilka kluczowych kompetencji na poziomie {level} wymaga wzmocnienia.",
+      "reviewPlan": "Zobacz mój plan →",
+      "goToPlan": "Przejdź do planu",
+      "invalidPlan": "Nieprawidłowy identyfikator planu. Otwórz test poziomu ze strony planu.",
+      "noQuestions": "Nie otrzymano pytań z serwera.",
+      "loadFailed": "Nie udało się załadować testu poziomu.",
+      "submitFailed": "Nie udało się wysłać odpowiedzi.",
       "question": "Pytanie",
       "of": "z",
       "confirm": "Potwierdź odpowiedź",
@@ -615,7 +638,7 @@
       "level_test": "Test poziomu"
     },
     "levelComplete": "Poziom {level} ukończony. Przystąp do testu poziomu",
-    "levelCompleteDesc": "Ukończyłeś(-aś) wszystkie jednostki dla poziomu {level}. Przystąp do testu ukończenia poziomu, aby potwierdzić postępy i odblokować następny poziom.",
+    "levelCompleteDesc": "Osiągnąłeś(-ęłaś) koniec planu dla poziomu {level}. Przystąp do testu ukończenia poziomu, aby potwierdzić postępy i odblokować następny poziom.",
     "levelCompleteHint": "Test trwa ok. 20 minut i obejmuje gramatykę, słownictwo i czytanie.",
     "beginLevelTest": "Rozpocznij test poziomu",
     "nLessons": "{count} lekcji",
@@ -1463,23 +1486,23 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.9.10",
+    "version": "v1.9.15",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Styl z własnym charakterem",
-      "desc": "Stonowane niebieskozielone odcienie i jednolite tła nadają FreeLingo więcej charakteru, zachowując minimalistyczny wygląd, który już znasz."
+      "label": "Lepiej zrównoważone plany nauki",
+      "desc": "Nowe plany równomierniej rozkładają lekcje między wszystkie działy i zapewniają więcej różnorodnych ćwiczeń, także w krótszych planach."
     },
     "entry2": {
-      "label": "Wygodniejsze czytanie",
-      "desc": "Czytelniejsza czcionka i delikatne zmiany wielkości tekstu, odstępów oraz kontrastu ułatwiają czytanie lekcji, wyjaśnień i rozmów."
+      "label": "Test na zakończenie planu",
+      "desc": "Gdy dotrzesz do ostatniego dnia i ukończysz zaległe lekcje, możesz przejść do testu kończącego poziom z panelu lub swojego planu i sprawdzić swoje postępy."
     },
     "entry3": {
-      "label": "Czytelniejsze szczegóły",
-      "desc": "Tłumaczenia i pomocne wskazówki są łatwiejsze do przeczytania. Nasza strona informacyjna i wiadomości e-mail również zyskały czytelniejszy wygląd."
+      "label": "Jaśniejsze wskazówki na dalszą naukę",
+      "desc": "Wyniki testu i zalecenia są teraz w Twoim języku, z jaśniejszymi wskazówkami, jak zrobić kolejny krok lub powtórzyć materiał."
     },
     "entry4": {
       "label": "Płynniejsze korzystanie",
-      "desc": "Poprawki błędów i drobne ulepszenia sprawiają, że FreeLingo działa stabilniej i jest przyjemniejsze w użyciu."
+      "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }
   },
   "contact": {

@@ -1,8 +1,23 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, field_serializer
+from pydantic import AfterValidator, BaseModel, Field, field_serializer
+
+from app.data.curriculum import CEFR_LEVELS
+
+
+def _known_cefr_level(value: str) -> str:
+    if value not in CEFR_LEVELS:
+        raise ValueError(f"Unknown CEFR level {value!r}: expected one of {', '.join(CEFR_LEVELS)}")
+    return value
+
+
+#: A CEFR level the curriculum defines. Membership is checked against the static
+#: level list; whether the resolved language actually ships units for that level is
+#: enforced by ``assert_plan_capacity``, which rejects an empty unit list.
+CefrLevel = Annotated[str, AfterValidator(_known_cefr_level)]
 
 
 class StudyPlanGoal(BaseModel):
@@ -10,10 +25,10 @@ class StudyPlanGoal(BaseModel):
 
 
 class GenerateStudyPlanRequest(BaseModel):
-    cefr_level: str
+    cefr_level: CefrLevel
     goals: list[str] = ["grammar", "vocabulary", "reading", "writing"]
-    duration_weeks: int = 12
-    days_per_week: int = 4
+    duration_weeks: int = Field(default=12, ge=1)
+    days_per_week: int = Field(default=4, ge=1)
     weaknesses: list[str] = []
     strengths: list[str] = []
     target_language: str | None = None
@@ -80,6 +95,20 @@ class TodayLesson(BaseModel):
     is_completed: bool = False
 
 
+class CompletionState(BaseModel):
+    """End-of-plan assessment state derived from the persisted study plan.
+
+    ``in_progress``: the learner has not reached the reserved final slot.
+    ``ready``: the final slot is reached and the real level test is available.
+    ``taken``: the final slot is reached and an assessment result exists.
+    """
+
+    state: Literal["in_progress", "ready", "taken"]
+    score: float | None = None
+    recommendation: str | None = None
+    next_level: str | None = None
+
+
 class TodayResponse(BaseModel):
     plan_id: int
     cefr_level: str
@@ -87,6 +116,7 @@ class TodayResponse(BaseModel):
     progress_day: int = 0
     total_days: int = 0
     pending_count: int = 0
+    completion: CompletionState
 
 
 class PendingLessonResponse(BaseModel):

@@ -427,6 +427,10 @@
     "noLevel": "Niciun nivel setat încă.",
     "completeAssessment": "Fă evaluarea",
     "allCaughtUp": "Planul tău, în ritmul tău",
+    "levelTestReady": "Testul tău de nivel este pregătit.",
+    "levelTestReadyDesc": "Ai ajuns la finalul planului. Fă testul de nivel pentru a-ți confirma progresul.",
+    "levelTestCompleted": "Test de nivel finalizat.",
+    "levelTestScoreLine": "Punctaj final: {score}. Rezultatul este salvat în Planul meu.",
     "startWithAssessment": "Începe cu o evaluare.",
     "takeAssessmentArrow": "Fă evaluarea →",
     "goToMyPlan": "Planul meu →",
@@ -512,6 +516,25 @@
       "loading": "Se încarcă întrebările...",
       "loadingTest": "Se încarcă testul...",
       "submittingTest": "Se trimit răspunsurile...",
+      "quizTitle": "Test de nivel {level}",
+      "resultsTitle": "Test de nivel {level} — Rezultate",
+      "finalScore": "Punctaj final",
+      "correctCount": "{correct} / {total} corecte",
+      "correctAnswer": "✓ Corect",
+      "incorrectAnswer": "✗ Incorect — răspunsul corect: {answer}",
+      "nextLevelFallback": "NIVELUL URMĂTOR",
+      "advanceLabel": "PREGĂTIT PENTRU {level}",
+      "advanceMessage": "Ai demonstrat o stăpânire solidă a nivelului {level}. Reia evaluarea pentru a-ți configura planul {next}.",
+      "extendLabel": "EXTINDERE DE 4 SĂPTĂMÂNI",
+      "extendMessage": "Zone slabe detectate: {areas}. Recomandăm 4 săptămâni suplimentare de exersare concentrată.",
+      "repeatLabel": "REPETĂ {level}",
+      "repeatMessage": "Punctaj sub 55%. Mai multe competențe de bază la nivelul {level} necesită consolidare.",
+      "reviewPlan": "Vezi planul meu →",
+      "goToPlan": "Mergi la plan",
+      "invalidPlan": "ID de plan invalid. Accesează testul de nivel din pagina planului tău.",
+      "noQuestions": "Nu s-au primit întrebări de la server.",
+      "loadFailed": "Testul de nivel nu a putut fi încărcat.",
+      "submitFailed": "Trimiterea a eșuat.",
       "question": "Întrebarea",
       "of": "din",
       "confirm": "Confirmă răspunsul",
@@ -615,7 +638,7 @@
       "level_test": "Test de nivel"
     },
     "levelComplete": "Nivelul {level} finalizat. Fă testul de nivel",
-    "levelCompleteDesc": "Ai finalizat toate unitățile pentru nivelul {level}. Fă testul de finalizare a nivelului pentru a confirma progresul și a debloca nivelul următor.",
+    "levelCompleteDesc": "Ai ajuns la finalul planului pentru nivelul {level}. Fă testul de finalizare a nivelului pentru a confirma progresul și a debloca nivelul următor.",
     "levelCompleteHint": "Testul durează aproximativ 20 de minute și acoperă gramatică, vocabular și lectură.",
     "beginLevelTest": "Începe testul de nivel",
     "nLessons": "{count} lecții",
@@ -1463,23 +1486,23 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.9.10",
+    "version": "v1.9.15",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Un stil care ne reprezintă",
-      "desc": "Tonurile de albastru petrol și fundalurile uniforme dau mai multă personalitate FreeLingo, păstrând designul minimalist pe care îl cunoști deja."
+      "label": "Planuri mai echilibrate",
+      "desc": "Noile planuri distribuie lecțiile mai uniform între toate unitățile și oferă mai multă varietate de activități, chiar și în planurile scurte."
     },
     "entry2": {
-      "label": "O lectură mai confortabilă",
-      "desc": "Un font mai clar și mici ajustări ale dimensiunii textului, spațierii și contrastului fac lecțiile, explicațiile și conversațiile tale mai ușor de citit."
+      "label": "Un test la finalul planului",
+      "desc": "Când ajungi la ultima zi și termini lecțiile restante, poți susține testul de final de nivel din panoul principal sau din planul tău și poți vedea cât ai învățat."
     },
     "entry3": {
-      "label": "Mai multă claritate în detalii",
-      "desc": "Traducerile și notele de ajutor sunt mai ușor de citit. Site-ul nostru de prezentare și e-mailurile au, de asemenea, un aspect mai lizibil."
+      "label": "Pași mai clari pentru a continua",
+      "desc": "Rezultatele testului și recomandările sunt acum în limba ta, cu îndrumări mai clare pentru a face următorul pas sau a recapitula ce ai învățat."
     },
     "entry4": {
       "label": "O experiență mai fluidă",
-      "desc": "Remedierile de erori și micile îmbunătățiri fac FreeLingo mai stabil și mai plăcut de utilizat."
+      "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }
   },
   "contact": {

@@ -31,8 +31,16 @@ interface TodayLessonItem {
   is_completed: boolean
 }
 
+interface CompletionState {
+  state: 'in_progress' | 'ready' | 'taken'
+  score: number | null
+  recommendation: string | null
+  next_level: string | null
+}
+
 export default function DashboardPage() {
   const t = useTranslations('dashboard')
+  const tAssessment = useTranslations('assessment')
   const tBilling = useTranslations('billing')
   const tNav = useTranslations('nav')
   const tPlan = useTranslations('plan')
@@ -70,6 +78,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [hasPlan, setHasPlan] = useState(false)
+  const [planId, setPlanId] = useState<number | null>(null)
+  const [completion, setCompletion] = useState<CompletionState | null>(null)
   const [cefrLevel, setCefrLevel] = useState<string | null>(null)
   const [progressDay, setProgressDay] = useState(0)
   const [totalDays, setTotalDays] = useState(0)
@@ -122,6 +132,8 @@ export default function DashboardPage() {
       if (planRes.ok) {
         const plan = await planRes.json()
         setCefrLevel(plan.cefr_level ?? null)
+        setPlanId(plan.plan_id ?? null)
+        setCompletion(plan.completion ?? null)
         setProgressDay(plan.progress_day ?? 0)
         setTotalDays(plan.total_days ?? 0)
         setPendingCount(plan.pending_count ?? 0)
@@ -140,6 +152,8 @@ export default function DashboardPage() {
         setHasPlan(true)
       } else {
         setCefrLevel(null)
+        setPlanId(null)
+        setCompletion(null)
         setProgressDay(0)
         setTotalDays(0)
         setPendingCount(0)
@@ -220,11 +234,22 @@ export default function DashboardPage() {
     (lesson) =>
       lesson.id && !completedToday.includes(lesson.id) && !lesson.isCompleted
   )
+  const planPositionComplete =
+    completion?.state === 'ready' || completion?.state === 'taken'
   const planCompletion =
     hasPlan && totalDays > 0
-      ? Math.min(100, Math.round((progressDay / totalDays) * 100))
+      ? planPositionComplete
+        ? 100
+        : Math.min(100, Math.round((progressDay / totalDays) * 100))
       : 0
-  const daysRemaining = hasPlan ? Math.max(totalDays - progressDay, 0) : 0
+  const daysRemaining = hasPlan
+    ? planPositionComplete
+      ? 0
+      : Math.max(totalDays - progressDay, 0)
+    : 0
+  const currentDayDisplay = planPositionComplete
+    ? totalDays
+    : Math.min(progressDay + 1, totalDays)
   const vocabularyProgressPct = Math.round(vocabularyProgress * 100)
   const paymentRecovery = needsPaymentRecovery(user)
   const showPremiumBanner = stripeEnabled && !isSubscribed(user, stripeEnabled)
@@ -260,7 +285,7 @@ export default function DashboardPage() {
             {hasPlan && totalDays > 0 && (
               <p className="text-fl-hint text-fl-muted-2 font-mono tracking-widest uppercase">
                 {t('dayProgress', {
-                  current: Math.min(progressDay + 1, totalDays),
+                  current: currentDayDisplay,
                   total: totalDays,
                 })}
               </p>
@@ -303,6 +328,53 @@ export default function DashboardPage() {
                   {t('takeAssessmentArrow')}
                 </button>
               </Link>
+            </div>
+          ) : completion?.state === 'taken' ? (
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-fl-fg font-mono text-xl font-bold tracking-tight">
+                  {t('levelTestCompleted')}
+                </h2>
+                <p className="text-fl-muted-2 mt-2 font-mono text-sm">
+                  {t('levelTestScoreLine', {
+                    score:
+                      completion.score != null
+                        ? `${Math.round(completion.score * 100)}%`
+                        : '—',
+                  })}
+                </p>
+              </div>
+              {completion.next_level != null ? (
+                <Link href="/assessment">
+                  <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                    {tAssessment('retake')}
+                  </button>
+                </Link>
+              ) : (
+                <Link href="/plan">
+                  <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                    {t('goToMyPlan')}
+                  </button>
+                </Link>
+              )}
+            </div>
+          ) : completion?.state === 'ready' ? (
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-fl-fg font-mono text-xl font-bold tracking-tight">
+                  {t('levelTestReady')}
+                </h2>
+                <p className="text-fl-muted-2 mt-2 max-w-xl font-mono text-sm">
+                  {t('levelTestReadyDesc')}
+                </p>
+              </div>
+              {planId != null && (
+                <Link href={`/assessment/level-test?plan=${planId}`}>
+                  <button className="text-fl-bg bg-fl-fg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2">
+                    {tPlan('beginLevelTest')}
+                  </button>
+                </Link>
+              )}
             </div>
           ) : nextLesson ? (
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -417,7 +489,7 @@ export default function DashboardPage() {
                       {t('currentDay')}
                     </p>
                     <p className="text-fl-fg font-mono text-lg font-bold">
-                      {Math.min(progressDay + 1, totalDays)} / {totalDays}
+                      {currentDayDisplay} / {totalDays}
                     </p>
                   </div>
                   <div className="bg-fl-bg p-3">
@@ -544,7 +616,13 @@ export default function DashboardPage() {
             ) : (
               <div className="space-y-3">
                 <p className="text-fl-muted-2 font-mono text-xs">
-                  {hasPlan ? t('allCaughtUp') : t('startWithAssessment')}
+                  {hasPlan
+                    ? completion?.state === 'ready'
+                      ? t('levelTestReady')
+                      : completion?.state === 'taken'
+                        ? t('levelTestCompleted')
+                        : t('allCaughtUp')
+                    : t('startWithAssessment')}
                 </p>
                 {!hasPlan && (
                   <Link href="/assessment">

@@ -2,6 +2,25 @@ export const REVIEW_PROMPT_DISMISS_COOLDOWN_MS = 14 * 24 * 60 * 60 * 1000
 export const REVIEW_PROMPT_MAX_DISMISSALS = 3
 export const VOICE_REVIEW_PROMPT_MIN_SESSION_MS = 5 * 60 * 1000
 
+interface PlanCompletionSnapshot {
+  completion?: { state?: string | null } | null
+  progress_day?: number
+  total_days?: number
+}
+
+export function isPlanPositionComplete(
+  payload: PlanCompletionSnapshot
+): boolean {
+  const state = payload.completion?.state
+  if (state === 'ready' || state === 'taken') return true
+  if (state) return false
+  return (
+    typeof payload.progress_day === 'number' &&
+    typeof payload.total_days === 'number' &&
+    payload.progress_day >= payload.total_days
+  )
+}
+
 function canAskAfterDismissals(
   dismissal: { count: number; lastDismissedAt: number },
   now: number

@@ -139,7 +139,10 @@ The application may ask after these successful moments:
 - Voice: the user manually stops a WebSocket session that has been live for at least five minutes.
   Timeout, error, remote close, and route unload do not trigger it.
 - Lesson: completion advances from the completed unit to another unit or completes the plan. Failure
-  to determine the next unit suppresses the prompt unless the plan is complete.
+  to determine the next unit suppresses the prompt unless the plan is complete. The plan counts as
+  complete when the `/today` `completion` state is `ready` or `taken`; a plan whose state is
+  `in_progress` never counts as complete. Without a `completion` field, a `progress_day` at
+  `total_days` is the legacy fallback.
 - Reading: a successful new attempt submission.
 - Listening: a successful new attempt submission.
 

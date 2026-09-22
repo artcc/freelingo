@@ -149,20 +149,28 @@ used by the current assessment page.
 
 ## Level-completion test
 
-The plan page exposes a level-test node when every curriculum unit aggregate reaches at least 0.80.
-This unlock is frontend-only; backend endpoints verify plan ownership but not unit completion.
+The level test unlocks when the learner reaches the plan's final position
+(`progress_day >= duration_weeks × days_per_week − 1`) and no lesson from a passed day is still pending.
+Skipped lessons keep the assessment locked until completed and remain reachable through
+`/pending-lessons`. Unit competency is informational and does not gate the assessment; the test's own
+recommendation handles reinforcement. A persisted result keeps the flow eligible so existing
+submissions are never refused. Eligibility is enforced by the backend, not only by a frontend button.
 
 - `GET /api/assessment/level-test/questions/{plan_id}`: authenticated, `5/minute`; gathers grammar
   and vocabulary identifiers from the plan language/level curriculum and asks the LLM for a test.
+  Returns 403 before the final position or while a passed-day lesson is pending, unless a result is
+  already persisted.
 - `POST /api/assessment/level-test/submit`: authenticated, `10/minute`; evaluates submitted answer
-  records and persists score/recommendation on the plan.
+  records and persists score/recommendation on the plan. Applies the same eligibility rule and returns
+  403 before the final position or while a passed-day lesson is pending, unless a result is already
+  persisted.
 - `GET /api/assessment/level-test/result/{plan_id}`: authenticated, `60/minute`; returns a recorded
-  result.
+  result. It requires a persisted result and is not affected by eligibility.
 
 The prompt requests 20 questions across grammar, vocabulary, and reading, but generated JSON is not
 validated by a Pydantic question schema and correct options are returned to the browser. Submit does
-not bind answers to a stored session, verify them against generated questions, require 20 answers,
-require plan completion, or prevent resubmission.
+not bind answers to a stored session, verify them against generated questions, require 20 answers, or
+prevent resubmission; its only eligibility gate is the final-position and pending-lessons rule above.
 
 Recommendation thresholds are `advance` at 0.75 or above, `extend` from 0.55 to below 0.75, and
 `repeat` below 0.55. Score is the mean of three skill profiles, including zero for an absent skill.

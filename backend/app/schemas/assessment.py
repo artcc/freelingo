@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from app.schemas.study_plan import CefrLevel
 
 # ── Quiz question (static bank shape — mirrored from assessment-bank.ts) ──────
 
@@ -61,12 +63,12 @@ class FreeWriteEvalRequest(BaseModel):
 
 
 class AssessmentCompleteRequest(BaseModel):
-    cefr_level: str
+    cefr_level: CefrLevel
     skill_profile: dict[str, float] = {}
     strengths: list[str] = []
     weaknesses: list[str] = []
-    duration_weeks: int = 12
-    days_per_week: int = 4
+    duration_weeks: int = Field(default=12, ge=1)
+    days_per_week: int = Field(default=4, ge=1)
     goals: list[str] = ["grammar", "vocabulary", "reading", "writing"]
     target_language: str | None = (
         None  # Phase 10: explicit language avoids relying on users.target_language

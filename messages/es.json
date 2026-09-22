@@ -427,6 +427,10 @@
     "noLevel": "Aún no tienes nivel asignado.",
     "completeAssessment": "Hacer evaluación",
     "allCaughtUp": "Tu plan, a tu ritmo",
+    "levelTestReady": "Tu test de nivel está listo.",
+    "levelTestReadyDesc": "Has llegado al final de tu plan. Haz el test de nivel para confirmar tu progreso.",
+    "levelTestCompleted": "Test de nivel completado.",
+    "levelTestScoreLine": "Puntuación final: {score}. Tu resultado está guardado en Mi plan.",
     "startWithAssessment": "Comienza con una evaluación.",
     "takeAssessmentArrow": "Hacer evaluación →",
     "goToMyPlan": "Mi plan →",
@@ -512,6 +516,25 @@
       "loading": "Cargando preguntas...",
       "loadingTest": "Cargando test...",
       "submittingTest": "Enviando respuestas...",
+      "quizTitle": "Test de nivel {level}",
+      "resultsTitle": "Test de nivel {level} — Resultados",
+      "finalScore": "Puntuación final",
+      "correctCount": "{correct} / {total} correctas",
+      "correctAnswer": "✓ Correcta",
+      "incorrectAnswer": "✗ Incorrecta — respuesta correcta: {answer}",
+      "nextLevelFallback": "SIGUIENTE NIVEL",
+      "advanceLabel": "LISTO PARA {level}",
+      "advanceMessage": "Has demostrado un buen dominio del {level}. Repite la evaluación para configurar tu plan {next}.",
+      "extendLabel": "EXTENSIÓN DE 4 SEMANAS",
+      "extendMessage": "Áreas débiles detectadas: {areas}. Recomendamos 4 semanas más de práctica enfocada.",
+      "repeatLabel": "REPETIR {level}",
+      "repeatMessage": "Puntuación por debajo del 55 %. Varias competencias clave del {level} necesitan refuerzo.",
+      "reviewPlan": "Revisar mi plan →",
+      "goToPlan": "Ir a mi plan",
+      "invalidPlan": "ID de plan no válido. Accede al test de nivel desde la página de tu plan.",
+      "noQuestions": "No se han recibido preguntas del servidor.",
+      "loadFailed": "No se pudo cargar el test de nivel.",
+      "submitFailed": "No se pudieron enviar las respuestas.",
       "question": "Pregunta",
       "of": "de",
       "confirm": "Confirmar respuesta",
@@ -615,7 +638,7 @@
       "level_test": "Test de nivel"
     },
     "levelComplete": "Nivel {level} completado. Haz el test de nivel",
-    "levelCompleteDesc": "Has completado todas las unidades del nivel {level}. Haz el test de finalización de nivel para confirmar tu progreso y desbloquear el siguiente.",
+    "levelCompleteDesc": "Has llegado al final de tu plan del nivel {level}. Haz el test de finalización de nivel para confirmar tu progreso y desbloquear el siguiente.",
     "levelCompleteHint": "El test dura aproximadamente 20 minutos y cubre gramática, vocabulario y lectura.",
     "beginLevelTest": "Empezar el test de nivel",
     "nLessons": "{count} lecciones",
@@ -1463,23 +1486,23 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.10",
+    "version": "v1.9.15",
     "cta": "Entendido",
     "entry1": {
-      "label": "Un estilo más nuestro",
-      "desc": "Estrenamos tonos azul petróleo y fondos lisos para dar más personalidad a FreeLingo, manteniendo el diseño minimalista que ya conoces."
+      "label": "Planes mejor equilibrados",
+      "desc": "Los nuevos planes reparten mejor las lecciones entre todas las unidades y dan más espacio a distintos tipos de actividades, también en los planes cortos."
     },
     "entry2": {
-      "label": "Una lectura más cómoda",
-      "desc": "Estrenamos una tipografía más clara y ajustes suaves de tamaño, espaciado y contraste para leer tus lecciones, explicaciones y conversaciones con más comodidad."
+      "label": "Tu test al terminar el plan",
+      "desc": "Al llegar al último día y completar las lecciones pendientes, podrás hacer el test de fin de nivel desde el panel o Mi plan y ver cuánto has aprendido."
     },
     "entry3": {
-      "label": "Más claridad en los detalles",
-      "desc": "Las traducciones y las ayudas se leen mejor. Nuestra web informativa y los correos también estrenan una presentación más legible."
+      "label": "Más claridad para seguir aprendiendo",
+      "desc": "Los resultados del test y sus recomendaciones ya están en tu idioma, con indicaciones más claras para dar el siguiente paso o repasar lo aprendido."
     },
     "entry4": {
       "label": "Una experiencia más fluida",
-      "desc": "Hemos corregido errores y añadido pequeñas mejoras para que FreeLingo sea más estable y agradable de usar."
+      "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }
   },
   "contact": {

@@ -24,7 +24,10 @@ import {
   ReviewPrompt,
   getReviewPromptDismissal,
 } from '@/components/reviews/ReviewPrompt'
-import { shouldShowUnitReviewPrompt } from '@/lib/review-prompt-triggers'
+import {
+  isPlanPositionComplete,
+  shouldShowUnitReviewPrompt,
+} from '@/lib/review-prompt-triggers'
 import { cn } from '@/lib/utils'
 import {
   annotateAnswer,
@@ -417,10 +420,7 @@ export default function LessonPage() {
           const nextUnitId = d.lessons?.find(
             (item: { unit_id?: string | null }) => item.unit_id
           )?.unit_id
-          const planComplete =
-            typeof d.progress_day === 'number' &&
-            typeof d.total_days === 'number' &&
-            d.progress_day >= d.total_days
+          const planComplete = isPlanPositionComplete(d)
           const unitCompleted =
             !!completedUnitId &&
             ((!!nextUnitId && nextUnitId !== completedUnitId) || planComplete)

@@ -78,6 +78,7 @@ async def test_get_today_lessons(client, test_user):
     assert data["progress_day"] == 0
     assert data["total_days"] == 48  # 12 weeks × 4 days
     assert data["pending_count"] == 0
+    assert data["completion"]["state"] == "in_progress"
     assert len(data["lessons"]) >= 0
 
 
@@ -536,6 +537,7 @@ async def test_today_returns_empty_when_plan_complete(client, test_user, db_sess
     assert data["lessons"] == []
     assert data["progress_day"] == total
     assert data["total_days"] == total
+    assert data["completion"]["state"] == "ready"
 
 
 @pytest.mark.asyncio

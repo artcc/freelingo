@@ -56,18 +56,6 @@ function computeSkillBreakdown(
   return map
 }
 
-const SKILL_LABELS: Record<string, string> = {
-  grammar: 'Grammar',
-  vocabulary: 'Vocabulary',
-  reading: 'Reading',
-}
-
-const SKILL_ICONS: Record<string, string> = {
-  grammar: 'G',
-  vocabulary: 'V',
-  reading: 'R',
-}
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function LevelTestPage() {
@@ -75,6 +63,15 @@ export default function LevelTestPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const planId = searchParams.get('plan')
+
+  const getSkillLabel = (skill: string): string => {
+    const labels: Record<string, string> = {
+      grammar: t('skills.grammar'),
+      vocabulary: t('skills.vocabulary'),
+      reading: t('skills.reading'),
+    }
+    return labels[skill] ?? skill
+  }
 
   // Bug #6 fix: gate loadQuestions until user confirms the start warning
   const [startConfirmed, setStartConfirmed] = useState(false)
@@ -103,9 +100,7 @@ export default function LevelTestPage() {
     // Bug #5 fix: validate planId before converting to number
     const planIdNum = Number(planId)
     if (!planId || !Number.isInteger(planIdNum) || planIdNum <= 0) {
-      setError(
-        'Invalid plan ID. Please access the level test from your plan page.'
-      )
+      setError(t('levelTest.invalidPlan'))
       setStep('error')
       return
     }
@@ -126,18 +121,16 @@ export default function LevelTestPage() {
         questions: LevelTestQuestion[]
       }
       if (!data.questions?.length) {
-        throw new Error('No questions received from the server.')
+        throw new Error(t('levelTest.noQuestions'))
       }
       setQuestions(data.questions)
       setCefrLevel(data.cefr_level)
       setStep('quiz')
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to load level test.'
-      )
+      setError(err instanceof Error ? err.message : t('levelTest.loadFailed'))
       setStep('error')
     }
-  }, [planId, startConfirmed])
+  }, [planId, startConfirmed, t])
 
   useEffect(() => {
     void loadQuestions()
@@ -200,7 +193,7 @@ export default function LevelTestPage() {
       setResult(data)
       setStep('result')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Submission failed.')
+      setError(err instanceof Error ? err.message : t('levelTest.submitFailed'))
       setStep('error')
     }
   }
@@ -245,7 +238,7 @@ export default function LevelTestPage() {
           <div className="border-fl-border flex items-center gap-2 border-b px-6 py-4">
             <span className="text-fl-label text-fl-muted-3">●</span>
             <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
-              Level Test
+              {t('levelTest.title')}
             </span>
           </div>
           <div className="space-y-6 p-8">
@@ -256,7 +249,7 @@ export default function LevelTestPage() {
               onClick={() => router.push('/plan')}
               className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg w-full border py-3 font-mono text-xs tracking-widest uppercase transition-colors"
             >
-              ← Back to Plan
+              ← {t('levelTest.result.back')}
             </button>
           </div>
         </div>
@@ -269,7 +262,7 @@ export default function LevelTestPage() {
     const breakdown = computeSkillBreakdown(questions, answers)
     const weakAreas = Object.entries(breakdown)
       .filter(([, v]) => v.total > 0 && v.correct / v.total < 0.6)
-      .map(([skill]) => SKILL_LABELS[skill] ?? skill)
+      .map(([skill]) => getSkillLabel(skill))
 
     const recConfig: Record<
       LevelTestResult['recommendation'],
@@ -283,26 +276,33 @@ export default function LevelTestPage() {
     > = {
       advance: {
         icon: '🎉',
-        label: `ADVANCE TO ${result.next_level ?? 'NEXT LEVEL'}`,
-        message: `You demonstrated solid ${cefrLevel} mastery. Your ${result.next_level ?? 'next-level'} programme is ready!`,
+        label: t('levelTest.advanceLabel', {
+          level: result.next_level ?? t('levelTest.nextLevelFallback'),
+        }),
+        message: t('levelTest.advanceMessage', {
+          level: cefrLevel,
+          next: result.next_level ?? t('levelTest.nextLevelFallback'),
+        }),
         nextAction: result.next_level ? '/assessment' : '/plan',
         nextLabel: result.next_level
-          ? `Start ${result.next_level} Programme →`
-          : 'Go to Plan',
+          ? `${t('retake')} →`
+          : t('levelTest.goToPlan'),
       },
       extend: {
         icon: '⚠',
-        label: '4-WEEK EXTENSION',
-        message: `Weak areas detected: ${weakAreas.join(', ') || 'Reading Comprehension'}. We recommend 4 extra weeks of focused practice.`,
+        label: t('levelTest.extendLabel'),
+        message: t('levelTest.extendMessage', {
+          areas: weakAreas.join(', ') || t('skills.reading'),
+        }),
         nextAction: '/plan',
-        nextLabel: 'Accept Extension →',
+        nextLabel: t('levelTest.reviewPlan'),
       },
       repeat: {
         icon: '↺',
-        label: `REPEAT ${cefrLevel}`,
-        message: `Score below 55%. Several core ${cefrLevel} competencies need reinforcement. A fresh plan has been prepared.`,
+        label: t('levelTest.repeatLabel', { level: cefrLevel }),
+        message: t('levelTest.repeatMessage', { level: cefrLevel }),
         nextAction: '/plan',
-        nextLabel: `Start New ${cefrLevel} Plan →`,
+        nextLabel: t('levelTest.reviewPlan'),
       },
     }
 
@@ -316,7 +316,7 @@ export default function LevelTestPage() {
             <div className="flex items-center gap-2">
               <span className="text-fl-label text-fl-muted-3">●</span>
               <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
-                {cefrLevel} Level Test — Results
+                {t('levelTest.resultsTitle', { level: cefrLevel })}
               </span>
             </div>
           </div>
@@ -325,14 +325,16 @@ export default function LevelTestPage() {
             {/* Score */}
             <div className="space-y-2 text-center">
               <p className="text-fl-label text-fl-muted-3 font-mono tracking-widest uppercase">
-                Final Score
+                {t('levelTest.finalScore')}
               </p>
               <p className="text-fl-fg font-mono text-7xl font-bold tracking-widest">
                 {pct}%
               </p>
               <p className="text-fl-muted-3 font-mono text-xs">
-                {answers.filter((a) => a.correct).length} / {questions.length}{' '}
-                correct
+                {t('levelTest.correctCount', {
+                  correct: answers.filter((a) => a.correct).length,
+                  total: questions.length,
+                })}
               </p>
             </div>
 
@@ -342,13 +344,14 @@ export default function LevelTestPage() {
                 const skillPct =
                   v.total > 0 ? Math.round((v.correct / v.total) * 100) : 0
                 const isWeak = skillPct < 60
+                const label = getSkillLabel(skill)
                 return (
                   <div key={skill} className="flex items-center gap-3">
                     <span className="text-fl-label text-fl-muted-3 w-6 text-center font-mono uppercase">
-                      {SKILL_ICONS[skill] ?? skill[0].toUpperCase()}
+                      {label[0]?.toUpperCase() ?? '?'}
                     </span>
                     <span className="text-fl-label text-fl-muted-2 w-24 font-mono tracking-widest uppercase">
-                      {SKILL_LABELS[skill] ?? skill}
+                      {label}
                     </span>
                     <div className="bg-fl-border h-1.5 flex-1">
                       <div
@@ -372,7 +375,7 @@ export default function LevelTestPage() {
               <div className="flex items-center gap-2">
                 <span className="text-xl">{rec.icon}</span>
                 <span className="text-fl-label text-fl-fg font-mono font-bold tracking-widest uppercase">
-                  Recommendation: {rec.label}
+                  {t('levelTest.result.recommendation')}: {rec.label}
                 </span>
               </div>
               <p className="text-fl-muted-2 font-mono text-xs leading-relaxed">
@@ -392,7 +395,7 @@ export default function LevelTestPage() {
                 onClick={() => router.push('/plan')}
                 className="border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg w-full border py-3 font-mono text-xs tracking-widest uppercase transition-colors"
               >
-                ← Back to Plan
+                ← {t('levelTest.result.back')}
               </button>
             </div>
           </div>
@@ -407,7 +410,7 @@ export default function LevelTestPage() {
   if (!q) return null
 
   const progress = (currentIndex / questions.length) * 100
-  const skillLabel = SKILL_LABELS[q.skill] ?? q.skill
+  const skillLabel = getSkillLabel(q.skill)
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-6">
@@ -418,7 +421,7 @@ export default function LevelTestPage() {
             <div className="flex items-center gap-2">
               <span className="text-fl-label text-fl-muted-3">●</span>
               <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
-                {cefrLevel} Level Test
+                {t('levelTest.quizTitle', { level: cefrLevel })}
               </span>
             </div>
             <span className="text-fl-label text-fl-muted-3 font-mono tracking-widest uppercase">
@@ -494,7 +497,7 @@ export default function LevelTestPage() {
               disabled={!selectedOption}
               className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Confirm Answer
+              {t('levelTest.confirm')}
             </button>
           ) : (
             <div className="space-y-3">
@@ -506,16 +509,16 @@ export default function LevelTestPage() {
                 }`}
               >
                 {answers.at(-1)?.correct
-                  ? '✓ Correct'
-                  : `✗ Incorrect — correct answer: ${q.correct}`}
+                  ? t('levelTest.correctAnswer')
+                  : t('levelTest.incorrectAnswer', { answer: q.correct })}
               </div>
               <button
                 onClick={handleNext}
                 className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
               >
                 {currentIndex + 1 >= questions.length
-                  ? 'Submit Test →'
-                  : 'Next Question →'}
+                  ? `${t('levelTest.submit')} →`
+                  : `${t('levelTest.nextQuestion')} →`}
               </button>
             </div>
           )}

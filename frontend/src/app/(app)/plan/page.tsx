@@ -77,6 +77,13 @@ interface CompetencyMap {
   [unitId: string]: number // 0–1
 }
 
+interface CompletionState {
+  state: 'in_progress' | 'ready' | 'taken'
+  score: number | null
+  recommendation: string | null
+  next_level: string | null
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function flattenLessons(plan: StudyPlan): Lesson[] {
@@ -129,11 +136,13 @@ export default function PlanPage() {
   const [lessonStates, setLessonStates] = useState<
     Record<string, Pick<Lesson, 'id' | 'completed' | 'action'>>
   >({})
+  const [completion, setCompletion] = useState<CompletionState | null>(null)
   const [units, setUnits] = useState<CurriculumUnit[]>([])
 
   const loadPlan = useCallback(async () => {
     setLoading(true)
     setError('')
+    setCompletion(null)
     try {
       const [planRes, compRes, todayRes, pendingRes, lessonsRes] =
         await Promise.all([
@@ -204,7 +213,9 @@ export default function PlanPage() {
       if (todayRes?.ok) {
         const todayData = (await todayRes.json()) as {
           lessons: TodayLesson[]
+          completion?: CompletionState
         }
+        setCompletion(todayData.completion ?? null)
         const nextLesson = todayData.lessons.find(
           (l) => l.id != null && !l.is_completed
         )
@@ -256,8 +267,9 @@ export default function PlanPage() {
   const byUnit = lessonsByUnit(allLessons)
   const currentUnitId = plan.current_unit
 
-  const allUnitsCompleted =
-    units.length > 0 && units.every((u) => (competencies[u.id] ?? 0) >= 0.8)
+  // The real level test unlocks when the learner reaches the plan's final
+  // position, as reported by the backend completion contract.
+  const levelTestReady = completion?.state === 'ready'
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
@@ -369,12 +381,12 @@ export default function PlanPage() {
             }
             status={{
               completed: plan.completion_test_taken,
-              active: allUnitsCompleted && !plan.completion_test_taken,
-              locked: !allUnitsCompleted,
+              active: levelTestReady && !plan.completion_test_taken,
+              locked: !levelTestReady && !plan.completion_test_taken,
               isLevelTest: true,
             }}
             onClick={() => {
-              if (allUnitsCompleted && !plan.completion_test_taken) {
+              if (levelTestReady && !plan.completion_test_taken) {
                 router.push(`/assessment/level-test?plan=${plan.id}`)
               }
             }}
@@ -422,7 +434,7 @@ export default function PlanPage() {
       )}
 
       {/* ── Level test banner ── */}
-      {allUnitsCompleted && !plan.completion_test_taken && (
+      {levelTestReady && !plan.completion_test_taken && (
         <LevelTestBanner planId={plan.id} level={level} />
       )}
 

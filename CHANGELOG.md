@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.15] - 2026-09-22
+
+### Changed
+
+- **More variety in short plans**: new study plans make better room for different activities, including writing and review where the curriculum and available lessons allow. Existing plans keep their schedules.
+
+### Fixed
+
+- **Better-balanced study plans**: lessons in new plans are spread more evenly across all units, in order, with the final slot reserved for the end-of-level test.
+- **A test to round off your plan**: Dashboard and My Plan now take you to the end-of-level test instead of an extra review lesson. It becomes available on the final plan day once earlier lessons are complete. Previous results are preserved, and completed tests no longer leave an old final lesson on your pending list.
+- **Clearer results and next steps**: test results, messages, and recommendations are now available in all ten interface languages. Guidance explains when to retake the assessment for the next level or return to My Plan to review what you've learned.
+- **Clearer plan setup**: plans that are too short to cover every unit now come with clearer minimum-duration guidance, including time for the final test. Invalid settings are caught before changing your plan.
+- Minor bug fixes and small improvements for a smoother everyday learning experience.
+
 ## [1.9.10] - 2026-09-15
 
 ### Added

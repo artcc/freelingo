@@ -1257,6 +1257,12 @@ async def test_complete_deactivates_previous_active_plans(
 # ═══════════════════════════════════════════════════════════════════════════════
 
 
+async def _reach_final_day(plan, db_session) -> None:
+    """Make the level test eligible: the plan must reach its final position."""
+    plan.progress_day = plan.duration_weeks * plan.days_per_week - 1
+    await db_session.commit()
+
+
 async def test_level_test_questions_requires_auth(client: AsyncClient):
     """GET /level-test/questions/{id} returns 401 without valid auth."""
     response = await client.get("/api/assessment/level-test/questions/1")
@@ -1321,6 +1327,121 @@ async def test_level_test_questions_wrong_user(client: AsyncClient, test_user, d
     assert response.status_code == 404
 
 
+async def test_level_test_questions_ineligible_403(
+    client: AsyncClient, test_user_with_plan, db_session
+):
+    """GET /level-test/questions/{id} refuses a learner before the final position."""
+    user, headers = test_user_with_plan
+
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+
+    plan = (
+        await db_session.execute(
+            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
+        )
+    ).scalar_one()
+    assert plan.progress_day == 0
+
+    response = await client.get(
+        f"/api/assessment/level-test/questions/{plan.id}",
+        headers=headers,
+    )
+    assert response.status_code == 403
+    assert "final day" in response.json()["detail"]
+
+
+async def test_level_test_questions_blocked_by_pending_lessons(
+    client: AsyncClient, test_user_with_plan, db_session
+):
+    """A lesson skipped from a passed day keeps the assessment locked."""
+    user, headers = test_user_with_plan
+
+    from sqlalchemy import select
+
+    from app.models.lesson import Lesson
+    from app.models.study_plan import StudyPlan
+
+    plan = (
+        await db_session.execute(
+            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
+        )
+    ).scalar_one()
+
+    await _reach_final_day(plan, db_session)
+    lesson = Lesson(
+        study_plan_id=plan.id,
+        title="Skipped Day 1",
+        lesson_type="grammar",
+        cefr_level=plan.cefr_level,
+        week_number=1,
+        day_number=1,
+        unit_id="a1_unit_1",
+        content={},
+        is_completed=False,
+    )
+    db_session.add(lesson)
+    await db_session.commit()
+
+    response = await client.get(
+        f"/api/assessment/level-test/questions/{plan.id}",
+        headers=headers,
+    )
+    assert response.status_code == 403
+    assert "pending lesson" in response.json()["detail"]
+
+    # Completing the pending lesson unlocks the assessment.
+    lesson.is_completed = True
+    await db_session.commit()
+
+    mock_questions = '{"questions": [{"id": "lt-001", "skill": "grammar", "difficulty": "A1", "question": "What is...?", "options": ["A", "B", "C", "D"], "correct": "B"}]}'  # noqa: E501
+
+    with patch(
+        "app.services.assessment.llm_adapter.chat",
+        return_value=mock_questions,
+    ):
+        response = await client.get(
+            f"/api/assessment/level-test/questions/{plan.id}",
+            headers=headers,
+        )
+    assert response.status_code == 200
+
+
+async def test_level_test_questions_allowed_for_an_existing_result(
+    client: AsyncClient, test_user_with_plan, db_session
+):
+    """A persisted result keeps the flow eligible even before the final position."""
+    user, headers = test_user_with_plan
+
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+
+    plan = (
+        await db_session.execute(
+            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
+        )
+    ).scalar_one()
+    plan.completion_test_taken = True
+    plan.completion_test_score = 0.6
+    plan.completion_test_recommendation = "extend"
+    await db_session.commit()
+
+    mock_questions = '{"questions": [{"id": "lt-001", "skill": "grammar", "difficulty": "A1", "question": "What is...?", "options": ["A", "B", "C", "D"], "correct": "B"}]}'  # noqa: E501
+
+    with patch(
+        "app.services.assessment.llm_adapter.chat",
+        return_value=mock_questions,
+    ):
+        response = await client.get(
+            f"/api/assessment/level-test/questions/{plan.id}",
+            headers=headers,
+        )
+    assert response.status_code == 200
+    assert response.json()["plan_id"] == plan.id
+
+
 async def test_level_test_questions_success(client: AsyncClient, test_user_with_plan, db_session):
     """GET /level-test/questions/{id} returns generated questions."""
     user, headers = test_user_with_plan
@@ -1335,6 +1456,8 @@ async def test_level_test_questions_success(client: AsyncClient, test_user_with_
             select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
         )
     ).scalar_one()
+
+    await _reach_final_day(plan, db_session)
 
     mock_questions = '{"questions": [{"id": "lt-001", "skill": "grammar", "difficulty": "A1", "question": "What is...?", "options": ["A", "B", "C", "D"], "correct": "B"}]}'  # noqa: E501
 
@@ -1370,6 +1493,8 @@ async def test_level_test_questions_handles_llm_timeout(
         )
     ).scalar_one()
 
+    await _reach_final_day(plan, db_session)
+
     with patch(
         "app.services.assessment.llm_adapter.chat",
         side_effect=LLMTimeoutError("timeout"),
@@ -1398,6 +1523,8 @@ async def test_level_test_questions_handles_llm_unavailable(
         )
     ).scalar_one()
 
+    await _reach_final_day(plan, db_session)
+
     with patch(
         "app.services.assessment.llm_adapter.chat",
         side_effect=LLMUnavailableError("unreachable"),
@@ -1425,6 +1552,8 @@ async def test_level_test_questions_handles_llm_generic_error(
             select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
         )
     ).scalar_one()
+
+    await _reach_final_day(plan, db_session)
 
     with patch(
         "app.services.assessment.llm_adapter.chat",
@@ -1463,6 +1592,123 @@ async def test_level_test_submit_plan_not_found(client: AsyncClient, test_user):
     assert response.status_code == 404
 
 
+async def test_level_test_submit_ineligible_403(
+    client: AsyncClient, test_user_with_plan, db_session
+):
+    """POST /level-test/submit refuses a learner before the final position."""
+    user, headers = test_user_with_plan
+
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+
+    plan = (
+        await db_session.execute(
+            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
+        )
+    ).scalar_one()
+
+    response = await client.post(
+        "/api/assessment/level-test/submit",
+        headers=headers,
+        json={
+            "plan_id": plan.id,
+            "answers": [
+                {"question_id": "q1", "skill": "grammar", "difficulty": "A1", "correct": True}
+            ],
+        },
+    )
+    assert response.status_code == 403
+    assert "final day" in response.json()["detail"]
+
+    await db_session.refresh(plan)
+    assert plan.completion_test_taken is False
+
+
+async def test_level_test_submit_blocked_by_pending_lessons(
+    client: AsyncClient, test_user_with_plan, db_session
+):
+    """POST /level-test/submit refuses a learner with skipped pending lessons."""
+    user, headers = test_user_with_plan
+
+    from sqlalchemy import select
+
+    from app.models.lesson import Lesson
+    from app.models.study_plan import StudyPlan
+
+    plan = (
+        await db_session.execute(
+            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
+        )
+    ).scalar_one()
+
+    await _reach_final_day(plan, db_session)
+    db_session.add(
+        Lesson(
+            study_plan_id=plan.id,
+            title="Skipped Day 1",
+            lesson_type="grammar",
+            cefr_level=plan.cefr_level,
+            week_number=1,
+            day_number=1,
+            unit_id="a1_unit_1",
+            content={},
+            is_completed=False,
+        )
+    )
+    await db_session.commit()
+
+    response = await client.post(
+        "/api/assessment/level-test/submit",
+        headers=headers,
+        json={
+            "plan_id": plan.id,
+            "answers": [
+                {"question_id": "q1", "skill": "grammar", "difficulty": "A1", "correct": True}
+            ],
+        },
+    )
+    assert response.status_code == 403
+    assert "pending lesson" in response.json()["detail"]
+
+    await db_session.refresh(plan)
+    assert plan.completion_test_taken is False
+
+
+async def test_level_test_submit_allowed_for_an_existing_result(
+    client: AsyncClient, test_user_with_plan, db_session
+):
+    """A persisted result keeps the flow eligible even before the final position."""
+    user, headers = test_user_with_plan
+
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+
+    plan = (
+        await db_session.execute(
+            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
+        )
+    ).scalar_one()
+    plan.completion_test_taken = True
+    plan.completion_test_score = 0.2
+    plan.completion_test_recommendation = "repeat"
+    await db_session.commit()
+
+    response = await client.post(
+        "/api/assessment/level-test/submit",
+        headers=headers,
+        json={
+            "plan_id": plan.id,
+            "answers": [
+                {"question_id": "q1", "skill": "grammar", "difficulty": "A1", "correct": False}
+            ],
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["recommendation"] == "repeat"
+
+
 async def test_level_test_submit_high_score_advance(
     client: AsyncClient, test_user_with_plan, db_session
 ):
@@ -1478,6 +1724,8 @@ async def test_level_test_submit_high_score_advance(
             select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
         )
     ).scalar_one()
+
+    await _reach_final_day(plan, db_session)
 
     # 4/5 A2 grammar correct = 0.8 grammar → score = 0.8 (other skills 0)
     # Weighted average: (0.8 + 0 + 0) / 3 = 0.267... wait that's not right.
@@ -1535,6 +1783,8 @@ async def test_level_test_submit_medium_score_extend(
         )
     ).scalar_one()
 
+    await _reach_final_day(plan, db_session)
+
     # 3/5 correct per skill = 0.6 → average = 0.6 → extend (>= 0.55 but < 0.75)
     answers = []
     for i in range(15):
@@ -1575,6 +1825,8 @@ async def test_level_test_submit_low_score_repeat(
             select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
         )
     ).scalar_one()
+
+    await _reach_final_day(plan, db_session)
 
     # 1/5 correct per skill = 0.2 → average = 0.2 → repeat (< 0.55)
     answers = []

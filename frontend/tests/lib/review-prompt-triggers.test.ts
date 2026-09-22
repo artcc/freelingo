@@ -3,6 +3,7 @@ import {
   REVIEW_PROMPT_DISMISS_COOLDOWN_MS,
   REVIEW_PROMPT_MAX_DISMISSALS,
   VOICE_REVIEW_PROMPT_MIN_SESSION_MS,
+  isPlanPositionComplete,
   shouldShowUnitReviewPrompt,
   shouldShowVoiceReviewPrompt,
 } from '@/lib/review-prompt-triggers'
@@ -83,5 +84,46 @@ describe('review prompt triggers', () => {
         true
       )
     ).toBe(false)
+  })
+})
+
+describe('plan position completion', () => {
+  it('treats the ready completion state as plan completion', () => {
+    expect(
+      isPlanPositionComplete({
+        completion: { state: 'ready' },
+        progress_day: 15,
+        total_days: 16,
+      })
+    ).toBe(true)
+  })
+
+  it('treats the taken completion state as plan completion', () => {
+    expect(
+      isPlanPositionComplete({
+        completion: { state: 'taken' },
+        progress_day: 16,
+        total_days: 16,
+      })
+    ).toBe(true)
+  })
+
+  it('trusts an in_progress state even at the final coordinate', () => {
+    expect(
+      isPlanPositionComplete({
+        completion: { state: 'in_progress' },
+        progress_day: 16,
+        total_days: 16,
+      })
+    ).toBe(false)
+  })
+
+  it('falls back to the legacy exhausted plan', () => {
+    expect(isPlanPositionComplete({ progress_day: 16, total_days: 16 })).toBe(
+      true
+    )
+    expect(isPlanPositionComplete({ progress_day: 15, total_days: 16 })).toBe(
+      false
+    )
   })
 })

@@ -9,10 +9,23 @@ All curriculum queries accept a ``target_language`` parameter (e.g. "en-GB",
 from __future__ import annotations
 
 import sys
+from typing import get_args
 
-from app.data._types import CEFRLevel, CurriculumUnit  # noqa: F401
+from app.data._types import CEFRLevel, CurriculumUnit, LessonType  # noqa: F401
 
 CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
+
+#: Unit id of the synthetic final slot reserved for the end-of-level assessment.
+COMPLETION_UNIT_ID = "completion-test"
+
+#: Legacy unit id used by plans generated before v1.7.0 for the same reserved
+#: final slot. Stored plans keep their schedule, so both ids are recognized.
+LEGACY_COMPLETION_UNIT_ID = "level-test"
+
+#: Every unit id that identifies the reserved end-of-level assessment slot.
+COMPLETION_UNIT_IDS = frozenset({COMPLETION_UNIT_ID, LEGACY_COMPLETION_UNIT_ID})
+
+_LESSON_TYPES: tuple[str, ...] = get_args(LessonType)
 
 _LANG_MODULES: dict[str, str] = {
     "en-GB": "app.data.en_GB.curriculum",
@@ -147,69 +160,156 @@ def get_curriculum_units(level: str, target_language: str = "en-GB") -> list:
     return curriculum.get(level, [])
 
 
+def _select_rotations(units: list[CurriculumUnit], quotas: list[int]) -> list[int]:
+    """Pick a cyclic rotation of each unit's ``lesson_types`` to fill its quota.
+
+    The selection maximises the number of distinct declared lesson types
+    represented across the whole plan, so a modality disappears only when no
+    rotation assignment can represent it. The search is exact over the seven
+    lesson types. Ties prefer types declared by fewer units, then the canonical
+    ``LessonType`` order, and finally keep the declared order for the earliest
+    units, so rotations land as late as possible in the plan.
+    """
+    declared: list[str] = []
+    owner_count: dict[str, int] = {}
+    for unit in units:
+        for lesson_type in dict.fromkeys(unit.lesson_types or ["grammar"]):
+            if lesson_type not in owner_count:
+                owner_count[lesson_type] = 0
+                declared.append(lesson_type)
+            owner_count[lesson_type] += 1
+
+    canonical = {lesson_type: index for index, lesson_type in enumerate(_LESSON_TYPES)}
+    priority = sorted(
+        declared,
+        key=lambda lesson_type: (
+            owner_count[lesson_type],
+            canonical.get(lesson_type, len(_LESSON_TYPES)),
+        ),
+    )
+    type_index = {lesson_type: index for index, lesson_type in enumerate(priority)}
+
+    # states maps the set of types already represented (a bitmask) to the
+    # lexicographically smallest rotation tuple reaching it.
+    states: dict[int, tuple[int, ...]] = {0: ()}
+    for unit, quota in zip(units, quotas, strict=True):
+        cycle = unit.lesson_types or ["grammar"]
+        length = len(cycle)
+        rotations = range(length) if 0 < quota < length else (0,)
+        candidates: list[tuple[int, int]] = []
+        for rotation in rotations:
+            mask = 0
+            for step in range(min(quota, length)):
+                mask |= 1 << type_index[cycle[(rotation + step) % length]]
+            candidates.append((rotation, mask))
+
+        next_states: dict[int, tuple[int, ...]] = {}
+        for mask, chosen in states.items():
+            for rotation, added in candidates:
+                combined = mask | added
+                candidate = chosen + (rotation,)
+                current = next_states.get(combined)
+                if current is None or candidate < current:
+                    next_states[combined] = candidate
+        states = next_states
+
+    best = max(
+        states,
+        key=lambda mask: (
+            mask.bit_count(),
+            tuple((mask >> index) & 1 for index in range(len(priority))),
+        ),
+    )
+    return list(states[best])
+
+
 def distribute_units(
     units: list[CurriculumUnit],
     total_weeks: int,
     days_per_week: int,
     target_language: str = "en-GB",
 ) -> list[dict]:
-    """Distribute curriculum units across lesson slots."""
+    """Distribute curriculum units across the plan's lesson slots.
+
+    The final grid coordinate is reserved for the level completion test. The
+    remaining ``total_weeks * days_per_week - 1`` teaching slots are split into
+    fair per-unit quotas: every curriculum unit receives
+    ``floor(teaching_slots / unit_count)`` slots and the remainder is handed out
+    one slot each to the earliest (prerequisite-first) units, so no unit differs
+    from another by more than one slot.
+
+    Each unit's quota is filled with a cyclic rotation of that unit's own
+    ``lesson_types``, chosen by ``_select_rotations`` so that every declared type
+    is represented plan-wide whenever a rotation assignment can represent it.
+    When the capacity cannot fit every type, the schedule keeps the maximum
+    possible coverage and is not described as complete modality coverage. A
+    quota of zero schedules no slot for that unit — callers are expected to
+    reject such plans before reaching here (see ``assert_plan_capacity`` in
+    ``services/study_plan_generator.py``).
+
+    The allocation is deterministic: identical inputs produce identical output.
+    """
     i18n = _I18N.get(target_language) or _I18N.get(target_language.split("-")[0], _I18N["en-GB"])
 
     total_slots = total_weeks * days_per_week
-    lesson_slots = max(1, total_slots - 1)
+    # Completion test always owns exactly the final slot; everything else teaches.
+    teaching_slots = total_slots - 1
+    test_slot = total_slots - 1
 
-    lesson_types_per_unit = [lt for u in units for lt in u.lesson_types]
-
-    if not lesson_types_per_unit:
+    # ── Fair unit quotas (issue #316) ────────────────────────────────
+    # Every unit gets a base share of the teaching slots; the remainder is
+    # spread one each across the earliest (prerequisite-first) units. No
+    # unit may accumulate surplus at another unit's expense.
+    n_units = len(units)
+    if n_units == 0:
         return []
+    base_quota, remainder = divmod(teaching_slots, n_units)
+    quotas = [base_quota + (1 if unit_index < remainder else 0) for unit_index in range(n_units)]
 
+    # ── Lay slots into the grid in curriculum order ──────────────────
+    # Each unit's quota is filled with a rotation of its own lesson_types so
+    # that no declared type disappears from the plan while another rotation
+    # could represent it (issue #334).
+    rotations = _select_rotations(units, quotas)
     slots: list[dict] = []
-    unit_index = 0
-    type_index = 0
-
-    for slot in range(lesson_slots):
-        unit = units[min(unit_index, len(units) - 1)]
-        lt_list = unit.lesson_types
-        lt = lt_list[type_index % len(lt_list)] if lt_list else "grammar"
-
-        slots.append(
-            {
-                "week": slot // days_per_week + 1,
-                "day": slot % days_per_week + 1,
-                "unit_id": unit.id,
-                "unit_title": unit.title,
-                "lesson_type": lt,
-                "title": i18n["lesson_title"].format(title=unit.title, n=type_index + 1),
-                "objectives": (unit.competency_checklist[:2] if unit.competency_checklist else []),
-                "estimated_minutes": 25,
-                "grammar_points": (unit.grammar_points[:2] if unit.grammar_points else []),
-                "vocabulary_set_ids": (
-                    unit.vocabulary_set_ids[:1] if unit.vocabulary_set_ids else []
-                ),
-            }
-        )
-
-        type_index += 1
-        if type_index % len(lt_list) == 0 and unit_index < len(units) - 1:
-            remaining_slots = lesson_slots - slot - 1
-            remaining_units = len(units) - unit_index - 1
-            if remaining_slots <= remaining_units * len(units[unit_index + 1].lesson_types):
-                unit_index += 1
-
-    last_unit = units[-1]
     level = units[0].level
+    for unit_index, unit in enumerate(units):
+        quota = quotas[unit_index]
+        rotation = rotations[unit_index]
+        lt_list = unit.lesson_types or ["grammar"]
+        cycle = len(lt_list)
+        gps = unit.grammar_points or []
+        checklist = unit.competency_checklist or []
+        vocab_ids = unit.vocabulary_set_ids or []
+        for per_unit_index in range(quota):
+            lt = lt_list[(rotation + per_unit_index) % cycle]
+            slot = len(slots)
+            slots.append(
+                {
+                    "week": slot // days_per_week + 1,
+                    "day": slot % days_per_week + 1,
+                    "unit_id": unit.id,
+                    "unit_title": unit.title,
+                    "lesson_type": lt,
+                    "title": i18n["lesson_title"].format(title=unit.title, n=per_unit_index + 1),
+                    "objectives": checklist[:2],
+                    "estimated_minutes": 25,
+                    "grammar_points": gps[:2],
+                    "vocabulary_set_ids": vocab_ids[:1],
+                }
+            )
+
     slots.append(
         {
-            "week": total_weeks,
-            "day": days_per_week,
-            "unit_id": "completion-test",
+            "week": test_slot // days_per_week + 1,
+            "day": test_slot % days_per_week + 1,
+            "unit_id": COMPLETION_UNIT_ID,
             "unit_title": i18n["test_unit_title"].format(level=level),
             "lesson_type": "review",
             "title": i18n["test_title"].format(level=level),
             "objectives": i18n["test_objectives"],
             "estimated_minutes": 45,
-            "grammar_points": last_unit.grammar_points,
+            "grammar_points": units[-1].grammar_points,
             "vocabulary_set_ids": [],
         }
     )
