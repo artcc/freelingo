@@ -96,7 +96,7 @@ describe('useConfigStore', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
-  it('keeps defaults when fetch fails', async () => {
+  it('keeps defaults and allows retry when fetch fails', async () => {
     vi.mocked(fetch).mockRejectedValueOnce(new Error('network error'))
 
     await useConfigStore.getState().load()
@@ -104,8 +104,37 @@ describe('useConfigStore', () => {
     expect(useConfigStore.getState().allowRegistration).toBe(false)
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
     expect(useConfigStore.getState().ttsProvider).toBe('local')
-    expect(useConfigStore.getState().loaded).toBe(true)
+    expect(useConfigStore.getState().loaded).toBe(false)
   })
+
+  it.each(['network error', 'invalid JSON'])(
+    'recovers registration and billing configuration after %s',
+    async (failure) => {
+      if (failure === 'network error') {
+        vi.mocked(fetch).mockRejectedValueOnce(new Error('offline'))
+      } else {
+        vi.mocked(fetch).mockResolvedValueOnce(new Response('invalid JSON'))
+      }
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ allow_registration: true, stripe_enabled: true })
+        )
+      )
+
+      await useConfigStore.getState().load()
+
+      expect(useConfigStore.getState().allowRegistration).toBe(false)
+      expect(useConfigStore.getState().stripeEnabled).toBe(false)
+      expect(useConfigStore.getState().loaded).toBe(false)
+
+      await useConfigStore.getState().load()
+
+      expect(fetch).toHaveBeenCalledTimes(2)
+      expect(useConfigStore.getState().allowRegistration).toBe(true)
+      expect(useConfigStore.getState().stripeEnabled).toBe(true)
+      expect(useConfigStore.getState().loaded).toBe(true)
+    }
+  )
 
   it('does not mark loaded when response is not ok (allows retry)', async () => {
     vi.mocked(fetch).mockResolvedValueOnce(

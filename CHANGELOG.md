@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Public signup controls now reflect `ALLOW_REGISTRATION`: closed registration shows a localized invite-only message and Login action, while invitation links retain access to the registration form. The existing flag is exposed through `/api/config`.
+- Configuration loading can retry after temporary network or invalid JSON failures, so registration and billing controls recover on subsequent navigation without requiring a full page reload.
 
 ## [1.9.15] - 2026-09-22
 
