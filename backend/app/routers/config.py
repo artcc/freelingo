@@ -43,6 +43,7 @@ async def get_config(
         }
 
     return {
+        "allow_registration": settings.ALLOW_REGISTRATION,
         "stripe_enabled": settings.STRIPE_ENABLED,
         "stripe_trial_days": settings.STRIPE_TRIAL_DAYS,
         "freemium_trial_enabled": settings.FREEMIUM_TRIAL_ENABLED,

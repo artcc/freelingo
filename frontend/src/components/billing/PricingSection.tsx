@@ -12,6 +12,7 @@ import { useAuthStore } from '@/store/auth'
 type BillingInterval = 'monthly' | 'yearly'
 
 interface PricingSectionProps {
+  allowRegistration: boolean
   stripeEnabled: boolean
   trialDays: number
   hasSession: boolean
@@ -22,6 +23,7 @@ interface PricingSectionProps {
 }
 
 export default function PricingSection({
+  allowRegistration,
   stripeEnabled,
   trialDays,
   hasSession,
@@ -31,6 +33,7 @@ export default function PricingSection({
   totalPriceYearly,
 }: PricingSectionProps) {
   const tBilling = useTranslations('billing')
+  const tLanding = useTranslations('landing')
   const [subscribed, setSubscribed] = useState<boolean | null>(
     hasSession ? null : false
   )
@@ -259,14 +262,18 @@ export default function PricingSection({
                 </button>
               ) : (
                 <Link
-                  href={plan.href}
+                  href={
+                    !hasSession && !allowRegistration ? '/login' : plan.href
+                  }
                   className={`inline-block px-6 py-2.5 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors ${
                     plan.isFree
                       ? 'border-fl-border-2 text-fl-muted-1 hover:text-fl-fg hover:border-fl-border border'
                       : 'bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90'
                   }`}
                 >
-                  {plan.cta}
+                  {!hasSession && !allowRegistration
+                    ? tLanding('signIn')
+                    : plan.cta}
                 </Link>
               )}
             </div>
@@ -349,10 +356,12 @@ export default function PricingSection({
           </button>
         ) : (
           <Link
-            href="/register?plan=yearly"
+            href={allowRegistration ? '/register?plan=yearly' : '/login'}
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-10 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
-            {tBilling(trialUsed ? 'ctaRegisterTrialUsed' : 'ctaRegister')}
+            {allowRegistration
+              ? tBilling(trialUsed ? 'ctaRegisterTrialUsed' : 'ctaRegister')
+              : tLanding('signIn')}
           </Link>
         )}
         {checkoutError && (

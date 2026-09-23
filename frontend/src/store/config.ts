@@ -12,6 +12,7 @@ export interface DashboardBanner {
 }
 
 interface ConfigStore {
+  allowRegistration: boolean
   stripeEnabled: boolean
   stripeTrialDays: number
   freemiumTrialEnabled: boolean
@@ -28,6 +29,7 @@ interface ConfigStore {
 }
 
 export const useConfigStore = create<ConfigStore>((set, get) => ({
+  allowRegistration: false,
   stripeEnabled: false,
   stripeTrialDays: 7,
   freemiumTrialEnabled: true,
@@ -47,6 +49,7 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
       if (!res.ok) return
       const data = await res.json()
       set({
+        allowRegistration: data.allow_registration === true,
         stripeEnabled: data.stripe_enabled ?? false,
         stripeTrialDays: data.stripe_trial_days ?? 7,
         freemiumTrialEnabled: data.freemium_trial_enabled ?? true,
@@ -61,7 +64,7 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
         loaded: true,
       })
     } catch {
-      // Non-fatal: keep defaults (stripe disabled)
+      // Non-fatal: keep conservative presentation defaults
       set({ loaded: true })
     }
   },

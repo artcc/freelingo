@@ -77,6 +77,7 @@ export default async function Home() {
   const tCommon = await getTranslations('common')
   const tBilling = await getTranslations('billing')
 
+  let allowRegistration = false
   let stripeEnabled = false
   let trialDays = 7
   let priceMonthly = 0.0
@@ -87,13 +88,16 @@ export default async function Home() {
   try {
     const backendUrl = process.env.BACKEND_URL || 'http://backend:8000'
     const [configRes, reviewsRes] = await Promise.all([
+      // Landing CTAs can lag registration changes by the existing one-hour cache.
+      // The backend still enforces ALLOW_REGISTRATION on every signup request.
       fetch(`${backendUrl}/api/config`, { next: { revalidate: 3600 } }),
       fetch(`${backendUrl}/api/reviews/public?limit=100`, {
         next: { revalidate: 300 },
-      }),
+      }).catch(() => null),
     ])
     if (configRes.ok) {
       const cfg = await configRes.json()
+      allowRegistration = cfg.allow_registration === true
       stripeEnabled = cfg.stripe_enabled ?? false
       trialDays = cfg.stripe_trial_days ?? 7
       priceMonthly = cfg.price_monthly ?? 0.0
@@ -101,7 +105,7 @@ export default async function Home() {
       totalPriceMonthly = cfg.total_price_monthly ?? 0.0
       totalPriceYearly = cfg.total_price_yearly ?? 0.0
     }
-    if (reviewsRes.ok) {
+    if (reviewsRes?.ok) {
       reviews = await reviewsRes.json()
     }
   } catch {
@@ -146,10 +150,20 @@ export default async function Home() {
         </div>
         <div className="flex flex-col items-center gap-3 sm:flex-row">
           <Link
-            href={hasSession ? '/dashboard' : '/register'}
+            href={
+              hasSession
+                ? '/dashboard'
+                : allowRegistration
+                  ? '/register'
+                  : '/login'
+            }
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-8 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
-            {hasSession ? t('dashboard') : tCommon('start')}
+            {hasSession
+              ? t('dashboard')
+              : allowRegistration
+                ? tCommon('start')
+                : t('signIn')}
           </Link>
           <a
             href="#features"
@@ -284,6 +298,7 @@ export default async function Home() {
       <ScrollReveal>
         <div id="pricing" className="scroll-mt-16">
           <PricingSection
+            allowRegistration={allowRegistration}
             stripeEnabled={stripeEnabled}
             trialDays={trialDays}
             hasSession={hasSession}

@@ -6,6 +6,7 @@ describe('useConfigStore', () => {
 
   beforeEach(() => {
     useConfigStore.setState({
+      allowRegistration: false,
       stripeEnabled: false,
       stripeTrialDays: 7,
       freemiumTrialEnabled: true,
@@ -27,6 +28,7 @@ describe('useConfigStore', () => {
     vi.mocked(fetch).mockResolvedValueOnce(
       new Response(
         JSON.stringify({
+          allow_registration: true,
           stripe_enabled: true,
           stripe_trial_days: 14,
           tts_provider: 'openai',
@@ -46,6 +48,7 @@ describe('useConfigStore', () => {
 
     await useConfigStore.getState().load()
 
+    expect(useConfigStore.getState().allowRegistration).toBe(true)
     expect(useConfigStore.getState().stripeEnabled).toBe(true)
     expect(useConfigStore.getState().stripeTrialDays).toBe(14)
     expect(useConfigStore.getState().ttsProvider).toBe('openai')
@@ -54,6 +57,29 @@ describe('useConfigStore', () => {
     expect(useConfigStore.getState().freemiumTrialEnabled).toBe(false)
     expect(useConfigStore.getState().dashboardBanner?.revision).toBe(3)
     expect(useConfigStore.getState().loaded).toBe(true)
+  })
+
+  it('keeps signup closed until configuration arrives', async () => {
+    let resolveConfig!: (response: Response) => void
+    vi.mocked(fetch).mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveConfig = resolve
+      })
+    )
+    const loading = useConfigStore.getState().load()
+    expect(useConfigStore.getState().allowRegistration).toBe(false)
+    resolveConfig(new Response(JSON.stringify({ allow_registration: true })))
+    await loading
+    expect(useConfigStore.getState().allowRegistration).toBe(true)
+  })
+
+  it('loads closed registration even if the previous state allowed it', async () => {
+    useConfigStore.setState({ allowRegistration: true })
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(JSON.stringify({ allow_registration: false }))
+    )
+    await useConfigStore.getState().load()
+    expect(useConfigStore.getState().allowRegistration).toBe(false)
   })
 
   it('does not fetch twice (idempotency)', async () => {
@@ -75,6 +101,7 @@ describe('useConfigStore', () => {
 
     await useConfigStore.getState().load()
 
+    expect(useConfigStore.getState().allowRegistration).toBe(false)
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
     expect(useConfigStore.getState().ttsProvider).toBe('local')
     expect(useConfigStore.getState().loaded).toBe(true)
@@ -87,6 +114,7 @@ describe('useConfigStore', () => {
 
     await useConfigStore.getState().load()
 
+    expect(useConfigStore.getState().allowRegistration).toBe(false)
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
     expect(useConfigStore.getState().loaded).toBe(false)
   })
@@ -101,6 +129,7 @@ describe('useConfigStore', () => {
 
     await useConfigStore.getState().load()
 
+    expect(useConfigStore.getState().allowRegistration).toBe(false)
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
     expect(useConfigStore.getState().stripeTrialDays).toBe(7)
     expect(useConfigStore.getState().ttsProvider).toBe('local')

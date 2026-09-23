@@ -31,7 +31,15 @@ offer assessment rather than inventing a plan or silently selecting another lang
 ## Authentication and session
 
 Public registration is controlled by `ALLOW_REGISTRATION`. A valid single-use invitation bypasses a
-closed public-registration gate. Email-domain blocking runs before user creation. When enabled,
+closed public-registration gate. The public config flag `allow_registration` reflects this setting.
+When false, public signup actions lead to Login or are hidden, and `/register` without a nonempty
+`invite` query parameter shows the localized closed-registration message and a Login action. Any
+supplied invite opens the existing form; only the backend validates and consumes the token. Legal
+page links preserve the supplied invite so reading the terms or privacy policy does not lose it.
+When true, the existing public signup journey and pricing plan selection remain available.
+Authenticated dashboard and checkout actions do not depend on this flag.
+
+Email-domain blocking runs before user creation. When enabled,
 `FIRST_USER_IS_ADMIN` assigns the first registered account the administrator role.
 
 Registration accepts account data and optional target language, creates the user, returns an access
@@ -185,12 +193,16 @@ Target-language metadata and typography are specified separately from UI localiz
 ## Runtime configuration
 
 Backend `Settings` and environment variables are private configuration. `/api/config` exposes only
-presentation-safe runtime data such as billing flags/prices, freemium trial state, TTS presentation,
-maintenance state, and active announcement. Available target-language codes come from
-`/api/languages`, not public config.
+presentation-safe runtime data such as public-registration availability, billing flags/prices,
+freemium trial state, TTS presentation, maintenance state, and active announcement. Available
+target-language codes come from `/api/languages`, not public config.
 
-The frontend config store loads runtime state with conservative presentation defaults. Client flags
-can be stale and never authorize an operation; backend dependencies remain authoritative.
+The frontend config store loads runtime state with conservative presentation defaults, including
+`allowRegistration=false` until the backend explicitly enables it. Registration without an invite
+shows loading while its config request is pending; failed requests or missing flags keep the form
+closed. Login remains available, and supplied invites do not wait for config. The landing page retains
+its one-hour config revalidation, so its signup CTAs can lag a setting change. Client flags can be
+stale and never authorize an operation; backend dependencies remain authoritative.
 
 Redis supports session rotation, invitations, rate limiting, quotas, and runtime operational state.
 

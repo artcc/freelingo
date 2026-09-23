@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -8,6 +8,8 @@ import { useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
+import { PageLoading } from '@/components/ui/page-loading'
 
 const LANGUAGES = [
   'en',
@@ -358,14 +360,22 @@ function RegisterForm() {
               >
                 {t('termsAccept')}{' '}
                 <a
-                  href="/terms?from=register"
+                  href={
+                    invite
+                      ? `/terms?from=register&invite=${encodeURIComponent(invite)}`
+                      : '/terms?from=register'
+                  }
                   className="text-fl-muted-1 hover:text-fl-fg underline underline-offset-2 transition-colors"
                 >
                   {t('termsLink')}
                 </a>{' '}
                 {t('andWord')}{' '}
                 <a
-                  href="/privacy?from=register"
+                  href={
+                    invite
+                      ? `/privacy?from=register&invite=${encodeURIComponent(invite)}`
+                      : '/privacy?from=register'
+                  }
                   className="text-fl-muted-1 hover:text-fl-fg underline underline-offset-2 transition-colors"
                 >
                   {t('privacyLink')}
@@ -423,10 +433,66 @@ function RegisterForm() {
   )
 }
 
+function RegistrationGate() {
+  const t = useTranslations('auth.register')
+  const tCommon = useTranslations('common')
+  const invite = useSearchParams().get('invite')
+  const allowRegistration = useConfigStore((s) => s.allowRegistration)
+  const loadConfig = useConfigStore((s) => s.load)
+  const [configLoading, setConfigLoading] = useState(true)
+
+  useEffect(() => {
+    void loadConfig().finally(() => setConfigLoading(false))
+  }, [loadConfig])
+
+  // Token validity is checked only by the backend when the form is submitted.
+  if (invite || allowRegistration) return <RegisterForm />
+  if (configLoading) return <PageLoading minHeight="min-h-screen" />
+
+  return (
+    <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-10 flex flex-col items-center">
+          <Image
+            src="/logo.png"
+            alt="FreeLingo"
+            width={100}
+            height={100}
+            className="mb-4"
+          />
+          <h1 className="text-fl-fg font-code text-xl font-bold tracking-widest uppercase">
+            FreeLingo
+          </h1>
+          <p className="text-fl-caption text-fl-muted-2 mt-1 font-mono tracking-widest uppercase">
+            {tCommon('tagline')}
+          </p>
+        </div>
+        <div className="border-fl-border bg-fl-surface border p-8">
+          <div className="border-fl-border mb-6 flex items-center gap-2 border-b pb-4">
+            <span className="text-fl-label text-fl-muted-2">●</span>
+            <span className="text-fl-muted-2 font-mono text-xs tracking-widest uppercase">
+              {t('title')}
+            </span>
+          </div>
+          <p className="border-fl-border bg-fl-bg text-fl-muted-1 mb-5 border px-4 py-4 text-center font-mono text-xs leading-relaxed">
+            {t('registrationClosed')}
+          </p>
+          <Link
+            href="/login"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block py-3 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors"
+          >
+            {t('login')}
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function RegisterPage() {
   return (
     <Suspense>
-      <RegisterForm />
+      <RegistrationGate />
     </Suspense>
   )
 }
