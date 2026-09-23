@@ -79,7 +79,7 @@ async def register(
         email_domain = data.email.split("@")[-1].lower()
         if email_domain in [d.lower() for d in settings.BLOCKED_EMAIL_DOMAINS]:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="Email domain not allowed",
             )
 

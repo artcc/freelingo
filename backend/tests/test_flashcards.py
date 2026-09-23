@@ -795,6 +795,8 @@ async def test_from_word_deleted_before_promotion_continues(
             .execution_options(synchronize_session=False)
         )
         await db.commit()
+        # Keep the stale reference without an identity-map collision if SQLite reuses its ID.
+        db.expunge(existing)
         return await respond(db, existing)
 
     async def lookup(**kwargs):
