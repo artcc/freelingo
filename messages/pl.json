@@ -1295,7 +1295,7 @@
     "saveFailed": "Nie udało się zapisać preferencji",
     "goals": {
       "title": "Twoje cele nauki",
-      "subtitle": "Do czego chcesz używać angielskiego? Zaznacz wszystkie, które dotyczą Ciebie.",
+      "subtitle": "Język: {language}. Do czego chcesz go używać? Zaznacz wszystkie cele, które Ci odpowiadają.",
       "skip": "Pominąć",
       "travel": "Podróże i turystyka",
       "work": "Praca i kariera",

@@ -116,6 +116,11 @@ Client state is split across auth, config, freemium, language, loading, progress
 The loading store uses a request counter and completion state; API calls through `apiFetch` participate
 automatically.
 
+The shared config store caches a successful `/api/config` response. Network, HTTP, and JSON parsing
+failures preserve the current values without marking the configuration as loaded, allowing the next
+`load()` call to retry. Public registration remains closed by default until configuration enables it;
+invitation forms remain available independently of configuration loading.
+
 Theme supports system, dark, and light modes and is applied before first paint from persisted
 preference.
 

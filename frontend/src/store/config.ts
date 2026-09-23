@@ -64,8 +64,7 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
         loaded: true,
       })
     } catch {
-      // Non-fatal: keep conservative presentation defaults
-      set({ loaded: true })
+      // Non-fatal: keep conservative defaults and allow the next load to retry.
     }
   },
 }))
