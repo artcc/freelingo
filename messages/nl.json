@@ -1295,7 +1295,7 @@
     "saveFailed": "Opslaan van voorkeuren mislukt",
     "goals": {
       "title": "Jouw leerdoelen",
-      "subtitle": "Waarvoor wil je Engels gebruiken? Selecteer alles wat van toepassing is.",
+      "subtitle": "Taal: {language}. Waarvoor wil je deze taal gebruiken? Selecteer alle doelen die van toepassing zijn.",
       "skip": "Overslaan",
       "travel": "Reizen en toerisme",
       "work": "Werk en carrière",

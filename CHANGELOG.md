@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Onboarding learning goals now name the selected language in all ten interface languages, with natural wording and a safe display fallback for unrecognized language codes.
 - Public signup controls now reflect `ALLOW_REGISTRATION`: closed registration shows a localized invite-only message and Login action, while invitation links retain access to the registration form. The existing flag is exposed through `/api/config`.
 - Configuration loading can retry after temporary network or invalid JSON failures, so registration and billing controls recover on subsequent navigation without requiring a full page reload.
 - Blocked email-domain registration uses the current HTTP 422 status constant, avoiding the deprecated Starlette alias while preserving the response code and message.

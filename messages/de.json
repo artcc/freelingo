@@ -1295,7 +1295,7 @@
     "saveFailed": "Einstellungen konnten nicht gespeichert werden",
     "goals": {
       "title": "Deine Lernziele",
-      "subtitle": "Wozu möchtest du Englisch nutzen? Wähle alles Zutreffende.",
+      "subtitle": "Sprache: {language}. Wofür möchtest du sie nutzen? Wähle alle zutreffenden Ziele aus.",
       "skip": "Überspringen",
       "travel": "Reisen & Tourismus",
       "work": "Beruf & Karriere",

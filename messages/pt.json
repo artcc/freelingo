@@ -1295,7 +1295,7 @@
     "saveFailed": "Falha ao salvar as preferências",
     "goals": {
       "title": "Seus objetivos de aprendizado",
-      "subtitle": "Para quê você quer usar o inglês? Selecione tudo que se aplica.",
+      "subtitle": "Idioma: {language}. Para que você quer usá-lo? Selecione todos os objetivos que se aplicam.",
       "skip": "Pular",
       "travel": "Viagens e turismo",
       "work": "Trabalho e carreira",
