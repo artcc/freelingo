@@ -17,7 +17,7 @@ Most REST endpoints are prefixed under `/api`. The public health check is at `/h
 
 ## Config — `/api/config`
 
-- **GET `/api/config`** — Rate limit: 60/min. Public runtime configuration flags for the frontend. Returns non-sensitive values including Stripe enablement/prices, TTS provider/voice, `maintenance_mode`, `freemium_trial_enabled`, and `dashboard_banner`. The banner field is `null` when no active singleton exists; otherwise it is `{revision, translations}` and omits admin-only source locale, active state, and timestamps.
+- **GET `/api/config`** — Rate limit: 60/min. Public runtime configuration flags for the frontend. Returns non-sensitive values including `allow_registration` (boolean, from `settings.ALLOW_REGISTRATION`), Stripe enablement/prices, TTS provider/voice, `maintenance_mode`, `freemium_trial_enabled`, and `dashboard_banner`. The banner field is `null` when no active singleton exists; otherwise it is `{revision, translations}` and omits admin-only source locale, active state, and timestamps.
 
 ---
 

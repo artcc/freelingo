@@ -691,3 +691,64 @@ async def test_register_sets_freemium_trial(client):
     body = me.json()
     assert body["freemium_trial_used"] is True
     assert body["freemium_trial_ends_at"] is not None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("allow_registration", [True, False])
+async def test_config_exposes_registration_setting(client, allow_registration):
+    from app.core.config import settings
+
+    with patch.object(settings, "ALLOW_REGISTRATION", allow_registration):
+        response = await client.get("/api/config")
+
+    assert response.status_code == 200
+    assert response.json()["allow_registration"] is allow_registration
+
+
+@pytest.mark.asyncio
+async def test_register_when_closed_with_single_use_invite(client, admin_user):
+    from app.core.config import settings
+
+    _, headers = admin_user
+    invite_response = await client.post("/api/admin/invite", headers=headers)
+    assert invite_response.status_code == 200
+    token = invite_response.json()["invite_url"].split("invite=")[1]
+    account = {
+        "username": "invited",
+        "email": "invited@test.com",
+        "password": "Test1234!@",
+        "native_language": "en",
+        "invite_token": token,
+    }
+    with patch.object(settings, "ALLOW_REGISTRATION", False):
+        response = await client.post("/api/auth/register", json=account)
+        assert response.status_code == 200
+        assert "access_token" in response.json()
+        assert "refresh_token" in response.cookies
+
+        # A second account cannot reuse the consumed invitation.
+        response = await client.post(
+            "/api/auth/register",
+            json={**account, "username": "another", "email": "another@test.com"},
+        )
+        assert response.status_code == 403
+        assert response.json()["detail"] == "Invalid or expired invite"
+
+
+@pytest.mark.asyncio
+async def test_register_when_closed_with_invalid_invite(client):
+    from app.core.config import settings
+
+    with patch.object(settings, "ALLOW_REGISTRATION", False):
+        response = await client.post(
+            "/api/auth/register",
+            json={
+                "username": "uninvited",
+                "email": "uninvited@test.com",
+                "password": "Test1234!@",
+                "native_language": "en",
+                "invite_token": "unknown-token",
+            },
+        )
+    assert response.status_code == 403
+    assert response.json()["detail"] == "Invalid or expired invite"

@@ -389,41 +389,45 @@ describe('billing paywall UI', () => {
     )
   })
 
-  it('starts Checkout directly from landing pricing when the user has a session', async () => {
-    mockLandingSubscriptionState.mockResolvedValueOnce({
-      subscribed: false,
-      trialUsed: false,
-    })
-    mockApiFetch.mockResolvedValueOnce(
-      jsonResponse({ url: 'https://checkout.stripe.com/pay/monthly' })
-    )
-
-    render(
-      <PricingSection
-        stripeEnabled={true}
-        trialDays={7}
-        hasSession={true}
-        priceMonthly={9.99}
-        priceYearly={99.99}
-        totalPriceMonthly={119.88}
-        totalPriceYearly={99.99}
-      />
-    )
-
-    await waitFor(() =>
-      expect(screen.getAllByText('ctaRegister')).toHaveLength(3)
-    )
-    fireEvent.click(screen.getAllByText('ctaRegister')[0])
-
-    await waitFor(() =>
-      expect(mockApiFetch).toHaveBeenCalledWith('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'monthly' }),
+  it.each([true, false])(
+    'starts Checkout directly with a session and registration=%s',
+    async (allowRegistration) => {
+      mockLandingSubscriptionState.mockResolvedValueOnce({
+        subscribed: false,
+        trialUsed: false,
       })
-    )
-    expect(window.location.assign).toHaveBeenCalledWith(
-      'https://checkout.stripe.com/pay/monthly'
-    )
-  })
+      mockApiFetch.mockResolvedValueOnce(
+        jsonResponse({ url: 'https://checkout.stripe.com/pay/monthly' })
+      )
+
+      render(
+        <PricingSection
+          allowRegistration={allowRegistration}
+          stripeEnabled={true}
+          trialDays={7}
+          hasSession={true}
+          priceMonthly={9.99}
+          priceYearly={99.99}
+          totalPriceMonthly={119.88}
+          totalPriceYearly={99.99}
+        />
+      )
+
+      await waitFor(() =>
+        expect(screen.getAllByText('ctaRegister')).toHaveLength(3)
+      )
+      fireEvent.click(screen.getAllByText('ctaRegister')[0])
+
+      await waitFor(() =>
+        expect(mockApiFetch).toHaveBeenCalledWith('/api/billing/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan: 'monthly' }),
+        })
+      )
+      expect(window.location.assign).toHaveBeenCalledWith(
+        'https://checkout.stripe.com/pay/monthly'
+      )
+    }
+  )
 })
