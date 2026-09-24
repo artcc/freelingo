@@ -20,6 +20,7 @@ vi.mock('@ricky0123/vad-react', () => ({
   },
 }))
 vi.mock('next-intl', () => ({
+  useLocale: () => 'en',
   useTranslations: () => Object.assign((key: string) => key, { raw: () => [] }),
 }))
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }))

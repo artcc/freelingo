@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useMicVAD } from '@ricky0123/vad-react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useAuthStore } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
@@ -162,13 +162,16 @@ function QuotaPill({
 function TrialPremiumCta() {
   const t = useTranslations('billing')
   const tConversation = useTranslations('conversation')
+  const locale = useLocale()
   const router = useRouter()
   const priceMonthly = useConfigStore((s) => s.priceMonthly)
   const priceYearly = useConfigStore((s) => s.priceYearly)
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [error, setError] = useState<string | null>(null)
   const yearlyCta = splitYearlyCta(
-    t('planYearly', { price: String(priceYearly) })
+    t('planYearly', {
+      price: new Intl.NumberFormat(locale).format(priceYearly),
+    })
   )
 
   async function handleCheckout(interval: BillingInterval) {
@@ -229,7 +232,9 @@ function TrialPremiumCta() {
         >
           {loading === 'monthly'
             ? '...'
-            : t('planMonthly', { price: String(priceMonthly) })}
+            : t('planMonthly', {
+                price: new Intl.NumberFormat(locale).format(priceMonthly),
+              })}
         </button>
       </div>
       {error && (

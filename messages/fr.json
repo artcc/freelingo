@@ -54,6 +54,7 @@
   "common": {
     "loading": "Chargement...",
     "error": "Erreur",
+    "errorMessage": "Une erreur s'est produite. Veuillez réessayer.",
     "save": "Sauvegarder",
     "saving": "Sauvegarde...",
     "cancel": "Annuler",
@@ -827,7 +828,7 @@
     "subtitle": "Vocabulaire",
     "all": "Tous",
     "searchPlaceholder": "Rechercher des ensembles...",
-    "sets": "ensembles",
+    "sets": "{count, plural, one {# ensemble} other {# ensembles}}",
     "words": "mots",
     "addAll": "Ajouter les {count} en fiches",
     "adding": "Ajout...",

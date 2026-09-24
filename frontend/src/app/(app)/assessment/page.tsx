@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useLanguageStore } from '@/store/language'
 import { isSubscribed, useAuthStore } from '@/store/auth'
@@ -87,6 +87,7 @@ function adjustLevel(current: CEFRLevel, direction: 'up' | 'down'): CEFRLevel {
 export default function AssessmentPage() {
   const t = useTranslations('assessment')
   const tCommon = useTranslations('common')
+  const locale = useLocale()
   const router = useRouter()
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const user = useAuthStore((s) => s.user)
@@ -380,7 +381,7 @@ export default function AssessmentPage() {
   // ── Existing plan ─────────────────────────────────────────────────────────
   if (step === 'existing' && existingPlan) {
     const assessedDate = new Date(existingPlan.created_at).toLocaleDateString(
-      undefined,
+      locale,
       {
         year: 'numeric',
         month: 'long',

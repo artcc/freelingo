@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useLanguageStore } from '@/store/language'
 import {
   getLanguageByCode,
@@ -16,6 +16,7 @@ import { PageLoading } from '@/components/ui/page-loading'
 import type { UserLanguageInfo } from '@/store/language'
 
 export default function MyLanguagesPage() {
+  const locale = useLocale()
   const t = useTranslations('languages')
   const tTarget = useTranslations('targetLanguages')
   const tSettings = useTranslations('settings')
@@ -207,7 +208,8 @@ export default function MyLanguagesPage() {
                       {progress && (
                         <>
                           <span>
-                            {t('xpLabel')}: {progress.total_xp.toLocaleString()}
+                            {t('xpLabel')}:{' '}
+                            {progress.total_xp.toLocaleString(locale)}
                           </span>
                           <span>
                             {t('streakLabel')}: {progress.current_streak}d

@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
@@ -59,8 +59,8 @@ const STATUS_STYLES: Record<string, string> = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
+function formatDate(iso: string, locale: string): string {
+  return new Date(iso).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -258,6 +258,7 @@ function DetailView({
   onEntryDeleted,
 }: DetailViewProps) {
   const t = useTranslations('feedback')
+  const locale = useLocale()
   const [entry, setEntry] = useState(initialEntry)
   const [comments, setComments] = useState<FeedbackComment[]>([])
   const [commentBody, setCommentBody] = useState('')
@@ -375,7 +376,7 @@ function DetailView({
                 {t('by')} {entry.author.display_name}
               </span>
               <AdminAuthorBadge role={entry.author.role} />
-              <span>· {formatDate(entry.created_at)}</span>
+              <span>· {formatDate(entry.created_at, locale)}</span>
             </span>
             {/* Vote button — only for features */}
             {entry.type === 'feature' && (
@@ -416,7 +417,7 @@ function DetailView({
                   <span className="text-fl-hint text-fl-muted-2 inline-flex flex-wrap items-center gap-x-1 font-mono">
                     <span>{c.author.display_name}</span>
                     <AdminAuthorBadge role={c.author.role} />
-                    <span>· {formatDate(c.created_at)}</span>
+                    <span>· {formatDate(c.created_at, locale)}</span>
                   </span>
                   {currentUserId === c.author.id && (
                     <button
@@ -496,6 +497,7 @@ function DetailView({
 
 export default function FeedbackPage() {
   const t = useTranslations('feedback')
+  const locale = useLocale()
   const currentUserId = useAuthStore((s) => s.user?.id)
   const isAdmin = useAuthStore((s) => s.user?.role === 'admin')
 
@@ -810,7 +812,7 @@ export default function FeedbackPage() {
                           {t('by')} {entry.author.display_name}
                         </span>
                         <AdminAuthorBadge role={entry.author.role} />
-                        <span>· {formatDate(entry.created_at)}</span>
+                        <span>· {formatDate(entry.created_at, locale)}</span>
                       </span>
                       {entry.comment_count > 0 && (
                         <span className="text-fl-hint text-fl-muted-4 font-mono">

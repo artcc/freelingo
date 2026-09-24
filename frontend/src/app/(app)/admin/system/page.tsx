@@ -310,9 +310,11 @@ export default function AdminSystemPage() {
                 </span>
                 <select
                   value={sourceLocale}
-                  onChange={(event) =>
-                    setSourceLocale(event.target.value as BannerLocale)
-                  }
+                  onChange={(event) => {
+                    const locale = event.target.value as BannerLocale
+                    setSourceLocale(locale)
+                    setSource({ ...translations[locale] })
+                  }}
                   className="border-fl-border bg-fl-bg text-fl-fg w-full border px-3 py-2"
                 >
                   {BANNER_LOCALES.map((locale) => (

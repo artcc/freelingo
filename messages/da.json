@@ -54,6 +54,7 @@
   "common": {
     "loading": "Indlæser...",
     "error": "Fejl",
+    "errorMessage": "Noget gik galt. Prøv igen.",
     "save": "Gem ændringer",
     "saving": "Gemmer...",
     "cancel": "Annuller",
@@ -827,7 +828,7 @@
     "subtitle": "Ordforråd",
     "all": "Alle",
     "searchPlaceholder": "Søg efter ordsamlinger...",
-    "sets": "samlinger",
+    "sets": "{count, plural, one {# samling} other {# samlinger}}",
     "words": "ord",
     "addAll": "Tilføj alle {count} som flashcards",
     "adding": "Tilføjer...",

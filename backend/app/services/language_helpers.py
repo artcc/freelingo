@@ -437,7 +437,7 @@ def voice_session_title(native_language: str) -> str:
         month_name = months[now.month - 1]
         if native_language in ("es", "pt"):
             return f"{label} — {now.day} de {month_name} de {now.year}"
-        if native_language in ("da", "fi"):
+        if native_language in ("de", "da", "fi"):
             return f"{label} — {now.day}. {month_name} {now.year}"
         if native_language == "hr":
             return f"{label} — {now.day}. {month_name} {now.year}."

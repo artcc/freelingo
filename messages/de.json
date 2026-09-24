@@ -54,6 +54,7 @@
   "common": {
     "loading": "Laden...",
     "error": "Fehler",
+    "errorMessage": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "save": "Änderungen speichern",
     "saving": "Wird gespeichert...",
     "cancel": "Abbrechen",
@@ -827,7 +828,7 @@
     "subtitle": "Vokabular",
     "all": "Alle",
     "searchPlaceholder": "Sammlungen suchen...",
-    "sets": "Sammlungen",
+    "sets": "{count, plural, one {# Sammlung} other {# Sammlungen}}",
     "words": "Wörter",
     "addAll": "Alle {count} als Karteikarten hinzufügen",
     "adding": "Wird hinzugefügt...",

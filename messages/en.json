@@ -54,6 +54,7 @@
   "common": {
     "loading": "Loading...",
     "error": "Error",
+    "errorMessage": "Something went wrong. Please try again.",
     "save": "Save changes",
     "saving": "Saving...",
     "cancel": "Cancel",
@@ -827,7 +828,7 @@
     "subtitle": "Vocabulary",
     "all": "All",
     "searchPlaceholder": "Search sets...",
-    "sets": "sets",
+    "sets": "{count, plural, one {# set} other {# sets}}",
     "words": "words",
     "addAll": "Add All {count} to Flashcards",
     "adding": "Adding...",

@@ -54,6 +54,7 @@
   "common": {
     "loading": "Laden...",
     "error": "Fout",
+    "errorMessage": "Er ging iets mis. Probeer opnieuw.",
     "save": "Wijzigingen opslaan",
     "saving": "Opslaan...",
     "cancel": "Annuleren",
@@ -827,7 +828,7 @@
     "subtitle": "Woordenschat",
     "all": "Alle",
     "searchPlaceholder": "Zoek sets...",
-    "sets": "sets",
+    "sets": "{count, plural, one {# set} other {# sets}}",
     "words": "woorden",
     "addAll": "Alle {count} toevoegen aan flashcards",
     "adding": "Toevoegen...",

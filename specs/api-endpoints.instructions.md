@@ -72,9 +72,9 @@ Requires `role="admin"`. All endpoints return 403 for non-admin users.
 
 ## Admin Dashboard Banner — `/api/admin/dashboard-banner`
 
-Requires `role="admin"`. New translation previews and saves must contain exactly `en`, `es`, `fr`, `pt`, `de`, `it`, `ru`, `nl`, `pl`, `ro`, `tr`, `sv`, `da`, `fi`, and `hr`, each with nonblank plain-text `title` (max 160), `subtitle` (max 240), and `description` (max 2000). Existing ten- through fourteen-locale banners remain readable until an administrator adds missing translations; they cannot be saved again without all fifteen.
+Requires `role="admin"`. Translation previews and saves must contain exactly `en`, `es`, `fr`, `pt`, `de`, `it`, `ru`, `nl`, `pl`, `ro`, `tr`, `sv`, `da`, `fi`, and `hr`, each with nonblank plain-text `title` (max 160), `subtitle` (max 240), and `description` (max 2000). Stored ten- through fourteen-locale banners remain readable but cannot be saved without all fifteen translations.
 
-- **GET ``** — Rate limit: 60/min. Returns the singleton with `revision`, translations, `source_locale`, `is_active`, and timestamps, or `null` before the first save. Previously stored maps without `tr`, `sv`, `da`, `fi`, or `hr` are returned unchanged for editing.
+- **GET ``** — Rate limit: 60/min. Returns the singleton with `revision`, translations, `source_locale`, `is_active`, and timestamps, or `null` before the first save. Incomplete stored maps are returned unchanged for editing.
 - **POST `/translate`** — Rate limit: 10/min. Uses the configured LLM to translate `{source_locale, title, subtitle, description}` into all fifteen UI locales, preserving the validated source text exactly after trimming. Returns `{translations}` as an editable preview without saving; LLM failure returns HTTP 502.
 - **PUT ``** — Rate limit: 60/min. Creates or updates the singleton from `{source_locale, is_active, translations}`. The server starts at revision 1 and increments the revision when source locale or translated content changes; changing only `is_active` does not increment it.
 

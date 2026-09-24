@@ -54,6 +54,7 @@
   "common": {
     "loading": "Laddar...",
     "error": "Fel",
+    "errorMessage": "Något gick fel. Försök igen.",
     "save": "Spara ändringar",
     "saving": "Sparar...",
     "cancel": "Avbryt",
@@ -827,7 +828,7 @@
     "subtitle": "Ordförråd",
     "all": "Alla",
     "searchPlaceholder": "Sök ordsamlingar...",
-    "sets": "samlingar",
+    "sets": "{count, plural, one {# samling} other {# samlingar}}",
     "words": "ord",
     "addAll": "Lägg till alla {count} som gloskort",
     "adding": "Lägger till...",

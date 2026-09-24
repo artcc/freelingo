@@ -118,8 +118,10 @@ fall back to English according to the platform contract.
 
 Locale selection, profile persistence, and cookies are coordinated by Settings and middleware. A
 target-language switch must not mutate UI locale or global account preferences.
-Visible tooltips, control titles, accessibility labels, and screen-reader-only text use the active
-UI locale's catalog rather than fixed English strings.
+Visible copy, including resource counts, errors, role labels, tooltips, and accessibility text, uses
+the active UI locale's catalog. Dates and numeric prices use that locale rather than the browser's
+default. In the dashboard-banner editor, selecting a source locale loads its current translation
+into the source fields before translation.
 
 ## Streaming and media
 

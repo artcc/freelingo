@@ -54,6 +54,7 @@
   "common": {
     "loading": "Yükleniyor...",
     "error": "Hata",
+    "errorMessage": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
     "save": "Değişiklikleri kaydet",
     "saving": "Kaydediliyor...",
     "cancel": "İptal",
@@ -827,7 +828,7 @@
     "subtitle": "Kelime Bilgisi",
     "all": "Tümü",
     "searchPlaceholder": "Setlerde ara...",
-    "sets": "set",
+    "sets": "{count, plural, one {# set} other {# set}}",
     "words": "kelime",
     "addAll": "{count} Kelimenin Tümünü Bilgi Kartlarına Ekle",
     "adding": "Ekleniyor...",

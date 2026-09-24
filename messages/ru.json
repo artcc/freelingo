@@ -54,6 +54,7 @@
   "common": {
     "loading": "Загрузка...",
     "error": "Ошибка",
+    "errorMessage": "Что-то пошло не так. Попробуйте снова.",
     "save": "Сохранить изменения",
     "saving": "Сохранение...",
     "cancel": "Отмена",
@@ -470,7 +471,7 @@
     "premiumBannerPastDueTitle": "Платёж ожидает",
     "premiumBannerPastDueDesc": "Обновите способ оплаты, чтобы восстановить Premium-доступ к чату, голосовым разговорам, reading и listening.",
     "premiumBannerPastDueCta": "Восстановить Premium",
-    "freemiumTrialTitle": "{days, plural, one {# день пробного периода} other {# дней пробного периода}}",
+    "freemiumTrialTitle": "{days, plural, one {# день пробного периода} few {# дня пробного периода} many {# дней пробного периода} other {# дня пробного периода}}",
     "freemiumTrialDesc": "Наслаждайтесь неограниченным доступом к чату, голосу, listening и reading. Попробуйте всё Premium бесплатно.",
     "announcementDismiss": "Закрыть объявление",
     "announcementDismissError": "Не удалось закрыть объявление. Попробуйте снова."
@@ -820,14 +821,14 @@
     "explanation": "Объяснение",
     "backLink": "Назад к грамматике",
     "notFound": "Тема не найдена.",
-    "topicsFound": "{count, plural, one {# тема найдена} few {# темы найдено} other {# тем найдено}}"
+    "topicsFound": "{count, plural, one {Найдена # тема} few {Найдены # темы} many {Найдено # тем} other {Найдено # темы}}"
   },
   "vocabulary": {
     "title": "Центр словарного запаса",
     "subtitle": "Словарный запас",
     "all": "Все",
     "searchPlaceholder": "Поиск наборов...",
-    "sets": "наборов",
+    "sets": "{count, plural, one {# набор} few {# набора} many {# наборов} other {# набора}}",
     "words": "слов",
     "addAll": "Добавить все {count} в карточки",
     "adding": "Добавление...",
@@ -857,7 +858,7 @@
     "level": "Уровень",
     "register": "Регистр",
     "statsLine": "{situationCount} ситуаций · {phraseCount} фраз · {range}",
-    "situationsShown": "{count, plural, one {# ситуация показана} few {# ситуации показано} other {# ситуаций показано}}",
+    "situationsShown": "{count, plural, one {Показана # ситуация} few {Показаны # ситуации} many {Показано # ситуаций} other {Показано # ситуации}}",
     "searchPlaceholder": "Поиск фраз..."
   },
   "admin": {
@@ -1495,7 +1496,7 @@
     "readingLabel": "Чтение",
     "voiceLabel": "Голос (мин)",
     "freeLimit": "Получить Premium",
-    "trialDaysLeft": "{days, plural, one {# день бесплатного пробного периода} other {# дней бесплатного пробного периода}}",
+    "trialDaysLeft": "{days, plural, one {# день бесплатного пробного периода} few {# дня бесплатного пробного периода} many {# дней бесплатного пробного периода} other {# дня бесплатного пробного периода}}",
     "trialUnlimited": "Неограниченный доступ",
     "requiresSubscription": "Только Premium"
   },

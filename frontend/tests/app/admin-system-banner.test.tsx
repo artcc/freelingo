@@ -122,6 +122,51 @@ describe('Admin system dashboard banner', () => {
     expect(await screen.findByText('dashboardBanner.saveSuccess')).toBeVisible()
   })
 
+  it('uses the selected translation as source when changing the source locale', async () => {
+    mockApiFetch.mockReset()
+    mockApiFetch
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            source_locale: 'en',
+            is_active: true,
+            revision: 1,
+            translations: generatedTranslations,
+            updated_at: '2026-08-06T10:00:00Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ translations: generatedTranslations }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+
+    render(<AdminSystemPage />)
+    expect(await screen.findByText('15/15 complete')).toBeInTheDocument()
+    expect(screen.getAllByLabelText('dashboardBanner.fieldTitle')[0]).toHaveValue(
+      'en title'
+    )
+
+    fireEvent.change(screen.getByLabelText('dashboardBanner.sourceLocale'), {
+      target: { value: 'hr' },
+    })
+    expect(screen.getAllByLabelText('dashboardBanner.fieldTitle')[0]).toHaveValue(
+      'hr title'
+    )
+    fireEvent.click(screen.getByText('dashboardBanner.translate'))
+
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledTimes(2))
+    expect(JSON.parse(mockApiFetch.mock.calls[1][1].body)).toEqual({
+      source_locale: 'hr',
+      title: 'hr title',
+      subtitle: 'hr subtitle',
+      description: 'hr description',
+    })
+  })
+
   it('loads a legacy announcement and requires missing locales before saving it', async () => {
     const { tr, sv, da, fi, hr, ...legacyTranslations } = generatedTranslations
     mockApiFetch.mockReset()

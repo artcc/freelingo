@@ -13,16 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
-- Existing dashboard announcements with ten through fourteen translations remain readable; a new save requires all fifteen, and adding a missing language creates a new announcement revision.
-- What's New announces five interface languages (Croatian, Danish, Finnish, Swedish, and Turkish) in alphabetical order for each of the fifteen current interface locales, alongside the general fixes note.
-
-### Fixed
-
-- Tooltips and accessible control labels for chat, vocabulary, phrasebook, feedback, navigation, loading, and shared panels now follow the selected interface language.
-- The review prompt waits for the existing-review check before showing the rating form, preventing early rating selections from being lost.
-- Grammar, vocabulary, and phrasebook help now show the user's native-language name for every supported profile language, including the five new options.
-- Voice conversation dates use the correct day punctuation in Danish and Finnish.
-- Dutch, Polish, Romanian, and Russian FAQ answers now explain that public registration is disabled by default.
+- Dashboard announcements with ten through fourteen translations remain readable; saving requires all fifteen and completing a translation creates a new revision. The editor loads the chosen source language's text before translating.
+- What's New presents the five interface languages (Croatian, Danish, Finnish, Swedish, and Turkish) in each of the fifteen interface locales alongside a general improvements note.
+- Interface text, resource counts, accessible controls, errors, administrator badges, dates, numbers, and prices follow the selected interface language. Study help displays the user's native-language name, and voice-session dates follow native-language conventions.
+- The review prompt waits for the existing-review lookup before showing the rating form. The Dutch, Polish, Romanian, and Russian FAQs explain the default public-registration setting.
 
 ## [1.9.20] - 2026-09-24
 

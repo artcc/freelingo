@@ -54,6 +54,7 @@
   "common": {
     "loading": "Caricamento...",
     "error": "Errore",
+    "errorMessage": "Qualcosa è andato storto. Per favore riprova.",
     "save": "Salva modifiche",
     "saving": "Salvataggio...",
     "cancel": "Annulla",
@@ -827,7 +828,7 @@
     "subtitle": "Vocabolario",
     "all": "Tutti",
     "searchPlaceholder": "Cerca set...",
-    "sets": "set",
+    "sets": "{count, plural, one {# set} other {# set}}",
     "words": "parole",
     "addAll": "Aggiungi tutti i {count} alle schede",
     "adding": "Aggiunta...",

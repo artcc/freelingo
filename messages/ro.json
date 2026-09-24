@@ -54,6 +54,7 @@
   "common": {
     "loading": "Se încarcă...",
     "error": "Eroare",
+    "errorMessage": "Ceva a mers greșit. Încearcă din nou.",
     "save": "Salvează modificările",
     "saving": "Se salvează...",
     "cancel": "Anulează",
@@ -827,7 +828,7 @@
     "subtitle": "Vocabular",
     "all": "Toate",
     "searchPlaceholder": "Caută seturi...",
-    "sets": "seturi",
+    "sets": "{count, plural, one {# set} few {# seturi} other {# seturi}}",
     "words": "cuvinte",
     "addAll": "Adaugă toate cele {count} la carduri flash",
     "adding": "Se adaugă...",

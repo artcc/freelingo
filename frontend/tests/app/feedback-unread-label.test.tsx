@@ -7,6 +7,7 @@ const { mockApiFetch, translate } = vi.hoisted(() => ({
 }))
 
 vi.mock('next-intl', () => ({
+  useLocale: () => 'en',
   useTranslations: () => translate,
 }))
 

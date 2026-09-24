@@ -54,6 +54,7 @@
   "common": {
     "loading": "Učitavanje...",
     "error": "Pogreška",
+    "errorMessage": "Nešto je pošlo po zlu. Pokušaj ponovno.",
     "save": "Spremi promjene",
     "saving": "Spremanje...",
     "cancel": "Odustani",
@@ -827,7 +828,7 @@
     "subtitle": "Rječnik",
     "all": "Sve",
     "searchPlaceholder": "Pretraži zbirke riječi...",
-    "sets": "zbirki",
+    "sets": "{count, plural, one {# zbirka} few {# zbirke} other {# zbirki}}",
     "words": "riječi",
     "addAll": "Dodaj svih {count} u kartice",
     "adding": "Dodavanje...",

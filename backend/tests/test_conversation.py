@@ -547,13 +547,14 @@ def test_voice_session_title_portuguese() -> None:
 
 
 def test_voice_session_title_german() -> None:
-    """German uses 'Sprachsitzung' label and plain 'D Month YYYY' format."""
+    """German uses an ordinal day before the month."""
     from app.services.language_helpers import voice_session_title
 
     title = voice_session_title("de")
     assert title.startswith("Sprachsitzung — ")
     # No 'de' separators in German dates.
     date_part = title.split(" — ", 1)[1]
+    assert date_part.split(" ", 1)[0].endswith(".")
     assert " de " not in date_part
 
 

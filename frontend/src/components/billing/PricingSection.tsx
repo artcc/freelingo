@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Circle, CircleDot, Diamond, Check, Minus } from 'lucide-react'
 import { PageLoading } from '@/components/ui/page-loading'
 import { getLandingSubscriptionState } from '@/lib/landing-subscription'
@@ -34,6 +34,7 @@ export default function PricingSection({
 }: PricingSectionProps) {
   const tBilling = useTranslations('billing')
   const tLanding = useTranslations('landing')
+  const locale = useLocale()
   const [subscribed, setSubscribed] = useState<boolean | null>(
     hasSession ? null : false
   )
@@ -223,12 +224,18 @@ export default function PricingSection({
                   <>
                     <p className="text-fl-muted-2 font-mono text-sm line-through">
                       {tBilling('priceOriginal', {
-                        price: plan.originalPrice,
+                        price: new Intl.NumberFormat(locale).format(
+                          plan.originalPrice
+                        ),
                         period: plan.priceLabel,
                       })}
                     </p>
                     <p className="text-fl-fg flex items-baseline gap-2 font-mono text-xl font-bold">
-                      {tBilling('priceAmount', { amount: plan.price })}
+                      {tBilling('priceAmount', {
+                        amount: new Intl.NumberFormat(locale).format(
+                          plan.price
+                        ),
+                      })}
                       <span className="text-fl-muted-1 text-sm">
                         {tBilling('pricePerPeriod', {
                           period: plan.priceLabel,

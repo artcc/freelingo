@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   BookOpen,
   GraduationCap,
@@ -55,6 +55,7 @@ export function PaywallBanner({
   compact = false,
 }: PaywallBannerProps) {
   const t = useTranslations('billing')
+  const locale = useLocale()
   const router = useRouter()
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
@@ -66,7 +67,9 @@ export function PaywallBanner({
   const [error, setError] = useState<string | null>(null)
   const paymentRecovery = needsPaymentRecovery(user)
   const yearlyCta = splitYearlyCta(
-    t('planYearly', { price: String(priceYearly) })
+    t('planYearly', {
+      price: new Intl.NumberFormat(locale).format(priceYearly),
+    })
   )
 
   if (!stripeEnabled || isSubscribed(user, stripeEnabled)) return null
@@ -187,7 +190,9 @@ export function PaywallBanner({
             >
               {loading === 'monthly'
                 ? '...'
-                : t('planMonthly', { price: String(priceMonthly) })}
+                : t('planMonthly', {
+                    price: new Intl.NumberFormat(locale).format(priceMonthly),
+                  })}
             </button>
           </div>
         )}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { PageLoading } from '@/components/ui/page-loading'
 import { apiFetch } from '@/lib/api'
 import { useLanguageStore } from '@/store/language'
@@ -156,6 +156,7 @@ function UnitCompetencyBlock({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ProgressPage() {
+  const locale = useLocale()
   const t = useTranslations('progress')
   const tVocab = useTranslations('vocabulary')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
@@ -259,8 +260,11 @@ export default function ProgressPage() {
         {summary && (
           <div className="divide-fl-border border-fl-border grid grid-cols-2 divide-x border-b sm:grid-cols-4">
             {[
-              { label: t('xp'), value: summary.total_xp.toLocaleString() },
-              { label: t('streak'), value: `${summary.current_streak}d 🔥` },
+              {
+                label: t('xp'),
+                value: summary.total_xp.toLocaleString(locale),
+              },
+              { label: t('streak'), value: `${summary.current_streak} 🔥` },
               { label: t('lessons'), value: summary.total_lessons },
               {
                 label: t('accuracy'),

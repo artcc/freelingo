@@ -54,6 +54,7 @@
   "common": {
     "loading": "Ladataan...",
     "error": "Virhe",
+    "errorMessage": "Jokin meni pieleen. Yritä uudelleen.",
     "save": "Tallenna muutokset",
     "saving": "Tallennetaan...",
     "cancel": "Peruuta",
@@ -827,7 +828,7 @@
     "subtitle": "Sanasto",
     "all": "Kaikki",
     "searchPlaceholder": "Hae sanakokoelmia...",
-    "sets": "kokoelmaa",
+    "sets": "{count, plural, one {# kokoelma} other {# kokoelmaa}}",
     "words": "sanaa",
     "addAll": "Lisää kaikki {count} muistikortteihin",
     "adding": "Lisätään...",

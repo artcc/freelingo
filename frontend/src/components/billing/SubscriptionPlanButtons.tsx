@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import { useConfigStore } from '@/store/config'
@@ -14,12 +14,15 @@ export function SubscriptionPlanButtons({
   className = '',
 }: SubscriptionPlanButtonsProps) {
   const tBilling = useTranslations('billing')
+  const locale = useLocale()
   const priceMonthly = useConfigStore((s) => s.priceMonthly)
   const priceYearly = useConfigStore((s) => s.priceYearly)
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [error, setError] = useState<string | null>(null)
   const yearlyCta = splitYearlyCta(
-    tBilling('planYearly', { price: String(priceYearly) })
+    tBilling('planYearly', {
+      price: new Intl.NumberFormat(locale).format(priceYearly),
+    })
   )
 
   async function startCheckout(plan: BillingInterval) {
@@ -74,7 +77,9 @@ export function SubscriptionPlanButtons({
         >
           {loading === 'monthly'
             ? '...'
-            : tBilling('planMonthly', { price: String(priceMonthly) })}
+            : tBilling('planMonthly', {
+                price: new Intl.NumberFormat(locale).format(priceMonthly),
+              })}
         </button>
       </div>
       {error && <p className="text-fl-error font-mono text-xs">{error}</p>}

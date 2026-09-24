@@ -54,6 +54,7 @@
   "common": {
     "loading": "Cargando...",
     "error": "Error",
+    "errorMessage": "Algo salió mal. Por favor inténtalo de nuevo.",
     "save": "Guardar cambios",
     "saving": "Guardando...",
     "cancel": "Cancelar",
@@ -827,7 +828,7 @@
     "subtitle": "Vocabulario",
     "all": "Todos",
     "searchPlaceholder": "Buscar conjuntos...",
-    "sets": "conjuntos",
+    "sets": "{count, plural, one {# conjunto} other {# conjuntos}}",
     "words": "palabras",
     "addAll": "Añadir las {count} a tarjetas",
     "adding": "Añadiendo...",

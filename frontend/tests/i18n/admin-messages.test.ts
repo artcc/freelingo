@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { createTranslator } from 'next-intl'
 import de from '../../../messages/de.json'
 import da from '../../../messages/da.json'
 import fi from '../../../messages/fi.json'
@@ -23,6 +24,24 @@ describe('admin i18n messages', () => {
 
     for (const [locale, messages] of Object.entries(locales)) {
       expect(Object.keys(messages.admin).sort(), locale).toEqual(expectedKeys)
+    }
+  })
+})
+
+describe('shared interface messages', () => {
+  it('renders generic errors and vocabulary counts in all fifteen locales', () => {
+    for (const [locale, messages] of Object.entries({ en, ...locales })) {
+      const errors: string[] = []
+      const t = createTranslator({
+        locale,
+        messages,
+        onError: (error) => errors.push(error.message),
+      })
+
+      expect(t('common.errorMessage'), locale).not.toBe('common.errorMessage')
+      expect(t('vocabulary.sets', { count: 1 }), locale).toContain('1')
+      expect(t('vocabulary.sets', { count: 2 }), locale).toContain('2')
+      expect(errors, locale).toEqual([])
     }
   })
 })

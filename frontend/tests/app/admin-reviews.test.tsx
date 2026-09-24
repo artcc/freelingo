@@ -4,6 +4,7 @@ import React from 'react'
 import AdminReviewsPage from '@/app/(app)/admin/reviews/page'
 
 vi.mock('next-intl', () => ({
+  useLocale: () => 'en',
   useTranslations:
     () => (key: string, values?: Record<string, string | number>) => {
       if (key === 'learningLanguage') return `Learning ${values?.language}`

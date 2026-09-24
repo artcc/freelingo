@@ -54,6 +54,7 @@
   "common": {
     "loading": "Ładowanie...",
     "error": "Błąd",
+    "errorMessage": "Coś poszło nie tak. Spróbuj ponownie.",
     "save": "Zapisz zmiany",
     "saving": "Zapisywanie...",
     "cancel": "Anuluj",
@@ -827,7 +828,7 @@
     "subtitle": "Słownictwo",
     "all": "Wszystkie",
     "searchPlaceholder": "Szukaj zestawów...",
-    "sets": "zestawy",
+    "sets": "{count, plural, one {# zestaw} few {# zestawy} other {# zestawów}}",
     "words": "słowa",
     "addAll": "Dodaj wszystkie {count} do fiszek",
     "adding": "Dodawanie...",

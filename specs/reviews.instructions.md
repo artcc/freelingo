@@ -166,7 +166,7 @@ The Community section in Settings loads `/api/reviews/me`.
 
 `/admin/reviews` uses ten-item pages and supports approval-state and rating filters. Backend language
 and order filters are not exposed by this page. It shows snapshot name, status, stars, English
-language name, browser-locale date, and comment/fallback.
+language name, interface-locale date, and comment/fallback.
 
 Administrators can approve, unapprove, and delete with confirmation. After mutation, the page reloads
 the effective page so filters and page bounds remain valid. Backend authorization protects every

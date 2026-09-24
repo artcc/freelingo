@@ -24,6 +24,7 @@ vi.mock('next/link', () => ({
 }))
 
 vi.mock('next-intl', () => ({
+  useLocale: () => 'en',
   useTranslations: () => (key: string) => key,
 }))
 

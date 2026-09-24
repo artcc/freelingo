@@ -2,8 +2,10 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import React from 'react'
 
+const localeState = vi.hoisted(() => ({ value: 'en' }))
+
 vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
+  useLocale: () => localeState.value,
   useTranslations: () => (key: string) => key,
 }))
 
@@ -116,6 +118,7 @@ function resetStores() {
 }
 
 beforeEach(() => {
+  localeState.value = 'en'
   mockApiFetch.mockReset()
   mockLandingSubscriptionState.mockReset()
   resetStores()
@@ -126,6 +129,20 @@ beforeEach(() => {
 })
 
 describe('billing paywall UI', () => {
+  it('formats the subscription end date with the selected interface locale', () => {
+    localeState.value = 'fi'
+    useAuthStore.setState({
+      user: user({
+        subscription_status: 'canceled',
+        subscription_ends_at: '2099-09-24T12:00:00Z',
+      }),
+    })
+
+    render(<BillingSection />)
+
+    expect(screen.getByText('24.9.2099')).toBeInTheDocument()
+  })
+
   it('opens Customer Portal for past_due users in Settings instead of showing plan buttons', async () => {
     useAuthStore.setState({
       accessToken: 'token',
