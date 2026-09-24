@@ -1071,7 +1071,8 @@
         "tr": "Turco",
         "sv": "Sueco",
         "da": "Danés",
-        "fi": "Finés"
+        "fi": "Finés",
+        "hr": "Croata"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Sueco",
     "da": "Danés",
     "fi": "Finés",
+    "hr": "Croata",
     "myLanguages": "Mis idiomas",
     "addLanguage": "Añadir idioma",
     "selectLanguage": "Selecciona el idioma que quieres aprender",

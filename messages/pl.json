@@ -1071,7 +1071,8 @@
         "tr": "Turecki",
         "sv": "Szwedzki",
         "da": "Duński",
-        "fi": "Fiński"
+        "fi": "Fiński",
+        "hr": "Chorwacki"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Szwedzki",
     "da": "Duński",
     "fi": "Fiński",
+    "hr": "Chorwacki",
     "myLanguages": "Moje języki",
     "addLanguage": "Dodaj język",
     "selectLanguage": "Wybierz język, którego chcesz się uczyć",

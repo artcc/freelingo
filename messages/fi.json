@@ -1071,7 +1071,8 @@
         "tr": "Turkki",
         "sv": "Ruotsi",
         "da": "Tanska",
-        "fi": "Suomi"
+        "fi": "Suomi",
+        "hr": "Kroatia"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Ruotsi",
     "da": "Tanska",
     "fi": "Suomi",
+    "hr": "Kroatia",
     "myLanguages": "Omat kielet",
     "addLanguage": "Lisää uusi kieli",
     "selectLanguage": "Valitse kieli, jota haluat opiskella",

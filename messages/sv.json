@@ -1071,7 +1071,8 @@
         "tr": "Turkiska",
         "sv": "Svenska",
         "da": "Danska",
-        "fi": "Finska"
+        "fi": "Finska",
+        "hr": "Kroatiska"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Svenska",
     "da": "Danska",
     "fi": "Finska",
+    "hr": "Kroatiska",
     "myLanguages": "Mina språk",
     "addLanguage": "Lägg till nytt språk",
     "selectLanguage": "Välj språket du vill lära dig",

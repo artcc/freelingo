@@ -27,6 +27,7 @@ SUPPORTED_LANGUAGES = {
     "sv",
     "da",
     "fi",
+    "hr",
 }
 
 

@@ -1071,7 +1071,8 @@
         "tr": "Türkisch",
         "sv": "Schwedisch",
         "da": "Dänisch",
-        "fi": "Finnisch"
+        "fi": "Finnisch",
+        "hr": "Kroatisch"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Schwedisch",
     "da": "Dänisch",
     "fi": "Finnisch",
+    "hr": "Kroatisch",
     "myLanguages": "Meine Sprachen",
     "addLanguage": "Sprache hinzufügen",
     "selectLanguage": "Wähle die Sprache, die du lernen möchtest",

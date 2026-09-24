@@ -6,7 +6,7 @@ from app.models.dashboard_banner import DashboardBanner
 from app.schemas.dashboard_banner import DashboardBannerTranslationResponse
 from app.services.llm_adapter import LLMError
 
-LOCALES = ("en", "es", "fr", "pt", "de", "it", "ru", "nl", "pl", "ro", "tr", "sv", "da", "fi")
+LOCALES = ("en", "es", "fr", "pt", "de", "it", "ru", "nl", "pl", "ro", "tr", "sv", "da", "fi", "hr")
 
 
 def banner_translations(label: str = "Notice") -> dict[str, dict[str, str]]:
@@ -56,6 +56,7 @@ async def test_existing_ten_locale_banner_remains_readable_until_turkish_is_adde
     legacy_translations.pop("sv")
     legacy_translations.pop("da")
     legacy_translations.pop("fi")
+    legacy_translations.pop("hr")
     db_session.add(
         DashboardBanner(
             id=1,
@@ -95,6 +96,7 @@ async def test_existing_eleven_locale_banner_remains_readable_until_swedish_is_a
     legacy_translations.pop("sv")
     legacy_translations.pop("da")
     legacy_translations.pop("fi")
+    legacy_translations.pop("hr")
     db_session.add(
         DashboardBanner(
             id=1,
@@ -127,6 +129,7 @@ async def test_existing_twelve_locale_banner_remains_readable_until_danish_is_ad
     translations = banner_translations()
     translations.pop("da")
     translations.pop("fi")
+    translations.pop("hr")
     db_session.add(
         DashboardBanner(
             id=1,
@@ -158,6 +161,7 @@ async def test_existing_thirteen_locale_banner_remains_readable_until_finnish_is
     _, headers = admin_user
     translations = banner_translations()
     translations.pop("fi")
+    translations.pop("hr")
     db_session.add(
         DashboardBanner(
             id=1,
@@ -180,6 +184,37 @@ async def test_existing_thirteen_locale_banner_remains_readable_until_finnish_is
         json=banner_update(translations=translations),
     )
     assert missing_fi.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_existing_fourteen_locale_banner_remains_readable_until_croatian_is_added(
+    client, admin_user, db_session
+):
+    _, headers = admin_user
+    translations = banner_translations()
+    translations.pop("hr")
+    db_session.add(
+        DashboardBanner(
+            id=1,
+            source_locale="en",
+            is_active=True,
+            translations=translations,
+            revision=8,
+        )
+    )
+    await db_session.commit()
+
+    response = await client.get("/api/admin/dashboard-banner", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["translations"] == translations
+    assert response.json()["revision"] == 8
+
+    missing_hr = await client.put(
+        "/api/admin/dashboard-banner",
+        headers=headers,
+        json=banner_update(translations=translations),
+    )
+    assert missing_hr.status_code == 422
 
 
 @pytest.mark.asyncio
@@ -249,6 +284,7 @@ async def test_translate_banner_returns_all_locales_and_preserves_stripped_sourc
     assert "sv" in translations
     assert "da" in translations
     assert "fi" in translations
+    assert "hr" in translations
 
     # Translation is a preview and must not create the singleton.
     banner_response = await client.get("/api/admin/dashboard-banner", headers=headers)
@@ -261,7 +297,7 @@ async def test_translate_banner_accepts_turkish_source(client, admin_user, monke
     generated = banner_translations("Generated")
 
     async def fake_structured_output(messages, schema):
-        assert "all fourteen requested locales" in messages[0]["content"]
+        assert "all fifteen requested locales" in messages[0]["content"]
         assert "Source locale: tr" in messages[0]["content"]
         return schema(translations=generated)
 

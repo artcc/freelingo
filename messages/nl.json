@@ -1071,7 +1071,8 @@
         "tr": "Turks",
         "sv": "Zweeds",
         "da": "Deens",
-        "fi": "Fins"
+        "fi": "Fins",
+        "hr": "Kroatisch"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Zweeds",
     "da": "Deens",
     "fi": "Fins",
+    "hr": "Kroatisch",
     "myLanguages": "Mijn talen",
     "addLanguage": "Taal toevoegen",
     "selectLanguage": "Kies de taal die je wilt leren",

@@ -1071,7 +1071,8 @@
         "tr": "Turco",
         "sv": "Sueco",
         "da": "Dinamarquês",
-        "fi": "Finlandês"
+        "fi": "Finlandês",
+        "hr": "Croata"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Sueco",
     "da": "Dinamarquês",
     "fi": "Finlandês",
+    "hr": "Croata",
     "myLanguages": "Meus idiomas",
     "addLanguage": "Adicionar idioma",
     "selectLanguage": "Selecione o idioma que deseja aprender",

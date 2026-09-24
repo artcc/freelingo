@@ -1071,7 +1071,8 @@
         "tr": "Türkçe",
         "sv": "İsveççe",
         "da": "Danca",
-        "fi": "Fince"
+        "fi": "Fince",
+        "hr": "Hırvatça"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "İsveççe",
     "da": "Danca",
     "fi": "Fince",
+    "hr": "Hırvatça",
     "myLanguages": "Dillerim",
     "addLanguage": "Yeni dil ekle",
     "selectLanguage": "Öğrenmek istediğiniz dili seçin",

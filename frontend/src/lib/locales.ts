@@ -17,6 +17,7 @@ export const SUPPORTED_LOCALES = [
   'sv',
   'da',
   'fi',
+  'hr',
 ] as const
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number]

@@ -147,6 +147,13 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "Hyvä ääntäminen!",
         "target_phrase": "Tavoiteilmaus oli: {answer}",
     },
+    "hr": {
+        "correct": "Točno!",
+        "correct_answer": "Točan odgovor: {answer}",
+        "free_write_unavailable": "Pisani odgovor trenutačno nije bilo moguće ocijeniti.",
+        "good_pronunciation": "Dobar izgovor!",
+        "target_phrase": "Ciljani izraz bio je: {answer}",
+    },
 }
 
 

@@ -611,11 +611,21 @@ def test_voice_session_title_finnish() -> None:
     assert "kuuta " in title
 
 
+def test_voice_session_title_croatian() -> None:
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("hr")
+    assert title.startswith("Glasovni razgovor — ")
+    date = title.split(" — ", 1)[1]
+    assert date.split(" ", 1)[0].endswith(".")
+    assert date.endswith(".")
+
+
 def test_voice_session_title_all_supported_languages_produce_nonempty() -> None:
     """Every supported native language must produce a non-empty title."""
     from app.services.language_helpers import voice_session_title
 
-    supported = ["es", "fr", "pt", "de", "it", "pl", "nl", "ro", "ru", "tr", "sv", "da", "fi"]
+    supported = ["es", "fr", "pt", "de", "it", "pl", "nl", "ro", "ru", "tr", "sv", "da", "fi", "hr"]
     for lang in supported:
         title = voice_session_title(lang)
         assert title.strip(), f"Empty title for language '{lang}'"

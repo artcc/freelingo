@@ -9,6 +9,7 @@ import { useLanguageStore } from '@/store/language'
 import de from '../../../messages/de.json'
 import da from '../../../messages/da.json'
 import fi from '../../../messages/fi.json'
+import hr from '../../../messages/hr.json'
 import en from '../../../messages/en.json'
 import es from '../../../messages/es.json'
 import fr from '../../../messages/fr.json'
@@ -35,7 +36,7 @@ vi.mock('@/lib/api', () => ({ apiFetch }))
 
 import OnboardingPage from '@/app/(auth)/onboarding/page'
 
-const catalogs = { da, de, en, es, fi, fr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
+const catalogs = { da, de, en, es, fi, fr, hr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
 type Locale = keyof typeof catalogs
 
 const spanishSubtitles: Record<Locale, string> = {
@@ -45,6 +46,7 @@ const spanishSubtitles: Record<Locale, string> = {
   es: 'Idioma: español. ¿Para qué quieres utilizarlo? Selecciona todos los objetivos que correspondan.',
   fi: 'Kieli: Espanja. Mihin haluat käyttää sitä? Valitse kaikki sopivat.',
   fr: "Langue : espagnol. Dans quel but souhaitez-vous l'utiliser ? Sélectionnez tous les objectifs qui vous correspondent.",
+  hr: 'Jezik: Španjolski. Za što ga želiš koristiti? Odaberi sve što vrijedi.',
   it: 'Lingua: spagnolo. Per cosa vuoi usarla? Seleziona tutti gli obiettivi che fanno al caso tuo.',
   nl: 'Taal: Spaans. Waarvoor wil je deze taal gebruiken? Selecteer alle doelen die van toepassing zijn.',
   pl: 'Język: hiszpański. Do czego chcesz go używać? Zaznacz wszystkie cele, które Ci odpowiadają.',

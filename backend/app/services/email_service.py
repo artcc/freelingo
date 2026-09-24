@@ -154,6 +154,14 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "Jos painike ei toimi, kopioi tämä linkki ja liitä se selaimeesi:",
         "footer": "Jos et luonut tätä tiliä, voit jättää tämän viestin huomiotta.",
     },
+    "hr": {
+        "greeting": "Pozdrav {name},",
+        "subject": "Potvrdi svoj FreeLingo račun",
+        "body": "Hvala što si stvorio/la FreeLingo račun.<br />Potvrdi adresu e-pošte klikom na gumb u nastavku. Poveznica vrijedi <strong>24 sata</strong>.",
+        "button": "Potvrdi moj račun",
+        "link_fallback": "Ako gumb ne radi, kopiraj ovu poveznicu i zalijepi je u preglednik:",
+        "footer": "Ako nisi stvorio/la ovaj račun, možeš zanemariti ovu poruku.",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -268,6 +276,14 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "Palauta salasanani",
         "link_fallback": "Jos painike ei toimi, kopioi tämä linkki ja liitä se selaimeesi:",
         "footer": "Jos et pyytänyt salasanan palautusta, voit jättää tämän viestin huomiotta.",
+    },
+    "hr": {
+        "greeting": "Pozdrav {name},",
+        "subject": "Postavi novu FreeLingo lozinku",
+        "body": "Primili smo zahtjev za postavljanje nove lozinke za tvoj FreeLingo račun.<br />Klikni na gumb u nastavku kako bi postavio/la novu lozinku. Poveznica vrijedi <strong>1 sat</strong>.",
+        "button": "Postavi novu lozinku",
+        "link_fallback": "Ako gumb ne radi, kopiraj ovu poveznicu i zalijepi je u preglednik:",
+        "footer": "Ako nisi zatražio/la novu lozinku, možeš zanemariti ovu poruku.",
     },
 }
 
@@ -412,6 +428,16 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "Siirry koontinäyttöön",
         "footer": "Iloisia opiskeluhetkiä!",
     },
+    "hr": {
+        "subject": "Dobrodošli u FreeLingo!",
+        "greeting": "Pozdrav {name},",
+        "body": "Tvoj račun je spreman. Evo kako možeš početi:",
+        "step1": "Riješi <strong>procjenu razine</strong> – ona utvrđuje tvoju trenutačnu razinu (A1–C2) te prednosti i slabosti.",
+        "step2": "Stvori <strong>plan učenja</strong> – tjedni program prilagođen tvojoj razini i ciljevima.",
+        "step3": "Dovrši svoju prvu dnevnu lekciju i počni graditi niz.",
+        "button": "Idi na nadzornu ploču",
+        "footer": "Sretno s učenjem!",
+    },
 }
 
 
@@ -499,6 +525,12 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "Hei {name},",
         "body": "FreeLingo-tilisi on poistettu. Kaikki tietosi on poistettu pysyvästi palvelimiltamme.",
         "footer": "Jos et pyytänyt tilin poistamista, ota meihin välittömästi yhteyttä.",
+    },
+    "hr": {
+        "subject": "Tvoj FreeLingo račun je izbrisan",
+        "greeting": "Pozdrav {name},",
+        "body": "Tvoj FreeLingo račun uspješno je izbrisan. Svi tvoji podaci trajno su uklonjeni s naših poslužitelja.",
+        "footer": "Ako nisi zatražio/la brisanje, odmah nam se javi.",
     },
 }
 
@@ -628,6 +660,15 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Aihe",
         "message_label": "Viesti",
         "footer": "Lähetetty FreeLingon yhteydenottolomakkeella",
+    },
+    "hr": {
+        "email_title": "Poruka iz kontaktnog obrasca",
+        "subject_prefix": "[FreeLingo Kontakt]",
+        "logo": "FreeLingo: Kontaktni obrazac",
+        "from_label": "Od",
+        "subject_label": "Predmet",
+        "message_label": "Poruka",
+        "footer": "Poslano putem FreeLingova kontaktnog obrasca",
     },
 }
 
@@ -814,6 +855,19 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Näytä ylläpidossa",
         "footer": "FreeLingon palautetaulu",
     },
+    "hr": {
+        "email_title": "Poslane su nove povratne informacije",
+        "logo": "FreeLingo: Nove povratne informacije",
+        "feature_label": "Prijedlog značajke",
+        "bug_label": "Prijava pogreške",
+        "feature_subject_prefix": "[Prijedlog značajke]",
+        "bug_subject_prefix": "[Prijava pogreške]",
+        "author_label": "Poslao/la",
+        "title_label": "Naslov",
+        "description_label": "Opis",
+        "cta": "Pogledaj u administraciji",
+        "footer": "FreeLingova ploča za povratne informacije",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -984,6 +1038,18 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "empty_comment": "Kommenttia ei annettu.",
         "cta": "Näytä ylläpidossa",
         "footer": "FreeLingon arvostelujen moderointi",
+    },
+    "hr": {
+        "email_title": "Poslana je nova recenzija",
+        "subject_prefix": "[Nova recenzija]",
+        "logo": "FreeLingo: Nova recenzija",
+        "author_label": "Poslao/la",
+        "rating_label": "Ocjena",
+        "language_label": "Jezik koji se uči",
+        "comment_label": "Komentar",
+        "empty_comment": "Nema komentara.",
+        "cta": "Pogledaj u administraciji",
+        "footer": "Moderiranje FreeLingo recenzija",
     },
 }
 

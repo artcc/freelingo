@@ -121,6 +121,15 @@ describe('middleware', () => {
       expect(res.headers.get('set-cookie')).toContain('NEXT_LOCALE=fi')
     })
 
+    it('detects Croatian browser language from hr-HR', () => {
+      const req = createRequest('/login', {
+        acceptLanguage: 'hr-HR,hr;q=0.9,en;q=0.8',
+      })
+
+      const res = middleware(req)
+      expect(res.headers.get('set-cookie')).toContain('NEXT_LOCALE=hr')
+    })
+
     it('falls back to en when no locale detected', () => {
       const req = createRequest('/login')
       const res = middleware(req)

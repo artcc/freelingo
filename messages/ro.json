@@ -1071,7 +1071,8 @@
         "tr": "Turcă",
         "sv": "Suedeză",
         "da": "Daneză",
-        "fi": "Finlandeză"
+        "fi": "Finlandeză",
+        "hr": "Croată"
       }
     }
   },
@@ -1247,6 +1248,7 @@
     "sv": "Suedeză",
     "da": "Daneză",
     "fi": "Finlandeză",
+    "hr": "Croată",
     "myLanguages": "Limbile mele",
     "addLanguage": "Adaugă limbă",
     "selectLanguage": "Alege limba pe care vrei să o înveți",

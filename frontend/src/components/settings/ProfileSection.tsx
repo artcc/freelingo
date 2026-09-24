@@ -24,6 +24,7 @@ const LANGUAGES = [
   'sv',
   'da',
   'fi',
+  'hr',
 ] as const
 
 function resizeImage(file: File, maxPx: number): Promise<Blob> {

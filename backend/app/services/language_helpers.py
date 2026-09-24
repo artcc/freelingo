@@ -139,6 +139,7 @@ _VOICE_SESSION_TITLES: dict[str, str] = {
     "sv": "Röstsamtal",
     "da": "Stemmesamtale",
     "fi": "Äänikeskustelu",
+    "hr": "Glasovni razgovor",
 }
 
 _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
@@ -156,6 +157,7 @@ _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
     "sv": "Swedish",
     "da": "Danish",
     "fi": "Finnish",
+    "hr": "Croatian",
 }
 
 _MONTH_NAMES: dict[str, list[str]] = {
@@ -341,6 +343,20 @@ _MONTH_NAMES: dict[str, list[str]] = {
         "marraskuuta",
         "joulukuuta",
     ],
+    "hr": [
+        "siječnja",
+        "veljače",
+        "ožujka",
+        "travnja",
+        "svibnja",
+        "lipnja",
+        "srpnja",
+        "kolovoza",
+        "rujna",
+        "listopada",
+        "studenoga",
+        "prosinca",
+    ],
 }
 
 
@@ -421,5 +437,7 @@ def voice_session_title(native_language: str) -> str:
         month_name = months[now.month - 1]
         if native_language in ("es", "pt"):
             return f"{label} — {now.day} de {month_name} de {now.year}"
+        if native_language == "hr":
+            return f"{label} — {now.day}. {month_name} {now.year}."
         return f"{label} — {now.day} {month_name} {now.year}"
     return f"{label} — {now.strftime('%B %d, %Y')}"

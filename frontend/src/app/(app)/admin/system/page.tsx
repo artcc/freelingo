@@ -25,6 +25,7 @@ const BANNER_LOCALES = [
   'sv',
   'da',
   'fi',
+  'hr',
 ] as const
 
 type BannerLocale = (typeof BANNER_LOCALES)[number]
