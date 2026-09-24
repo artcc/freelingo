@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { useLoadingStore } from '@/store/loading'
 
 const MIN_VISIBLE_MS = 600
@@ -9,6 +10,7 @@ const COMPLETE_DURATION_MS = 400
 type Phase = 'hidden' | 'loading' | 'completing'
 
 export function LoadingBar() {
+  const tCommon = useTranslations('common')
   const count = useLoadingStore((s) => s.count)
   const complete = useLoadingStore((s) => s.complete)
   const finishComplete = useLoadingStore((s) => s.finishComplete)
@@ -46,7 +48,7 @@ export function LoadingBar() {
     <div
       className="fixed top-0 right-0 left-0 z-[300] h-px overflow-hidden"
       role="progressbar"
-      aria-label="Loading"
+      aria-label={tCommon('loading')}
     >
       <div
         className={`bg-fl-fg h-full ${

@@ -732,6 +732,9 @@ export default function FeedbackPage() {
           <div>
             {entries.map((entry, i) => {
               const canDelete = currentUserId === entry.author.id || isAdmin
+              const voteLabel = t(
+                entry.voted_by_me ? 'removeVoteAction' : 'voteAction'
+              )
               return (
                 <div
                   key={entry.id}
@@ -769,7 +772,8 @@ export default function FeedbackPage() {
                             ? 'border-fl-accent/60 text-fl-accent bg-fl-accent/10'
                             : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg'
                         }`}
-                        title={entry.voted_by_me ? 'Remove vote' : 'Vote'}
+                        title={voteLabel}
+                        aria-label={voteLabel}
                       >
                         ▲
                       </button>

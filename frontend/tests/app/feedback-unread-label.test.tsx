@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-const { mockApiFetch } = vi.hoisted(() => ({
+const { mockApiFetch, translate } = vi.hoisted(() => ({
   mockApiFetch: vi.fn(),
+  translate: (key: string) => key,
 }))
 
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => translate,
 }))
 
 vi.mock('@/lib/api', () => ({
@@ -81,5 +82,44 @@ describe('FeedbackPage unread labels', () => {
     await waitFor(() => expect(screen.getByText('unread')).toBeDefined())
     expect(screen.getAllByText('statusPending').length).toBeGreaterThan(0)
     expect(screen.getByText('Add focused practice')).toBeDefined()
+  })
+
+  it('updates the translated vote button label when a vote is toggled', async () => {
+    const list = {
+      items: [
+        {
+          id: 10,
+          type: 'feature',
+          title: 'Add focused practice',
+          description: 'A suggestion.',
+          status: 'pending',
+          author: {
+            id: 2,
+            username: 'other',
+            display_name: 'Other User',
+          },
+          vote_count: 0,
+          voted_by_me: false,
+          unread_by_me: false,
+          comment_count: 0,
+          created_at: '2026-07-04T10:00:00',
+        },
+      ],
+      total: 1,
+      skip: 0,
+      limit: 20,
+    }
+    mockApiFetch
+      .mockResolvedValueOnce(jsonResponse(list))
+      .mockResolvedValueOnce(jsonResponse(list))
+      .mockResolvedValueOnce(jsonResponse({ voted: true, vote_count: 1 }))
+
+    render(<FeedbackPage />)
+    const voteButton = await screen.findByRole('button', { name: 'voteAction' })
+    expect(voteButton).toHaveAttribute('title', 'voteAction')
+    fireEvent.click(voteButton)
+    expect(
+      await screen.findByRole('button', { name: 'removeVoteAction' })
+    ).toHaveAttribute('title', 'removeVoteAction')
   })
 })

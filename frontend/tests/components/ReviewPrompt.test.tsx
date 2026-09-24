@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import {
   ReviewPrompt,
   getReviewPromptDismissal,
@@ -53,7 +53,18 @@ describe('ReviewPrompt', () => {
   it('submits rating-only reviews', async () => {
     const onClose = vi.fn()
     mockCreateReview.mockResolvedValue({ id: 1, rating: 5 })
+    let resolveReview!: (value: { has_review: boolean; review: null }) => void
+    mockFetchMyReview.mockReturnValueOnce(
+      new Promise<{ has_review: boolean; review: null }>((resolve) => {
+        resolveReview = resolve
+      })
+    )
     render(<ReviewPrompt open onClose={onClose} />)
+    expect(screen.getByText('checking')).toBeInTheDocument()
+    expect(screen.queryByText('Rating required')).toBeNull()
+    await act(async () => {
+      resolveReview({ has_review: false, review: null })
+    })
     await screen.findByText('Rating required')
     fireEvent.click(screen.getByLabelText('5 stars'))
     await waitFor(() =>

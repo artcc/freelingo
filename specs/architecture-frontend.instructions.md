@@ -118,6 +118,8 @@ fall back to English according to the platform contract.
 
 Locale selection, profile persistence, and cookies are coordinated by Settings and middleware. A
 target-language switch must not mutate UI locale or global account preferences.
+Visible tooltips, control titles, accessibility labels, and screen-reader-only text use the active
+UI locale's catalog rather than fixed English strings.
 
 ## Streaming and media
 

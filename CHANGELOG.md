@@ -16,6 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Existing dashboard announcements remain readable with ten translations; adding Turkish is required before saving them again and creates a new announcement revision.
 - What's New now highlights the Turkish interface and retains the general fixes note in all eleven interface languages.
 
+### Fixed
+
+- Tooltips and accessible control labels for chat, vocabulary, phrasebook, feedback, navigation, loading, and shared panels now follow the selected interface language.
+- The review prompt waits for the existing-review check before showing the rating form, preventing early rating selections from being lost.
+
 ## [1.9.20] - 2026-09-24
 
 ### Fixed

@@ -116,6 +116,7 @@ not.
 
 When the prompt opens, it requests `/api/reviews/me`:
 
+- a loading state blocks the form until the lookup completes, including when the prompt reopens;
 - an existing review suppresses the prompt;
 - a successful no-review response shows the form;
 - a failed lookup shows an error-only state and prevents submission.

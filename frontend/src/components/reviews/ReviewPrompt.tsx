@@ -169,13 +169,17 @@ export function ReviewPrompt({
   onSubmitted,
 }: ReviewPromptProps) {
   const t = useTranslations('reviewPrompt')
-  const [checking, setChecking] = useState(false)
+  const [checking, setChecking] = useState(true)
   const [hasReview, setHasReview] = useState(false)
   const [error, setError] = useState('')
   const [statusCheckFailed, setStatusCheckFailed] = useState(false)
 
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      setChecking(true)
+      setHasReview(false)
+      return
+    }
     let cancelled = false
     setChecking(true)
     setError('')

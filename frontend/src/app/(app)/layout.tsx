@@ -405,7 +405,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <button
             onClick={() => setMobileMenuOpen((o) => !o)}
             className="text-fl-muted-2 hover:text-fl-fg p-1 font-mono transition-colors"
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={
+              mobileMenuOpen ? tCommon('closeMenu') : tCommon('openMenu')
+            }
           >
             <span className="text-base leading-none">
               {mobileMenuOpen ? '✕' : '☰'}
