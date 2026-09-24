@@ -1070,7 +1070,8 @@
         "ro": "Romeno",
         "tr": "Turco",
         "sv": "Sueco",
-        "da": "Dinamarquês"
+        "da": "Dinamarquês",
+        "fi": "Finlandês"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Turco",
     "sv": "Sueco",
     "da": "Dinamarquês",
+    "fi": "Finlandês",
     "myLanguages": "Meus idiomas",
     "addLanguage": "Adicionar idioma",
     "selectLanguage": "Selecione o idioma que deseja aprender",

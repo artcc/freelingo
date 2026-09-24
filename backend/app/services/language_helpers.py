@@ -138,6 +138,7 @@ _VOICE_SESSION_TITLES: dict[str, str] = {
     "tr": "Sesli oturum",
     "sv": "Röstsamtal",
     "da": "Stemmesamtale",
+    "fi": "Äänikeskustelu",
 }
 
 _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
@@ -154,6 +155,7 @@ _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
     "tr": "Turkish",
     "sv": "Swedish",
     "da": "Danish",
+    "fi": "Finnish",
 }
 
 _MONTH_NAMES: dict[str, list[str]] = {
@@ -324,6 +326,20 @@ _MONTH_NAMES: dict[str, list[str]] = {
         "oktober",
         "november",
         "december",
+    ],
+    "fi": [
+        "tammikuuta",
+        "helmikuuta",
+        "maaliskuuta",
+        "huhtikuuta",
+        "toukokuuta",
+        "kesäkuuta",
+        "heinäkuuta",
+        "elokuuta",
+        "syyskuuta",
+        "lokakuuta",
+        "marraskuuta",
+        "joulukuuta",
     ],
 }
 

@@ -25,6 +25,7 @@ const LANGUAGES = [
   'tr',
   'sv',
   'da',
+  'fi',
 ] as const
 
 type SelectedPlan = 'monthly' | 'yearly'

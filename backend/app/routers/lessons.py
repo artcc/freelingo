@@ -140,6 +140,13 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "God udtale!",
         "target_phrase": "Målfrasen var: {answer}",
     },
+    "fi": {
+        "correct": "Oikein!",
+        "correct_answer": "Oikea vastaus: {answer}",
+        "free_write_unavailable": "Kirjoitettua vastausta ei voitu arvioida juuri nyt.",
+        "good_pronunciation": "Hyvä ääntäminen!",
+        "target_phrase": "Tavoiteilmaus oli: {answer}",
+    },
 }
 
 

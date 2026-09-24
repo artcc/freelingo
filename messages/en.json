@@ -1070,7 +1070,8 @@
         "ro": "Romanian",
         "tr": "Turkish",
         "sv": "Swedish",
-        "da": "Danish"
+        "da": "Danish",
+        "fi": "Finnish"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Turkish",
     "sv": "Swedish",
     "da": "Danish",
+    "fi": "Finnish",
     "myLanguages": "My Languages",
     "addLanguage": "Add new language",
     "selectLanguage": "Select the language you want to learn",

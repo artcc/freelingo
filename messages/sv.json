@@ -1070,7 +1070,8 @@
         "ro": "Rumänska",
         "tr": "Turkiska",
         "sv": "Svenska",
-        "da": "Danska"
+        "da": "Danska",
+        "fi": "Finska"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Turkiska",
     "sv": "Svenska",
     "da": "Danska",
+    "fi": "Finska",
     "myLanguages": "Mina språk",
     "addLanguage": "Lägg till nytt språk",
     "selectLanguage": "Välj språket du vill lära dig",

@@ -8,13 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
-- Turkish (`tr`), Swedish (`sv`), and Danish (`da`) interface and native-language options across registration, Settings, and administration, with translated UI, learning feedback, voice-session titles, and emails. These are not study languages.
-- Dashboard announcements can use these three languages as source or translations alongside the original ten.
+- Turkish (`tr`), Swedish (`sv`), Danish (`da`), and Finnish (`fi`) interface and native-language options across registration, Settings, and administration, with translated UI, learning feedback, voice-session titles, and emails. These are not study languages.
+- Dashboard announcements can use these four languages as source or translations alongside the original ten.
 
 ### Changed
 
-- Existing dashboard announcements with ten, eleven, or twelve translations remain readable; a new save requires all thirteen, and adding a missing language creates a new announcement revision.
-- What's New announces five interface languages (Croatian, Danish, Finnish, Swedish, and Turkish) in alphabetical order for each of the thirteen current interface locales, alongside the general fixes note.
+- Existing dashboard announcements with ten, eleven, twelve, or thirteen translations remain readable; a new save requires all fourteen, and adding a missing language creates a new announcement revision.
+- What's New announces five interface languages (Croatian, Danish, Finnish, Swedish, and Turkish) in alphabetical order for each of the fourteen current interface locales, alongside the general fixes note.
 
 ### Fixed
 

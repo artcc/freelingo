@@ -1070,7 +1070,8 @@
         "ro": "Rumeno",
         "tr": "Turco",
         "sv": "Svedese",
-        "da": "Danese"
+        "da": "Danese",
+        "fi": "Finlandese"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Turco",
     "sv": "Svedese",
     "da": "Danese",
+    "fi": "Finlandese",
     "myLanguages": "Le mie lingue",
     "addLanguage": "Aggiungi lingua",
     "selectLanguage": "Seleziona la lingua che vuoi imparare",

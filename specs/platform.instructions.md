@@ -188,7 +188,7 @@ translation context from the user profile. Reviewing always credits the card's s
 The application distinguishes UI locale, native language, learned target language, active
 `UserLanguage`, and resource-owning `StudyPlan.target_language`.
 
-The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, and `da`. Locale
+The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, `da`, and `fi`. Locale
 resolution uses `NEXT_LOCALE`, then `Accept-Language`, then English. Middleware passes the selected
 locale to server rendering; missing catalogs fall back to English. Settings updates profile locale
 and locale cookies before reload.

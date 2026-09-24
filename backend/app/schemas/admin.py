@@ -26,6 +26,7 @@ SUPPORTED_LANGUAGES = {
     "tr",
     "sv",
     "da",
+    "fi",
 }
 
 

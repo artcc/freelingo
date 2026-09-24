@@ -1070,7 +1070,8 @@
         "ro": "Rumuński",
         "tr": "Turecki",
         "sv": "Szwedzki",
-        "da": "Duński"
+        "da": "Duński",
+        "fi": "Fiński"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Turecki",
     "sv": "Szwedzki",
     "da": "Duński",
+    "fi": "Fiński",
     "myLanguages": "Moje języki",
     "addLanguage": "Dodaj język",
     "selectLanguage": "Wybierz język, którego chcesz się uczyć",

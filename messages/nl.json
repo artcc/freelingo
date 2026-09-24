@@ -1070,7 +1070,8 @@
         "ro": "Roemeens",
         "tr": "Turks",
         "sv": "Zweeds",
-        "da": "Deens"
+        "da": "Deens",
+        "fi": "Fins"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Turks",
     "sv": "Zweeds",
     "da": "Deens",
+    "fi": "Fins",
     "myLanguages": "Mijn talen",
     "addLanguage": "Taal toevoegen",
     "selectLanguage": "Kies de taal die je wilt leren",

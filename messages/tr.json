@@ -1070,7 +1070,8 @@
         "ro": "Rumence",
         "tr": "Türkçe",
         "sv": "İsveççe",
-        "da": "Danca"
+        "da": "Danca",
+        "fi": "Fince"
       }
     }
   },
@@ -1245,6 +1246,7 @@
     "tr": "Türkçe",
     "sv": "İsveççe",
     "da": "Danca",
+    "fi": "Fince",
     "myLanguages": "Dillerim",
     "addLanguage": "Yeni dil ekle",
     "selectLanguage": "Öğrenmek istediğiniz dili seçin",

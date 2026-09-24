@@ -146,6 +146,14 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "Hvis knappen ikke virker, kan du kopiere linket og indsætte det i din browser:",
         "footer": "Hvis du ikke har oprettet kontoen, kan du ignorere denne e-mail.",
     },
+    "fi": {
+        "greeting": "Hei {name},",
+        "subject": "Vahvista FreeLingo-tilisi",
+        "body": "Kiitos, että loit FreeLingo-tilin.<br />Vahvista sähköpostiosoitteesi napsauttamalla alla olevaa painiketta. Linkki on voimassa <strong>24 tuntia</strong>.",
+        "button": "Vahvista tilini",
+        "link_fallback": "Jos painike ei toimi, kopioi tämä linkki ja liitä se selaimeesi:",
+        "footer": "Jos et luonut tätä tiliä, voit jättää tämän viestin huomiotta.",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -252,6 +260,14 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "Nulstil min adgangskode",
         "link_fallback": "Hvis knappen ikke virker, kan du kopiere linket og indsætte det i din browser:",
         "footer": "Hvis du ikke har bedt om at få nulstillet adgangskoden, kan du ignorere denne e-mail.",
+    },
+    "fi": {
+        "greeting": "Hei {name},",
+        "subject": "Palauta FreeLingo-salasanasi",
+        "body": "Saimme pyynnön palauttaa FreeLingo-tilisi salasana.<br />Luo uusi salasana napsauttamalla alla olevaa painiketta. Linkki on voimassa <strong>1 tunnin</strong>.",
+        "button": "Palauta salasanani",
+        "link_fallback": "Jos painike ei toimi, kopioi tämä linkki ja liitä se selaimeesi:",
+        "footer": "Jos et pyytänyt salasanan palautusta, voit jättää tämän viestin huomiotta.",
     },
 }
 
@@ -386,6 +402,16 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "Gå til min oversigt",
         "footer": "God fornøjelse med læringen!",
     },
+    "fi": {
+        "subject": "Tervetuloa FreeLingoon!",
+        "greeting": "Hei {name},",
+        "body": "Tilisi on valmis. Näin pääset alkuun:",
+        "step1": "Tee <strong>tasoarvio</strong> – se selvittää nykyisen tasosi (A1–C2) sekä vahvuutesi ja kehittämiskohteesi.",
+        "step2": "Luo <strong>opintosuunnitelmasi</strong> – tasosi ja tavoitteidesi mukainen viikkosuunnitelma.",
+        "step3": "Suorita ensimmäinen päivittäinen oppituntisi ja aloita putkesi.",
+        "button": "Siirry koontinäyttöön",
+        "footer": "Iloisia opiskeluhetkiä!",
+    },
 }
 
 
@@ -467,6 +493,12 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "Hej {name},",
         "body": "Din FreeLingo-konto er blevet slettet. Alle dine oplysninger er fjernet permanent fra vores servere.",
         "footer": "Hvis du ikke har bedt om sletningen, skal du kontakte os med det samme.",
+    },
+    "fi": {
+        "subject": "FreeLingo-tilisi on poistettu",
+        "greeting": "Hei {name},",
+        "body": "FreeLingo-tilisi on poistettu. Kaikki tietosi on poistettu pysyvästi palvelimiltamme.",
+        "footer": "Jos et pyytänyt tilin poistamista, ota meihin välittömästi yhteyttä.",
     },
 }
 
@@ -587,6 +619,15 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Emne",
         "message_label": "Besked",
         "footer": "Sendt via FreeLingos kontaktformular",
+    },
+    "fi": {
+        "email_title": "Yhteydenottolomakkeen viesti",
+        "subject_prefix": "[FreeLingo Yhteydenotto]",
+        "logo": "FreeLingo: Yhteydenottolomake",
+        "from_label": "Lähettäjä",
+        "subject_label": "Aihe",
+        "message_label": "Viesti",
+        "footer": "Lähetetty FreeLingon yhteydenottolomakkeella",
     },
 }
 
@@ -760,6 +801,19 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Se i administrationspanelet",
         "footer": "FreeLingos feedbacktavle",
     },
+    "fi": {
+        "email_title": "Uusi palaute lähetetty",
+        "logo": "FreeLingo: Uusi palaute",
+        "feature_label": "Ominaisuusehdotus",
+        "bug_label": "Virheraportti",
+        "feature_subject_prefix": "[Ominaisuusehdotus]",
+        "bug_subject_prefix": "[Virheraportti]",
+        "author_label": "Lähettäjä",
+        "title_label": "Otsikko",
+        "description_label": "Kuvaus",
+        "cta": "Näytä ylläpidossa",
+        "footer": "FreeLingon palautetaulu",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -918,6 +972,18 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "empty_comment": "Ingen kommentar tilføjet.",
         "cta": "Se i administrationspanelet",
         "footer": "Moderering af FreeLingo-anmeldelser",
+    },
+    "fi": {
+        "email_title": "Uusi arvostelu lähetetty",
+        "subject_prefix": "[Uusi arvostelu]",
+        "logo": "FreeLingo: Uusi arvostelu",
+        "author_label": "Lähettäjä",
+        "rating_label": "Arvosana",
+        "language_label": "Opiskeltava kieli",
+        "comment_label": "Kommentti",
+        "empty_comment": "Kommenttia ei annettu.",
+        "cta": "Näytä ylläpidossa",
+        "footer": "FreeLingon arvostelujen moderointi",
     },
 }
 

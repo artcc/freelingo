@@ -8,6 +8,7 @@ import { useConfigStore } from '@/store/config'
 import { useLanguageStore } from '@/store/language'
 import de from '../../../messages/de.json'
 import da from '../../../messages/da.json'
+import fi from '../../../messages/fi.json'
 import en from '../../../messages/en.json'
 import es from '../../../messages/es.json'
 import fr from '../../../messages/fr.json'
@@ -34,7 +35,7 @@ vi.mock('@/lib/api', () => ({ apiFetch }))
 
 import OnboardingPage from '@/app/(auth)/onboarding/page'
 
-const catalogs = { da, de, en, es, fr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
+const catalogs = { da, de, en, es, fi, fr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
 type Locale = keyof typeof catalogs
 
 const spanishSubtitles: Record<Locale, string> = {
@@ -42,6 +43,7 @@ const spanishSubtitles: Record<Locale, string> = {
   de: 'Sprache: Spanisch. Wofür möchtest du sie nutzen? Wähle alle zutreffenden Ziele aus.',
   en: 'Language: Spanish. What do you want to use it for? Select all that apply.',
   es: 'Idioma: español. ¿Para qué quieres utilizarlo? Selecciona todos los objetivos que correspondan.',
+  fi: 'Kieli: Espanja. Mihin haluat käyttää sitä? Valitse kaikki sopivat.',
   fr: "Langue : espagnol. Dans quel but souhaitez-vous l'utiliser ? Sélectionnez tous les objectifs qui vous correspondent.",
   it: 'Lingua: spagnolo. Per cosa vuoi usarla? Seleziona tutti gli obiettivi che fanno al caso tuo.',
   nl: 'Taal: Spaans. Waarvoor wil je deze taal gebruiken? Selecteer alle doelen die van toepassing zijn.',
