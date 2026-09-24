@@ -623,7 +623,7 @@
     "learningRoadmap": "Put učenja",
     "level": "Razina",
     "duration": "Trajanje",
-    "durationDetail": "{weeks} tjedana · {days} dana/tjedan",
+    "durationDetail": "{weeks, plural, one {# tjedan} few {# tjedna} other {# tjedana}} · {days, plural, one {# dan/tjedan} few {# dana/tjedan} other {# dana/tjedan}}",
     "unitsLabel": "Jedinice",
     "noUnitsForLevel": "Za razinu {level} nema dostupnih jedinica",
     "takeAssessmentArrow": "Riješi procjenu →",

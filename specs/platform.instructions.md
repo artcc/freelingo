@@ -193,7 +193,9 @@ The application distinguishes UI locale, native language, learned target languag
 `UserLanguage`, and resource-owning `StudyPlan.target_language`.
 
 The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, `da`, `fi`, and `hr`. Locale
-resolution uses `NEXT_LOCALE`, then `Accept-Language`, then English. Middleware passes the selected
+resolution uses `NEXT_LOCALE`, then `Accept-Language`, then English. Only header entries with a parsed
+quality greater than 0 and no greater than 1 are considered. The initial browser script preserves a
+supported `NEXT_LOCALE` value even when `LOCALE_DETECTED` is absent. Middleware passes the selected
 locale to server rendering; missing catalogs fall back to English. After a successful profile save,
 Settings synchronizes `NEXT_LOCALE` and `LOCALE_DETECTED` with the selected interface locale. It reloads
 when that selection differs from the currently rendered locale, even if the profile already stores

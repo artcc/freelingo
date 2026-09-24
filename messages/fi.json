@@ -645,7 +645,7 @@
     "levelCompleteDesc": "Olet saavuttanut tason {level} suunnitelman lopun. Tee tasotesti vahvistaaksesi edistymisesi ja avataksesi seuraavan tason.",
     "levelCompleteHint": "Testi kestää noin 20 minuuttia ja sisältää kielioppia, sanastoa ja lukemista.",
     "beginLevelTest": "Aloita tasotesti",
-    "nLessons": "{count} oppituntia",
+    "nLessons": "{count, plural, one {# oppitunti} other {# oppituntia}}",
     "nGrammar": "{count} kielioppitehtävää",
     "levelTestLabel": "Tasotesti",
     "unitAriaLabel": "Yksikkö {index}: {title}",

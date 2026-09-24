@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Fixed
 
 - Saving the interface language synchronizes locale cookies and applies the selection when the displayed language differs, including when that selection was already saved in the profile.
+- Initial locale detection preserves an existing supported interface-language cookie and ignores `Accept-Language` entries with zero or out-of-range quality weights.
 - Post-assessment voice-trial prompts and Premium continuation messages are translated in French, Portuguese, German, Italian, Polish, Dutch, Romanian, and Russian.
 - Voice transcription, tutor-response, speech-generation, and transport errors display localized messages instead of raw backend or WebSocket diagnostics.
 - Croatian feedback comment counts use the correct plural forms, including counts such as 21 and 31.

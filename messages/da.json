@@ -645,7 +645,7 @@
     "levelCompleteDesc": "Du er nået til slutningen af din plan for niveau {level}. Tag niveautesten for at bekræfte dine fremskridt og låse op for næste niveau.",
     "levelCompleteHint": "Testen tager cirka 20 minutter og dækker grammatik, ordforråd og læsning.",
     "beginLevelTest": "Start niveautesten",
-    "nLessons": "{count} lektioner",
+    "nLessons": "{count, plural, one {# lektion} other {# lektioner}}",
     "nGrammar": "{count} grammatiklektioner",
     "levelTestLabel": "Niveautest",
     "unitAriaLabel": "Enhed {index}: {title}",
