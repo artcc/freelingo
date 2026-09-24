@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.9.15**
+**Current version: 1.9.20**
 
 ## Project
 
