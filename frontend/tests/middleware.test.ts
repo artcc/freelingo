@@ -94,6 +94,15 @@ describe('middleware', () => {
       expect(setCookie).toContain('NEXT_LOCALE=es')
     })
 
+    it('detects Swedish browser language from sv-SE', () => {
+      const req = createRequest('/login', {
+        acceptLanguage: 'sv-SE,sv;q=0.9,en;q=0.8',
+      })
+
+      const res = middleware(req)
+      expect(res.headers.get('set-cookie')).toContain('NEXT_LOCALE=sv')
+    })
+
     it('falls back to en when no locale detected', () => {
       const req = createRequest('/login')
       const res = middleware(req)

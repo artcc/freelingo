@@ -1068,7 +1068,8 @@
         "nl": "Néerlandais",
         "pl": "Polonais",
         "ro": "Roumain",
-        "tr": "Turc"
+        "tr": "Turc",
+        "sv": "Suédois"
       }
     }
   },
@@ -1241,6 +1242,7 @@
     "ro": "Roumain",
     "ru": "Russe",
     "tr": "Turc",
+    "sv": "Suédois",
     "myLanguages": "Mes langues",
     "addLanguage": "Ajouter une langue",
     "selectLanguage": "Choisissez la langue que vous voulez apprendre",
@@ -1496,8 +1498,8 @@
     "version": "v1.9.25",
     "cta": "Compris",
     "entry1": {
-      "label": "Le turc est arrivé",
-      "desc": "Tu peux désormais utiliser FreeLingo en turc. Choisis le turc comme langue de l'interface dans les paramètres."
+      "label": "Cinq nouvelles langues d'interface",
+      "desc": "FreeLingo est disponible en croate, danois, finnois, suédois et turc. Choisis la langue de l'interface dans les paramètres."
     },
     "entry2": {
       "label": "Une expérience plus fluide",

@@ -1068,7 +1068,8 @@
         "nl": "Neerlandeză",
         "pl": "Poloneză",
         "ro": "Română",
-        "tr": "Turcă"
+        "tr": "Turcă",
+        "sv": "Suedeză"
       }
     }
   },
@@ -1241,6 +1242,7 @@
     "ro": "Română",
     "ru": "Rusă",
     "tr": "Turcă",
+    "sv": "Suedeză",
     "myLanguages": "Limbile mele",
     "addLanguage": "Adaugă limbă",
     "selectLanguage": "Alege limba pe care vrei să o înveți",
@@ -1496,8 +1498,8 @@
     "version": "v1.9.25",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Turca este aici",
-      "desc": "Acum poți folosi FreeLingo în limba turcă. Selectează turca drept limbă a interfeței în Setări."
+      "label": "Cinci limbi noi pentru interfață",
+      "desc": "FreeLingo este disponibil în croată, daneză, finlandeză, suedeză și turcă. Alege limba interfeței în Setări."
     },
     "entry2": {
       "label": "O experiență mai fluidă",

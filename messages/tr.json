@@ -1068,7 +1068,8 @@
         "nl": "Felemenkçe",
         "pl": "Lehçe",
         "ro": "Rumence",
-        "tr": "Türkçe"
+        "tr": "Türkçe",
+        "sv": "İsveççe"
       }
     }
   },
@@ -1241,6 +1242,7 @@
     "ro": "Rumence",
     "ru": "Rusça",
     "tr": "Türkçe",
+    "sv": "İsveççe",
     "myLanguages": "Dillerim",
     "addLanguage": "Yeni dil ekle",
     "selectLanguage": "Öğrenmek istediğiniz dili seçin",
@@ -1496,8 +1498,8 @@
     "version": "v1.9.25",
     "cta": "Anladım",
     "entry1": {
-      "label": "Türkçe artık burada",
-      "desc": "FreeLingo'yu artık Türkçe kullanabilirsiniz. Ayarlar'dan arayüz dili olarak Türkçe'yi seçin."
+      "label": "Beş yeni arayüz dili",
+      "desc": "FreeLingo, Danca, Fince, Hırvatça, İsveççe ve Türkçe dillerinde kullanılabilir. Arayüz dilini Ayarlar'dan seçin."
     },
     "entry2": {
       "label": "Daha akıcı bir deneyim",

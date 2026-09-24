@@ -6,7 +6,7 @@ from app.models.dashboard_banner import DashboardBanner
 from app.schemas.dashboard_banner import DashboardBannerTranslationResponse
 from app.services.llm_adapter import LLMError
 
-LOCALES = ("en", "es", "fr", "pt", "de", "it", "ru", "nl", "pl", "ro", "tr")
+LOCALES = ("en", "es", "fr", "pt", "de", "it", "ru", "nl", "pl", "ro", "tr", "sv")
 
 
 def banner_translations(label: str = "Notice") -> dict[str, dict[str, str]]:
@@ -53,6 +53,7 @@ async def test_existing_ten_locale_banner_remains_readable_until_turkish_is_adde
     _, headers = admin_user
     legacy_translations = banner_translations()
     legacy_translations.pop("tr")
+    legacy_translations.pop("sv")
     db_session.add(
         DashboardBanner(
             id=1,
@@ -81,6 +82,37 @@ async def test_existing_ten_locale_banner_remains_readable_until_turkish_is_adde
         json=banner_update(translations=legacy_translations),
     )
     assert missing_tr.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_existing_eleven_locale_banner_remains_readable_until_swedish_is_added(
+    client, admin_user, db_session
+):
+    _, headers = admin_user
+    legacy_translations = banner_translations()
+    legacy_translations.pop("sv")
+    db_session.add(
+        DashboardBanner(
+            id=1,
+            source_locale="en",
+            is_active=True,
+            translations=legacy_translations,
+            revision=5,
+        )
+    )
+    await db_session.commit()
+
+    response = await client.get("/api/admin/dashboard-banner", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["translations"] == legacy_translations
+    assert response.json()["revision"] == 5
+
+    missing_sv = await client.put(
+        "/api/admin/dashboard-banner",
+        headers=headers,
+        json=banner_update(translations=legacy_translations),
+    )
+    assert missing_sv.status_code == 422
 
 
 @pytest.mark.asyncio
@@ -147,6 +179,7 @@ async def test_translate_banner_returns_all_locales_and_preserves_stripped_sourc
         "description": "Service returns shortly.",
     }
     assert "tr" in translations
+    assert "sv" in translations
 
     # Translation is a preview and must not create the singleton.
     banner_response = await client.get("/api/admin/dashboard-banner", headers=headers)
@@ -159,7 +192,7 @@ async def test_translate_banner_accepts_turkish_source(client, admin_user, monke
     generated = banner_translations("Generated")
 
     async def fake_structured_output(messages, schema):
-        assert "all eleven requested locales" in messages[0]["content"]
+        assert "all twelve requested locales" in messages[0]["content"]
         assert "Source locale: tr" in messages[0]["content"]
         return schema(translations=generated)
 

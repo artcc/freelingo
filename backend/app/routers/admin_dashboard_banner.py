@@ -19,8 +19,8 @@ from app.services.llm_adapter import LLMError, llm_adapter
 
 router = APIRouter(prefix="/api/admin/dashboard-banner", tags=["admin"])
 
-_TRANSLATION_PROMPT = """Translate this dashboard announcement faithfully into all eleven requested locales.
-Return en, es, fr, pt, de, it, ru, nl, pl, ro, and tr. Preserve the original tone and meaning.
+_TRANSLATION_PROMPT = """Translate this dashboard announcement faithfully into all twelve requested locales.
+Return en, es, fr, pt, de, it, ru, nl, pl, ro, tr, and sv. Preserve the original tone and meaning.
 Do not add claims, details, formatting, Markdown, or HTML. Every field must contain plain text only.
 For the source locale, copy each provided field exactly.
 

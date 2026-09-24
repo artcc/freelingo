@@ -136,6 +136,7 @@ _VOICE_SESSION_TITLES: dict[str, str] = {
     "ro": "Sesiune vocală",
     "ru": "Голосовая сессия",
     "tr": "Sesli oturum",
+    "sv": "Röstsamtal",
 }
 
 _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
@@ -150,6 +151,7 @@ _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
     "ro": "Romanian",
     "ru": "Russian",
     "tr": "Turkish",
+    "sv": "Swedish",
 }
 
 _MONTH_NAMES: dict[str, list[str]] = {
@@ -292,6 +294,20 @@ _MONTH_NAMES: dict[str, list[str]] = {
         "Ekim",
         "Kasım",
         "Aralık",
+    ],
+    "sv": [
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december",
     ],
 }
 

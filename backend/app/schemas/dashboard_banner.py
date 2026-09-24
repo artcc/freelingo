@@ -5,7 +5,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-DashboardBannerLocale = Literal["en", "es", "fr", "pt", "de", "it", "ru", "nl", "pl", "ro", "tr"]
+DashboardBannerLocale = Literal["en", "es", "fr", "pt", "de", "it", "ru", "nl", "pl", "ro", "tr", "sv"]
 
 
 class DashboardBannerTranslation(BaseModel):
@@ -38,10 +38,12 @@ class DashboardBannerStoredTranslations(BaseModel):
     pl: DashboardBannerTranslation
     ro: DashboardBannerTranslation
     tr: DashboardBannerTranslation | None = None
+    sv: DashboardBannerTranslation | None = None
 
 
 class DashboardBannerTranslations(DashboardBannerStoredTranslations):
     tr: DashboardBannerTranslation
+    sv: DashboardBannerTranslation
 
 
 class DashboardBannerTranslateRequest(DashboardBannerTranslation):

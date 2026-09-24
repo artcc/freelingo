@@ -1068,7 +1068,8 @@
         "nl": "Niederländisch",
         "pl": "Polnisch",
         "ro": "Rumänisch",
-        "tr": "Türkisch"
+        "tr": "Türkisch",
+        "sv": "Schwedisch"
       }
     }
   },
@@ -1241,6 +1242,7 @@
     "ro": "Rumänisch",
     "ru": "Russisch",
     "tr": "Türkisch",
+    "sv": "Schwedisch",
     "myLanguages": "Meine Sprachen",
     "addLanguage": "Sprache hinzufügen",
     "selectLanguage": "Wähle die Sprache, die du lernen möchtest",
@@ -1496,8 +1498,8 @@
     "version": "v1.9.25",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Türkisch ist da",
-      "desc": "Du kannst FreeLingo jetzt auf Türkisch nutzen. Wähle Türkisch in den Einstellungen als Sprache der Benutzeroberfläche aus."
+      "label": "Fünf neue Oberflächensprachen",
+      "desc": "FreeLingo ist auf Dänisch, Finnisch, Kroatisch, Schwedisch und Türkisch verfügbar. Wähle deine Oberflächensprache in den Einstellungen."
     },
     "entry2": {
       "label": "Ein flüssigeres Erlebnis",

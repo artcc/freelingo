@@ -1068,7 +1068,8 @@
         "nl": "Dutch",
         "pl": "Polish",
         "ro": "Romanian",
-        "tr": "Turkish"
+        "tr": "Turkish",
+        "sv": "Swedish"
       }
     }
   },
@@ -1241,6 +1242,7 @@
     "ro": "Romanian",
     "ru": "Russian",
     "tr": "Turkish",
+    "sv": "Swedish",
     "myLanguages": "My Languages",
     "addLanguage": "Add new language",
     "selectLanguage": "Select the language you want to learn",
@@ -1496,8 +1498,8 @@
     "version": "v1.9.25",
     "cta": "Got it",
     "entry1": {
-      "label": "Turkish is here",
-      "desc": "You can now use FreeLingo in Turkish. Select it as your interface language in Settings."
+      "label": "Five new interface languages",
+      "desc": "FreeLingo is available in Croatian, Danish, Finnish, Swedish and Turkish. Choose your interface language in Settings."
     },
     "entry2": {
       "label": "A smoother experience",

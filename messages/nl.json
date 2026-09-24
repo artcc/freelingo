@@ -1068,7 +1068,8 @@
         "nl": "Nederlands",
         "pl": "Pools",
         "ro": "Roemeens",
-        "tr": "Turks"
+        "tr": "Turks",
+        "sv": "Zweeds"
       }
     }
   },
@@ -1241,6 +1242,7 @@
     "ro": "Roemeens",
     "ru": "Russisch",
     "tr": "Turks",
+    "sv": "Zweeds",
     "myLanguages": "Mijn talen",
     "addLanguage": "Taal toevoegen",
     "selectLanguage": "Kies de taal die je wilt leren",
@@ -1496,8 +1498,8 @@
     "version": "v1.9.25",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Turks is er",
-      "desc": "Je kunt FreeLingo nu in het Turks gebruiken. Kies Turks als interfacetaal in Instellingen."
+      "label": "Vijf nieuwe interfacetalen",
+      "desc": "FreeLingo is beschikbaar in het Deens, Fins, Kroatisch, Turks en Zweeds. Kies je interfacetaal in Instellingen."
     },
     "entry2": {
       "label": "Een soepelere ervaring",

@@ -130,6 +130,14 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "D\u00fc\u011fme \u00e7al\u0131\u015fmazsa bu ba\u011flant\u0131y\u0131 kopyalay\u0131p taray\u0131c\u0131n\u0131za yap\u0131\u015ft\u0131r\u0131n:",
         "footer": "Bu hesab\u0131 siz olu\u015fturmad\u0131ysan\u0131z bu e-postay\u0131 yok sayabilirsiniz.",
     },
+    "sv": {
+        "greeting": "Hej {name},",
+        "subject": "Bekräfta ditt FreeLingo-konto",
+        "body": "Tack för att du skapade ett FreeLingo-konto.<br />Bekräfta din e-postadress genom att klicka på knappen nedan. Länken är giltig i <strong>24 timmar</strong>.",
+        "button": "Bekräfta mitt konto",
+        "link_fallback": "Om knappen inte fungerar kan du kopiera länken och klistra in den i din webbläsare:",
+        "footer": "Om du inte har skapat kontot kan du ignorera det här e-postmeddelandet.",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -220,6 +228,14 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "Parolam\u0131 s\u0131f\u0131rla",
         "link_fallback": "D\u00fc\u011fme \u00e7al\u0131\u015fmazsa bu ba\u011flant\u0131y\u0131 kopyalay\u0131p taray\u0131c\u0131n\u0131za yap\u0131\u015ft\u0131r\u0131n:",
         "footer": "Parola s\u0131f\u0131rlama iste\u011finde bulunmad\u0131ysan\u0131z bu e-postay\u0131 g\u00fcvenle yok sayabilirsiniz.",
+    },
+    "sv": {
+        "greeting": "Hej {name},",
+        "subject": "Återställ ditt FreeLingo-lösenord",
+        "body": "Vi har fått en begäran om att återställa lösenordet för ditt FreeLingo-konto.<br />Klicka på knappen nedan för att skapa ett nytt lösenord. Länken är giltig i <strong>1 timme</strong>.",
+        "button": "Återställ mitt lösenord",
+        "link_fallback": "Om knappen inte fungerar kan du kopiera länken och klistra in den i din webbläsare:",
+        "footer": "Om du inte har begärt en lösenordsåterställning kan du ignorera det här e-postmeddelandet.",
     },
 }
 
@@ -334,6 +350,16 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "Panoma git",
         "footer": "\u0130yi \u00e7al\u0131\u015fmalar!",
     },
+    "sv": {
+        "subject": "Välkommen till FreeLingo!",
+        "greeting": "Hej {name},",
+        "body": "Ditt konto är redo. Så här kommer du igång:",
+        "step1": "Gör <strong>nivåbedömningen</strong> – den visar din nuvarande nivå (A1–C2) samt dina styrkor och svagheter.",
+        "step2": "Skapa din <strong>studieplan</strong> – en plan vecka för vecka anpassad till din nivå och dina mål.",
+        "step3": "Slutför din första dagliga lektion och börja bygga din svit.",
+        "button": "Gå till min översikt",
+        "footer": "Lycka till med studierna!",
+    },
 }
 
 
@@ -403,6 +429,12 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "Merhaba {name},",
         "body": "FreeLingo hesab\u0131n\u0131z ba\u015far\u0131yla silindi. T\u00fcm verileriniz sunucular\u0131m\u0131zdan kal\u0131c\u0131 olarak kald\u0131r\u0131ld\u0131.",
         "footer": "Bu silme i\u015flemini siz istemediyseniz l\u00fctfen hemen bizimle ileti\u015fime ge\u00e7in.",
+    },
+    "sv": {
+        "subject": "Ditt FreeLingo-konto har raderats",
+        "greeting": "Hej {name},",
+        "body": "Ditt FreeLingo-konto har raderats. Alla dina uppgifter har tagits bort permanent från våra servrar.",
+        "footer": "Om du inte har begärt att kontot ska raderas ska du kontakta oss omedelbart.",
     },
 }
 
@@ -505,6 +537,15 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Konu",
         "message_label": "Mesaj",
         "footer": "FreeLingo iletişim formu aracılığıyla gönderildi",
+    },
+    "sv": {
+        "email_title": "Meddelande från kontaktformuläret",
+        "subject_prefix": "[FreeLingo Kontakt]",
+        "logo": "FreeLingo: Kontaktformulär",
+        "from_label": "Från",
+        "subject_label": "Ämne",
+        "message_label": "Meddelande",
+        "footer": "Skickat via FreeLingos kontaktformulär",
     },
 }
 
@@ -652,6 +693,19 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Yönetim panelinde görüntüle",
         "footer": "FreeLingo geri bildirim panosu",
     },
+    "sv": {
+        "email_title": "Ny feedback har skickats in",
+        "logo": "FreeLingo: Ny feedback",
+        "feature_label": "Funktionsförslag",
+        "bug_label": "Felrapport",
+        "feature_subject_prefix": "[Funktionsförslag]",
+        "bug_subject_prefix": "[Felrapport]",
+        "author_label": "Skickat av",
+        "title_label": "Titel",
+        "description_label": "Beskrivning",
+        "cta": "Visa i administrationspanelen",
+        "footer": "FreeLingos feedbacktavla",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -786,6 +840,18 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "empty_comment": "Yorum yazılmadı.",
         "cta": "Yönetim panelinde görüntüle",
         "footer": "FreeLingo yorum moderasyonu",
+    },
+    "sv": {
+        "email_title": "Nytt omdöme har skickats in",
+        "subject_prefix": "[Nytt omdöme]",
+        "logo": "FreeLingo: Nytt omdöme",
+        "author_label": "Skickat av",
+        "rating_label": "Betyg",
+        "language_label": "Språk som lärs in",
+        "comment_label": "Kommentar",
+        "empty_comment": "Ingen kommentar lämnades.",
+        "cta": "Visa i administrationspanelen",
+        "footer": "Moderering av FreeLingo-omdömen",
     },
 }
 

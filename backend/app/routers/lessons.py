@@ -126,6 +126,13 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "Telaffuzunuz iyi!",
         "target_phrase": "Hedef ifade şuydu: {answer}",
     },
+    "sv": {
+        "correct": "Rätt!",
+        "correct_answer": "Rätt svar: {answer}",
+        "free_write_unavailable": "Det gick inte att bedöma det skriftliga svaret just nu.",
+        "good_pronunciation": "Bra uttal!",
+        "target_phrase": "Målfrasen var: {answer}",
+    },
 }
 
 
