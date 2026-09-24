@@ -1115,7 +1115,7 @@
     "provider_anthropic": "Anthropic Claude. Necesită ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Necesită DEEPSEEK_API_KEY.",
     "q_invite": "Pot invita pe alții?",
-    "a_invite": "Da. Prin <adminLink>Admin → Utilizatori</adminLink>, administratorul poate crea utilizatori direct sau poate genera linkuri de invitație de unică folosință care expiră după 48 de ore.",
+    "a_invite": "Da. Prin <adminLink>Admin → Utilizatori</adminLink>, administratorul poate crea utilizatori direct sau poate genera linkuri de invitație de unică folosință care expiră după 48 de ore. Înregistrarea publică este dezactivată implicit (<code>ALLOW_REGISTRATION=false</code>).",
     "q_password": "Cum îmi schimb parola sau limba maternă?",
     "a_password": "Mergi la <settingsLink>Setări</settingsLink>. Acolo poți actualiza numele afișat, limba maternă și parola.",
     "q_uiLanguage": "Cum schimb limba platformei?",

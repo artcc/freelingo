@@ -1115,7 +1115,7 @@
     "provider_anthropic": "Anthropic Claude. Wymaga ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Wymaga DEEPSEEK_API_KEY.",
     "q_invite": "Czy mogę zapraszać innych?",
-    "a_invite": "Tak. Z <adminLink>Admin → Użytkownicy</adminLink> administrator może tworzyć użytkowników bezpośrednio lub generować jednorazowe linki zaproszenia wygasające po 48 godzinach.",
+    "a_invite": "Tak. Z <adminLink>Admin → Użytkownicy</adminLink> administrator może tworzyć użytkowników bezpośrednio lub generować jednorazowe linki zaproszenia wygasające po 48 godzinach. Rejestracja publiczna jest domyślnie wyłączona (<code>ALLOW_REGISTRATION=false</code>).",
     "q_password": "Jak zmienić hasło lub język ojczysty?",
     "a_password": "Przejdź do <settingsLink>Ustawień</settingsLink>. Możesz tam zaktualizować wyświetlaną nazwę, język ojczysty i hasło.",
     "q_uiLanguage": "Jak zmienić język platformy?",

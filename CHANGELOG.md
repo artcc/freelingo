@@ -20,6 +20,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Tooltips and accessible control labels for chat, vocabulary, phrasebook, feedback, navigation, loading, and shared panels now follow the selected interface language.
 - The review prompt waits for the existing-review check before showing the rating form, preventing early rating selections from being lost.
+- Grammar, vocabulary, and phrasebook help now show the user's native-language name for every supported profile language, including the five new options.
+- Voice conversation dates use the correct day punctuation in Danish and Finnish.
+- Dutch, Polish, Romanian, and Russian FAQ answers now explain that public registration is disabled by default.
 
 ## [1.9.20] - 2026-09-24
 

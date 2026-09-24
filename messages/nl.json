@@ -1115,7 +1115,7 @@
     "provider_anthropic": "Anthropic Claude. Vereist ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Vereist DEEPSEEK_API_KEY.",
     "q_invite": "Kan ik anderen uitnodigen?",
-    "a_invite": "Ja. Via <adminLink>Admin → Gebruikers</adminLink> kan de beheerder gebruikers direct aanmaken of eenmalige uitnodigingslinks genereren die na 48 uur verlopen.",
+    "a_invite": "Ja. Via <adminLink>Admin → Gebruikers</adminLink> kan de beheerder gebruikers direct aanmaken of eenmalige uitnodigingslinks genereren die na 48 uur verlopen. Openbare registratie is standaard uitgeschakeld (<code>ALLOW_REGISTRATION=false</code>).",
     "q_password": "Hoe verander ik mijn wachtwoord of moedertaal?",
     "a_password": "Ga naar <settingsLink>Instellingen</settingsLink>. Daar kun je je weergavenaam, moedertaal en wachtwoord bijwerken.",
     "q_uiLanguage": "Hoe verander ik de taal van het platform?",

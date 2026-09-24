@@ -38,10 +38,10 @@ function CategoryCard({
 }) {
   const t = useTranslations('phrasebook')
   const tCommon = useTranslations('common')
-  const tTargetLang = useTranslations('targetLanguages')
+  const tLang = useTranslations('languages')
   const user = useAuthStore((s) => s.user)
   const nativeLanguageName = user?.native_language
-    ? tTargetLang(user.native_language)
+    ? tLang(user.native_language)
     : ''
   const [nativeHelpOpen, setNativeHelpOpen] = useState(
     cat.level === 'A1' || cat.level === 'A2'

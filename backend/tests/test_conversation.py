@@ -600,7 +600,9 @@ def test_voice_session_title_danish() -> None:
 
     title = voice_session_title("da")
     assert title.startswith("Stemmesamtale — ")
-    assert " de " not in title
+    date = title.split(" — ", 1)[1]
+    assert date.split(" ", 1)[0].endswith(".")
+    assert " de " not in date
 
 
 def test_voice_session_title_finnish() -> None:
@@ -608,6 +610,7 @@ def test_voice_session_title_finnish() -> None:
 
     title = voice_session_title("fi")
     assert title.startswith("Äänikeskustelu — ")
+    assert title.split(" — ", 1)[1].split(" ", 1)[0].endswith(".")
     assert "kuuta " in title
 
 

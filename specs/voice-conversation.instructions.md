@@ -143,6 +143,8 @@ fallback element, and prevents stale decoding callbacks from restarting playback
 A voice session creates or reuses a `Conversation`. Reuse requires a positive supplied conversation
 ID owned by the user and a compatible target language. The current frontend does not send this ID,
 so normal voice starts create a new `source="voice"` conversation.
+New voice conversations use a title with a native-language label and date. Danish and Finnish dates
+place an ordinal dot after the day; Croatian dates also end with a dot after the year.
 
 `ChatHistory` rows store role, content, target language, optional plan provenance, and conversation.
 Voice sessions are visible in text-chat history. Continuing from text chat supplies textual context
