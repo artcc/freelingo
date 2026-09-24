@@ -9,8 +9,9 @@ import pl from '../../../messages/pl.json'
 import pt from '../../../messages/pt.json'
 import ro from '../../../messages/ro.json'
 import ru from '../../../messages/ru.json'
+import tr from '../../../messages/tr.json'
 
-const locales = { de, es, fr, it: itMessages, nl, pl, pt, ro, ru }
+const locales = { de, es, fr, it: itMessages, nl, pl, pt, ro, ru, tr }
 
 describe('admin i18n messages', () => {
   it('keeps admin namespace keys in sync across locales', () => {

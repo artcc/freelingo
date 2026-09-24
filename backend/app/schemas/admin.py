@@ -23,6 +23,7 @@ SUPPORTED_LANGUAGES = {
     "nl",
     "pl",
     "ro",
+    "tr",
 }
 
 

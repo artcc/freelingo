@@ -577,11 +577,21 @@ def test_voice_session_title_russian() -> None:
     assert " de " not in date_part
 
 
+def test_voice_session_title_turkish() -> None:
+    """Turkish uses its own label and plain 'D Month YYYY' format."""
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("tr")
+    assert title.startswith("Sesli oturum — ")
+    date_part = title.split(" — ", 1)[1]
+    assert " de " not in date_part
+
+
 def test_voice_session_title_all_supported_languages_produce_nonempty() -> None:
     """Every supported native language must produce a non-empty title."""
     from app.services.language_helpers import voice_session_title
 
-    supported = ["es", "fr", "pt", "de", "it", "pl", "nl", "ro", "ru"]
+    supported = ["es", "fr", "pt", "de", "it", "pl", "nl", "ro", "ru", "tr"]
     for lang in supported:
         title = voice_session_title(lang)
         assert title.strip(), f"Empty title for language '{lang}'"

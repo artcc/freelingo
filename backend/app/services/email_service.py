@@ -122,6 +122,14 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "\u0415\u0441\u043b\u0438 \u043a\u043d\u043e\u043f\u043a\u0430 \u043d\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442, \u0441\u043a\u043e\u043f\u0438\u0440\u0443\u0439\u0442\u0435 \u0438 \u0432\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u044d\u0442\u0443 \u0441\u0441\u044b\u043b\u043a\u0443 \u0432 \u0431\u0440\u0430\u0443\u0437\u0435\u0440:",
         "footer": "\u0415\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u043b\u0438 \u044d\u0442\u043e\u0442 \u0430\u043a\u043a\u0430\u0443\u043d\u0442, \u043f\u0440\u043e\u0441\u0442\u043e \u0438\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0439\u0442\u0435 \u044d\u0442\u043e \u043f\u0438\u0441\u044c\u043c\u043e.",
     },
+    "tr": {
+        "greeting": "Merhaba {name},",
+        "subject": "FreeLingo hesab\u0131n\u0131z\u0131 do\u011frulay\u0131n",
+        "body": "FreeLingo hesab\u0131n\u0131z\u0131 olu\u015fturdu\u011funuz i\u00e7in te\u015fekk\u00fcr ederiz.<br />L\u00fctfen a\u015fa\u011f\u0131daki d\u00fc\u011fmeye t\u0131klayarak e-posta adresinizi do\u011frulay\u0131n. Bu ba\u011flant\u0131 <strong>24 saat</strong> ge\u00e7erlidir.",
+        "button": "Hesab\u0131m\u0131 do\u011frula",
+        "link_fallback": "D\u00fc\u011fme \u00e7al\u0131\u015fmazsa bu ba\u011flant\u0131y\u0131 kopyalay\u0131p taray\u0131c\u0131n\u0131za yap\u0131\u015ft\u0131r\u0131n:",
+        "footer": "Bu hesab\u0131 siz olu\u015fturmad\u0131ysan\u0131z bu e-postay\u0131 yok sayabilirsiniz.",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -204,6 +212,14 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u043f\u0430\u0440\u043e\u043b\u044c",
         "link_fallback": "\u0415\u0441\u043b\u0438 \u043a\u043d\u043e\u043f\u043a\u0430 \u043d\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442, \u0441\u043a\u043e\u043f\u0438\u0440\u0443\u0439\u0442\u0435 \u0438 \u0432\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u044d\u0442\u0443 \u0441\u0441\u044b\u043b\u043a\u0443 \u0432 \u0431\u0440\u0430\u0443\u0437\u0435\u0440:",
         "footer": "\u0415\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u0437\u0430\u043f\u0440\u0430\u0448\u0438\u0432\u0430\u043b\u0438 \u0441\u0431\u0440\u043e\u0441, \u043f\u0440\u043e\u0441\u0442\u043e \u0438\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0439\u0442\u0435 \u044d\u0442\u043e \u043f\u0438\u0441\u044c\u043c\u043e.",
+    },
+    "tr": {
+        "greeting": "Merhaba {name},",
+        "subject": "FreeLingo parolan\u0131z\u0131 s\u0131f\u0131rlay\u0131n",
+        "body": "FreeLingo hesab\u0131n\u0131z\u0131n parolas\u0131n\u0131 s\u0131f\u0131rlama iste\u011fi ald\u0131k.<br />Yeni bir parola olu\u015fturmak i\u00e7in a\u015fa\u011f\u0131daki d\u00fc\u011fmeye t\u0131klay\u0131n. Bu ba\u011flant\u0131 <strong>1 saat</strong> ge\u00e7erlidir.",
+        "button": "Parolam\u0131 s\u0131f\u0131rla",
+        "link_fallback": "D\u00fc\u011fme \u00e7al\u0131\u015fmazsa bu ba\u011flant\u0131y\u0131 kopyalay\u0131p taray\u0131c\u0131n\u0131za yap\u0131\u015ft\u0131r\u0131n:",
+        "footer": "Parola s\u0131f\u0131rlama iste\u011finde bulunmad\u0131ysan\u0131z bu e-postay\u0131 g\u00fcvenle yok sayabilirsiniz.",
     },
 }
 
@@ -308,6 +324,16 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 \u043f\u0430\u043d\u0435\u043b\u044c \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
         "footer": "\u0423\u0441\u043f\u0435\u0445\u043e\u0432 \u0432 \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u0438!",
     },
+    "tr": {
+        "subject": "FreeLingo'ya ho\u015f geldiniz!",
+        "greeting": "Merhaba {name},",
+        "body": "Hesab\u0131n\u0131z haz\u0131r. Ba\u015flamak i\u00e7in \u015funlar\u0131 yapabilirsiniz:",
+        "step1": "<strong>Seviye Tespitine</strong> girin \u2014 mevcut seviyenizi (A1\u2013C2), g\u00fc\u00e7l\u00fc ve zay\u0131f y\u00f6nlerinizi belirler.",
+        "step2": "<strong>\u00c7al\u0131\u015fma Plan\u0131n\u0131z\u0131</strong> olu\u015fturun \u2014 seviyenize ve hedeflerinize g\u00f6re haz\u0131rlanm\u0131\u015f haftal\u0131k bir program.",
+        "step3": "\u0130lk g\u00fcnl\u00fck dersinizi tamamlay\u0131n ve serinizi olu\u015fturmaya ba\u015flay\u0131n.",
+        "button": "Panoma git",
+        "footer": "\u0130yi \u00e7al\u0131\u015fmalar!",
+    },
 }
 
 
@@ -371,6 +397,12 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "\u041f\u0440\u0438\u0432\u0435\u0442, {name},",
         "body": "\u0412\u0430\u0448 \u0430\u043a\u043a\u0430\u0443\u043d\u0442 FreeLingo \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0443\u0434\u0430\u043b\u0451\u043d. \u0412\u0441\u0435 \u0432\u0430\u0448\u0438 \u0434\u0430\u043d\u043d\u044b\u0435 \u0431\u044b\u043b\u0438 \u043d\u0430\u0432\u0441\u0435\u0433\u0434\u0430 \u0443\u0434\u0430\u043b\u0435\u043d\u044b \u0441 \u043d\u0430\u0448\u0438\u0445 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432.",
         "footer": "\u0415\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u0437\u0430\u043f\u0440\u0430\u0448\u0438\u0432\u0430\u043b\u0438 \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u0435, \u043d\u0435\u043c\u0435\u0434\u043b\u0435\u043d\u043d\u043e \u0441\u0432\u044f\u0436\u0438\u0442\u0435\u0441\u044c \u0441 \u043d\u0430\u043c\u0438.",
+    },
+    "tr": {
+        "subject": "FreeLingo hesab\u0131n\u0131z silindi",
+        "greeting": "Merhaba {name},",
+        "body": "FreeLingo hesab\u0131n\u0131z ba\u015far\u0131yla silindi. T\u00fcm verileriniz sunucular\u0131m\u0131zdan kal\u0131c\u0131 olarak kald\u0131r\u0131ld\u0131.",
+        "footer": "Bu silme i\u015flemini siz istemediyseniz l\u00fctfen hemen bizimle ileti\u015fime ge\u00e7in.",
     },
 }
 
@@ -464,6 +496,15 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Тема",
         "message_label": "Сообщение",
         "footer": "Отправлено через контактную форму FreeLingo",
+    },
+    "tr": {
+        "email_title": "İletişim formu mesajı",
+        "subject_prefix": "[FreeLingo İletişim]",
+        "logo": "FreeLingo: İletişim Formu",
+        "from_label": "Gönderen",
+        "subject_label": "Konu",
+        "message_label": "Mesaj",
+        "footer": "FreeLingo iletişim formu aracılığıyla gönderildi",
     },
 }
 
@@ -598,6 +639,19 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Открыть в панели администратора",
         "footer": "Доска отзывов FreeLingo",
     },
+    "tr": {
+        "email_title": "Yeni geri bildirim gönderildi",
+        "logo": "FreeLingo: Yeni Geri Bildirim",
+        "feature_label": "Özellik isteği",
+        "bug_label": "Hata bildirimi",
+        "feature_subject_prefix": "[Özellik İsteği]",
+        "bug_subject_prefix": "[Hata Bildirimi]",
+        "author_label": "Gönderen",
+        "title_label": "Başlık",
+        "description_label": "Açıklama",
+        "cta": "Yönetim panelinde görüntüle",
+        "footer": "FreeLingo geri bildirim panosu",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -720,6 +774,18 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "empty_comment": "Комментарий не указан.",
         "cta": "Открыть в панели администратора",
         "footer": "Модерация отзывов FreeLingo",
+    },
+    "tr": {
+        "email_title": "Yeni yorum gönderildi",
+        "subject_prefix": "[Yeni Yorum]",
+        "logo": "FreeLingo: Yeni Yorum",
+        "author_label": "Gönderen",
+        "rating_label": "Puan",
+        "language_label": "Öğrenilen dil",
+        "comment_label": "Yorum",
+        "empty_comment": "Yorum yazılmadı.",
+        "cta": "Yönetim panelinde görüntüle",
+        "footer": "FreeLingo yorum moderasyonu",
     },
 }
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.9.20] - 2026-09-24
 
+### Added
+
+- Turkish (`tr`) interface language: full interface translation, Turkish as a native-language option at registration and in Settings, and Turkish verification, password reset, welcome, and account deletion emails. The dashboard announcement keeps its existing ten locales and falls back to English for Turkish users.
+
 ### Fixed
 
 - Onboarding learning goals now name the selected language in all ten interface languages, with natural wording and a safe display fallback for unrecognized language codes.
