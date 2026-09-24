@@ -1295,7 +1295,7 @@
     "saveFailed": "Échec de l'enregistrement des préférences",
     "goals": {
       "title": "Vos objectifs d'apprentissage",
-      "subtitle": "Pour quoi voulez-vous utiliser l'anglais ? Sélectionnez tout ce qui s'applique.",
+      "subtitle": "Langue : {language}. Dans quel but souhaitez-vous l'utiliser ? Sélectionnez tous les objectifs qui vous correspondent.",
       "skip": "Passer",
       "travel": "Voyages et tourisme",
       "work": "Travail et carrière",
@@ -1486,7 +1486,7 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.9.15",
+    "version": "v1.9.20",
     "cta": "Compris",
     "entry1": {
       "label": "Des plans mieux équilibrés",

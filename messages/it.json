@@ -1295,7 +1295,7 @@
     "saveFailed": "Impossibile salvare le preferenze",
     "goals": {
       "title": "I tuoi obiettivi",
-      "subtitle": "Per cosa vuoi usare l'inglese? Seleziona tutto ciò che si applica.",
+      "subtitle": "Lingua: {language}. Per cosa vuoi usarla? Seleziona tutti gli obiettivi che fanno al caso tuo.",
       "skip": "Salta",
       "travel": "Viaggi e turismo",
       "work": "Lavoro e carriera",
@@ -1486,7 +1486,7 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.9.15",
+    "version": "v1.9.20",
     "cta": "Capito",
     "entry1": {
       "label": "Piani più equilibrati",

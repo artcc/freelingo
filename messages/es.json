@@ -1295,7 +1295,7 @@
     "saveFailed": "Error al guardar las preferencias",
     "goals": {
       "title": "Tus objetivos de aprendizaje",
-      "subtitle": "¿Para qué quieres usar el inglés? Selecciona todos los que apliquen.",
+      "subtitle": "Idioma: {language}. ¿Para qué quieres utilizarlo? Selecciona todos los objetivos que correspondan.",
       "skip": "Omitir",
       "travel": "Viajes y turismo",
       "work": "Trabajo y carrera",
@@ -1486,7 +1486,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.15",
+    "version": "v1.9.20",
     "cta": "Entendido",
     "entry1": {
       "label": "Planes mejor equilibrados",

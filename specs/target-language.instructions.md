@@ -74,6 +74,13 @@ The current frontend registration form does not send target language. Onboarding
 6. Creates or activates the initial `UserLanguage`.
 7. Navigates to Dashboard; assessment remains a separate next action.
 
+The learning-goals subtitle identifies the selected language using the localized `targetLanguages`
+ISO 639-1 entry rather than the regional selector label. The name appears as a standalone language
+label, so translations do not require language-specific articles or inflections. Unrecognized
+selection codes use the language of `DEFAULT_TARGET_LANGUAGE` (`en-GB`) for display, including while
+the available-language request is pending or has failed. This display fallback does not change the
+selected code or replace backend validation.
+
 ## Compatibility field
 
 `users.target_language` remains part of registration and profile responses for defaults and older

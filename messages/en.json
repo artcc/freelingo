@@ -1295,7 +1295,7 @@
     "saveFailed": "Failed to save preferences",
     "goals": {
       "title": "Your Learning Goals",
-      "subtitle": "What do you want to use English for? Select all that apply.",
+      "subtitle": "Language: {language}. What do you want to use it for? Select all that apply.",
       "skip": "Skip",
       "travel": "Travel & Tourism",
       "work": "Work & Professional",
@@ -1486,7 +1486,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.9.15",
+    "version": "v1.9.20",
     "cta": "Got it",
     "entry1": {
       "label": "Better-balanced study plans",

@@ -1,34 +1,51 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
+import { useConfigStore } from '@/store/config'
 
 export default function PrivacyPage() {
   const t = useTranslations('legal.privacy')
   const tCommon = useTranslations('common')
   const searchParams = useSearchParams()
+  const allowRegistration = useConfigStore((s) => s.allowRegistration)
+  const loadConfig = useConfigStore((s) => s.load)
+  const tRegister = useTranslations('auth.register')
+  const invite = searchParams.get('invite')
+  const inviteQuery = invite ? `&invite=${encodeURIComponent(invite)}` : ''
   const from = searchParams.get('from')
   const isFromSettings = from === 'settings'
   const isFromRegister = from === 'register'
   const isFromLanding = from === 'landing'
+
+  useEffect(() => {
+    if (isFromRegister) void loadConfig()
+  }, [isFromRegister, loadConfig])
   const backHref = isFromSettings
     ? '/settings'
     : isFromRegister
-      ? '/register'
+      ? invite
+        ? `/register?invite=${encodeURIComponent(invite)}`
+        : allowRegistration
+          ? '/register'
+          : '/login'
       : isFromLanding
         ? '/'
         : '/'
   const backLabel = isFromSettings
     ? t('linkBackSettings')
     : isFromRegister
-      ? t('linkBack')
+      ? allowRegistration || invite
+        ? t('linkBack')
+        : tRegister('login')
       : tCommon('back')
   const termsHref = isFromSettings
     ? '/terms?from=settings'
     : isFromRegister
-      ? '/terms?from=register'
+      ? `/terms?from=register${inviteQuery}`
       : isFromLanding
         ? '/terms?from=landing'
         : '/terms'

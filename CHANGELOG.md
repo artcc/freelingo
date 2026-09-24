@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.20] - 2026-09-24
+
+### Fixed
+
+- Onboarding learning goals now name the selected language in all ten interface languages, with natural wording and a safe display fallback for unrecognized language codes.
+- Public signup controls now reflect `ALLOW_REGISTRATION`: closed registration shows a localized invite-only message and Login action, while invitation links retain access to the registration form. The existing flag is exposed through `/api/config`.
+- Configuration loading can retry after temporary network or invalid JSON failures, so registration and billing controls recover on subsequent navigation without requiring a full page reload.
+- Blocked email-domain registration uses the current HTTP 422 status constant, avoiding the deprecated Starlette alias while preserving the response code and message.
+- Flashcard concurrent-deletion tests detach the deleted object before promotion, avoiding SQLAlchemy identity-map collisions when SQLite reuses its ID while preserving the simulated deletion scenario.
+
 ## [1.9.15] - 2026-09-22
 
 ### Changed

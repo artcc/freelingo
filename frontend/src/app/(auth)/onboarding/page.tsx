@@ -12,7 +12,10 @@ import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { useLanguageStore } from '@/store/language'
 import TargetLanguageSelector from '@/components/TargetLanguageSelector'
-import { DEFAULT_TARGET_LANGUAGE } from '@/lib/target-languages'
+import {
+  DEFAULT_TARGET_LANGUAGE,
+  getLanguageByCode,
+} from '@/lib/target-languages'
 
 const LEARNING_GOALS = [
   'travel',
@@ -34,6 +37,7 @@ function getSelectedPlan(plan: string | null): BillingInterval | null {
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tCommon = useTranslations('common')
+  const tLang = useTranslations('targetLanguages')
   const router = useRouter()
   const searchParams = useSearchParams()
   const setUser = useAuthStore((s) => s.setUser)
@@ -63,6 +67,11 @@ export default function OnboardingPage() {
   const [checkoutLoading, setCheckoutLoading] =
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState('')
+
+  const targetLanguageName = tLang(
+    getLanguageByCode(targetLanguage)?.iso639 ??
+      DEFAULT_TARGET_LANGUAGE.split('-')[0]
+  )
 
   useEffect(() => {
     loadConfig()
@@ -266,7 +275,7 @@ export default function OnboardingPage() {
           {step === 2 && (
             <div className="space-y-5">
               <p className="text-fl-fg font-mono text-sm">
-                {t('goals.subtitle')}
+                {t('goals.subtitle', { language: targetLanguageName })}
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {LEARNING_GOALS.map((goal) => {

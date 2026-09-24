@@ -70,7 +70,7 @@ direction, and optional reading behavior remain centralized.
 Zustand stores shared cross-route state:
 
 - `auth`: access token and current mapped user.
-- `config`: public runtime presentation flags and dashboard announcement.
+- `config`: public runtime presentation flags, including `allowRegistration` (default false), and dashboard announcement.
 - `freemium`: cached quota and trial status.
 - `language`: active language, user languages, available codes, and language mutations.
 - `loading`: request counter and loading-bar completion state.
@@ -79,6 +79,15 @@ Zustand stores shared cross-route state:
 
 Screen-specific forms, async state, playback, selections, and modal state remain local React state.
 Do not promote local state into a global store without a cross-route requirement.
+
+## Public registration surfaces
+
+The server-rendered landing page retains its one-hour `/api/config` revalidation and passes
+`allowRegistration` to pricing. Login, registration, and registration-origin legal pages load the
+config store. Public signup links use the flag, while dashboard and authenticated checkout actions retain their session
+behavior. The registration page gates the form for ordinary visitors and accepts any nonempty
+`invite` query parameter without frontend validation. Legal links carry that invite through the
+terms/privacy pages and back to registration. All closed-state copy reuses existing locale keys.
 
 ## Authenticated shell
 
