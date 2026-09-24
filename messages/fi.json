@@ -209,7 +209,7 @@
       "saving": "Tallennetaan...",
       "success": "Salasana päivitetty. Siirryt kirjautumiseen...",
       "mismatch": "Salasanat eivät täsmää",
-      "tooShort": "Salasanassa on oltava vähintään kahdeksan merkkiä",
+      "tooShort": "Salasanassa on oltava vähintään 10 merkkiä",
       "missingToken": "Virheellinen palautuslinkki. Pyydä uutta salasanan palautusta.",
       "error": "Virheellinen tai vanhentunut palautuslinkki",
       "backToLogin": "Takaisin kirjautumiseen"
@@ -1165,6 +1165,9 @@
     "statusError": "Virhe",
     "errorServicesDisabled": "Äänipalvelut eivät ole käytössä tällä palvelimella.",
     "errorConnection": "Yhteysvirhe. Yritä uudelleen.",
+    "errorTranscription": "Puhettasi ei voitu muuntaa tekstiksi. Yritä puhua uudelleen.",
+    "errorResponse": "Lingu ei voinut vastata. Yritä uudelleen.",
+    "errorSpeech": "Lingun vastausta ei voitu muuntaa puheeksi. Yritä uudelleen.",
     "errorUnauthorized": "Istunto on vanhentunut. Päivitä sivu.",
     "errorMic": "Mikrofonin käyttö estetty.",
     "errorVadInit": "Puheentunnistusta ei voitu käynnistää. Varmista, että selaimesi tukee WebAssemblyä.",

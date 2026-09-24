@@ -18,6 +18,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Interface text, resource counts, accessible controls, payment-recovery and error messages, administrator badges, review ratings, learning-language names, dates, numbers, and prices follow the selected interface language. Study help displays the user's native-language name, and voice-session dates follow native-language conventions.
 - The review prompt waits for the existing-review lookup before showing the rating form. The Dutch, Polish, Romanian, and Russian FAQs explain the default public-registration setting.
 
+### Fixed
+
+- Saving the interface language synchronizes locale cookies and applies the selection when the displayed language differs, including when that selection was already saved in the profile.
+- Post-assessment voice-trial prompts and Premium continuation messages are translated in French, Portuguese, German, Italian, Polish, Dutch, Romanian, and Russian.
+- Voice transcription, tutor-response, speech-generation, and transport errors display localized messages instead of raw backend or WebSocket diagnostics.
+- Croatian feedback comment counts use the correct plural forms, including counts such as 21 and 31.
+- Password reset displays the current password requirements and validates the 10-25 character length consistently with the backend, with translated errors across all fifteen interface locales.
+- Transactional emails declare the language of their rendered content in HTML, including the English fallback for unsupported locales.
+
 ## [1.9.20] - 2026-09-24
 
 ### Fixed

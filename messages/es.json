@@ -209,7 +209,7 @@
       "saving": "Guardando...",
       "success": "Contraseña actualizada. Redirigiendo al inicio de sesión...",
       "mismatch": "Las contraseñas no coinciden",
-      "tooShort": "La contraseña debe tener al menos 8 caracteres",
+      "tooShort": "La contraseña debe tener al menos 10 caracteres",
       "missingToken": "Enlace inválido. Por favor, solicita un nuevo restablecimiento.",
       "error": "Enlace inválido o caducado",
       "backToLogin": "Volver al inicio de sesión"
@@ -1165,6 +1165,9 @@
     "statusError": "Error",
     "errorServicesDisabled": "Los servicios de voz no están habilitados en este servidor.",
     "errorConnection": "Error de conexión. Por favor, inténtalo de nuevo.",
+    "errorTranscription": "No se ha podido transcribir lo que has dicho. Intenta hablar de nuevo.",
+    "errorResponse": "Lingu no ha podido responder. Inténtalo de nuevo.",
+    "errorSpeech": "No se ha podido generar el audio de la respuesta de Lingu. Inténtalo de nuevo.",
     "errorUnauthorized": "Sesión expirada. Por favor, actualiza la página.",
     "errorMic": "Acceso al micrófono denegado.",
     "errorVadInit": "Error al inicializar el reconocimiento de voz. Comprueba que el navegador es compatible con WebAssembly.",

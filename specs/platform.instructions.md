@@ -51,6 +51,10 @@ Login uses email and password. Missing-user verification performs a dummy bcrypt
 credential-enumeration timing differences. Password validation requires 10-25 characters with an
 uppercase letter, number, and symbol.
 
+The password-reset form displays these requirements in the interface language and checks the 10-25
+character length before submitting, counting Unicode code points consistently with the backend.
+Backend validation enforces password strength; validation errors use localized interface messages.
+
 The access token is an HS256 JWT containing user ID, role, and expiration. Its default lifetime is 15
 minutes and the frontend stores it in Zustand memory only.
 
@@ -190,8 +194,10 @@ The application distinguishes UI locale, native language, learned target languag
 
 The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, `da`, `fi`, and `hr`. Locale
 resolution uses `NEXT_LOCALE`, then `Accept-Language`, then English. Middleware passes the selected
-locale to server rendering; missing catalogs fall back to English. Settings updates profile locale
-and locale cookies before reload.
+locale to server rendering; missing catalogs fall back to English. After a successful profile save,
+Settings synchronizes `NEXT_LOCALE` and `LOCALE_DETECTED` with the selected interface locale. It reloads
+when that selection differs from the currently rendered locale, even if the profile already stores
+the selected value. A failed save leaves locale cookies and the displayed language unchanged.
 
 Target-language metadata and typography are specified separately from UI localization.
 

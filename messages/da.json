@@ -209,7 +209,7 @@
       "saving": "Gemmer...",
       "success": "Adgangskoden er opdateret. Du sendes videre til login...",
       "mismatch": "Adgangskoderne stemmer ikke overens",
-      "tooShort": "Adgangskoden skal være på mindst otte tegn",
+      "tooShort": "Adgangskoden skal være på mindst 10 tegn",
       "missingToken": "Ugyldigt link til nulstilling. Anmod om at nulstille adgangskoden igen.",
       "error": "Ugyldigt eller udløbet link til nulstilling",
       "backToLogin": "Tilbage til login"
@@ -1165,6 +1165,9 @@
     "statusError": "Fejl",
     "errorServicesDisabled": "Stemmetjenester er ikke aktiveret på denne server.",
     "errorConnection": "Forbindelsesfejl. Prøv igen.",
+    "errorTranscription": "Din tale kunne ikke omdannes til tekst. Prøv at sige det igen.",
+    "errorResponse": "Lingu kunne ikke svare. Prøv igen.",
+    "errorSpeech": "Lingus svar kunne ikke læses op. Prøv igen.",
     "errorUnauthorized": "Sessionen er udløbet. Genindlæs siden.",
     "errorMic": "Adgang til mikrofonen blev afvist.",
     "errorVadInit": "Talegenkendelsen kunne ikke startes. Kontrollér, at din browser understøtter WebAssembly.",

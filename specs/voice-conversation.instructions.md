@@ -222,6 +222,11 @@ in the browser when the session component is created.
 
 ## Error recovery and cleanup
 
+Visible errors are translated by code using the active interface locale. Transcription, tutor-response,
+and speech-generation failures have distinct messages; unknown server errors use a localized generic
+fallback. Raw server messages and socket close reasons remain diagnostic log data. Transport failures
+display the localized connection error without appended backend text or transport diagnostics.
+
 `stt_failed`, `llm_failed`, and `tts_failed` are recoverable turn errors. The frontend cancels
 playback, clears pending assistant state, releases the turn guard, keeps the session live, and clears
 the visible error after the next WAV is sent successfully.

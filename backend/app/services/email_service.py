@@ -1054,10 +1054,11 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
 }
 
 
-def _render_template(name: str, context: dict) -> str:
+def _render_template(name: str, context: dict, locale: str = "en") -> str:
     """Render a plain HTML template, escaping interpolated values by default."""
     path = _TEMPLATES_DIR / name
     html = path.read_text(encoding="utf-8")
+    context = {**context, "locale": locale if locale in _VERIFY_I18N else "en"}
     for key, value in context.items():
         rendered = str(value) if isinstance(value, _SafeHtml) else escape(str(value), quote=True)
         html = html.replace(f"{{{{{key}}}}}", rendered)
@@ -1097,6 +1098,7 @@ async def send_verification_email(
             "url": url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -1120,6 +1122,7 @@ async def send_reset_password_email(
             "url": url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -1143,6 +1146,7 @@ async def send_welcome_email(to: str, display_name: str, locale: str = "en") -> 
             "url": url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -1171,6 +1175,7 @@ async def send_contact_email(
             "footer": strings["footer"],
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     message = MessageSchema(
         subject=f"{strings['subject_prefix']} {subject}",
@@ -1200,6 +1205,7 @@ async def send_account_deleted_email(to: str, display_name: str, locale: str = "
             "footer": strings["footer"],
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -1244,6 +1250,7 @@ async def send_feedback_notification(
             "admin_url": admin_url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     subject_prefix = (
         strings["feature_subject_prefix"]
@@ -1292,6 +1299,7 @@ async def send_review_notification(
             "footer": strings["footer"],
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(
         f"{strings['subject_prefix']} {rating}/5 — {user_display_name}",

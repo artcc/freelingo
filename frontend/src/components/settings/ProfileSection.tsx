@@ -168,10 +168,10 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       setPassword('')
       setConfirmPassword('')
 
-      if (uiLocale !== user?.ui_locale) {
-        const opts = `path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`
-        document.cookie = `NEXT_LOCALE=${uiLocale}; ${opts}`
-        document.cookie = `LOCALE_DETECTED=1; ${opts}`
+      const opts = `path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`
+      document.cookie = `NEXT_LOCALE=${uiLocale}; ${opts}`
+      document.cookie = `LOCALE_DETECTED=1; ${opts}`
+      if (uiLocale !== currentLocale) {
         window.location.reload()
       }
     } catch {

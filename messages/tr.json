@@ -209,7 +209,7 @@
       "saving": "Kaydediliyor...",
       "success": "Parola güncellendi. Giriş sayfasına yönlendiriliyorsunuz...",
       "mismatch": "Parolalar eşleşmiyor",
-      "tooShort": "Parola en az 8 karakter olmalıdır",
+      "tooShort": "Parola en az 10 karakter olmalıdır",
       "missingToken": "Geçersiz sıfırlama bağlantısı. Lütfen yeni bir parola sıfırlama isteyin.",
       "error": "Geçersiz veya süresi dolmuş sıfırlama bağlantısı",
       "backToLogin": "Girişe dön"
@@ -1165,6 +1165,9 @@
     "statusError": "Hata",
     "errorServicesDisabled": "Bu sunucuda ses hizmetleri etkin değil.",
     "errorConnection": "Bağlantı hatası. Lütfen tekrar deneyin.",
+    "errorTranscription": "Söyledikleriniz yazıya dökülemedi. Lütfen yeniden konuşmayı deneyin.",
+    "errorResponse": "Lingu yanıt veremedi. Lütfen tekrar deneyin.",
+    "errorSpeech": "Lingu'nun yanıtı seslendirilemedi. Lütfen tekrar deneyin.",
     "errorUnauthorized": "Oturumun süresi doldu. Lütfen sayfayı yenileyin.",
     "errorMic": "Mikrofon erişimi reddedildi.",
     "errorVadInit": "Ses tanıma başlatılamadı. Tarayıcınızın WebAssembly desteklediğinden emin olun.",

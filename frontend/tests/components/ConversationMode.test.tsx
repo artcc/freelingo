@@ -180,6 +180,44 @@ describe('ConversationMode session lifecycle', () => {
     expect(ws.close).not.toHaveBeenCalled()
   })
 
+  it.each([
+    ['stt_failed', 'errorTranscription'],
+    ['llm_failed', 'errorResponse'],
+    ['tts_failed', 'errorSpeech'],
+    ['auth_failed', 'errorUnauthorized'],
+    ['services_disabled', 'errorServicesDisabled'],
+    ['quota_exceeded_sessions', 'quotaExceededSessions'],
+    ['quota_exceeded_time', 'quotaExceededTime'],
+    ['quota_exceeded_tokens', 'quotaExceededTokens'],
+    ['no_active_plan', 'noActivePlan'],
+    ['unknown_server_error', 'errorMessage'],
+  ])('localizes %s without displaying the backend message', async (code, key) => {
+    render(<ConversationMode />)
+    const ws = await start()
+
+    act(() => ws.message({
+      type: 'error',
+      code,
+      message: 'Untranslated backend failure',
+    }))
+
+    expect(screen.getByText(new RegExp(key))).toBeInTheDocument()
+    expect(screen.queryByText(/Untranslated backend failure/)).toBeNull()
+  })
+
+  it.each(['onerror', 'onclose'])('localizes %s without displaying transport diagnostics', async (event) => {
+    render(<ConversationMode />)
+    const ws = await start()
+
+    act(() => {
+      if (event === 'onerror') ws.onerror?.()
+      else ws.onclose?.({ code: 1011, reason: 'Untranslated close reason' })
+    })
+
+    expect(screen.getByText('✕ errorConnection')).toBeInTheDocument()
+    expect(screen.queryByText(/Untranslated close reason|\[onerror|\[code/)).toBeNull()
+  })
+
   it('clears visual speech and discards the unfinished segment on misfire', async () => {
     render(<ConversationMode />)
     const ws = await start()

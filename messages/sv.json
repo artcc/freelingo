@@ -209,7 +209,7 @@
       "saving": "Sparar...",
       "success": "Lösenordet har uppdaterats. Du skickas vidare till inloggningen...",
       "mismatch": "Lösenorden stämmer inte överens",
-      "tooShort": "Lösenordet måste vara minst åtta tecken långt",
+      "tooShort": "Lösenordet måste vara minst 10 tecken långt",
       "missingToken": "Ogiltig återställningslänk. Begär en ny lösenordsåterställning.",
       "error": "Ogiltig eller utgången återställningslänk",
       "backToLogin": "Tillbaka till inloggningen"
@@ -1165,6 +1165,9 @@
     "statusError": "Fel",
     "errorServicesDisabled": "Rösttjänster är inte aktiverade på den här servern.",
     "errorConnection": "Anslutningsfel. Försök igen.",
+    "errorTranscription": "Det gick inte att omvandla ditt tal till text. Försök säga det igen.",
+    "errorResponse": "Lingu kunde inte svara. Försök igen.",
+    "errorSpeech": "Det gick inte att läsa upp Lingus svar. Försök igen.",
     "errorUnauthorized": "Sessionen har gått ut. Uppdatera sidan.",
     "errorMic": "Åtkomst till mikrofonen nekades.",
     "errorVadInit": "Det gick inte att starta röstigenkänningen. Kontrollera att din webbläsare stöder WebAssembly.",

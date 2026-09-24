@@ -209,7 +209,7 @@
       "saving": "Saving...",
       "success": "Password updated. Redirecting to login...",
       "mismatch": "Passwords do not match",
-      "tooShort": "Password must be at least 8 characters",
+      "tooShort": "Password must be at least 10 characters",
       "missingToken": "Invalid reset link. Please request a new password reset.",
       "error": "Invalid or expired reset link",
       "backToLogin": "Back to login"
@@ -1165,6 +1165,9 @@
     "statusError": "Error",
     "errorServicesDisabled": "Voice services are not enabled on this server.",
     "errorConnection": "Connection error. Please try again.",
+    "errorTranscription": "Your speech could not be transcribed. Please try speaking again.",
+    "errorResponse": "Lingu could not respond. Please try again.",
+    "errorSpeech": "Could not generate audio for Lingu's reply. Please try again.",
     "errorUnauthorized": "Session expired. Please refresh.",
     "errorMic": "Microphone access denied.",
     "errorVadInit": "Failed to initialize voice recognition. Make sure your browser supports WebAssembly.",

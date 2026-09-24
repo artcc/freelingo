@@ -464,6 +464,75 @@ describe('ProfileSection', () => {
     expect(reloadSpy).not.toHaveBeenCalled()
   })
 
+  it('applies a saved locale when the interface is displaying another language', async () => {
+    const reloadSpy = vi.fn()
+    vi.stubGlobal('location', {
+      ...window.location,
+      reload: reloadSpy,
+      protocol: 'http:',
+    })
+    useAuthStore.setState({ user: { ...defaultUser, ui_locale: 'fi' } })
+    document.cookie = 'NEXT_LOCALE=en; path=/'
+    mockApiFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 1, ui_locale: 'fi' }),
+    })
+
+    render(<ProfileSection />)
+    expect(selectAfterLabelText('uiLocale')).toHaveValue('fi')
+    fireEvent.click(screen.getByText('saveChanges'))
+
+    await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1))
+    expect(document.cookie).toContain('NEXT_LOCALE=fi')
+    expect(document.cookie).toContain('LOCALE_DETECTED=1')
+  })
+
+  it('synchronizes cookies without reloading when choosing the displayed locale', async () => {
+    const reloadSpy = vi.fn()
+    vi.stubGlobal('location', {
+      ...window.location,
+      reload: reloadSpy,
+      protocol: 'http:',
+    })
+    useAuthStore.setState({ user: { ...defaultUser, ui_locale: 'fi' } })
+    document.cookie = 'NEXT_LOCALE=fi; path=/'
+    mockApiFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 1, ui_locale: 'en' }),
+    })
+
+    render(<ProfileSection />)
+    fireEvent.change(selectAfterLabelText('uiLocale'), {
+      target: { value: 'en' },
+    })
+    fireEvent.click(screen.getByText('saveChanges'))
+
+    await waitFor(() => expect(screen.getByText(/saved/)).toBeDefined())
+    expect(document.cookie).toContain('NEXT_LOCALE=en')
+    expect(reloadSpy).not.toHaveBeenCalled()
+  })
+
+  it('keeps the current locale when saving the profile fails', async () => {
+    const reloadSpy = vi.fn()
+    vi.stubGlobal('location', {
+      ...window.location,
+      reload: reloadSpy,
+      protocol: 'http:',
+    })
+    document.cookie = 'NEXT_LOCALE=en; path=/'
+    mockApiFetch.mockResolvedValue({ ok: false })
+
+    render(<ProfileSection />)
+    fireEvent.change(selectAfterLabelText('uiLocale'), {
+      target: { value: 'hr' },
+    })
+    fireEvent.click(screen.getByText('saveChanges'))
+
+    await waitFor(() => expect(screen.getByText(/saveFailed/)).toBeDefined())
+    expect(document.cookie).toContain('NEXT_LOCALE=en')
+    expect(reloadSpy).not.toHaveBeenCalled()
+  })
+
   // ── API errors ──────────────────────────────────────────────
 
   it('shows error message on API failure', async () => {

@@ -845,24 +845,23 @@ export default function ConversationMode({
               if (trialMode) void refreshCurrentUser()
               break
 
-            case 'error':
+            case 'error': {
               convLogger.error('ws error message', {
                 code: msg.code,
                 message: msg.message,
               })
-              setErrorMsg(
-                msg.code === 'services_disabled'
-                  ? t('errorServicesDisabled')
-                  : msg.code === 'quota_exceeded_sessions'
-                    ? t('quotaExceededSessions')
-                    : msg.code === 'quota_exceeded_time'
-                      ? t('quotaExceededTime')
-                      : msg.code === 'quota_exceeded_tokens'
-                        ? t('quotaExceededTokens')
-                        : msg.code === 'no_active_plan'
-                          ? tCommon('noActivePlan')
-                          : (msg.message ?? t('errorConnection'))
-              )
+              const errorMessages: Record<string, string> = {
+                auth_failed: t('errorUnauthorized'),
+                services_disabled: t('errorServicesDisabled'),
+                quota_exceeded_sessions: t('quotaExceededSessions'),
+                quota_exceeded_time: t('quotaExceededTime'),
+                quota_exceeded_tokens: t('quotaExceededTokens'),
+                no_active_plan: tCommon('noActivePlan'),
+                stt_failed: t('errorTranscription'),
+                llm_failed: t('errorResponse'),
+                tts_failed: t('errorSpeech'),
+              }
+              setErrorMsg(errorMessages[msg.code] ?? tCommon('errorMessage'))
               setStatus('error')
               assistantTurnActiveRef.current = false
               if (
@@ -878,6 +877,7 @@ export default function ConversationMode({
                 finalizeSession()
               }
               break
+            }
 
             case 'memory_updated':
               showMemoryToast()
@@ -892,7 +892,7 @@ export default function ConversationMode({
         if (!isCurrent()) return
         if (!cleanEndRef.current) {
           convLogger.error('ws onerror')
-          setErrorMsg(`${t('errorConnection')} [onerror → ${url}]`)
+          setErrorMsg(t('errorConnection'))
           setStatus('error')
           finalizeSession()
         }
@@ -905,9 +905,7 @@ export default function ConversationMode({
           if (ev.code === 1008) {
             setErrorMsg(t('errorUnauthorized'))
           } else if (ev.code !== 1000) {
-            setErrorMsg(
-              `${t('errorConnection')} [code ${ev.code}: ${ev.reason || 'no reason'} → ${url}]`
-            )
+            setErrorMsg(t('errorConnection'))
           }
           setStatus('error')
           finalizeSession()
@@ -915,9 +913,9 @@ export default function ConversationMode({
         cleanEndRef.current = false
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       t,
+      tCommon,
       targetLanguage,
       voiceTrialToken,
       trialMode,
