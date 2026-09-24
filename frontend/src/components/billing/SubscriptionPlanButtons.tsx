@@ -36,13 +36,12 @@ export function SubscriptionPlanButtons({
         body: JSON.stringify({ plan }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? tBilling('checkoutError'))
+        throw new Error(tBilling('checkoutError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : tBilling('checkoutError'))
+    } catch {
+      setError(tBilling('checkoutError'))
       setLoading(null)
     }
   }

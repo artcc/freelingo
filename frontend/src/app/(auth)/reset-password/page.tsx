@@ -9,6 +9,8 @@ import { apiFetch } from '@/lib/api'
 
 function ResetPasswordContent() {
   const t = useTranslations('auth.resetPassword')
+  const tCommon = useTranslations('common')
+  const tRegister = useTranslations('auth.register')
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
@@ -37,13 +39,24 @@ function ResetPasswordContent() {
         body: JSON.stringify({ token, new_password: password }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail || t('error'))
+        throw new Error(
+          res.status === 400 || res.status === 404
+            ? t('error')
+            : res.status === 422
+              ? tRegister('invalidPassword')
+              : tCommon('errorMessage')
+        )
       }
       setDone(true)
       setTimeout(() => router.push('/login'), 2000)
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('error'))
+      setError(
+        err instanceof Error &&
+          (err.message === t('error') ||
+            err.message === tRegister('invalidPassword'))
+          ? err.message
+          : tCommon('errorMessage')
+      )
     } finally {
       setLoading(false)
     }

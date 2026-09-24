@@ -478,14 +478,14 @@ describe('ProfileSection', () => {
     })
   })
 
-  it('shows error message on network failure', async () => {
+  it('shows a localized error on network failure', async () => {
     mockApiFetch.mockRejectedValue(new Error('Network error'))
     render(<ProfileSection />)
     fireEvent.click(screen.getByText('saveChanges'))
-    // The component uses err.message (the thrown Error's message) as the displayed text.
     await waitFor(() => {
-      expect(screen.getByText(/Network error/)).toBeDefined()
+      expect(screen.getByText(/saveFailed/)).toBeDefined()
     })
+    expect(screen.queryByText(/Network error/)).toBeNull()
   })
 
   it('message type is error for failures', async () => {

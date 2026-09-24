@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Dashboard announcements with ten through fourteen translations remain readable; saving requires all fifteen and completing a translation creates a new revision. The editor loads the chosen source language's text before translating.
 - What's New presents the five interface languages (Croatian, Danish, Finnish, Swedish, and Turkish) in each of the fifteen interface locales alongside a general improvements note.
-- Interface text, resource counts, accessible controls, errors, administrator badges, dates, numbers, and prices follow the selected interface language. Study help displays the user's native-language name, and voice-session dates follow native-language conventions.
+- Interface text, resource counts, accessible controls, payment-recovery and error messages, administrator badges, review ratings, learning-language names, dates, numbers, and prices follow the selected interface language. Study help displays the user's native-language name, and voice-session dates follow native-language conventions.
 - The review prompt waits for the existing-review lookup before showing the rating form. The Dutch, Polish, Romanian, and Russian FAQs explain the default public-registration setting.
 
 ## [1.9.20] - 2026-09-24

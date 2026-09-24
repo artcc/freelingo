@@ -25,7 +25,10 @@ const translations: Record<string, string> = {
   submit: 'Submit',
 }
 
-const translate = (key: string) => translations[key] ?? key
+const translate = (key: string, values?: { rating: number }) =>
+  key === 'starsLabel'
+    ? `${values?.rating} out of 5 stars`
+    : (translations[key] ?? key)
 
 vi.mock('next-intl', () => ({
   useTranslations: () => translate,
@@ -66,9 +69,9 @@ describe('ReviewPrompt', () => {
       resolveReview({ has_review: false, review: null })
     })
     await screen.findByText('Rating required')
-    fireEvent.click(screen.getByLabelText('5 stars'))
+    fireEvent.click(screen.getByLabelText('5 out of 5 stars'))
     await waitFor(() =>
-      expect(screen.getByLabelText('5 stars')).toHaveAttribute(
+      expect(screen.getByLabelText('5 out of 5 stars')).toHaveAttribute(
         'aria-checked',
         'true'
       )
@@ -96,9 +99,9 @@ describe('ReviewPrompt', () => {
       resolveReview({ has_review: false, review: null })
     })
     await screen.findByText('Rating required')
-    fireEvent.click(screen.getByLabelText('4 stars'))
+    fireEvent.click(screen.getByLabelText('4 out of 5 stars'))
     await waitFor(() =>
-      expect(screen.getByLabelText('4 stars')).toHaveAttribute(
+      expect(screen.getByLabelText('4 out of 5 stars')).toHaveAttribute(
         'aria-checked',
         'true'
       )

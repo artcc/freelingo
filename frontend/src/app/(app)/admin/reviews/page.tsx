@@ -40,10 +40,6 @@ function formatDate(iso: string, locale: string): string {
   })
 }
 
-function languageLabel(code: string): string {
-  return getLanguageByCode(code)?.nameEn ?? code
-}
-
 function stars(rating: number): string {
   return '★'.repeat(rating) + '☆'.repeat(Math.max(0, 5 - rating))
 }
@@ -51,7 +47,14 @@ function stars(rating: number): string {
 export default function AdminReviewsPage() {
   const t = useTranslations('adminReviews')
   const tAdmin = useTranslations('admin')
+  const tTarget = useTranslations('targetLanguages')
+  const tStars = useTranslations('landingReviews')
   const locale = useLocale()
+
+  function languageLabel(code: string): string {
+    const language = getLanguageByCode(code)
+    return language ? tTarget(language.code) : code
+  }
   const [reviews, setReviews] = useState<ReviewAdmin[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(0)
@@ -256,7 +259,9 @@ export default function AdminReviewsPage() {
                       </AdminBadge>
                       <span
                         className="text-fl-muted-2 font-mono text-xs"
-                        aria-label={t('starsLabel', { rating: review.rating })}
+                        aria-label={tStars('starsLabel', {
+                          rating: review.rating,
+                        })}
                       >
                         {stars(review.rating)}
                       </span>

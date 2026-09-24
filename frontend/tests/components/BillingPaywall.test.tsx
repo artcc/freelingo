@@ -387,8 +387,8 @@ describe('billing paywall UI', () => {
 
     render(<PaywallBanner />)
 
-    expect(screen.getByText('premiumBannerPastDueTitle')).toBeDefined()
-    expect(screen.getByText('premiumBannerPastDueDesc')).toBeDefined()
+    expect(screen.getByText('pastDueTitle')).toBeDefined()
+    expect(screen.getByText('pastDueDesc')).toBeDefined()
     expect(screen.getByText('updatePayment')).toBeDefined()
     expect(screen.queryByText('planMonthly')).toBeNull()
     expect(screen.queryByText('paywallNoCharge')).toBeNull()

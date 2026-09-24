@@ -26,8 +26,8 @@ export default function ForgotPasswordPage() {
       })
       if (!res.ok) throw new Error(t('error'))
       setSent(true)
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('error'))
+    } catch {
+      setError(t('error'))
     } finally {
       setLoading(false)
     }

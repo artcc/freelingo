@@ -174,10 +174,10 @@ export function ProfileSection({ title }: { title?: string } = {}) {
         document.cookie = `LOCALE_DETECTED=1; ${opts}`
         window.location.reload()
       }
-    } catch (err: unknown) {
+    } catch {
       setMessage({
         type: 'err',
-        text: err instanceof Error ? err.message : t('saveFailed'),
+        text: t('saveFailed'),
       })
     } finally {
       setSaving(false)

@@ -88,13 +88,12 @@ export function PaywallBanner({
         body: JSON.stringify({ plan: interval }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? t('checkoutError'))
+        throw new Error(t('checkoutError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('checkoutError'))
+    } catch {
+      setError(t('checkoutError'))
       setLoading(null)
     }
   }
@@ -107,8 +106,8 @@ export function PaywallBanner({
       if (!res.ok) throw new Error(t('portalError'))
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('portalError'))
+    } catch {
+      setError(t('portalError'))
       setPortalLoading(false)
     }
   }
@@ -143,11 +142,11 @@ export function PaywallBanner({
           {t('paywallLabel')}
         </p>
         <h2 className="text-fl-fg mb-3 font-mono text-base font-bold">
-          {t(paymentRecovery ? 'premiumBannerPastDueTitle' : context.title)}
+          {t(paymentRecovery ? 'pastDueTitle' : context.title)}
         </h2>
         <p className="text-fl-muted-1 mb-6 font-mono text-sm leading-relaxed">
           {paymentRecovery
-            ? t('premiumBannerPastDueDesc')
+            ? t('pastDueDesc')
             : t(
                 context.desc ??
                   (trialEligible ? 'paywallDesc' : 'paywallDescTrialUsed'),

@@ -88,15 +88,12 @@ export default function PricingSection({
         body: JSON.stringify({ plan }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? tBilling('checkoutError'))
+        throw new Error(tBilling('checkoutError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setCheckoutError(
-        err instanceof Error ? err.message : tBilling('checkoutError')
-      )
+    } catch {
+      setCheckoutError(tBilling('checkoutError'))
       setCheckoutLoading(null)
     }
   }

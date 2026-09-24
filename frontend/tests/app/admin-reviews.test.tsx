@@ -6,9 +6,13 @@ import AdminReviewsPage from '@/app/(app)/admin/reviews/page'
 vi.mock('next-intl', () => ({
   useLocale: () => 'en',
   useTranslations:
-    () => (key: string, values?: Record<string, string | number>) => {
+    (namespace: string) => (key: string, values?: Record<string, string | number>) => {
+      if (namespace === 'targetLanguages' && key === 'de-DE') return 'German'
       if (key === 'learningLanguage') return `Learning ${values?.language}`
-      if (key === 'starsLabel') return `${values?.rating} stars`
+      if (key === 'starsLabel')
+        return namespace === 'landingReviews'
+          ? `${values?.rating} out of 5 stars`
+          : `${values?.rating} stars`
       if (key === 'total') return `${values?.total} total`
       const labels: Record<string, string> = {
         approve: 'Approve',
@@ -72,6 +76,7 @@ describe('AdminReviewsPage', () => {
     expect(await screen.findByText('Reviewer')).toBeDefined()
     expect(screen.getByText('Strong experience')).toBeDefined()
     expect(screen.getByText(/Learning German/)).toBeDefined()
+    expect(screen.getByLabelText('5 out of 5 stars')).toBeInTheDocument()
   })
 
   it('calls approve action', async () => {

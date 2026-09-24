@@ -71,7 +71,12 @@ function LoginForm() {
         if (meRes.ok) setUser(mapUser(await meRes.json()))
         router.push('/dashboard')
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : t('loginFailed'))
+        setError(
+          err instanceof Error &&
+            (err.message === t('error') || err.message === t('invalidEmail'))
+            ? err.message
+            : t('loginFailed')
+        )
       } finally {
         setLoading(false)
       }

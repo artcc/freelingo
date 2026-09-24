@@ -115,7 +115,9 @@ export default function VocabularySetPage({
       if (!res.ok) {
         const d = await res.json().catch(() => ({}))
         throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
+          (d as { detail?: string }).detail === 'No active study plan found'
+            ? 'No active study plan found'
+            : t('addFailed')
         )
       }
       const data = (await res.json()) as { created: number }
@@ -125,7 +127,7 @@ export default function VocabularySetPage({
       setError(
         msg === 'No active study plan found'
           ? tCommon('noActivePlan')
-          : msg || 'Failed to add flashcards.'
+          : t('addFailed')
       )
     } finally {
       setAdding(false)

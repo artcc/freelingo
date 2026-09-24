@@ -184,13 +184,12 @@ function TrialPremiumCta() {
         body: JSON.stringify({ plan: interval }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? t('checkoutError'))
+        throw new Error(t('checkoutError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('checkoutError'))
+    } catch {
+      setError(t('checkoutError'))
       setLoading(null)
     }
   }

@@ -126,8 +126,8 @@ export default function OnboardingPage() {
       } else {
         router.push('/dashboard')
       }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('saveFailed'))
+    } catch {
+      setError(t('saveFailed'))
     } finally {
       setLoading(false)
     }
@@ -156,13 +156,12 @@ export default function OnboardingPage() {
         body: JSON.stringify({ plan: interval }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? t('trialError'))
+        throw new Error(t('trialError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err: unknown) {
-      setCheckoutError(err instanceof Error ? err.message : t('trialError'))
+    } catch {
+      setCheckoutError(t('trialError'))
       setCheckoutLoading(null)
     }
   }
