@@ -1069,7 +1069,8 @@
         "pl": "Poloneză",
         "ro": "Română",
         "tr": "Turcă",
-        "sv": "Suedeză"
+        "sv": "Suedeză",
+        "da": "Daneză"
       }
     }
   },
@@ -1243,6 +1244,7 @@
     "ru": "Rusă",
     "tr": "Turcă",
     "sv": "Suedeză",
+    "da": "Daneză",
     "myLanguages": "Limbile mele",
     "addLanguage": "Adaugă limbă",
     "selectLanguage": "Alege limba pe care vrei să o înveți",

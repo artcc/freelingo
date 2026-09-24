@@ -103,6 +103,15 @@ describe('middleware', () => {
       expect(res.headers.get('set-cookie')).toContain('NEXT_LOCALE=sv')
     })
 
+    it('detects Danish browser language from da-DK', () => {
+      const req = createRequest('/login', {
+        acceptLanguage: 'da-DK,da;q=0.9,en;q=0.8',
+      })
+
+      const res = middleware(req)
+      expect(res.headers.get('set-cookie')).toContain('NEXT_LOCALE=da')
+    })
+
     it('falls back to en when no locale detected', () => {
       const req = createRequest('/login')
       const res = middleware(req)

@@ -25,6 +25,7 @@ SUPPORTED_LANGUAGES = {
     "ro",
     "tr",
     "sv",
+    "da",
 }
 
 

@@ -1069,7 +1069,8 @@
         "pl": "Pools",
         "ro": "Roemeens",
         "tr": "Turks",
-        "sv": "Zweeds"
+        "sv": "Zweeds",
+        "da": "Deens"
       }
     }
   },
@@ -1243,6 +1244,7 @@
     "ru": "Russisch",
     "tr": "Turks",
     "sv": "Zweeds",
+    "da": "Deens",
     "myLanguages": "Mijn talen",
     "addLanguage": "Taal toevoegen",
     "selectLanguage": "Kies de taal die je wilt leren",

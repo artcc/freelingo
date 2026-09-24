@@ -1069,7 +1069,8 @@
         "pl": "Lehçe",
         "ro": "Rumence",
         "tr": "Türkçe",
-        "sv": "İsveççe"
+        "sv": "İsveççe",
+        "da": "Danca"
       }
     }
   },
@@ -1243,6 +1244,7 @@
     "ru": "Rusça",
     "tr": "Türkçe",
     "sv": "İsveççe",
+    "da": "Danca",
     "myLanguages": "Dillerim",
     "addLanguage": "Yeni dil ekle",
     "selectLanguage": "Öğrenmek istediğiniz dili seçin",

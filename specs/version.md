@@ -30,4 +30,4 @@ content and storage key.
 
 Before changing them, confirm whether the maintainer wants new entries or intentionally wants to show
 the existing entries again under a new key. New content must replace old `entry*` keys consistently in
-all twelve locale catalogs. See `whats-new.instructions.md`.
+all thirteen locale catalogs. See `whats-new.instructions.md`.

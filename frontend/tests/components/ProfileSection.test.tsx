@@ -806,6 +806,7 @@ describe('ProfileSection', () => {
     expect(options).toContain('ru')
     expect(options).toContain('tr')
     expect(options).toContain('sv')
+    expect(options).toContain('da')
   })
 
   it('renders all ui locale options', () => {
@@ -824,6 +825,7 @@ describe('ProfileSection', () => {
     expect(options).toContain('ru')
     expect(options).toContain('tr')
     expect(options).toContain('sv')
+    expect(options).toContain('da')
   })
 
   // ── Avatar upload buttons ───────────────────────────────────

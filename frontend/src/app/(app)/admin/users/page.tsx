@@ -56,6 +56,7 @@ const LANGUAGES = [
   'ru',
   'tr',
   'sv',
+  'da',
 ] as const
 
 const PAGE_SIZE = 10

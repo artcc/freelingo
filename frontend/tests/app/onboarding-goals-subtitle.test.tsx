@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { useLanguageStore } from '@/store/language'
 import de from '../../../messages/de.json'
+import da from '../../../messages/da.json'
 import en from '../../../messages/en.json'
 import es from '../../../messages/es.json'
 import fr from '../../../messages/fr.json'
@@ -33,10 +34,11 @@ vi.mock('@/lib/api', () => ({ apiFetch }))
 
 import OnboardingPage from '@/app/(auth)/onboarding/page'
 
-const catalogs = { de, en, es, fr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
+const catalogs = { da, de, en, es, fr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
 type Locale = keyof typeof catalogs
 
 const spanishSubtitles: Record<Locale, string> = {
+  da: 'Sprog: Spansk. Hvad vil du bruge det til? Vælg alle relevante mål.',
   de: 'Sprache: Spanisch. Wofür möchtest du sie nutzen? Wähle alle zutreffenden Ziele aus.',
   en: 'Language: Spanish. What do you want to use it for? Select all that apply.',
   es: 'Idioma: español. ¿Para qué quieres utilizarlo? Selecciona todos los objetivos que correspondan.',

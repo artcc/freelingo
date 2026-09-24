@@ -133,6 +133,13 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "Bra uttal!",
         "target_phrase": "Målfrasen var: {answer}",
     },
+    "da": {
+        "correct": "Rigtigt!",
+        "correct_answer": "Det rigtige svar er: {answer}",
+        "free_write_unavailable": "Det skriftlige svar kunne ikke vurderes lige nu.",
+        "good_pronunciation": "God udtale!",
+        "target_phrase": "Målfrasen var: {answer}",
+    },
 }
 
 

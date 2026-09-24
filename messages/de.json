@@ -1069,7 +1069,8 @@
         "pl": "Polnisch",
         "ro": "Rumänisch",
         "tr": "Türkisch",
-        "sv": "Schwedisch"
+        "sv": "Schwedisch",
+        "da": "Dänisch"
       }
     }
   },
@@ -1243,6 +1244,7 @@
     "ru": "Russisch",
     "tr": "Türkisch",
     "sv": "Schwedisch",
+    "da": "Dänisch",
     "myLanguages": "Meine Sprachen",
     "addLanguage": "Sprache hinzufügen",
     "selectLanguage": "Wähle die Sprache, die du lernen möchtest",

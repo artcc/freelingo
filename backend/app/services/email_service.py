@@ -138,6 +138,14 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "Om knappen inte fungerar kan du kopiera länken och klistra in den i din webbläsare:",
         "footer": "Om du inte har skapat kontot kan du ignorera det här e-postmeddelandet.",
     },
+    "da": {
+        "greeting": "Hej {name},",
+        "subject": "Bekræft din FreeLingo-konto",
+        "body": "Tak, fordi du oprettede en FreeLingo-konto.<br />Bekræft din e-mailadresse ved at klikke på knappen nedenfor. Linket er gyldigt i <strong>24 timer</strong>.",
+        "button": "Bekræft min konto",
+        "link_fallback": "Hvis knappen ikke virker, kan du kopiere linket og indsætte det i din browser:",
+        "footer": "Hvis du ikke har oprettet kontoen, kan du ignorere denne e-mail.",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -236,6 +244,14 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "Återställ mitt lösenord",
         "link_fallback": "Om knappen inte fungerar kan du kopiera länken och klistra in den i din webbläsare:",
         "footer": "Om du inte har begärt en lösenordsåterställning kan du ignorera det här e-postmeddelandet.",
+    },
+    "da": {
+        "greeting": "Hej {name},",
+        "subject": "Nulstil din FreeLingo-adgangskode",
+        "body": "Vi har modtaget en anmodning om at nulstille adgangskoden til din FreeLingo-konto.<br />Klik på knappen nedenfor for at oprette en ny adgangskode. Linket er gyldigt i <strong>1 time</strong>.",
+        "button": "Nulstil min adgangskode",
+        "link_fallback": "Hvis knappen ikke virker, kan du kopiere linket og indsætte det i din browser:",
+        "footer": "Hvis du ikke har bedt om at få nulstillet adgangskoden, kan du ignorere denne e-mail.",
     },
 }
 
@@ -360,6 +376,16 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "Gå till min översikt",
         "footer": "Lycka till med studierna!",
     },
+    "da": {
+        "subject": "Velkommen til FreeLingo!",
+        "greeting": "Hej {name},",
+        "body": "Din konto er klar. Sådan kommer du i gang:",
+        "step1": "Tag <strong>niveauvurderingen</strong> – den viser dit aktuelle niveau (A1–C2) samt dine styrker og svagheder.",
+        "step2": "Opret din <strong>læringsplan</strong> – en ugeplan tilpasset dit niveau og dine mål.",
+        "step3": "Gennemfør din første daglige lektion, og begynd at opbygge din stime.",
+        "button": "Gå til min oversigt",
+        "footer": "God fornøjelse med læringen!",
+    },
 }
 
 
@@ -435,6 +461,12 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "Hej {name},",
         "body": "Ditt FreeLingo-konto har raderats. Alla dina uppgifter har tagits bort permanent från våra servrar.",
         "footer": "Om du inte har begärt att kontot ska raderas ska du kontakta oss omedelbart.",
+    },
+    "da": {
+        "subject": "Din FreeLingo-konto er blevet slettet",
+        "greeting": "Hej {name},",
+        "body": "Din FreeLingo-konto er blevet slettet. Alle dine oplysninger er fjernet permanent fra vores servere.",
+        "footer": "Hvis du ikke har bedt om sletningen, skal du kontakte os med det samme.",
     },
 }
 
@@ -546,6 +578,15 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Ämne",
         "message_label": "Meddelande",
         "footer": "Skickat via FreeLingos kontaktformulär",
+    },
+    "da": {
+        "email_title": "Besked fra kontaktformularen",
+        "subject_prefix": "[FreeLingo Kontakt]",
+        "logo": "FreeLingo: Kontaktformular",
+        "from_label": "Fra",
+        "subject_label": "Emne",
+        "message_label": "Besked",
+        "footer": "Sendt via FreeLingos kontaktformular",
     },
 }
 
@@ -706,6 +747,19 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Visa i administrationspanelen",
         "footer": "FreeLingos feedbacktavla",
     },
+    "da": {
+        "email_title": "Ny feedback er indsendt",
+        "logo": "FreeLingo: Ny feedback",
+        "feature_label": "Funktionsforslag",
+        "bug_label": "Fejlrapport",
+        "feature_subject_prefix": "[Funktionsforslag]",
+        "bug_subject_prefix": "[Fejlrapport]",
+        "author_label": "Indsendt af",
+        "title_label": "Titel",
+        "description_label": "Beskrivelse",
+        "cta": "Se i administrationspanelet",
+        "footer": "FreeLingos feedbacktavle",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -852,6 +906,18 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "empty_comment": "Ingen kommentar lämnades.",
         "cta": "Visa i administrationspanelen",
         "footer": "Moderering av FreeLingo-omdömen",
+    },
+    "da": {
+        "email_title": "Ny anmeldelse er indsendt",
+        "subject_prefix": "[Ny anmeldelse]",
+        "logo": "FreeLingo: Ny anmeldelse",
+        "author_label": "Indsendt af",
+        "rating_label": "Bedømmelse",
+        "language_label": "Sprog, der læres",
+        "comment_label": "Kommentar",
+        "empty_comment": "Ingen kommentar tilføjet.",
+        "cta": "Se i administrationspanelet",
+        "footer": "Moderering af FreeLingo-anmeldelser",
     },
 }
 

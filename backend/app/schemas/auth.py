@@ -31,6 +31,7 @@ SUPPORTED_LANGUAGES = {
     "ro",
     "tr",
     "sv",
+    "da",
 }
 
 SUPPORTED_TARGET_LANGUAGES: set[str] = {
@@ -69,6 +70,7 @@ SUPPORTED_UI_LOCALES: set[str] = {
     "ru",
     "tr",
     "sv",
+    "da",
 }
 
 VALID_LEARNING_GOALS: set[str] = {

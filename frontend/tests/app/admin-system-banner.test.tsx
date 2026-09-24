@@ -28,7 +28,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/admin/system',
 }))
 
-const locales = ['en', 'es', 'fr', 'pt', 'de', 'it', 'ru', 'nl', 'pl', 'ro', 'tr', 'sv']
+const locales = ['en', 'es', 'fr', 'pt', 'de', 'it', 'ru', 'nl', 'pl', 'ro', 'tr', 'sv', 'da']
 const generatedTranslations = Object.fromEntries(
   locales.map((locale) => [
     locale,
@@ -116,11 +116,12 @@ describe('Admin system dashboard banner', () => {
     )
     expect(JSON.parse(saveOptions.body).translations.tr.title).toBe('tr title')
     expect(JSON.parse(saveOptions.body).translations.sv.title).toBe('sv title')
+    expect(JSON.parse(saveOptions.body).translations.da.title).toBe('da title')
     expect(await screen.findByText('dashboardBanner.saveSuccess')).toBeVisible()
   })
 
   it('loads a legacy announcement and requires missing locales before saving it', async () => {
-    const { tr, sv, ...legacyTranslations } = generatedTranslations
+    const { tr, sv, da, ...legacyTranslations } = generatedTranslations
     mockApiFetch.mockReset()
     mockApiFetch
       .mockResolvedValueOnce(
@@ -150,7 +151,7 @@ describe('Admin system dashboard banner', () => {
 
     render(<AdminSystemPage />)
 
-    expect(await screen.findByText('10/12 complete')).toBeVisible()
+    expect(await screen.findByText('10/13 complete')).toBeVisible()
     expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
 
     fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
@@ -165,7 +166,7 @@ describe('Admin system dashboard banner', () => {
     fireEvent.change(subtitle, { target: { value: tr.subtitle } })
     fireEvent.change(description, { target: { value: tr.description } })
 
-    expect(screen.getByText('11/12 complete')).toBeVisible()
+    expect(screen.getByText('11/13 complete')).toBeVisible()
     expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
     fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
       target: { value: 'sv' },
@@ -180,7 +181,20 @@ describe('Admin system dashboard banner', () => {
     fireEvent.change(swedishDescription, {
       target: { value: sv.description },
     })
-    expect(screen.getByText('12/12 complete')).toBeVisible()
+    expect(screen.getByText('12/13 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'da' },
+    })
+    const [danishTitle, danishSubtitle, danishDescription] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(danishTitle, { target: { value: da.title } })
+    fireEvent.change(danishSubtitle, { target: { value: da.subtitle } })
+    fireEvent.change(danishDescription, { target: { value: da.description } })
+    expect(screen.getByText('13/13 complete')).toBeVisible()
     fireEvent.click(screen.getByText('dashboardBanner.save'))
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalledTimes(2))
     const saved = JSON.parse(mockApiFetch.mock.calls[1][1].body)
