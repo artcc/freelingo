@@ -85,7 +85,16 @@ describe('ReviewPrompt', () => {
 
   it('submits rating plus comment', async () => {
     mockCreateReview.mockResolvedValue({ id: 1, rating: 4 })
+    let resolveReview!: (value: { has_review: boolean; review: null }) => void
+    mockFetchMyReview.mockReturnValueOnce(
+      new Promise<{ has_review: boolean; review: null }>((resolve) => {
+        resolveReview = resolve
+      })
+    )
     render(<ReviewPrompt open onClose={() => {}} />)
+    await act(async () => {
+      resolveReview({ has_review: false, review: null })
+    })
     await screen.findByText('Rating required')
     fireEvent.click(screen.getByLabelText('4 stars'))
     await waitFor(() =>
