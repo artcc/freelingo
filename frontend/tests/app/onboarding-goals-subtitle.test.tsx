@@ -16,6 +16,7 @@ import pl from '../../../messages/pl.json'
 import pt from '../../../messages/pt.json'
 import ro from '../../../messages/ro.json'
 import ru from '../../../messages/ru.json'
+import tr from '../../../messages/tr.json'
 
 const { searchParams, apiFetch } = vi.hoisted(() => ({
   searchParams: new URLSearchParams(),
@@ -31,7 +32,7 @@ vi.mock('@/lib/api', () => ({ apiFetch }))
 
 import OnboardingPage from '@/app/(auth)/onboarding/page'
 
-const catalogs = { de, en, es, fr, it: itMessages, nl, pl, pt, ro, ru }
+const catalogs = { de, en, es, fr, it: itMessages, nl, pl, pt, ro, ru, tr }
 type Locale = keyof typeof catalogs
 
 const spanishSubtitles: Record<Locale, string> = {
@@ -45,6 +46,7 @@ const spanishSubtitles: Record<Locale, string> = {
   pt: 'Idioma: espanhol. Para que você quer usá-lo? Selecione todos os objetivos que se aplicam.',
   ro: 'Limbă: spaniolă. Pentru ce vrei să o folosești? Selectează toate obiectivele care ți se potrivesc.',
   ru: 'Язык: испанский. Для чего ты хочешь его использовать? Выбери все подходящие цели.',
+  tr: 'Dil: İspanyolca. Bu dili ne için kullanmak istiyorsunuz? Uygun olanların hepsini seçin.',
 }
 
 const onIntlError = vi.fn()

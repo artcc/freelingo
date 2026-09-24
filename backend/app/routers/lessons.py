@@ -119,6 +119,13 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "Pronuntie buna!",
         "target_phrase": "Fraza tinta a fost: {answer}",
     },
+    "tr": {
+        "correct": "Doğru!",
+        "correct_answer": "Doğru cevap: {answer}",
+        "free_write_unavailable": "Yazılı cevap şu anda değerlendirilemedi.",
+        "good_pronunciation": "Telaffuzunuz iyi!",
+        "target_phrase": "Hedef ifade şuydu: {answer}",
+    },
 }
 
 
