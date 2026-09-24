@@ -1062,7 +1062,8 @@
         "ru": "Russisch",
         "nl": "Nederlands",
         "pl": "Pools",
-        "ro": "Roemeens"
+        "ro": "Roemeens",
+        "tr": "Turks"
       }
     }
   },
@@ -1487,21 +1488,13 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Studieplannen met meer balans",
-      "desc": "Nieuwe plannen verdelen de lessen beter over alle onderdelen en bieden meer afwisseling in de activiteiten, ook bij kortere plannen."
+      "label": "Turks is er",
+      "desc": "Je kunt FreeLingo nu in het Turks gebruiken. Kies Turks als interfacetaal in Instellingen."
     },
     "entry2": {
-      "label": "Een toets om je plan af te ronden",
-      "desc": "Zodra je de laatste dag bereikt en alle openstaande lessen afrondt, kun je via het dashboard of je studieplan de eindtoets maken en zien hoeveel je hebt geleerd."
-    },
-    "entry3": {
-      "label": "Duidelijker weten hoe je verdergaat",
-      "desc": "Toetsresultaten en aanbevelingen zijn nu in jouw taal beschikbaar, met duidelijkere uitleg om de volgende stap te zetten of het geleerde te herhalen."
-    },
-    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

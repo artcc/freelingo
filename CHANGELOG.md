@@ -2,14 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.20] - 2026-09-24
+## [1.9.25] - Unreleased
 
 ### Added
 
-- Turkish (`tr`) interface language: full interface translation, Turkish as a native-language option at registration and in Settings, and Turkish verification, password reset, welcome, and account deletion emails. The dashboard announcement keeps its existing ten locales and falls back to English for Turkish users.
+- Turkish (`tr`) interface language and native-language option in registration, Settings, and administration, including localized learning feedback, voice-session titles, and transactional emails.
+- Dashboard announcements support Turkish as a source and translation language, alongside the existing ten languages.
+
+### Changed
+
+- Existing dashboard announcements remain readable with ten translations; adding Turkish is required before saving them again and creates a new announcement revision.
+- What's New now highlights the Turkish interface and retains the general fixes note in all eleven interface languages.
+
+## [1.9.20] - 2026-09-24
 
 ### Fixed
 

@@ -1062,7 +1062,8 @@
         "ru": "Russisch",
         "nl": "Niederländisch",
         "pl": "Polnisch",
-        "ro": "Rumänisch"
+        "ro": "Rumänisch",
+        "tr": "Türkisch"
       }
     }
   },
@@ -1487,21 +1488,13 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Ausgewogenere Lernpläne",
-      "desc": "Neue Lernpläne verteilen die Lektionen gleichmäßiger auf alle Einheiten und bieten mehr Abwechslung bei den Übungen – auch bei kürzeren Plänen."
+      "label": "Türkisch ist da",
+      "desc": "Du kannst FreeLingo jetzt auf Türkisch nutzen. Wähle Türkisch in den Einstellungen als Sprache der Benutzeroberfläche aus."
     },
     "entry2": {
-      "label": "Dein Test zum Planabschluss",
-      "desc": "Wenn du den letzten Tag erreicht und alle offenen Lektionen abgeschlossen hast, kannst du den Abschlusstest über das Dashboard oder deinen Lernplan starten und sehen, wie viel du gelernt hast."
-    },
-    "entry3": {
-      "label": "Klarer wissen, wie es weitergeht",
-      "desc": "Testergebnisse und Empfehlungen gibt es jetzt in deiner Sprache, mit klareren Hinweisen für deinen nächsten Schritt oder zum Wiederholen des Gelernten."
-    },
-    "entry4": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

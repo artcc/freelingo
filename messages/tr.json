@@ -1062,7 +1062,8 @@
         "ru": "Rusça",
         "nl": "Felemenkçe",
         "pl": "Lehçe",
-        "ro": "Rumence"
+        "ro": "Rumence",
+        "tr": "Türkçe"
       }
     }
   },
@@ -1487,21 +1488,13 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.9.15",
+    "version": "v1.9.25",
     "cta": "Anladım",
     "entry1": {
-      "label": "Daha dengeli çalışma planları",
-      "desc": "Yeni planlar dersleri tüm ünitelere daha eşit dağıtır ve daha kısa planlarda bile daha çeşitli etkinliklere yer açar."
+      "label": "Türkçe artık burada",
+      "desc": "FreeLingo'yu artık Türkçe kullanabilirsiniz. Ayarlar'dan arayüz dili olarak Türkçe'yi seçin."
     },
     "entry2": {
-      "label": "Planınızı tamamlayan bir test",
-      "desc": "Son güne ulaşıp bekleyen dersleri bitirdiğinizde, seviye sonu testine panodan veya Planım bölümünden girebilir ve ne kadar öğrendiğinizi görebilirsiniz."
-    },
-    "entry3": {
-      "label": "Daha net sonraki adımlar",
-      "desc": "Test sonuçları ve öneriler artık kendi dilinizde; bir sonraki adıma geçmek veya öğrendiklerinizi tekrar etmek için daha net yönlendirmeler içeriyor."
-    },
-    "entry4": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

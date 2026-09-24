@@ -1062,7 +1062,8 @@
         "ru": "Ruso",
         "nl": "Neerlandés",
         "pl": "Polaco",
-        "ro": "Rumano"
+        "ro": "Rumano",
+        "tr": "Turco"
       }
     }
   },
@@ -1487,21 +1488,13 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Entendido",
     "entry1": {
-      "label": "Planes mejor equilibrados",
-      "desc": "Los nuevos planes reparten mejor las lecciones entre todas las unidades y dan más espacio a distintos tipos de actividades, también en los planes cortos."
+      "label": "El turco ya está aquí",
+      "desc": "Ya puedes usar FreeLingo en turco. Selecciónalo como idioma de la interfaz en Ajustes."
     },
     "entry2": {
-      "label": "Tu test al terminar el plan",
-      "desc": "Al llegar al último día y completar las lecciones pendientes, podrás hacer el test de fin de nivel desde el panel o Mi plan y ver cuánto has aprendido."
-    },
-    "entry3": {
-      "label": "Más claridad para seguir aprendiendo",
-      "desc": "Los resultados del test y sus recomendaciones ya están en tu idioma, con indicaciones más claras para dar el siguiente paso o repasar lo aprendido."
-    },
-    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

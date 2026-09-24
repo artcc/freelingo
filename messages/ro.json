@@ -1062,7 +1062,8 @@
         "ru": "Rusă",
         "nl": "Neerlandeză",
         "pl": "Poloneză",
-        "ro": "Română"
+        "ro": "Română",
+        "tr": "Turcă"
       }
     }
   },
@@ -1487,21 +1488,13 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Planuri mai echilibrate",
-      "desc": "Noile planuri distribuie lecțiile mai uniform între toate unitățile și oferă mai multă varietate de activități, chiar și în planurile scurte."
+      "label": "Turca este aici",
+      "desc": "Acum poți folosi FreeLingo în limba turcă. Selectează turca drept limbă a interfeței în Setări."
     },
     "entry2": {
-      "label": "Un test la finalul planului",
-      "desc": "Când ajungi la ultima zi și termini lecțiile restante, poți susține testul de final de nivel din panoul principal sau din planul tău și poți vedea cât ai învățat."
-    },
-    "entry3": {
-      "label": "Pași mai clari pentru a continua",
-      "desc": "Rezultatele testului și recomandările sunt acum în limba ta, cu îndrumări mai clare pentru a face următorul pas sau a recapitula ce ai învățat."
-    },
-    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

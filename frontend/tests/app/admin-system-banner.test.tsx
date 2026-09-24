@@ -28,7 +28,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/admin/system',
 }))
 
-const locales = ['en', 'es', 'fr', 'pt', 'de', 'it', 'ru', 'nl', 'pl', 'ro']
+const locales = ['en', 'es', 'fr', 'pt', 'de', 'it', 'ru', 'nl', 'pl', 'ro', 'tr']
 const generatedTranslations = Object.fromEntries(
   locales.map((locale) => [
     locale,
@@ -114,7 +114,62 @@ describe('Admin system dashboard banner', () => {
     expect(JSON.parse(saveOptions.body).translations.es.title).toBe(
       'Título corregido'
     )
+    expect(JSON.parse(saveOptions.body).translations.tr.title).toBe('tr title')
     expect(await screen.findByText('dashboardBanner.saveSuccess')).toBeVisible()
+  })
+
+  it('loads a legacy announcement and requires Turkish before saving it', async () => {
+    const { tr, ...legacyTranslations } = generatedTranslations
+    mockApiFetch.mockReset()
+    mockApiFetch
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            source_locale: 'en',
+            is_active: true,
+            revision: 4,
+            translations: legacyTranslations,
+            updated_at: '2026-08-06T10:00:00Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            source_locale: 'en',
+            is_active: true,
+            revision: 5,
+            translations: generatedTranslations,
+            updated_at: '2026-08-06T10:00:00Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+
+    render(<AdminSystemPage />)
+
+    expect(await screen.findByText('10/11 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'tr' },
+    })
+    const [title, subtitle, description] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(title, { target: { value: tr.title } })
+    fireEvent.change(subtitle, { target: { value: tr.subtitle } })
+    fireEvent.change(description, { target: { value: tr.description } })
+
+    expect(screen.getByText('11/11 complete')).toBeVisible()
+    fireEvent.click(screen.getByText('dashboardBanner.save'))
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledTimes(2))
+    const saved = JSON.parse(mockApiFetch.mock.calls[1][1].body)
+    expect(saved.translations).toEqual(generatedTranslations)
+    expect(saved.source_locale).toBe('en')
   })
 
   it('keeps source editor content when translation fails', async () => {
