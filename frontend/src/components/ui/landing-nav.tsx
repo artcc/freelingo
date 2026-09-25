@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { hasActiveLandingSubscription } from '@/lib/landing-subscription'
 
 interface LandingNavProps {
@@ -29,6 +30,7 @@ export function LandingNav({
   signIn,
   dashboard,
 }: LandingNavProps) {
+  const tCommon = useTranslations('common')
   const [open, setOpen] = useState(false)
   const [showPricing, setShowPricing] = useState(stripeEnabled && !hasSession)
 
@@ -118,7 +120,7 @@ export function LandingNav({
         <button
           onClick={() => setOpen(!open)}
           className="text-fl-muted-2 hover:text-fl-fg md:hidden"
-          aria-label="Toggle menu"
+          aria-label={open ? tCommon('closeMenu') : tCommon('openMenu')}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>

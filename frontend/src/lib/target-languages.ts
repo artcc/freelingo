@@ -172,7 +172,7 @@ export function getTargetLanguageTextClass(code: string): string {
 
 export const DEFAULT_TARGET_LANGUAGE = 'en-GB'
 
-const LOCALES_CAPITALIZE_LANGUAGE = new Set(['en', 'de', 'nl'])
+const LOCALES_CAPITALIZE_LANGUAGE = new Set(['en', 'de', 'nl', 'tr'])
 
 export function formatLanguageName(name: string, locale: string): string {
   const lang = locale.split('-')[0]

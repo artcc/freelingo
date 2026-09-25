@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 
 // ---------------------------------------------------------------------------
@@ -38,6 +39,7 @@ export function WordTooltip({
     wordSaveError: string
   }
 }) {
+  const tCommon = useTranslations('common')
   return (
     <div
       style={{ left: pos.x, top: pos.y }}
@@ -76,7 +78,7 @@ export function WordTooltip({
         <button
           onClick={onDismiss}
           className="text-fl-muted-3 hover:text-fl-fg ml-1 transition-colors"
-          aria-label="dismiss"
+          aria-label={tCommon('close')}
         >
           ✕
         </button>

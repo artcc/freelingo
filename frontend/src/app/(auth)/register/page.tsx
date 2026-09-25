@@ -22,6 +22,11 @@ const LANGUAGES = [
   'nl',
   'ro',
   'ru',
+  'tr',
+  'sv',
+  'da',
+  'fi',
+  'hr',
 ] as const
 
 type SelectedPlan = 'monthly' | 'yearly'
@@ -123,7 +128,20 @@ function RegisterForm() {
           selectedPlan ? `/onboarding?plan=${selectedPlan}` : '/onboarding'
         )
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : t('error'))
+        const knownErrors = [
+          t('error'),
+          t('usernameTaken'),
+          t('emailTaken'),
+          t('registrationClosed'),
+          t('invalidInvite'),
+          t('invalidEmail'),
+          t('invalidPassword'),
+        ]
+        setError(
+          err instanceof Error && knownErrors.includes(err.message)
+            ? err.message
+            : t('error')
+        )
       } finally {
         setLoading(false)
       }

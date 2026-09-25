@@ -9,6 +9,8 @@ import { apiFetch } from '@/lib/api'
 
 function ResetPasswordContent() {
   const t = useTranslations('auth.resetPassword')
+  const tCommon = useTranslations('common')
+  const tRegister = useTranslations('auth.register')
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
@@ -25,8 +27,13 @@ function ResetPasswordContent() {
       setError(t('mismatch'))
       return
     }
-    if (password.length < 8) {
+    const passwordLength = [...password].length
+    if (passwordLength < 10) {
       setError(t('tooShort'))
+      return
+    }
+    if (passwordLength > 25) {
+      setError(tRegister('invalidPassword'))
       return
     }
     setLoading(true)
@@ -37,13 +44,24 @@ function ResetPasswordContent() {
         body: JSON.stringify({ token, new_password: password }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail || t('error'))
+        throw new Error(
+          res.status === 400 || res.status === 404
+            ? t('error')
+            : res.status === 422
+              ? tRegister('invalidPassword')
+              : tCommon('errorMessage')
+        )
       }
       setDone(true)
       setTimeout(() => router.push('/login'), 2000)
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('error'))
+      setError(
+        err instanceof Error &&
+          (err.message === t('error') ||
+            err.message === tRegister('invalidPassword'))
+          ? err.message
+          : tCommon('errorMessage')
+      )
     } finally {
       setLoading(false)
     }
@@ -78,7 +96,10 @@ function ResetPasswordContent() {
                 </div>
               )}
               {error && (
-                <div className="border-fl-error/40 text-fl-error border px-4 py-3 font-mono text-xs">
+                <div
+                  role="alert"
+                  className="border-fl-error/40 text-fl-error border px-4 py-3 font-mono text-xs"
+                >
                   ✕ {error}
                 </div>
               )}
@@ -89,8 +110,15 @@ function ResetPasswordContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
+                aria-describedby="reset-password-requirements"
                 className="bg-fl-bg border-fl-border text-fl-fg placeholder:text-fl-muted-4 focus:border-fl-border-2 w-full border px-4 py-3 font-mono text-xs transition-colors focus:outline-none"
               />
+              <p
+                id="reset-password-requirements"
+                className="text-fl-muted-2 font-sans text-sm leading-relaxed"
+              >
+                {tRegister('invalidPassword')}
+              </p>
               <input
                 type="password"
                 placeholder={t('confirmPassword')}

@@ -5,7 +5,8 @@ import { LanguageBubbles } from '@/components/LanguageBubbles'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: (namespace: string) => (key: string) =>
+    namespace === 'targetLanguages' ? `Localized ${key}` : key,
 }))
 
 vi.mock('next/image', () => ({
@@ -29,6 +30,7 @@ describe('LanguageBubbles', () => {
     expect(screen.getAllByRole('img')).toHaveLength(
       SUPPORTED_TARGET_LANGUAGES.length
     )
+    expect(screen.getByAltText('Localized de-DE')).toBeInTheDocument()
   })
 
   it('positions bubbles dynamically from the supported language count', () => {

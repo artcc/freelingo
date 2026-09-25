@@ -119,6 +119,41 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "Pronuntie buna!",
         "target_phrase": "Fraza tinta a fost: {answer}",
     },
+    "tr": {
+        "correct": "Doğru!",
+        "correct_answer": "Doğru cevap: {answer}",
+        "free_write_unavailable": "Yazılı cevap şu anda değerlendirilemedi.",
+        "good_pronunciation": "Telaffuzunuz iyi!",
+        "target_phrase": "Hedef ifade şuydu: {answer}",
+    },
+    "sv": {
+        "correct": "Rätt!",
+        "correct_answer": "Rätt svar: {answer}",
+        "free_write_unavailable": "Det gick inte att bedöma det skriftliga svaret just nu.",
+        "good_pronunciation": "Bra uttal!",
+        "target_phrase": "Målfrasen var: {answer}",
+    },
+    "da": {
+        "correct": "Rigtigt!",
+        "correct_answer": "Det rigtige svar er: {answer}",
+        "free_write_unavailable": "Det skriftlige svar kunne ikke vurderes lige nu.",
+        "good_pronunciation": "God udtale!",
+        "target_phrase": "Målfrasen var: {answer}",
+    },
+    "fi": {
+        "correct": "Oikein!",
+        "correct_answer": "Oikea vastaus: {answer}",
+        "free_write_unavailable": "Kirjoitettua vastausta ei voitu arvioida juuri nyt.",
+        "good_pronunciation": "Hyvä ääntäminen!",
+        "target_phrase": "Tavoiteilmaus oli: {answer}",
+    },
+    "hr": {
+        "correct": "Točno!",
+        "correct_answer": "Točan odgovor: {answer}",
+        "free_write_unavailable": "Pisani odgovor trenutačno nije bilo moguće ocijeniti.",
+        "good_pronunciation": "Dobar izgovor!",
+        "target_phrase": "Ciljani izraz bio je: {answer}",
+    },
 }
 
 

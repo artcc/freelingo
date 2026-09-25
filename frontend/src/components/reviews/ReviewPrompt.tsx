@@ -60,6 +60,7 @@ export function ReviewForm({
   onSubmit,
 }: ReviewFormProps) {
   const t = useTranslations('reviewPrompt')
+  const tStars = useTranslations('landingReviews')
   const [rating, setRating] = useState(initialReview?.rating ?? 0)
   const [comment, setComment] = useState(initialReview?.comment ?? '')
   const [submitting, setSubmitting] = useState(false)
@@ -104,7 +105,7 @@ export function ReviewForm({
                 type="button"
                 role="radio"
                 aria-checked={rating === value}
-                aria-label={`${value} ${t(value === 1 ? 'star' : 'stars')}`}
+                aria-label={tStars('starsLabel', { rating: value })}
                 onClick={() => setRating(value)}
                 className={`border px-3 py-2 transition-colors ${
                   value <= rating
@@ -169,13 +170,17 @@ export function ReviewPrompt({
   onSubmitted,
 }: ReviewPromptProps) {
   const t = useTranslations('reviewPrompt')
-  const [checking, setChecking] = useState(false)
+  const [checking, setChecking] = useState(true)
   const [hasReview, setHasReview] = useState(false)
   const [error, setError] = useState('')
   const [statusCheckFailed, setStatusCheckFailed] = useState(false)
 
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      setChecking(true)
+      setHasReview(false)
+      return
+    }
     let cancelled = false
     setChecking(true)
     setError('')

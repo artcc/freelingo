@@ -28,7 +28,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/admin/system',
 }))
 
-const locales = ['en', 'es', 'fr', 'pt', 'de', 'it', 'ru', 'nl', 'pl', 'ro']
+const locales = ['en', 'es', 'fr', 'pt', 'de', 'it', 'ru', 'nl', 'pl', 'ro', 'tr', 'sv', 'da', 'fi', 'hr']
 const generatedTranslations = Object.fromEntries(
   locales.map((locale) => [
     locale,
@@ -114,7 +114,165 @@ describe('Admin system dashboard banner', () => {
     expect(JSON.parse(saveOptions.body).translations.es.title).toBe(
       'Título corregido'
     )
+    expect(JSON.parse(saveOptions.body).translations.tr.title).toBe('tr title')
+    expect(JSON.parse(saveOptions.body).translations.sv.title).toBe('sv title')
+    expect(JSON.parse(saveOptions.body).translations.da.title).toBe('da title')
+    expect(JSON.parse(saveOptions.body).translations.fi.title).toBe('fi title')
+    expect(JSON.parse(saveOptions.body).translations.hr.title).toBe('hr title')
     expect(await screen.findByText('dashboardBanner.saveSuccess')).toBeVisible()
+  })
+
+  it('uses the selected translation as source when changing the source locale', async () => {
+    mockApiFetch.mockReset()
+    mockApiFetch
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            source_locale: 'en',
+            is_active: true,
+            revision: 1,
+            translations: generatedTranslations,
+            updated_at: '2026-08-06T10:00:00Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ translations: generatedTranslations }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+
+    render(<AdminSystemPage />)
+    expect(await screen.findByText('15/15 complete')).toBeInTheDocument()
+    expect(screen.getAllByLabelText('dashboardBanner.fieldTitle')[0]).toHaveValue(
+      'en title'
+    )
+
+    fireEvent.change(screen.getByLabelText('dashboardBanner.sourceLocale'), {
+      target: { value: 'hr' },
+    })
+    expect(screen.getAllByLabelText('dashboardBanner.fieldTitle')[0]).toHaveValue(
+      'hr title'
+    )
+    fireEvent.click(screen.getByText('dashboardBanner.translate'))
+
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledTimes(2))
+    expect(JSON.parse(mockApiFetch.mock.calls[1][1].body)).toEqual({
+      source_locale: 'hr',
+      title: 'hr title',
+      subtitle: 'hr subtitle',
+      description: 'hr description',
+    })
+  })
+
+  it('loads a legacy announcement and requires missing locales before saving it', async () => {
+    const { tr, sv, da, fi, hr, ...legacyTranslations } = generatedTranslations
+    mockApiFetch.mockReset()
+    mockApiFetch
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            source_locale: 'en',
+            is_active: true,
+            revision: 4,
+            translations: legacyTranslations,
+            updated_at: '2026-08-06T10:00:00Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            source_locale: 'en',
+            is_active: true,
+            revision: 5,
+            translations: generatedTranslations,
+            updated_at: '2026-08-06T10:00:00Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+
+    render(<AdminSystemPage />)
+
+    expect(await screen.findByText('10/15 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'tr' },
+    })
+    const [title, subtitle, description] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(title, { target: { value: tr.title } })
+    fireEvent.change(subtitle, { target: { value: tr.subtitle } })
+    fireEvent.change(description, { target: { value: tr.description } })
+
+    expect(screen.getByText('11/15 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'sv' },
+    })
+    const [swedishTitle, swedishSubtitle, swedishDescription] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(swedishTitle, { target: { value: sv.title } })
+    fireEvent.change(swedishSubtitle, { target: { value: sv.subtitle } })
+    fireEvent.change(swedishDescription, {
+      target: { value: sv.description },
+    })
+    expect(screen.getByText('12/15 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'da' },
+    })
+    const [danishTitle, danishSubtitle, danishDescription] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(danishTitle, { target: { value: da.title } })
+    fireEvent.change(danishSubtitle, { target: { value: da.subtitle } })
+    fireEvent.change(danishDescription, { target: { value: da.description } })
+    expect(screen.getByText('13/15 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'fi' },
+    })
+    const [finnishTitle, finnishSubtitle, finnishDescription] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(finnishTitle, { target: { value: fi.title } })
+    fireEvent.change(finnishSubtitle, { target: { value: fi.subtitle } })
+    fireEvent.change(finnishDescription, { target: { value: fi.description } })
+    expect(screen.getByText('14/15 complete')).toBeVisible()
+    expect(screen.getByText('dashboardBanner.save')).toBeDisabled()
+    fireEvent.change(screen.getByLabelText('dashboardBanner.editTranslation'), {
+      target: { value: 'hr' },
+    })
+    const [croatianTitle, croatianSubtitle, croatianDescription] = [
+      'dashboardBanner.fieldTitle',
+      'dashboardBanner.fieldSubtitle',
+      'dashboardBanner.fieldDescription',
+    ].map((label) => screen.getAllByLabelText(label)[1])
+    fireEvent.change(croatianTitle, { target: { value: hr.title } })
+    fireEvent.change(croatianSubtitle, { target: { value: hr.subtitle } })
+    fireEvent.change(croatianDescription, { target: { value: hr.description } })
+    expect(screen.getByText('15/15 complete')).toBeVisible()
+    fireEvent.click(screen.getByText('dashboardBanner.save'))
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledTimes(2))
+    const saved = JSON.parse(mockApiFetch.mock.calls[1][1].body)
+    expect(saved.translations).toEqual(generatedTranslations)
+    expect(saved.source_locale).toBe('en')
   })
 
   it('keeps source editor content when translation fails', async () => {

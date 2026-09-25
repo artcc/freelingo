@@ -2,8 +2,10 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 
+const translate = vi.hoisted(() => (key: string) => key)
+
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => translate,
 }))
 
 vi.mock('next/link', () => ({
@@ -60,10 +62,8 @@ describe('AdminOverviewPage', () => {
 
     render(<AdminOverviewPage />)
 
-    await waitFor(() =>
-      expect(mockApiFetch).toHaveBeenCalledWith('/api/admin/stats')
-    )
-    expect(screen.getByText('12')).toBeDefined()
+    await waitFor(() => expect(screen.getByText('12')).toBeDefined())
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/admin/stats')
     expect(screen.getByText('10')).toBeDefined()
     expect(screen.getByText('4 / 3')).toBeDefined()
     expect(screen.getByText('5')).toBeDefined()

@@ -547,13 +547,14 @@ def test_voice_session_title_portuguese() -> None:
 
 
 def test_voice_session_title_german() -> None:
-    """German uses 'Sprachsitzung' label and plain 'D Month YYYY' format."""
+    """German uses an ordinal day before the month."""
     from app.services.language_helpers import voice_session_title
 
     title = voice_session_title("de")
     assert title.startswith("Sprachsitzung — ")
     # No 'de' separators in German dates.
     date_part = title.split(" — ", 1)[1]
+    assert date_part.split(" ", 1)[0].endswith(".")
     assert " de " not in date_part
 
 
@@ -577,11 +578,58 @@ def test_voice_session_title_russian() -> None:
     assert " de " not in date_part
 
 
+def test_voice_session_title_turkish() -> None:
+    """Turkish uses its own label and plain 'D Month YYYY' format."""
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("tr")
+    assert title.startswith("Sesli oturum — ")
+    date_part = title.split(" — ", 1)[1]
+    assert " de " not in date_part
+
+
+def test_voice_session_title_swedish() -> None:
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("sv")
+    assert title.startswith("Röstsamtal — ")
+    assert " de " not in title
+
+
+def test_voice_session_title_danish() -> None:
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("da")
+    assert title.startswith("Stemmesamtale — ")
+    date = title.split(" — ", 1)[1]
+    assert date.split(" ", 1)[0].endswith(".")
+    assert " de " not in date
+
+
+def test_voice_session_title_finnish() -> None:
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("fi")
+    assert title.startswith("Äänikeskustelu — ")
+    assert title.split(" — ", 1)[1].split(" ", 1)[0].endswith(".")
+    assert "kuuta " in title
+
+
+def test_voice_session_title_croatian() -> None:
+    from app.services.language_helpers import voice_session_title
+
+    title = voice_session_title("hr")
+    assert title.startswith("Glasovni razgovor — ")
+    date = title.split(" — ", 1)[1]
+    assert date.split(" ", 1)[0].endswith(".")
+    assert date.endswith(".")
+
+
 def test_voice_session_title_all_supported_languages_produce_nonempty() -> None:
     """Every supported native language must produce a non-empty title."""
     from app.services.language_helpers import voice_session_title
 
-    supported = ["es", "fr", "pt", "de", "it", "pl", "nl", "ro", "ru"]
+    supported = ["es", "fr", "pt", "de", "it", "pl", "nl", "ro", "ru", "tr", "sv", "da", "fi", "hr"]
     for lang in supported:
         title = voice_session_title(lang)
         assert title.strip(), f"Empty title for language '{lang}'"

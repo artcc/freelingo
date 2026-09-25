@@ -83,7 +83,7 @@ export default function VocabularyIndexPage() {
         </div>
         <div className="space-y-4 px-6 py-5">
           <p className="text-fl-muted-2 font-mono text-xs leading-relaxed">
-            {vocabSets.length} {t('sets')} · {totalWords} {t('words')}
+            {t('sets', { count: vocabSets.length })} · {totalWords} {t('words')}
             {usedLevels.length > 0 && (
               <>
                 {' · '}
@@ -142,7 +142,7 @@ export default function VocabularyIndexPage() {
               </span>
               <div className="bg-fl-border h-px flex-1" />
               <span className="text-fl-label text-fl-muted-3 font-mono">
-                {sets.length} set{sets.length !== 1 ? 's' : ''} ·{' '}
+                {t('sets', { count: sets.length })} ·{' '}
                 {sets.reduce((a, s) => a + s.words.length, 0)} {t('words')}
               </span>
             </div>

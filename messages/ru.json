@@ -54,6 +54,7 @@
   "common": {
     "loading": "Загрузка...",
     "error": "Ошибка",
+    "errorMessage": "Что-то пошло не так. Попробуйте снова.",
     "save": "Сохранить изменения",
     "saving": "Сохранение...",
     "cancel": "Отмена",
@@ -78,6 +79,9 @@
     "backToDashboard": "На главную",
     "tagline": "ИИ-обучение языкам",
     "close": "Закрыть",
+    "delete": "Удалить",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
     "verifyEmailBanner": "Пожалуйста, подтвердите свой адрес электронной почты для завершения настройки аккаунта.",
     "verifyEmailSent": "Письмо отправлено. Проверьте входящие.",
     "resendVerification": "Повторно отправить письмо для подтверждения",
@@ -205,7 +209,7 @@
       "saving": "Сохранение...",
       "success": "Пароль обновлён. Перенаправление...",
       "mismatch": "Пароли не совпадают",
-      "tooShort": "Пароль должен содержать не менее 8 символов",
+      "tooShort": "Пароль должен содержать не менее 10 символов",
       "missingToken": "Недействительная ссылка. Запросите новый сброс.",
       "error": "Недействительная или просроченная ссылка",
       "backToLogin": "Вернуться ко входу"
@@ -467,7 +471,7 @@
     "premiumBannerPastDueTitle": "Платёж ожидает",
     "premiumBannerPastDueDesc": "Обновите способ оплаты, чтобы восстановить Premium-доступ к чату, голосовым разговорам, reading и listening.",
     "premiumBannerPastDueCta": "Восстановить Premium",
-    "freemiumTrialTitle": "{days, plural, one {# день пробного периода} other {# дней пробного периода}}",
+    "freemiumTrialTitle": "{days, plural, one {# день пробного периода} few {# дня пробного периода} many {# дней пробного периода} other {# дня пробного периода}}",
     "freemiumTrialDesc": "Наслаждайтесь неограниченным доступом к чату, голосу, listening и reading. Попробуйте всё Premium бесплатно.",
     "announcementDismiss": "Закрыть объявление",
     "announcementDismissError": "Не удалось закрыть объявление. Попробуйте снова."
@@ -594,11 +598,11 @@
     "startWarningMessageLevelTest": "Если вы покинете тест уровня до его завершения, ваш прогресс будет утерян и вам придётся пройти его повторно.",
     "startWarningConfirm": "Начать",
     "startMyPlan": "Начать мой план",
-    "voiceTrialLabel": "Voice trial",
-    "voiceTrialTitle": "Try a real conversation now",
-    "voiceTrialDesc": "Talk with Lingu for {minutes} minutes, free. Your tutor will adapt to the level you just unlocked.",
-    "voiceTrialStart": "Start free conversation",
-    "voiceTrialSkip": "Skip for now"
+    "voiceTrialLabel": "Пробный голосовой разговор",
+    "voiceTrialTitle": "Попробуйте настоящий разговор прямо сейчас",
+    "voiceTrialDesc": "Поговорите с Lingu бесплатно в течение {minutes} мин. Ваш преподаватель подстроится под только что открытый уровень.",
+    "voiceTrialStart": "Начать бесплатный разговор",
+    "voiceTrialSkip": "Пока пропустить"
   },
   "plan": {
     "unitLocked": "Модуль заблокирован",
@@ -761,6 +765,7 @@
     "toggleSidebarShow": "Показать чаты",
     "toggleSidebarHide": "Скрыть чаты",
     "conversations": "Разговоры",
+    "voiceSession": "Голосовой сеанс",
     "loading": "Загрузка...",
     "thinking": "Думает...",
     "takingLonger": "Это занимает больше времени...",
@@ -816,14 +821,14 @@
     "explanation": "Объяснение",
     "backLink": "Назад к грамматике",
     "notFound": "Тема не найдена.",
-    "topicsFound": "{count, plural, one {# тема найдена} few {# темы найдено} other {# тем найдено}}"
+    "topicsFound": "{count, plural, one {Найдена # тема} few {Найдены # темы} many {Найдено # тем} other {Найдено # темы}}"
   },
   "vocabulary": {
     "title": "Центр словарного запаса",
     "subtitle": "Словарный запас",
     "all": "Все",
     "searchPlaceholder": "Поиск наборов...",
-    "sets": "наборов",
+    "sets": "{count, plural, one {# набор} few {# набора} many {# наборов} other {# набора}}",
     "words": "слов",
     "addAll": "Добавить все {count} в карточки",
     "adding": "Добавление...",
@@ -848,11 +853,12 @@
     "informal": "Неформальный",
     "copied": "Скопировано!",
     "copy": "Копировать",
+    "copyPhrase": "Скопировать фразу",
     "noResults": "Нет фраз, соответствующих фильтрам",
     "level": "Уровень",
     "register": "Регистр",
     "statsLine": "{situationCount} ситуаций · {phraseCount} фраз · {range}",
-    "situationsShown": "{count, plural, one {# ситуация показана} few {# ситуации показано} other {# ситуаций показано}}",
+    "situationsShown": "{count, plural, one {Показана # ситуация} few {Показаны # ситуации} many {Показано # ситуаций} other {Показано # ситуации}}",
     "searchPlaceholder": "Поиск фраз..."
   },
   "admin": {
@@ -1046,6 +1052,7 @@
       "translateSuccess": "Переводы созданы. Проверьте их перед сохранением.",
       "translateError": "Перевод не выполнен. Текущий текст сохранён.",
       "editTranslation": "Редактировать перевод",
+      "pending": "ожидает",
       "completion": "Готово языков: {complete}/{total}",
       "save": "Сохранить объявление",
       "saveSuccess": "Объявление сохранено.",
@@ -1062,7 +1069,12 @@
         "ru": "Русский",
         "nl": "Нидерландский",
         "pl": "Польский",
-        "ro": "Румынский"
+        "ro": "Румынский",
+        "tr": "Турецкий",
+        "sv": "Шведский",
+        "da": "Датский",
+        "fi": "Финский",
+        "hr": "Хорватский"
       }
     }
   },
@@ -1105,7 +1117,7 @@
     "provider_anthropic": "Anthropic Claude. Требует ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Требует DEEPSEEK_API_KEY.",
     "q_invite": "Могу ли я пригласить других?",
-    "a_invite": "Да. Через <adminLink>Администрирование → Пользователи</adminLink> администратор может создавать пользователей напрямую или генерировать одноразовые ссылки-приглашения, которые истекают через 48 часов.",
+    "a_invite": "Да. Через <adminLink>Администрирование → Пользователи</adminLink> администратор может создавать пользователей напрямую или генерировать одноразовые ссылки-приглашения, которые истекают через 48 часов. Публичная регистрация по умолчанию отключена (<code>ALLOW_REGISTRATION=false</code>).",
     "q_password": "Как изменить пароль или родной язык?",
     "a_password": "Перейдите в <settingsLink>Настройки</settingsLink>. Там вы можете обновить отображаемое имя, родной язык и пароль.",
     "q_uiLanguage": "Как изменить язык платформы?",
@@ -1154,6 +1166,9 @@
     "statusError": "Ошибка",
     "errorServicesDisabled": "Голосовые сервисы не активированы на этом сервере.",
     "errorConnection": "Ошибка соединения. Попробуйте снова.",
+    "errorTranscription": "Не удалось преобразовать вашу речь в текст. Попробуйте произнести фразу ещё раз.",
+    "errorResponse": "Lingu не удалось ответить. Попробуйте снова.",
+    "errorSpeech": "Не удалось озвучить ответ Lingu. Попробуйте снова.",
     "errorUnauthorized": "Сессия истекла. Обновите страницу.",
     "errorMic": "Доступ к микрофону запрещён.",
     "errorVadInit": "Не удалось инициализировать обнаружение речи. Проверьте, поддерживает ли ваш браузер WebAssembly.",
@@ -1171,10 +1186,10 @@
     "freemiumVoiceRemaining": "Бесплатный голос: {remaining}/{limit} мин на этой неделе",
     "quotaTokens": "Токены в этом месяце",
     "memoryUpdated": "Память обновлена",
-    "trialBanner": "Free assessment conversation · {minutes} min",
-    "trialCtaLabel": "Keep speaking",
-    "trialCtaTitle": "Continue practising with Lingu",
-    "trialCtaDesc": "Unlock full voice conversations, tutor chat, listening and reading practice with Premium.",
+    "trialBanner": "Бесплатный разговор после оценки уровня · {minutes} мин",
+    "trialCtaLabel": "Продолжайте говорить",
+    "trialCtaTitle": "Продолжайте практиковаться с Lingu",
+    "trialCtaDesc": "Откройте полный доступ к голосовым разговорам, чату с преподавателем, упражнениям на аудирование и чтение с Premium.",
     "startersHint": "Или начните с темы",
     "starters": [
       "Искусство и творчество",
@@ -1234,6 +1249,11 @@
     "nl": "Нидерландский",
     "ro": "Румынский",
     "ru": "Русский",
+    "tr": "Турецкий",
+    "sv": "Шведский",
+    "da": "Датский",
+    "fi": "Финский",
+    "hr": "Хорватский",
     "myLanguages": "Мои языки",
     "addLanguage": "Добавить язык",
     "selectLanguage": "Выберите язык, который хотите изучать",
@@ -1480,27 +1500,19 @@
     "readingLabel": "Чтение",
     "voiceLabel": "Голос (мин)",
     "freeLimit": "Получить Premium",
-    "trialDaysLeft": "{days, plural, one {# день бесплатного пробного периода} other {# дней бесплатного пробного периода}}",
+    "trialDaysLeft": "{days, plural, one {# день бесплатного пробного периода} few {# дня бесплатного пробного периода} many {# дней бесплатного пробного периода} other {# дня бесплатного пробного периода}}",
     "trialUnlimited": "Неограниченный доступ",
     "requiresSubscription": "Только Premium"
   },
   "whatsNew": {
     "title": "Что нового",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Понятно",
     "entry1": {
-      "label": "Более сбалансированные планы",
-      "desc": "В новых планах уроки распределены равномернее между всеми разделами, а задания стали разнообразнее — даже в коротких планах."
+      "label": "Пять новых языков интерфейса",
+      "desc": "FreeLingo доступен на датском, турецком, финском, хорватском и шведском языках. Выбери язык интерфейса в настройках."
     },
     "entry2": {
-      "label": "Тест в конце твоего плана",
-      "desc": "Когда дойдёшь до последнего дня и завершишь оставшиеся уроки, сможешь открыть итоговый тест уровня с главной страницы или из своего плана и оценить свои успехи."
-    },
-    "entry3": {
-      "label": "Понятнее, как двигаться дальше",
-      "desc": "Результаты теста и рекомендации теперь доступны на твоём языке. Подсказки стали понятнее: будет проще сделать следующий шаг или повторить пройденное."
-    },
-    "entry4": {
       "label": "Более плавная работа",
       "desc": "Мы также исправили небольшие ошибки и доработали несколько деталей, чтобы учиться с FreeLingo каждый день было ещё приятнее."
     }
@@ -1588,6 +1600,8 @@
     "noEntries": "Пока ничего нет. Будьте первым!",
     "votes": "{count} голосов",
     "vote": "1 голос",
+    "voteAction": "Голосовать",
+    "removeVoteAction": "Отменить голос",
     "comments": "{count} комментариев",
     "comment": "1 комментарий",
     "by": "от",

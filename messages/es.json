@@ -54,6 +54,7 @@
   "common": {
     "loading": "Cargando...",
     "error": "Error",
+    "errorMessage": "Algo salió mal. Por favor inténtalo de nuevo.",
     "save": "Guardar cambios",
     "saving": "Guardando...",
     "cancel": "Cancelar",
@@ -78,6 +79,9 @@
     "backToDashboard": "Volver al inicio",
     "tagline": "aprendizaje de idiomas con IA",
     "close": "Cerrar",
+    "delete": "Eliminar",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
     "verifyEmailBanner": "Por favor, verifica tu dirección de correo para completar la configuración de tu cuenta.",
     "verifyEmailSent": "Correo enviado. Revisa tu bandeja de entrada.",
     "resendVerification": "Reenviar correo de verificación",
@@ -205,7 +209,7 @@
       "saving": "Guardando...",
       "success": "Contraseña actualizada. Redirigiendo al inicio de sesión...",
       "mismatch": "Las contraseñas no coinciden",
-      "tooShort": "La contraseña debe tener al menos 8 caracteres",
+      "tooShort": "La contraseña debe tener al menos 10 caracteres",
       "missingToken": "Enlace inválido. Por favor, solicita un nuevo restablecimiento.",
       "error": "Enlace inválido o caducado",
       "backToLogin": "Volver al inicio de sesión"
@@ -761,6 +765,7 @@
     "toggleSidebarShow": "Mostrar chats",
     "toggleSidebarHide": "Ocultar chats",
     "conversations": "Conversaciones",
+    "voiceSession": "Sesión de voz",
     "loading": "Cargando...",
     "thinking": "Pensando...",
     "takingLonger": "Está tardando más de lo esperado...",
@@ -823,7 +828,7 @@
     "subtitle": "Vocabulario",
     "all": "Todos",
     "searchPlaceholder": "Buscar conjuntos...",
-    "sets": "conjuntos",
+    "sets": "{count, plural, one {# conjunto} other {# conjuntos}}",
     "words": "palabras",
     "addAll": "Añadir las {count} a tarjetas",
     "adding": "Añadiendo...",
@@ -848,6 +853,7 @@
     "informal": "Informal",
     "copied": "¡Copiado!",
     "copy": "Copiar",
+    "copyPhrase": "Copiar frase",
     "noResults": "Ninguna frase coincide con los filtros",
     "level": "Nivel",
     "register": "Registro",
@@ -1046,6 +1052,7 @@
       "translateSuccess": "Traducciones generadas. Revísalas antes de guardar.",
       "translateError": "La traducción falló. Se ha conservado el contenido actual.",
       "editTranslation": "Traducción que editar",
+      "pending": "pendiente",
       "completion": "{complete}/{total} idiomas completos",
       "save": "Guardar anuncio",
       "saveSuccess": "Anuncio del panel guardado.",
@@ -1062,7 +1069,12 @@
         "ru": "Ruso",
         "nl": "Neerlandés",
         "pl": "Polaco",
-        "ro": "Rumano"
+        "ro": "Rumano",
+        "tr": "Turco",
+        "sv": "Sueco",
+        "da": "Danés",
+        "fi": "Finés",
+        "hr": "Croata"
       }
     }
   },
@@ -1154,6 +1166,9 @@
     "statusError": "Error",
     "errorServicesDisabled": "Los servicios de voz no están habilitados en este servidor.",
     "errorConnection": "Error de conexión. Por favor, inténtalo de nuevo.",
+    "errorTranscription": "No se ha podido transcribir lo que has dicho. Intenta hablar de nuevo.",
+    "errorResponse": "Lingu no ha podido responder. Inténtalo de nuevo.",
+    "errorSpeech": "No se ha podido generar el audio de la respuesta de Lingu. Inténtalo de nuevo.",
     "errorUnauthorized": "Sesión expirada. Por favor, actualiza la página.",
     "errorMic": "Acceso al micrófono denegado.",
     "errorVadInit": "Error al inicializar el reconocimiento de voz. Comprueba que el navegador es compatible con WebAssembly.",
@@ -1234,6 +1249,11 @@
     "nl": "Neerlandés",
     "ro": "Rumano",
     "ru": "Ruso",
+    "tr": "Turco",
+    "sv": "Sueco",
+    "da": "Danés",
+    "fi": "Finés",
+    "hr": "Croata",
     "myLanguages": "Mis idiomas",
     "addLanguage": "Añadir idioma",
     "selectLanguage": "Selecciona el idioma que quieres aprender",
@@ -1486,21 +1506,13 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Entendido",
     "entry1": {
-      "label": "Planes mejor equilibrados",
-      "desc": "Los nuevos planes reparten mejor las lecciones entre todas las unidades y dan más espacio a distintos tipos de actividades, también en los planes cortos."
+      "label": "Cinco nuevos idiomas de interfaz",
+      "desc": "FreeLingo está disponible en croata, danés, finés, sueco y turco. Elige tu idioma de interfaz en Ajustes."
     },
     "entry2": {
-      "label": "Tu test al terminar el plan",
-      "desc": "Al llegar al último día y completar las lecciones pendientes, podrás hacer el test de fin de nivel desde el panel o Mi plan y ver cuánto has aprendido."
-    },
-    "entry3": {
-      "label": "Más claridad para seguir aprendiendo",
-      "desc": "Los resultados del test y sus recomendaciones ya están en tu idioma, con indicaciones más claras para dar el siguiente paso o repasar lo aprendido."
-    },
-    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }
@@ -1588,6 +1600,8 @@
     "noEntries": "Nada aquí todavía. ¡Sé el primero en enviar algo!",
     "votes": "{count} votos",
     "vote": "1 voto",
+    "voteAction": "Votar",
+    "removeVoteAction": "Retirar voto",
     "comments": "{count} comentarios",
     "comment": "1 comentario",
     "by": "por",

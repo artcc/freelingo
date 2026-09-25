@@ -21,6 +21,11 @@ const BANNER_LOCALES = [
   'nl',
   'pl',
   'ro',
+  'tr',
+  'sv',
+  'da',
+  'fi',
+  'hr',
 ] as const
 
 type BannerLocale = (typeof BANNER_LOCALES)[number]
@@ -30,7 +35,7 @@ interface AdminDashboardBanner {
   source_locale: BannerLocale
   is_active: boolean
   revision: number
-  translations: BannerTranslations
+  translations: Partial<BannerTranslations>
   created_at: string
   updated_at: string
 }
@@ -50,6 +55,12 @@ function emptyTranslations(): BannerTranslations {
 export default function AdminSystemPage() {
   const t = useTranslations('admin')
   const currentLocale = useLocale()
+  const sortedBannerLocales = [...BANNER_LOCALES].sort((a, b) =>
+    t(`dashboardBanner.locales.${a}`).localeCompare(
+      t(`dashboardBanner.locales.${b}`),
+      currentLocale
+    )
+  )
   const defaultLocale = BANNER_LOCALES.includes(currentLocale as BannerLocale)
     ? (currentLocale as BannerLocale)
     : 'en'
@@ -80,8 +91,10 @@ export default function AdminSystemPage() {
         if (banner) {
           setSourceLocale(banner.source_locale)
           setEditorLocale(banner.source_locale)
-          setSource({ ...banner.translations[banner.source_locale] })
-          setTranslations(banner.translations)
+          setSource({
+            ...(banner.translations[banner.source_locale] ?? EMPTY_TRANSLATION),
+          })
+          setTranslations({ ...emptyTranslations(), ...banner.translations })
           setHasTranslations(true)
           setIsActive(banner.is_active)
           setRevision(banner.revision)
@@ -163,11 +176,15 @@ export default function AdminSystemPage() {
       const saved: AdminDashboardBanner = await response.json()
       setRevision(saved.revision)
       setUpdatedAt(saved.updated_at)
-      setTranslations(saved.translations)
+      const savedTranslations = {
+        ...emptyTranslations(),
+        ...saved.translations,
+      }
+      setTranslations(savedTranslations)
       setIsActive(saved.is_active)
       useConfigStore.setState({
         dashboardBanner: saved.is_active
-          ? { revision: saved.revision, translations: saved.translations }
+          ? { revision: saved.revision, translations: savedTranslations }
           : null,
       })
       setBannerSuccess(t('dashboardBanner.saveSuccess'))
@@ -299,12 +316,14 @@ export default function AdminSystemPage() {
                 </span>
                 <select
                   value={sourceLocale}
-                  onChange={(event) =>
-                    setSourceLocale(event.target.value as BannerLocale)
-                  }
+                  onChange={(event) => {
+                    const locale = event.target.value as BannerLocale
+                    setSourceLocale(locale)
+                    setSource({ ...translations[locale] })
+                  }}
                   className="border-fl-border bg-fl-bg text-fl-fg w-full border px-3 py-2"
                 >
-                  {BANNER_LOCALES.map((locale) => (
+                  {sortedBannerLocales.map((locale) => (
                     <option key={locale} value={locale}>
                       {t(`dashboardBanner.locales.${locale}`)}
                     </option>
@@ -411,14 +430,14 @@ export default function AdminSystemPage() {
                       }
                       className="border-fl-border bg-fl-bg text-fl-fg min-w-52 border px-3 py-2"
                     >
-                      {BANNER_LOCALES.map((locale) => {
+                      {sortedBannerLocales.map((locale) => {
                         const complete = Object.values(
                           translations[locale]
                         ).every((value) => value.trim())
                         return (
                           <option key={locale} value={locale}>
-                            {complete ? '✓ ' : ''}
                             {t(`dashboardBanner.locales.${locale}`)}
+                            {!complete && ` — ${t('dashboardBanner.pending')}`}
                           </option>
                         )
                       })}

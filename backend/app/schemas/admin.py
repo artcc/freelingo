@@ -8,21 +8,24 @@ from pydantic import BaseModel, EmailStr, Field, field_serializer, field_validat
 
 from app.core.config import settings
 
+# Native-language codes accepted when creating users through the admin API.
+# These match the registration and profile options, not the study-language catalog.
 SUPPORTED_LANGUAGES = {
-    "en",
-    "es",
-    "fr",
-    "pt",
-    "de",
-    "it",
-    "zh",
-    "ja",
-    "ko",
-    "ar",
-    "ru",
-    "nl",
-    "pl",
-    "ro",
+    "da",  # Danish
+    "de",  # German
+    "en",  # English
+    "es",  # Spanish
+    "fi",  # Finnish
+    "fr",  # French
+    "hr",  # Croatian
+    "it",  # Italian
+    "nl",  # Dutch
+    "pl",  # Polish
+    "pt",  # Portuguese
+    "ro",  # Romanian
+    "ru",  # Russian
+    "sv",  # Swedish
+    "tr",  # Turkish
 }
 
 

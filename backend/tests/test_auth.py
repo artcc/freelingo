@@ -648,6 +648,58 @@ async def test_patch_me_ui_locale_empty_string_clears(client, test_user):
 
 
 @pytest.mark.asyncio
+async def test_patch_me_accepts_swedish_ui_locale_and_native_language(client, test_user):
+    _, headers = test_user
+    response = await client.patch(
+        "/api/auth/me",
+        headers=headers,
+        json={"ui_locale": "sv", "native_language": "sv"},
+    )
+    assert response.status_code == 200
+    assert response.json()["ui_locale"] == "sv"
+    assert response.json()["native_language"] == "sv"
+
+
+@pytest.mark.asyncio
+async def test_patch_me_accepts_danish_ui_locale_and_native_language(client, test_user):
+    _, headers = test_user
+    response = await client.patch(
+        "/api/auth/me",
+        headers=headers,
+        json={"ui_locale": "da", "native_language": "da"},
+    )
+    assert response.status_code == 200
+    assert response.json()["ui_locale"] == "da"
+    assert response.json()["native_language"] == "da"
+
+
+@pytest.mark.asyncio
+async def test_patch_me_accepts_finnish_ui_locale_and_native_language(client, test_user):
+    _, headers = test_user
+    response = await client.patch(
+        "/api/auth/me",
+        headers=headers,
+        json={"ui_locale": "fi", "native_language": "fi"},
+    )
+    assert response.status_code == 200
+    assert response.json()["ui_locale"] == "fi"
+    assert response.json()["native_language"] == "fi"
+
+
+@pytest.mark.asyncio
+async def test_patch_me_accepts_croatian_ui_locale_and_native_language(client, test_user):
+    _, headers = test_user
+    response = await client.patch(
+        "/api/auth/me",
+        headers=headers,
+        json={"ui_locale": "hr", "native_language": "hr"},
+    )
+    assert response.status_code == 200
+    assert response.json()["ui_locale"] == "hr"
+    assert response.json()["native_language"] == "hr"
+
+
+@pytest.mark.asyncio
 async def test_register_unsupported_native_language(client):
     """Registration must reject native_language codes outside SUPPORTED_LANGUAGES."""
     response = await client.post(

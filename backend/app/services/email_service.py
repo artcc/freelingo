@@ -122,6 +122,46 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "\u0415\u0441\u043b\u0438 \u043a\u043d\u043e\u043f\u043a\u0430 \u043d\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442, \u0441\u043a\u043e\u043f\u0438\u0440\u0443\u0439\u0442\u0435 \u0438 \u0432\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u044d\u0442\u0443 \u0441\u0441\u044b\u043b\u043a\u0443 \u0432 \u0431\u0440\u0430\u0443\u0437\u0435\u0440:",
         "footer": "\u0415\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u043b\u0438 \u044d\u0442\u043e\u0442 \u0430\u043a\u043a\u0430\u0443\u043d\u0442, \u043f\u0440\u043e\u0441\u0442\u043e \u0438\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0439\u0442\u0435 \u044d\u0442\u043e \u043f\u0438\u0441\u044c\u043c\u043e.",
     },
+    "tr": {
+        "greeting": "Merhaba {name},",
+        "subject": "FreeLingo hesab\u0131n\u0131z\u0131 do\u011frulay\u0131n",
+        "body": "FreeLingo hesab\u0131n\u0131z\u0131 olu\u015fturdu\u011funuz i\u00e7in te\u015fekk\u00fcr ederiz.<br />L\u00fctfen a\u015fa\u011f\u0131daki d\u00fc\u011fmeye t\u0131klayarak e-posta adresinizi do\u011frulay\u0131n. Bu ba\u011flant\u0131 <strong>24 saat</strong> ge\u00e7erlidir.",
+        "button": "Hesab\u0131m\u0131 do\u011frula",
+        "link_fallback": "D\u00fc\u011fme \u00e7al\u0131\u015fmazsa bu ba\u011flant\u0131y\u0131 kopyalay\u0131p taray\u0131c\u0131n\u0131za yap\u0131\u015ft\u0131r\u0131n:",
+        "footer": "Bu hesab\u0131 siz olu\u015fturmad\u0131ysan\u0131z bu e-postay\u0131 yok sayabilirsiniz.",
+    },
+    "sv": {
+        "greeting": "Hej {name},",
+        "subject": "Bekräfta ditt FreeLingo-konto",
+        "body": "Tack för att du skapade ett FreeLingo-konto.<br />Bekräfta din e-postadress genom att klicka på knappen nedan. Länken är giltig i <strong>24 timmar</strong>.",
+        "button": "Bekräfta mitt konto",
+        "link_fallback": "Om knappen inte fungerar kan du kopiera länken och klistra in den i din webbläsare:",
+        "footer": "Om du inte har skapat kontot kan du ignorera det här e-postmeddelandet.",
+    },
+    "da": {
+        "greeting": "Hej {name},",
+        "subject": "Bekræft din FreeLingo-konto",
+        "body": "Tak, fordi du oprettede en FreeLingo-konto.<br />Bekræft din e-mailadresse ved at klikke på knappen nedenfor. Linket er gyldigt i <strong>24 timer</strong>.",
+        "button": "Bekræft min konto",
+        "link_fallback": "Hvis knappen ikke virker, kan du kopiere linket og indsætte det i din browser:",
+        "footer": "Hvis du ikke har oprettet kontoen, kan du ignorere denne e-mail.",
+    },
+    "fi": {
+        "greeting": "Hei {name},",
+        "subject": "Vahvista FreeLingo-tilisi",
+        "body": "Kiitos, että loit FreeLingo-tilin.<br />Vahvista sähköpostiosoitteesi napsauttamalla alla olevaa painiketta. Linkki on voimassa <strong>24 tuntia</strong>.",
+        "button": "Vahvista tilini",
+        "link_fallback": "Jos painike ei toimi, kopioi tämä linkki ja liitä se selaimeesi:",
+        "footer": "Jos et luonut tätä tiliä, voit jättää tämän viestin huomiotta.",
+    },
+    "hr": {
+        "greeting": "Pozdrav {name},",
+        "subject": "Potvrdi svoj FreeLingo račun",
+        "body": "Hvala što si stvorio/la FreeLingo račun.<br />Potvrdi adresu e-pošte klikom na gumb u nastavku. Poveznica vrijedi <strong>24 sata</strong>.",
+        "button": "Potvrdi moj račun",
+        "link_fallback": "Ako gumb ne radi, kopiraj ovu poveznicu i zalijepi je u preglednik:",
+        "footer": "Ako nisi stvorio/la ovaj račun, možeš zanemariti ovu poruku.",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -204,6 +244,46 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u043f\u0430\u0440\u043e\u043b\u044c",
         "link_fallback": "\u0415\u0441\u043b\u0438 \u043a\u043d\u043e\u043f\u043a\u0430 \u043d\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442, \u0441\u043a\u043e\u043f\u0438\u0440\u0443\u0439\u0442\u0435 \u0438 \u0432\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u044d\u0442\u0443 \u0441\u0441\u044b\u043b\u043a\u0443 \u0432 \u0431\u0440\u0430\u0443\u0437\u0435\u0440:",
         "footer": "\u0415\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u0437\u0430\u043f\u0440\u0430\u0448\u0438\u0432\u0430\u043b\u0438 \u0441\u0431\u0440\u043e\u0441, \u043f\u0440\u043e\u0441\u0442\u043e \u0438\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0439\u0442\u0435 \u044d\u0442\u043e \u043f\u0438\u0441\u044c\u043c\u043e.",
+    },
+    "tr": {
+        "greeting": "Merhaba {name},",
+        "subject": "FreeLingo parolan\u0131z\u0131 s\u0131f\u0131rlay\u0131n",
+        "body": "FreeLingo hesab\u0131n\u0131z\u0131n parolas\u0131n\u0131 s\u0131f\u0131rlama iste\u011fi ald\u0131k.<br />Yeni bir parola olu\u015fturmak i\u00e7in a\u015fa\u011f\u0131daki d\u00fc\u011fmeye t\u0131klay\u0131n. Bu ba\u011flant\u0131 <strong>1 saat</strong> ge\u00e7erlidir.",
+        "button": "Parolam\u0131 s\u0131f\u0131rla",
+        "link_fallback": "D\u00fc\u011fme \u00e7al\u0131\u015fmazsa bu ba\u011flant\u0131y\u0131 kopyalay\u0131p taray\u0131c\u0131n\u0131za yap\u0131\u015ft\u0131r\u0131n:",
+        "footer": "Parola s\u0131f\u0131rlama iste\u011finde bulunmad\u0131ysan\u0131z bu e-postay\u0131 g\u00fcvenle yok sayabilirsiniz.",
+    },
+    "sv": {
+        "greeting": "Hej {name},",
+        "subject": "Återställ ditt FreeLingo-lösenord",
+        "body": "Vi har fått en begäran om att återställa lösenordet för ditt FreeLingo-konto.<br />Klicka på knappen nedan för att skapa ett nytt lösenord. Länken är giltig i <strong>1 timme</strong>.",
+        "button": "Återställ mitt lösenord",
+        "link_fallback": "Om knappen inte fungerar kan du kopiera länken och klistra in den i din webbläsare:",
+        "footer": "Om du inte har begärt en lösenordsåterställning kan du ignorera det här e-postmeddelandet.",
+    },
+    "da": {
+        "greeting": "Hej {name},",
+        "subject": "Nulstil din FreeLingo-adgangskode",
+        "body": "Vi har modtaget en anmodning om at nulstille adgangskoden til din FreeLingo-konto.<br />Klik på knappen nedenfor for at oprette en ny adgangskode. Linket er gyldigt i <strong>1 time</strong>.",
+        "button": "Nulstil min adgangskode",
+        "link_fallback": "Hvis knappen ikke virker, kan du kopiere linket og indsætte det i din browser:",
+        "footer": "Hvis du ikke har bedt om at få nulstillet adgangskoden, kan du ignorere denne e-mail.",
+    },
+    "fi": {
+        "greeting": "Hei {name},",
+        "subject": "Palauta FreeLingo-salasanasi",
+        "body": "Saimme pyynnön palauttaa FreeLingo-tilisi salasana.<br />Luo uusi salasana napsauttamalla alla olevaa painiketta. Linkki on voimassa <strong>1 tunnin</strong>.",
+        "button": "Palauta salasanani",
+        "link_fallback": "Jos painike ei toimi, kopioi tämä linkki ja liitä se selaimeesi:",
+        "footer": "Jos et pyytänyt salasanan palautusta, voit jättää tämän viestin huomiotta.",
+    },
+    "hr": {
+        "greeting": "Pozdrav {name},",
+        "subject": "Postavi novu FreeLingo lozinku",
+        "body": "Primili smo zahtjev za postavljanje nove lozinke za tvoj FreeLingo račun.<br />Klikni na gumb u nastavku kako bi postavio/la novu lozinku. Poveznica vrijedi <strong>1 sat</strong>.",
+        "button": "Postavi novu lozinku",
+        "link_fallback": "Ako gumb ne radi, kopiraj ovu poveznicu i zalijepi je u preglednik:",
+        "footer": "Ako nisi zatražio/la novu lozinku, možeš zanemariti ovu poruku.",
     },
 }
 
@@ -308,6 +388,56 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 \u043f\u0430\u043d\u0435\u043b\u044c \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
         "footer": "\u0423\u0441\u043f\u0435\u0445\u043e\u0432 \u0432 \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u0438!",
     },
+    "tr": {
+        "subject": "FreeLingo'ya ho\u015f geldiniz!",
+        "greeting": "Merhaba {name},",
+        "body": "Hesab\u0131n\u0131z haz\u0131r. Ba\u015flamak i\u00e7in \u015funlar\u0131 yapabilirsiniz:",
+        "step1": "<strong>Seviye Tespitine</strong> girin \u2014 mevcut seviyenizi (A1\u2013C2), g\u00fc\u00e7l\u00fc ve zay\u0131f y\u00f6nlerinizi belirler.",
+        "step2": "<strong>\u00c7al\u0131\u015fma Plan\u0131n\u0131z\u0131</strong> olu\u015fturun \u2014 seviyenize ve hedeflerinize g\u00f6re haz\u0131rlanm\u0131\u015f haftal\u0131k bir program.",
+        "step3": "\u0130lk g\u00fcnl\u00fck dersinizi tamamlay\u0131n ve serinizi olu\u015fturmaya ba\u015flay\u0131n.",
+        "button": "Panoma git",
+        "footer": "\u0130yi \u00e7al\u0131\u015fmalar!",
+    },
+    "sv": {
+        "subject": "Välkommen till FreeLingo!",
+        "greeting": "Hej {name},",
+        "body": "Ditt konto är redo. Så här kommer du igång:",
+        "step1": "Gör <strong>nivåbedömningen</strong> – den visar din nuvarande nivå (A1–C2) samt dina styrkor och svagheter.",
+        "step2": "Skapa din <strong>studieplan</strong> – en plan vecka för vecka anpassad till din nivå och dina mål.",
+        "step3": "Slutför din första dagliga lektion och börja bygga din svit.",
+        "button": "Gå till min översikt",
+        "footer": "Lycka till med studierna!",
+    },
+    "da": {
+        "subject": "Velkommen til FreeLingo!",
+        "greeting": "Hej {name},",
+        "body": "Din konto er klar. Sådan kommer du i gang:",
+        "step1": "Tag <strong>niveauvurderingen</strong> – den viser dit aktuelle niveau (A1–C2) samt dine styrker og svagheder.",
+        "step2": "Opret din <strong>læringsplan</strong> – en ugeplan tilpasset dit niveau og dine mål.",
+        "step3": "Gennemfør din første daglige lektion, og begynd at opbygge din stime.",
+        "button": "Gå til min oversigt",
+        "footer": "God fornøjelse med læringen!",
+    },
+    "fi": {
+        "subject": "Tervetuloa FreeLingoon!",
+        "greeting": "Hei {name},",
+        "body": "Tilisi on valmis. Näin pääset alkuun:",
+        "step1": "Tee <strong>tasoarvio</strong> – se selvittää nykyisen tasosi (A1–C2) sekä vahvuutesi ja kehittämiskohteesi.",
+        "step2": "Luo <strong>opintosuunnitelmasi</strong> – tasosi ja tavoitteidesi mukainen viikkosuunnitelma.",
+        "step3": "Suorita ensimmäinen päivittäinen oppituntisi ja aloita putkesi.",
+        "button": "Siirry koontinäyttöön",
+        "footer": "Iloisia opiskeluhetkiä!",
+    },
+    "hr": {
+        "subject": "Dobrodošli u FreeLingo!",
+        "greeting": "Pozdrav {name},",
+        "body": "Tvoj račun je spreman. Evo kako možeš početi:",
+        "step1": "Riješi <strong>procjenu razine</strong> – ona utvrđuje tvoju trenutačnu razinu (A1–C2) te prednosti i slabosti.",
+        "step2": "Stvori <strong>plan učenja</strong> – tjedni program prilagođen tvojoj razini i ciljevima.",
+        "step3": "Dovrši svoju prvu dnevnu lekciju i počni graditi niz.",
+        "button": "Idi na nadzornu ploču",
+        "footer": "Sretno s učenjem!",
+    },
 }
 
 
@@ -371,6 +501,36 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "\u041f\u0440\u0438\u0432\u0435\u0442, {name},",
         "body": "\u0412\u0430\u0448 \u0430\u043a\u043a\u0430\u0443\u043d\u0442 FreeLingo \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0443\u0434\u0430\u043b\u0451\u043d. \u0412\u0441\u0435 \u0432\u0430\u0448\u0438 \u0434\u0430\u043d\u043d\u044b\u0435 \u0431\u044b\u043b\u0438 \u043d\u0430\u0432\u0441\u0435\u0433\u0434\u0430 \u0443\u0434\u0430\u043b\u0435\u043d\u044b \u0441 \u043d\u0430\u0448\u0438\u0445 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432.",
         "footer": "\u0415\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u0437\u0430\u043f\u0440\u0430\u0448\u0438\u0432\u0430\u043b\u0438 \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u0435, \u043d\u0435\u043c\u0435\u0434\u043b\u0435\u043d\u043d\u043e \u0441\u0432\u044f\u0436\u0438\u0442\u0435\u0441\u044c \u0441 \u043d\u0430\u043c\u0438.",
+    },
+    "tr": {
+        "subject": "FreeLingo hesab\u0131n\u0131z silindi",
+        "greeting": "Merhaba {name},",
+        "body": "FreeLingo hesab\u0131n\u0131z ba\u015far\u0131yla silindi. T\u00fcm verileriniz sunucular\u0131m\u0131zdan kal\u0131c\u0131 olarak kald\u0131r\u0131ld\u0131.",
+        "footer": "Bu silme i\u015flemini siz istemediyseniz l\u00fctfen hemen bizimle ileti\u015fime ge\u00e7in.",
+    },
+    "sv": {
+        "subject": "Ditt FreeLingo-konto har raderats",
+        "greeting": "Hej {name},",
+        "body": "Ditt FreeLingo-konto har raderats. Alla dina uppgifter har tagits bort permanent från våra servrar.",
+        "footer": "Om du inte har begärt att kontot ska raderas ska du kontakta oss omedelbart.",
+    },
+    "da": {
+        "subject": "Din FreeLingo-konto er blevet slettet",
+        "greeting": "Hej {name},",
+        "body": "Din FreeLingo-konto er blevet slettet. Alle dine oplysninger er fjernet permanent fra vores servere.",
+        "footer": "Hvis du ikke har bedt om sletningen, skal du kontakte os med det samme.",
+    },
+    "fi": {
+        "subject": "FreeLingo-tilisi on poistettu",
+        "greeting": "Hei {name},",
+        "body": "FreeLingo-tilisi on poistettu. Kaikki tietosi on poistettu pysyvästi palvelimiltamme.",
+        "footer": "Jos et pyytänyt tilin poistamista, ota meihin välittömästi yhteyttä.",
+    },
+    "hr": {
+        "subject": "Tvoj FreeLingo račun je izbrisan",
+        "greeting": "Pozdrav {name},",
+        "body": "Tvoj FreeLingo račun uspješno je izbrisan. Svi tvoji podaci trajno su uklonjeni s naših poslužitelja.",
+        "footer": "Ako nisi zatražio/la brisanje, odmah nam se javi.",
     },
 }
 
@@ -464,6 +624,51 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Тема",
         "message_label": "Сообщение",
         "footer": "Отправлено через контактную форму FreeLingo",
+    },
+    "tr": {
+        "email_title": "İletişim formu mesajı",
+        "subject_prefix": "[FreeLingo İletişim]",
+        "logo": "FreeLingo: İletişim Formu",
+        "from_label": "Gönderen",
+        "subject_label": "Konu",
+        "message_label": "Mesaj",
+        "footer": "FreeLingo iletişim formu aracılığıyla gönderildi",
+    },
+    "sv": {
+        "email_title": "Meddelande från kontaktformuläret",
+        "subject_prefix": "[FreeLingo Kontakt]",
+        "logo": "FreeLingo: Kontaktformulär",
+        "from_label": "Från",
+        "subject_label": "Ämne",
+        "message_label": "Meddelande",
+        "footer": "Skickat via FreeLingos kontaktformulär",
+    },
+    "da": {
+        "email_title": "Besked fra kontaktformularen",
+        "subject_prefix": "[FreeLingo Kontakt]",
+        "logo": "FreeLingo: Kontaktformular",
+        "from_label": "Fra",
+        "subject_label": "Emne",
+        "message_label": "Besked",
+        "footer": "Sendt via FreeLingos kontaktformular",
+    },
+    "fi": {
+        "email_title": "Yhteydenottolomakkeen viesti",
+        "subject_prefix": "[FreeLingo Yhteydenotto]",
+        "logo": "FreeLingo: Yhteydenottolomake",
+        "from_label": "Lähettäjä",
+        "subject_label": "Aihe",
+        "message_label": "Viesti",
+        "footer": "Lähetetty FreeLingon yhteydenottolomakkeella",
+    },
+    "hr": {
+        "email_title": "Poruka iz kontaktnog obrasca",
+        "subject_prefix": "[FreeLingo Kontakt]",
+        "logo": "FreeLingo: Kontaktni obrazac",
+        "from_label": "Od",
+        "subject_label": "Predmet",
+        "message_label": "Poruka",
+        "footer": "Poslano putem FreeLingova kontaktnog obrasca",
     },
 }
 
@@ -598,6 +803,71 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Открыть в панели администратора",
         "footer": "Доска отзывов FreeLingo",
     },
+    "tr": {
+        "email_title": "Yeni geri bildirim gönderildi",
+        "logo": "FreeLingo: Yeni Geri Bildirim",
+        "feature_label": "Özellik isteği",
+        "bug_label": "Hata bildirimi",
+        "feature_subject_prefix": "[Özellik İsteği]",
+        "bug_subject_prefix": "[Hata Bildirimi]",
+        "author_label": "Gönderen",
+        "title_label": "Başlık",
+        "description_label": "Açıklama",
+        "cta": "Yönetim panelinde görüntüle",
+        "footer": "FreeLingo geri bildirim panosu",
+    },
+    "sv": {
+        "email_title": "Ny feedback har skickats in",
+        "logo": "FreeLingo: Ny feedback",
+        "feature_label": "Funktionsförslag",
+        "bug_label": "Felrapport",
+        "feature_subject_prefix": "[Funktionsförslag]",
+        "bug_subject_prefix": "[Felrapport]",
+        "author_label": "Skickat av",
+        "title_label": "Titel",
+        "description_label": "Beskrivning",
+        "cta": "Visa i administrationspanelen",
+        "footer": "FreeLingos feedbacktavla",
+    },
+    "da": {
+        "email_title": "Ny feedback er indsendt",
+        "logo": "FreeLingo: Ny feedback",
+        "feature_label": "Funktionsforslag",
+        "bug_label": "Fejlrapport",
+        "feature_subject_prefix": "[Funktionsforslag]",
+        "bug_subject_prefix": "[Fejlrapport]",
+        "author_label": "Indsendt af",
+        "title_label": "Titel",
+        "description_label": "Beskrivelse",
+        "cta": "Se i administrationspanelet",
+        "footer": "FreeLingos feedbacktavle",
+    },
+    "fi": {
+        "email_title": "Uusi palaute lähetetty",
+        "logo": "FreeLingo: Uusi palaute",
+        "feature_label": "Ominaisuusehdotus",
+        "bug_label": "Virheraportti",
+        "feature_subject_prefix": "[Ominaisuusehdotus]",
+        "bug_subject_prefix": "[Virheraportti]",
+        "author_label": "Lähettäjä",
+        "title_label": "Otsikko",
+        "description_label": "Kuvaus",
+        "cta": "Näytä ylläpidossa",
+        "footer": "FreeLingon palautetaulu",
+    },
+    "hr": {
+        "email_title": "Poslane su nove povratne informacije",
+        "logo": "FreeLingo: Nove povratne informacije",
+        "feature_label": "Prijedlog značajke",
+        "bug_label": "Prijava pogreške",
+        "feature_subject_prefix": "[Prijedlog značajke]",
+        "bug_subject_prefix": "[Prijava pogreške]",
+        "author_label": "Poslao/la",
+        "title_label": "Naslov",
+        "description_label": "Opis",
+        "cta": "Pogledaj u administraciji",
+        "footer": "FreeLingova ploča za povratne informacije",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -721,13 +991,74 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "cta": "Открыть в панели администратора",
         "footer": "Модерация отзывов FreeLingo",
     },
+    "tr": {
+        "email_title": "Yeni yorum gönderildi",
+        "subject_prefix": "[Yeni Yorum]",
+        "logo": "FreeLingo: Yeni Yorum",
+        "author_label": "Gönderen",
+        "rating_label": "Puan",
+        "language_label": "Öğrenilen dil",
+        "comment_label": "Yorum",
+        "empty_comment": "Yorum yazılmadı.",
+        "cta": "Yönetim panelinde görüntüle",
+        "footer": "FreeLingo yorum moderasyonu",
+    },
+    "sv": {
+        "email_title": "Nytt omdöme har skickats in",
+        "subject_prefix": "[Nytt omdöme]",
+        "logo": "FreeLingo: Nytt omdöme",
+        "author_label": "Skickat av",
+        "rating_label": "Betyg",
+        "language_label": "Språk som lärs in",
+        "comment_label": "Kommentar",
+        "empty_comment": "Ingen kommentar lämnades.",
+        "cta": "Visa i administrationspanelen",
+        "footer": "Moderering av FreeLingo-omdömen",
+    },
+    "da": {
+        "email_title": "Ny anmeldelse er indsendt",
+        "subject_prefix": "[Ny anmeldelse]",
+        "logo": "FreeLingo: Ny anmeldelse",
+        "author_label": "Indsendt af",
+        "rating_label": "Bedømmelse",
+        "language_label": "Sprog, der læres",
+        "comment_label": "Kommentar",
+        "empty_comment": "Ingen kommentar tilføjet.",
+        "cta": "Se i administrationspanelet",
+        "footer": "Moderering af FreeLingo-anmeldelser",
+    },
+    "fi": {
+        "email_title": "Uusi arvostelu lähetetty",
+        "subject_prefix": "[Uusi arvostelu]",
+        "logo": "FreeLingo: Uusi arvostelu",
+        "author_label": "Lähettäjä",
+        "rating_label": "Arvosana",
+        "language_label": "Opiskeltava kieli",
+        "comment_label": "Kommentti",
+        "empty_comment": "Kommenttia ei annettu.",
+        "cta": "Näytä ylläpidossa",
+        "footer": "FreeLingon arvostelujen moderointi",
+    },
+    "hr": {
+        "email_title": "Poslana je nova recenzija",
+        "subject_prefix": "[Nova recenzija]",
+        "logo": "FreeLingo: Nova recenzija",
+        "author_label": "Poslao/la",
+        "rating_label": "Ocjena",
+        "language_label": "Jezik koji se uči",
+        "comment_label": "Komentar",
+        "empty_comment": "Nema komentara.",
+        "cta": "Pogledaj u administraciji",
+        "footer": "Moderiranje FreeLingo recenzija",
+    },
 }
 
 
-def _render_template(name: str, context: dict) -> str:
+def _render_template(name: str, context: dict, locale: str = "en") -> str:
     """Render a plain HTML template, escaping interpolated values by default."""
     path = _TEMPLATES_DIR / name
     html = path.read_text(encoding="utf-8")
+    context = {**context, "locale": locale if locale in _VERIFY_I18N else "en"}
     for key, value in context.items():
         rendered = str(value) if isinstance(value, _SafeHtml) else escape(str(value), quote=True)
         html = html.replace(f"{{{{{key}}}}}", rendered)
@@ -767,6 +1098,7 @@ async def send_verification_email(
             "url": url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -790,6 +1122,7 @@ async def send_reset_password_email(
             "url": url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -813,6 +1146,7 @@ async def send_welcome_email(to: str, display_name: str, locale: str = "en") -> 
             "url": url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -841,6 +1175,7 @@ async def send_contact_email(
             "footer": strings["footer"],
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     message = MessageSchema(
         subject=f"{strings['subject_prefix']} {subject}",
@@ -870,6 +1205,7 @@ async def send_account_deleted_email(to: str, display_name: str, locale: str = "
             "footer": strings["footer"],
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(strings["subject"], [to], html)
 
@@ -914,6 +1250,7 @@ async def send_feedback_notification(
             "admin_url": admin_url,
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     subject_prefix = (
         strings["feature_subject_prefix"]
@@ -962,6 +1299,7 @@ async def send_review_notification(
             "footer": strings["footer"],
             "base_url": settings.APP_BASE_URL,
         },
+        locale=locale,
     )
     await _dispatch(
         f"{strings['subject_prefix']} {rating}/5 — {user_display_name}",

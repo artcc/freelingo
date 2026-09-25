@@ -19,8 +19,8 @@ from app.services.llm_adapter import LLMError, llm_adapter
 
 router = APIRouter(prefix="/api/admin/dashboard-banner", tags=["admin"])
 
-_TRANSLATION_PROMPT = """Translate this dashboard announcement faithfully into all ten requested locales.
-Return en, es, fr, pt, de, it, ru, nl, pl, and ro. Preserve the original tone and meaning.
+_TRANSLATION_PROMPT = """Translate this dashboard announcement faithfully into all fifteen requested locales.
+Return en, es, fr, pt, de, it, ru, nl, pl, ro, tr, sv, da, fi, and hr. Preserve the original tone and meaning.
 Do not add claims, details, formatting, Markdown, or HTML. Every field must contain plain text only.
 For the source locale, copy each provided field exactly.
 
@@ -31,7 +31,9 @@ Description: {description}
 """
 
 
-@router.get("", response_model=DashboardBannerAdminResponse | None)
+@router.get(
+    "", response_model=DashboardBannerAdminResponse | None, response_model_exclude_unset=True
+)
 @limiter.limit("60/minute")
 async def get_dashboard_banner(
     request: Request,

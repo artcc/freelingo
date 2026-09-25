@@ -92,11 +92,11 @@ export default function GrammarDetailPage({
   const t = useTranslations('grammar')
   const tCommon = useTranslations('common')
   const tNav = useTranslations('nav')
-  const tTargetLang = useTranslations('targetLanguages')
+  const tLang = useTranslations('languages')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const user = useAuthStore((s) => s.user)
   const nativeLanguageName = user?.native_language
-    ? tTargetLang(user.native_language)
+    ? tLang(user.native_language)
     : ''
   const { slug } = use(params)
 

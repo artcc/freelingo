@@ -118,6 +118,13 @@ fall back to English according to the platform contract.
 
 Locale selection, profile persistence, and cookies are coordinated by Settings and middleware. A
 target-language switch must not mutate UI locale or global account preferences.
+Visible copy, including resource counts, errors, role labels, tooltips, and accessibility text, uses
+the active UI locale's catalog. Dates and numeric prices use that locale rather than the browser's
+default. In the dashboard-banner editor, selecting a source locale loads its current translation
+into the source fields before translation. Both banner language selectors sort translated language
+names alphabetically using the active UI locale's collation. The translation editor marks only
+incomplete translations with a localized pending suffix, without adding completion checkmarks to
+options; the overall completion counter remains visible.
 
 ## Streaming and media
 

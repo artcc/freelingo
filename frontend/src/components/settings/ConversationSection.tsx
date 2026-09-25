@@ -50,10 +50,10 @@ export function ConversationSection({ title }: { title?: string } = {}) {
       const updated = await res.json()
       setUser(mapUser(updated, user))
       setConvMessage({ type: 'ok', text: t('conversationSaved') })
-    } catch (err: unknown) {
+    } catch {
       setConvMessage({
         type: 'err',
-        text: err instanceof Error ? err.message : t('saveFailed'),
+        text: t('saveFailed'),
       })
     } finally {
       setSavingConv(false)

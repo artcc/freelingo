@@ -109,12 +109,7 @@ export default function LevelTestPage() {
       const res = await apiFetch(
         `/api/assessment/level-test/questions/${planIdNum}`
       )
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}))
-        throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
-        )
-      }
+      if (!res.ok) throw new Error(t('levelTest.loadFailed'))
       const data = (await res.json()) as {
         plan_id: number
         cefr_level: string
@@ -127,7 +122,11 @@ export default function LevelTestPage() {
       setCefrLevel(data.cefr_level)
       setStep('quiz')
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('levelTest.loadFailed'))
+      setError(
+        err instanceof Error && err.message === t('levelTest.noQuestions')
+          ? err.message
+          : t('levelTest.loadFailed')
+      )
       setStep('error')
     }
   }, [planId, startConfirmed, t])
@@ -183,17 +182,12 @@ export default function LevelTestPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan_id: planIdNum, answers: finalAnswers }),
       })
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}))
-        throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
-        )
-      }
+      if (!res.ok) throw new Error(t('levelTest.submitFailed'))
       const data = (await res.json()) as LevelTestResult
       setResult(data)
       setStep('result')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('levelTest.submitFailed'))
+    } catch {
+      setError(t('levelTest.submitFailed'))
       setStep('error')
     }
   }

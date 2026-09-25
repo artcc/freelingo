@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
@@ -9,6 +9,7 @@ import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanBu
 
 export function BillingSection() {
   const tBilling = useTranslations('billing')
+  const locale = useLocale()
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const [portalLoading, setPortalLoading] = useState(false)
@@ -26,10 +27,8 @@ export function BillingSection() {
       if (!res.ok) throw new Error(tBilling('portalError'))
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setPortalError(
-        err instanceof Error ? err.message : tBilling('portalError')
-      )
+    } catch {
+      setPortalError(tBilling('portalError'))
       setPortalLoading(false)
     }
   }
@@ -105,7 +104,7 @@ export function BillingSection() {
                   : tBilling('nextBilling')}
               </span>
               <span className="text-fl-muted-1 font-mono text-xs">
-                {new Date(user.subscription_ends_at).toLocaleDateString()}
+                {new Date(user.subscription_ends_at).toLocaleDateString(locale)}
               </span>
             </div>
           )}

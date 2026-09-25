@@ -43,6 +43,7 @@ function detectLocale(req: NextRequest): Locale {
       const lang = langTag.trim().split(/[-_]/)[0].toLowerCase()
       return { lang, q: isNaN(q) ? 0 : q }
     })
+    .filter(({ q }) => q > 0 && q <= 1)
     .sort((a, b) => b.q - a.q)
 
   for (const { lang } of parsed) {

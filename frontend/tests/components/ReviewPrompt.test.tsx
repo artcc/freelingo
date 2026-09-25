@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import {
   ReviewPrompt,
   getReviewPromptDismissal,
@@ -25,7 +25,10 @@ const translations: Record<string, string> = {
   submit: 'Submit',
 }
 
-const translate = (key: string) => translations[key] ?? key
+const translate = (key: string, values?: { rating: number }) =>
+  key === 'starsLabel'
+    ? `${values?.rating} out of 5 stars`
+    : (translations[key] ?? key)
 
 vi.mock('next-intl', () => ({
   useTranslations: () => translate,
@@ -53,11 +56,22 @@ describe('ReviewPrompt', () => {
   it('submits rating-only reviews', async () => {
     const onClose = vi.fn()
     mockCreateReview.mockResolvedValue({ id: 1, rating: 5 })
+    let resolveReview!: (value: { has_review: boolean; review: null }) => void
+    mockFetchMyReview.mockReturnValueOnce(
+      new Promise<{ has_review: boolean; review: null }>((resolve) => {
+        resolveReview = resolve
+      })
+    )
     render(<ReviewPrompt open onClose={onClose} />)
+    expect(screen.getByText('checking')).toBeInTheDocument()
+    expect(screen.queryByText('Rating required')).toBeNull()
+    await act(async () => {
+      resolveReview({ has_review: false, review: null })
+    })
     await screen.findByText('Rating required')
-    fireEvent.click(screen.getByLabelText('5 stars'))
+    fireEvent.click(screen.getByLabelText('5 out of 5 stars'))
     await waitFor(() =>
-      expect(screen.getByLabelText('5 stars')).toHaveAttribute(
+      expect(screen.getByLabelText('5 out of 5 stars')).toHaveAttribute(
         'aria-checked',
         'true'
       )
@@ -74,11 +88,20 @@ describe('ReviewPrompt', () => {
 
   it('submits rating plus comment', async () => {
     mockCreateReview.mockResolvedValue({ id: 1, rating: 4 })
+    let resolveReview!: (value: { has_review: boolean; review: null }) => void
+    mockFetchMyReview.mockReturnValueOnce(
+      new Promise<{ has_review: boolean; review: null }>((resolve) => {
+        resolveReview = resolve
+      })
+    )
     render(<ReviewPrompt open onClose={() => {}} />)
+    await act(async () => {
+      resolveReview({ has_review: false, review: null })
+    })
     await screen.findByText('Rating required')
-    fireEvent.click(screen.getByLabelText('4 stars'))
+    fireEvent.click(screen.getByLabelText('4 out of 5 stars'))
     await waitFor(() =>
-      expect(screen.getByLabelText('4 stars')).toHaveAttribute(
+      expect(screen.getByLabelText('4 out of 5 stars')).toHaveAttribute(
         'aria-checked',
         'true'
       )
