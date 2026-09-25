@@ -1052,6 +1052,7 @@
       "translateSuccess": "Prijevodi su stvoreni. Pregledaj ih prije spremanja.",
       "translateError": "Prevođenje nije uspjelo. Trenutačni sadržaj je sačuvan.",
       "editTranslation": "Prijevod za uređivanje",
+      "pending": "na čekanju",
       "completion": "{complete}/{total} jezika dovršeno",
       "save": "Spremi obavijest",
       "saveSuccess": "Obavijest na nadzornoj ploči je spremljena.",

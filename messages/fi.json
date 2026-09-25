@@ -1052,6 +1052,7 @@
       "translateSuccess": "Käännökset luotu. Tarkista ne ennen tallentamista.",
       "translateError": "Kääntäminen epäonnistui. Nykyinen sisältö säilytettiin.",
       "editTranslation": "Muokattava käännös",
+      "pending": "odottaa",
       "completion": "{complete}/{total} kieltä valmiina",
       "save": "Tallenna ilmoitus",
       "saveSuccess": "Koontinäytön ilmoitus tallennettu.",

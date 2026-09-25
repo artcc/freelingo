@@ -1052,6 +1052,7 @@
       "translateSuccess": "Traducciones generadas. Revísalas antes de guardar.",
       "translateError": "La traducción falló. Se ha conservado el contenido actual.",
       "editTranslation": "Traducción que editar",
+      "pending": "pendiente",
       "completion": "{complete}/{total} idiomas completos",
       "save": "Guardar anuncio",
       "saveSuccess": "Anuncio del panel guardado.",

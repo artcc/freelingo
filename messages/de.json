@@ -1052,6 +1052,7 @@
       "translateSuccess": "Übersetzungen erstellt. Prüfe sie vor dem Speichern.",
       "translateError": "Übersetzung fehlgeschlagen. Der aktuelle Inhalt wurde beibehalten.",
       "editTranslation": "Übersetzung bearbeiten",
+      "pending": "ausstehend",
       "completion": "{complete}/{total} Sprachen vollständig",
       "save": "Ankündigung speichern",
       "saveSuccess": "Dashboard-Ankündigung gespeichert.",

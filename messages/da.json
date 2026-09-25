@@ -1052,6 +1052,7 @@
       "translateSuccess": "Oversættelserne er oprettet. Gennemgå dem, før du gemmer.",
       "translateError": "Oversættelsen mislykkedes. Dit nuværende indhold blev bevaret.",
       "editTranslation": "Oversættelse, der skal redigeres",
+      "pending": "afventer",
       "completion": "{complete}/{total} sprog færdige",
       "save": "Gem meddelelse",
       "saveSuccess": "Meddelelsen på oversigten er gemt.",

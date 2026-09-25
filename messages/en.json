@@ -1052,6 +1052,7 @@
       "translateSuccess": "Translations generated. Review them before saving.",
       "translateError": "Translation failed. Your current content was kept.",
       "editTranslation": "Translation to edit",
+      "pending": "pending",
       "completion": "{complete}/{total} languages complete",
       "save": "Save announcement",
       "saveSuccess": "Dashboard announcement saved.",

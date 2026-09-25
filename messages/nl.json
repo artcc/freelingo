@@ -1052,6 +1052,7 @@
       "translateSuccess": "Vertalingen gegenereerd. Controleer ze voor het opslaan.",
       "translateError": "Vertalen mislukt. De huidige inhoud is behouden.",
       "editTranslation": "Vertaling bewerken",
+      "pending": "in behandeling",
       "completion": "{complete}/{total} talen compleet",
       "save": "Aankondiging opslaan",
       "saveSuccess": "Dashboardaankondiging opgeslagen.",

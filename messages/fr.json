@@ -1052,6 +1052,7 @@
       "translateSuccess": "Traductions générées. Vérifiez-les avant d'enregistrer.",
       "translateError": "La traduction a échoué. Votre contenu actuel a été conservé.",
       "editTranslation": "Traduction à modifier",
+      "pending": "en attente",
       "completion": "{complete}/{total} langues complètes",
       "save": "Enregistrer l'annonce",
       "saveSuccess": "Annonce du tableau de bord enregistrée.",

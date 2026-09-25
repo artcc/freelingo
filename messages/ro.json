@@ -1052,6 +1052,7 @@
       "translateSuccess": "Traduceri generate. Verifică-le înainte de salvare.",
       "translateError": "Traducerea a eșuat. Conținutul actual a fost păstrat.",
       "editTranslation": "Traducere de editat",
+      "pending": "în așteptare",
       "completion": "{complete}/{total} limbi complete",
       "save": "Salvează anunțul",
       "saveSuccess": "Anunțul a fost salvat.",

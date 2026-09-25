@@ -1052,6 +1052,7 @@
       "translateSuccess": "Traduzioni generate. Controllale prima di salvare.",
       "translateError": "Traduzione non riuscita. Il contenuto attuale è stato mantenuto.",
       "editTranslation": "Traduzione da modificare",
+      "pending": "in attesa",
       "completion": "{complete}/{total} lingue complete",
       "save": "Salva annuncio",
       "saveSuccess": "Annuncio della dashboard salvato.",

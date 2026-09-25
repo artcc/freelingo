@@ -1052,6 +1052,7 @@
       "translateSuccess": "Tłumaczenia wygenerowane. Sprawdź je przed zapisaniem.",
       "translateError": "Tłumaczenie nie powiodło się. Obecna treść została zachowana.",
       "editTranslation": "Edytuj tłumaczenie",
+      "pending": "oczekuje",
       "completion": "Ukończone języki: {complete}/{total}",
       "save": "Zapisz ogłoszenie",
       "saveSuccess": "Ogłoszenie zapisane.",

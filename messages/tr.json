@@ -1052,6 +1052,7 @@
       "translateSuccess": "Çeviriler oluşturuldu. Kaydetmeden önce inceleyin.",
       "translateError": "Çeviri başarısız oldu. Mevcut içeriğiniz korundu.",
       "editTranslation": "Düzenlenecek çeviri",
+      "pending": "beklemede",
       "completion": "{complete}/{total} dil tamamlandı",
       "save": "Duyuruyu kaydet",
       "saveSuccess": "Pano duyurusu kaydedildi.",

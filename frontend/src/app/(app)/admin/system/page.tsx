@@ -55,6 +55,12 @@ function emptyTranslations(): BannerTranslations {
 export default function AdminSystemPage() {
   const t = useTranslations('admin')
   const currentLocale = useLocale()
+  const sortedBannerLocales = [...BANNER_LOCALES].sort((a, b) =>
+    t(`dashboardBanner.locales.${a}`).localeCompare(
+      t(`dashboardBanner.locales.${b}`),
+      currentLocale
+    )
+  )
   const defaultLocale = BANNER_LOCALES.includes(currentLocale as BannerLocale)
     ? (currentLocale as BannerLocale)
     : 'en'
@@ -317,7 +323,7 @@ export default function AdminSystemPage() {
                   }}
                   className="border-fl-border bg-fl-bg text-fl-fg w-full border px-3 py-2"
                 >
-                  {BANNER_LOCALES.map((locale) => (
+                  {sortedBannerLocales.map((locale) => (
                     <option key={locale} value={locale}>
                       {t(`dashboardBanner.locales.${locale}`)}
                     </option>
@@ -424,14 +430,14 @@ export default function AdminSystemPage() {
                       }
                       className="border-fl-border bg-fl-bg text-fl-fg min-w-52 border px-3 py-2"
                     >
-                      {BANNER_LOCALES.map((locale) => {
+                      {sortedBannerLocales.map((locale) => {
                         const complete = Object.values(
                           translations[locale]
                         ).every((value) => value.trim())
                         return (
                           <option key={locale} value={locale}>
-                            {complete ? '✓ ' : ''}
                             {t(`dashboardBanner.locales.${locale}`)}
+                            {!complete && ` — ${t('dashboardBanner.pending')}`}
                           </option>
                         )
                       })}

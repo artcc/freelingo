@@ -1052,6 +1052,7 @@
       "translateSuccess": "Översättningarna har skapats. Granska dem innan du sparar.",
       "translateError": "Översättningen misslyckades. Ditt nuvarande innehåll behölls.",
       "editTranslation": "Översättning att redigera",
+      "pending": "väntar",
       "completion": "{complete}/{total} språk klara",
       "save": "Spara meddelande",
       "saveSuccess": "Meddelandet på översikten har sparats.",
