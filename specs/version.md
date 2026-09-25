@@ -1,6 +1,6 @@
 # Version
 
-**1.9.20**
+**1.9.25**
 
 This is the canonical current development version. Its publication state and date belong to
 `CHANGELOG.md`; the canonical value may therefore correspond to a changelog section marked
@@ -30,4 +30,4 @@ content and storage key.
 
 Before changing them, confirm whether the maintainer wants new entries or intentionally wants to show
 the existing entries again under a new key. New content must replace old `entry*` keys consistently in
-all ten locale catalogs. See `whats-new.instructions.md`.
+all fifteen locale catalogs. See `whats-new.instructions.md`.

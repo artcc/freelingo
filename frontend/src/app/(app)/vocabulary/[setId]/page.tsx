@@ -32,7 +32,7 @@ export default function VocabularySetPage({
   const router = useRouter()
   const t = useTranslations('vocabulary')
   const tCommon = useTranslations('common')
-  const tTargetLang = useTranslations('targetLanguages')
+  const tLang = useTranslations('languages')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const user = useAuthStore((s) => s.user)
   const [vocabSet, setVocabSet] = useState<VocabularySet | null>(null)
@@ -47,7 +47,7 @@ export default function VocabularySetPage({
   const [loadingNativeHelp, setLoadingNativeHelp] = useState(false)
   const [nativeHelpError, setNativeHelpError] = useState(false)
   const nativeLanguageName = user?.native_language
-    ? tTargetLang(user.native_language)
+    ? tLang(user.native_language)
     : ''
 
   useEffect(() => {
@@ -115,7 +115,9 @@ export default function VocabularySetPage({
       if (!res.ok) {
         const d = await res.json().catch(() => ({}))
         throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
+          (d as { detail?: string }).detail === 'No active study plan found'
+            ? 'No active study plan found'
+            : t('addFailed')
         )
       }
       const data = (await res.json()) as { created: number }
@@ -125,7 +127,7 @@ export default function VocabularySetPage({
       setError(
         msg === 'No active study plan found'
           ? tCommon('noActivePlan')
-          : msg || 'Failed to add flashcards.'
+          : t('addFailed')
       )
     } finally {
       setAdding(false)

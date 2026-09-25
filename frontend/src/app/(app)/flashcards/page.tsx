@@ -276,7 +276,7 @@ export default function FlashcardsPage() {
         <>
           <div className="text-fl-label text-fl-muted-3 flex items-center justify-between font-mono tracking-widest uppercase">
             <span>
-              {current + 1} / {cards.length} due
+              {current + 1} / {cards.length} {t('due')}
             </span>
             {/* Mode toggle */}
             <div className="flex gap-1">

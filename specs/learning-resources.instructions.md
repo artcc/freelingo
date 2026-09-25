@@ -23,6 +23,8 @@ active language or owned plans. Frontend resource pages normally send the active
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native
 language. The client chooses target resource/language but cannot override native language.
+Help labels resolve the profile's native-language code through the UI locale's `languages` catalog;
+`targetLanguages` names only learning languages and cannot label every native language.
 
 Generated help is cached globally in `resource_native_helps` by resource type/key, target language,
 native language, and source-content hash. Changing hashed source data invalidates the cache.

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   BookOpen,
   GraduationCap,
@@ -55,6 +55,7 @@ export function PaywallBanner({
   compact = false,
 }: PaywallBannerProps) {
   const t = useTranslations('billing')
+  const locale = useLocale()
   const router = useRouter()
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
@@ -66,7 +67,9 @@ export function PaywallBanner({
   const [error, setError] = useState<string | null>(null)
   const paymentRecovery = needsPaymentRecovery(user)
   const yearlyCta = splitYearlyCta(
-    t('planYearly', { price: String(priceYearly) })
+    t('planYearly', {
+      price: new Intl.NumberFormat(locale).format(priceYearly),
+    })
   )
 
   if (!stripeEnabled || isSubscribed(user, stripeEnabled)) return null
@@ -85,13 +88,12 @@ export function PaywallBanner({
         body: JSON.stringify({ plan: interval }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? t('checkoutError'))
+        throw new Error(t('checkoutError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('checkoutError'))
+    } catch {
+      setError(t('checkoutError'))
       setLoading(null)
     }
   }
@@ -104,8 +106,8 @@ export function PaywallBanner({
       if (!res.ok) throw new Error(t('portalError'))
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('portalError'))
+    } catch {
+      setError(t('portalError'))
       setPortalLoading(false)
     }
   }
@@ -140,11 +142,11 @@ export function PaywallBanner({
           {t('paywallLabel')}
         </p>
         <h2 className="text-fl-fg mb-3 font-mono text-base font-bold">
-          {t(paymentRecovery ? 'premiumBannerPastDueTitle' : context.title)}
+          {t(paymentRecovery ? 'pastDueTitle' : context.title)}
         </h2>
         <p className="text-fl-muted-1 mb-6 font-mono text-sm leading-relaxed">
           {paymentRecovery
-            ? t('premiumBannerPastDueDesc')
+            ? t('pastDueDesc')
             : t(
                 context.desc ??
                   (trialEligible ? 'paywallDesc' : 'paywallDescTrialUsed'),
@@ -187,7 +189,9 @@ export function PaywallBanner({
             >
               {loading === 'monthly'
                 ? '...'
-                : t('planMonthly', { price: String(priceMonthly) })}
+                : t('planMonthly', {
+                    price: new Intl.NumberFormat(locale).format(priceMonthly),
+                  })}
             </button>
           </div>
         )}

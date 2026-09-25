@@ -5,6 +5,10 @@ import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 const mockApiFetch = vi.hoisted(() => vi.fn())
 
 vi.mock('@/lib/api', () => ({ apiFetch: mockApiFetch }))
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) =>
+    key === 'close' ? 'Cerrar' : key,
+}))
 
 const labels = {
   saveWord: 'Save',
@@ -40,6 +44,7 @@ describe('WordTooltip component', () => {
       />
     )
     expect(screen.getByText('Save')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument()
   })
 
   it('renders wordSaved with green styling in saved state', () => {

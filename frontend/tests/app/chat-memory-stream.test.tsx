@@ -280,4 +280,29 @@ describe('chat memory stream', () => {
     expect(await screen.findByText('memorySavedToast')).toBeInTheDocument()
     expect(await screen.findByText(/errorMessage/)).toBeInTheDocument()
   })
+
+  it.each([
+    [429, 'Monthly token limit reached (10/10 tokens).', 'quotaExceededTokens'],
+    [429, 'Rate limit exceeded: 30 per 1 minute', 'errorMessage'],
+    [502, 'Provider unavailable', 'errorMessage'],
+  ])('localizes HTTP %i errors instead of showing backend details', async (status, detail, label) => {
+    mocks.apiFetch.mockImplementation((path: string) =>
+      Promise.resolve(
+        path === '/api/chat'
+          ? new Response(JSON.stringify({ detail }), {
+              status,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          : jsonResponse([])
+      )
+    )
+    render(<ChatPage />)
+
+    const input = await screen.findByPlaceholderText('placeholder')
+    fireEvent.change(input, { target: { value: 'Hello' } })
+    fireEvent.click(screen.getByRole('button', { name: 'send' }))
+
+    expect(await screen.findByText(new RegExp(label))).toBeInTheDocument()
+    expect(screen.queryByText(detail)).toBeNull()
+  })
 })

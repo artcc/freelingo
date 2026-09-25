@@ -143,6 +143,8 @@ fallback element, and prevents stale decoding callbacks from restarting playback
 A voice session creates or reuses a `Conversation`. Reuse requires a positive supplied conversation
 ID owned by the user and a compatible target language. The current frontend does not send this ID,
 so normal voice starts create a new `source="voice"` conversation.
+Voice conversation titles use a native-language label and date. German, Danish, Finnish, and Croatian
+dates place an ordinal dot after the day; Croatian dates also end with a dot after the year.
 
 `ChatHistory` rows store role, content, target language, optional plan provenance, and conversation.
 Voice sessions are visible in text-chat history. Continuing from text chat supplies textual context
@@ -219,6 +221,11 @@ Timeout settings are global per user. Backend settings are read at connection; V
 in the browser when the session component is created.
 
 ## Error recovery and cleanup
+
+Visible errors are translated by code using the active interface locale. Transcription, tutor-response,
+and speech-generation failures have distinct messages; unknown server errors use a localized generic
+fallback. Raw server messages and socket close reasons remain diagnostic log data. Transport failures
+display the localized connection error without appended backend text or transport diagnostics.
 
 `stt_failed`, `llm_failed`, and `tts_failed` are recoverable turn errors. The frontend cancels
 playback, clears pending assistant state, releases the turn guard, keeps the session live, and clears

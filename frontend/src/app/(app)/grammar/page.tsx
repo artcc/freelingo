@@ -121,7 +121,7 @@ export default function GrammarIndexPage() {
         </div>
         <div className="space-y-4 px-6 py-5">
           <p className="text-fl-muted-2 font-mono text-xs leading-relaxed">
-            {topics.length} topics · A1 – C2
+            {t('topicsFound', { count: topics.length })} · A1 – C2
           </p>
           <input
             type="text"
@@ -177,7 +177,7 @@ export default function GrammarIndexPage() {
               </span>
               <div className="bg-fl-border h-px flex-1" />
               <span className="text-fl-label text-fl-muted-3 font-mono">
-                {levelTopics.length} topic{levelTopics.length !== 1 ? 's' : ''}
+                {t('topicsFound', { count: levelTopics.length })}
               </span>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

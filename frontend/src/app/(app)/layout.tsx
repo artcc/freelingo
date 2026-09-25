@@ -379,7 +379,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.9.20
+            v1.9.25
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -405,7 +405,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <button
             onClick={() => setMobileMenuOpen((o) => !o)}
             className="text-fl-muted-2 hover:text-fl-fg p-1 font-mono transition-colors"
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={
+              mobileMenuOpen ? tCommon('closeMenu') : tCommon('openMenu')
+            }
           >
             <span className="text-base leading-none">
               {mobileMenuOpen ? '✕' : '☰'}
@@ -573,7 +575,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </p>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.9.20
+                v1.9.25
               </p>
               <button
                 onClick={() => {

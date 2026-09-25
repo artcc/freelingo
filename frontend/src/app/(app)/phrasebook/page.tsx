@@ -38,10 +38,10 @@ function CategoryCard({
 }) {
   const t = useTranslations('phrasebook')
   const tCommon = useTranslations('common')
-  const tTargetLang = useTranslations('targetLanguages')
+  const tLang = useTranslations('languages')
   const user = useAuthStore((s) => s.user)
   const nativeLanguageName = user?.native_language
-    ? tTargetLang(user.native_language)
+    ? tLang(user.native_language)
     : ''
   const [nativeHelpOpen, setNativeHelpOpen] = useState(
     cat.level === 'A1' || cat.level === 'A2'
@@ -280,6 +280,7 @@ function CategoryCard({
 }
 
 function CopyButton({ text }: { text: string }) {
+  const t = useTranslations('phrasebook')
   const [copied, setCopied] = useState(false)
 
   async function handleCopy() {
@@ -296,8 +297,8 @@ function CopyButton({ text }: { text: string }) {
     <button
       onClick={handleCopy}
       className="text-fl-label text-fl-muted-4 hover:text-fl-fg px-1 font-mono transition-colors"
-      title="Copy"
-      aria-label="Copy phrase"
+      title={t('copy')}
+      aria-label={t('copyPhrase')}
     >
       {copied ? '\u2713' : '\u{1f4cb}'}
     </button>

@@ -136,6 +136,10 @@ _VOICE_SESSION_TITLES: dict[str, str] = {
     "ro": "Sesiune vocală",
     "ru": "Голосовая сессия",
     "tr": "Sesli oturum",
+    "sv": "Röstsamtal",
+    "da": "Stemmesamtale",
+    "fi": "Äänikeskustelu",
+    "hr": "Glasovni razgovor",
 }
 
 _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
@@ -150,6 +154,10 @@ _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
     "ro": "Romanian",
     "ru": "Russian",
     "tr": "Turkish",
+    "sv": "Swedish",
+    "da": "Danish",
+    "fi": "Finnish",
+    "hr": "Croatian",
 }
 
 _MONTH_NAMES: dict[str, list[str]] = {
@@ -293,6 +301,62 @@ _MONTH_NAMES: dict[str, list[str]] = {
         "Kasım",
         "Aralık",
     ],
+    "sv": [
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    ],
+    "da": [
+        "januar",
+        "februar",
+        "marts",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    ],
+    "fi": [
+        "tammikuuta",
+        "helmikuuta",
+        "maaliskuuta",
+        "huhtikuuta",
+        "toukokuuta",
+        "kesäkuuta",
+        "heinäkuuta",
+        "elokuuta",
+        "syyskuuta",
+        "lokakuuta",
+        "marraskuuta",
+        "joulukuuta",
+    ],
+    "hr": [
+        "siječnja",
+        "veljače",
+        "ožujka",
+        "travnja",
+        "svibnja",
+        "lipnja",
+        "srpnja",
+        "kolovoza",
+        "rujna",
+        "listopada",
+        "studenoga",
+        "prosinca",
+    ],
 }
 
 
@@ -373,5 +437,9 @@ def voice_session_title(native_language: str) -> str:
         month_name = months[now.month - 1]
         if native_language in ("es", "pt"):
             return f"{label} — {now.day} de {month_name} de {now.year}"
+        if native_language in ("de", "da", "fi"):
+            return f"{label} — {now.day}. {month_name} {now.year}"
+        if native_language == "hr":
+            return f"{label} — {now.day}. {month_name} {now.year}."
         return f"{label} — {now.day} {month_name} {now.year}"
     return f"{label} — {now.strftime('%B %d, %Y')}"

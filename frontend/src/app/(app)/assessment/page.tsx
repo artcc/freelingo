@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useLanguageStore } from '@/store/language'
 import { isSubscribed, useAuthStore } from '@/store/auth'
@@ -87,6 +87,7 @@ function adjustLevel(current: CEFRLevel, direction: 'up' | 'down'): CEFRLevel {
 export default function AssessmentPage() {
   const t = useTranslations('assessment')
   const tCommon = useTranslations('common')
+  const locale = useLocale()
   const router = useRouter()
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const user = useAuthStore((s) => s.user)
@@ -249,23 +250,13 @@ export default function AssessmentPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answers: answersToSend }),
       })
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}))
-        throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
-        )
-      }
+      if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentResult
       setResult(data)
       setSelectedLevel(data.cefr_level as CEFRLevel)
       setStep('result')
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : ''
-      setError(
-        msg === 'ai_service_error' || msg === 'ai_service_unavailable'
-          ? tCommon('errorMessage')
-          : msg || 'Evaluation failed'
-      )
+    } catch {
+      setError(tCommon('errorMessage'))
     } finally {
       setEvaluating(false)
     }
@@ -293,12 +284,7 @@ export default function AssessmentPage() {
           target_language: activeLanguage?.code ?? undefined,
         }),
       })
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}))
-        throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
-        )
-      }
+      if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentCompleteResponse
       setCreatedPlanId(data.plan_id)
       if (data.voice_trial?.available && data.voice_trial.token) {
@@ -308,13 +294,8 @@ export default function AssessmentPage() {
         return
       }
       router.push('/plan')
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : ''
-      setError(
-        msg === 'ai_service_error' || msg === 'ai_service_unavailable'
-          ? tCommon('errorMessage')
-          : msg || 'Failed to create plan'
-      )
+    } catch {
+      setError(tCommon('errorMessage'))
       setSubmitting(false)
     }
   }
@@ -344,12 +325,7 @@ export default function AssessmentPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_language: activeLanguage?.code }),
       })
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}))
-        throw new Error(
-          (d as { detail?: string }).detail ?? `Error ${res.status}`
-        )
-      }
+      if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentCompleteResponse
       if (data.voice_trial?.available && data.voice_trial.token) {
         setCreatedPlanId(data.plan_id)
@@ -359,9 +335,8 @@ export default function AssessmentPage() {
         return
       }
       setError(tCommon('errorMessage'))
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : ''
-      setError(msg || tCommon('errorMessage'))
+    } catch {
+      setError(tCommon('errorMessage'))
     } finally {
       setTrialLoading(false)
     }
@@ -380,7 +355,7 @@ export default function AssessmentPage() {
   // ── Existing plan ─────────────────────────────────────────────────────────
   if (step === 'existing' && existingPlan) {
     const assessedDate = new Date(existingPlan.created_at).toLocaleDateString(
-      undefined,
+      locale,
       {
         year: 'numeric',
         month: 'long',

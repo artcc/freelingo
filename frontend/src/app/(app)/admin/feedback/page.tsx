@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   Bug,
   FilterX,
@@ -68,8 +68,8 @@ const STATUS_TONES: Record<
   declined: 'danger',
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
+function formatDate(iso: string, locale: string): string {
+  return new Date(iso).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -79,6 +79,7 @@ function formatDate(iso: string): string {
 export default function AdminFeedbackPage() {
   const t = useTranslations('feedback')
   const tAdmin = useTranslations('admin')
+  const locale = useLocale()
   const searchParams = useSearchParams()
 
   const [entries, setEntries] = useState<FeedbackEntry[]>([])
@@ -494,7 +495,7 @@ export default function AdminFeedbackPage() {
                             {t('by')} {entry.author.display_name}
                           </span>
                           <AdminAuthorBadge role={entry.author.role} />
-                          <span>· {formatDate(entry.created_at)}</span>
+                          <span>· {formatDate(entry.created_at, locale)}</span>
                         </p>
                       </td>
                       <td className="px-5 py-4 align-top">
@@ -595,7 +596,7 @@ export default function AdminFeedbackPage() {
                         {t('by')} {entry.author.display_name}
                       </span>
                       <AdminAuthorBadge role={entry.author.role} />
-                      <span>· {formatDate(entry.created_at)}</span>
+                      <span>· {formatDate(entry.created_at, locale)}</span>
                     </p>
                   </div>
 

@@ -54,6 +54,7 @@
   "common": {
     "loading": "Laden...",
     "error": "Fehler",
+    "errorMessage": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "save": "Änderungen speichern",
     "saving": "Wird gespeichert...",
     "cancel": "Abbrechen",
@@ -78,6 +79,9 @@
     "backToDashboard": "Zurück zum Dashboard",
     "tagline": "KI-gestütztes Sprachenlernen",
     "close": "Schließen",
+    "delete": "Löschen",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
     "verifyEmailBanner": "Bitte bestätige deine E-Mail-Adresse, um dein Konto einzurichten.",
     "verifyEmailSent": "E-Mail gesendet. Prüfe deinen Posteingang.",
     "resendVerification": "Bestätigungs-E-Mail erneut senden",
@@ -205,7 +209,7 @@
       "saving": "Speichern...",
       "success": "Passwort aktualisiert. Weiterleitung...",
       "mismatch": "Passwörter stimmen nicht überein",
-      "tooShort": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "tooShort": "Das Passwort muss mindestens 10 Zeichen lang sein",
       "missingToken": "Ungültiger Link. Bitte fordere eine neue Zurücksetzung an.",
       "error": "Ungültiger oder abgelaufener Link",
       "backToLogin": "Zurück zum Login"
@@ -594,11 +598,11 @@
     "startWarningMessageLevelTest": "Wenn Sie den Stufentest vor dem Abschluss verlassen, geht Ihr Fortschritt verloren und Sie müssen ihn wiederholen.",
     "startWarningConfirm": "Beginnen",
     "startMyPlan": "Meinen Plan starten",
-    "voiceTrialLabel": "Voice trial",
-    "voiceTrialTitle": "Try a real conversation now",
-    "voiceTrialDesc": "Talk with Lingu for {minutes} minutes, free. Your tutor will adapt to the level you just unlocked.",
-    "voiceTrialStart": "Start free conversation",
-    "voiceTrialSkip": "Skip for now"
+    "voiceTrialLabel": "Sprachgespräch ausprobieren",
+    "voiceTrialTitle": "Probiere jetzt ein echtes Gespräch aus",
+    "voiceTrialDesc": "Sprich {minutes} Minuten lang kostenlos mit Lingu. Dein Tutor passt sich an die Stufe an, die du gerade freigeschaltet hast.",
+    "voiceTrialStart": "Kostenloses Gespräch starten",
+    "voiceTrialSkip": "Vorerst überspringen"
   },
   "plan": {
     "unitLocked": "Einheit gesperrt",
@@ -761,6 +765,7 @@
     "toggleSidebarShow": "Chats anzeigen",
     "toggleSidebarHide": "Chats ausblenden",
     "conversations": "Gespräche",
+    "voiceSession": "Sprachsitzung",
     "loading": "Laden...",
     "thinking": "Denke nach...",
     "takingLonger": "Dauert länger als erwartet...",
@@ -823,7 +828,7 @@
     "subtitle": "Vokabular",
     "all": "Alle",
     "searchPlaceholder": "Sammlungen suchen...",
-    "sets": "Sammlungen",
+    "sets": "{count, plural, one {# Sammlung} other {# Sammlungen}}",
     "words": "Wörter",
     "addAll": "Alle {count} als Karteikarten hinzufügen",
     "adding": "Wird hinzugefügt...",
@@ -848,6 +853,7 @@
     "informal": "Informell",
     "copied": "Kopiert!",
     "copy": "Kopieren",
+    "copyPhrase": "Satz kopieren",
     "noResults": "Keine Phrasen gefunden",
     "level": "Niveau",
     "register": "Register",
@@ -1062,7 +1068,12 @@
         "ru": "Russisch",
         "nl": "Niederländisch",
         "pl": "Polnisch",
-        "ro": "Rumänisch"
+        "ro": "Rumänisch",
+        "tr": "Türkisch",
+        "sv": "Schwedisch",
+        "da": "Dänisch",
+        "fi": "Finnisch",
+        "hr": "Kroatisch"
       }
     }
   },
@@ -1154,6 +1165,9 @@
     "statusError": "Fehler",
     "errorServicesDisabled": "Sprachdienste sind auf diesem Server nicht aktiviert.",
     "errorConnection": "Verbindungsfehler. Bitte versuche es erneut.",
+    "errorTranscription": "Deine Spracheingabe konnte nicht transkribiert werden. Bitte sprich noch einmal.",
+    "errorResponse": "Lingu konnte nicht antworten. Bitte versuche es erneut.",
+    "errorSpeech": "Die Audioausgabe für Lingus Antwort konnte nicht erstellt werden. Bitte versuche es erneut.",
     "errorUnauthorized": "Sitzung abgelaufen. Bitte neu laden.",
     "errorMic": "Mikrofonzugriff verweigert.",
     "errorVadInit": "Fehler beim Initialisieren der Spracherkennung. Überprüfe, ob dein Browser WebAssembly unterstützt.",
@@ -1171,10 +1185,10 @@
     "freemiumVoiceRemaining": "Kostenlose Stimme: {remaining}/{limit} Min diese Woche",
     "quotaTokens": "Token diesen Monat",
     "memoryUpdated": "Erinnerung gespeichert",
-    "trialBanner": "Free assessment conversation · {minutes} min",
-    "trialCtaLabel": "Keep speaking",
-    "trialCtaTitle": "Continue practising with Lingu",
-    "trialCtaDesc": "Unlock full voice conversations, tutor chat, listening and reading practice with Premium.",
+    "trialBanner": "Kostenloses Gespräch nach der Einstufung · {minutes} Min.",
+    "trialCtaLabel": "Sprich weiter",
+    "trialCtaTitle": "Übe weiter mit Lingu",
+    "trialCtaDesc": "Schalte mit Premium vollständige Sprachgespräche, den Tutor-Chat sowie Hör- und Leseübungen frei.",
     "startersHint": "Oder mit einem Thema beginnen",
     "starters": [
       "Kunst und Kreativität",
@@ -1235,6 +1249,10 @@
     "ro": "Rumänisch",
     "ru": "Russisch",
     "tr": "Türkisch",
+    "sv": "Schwedisch",
+    "da": "Dänisch",
+    "fi": "Finnisch",
+    "hr": "Kroatisch",
     "myLanguages": "Meine Sprachen",
     "addLanguage": "Sprache hinzufügen",
     "selectLanguage": "Wähle die Sprache, die du lernen möchtest",
@@ -1487,21 +1505,13 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Ausgewogenere Lernpläne",
-      "desc": "Neue Lernpläne verteilen die Lektionen gleichmäßiger auf alle Einheiten und bieten mehr Abwechslung bei den Übungen – auch bei kürzeren Plänen."
+      "label": "Fünf neue Oberflächensprachen",
+      "desc": "FreeLingo ist auf Dänisch, Finnisch, Kroatisch, Schwedisch und Türkisch verfügbar. Wähle deine Oberflächensprache in den Einstellungen."
     },
     "entry2": {
-      "label": "Dein Test zum Planabschluss",
-      "desc": "Wenn du den letzten Tag erreicht und alle offenen Lektionen abgeschlossen hast, kannst du den Abschlusstest über das Dashboard oder deinen Lernplan starten und sehen, wie viel du gelernt hast."
-    },
-    "entry3": {
-      "label": "Klarer wissen, wie es weitergeht",
-      "desc": "Testergebnisse und Empfehlungen gibt es jetzt in deiner Sprache, mit klareren Hinweisen für deinen nächsten Schritt oder zum Wiederholen des Gelernten."
-    },
-    "entry4": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }
@@ -1589,6 +1599,8 @@
     "noEntries": "Noch nichts hier. Sei der Erste!",
     "votes": "{count} Stimmen",
     "vote": "1 Stimme",
+    "voteAction": "Abstimmen",
+    "removeVoteAction": "Stimme zurückziehen",
     "comments": "{count} Kommentare",
     "comment": "1 Kommentar",
     "by": "von",

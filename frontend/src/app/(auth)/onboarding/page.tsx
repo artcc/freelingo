@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
@@ -38,6 +38,7 @@ export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tCommon = useTranslations('common')
   const tLang = useTranslations('targetLanguages')
+  const locale = useLocale()
   const router = useRouter()
   const searchParams = useSearchParams()
   const setUser = useAuthStore((s) => s.setUser)
@@ -125,8 +126,8 @@ export default function OnboardingPage() {
       } else {
         router.push('/dashboard')
       }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('saveFailed'))
+    } catch {
+      setError(t('saveFailed'))
     } finally {
       setLoading(false)
     }
@@ -155,13 +156,12 @@ export default function OnboardingPage() {
         body: JSON.stringify({ plan: interval }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.detail ?? t('trialError'))
+        throw new Error(t('trialError'))
       }
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err: unknown) {
-      setCheckoutError(err instanceof Error ? err.message : t('trialError'))
+    } catch {
+      setCheckoutError(t('trialError'))
       setCheckoutLoading(null)
     }
   }
@@ -171,7 +171,7 @@ export default function OnboardingPage() {
   const trialEligible = !user?.trial_used
   const yearlyCta = splitYearlyCta(
     t(trialEligible ? 'trialCtaYearly' : 'trialCtaYearlyTrialUsed', {
-      price: String(priceYearly),
+      price: new Intl.NumberFormat(locale).format(priceYearly),
     })
   )
 
@@ -395,7 +395,9 @@ export default function OnboardingPage() {
                             ? 'trialCtaMonthly'
                             : 'trialCtaMonthlyTrialUsed',
                           {
-                            price: String(priceMonthly),
+                            price: new Intl.NumberFormat(locale).format(
+                              priceMonthly
+                            ),
                           }
                         )
                       ) : (

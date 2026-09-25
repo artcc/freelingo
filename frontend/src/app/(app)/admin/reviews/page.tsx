@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   CheckCircle2,
   FilterX,
@@ -32,16 +32,12 @@ const PAGE_SIZE = 10
 
 type ApprovalFilter = 'all' | 'pending' | 'approved'
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
+function formatDate(iso: string, locale: string): string {
+  return new Date(iso).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   })
-}
-
-function languageLabel(code: string): string {
-  return getLanguageByCode(code)?.nameEn ?? code
 }
 
 function stars(rating: number): string {
@@ -51,6 +47,14 @@ function stars(rating: number): string {
 export default function AdminReviewsPage() {
   const t = useTranslations('adminReviews')
   const tAdmin = useTranslations('admin')
+  const tTarget = useTranslations('targetLanguages')
+  const tStars = useTranslations('landingReviews')
+  const locale = useLocale()
+
+  function languageLabel(code: string): string {
+    const language = getLanguageByCode(code)
+    return language ? tTarget(language.code) : code
+  }
   const [reviews, setReviews] = useState<ReviewAdmin[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(0)
@@ -255,7 +259,9 @@ export default function AdminReviewsPage() {
                       </AdminBadge>
                       <span
                         className="text-fl-muted-2 font-mono text-xs"
-                        aria-label={t('starsLabel', { rating: review.rating })}
+                        aria-label={tStars('starsLabel', {
+                          rating: review.rating,
+                        })}
                       >
                         {stars(review.rating)}
                       </span>
@@ -264,7 +270,7 @@ export default function AdminReviewsPage() {
                       {t('learningLanguage', {
                         language: languageLabel(review.target_language),
                       })}{' '}
-                      · {formatDate(review.created_at)}
+                      · {formatDate(review.created_at, locale)}
                     </p>
                     <p className="text-fl-muted-1 font-mono text-sm leading-relaxed">
                       {review.comment || t('ratingOnly')}

@@ -14,6 +14,7 @@ function circlePosition(index: number, total: number, radius: number) {
 
 export function LanguageBubbles() {
   const t = useTranslations('landing')
+  const tTarget = useTranslations('targetLanguages')
   const positions = useMemo(
     () =>
       SUPPORTED_TARGET_LANGUAGES.map((_, i) =>
@@ -54,7 +55,7 @@ export function LanguageBubbles() {
               <div className="border-fl-border bg-fl-surface flex items-center gap-1.5 rounded-full border px-2.5 py-1 shadow-sm transition-shadow hover:shadow-md">
                 <Image
                   src={lang.flagPath}
-                  alt={lang.nameEn}
+                  alt={tTarget(lang.code)}
                   width={14}
                   height={10}
                   className="rounded-[2px]"

@@ -111,11 +111,12 @@ all approved reviews.
 ## Review prompt
 
 `ReviewForm` is shared by automatic prompts and Settings. It provides an accessible 1-5-star radio
-group, optional comment, submit state, and generic localized errors. Rating is required; comment is
-not.
+group with locale-specific "out of five" labels, optional comment, submit state, and generic localized
+errors. Rating is required; comment is not.
 
 When the prompt opens, it requests `/api/reviews/me`:
 
+- a loading state blocks the form until the lookup completes, including when the prompt reopens;
 - an existing review suppresses the prompt;
 - a successful no-review response shows the form;
 - a failed lookup shows an error-only state and prevents submission.
@@ -164,8 +165,8 @@ The Community section in Settings loads `/api/reviews/me`.
 ## Administrative frontend
 
 `/admin/reviews` uses ten-item pages and supports approval-state and rating filters. Backend language
-and order filters are not exposed by this page. It shows snapshot name, status, stars, English
-language name, browser-locale date, and comment/fallback.
+and order filters are not exposed by this page. It shows snapshot name, status, localized star labels
+and learning-language name, interface-locale date, and comment/fallback.
 
 Administrators can approve, unapprove, and delete with confirmation. After mutation, the page reloads
 the effective page so filters and page bounds remain valid. Backend authorization protects every

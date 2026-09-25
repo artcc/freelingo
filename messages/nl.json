@@ -54,6 +54,7 @@
   "common": {
     "loading": "Laden...",
     "error": "Fout",
+    "errorMessage": "Er ging iets mis. Probeer opnieuw.",
     "save": "Wijzigingen opslaan",
     "saving": "Opslaan...",
     "cancel": "Annuleren",
@@ -78,6 +79,9 @@
     "backToDashboard": "Terug naar dashboard",
     "tagline": "AI-taalonderwijs",
     "close": "Sluiten",
+    "delete": "Verwijderen",
+    "openMenu": "Menu openen",
+    "closeMenu": "Menu sluiten",
     "verifyEmailBanner": "Verifieer je e-mailadres om je accountinstellingen te voltooien.",
     "verifyEmailSent": "E-mail verzonden. Controleer je inbox.",
     "resendVerification": "Verificatie-e-mail opnieuw verzenden",
@@ -205,7 +209,7 @@
       "saving": "Opslaan...",
       "success": "Wachtwoord bijgewerkt. Doorsturen...",
       "mismatch": "Wachtwoorden komen niet overeen",
-      "tooShort": "Het wachtwoord moet minimaal 8 tekens bevatten",
+      "tooShort": "Het wachtwoord moet minimaal 10 tekens bevatten",
       "missingToken": "Ongeldige link. Vraag een nieuwe reset aan.",
       "error": "Ongeldige of verlopen link",
       "backToLogin": "Terug naar inloggen"
@@ -594,11 +598,11 @@
     "startWarningMessageLevelTest": "Als u de niveautest verlaat voordat u klaar bent, gaat uw voortgang verloren en moet u hem opnieuw afleggen.",
     "startWarningConfirm": "Beginnen",
     "startMyPlan": "Mijn plan starten",
-    "voiceTrialLabel": "Voice trial",
-    "voiceTrialTitle": "Try a real conversation now",
-    "voiceTrialDesc": "Talk with Lingu for {minutes} minutes, free. Your tutor will adapt to the level you just unlocked.",
-    "voiceTrialStart": "Start free conversation",
-    "voiceTrialSkip": "Skip for now"
+    "voiceTrialLabel": "Proefgesprek",
+    "voiceTrialTitle": "Probeer nu een echt gesprek",
+    "voiceTrialDesc": "Praat {minutes} minuten gratis met Lingu. Je tutor past zich aan het niveau aan dat je zojuist hebt ontgrendeld.",
+    "voiceTrialStart": "Start een gratis gesprek",
+    "voiceTrialSkip": "Voorlopig overslaan"
   },
   "plan": {
     "unitLocked": "Eenheid vergrendeld",
@@ -761,6 +765,7 @@
     "toggleSidebarShow": "Chats tonen",
     "toggleSidebarHide": "Chats verbergen",
     "conversations": "Gesprekken",
+    "voiceSession": "Spraaksessie",
     "loading": "Laden...",
     "thinking": "Nadenken...",
     "takingLonger": "Duurt langer dan verwacht...",
@@ -823,7 +828,7 @@
     "subtitle": "Woordenschat",
     "all": "Alle",
     "searchPlaceholder": "Zoek sets...",
-    "sets": "sets",
+    "sets": "{count, plural, one {# set} other {# sets}}",
     "words": "woorden",
     "addAll": "Alle {count} toevoegen aan flashcards",
     "adding": "Toevoegen...",
@@ -848,6 +853,7 @@
     "informal": "Informeel",
     "copied": "Gekopieerd!",
     "copy": "Kopiëren",
+    "copyPhrase": "Zin kopiëren",
     "noResults": "Geen zinnen komen overeen met je filters",
     "level": "Niveau",
     "register": "Register",
@@ -1062,7 +1068,12 @@
         "ru": "Russisch",
         "nl": "Nederlands",
         "pl": "Pools",
-        "ro": "Roemeens"
+        "ro": "Roemeens",
+        "tr": "Turks",
+        "sv": "Zweeds",
+        "da": "Deens",
+        "fi": "Fins",
+        "hr": "Kroatisch"
       }
     }
   },
@@ -1105,7 +1116,7 @@
     "provider_anthropic": "Anthropic Claude. Vereist ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Vereist DEEPSEEK_API_KEY.",
     "q_invite": "Kan ik anderen uitnodigen?",
-    "a_invite": "Ja. Via <adminLink>Admin → Gebruikers</adminLink> kan de beheerder gebruikers direct aanmaken of eenmalige uitnodigingslinks genereren die na 48 uur verlopen.",
+    "a_invite": "Ja. Via <adminLink>Admin → Gebruikers</adminLink> kan de beheerder gebruikers direct aanmaken of eenmalige uitnodigingslinks genereren die na 48 uur verlopen. Openbare registratie is standaard uitgeschakeld (<code>ALLOW_REGISTRATION=false</code>).",
     "q_password": "Hoe verander ik mijn wachtwoord of moedertaal?",
     "a_password": "Ga naar <settingsLink>Instellingen</settingsLink>. Daar kun je je weergavenaam, moedertaal en wachtwoord bijwerken.",
     "q_uiLanguage": "Hoe verander ik de taal van het platform?",
@@ -1154,6 +1165,9 @@
     "statusError": "Fout",
     "errorServicesDisabled": "Spraakdiensten zijn niet ingeschakeld op deze server.",
     "errorConnection": "Verbindingsfout. Probeer opnieuw.",
+    "errorTranscription": "Je spraak kon niet worden omgezet in tekst. Probeer opnieuw te spreken.",
+    "errorResponse": "Lingu kon niet antwoorden. Probeer het opnieuw.",
+    "errorSpeech": "Er kon geen audio worden gemaakt voor Lingu's antwoord. Probeer het opnieuw.",
     "errorUnauthorized": "Sessie verlopen. Vernieuw de pagina.",
     "errorMic": "Microfoon toegang geweigerd.",
     "errorVadInit": "Initialiseren van spraakherkenning mislukt. Controleer of je browser WebAssembly ondersteunt.",
@@ -1171,10 +1185,10 @@
     "freemiumVoiceRemaining": "Gratis stem: {remaining}/{limit} min deze week",
     "quotaTokens": "Tokens deze maand",
     "memoryUpdated": "Geheugen bijgewerkt",
-    "trialBanner": "Free assessment conversation · {minutes} min",
-    "trialCtaLabel": "Keep speaking",
-    "trialCtaTitle": "Continue practising with Lingu",
-    "trialCtaDesc": "Unlock full voice conversations, tutor chat, listening and reading practice with Premium.",
+    "trialBanner": "Gratis gesprek na de niveautest · {minutes} min",
+    "trialCtaLabel": "Blijf praten",
+    "trialCtaTitle": "Blijf oefenen met Lingu",
+    "trialCtaDesc": "Ontgrendel volledige spraakgesprekken, tutorchat en luister- en leesoefeningen met Premium.",
     "startersHint": "Of begin met een onderwerp",
     "starters": [
       "Kunst en creativiteit",
@@ -1235,6 +1249,10 @@
     "ro": "Roemeens",
     "ru": "Russisch",
     "tr": "Turks",
+    "sv": "Zweeds",
+    "da": "Deens",
+    "fi": "Fins",
+    "hr": "Kroatisch",
     "myLanguages": "Mijn talen",
     "addLanguage": "Taal toevoegen",
     "selectLanguage": "Kies de taal die je wilt leren",
@@ -1487,21 +1505,13 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Studieplannen met meer balans",
-      "desc": "Nieuwe plannen verdelen de lessen beter over alle onderdelen en bieden meer afwisseling in de activiteiten, ook bij kortere plannen."
+      "label": "Vijf nieuwe interfacetalen",
+      "desc": "FreeLingo is beschikbaar in het Deens, Fins, Kroatisch, Turks en Zweeds. Kies je interfacetaal in Instellingen."
     },
     "entry2": {
-      "label": "Een toets om je plan af te ronden",
-      "desc": "Zodra je de laatste dag bereikt en alle openstaande lessen afrondt, kun je via het dashboard of je studieplan de eindtoets maken en zien hoeveel je hebt geleerd."
-    },
-    "entry3": {
-      "label": "Duidelijker weten hoe je verdergaat",
-      "desc": "Toetsresultaten en aanbevelingen zijn nu in jouw taal beschikbaar, met duidelijkere uitleg om de volgende stap te zetten of het geleerde te herhalen."
-    },
-    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }
@@ -1589,6 +1599,8 @@
     "noEntries": "Nog niets hier. Wees de eerste!",
     "votes": "{count} stemmen",
     "vote": "1 stem",
+    "voteAction": "Stemmen",
+    "removeVoteAction": "Stem intrekken",
     "comments": "{count} reacties",
     "comment": "1 reactie",
     "by": "door",

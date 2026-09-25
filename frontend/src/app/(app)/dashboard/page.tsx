@@ -193,10 +193,8 @@ export default function DashboardPage() {
       if (!res.ok) throw new Error(tBilling('portalError'))
       const { url } = await res.json()
       window.location.assign(url)
-    } catch (err) {
-      setPortalError(
-        err instanceof Error ? err.message : tBilling('portalError')
-      )
+    } catch {
+      setPortalError(tBilling('portalError'))
       setPortalLoading(false)
     }
   }

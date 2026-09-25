@@ -189,8 +189,10 @@ state. There is no request identity or cancellation between filter loads, so a l
 can replace newer list state. Some mutations are optimistically reflected without consistently
 checking non-success responses.
 
-Feedback UI and status/read labels are translated in all supported interface locales. The `ADMIN`
-marker and vote HTML tooltip remain fixed labels.
+Feedback UI, status/read labels, and administrator author badges use the active interface locale.
+Croatian comment counts use ICU plural categories, including the singular form for counts such as
+21 and 31 and the appropriate forms for `few` and `other`.
+The vote HTML tooltip remains a fixed label.
 
 ## Related specifications
 

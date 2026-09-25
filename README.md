@@ -5,7 +5,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.9.20-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.9.25-brightgreen?style=flat-square)
 
 <p align="left">
   <img src="assets/logo_large.png" alt="FreeLingo logo" />
@@ -71,7 +71,7 @@ freelingo/
 ├── data/                            # Shared data files
 ├── docs/                            # GitHub Pages landing site
 ├── frontend/                        # Next.js (React)
-├── messages/                        # i18n translation files (de, en, es, fr, it, nl, pl, pt, ro, ru)
+├── messages/                        # i18n catalogs (da, de, en, es, fi, fr, hr, it, nl, pl, pt, ro, ru, sv, tr)
 ├── specs/                           # Specification files
 ├── AGENTS.md                        # AI assistant instructions
 ├── CHANGELOG.md                     # Version history

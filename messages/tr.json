@@ -54,6 +54,7 @@
   "common": {
     "loading": "Yükleniyor...",
     "error": "Hata",
+    "errorMessage": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
     "save": "Değişiklikleri kaydet",
     "saving": "Kaydediliyor...",
     "cancel": "İptal",
@@ -78,6 +79,9 @@
     "backToDashboard": "Panoya dön",
     "tagline": "Yapay zekâ ile dil öğrenimi",
     "close": "Kapat",
+    "delete": "Sil",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
     "verifyEmailBanner": "Hesap kurulumunuzu tamamlamak için lütfen e-posta adresinizi doğrulayın.",
     "verifyEmailSent": "E-posta gönderildi. Gelen kutunuzu kontrol edin.",
     "resendVerification": "Doğrulama e-postasını tekrar gönder",
@@ -205,7 +209,7 @@
       "saving": "Kaydediliyor...",
       "success": "Parola güncellendi. Giriş sayfasına yönlendiriliyorsunuz...",
       "mismatch": "Parolalar eşleşmiyor",
-      "tooShort": "Parola en az 8 karakter olmalıdır",
+      "tooShort": "Parola en az 10 karakter olmalıdır",
       "missingToken": "Geçersiz sıfırlama bağlantısı. Lütfen yeni bir parola sıfırlama isteyin.",
       "error": "Geçersiz veya süresi dolmuş sıfırlama bağlantısı",
       "backToLogin": "Girişe dön"
@@ -761,6 +765,7 @@
     "toggleSidebarShow": "Sohbetleri göster",
     "toggleSidebarHide": "Sohbetleri gizle",
     "conversations": "Konuşmalar",
+    "voiceSession": "Sesli oturum",
     "loading": "Yükleniyor...",
     "thinking": "Düşünüyor...",
     "takingLonger": "Beklenenden uzun sürüyor...",
@@ -823,7 +828,7 @@
     "subtitle": "Kelime Bilgisi",
     "all": "Tümü",
     "searchPlaceholder": "Setlerde ara...",
-    "sets": "set",
+    "sets": "{count, plural, one {# set} other {# set}}",
     "words": "kelime",
     "addAll": "{count} Kelimenin Tümünü Bilgi Kartlarına Ekle",
     "adding": "Ekleniyor...",
@@ -848,6 +853,7 @@
     "informal": "Gündelik",
     "copied": "Kopyalandı!",
     "copy": "Kopyala",
+    "copyPhrase": "İfadeyi kopyala",
     "noResults": "Filtrelerinizle eşleşen ifade yok",
     "level": "Seviye",
     "register": "Üslup",
@@ -1062,7 +1068,12 @@
         "ru": "Rusça",
         "nl": "Felemenkçe",
         "pl": "Lehçe",
-        "ro": "Rumence"
+        "ro": "Rumence",
+        "tr": "Türkçe",
+        "sv": "İsveççe",
+        "da": "Danca",
+        "fi": "Fince",
+        "hr": "Hırvatça"
       }
     }
   },
@@ -1154,6 +1165,9 @@
     "statusError": "Hata",
     "errorServicesDisabled": "Bu sunucuda ses hizmetleri etkin değil.",
     "errorConnection": "Bağlantı hatası. Lütfen tekrar deneyin.",
+    "errorTranscription": "Söyledikleriniz yazıya dökülemedi. Lütfen yeniden konuşmayı deneyin.",
+    "errorResponse": "Lingu yanıt veremedi. Lütfen tekrar deneyin.",
+    "errorSpeech": "Lingu'nun yanıtı seslendirilemedi. Lütfen tekrar deneyin.",
     "errorUnauthorized": "Oturumun süresi doldu. Lütfen sayfayı yenileyin.",
     "errorMic": "Mikrofon erişimi reddedildi.",
     "errorVadInit": "Ses tanıma başlatılamadı. Tarayıcınızın WebAssembly desteklediğinden emin olun.",
@@ -1235,6 +1249,10 @@
     "ro": "Rumence",
     "ru": "Rusça",
     "tr": "Türkçe",
+    "sv": "İsveççe",
+    "da": "Danca",
+    "fi": "Fince",
+    "hr": "Hırvatça",
     "myLanguages": "Dillerim",
     "addLanguage": "Yeni dil ekle",
     "selectLanguage": "Öğrenmek istediğiniz dili seçin",
@@ -1487,21 +1505,13 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.9.15",
+    "version": "v1.9.25",
     "cta": "Anladım",
     "entry1": {
-      "label": "Daha dengeli çalışma planları",
-      "desc": "Yeni planlar dersleri tüm ünitelere daha eşit dağıtır ve daha kısa planlarda bile daha çeşitli etkinliklere yer açar."
+      "label": "Beş yeni arayüz dili",
+      "desc": "FreeLingo, Danca, Fince, Hırvatça, İsveççe ve Türkçe dillerinde kullanılabilir. Arayüz dilini Ayarlar'dan seçin."
     },
     "entry2": {
-      "label": "Planınızı tamamlayan bir test",
-      "desc": "Son güne ulaşıp bekleyen dersleri bitirdiğinizde, seviye sonu testine panodan veya Planım bölümünden girebilir ve ne kadar öğrendiğinizi görebilirsiniz."
-    },
-    "entry3": {
-      "label": "Daha net sonraki adımlar",
-      "desc": "Test sonuçları ve öneriler artık kendi dilinizde; bir sonraki adıma geçmek veya öğrendiklerinizi tekrar etmek için daha net yönlendirmeler içeriyor."
-    },
-    "entry4": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }
@@ -1589,6 +1599,8 @@
     "noEntries": "Burada henüz bir şey yok. İlk gönderen siz olun.",
     "votes": "{count} oy",
     "vote": "1 oy",
+    "voteAction": "Oy ver",
+    "removeVoteAction": "Oyu geri çek",
     "comments": "{count} yorum",
     "comment": "1 yorum",
     "by": "Gönderen:",

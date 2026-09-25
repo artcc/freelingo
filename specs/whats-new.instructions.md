@@ -68,7 +68,7 @@ The component reads raw messages with `useMessages()`, selects keys matching `en
 numerically. It must not probe unknown translation keys with a `useTranslations` try/catch loop because
 missing keys return paths rather than throwing.
 
-All ten locale catalogs must contain the same entry keys and matching version label. Entry count is
+All fifteen locale catalogs must contain the same entry keys and matching version label. Entry count is
 variable. New content replaces old `entry*` keys rather than accumulating release history.
 
 ## Version semantics

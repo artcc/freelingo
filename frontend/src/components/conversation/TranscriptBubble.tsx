@@ -44,7 +44,7 @@ export default function TranscriptBubble({
           {!isUser ? (
             <Image
               src="/logo_head.png"
-              alt="Tutor"
+              alt="Lingu"
               width={28}
               height={28}
               className="h-full w-full object-cover"

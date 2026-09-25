@@ -464,6 +464,75 @@ describe('ProfileSection', () => {
     expect(reloadSpy).not.toHaveBeenCalled()
   })
 
+  it('applies a saved locale when the interface is displaying another language', async () => {
+    const reloadSpy = vi.fn()
+    vi.stubGlobal('location', {
+      ...window.location,
+      reload: reloadSpy,
+      protocol: 'http:',
+    })
+    useAuthStore.setState({ user: { ...defaultUser, ui_locale: 'fi' } })
+    document.cookie = 'NEXT_LOCALE=en; path=/'
+    mockApiFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 1, ui_locale: 'fi' }),
+    })
+
+    render(<ProfileSection />)
+    expect(selectAfterLabelText('uiLocale')).toHaveValue('fi')
+    fireEvent.click(screen.getByText('saveChanges'))
+
+    await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1))
+    expect(document.cookie).toContain('NEXT_LOCALE=fi')
+    expect(document.cookie).toContain('LOCALE_DETECTED=1')
+  })
+
+  it('synchronizes cookies without reloading when choosing the displayed locale', async () => {
+    const reloadSpy = vi.fn()
+    vi.stubGlobal('location', {
+      ...window.location,
+      reload: reloadSpy,
+      protocol: 'http:',
+    })
+    useAuthStore.setState({ user: { ...defaultUser, ui_locale: 'fi' } })
+    document.cookie = 'NEXT_LOCALE=fi; path=/'
+    mockApiFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 1, ui_locale: 'en' }),
+    })
+
+    render(<ProfileSection />)
+    fireEvent.change(selectAfterLabelText('uiLocale'), {
+      target: { value: 'en' },
+    })
+    fireEvent.click(screen.getByText('saveChanges'))
+
+    await waitFor(() => expect(screen.getByText(/saved/)).toBeDefined())
+    expect(document.cookie).toContain('NEXT_LOCALE=en')
+    expect(reloadSpy).not.toHaveBeenCalled()
+  })
+
+  it('keeps the current locale when saving the profile fails', async () => {
+    const reloadSpy = vi.fn()
+    vi.stubGlobal('location', {
+      ...window.location,
+      reload: reloadSpy,
+      protocol: 'http:',
+    })
+    document.cookie = 'NEXT_LOCALE=en; path=/'
+    mockApiFetch.mockResolvedValue({ ok: false })
+
+    render(<ProfileSection />)
+    fireEvent.change(selectAfterLabelText('uiLocale'), {
+      target: { value: 'hr' },
+    })
+    fireEvent.click(screen.getByText('saveChanges'))
+
+    await waitFor(() => expect(screen.getByText(/saveFailed/)).toBeDefined())
+    expect(document.cookie).toContain('NEXT_LOCALE=en')
+    expect(reloadSpy).not.toHaveBeenCalled()
+  })
+
   // ── API errors ──────────────────────────────────────────────
 
   it('shows error message on API failure', async () => {
@@ -478,14 +547,14 @@ describe('ProfileSection', () => {
     })
   })
 
-  it('shows error message on network failure', async () => {
+  it('shows a localized error on network failure', async () => {
     mockApiFetch.mockRejectedValue(new Error('Network error'))
     render(<ProfileSection />)
     fireEvent.click(screen.getByText('saveChanges'))
-    // The component uses err.message (the thrown Error's message) as the displayed text.
     await waitFor(() => {
-      expect(screen.getByText(/Network error/)).toBeDefined()
+      expect(screen.getByText(/saveFailed/)).toBeDefined()
     })
+    expect(screen.queryByText(/Network error/)).toBeNull()
   })
 
   it('message type is error for failures', async () => {
@@ -805,6 +874,10 @@ describe('ProfileSection', () => {
     expect(options).toContain('ro')
     expect(options).toContain('ru')
     expect(options).toContain('tr')
+    expect(options).toContain('sv')
+    expect(options).toContain('da')
+    expect(options).toContain('fi')
+    expect(options).toContain('hr')
   })
 
   it('renders all ui locale options', () => {
@@ -822,6 +895,10 @@ describe('ProfileSection', () => {
     expect(options).toContain('ro')
     expect(options).toContain('ru')
     expect(options).toContain('tr')
+    expect(options).toContain('sv')
+    expect(options).toContain('da')
+    expect(options).toContain('fi')
+    expect(options).toContain('hr')
   })
 
   // ── Avatar upload buttons ───────────────────────────────────

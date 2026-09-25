@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   Activity,
   BadgeCheck,
@@ -157,6 +157,7 @@ function subscriptionStatusClass(status: string) {
 }
 
 export default function AdminUserStatsPage() {
+  const locale = useLocale()
   const t = useTranslations('admin')
   const tLang = useTranslations('languages')
   const tBilling = useTranslations('billing')
@@ -433,7 +434,7 @@ export default function AdminUserStatsPage() {
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <SummaryCard
               label={t('statsXp')}
-              value={stats.xp_total.toLocaleString()}
+              value={stats.xp_total.toLocaleString(locale)}
             />
             <SummaryCard
               label={t('statsStreak')}
@@ -588,7 +589,7 @@ export default function AdminUserStatsPage() {
                     </div>
                     <div className="text-fl-muted-2 mt-3 grid grid-cols-2 gap-2 font-mono text-xs">
                       <span>
-                        {t('statsXp')}: {pl.xp_total.toLocaleString()}
+                        {t('statsXp')}: {pl.xp_total.toLocaleString(locale)}
                       </span>
                       <span>
                         {t('statsStreak')}: {pl.streak_current} {t('statsDays')}
@@ -615,7 +616,7 @@ export default function AdminUserStatsPage() {
           <Section title={t('sectionActivity')}>
             <StatRow
               label={t('statsXp')}
-              value={stats.xp_total.toLocaleString()}
+              value={stats.xp_total.toLocaleString(locale)}
             />
             <StatRow
               label={t('statsStreak')}
@@ -645,15 +646,15 @@ export default function AdminUserStatsPage() {
               <>
                 <StatRow
                   label={t('statsTokensTotal')}
-                  value={stats.tokens_total.toLocaleString()}
+                  value={stats.tokens_total.toLocaleString(locale)}
                 />
                 <StatRow
                   label={t('statsTokensChat')}
-                  value={stats.tokens_chat.toLocaleString()}
+                  value={stats.tokens_chat.toLocaleString(locale)}
                 />
                 <StatRow
                   label={t('statsTokensConversation')}
-                  value={stats.tokens_conversation.toLocaleString()}
+                  value={stats.tokens_conversation.toLocaleString(locale)}
                 />
               </>
             )}
@@ -756,7 +757,9 @@ export default function AdminUserStatsPage() {
           {user.subscription_ends_at && (
             <StatRow
               label={t('fieldEndsRenews')}
-              value={new Date(user.subscription_ends_at).toLocaleDateString()}
+              value={new Date(user.subscription_ends_at).toLocaleDateString(
+                locale
+              )}
             />
           )}
           {user.stripe_customer_id && (

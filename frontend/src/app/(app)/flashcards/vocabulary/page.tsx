@@ -20,6 +20,7 @@ const LIMIT = 10
 
 export default function VocabularyPage() {
   const t = useTranslations('flashcards')
+  const tCommon = useTranslations('common')
 
   const [items, setItems] = useState<VocabItem[]>([])
   const [total, setTotal] = useState(0)
@@ -146,7 +147,7 @@ export default function VocabularyPage() {
                   onClick={() => deleteItem(item.id)}
                   disabled={deletingId === item.id}
                   className="text-fl-muted-3 shrink-0 font-mono text-xs transition-colors hover:text-red-400 disabled:opacity-40"
-                  aria-label="Delete"
+                  aria-label={tCommon('delete')}
                 >
                   ✕
                 </button>

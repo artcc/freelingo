@@ -54,6 +54,7 @@
   "common": {
     "loading": "Loading...",
     "error": "Error",
+    "errorMessage": "Something went wrong. Please try again.",
     "save": "Save changes",
     "saving": "Saving...",
     "cancel": "Cancel",
@@ -78,6 +79,9 @@
     "backToDashboard": "Back to Dashboard",
     "tagline": "AI language learning",
     "close": "Close",
+    "delete": "Delete",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "verifyEmailBanner": "Please verify your email address to complete your account setup.",
     "verifyEmailSent": "Email sent. Check your inbox.",
     "resendVerification": "Resend verification email",
@@ -205,7 +209,7 @@
       "saving": "Saving...",
       "success": "Password updated. Redirecting to login...",
       "mismatch": "Passwords do not match",
-      "tooShort": "Password must be at least 8 characters",
+      "tooShort": "Password must be at least 10 characters",
       "missingToken": "Invalid reset link. Please request a new password reset.",
       "error": "Invalid or expired reset link",
       "backToLogin": "Back to login"
@@ -761,6 +765,7 @@
     "toggleSidebarShow": "Show chats",
     "toggleSidebarHide": "Hide chats",
     "conversations": "Conversations",
+    "voiceSession": "Voice session",
     "loading": "Loading...",
     "thinking": "Thinking...",
     "takingLonger": "Taking longer than expected...",
@@ -823,7 +828,7 @@
     "subtitle": "Vocabulary",
     "all": "All",
     "searchPlaceholder": "Search sets...",
-    "sets": "sets",
+    "sets": "{count, plural, one {# set} other {# sets}}",
     "words": "words",
     "addAll": "Add All {count} to Flashcards",
     "adding": "Adding...",
@@ -848,6 +853,7 @@
     "informal": "Informal",
     "copied": "Copied!",
     "copy": "Copy",
+    "copyPhrase": "Copy phrase",
     "noResults": "No phrases match your filters",
     "level": "Level",
     "register": "Register",
@@ -1062,7 +1068,12 @@
         "ru": "Russian",
         "nl": "Dutch",
         "pl": "Polish",
-        "ro": "Romanian"
+        "ro": "Romanian",
+        "tr": "Turkish",
+        "sv": "Swedish",
+        "da": "Danish",
+        "fi": "Finnish",
+        "hr": "Croatian"
       }
     }
   },
@@ -1154,6 +1165,9 @@
     "statusError": "Error",
     "errorServicesDisabled": "Voice services are not enabled on this server.",
     "errorConnection": "Connection error. Please try again.",
+    "errorTranscription": "Your speech could not be transcribed. Please try speaking again.",
+    "errorResponse": "Lingu could not respond. Please try again.",
+    "errorSpeech": "Could not generate audio for Lingu's reply. Please try again.",
     "errorUnauthorized": "Session expired. Please refresh.",
     "errorMic": "Microphone access denied.",
     "errorVadInit": "Failed to initialize voice recognition. Make sure your browser supports WebAssembly.",
@@ -1235,6 +1249,10 @@
     "ro": "Romanian",
     "ru": "Russian",
     "tr": "Turkish",
+    "sv": "Swedish",
+    "da": "Danish",
+    "fi": "Finnish",
+    "hr": "Croatian",
     "myLanguages": "My Languages",
     "addLanguage": "Add new language",
     "selectLanguage": "Select the language you want to learn",
@@ -1487,21 +1505,13 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.9.20",
+    "version": "v1.9.25",
     "cta": "Got it",
     "entry1": {
-      "label": "Better-balanced study plans",
-      "desc": "New plans spread lessons more evenly across all units and make room for a wider mix of activities, even in shorter plans."
+      "label": "Five new interface languages",
+      "desc": "FreeLingo is available in Croatian, Danish, Finnish, Swedish and Turkish. Choose your interface language in Settings."
     },
     "entry2": {
-      "label": "A test to round off your plan",
-      "desc": "Once you reach the final day and finish any outstanding lessons, you can take the end-of-level test from the dashboard or My Plan and see how much you've learned."
-    },
-    "entry3": {
-      "label": "Clearer next steps",
-      "desc": "Test results and recommendations are now available in your language, with clearer guidance on taking the next step or reviewing what you've learned."
-    },
-    "entry4": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }
@@ -1589,6 +1599,8 @@
     "noEntries": "Nothing here yet. Be the first to submit one.",
     "votes": "{count} votes",
     "vote": "1 vote",
+    "voteAction": "Vote",
+    "removeVoteAction": "Remove vote",
     "comments": "{count} comments",
     "comment": "1 comment",
     "by": "by",

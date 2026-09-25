@@ -21,6 +21,10 @@ const LANGUAGES = [
   'ro',
   'ru',
   'tr',
+  'sv',
+  'da',
+  'fi',
+  'hr',
 ] as const
 
 function resizeImage(file: File, maxPx: number): Promise<Blob> {
@@ -164,16 +168,16 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       setPassword('')
       setConfirmPassword('')
 
-      if (uiLocale !== user?.ui_locale) {
-        const opts = `path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`
-        document.cookie = `NEXT_LOCALE=${uiLocale}; ${opts}`
-        document.cookie = `LOCALE_DETECTED=1; ${opts}`
+      const opts = `path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`
+      document.cookie = `NEXT_LOCALE=${uiLocale}; ${opts}`
+      document.cookie = `LOCALE_DETECTED=1; ${opts}`
+      if (uiLocale !== currentLocale) {
         window.location.reload()
       }
-    } catch (err: unknown) {
+    } catch {
       setMessage({
         type: 'err',
-        text: err instanceof Error ? err.message : t('saveFailed'),
+        text: t('saveFailed'),
       })
     } finally {
       setSaving(false)

@@ -160,6 +160,10 @@ notifications. User-facing locale comes from the recipient; administrator notifi
 administrator's native language with English fallback. Notification failures after durable feedback or
 review creation are logged without rolling back that content.
 
+All seven email templates declare the rendered content's locale in the HTML `lang` attribute. Omitted
+or unsupported locales use English for both the content and the language attribute. Template values,
+including the locale attribute, retain the renderer's default HTML escaping.
+
 ## Voice conversation pipeline
 
 `conversation_pipeline.py` orchestrates explicit-language STT, memory-aware LLM streaming, sentence

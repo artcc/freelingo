@@ -14,6 +14,10 @@ export const SUPPORTED_LOCALES = [
   'ro',
   'ru',
   'tr',
+  'sv',
+  'da',
+  'fi',
+  'hr',
 ] as const
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number]
