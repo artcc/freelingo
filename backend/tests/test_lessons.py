@@ -306,7 +306,8 @@ async def test_regenerate_invalid_multiple_choice_exercise(client, test_user, db
     data = response.json()
     assert data["id"] == exercise.id
     assert data["options"] == ["stehe", "steht", "stehen", "stehst"]
-    assert data["correct_answer"] == "stehe"
+    # A regenerated exercise is unanswered, so its answer stays server-side.
+    assert data["correct_answer"] is None
     await db_session.refresh(exercise)
     await db_session.refresh(lesson)
     assert exercise.options == ["stehe", "steht", "stehen", "stehst"]
