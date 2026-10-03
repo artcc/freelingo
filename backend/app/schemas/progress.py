@@ -7,6 +7,35 @@ from typing import Literal
 from pydantic import BaseModel, Field, field_serializer, field_validator
 
 
+# Keys that would let a client solve an interactive challenge without playing.
+# The server keeps pairing/order solutions in session state and validates the
+# submitted trace against them, so public responses never need these keys.
+_PRIVATE_INTERACTION_KEYS = frozenset({"pair_key", "solution", "answer", "answers", "correct", "target", "pairs"})
+
+
+def public_interaction(value: dict | None) -> dict | None:
+    """Return a copy of an interactive challenge with private keys removed.
+
+    Never mutates the input: start_game_session passes the same dict object
+    that is stored in GameSession.questions.
+    """
+    if value is None:
+        return None
+    clean: dict = {}
+    for key, item in value.items():
+        if key in _PRIVATE_INTERACTION_KEYS:
+            continue
+        if isinstance(item, list):
+            clean[key] = [
+                {k: v for k, v in entry.items() if k not in _PRIVATE_INTERACTION_KEYS}
+                if isinstance(entry, dict) else entry
+                for entry in item
+            ]
+        else:
+            clean[key] = item
+    return clean
+
+
 class ProgressResponse(BaseModel):
     id: int
     user_id: int
@@ -208,6 +237,13 @@ class GameSessionResponse(BaseModel):
     interaction: dict | None = None
     adaptive_mode: Literal["new", "review", "steady", "challenge", "skill_review", "skill_challenge"] = "new"
     effective_difficulty: int = 1
+
+    @field_validator("interaction")
+    @classmethod
+    def strip_private_interaction_keys(cls, value: dict | None) -> dict | None:
+        # Defense in depth: whatever the router passes, the public response
+        # never carries pairing or ordering solutions (e.g. legacy pair_key).
+        return public_interaction(value)
 
 
 class GameSessionResultResponse(GameStatsResponse):
