@@ -9,6 +9,39 @@ from pydantic import Field, BaseModel, field_serializer, field_validator, model_
 MasteryState = Literal["unseen", "struggling", "learning", "mastered"]
 MasteryReason = Literal["struggling", "unseen", "lowest_mastery"]
 
+# Answer-bearing keys stored in Lesson.content["exercises"]. They stay in the
+# database for grading, but never leave the server before the learner answers.
+_PRIVATE_EXERCISE_CONTENT_KEYS = frozenset({"correct", "correct_answer", "accepted_answers"})
+# A pronunciation target is the phrase the learner must read aloud, so it is
+# part of the prompt rather than a secret answer.
+_PUBLIC_TARGET_EXERCISE_TYPES = frozenset({"pronunciation"})
+
+
+def public_lesson_content(value: dict) -> dict:
+    """Return a copy of lesson content without exercise answer keys.
+
+    Never mutates the input: LessonResponse validates the ORM Lesson.content
+    dict directly, and mutating it would mark the row dirty.
+    """
+    if not isinstance(value, dict):
+        return value
+    exercises = value.get("exercises")
+    if not isinstance(exercises, list):
+        return dict(value)
+    clean = dict(value)
+    clean["exercises"] = [
+        {
+            key: item
+            for key, item in exercise.items()
+            if key not in _PRIVATE_EXERCISE_CONTENT_KEYS
+            or exercise.get("type") in _PUBLIC_TARGET_EXERCISE_TYPES
+        }
+        if isinstance(exercise, dict)
+        else exercise
+        for exercise in exercises
+    ]
+    return clean
+
 
 class ExerciseContent(BaseModel):
     type: str
@@ -92,6 +125,11 @@ class LessonResponse(BaseModel):
     def serialize_completed_at(self, v: datetime | None, _info):
         return v.isoformat() if v else None
 
+    @field_validator("content")
+    @classmethod
+    def strip_exercise_answers(cls, value: dict) -> dict:
+        return public_lesson_content(value)
+
 
 class ExerciseResponse(BaseModel):
     id: int
@@ -99,7 +137,8 @@ class ExerciseResponse(BaseModel):
     exercise_type: str
     question: str
     options: list | None = None
-    correct_answer: str
+    # Only present once the exercise has been answered (see hide_unanswered_answers).
+    correct_answer: str | None = None
     user_answer: str | None = None
     score: float | None = None
     feedback: str | None = None
@@ -121,6 +160,16 @@ class ExerciseResponse(BaseModel):
     @field_serializer("answered_at")
     def serialize_answered_at(self, v: datetime | None, _info):
         return v.isoformat() if v else None
+
+    @model_validator(mode="after")
+    def hide_unanswered_answers(self) -> Self:
+        # Before the learner answers, the payload carries the prompt only. The
+        # answer is returned by the grading response (ExerciseAnswerResponse)
+        # and again here once the exercise has a score.
+        if self.score is None and self.exercise_type not in _PUBLIC_TARGET_EXERCISE_TYPES:
+            self.correct_answer = None
+            self.accepted_answers = None
+        return self
 
 
 class LessonDetailResponse(BaseModel):
