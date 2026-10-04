@@ -214,13 +214,13 @@ def get_native_language_name(native_language: str) -> str:
     foundation-language codes from leaking into the UI as raw ISO identifiers.
     """
     normalized = _normalize_locale(native_language)
-    base_language = normalized.split("-")[0]
-    explicit_name = _NATIVE_LANGUAGE_NAMES.get(normalized) or _NATIVE_LANGUAGE_NAMES.get(base_language)
-    if explicit_name:
-        return explicit_name
-
     info = _resolve_language_info(normalized)
-    return info["name"] if info else native_language
+    if info:
+        return info["name"]
+
+    # Keep unknown legacy profile values readable instead of raising because a
+    # private native-language map is missing or out of sync with locale.py.
+    return native_language
 
 
 def voice_session_title(native_language: str) -> str:
