@@ -478,14 +478,20 @@ async def forgot_password(request: Request, data: ForgotPasswordRequest, db: Asy
 async def reset_password(request: Request, data: ResetPasswordRequest, response: Response,
                          db: AsyncSession = Depends(get_db), redis: Redis | None = Depends(get_redis)):
     redis_client = _require_redis(redis, "Password reset")
-    user_id_str = await redis_client.get(f"reset_password:{data.token}")
+    # Consume the token atomically (GET+DEL in one Redis call) before touching the
+    # password, so two concurrent requests cannot both use it and a crash after the
+    # commit cannot leave it valid until the TTL expires.
+    user_id_str = await redis_client.eval(_CONSUME_REFRESH_LUA, 1, f"reset_password:{data.token}")
     if not user_id_str:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
-    user = await db.get(User, int(user_id_str))
+    try:
+        user_id = int(user_id_str)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token") from None
+    user = await db.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     await _change_password(db, user, data.new_password)
     await db.commit()
-    await redis_client.delete(f"reset_password:{data.token}")
     response.delete_cookie("refresh_token")
     return {"detail": "Password updated successfully"}
