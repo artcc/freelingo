@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 # ── Quiz question (static bank shape — mirrored from assessment-bank.ts) ──────
 
@@ -19,7 +19,7 @@ class QuizResponse(BaseModel):
     questions: list[QuizQuestion]
 
 
-# ── Submission ─────────────────────────────────────────────────────────────────
+# ── Submission ─────────────────────────────────────────────────────────────────────────────
 
 
 class AnswerRecord(BaseModel):
@@ -32,10 +32,39 @@ class AnswerRecord(BaseModel):
 
 
 class AssessmentSubmitRequest(BaseModel):
+    """Legacy client-graded payload. No longer accepted by any endpoint."""
+
     answers: list[AnswerRecord]
 
 
-# ── Result ─────────────────────────────────────────────────────────────────────
+class AssessmentAnswerCheckRequest(BaseModel):
+    """One learner choice, graded on the server against the stored bank."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    session_id: str = Field(min_length=1, max_length=64)
+    question_id: str = Field(min_length=1, max_length=64)
+    selected: str = Field(min_length=1, max_length=500)
+
+
+class AssessmentAnswerCheckResponse(BaseModel):
+    question_id: str
+    correct: bool
+
+
+class AssessmentEvaluateRequest(BaseModel):
+    """Scores only the answers recorded on the server for this session.
+
+    extra="forbid" rejects legacy payloads that carried client-side
+    `correct` booleans, so a forged result returns 422 instead of a level.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    session_id: str = Field(min_length=1, max_length=64)
+
+
+# ── Result ─────────────────────────────────────────────────────────────────────────────────
 
 
 class AssessmentResult(BaseModel):
@@ -76,12 +105,31 @@ class AssessmentVoiceTrialRequest(BaseModel):
     target_language: str | None = None
 
 
-# ── Level test ─────────────────────────────────────────────────────────────────
+# ── Level test ─────────────────────────────────────────────────────────────────────────────
+
+
+class LevelTestAnswerRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    plan_id: int
+    question_id: str = Field(min_length=1, max_length=64)
+    selected: str = Field(min_length=1, max_length=500)
+
+
+class LevelTestAnswerResponse(BaseModel):
+    question_id: str
+    correct: bool
+    # Revealed only after the answer is locked in on the server.
+    correct_answer: str
+    explanation: str | None = None
 
 
 class LevelTestSubmitRequest(BaseModel):
+    """The score comes from answers graded by /level-test/answer, never the client."""
+
+    model_config = ConfigDict(extra="forbid")
+
     plan_id: int
-    answers: list[AnswerRecord]
 
 
 class LevelTestResult(BaseModel):
@@ -105,5 +153,17 @@ class AssessmentBankQuestion(BaseModel):
     grammar_slug: str | None = None
 
 
+class AssessmentBankPublicQuestion(BaseModel):
+    """A bank question as sent to the client: no answer key."""
+
+    id: str
+    skill: str
+    difficulty: str
+    question: str
+    options: list[str]
+    grammar_slug: str | None = None
+
+
 class AssessmentBankResponse(BaseModel):
-    questions: list[AssessmentBankQuestion]
+    session_id: str
+    questions: list[AssessmentBankPublicQuestion]
