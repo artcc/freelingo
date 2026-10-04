@@ -1,19 +1,10 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import {create} from 'zustand'
+import {persist} from 'zustand/middleware'
 
-export type Theme = 'system' | 'dark' | 'light'
+export type Theme='system'|'dark'|'light'
+interface ThemeStore{theme:Theme;setTheme:(theme:Theme)=>void}
 
-interface ThemeStore {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}
-
-export const useThemeStore = create<ThemeStore>()(
-  persist(
-    (set) => ({
-      theme: 'system',
-      setTheme: (theme) => set({ theme }),
-    }),
-    { name: 'fl-theme', skipHydration: true }
-  )
-)
+export const useThemeStore=create<ThemeStore>()(persist((set)=>({
+ theme:'light',
+ setTheme:(theme)=>set({theme}),
+}),{name:'fl-theme',skipHydration:true}))

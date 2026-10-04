@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import './theme-modes.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { CookieBanner } from '@/components/CookieBanner'
@@ -22,19 +24,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale()
   const messages = await getMessages()
-
-  return (
-    <html suppressHydrationWarning lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} data-scroll-behavior="smooth" className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}>
-      <head>
-        <meta name="theme-color" content="#fdfdfd" />
-        <meta name="color-scheme" content="light dark" />
-      </head>
-      <body className="min-h-full bg-[var(--juba-bg)] text-[var(--juba-text)]">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider>{children}</ThemeProvider>
-          <CookieBanner />
-        </NextIntlClientProvider>
-      </body>
-    </html>
-  )
+  return <html suppressHydrationWarning lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} data-scroll-behavior="smooth" className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}>
+    <head><meta name="theme-color" content="#fdfdfd" /><meta name="color-scheme" content="light dark" /></head>
+    <body className="min-h-full bg-[var(--juba-bg)] text-[var(--juba-text)]"><NextIntlClientProvider locale={locale} messages={messages}><ThemeProvider><ThemeToggle/>{children}</ThemeProvider><CookieBanner/></NextIntlClientProvider></body>
+  </html>
 }

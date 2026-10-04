@@ -1,0 +1,24 @@
+/* Shared day/night contract. Light is the default product surface; dark reuses
+   the landing campaign palette for the authenticated app. The toggle writes the
+   same persisted theme used by Settings > Appearance. */
+html[data-theme='light']{color-scheme:light}
+html:not([data-theme='light']){color-scheme:dark}
+.juba-theme-toggle{position:fixed;z-index:100;inset-block-start:14px;inset-inline-end:18px;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 12px;border:1px solid oklch(70% .04 280 / .55);border-radius:999px;background:oklch(99% .006 130 / .9);color:oklch(30% .04 270);box-shadow:0 5px 16px oklch(20% .03 270 / .14);font:800 12px/1.2 inherit;cursor:pointer;backdrop-filter:blur(8px)}
+.juba-theme-toggle:hover{transform:translateY(-1px)}
+html:not([data-theme='light']) .juba-theme-toggle{background:oklch(25% .07 278 / .92);border-color:oklch(70% .16 190 / .7);color:oklch(90% .08 190)}
+.juba-landing-refresh[data-theme='light'],html[data-theme='light'] .juba-landing-refresh{--jl-night:oklch(98% .008 130);--jl-band:oklch(93% .025 135);--jl-paper:oklch(27% .035 270);--jl-muted:oklch(45% .035 270);--jl-line:oklch(84% .03 135);--jl-face:oklch(92% .035 190);--jl-ink:oklch(28% .035 270);--jl-link:oklch(42% .13 235);background:var(--jl-night);color:var(--jl-paper);color-scheme:light}
+html[data-theme='light'] .juba-landing-refresh .jl-nav,html[data-theme='light'] .juba-landing-refresh .jl-hero{background:var(--jl-night)}
+html[data-theme='light'] .juba-landing-refresh .jl-languages,html[data-theme='light'] .juba-landing-refresh .jl-learning-band,html[data-theme='light'] .juba-landing-refresh .jl-open-source,html[data-theme='light'] .juba-landing-refresh .jl-footer,html[data-theme='light'] .juba-landing-refresh .jl-feature-copy,html[data-theme='light'] .juba-landing-refresh .jl-reviews{background:var(--jl-band)}
+html[data-theme='light'] .juba-landing-refresh .jl-primary{background:oklch(31% .04 270);color:oklch(98% .008 130);box-shadow:0 4px 0 oklch(66% .06 220)}
+html[data-theme='light'] .juba-landing-refresh .jl-phone{background:oklch(98% .008 130);color:var(--jl-ink)}
+html[data-theme='light'] .juba-landing-refresh .juba-tier-table tbody td:nth-child(3){background:oklch(96% .02 135);color:var(--jl-ink)}
+/* Authenticated dark mode: same campaign navy plus mint, purple and gold. */
+html:not([data-theme='light']) .juba-app-shell{--juba-bg:oklch(17% .095 278)!important;--juba-card:oklch(22% .075 278)!important;--juba-soft:oklch(27% .065 278)!important;--juba-border:oklch(39% .07 278)!important;--juba-ink:oklch(98% .006 278)!important;--juba-text:oklch(98% .006 278)!important;--juba-muted:oklch(81% .028 278)!important;--juba-green:oklch(84% .14 190)!important;--juba-green-dark:oklch(70% .19 245)!important;--juba-green-soft:oklch(30% .08 278)!important;--juba-yellow:oklch(80% .19 65)!important;--juba-blue:oklch(70% .19 245)!important;--juba-red:oklch(70% .18 25)!important;color-scheme:dark}
+html:not([data-theme='light']) .juba-app-shell :is(.juba-duo-sidebar,.juba-duo-main,.juba-app-topbar,.juba-duo-page-frame,.juba-card,.juba-panel,.juba-reference-section,.juba-reference-list-card,.reference-resource-panel,.reference-course-panel,.reference-settings-panel,.reference-admin-panel,.reference-faq-panel,.reference-friends-panel,.reference-coach-card,.reference-vocab-panel,.reference-review-card,.reference-memory-panel){background:var(--juba-card)!important;color:var(--juba-ink)!important;border-color:var(--juba-border)!important}
+html:not([data-theme='light']) .juba-app-shell .juba-duo-main,html:not([data-theme='light']) .juba-app-shell .juba-duo-page-frame{background:var(--juba-bg)!important}
+html:not([data-theme='light']) .juba-app-shell :is(.juba-duo-nav-link,.juba-app-topnav a,.reference-settings-nav a){color:var(--juba-muted)!important}
+html:not([data-theme='light']) .juba-app-shell :is(.juba-duo-nav-link:hover,.juba-duo-nav-link.is-active,.juba-app-topnav a:hover,.juba-app-topnav a.is-active,.reference-settings-nav a[aria-current='page']){background:var(--juba-green-soft)!important;color:var(--juba-ink)!important}
+html:not([data-theme='light']) .juba-app-shell :is(input,textarea,select){background:var(--juba-card)!important;color:var(--juba-ink)!important;border-color:var(--juba-border)!important}
+html:not([data-theme='light']) .juba-app-shell :is(.juba-primary-button,.edu-primary,.interactive-submit){background:var(--juba-green)!important;color:oklch(20% .08 190)!important;border-color:var(--juba-green)!important}
+html:not([data-theme='light']) .juba-app-shell :is(.reference-dashboard-track,.learning-unit-track,.reference-coach-track,.reference-course-track,.reference-vocab-track){background:var(--juba-soft)!important}
+@media(max-width:640px){.juba-theme-toggle{inset-block-start:8px;inset-inline-end:62px;min-height:38px;padding-inline:10px}.juba-theme-toggle span{display:none}}
