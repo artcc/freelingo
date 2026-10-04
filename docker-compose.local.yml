@@ -55,6 +55,17 @@ services:
       COOKIE_SECURE: "false"
       ALLOW_REGISTRATION: "true"
       FIRST_USER_IS_ADMIN: "true"
+      # Stripe stays off locally unless STRIPE_ENABLED=true is set in .env.
+      STRIPE_ENABLED: ${STRIPE_ENABLED:-false}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_GO_MONTHLY: ${STRIPE_PRICE_GO_MONTHLY:-}
+      STRIPE_PRICE_GO_YEARLY: ${STRIPE_PRICE_GO_YEARLY:-}
+      STRIPE_PRICE_PLUS_MONTHLY: ${STRIPE_PRICE_PLUS_MONTHLY:-}
+      STRIPE_PRICE_PLUS_YEARLY: ${STRIPE_PRICE_PLUS_YEARLY:-}
+      STRIPE_PRICE_MONTHLY: ${STRIPE_PRICE_MONTHLY:-}
+      STRIPE_PRICE_YEARLY: ${STRIPE_PRICE_YEARLY:-}
+      STRIPE_BASE_URL: ${STRIPE_BASE_URL:-http://localhost:3000}
     depends_on:
       postgres:
         condition: service_healthy
