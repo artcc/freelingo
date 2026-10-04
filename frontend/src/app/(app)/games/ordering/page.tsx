@@ -1,6 +1,6 @@
 'use client'
 
-import '../educational-games.css'
+import '../games.css'
 import { InteractiveGamePage } from '@/components/games/InteractiveGamePage'
 
 export default function OrderingGamePage() {
