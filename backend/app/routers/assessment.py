@@ -17,12 +17,17 @@ from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.models.user_language import UserLanguage
 from app.schemas.assessment import (
+    AnswerRecord,
+    AssessmentAnswerCheckRequest,
+    AssessmentAnswerCheckResponse,
     AssessmentBankResponse,
     AssessmentCompleteRequest,
+    AssessmentEvaluateRequest,
     AssessmentResult,
-    AssessmentSubmitRequest,
     AssessmentVoiceTrialRequest,
     FreeWriteEvalRequest,
+    LevelTestAnswerRequest,
+    LevelTestAnswerResponse,
     LevelTestResult,
     LevelTestSubmitRequest,
 )
@@ -55,6 +60,83 @@ router = APIRouter(prefix="/api/assessment", tags=["assessment"], dependencies=[
 _ASSESSMENT_TTL = 1800  # 30 minutes
 
 _ANSWER_FIELDS = frozenset({"correct_answer", "correct"})
+
+# Server-side grading sessions. The client only ever sees prompts and options;
+# every answer is graded here and the final score is computed from what the
+# server recorded, so forging `correct: true` cannot change a result.
+_BANK_SESSION_TTL = 1800  # 30 minutes
+_LEVEL_TEST_TTL = 7200  # 2 hours
+_MAX_BANK_ANSWERS = 30
+_PRIVATE_QUESTION_KEYS = frozenset({"correct", "correct_answer", "answer", "explanation"})
+
+
+def _bank_session_key(user_id: int, session_id: str) -> str:
+    return f"assessment-bank:{user_id}:{session_id}"
+
+
+def _level_test_key(user_id: int, plan_id: int) -> str:
+    return f"level-test:{user_id}:{plan_id}"
+
+
+async def _load_session(redis: Redis, key: str) -> dict | None:
+    raw = await redis.get(key)
+    if not raw:
+        return None
+    try:
+        session = json.loads(raw)
+    except (TypeError, ValueError):
+        return None
+    return session if isinstance(session, dict) else None
+
+
+def _recorded_answers(session: dict) -> list[AnswerRecord]:
+    answers = session.get("answers")
+    if not isinstance(answers, dict):
+        return []
+    return [
+        AnswerRecord(
+            question_id=question_id,
+            skill=str(record.get("skill", "")),
+            difficulty=str(record.get("difficulty", "")),
+            correct=record.get("correct") is True,
+        )
+        for question_id, record in answers.items()
+        if isinstance(record, dict)
+    ]
+
+
+def _normalise_level_test_questions(questions: list) -> list[dict]:
+    """Keep only gradable questions and give each a unique, stable id."""
+    stored: list[dict] = []
+    seen: set[str] = set()
+    for index, raw in enumerate(questions):
+        if not isinstance(raw, dict):
+            continue
+        options = [str(option) for option in raw.get("options") or [] if str(option).strip()]
+        answer = raw.get("correct", raw.get("correct_answer"))
+        if not isinstance(answer, str) or answer not in options:
+            continue
+        question_id = str(raw.get("id") or "").strip()[:64] or f"lt-{index + 1:03d}"
+        if question_id in seen:
+            question_id = f"lt-{index + 1:03d}"
+        seen.add(question_id)
+        stored.append({**raw, "id": question_id, "options": options, "correct": answer})
+    return stored
+
+
+async def _get_owned_plan(db: AsyncSession, plan_id: int, user_id: int) -> StudyPlan:
+    result = await db.execute(
+        select(StudyPlan)
+        .join(UserLanguage, StudyPlan.user_language_id == UserLanguage.id)
+        .where(
+            StudyPlan.id == plan_id,
+            UserLanguage.user_id == user_id,
+        )
+    )
+    plan = result.scalar_one_or_none()
+    if not plan:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Study plan not found.")
+    return plan
 
 
 def _strip_answers(quiz: dict) -> dict:
@@ -174,20 +256,29 @@ async def start_assessment(
 async def get_assessment_bank(
     request: Request,
     language: str = Query("en-GB", description="BCP-47 target language code"),
-    _current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
+    redis: Redis = Depends(get_redis),
 ):
     """
-    Return the full static assessment bank for the given language.
-    Includes correct answers — the frontend needs them for the real-time
-    adaptive quiz logic. The backend re-evaluates answers server-side
-    via POST /api/assessment/evaluate.
+    Return the static assessment bank WITHOUT answer keys, plus a grading session.
+
+    The adaptive quiz posts each choice to POST /bank/answer, which grades it
+    against the bank on the server; POST /evaluate then scores only the answers
+    recorded in that session.
     """
     from app.data.assessment_bank import (
         get_assessment_bank as _get_bank,
     )  # noqa: PLC0415
 
     questions = _get_bank(language)
+    session_id = str(uuid4())
+    await redis.setex(
+        _bank_session_key(current_user.id, session_id),
+        _BANK_SESSION_TTL,
+        json.dumps({"language": language, "answers": {}}),
+    )
     return AssessmentBankResponse(
+        session_id=session_id,
         questions=[
             {
                 "id": q.id,
@@ -195,12 +286,56 @@ async def get_assessment_bank(
                 "difficulty": q.difficulty,
                 "question": q.question,
                 "options": q.options,
-                "correct": q.correct,
                 "grammar_slug": q.grammar_slug,
             }
             for q in questions
-        ]
+        ],
     )
+
+
+@router.post("/bank/answer", response_model=AssessmentAnswerCheckResponse)
+@limiter.limit("120/minute")
+async def answer_assessment_bank_question(
+    request: Request,
+    data: AssessmentAnswerCheckRequest,
+    current_user: User = Depends(get_current_user),
+    redis: Redis = Depends(get_redis),
+):
+    """Grade one adaptive-quiz answer on the server and record it in the session."""
+    key = _bank_session_key(current_user.id, data.session_id)
+    session = await _load_session(redis, key)
+    if session is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No active assessment session.")
+
+    from app.data.assessment_bank import (
+        get_assessment_bank as _get_bank,
+    )  # noqa: PLC0415
+
+    language = session.get("language") or "en-GB"
+    question = next((q for q in _get_bank(language) if q.id == data.question_id), None)
+    if question is None:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Unknown question.")
+    if data.selected not in question.options:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Answer must be one of the question options.",
+        )
+    answers = session.setdefault("answers", {})
+    if not isinstance(answers, dict):
+        answers = session["answers"] = {}
+    if data.question_id in answers:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Question already answered.")
+    if len(answers) >= _MAX_BANK_ANSWERS:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Too many answers.")
+
+    correct = data.selected == question.correct
+    answers[data.question_id] = {
+        "skill": question.skill,
+        "difficulty": question.difficulty,
+        "correct": correct,
+    }
+    await redis.setex(key, _BANK_SESSION_TTL, json.dumps(session))
+    return AssessmentAnswerCheckResponse(question_id=data.question_id, correct=correct)
 
 
 @router.post("/submit", response_model=AssessmentResult)
@@ -307,14 +442,18 @@ async def submit_assessment(
 @limiter.limit("60/minute")
 async def evaluate_quiz(
     request: Request,
-    data: AssessmentSubmitRequest,
-    _current_user: User = Depends(get_current_user),
+    data: AssessmentEvaluateRequest,
+    current_user: User = Depends(get_current_user),
+    redis: Redis = Depends(get_redis),
 ):
     """
-    Deterministic CEFR evaluation of the adaptive quiz answers.
-    No LLM involved — pure algorithm.
+    Deterministic CEFR evaluation of the answers graded in this session.
+    No LLM involved, and nothing the client claims about correctness is used.
     """
-    return evaluate_adaptive_quiz(data.answers)
+    session = await _load_session(redis, _bank_session_key(current_user.id, data.session_id))
+    if session is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No active assessment session.")
+    return evaluate_adaptive_quiz(_recorded_answers(session))
 
 
 @router.post("/free-write", response_model=dict)
@@ -548,22 +687,14 @@ async def get_level_test_questions(
     plan_id: int,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    redis: Redis = Depends(get_redis),
 ):
     """
     Generate 20 level-completion test questions using the LLM.
     Questions are constrained to grammar/vocabulary studied in the plan's CEFR level.
+    Answers stay in a server-side session; the client receives prompts and options only.
     """
-    result = await db.execute(
-        select(StudyPlan)
-        .join(UserLanguage, StudyPlan.user_language_id == UserLanguage.id)
-        .where(
-            StudyPlan.id == plan_id,
-            UserLanguage.user_id == current_user.id,
-        )
-    )
-    plan = result.scalar_one_or_none()
-    if not plan:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Study plan not found.")
+    plan = await _get_owned_plan(db, plan_id, current_user.id)
 
     # Collect all grammar points and vocabulary sets from the curriculum
     from app.data.curriculum import get_curriculum_units  # noqa: PLC0415
@@ -595,7 +726,65 @@ async def get_level_test_questions(
     except LLMError:
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="ai_service_error")
 
-    return {"plan_id": plan_id, "cefr_level": plan.cefr_level, "questions": questions}
+    stored = _normalise_level_test_questions(questions)
+    await redis.setex(
+        _level_test_key(current_user.id, plan_id),
+        _LEVEL_TEST_TTL,
+        json.dumps({"questions": stored, "answers": {}}),
+    )
+    public_questions = [
+        {key: value for key, value in question.items() if key not in _PRIVATE_QUESTION_KEYS}
+        for question in stored
+    ]
+    return {"plan_id": plan_id, "cefr_level": plan.cefr_level, "questions": public_questions}
+
+
+@router.post("/level-test/answer", response_model=LevelTestAnswerResponse)
+@limiter.limit("120/minute")
+async def answer_level_test_question(
+    request: Request,
+    data: LevelTestAnswerRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    redis: Redis = Depends(get_redis),
+):
+    """Grade one level-test answer on the server; each question can be answered once."""
+    await _get_owned_plan(db, data.plan_id, current_user.id)
+    key = _level_test_key(current_user.id, data.plan_id)
+    session = await _load_session(redis, key)
+    if session is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No active level test.")
+    question = next(
+        (item for item in session.get("questions") or [] if isinstance(item, dict) and item.get("id") == data.question_id),
+        None,
+    )
+    if question is None:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Unknown question.")
+    if data.selected not in question.get("options", []):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Answer must be one of the question options.",
+        )
+    answers = session.setdefault("answers", {})
+    if not isinstance(answers, dict):
+        answers = session["answers"] = {}
+    if data.question_id in answers:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Question already answered.")
+
+    correct = data.selected == question["correct"]
+    answers[data.question_id] = {
+        "skill": question.get("skill", ""),
+        "difficulty": question.get("difficulty", ""),
+        "correct": correct,
+    }
+    await redis.setex(key, _LEVEL_TEST_TTL, json.dumps(session))
+    explanation = question.get("explanation")
+    return LevelTestAnswerResponse(
+        question_id=data.question_id,
+        correct=correct,
+        correct_answer=question["correct"],
+        explanation=explanation if isinstance(explanation, str) else None,
+    )
 
 
 @router.post("/level-test/submit", response_model=LevelTestResult)
@@ -605,22 +794,17 @@ async def submit_level_test(
     data: LevelTestSubmitRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    redis: Redis = Depends(get_redis),
 ):
-    """Evaluate the end-of-level test and save the result to the study plan."""
-    result = await db.execute(
-        select(StudyPlan)
-        .join(UserLanguage, StudyPlan.user_language_id == UserLanguage.id)
-        .where(
-            StudyPlan.id == data.plan_id,
-            UserLanguage.user_id == current_user.id,
-        )
-    )
-    plan = result.scalar_one_or_none()
-    if not plan:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Study plan not found.")
+    """Evaluate the end-of-level test from server-graded answers and save the result."""
+    plan = await _get_owned_plan(db, data.plan_id, current_user.id)
+    key = _level_test_key(current_user.id, data.plan_id)
+    session = await _load_session(redis, key)
+    if session is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No active level test.")
 
-    # Use the same deterministic evaluator — treat all answers as one skill bucket
-    assessment = evaluate_adaptive_quiz(data.answers)
+    # Same deterministic evaluator, fed only by answers graded on the server.
+    assessment = evaluate_adaptive_quiz(_recorded_answers(session))
     score = assessment.score
 
     if score >= 0.75:
@@ -640,6 +824,8 @@ async def submit_level_test(
     plan.completion_test_recommendation = recommendation
     await db.commit()
     await db.refresh(plan)
+    # One submission per generated test; a retake starts a new session.
+    await redis.delete(key)
 
     return LevelTestResult(
         score=score,
