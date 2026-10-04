@@ -121,6 +121,9 @@ async def submit_listening_attempt(request: Request, body: ListeningSubmitReques
     exercise = await db.get(ListeningExercise, body.exercise_id)
     if exercise is None or exercise.target_language != plan.target_language:
         raise HTTPException(status_code=404, detail="exercise_not_found")
+    # Scored first attempts must match the plan level; replays from history stay allowed.
+    if not body.replay and exercise.level != plan.cefr_level:
+        raise HTTPException(status_code=404, detail="exercise_not_found")
     try:
         attempt, exercise = await submit_attempt(body.exercise_id, current_user.id, body.answers, db, is_replay=body.replay, study_plan_id=plan.id)
     except ValueError as exc:
