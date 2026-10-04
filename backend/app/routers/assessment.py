@@ -11,7 +11,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.deps import get_current_user, get_redis, require_learner
+
+# Grading sessions use Redis when enabled and a process-local store otherwise
+# (desktop / single worker). The alias keeps the historical dependency name.
+from app.core.deps import get_current_user, get_session_store as get_redis, require_learner
 from app.core.limiter import limiter
 from app.models.study_plan import StudyPlan
 from app.models.user import User
