@@ -1,0 +1,97 @@
+/* All 24 authenticated section families and their nested pages.
+   Pure presentation: no API, quota, session, curriculum or XP behavior changes.
+   Dashboard/Chat retain their detailed geometry from dashboard-layout-fix.css.
+   Do not normalize answer/recording/risk/memory-card state colors or transforms. */
+html[lang] .juba-app-shell{
+ --juba-bg:oklch(99.5% .005 130);--juba-card:oklch(99.5% .005 130);
+ --juba-soft:oklch(98% .008 130);--juba-border:oklch(94% .008 130);
+ --juba-ink:oklch(34% .012 130);--juba-text:var(--juba-ink);--juba-muted:oklch(48% .012 130);
+ --juba-green:oklch(72% .2 130);--juba-green-dark:oklch(45% .13 130);--juba-green-soft:oklch(97% .027 130);
+ --juba-yellow:oklch(83% .18 85);--juba-blue:oklch(57% .15 235);--juba-red:oklch(57% .2 25);
+ --juba-purple:oklch(57% .18 305);--juba-radius:7px;--juba-sidebar-width:180px;
+ --duo-bg:var(--juba-bg);--duo-card:var(--juba-card);--duo-soft:var(--juba-soft);
+ --duo-line:var(--juba-border);--duo-border:var(--juba-border);--duo-ink:var(--juba-ink);--duo-text:var(--juba-ink);--duo-muted:var(--juba-muted);
+ --duo-green:var(--juba-green);--duo-green-dark:var(--juba-green-dark);--duo-green-soft:var(--juba-green-soft);
+ --duo-yellow:var(--juba-yellow);--duo-red:var(--juba-red);--duo-blue:var(--juba-blue);--duo-purple:var(--juba-purple);
+ --busuu-ink:var(--juba-ink);--busuu-line:var(--juba-border);--busuu-soft:var(--juba-soft);
+ color-scheme:light;background:var(--juba-bg)!important;color:var(--juba-ink)!important;line-height:1.6;
+}
+html[lang] .juba-app-shell :is(h1,h2,h3){text-wrap:balance}
+html[lang] .juba-app-shell p{max-width:75ch;text-wrap:pretty}
+html[lang] .juba-app-shell :is(a,button,summary,input,textarea,select):focus-visible{outline:3px solid var(--juba-green-dark)!important;outline-offset:3px!important}
+html[lang] .juba-app-shell :is(button,input,textarea,select):disabled{cursor:not-allowed;opacity:.55}
+/* Shared navigation retains the actual route set, locale direction and menus. */
+html[lang] .juba-app-shell .juba-duo-sidebar{background:var(--juba-card)!important;border-inline-end:1px solid var(--juba-border)!important;box-shadow:none!important}
+html[lang] .juba-app-shell .reference-brand{height:76px!important;min-height:76px!important;padding-inline:22px!important;font-size:23px!important;font-weight:1000!important;letter-spacing:-.05em;color:var(--juba-green)!important}
+html[lang] .juba-app-shell .juba-duo-logo-mark{display:none!important}
+html[lang] .juba-app-shell .juba-duo-nav{padding:16px 14px!important;overflow-y:auto!important;scrollbar-width:thin!important;min-height:0!important}
+html[lang] .juba-app-shell .juba-duo-nav-section-label{display:none!important}
+html[lang] .juba-app-shell .juba-duo-nav-link{min-height:40px!important;gap:12px!important;padding:9px 10px!important;margin:0!important;font-size:11px!important;font-weight:700!important;border-radius:6px!important}
+html[lang] .juba-app-shell .juba-duo-nav-link svg{width:20px;height:20px;stroke-width:2.5;color:oklch(64% .18 135);fill:oklch(91% .06 135)}
+html[lang] .juba-app-shell .juba-duo-nav-link:is([href='/reading'],[href='/chat'],[href='/flashcards']) svg{color:oklch(60% .15 235);fill:oklch(90% .055 235)}
+html[lang] .juba-app-shell .juba-duo-nav-link:is([href='/games'],[href='/listening']) svg{color:oklch(62% .18 305);fill:oklch(92% .055 305)}
+html[lang] .juba-app-shell .juba-duo-nav-link:is([href='/assessment'],[href='/review'],[href='/translator']) svg{color:oklch(63% .14 75);fill:oklch(93% .09 85)}
+html[lang] .juba-app-shell .juba-duo-nav-link[href='/conversation'] svg{color:oklch(60% .2 25);fill:oklch(94% .04 25)}
+html[lang] .juba-app-shell .juba-app-topbar{height:76px!important;min-height:76px!important;flex-basis:76px!important;background:var(--juba-card)!important;box-shadow:none!important}
+html[lang] .juba-app-shell .juba-app-topnav{gap:28px!important}
+html[lang] .juba-app-shell .juba-app-topnav a{font-size:10px!important;font-weight:800!important;min-height:44px}
+/* Route states sometimes render a main/div instead of juba-page-shell. Supply
+   the same measure without imposing grids on games, charts, drawers or dialogs. */
+html[lang] .juba-app-shell .juba-dashboard-workspace>:is(main,div):not(.juba-page-shell):not(.juba-chat-reference):not([role='dialog']):not([role='alert']){max-width:1480px;margin-inline:auto;min-width:0}
+html[lang] .juba-app-shell .juba-dashboard-workspace>main:not(.juba-page-shell){padding:24px}
+html[lang] .juba-app-shell .juba-page-shell:not(.reference-dashboard):not(.juba-chat-reference):not(.reference-peer-chat){padding:24px!important;max-width:1480px!important;margin-inline:auto!important;background:transparent!important;color:var(--juba-ink)}
+/* Headings for courses, grammar/vocabulary resources, personal coach, social,
+   FAQ, assessment, voice, leagues, settings and administration. */
+html[lang] .juba-app-shell :is(.reference-resource-header,.reference-resource-heading,.reference-course-heading,.reference-vocab-header,.reference-grammar-header,.reference-faq-header,.reference-friends-heading,.reference-coach-heading,.reference-voice-header,.reference-settings-heading,.reference-admin-heading,.competition-heading,.league-movement-heading,.league-history-heading,.edu-heading,.learning-session-header,.juba-reference-hero){background:transparent!important;box-shadow:none!important;border-radius:0!important}
+html[lang] .juba-app-shell :is(.reference-resource-page,.reference-courses,.reference-course-detail,.reference-vocabulary,.reference-vocab-detail,.reference-grammar,.reference-faq,.reference-friends,.reference-coach,.reference-voice-page,.reference-settings-page,.reference-admin-overview,.competition-panel,.league-movement,.league-history,.educational-games,.learning-session,.juba-mobile-plan,.juba-mobile-progress,.juba-mobile-reading,.juba-mobile-listening,.juba-mobile-translator) h1{font-size:clamp(24px,2.2vw,30px)!important;line-height:1.35!important;font-weight:700!important;letter-spacing:-.025em}
+html[lang] .juba-app-shell[dir='rtl'] h1{letter-spacing:0!important;line-height:1.5!important}
+/* Named surfaces, not every bordered child. Preserve game options, selected
+   answers, risk alerts, live microphone buttons and avatar circles untouched. */
+html[lang] .juba-app-shell :is(.juba-card,.juba-panel,.juba-reference-section,.juba-reference-list-section,.juba-reference-list-card,.juba-reference-assessment-card,.juba-reference-filter-panel,.juba-reference-translator-panel,.reference-resource-panel,.reference-course-panel,.reference-course-summary,.reference-vocab-panel,.reference-grammar-level,.reference-faq-panel,.reference-friends-panel,.reference-coach-card,.reference-coach-goal,.reference-coach-insight,.reference-settings-panel,.reference-settings-action,.reference-admin-panel,.reference-admin-metric,.reference-flash-vocab-panel,.reference-review-card,.reference-memory-panel,.reference-language-panel,.learning-assessment-level,.learning-assessment-actions,.learning-session-status,.learning-flashcard,.reference-interactive-index,.edu-activity,.edu-stage,.game-card,.play-card,.competition-section,.league-history-detail,.league-history-table,.juba-ff-unit-card){border:1px solid var(--juba-border)!important;border-radius:var(--juba-radius)!important;background:var(--juba-card)!important;box-shadow:0 1px 3px oklch(35% .01 130 / .03)!important;color:var(--juba-ink)}
+html[lang] .juba-app-shell :is(.reference-resource-panel,.reference-course-panel,.reference-vocab-panel,.reference-friends-panel,.reference-coach-card,.reference-settings-panel,.reference-admin-panel,.competition-section)>:is(h2,header h2){font-size:16px;font-weight:800;line-height:1.5}
+html[lang] .juba-app-shell :is(.reference-resource-prose,.reference-resource-body,.reference-faq-answer,.reference-review-answer,.reading-text){font-size:16px!important;line-height:1.8!important;max-width:75ch}
+html[lang] .juba-app-shell :is(.reference-resource-prose,.reference-resource-body,.reference-faq-answer) strong{color:var(--juba-ink)}
+html[lang] .juba-app-shell :is(.reference-faq-question,.reference-settings-action,.reference-game-row,.reference-vocab-set-row,.reference-friend-row){min-height:52px}
+html[lang] .juba-app-shell :is(.reference-faq-question,.reference-resource-link-row,.reference-game-row,.reference-vocab-set-row):hover{background:var(--juba-green-soft)}
+/* Tables, account subscription comparison and admin data use the same neutral
+   rows. Badge tones, selected plans and semantic alert colors remain independent. */
+html[lang] .juba-app-shell table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;background:var(--juba-card)}
+html[lang] .juba-app-shell :is(th,td){border-block-end:1px solid var(--juba-border);padding:12px 16px;text-align:start}
+html[lang] .juba-app-shell th{background:var(--juba-soft);color:var(--juba-muted);font-size:12px;font-weight:800}
+html[lang] .juba-app-shell td{font-size:14px;line-height:1.6}
+html[lang] .juba-app-shell :is(.reference-resource-table,.reference-dashboard-table,.league-history-table){overflow-x:auto;max-width:100%}
+html[lang] .juba-app-shell :is(input:not([type='radio']):not([type='checkbox']):not([type='range']):not([type='file']),textarea,select){border-color:var(--juba-border)!important;color:var(--juba-ink);background:var(--juba-card);font-size:14px;line-height:1.6}
+html[lang] .juba-app-shell :is(.reference-grammar-search,.reference-vocab-search,.reference-phrase-search,.reference-friends-search) input{min-height:44px}
+html[lang] .juba-app-shell :is(.juba-primary-button,.edu-primary,.competition-primary,.interactive-submit){min-height:44px;border-radius:7px!important;background:var(--juba-green)!important;border:1px solid var(--juba-green)!important;color:var(--juba-card)!important;font-size:14px;font-weight:800;box-shadow:none!important}
+html[lang] .juba-app-shell :is(.juba-secondary-button,.interactive-secondary){min-height:44px;border-radius:7px!important;background:var(--juba-card);border:1px solid var(--juba-border);color:var(--juba-ink);box-shadow:none!important}
+/* Only neutral progress primitives get yellow. UnitCard's completed/active
+   inline colors, game result bars and exceeded quota indicators are excluded. */
+html[lang] .juba-app-shell :is(.reference-coach-track,.reference-course-track,.reference-vocab-track,.learning-unit-track,.reference-voice-track){height:10px;border-radius:4px;overflow:hidden;background:var(--juba-soft)}
+html[lang] .juba-app-shell :is(.reference-coach-track,.reference-course-track,.reference-vocab-track,.learning-unit-track)>span{background:var(--juba-yellow);border-radius:inherit}
+html[lang] .juba-app-shell .juba-ff-unit-card.juba-ff-unit-active{border-color:var(--juba-green)!important;background:var(--juba-green-soft)!important}
+html[lang] .juba-app-shell .juba-ff-unit-locked{color:var(--juba-muted)!important}
+html[lang] .juba-app-shell .juba-admin-nav{border:1px solid var(--juba-border)!important;border-radius:7px!important;background:var(--juba-card)!important;box-shadow:none!important}
+html[lang] .juba-app-shell :is(.juba-admin-nav-item,.juba-admin-nav-active){border-radius:6px!important;border-inline-start-width:0!important}
+html[lang] .juba-app-shell .juba-admin-nav-active{background:var(--juba-green-soft)!important;color:var(--juba-green-dark)!important;font-weight:800!important}
+html[lang] .juba-app-shell :is(.reference-settings-nav a,.reference-resource-tabs button,.reference-vocab-tabs button){min-height:44px;border-radius:6px}
+html[lang] .juba-app-shell .learning-unit-drawer{background:var(--juba-card);border:1px solid var(--juba-border);border-radius:12px}
+/* Risk, wrong-answer, warning and recording red tones are not replaced by green.
+   Dialog backdrop layering, memory-card flips and target-game motion stay intact. */
+html[lang] .juba-app-shell .reference-admin-badge{border-radius:5px;line-height:1.5}
+html[lang] .juba-app-shell .reference-admin-badge[data-tone='info']{color:var(--juba-blue)}
+html[lang] .juba-app-shell .competition-own{background:var(--juba-green-soft)}
+html[lang] .juba-app-shell .juba-hero-glow{display:none}
+@media(max-width:900px){
+ html[lang] .juba-app-shell .juba-app-topbar{display:none!important}
+ html[lang] .juba-app-shell .juba-duo-nav-link{min-height:44px!important;font-size:14px!important}
+ html[lang] .juba-app-shell .juba-page-shell:not(.reference-dashboard):not(.juba-chat-reference):not(.reference-peer-chat){padding:16px!important}
+ html[lang] .juba-app-shell .juba-dashboard-workspace>main:not(.juba-page-shell){padding:16px}
+ html[lang] .juba-app-shell :is(input:not([type='radio']):not([type='checkbox']),textarea,select){font-size:16px}
+ html[lang] .juba-app-shell :is(th,td){padding:10px 12px}
+}
+@media(max-width:640px){
+ html[lang] .juba-app-shell :is(.reference-course-heading,.reference-settings-heading,.reference-admin-heading)>div{flex-wrap:wrap}
+ html[lang] .juba-app-shell :is(.reference-admin-actions,.reference-settings-nav){flex-wrap:wrap;gap:8px}
+ html[lang] .juba-app-shell :is(.reference-resource-prose,.reference-resource-body,.reference-faq-answer,.reading-text){font-size:16px!important;line-height:1.8!important}
+}
+@media(prefers-reduced-motion:reduce){html[lang] .juba-app-shell{scroll-behavior:auto}html[lang] .juba-app-shell :is(.animate-halo-speaking,.animate-halo-idle){animation:none}}

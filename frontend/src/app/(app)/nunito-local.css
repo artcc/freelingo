@@ -1,17 +1,9 @@
-/* Local-font policy: no external font request. Browsers with Nunito installed use it; otherwise the bundled system fallback keeps layout stable. */
-@font-face{
-  font-family:"JUBA Nunito Local";
-  src:local("Nunito"),local("Nunito Variable"),local("Nunito Regular");
-  font-style:normal;
-  font-weight:200 1000;
-  font-display:swap;
-}
-@font-face{
-  font-family:"JUBA Nunito Local";
-  src:local("Nunito Italic"),local("Nunito Variable Italic");
-  font-style:italic;
-  font-weight:200 1000;
-  font-display:swap;
-}
-.juba-app-shell{font-family:"JUBA Nunito Local",Nunito,"Segoe UI",Arial,sans-serif!important;}
-.juba-app-shell :is(h1,h2,h3,h4,h5,h6,button,a,input,textarea,select){font-family:inherit;}
+/* Shared design contract for all authenticated routes, including nested pages.
+   Uses existing repository binaries published by next.config.ts, never OS-local
+   substitutes or external font services. */
+@import './all-pages-reference.css';
+@font-face{font-family:'JUBA App Nunito';src:url('/fonts/Juba-Nunito.ttf') format('truetype');font-style:normal;font-weight:200 1000;font-display:swap}
+@font-face{font-family:'JUBA App Cairo';src:url('/fonts/Juba-Cairo.ttf') format('truetype');font-style:normal;font-weight:200 1000;font-display:swap}
+html[lang] .juba-app-shell{font-family:'JUBA App Nunito','JUBA App Cairo',system-ui,sans-serif!important}
+html[lang] .juba-app-shell[dir='rtl']{font-family:'JUBA App Cairo','JUBA App Nunito',system-ui,sans-serif!important}
+html[lang] .juba-app-shell :is(h1,h2,h3,h4,h5,h6,p,button,a,input,textarea,select,label,th,td,summary){font-family:inherit!important}
