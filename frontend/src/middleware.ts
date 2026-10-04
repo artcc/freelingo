@@ -1,29 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { normalizeLocale, SUPPORTED_LOCALES, type Locale } from '@/lib/locales'
+import { isProtectedPath, loginRedirectPath } from '@/lib/protected-routes'
 
-// Routes that require authentication — anything else passes through so unknown
-// URLs reach Next.js's 404 handler instead of being redirected to /login.
-const PROTECTED_ROUTES = [
-  '/admin',
-  '/assessment',
-  '/billing',
-  '/chat',
-  '/conversation',
-  '/dashboard',
-  '/faq',
-  '/feedback',
-  '/flashcards',
-  '/grammar',
-  '/lesson',
-  '/listening',
-  '/onboarding',
-  '/phrasebook',
-  '/plan',
-  '/progress',
-  '/settings',
-  '/vocabulary',
-]
+// Every route under src/app/(app) requires authentication (see
+// lib/protected-routes.ts); anything else passes through so unknown URLs reach
+// Next.js's 404 handler instead of being redirected to /login.
 
 function detectLocale(req: NextRequest): Locale {
   // 1. An explicit /:locale URL prefix always wins, including regional aliases
@@ -101,13 +83,18 @@ export function middleware(req: NextRequest) {
     : pathname
 
   const hasRefreshToken = req.cookies.has('refresh_token')
-  const isProtected = PROTECTED_ROUTES.some((r) =>
-    normalizedPath === r || normalizedPath.startsWith(r + '/')
-  )
+  const isProtected = isProtectedPath(normalizedPath)
 
   if (!hasRefreshToken && isProtected) {
-    const response = NextResponse.redirect(new URL('/login', req.url))
-    if (!req.cookies.has('NEXT_LOCALE')) {
+    // Keep /ar, /fr, ... on the login page so the user's language survives
+    // the authentication redirect, and remember where they were going.
+    const target = loginRedirectPath(
+      normalizedPath,
+      req.nextUrl.search,
+      hasLocalePrefix ? firstSegment! : null,
+    )
+    const response = NextResponse.redirect(new URL(target, req.url))
+    if (hasLocalePrefix || !req.cookies.has('NEXT_LOCALE')) {
       response.cookies.set('NEXT_LOCALE', locale, {
         path: '/',
         sameSite: 'lax',

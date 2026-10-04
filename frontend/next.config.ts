@@ -37,7 +37,6 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'raw.githubusercontent.com' },
     ],
   },
-  typescript: { ignoreBuildErrors: true },
   webpack(config, { isServer }) {
     if (isServer) {
       const externals = Array.isArray(config.externals) ? config.externals : []

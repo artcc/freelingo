@@ -1,4 +1,4 @@
-import secrets
+import json
 import uuid
 from typing import Literal
 
@@ -36,6 +36,46 @@ from app.services.subscription_service import apply_subscription_quotas
 from app.utils.pagination import paginate
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
+
+MAINTENANCE_REQUIRES_REDIS = "Maintenance mode requires Redis (REDIS_ENABLED=true)"
+
+
+def _refresh_value_belongs_to(value: object, user_id: int) -> bool:
+    """Match a Redis refresh-token value against a user id.
+
+    Values are stored as JSON {"uid": ..., "sv": ...}; older deployments stored
+    the bare user id. Both formats are recognised.
+    """
+    if isinstance(value, bytes):
+        value = value.decode("utf-8", errors="ignore")
+    if not isinstance(value, str):
+        return False
+    if value == str(user_id):
+        return True
+    try:
+        payload = json.loads(value)
+    except (TypeError, ValueError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    return str(payload.get("uid")) == str(user_id)
+
+
+async def revoke_redis_refresh_tokens(redis: Redis | None, user_id: int) -> int:
+    """Delete every Redis refresh token owned by user_id. Returns the count."""
+    if redis is None:
+        return 0
+    removed = 0
+    cursor: int = 0
+    while True:
+        cursor, keys = await redis.scan(cursor, match="refresh:*", count=100)
+        for key in keys:
+            if _refresh_value_belongs_to(await redis.get(key), user_id):
+                await redis.delete(key)
+                removed += 1
+        if cursor == 0:
+            break
+    return removed
 
 
 @router.get("/stats", response_model=AdminOverviewStatsResponse)
@@ -143,7 +183,7 @@ async def create_user(
     data: AdminUserCreate,
     admin: User = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
-    redis: Redis = Depends(get_redis),
+    redis: Redis | None = Depends(get_redis),
 ):
     existing = await db.execute(select(User).where(User.username == data.username))
     if existing.scalar_one_or_none():
@@ -154,6 +194,11 @@ async def create_user(
         if email_check.scalar_one_or_none():
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already taken")
 
+    # A verification e-mail needs a Redis-backed token. Without Redis the
+    # admin-created account is marked verified instead of being left in an
+    # unverifiable state.
+    send_verification = bool(data.email) and settings.EMAIL_ENABLED and redis is not None
+
     user = User(
         username=data.username,
         email=data.email,
@@ -163,13 +208,11 @@ async def create_user(
         target_language=data.target_language,
         role=data.role,
         is_active=True,
-        is_verified=not settings.EMAIL_ENABLED,
+        is_verified=not send_verification,
     )
     db.add(user)
     await db.commit()
     await db.refresh(user)
-
-    from app.models.user_language import UserLanguage
 
     db.add(
         UserLanguage(
@@ -180,7 +223,7 @@ async def create_user(
     )
     await db.commit()
 
-    if user.email and settings.EMAIL_ENABLED:
+    if send_verification and redis is not None and user.email:
         verify_token = str(uuid.uuid4())
         await redis.setex(f"verify_email:{verify_token}", 86400, str(user.id))
         await email_service.send_verification_email(
@@ -407,7 +450,7 @@ async def get_user_quota(
     user_id: int,
     admin: User = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
-    redis: Redis = Depends(get_redis),
+    redis: Redis | None = Depends(get_redis),
 ):
     """Return live quota status (Redis) for a user."""
     user = await db.get(User, user_id)
@@ -431,7 +474,7 @@ async def delete_user(
     user_id: int,
     admin: User = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
-    redis: Redis = Depends(get_redis),
+    redis: Redis | None = Depends(get_redis),
 ):
     user = await db.get(User, user_id)
     if not user:
@@ -441,17 +484,9 @@ async def delete_user(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot delete yourself"
         )
 
-    # Invalidate all active refresh tokens for this user in Redis
-    uid_str = str(user_id)
-    cursor: int = 0
-    while True:
-        cursor, keys = await redis.scan(cursor, match="refresh:*", count=100)
-        for key in keys:
-            val = await redis.get(key)
-            if val == uid_str:
-                await redis.delete(key)
-        if cursor == 0:
-            break
+    # Redis refresh tokens (server mode) are revoked explicitly. SQL refresh
+    # tokens (Redis disabled / desktop) are removed by the user cascade below.
+    await revoke_redis_refresh_tokens(redis, user_id)
 
     await db.delete(user)
     await db.commit()
@@ -463,8 +498,10 @@ async def delete_user(
 async def get_maintenance_mode(
     request: Request,
     admin: User = Depends(require_admin),
-    redis: Redis = Depends(get_redis),
+    redis: Redis | None = Depends(get_redis),
 ):
+    if redis is None:
+        return {"maintenance_mode": False}
     mode = await redis.get(MAINTENANCE_KEY)
     return {"maintenance_mode": mode == "1"}
 
@@ -474,8 +511,10 @@ async def get_maintenance_mode(
 async def toggle_maintenance_mode(
     request: Request,
     admin: User = Depends(require_admin),
-    redis: Redis = Depends(get_redis),
+    redis: Redis | None = Depends(get_redis),
 ):
+    if redis is None:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=MAINTENANCE_REQUIRES_REDIS)
     current = await redis.get(MAINTENANCE_KEY)
     new_mode = "1" if current != "1" else "0"
     await redis.set(MAINTENANCE_KEY, new_mode)
@@ -488,8 +527,10 @@ async def set_maintenance_mode(
     request: Request,
     data: MaintenanceModeUpdate,
     admin: User = Depends(require_admin),
-    redis: Redis = Depends(get_redis),
+    redis: Redis | None = Depends(get_redis),
 ):
+    if redis is None:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=MAINTENANCE_REQUIRES_REDIS)
     mode = "1" if data.maintenance_mode else "0"
     await redis.set(MAINTENANCE_KEY, mode)
     return {"maintenance_mode": data.maintenance_mode}
