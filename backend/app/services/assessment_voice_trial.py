@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 import secrets
 from dataclasses import dataclass
-
-from redis.asyncio import Redis
+from typing import Any
 
 from app.core.config import settings
 from app.models.user import User
@@ -44,8 +43,12 @@ def _token_key(user_id: int, token: str) -> str:
     return f"{_TOKEN_PREFIX}:{user_id}:{token}"
 
 
+# `store` is a Redis client or the process-local MemorySessionStore; it may be
+# None when Redis is disabled. Without a store no trial token can be issued or
+# validated, so the trial is simply reported as unavailable.
+
 async def create_assessment_voice_trial_token(
-    redis: Redis,
+    store: Any | None,
     *,
     user_id: int,
     subscription_status: str,
@@ -55,7 +58,7 @@ async def create_assessment_voice_trial_token(
     target_language: str,
     cefr_level: str,
 ) -> dict[str, object]:
-    if not is_assessment_voice_trial_available_for_values(
+    if store is None or not is_assessment_voice_trial_available_for_values(
         subscription_status=subscription_status,
         assessment_voice_trial_used=assessment_voice_trial_used,
         stripe_enabled=stripe_enabled,
@@ -70,7 +73,7 @@ async def create_assessment_voice_trial_token(
         "cefr_level": cefr_level,
         "duration_seconds": TRIAL_DURATION_SECONDS,
     }
-    await redis.setex(
+    await store.setex(
         _token_key(user_id, token),
         TRIAL_TOKEN_TTL_SECONDS,
         json.dumps(payload),
@@ -84,16 +87,16 @@ async def create_assessment_voice_trial_token(
 
 
 async def validate_assessment_voice_trial_token(
-    redis: Redis,
+    store: Any | None,
     *,
     user: User,
     token: str | None,
     stripe_enabled: bool,
 ) -> AssessmentVoiceTrial | None:
-    if not token or not is_assessment_voice_trial_available(user, stripe_enabled):
+    if store is None or not token or not is_assessment_voice_trial_available(user, stripe_enabled):
         return None
 
-    raw = await redis.get(_token_key(user.id, token))
+    raw = await store.get(_token_key(user.id, token))
     if not raw:
         return None
     try:
@@ -107,15 +110,16 @@ async def validate_assessment_voice_trial_token(
             duration_seconds=int(payload.get("duration_seconds", TRIAL_DURATION_SECONDS)),
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError):
-        await redis.delete(_token_key(user.id, token))
+        await store.delete(_token_key(user.id, token))
         return None
 
 
 async def consume_assessment_voice_trial_token(
-    redis: Redis,
+    store: Any | None,
     *,
     user: User,
     token: str,
 ) -> None:
-    await redis.delete(_token_key(user.id, token))
+    if store is not None:
+        await store.delete(_token_key(user.id, token))
     user.assessment_voice_trial_used = True

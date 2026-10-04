@@ -1,3 +1,4 @@
+import os
 from collections.abc import AsyncIterator
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
@@ -8,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import decode_access_token
+from app.core.session_store import MemorySessionStore, memory_session_store
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.services.subscription_service import is_subscribed
@@ -15,6 +17,10 @@ from app.services.subscription_service import is_subscribed
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 MAINTENANCE_KEY = "maintenance_mode"
 REDIS_SOCKET_TIMEOUT = 5.0
+SESSION_STORE_REQUIRES_REDIS = (
+    "Assessment sessions require Redis when the API runs with more than one worker "
+    "(set REDIS_ENABLED=true and REDIS_URL)."
+)
 
 
 async def get_redis() -> AsyncIterator[Redis | None]:
@@ -26,6 +32,39 @@ async def get_redis() -> AsyncIterator[Redis | None]:
         yield redis
     finally:
         await redis.aclose()
+
+
+def _runs_single_process() -> bool:
+    for name in ("UVICORN_WORKERS", "WEB_CONCURRENCY"):
+        raw = os.environ.get(name, "").strip()
+        if not raw:
+            continue
+        try:
+            if int(raw) > 1:
+                return False
+        except ValueError:
+            return False
+    return True
+
+
+async def get_session_store() -> AsyncIterator[Redis | MemorySessionStore]:
+    """Short-lived server-side session storage (assessment grading sessions).
+
+    Redis when enabled; otherwise a process-local store for desktop and
+    single-worker deployments. A multi-worker deployment without Redis gets an
+    explicit 503 instead of sessions silently split between workers.
+    """
+    if settings.REDIS_ENABLED and settings.REDIS_URL:
+        redis = Redis.from_url(settings.REDIS_URL, decode_responses=True, socket_connect_timeout=REDIS_SOCKET_TIMEOUT, socket_timeout=REDIS_SOCKET_TIMEOUT)
+        try:
+            yield redis
+        finally:
+            await redis.aclose()
+        return
+    if settings.DESKTOP_MODE or _runs_single_process():
+        yield memory_session_store
+        return
+    raise HTTPException(status_code=503, detail=SESSION_STORE_REQUIRES_REDIS)
 
 
 def access_token_identity(token: str) -> tuple[int, int]:
