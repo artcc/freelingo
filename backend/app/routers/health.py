@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
+from app.core.config import settings
 from app.core.database import engine
 from app.core.deps import require_admin
 from app.core.limiter import limiter
@@ -36,13 +37,19 @@ async def admin_health(
         checks["db"] = f"error: {exc}"
         ok = False
 
-    try:
-        async with _redis_client() as redis:
-            await redis.ping()
-        checks["redis"] = "ok"
-    except Exception as exc:
-        checks["redis"] = f"error: {exc}"
-        ok = False
+    # Redis is optional (desktop and single-node deployments run without it).
+    # "disabled" is a valid configuration, not a failure; only an enabled but
+    # unreachable Redis degrades the service.
+    if not settings.REDIS_ENABLED:
+        checks["redis"] = "disabled"
+    else:
+        try:
+            async with _redis_client() as redis:
+                await redis.ping()
+            checks["redis"] = "ok"
+        except Exception as exc:
+            checks["redis"] = f"error: {exc}"
+            ok = False
 
     try:
         tts = getattr(request.app.state, "tts_service", None)

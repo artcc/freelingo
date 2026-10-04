@@ -4,7 +4,10 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DESKTOP_MODE: bool = True
+    # Desktop mode must be opted into explicitly (the Electron shell and
+    # desktop_server.py set DESKTOP_MODE=true). A server deployment that forgets
+    # the variable must not silently run with desktop defaults.
+    DESKTOP_MODE: bool = False
     DATABASE_URL: str = ""
     DATA_DIR: str = ""
     REDIS_URL: str = ""
@@ -35,6 +38,17 @@ class Settings(BaseSettings):
     STT_BASE_URL: str = "http://127.0.0.1:9000"
     OPENAI_STT_MODEL: str = "whisper-1"
     RATE_LIMIT_ENABLED: bool = True
+    # Peers allowed to set X-Real-IP / X-Forwarded-For (reverse proxies).
+    # Defaults cover loopback and private networks (Docker/nginx); a client
+    # connecting from a public address can never spoof its rate-limit key.
+    TRUSTED_PROXY_IPS: list[str] = [
+        "127.0.0.0/8",
+        "::1/128",
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fc00::/7",
+    ]
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     COOKIE_SECURE: bool = False
     LOG_LEVEL: str = "INFO"
@@ -144,7 +158,32 @@ def get_settings() -> Settings:
     return settings
 
 
+def _persistent_desktop_secret(data_dir: str) -> str:
+    """Return the per-install desktop secret, creating it once if needed.
+
+    Uses the same DATA_DIR/.secret_key file as the Electron backend manager so
+    access/refresh tokens survive restarts of the desktop backend.
+    """
+    import secrets
+
+    secret_file = os.path.join(data_dir, ".secret_key")
+    if os.path.exists(secret_file):
+        with open(secret_file, encoding="utf-8") as handle:
+            value = handle.read().strip()
+        if len(value) >= 32:
+            return value
+    value = secrets.token_urlsafe(48)
+    with open(secret_file, "w", encoding="utf-8") as handle:
+        handle.write(value)
+    try:
+        os.chmod(secret_file, 0o600)
+    except OSError:
+        pass
+    return value
+
+
 def initialize_desktop_mode(data_dir: str) -> Settings:
+    os.makedirs(data_dir, exist_ok=True)
     os.environ["DESKTOP_MODE"] = "True"
     os.environ["DATA_DIR"] = data_dir
 
@@ -157,10 +196,13 @@ def initialize_desktop_mode(data_dir: str) -> Settings:
     os.environ["AUDIO_STORAGE_PATH"] = os.path.join(data_dir, "audio")
     os.makedirs(os.environ["AUDIO_STORAGE_PATH"], exist_ok=True)
 
-    if not os.environ.get("SECRET_KEY"):
-        import secrets
-        os.environ["SECRET_KEY"] = secrets.token_urlsafe(32)
+    if len(os.environ.get("SECRET_KEY", "")) < 32:
+        os.environ["SECRET_KEY"] = _persistent_desktop_secret(data_dir)
 
-    global settings
-    settings = Settings()
+    # Update the shared instance in place: modules that already imported
+    # `settings` keep a reference to this object, so rebinding the global
+    # name would leave them on the old configuration.
+    fresh = Settings()
+    for name in Settings.model_fields:
+        setattr(settings, name, getattr(fresh, name))
     return settings
