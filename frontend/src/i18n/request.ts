@@ -62,6 +62,12 @@ export default getRequestConfig(async () => {
     throw new Error('No locale messages were found in the application runtime.')
   }
 
+  // ProgressPage uses this key, and older locale files may not have it yet.
+  const progressMessages = (messages as Record<string, unknown>).progress
+  if (progressMessages && typeof progressMessages === 'object' && !Array.isArray(progressMessages)) {
+    ;(progressMessages as Record<string, unknown>).learningActivity = locale === 'ar' ? 'النشاط التعليمي' : 'Learning activity'
+  }
+
   return {
     locale,
     messages,
