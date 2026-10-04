@@ -25,6 +25,7 @@ from app.models.refresh_token import RefreshToken
 from app.models.reading import ReadingAttempt, ReadingExercise
 from app.models.resource_native_help import ResourceNativeHelp
 from app.models.review import Review
+from app.models.stripe_event import StripeEvent
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.models.user_language import UserLanguage
@@ -34,4 +35,4 @@ __all__ = ["AISession", "SpeechAnalysis", "SessionStatus", "SpeechQuality", "Bil
     "FeedbackVote", "FriendConnection", "DirectMessage", "Flashcard", "GameProgress", "GameProgressEvent", "GameSession",
     "ExerciseAttempt", "Exercise", "Lesson", "ListeningAttempt", "ListeningExercise", "LearningGoal", "LearningGoalMilestone",
     "LeagueMembership", "LeagueSeason", "LLMUsage", "Memory", "Progress", "RefreshToken", "ReadingAttempt", "ReadingExercise",
-    "ResourceNativeHelp", "Review", "StudyPlan", "User", "UserLanguage"]
+    "ResourceNativeHelp", "Review", "StripeEvent", "StudyPlan", "User", "UserLanguage"]

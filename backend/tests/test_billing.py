@@ -40,8 +40,11 @@ def subscription(customer="cus_test", identifier="sub_current", tier="go", statu
             "items": {"data": [{"price": {"id": f"price_{tier}_monthly"}}]}}
 
 
-async def webhook(client, monkeypatch, event_type, body):
-    monkeypatch.setattr(stripe.Webhook, "construct_event", lambda *args: {"type": event_type, "data": {"object": body}})
+async def webhook(client, monkeypatch, event_type, body, event_id=None):
+    event = {"type": event_type, "data": {"object": body}}
+    if event_id:
+        event["id"] = event_id
+    monkeypatch.setattr(stripe.Webhook, "construct_event", lambda *args: event)
     return await client.post("/api/billing/webhook", content=b"{}", headers={"stripe-signature": "test"})
 
 
@@ -163,10 +166,69 @@ async def test_delete_current_subscription(client, test_user, db_session, stripe
     user, _ = test_user
     user.stripe_customer_id, user.stripe_subscription_id, user.subscription_status = "cus_test", "sub_current", "active"
     await db_session.commit()
+    stripe_mocks.retrieve.return_value = subscription(status="canceled")
     response = await webhook(client, monkeypatch, "customer.subscription.deleted", {"id": "sub_current", "customer": "cus_test"})
     assert response.status_code == 200
     await db_session.refresh(user)
     assert user.subscription_status == "canceled"
+
+
+@pytest.mark.asyncio
+async def test_late_deletion_does_not_cancel_a_subscription_stripe_reports_active(client, test_user, db_session, stripe_mocks, monkeypatch):
+    user, _ = test_user
+    user.stripe_customer_id, user.stripe_subscription_id, user.subscription_status = "cus_test", "sub_current", "active"
+    await db_session.commit()
+    stripe_mocks.retrieve.return_value = subscription(status="active")
+    response = await webhook(client, monkeypatch, "customer.subscription.deleted", {"id": "sub_current", "customer": "cus_test"}, "evt_late_delete")
+    assert response.status_code == 200
+    await db_session.refresh(user)
+    assert user.subscription_status == "active"
+
+
+@pytest.mark.asyncio
+async def test_old_subscription_deletion_keeps_newer_active_subscription(client, test_user, db_session, stripe_mocks, monkeypatch):
+    user, _ = test_user
+    user.stripe_customer_id, user.stripe_subscription_id, user.subscription_status = "cus_test", "sub_new", "active"
+    await db_session.commit()
+    stripe_mocks.retrieve.return_value = subscription(identifier="sub_old", status="canceled")
+    response = await webhook(client, monkeypatch, "customer.subscription.deleted", {"id": "sub_old", "customer": "cus_test"}, "evt_old_delete")
+    assert response.status_code == 200
+    await db_session.refresh(user)
+    assert user.subscription_status == "active"
+    assert user.stripe_subscription_id == "sub_new"
+
+
+@pytest.mark.asyncio
+async def test_same_event_delivered_twice_has_one_effect(client, test_user, db_session, stripe_mocks, monkeypatch):
+    user, _ = test_user
+    user.stripe_customer_id, user.stripe_subscription_id = "cus_test", "sub_current"
+    await db_session.commit()
+    current = subscription(tier="plus", status="active")
+    stripe_mocks.retrieve.return_value = current
+    first = await webhook(client, monkeypatch, "customer.subscription.updated", current, "evt_once")
+    second = await webhook(client, monkeypatch, "customer.subscription.updated", current, "evt_once")
+    assert first.status_code == 200 and second.status_code == 200
+    assert second.json().get("duplicate") is True
+    assert stripe_mocks.retrieve.await_count == 1
+    await db_session.refresh(user)
+    assert user.subscription_tier == "plus"
+
+
+@pytest.mark.asyncio
+async def test_failed_event_is_not_recorded_so_retry_is_processed(client, test_user, db_session, stripe_mocks, monkeypatch):
+    user, _ = test_user
+    user.stripe_customer_id, user.stripe_subscription_id, user.subscription_status = "cus_test", "sub_current", "active"
+    await db_session.commit()
+    stripe_mocks.retrieve.side_effect = RuntimeError("Stripe unavailable")
+    failed = await webhook(client, monkeypatch, "customer.subscription.updated", subscription(), "evt_retry")
+    assert failed.status_code == 500
+    stripe_mocks.retrieve.side_effect = None
+    stripe_mocks.retrieve.return_value = subscription(tier="plus", status="past_due")
+    retried = await webhook(client, monkeypatch, "customer.subscription.updated", subscription(), "evt_retry")
+    assert retried.status_code == 200
+    assert retried.json().get("duplicate") is None
+    await db_session.refresh(user)
+    assert user.subscription_status == "past_due"
 
 
 def test_invoice_parent_shape():

@@ -6,12 +6,15 @@ import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, model_validator
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.app_logger import get_logger
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.core.limiter import limiter
+from app.models.stripe_event import StripeEvent
 from app.models.user import User
 from app.services.billing_checkout_service import checked_checkout
 from app.services.subscription_catalog import verified_price_tier
@@ -20,6 +23,7 @@ from app.services.subscription_service import apply_subscription_quotas
 router = APIRouter(prefix="/api/billing", tags=["billing"])
 logger = get_logger(__name__)
 STRIPE_SUBSCRIPTION_STATUSES = {"active", "canceled", "incomplete", "incomplete_expired", "past_due", "paused", "trialing", "unpaid"}
+STRIPE_ENDED_STATUSES = {"canceled", "incomplete_expired"}
 
 
 def _stripe_client() -> None:
@@ -79,13 +83,38 @@ async def stripe_webhook(request: Request, db: AsyncSession = Depends(get_db)) -
         "customer.subscription.deleted": _handle_subscription_deleted, "invoice.payment_failed": _handle_payment_failed}
     handler = handlers.get(event["type"])
     if handler:
+        event_id = _sget(event, "id")
+        if event_id:
+            # Claim the event id in the same transaction as its effect. A redelivery
+            # (Stripe retries, replays, concurrent deliveries) hits the primary key and
+            # is acknowledged without a second effect. A failed handler rolls the claim
+            # back, so Stripe's retry is processed normally.
+            if not await _claim_event(db, str(event_id), str(event["type"])):
+                await db.rollback()
+                logger.info("Duplicate Stripe event %s ignored", event_id)
+                return {"received": True, "duplicate": True}
         try:
             await handler(db, event["data"]["object"])
+            await db.commit()
         except Exception as exc:
             await db.rollback()
             logger.exception("Stripe event processing failed")
             raise HTTPException(status_code=500, detail="Webhook processing failed") from exc
     return {"received": True}
+
+
+async def _claim_event(db: AsyncSession, event_id: str, event_type: str) -> bool:
+    """Insert the event id unless it exists. False means it was already processed."""
+    dialect = db.get_bind().dialect.name
+    if dialect == "postgresql":
+        insert = pg_insert
+    elif dialect == "sqlite":
+        insert = sqlite_insert
+    else:
+        raise RuntimeError("Stripe event idempotency requires PostgreSQL or SQLite")
+    result = await db.execute(insert(StripeEvent).values(event_id=event_id, event_type=event_type)
+        .on_conflict_do_nothing(index_elements=[StripeEvent.event_id]).returning(StripeEvent.event_id))
+    return result.scalar_one_or_none() is not None
 
 
 def _subscription_period_end(sub: object) -> datetime | None:
@@ -167,10 +196,19 @@ async def _handle_subscription_updated(db: AsyncSession, subscription: object) -
 
 async def _handle_subscription_deleted(db: AsyncSession, subscription: object) -> None:
     user = await _get_user_by_customer_id(db, _sget(subscription, "customer"))
-    if user is None or not _subscription_event_is_current(user, _sget(subscription, "id"), "deleted"):
+    identifier = _sget(subscription, "id")
+    if user is None or not _subscription_event_is_current(user, identifier, "deleted"):
+        return
+    # Never trust the event body alone: a late or replayed deletion must match what
+    # Stripe says now. Only an ended subscription of this customer cancels access.
+    current = await stripe.Subscription.retrieve_async(identifier)
+    if _sget(current, "customer") != user.stripe_customer_id:
+        raise ValueError("Subscription customer mismatch")
+    if _sget(current, "status") not in STRIPE_ENDED_STATUSES:
+        logger.warning("Ignoring deletion event for subscription %s that Stripe reports as %s", identifier, _sget(current, "status"))
         return
     user.subscription_status, user.cancel_at_period_end, user.freemium_trial_ends_at = "canceled", False, None
-    await db.commit()
+    await apply_subscription_quotas(user, db)
 
 
 async def _handle_payment_failed(db: AsyncSession, invoice: object) -> None:
