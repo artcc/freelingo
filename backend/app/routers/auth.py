@@ -141,7 +141,6 @@ async def register(request: Request, data: RegisterRequest, response: Response,
         valid = await redis_client.get(f"invite:{data.invite_token}")
         if not valid:
             raise HTTPException(status_code=403, detail="Invalid or expired invite")
-        await redis_client.delete(f"invite:{data.invite_token}")
     if settings.BLOCKED_EMAIL_DOMAINS:
         email_domain = data.email.split("@")[-1].lower()
         if email_domain in [d.lower() for d in settings.BLOCKED_EMAIL_DOMAINS]:
@@ -154,6 +153,12 @@ async def register(request: Request, data: RegisterRequest, response: Response,
     email_check = await db.execute(select(User).where(User.email == data.email))
     if email_check.scalar_one_or_none():
         raise HTTPException(status_code=409, detail="Email already taken")
+    if not settings.ALLOW_REGISTRATION:
+        # Consume the invite atomically only after validation passed, so a typo in the
+        # username does not burn it, and two concurrent sign-ups cannot share one invite.
+        consumed = await _require_redis(redis, "Invite registration").eval(_CONSUME_REFRESH_LUA, 1, f"invite:{data.invite_token}")
+        if not consumed:
+            raise HTTPException(status_code=403, detail="Invalid or expired invite")
     user = User(username=data.username, email=data.email, display_name=data.display_name or data.username,
                 hashed_password=hashed_password, native_language=data.native_language,
                 target_language=data.target_language, role=role, is_active=True, is_verified=not settings.EMAIL_ENABLED)
@@ -432,15 +437,19 @@ async def get_my_quota(request: Request, current_user: User = Depends(get_curren
 @limiter.limit("60/minute")
 async def verify_email(request: Request, token: str, db: AsyncSession = Depends(get_db), redis: Redis | None = Depends(get_redis)):
     redis_client = _require_redis(redis, "Email verification")
-    user_id_str = await redis_client.get(f"verify_email:{token}")
+    # Single-use: GET+DEL in one Redis call.
+    user_id_str = await redis_client.eval(_CONSUME_REFRESH_LUA, 1, f"verify_email:{token}")
     if not user_id_str:
         raise HTTPException(status_code=400, detail="Invalid or expired verification token")
-    user = await db.get(User, int(user_id_str))
+    try:
+        user_id = int(user_id_str)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid or expired verification token") from None
+    user = await db.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     user.is_verified = True
     await db.commit()
-    await redis_client.delete(f"verify_email:{token}")
     return {"detail": "Email verified successfully"}
 
 
