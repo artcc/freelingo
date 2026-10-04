@@ -6,6 +6,7 @@ import {useLanguageStore} from '@/store/language'
 import {gameLanguageForTargetLanguage,type GameId} from '@/lib/games/persist'
 import {EducationalGameSession} from '@/components/games/EducationalGameSession'
 import './educational-games.css'
+import './games-vivid.css'
 
 type GameFormat='recall'|'build'|'listen'|'review'
 type Activity={id:GameId;icon:string;ar:string;en:string;arDesc:string;enDesc:string;color:string;format:GameFormat;arMechanic:string;enMechanic:string}
