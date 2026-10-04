@@ -49,6 +49,10 @@ export default function AssessmentPage(){
   const usedIds=useRef(new Set<string>())
   const answeredIds=useRef(new Set<string>())
   const evaluationLock=useRef(false)
+  // Server-side grading session: the bank no longer carries answers, so every
+  // choice is graded by POST /api/assessment/bank/answer.
+  const gradingSessionId=useRef<string|null>(null)
+  const answerPending=useRef(false)
   const sessionVersion=useRef(0)
   const [currentLevel,setCurrentLevel]=useState<CEFRLevel>(START_LEVEL)
   const [correctStreak,setCorrectStreak]=useState(0)
@@ -73,10 +77,10 @@ export default function AssessmentPage(){
       try{
         const lang=activeLanguage?.code??'en-GB'
         const [planRes,bankRes]=await Promise.all([apiFetch('/api/study-plan/current'),apiFetch(`/api/assessment/bank?language=${lang}`)])
-        const bankData=bankRes.ok?await bankRes.json() as {questions:AssessmentQuestion[]}:null
+        const bankData=bankRes.ok?await bankRes.json() as {questions:AssessmentQuestion[];session_id:string}:null
         const plan=planRes.ok?await planRes.json():null
         if(cancelled)return
-        if(bankData)setBank(bankData.questions)
+        if(bankData){setBank(bankData.questions);gradingSessionId.current=bankData.session_id}
         if(plan?.cefr_level){setExistingPlan(plan as ExistingPlan);setStep('existing');return}
       }catch{/* Beginner setup remains available without an existing plan. */}
       if(!cancelled)setStep('beginner-gate')
@@ -84,21 +88,40 @@ export default function AssessmentPage(){
     void check();return ()=>{cancelled=true;sessionVersion.current+=1}
   },[activeLanguage?.code])
   const canOfferVoiceTrial=configLoaded&&stripeEnabled&&user!==null&&!isSubscribed(user,stripeEnabled)&&!user.assessment_voice_trial_used
-  function startQuiz(){
-    if(!bank.length||evaluationLock.current){setError(tCommon('error'));return}
-    const available=bank.filter(question=>question.difficulty===START_LEVEL)
+  async function startQuiz(){
+    if(evaluationLock.current){setError(tCommon('error'));return}
+    // Every attempt gets a fresh grading session so retakes start from zero.
+    let questions=bank
+    try{
+      const res=await apiFetch(`/api/assessment/bank?language=${activeLanguage?.code??'en-GB'}`)
+      if(!res.ok)throw new Error(`Error ${res.status}`)
+      const data=await res.json() as {questions:AssessmentQuestion[];session_id:string}
+      questions=data.questions;gradingSessionId.current=data.session_id;setBank(questions)
+    }catch{setError(tCommon('error'));return}
+    if(!questions.length){setError(tCommon('error'));return}
+    const available=questions.filter(question=>question.difficulty===START_LEVEL)
     if(!available.length){setError(tCommon('error'));return}
     const question=available[Math.floor(Math.random()*available.length)]
     sessionVersion.current+=1;answersRef.current=[];usedIds.current.clear();answeredIds.current.clear()
     setError('');setAnswers([]);setCurrentLevel(START_LEVEL);setCorrectStreak(0);setWrongStreak(0)
     usedIds.current.add(question.id);setCurrentQuestion(question);setQuestionNumber(1);setStep('quiz')
   }
-  function handleAnswer(chosen:string){
-    if(!currentQuestion||evaluationLock.current||answeredIds.current.has(currentQuestion.id))return
-    if(!currentQuestion.options.includes(chosen))return
-    answeredIds.current.add(currentQuestion.id)
-    const correct=chosen===currentQuestion.correct
-    const record:AnswerRecord={question_id:currentQuestion.id,skill:currentQuestion.skill,difficulty:currentQuestion.difficulty,correct}
+  async function handleAnswer(chosen:string){
+    if(!currentQuestion||evaluationLock.current||answerPending.current||answeredIds.current.has(currentQuestion.id))return
+    if(!currentQuestion.options.includes(chosen)||!gradingSessionId.current)return
+    const question=currentQuestion
+    const version=sessionVersion.current
+    answeredIds.current.add(question.id);answerPending.current=true
+    let correct=false
+    try{
+      const res=await apiFetch('/api/assessment/bank/answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:gradingSessionId.current,question_id:question.id,selected:chosen})})
+      if(!res.ok)throw new Error(`Error ${res.status}`)
+      correct=(await res.json() as {correct:boolean}).correct===true
+    }catch{answeredIds.current.delete(question.id);if(version===sessionVersion.current)setError(tCommon('error'));return}
+    finally{answerPending.current=false}
+    if(version!==sessionVersion.current)return
+    setError('')
+    const record:AnswerRecord={question_id:question.id,skill:question.skill,difficulty:question.difficulty,correct}
     const nextAnswers=[...answersRef.current,record]
     answersRef.current=nextAnswers;setAnswers(nextAnswers)
     let nextCorrect=correctStreak;let nextWrong=wrongStreak;let nextLevel=currentLevel
@@ -106,16 +129,16 @@ export default function AssessmentPage(){
     else{nextWrong+=1;nextCorrect=0;if(nextWrong>=2){nextLevel=adjustLevel(currentLevel,'down');nextWrong=0}}
     setCorrectStreak(nextCorrect);setWrongStreak(nextWrong);setCurrentLevel(nextLevel)
     const transition=resolveAssessmentTransition(bank,usedIds.current,nextLevel,nextAnswers,MAX_QUESTIONS)
-    if(transition.kind==='evaluate'){void evaluateQuiz(transition.answers);return}
+    if(transition.kind==='evaluate'){void evaluateQuiz();return}
     usedIds.current.add(transition.question.id);setCurrentQuestion(transition.question);setQuestionNumber(nextAnswers.length+1)
   }
-  async function evaluateQuiz(answersToSend:AnswerRecord[]){
-    if(evaluationLock.current)return
+  async function evaluateQuiz(){
+    if(evaluationLock.current||!gradingSessionId.current)return
     evaluationLock.current=true
     const version=sessionVersion.current
     setEvaluating(true);setCurrentQuestion(null);setError('')
     try{
-      const res=await apiFetch('/api/assessment/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers:answersToSend})})
+      const res=await apiFetch('/api/assessment/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:gradingSessionId.current})})
       if(!res.ok){const data=await res.json().catch(()=>({}));throw new Error((data as {detail?:string}).detail??`Error ${res.status}`)}
       const data=await res.json() as AssessmentResult
       if(version!==sessionVersion.current)return
@@ -171,11 +194,11 @@ export default function AssessmentPage(){
       @media(max-width:640px){.juba-app-shell .learning-assessment-grid,.juba-app-shell .learning-assessment-grid>div{gap:16px;}}
     `}</style>
     <header className="reference-resource-heading"><ClipboardCheck size={40} aria-hidden="true"/><div><h1>{t('title')}</h1><p>{step==='result'?t('resultStep'):step==='voice-trial-offer'?t('voiceTrialLabel'):t('cefrLevel')}</p></div></header>
-    {error&&<div className="learning-assessment-error" role="alert"><span>{error}</span>{step==='quiz'&&!currentQuestion&&!evaluating&&<button className="juba-secondary-button" onClick={()=>void evaluateQuiz(answersRef.current)}>{tCommon('retry')}</button>}</div>}
+    {error&&<div className="learning-assessment-error" role="alert"><span>{error}</span>{step==='quiz'&&!currentQuestion&&!evaluating&&<button className="juba-secondary-button" onClick={()=>void evaluateQuiz()}>{tCommon('retry')}</button>}</div>}
     {(step==='checking'||(step==='quiz'&&(evaluating||!currentQuestion)&&!error))&&<PageLoading label={evaluating?t('evaluating'):tCommon('loading')}/>}
     {step==='existing'&&existingPlan&&<div className="learning-assessment-grid"><div><section className={panel}><header className="reference-resource-panel-head"><h2>{t('currentLevel')}</h2></header><div className="learning-assessment-level"><strong>{existingPlan.cefr_level}</strong><div><p>{t('assessedOn')}</p><p>{new Date(existingPlan.created_at).toLocaleDateString(locale,{year:'numeric',month:'long',day:'numeric'})}</p></div></div><div className={body}><p>{t('alreadyHasPlan')}</p></div><div className={actions}><button className="juba-secondary-button" onClick={()=>router.push('/dashboard')}><Back size={16}/>{tCommon('backToDashboard')}</button><button className="juba-primary-button" onClick={()=>setStep('beginner-gate')}>{t('retake')}</button></div></section></div>{canOfferVoiceTrial&&<aside className={panel}><header className="reference-resource-panel-head"><h2>{t('voiceTrialTitle')}</h2><Mic size={18}/></header><div className={body}><p>{t('voiceTrialDesc',{minutes:5})}</p></div><div className={actions}><button className="juba-primary-button" onClick={()=>void requestVoiceTrial()} disabled={trialLoading}>{trialLoading?'…':t('voiceTrialStart')}<Forward size={16}/></button></div></aside>}</div>}
-    {step==='beginner-gate'&&<><BeginnerGate languageCode={activeLanguage?.iso639??''} onBeginner={()=>{setResult({cefr_level:'A1',score:0,skill_profile:{},strengths:[],weaknesses:[]});setSelectedLevel('A1');setAnswers([]);answersRef.current=[];setStep('duration')}} onHasExperience={()=>setShowStartWarning(true)}/><ConfirmDialog open={showStartWarning} title={t('startWarningTitle')} message={t('startWarningMessage')} confirmLabel={t('startWarningConfirm')} onConfirm={()=>{setShowStartWarning(false);startQuiz()}} onCancel={()=>setShowStartWarning(false)}/></>}
-    {step==='quiz'&&currentQuestion&&<AdaptiveQuizCard question={currentQuestion} questionNumber={questionNumber} totalQuestions={MAX_QUESTIONS} onAnswer={handleAnswer} languageCode={activeLanguage?.code}/>}
+    {step==='beginner-gate'&&<><BeginnerGate languageCode={activeLanguage?.iso639??''} onBeginner={()=>{setResult({cefr_level:'A1',score:0,skill_profile:{},strengths:[],weaknesses:[]});setSelectedLevel('A1');setAnswers([]);answersRef.current=[];setStep('duration')}} onHasExperience={()=>setShowStartWarning(true)}/><ConfirmDialog open={showStartWarning} title={t('startWarningTitle')} message={t('startWarningMessage')} confirmLabel={t('startWarningConfirm')} onConfirm={()=>{setShowStartWarning(false);void startQuiz()}} onCancel={()=>setShowStartWarning(false)}/></>}
+    {step==='quiz'&&currentQuestion&&<AdaptiveQuizCard question={currentQuestion} questionNumber={questionNumber} totalQuestions={MAX_QUESTIONS} onAnswer={choice=>void handleAnswer(choice)} languageCode={activeLanguage?.code}/>}
     {step==='result'&&result&&<div className="learning-assessment-grid"><div><section className={panel}><header className="reference-resource-panel-head"><h2>{t('cefrLevel')}</h2></header><div className="learning-assessment-level"><strong>{result.cefr_level}</strong><div><p>{t('overrideLevel')}</p><div className="learning-assessment-picker" role="group" aria-label={t('overrideLevel')}>{CEFR_LEVELS.map(level=><button key={level} aria-pressed={selectedLevel===level} onClick={()=>setSelectedLevel(level)}>{level}</button>)}</div></div></div>{selectedLevel!==result.cefr_level&&<div className={body}><p>{t('suggestedLevel',{aiLevel:result.cefr_level,selectedLevel})}</p></div>}<div className={actions}><button className="juba-primary-button" onClick={()=>setStep('duration')}>{t('createPlan')}<Forward size={16}/></button></div></section>{result.strengths.length>0&&<section className={panel}><header className="reference-resource-panel-head"><h2>{t('strengths')}</h2></header><ul className="learning-assessment-tags">{result.strengths.map(item=><li key={item} dir="auto">{item}</li>)}</ul></section>}{result.weaknesses.length>0&&<section className={panel}><header className="reference-resource-panel-head"><h2>{t('needsWork')}</h2></header><ul className="learning-assessment-tags">{result.weaknesses.map(item=><li key={item} dir="auto">{item}</li>)}</ul></section>}</div><aside className={panel}><header className="reference-resource-panel-head"><h2>{tCommon('score')}</h2></header><div className={body}><p className="learning-assessment-score">{Math.round(result.score*100)}%</p></div></aside></div>}
     {step==='duration'&&<DurationSelector selectedWeeks={durationOption.weeks} selectedGoals={selectedGoals} onSelectDuration={setDurationOption} onToggleGoal={goal=>setSelectedGoals(previous=>previous.includes(goal)?previous.filter(item=>item!==goal):[...previous,goal])} onConfirm={handleComplete} onBack={()=>{const beginner=result?.score===0&&result?.cefr_level==='A1'&&answers.length===0;setStep(beginner?'beginner-gate':'result')}} cefr_level={selectedLevel} loading={submitting}/>}
     {step==='voice-trial-offer'&&<section className={panel}><header className="reference-resource-panel-head"><h2>{t('voiceTrialLabel')}</h2><Mic size={20}/></header><div className="learning-assessment-level"><strong>{selectedLevel}</strong><div><p>{t('cefrLevel')}</p><p>{t('voiceTrialTitle')}</p></div></div><div className={body}><p>{t('voiceTrialDesc',{minutes:Math.round((voiceTrial?.duration_seconds??300)/60)})}</p></div><div className={actions}><button className="juba-primary-button" onClick={startVoiceTrial}>{t('voiceTrialStart')}<Forward size={16}/></button><button className="juba-secondary-button" onClick={()=>router.push('/plan')}>{t('voiceTrialSkip')}</button></div></section>}

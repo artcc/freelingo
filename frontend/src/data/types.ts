@@ -44,7 +44,8 @@ export interface AssessmentQuestion {
   difficulty: CEFRLevel
   question: string
   options: string[]
-  correct: string
+  /** Never sent by the API: answers are graded server-side via /api/assessment/bank/answer. */
+  correct?: string
   grammar_slug?: string
 }
 
