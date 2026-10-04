@@ -21,9 +21,9 @@ from app.services.llm_adapter import (
 pytestmark = pytest.mark.asyncio
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # GET /api/assessment/start — additional tests (existing tests cover basic path)
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_start_assessment_handles_llm_generic_error(client: AsyncClient, test_user):
@@ -85,9 +85,9 @@ async def test_start_assessment_empty_quiz(client: AsyncClient, test_user):
         assert data["quiz"]["questions"] == []
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # POST /api/assessment/submit — additional tests
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_submit_assessment_requires_auth(client: AsyncClient):
@@ -304,365 +304,23 @@ async def test_submit_assessment_no_session_after_legacy_deletion(client: AsyncC
     assert "No active assessment" in response.json()["detail"]
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # POST /api/assessment/evaluate — deterministic evaluation (no LLM)
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_evaluate_requires_auth(client: AsyncClient):
     """POST /evaluate returns 401 without valid auth."""
     response = await client.post(
         "/api/assessment/evaluate",
-        json={"answers": []},
+        json={"session_id": "missing"},
     )
     assert response.status_code == 401
 
 
-async def test_evaluate_empty_answers_returns_a1(client: AsyncClient, test_user):
-    """POST /evaluate with empty answers returns A1, score 0."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={"answers": []},
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert result["cefr_level"] == "A1"
-    assert result["score"] == 0.0
-    assert isinstance(result["skill_profile"], dict)
-
-
-async def test_evaluate_all_correct_a2(client: AsyncClient, test_user):
-    """POST /evaluate with 2+ correct A2 answers => A2 level."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                # All three skills at A2, all correct
-                {
-                    "question_id": "q1",
-                    "skill": "grammar",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q2",
-                    "skill": "grammar",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q3",
-                    "skill": "vocabulary",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q4",
-                    "skill": "vocabulary",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q5",
-                    "skill": "reading",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q6",
-                    "skill": "reading",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert result["cefr_level"] == "A2"
-    assert result["score"] == 1.0
-
-
-async def test_evaluate_mixed_level_advances_to_highest_passing(client: AsyncClient, test_user):
-    """POST /evaluate returns highest CEFR level with >= 2 questions and >= 60%."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                # A1: 2/2 correct => 100% → A1 passes
-                {
-                    "question_id": "q1",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q2",
-                    "skill": "vocabulary",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                # A2: 2/3 correct => 66% → A2 passes
-                {
-                    "question_id": "q3",
-                    "skill": "grammar",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q4",
-                    "skill": "vocabulary",
-                    "difficulty": "A2",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q5",
-                    "skill": "reading",
-                    "difficulty": "A2",
-                    "correct": False,
-                },
-                # B1: 1/2 correct => 50% → B1 fails
-                {
-                    "question_id": "q6",
-                    "skill": "grammar",
-                    "difficulty": "B1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q7",
-                    "skill": "reading",
-                    "difficulty": "B1",
-                    "correct": False,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    # Highest passing level is A2 (B1 had 50% < 60%)
-    assert result["cefr_level"] == "A2"
-
-
-async def test_evaluate_single_question_insufficient(client: AsyncClient, test_user):
-    """POST /evaluate with only 1 question per level cannot pass any level."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                {
-                    "question_id": "q1",
-                    "skill": "grammar",
-                    "difficulty": "B1",
-                    "correct": True,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    # Only 1 B1 question, needs >= 2 → defaults to A1
-    assert result["cefr_level"] == "A1"
-
-
-async def test_evaluate_skill_profile_structure(client: AsyncClient, test_user):
-    """POST /evaluate returns correct skill_profile with grammar/vocabulary/reading keys."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                {
-                    "question_id": "q1",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q2",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-                {
-                    "question_id": "q3",
-                    "skill": "vocabulary",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q4",
-                    "skill": "reading",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q5",
-                    "skill": "reading",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    profile = result["skill_profile"]
-    assert "grammar" in profile
-    assert "vocabulary" in profile
-    assert "reading" in profile
-    assert profile["grammar"] == 0.5
-    assert profile["vocabulary"] == 1.0
-    assert profile["reading"] == 0.5
-
-
-async def test_evaluate_strengths_and_weaknesses(client: AsyncClient, test_user):
-    """POST /evaluate correctly identifies strengths (>= 0.65) and weaknesses (< 0.45)."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                # Grammar: 3/3 = 1.0 → strength
-                {
-                    "question_id": "q1",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q2",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q3",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                # Vocabulary: 0/2 = 0.0 → weakness
-                {
-                    "question_id": "q4",
-                    "skill": "vocabulary",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-                {
-                    "question_id": "q5",
-                    "skill": "vocabulary",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-                # Reading: 1/2 = 0.5 → neither
-                {
-                    "question_id": "q6",
-                    "skill": "reading",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q7",
-                    "skill": "reading",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert "grammar" in result["strengths"]
-    assert "vocabulary" in result["weaknesses"]
-    assert "reading" not in result["strengths"]
-    assert "reading" not in result["weaknesses"]
-
-
-async def test_evaluate_unknown_skill_ignored(client: AsyncClient, test_user):
-    """POST /evaluate ignores answers with skills outside grammar/vocabulary/reading."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                {
-                    "question_id": "q1",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q2",
-                    "skill": "grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q3",
-                    "skill": "writing",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    # Only grammar counted in skill_profile; "writing" is ignored
-    assert result["skill_profile"]["grammar"] == 1.0
-    assert "writing" not in result["skill_profile"]
-
-
-async def test_evaluate_case_insensitive_skills(client: AsyncClient, test_user):
-    """POST /evaluate handles uppercase/mixed-case skill names."""
-    _user, headers = test_user
-    response = await client.post(
-        "/api/assessment/evaluate",
-        headers=headers,
-        json={
-            "answers": [
-                {
-                    "question_id": "q1",
-                    "skill": "GRAMMAR",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q2",
-                    "skill": "Grammar",
-                    "difficulty": "A1",
-                    "correct": True,
-                },
-                {
-                    "question_id": "q3",
-                    "skill": "Reading",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-                {
-                    "question_id": "q4",
-                    "skill": "reading",
-                    "difficulty": "A1",
-                    "correct": False,
-                },
-            ]
-        },
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert result["skill_profile"]["grammar"] == 1.0
-    assert result["skill_profile"]["reading"] == 0.0
+# The deterministic CEFR algorithm itself is covered in test_assessment_evaluator.py.
+# The server-graded session flow (bank -> answer -> evaluate) is covered in
+# test_assessment_sessions.py; /evaluate no longer accepts client `correct` flags.
 
 
 async def test_evaluate_invalid_body_422(client: AsyncClient, test_user):
@@ -686,9 +344,9 @@ async def test_evaluate_invalid_body_422(client: AsyncClient, test_user):
     assert response.status_code == 422
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # POST /api/assessment/free-write — LLM evaluation of free-write
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_free_write_requires_auth(client: AsyncClient):
@@ -841,9 +499,9 @@ async def test_free_write_invalid_body_422(client: AsyncClient, test_user):
     assert response.status_code == 422
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # POST /api/assessment/complete — persist result & create study plan
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_complete_requires_auth(client: AsyncClient):
@@ -1164,9 +822,9 @@ async def test_complete_deactivates_previous_active_plans(
     assert plan3.user_language_id == plan2.user_language_id
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # GET /api/assessment/level-test/questions/{plan_id}
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_level_test_questions_requires_auth(client: AsyncClient):
@@ -1264,6 +922,9 @@ async def test_level_test_questions_success(client: AsyncClient, test_user_with_
         assert result["cefr_level"] == "A1"
         assert "questions" in result
         assert len(result["questions"]) == 1
+        # The answer key stays in the server-side session.
+        assert "correct" not in result["questions"][0]
+        assert "correct_answer" not in result["questions"][0]
 
 
 async def test_level_test_questions_handles_llm_timeout(
@@ -1350,16 +1011,16 @@ async def test_level_test_questions_handles_llm_generic_error(
         assert "ai_service_error" in response.json()["detail"]
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # POST /api/assessment/level-test/submit
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_level_test_submit_requires_auth(client: AsyncClient):
     """POST /level-test/submit returns 401 without valid auth."""
     response = await client.post(
         "/api/assessment/level-test/submit",
-        json={"plan_id": 1, "answers": []},
+        json={"plan_id": 1},
     )
     assert response.status_code == 401
 
@@ -1370,147 +1031,13 @@ async def test_level_test_submit_plan_not_found(client: AsyncClient, test_user):
     response = await client.post(
         "/api/assessment/level-test/submit",
         headers=headers,
-        json={"plan_id": 99999, "answers": []},
+        json={"plan_id": 99999},
     )
     assert response.status_code == 404
 
 
-async def test_level_test_submit_high_score_advance(
-    client: AsyncClient, test_user_with_plan, db_session
-):
-    """POST /level-test/submit with >= 75% score recommends 'advance' with next_level."""
-    user, headers = test_user_with_plan
-
-    from sqlalchemy import select
-
-    from app.models.study_plan import StudyPlan
-
-    plan = (
-        await db_session.execute(
-            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
-        )
-    ).scalar_one()
-
-    # 4/5 A2 grammar correct = 0.8 grammar → score = 0.8 (other skills 0)
-    # Weighted average: (0.8 + 0 + 0) / 3 = 0.267... wait that's not right.
-    # Actually evaluate_adaptive_quiz computes: sum(profile.values) / 3
-    # With only grammar answers: grammar=0.8, vocab=0.0, reading=0.0 → (0.8)/3 ≈ 0.267
-    #
-    # We need all three skills to get a clean score. Let's do 80% across all three:
-    # Grammar: 4/5 correct = 0.8
-    # Vocab: 4/5 correct = 0.8
-    # Reading: 4/5 correct = 0.8
-    # Average: 0.8 → >= 0.75 → advance
-    answers = []
-    for i in range(15):
-        skill = ["grammar", "vocabulary", "reading"][i % 3]
-        correct = (i % 5) != 0  # 4 of 5 correct per skill
-        answers.append(
-            {
-                "question_id": f"q{i}",
-                "skill": skill,
-                "difficulty": "A1",
-                "correct": correct,
-            }
-        )
-
-    response = await client.post(
-        "/api/assessment/level-test/submit",
-        headers=headers,
-        json={"plan_id": plan.id, "answers": answers},
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert result["recommendation"] == "advance"
-    assert result["next_level"] == "A2"
-
-    # Verify plan was updated
-    await db_session.refresh(plan)
-    assert plan.completion_test_taken is True
-    assert plan.completion_test_score is not None
-    assert plan.completion_test_recommendation == "advance"
-
-
-async def test_level_test_submit_medium_score_extend(
-    client: AsyncClient, test_user_with_plan, db_session
-):
-    """POST /level-test/submit with 55-74% score recommends 'extend'."""
-    user, headers = test_user_with_plan
-
-    from sqlalchemy import select
-
-    from app.models.study_plan import StudyPlan
-
-    plan = (
-        await db_session.execute(
-            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
-        )
-    ).scalar_one()
-
-    # 3/5 correct per skill = 0.6 → average = 0.6 → extend (>= 0.55 but < 0.75)
-    answers = []
-    for i in range(15):
-        skill = ["grammar", "vocabulary", "reading"][i % 3]
-        correct = i % 5 < 3  # 3 of 5 correct per skill
-        answers.append(
-            {
-                "question_id": f"q{i}",
-                "skill": skill,
-                "difficulty": "A1",
-                "correct": correct,
-            }
-        )
-
-    response = await client.post(
-        "/api/assessment/level-test/submit",
-        headers=headers,
-        json={"plan_id": plan.id, "answers": answers},
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert result["recommendation"] == "extend"
-    assert result["next_level"] is None
-
-
-async def test_level_test_submit_low_score_repeat(
-    client: AsyncClient, test_user_with_plan, db_session
-):
-    """POST /level-test/submit with < 55% score recommends 'repeat'."""
-    user, headers = test_user_with_plan
-
-    from sqlalchemy import select
-
-    from app.models.study_plan import StudyPlan
-
-    plan = (
-        await db_session.execute(
-            select(StudyPlan).where(StudyPlan.user_id == user.id, StudyPlan.is_active.is_(True))
-        )
-    ).scalar_one()
-
-    # 1/5 correct per skill = 0.2 → average = 0.2 → repeat (< 0.55)
-    answers = []
-    for i in range(15):
-        skill = ["grammar", "vocabulary", "reading"][i % 3]
-        correct = i % 5 == 0  # 1 of 5 correct per skill
-        answers.append(
-            {
-                "question_id": f"q{i}",
-                "skill": skill,
-                "difficulty": "A1",
-                "correct": correct,
-            }
-        )
-
-    response = await client.post(
-        "/api/assessment/level-test/submit",
-        headers=headers,
-        json={"plan_id": plan.id, "answers": answers},
-    )
-    assert response.status_code == 200
-    result = response.json()
-    assert result["recommendation"] == "repeat"
-    assert result["next_level"] is None
+# Score thresholds (advance / extend / repeat) are exercised end to end with
+# server-graded answers in test_assessment_sessions.py.
 
 
 async def test_level_test_submit_invalid_body_422(client: AsyncClient, test_user):
@@ -1525,9 +1052,9 @@ async def test_level_test_submit_invalid_body_422(client: AsyncClient, test_user
     assert response.status_code == 422
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # GET /api/assessment/level-test/result/{plan_id}
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 
 async def test_level_test_result_requires_auth(client: AsyncClient):
@@ -1748,8 +1275,8 @@ async def test_level_test_result_null_recommendation_defaults_to_repeat(
     assert result["recommendation"] == "repeat"
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 # Helper — re-exported from conftest for convenience in this file
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═════════════════════════════════════════════════════════════════════════════
 
 from tests.conftest import deactivate_active_plans  # noqa: E402
