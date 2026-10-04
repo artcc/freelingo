@@ -2,7 +2,7 @@
 
 import {useState,useEffect,useCallback,useRef} from 'react'
 import {useRouter} from 'next/navigation'
-import {useTranslations} from 'next-intl'
+import {useLocale,useTranslations} from 'next-intl'
 import {PageLoading} from '@/components/ui/page-loading'
 import {apiFetch} from '@/lib/api'
 import {nextLessonFromSources} from '@/lib/plan-next-lesson'
@@ -26,7 +26,7 @@ const key=(week:number,day:number,title:string)=>`${week}:${day}:${title}`
 async function optional<T>(path:string):Promise<T|null>{try{const r=await apiFetch(path);return r.ok?await r.json() as T:null}catch{return null}}
 
 export default function PlanPage(){
- const t=useTranslations('plan'),common=useTranslations('common'),router=useRouter()
+ const t=useTranslations('plan'),common=useTranslations('common'),router=useRouter(),locale=useLocale()
  const activeLanguage=useLanguageStore(s=>s.activeLanguage),switching=useLanguageStore(s=>s.isSwitching)
  const [snapshot,setSnapshot]=useState<Snapshot|null>(null),[loading,setLoading]=useState(true),[noPlan,setNoPlan]=useState(false),[loadError,setLoadError]=useState(false),[launchError,setLaunchError]=useState('')
  const [units,setUnits]=useState<CurriculumUnit[]>([]),[activeDrawer,setActiveDrawer]=useState<CurriculumUnit|null>(null),[launching,setLaunching]=useState(false)
@@ -36,12 +36,19 @@ export default function PlanPage(){
   const request=++requestVersion.current,epoch=context.current
   setLoading(true);setLoadError(false);setNoPlan(false);setSnapshot(null);setUnits([]);setActiveDrawer(null);setLaunchError('')
   try{
-   const [response,rawJourney,comp,today,pending,generated]=await Promise.all([
-    apiFetch('/api/study-plan/current'),optional<Journey>('/api/study-plan/learning-path'),optional<Record<string,number>|Array<{unit_id:string;score:number}>>('/api/progress/competencies'),optional<{plan_id:number;lessons:TodayLesson[]}>('/api/study-plan/today'),optional<PendingLesson[]>('/api/study-plan/pending-lessons'),optional<PlanLesson[]>('/api/study-plan/lessons'),
+   // /today creates today's lesson on the first visit. The journey and lesson lists must be
+   // read after it; fetched in parallel, a brand-new plan reports next_lesson_id=null and the
+   // page showed no start button at all.
+   const [response,today]=await Promise.all([
+    apiFetch('/api/study-plan/current'),optional<{plan_id:number;lessons:TodayLesson[]}>('/api/study-plan/today'),
    ])
    if(!mounted.current||request!==requestVersion.current||epoch!==context.current)return
    if(response.status===404){setNoPlan(true);return}
    if(!response.ok)throw new Error()
+   const [rawJourney,comp,pending,generated]=await Promise.all([
+    optional<Journey>('/api/study-plan/learning-path'),optional<Record<string,number>|Array<{unit_id:string;score:number}>>('/api/progress/competencies'),optional<PendingLesson[]>('/api/study-plan/pending-lessons'),optional<PlanLesson[]>('/api/study-plan/lessons'),
+   ])
+   if(!mounted.current||request!==requestVersion.current||epoch!==context.current)return
    const plan=await response.json() as StudyPlan
    if(!mounted.current||request!==requestVersion.current||epoch!==context.current)return
    const journey=rawJourney?.plan_id===plan.id?rawJourney:null
@@ -88,11 +95,15 @@ export default function PlanPage(){
  for(const week of plan.generated_plan.weekly_plan??[])for(const day of week.days??[]){const lesson:Lesson={id:null,title:day.title,lesson_type:day.lesson_type,week:week.week,day:day.day,unit_id:day.unit_id,completed:false,...states[key(week.week,day.day,day.title)]};const unit=lesson.unit_id??'__unassigned';(byUnit[unit]??=[]).push(lesson)}
  const level=plan.cefr_level as CEFRLevel
  const allCompleted=units.length>0&&units.every(unit=>(competencies[unit.id]??0)>=.8)
+ const started=Object.values(states).some(state=>state.completed)
+ const ar=locale==='ar'
+ const startLabel=started?t('resume'):t.has('startLearning')?t('startLearning'):ar?'ابدأ التعلم':'Start learning'
  return <div className="juba-page-shell juba-mobile-plan w-full space-y-5 px-3 py-5 sm:px-6 sm:py-6 lg:px-8">
   <section className="juba-reference-hero px-5 py-5 sm:px-6"><p className="juba-eyebrow">{t('learningRoadmap')}</p><h1 className="text-[28px] font-semibold">{activeLanguage.name} · {level}</h1><p className="mt-3 text-sm text-[var(--juba-muted)]">{t('durationDetail',{weeks:plan.duration_weeks,days:plan.days_per_week})}</p><div className="mt-5 flex flex-wrap gap-4 text-sm"><span>{units.length} {t('unitsLabel')}</span><span>{pending.length} {t('pendingLessons')}</span><span>{Math.round((competencies[plan.current_unit]??0)*100)}%</span></div></section>
   {launchError&&<div role="alert" className="juba-reference-section p-4"><p>{launchError}</p><button className="juba-secondary-button" onClick={()=>setLaunchError('')}>{common('close')}</button></div>}
   {snapshot.partial&&<div className="juba-reference-section p-4" role="status"><p>{common('error')}</p><button className="juba-secondary-button" disabled={launching} onClick={()=>void loadPlan()}>{common('retry')}</button></div>}
-  {next!==null&&<section className="juba-reference-section px-5 py-5"><div className="flex flex-wrap items-center justify-between gap-4"><div><p className="juba-eyebrow">{t('learningRoadmap')}</p><h2 className="mt-1 text-xl font-semibold">{t('resume')}</h2></div><button disabled={launching} className="juba-primary-button" onClick={()=>void launchLesson(next)}>{launching?common('loading'):t('resume')}</button></div></section>}
+  {next!==null&&<section className="juba-reference-section px-5 py-5"><div className="flex flex-wrap items-center justify-between gap-4"><div><p className="juba-eyebrow">{t('learningRoadmap')}</p><h2 className="mt-1 text-xl font-semibold">{startLabel}</h2></div><button disabled={launching} className="juba-primary-button" onClick={()=>void launchLesson(next)}>{launching?common('loading'):startLabel}</button></div></section>}
+  {next===null&&pending.length===0&&!allCompleted&&!plan.completion_test_taken&&<section className="juba-reference-section px-5 py-5" role="status"><div className="flex flex-wrap items-center justify-between gap-4"><div><p className="juba-eyebrow">{t('learningRoadmap')}</p><h2 className="mt-1 text-xl font-semibold">{ar?'درس اليوم غير جاهز بعد':"Today's lesson is not ready yet"}</h2><p className="mt-1 text-sm text-[var(--juba-muted)]">{ar?'جرّب تجهيزه الآن.':'Try preparing it now.'}</p></div><button disabled={launching} className="juba-primary-button" onClick={()=>void loadPlan()}>{ar?'جهّز الدرس':'Prepare lesson'}</button></div></section>}
   {pending.length>0&&<section><h2 className="mb-4 text-xl font-semibold">{t('pendingLessons')}</h2><div className="grid gap-3 md:grid-cols-2">{pending.map(lesson=><button key={lesson.id} disabled={launching} onClick={()=>void launchLesson(lesson.id)} className="flex items-center gap-4 rounded-md border border-[var(--juba-border)] bg-[var(--juba-card)] p-4 text-start"><span className="min-w-0 flex-1"><strong className="block text-sm">{lesson.title}</strong><span className="mt-1 block text-xs text-[var(--juba-muted)]">{t('weekDay',{week:lesson.week_number,day:lesson.day_number})}</span></span><span>{t('resume')}</span></button>)}</div></section>}
   <section><h2 className="mb-5 text-xl font-semibold">{t('learningRoadmap')} · {level}</h2><div className="space-y-4">{units.length===0&&<div className="juba-reference-section px-6 py-10 text-center"><p>{t('noUnitsForLevel',{level})}</p><p className="mt-2 text-sm text-[var(--juba-muted)]">{t('noUnitsDesc')}</p></div>}{units.map((unit,index)=>{
    const lessons=byUnit[unit.id]??[],completed=lessons.filter(lesson=>lesson.completed).length,score=competencies[unit.id]??0
