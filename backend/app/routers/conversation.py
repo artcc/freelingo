@@ -10,9 +10,15 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from app.core.app_logger import get_logger
 from app.core.config import settings
-from app.core.deps import MAINTENANCE_KEY, get_current_user, get_redis, require_not_maintenance
+from app.core.deps import (
+    MAINTENANCE_KEY,
+    access_token_identity,
+    get_current_user,
+    get_redis,
+    require_not_maintenance,
+    session_is_current,
+)
 from app.core.limiter import limiter
-from app.core.security import decode_access_token
 from app.models.conversation import Conversation as ConversationModel
 from app.models.study_plan import StudyPlan
 from app.models.user import User
@@ -30,6 +36,10 @@ from app.utils.db import db_session
 
 logger = get_logger(__name__)
 router = APIRouter(tags=["conversation"])
+
+# How often a live voice session re-checks that its token was not revoked
+# (logout everywhere, password change, deactivation bump session_version).
+SESSION_RECHECK_SECONDS = 15.0
 
 
 @asynccontextmanager
@@ -104,13 +114,54 @@ async def _reject(ws, code, message, close_code=1008):
     await ws.close(code=close_code)
 
 
+async def _session_still_valid(user_id: int, session_version: int) -> bool:
+    async with db_session() as db:
+        return session_is_current(await db.get(User, user_id), session_version)
+
+
+async def _watch_session(user_id: int, session_version: int) -> None:
+    """Return as soon as the session is revoked; transient DB errors are retried."""
+    while True:
+        await asyncio.sleep(SESSION_RECHECK_SECONDS)
+        try:
+            if not await _session_still_valid(user_id, session_version):
+                return
+        except Exception:
+            logger.exception("Could not re-check voice session revision")
+
+
+async def _run_until_revoked(pipeline, delivered, websocket, user_id: int, session_version: int) -> None:
+    """Run the voice pipeline, closing it if the user's session_version changes."""
+    run_task = asyncio.create_task(pipeline.run(delivered))
+    watch_task = asyncio.create_task(_watch_session(user_id, session_version))
+    try:
+        done, _ = await asyncio.wait({run_task, watch_task}, return_when=asyncio.FIRST_COMPLETED)
+    except BaseException:
+        run_task.cancel()
+        watch_task.cancel()
+        raise
+    if run_task in done:
+        watch_task.cancel()
+        await run_task  # re-raise pipeline errors to the caller's handlers
+        return
+    run_task.cancel()
+    try:
+        await run_task
+    except (asyncio.CancelledError, Exception):
+        pass
+    logger.info("Voice session closed: session revoked")
+    try:
+        await _reject(websocket, "session_revoked", "Session expired", 1008)
+    except Exception:
+        pass
+
+
 @router.websocket("/ws/conversation")
 async def conversation_ws(websocket: WebSocket) -> None:
     await websocket.accept()
     try:
         auth = await asyncio.wait_for(websocket.receive_json(), timeout=10)
-        payload = decode_access_token(auth.get("token", ""))
-        user_id = int(payload["sub"])
+        user_id, session_version = access_token_identity(auth.get("token", ""))
     except Exception:
         await _reject(websocket, "auth_failed", "Authentication failed")
         return
@@ -122,8 +173,9 @@ async def conversation_ws(websocket: WebSocket) -> None:
         try:
             async with db_session() as db:
                 user = await db.get(User, user_id)
-                if user is None or not user.is_active:
-                    await _reject(websocket, "auth_failed", "User is unavailable")
+                if not session_is_current(user, session_version):
+                    # Same rule as HTTP auth: a revoked token (old session_version) is refused.
+                    await _reject(websocket, "auth_failed", "Session expired or account inactive")
                     return
                 if user.role == "admin":
                     await _reject(websocket, "learner_only", "Voice conversation is available to learners only")
@@ -204,7 +256,7 @@ async def conversation_ws(websocket: WebSocket) -> None:
                 pipeline._redis = None if settings.STRIPE_ENABLED else redis
                 pipeline._freemium_voice = False
             started = time.monotonic()
-            await pipeline.run(delivered)
+            await _run_until_revoked(pipeline, delivered, websocket, user_id, session_version)
         except HTTPException as exc:
             await _reject(websocket, "voice_quota_exhausted" if exc.status_code == 402 else "internal_error", "Voice session could not be started")
         except (WebSocketDisconnect, asyncio.CancelledError):

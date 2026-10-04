@@ -28,17 +28,35 @@ async def get_redis() -> AsyncIterator[Redis | None]:
         await redis.aclose()
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)) -> User:
+def access_token_identity(token: str) -> tuple[int, int]:
+    """Decode an access token into (user_id, session_version).
+
+    Shared by HTTP auth and the voice WebSocket so both apply the same rules.
+    Raises ValueError for any malformed, expired or tampered token.
+    """
     try:
         claims = decode_access_token(token)
         user_id = int(claims["sub"])
         version = claims.get("sv", 0)
-        if type(version) is not int or version < 0:
-            raise ValueError("Invalid session revision")
-    except (JWTError, KeyError, ValueError, TypeError):
+    except (JWTError, KeyError, ValueError, TypeError) as exc:
+        raise ValueError("Invalid token") from exc
+    if type(version) is not int or version < 0:
+        raise ValueError("Invalid session revision")
+    return user_id, version
+
+
+def session_is_current(user: User | None, session_version: int) -> bool:
+    """True only for an active user whose session revision matches the token."""
+    return user is not None and user.is_active and session_version == user.session_version
+
+
+async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)) -> User:
+    try:
+        user_id, version = access_token_identity(token)
+    except ValueError:
         raise HTTPException(status_code=401, detail="Invalid token") from None
     user = await db.get(User, user_id)
-    if user is None or not user.is_active or version != user.session_version:
+    if not session_is_current(user, version):
         raise HTTPException(status_code=401, detail="Session expired or account inactive")
     return user
 
