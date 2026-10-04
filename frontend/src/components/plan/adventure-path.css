@@ -1,0 +1,41 @@
+/* Illustrated path only on the study-plan route; curriculum state is untouched. */
+html[lang] .juba-app-shell .juba-mobile-plan>section:has(.juba-adventure-stop){max-width:860px;margin-inline:auto;width:100%}
+html[lang] .juba-app-shell .juba-mobile-plan>section:has(.juba-adventure-stop)>h2{font-size:22px!important;margin:28px 0 18px!important}
+html[lang] .juba-app-shell .juba-mobile-plan>section:has(.juba-adventure-stop)>div:has(>.juba-adventure-stop){position:relative;isolation:isolate;overflow:hidden;border-radius:24px;border:1px solid oklch(85% .07 135);background:oklch(94% .075 130);padding:42px 0 20px}
+html[lang] .juba-app-shell .juba-adventure-stop{--path-ground:oklch(94% .075 130);--path-road:oklch(87% .105 80);--path-edge:oklch(77% .10 95);position:relative;min-height:250px;margin:0!important;padding:20px 24px;background:var(--path-ground);display:grid;grid-template-columns:1fr 1fr;align-items:center}
+html[lang] .juba-app-shell .juba-adventure-stop[data-world='1']{--path-ground:oklch(93% .08 175);--path-road:oklch(88% .08 85);--path-edge:oklch(73% .095 180)}
+html[lang] .juba-app-shell .juba-adventure-stop[data-world='2']{--path-ground:oklch(94% .04 235);--path-road:oklch(89% .035 265);--path-edge:oklch(78% .055 265)}
+html[lang] .juba-app-shell .juba-adventure-road{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+html[lang] .juba-app-shell .juba-adventure-road path{fill:none;stroke-linecap:round}
+html[lang] .juba-app-shell .road-edge{stroke:var(--path-edge);stroke-width:54}
+html[lang] .juba-app-shell .road-fill{stroke:var(--path-road);stroke-width:42}
+html[lang] .juba-app-shell .road-dashes{stroke:oklch(98% .012 85);stroke-width:3;stroke-dasharray:5 13;opacity:.7}
+html[lang] .juba-app-shell .juba-adventure-stop:nth-child(even) .juba-adventure-road{transform:scaleX(-1)}
+html[lang] .juba-app-shell .juba-adventure-station{position:relative;z-index:2;grid-column:2;justify-self:center;width:min(100%,245px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+html[lang] .juba-app-shell .juba-adventure-stop:nth-child(even) .juba-adventure-station{grid-column:1}
+html[lang] .juba-app-shell .juba-adventure-node{display:grid;place-items:center;position:relative;width:76px;height:76px;border-radius:25px;border:4px solid oklch(97% .015 130);background:oklch(68% .18 135);color:oklch(98% .006 130);box-shadow:0 7px 0 oklch(47% .13 135),0 10px 0 oklch(80% .035 135);cursor:pointer;transition:transform 150ms cubic-bezier(.16,1,.3,1);flex:none}
+html[lang] .juba-app-shell .juba-adventure-node:hover:not(:disabled){transform:translateY(-3px)}
+html[lang] .juba-app-shell .juba-adventure-node:active:not(:disabled){transform:translateY(3px)}
+html[lang] .juba-app-shell .juba-adventure-stop[data-state='active'] .juba-adventure-node{background:oklch(80% .17 80);color:oklch(36% .085 65);box-shadow:0 7px 0 oklch(63% .135 65),0 0 0 9px oklch(94% .09 85)}
+html[lang] .juba-app-shell .juba-adventure-stop[data-state='locked'] .juba-adventure-node{background:oklch(84% .024 160);color:oklch(49% .025 160);box-shadow:0 7px 0 oklch(72% .025 160);opacity:1!important;cursor:not-allowed}
+html[lang] .juba-app-shell .juba-adventure-stop[data-finale='true'] .juba-adventure-node{border-radius:50%;background:oklch(65% .16 305);box-shadow:0 7px 0 oklch(47% .14 305);color:oklch(98% .006 305)}
+html[lang] .juba-app-shell .juba-adventure-stop[data-finale='true'][data-state='locked'] .juba-adventure-node{background:oklch(84% .025 305);color:oklch(49% .025 305);box-shadow:0 7px 0 oklch(72% .025 305)}
+html[lang] .juba-app-shell .juba-adventure-number{position:absolute;bottom:-9px;inset-inline-end:-6px;border-radius:50%;min-width:25px;height:25px;display:grid;place-items:center;background:oklch(98% .006 130);color:oklch(39% .035 135);font-size:12px;border:1px solid oklch(84% .03 135);font-weight:900}
+html[lang] .juba-app-shell .juba-adventure-label{max-width:245px;background:oklch(98% .014 135);border:1px solid oklch(88% .035 135);border-radius:14px;padding:12px 16px;box-shadow:0 3px 0 oklch(86% .025 135);width:100%}
+html[lang] .juba-app-shell .juba-adventure-label h3{font-size:16px;line-height:1.5;margin:0;font-weight:850;text-wrap:balance;color:oklch(34% .035 135)}
+html[lang] .juba-app-shell .juba-adventure-label p{font-size:12px;margin:6px 0;color:oklch(47% .025 135)}
+html[lang] .juba-app-shell .juba-adventure-status{display:flex;align-items:center;justify-content:center;gap:5px;font-size:11px;color:oklch(43% .025 135);line-height:1.6;margin-top:7px}
+html[lang] .juba-app-shell .juba-adventure-mastery{height:6px;border-radius:8px;background:oklch(90% .028 135);overflow:hidden;margin-top:9px}
+html[lang] .juba-app-shell .juba-adventure-mastery>span{height:100%;display:block;border-radius:inherit;background:oklch(67% .17 135)}
+html[lang] .juba-app-shell .juba-adventure-current{background:oklch(98% .012 85);color:oklch(43% .1 65);font-size:12px;font-weight:900;padding:4px 14px;border:1px solid oklch(83% .09 85);border-radius:8px;position:absolute;top:-30px}
+html[lang] .juba-app-shell .juba-adventure-start{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;width:100%;margin-top:10px;background:oklch(67% .18 135);color:oklch(98% .006 135);border:0;border-radius:8px;font-size:13px;font-weight:900;cursor:pointer}
+html[lang] .juba-app-shell .juba-adventure-world{position:absolute;z-index:2;top:0;inset-inline-start:24px;padding:5px 13px;border-radius:8px;background:oklch(98% .01 135);color:oklch(42% .045 135);font-size:12px;font-weight:800}
+html[lang] .juba-app-shell .juba-adventure-scenery{position:absolute;top:25%;inset-inline-start:9%;width:130px;height:145px;pointer-events:none}
+html[lang] .juba-app-shell .juba-adventure-stop:nth-child(even) .juba-adventure-scenery{inset-inline-start:auto;inset-inline-end:8%}
+html[lang] .juba-app-shell .juba-adventure-scenery>svg{height:100px;width:100px;stroke:oklch(42% .095 145);fill:oklch(62% .14 140);stroke-width:1.5;filter:drop-shadow(0 6px 0 oklch(77% .07 135))}
+html[lang] .juba-app-shell .juba-adventure-stop[data-world='2'] .juba-adventure-scenery>svg{fill:oklch(99% .006 235);stroke:oklch(66% .035 235)}
+html[lang] .juba-app-shell .scenery-rock{position:absolute;bottom:20px;left:80px;width:45px;height:27px;background:oklch(77% .015 150);clip-path:polygon(18% 20%,65% 0,100% 65%,85% 100%,0 90%)}
+html[lang] .juba-app-shell .scenery-bush{position:absolute;bottom:0;left:0;width:80px;height:32px;border-radius:60% 50% 30% 40%;background:oklch(72% .15 135);box-shadow:0 5px 0 oklch(57% .12 135)}
+html[lang] .juba-app-shell .scenery-stream{position:absolute;left:-50px;bottom:-30px;width:160px;height:30px;background:oklch(76% .13 225);border-radius:50%;transform:rotate(-12deg);border:5px solid oklch(87% .07 195)}
+@media(max-width:640px){html[lang] .juba-app-shell .juba-adventure-stop{min-height:260px;padding:20px 14px;grid-template-columns:1fr 1fr}html[lang] .juba-app-shell .juba-adventure-station{width:min(100%,175px)}html[lang] .juba-app-shell .juba-adventure-label{padding:10px}html[lang] .juba-app-shell .juba-adventure-label h3{font-size:14px}html[lang] .juba-app-shell .juba-adventure-label p{font-size:11px}html[lang] .juba-app-shell .juba-adventure-node{width:66px;height:66px;border-radius:22px}html[lang] .juba-app-shell .juba-adventure-scenery{transform:scale(.65);transform-origin:left center;inset-inline-start:0}html[lang] .juba-app-shell .juba-adventure-stop:nth-child(even) .juba-adventure-scenery{inset-inline-end:0}html[lang] .juba-app-shell .juba-adventure-world{inset-inline-start:14px}}
+@media(prefers-reduced-motion:reduce){html[lang] .juba-app-shell .juba-adventure-node{transition:none}html[lang] .juba-app-shell .juba-adventure-node:is(:hover,:active){transform:none}}
