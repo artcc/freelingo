@@ -1,11 +1,118 @@
-/* The Dashboard stylesheet predates the fixed shell. These overrides keep its internal grid, but let the shared shell own the viewport geometry. */
-.juba-app-shell:has(.reference-dashboard){display:block!important;min-width:0!important;margin:0!important;padding:0!important;}
-.juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar{position:fixed!important;inset-inline-start:0!important;inset-inline-end:auto!important;inset-block:0!important;margin:0!important;}
-.juba-app-shell:has(.reference-dashboard) .juba-duo-main{display:flex!important;flex-direction:column!important;position:relative!important;width:auto!important;max-width:none!important;min-width:0!important;margin-inline-start:var(--juba-sidebar-width)!important;margin-inline-end:0!important;padding:0!important;flex:initial!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
-.juba-app-shell:has(.reference-dashboard) .juba-app-topbar{width:100%!important;align-self:stretch!important;margin:0!important;padding-inline:24px!important;border-radius:0!important;}
-.juba-app-shell:has(.reference-dashboard) .juba-duo-page-frame{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
-.juba-app-shell:has(.reference-dashboard) .reference-dashboard{width:100%!important;max-width:none!important;margin:0!important;}
-@media(max-width:900px){
-  .juba-app-shell:has(.reference-dashboard) .juba-duo-main{margin-inline-start:0!important;padding-block-start:54px!important;}
-  .juba-app-shell:has(.reference-dashboard) .juba-app-topbar{display:none!important;}
+/* Dashboard-only reference calibration. Keep every existing API, chart range,
+   progress event and account control intact. Do not restyle Chat via its reference.
+   Local binaries are published by next.config.ts from the repository fonts. */
+@font-face{font-family:'Juba Dashboard Nunito';src:url('/fonts/Juba-Nunito.ttf') format('truetype');font-weight:200 1000;font-style:normal;font-display:swap}
+@font-face{font-family:'Juba Dashboard Cairo';src:url('/fonts/Juba-Cairo.ttf') format('truetype');font-weight:200 1000;font-style:normal;font-display:swap}
+html[lang] .juba-app-shell:has(.reference-dashboard){--juba-sidebar-width:180px;--juba-bg:oklch(99% .005 130);--juba-card:oklch(99% .005 130);--juba-ink:oklch(29% .015 130);--juba-text:oklch(29% .015 130);--juba-muted:oklch(49% .015 130);--juba-border:oklch(93% .008 130);--juba-soft:oklch(97% .008 130);--juba-green:oklch(71% .2 130);--juba-green-dark:oklch(44% .13 130);--juba-green-soft:oklch(96% .025 130);--juba-yellow:oklch(80% .17 80);display:block!important;min-width:0!important;margin:0!important;padding:0!important;background:var(--juba-bg)!important;color:var(--juba-ink)!important;color-scheme:light;font-family:'Juba Dashboard Nunito','Juba Dashboard Cairo',system-ui,sans-serif!important}
+html[lang] .juba-app-shell:has(.reference-dashboard)[dir=rtl],html[lang] .juba-app-shell:has(.reference-dashboard)[dir=rtl] .reference-dashboard{font-family:'Juba Dashboard Cairo','Juba Dashboard Nunito',system-ui,sans-serif!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard{font-family:inherit!important;width:100%!important;max-width:1480px!important;padding:12px 24px 32px!important;margin:0 auto!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) :is(h1,h2,h3,button,input,select,a){font-family:inherit!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) :is(h1,h2,h3){text-wrap:balance}
+html[lang] .juba-app-shell:has(.reference-dashboard) :is(a,button,summary):focus-visible{outline:3px solid var(--juba-green-dark);outline-offset:4px}
+html[lang] .juba-app-shell:has(.reference-dashboard) button:disabled{opacity:.55;cursor:not-allowed}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar{position:fixed!important;inset-inline-start:0!important;inset-inline-end:auto!important;inset-block:0!important;width:var(--juba-sidebar-width)!important;min-width:var(--juba-sidebar-width)!important;margin:0!important;transform:none!important;background:var(--juba-bg)!important;border-inline-end:1px solid var(--juba-border)!important;padding-inline:16px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-brand{font-size:23px!important;letter-spacing:-.035em;color:var(--juba-green-dark)!important;min-height:76px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-logo-mark{display:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav{padding-block-start:14px!important;overflow-y:auto!important;scrollbar-width:thin!important;scrollbar-color:var(--juba-border) transparent!important;min-height:0!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav-link{min-height:44px!important;gap:12px!important;font-size:12px!important;padding-block:10px!important;border-radius:6px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav-link svg{width:20px;height:20px;color:var(--juba-green-dark)}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav-link[href='/games'] svg{color:oklch(54% .16 305)}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav-link[href='/flashcards'] svg{color:oklch(53% .13 240)}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav-link[href='/listening'] svg{color:oklch(54% .16 305)}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-nav-link[href='/assessment'] svg{color:oklch(51% .12 65)}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-main{display:flex!important;flex-direction:column!important;position:relative!important;width:auto!important;max-width:none!important;min-width:0!important;margin-inline-start:var(--juba-sidebar-width)!important;margin-inline-end:0!important;padding:0!important;flex:initial!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-app-topbar{width:calc(100% - 292px)!important;align-self:flex-start!important;min-height:76px!important;margin:0!important;padding-inline:24px!important;border-radius:0!important;background:var(--juba-bg)!important;box-shadow:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-app-topnav{gap:28px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-app-topnav a{font-size:11px!important;min-height:44px!important;display:inline-flex;align-items:center;text-transform:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-page-frame{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-layout{display:grid!important;grid-template-columns:minmax(0,1fr) 244px!important;gap:24px!important;align-items:start}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-main{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(210px,1fr)!important;gap:24px!important;align-items:start}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome{grid-column:1/-1;min-height:96px!important;margin:0 0 8px!important;gap:20px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome h1{font-size:clamp(24px,2.15vw,30px)!important;font-weight:400!important;line-height:1.4!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome h1 strong{font-weight:900!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome p{font-size:13px!important;line-height:1.7}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-refresh{width:44px;height:44px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-overview{grid-column:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-card{padding:16px!important;border:1px solid var(--juba-border)!important;border-radius:7px!important;box-shadow:0 1px 3px oklch(40% .01 130 / .035)!important;background:var(--juba-card)!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-card-head{gap:10px;margin-block-end:18px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-card-head h2{font-size:15px!important;line-height:1.5;font-weight:800!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-card-head>a{font-size:10px!important;min-height:32px;display:inline-flex;align-items:center}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-overview>.reference-dashboard-card{min-height:210px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-progress-row{gap:10px!important;margin-block:16px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-progress-row>div>span{font-size:11px!important;line-height:1.5}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-progress-row>small{font-size:10px!important;direction:ltr;white-space:nowrap}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-tile{width:36px!important;height:40px!important;border-radius:5px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-track{height:10px!important;border-radius:4px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-track>span{background:var(--juba-yellow)!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-league{grid-column:2!important;grid-row:2/span 2!important;min-height:510px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-standings li{min-height:36px;font-size:11px;padding-inline:4px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-standings small{font-size:10px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-history{grid-column:1!important;min-height:280px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-ranges button{min-height:44px;font-size:11px;padding-inline:6px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-chart{height:220px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-chart-axis{font-size:10px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-bar small{font-size:10px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-chart-empty p{font-size:13px;line-height:1.7}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-next{grid-column:1/-1!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-lesson{gap:14px;padding-block:18px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-lesson strong{font-size:15px;line-height:1.6}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-lesson small{font-size:12px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-lesson p{font-size:13px;line-height:1.7}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-rail{display:flex!important;flex-direction:column;gap:24px!important;margin-block-start:-64px!important;min-width:0;padding:0;border:0;overflow:visible!important;max-height:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-avatar{width:96px;height:96px;margin-bottom:12px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-profile>strong{font-size:15px;font-weight:800}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-profile>p{font-size:12px;line-height:1.6}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-profile-stats{margin-block-start:20px!important;gap:8px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-utilities{min-height:44px!important;position:relative!important;border-radius:7px!important;z-index:5!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-utilities a{width:44px!important;height:44px!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-achievement strong{font-size:13px;line-height:1.6}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-achievement p{font-size:12px;line-height:1.7}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-friends>a{min-height:44px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-friends strong{font-size:12px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-friends small{font-size:11px}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-empty{font-size:13px;line-height:1.75}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-empty :is(a,button){min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-caption{font-size:12px;line-height:1.7}
+/* Never float real account actions over unrelated cards at a fixed viewport Y.
+   Keep both reachable in the sidebar until React owns a shared profile rail. */
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar>.juba-duo-user{display:block!important;position:static!important;margin-block-start:auto;padding-block:16px!important;flex-shrink:0!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar>.juba-duo-user .juba-duo-user-action{position:static!important;inset:auto!important;width:auto!important;height:auto!important;min-height:44px!important;font-size:12px!important;display:inline-flex!important;align-items:center;justify-content:center;padding:8px!important;margin:0!important;color:var(--juba-muted)!important;background:transparent!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar>.juba-duo-user .juba-duo-user-action::before{content:none!important}
+html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar>.juba-duo-user :is(.reference-account,.reference-trial,.juba-duo-version){display:none!important}
+@media(min-width:901px) and (max-width:1180px){
+ html[lang] .juba-app-shell:has(.reference-dashboard){--juba-sidebar-width:164px}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard{padding-inline:20px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-layout{grid-template-columns:minmax(0,1fr) 216px!important;gap:20px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-main{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-league{grid-column:1!important;grid-row:auto!important;min-height:0!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-history{grid-row:auto!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-overview{gap:16px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .juba-app-topbar{width:calc(100% - 256px)!important;padding-inline:20px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-brand{font-size:20px!important}
 }
+@media(max-width:900px){
+ html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-main{margin-inline-start:0!important;padding-block-start:54px!important;width:100%!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .juba-app-topbar{display:none!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .juba-duo-sidebar{display:none!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard{padding:20px 16px 32px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-layout{grid-template-columns:minmax(0,1fr)!important;gap:24px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-main{grid-template-columns:minmax(0,1fr)!important;gap:16px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-overview{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-league{grid-column:1!important;grid-row:auto!important;min-height:0!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-history{grid-row:3!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-rail{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));margin:0!important;gap:16px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) :is(.reference-dashboard-profile,.reference-dashboard-utilities){grid-column:1/-1}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome{min-height:90px!important;margin:0!important;gap:14px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome h1{font-size:24px!important}
+}
+@media(max-width:640px){
+ html[lang] .juba-app-shell:has(.reference-dashboard) :is(.reference-dashboard-overview,.reference-dashboard-rail){grid-template-columns:1fr!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome h1{font-size:22px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome-mark{width:44px;height:44px}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome-mark svg{width:28px;height:28px}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-welcome p{font-size:12px!important}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-card-head{flex-wrap:wrap}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-lesson{grid-template-columns:32px minmax(0,1fr)}
+ html[lang] .juba-app-shell:has(.reference-dashboard) .reference-dashboard-lesson>a{grid-column:2;justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){html[lang] .juba-app-shell:has(.reference-dashboard) *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
