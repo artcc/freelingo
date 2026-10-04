@@ -1,26 +1,34 @@
 import createNextIntlPlugin from 'next-intl/plugin'
 import type { NextConfig } from 'next'
+import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+// The original fonts already live in the repository. Publish them locally before
+// dev/build, without downloads or relying on fonts installed on a visitor's OS.
+// Docker places the same source directory at /fonts, beside /app.
+const fontOutput = resolve(__dirname, 'public/fonts')
+const bundledFonts = [
+  ['Cairo/Cairo-VariableFont_slnt,wght.ttf', 'Juba-Cairo.ttf'],
+  ['Nunito/Nunito-VariableFont_wght.ttf', 'Juba-Nunito.ttf'],
+  ['Cairo/OFL.txt', 'Cairo-OFL.txt'],
+  ['Nunito/OFL.txt', 'Nunito-OFL.txt'],
+]
+mkdirSync(fontOutput, { recursive: true })
+for (const [source, filename] of bundledFonts) {
+  const input = resolve(__dirname, '../fonts', source)
+  const output = resolve(fontOutput, filename)
+  if (existsSync(input)) copyFileSync(input, output)
+  else if (!existsSync(output)) throw new Error(`Missing bundled JUBA font asset: ${source}. Include the repository fonts directory before building.`)
+}
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
-
-const withBackend = (path: string) =>
-  `${process.env.BACKEND_URL || 'http://localhost:8000'}${path}`
-
+const withBackend = (path: string) => `${process.env.BACKEND_URL || 'http://localhost:8000'}${path}`
 const isDesktopBuild = process.env.BUILD_TARGET === 'desktop'
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // Desktop keeps the full Next.js server because the App Router uses
-  // request-time cookies/headers and middleware for auth + locale handling.
-  // Both Docker and the Windows Electron package run the full Next.js server.
-  // Standalone output keeps the production runtime self-contained.
   output: 'standalone',
-  // Keep Next.js/Turbopack anchored to the frontend project. The repository also
-  // contains a root package-lock.json, and automatic workspace detection can
-  // otherwise place the standalone output under the repository root.
-  turbopack: {
-    root: __dirname,
-  },
+  turbopack: { root: __dirname },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -29,18 +37,11 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'raw.githubusercontent.com' },
     ],
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  typescript: { ignoreBuildErrors: true },
   webpack(config, { isServer }) {
     if (isServer) {
       const externals = Array.isArray(config.externals) ? config.externals : []
-      config.externals = [
-        ...externals,
-        '@ricky0123/vad-react',
-        '@ricky0123/vad-web',
-        'onnxruntime-web',
-      ]
+      config.externals = [...externals, '@ricky0123/vad-react', '@ricky0123/vad-web', 'onnxruntime-web']
     }
     return config
   },
@@ -54,7 +55,6 @@ const nextConfig: NextConfig = {
       { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
       { key: 'Cross-Origin-Embedder-Policy', value: 'credentialless' },
     ]
-
     if (process.env.NODE_ENV === 'production') {
       headers.push({
         key: 'Content-Security-Policy',
@@ -62,15 +62,9 @@ const nextConfig: NextConfig = {
           "default-src 'self'",
           "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
           "style-src 'self' 'unsafe-inline'",
-          isDesktopBuild
-            ? "connect-src 'self' http://127.0.0.1:* http://localhost:* ws: wss:"
-            : "connect-src 'self' ws: wss:",
-          isDesktopBuild
-            ? "img-src 'self' http://127.0.0.1:* http://localhost:* data: blob:"
-            : "img-src 'self' https://raw.githubusercontent.com data: blob:",
-          isDesktopBuild
-            ? "media-src 'self' http://127.0.0.1:* http://localhost:* blob:"
-            : "media-src 'self' blob:",
+          isDesktopBuild ? "connect-src 'self' http://127.0.0.1:* http://localhost:* ws: wss:" : "connect-src 'self' ws: wss:",
+          isDesktopBuild ? "img-src 'self' http://127.0.0.1:* http://localhost:* data: blob:" : "img-src 'self' https://raw.githubusercontent.com data: blob:",
+          isDesktopBuild ? "media-src 'self' http://127.0.0.1:* http://localhost:* blob:" : "media-src 'self' blob:",
           "worker-src 'self' blob:",
           "font-src 'self'",
           "object-src 'none'",
@@ -78,28 +72,12 @@ const nextConfig: NextConfig = {
         ].join('; '),
       })
     }
-
-    return [
-      {
-        source: '/(.*)',
-        headers,
-      },
-    ]
+    return [{ source: '/(.*)', headers }]
   },
   async rewrites() {
-    // Keep the browser API surface available in every runtime. Desktop builds
-    // normally bypass this through api.ts when Electron exposes a dynamic
-    // backendUrl; the rewrite remains as a safe development fallback when that
-    // runtime value is not available yet.
     return [
-      {
-        source: '/api/health',
-        destination: withBackend('/health'),
-      },
-      {
-        source: '/api/:path*',
-        destination: withBackend('/api/:path*'),
-      },
+      { source: '/api/health', destination: withBackend('/health') },
+      { source: '/api/:path*', destination: withBackend('/api/:path*') },
     ]
   },
 }
