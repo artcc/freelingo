@@ -18,7 +18,7 @@ vi.mock('next/link', () => ({
   ),
 }))
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => Object.assign((key: string) => key, { rich: (key: string) => key }),
   useLocale: () => 'en',
 }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
@@ -193,6 +193,34 @@ function scoreBadge(label: string): HTMLElement {
 describe('LessonPage free-write corrections', () => {
   beforeEach(() => {
     mocks.apiFetch.mockReset()
+  })
+
+  it('offers voice practice when reviewing a completed lesson', async () => {
+    mockApi(lessonDetail({ isCompleted: true }))
+    render(<LessonPage />)
+    expect(await screen.findByRole('button', { name: 'action' })).toBeInTheDocument()
+  })
+
+  it('does not offer lesson practice before completion', async () => {
+    mockApi(lessonDetail({}))
+    render(<LessonPage />)
+    await screen.findByPlaceholderText('yourAnswer')
+    expect(screen.queryByRole('button', { name: 'action' })).toBeNull()
+  })
+
+  it('offers practice immediately after successful lesson completion', async () => {
+    const detail = lessonDetail({ exercise: { user_answer: ANSWER, score: 1 } })
+    mocks.apiFetch.mockImplementation((url: string) => {
+      if (url === '/api/lessons/1') return Promise.resolve(jsonResponse(detail))
+      if (url === '/api/lessons/1/complete') {
+        return Promise.resolve(jsonResponse({ ...detail.lesson, is_completed: true }))
+      }
+      return Promise.resolve(new Response(null, { status: 404 }))
+    })
+    render(<LessonPage />)
+    fireEvent.click(await screen.findByRole('button', { name: 'completeLesson' }))
+    await screen.findByText('lessonDone')
+    expect(screen.getByRole('button', { name: 'action' })).toBeInTheDocument()
   })
 
   it('renders inline annotations, the corrections list and the amber state after evaluation', async () => {

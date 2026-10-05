@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Ubegrænset adgang",
     "requiresSubscription": "Kun Premium"
   },
+  "lessonPractice": {
+    "action": "Øv denne lektion med Lingu",
+    "title": "Øvelse: <topic>{title}</topic>",
+    "description": "Øv indholdet af denne lektion mundtligt. Lingu stiller spørgsmål og hjælper dig med at bruge det, du har lært. Du bestemmer, hvornår du vil afslutte.",
+    "start": "Start øvelsen",
+    "cancel": "Ikke nu",
+    "unavailable": "Øvelsen kunne ikke forberedes. Kontrollér, at lektionen er gennemført, og prøv igen.",
+    "back": "Tilbage til studieplanen"
+  },
   "whatsNew": {
     "title": "Nyheder",
     "version": "v1.9.30",
     "cta": "Forstået",
     "entry1": {
-      "label": "Fem nye grænsefladesprog",
-      "desc": "FreeLingo er tilgængeligt på dansk, finsk, kroatisk, svensk og tyrkisk. Vælg dit grænsefladesprog under Indstillinger."
+      "label": "Øv dine lektioner med Lingu",
+      "desc": "Start en stemmesamtale fra en gennemført lektion. Lingu hjælper dig med at bruge det, du har lært, og samtalen gemmes med titlen på det emne, du øvede."
     },
     "entry2": {
       "label": "En mere smidig oplevelse",

@@ -13,6 +13,7 @@ import { getGrammarTopics, type GrammarTopic } from '@/data/grammar'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { VoiceRecorder } from '@/components/ui/VoiceRecorder'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { LessonVoicePracticeButton } from '@/components/lesson/LessonVoicePracticeButton'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
@@ -114,6 +115,7 @@ export default function LessonPage() {
   } = useWordSave()
 
   const [lesson, setLesson] = useState<LessonData | null>(null)
+  const [lessonTargetLanguage, setLessonTargetLanguage] = useState<string>()
   const [exercises, setExercises] = useState<ExerciseItem[]>([])
   const [currentExercise, setCurrentExercise] = useState(0)
   const [answer, setAnswer] = useState('')
@@ -172,6 +174,7 @@ export default function LessonPage() {
       const res = await apiFetch(`/api/lessons/${id}`)
       const data = await res.json()
       setLesson(data.lesson)
+      setLessonTargetLanguage(data.target_language)
       setExercises(data.exercises)
       setNativeExplanationOpen(
         data.lesson?.cefr_level === 'A1' || data.lesson?.cefr_level === 'A2'
@@ -505,6 +508,13 @@ export default function LessonPage() {
               </div>
             )}
             <div className="mt-8 flex flex-col items-center gap-4">
+              {lesson && (
+                <LessonVoicePracticeButton
+                  lessonId={lesson.id}
+                  title={lesson.title}
+                  targetLanguage={lessonTargetLanguage}
+                />
+              )}
               <Link
                 href="/plan"
                 className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg px-8 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -568,6 +578,13 @@ export default function LessonPage() {
     <>
       <div className="mx-auto max-w-4xl space-y-4 p-6">
         {!isReview && <FreemiumQuotaBanner feature="lessons" />}
+        {isReview && lesson && (
+          <LessonVoicePracticeButton
+            lessonId={lesson.id}
+            title={lesson.title}
+            targetLanguage={lessonTargetLanguage}
+          />
+        )}
         {/* Lesson header */}
         <div className="border-fl-border bg-fl-surface border">
           <div className="border-fl-border flex items-center justify-between border-b px-6 py-4">

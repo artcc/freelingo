@@ -54,6 +54,7 @@ def _build_conversation_system_prompt(
     memory_context: str,
     language_prompt_overlay: str = "",
     memory_tools_enabled: bool = True,
+    lesson_practice_context: str = "",
 ) -> str:
     return build_conversation_system_prompt(
         student_name=student_name,
@@ -64,6 +65,7 @@ def _build_conversation_system_prompt(
         memory_context=memory_context,
         language_prompt_overlay=language_prompt_overlay,
         memory_tools_enabled=memory_tools_enabled,
+        lesson_practice_context=lesson_practice_context,
     )
 
 
@@ -91,6 +93,7 @@ class ConversationPipeline:
         memories: list | None = None,
         voice: str = "",
         study_plan_id: int | None = None,
+        lesson_practice_context: str = "",
     ) -> None:
         self.llm = llm
         self.tts = tts
@@ -129,6 +132,7 @@ class ConversationPipeline:
             "target_language_name": target_language_name,
             "user_context": user_context,
             "language_prompt_overlay": language_prompt_overlay,
+            "lesson_practice_context": lesson_practice_context,
         }
         self.system_prompt = _build_conversation_system_prompt(
             **self._prompt_args,

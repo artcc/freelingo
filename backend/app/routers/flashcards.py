@@ -24,6 +24,7 @@ from app.schemas.flashcards import (
     VocabularyListResponse,
 )
 from app.services.flashcard_sm2 import generate_flashcards, lookup_word, sm2_update
+from app.services.lesson_voice_practice import get_lesson_practice_source
 from app.services.llm_adapter import (
     LLMError,
     LLMTimeoutError,
@@ -340,7 +341,15 @@ async def create_flashcard_from_word(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    plan = await _get_active_plan_or_404(db, current_user.id)
+    if data.lesson_id is not None:
+        source = await get_lesson_practice_source(db, current_user.id, data.lesson_id)
+        if source is None:
+            raise HTTPException(status_code=404, detail="Lesson not found")
+        _, plan = source
+        cefr_level = plan.cefr_level
+    else:
+        plan = await _get_active_plan_or_404(db, current_user.id)
+        cefr_level = data.cefr_level
     existing = await _find_existing_flashcard(db, current_user.id, plan.id, data.word)
     if existing is not None:
         response = await _respond_with_existing_flashcard(db, existing)
@@ -351,7 +360,7 @@ async def create_flashcard_from_word(
         card_data = await lookup_word(
             word=data.word.strip(),
             context=data.context,
-            cefr_level=data.cefr_level,
+            cefr_level=cefr_level,
             native_language=current_user.native_language,
             target_language=plan.target_language,
         )

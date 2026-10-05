@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Neograničen pristup",
     "requiresSubscription": "Samo za Premium"
   },
+  "lessonPractice": {
+    "action": "Vježbaj ovu lekciju s Linguom",
+    "title": "Vježba: <topic>{title}</topic>",
+    "description": "Usmeno vježbaj sadržaj ove lekcije. Lingu će postavljati pitanja i pomoći ti primijeniti naučeno. Ti odlučuješ kada završiti.",
+    "start": "Započni vježbu",
+    "cancel": "Ne sada",
+    "unavailable": "Nije moguće pripremiti vježbu. Provjeri je li lekcija dovršena i pokušaj ponovno.",
+    "back": "Natrag na plan"
+  },
   "whatsNew": {
     "title": "Novosti",
     "version": "v1.9.30",
     "cta": "Razumijem",
     "entry1": {
-      "label": "Pet novih jezika sučelja",
-      "desc": "FreeLingo je dostupan na danskom, finskom, hrvatskom, švedskom i turskom. Odaberi jezik sučelja u Postavkama."
+      "label": "Vježbaj lekcije s Linguom",
+      "desc": "Započni glasovni razgovor iz dovršene lekcije. Lingu ti pomaže primijeniti naučeno, a razgovor se sprema s naslovom teme koju si vježbao."
     },
     "entry2": {
       "label": "Ugodnije iskustvo",

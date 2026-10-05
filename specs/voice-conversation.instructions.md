@@ -51,6 +51,42 @@ Both TTS adapters currently ignore the language argument.
 The current fallback path can combine a fallback active plan with a different target language sent
 by the client. This association is not enforced by the WebSocket contract.
 
+### Lesson practice context
+
+Authentication may include `lesson_id`, a JSON integer in `1..2147483647` (booleans, fractional
+numbers, strings, null, and out-of-range values are rejected before lesson SQL lookup). The backend loads a completed lesson through its owned plan
+and language track. Invalid, missing, foreign, or incomplete lessons produce
+`lesson_practice_unavailable` and close code 1008 before general session quotas are consumed.
+
+For this mode, the lesson's persisted plan determines language, CEFR level, and plan provenance,
+regardless of active language, active plan, or the client's `target_language`. Client `context` and
+`conversation_id` are ignored: every start creates a separate practice conversation. Normal voice
+access, maintenance, warmup, quotas, timeouts, microphone, playback, and manual stop behavior apply.
+
+`lesson_voice_practice.py` supplies bounded, escaped reference data from the lesson title, content,
+scheduled objectives, vocabulary, grammar references, and up to eight answered exercises ordered by
+score then ID. Exercise questions and explanations use the same read-time legacy fill-blank
+normalization as lesson detail, without mutating stored exercises; both fields are bounded in the
+context. This snapshot is included in the system prompt for the greeting, normal turns, memory
+refreshes, and no-tools fallbacks; trimming turn history cannot remove it. Lingu guides questions and
+help around the lesson and can suggest that the main objectives have been practised. This is ordinary
+conversational text, not a session-end event or a persisted completion flag. The learner can continue
+or stop, subject to the existing voice limits.
+
+The frontend entry `/conversation?lesson={id}` loads lesson metadata before using the existing
+automatic start flow. It shows the topic title and hides unrelated conversation starters for this
+mode. The lesson entry button first uses the shared confirmation dialog. All entry/error copy is
+localized under `lessonPractice`.
+
+The title uses rich interpolation: its localized prefix carries the interface locale, while only the
+lesson topic is rendered through `TargetLanguageText` with the learned language.
+
+Saving a selected transcript word sends `lesson_id` through the existing `/api/flashcards/from-word`
+endpoint. The backend rechecks ownership and completion and derives lookup language, level,
+deduplication, and storage from that lesson's plan. This also applies to historical plans and when
+the active language changes elsewhere. Missing or inaccessible lessons fail without active-plan
+fallback. Voice sessions without a lesson retain the existing word-save contract.
+
 ## Client-to-server protocol
 
 - Initial JSON: authentication and optional session context.
@@ -145,6 +181,12 @@ ID owned by the user and a compatible target language. The current frontend does
 so normal voice starts create a new `source="voice"` conversation.
 Voice conversation titles use a native-language label and date. German, Danish, Finnish, and Croatian
 dates place an ordinal dot after the day; Croatian dates also end with a dot after the year.
+
+Lesson practice titles instead use the native-language equivalent of `Practice: {lesson title}`,
+bounded to the existing 200-character title column. The existing voice transcript persistence and
+text-chat history display apply; subsequent practice sessions have separate rows with the same topic
+title and their own timestamps. The lesson reference/context is session-local, not a new database
+association or a separately persisted report. Text chat retains its existing transcript-based flow.
 
 `ChatHistory` rows store role, content, target language, optional plan provenance, and conversation.
 Voice sessions are visible in text-chat history. Continuing from text chat supplies textual context

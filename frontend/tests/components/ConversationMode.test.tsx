@@ -19,10 +19,15 @@ vi.mock('@ricky0123/vad-react', () => ({
     return { loading: false, errored: false, start: mocks.start, pause: mocks.pause }
   },
 }))
-vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
-  useTranslations: () => Object.assign((key: string) => key, { raw: () => [] }),
-}))
+vi.mock('next-intl', async (importOriginal) => {
+  const { createTranslator } = await importOriginal<typeof import('next-intl')>()
+  const { default: messages } = await import('../../../messages/en.json')
+  const practice = createTranslator({ locale: 'en', messages, namespace: 'lessonPractice' })
+  return {
+    useLocale: () => 'en',
+    useTranslations: () => Object.assign((key: string) => key, { raw: () => [], rich: practice.rich }),
+  }
+})
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
 vi.mock('@/lib/audio', async (importOriginal) => ({
@@ -107,6 +112,40 @@ afterEach(() => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it('sends the lesson reference through the existing handshake and lets the user end practice', async () => {
+    render(<ConversationMode lessonId={7} lessonTitle="Past experiences" targetLanguage="fr-FR" />)
+    const topic = screen.getByText('Past experiences')
+    expect(topic).toHaveAttribute('lang', 'fr-FR')
+    expect(topic.parentElement).toHaveAttribute('lang', 'en')
+    expect(topic.parentElement).toHaveTextContent('Practice: Past experiences')
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+      type: 'auth', token: 'token', lesson_id: 7, target_language: 'fr-FR',
+    })
+    expect(mocks.apiFetch).toHaveBeenCalledWith('/api/conversation/warmup', expect.any(Object))
+    expect(screen.queryByText('startersHint')).toBeNull()
+    act(() => ws.message({
+      type: 'transcript', role: 'assistant', final: true,
+      text: 'We have practised the main points. You can finish or keep practising.',
+    }))
+    expect(ws.close).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'stop' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+    await waitFor(() => expect(ws.close).toHaveBeenCalledTimes(1))
+  })
+
+  it('does not add lesson context to ordinary voice sessions', async () => {
+    render(<ConversationMode />)
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({ type: 'auth', token: 'token' })
+  })
+
   it('retries denied permission without poisoning VAD', async () => {
     mocks.getUserMedia.mockRejectedValueOnce(new DOMException('Denied', 'NotAllowedError'))
     render(<ConversationMode />)
@@ -190,6 +229,7 @@ describe('ConversationMode session lifecycle', () => {
     ['quota_exceeded_time', 'quotaExceededTime'],
     ['quota_exceeded_tokens', 'quotaExceededTokens'],
     ['no_active_plan', 'noActivePlan'],
+    ['lesson_practice_unavailable', 'unavailable'],
     ['unknown_server_error', 'errorMessage'],
   ])('localizes %s without displaying the backend message', async (code, key) => {
     render(<ConversationMode />)

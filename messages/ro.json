@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Acces nelimitat",
     "requiresSubscription": "Doar Premium"
   },
+  "lessonPractice": {
+    "action": "Exersează această lecție cu Lingu",
+    "title": "Practică: <topic>{title}</topic>",
+    "description": "Exersează oral conținutul acestei lecții. Lingu îți va pune întrebări și te va ajuta să folosești ce ai învățat. Tu decizi când închei.",
+    "start": "Începe practica",
+    "cancel": "Nu acum",
+    "unavailable": "Practica nu a putut fi pregătită. Verifică dacă lecția este finalizată și încearcă din nou.",
+    "back": "Înapoi la plan"
+  },
   "whatsNew": {
     "title": "Noutăți",
     "version": "v1.9.30",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Cinci limbi noi pentru interfață",
-      "desc": "FreeLingo este disponibil în croată, daneză, finlandeză, suedeză și turcă. Alege limba interfeței în Setări."
+      "label": "Exersează lecțiile cu Lingu",
+      "desc": "Începe o conversație vocală dintr-o lecție finalizată. Lingu te ajută să folosești ce ai învățat, iar conversația este salvată cu titlul subiectului exersat."
     },
     "entry2": {
       "label": "O experiență mai fluidă",

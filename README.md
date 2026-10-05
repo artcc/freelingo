@@ -28,6 +28,10 @@ voice tutoring with durable user-controlled memories. Generated Listening and Re
 pronunciation exercises, XP, streaks, skill scores, unit competencies, and end-of-level tests complete
 the learning workflow.
 
+Completed lessons also offer voice practice with Lingu: confirm a short topic preview, then practise
+the lesson's content with questions and help informed by your exercise answers. These conversations
+use the existing voice controls and limits and appear in chat history under the lesson topic.
+
 ## Hosted service
 
 > **Don't want to manage your own server?**

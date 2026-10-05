@@ -131,7 +131,8 @@ describe.each([
       expect(await screen.findByText('unavailable')).toBeInTheDocument()
       expect(screen.queryByRole('status')).not.toBeInTheDocument()
       expect(lookups()).toHaveLength(0)
-      expect(useLoadingStore.getState().count).toBe(0)
+      // DOM removal can precede PageLoading's passive-effect cleanup.
+      await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
 
       fireEvent.click(screen.getByRole('button', { name: 'retry' }))
       await waitFor(assertFreshLookup)

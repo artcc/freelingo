@@ -97,6 +97,12 @@ Flashcard generation derives the target language from the active persisted plan 
 state. A review credits progress to the `study_plan_id` stored on the card, even if the user changes
 their active language while the review is pending.
 
+Word saves from lesson-linked voice practice carry `lesson_id`. The backend requires an owned
+completed lesson and resolves language, CEFR level, deduplication scope, and flashcard ownership from
+its persisted plan. A switch in another tab, a newer active plan for the same language, or an active
+language without a plan cannot redirect that save. Unavailable lessons fail without an active-plan
+fallback. Word saves without this reference retain the existing active-plan behavior.
+
 Conversations, chat history, and LLM usage retain an optional `study_plan_id` with
 `ON DELETE SET NULL`. Conversation history is selected by target language so it can include
 conversations from previous plans for that language.

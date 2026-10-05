@@ -93,7 +93,7 @@ export function WordTooltip({
 // useWordSave hook — encapsulates word-selection state & save logic
 // ---------------------------------------------------------------------------
 
-export function useWordSave() {
+export function useWordSave(lessonId?: number) {
   const [selectedWord, setSelectedWord] = useState<string | null>(null)
   const [selectedContext, setSelectedContext] = useState('')
   const [selectedCefrLevel, setSelectedCefrLevel] = useState('B1')
@@ -176,6 +176,7 @@ export function useWordSave() {
           word: selectedWord,
           context: selectedContext,
           cefr_level: selectedCefrLevel,
+          ...(lessonId !== undefined ? { lesson_id: lessonId } : {}),
         }),
       })
       if (!res.ok) throw new Error()

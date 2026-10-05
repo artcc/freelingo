@@ -52,6 +52,14 @@ Text tutoring responds primarily in the target language and may briefly explain 
 learner's native language. Voice output uses short TTS-safe plain text. Detailed persistence, access,
 and streaming behavior belongs to Platform and Voice Conversation specs.
 
+Lesson-linked voice sessions additionally receive `lesson_practice_context`. The service loads this
+bounded, escaped JSON reference from an owned completed lesson and its answered exercises; the client
+supplies only the lesson ID. The prompt treats it as non-authoritative data inside `lesson_practice`
+delimiters. It asks Lingu to open with a relevant question, provide hints and gentle corrections, and
+revisit difficult structures. Lingu may acknowledge sufficient practice and offer to finish or
+continue, but cannot end the session or impose a new duration. The context remains in prompt arguments
+through greeting, memory refresh, and tool-free fallback, independently of the bounded turn history.
+
 ## Learning prompts
 
 Lesson generation receives CEFR level, language overlay, unit/topic, declared lesson type, curriculum
