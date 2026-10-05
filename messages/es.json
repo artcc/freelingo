@@ -1504,15 +1504,48 @@
     "trialUnlimited": "Acceso ilimitado",
     "requiresSubscription": "Solo Premium"
   },
+  "lessonPractice": {
+    "action": "Practicar esta lección con Lingu",
+    "title": "Práctica: <topic>{title}</topic>",
+    "description": "Practica por voz el contenido de esta lección. Lingu te hará preguntas y te ayudará a utilizar lo aprendido. Tú decides cuándo terminar.",
+    "start": "Empezar práctica",
+    "cancel": "Ahora no",
+    "unavailable": "No se pudo preparar la práctica. Comprueba que la lección está completada e inténtalo de nuevo.",
+    "back": "Volver al plan"
+  },
+  "dashboardProgress": {
+    "title": "Tu progreso",
+    "scope": "Tu idioma y plan de estudio actuales",
+    "details": "Ver progreso",
+    "experience": "Experiencia",
+    "todayXp": "+{xp} XP hoy",
+    "experienceHint": "Cada práctica contribuye a tu recorrido.",
+    "streak": "Racha de aprendizaje",
+    "days": "{count, plural, one {día} other {días}}",
+    "practisedToday": "Hoy has practicado",
+    "readyToday": "Una nueva oportunidad para practicar",
+    "week": "Actividad de los últimos siete días",
+    "activeDay": "Has practicado",
+    "inactiveDay": "Sin actividad registrada",
+    "utcHint": "Últimos 7 días",
+    "lessons": "Lecciones completadas",
+    "accuracy": "Aciertos en ejercicios de lección",
+    "correctAnswers": "{correct} de {total} respuestas correctas",
+    "noExercises": "Tus resultados aparecerán después del primer ejercicio."
+  },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Entendido",
     "entry1": {
-      "label": "Cinco nuevos idiomas de interfaz",
-      "desc": "FreeLingo está disponible en croata, danés, finés, sueco y turco. Elige tu idioma de interfaz en Ajustes."
+      "label": "Practica tus lecciones con Lingu",
+      "desc": "Abre una conversación de voz desde una lección completada. Lingu te ayuda a utilizar lo aprendido y la conversación se guarda con el título del tema practicado."
     },
     "entry2": {
+      "label": "Más formas de ganar XP",
+      "desc": "Gana XP con <bold>voz, chat, repasos espaciados de lectura y escucha y al completar unidades y niveles</bold>. El dashboard renovado destaca los XP de hoy, tu racha y tu actividad reciente."
+    },
+    "entry3": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }
@@ -1557,6 +1590,12 @@
     "moreInHistory": "+{count} más",
     "practiceAgain": "Practicar de nuevo",
     "replayNoXp": "Repetición (sin XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Tu idioma activo o plan de estudio ha cambiado. Recarga esta página para continuar.",
+    "failed": "No se ha podido generar el ejercicio. Inténtalo de nuevo.",
+    "timeout": "La generación del ejercicio ha tardado demasiado. Inténtalo de nuevo.",
+    "unavailable": "No se ha podido comprobar el estado del ejercicio. Inténtalo de nuevo."
   },
   "reading": {
     "title": "Lectura",

@@ -104,6 +104,7 @@ class ExerciseResponse(BaseModel):
 class LessonDetailResponse(BaseModel):
     lesson: LessonResponse
     exercises: list[ExerciseResponse]
+    target_language: str
 
 
 class ExerciseAnswerRequest(BaseModel):

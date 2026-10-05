@@ -287,6 +287,10 @@ export default function AssessmentPage() {
       if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentCompleteResponse
       setCreatedPlanId(data.plan_id)
+      // The previous plan is no longer valid even if refreshing the summary fails.
+      // Completion already succeeded: do not make the user create the plan again.
+      useLanguageStore.getState().invalidateLanguages()
+      await useLanguageStore.getState().fetchLanguages()
       if (data.voice_trial?.available && data.voice_trial.token) {
         setVoiceTrial(data.voice_trial)
         setStep('voice-trial-offer')

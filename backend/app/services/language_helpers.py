@@ -160,6 +160,30 @@ _NATIVE_LANGUAGE_NAMES: dict[str, str] = {
     "hr": "Croatian",
 }
 
+_LESSON_PRACTICE_TITLES: dict[str, str] = {
+    "en": "Practice",
+    "es": "Práctica",
+    "fr": "Pratique",
+    "pt": "Prática",
+    "de": "Übung",
+    "it": "Pratica",
+    "pl": "Ćwiczenie",
+    "nl": "Oefening",
+    "ro": "Practică",
+    "ru": "Практика",
+    "tr": "Pratik",
+    "sv": "Övning",
+    "da": "Øvelse",
+    "fi": "Harjoitus",
+    "hr": "Vježba",
+}
+
+
+def lesson_practice_title(native_language: str, lesson_title: str) -> str:
+    label = _LESSON_PRACTICE_TITLES.get(native_language, "Practice")
+    return f"{label}: {lesson_title}"[:200]
+
+
 _MONTH_NAMES: dict[str, list[str]] = {
     "es": [
         "enero",

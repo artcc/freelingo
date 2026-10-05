@@ -186,9 +186,13 @@ response mapping must tolerate absent optional native-support and enriched-vocab
 `POST /api/lessons/{id}/start` exists but only verifies ownership and returns the lesson; the current
 lesson page does not call it and no in-progress state is persisted.
 
-Completion retries are idempotent. An already-completed row is returned before freemium quota checks
-and does not change timestamps, progress, XP, competencies, or quota. Freemium usage is recorded
-best-effort after the database transaction succeeds.
+Completion retries preserve the original `completed_at`, base lesson XP, completion counters,
+competencies, and quota, and skip freemium quota checks. Both first completions and retries check
+eligible unit and level milestones, including when the final evaluation predates the last teaching
+lesson. A retry can grant a first milestone reward missing from the ledger on the request's UTC day;
+already-awarded milestones do not create new activity. Completion and eligible rewards share one
+transaction and a single captured activity date. Freemium usage is recorded best-effort after the
+database transaction succeeds, only for the first completion.
 
 ## Exercise evaluation
 
@@ -204,6 +208,11 @@ exercise type and synchronize the relational row with `lesson.content.exercises`
 Lesson completion applies daily XP and skill progress to the lesson's owning plan. Unit competencies
 use the mean answered-exercise score, or the established fallback when none is available, and update by
 EMA. Detailed XP and mastery rules live in `learning-resources.instructions.md`.
+
+Completion also checks the persisted schedule for a unit bonus: 30 XP once per plan/unit only when
+every scheduled lesson in that unit is complete. Completing the teaching schedule and submitting the
+level test grants 100 XP once per plan, independent of score. Reward keys and credits commit in the
+same transaction as completion; missing future lesson rows cannot qualify as completed slots.
 
 ## Frontend integration
 
@@ -224,6 +233,25 @@ real assessment and `taken` shows the persisted result.
 The lesson page disables answer/regeneration/completion controls for completed lessons. After first
 completion it refreshes `/today`, can show day-complete state, refreshes freemium status, and may trigger
 the review prompt when the next returned lesson belongs to another unit or the plan is exhausted.
+
+## Lesson-linked voice practice
+
+The completion screen and completed-lesson review offer an optional practice button. The shared
+confirmation dialog previews the lesson title and explains the guided voice practice. Confirmation
+navigates to `/conversation?lesson={id}`; dismissal does not start voice or affect lesson completion.
+
+The conversation page reads the owned lesson detail before mounting the existing voice component.
+The detail response includes top-level `target_language`, derived from the lesson's persisted plan.
+Loading is cancellable and bounded to 20 seconds, with a retry action on failure. Missing, incomplete,
+or invalid lesson context never silently starts a generic conversation. Practice uses the lesson
+reference rather than chat/demo session-storage context and does not request `/study-plan/today`.
+
+The WebSocket independently verifies ownership and completion and loads a bounded reference snapshot
+of the lesson, scheduled objectives, and answered exercises. The lesson's plan owns the session
+language, level, and provenance, including when it is no longer the active plan. Voice access and
+quota rules remain authoritative. Practice does not change lesson completion or competencies; it can
+credit the existing voice-participation reward to the lesson's persisted plan.
+See `voice-conversation.instructions.md` for prompt lifecycle and history titles.
 
 ## Related specifications
 

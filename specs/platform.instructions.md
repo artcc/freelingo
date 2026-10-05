@@ -66,6 +66,10 @@ Redis token before issuing a replacement. Logout deletes the current token and c
 one refresh request, stores the new access token, and retries. Failed refresh clears client auth and
 redirects to login.
 
+A caller's AbortSignal also cancels its wait for the shared refresh and releases its loading-counter
+slot. It does not abort shared token rotation or log out other callers. A cancelled caller does not
+retry its original request when that refresh later completes.
+
 Frontend middleware checks refresh-cookie presence only for an explicit protected-route list. This
 is a preliminary navigation guard, not authorization. Backend `get_current_user` decodes the JWT,
 loads the user, and requires the account to remain active.
@@ -137,6 +141,12 @@ Without a plan it shows assessment as the next learning action. With a plan it c
 language/level, next available lesson, plan-day progress, XP, streak, lesson count, accuracy,
 vocabulary coverage, recent skills, today's lessons, pending lessons, and access to the full plan.
 
+`ProgressOverview` presents XP and streak as prominent cards, today's XP, a seven-day UTC activity
+strip, and compact lesson-count and lesson-exercise-accuracy indicators. The summary supplies today's
+XP and activity dates, including zero-XP activity. Plan/vocabulary bars have accessible numeric values;
+lesson-day segments reflect actual completed lessons. Loading discards responses from an obsolete
+language or unmounted page. Totals remain scoped to the current plan.
+
 Absence of a next lesson does not by itself prove plan completion. Skip-day behavior and lesson
 availability remain governed by the Study Plan specification.
 
@@ -178,7 +188,9 @@ incorrect lesson exercise, and 2 for a flashcard review. Comprehension XP is def
 specs.
 
 Skill and competency updates use a 70/30 exponential moving average. Competency mastery begins at
-0.80. Streak derives from consecutive dated activity rows within the plan.
+0.80. Streak derives from consecutive UTC-dated activity rows within the plan and expires when the
+latest entry predates yesterday. Rewards for conversations, spaced comprehension replays, units, and
+level completion follow `learning-resources.instructions.md`; all awards remain plan-owned.
 
 SM-2 accepts quality 0-5. Quality below 3 resets repetition and interval; successful repetitions use
 1 day, 6 days, then prior interval times ease factor, with minimum ease 1.3. The standard UI offers

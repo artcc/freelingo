@@ -29,6 +29,7 @@ class FlashcardFromWordRequest(BaseModel):
     word: str
     context: str = ""
     cefr_level: str = "B1"
+    lesson_id: int | None = Field(default=None, strict=True, ge=1, le=2_147_483_647)
 
 
 class FlashcardGenerateRequest(BaseModel):

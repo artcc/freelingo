@@ -27,15 +27,26 @@ currently retries any `LLMError`, not only transient subclasses. Anthropic disab
 explicitly; OpenAI-compatible clients do not, so three adapter invocations do not guarantee only three
 network requests.
 
-The timeout applies per adapter invocation. Do not document malformed output or context overflow as
-non-retryable while the implementation catches the common base class.
+The default request timeout is 120 seconds per network attempt, not an end-to-end generation limit.
+OpenAI SDK `APITimeoutError` and Python `TimeoutError` normalize to `LLMTimeoutError`. Do not document
+malformed output or context overflow as non-retryable while the default implementation catches the
+common base class.
+
+Listening and Reading call `structured_output` with an absolute monotonic deadline. This policy
+disables adapter and SDK transport retries, sets each request timeout to the remaining budget, and
+preserves timeout/provider exception types during JSON correction. It does not mutate shared client
+configuration or change the default retry policy of other features. The outer background-job budget
+also includes TTS and persistence and is configured by `EXERCISE_GENERATION_TIMEOUT_SECONDS`.
+The exercise coordinator maps Python, HTTPX, normalized LLM, and OpenAI SDK timeout exceptions to the
+same `timeout` status, including OpenAI TTS failures outside the LLM adapter.
 
 ## Structured output
 
 `structured_output()` appends the JSON-only instruction, parses and validates the first response, and
 performs one correction generation after parse/validation failure. If the correction path fails, its
 broad exception handling wraps that failure as `LLMResponseError`, including a timeout or availability
-error raised during the second generation.
+error raised during the second generation under the default policy. With a deadline, typed LLM
+errors are preserved and correction can only use the remaining budget.
 
 Anthropic non-streaming responses stopped at `max_tokens` become `LLMResponseError` before downstream
 JSON parsing and retain partial content for diagnostics.
@@ -79,7 +90,9 @@ There is no universal HTTP mapping for every LLM exception.
 - Native-resource and lesson-help endpoints commonly map all normalized LLM failures to 503.
 - Dashboard-banner translation maps normalized LLM failures to 502.
 - Exercise evaluation can return a deterministic unavailable/fallback result instead of an HTTP error.
-- Listening and Reading generation runs in background; failure is logged and no resource appears.
+- Listening and Reading generation runs in background; failure is logged and `/next` exposes
+  `failed` status with `timeout`, `generation_failed`, or `interrupted`. Available persisted exercises
+  take priority over operational status.
 - Chat emits JSON SSE error events, never `[ERROR]` text markers.
 - Voice emits structured WebSocket error frames and may keep recoverable sessions open.
 

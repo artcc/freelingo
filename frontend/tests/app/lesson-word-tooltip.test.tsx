@@ -111,13 +111,27 @@ function mockApiFetchImplementation(url: string) {
   return Promise.resolve(new Response(JSON.stringify({}), { status: 200 }))
 }
 
-async function selectWordInQuestion(word: string, questionText: string) {
-  const question = await screen.findByText(questionText)
-  mockSelection(word)
-  fireEvent.pointerUp(question)
+async function renderLesson() {
+  // Finish the resolved HTTP work and initial question-change effect before selecting.
+  // Finding text alone can observe the DOM before that effect dismisses old selections.
   await act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 0))
+    render(<LessonPage />)
   })
+}
+
+async function selectWordInQuestion(word: string, questionText: string) {
+  const question = screen.getByText(questionText)
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+  try {
+    mockSelection(word)
+    await act(async () => {
+      fireEvent.pointerUp(question)
+      // Advance the hook's deferred selection itself, not an unrelated real timer.
+      await vi.advanceTimersByTimeAsync(0)
+    })
+  } finally {
+    vi.useRealTimers()
+  }
 }
 
 async function submitCurrentAnswer(answer: string) {
@@ -145,7 +159,7 @@ describe('Lesson page word tooltip', () => {
   })
 
   it('keeps the word tooltip open when the exercises array is replaced without navigation', async () => {
-    render(<LessonPage />)
+    await renderLesson()
 
     await selectWordInQuestion('pregunta', 'Primera pregunta')
     expect(screen.getByText('saveWord')).toBeInTheDocument()
@@ -158,7 +172,7 @@ describe('Lesson page word tooltip', () => {
   })
 
   it('dismisses the word tooltip when navigating to the next exercise', async () => {
-    render(<LessonPage />)
+    await renderLesson()
 
     await selectWordInQuestion('pregunta', 'Primera pregunta')
     expect(screen.getByText('saveWord')).toBeInTheDocument()
@@ -168,7 +182,7 @@ describe('Lesson page word tooltip', () => {
     fireEvent.click(screen.getByRole('button', { name: /next/i }))
     await screen.findByText('Segunda pregunta')
 
-    expect(screen.queryByText('saveWord')).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.queryByText('saveWord')).not.toBeInTheDocument())
   })
 
   it('dismisses a selection made while question regeneration is pending', async () => {
@@ -178,7 +192,7 @@ describe('Lesson page word tooltip', () => {
         ? new Promise<Response>((resolve) => { resolveRegeneration = resolve })
         : mockApiFetchImplementation(url)
     )
-    render(<LessonPage />)
+    await renderLesson()
     await screen.findByText('Primera pregunta')
     fireEvent.click(screen.getByRole('button', { name: 'regenerateExercise' }))
     await selectWordInQuestion('pregunta', 'Primera pregunta')
@@ -189,6 +203,6 @@ describe('Lesson page word tooltip', () => {
       }), { status: 200 }))
     })
     await screen.findByText('Una pregunta nueva')
-    expect(screen.queryByText('saveWord')).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.queryByText('saveWord')).not.toBeInTheDocument())
   })
 })

@@ -34,11 +34,15 @@ interface LanguageStore {
   supportedLanguages: TargetLanguage[]
   availableLanguageCodes: string[]
   isSwitching: boolean
-  fetchLanguages: () => Promise<void>
+  needsRefresh: boolean
+  invalidateLanguages: () => void
+  fetchLanguages: (signal?: AbortSignal) => Promise<boolean>
   switchLanguage: (code: string) => Promise<boolean>
   addLanguage: (code: string) => Promise<boolean>
   removeLanguage: (code: string) => Promise<boolean>
 }
+
+let languageRequestId = 0
 
 export const useLanguageStore = create<LanguageStore>((set, get) => ({
   activeLanguage: null,
@@ -46,12 +50,25 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
   supportedLanguages: SUPPORTED_TARGET_LANGUAGES,
   availableLanguageCodes: [],
   isSwitching: false,
+  needsRefresh: false,
 
-  fetchLanguages: async () => {
+  invalidateLanguages: () => {
+    ++languageRequestId
+    set({ needsRefresh: true })
+  },
+
+  fetchLanguages: async (signal) => {
+    const requestId = ++languageRequestId
     try {
-      const res = await apiFetch('/api/languages')
-      if (!res.ok) return
+      const requestSignal = AbortSignal.any([
+        AbortSignal.timeout(20_000),
+        ...(signal ? [signal] : []),
+      ])
+      const res = await apiFetch('/api/languages', { signal: requestSignal })
+      if (!res.ok) return false
       const data = await res.json()
+      requestSignal.throwIfAborted()
+      if (requestId !== languageRequestId) return false
 
       const languages: UserLanguageInfo[] = (data.languages || []).map(
         mapUserLanguageInfo
@@ -66,24 +83,36 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
         userLanguages: languages,
         activeLanguage: activeLang,
         availableLanguageCodes: data.all_supported_languages || [],
+        needsRefresh: false,
       })
+      return true
     } catch {
-      // silently ignore — store stays with current state
+      // Preserve the last snapshot and its invalidation state so callers can retry.
+      return false
     }
   },
 
   switchLanguage: async (code: string): Promise<boolean> => {
     set({ isSwitching: true })
     try {
+      const signal = AbortSignal.timeout(20_000)
       const res = await apiFetch('/api/languages/active', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_language: code }),
+        signal,
       })
-      if (!res.ok) return false
-      await get().fetchLanguages()
-      return true
+      signal.throwIfAborted()
+      if (!res.ok) {
+        // Server/proxy failures may hide a committed mutation; reconcile with GET.
+        if (res.status >= 500 || res.status === 408) get().invalidateLanguages()
+        return false
+      }
+      get().invalidateLanguages()
+      return await get().fetchLanguages()
     } catch {
+      // A lost response does not tell us whether the server applied the switch.
+      get().invalidateLanguages()
       return false
     } finally {
       set({ isSwitching: false })

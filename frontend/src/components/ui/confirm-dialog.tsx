@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useEffectEvent, useId, useRef } from 'react'
+import { useEffect, useEffectEvent, useId, useRef, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 
 interface ConfirmDialogProps {
   open: boolean
-  title: string
+  title: ReactNode
   message: string
   confirmLabel?: string
   cancelLabel?: string

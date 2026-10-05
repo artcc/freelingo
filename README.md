@@ -5,7 +5,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.9.25-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.9.30-brightgreen?style=flat-square)
 
 <p align="left">
   <img src="assets/logo_large.png" alt="FreeLingo logo" />
@@ -27,6 +27,15 @@ native-language support, flashcards use SM-2 spaced repetition, and Lingu provid
 voice tutoring with durable user-controlled memories. Generated Listening and Reading practice,
 pronunciation exercises, XP, streaks, skill scores, unit competencies, and end-of-level tests complete
 the learning workflow.
+
+Completed lessons also offer voice practice with Lingu: confirm a short topic preview, then practise
+the lesson's content with questions and help informed by your exercise answers. These conversations
+use the existing voice controls and limits and appear in chat history under the lesson topic.
+
+XP also recognizes meaningful voice and chat participation, spaced Listening/Reading reviews, and
+completed units and level journeys. The dashboard highlights today's XP, the current learning streak,
+seven days of activity, and plan progress. Rewards and activity remain isolated by study plan and
+language; daily activity is measured in UTC.
 
 ## Hosted service
 

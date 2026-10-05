@@ -80,6 +80,44 @@ Redis, and database operations exposed to the frontend.
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
 
+Listening and Reading retain FastAPI background tasks with independent database/Redis resources.
+`exercise_generation.py` owns their renewable Redis leases, total generation deadline, cancellation,
+and temporary status. Domain services verify lease ownership before persistence. Immediate `/next`
+responses expose status without holding a database session open while waiting for inference.
+`get_exercise_study_plan` compares optional expected context with the authenticated user's active plan
+and rejects mismatches with 409. It does not authorize arbitrary client-supplied plan IDs. Redis lease
+ownership and PostgreSQL commit are separate operations; the pre-save guard is not transactional fencing.
+
+`progress_rewards.py` owns additional XP awards, limits, and source-key deduplication through
+`ProgressReward`. PostgreSQL `FOR NO KEY UPDATE` plan-row locks serialize reward decisions and daily
+progress while remaining compatible with FK `KEY SHARE` locks. Rewards use persisted resource
+ownership, explicit response-to-learner associations, actual turn modality, and a fixed UTC activity
+date. They commit with their progress credit; voice transcript pairs share that transaction.
+Voice captures completion before scheduling background persistence. Daily progress records ordered
+per-skill scores so writes arriving out of date order can reconcile later skill snapshots and streaks
+inside the same locked transaction, preserving subsequent scores and per-step rounding. Historical
+null score histories remain opaque skill checkpoints; no historical score reconstruction is attempted.
+
+Schema changes include versioned Alembic files in `backend/alembic/versions/`, shipped in the backend
+image and automatically applied by deployment startup through `alembic upgrade head`.
+`0053_progress_rewards`, linked to `0052_exercise_corrections`, supplies `progress_rewards`,
+`chat_history.modality`/`reply_to_id`, and nullable `progress.skill_updates`, including foreign keys,
+indexes and unique constraints. Historical skill-update values remain null rather than empty
+histories, and legacy messages retain null pairing/modality without inferred backfill. Startup applies
+pending revisions; it does not generate missing files.
+
+`backend/tests/test_progress_migration.py` checks the revision chain and PostgreSQL upgrade/downgrade
+SQL offline, including model/DDL agreement and additive changes for existing tables. These checks do
+not connect to a database and do not replace an actual PostgreSQL upgrade test.
+
+PostgreSQL-specific reward regressions live in `backend/tests/test_progress_rewards_postgres.py`.
+They require an explicitly supplied `TEST_POSTGRES_URL` using the asyncpg dialect and a test database
+where the maintainer permits creating/deleting isolated random test schemas. With that environment
+configured, run `pytest tests/test_progress_rewards_postgres.py --no-cov -q -x` from `backend/`.
+The tests coordinate two independent sessions after FK inserts to exercise deadlock avoidance,
+first-day credit, shared caps, and interleaved replies. They skip without that URL; SQLite checks do
+not validate PostgreSQL locking. Local execution does not require or start PostgreSQL or Docker.
+
 ### Static learning data
 
 `app/data/` contains the canonical curriculum, grammar, vocabulary, phrasebook, and assessment-bank

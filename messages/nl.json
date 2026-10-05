@@ -1504,15 +1504,48 @@
     "trialUnlimited": "Onbeperkte toegang",
     "requiresSubscription": "Alleen Premium"
   },
+  "lessonPractice": {
+    "action": "Oefen deze les met Lingu",
+    "title": "Oefening: <topic>{title}</topic>",
+    "description": "Oefen de inhoud van deze les hardop. Lingu stelt vragen en helpt je toe te passen wat je hebt geleerd. Jij beslist wanneer je stopt.",
+    "start": "Begin met oefenen",
+    "cancel": "Niet nu",
+    "unavailable": "De oefening kon niet worden voorbereid. Controleer of de les is afgerond en probeer het opnieuw.",
+    "back": "Terug naar het leerplan"
+  },
+  "dashboardProgress": {
+    "title": "Je voortgang",
+    "scope": "Je huidige taal en studieplan",
+    "details": "Voortgang bekijken",
+    "experience": "Ervaring",
+    "todayXp": "+{xp} XP vandaag",
+    "experienceHint": "Elke oefening draagt bij aan je leertraject.",
+    "streak": "Leerreeks",
+    "days": "{count, plural, one {dag} other {dagen}}",
+    "practisedToday": "Vandaag geoefend",
+    "readyToday": "Een nieuwe kans om te oefenen",
+    "week": "Activiteit van de afgelopen zeven dagen",
+    "activeDay": "Geoefend",
+    "inactiveDay": "Geen activiteit geregistreerd",
+    "utcHint": "Laatste 7 dagen",
+    "lessons": "Voltooide lessen",
+    "accuracy": "Juiste antwoorden bij lesoefeningen",
+    "correctAnswers": "{correct} van {total} antwoorden goed",
+    "noExercises": "Je resultaten verschijnen na je eerste oefening."
+  },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Vijf nieuwe interfacetalen",
-      "desc": "FreeLingo is beschikbaar in het Deens, Fins, Kroatisch, Turks en Zweeds. Kies je interfacetaal in Instellingen."
+      "label": "Oefen je lessen met Lingu",
+      "desc": "Start een spraakgesprek vanuit een afgeronde les. Lingu helpt je toe te passen wat je hebt geleerd. Het gesprek wordt opgeslagen met de titel van het geoefende onderwerp."
     },
     "entry2": {
+      "label": "Meer manieren om XP te verdienen",
+      "desc": "Verdien XP met <bold>spraak, chat, gespreide lees- en luisterherhalingen en het afronden van onderdelen en niveaus</bold>. Je vernieuwde dashboard toont de XP van vandaag, je leerreeks en je recente activiteit."
+    },
+    "entry3": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }
@@ -1557,6 +1590,12 @@
     "moreInHistory": "+{count} meer",
     "practiceAgain": "Opnieuw oefenen",
     "replayNoXp": "Herhaling (geen XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Je actieve taal of studieplan is gewijzigd. Laad deze pagina opnieuw om door te gaan.",
+    "failed": "De oefening kon niet worden gemaakt. Probeer het opnieuw.",
+    "timeout": "Het maken van de oefening duurde te lang. Probeer het opnieuw.",
+    "unavailable": "De status van de oefening kon niet worden gecontroleerd. Probeer het opnieuw."
   },
   "reading": {
     "title": "Lezen",

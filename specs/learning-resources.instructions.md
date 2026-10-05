@@ -114,12 +114,70 @@ flashcards.
 Progress has daily rows per user, plan, and date with XP, lessons, exercises, streak, and skill JSON.
 `UserCompetency` stores one row per user, plan, unit, and competency text.
 
+### Activity and rewards
+
+Activity days use UTC. Submitted Reading/Listening attempts count even with zero correct answers
+or zero replay XP; conversations count after a distinct learner contribution receives a persisted
+nonempty tutor response. Greetings, unanswered contributions, and planless conversations do not count.
+The current streak is the latest stored streak only if its date is today or yesterday; otherwise it is
+zero. New daily rows carry forward the previous row's skill snapshot before applying scored updates.
+Daily rows also retain ordered scores per skill in `skill_updates`. Under the same plan lock and
+transaction, a late write reconciles every later row's streak from consecutive activity dates and
+replays each later day's own scores against its corrected predecessor, rounding each EMA update to
+three decimals. Gaps reset streaks but do not discard skills; XP and daily counters stay on their
+original dates. Same-day scores retain their persistence order. Legacy rows with null `skill_updates`
+remain opaque skill checkpoints: their original score sequences are not inferred or backfilled.
+Reconciliation preserves those checkpoints and uses them as the baseline for following tracked days.
+
+Conversation activity uses the persisted assistant response's UTC completion date. Each eligible
+response has a unique `reply_to_id` pointing to its learner message; both messages carry the actual
+turn `modality` (`chat` or `voice`). Conversation origin is only descriptive. Counting follows these
+associations rather than message order, including replies completed after a prompt's UTC day ends.
+Unpaired legacy messages are not reconstructed or classified for rewards. Text continuation of voice
+history counts only toward chat thresholds/caps and does not consume the voice reward.
+
+Comprehension captures `completed_at` once on entry to submission. Its date is used for replay
+eligibility, source key, ledger, and daily progress. Conversation rewards likewise pass the persisted
+response date through all daily checks and writes. Database waits never recalculate the activity day.
+Voice captures the response completion timestamp in the successful processing path before scheduling
+the background transcript task, so task scheduling delays cannot move activity to another UTC day.
+
+Base rewards are 20 XP for lesson completion, 5/1 for correct/incorrect lesson exercises, 2 per
+flashcard review, and 10 per correct first-attempt Reading/Listening answer. Additional rewards:
+
+- Voice: 20 XP after three distinct answered learner contributions in a conversation on a UTC day,
+  once per conversation/day, at most 60 XP per plan/day. Lesson practice shares this reward.
+- Text chat: 10 XP per block of five distinct answered contributions in a conversation/day, at most
+  30 XP per plan/day across conversations. Whitespace and case differences do not make a new contribution.
+- Reading/Listening replay: 5 XP per exercise/plan/UTC day when an attempt for that exercise in that
+  plan exists on an earlier UTC day. Other replays give zero XP. All submitted attempts count as activity.
+- Unit: 30 XP once per plan/unit, after all its persisted schedule slots have completed lesson rows.
+  Future scheduled lessons must also be complete, not just already generated lessons.
+- Level: 100 XP once per plan, after all scheduled teaching lessons and the level test are complete,
+  independently of the test score. Current/legacy completion-test slots are excluded.
+
+`progress_rewards.py` records additional awards in `progress_rewards`. A unique plan/kind/source key
+and a PostgreSQL `FOR NO KEY UPDATE` plan-row lock protect repeat requests and daily limits without
+conflicting with FK `KEY SHARE` locks held by concurrent inserts. Award and daily credit share
+the caller's transaction. Comprehension attempt persistence shares that transaction. Existing totals
+are preserved; no historical reward backfill is performed. A qualifying milestone submitted again
+may receive its first award if its ledger key does not yet exist. Lesson completion checks both unit
+and level milestones, including when the level test was recorded before the last teaching lesson.
+Resubmitting an already-completed lesson checks the same milestones without repeating base lesson XP,
+completion counters, competencies, or quota consumption, and preserves its original `completed_at`.
+Any newly granted milestone uses the resubmission's UTC activity day; an already-awarded milestone
+does not create new activity. All eligible milestone awards share the completion transaction and its
+single captured activity date. Rewards describe participation and
+completion, not linguistic mastery. Ownership comes from the persisted conversation/lesson/plan or
+the validated comprehension attempt context, never from mutable client selection.
+
 Exercise skill uses lesson type as its key. Updates apply `0.7 * previous + 0.3 * latest`; a new skill
 starts at the latest score. Lesson completion applies the lesson's mean answered-exercise score, or
 0.5 when none is available, to every competency in the unit. Mastery is `score >= 0.80`.
 
 - `GET /api/progress/summary`: authenticated, `60/minute`; summarizes the active plan, returns zeros
-  without one, and exposes skill JSON from the latest daily row.
+  without one, and exposes skill JSON from the latest daily row. Includes `today_xp` and seven
+  chronological `activity_week` entries (`date`, `active`, `xp`), ending on the current UTC day.
 - `GET /api/progress/history`: authenticated, `60/minute`; returns up to 90 recent daily rows.
 - `GET /api/progress/competencies`: authenticated, `60/minute`; returns unit ID, average score,
   mastered count, and total count, or an empty list without a plan.
@@ -141,6 +199,11 @@ grammar slug.
 - `GET /api/assessment/bank`: authenticated, `60/minute`; returns the bank including correct answers.
 - `POST /api/assessment/evaluate`: authenticated, `60/minute`; evaluates submitted answer records.
 - `POST /api/assessment/complete`: authenticated, `10/minute`; creates the selected-language plan.
+
+After successful completion, the frontend invalidates and refreshes the shared language/plan summary
+before navigating to Plan or showing the voice-trial offer. If this bounded refresh fails, completion
+still proceeds, and the summary remains marked for refresh. Listening and Reading recover that
+context before using it; a summary failure must not cause the plan-creation request to be repeated.
 
 The client calculates each `correct` boolean. Evaluation trusts submitted question metadata and does
 not retrieve the bank to verify selected options. The deterministic algorithm is described in

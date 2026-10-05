@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from pydantic import BaseModel, field_serializer
+from pydantic import BaseModel, Field, field_serializer
 
 
 class ProgressResponse(BaseModel):
@@ -23,6 +23,12 @@ class ProgressResponse(BaseModel):
         return v.isoformat()
 
 
+class ProgressActivityDay(BaseModel):
+    date: date
+    active: bool
+    xp: int
+
+
 class ProgressSummary(BaseModel):
     total_xp: int
     current_streak: int
@@ -31,6 +37,8 @@ class ProgressSummary(BaseModel):
     exercises_correct: int
     accuracy: float
     skills: dict
+    today_xp: int = 0
+    activity_week: list[ProgressActivityDay] = Field(default_factory=list)
     vocabulary_level: str | None = None
     vocabulary_mastered: int = 0
     vocabulary_total: int = 0

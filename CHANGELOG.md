@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.30] - 2026-10-05
+
+### Added
+
+- Voice practice with Lingu from completed lessons, using their content and answered exercises as conversation context. Practice sessions appear in chat history with the lesson title.
+- Plan-specific XP rewards for voice and chat participation, spaced Listening/Reading reviews, and completing units and levels, with daily limits and protection against duplicate rewards. Completion milestones recognize either order of lessons and final evaluation, and eligible historical completions can receive their first milestone reward when resubmitted.
+
+### Changed
+
+- Refreshed dashboard progress with today's XP, streaks, weekly activity, and clearer plan and vocabulary indicators in both themes.
+- Completed comprehension attempts and answered conversations count as daily activity even when they award no XP.
+- Listening and Reading return exercise-generation status immediately, with configurable generation timeouts.
+- Declined feedback is hidden from the default board and admin queue and remains available through its status filter.
+
+### Fixed
+
+- Voice startup allows time for cold speech-service preparation, supports cancellation while preparing, and records distinct timeout, network, and HTTP failure diagnostics.
+- Streaks expire after missed activity days, and daily skill scores carry forward instead of losing prior progress.
+- Listening and Reading recover from slow generation and temporary connection failures, resume pending exercises, and show localized errors instead of remaining indefinitely in a loading state.
+- Completing Assessment makes the new plan available to Listening and Reading without reloading the page.
+- Language and plan changes refresh progress consistently and prevent stale responses or submissions from assigning exercises and XP to the wrong context. Failed language switches preserve current answers and allow recovery.
+
 ## [1.9.25] - 2026-09-25
 
 ### Added

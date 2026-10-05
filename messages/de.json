@@ -1504,15 +1504,48 @@
     "trialUnlimited": "Unbegrenzter Zugang",
     "requiresSubscription": "Nur Premium"
   },
+  "lessonPractice": {
+    "action": "Diese Lektion mit Lingu üben",
+    "title": "Übung: <topic>{title}</topic>",
+    "description": "Übe den Inhalt dieser Lektion im Sprachgespräch. Lingu stellt dir Fragen und hilft dir, das Gelernte anzuwenden. Du entscheidest, wann du aufhörst.",
+    "start": "Übung starten",
+    "cancel": "Jetzt nicht",
+    "unavailable": "Die Übung konnte nicht vorbereitet werden. Prüfe, ob die Lektion abgeschlossen ist, und versuche es erneut.",
+    "back": "Zurück zum Lernplan"
+  },
+  "dashboardProgress": {
+    "title": "Dein Fortschritt",
+    "scope": "Deine aktuelle Sprache und dein Lernplan",
+    "details": "Fortschritt ansehen",
+    "experience": "Erfahrung",
+    "todayXp": "+{xp} XP heute",
+    "experienceHint": "Jede Übung trägt zu deinem Lernweg bei.",
+    "streak": "Lernserie",
+    "days": "{count, plural, one {Tag} other {Tage}}",
+    "practisedToday": "Heute geübt",
+    "readyToday": "Eine neue Gelegenheit zum Üben",
+    "week": "Aktivität der letzten sieben Tage",
+    "activeDay": "Geübt",
+    "inactiveDay": "Keine Aktivität erfasst",
+    "utcHint": "Letzte 7 Tage",
+    "lessons": "Abgeschlossene Lektionen",
+    "accuracy": "Trefferquote bei Lektionsübungen",
+    "correctAnswers": "{correct} von {total} Antworten richtig",
+    "noExercises": "Deine Ergebnisse erscheinen nach der ersten Übung."
+  },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Fünf neue Oberflächensprachen",
-      "desc": "FreeLingo ist auf Dänisch, Finnisch, Kroatisch, Schwedisch und Türkisch verfügbar. Wähle deine Oberflächensprache in den Einstellungen."
+      "label": "Übe deine Lektionen mit Lingu",
+      "desc": "Starte ein Sprachgespräch aus einer abgeschlossenen Lektion. Lingu hilft dir, das Gelernte anzuwenden. Das Gespräch wird unter dem Titel des geübten Themas gespeichert."
     },
     "entry2": {
+      "label": "Mehr Möglichkeiten, XP zu sammeln",
+      "desc": "Sammle XP mit <bold>Sprachgesprächen, Chats, zeitversetzten Lese- und Hörwiederholungen sowie abgeschlossenen Einheiten und Niveaus</bold>. Das überarbeitete Dashboard zeigt deine heutigen XP, deine Lernserie und deine letzten Aktivitäten."
+    },
+    "entry3": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }
@@ -1557,6 +1590,12 @@
     "moreInHistory": "+{count} weitere",
     "practiceAgain": "Erneut üben",
     "replayNoXp": "Wiederholung (kein XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Deine aktive Sprache oder dein Lernplan hat sich geändert. Lade diese Seite neu, um fortzufahren.",
+    "failed": "Die Übung konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "timeout": "Das Erstellen der Übung hat zu lange gedauert. Bitte versuche es erneut.",
+    "unavailable": "Der Status der Übung konnte nicht überprüft werden. Bitte versuche es erneut."
   },
   "reading": {
     "title": "Lesen",

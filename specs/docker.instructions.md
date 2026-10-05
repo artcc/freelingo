@@ -61,6 +61,12 @@ public.
 values; a field present in backend `Settings` but absent from Compose is not configurable merely by
 placing it in `.env`.
 
+Both Compose files forward `EXERCISE_GENERATION_TIMEOUT_SECONDS` with a default of 600. This positive
+integer limits the complete Listening/Reading background job, including LLM output, JSON correction,
+audio synthesis where applicable, and persistence. `.env.example` documents it for operators using
+slow local models. The frontend receives the generation deadline through the API rather than a
+separate environment variable.
+
 Operators must review database/data path, Redis password, JWT secret, CORS/cookie security,
 registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, logging, and
 analytics settings.
@@ -79,9 +85,16 @@ Their in-code defaults therefore apply in containers.
 
 ## Startup and migrations
 
-The backend startup command applies existing Alembic revisions before starting Uvicorn. This does not
-create or review migration files. Migration generation/application outside normal startup belongs to
-the remote deployment maintainer; migrations are not created locally.
+Schema changes include their Alembic revision files in `backend/alembic/versions/`, linked to the
+previous revision through `down_revision` and committed with the corresponding model changes.
+The backend image includes these files. On deployment, the backend startup command automatically
+applies pending revisions with `alembic upgrade head` before starting Uvicorn. Startup does not
+generate revisions; preparing the versioned files is part of development, not a manual deployment step.
+
+The progress reward schema is supplied by `0053_progress_rewards`, following
+`0052_exercise_corrections`. It adds the reward ledger, nullable transcript pairing/modality, and
+nullable daily skill-update history while preserving existing data. Offline SQL checks do not
+replace verification of an actual PostgreSQL upgrade; tests using `metadata.create_all` bypass Alembic.
 
 ## GPU and provider selection
 

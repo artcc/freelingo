@@ -7,7 +7,7 @@ from contextlib import aclosing
 from dataclasses import dataclass
 
 import anthropic as _anthropic
-from openai import AsyncOpenAI
+from openai import APITimeoutError, AsyncOpenAI
 from pydantic import BaseModel
 
 from app.core.app_logger import get_logger
@@ -548,9 +548,11 @@ class LLMAdapter:
             self.client = None
             self.model = settings.ANTHROPIC_MODEL
 
-    async def _call_with_retry(self, fn, *args, tools_requested: bool = False, **kwargs):
+    async def _call_with_retry(
+        self, fn, *args, tools_requested: bool = False, max_retries: int = MAX_RETRIES, **kwargs
+    ):
         last_error = None
-        for attempt in range(MAX_RETRIES + 1):
+        for attempt in range(max_retries + 1):
             try:
                 return await fn(*args, **kwargs)
             except LLMError as e:
@@ -560,8 +562,8 @@ class LLMAdapter:
                 # handler (e.g. _anthropic_chat). Preserve the type instead of
                 # re-wrapping into a generic LLMError.
                 last_error = e
-            except TimeoutError:
-                last_error = LLMTimeoutError(f"{self.provider} timed out after {REQUEST_TIMEOUT}s")
+            except TimeoutError, APITimeoutError:
+                last_error = LLMTimeoutError(f"{self.provider} request timed out")
             except Exception as e:
                 if tools_requested and _is_tools_unsupported_error(e):
                     raise LLMToolsUnsupportedError(f"{self.provider} does not support tools") from e
@@ -577,7 +579,7 @@ class LLMAdapter:
                 else:
                     last_error = LLMError(f"{self.provider} error: {error_msg}")
 
-            if attempt < MAX_RETRIES:
+            if attempt < max_retries:
                 await asyncio.sleep(RETRY_DELAY_SECONDS * (attempt + 1))
 
         raise last_error
@@ -661,8 +663,14 @@ class LLMAdapter:
         tools: list[LLMTool] | None = None,
         *,
         reasoning_effort: str | None = None,
+        request_timeout: float = REQUEST_TIMEOUT,
+        sdk_max_retries: int | None = None,
     ):
         if self.provider == "anthropic":
+            if request_timeout != REQUEST_TIMEOUT:
+                return await self._anthropic_chat(
+                    messages, stream, tools, request_timeout=request_timeout
+                )
             return await self._anthropic_chat(messages, stream, tools)
 
         # For Ollama, OpenAI and DeepSeek (all OpenAI-compatible):
@@ -686,11 +694,14 @@ class LLMAdapter:
         if reasoning_effort is not None:
             extra["reasoning_effort"] = reasoning_effort
 
-        response = await self.client.chat.completions.create(
+        client = self.client
+        if sdk_max_retries is not None:
+            client = client.with_options(max_retries=sdk_max_retries)
+        response = await client.chat.completions.create(
             model=self.model,
             messages=messages,
             stream=stream,
-            timeout=REQUEST_TIMEOUT,
+            timeout=request_timeout,
             **extra,
         )
         if stream:
@@ -716,12 +727,20 @@ class LLMAdapter:
             return "none"
         return None
 
-    async def structured_output(self, messages: list[dict], schema: type[BaseModel]) -> BaseModel:
+    async def structured_output(
+        self, messages: list[dict], schema: type[BaseModel], *, deadline: float | None = None
+    ) -> BaseModel:
         # Use JSON mode for all providers — more reliable across versions
-        return await self._structured_via_json(messages, schema)
+        if deadline is None:
+            return await self._structured_via_json(messages, schema)
+        try:
+            async with asyncio.timeout_at(deadline):
+                return await self._structured_via_json(messages, schema, deadline=deadline)
+        except TimeoutError as exc:
+            raise LLMTimeoutError("Structured generation deadline reached") from exc
 
     async def _structured_via_json(
-        self, messages: list[dict], schema: type[BaseModel]
+        self, messages: list[dict], schema: type[BaseModel], *, deadline: float | None = None
     ) -> BaseModel:
         messages_with_format = messages + [
             {
@@ -730,7 +749,22 @@ class LLMAdapter:
             }
         ]
 
-        raw = await self._call_with_retry(self._do_chat, messages_with_format, False)
+        async def request(request_messages: list[dict]) -> str:
+            if deadline is None:
+                return await self._call_with_retry(self._do_chat, request_messages, False)
+            remaining = deadline - asyncio.get_running_loop().time()
+            if remaining <= 0:
+                raise LLMTimeoutError("Structured generation deadline reached")
+            return await self._call_with_retry(
+                self._do_chat,
+                request_messages,
+                False,
+                max_retries=0,
+                request_timeout=remaining,
+                sdk_max_retries=0,
+            )
+
+        raw = await request(messages_with_format)
 
         cleaned = raw.strip()
         if cleaned.startswith("```"):
@@ -749,7 +783,7 @@ class LLMAdapter:
                 }
             ]
             try:
-                raw2 = await self._call_with_retry(self._do_chat, retry_messages, False)
+                raw2 = await request(retry_messages)
                 cleaned2 = (
                     raw2.strip()
                     .removeprefix("```json")
@@ -759,6 +793,8 @@ class LLMAdapter:
                 )
                 return schema.model_validate(json.loads(cleaned2))
             except Exception as e2:
+                if deadline is not None and isinstance(e2, LLMError):
+                    raise
                 raise LLMResponseError(
                     f"Failed to parse JSON after retry: {str(e2)}",
                     raw_response=raw2 if "raw2" in locals() else raw,
@@ -831,6 +867,8 @@ class LLMAdapter:
         messages: list[dict],
         stream: bool = False,
         tools: list[LLMTool] | None = None,
+        *,
+        request_timeout: float = REQUEST_TIMEOUT,
     ):
         # Combine ALL system messages so that extra instructions (e.g. the
         # JSON format hint appended by _structured_via_json) are not silently
@@ -851,7 +889,7 @@ class LLMAdapter:
             messages=user_messages,
             max_tokens=settings.ANTHROPIC_MAX_TOKENS,
             stream=stream,
-            timeout=REQUEST_TIMEOUT,
+            timeout=request_timeout,
         )
         # Only pass system when present — Anthropic SDK does not accept None.
         if system is not None:
@@ -873,7 +911,7 @@ class LLMAdapter:
         try:
             response = await self._anthropic.messages.create(**kwargs)
         except _anthropic.APITimeoutError as e:
-            raise LLMTimeoutError(f"anthropic timed out after {REQUEST_TIMEOUT}s") from e
+            raise LLMTimeoutError(f"anthropic timed out after {request_timeout}s") from e
         except _anthropic.APIConnectionError as e:
             raise LLMUnavailableError(
                 "anthropic is unreachable. Check that the service is running."

@@ -183,8 +183,33 @@ Daily progress record, one row per user per day per plan.
 - exercises_total — Type: integer; Notes: —
 - streak_day — Type: integer; Notes: Consecutive day count
 - skills — Type: JSON; Notes: Skill scores: `{"grammar": 0.6, "vocabulary": 0.4, ...}`
+- skill_updates — Type: nullable JSON; Notes: Ordered scores per skill for that day, for example
+  `{"grammar": [1.0, 0.5]}`. Progress service initializes new rows to `{}`; legacy rows remain null.
 
 **Constraint:** `UNIQUE(user_id, study_plan_id, date)` — one progress row per user per plan per day.
+
+Late activity reconciles subsequent streaks and replays their recorded skill updates against the
+corrected preceding snapshot, with rounding after each EMA step. Legacy null histories are opaque
+skill checkpoints and are preserved, not inferred from their aggregates. Revision `0053_progress_rewards`
+adds nullable `skill_updates` without replacing historical null values with empty objects. The
+column is internal persistence metadata and is not exposed in progress response schemas.
+
+## ProgressReward (`progress_rewards`)
+
+Durable additional XP awards. The source key records provenance without cascading deletion from
+conversations or exercises; deleting those resources does not reopen reward eligibility.
+
+- `id`: integer primary key.
+- `user_id`: indexed, required FK to users, CASCADE.
+- `study_plan_id`: indexed, required FK to study_plans, CASCADE.
+- `kind`: required string(30), voice/chat/reading_replay/listening_replay/unit/level.
+- `source_key`: required string(160), service-generated resource/date/block or milestone key.
+- `date`: indexed UTC award date.
+- `xp`: required integer credit.
+- Unique `(study_plan_id, kind, source_key)` (`uq_progress_reward_source`).
+
+Award rules live in `learning-resources.instructions.md`. The table is registered in model metadata
+and created by versioned revision `0053_progress_rewards`, applied automatically on deployment.
 
 ## Conversation (`conversations`)
 
@@ -195,7 +220,7 @@ Grouping of chat messages (text and voice) into named conversations.
 - study_plan_id — Type: integer (nullable); Notes: FK → study_plans (SET NULL), indexed
 - target_language — Type: string (nullable); Notes: Indexed conversation-language snapshot
 - title — Type: string; Notes: Auto-generated or user-set
-- source — Type: string; Notes: `'chat'` or `'voice'` (default `'chat'`)
+- source — Type: string; Notes: Creation origin, `'chat'` or `'voice'` (default `'chat'`); not the modality of subsequent turns
 - created_at — Type: datetime; Notes: —
 - updated_at — Type: datetime; Notes: —
 
@@ -211,6 +236,18 @@ Individual messages within text chat and voice conversations.
 - role — Type: string; Notes: `"user"` or `"assistant"`
 - content — Type: text; Notes: Message body
 - created_at — Type: datetime; Notes: —
+- modality — Type: nullable string(10); Notes: Actual message modality, `chat` or `voice`; null for legacy rows
+- reply_to_id — Type: nullable integer; Notes: Unique FK → chat_history (SET NULL), assistant's learner-message association
+
+The assistant completion timestamp fixes the UTC day of a completed turn. A prompt can have an
+earlier date; pairing is by ID, not position or date. Both sides of successful voice turns and their
+progress commit atomically. Greetings and historical messages remain unpaired and do not count as
+completed reward turns. The backend validates matching conversation, user, roles, and modality before
+crediting a pair. Deleting the learner message clears its association without deleting ledger credit.
+
+Revision `0053_progress_rewards` adds both nullable columns, the self-reference and its unique
+constraint, alongside `progress_rewards` and nullable `progress.skill_updates`. Do not backfill
+modality from conversation origin or pair by adjacency.
 
 ## UserCompetency (`user_competencies`)
 
@@ -259,7 +296,8 @@ Records user submissions for a listening exercise.
 - completed_at — Type: datetime; Notes: Auto-set on creation
 
 Initial duplicate submissions are rejected by the service. A replay creates an additional row and
-always awards zero XP; there is no database uniqueness constraint on user and exercise.
+awards 5 XP once per plan/exercise/UTC day if a prior-day attempt exists in that plan, otherwise zero.
+There is no database uniqueness constraint on user and exercise.
 
 ## ReadingExercise (`reading_exercises`)
 
@@ -291,7 +329,8 @@ Records user submissions for a reading exercise.
 - completed_at — Type: datetime; Notes: Auto-set on creation
 
 Initial duplicate submissions are rejected by the service. A replay creates an additional row and
-always awards zero XP; there is no database uniqueness constraint on user and exercise.
+awards 5 XP once per plan/exercise/UTC day if a prior-day attempt exists in that plan, otherwise zero.
+There is no database uniqueness constraint on user and exercise.
 
 ## FeedbackEntry (`feedback_entries`)
 

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, field_serializer
+
+from app.schemas.exercise_generation import ExerciseContext, ExerciseGenerationState
 
 
 class QuestionOut(BaseModel):
@@ -40,16 +43,18 @@ class ListeningExerciseOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
-class ListeningNextResponse(BaseModel):
+class ListeningNextResponse(ExerciseGenerationState):
+    context: ExerciseContext
     available: bool
     exercise: ListeningExerciseOut | None = None
 
 
 class ListeningGeneratingResponse(BaseModel):
-    status: str  # "generating"
+    status: Literal["generating", "available"]
 
 
 class ListeningSubmitRequest(BaseModel):
+    context: ExerciseContext
     exercise_id: int
     answers: dict[str, str]  # {"0": "A", "1": "B", "2": "C", "3": "D", "4": "A"}
     replay: bool = False  # True → re-attempt from history; awards no XP
@@ -84,6 +89,7 @@ class ListeningAttemptOut(BaseModel):
 
 
 class ListeningHistoryResponse(BaseModel):
+    context: ExerciseContext
     items: list[ListeningAttemptOut]
     total: int
     skip: int

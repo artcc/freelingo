@@ -160,9 +160,9 @@ Auth required (`get_current_user`). Serves canonical backend vocabulary data org
 
 Lesson viewing and exercise answering use `get_current_user` (always free). Only completion is gated by `require_subscription_or_freemium("lessons")`.
 
-- **GET `/{lesson_id}`** — Rate limit: 60/min. Auth: get_current_user. Lesson detail with exercises. Exercise responses include optional `native_explanation` and `native_hint` copied from generated lesson JSON when available. Lesson content may include enriched vocabulary items with optional native-language translation, example translation, usage note, and reading fields.
+- **GET `/{lesson_id}`** — Rate limit: 60/min. Auth: get_current_user. Returns `{lesson, exercises, target_language}`; `target_language` comes from the lesson's persisted study plan, independently of the active language. Exercise responses include optional `native_explanation` and `native_hint` copied from generated lesson JSON when available. Lesson content may include enriched vocabulary items with optional native-language translation, example translation, usage note, and reading fields.
 - **POST `/{lesson_id}/start`** — Rate limit: 60/min. Auth: get_current_user. Validates ownership and returns the lesson; no in-progress state is persisted.
-- **POST `/{lesson_id}/complete`** — Rate limit: 60/min. Auth: get_current_user; subscription/freemium quota is checked only when applying the first completion. Locks the lesson row and atomically commits completion, progress, XP, and competencies. Repeated or concurrent calls for an already-completed lesson return its existing state without changing `completed_at`, quota, progress, XP, or competencies, including when the user's freemium quota is exhausted.
+- **POST `/{lesson_id}/complete`** — Rate limit: 60/min. Auth: get_current_user; subscription/freemium quota is checked only when applying the first completion. Locks the lesson row and atomically commits completion, progress, XP, competencies, and eligible unit/level rewards. Checks the level milestone even when the evaluation was recorded before the last teaching lesson, including lessons without a unit. Repeated calls preserve `completed_at`, base lesson XP, completion counters, competencies, and quota, including when the user's freemium quota is exhausted. They can grant a first eligible unit/level reward missing from the ledger, using the resubmission's UTC day. Existing reward keys prevent duplicate credit or new activity on further retries.
 - **POST `/{lesson_id}/native-explanation`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a native-language explanation for existing lessons at any CEFR level whose `content.native_explanation` is missing. Returned support includes translated text, key points, examples, common traps, and a mini-glossary. If already present, returns the cached explanation idempotently.
 - **POST `/exercises/{id}/native-explanation`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a concise native-language clarification for an exercise whose target-language `explanation` exists but whose generated JSON lacks `native_explanation`. If already present, returns the cached exercise-level explanation idempotently.
 - **POST `/exercises/{id}/native-hint`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a concise pre-answer native-language hint for an exercise whose generated JSON lacks `native_hint`. Hints must help without revealing the correct answer. If already present, returns the cached hint idempotently.
@@ -180,6 +180,7 @@ Lesson viewing and exercise answering use `get_current_user` (always free). Only
 - **POST `/{card_id}/review`** — Rate limit: 60/min. Records an SM-2 review (quality 0–5) and credits vocabulary progress to the card's persisted `study_plan_id`, not transient active-language state
 - **POST `/generate`** — Rate limit: 20/min. Generates N flashcards via LLM with native-language translations. The backend derives the target language from the authenticated user's active study plan; the request body has no client-supplied `target_language`. Persisted cards and `FlashcardResponse` include that plan's `study_plan_id`.
 - **POST `/from-word`** — Rate limit: 30/min. Saves a word as a flashcard: body `{word, context, cefr_level}`. Best-effort deduplication is scoped to the user's active plan, with the oldest matching card winning. Comparison is case-insensitive, collapses Unicode whitespace runs, and trims boundary spaces without changing the persisted word's capitalization. An input match skips the AI; otherwise the AI's canonical word is checked before insertion. Concurrent first-time saves can still both insert. Returns `FlashcardFromWordResponse` (`FlashcardResponse` plus `already_saved: bool`): `true` means the card is already in My Vocabulary (`source="from_text"`). Generated/imported cards are promoted in place with `UPDATE RETURNING` and return `false`, preserving review progress. If a card disappears before promotion, the request continues as a miss; response data is captured before commit without a subsequent refresh.
+  Optional `lesson_id` binds saves from lesson-linked voice practice to an owned completed lesson. When non-null, it must be a strict JSON integer in `1..2147483647` (otherwise HTTP 422). The backend verifies lesson, plan, and language-track ownership; unavailable or incomplete lessons return HTTP 404 without falling back to the active plan. Lookup language and CEFR level, deduplication, and storage use the lesson's persisted plan, including historical plans. Omitted or null `lesson_id` preserves active-plan behavior.
 - **GET `/vocabulary`** — Rate limit: 60/min. Query params: `page`, `limit`, and optional `search`. Returns active-plan saved vocabulary ordered case-insensitively by word as `{items,total,page,pages}`.
 - **DELETE `/{card_id}`** — Rate limit: 60/min. Permanently deletes a flashcard owned by the user; 204 No Content
 
@@ -209,6 +210,12 @@ Chat endpoints require authentication and maintenance/access policy. Conversatio
 ---
 
 ## Progress — `/api/progress`
+
+The summary also returns `today_xp` and `activity_week`: seven chronological UTC-day objects with
+`date` (ISO date), `active` (whether a daily progress row exists), and `xp` (daily credit), ending today.
+Zero-XP activity counts. `current_streak` is zero if the latest entry is older than yesterday. Empty
+plans return seven inactive days. Reward rules live in `learning-resources.instructions.md`; rewards
+are server-triggered by persisted activity and have no client-claim endpoint.
 
 - GET — Path: `/summary`; Rate limit: 60/min; Description: Streak, XP, skills breakdown, and current-level vocabulary progress for the active study language
 - GET — Path: `/history`; Rate limit: 60/min; Description: Up to the 90 most recent daily progress rows for the active plan; no calendar-date cutoff is applied.
@@ -243,7 +250,7 @@ Full-duplex voice conversation pipeline.
 
 Both `POST /api/conversation/warmup` and `/ws/conversation` require an authenticated user with subscription or freemium access when `STRIPE_ENABLED=true`, except for a valid post-assessment voice trial token. Both reject non-admin users while maintenance mode is active.
 
-- **POST `/api/conversation/warmup`** — Rate limit: 20/min. Performs best-effort TTS and STT probes before opening the WebSocket and returns ready even when an individual probe fails. Optional body: `{trial_token}`.
+- **POST `/api/conversation/warmup`** — Rate limit: 20/min. Performs parallel best-effort TTS and STT probes within a shared 60-second budget before opening the WebSocket. Logs individual failures or budget exhaustion, cancels unfinished probes at the deadline, and returns ready even when probes fail or time out; this is not a strict provider-health check. A dedicated Next.js proxy forwards authentication and the request body with a 70-second deadline (504 on proxy timeout); the conversation client uses a 75-second abortable request timeout. Optional body: `{trial_token}`.
 
 **Authentication**: After the handshake, the client must send a JSON object containing a valid `token` within 10 seconds. The backend reads the token but does not require the `type` field to equal `auth`. Missing, malformed, or invalid authentication closes with code 1008.
 
@@ -251,7 +258,9 @@ Both `POST /api/conversation/warmup` and `/ws/conversation` require an authentic
 
 **Client → Server message types:**
 
-- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, and numeric `conversation_id`. It authenticates and can reuse an owned conversation. Trial sessions are consumed when the WebSocket starts.
+- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id`. It authenticates and can reuse an owned conversation outside lesson practice. Trial sessions are consumed when the WebSocket starts.
+- **Lesson practice** — When `lesson_id` is present, the server requires a completed lesson belonging to the authenticated user. Its persisted plan determines language, level, and provenance; client `context`, `target_language`, and `conversation_id` do not override them. Invalid IDs (including null, booleans, strings, and fractional numbers), missing, foreign, or incomplete lessons emit `error` with `code=lesson_practice_unavailable` and close 1008 before consuming general session quota. Each start creates a voice conversation titled with a localized `Practice: {lesson title}`. Lesson context remains in the voice system prompt throughout the session. Existing access, maintenance, quota, timeout, and transcript rules apply; a verbal completion suggestion never emits a new control event.
+  IDs must be in `1..2147483647`, matching the lesson's database column. The WebSocket rejects out-of-range IDs before lesson SQL lookup, and the frontend applies the same range before loading lesson metadata.
 - **binary frame** — Payload: raw audio bytes. Description: WAV audio chunk from VAD
 - **`interrupt`** — Payload: `{"type":"interrupt"}`. Description: Optional manual interruption; cancels current generation
 
@@ -285,19 +294,35 @@ Both `POST /api/conversation/warmup` and `/ws/conversation` require an authentic
 
 Listening reads use read-only subscription/freemium access; generation and attempt submission use consumable access. Maintenance policy remains backend-enforced. Audio paths are derived from integer exercise IDs.
 
-- **GET `/next`** — Rate limit: 10/min. Returns `{available, exercise}` with transcript and correct answers omitted. Supports `wait=true` for bounded polling while generation is in progress.
-- **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a language/level generation lock and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job.
+Both comprehension domains expose `context: {study_plan_id, target_language, level}` and nullable
+`generation_remaining_seconds` in `/next` responses, in addition to the fields below. Remaining time
+is calculated on the server. Both `/next` and `/generate` accept optional `expected_study_plan_id`,
+`expected_target_language`, and `expected_level`. They are compared with the authenticated user's
+persisted active plan; a mismatch returns 409 `study_context_changed` before pool lookup or generation.
+These parameters cannot select or authorize a different plan.
+
+For both Listening and Reading, `/attempt` requires body `context: {study_plan_id, target_language,
+level}` from the exercise lookup or history response. The backend independently resolves the user's
+active plan and rejects mismatches with `409 study_context_changed` before writing attempts, XP,
+exercise counters, or quota usage. The exercise language must match that plan; its level must also
+match for normal attempts. Replays can retain an earlier exercise level in the same language and
+earn 5 XP once per exercise/plan/UTC day when a prior-day attempt exists in that plan, otherwise zero.
+Missing context returns `422`. History responses include the active plan's `context` so
+replays retain the selection under which their history was loaded.
+
+- **GET `/next`** — Rate limit: 60/min. Returns immediately with `{available, exercise, generation_status, generation_error, generation_deadline}`; transcript and correct answers are omitted. Status is `idle`, `generating`, or `failed`; error is null, `timeout`, `generation_failed`, or `interrupted`; deadline is nullable UTC. Available exercises take priority. A supplied `wait` parameter does not enable long-polling.
+- **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a renewable, owner-scoped language/level generation lease and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job. Returns `{"status":"available"}` without generating when the user's pool already has an exercise.
 - **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
-- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with zero XP.
+- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ## Reading — `/api/reading`
 
 Reading reads use read-only subscription/freemium access; generation and attempt submission use consumable access. Exercise text is returned immediately and there is no audio endpoint.
 
-- **GET `/next`** — Rate limit: 10/min. Auth: require_subscription_or_freemium. Returns the oldest uncompleted `ReadingExercise` for the user's current CEFR level and target language. **Text and questions are included immediately.** Returns `{"available": false}` when the pool is empty. Supports `?wait=true` for long-polling (max 90 s) while generation is in progress.
-- **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a per-(level, language) Redis lock (`nx=True, ex=60`) and enqueues a `BackgroundTask` that calls LLM and saves the exercise. Returns HTTP 202 with `{"status": "generating"}`. Returns 202 (no-op) if a generation job is already running.
-- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with zero XP.
+- **GET `/next`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns immediately with the oldest uncompleted `ReadingExercise` for the current plan's CEFR level and language. Text and questions are included, correct answers are omitted. Response: `{available, exercise, generation_status, generation_error, generation_deadline}`, with the same status contract as Listening. A supplied `wait` parameter does not enable long-polling.
+- **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a renewable, owner-scoped per-(level, language) Redis lease and enqueues a bounded `BackgroundTask`. Returns HTTP 202 `{"status":"generating"}` for new or existing work, or `{"status":"available"}` when an exercise can already be used.
+- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ---
@@ -306,7 +331,7 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 
 All endpoints require `get_current_user`. Status update requires `require_admin`. Every embedded entry or comment `author` object contains `{id, username, display_name, role}` so clients can identify administrator-authored content.
 
-- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns paginated list of feedback entries. Query params: `q` (search by title, description, username, or display name; max 100 chars), `type` (`feature`\|`bug`), `status` (`pending`\|`planned`\|`in_progress`\|`done`\|`declined`), `sort` (`votes`\|`date`, default `votes`), `order` (`asc`\|`desc`, default `desc`), `skip` (default 0), `limit` (default 10, max 100). Ordering uses entry ID as a deterministic tie-breaker in the requested direction. When `status` is omitted, entries with `status=done` are excluded from the public board and admin queue; they are returned only with `status=done`. Response: `{items, total, skip, limit}`. Each item includes `voted_by_me`, `unread_by_me`, and `comment_count` fields injected server-side.
+- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns paginated list of feedback entries. Query params: `q` (search by title, description, username, or display name; max 100 chars), `type` (`feature`\|`bug`), `status` (`pending`\|`planned`\|`in_progress`\|`done`\|`declined`), `sort` (`votes`\|`date`, default `votes`), `order` (`asc`\|`desc`, default `desc`), `skip` (default 0), `limit` (default 10, max 100). Ordering uses entry ID as a deterministic tie-breaker in the requested direction. When `status` is omitted, entries with `status=done` or `status=declined` are excluded from the public board and admin queue; each is returned only with its respective status filter. Response: `{items, total, skip, limit}`. Each item includes `voted_by_me`, `unread_by_me`, and `comment_count` fields injected server-side.
 - **POST ``** — Rate limit: 10/hour. Auth: get_current_user. Creates a new feature request or bug report. Body: `{type, title, description}`. Returns HTTP 201 + the created entry.
 - **GET `/unread-summary`** — Rate limit: 60/min. Auth: get_current_user. Returns `{unread_count}` for the authenticated user's unread feedback threads. Counts threads with new entries or comments from other users, including `done` entries, and does not expose read state for other users.
 - **GET `/{id}`** — Rate limit: 60/min. Auth: get_current_user. Returns a single entry with its full comment thread ordered by `created_at ASC`, including `unread_by_me` for the current user.

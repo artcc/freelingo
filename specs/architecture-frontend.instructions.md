@@ -37,7 +37,7 @@ UI translation catalogs live in the repository-root `messages/` directory.
   under a shared layout. Onboarding and billing returns are included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
 - `(legal)`: terms and privacy pages with a minimal public layout.
-- `api/`: Next.js handlers that proxy chat SSE, TTS, and STT to the backend.
+- `api/`: Next.js handlers that proxy chat SSE, TTS, STT, and conversation warmup to the backend.
 
 Nested pages such as level test, vocabulary management, language settings, and memory settings belong
 to their parent domains. Their detailed behavior lives in the corresponding domain specs rather than
@@ -49,9 +49,49 @@ an exhaustive route inventory here.
 through one serialized refresh only when the original request had an access token. Failed refresh
 clears auth state and routes to login.
 
-Ordinary JSON APIs are called directly against the configured backend URL. The chat handler preserves
+Callers with an AbortSignal can stop waiting for shared refresh independently. Cancellation releases
+their loading-counter slot and prevents their retry; shared token rotation continues for other callers.
+
+Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
+
+`api/conversation/warmup` uses a dedicated handler to accommodate speech-provider cold starts beyond
+the generic rewrite's 30-second timeout. It forwards authentication cookies, bearer authorization,
+and the optional trial-token body; preserves backend status, content type, and `Retry-After`; and
+propagates client cancellation to the backend fetch. Its 70-second deadline aborts the fetch and
+returns HTTP 504, between the backend's 60-second probe budget and the browser's 75-second deadline.
+The handler preserves `X-Real-IP` and `X-Forwarded-For` so the backend's IP-based limits retain client
+identity. The trusted ingress must overwrite forwarding headers as specified in
+`rate-limiting.instructions.md`.
+
+Listening and Reading share `hooks/useExerciseGeneration.ts` and `lib/exercise-generation.ts`.
+The hook loads missing or invalidated language context before querying exercises. Context loading
+is cancellable and bounded to 20 seconds; failure exits the loading screen with a localized error
+and a Retry action. Successful recovery starts a read-only exercise lookup with the refreshed context.
+They use immediate status queries, ten-second polling, bounded transport recovery, and at most one
+generation POST per operation. The hook prevents duplicate starts, resumes active work on entry,
+cancels on unmount or local language/plan/level changes, and guards late responses. Each operation
+retains its expected plan/language/level; server-side changes return a context conflict rather than
+silently switching pools. Server-calculated remaining time is converted to a local monotonic budget
+shared by requests and retry pauses. Errors use the shared
+`exerciseGeneration` namespace in all interface catalogs. Detailed status and timing rules belong
+to the Listening and Reading specifications.
+
+Exercise delivery also captures the server-returned plan/language/level context. Pages submit that
+snapshot with answers; history pages capture their response context for replay, including exercises
+from an earlier level. A `study_context_changed` submission response displays the shared localized
+context-conflict message instead of showing results or decrementing the local quota.
+
+The language store invalidates cached context after a persisted switch and rejects responses from
+queries predating invalidation or a newer request. The switch PUT has a 20-second timeout that also
+bounds its authentication-refresh wait. Transport/timeout failures and HTTP 408/5xx invalidate the
+summary for GET-only reconciliation; a definite rejection preserves the valid summary.
+The exercise hook pauses pending lookups during a switch, then resumes them through GET. A busy-flag
+transition alone does not reload an already displayed exercise or discard answers and replay mode.
+Changed or invalidated context still triggers recovery. Failed summary refreshes remain recoverable
+through the selector, language settings, and exercise pages; success feedback requires a refreshed
+summary.
 
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
@@ -79,6 +119,14 @@ Zustand stores shared cross-route state:
 
 Screen-specific forms, async state, playback, selections, and modal state remain local React state.
 Do not promote local state into a global store without a cross-route requirement.
+
+Dashboard's `components/dashboard/ProgressOverview.tsx` renders existing plan-scoped progress with
+prominent XP/streak cards, today's XP, a seven-day UTC strip, and compact lesson/accuracy metrics.
+`today_xp` and `activity_week` come from `/api/progress/summary` and stay in page-local state. Request
+sequence guards discard obsolete language responses and responses after unmount. Dates and numbers
+use the interface locale; dates use UTC to match the backend. Decorative charts/icons are hidden from
+assistive technology and activity dates have explicit accessible labels. Transitions respect reduced
+motion. Plan/vocabulary bars expose numeric progress and today's lesson segments reflect completions.
 
 ## Public registration surfaces
 

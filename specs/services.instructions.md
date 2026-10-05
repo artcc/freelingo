@@ -21,8 +21,9 @@ The frontend never calls an external provider directly.
   results and usage, and can reset visible output before a complete no-tools fallback.
 - Explicit tool incompatibility raises/records `LLMToolsUnsupportedError`; voice remembers that state
   only for its current WebSocket session.
-- `structured_output(messages, schema)` requests JSON and validates a Pydantic model, with one
-  correction generation after parse/validation failure.
+- `structured_output(messages, schema, deadline=None)` requests JSON and validates a Pydantic model,
+  with one correction generation after parse/validation failure. An optional monotonic deadline
+  bounds both calls, uses remaining time per request, and disables SDK/adapter transport retries.
 - `parse_llm_json(raw)` strips optional fences and parses JSON for callers that do not use structured
   output.
 - The exception hierarchy includes `LLMError`, `LLMTimeoutError`, `LLMUnavailableError`,
@@ -75,6 +76,26 @@ translation context. Generated cards receive target language from the persisted 
 `progress_service.py` updates daily XP, streak, exercise skill EMA, and unit competency EMA. It can
 flush without committing so lesson completion can include progress in one transaction. Progress is
 always credited to the resource-owning plan.
+New daily rows store ordered per-skill scores in `Progress.skill_updates`. A write to an earlier date
+reconciles subsequent streaks and replays subsequent days' own skill updates in date order, under the
+same plan lock and transaction. Every EMA step retains its three-decimal rounding; gaps reset only
+streaks. Legacy null score histories preserve their skill snapshots as opaque checkpoints rather than
+pretending they contain no scored activity. Daily counters and XP are not moved between dates.
+
+`progress_rewards.py` grants additional conversation, spaced-replay, unit, and level XP with durable
+source keys and plan-row serialization. Reward inserts and daily credit share a transaction. Activity
+uses UTC and can have zero XP; new days retain prior skill snapshots. Streak reads expire when the
+latest date is older than yesterday. Exact award thresholds live in `learning-resources.instructions.md`.
+
+Serialization uses PostgreSQL `FOR NO KEY UPDATE`, compatible with FK `KEY SHARE` locks from transcript
+and attempt inserts. `reward_conversation` receives a persisted response ID, validates its explicit
+learner-message association and actual modality, and counts paired responses on its completion date.
+Legacy unpaired messages do not qualify. Callers pass one activity date to award and daily-progress
+writes; these helpers must not independently recalculate the day after awaiting database operations.
+Voice fixes the completion timestamp before creating its background transcript task and passes it
+explicitly through persistence, including waits for the transcript lock.
+Chat context is bounded by its own learner-message ID so later concurrent prompts cannot replace the
+request being answered. Transcript reads order by timestamp and ID to keep equal-time voice pairs stable.
 
 ## Static-resource help
 
@@ -119,11 +140,27 @@ Provider details belong to `speech-services.instructions.md`.
 
 `listening_service.py` resolves reusable exercises, generates structured content and TTS audio, scores
 attempts, and returns paginated history. Generation accepts an optional voice. Initial duplicate
-attempts are rejected; `is_replay=True` creates another attempt with zero XP. Submission and history
+attempts are rejected; `is_replay=True` creates another attempt with 5 XP once per exercise/plan/day
+when a prior-day attempt exists in that plan, otherwise zero. Submission and history
 accept plan/language context so progress and retrieval remain isolated.
 
 `reading_service.py` provides the equivalent text-only flow with language-aware cultural topics and
-length guidance. Replays likewise persist with zero XP.
+length guidance. Replays use the same spaced-reward rules. Attempt, reward and daily progress commit
+together; even a zero-score or zero-XP attempt records activity.
+The service captures the attempt timestamp once before database awaits and reuses its UTC date for
+replay eligibility, source keys, reward limits, ledger dates, and progress dates.
+
+`exercise_generation.py` coordinates both domains' background tasks through unique-owner Redis
+leases, 60-second expiry, 20-second renewal, atomic owner-checked completion, and expiring status.
+`EXERCISE_GENERATION_TIMEOUT_SECONDS` (default 600, positive integer) bounds the entire task from
+acquisition. The domain services accept a monotonic `deadline` and async `before_save` ownership
+guard. The coordinator cancels work on timeout or renewal failure, stops its heartbeat in all cases,
+and exposes controlled failure codes through immediate `/next` responses. Database content remains
+the authority when an exercise is available; Redis stores no learner answers or generated content.
+Status reads calculate remaining generation seconds on the server. Redis ownership checks do not
+form an atomic transaction with PostgreSQL commits. Listening compensates audio writes on failure or
+cancellation before commit is attempted, while preserving audio after an uncertain commit or failed
+post-commit refresh. The coordinator recognizes OpenAI TTS `APITimeoutError` as `timeout`.
 
 Pool, generation-lock, attempt, and history behavior belongs to the Listening and Reading specs.
 

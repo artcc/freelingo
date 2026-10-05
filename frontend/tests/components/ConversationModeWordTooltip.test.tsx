@@ -10,6 +10,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { useMicVAD } from '@ricky0123/vad-react'
 import ConversationMode from '@/components/conversation/ConversationMode'
 import { useAuthStore } from '@/store/auth'
+import { useLanguageStore } from '@/store/language'
+import { getLanguageByCode } from '@/lib/target-languages'
 
 vi.mock('next-intl', () => ({
   useTranslations: () => {
@@ -174,6 +176,22 @@ describe('ConversationMode word tooltip dismissal', () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
+  })
+
+  it.each([undefined, 7])('saves words with the lesson owner only in practice mode (%s)', async (lessonId) => {
+    useLanguageStore.setState({ activeLanguage: getLanguageByCode('fr-FR') ?? null })
+    render(<ConversationMode lessonId={lessonId} targetLanguage="fr-FR" cefrLevel="B1" />)
+    await startSession()
+    deliverTranscript({ role: 'assistant', text: 'Bon voyage', turn_id: 1 })
+    await selectWordInBubble('Bon voyage', 'voyage')
+    act(() => useLanguageStore.setState({ activeLanguage: getLanguageByCode('de-DE') ?? null }))
+    fireEvent.click(screen.getByText('saveWord'))
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledWith('/api/flashcards/from-word', expect.any(Object)))
+    const call = mockApiFetch.mock.calls.find(([url]) => url === '/api/flashcards/from-word')!
+    expect(JSON.parse(call[1].body)).toEqual({
+      word: 'voyage', context: 'Bon voyage', cefr_level: 'B1',
+      ...(lessonId !== undefined ? { lesson_id: lessonId } : {}),
+    })
   })
 
   it('dismisses the word tooltip when a new transcript turn arrives', async () => {

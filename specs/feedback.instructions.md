@@ -67,9 +67,10 @@ It supports:
 - `order=asc|desc`;
 - `skip >= 0` and `1 <= limit <= 100`, defaulting to 0 and 10.
 
-Without an explicit status, entries marked `done` are excluded. The filtered total is calculated
-before pagination. Ordering uses vote count or creation time plus entry ID in the same direction,
-making offset pages deterministic when primary values tie.
+Without an explicit status, entries marked `done` or `declined` are excluded from both the community
+board and admin queue. They appear only when their respective status filter is selected. The filtered
+total is calculated before pagination. Ordering uses vote count or creation time plus entry ID in the
+same direction, making offset pages deterministic when primary values tie.
 
 The authenticated community and administrative pages use ten entries per page. The community view
 defaults to feature requests sorted by votes; the admin queue defaults to date order.
@@ -144,8 +145,8 @@ A thread is unread when:
 - another user added a comment after the marker.
 
 The user's own entry and comments do not create unread activity for that user. Votes and status
-changes do not count. Entries in `done` or `declined` can still contribute to the summary; a `done`
-entry may therefore count while hidden by the default list filter.
+changes do not count. Entries in `done` or `declined` can still contribute to the summary while hidden
+by the default list filter.
 
 - `GET /api/feedback/unread-summary`: authenticated, `60/minute`; returns unread thread count.
 - `POST /api/feedback/{id}/read`: authenticated, `60/minute`; creates or updates only that thread's

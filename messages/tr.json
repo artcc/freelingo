@@ -1504,15 +1504,48 @@
     "trialUnlimited": "Sınırsız erişim",
     "requiresSubscription": "Yalnızca Premium"
   },
+  "lessonPractice": {
+    "action": "Bu dersi Lingu ile pratik yap",
+    "title": "Pratik: <topic>{title}</topic>",
+    "description": "Bu dersin içeriğini sesli konuşarak pekiştir. Lingu sorular soracak ve öğrendiklerini kullanmana yardımcı olacak. Ne zaman bitireceğine sen karar verirsin.",
+    "start": "Pratiğe başla",
+    "cancel": "Şimdi değil",
+    "unavailable": "Pratik hazırlanamadı. Dersin tamamlandığından emin ol ve tekrar dene.",
+    "back": "Plana dön"
+  },
+  "dashboardProgress": {
+    "title": "İlerlemen",
+    "scope": "Mevcut dilin ve çalışma planın",
+    "details": "İlerlemeyi gör",
+    "experience": "Deneyim",
+    "todayXp": "Bugün +{xp} XP",
+    "experienceHint": "Her pratik öğrenme yolculuğuna katkıda bulunur.",
+    "streak": "Öğrenme serisi",
+    "days": "gün",
+    "practisedToday": "Bugün pratik yaptın",
+    "readyToday": "Pratik için yeni bir fırsat",
+    "week": "Son yedi günün etkinliği",
+    "activeDay": "Pratik yapıldı",
+    "inactiveDay": "Kayıtlı etkinlik yok",
+    "utcHint": "Son 7 gün",
+    "lessons": "Tamamlanan dersler",
+    "accuracy": "Ders alıştırmalarındaki doğruluk",
+    "correctAnswers": "{total} yanıttan {correct} tanesi doğru",
+    "noExercises": "Sonuçların ilk alıştırmadan sonra görünecek."
+  },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Anladım",
     "entry1": {
-      "label": "Beş yeni arayüz dili",
-      "desc": "FreeLingo, Danca, Fince, Hırvatça, İsveççe ve Türkçe dillerinde kullanılabilir. Arayüz dilini Ayarlar'dan seçin."
+      "label": "Derslerini Lingu ile pekiştir",
+      "desc": "Tamamlanmış bir dersten sesli konuşma başlat. Lingu öğrendiklerini kullanmana yardımcı olur ve konuşma, pratik yaptığın konunun başlığıyla kaydedilir."
     },
     "entry2": {
+      "label": "XP kazanmanın daha fazla yolu",
+      "desc": "<bold>Sesli konuşma, sohbet, aralıklı okuma ve dinleme tekrarları ile ünite ve seviye tamamlama</bold> sayesinde XP kazan. Yenilenen panel bugünkü XP’ni, serini ve son etkinliklerini öne çıkarır."
+    },
+    "entry3": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }
@@ -1557,6 +1590,12 @@
     "moreInHistory": "+{count} tane daha",
     "practiceAgain": "Tekrar pratik yap",
     "replayNoXp": "Tekrar oyna (XP yok)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Etkin diliniz veya çalışma planınız değişti. Devam etmek için bu sayfayı yeniden yükleyin.",
+    "failed": "Alıştırma oluşturulamadı. Lütfen tekrar deneyin.",
+    "timeout": "Alıştırmanın oluşturulması çok uzun sürdü. Lütfen tekrar deneyin.",
+    "unavailable": "Alıştırmanın durumu kontrol edilemedi. Lütfen tekrar deneyin."
   },
   "reading": {
     "title": "Okuma",

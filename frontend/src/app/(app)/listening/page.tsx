@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import type { ExerciseContext } from '@/lib/exercise-generation'
+import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
 import { useLanguageStore } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
@@ -61,7 +63,11 @@ const HISTORY_PAGE_SIZE = 10
 function ListeningPage() {
   const t = useTranslations('listening')
   const tCommon = useTranslations('common')
+  const tGeneration = useTranslations('exerciseGeneration')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const activePlan = useLanguageStore(
+    (s) => s.userLanguages.find((l) => l.is_active)?.plan
+  )
   const {
     selectedWord,
     tooltipPos,
@@ -73,6 +79,11 @@ function ListeningPage() {
 
   const [pageState, setPageState] = useState<PageState>('loading')
   const [exercise, setExercise] = useState<ListeningExercise | null>(null)
+  const [exerciseContext, setExerciseContext] =
+    useState<ExerciseContext | null>(null)
+  const [historyContext, setHistoryContext] = useState<ExerciseContext | null>(
+    null
+  )
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [result, setResult] = useState<SubmitResult | null>(null)
   const [history, setHistory] = useState<AttemptItem[]>([])
@@ -102,7 +113,6 @@ function ListeningPage() {
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
   const [isReplay, setIsReplay] = useState(false)
   const [generatingWarn, setGeneratingWarn] = useState(false)
-  const generateAbortRef = useRef<AbortController | null>(null)
   const generatingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Warn if exercise generation takes longer than 15 s
@@ -122,97 +132,38 @@ function ListeningPage() {
     }
   }, [pageState])
 
-  // Cancel in-flight long-poll on unmount
-  useEffect(() => {
-    return () => {
-      generateAbortRef.current?.abort()
-    }
-  }, [])
+  const onExercise = useCallback(
+    (nextExercise: ListeningExercise, context: ExerciseContext) => {
+      setExercise(nextExercise)
+      setExerciseContext(context)
+      setAnswers({})
+      setResult(null)
+      setIsReplay(false)
+    },
+    []
+  )
 
-  const loadNext = useCallback(async () => {
-    setPageState('loading')
-    setError('')
-    dismissTooltip()
-    try {
-      const res = await apiFetch('/api/listening/next')
-      if (!res.ok) {
-        setPageState('idle')
-        return
-      }
-      const data = (await res.json()) as {
-        available: boolean
-        exercise?: ListeningExercise
-      }
-      if (data.available && data.exercise) {
-        setExercise(data.exercise)
-        setAnswers({})
-        setResult(null)
-        setIsReplay(false)
-        setPageState('exercise')
-      } else {
-        setPageState('idle')
-      }
-    } catch {
-      setError(t('errorLoading'))
-      setPageState('idle')
-    }
-  }, [t, dismissTooltip])
+  const { loadNext, generate, needsContext } = useExerciseGeneration({
+    feature: 'listening',
+    language: activeLanguage?.code,
+    studyPlanId: activePlan?.id,
+    level: activePlan?.cefr_level,
+    onExercise,
+    setPageState,
+    setError,
+    dismissTooltip,
+  })
 
-  useEffect(() => {
-    loadNext()
-  }, [loadNext, activeLanguage?.code])
-
-  async function handleGenerate() {
+  function handleGenerate() {
     const voice =
       typeof window !== 'undefined'
         ? (localStorage.getItem('tts_voice') ?? '')
         : ''
-    const voiceQ = voice ? `?voice=${encodeURIComponent(voice)}` : ''
-    try {
-      const res = await apiFetch(`/api/listening/generate${voiceQ}`, {
-        method: 'POST',
-      })
-      if (res.ok || res.status === 202) {
-        setPageState('generating')
-        // Single long-poll request — server waits (async) until exercise is ready.
-        // AbortController cancels the request if the component unmounts first.
-        const controller = new AbortController()
-        generateAbortRef.current = controller
-        const nextRes = await apiFetch('/api/listening/next?wait=true', {
-          signal: controller.signal,
-        })
-        generateAbortRef.current = null
-        if (nextRes.ok) {
-          const data = (await nextRes.json()) as {
-            available: boolean
-            exercise?: ListeningExercise
-          }
-          if (data.available && data.exercise) {
-            setExercise(data.exercise)
-            setAnswers({})
-            setResult(null)
-            setIsReplay(false)
-            setPageState('exercise')
-            return
-          }
-        }
-        setPageState('idle')
-      } else {
-        const d = (await res.json().catch(() => ({}))) as { detail?: string }
-        setError(
-          d.detail === 'No active study plan found'
-            ? tCommon('noActivePlan')
-            : t('errorLoading')
-        )
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return
-      setPageState('idle')
-    }
+    void generate(voice)
   }
 
   async function handleSubmit() {
-    if (!exercise) return
+    if (!exercise || !exerciseContext) return
     setSubmitting(true)
     setError('')
     try {
@@ -223,14 +174,17 @@ function ListeningPage() {
           exercise_id: exercise.id,
           answers,
           replay: isReplay,
+          context: exerciseContext,
         }),
       })
       if (!res.ok) {
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
         setError(
-          d.detail === 'already_attempted'
-            ? t('alreadyAttempted')
-            : t('errorSubmit')
+          d.detail === 'study_context_changed'
+            ? tGeneration('contextChanged')
+            : d.detail === 'already_attempted'
+              ? t('alreadyAttempted')
+              : t('errorSubmit')
         )
         return
       }
@@ -267,10 +221,12 @@ function ListeningPage() {
       const res = await apiFetch(`/api/listening/history?${params.toString()}`)
       if (res.ok) {
         const data = (await res.json()) as {
+          context: ExerciseContext
           items: AttemptItem[]
           total: number
         }
         setHistory(data.items)
+        setHistoryContext(data.context)
         setHistoryTotal(data.total)
       }
     } catch {
@@ -367,6 +323,7 @@ function ListeningPage() {
                 <button
                   onClick={() => {
                     setExercise(item.exercise)
+                    setExerciseContext(historyContext)
                     setAnswers({})
                     setResult(null)
                     setIsReplay(true)
@@ -430,7 +387,7 @@ function ListeningPage() {
               <p className="text-fl-label text-fl-muted-3 font-mono tracking-widest uppercase">
                 XP
               </p>
-              {isReplay ? (
+              {isReplay && result.xp_earned === 0 ? (
                 <p className="text-fl-label text-fl-muted-3 mt-1 font-mono">
                   {t('replayNoXp')}
                 </p>
@@ -580,18 +537,17 @@ function ListeningPage() {
 
         <FreemiumQuotaBanner feature="listening" className="mb-4" />
 
-        {freemiumExhausted ? (
-          <PaywallBanner feature="listening" compact />
-        ) : (
+        {freemiumExhausted && <PaywallBanner feature="listening" compact />}
+        {(needsContext || !freemiumExhausted) && (
           <div className="border-fl-border bg-fl-surface flex flex-col items-center gap-5 border p-8 text-center">
             <p className="text-fl-muted-2 font-mono text-xs tracking-wide">
               {t('noExercises')}
             </p>
             <button
-              onClick={handleGenerate}
+              onClick={needsContext ? loadNext : handleGenerate}
               className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 border px-8 py-3 font-mono text-sm tracking-widest uppercase transition-colors"
             >
-              {t('generate')}
+              {needsContext ? tCommon('retry') : t('generate')}
             </button>
           </div>
         )}

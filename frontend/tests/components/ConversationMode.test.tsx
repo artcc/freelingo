@@ -19,10 +19,15 @@ vi.mock('@ricky0123/vad-react', () => ({
     return { loading: false, errored: false, start: mocks.start, pause: mocks.pause }
   },
 }))
-vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
-  useTranslations: () => Object.assign((key: string) => key, { raw: () => [] }),
-}))
+vi.mock('next-intl', async (importOriginal) => {
+  const { createTranslator } = await importOriginal<typeof import('next-intl')>()
+  const { default: messages } = await import('../../../messages/en.json')
+  const practice = createTranslator({ locale: 'en', messages, namespace: 'lessonPractice' })
+  return {
+    useLocale: () => 'en',
+    useTranslations: () => Object.assign((key: string) => key, { raw: () => [], rich: practice.rich }),
+  }
+})
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
 vi.mock('@/lib/audio', async (importOriginal) => ({
@@ -67,6 +72,27 @@ function microphone() {
   return { stream: { getTracks: () => [{ stop }] } as unknown as MediaStream, stop }
 }
 
+function deferWarmup(ignoreAbort = false) {
+  let resolve!: (response: { ok: boolean; status?: number }) => void
+  let reject!: (error: Error) => void
+  let signal!: AbortSignal
+  const response = new Promise((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  mocks.apiFetch.mockImplementation((url: string, options?: RequestInit) => {
+    if (url !== '/api/conversation/warmup') {
+      return Promise.resolve({ ok: true, json: async () => null })
+    }
+    signal = options!.signal as AbortSignal
+    if (!ignoreAbort) {
+      signal.addEventListener('abort', () => reject(signal.reason), { once: true })
+    }
+    return response
+  })
+  return { resolve, reject, get signal() { return signal } }
+}
+
 async function start(label = 'start') {
   const count = MockWebSocket.instances.length
   fireEvent.click(screen.getByRole('button', { name: label }))
@@ -103,10 +129,136 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  vi.useRealTimers()
+  vi.restoreAllMocks()
   vi.unstubAllGlobals()
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it.each([undefined, 7])('waits through a 30-second cold start for lesson %s', async (lessonId) => {
+    vi.useFakeTimers()
+    const pending = deferWarmup()
+    render(<ConversationMode lessonId={lessonId} />)
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'start' })) })
+    await act(async () => { await vi.advanceTimersByTimeAsync(30_000) })
+    expect(pending.signal.aborted).toBe(false)
+    expect(screen.queryByText(/errorConnection/)).toBeNull()
+    expect(MockWebSocket.instances).toHaveLength(0)
+
+    await act(async () => { pending.resolve({ ok: true }) })
+    expect(MockWebSocket.instances).toHaveLength(1)
+    await act(async () => { await vi.advanceTimersByTimeAsync(80_000) })
+    expect(pending.signal.aborted).toBe(false)
+    expect(screen.queryByText(/errorConnection/)).toBeNull()
+    expect(MockWebSocket.instances[0].close).not.toHaveBeenCalled()
+  })
+
+  it('aborts at 75 seconds, releases the microphone, and allows a fresh attempt', async () => {
+    vi.useFakeTimers()
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const mic = microphone()
+    mocks.getUserMedia.mockResolvedValueOnce(mic.stream)
+    const pending = deferWarmup()
+    render(<ConversationMode />)
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'start' })) })
+    await act(async () => { await vi.advanceTimersByTimeAsync(74_999) })
+    expect(pending.signal.aborted).toBe(false)
+    await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+    expect(pending.signal.aborted).toBe(true)
+    expect(mic.stop).toHaveBeenCalledTimes(1)
+    expect(mocks.closeAudio).toHaveBeenCalledTimes(1)
+    expect(screen.getByText('✕ errorConnection')).toBeInTheDocument()
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('warmup timeout'))
+    expect(MockWebSocket.instances).toHaveLength(0)
+
+    mocks.apiFetch.mockResolvedValue({ ok: true, json: async () => null })
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'startNew' })) })
+    expect(MockWebSocket.instances).toHaveLength(1)
+    expect(screen.queryByText(/errorConnection/)).toBeNull()
+  })
+
+  it.each(['stop', 'unmount'])('cancels warming on %s and ignores a late response', async (action) => {
+    vi.useFakeTimers()
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const mic = microphone()
+    mocks.getUserMedia.mockResolvedValueOnce(mic.stream)
+    // Simulate a transport that delivers a response despite cancellation.
+    const pending = deferWarmup(true)
+    const view = render(<ConversationMode />)
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'start' })) })
+    const abort = vi.spyOn(AbortController.prototype, 'abort')
+    if (action === 'stop') {
+      await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'stop' })) })
+      mocks.apiFetch.mockResolvedValue({ ok: true, json: async () => null })
+      await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'startNew' })) })
+    } else {
+      view.unmount()
+    }
+    expect(pending.signal.aborted).toBe(true)
+    expect(mic.stop).toHaveBeenCalledTimes(1)
+    await act(async () => { await vi.advanceTimersByTimeAsync(80_000) })
+    expect(abort).toHaveBeenCalledTimes(1)
+    await act(async () => { pending.resolve({ ok: true }) })
+    expect(MockWebSocket.instances).toHaveLength(action === 'stop' ? 1 : 0)
+    if (action === 'stop') {
+      expect(MockWebSocket.instances[0].close).not.toHaveBeenCalled()
+    }
+    expect(log).not.toHaveBeenCalled()
+  })
+
+  it.each(['network', 402, 503])('reports %s warmup failures without opening a WebSocket', async (failure) => {
+    vi.useFakeTimers()
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const pending = deferWarmup()
+    render(<ConversationMode />)
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'start' })) })
+    await act(async () => {
+      if (failure === 'network') pending.reject(new TypeError('Failed to fetch'))
+      else pending.resolve({ ok: false, status: failure as number })
+    })
+    expect(screen.getByText('✕ errorConnection')).toBeInTheDocument()
+    expect(log).toHaveBeenCalledWith(expect.stringContaining(
+      failure === 'network' ? 'Failed to fetch' : `"status":${failure}`
+    ))
+    await act(async () => { await vi.advanceTimersByTimeAsync(80_000) })
+    expect(log).toHaveBeenCalledTimes(1)
+    expect(MockWebSocket.instances).toHaveLength(0)
+  })
+
+  it('sends the lesson reference through the existing handshake and lets the user end practice', async () => {
+    render(<ConversationMode lessonId={7} lessonTitle="Past experiences" targetLanguage="fr-FR" />)
+    const topic = screen.getByText('Past experiences')
+    expect(topic).toHaveAttribute('lang', 'fr-FR')
+    expect(topic.parentElement).toHaveAttribute('lang', 'en')
+    expect(topic.parentElement).toHaveTextContent('Practice: Past experiences')
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+      type: 'auth', token: 'token', lesson_id: 7, target_language: 'fr-FR',
+    })
+    expect(mocks.apiFetch).toHaveBeenCalledWith('/api/conversation/warmup', expect.any(Object))
+    expect(screen.queryByText('startersHint')).toBeNull()
+    act(() => ws.message({
+      type: 'transcript', role: 'assistant', final: true,
+      text: 'We have practised the main points. You can finish or keep practising.',
+    }))
+    expect(ws.close).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'stop' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+    await waitFor(() => expect(ws.close).toHaveBeenCalledTimes(1))
+  })
+
+  it('does not add lesson context to ordinary voice sessions', async () => {
+    render(<ConversationMode />)
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({ type: 'auth', token: 'token' })
+  })
+
   it('retries denied permission without poisoning VAD', async () => {
     mocks.getUserMedia.mockRejectedValueOnce(new DOMException('Denied', 'NotAllowedError'))
     render(<ConversationMode />)
@@ -190,6 +342,7 @@ describe('ConversationMode session lifecycle', () => {
     ['quota_exceeded_time', 'quotaExceededTime'],
     ['quota_exceeded_tokens', 'quotaExceededTokens'],
     ['no_active_plan', 'noActivePlan'],
+    ['lesson_practice_unavailable', 'unavailable'],
     ['unknown_server_error', 'errorMessage'],
   ])('localizes %s without displaying the backend message', async (code, key) => {
     render(<ConversationMode />)

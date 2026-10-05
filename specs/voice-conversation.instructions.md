@@ -22,13 +22,26 @@ The frontend startup order is:
 2. Create session and attempt identities plus an AudioContext.
 3. Request and own a mono microphone stream.
 4. Supply that stream to VAD and await serialized `vad.start()`.
-5. Call `POST /api/conversation/warmup` with a 15-second client timeout.
+5. Call `POST /api/conversation/warmup` with a 75-second abortable client timeout.
 6. Refresh the access token reference.
 7. Open `/ws/conversation` and send the authentication payload.
 
-Warmup requires authentication, voice access, and absence of maintenance for non-admin users. It
-warms TTS and STT in parallel, logs individual failures, and still returns `status: "ready"`; it is
-not a strict availability check.
+Warmup requires authentication, voice access, and absence of maintenance for non-admin users. TTS
+and STT probes run in parallel with a shared 60-second budget. Individual failures and exhaustion of
+that budget are logged; unfinished probes are cancelled at the deadline. The endpoint returns
+`status: "ready"` after these best-effort probes, not a strict provider-health guarantee.
+
+The Next.js warmup proxy has a 70-second deadline, forwards authentication and the optional trial
+token, and propagates client cancellation. It preserves backend HTTP errors and returns 504 if its
+own deadline expires, avoiding the generic rewrite's 30-second limit.
+
+The frontend remains in `warming` while awaiting the response and offers a stop control. Stopping
+or unmounting aborts the client request and clears its timer; success and failure also clear the
+timer. Attempt identities prevent late responses from opening a WebSocket or changing a newer
+session. A client timeout aborts the request and releases session audio resources. Client timeout,
+network failure details, and HTTP status failures are logged independently of audio-debug logging;
+the interface displays the localized connection error without transport diagnostics. Failed attempts
+can be restarted manually.
 
 After accepting the WebSocket handshake, the backend waits up to ten seconds for the first JSON
 frame. The payload can contain token, initial context, TTS voice, target language, post-assessment
@@ -50,6 +63,42 @@ Both TTS adapters currently ignore the language argument.
 
 The current fallback path can combine a fallback active plan with a different target language sent
 by the client. This association is not enforced by the WebSocket contract.
+
+### Lesson practice context
+
+Authentication may include `lesson_id`, a JSON integer in `1..2147483647` (booleans, fractional
+numbers, strings, null, and out-of-range values are rejected before lesson SQL lookup). The backend loads a completed lesson through its owned plan
+and language track. Invalid, missing, foreign, or incomplete lessons produce
+`lesson_practice_unavailable` and close code 1008 before general session quotas are consumed.
+
+For this mode, the lesson's persisted plan determines language, CEFR level, and plan provenance,
+regardless of active language, active plan, or the client's `target_language`. Client `context` and
+`conversation_id` are ignored: every start creates a separate practice conversation. Normal voice
+access, maintenance, warmup, quotas, timeouts, microphone, playback, and manual stop behavior apply.
+
+`lesson_voice_practice.py` supplies bounded, escaped reference data from the lesson title, content,
+scheduled objectives, vocabulary, grammar references, and up to eight answered exercises ordered by
+score then ID. Exercise questions and explanations use the same read-time legacy fill-blank
+normalization as lesson detail, without mutating stored exercises; both fields are bounded in the
+context. This snapshot is included in the system prompt for the greeting, normal turns, memory
+refreshes, and no-tools fallbacks; trimming turn history cannot remove it. Lingu guides questions and
+help around the lesson and can suggest that the main objectives have been practised. This is ordinary
+conversational text, not a session-end event or a persisted completion flag. The learner can continue
+or stop, subject to the existing voice limits.
+
+The frontend entry `/conversation?lesson={id}` loads lesson metadata before using the existing
+automatic start flow. It shows the topic title and hides unrelated conversation starters for this
+mode. The lesson entry button first uses the shared confirmation dialog. All entry/error copy is
+localized under `lessonPractice`.
+
+The title uses rich interpolation: its localized prefix carries the interface locale, while only the
+lesson topic is rendered through `TargetLanguageText` with the learned language.
+
+Saving a selected transcript word sends `lesson_id` through the existing `/api/flashcards/from-word`
+endpoint. The backend rechecks ownership and completion and derives lookup language, level,
+deduplication, and storage from that lesson's plan. This also applies to historical plans and when
+the active language changes elsewhere. Missing or inaccessible lessons fail without active-plan
+fallback. Voice sessions without a lesson retain the existing word-save contract.
 
 ## Client-to-server protocol
 
@@ -146,7 +195,15 @@ so normal voice starts create a new `source="voice"` conversation.
 Voice conversation titles use a native-language label and date. German, Danish, Finnish, and Croatian
 dates place an ordinal dot after the day; Croatian dates also end with a dot after the year.
 
-`ChatHistory` rows store role, content, target language, optional plan provenance, and conversation.
+Lesson practice titles instead use the native-language equivalent of `Practice: {lesson title}`,
+bounded to the existing 200-character title column. The existing voice transcript persistence and
+text-chat history display apply; subsequent practice sessions have separate rows with the same topic
+title and their own timestamps. The lesson reference/context is session-local, not a new database
+association or a separately persisted report. Text chat retains its existing transcript-based flow.
+
+`ChatHistory` rows store role, content, target language, optional plan provenance, conversation, and
+the actual turn modality. Normal assistant replies link to their learner message through `reply_to_id`;
+greetings remain unpaired. Existing unpaired messages remain readable but are not inferred as turns.
 Voice sessions are visible in text-chat history. Continuing from text chat supplies textual context
 but normally creates a separate voice conversation.
 
@@ -157,8 +214,21 @@ Persistence rules:
 - Empty STT, failed STT, failed LLM, empty LLM fallback, cancellation, or failed output transport:
   neither side of that turn.
 
-Writes use independent best-effort tasks and update conversation timestamps. Cleanup waits for
-pending writes. A conversation can remain empty when a session ends before a persistible turn.
+Writes use best-effort background tasks and update conversation timestamps. Normal-turn writes are
+serialized within the pipeline, saving user, associated assistant, activity, and reward in a single
+transaction; cleanup waits for pending writes. Failure rolls back the whole turn, not just its reply.
+A conversation can remain empty when a session ends before a persistible turn.
+
+Persisted answered contributions count as plan-owned daily activity. Three distinct answered learner
+contributions on the same UTC day grant 20 XP once per conversation/day, capped at 60 XP per plan/day.
+Lesson practice uses this same reward without an extra bonus. Greetings, failed/cancelled turns, and
+planless conversations do not earn rewards. Successful processing captures the response completion
+timestamp before scheduling the background transcript task, after response delivery and before the
+final `turn_complete` notification. The timestamp fixes the activity day even if the task starts or
+acquires its transcript/database lock after midnight; all reward/progress operations reuse it.
+Continuing the same conversation in text chat persists chat modality and uses chat rewards independently of voice.
+No client reward claim or new voice-control event is used.
+Reward rules and durable source keys are specified in `learning-resources.instructions.md`.
 
 LLM usage is stored best-effort with `source="conversation"` and optional plan provenance when token
 metadata is available. Greeting usage is not recorded.

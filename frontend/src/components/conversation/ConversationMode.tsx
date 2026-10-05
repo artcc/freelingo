@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useMicVAD } from '@ricky0123/vad-react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
+import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { useAuthStore } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
@@ -257,6 +258,9 @@ const INTERRUPTION_MIN_UTTERANCE_MS = 1200
 const INTERRUPTION_RMS_THRESHOLD = 0.03
 const BARGE_IN_STARTUP_GUARD_MS = 900
 const VAD_MAX_RMS = 0.25
+// Allow the backend's 60-second provider budget plus transport/auth overhead.
+const WARMUP_TIMEOUT_MS = 75_000
+const warmupLogger = getLogger('conversation-warmup')
 const convLogger = ENABLE_CONVERSATION_AUDIO_DEBUG_LOGS
   ? getLogger('conversation-audio')
   : silentLogger
@@ -266,6 +270,8 @@ export default function ConversationMode({
   autoStart,
   cefrLevel,
   targetLanguage,
+  lessonId,
+  lessonTitle,
   voiceTrialToken,
   voiceTrialDurationSeconds,
   trialMode,
@@ -277,6 +283,8 @@ export default function ConversationMode({
   autoStart?: boolean
   cefrLevel?: string | null
   targetLanguage?: string
+  lessonId?: number
+  lessonTitle?: string
   voiceTrialToken?: string
   voiceTrialDurationSeconds?: number
   trialMode?: boolean
@@ -286,6 +294,8 @@ export default function ConversationMode({
 }) {
   const t = useTranslations('conversation')
   const tCommon = useTranslations('common')
+  const tPractice = useTranslations('lessonPractice')
+  const locale = useLocale()
   const accessToken = useAuthStore((s) => s.accessToken)
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
@@ -313,7 +323,7 @@ export default function ConversationMode({
     handleTextSelection,
     handleSaveWord,
     dismissTooltip,
-  } = useWordSave()
+  } = useWordSave(lessonId)
 
   // 6 random starters picked once per component mount, shown alphabetically
   const visibleStarters = useMemo(
@@ -349,6 +359,10 @@ export default function ConversationMode({
   const cleanEndRef = useRef(false)
   const mountedRef = useRef(true)
   const startAttemptRef = useRef(0)
+  const warmupRef = useRef<{
+    controller: AbortController
+    timeout: ReturnType<typeof setTimeout>
+  } | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
   const vadOperationRef = useRef<Promise<void>>(Promise.resolve())
   const assistantSpeakingRef = useRef(false)
@@ -595,11 +609,17 @@ export default function ConversationMode({
         !sessionActiveRef.current &&
         !wsRef.current &&
         !micStreamRef.current &&
-        !audioCtxRef.current
+        !audioCtxRef.current &&
+        !warmupRef.current
       )
         return
       closeReasonRef.current = reason
       startAttemptRef.current++
+      if (warmupRef.current) {
+        clearTimeout(warmupRef.current.timeout)
+        warmupRef.current.controller.abort()
+        warmupRef.current = null
+      }
       sessionActiveRef.current = false
       activeTurnIdRef.current = null
       assistantTurnActiveRef.current = false
@@ -707,6 +727,7 @@ export default function ConversationMode({
         if (context?.length) authPayload.context = context
         if (targetLanguage) authPayload.target_language = targetLanguage
         if (voiceTrialToken) authPayload.voice_trial_token = voiceTrialToken
+        if (lessonId !== undefined) authPayload.lesson_id = lessonId
         try {
           ws.send(JSON.stringify(authPayload))
         } catch {
@@ -857,6 +878,7 @@ export default function ConversationMode({
                 quota_exceeded_time: t('quotaExceededTime'),
                 quota_exceeded_tokens: t('quotaExceededTokens'),
                 no_active_plan: tCommon('noActivePlan'),
+                lesson_practice_unavailable: tPractice('unavailable'),
                 stt_failed: t('errorTranscription'),
                 llm_failed: t('errorResponse'),
                 tts_failed: t('errorSpeech'),
@@ -916,7 +938,9 @@ export default function ConversationMode({
     [
       t,
       tCommon,
+      tPractice,
       targetLanguage,
+      lessonId,
       voiceTrialToken,
       trialMode,
       refreshCurrentUser,
@@ -984,9 +1008,8 @@ export default function ConversationMode({
     sessionStartedAtRef.current = null
     refreshQuota()
 
-    // Trigger model warmup on TTS/STT services and WAIT for them to be ready
-    // before opening the WebSocket. Models are loaded lazily by the backend;
-    // this ensures the first transcription/synthesis in the session is fast.
+    // Await best-effort TTS/STT preparation before opening the WebSocket.
+    // Local models may need a cold start; provider health is not guaranteed.
     setStatus('warming')
 
     // Start mic (requests permission if not already granted)
@@ -1021,41 +1044,53 @@ export default function ConversationMode({
     }
     if (!mountedRef.current || startAttemptRef.current !== startAttempt) return
 
-    const warmupResponsePromise = apiFetch('/api/conversation/warmup', {
-      method: 'POST',
-      ...(voiceTrialToken
-        ? {
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ trial_token: voiceTrialToken }),
-          }
-        : {}),
-    })
-    const warmupTimeout = new Promise<Response>((_, reject) => {
-      setTimeout(() => reject(new Error('warmup timeout')), 15_000)
-    })
+    const controller = new AbortController()
+    let timedOut = false
+    const timeout = setTimeout(() => {
+      timedOut = true
+      controller.abort()
+    }, WARMUP_TIMEOUT_MS)
+    warmupRef.current = { controller, timeout }
     let warmupResponse: Response
     try {
-      warmupResponse = (await Promise.race([
-        warmupResponsePromise,
-        warmupTimeout,
-      ])) as Response
-    } catch {
+      warmupResponse = await apiFetch('/api/conversation/warmup', {
+        method: 'POST',
+        signal: controller.signal,
+        ...(voiceTrialToken
+          ? {
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ trial_token: voiceTrialToken }),
+            }
+          : {}),
+      })
+    } catch (error) {
       if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
         return
       }
-      setErrorMsg(`${t('errorConnection')} [warmup request failed]`)
-      convLogger.error('warmup request failed')
+      setErrorMsg(t('errorConnection'))
+      warmupLogger.error(
+        timedOut ? 'warmup timeout' : 'warmup request failed',
+        {
+          timeoutMs: WARMUP_TIMEOUT_MS,
+          error: error instanceof Error ? error.message : String(error),
+        }
+      )
       setStatus('error')
       finalizeSession()
       return
+    } finally {
+      clearTimeout(timeout)
+      if (warmupRef.current?.controller === controller) {
+        warmupRef.current = null
+      }
     }
 
     if (!warmupResponse.ok) {
       if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
         return
       }
-      setErrorMsg(`${t('errorConnection')} [warmup ${warmupResponse.status}]`)
-      convLogger.error('warmup bad status', { status: warmupResponse.status })
+      setErrorMsg(t('errorConnection'))
+      warmupLogger.error('warmup bad status', { status: warmupResponse.status })
       setStatus('error')
       finalizeSession()
       return
@@ -1123,7 +1158,20 @@ export default function ConversationMode({
             {t('subtitle')}
           </p>
           <h1 className="text-fl-fg font-mono text-2xl font-bold tracking-tight">
-            {t('title')}
+            {lessonTitle ? (
+              <span lang={locale}>
+                {tPractice.rich('title', {
+                  title: lessonTitle,
+                  topic: (chunks) => (
+                    <TargetLanguageText languageCode={targetLanguage}>
+                      {chunks}
+                    </TargetLanguageText>
+                  ),
+                })}
+              </span>
+            ) : (
+              t('title')
+            )}
           </h1>
         </div>
         {onClose && (
@@ -1207,6 +1255,7 @@ export default function ConversationMode({
 
       {/* Conversation starters — shown when idle, hidden as soon as session starts */}
       {!trialMode &&
+        lessonId === undefined &&
         !sessionActive &&
         (status === 'ready' || status === 'ended' || status === 'error') && (
           <div className="mb-4">

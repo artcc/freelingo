@@ -1504,15 +1504,48 @@
     "trialUnlimited": "Rajaton käyttö",
     "requiresSubscription": "Vain Premium"
   },
+  "lessonPractice": {
+    "action": "Harjoittele tätä oppituntia Lingun kanssa",
+    "title": "Harjoitus: <topic>{title}</topic>",
+    "description": "Harjoittele tämän oppitunnin sisältöä puhumalla. Lingu esittää kysymyksiä ja auttaa sinua käyttämään oppimaasi. Päätät itse, milloin lopetat.",
+    "start": "Aloita harjoitus",
+    "cancel": "Ei nyt",
+    "unavailable": "Harjoitusta ei voitu valmistella. Tarkista, että oppitunti on suoritettu, ja yritä uudelleen.",
+    "back": "Takaisin opintosuunnitelmaan"
+  },
+  "dashboardProgress": {
+    "title": "Edistymisesi",
+    "scope": "Nykyinen kielesi ja opiskelusuunnitelmasi",
+    "details": "Näytä edistyminen",
+    "experience": "Kokemus",
+    "todayXp": "+{xp} XP tänään",
+    "experienceHint": "Jokainen harjoitus edistää oppimistasi.",
+    "streak": "Oppimisputki",
+    "days": "{count, plural, one {päivä} other {päivää}}",
+    "practisedToday": "Harjoittelit tänään",
+    "readyToday": "Uusi tilaisuus harjoitella",
+    "week": "Viimeisten seitsemän päivän aktiivisuus",
+    "activeDay": "Harjoiteltu",
+    "inactiveDay": "Ei kirjattua toimintaa",
+    "utcHint": "Viimeiset 7 päivää",
+    "lessons": "Suoritetut oppitunnit",
+    "accuracy": "Oppituntien tehtävien tarkkuus",
+    "correctAnswers": "{correct} oikein {total} vastauksesta",
+    "noExercises": "Tuloksesi näkyvät ensimmäisen tehtävän jälkeen."
+  },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Selvä",
     "entry1": {
-      "label": "Viisi uutta käyttöliittymän kieltä",
-      "desc": "FreeLingo on saatavilla kroatiaksi, ruotsiksi, suomeksi, tanskaksi ja turkiksi. Valitse käyttöliittymän kieli Asetuksista."
+      "label": "Harjoittele oppitunteja Lingun kanssa",
+      "desc": "Aloita äänikeskustelu suoritetulta oppitunnilta. Lingu auttaa sinua käyttämään oppimaasi, ja keskustelu tallennetaan harjoitellun aiheen otsikolla."
     },
     "entry2": {
+      "label": "Lisää tapoja ansaita XP:tä",
+      "desc": "Ansaitse XP:tä <bold>puheesta, chatista, hajautetuista luku- ja kuuntelukertauksista sekä osioiden ja tasojen suorittamisesta</bold>. Uudistettu näkymä korostaa päivän XP:tä, oppimisputkeasi ja viimeaikaista toimintaasi."
+    },
+    "entry3": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }
@@ -1557,6 +1590,12 @@
     "moreInHistory": "+{count} lisää",
     "practiceAgain": "Harjoittele uudelleen",
     "replayNoXp": "Toista (ei XP-pisteitä)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Aktiivinen kielesi tai opiskelusuunnitelmasi on muuttunut. Jatka lataamalla tämä sivu uudelleen.",
+    "failed": "Harjoitusta ei voitu luoda. Yritä uudelleen.",
+    "timeout": "Harjoituksen luominen kesti liian kauan. Yritä uudelleen.",
+    "unavailable": "Harjoituksen tilaa ei voitu tarkistaa. Yritä uudelleen."
   },
   "reading": {
     "title": "Lukeminen",

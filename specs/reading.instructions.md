@@ -79,7 +79,7 @@ The prompt requests five questions with A-D options, but the generation schema c
 field types rather than enforcing question count, option keys, index uniqueness, or correct-answer
 membership. Those prompt requirements are not database invariants.
 
-## Generation lock and long-poll
+## Generation lease and status
 
 Redis prevents ordinary duplicate generation with the key:
 
@@ -87,53 +87,79 @@ Redis prevents ordinary duplicate generation with the key:
 reading:generating:{level}:{target_language}
 ```
 
-- Acquisition uses `SET NX` with a 60-second TTL.
-- An existing lock still produces a successful `202` response.
-- The background task opens its own database and Redis resources.
-- The task deletes the lock in `finally`, whether generation succeeds or fails.
-- Generation failures are logged and are not returned through the already-completed HTTP request.
+- `exercise_generation.py` acquires a unique-owner lease with a 60-second TTL and renews it every
+  20 seconds. Lua operations atomically acquire the lease and state, compare-and-renew, and
+  compare-and-finish. An older task cannot release a replacement lease or overwrite its state.
+- The background task opens its own database and Redis resources. Detected lease loss, renewal
+  failure, or cancellation stops local work; persistence checks ownership before saving. Redis and
+  PostgreSQL do not share a transaction: the lease prevents ordinary duplicate work but is not a
+  database fencing guarantee if ownership disappears between the final guard and commit.
+- `EXERCISE_GENERATION_TIMEOUT_SECONDS` defaults to 600 and bounds the complete job from acquisition,
+  including structured generation, JSON correction, and persistence. The LLM receives the remaining
+  budget with SDK and adapter transport retries disabled for this flow; one JSON correction remains
+  possible within that budget.
+- Redis `{lock_key}:state` stores the generation status. Running state lives for the configured
+  budget plus 15 minutes; terminal state lives for 15 minutes. A running state without a lease is
+  reported as interrupted. Redis state is operational, not a durable job queue.
+- Available exercises take priority over generation status. Generation checks availability before
+  and after acquiring a lease and returns `status: "available"` without starting redundant work.
+- Failures are logged and exposed through `/next` as controlled error codes, not raw exceptions.
 
-After requesting generation, the frontend sends one `GET /api/reading/next?wait=true` request. The
-backend checks once per second for at most 90 seconds and returns early when an exercise appears or
-the generation lock disappears. This is server-side long-polling, not repeated client polling.
-
-The lock TTL is shorter than the maximum wait and has no ownership token. The current implementation
-does not guarantee single generation when a job lasts longer than the lock.
+`GET /api/reading/next` responds immediately. A supplied `wait` query parameter does not enable a
+long-poll. The frontend periodically queries the existing endpoint; closing the page or losing one
+HTTP response does not cancel the accepted background job.
 
 ## API
 
 All endpoints require authentication, an active language, an active study plan, and normal
 maintenance access. They derive level, language, and plan from persisted server state.
 
+`/next` and `/generate` accept optional `expected_study_plan_id`, `expected_target_language`, and
+`expected_level` query parameters. These are consistency checks against the authenticated user's
+persisted active plan, not authorization or pool-selection inputs. A mismatch returns HTTP 409
+`study_context_changed` before selecting an exercise or starting work. The frontend sends its known
+context on the first lookup and preserves the full returned context for subsequent GET and POST calls.
+Changing the active context in another tab stops the stale operation and prompts a page reload.
+
 ### `GET /api/reading/next`
 
-- Rate limit: `10/minute`.
+- Rate limit: `60/minute`.
 - Access: freemium read-only policy.
-- Optional `wait=true` enables the 90-second long-poll.
+- Returns immediately, including while a generation is active.
 - Available response includes passage, metadata, questions, and options.
 - It never includes correct answers.
 - No available exercise returns `available: false` and a null exercise.
+- Every response includes `generation_status` (`idle`, `generating`, or `failed`), nullable
+  `generation_error` (`timeout`, `generation_failed`, or `interrupted`), and nullable UTC
+  `generation_deadline`, plus nullable `generation_remaining_seconds` calculated by the server.
+  Available responses use idle state with no error, deadline, or remaining time.
+- Every response includes `context: {study_plan_id, target_language, level}` from the resolved plan.
 
 ### `POST /api/reading/generate`
 
 - Rate limit: `5/minute`.
 - Access: freemium consuming-feature policy, without consuming quota at generation time.
-- Returns HTTP `202` with `status: "generating"`, whether this request acquired the lock or found
-  generation already in progress.
+- Returns HTTP `202` with `status: "generating"`, whether this request acquired the lease or found
+  generation already in progress; returns `status: "available"` when an exercise can already be used.
 
 ### `POST /api/reading/attempt`
 
 - Rate limit: `20/minute`.
 - Access: freemium consuming-feature policy.
-- Accepts `exercise_id`, exactly five answer entries, and optional `replay`.
+- Accepts `exercise_id`, exactly five answer entries, optional `replay`, and required
+  `context: {study_plan_id, target_language, level}` captured when loading the exercise or history.
+- Resolves the authenticated user's active plan independently and compares all context fields before
+  saving. A mismatch returns `409 study_context_changed` without recording attempts, XP, view count,
+  or quota usage. Context identifies the expected selection; it cannot authorize another plan.
+- The exercise must match the plan language and, for normal attempts, its level. Replays may use an
+   earlier-level exercise in the same language and use the spaced-replay reward rules below.
 - An answer-count violation returns validation HTTP `422`.
 - A normal duplicate returns `409 already_attempted`.
 - An unknown exercise returns `404 exercise_not_found`.
 - The response includes score, XP, and correct answers.
 
-The schema enforces only dictionary length, not expected question indices or option values. The
-endpoint resolves the plan independently but does not currently compare the submitted exercise's
-level or language with that plan before persisting the attempt.
+The schema enforces only dictionary length, not expected question indices or option values.
+Omitting the submission context returns validation HTTP `422`.
 
 ### `GET /api/reading/history`
 
@@ -144,6 +170,8 @@ level or language with that plan before persisting the attempt.
 - Returns newest attempts first with the full passage, exercise metadata, submitted answers, correct
   answers, score, XP, total count, skip, and effective limit.
 - Includes normal attempts and replay rows.
+- Returns the active plan's `context` alongside the page of results. The frontend retains it with
+  those results and submits it when replaying, rather than reading mutable language-store state.
 
 The backend currently does not impose minimum values for `skip` or `limit`, and ordering has no ID
 tie-breaker for equal timestamps.
@@ -159,16 +187,22 @@ A normal submission:
 2. Calculates score and XP.
 3. Stores the attempt against the active plan.
 4. Increments `view_count`.
-5. Commits the attempt.
-6. Credits positive XP through `update_daily_progress()` for that plan.
+5. Records daily activity and credits XP through `update_daily_progress()` for that plan.
+6. Commits the attempt and progress together.
 7. Records freemium Reading use on a best-effort basis.
 
-Attempt persistence and daily-progress credit occur in separate commits. Freemium usage is recorded
+Attempt persistence, reward keys, and daily-progress credit share one transaction. Zero-score attempts
+also record activity. Freemium usage is recorded
 afterward and does not roll back a successful attempt if Redis fails.
 
 With `replay=true`, duplicate protection is skipped, a new history row is stored, score is calculated,
-and XP is forced to zero. Replay still increments `view_count` and consumes one freemium Reading use
+and XP is 5 once per exercise/plan/UTC day if a prior-day attempt exists in that plan, otherwise zero.
+Replay still increments `view_count`, records activity, and consumes one freemium Reading use
 after a successful submission.
+
+The submission service captures `completed_at` once before awaiting database work. Its UTC date is
+reused for prior-day eligibility, reward source key, ledger date, and daily progress. Crossing midnight
+while waiting on queries or locks cannot move that attempt's credit or reopen the same day's reward.
 
 ## Freemium and maintenance
 
@@ -191,8 +225,33 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
 `exercise`, `results`, and `history`.
 
 - Initial load and active-language changes request the next exercise.
+- A pending language switch pauses an in-flight lookup without replacing an already displayed
+  exercise. A definite rejection with unchanged context preserves answers and replay mode; only
+  interrupted lookups need resuming. The switch PUT has a 20-second timeout including authentication
+  refresh. An uncertain outcome invalidates context for GET-only reconciliation and bounded recovery.
+- Missing or invalidated language context is loaded first through the shared language store, with
+  cancellation and a 20-second timeout. Failure exits `loading`, shows the localized unavailable
+  message, and offers Retry. Retry reloads context and checks for existing exercises before any
+  generation can be requested. A successful language lookup with no active language is also an error;
+  a valid active language without a study plan is handled by the backend's no-active-plan response.
 - Idle state offers generation, history, quota information, or an inline paywall.
-- Generating state waits on one cancelable long-poll and adds a delay warning after 15 seconds.
+- `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Listening.
+- Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay
+  warning after 15 seconds. Each request uses at most 20 seconds or the remaining operation budget,
+  including the consumer's wait for shared authentication refresh.
+- The first server-calculated remaining time is anchored to the browser's monotonic clock. A final
+  result lookup at expiry has up to 10 seconds of grace. Missing remaining time uses a 60-second
+  observation window. Client wall-clock offsets do not change this budget.
+- Network errors, 5xx, and 429 use progressive backoff; recovery stops after four consecutive failures.
+  `Retry-After` is respected up to 120 seconds; longer delays are surfaced as unavailable status.
+  Recovery pauses are capped by the remaining budget; when Retry-After cannot fit, the operation
+  expires without sending a request earlier than permitted or outside its budget.
+- An uncertain POST response is recovered using GET only. Checking status never resubmits generation.
+- Page entry resumes active generation or retrieves a saved result. Localized errors distinguish
+  generation failure, timeout, and unavailable status. A manual retry checks for existing work first.
+- Repeated clicks are blocked before POST completes. Unmount and local language, plan, or level
+  changes abort the current lookup and its timers. Responses must match the operation's context;
+  late responses cannot update a replacement operation.
 - Exercise state shows the passage and questions together; there is no audio or readiness gate.
 - Submission becomes available when every received question index has an answer.
 - Results show score, XP, correct options, and the learner's incorrect selections.

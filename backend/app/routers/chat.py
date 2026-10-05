@@ -42,6 +42,7 @@ from app.services.memory_service import (
     execute_save_user_memory,
     get_user_memories,
 )
+from app.services.progress_rewards import reward_conversation
 from app.services.prompts.common import get_language_prompt_overlay
 from app.services.prompts.tutor import build_tutor_system_prompt
 from app.utils.db import db_session
@@ -211,7 +212,7 @@ async def get_conversation_messages(
     result = await db.execute(
         select(ChatHistory)
         .where(where_clause)
-        .order_by(ChatHistory.created_at.asc())
+        .order_by(ChatHistory.created_at.asc(), ChatHistory.id.asc())
         .limit(MAX_HISTORY)
     )
     messages = [{"role": m.role, "content": m.content} for m in result.scalars().all()]
@@ -357,25 +358,27 @@ async def chat(
         memory_tools_enabled=False,
     )
 
-    db.add(
-        ChatHistory(
-            user_id=current_user.id,
-            conversation_id=conversation_id,
-            role="user",
-            content=request_data.message,
-            study_plan_id=study_plan_id,
-            target_language=target_language,
-        )
+    user_message = ChatHistory(
+        user_id=current_user.id,
+        conversation_id=conversation_id,
+        role="user",
+        content=request_data.message,
+        study_plan_id=study_plan_id,
+        target_language=target_language,
+        modality="chat",
     )
+    db.add(user_message)
     await db.commit()
+    user_message_id = user_message.id
 
     result = await db.execute(
         select(ChatHistory)
         .where(
             ChatHistory.user_id == current_user.id,
             ChatHistory.conversation_id == conversation_id,
+            ChatHistory.id <= user_message_id,
         )
-        .order_by(ChatHistory.created_at.desc())
+        .order_by(ChatHistory.created_at.desc(), ChatHistory.id.desc())
         .limit(MAX_HISTORY)
     )
     db_messages = list(result.scalars().all())
@@ -438,17 +441,22 @@ async def chat(
             if memory_updated and not memory_updated_sent:
                 yield f"data: {json.dumps({'memory_updated': True})}\n\n"
 
-            db.add(
-                ChatHistory(
-                    user_id=current_user.id,
-                    conversation_id=conversation_id,
-                    role="assistant",
-                    content=full_response,
-                    study_plan_id=study_plan_id,
-                    target_language=target_language,
-                )
+            completed_at = datetime.now(UTC).replace(tzinfo=None)
+            assistant_message = ChatHistory(
+                user_id=current_user.id,
+                conversation_id=conversation_id,
+                role="assistant",
+                content=full_response,
+                study_plan_id=study_plan_id,
+                target_language=target_language,
+                modality="chat",
+                reply_to_id=user_message_id,
+                created_at=completed_at,
             )
-            conv.updated_at = datetime.now(UTC).replace(tzinfo=None)
+            db.add(assistant_message)
+            conv.updated_at = completed_at
+            await db.flush()
+            await reward_conversation(db, assistant_message.id)
             await db.commit()
 
             yield f"data: {json.dumps({'done': True})}\n\n"
@@ -525,7 +533,7 @@ async def get_history(
     result = await db.execute(
         select(ChatHistory)
         .where(where_clause)
-        .order_by(ChatHistory.created_at.asc())
+        .order_by(ChatHistory.created_at.asc(), ChatHistory.id.asc())
         .limit(MAX_HISTORY)
     )
     messages = [{"role": m.role, "content": m.content} for m in result.scalars().all()]

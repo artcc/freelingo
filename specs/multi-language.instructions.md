@@ -74,6 +74,10 @@ that require a plan must handle this state explicitly.
 
 ## Data ownership and isolation
 
+Additional XP award keys and daily caps are scoped to the persisted owning plan. Voice lesson practice
+uses its historical plan even after a language switch. Planless conversations do not earn XP. Deleting
+a plan cascades its reward ledger; switching plans does not transfer rewards or totals.
+
 The following data is scoped to a study plan and therefore isolated between target languages:
 
 - lessons and exercises;
@@ -88,10 +92,21 @@ required `study_plan_id` with `ON DELETE CASCADE`. Lessons also cascade with the
 
 Listening and Reading exercise definitions may be shared by users studying the same language and
 CEFR level. Attempts, completion state, and awarded XP remain tied to the learner's plan.
+Submissions carry the context captured at exercise or history lookup. The backend resolves the
+authenticated user's active plan and rejects a changed selection before persisting; it also verifies
+the exercise language and the level for normal attempts. Historical replays may use a previous
+exercise level in the same language. Spaced replay rewards require an earlier-day attempt in the
+validated destination plan; history in another plan does not qualify that plan for replay XP.
 
 Flashcard generation derives the target language from the active persisted plan rather than client
 state. A review credits progress to the `study_plan_id` stored on the card, even if the user changes
 their active language while the review is pending.
+
+Word saves from lesson-linked voice practice carry `lesson_id`. The backend requires an owned
+completed lesson and resolves language, CEFR level, deduplication scope, and flashcard ownership from
+its persisted plan. A switch in another tab, a newer active plan for the same language, or an active
+language without a plan cannot redirect that save. Unavailable lessons fail without an active-plan
+fallback. Word saves without this reference retain the existing active-plan behavior.
 
 Conversations, chat history, and LLM usage retain an optional `study_plan_id` with
 `ON DELETE SET NULL`. Conversation history is selected by target language so it can include
@@ -213,7 +228,34 @@ Dependencies that require a plan distinguish `No active language set` from
 - the static supported-language catalog;
 - the backend-provided available codes;
 - the language-switching busy state;
+- whether the cached summary needs refreshing after plan creation or a persisted language switch;
 - fetch, add, switch, and remove operations.
+
+`fetchLanguages` returns a success boolean and preserves the previous snapshot and invalidation
+state on failure. Requests have a 20-second timeout, including the caller's authentication-refresh
+wait, and accept an optional cancellation signal. Cancelled responses do not update the store.
+Only the most recently started language query may publish its response. `invalidateLanguages`
+also invalidates pending queries, preventing pre-mutation responses from restoring an old summary
+or clearing its invalidation flag.
+Assessment completion marks the summary as needing refresh and fetches it before navigation or
+the voice-trial offer. A failed refresh does not undo plan creation or repeat the completion POST;
+Listening and Reading reload invalidated context before consulting their exercise pools.
+
+After a successful language-switch PUT, the store invalidates the summary and fetches it again.
+`switchLanguage` returns true only when that refresh succeeds. A failed refresh leaves `needsRefresh`
+set even though the server has persisted the switch. The PUT has its own 20-second timeout,
+including its authentication-refresh wait; cancellation does not interrupt shared token rotation.
+Timeouts, transport failures, HTTP 408, and server/proxy 5xx responses leave the summary invalidated
+because the mutation outcome is uncertain. Reconciliation uses GET, never an automatic repeat PUT.
+Other rejected HTTP responses preserve the valid summary.
+
+Listening and Reading pause an in-flight exercise lookup while `isSwitching` is true. An already
+displayed exercise, its answers, and replay mode are preserved during the switch and after a definite
+rejection with unchanged context. The busy flag alone does not trigger another exercise lookup.
+Interrupted lookups resume through GET after the switch; changed or invalidated context triggers
+the normal reload/reconciliation flow. Both the sidebar selector and language settings offer a
+summary-only retry after a refresh failure or an uncertain PUT outcome, without repeating the PUT
+or announcing a fully synchronized switch.
 
 The sidebar `LanguageSwitcher` is present in desktop and mobile navigation. With one language it
 shows the active language as a disabled indicator. With multiple languages it opens a selector,
@@ -223,7 +265,7 @@ displays confirmation feedback.
 Settings > My Languages:
 
 - lists each language's active plan level and completion percentage when available;
-- summarizes XP, stored streak value, and lessons completed;
+- summarizes XP, the date-aware current streak, and lessons completed;
 - allows switching to an inactive language;
 - allows removing an inactive language when more than one exists;
 - offers only enabled languages not already owned;

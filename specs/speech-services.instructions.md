@@ -179,8 +179,11 @@ Whisper services use internal network addresses and are not called from the fron
 ## Availability semantics
 
 Startup creates configured adapter objects but does not prove provider health. Administrative health
-checks call adapter `health()` methods. Conversation warmup attempts provider work in parallel but
-logs and suppresses individual failures, so a `ready` response is not a strict health guarantee.
+checks call adapter `health()` methods. Conversation warmup attempts provider work in parallel within
+a shared 60-second budget. It logs and suppresses individual failures, cancels unfinished probes at
+the deadline, and logs the timeout. Its `ready` response is therefore not a strict health guarantee.
+The conversation frontend allows 75 seconds for the warmup request, including transport and
+authentication overhead, and aborts its request on timeout, manual stop, or unmount.
 
 ## Related specifications
 
