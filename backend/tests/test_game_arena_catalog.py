@@ -15,6 +15,12 @@ def test_server_catalog_is_explicit_and_arena_only():
     assert all(item["engine"] == "arena" for item in arena.GAME_CATALOG.values())
 
 
+def test_skill_mapping_is_server_owned():
+    assert arena.skill_for("memory") == "memory"
+    assert arena.skill_for("spelling") == "writing"
+    assert arena.skill_for("matching") == "vocabulary"
+
+
 def test_unknown_game_is_rejected_before_content_processing():
     try:
         arena.create("sentence_builder", [], 1)
