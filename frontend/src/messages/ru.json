@@ -1828,6 +1828,8 @@
     }
   },
   "contact": {
+  "description": "Отправьте нам свой вопрос, отзыв или запрос, и мы ответим вам как можно скорее.",
+
     "title": "Контакт",
     "labelEmail": "E-mail",
     "placeholderEmail": "ваш@email.com",
