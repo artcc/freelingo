@@ -1833,6 +1833,8 @@
     }
   },
   "contact": {
+  "description": "Senden Sie uns Ihre Frage, Ihr Feedback oder Ihre Anfrage. Wir melden uns so schnell wie möglich.",
+
     "title": "Kontakt",
     "labelEmail": "E-Mail",
     "placeholderEmail": "deine@email.de",
