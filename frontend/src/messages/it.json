@@ -1834,6 +1834,8 @@
     }
   },
   "contact": {
+  "description": "Inviaci la tua domanda, il tuo feedback o la tua richiesta e ti risponderemo al più presto.",
+
     "title": "Contatto",
     "labelEmail": "E-mail",
     "placeholderEmail": "tua@email.com",
