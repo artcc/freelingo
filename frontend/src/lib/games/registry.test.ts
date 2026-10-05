@@ -6,13 +6,15 @@ describe('game registry', () => {
     const ids = GAME_REGISTRY.map(game => game.id)
     expect(ids.length).toBe(10)
     expect(new Set(ids).size).toBe(ids.length)
-    expect(GAME_REGISTRY.every(game => game.ar && game.en && game.arDesc && game.enDesc)).toBe(true)
+    expect(GAME_REGISTRY.every(game => game.ar && game.en && game.arDesc && game.enDesc && game.skill)).toBe(true)
   })
 
-  it('keeps arena routing explicit', () => {
+  it('keeps arena routing and learning skills explicit', () => {
     expect(isArenaGame('memory')).toBe(true)
     expect(isArenaGame('matching')).toBe(true)
     expect(isArenaGame('sentence_builder')).toBe(false)
+    expect(getGameDefinition('memory')?.skill).toBe('memory')
+    expect(getGameDefinition('spelling')?.skill).toBe('writing')
     expect(getGameDefinition('review_mix')?.category).toBe('review')
   })
 })
