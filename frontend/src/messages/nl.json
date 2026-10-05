@@ -1833,6 +1833,8 @@
     }
   },
   "contact": {
+  "description": "Stuur ons je vraag, feedback of verzoek en we nemen zo snel mogelijk contact met je op.",
+
     "title": "Contact",
     "labelEmail": "E-mail",
     "placeholderEmail": "jouw@email.nl",
