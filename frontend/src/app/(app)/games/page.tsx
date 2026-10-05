@@ -8,6 +8,14 @@ import { GAME_REGISTRY } from '@/lib/games/registry'
 import { EducationalGameSession } from '@/components/games/EducationalGameSession'
 import './educational-games.css'
 
+const skillLabels = {
+  memory: { ar: 'ذاكرة', en: 'Memory' },
+  vocabulary: { ar: 'مفردات', en: 'Vocabulary' },
+  writing: { ar: 'كتابة', en: 'Writing' },
+  listening: { ar: 'استماع', en: 'Listening' },
+  grammar: { ar: 'قواعد', en: 'Grammar' },
+} as const
+
 export default function GamesPage() {
   const arabic = useLocale().startsWith('ar')
   const language = useLanguageStore(state => state.activeLanguage)
@@ -20,7 +28,7 @@ export default function GamesPage() {
     <header className="edu-heading"><div><p>{arabic ? 'مختبر اللغة' : 'Language lab'} · <b dir="ltr">{code}</b></p><h1>{arabic ? 'تعلّم باللعب' : 'Learn through play'}</h1><p>{arabic ? 'محتوى من خطتك ومستواك. التصحيح والنقاط من الخادم، وليس من المتصفح.' : 'Content from your plan and level. The server validates answers and awards points.'}</p></div></header>
     {game && activity ? <EducationalGameSession key={`${game}:${code}:${difficulty}:${round}`} gameId={game} language={gameLanguageForTargetLanguage(code)} targetLanguage={code} difficulty={difficulty} arabic={arabic} title={arabic ? activity.ar : activity.en} onExit={() => setGame(null)} onReplay={() => setRound(value => value + 1)} /> : <>
       <section className="edu-level"><label htmlFor="game-difficulty">{arabic ? 'درجة التحدي' : 'Challenge difficulty'}</label><select id="game-difficulty" value={difficulty} onChange={event => setDifficulty(Number(event.target.value))}><option value={1}>{arabic ? 'تدرّب' : 'Practice'}</option><option value={2}>{arabic ? 'تحدّ نفسك' : 'Challenge'}</option><option value={3}>{arabic ? 'تحدٍ متقدم' : 'Advanced challenge'}</option></select><span>{arabic ? 'لا يغيّر مستوى CEFR لخطة التعلم.' : 'Does not change your plan’s CEFR level.'}</span></section>
-      <section className="edu-catalog" aria-label={arabic ? 'الألعاب التعليمية' : 'Educational games'}>{GAME_REGISTRY.map((item, index) => <button key={item.id} className="edu-activity" onClick={() => setGame(item.id)}><span className="edu-number">{String(index + 1).padStart(2,'0')}</span><span className="edu-symbol" aria-hidden="true">{item.icon}</span><span><strong>{arabic ? item.ar : item.en}</strong><small>{arabic ? item.arDesc : item.enDesc}</small></span><span className="edu-play">{arabic ? 'العب' : 'Play'} {arabic ? '←' : '→'}</span></button>)}</section>
+      <section className="edu-catalog" aria-label={arabic ? 'الألعاب التعليمية' : 'Educational games'}>{GAME_REGISTRY.map((item, index) => { const skill = skillLabels[item.skill]; return <button key={item.id} className="edu-activity" onClick={() => setGame(item.id)}><span className="edu-number">{String(index + 1).padStart(2,'0')}</span><span className="edu-symbol" aria-hidden="true">{item.icon}</span><span><strong>{arabic ? item.ar : item.en}</strong><small>{arabic ? item.arDesc : item.enDesc}</small><small className="edu-skill">{arabic ? 'يدرّب: ' : 'Trains: '}{arabic ? skill.ar : skill.en}</small></span><span className="edu-play">{arabic ? 'العب' : 'Play'} {arabic ? '←' : '→'}</span></button> })}</section>
       <p className="edu-note">{arabic ? 'تحتاج إلى خطة تعلّم نشطة. لن ننشئ نتائج أو منافسين وهميين عند غياب البيانات.' : 'An active learning plan is required. Missing content is not replaced with fake results or opponents.'}</p>
     </>}
   </main>
