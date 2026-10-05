@@ -113,7 +113,6 @@ async def read_arena(request: Request, session_id: str, user: User = Depends(req
     if not game:
         raise HTTPException(404, 'Arcade round not found')
     state = _arena_state(game)
-    # Saved results remain recoverable; unfinished rounds must be playable.
     if not game.completed:
         if game.expires_at <= datetime.now(UTC).replace(tzinfo=None):
             raise HTTPException(410, 'Round expired; start a new round')
@@ -162,12 +161,10 @@ async def move_arena(request: Request, session_id: str, data: ArenaMove, user: U
         aggregate.questions_answered += earned['questions']
         aggregate.correct_answers += earned['correct']
         aggregate.best_round_score = max(aggregate.best_round_score, earned['round_score'])
-        # Perfect streak requires clearing the challenge without misses, not a
-        # single correct attempt followed by abandoning the remaining items.
         perfect = earned['won'] and earned['correct'] == earned['challenge_items'] and earned['correct'] == earned['questions']
         aggregate.current_correct_streak = aggregate.current_correct_streak + earned['correct'] if perfect else 0
         aggregate.best_correct_streak = max(aggregate.best_correct_streak, aggregate.current_correct_streak)
-        skill = 'writing' if state['game'] == 'spelling' else 'memory' if state['game'] == 'memory' else 'vocabulary'
+        skill = game_arena.skill_for(state['game'])
         db.add(GameProgressEvent(event_id=game.id, user_id=user.id, study_plan_id=plan.id, game_id=state['game'],
             questions_answered=earned['questions'], correct_answers=earned['correct'], round_score=earned['round_score'],
             xp_earned=earned['xp'], achievements=[], daily_challenge=False, daily_challenge_date='', mistakes=[]))
