@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
 import { useLanguageStore } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
@@ -62,6 +63,7 @@ const HISTORY_PAGE_SIZE = 10
 function ListeningPage() {
   const t = useTranslations('listening')
   const tCommon = useTranslations('common')
+  const tGeneration = useTranslations('exerciseGeneration')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const activePlan = useLanguageStore(
     (s) => s.userLanguages.find((l) => l.is_active)?.plan
@@ -77,6 +79,11 @@ function ListeningPage() {
 
   const [pageState, setPageState] = useState<PageState>('loading')
   const [exercise, setExercise] = useState<ListeningExercise | null>(null)
+  const [exerciseContext, setExerciseContext] =
+    useState<ExerciseContext | null>(null)
+  const [historyContext, setHistoryContext] = useState<ExerciseContext | null>(
+    null
+  )
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [result, setResult] = useState<SubmitResult | null>(null)
   const [history, setHistory] = useState<AttemptItem[]>([])
@@ -125,12 +132,16 @@ function ListeningPage() {
     }
   }, [pageState])
 
-  const onExercise = useCallback((nextExercise: ListeningExercise) => {
-    setExercise(nextExercise)
-    setAnswers({})
-    setResult(null)
-    setIsReplay(false)
-  }, [])
+  const onExercise = useCallback(
+    (nextExercise: ListeningExercise, context: ExerciseContext) => {
+      setExercise(nextExercise)
+      setExerciseContext(context)
+      setAnswers({})
+      setResult(null)
+      setIsReplay(false)
+    },
+    []
+  )
 
   const { loadNext, generate, needsContext } = useExerciseGeneration({
     feature: 'listening',
@@ -152,7 +163,7 @@ function ListeningPage() {
   }
 
   async function handleSubmit() {
-    if (!exercise) return
+    if (!exercise || !exerciseContext) return
     setSubmitting(true)
     setError('')
     try {
@@ -163,14 +174,17 @@ function ListeningPage() {
           exercise_id: exercise.id,
           answers,
           replay: isReplay,
+          context: exerciseContext,
         }),
       })
       if (!res.ok) {
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
         setError(
-          d.detail === 'already_attempted'
-            ? t('alreadyAttempted')
-            : t('errorSubmit')
+          d.detail === 'study_context_changed'
+            ? tGeneration('contextChanged')
+            : d.detail === 'already_attempted'
+              ? t('alreadyAttempted')
+              : t('errorSubmit')
         )
         return
       }
@@ -207,10 +221,12 @@ function ListeningPage() {
       const res = await apiFetch(`/api/listening/history?${params.toString()}`)
       if (res.ok) {
         const data = (await res.json()) as {
+          context: ExerciseContext
           items: AttemptItem[]
           total: number
         }
         setHistory(data.items)
+        setHistoryContext(data.context)
         setHistoryTotal(data.total)
       }
     } catch {
@@ -307,6 +323,7 @@ function ListeningPage() {
                 <button
                   onClick={() => {
                     setExercise(item.exercise)
+                    setExerciseContext(historyContext)
                     setAnswers({})
                     setResult(null)
                     setIsReplay(true)
@@ -520,9 +537,8 @@ function ListeningPage() {
 
         <FreemiumQuotaBanner feature="listening" className="mb-4" />
 
-        {freemiumExhausted ? (
-          <PaywallBanner feature="listening" compact />
-        ) : (
+        {freemiumExhausted && <PaywallBanner feature="listening" compact />}
+        {(needsContext || !freemiumExhausted) && (
           <div className="border-fl-border bg-fl-surface flex flex-col items-center gap-5 border p-8 text-center">
             <p className="text-fl-muted-2 font-mono text-xs tracking-wide">
               {t('noExercises')}

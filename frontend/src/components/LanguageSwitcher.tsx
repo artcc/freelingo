@@ -10,16 +10,20 @@ import { getLanguageByCode } from '@/lib/target-languages'
 export default function LanguageSwitcher() {
   const tLang = useTranslations('languages')
   const tTarget = useTranslations('targetLanguages')
+  const tCommon = useTranslations('common')
   const router = useRouter()
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const userLanguages = useLanguageStore((s) => s.userLanguages)
   const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
   const switchLanguage = useLanguageStore((s) => s.switchLanguage)
 
   const [open, setOpen] = useState(false)
   const [toast, setToast] = useState(false)
   const [toastMsg, setToastMsg] = useState('')
+  const [switchFailed, setSwitchFailed] = useState(false)
+  const [recovering, setRecovering] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -41,9 +45,12 @@ export default function LanguageSwitcher() {
   async function handleSwitch(code: string) {
     setOpen(false)
     if (code === activeLanguage?.code) return
+    setToast(false)
+    setSwitchFailed(false)
     // Capture target language info before switching (store will update after)
     const targetInfo = userLanguages.find((l) => l.target_language === code)
     const ok = await switchLanguage(code)
+    setSwitchFailed(!ok)
     if (ok) {
       const langName = tTarget(code)
       const level = targetInfo?.plan?.cefr_level
@@ -65,6 +72,27 @@ export default function LanguageSwitcher() {
     ),
     []
   )
+
+  if (switchFailed && needsRefresh) {
+    return (
+      <div className="space-y-2 px-5 py-2.5">
+        <p role="alert" className="text-fl-error-fg text-xs">
+          {tCommon('errorMessage')}
+        </p>
+        <button
+          disabled={recovering}
+          onClick={async () => {
+            setRecovering(true)
+            await fetchLanguages()
+            setRecovering(false)
+          }}
+          className="text-fl-muted-2 hover:text-fl-fg text-xs disabled:opacity-50"
+        >
+          {tCommon('retry')}
+        </button>
+      </div>
+    )
+  }
 
   if (!activeLanguage) {
     return skeleton

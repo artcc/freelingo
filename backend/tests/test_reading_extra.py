@@ -180,7 +180,11 @@ async def test_submit_not_found(reading_client) -> None:
     r = await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": 99999, "answers": _ALL_CORRECT},
+        json={
+            "exercise_id": 99999,
+            "answers": _ALL_CORRECT,
+            "context": (await ac.get("/api/reading/next", headers=headers)).json()["context"],
+        },
     )
     assert r.status_code == 404
     assert r.json()["detail"] == "exercise_not_found"

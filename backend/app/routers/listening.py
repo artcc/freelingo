@@ -238,6 +238,18 @@ async def submit_listening_attempt(
     db: AsyncSession = Depends(get_db),
 ) -> ListeningSubmitResponse:
     """Submit answers and receive score, XP, correct answers, and transcript."""
+    await get_exercise_study_plan(
+        plan=plan,
+        expected_study_plan_id=body.context.study_plan_id,
+        expected_target_language=body.context.target_language,
+        expected_level=body.context.level,
+    )
+    exercise = await db.get(ListeningExercise, body.exercise_id)
+    if exercise is not None and (
+        exercise.target_language != plan.target_language
+        or (not body.replay and exercise.level != plan.cefr_level)
+    ):
+        raise HTTPException(status_code=409, detail="study_context_changed")
     try:
         attempt, exercise = await submit_attempt(
             body.exercise_id,
@@ -309,4 +321,12 @@ async def get_listening_history(
         )
         for attempt, exercise in rows
     ]
-    return ListeningHistoryResponse(items=items, total=total, skip=skip, limit=limit)
+    return ListeningHistoryResponse(
+        context=ExerciseContext(
+            study_plan_id=plan.id, target_language=plan.target_language, level=plan.cefr_level
+        ),
+        items=items,
+        total=total,
+        skip=skip,
+        limit=limit,
+    )

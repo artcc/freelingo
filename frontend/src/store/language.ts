@@ -35,11 +35,14 @@ interface LanguageStore {
   availableLanguageCodes: string[]
   isSwitching: boolean
   needsRefresh: boolean
+  invalidateLanguages: () => void
   fetchLanguages: (signal?: AbortSignal) => Promise<boolean>
   switchLanguage: (code: string) => Promise<boolean>
   addLanguage: (code: string) => Promise<boolean>
   removeLanguage: (code: string) => Promise<boolean>
 }
+
+let languageRequestId = 0
 
 export const useLanguageStore = create<LanguageStore>((set, get) => ({
   activeLanguage: null,
@@ -49,7 +52,13 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
   isSwitching: false,
   needsRefresh: false,
 
+  invalidateLanguages: () => {
+    ++languageRequestId
+    set({ needsRefresh: true })
+  },
+
   fetchLanguages: async (signal) => {
+    const requestId = ++languageRequestId
     try {
       const requestSignal = AbortSignal.any([
         AbortSignal.timeout(20_000),
@@ -59,6 +68,7 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
       if (!res.ok) return false
       const data = await res.json()
       requestSignal.throwIfAborted()
+      if (requestId !== languageRequestId) return false
 
       const languages: UserLanguageInfo[] = (data.languages || []).map(
         mapUserLanguageInfo
@@ -91,8 +101,8 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
         body: JSON.stringify({ target_language: code }),
       })
       if (!res.ok) return false
-      await get().fetchLanguages()
-      return true
+      get().invalidateLanguages()
+      return await get().fetchLanguages()
     } catch {
       return false
     } finally {

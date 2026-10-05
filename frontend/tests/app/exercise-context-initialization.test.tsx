@@ -10,15 +10,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import AssessmentPage from '@/app/(app)/assessment/page'
 import ListeningPage from '@/app/(app)/listening/page'
 import ReadingPage from '@/app/(app)/reading/page'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { getLanguageByCode } from '@/lib/target-languages'
 import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
+import { useFreemiumStore } from '@/store/freemium'
 import { useLanguageStore } from '@/store/language'
 import { useLoadingStore } from '@/store/loading'
 
-const { push } = vi.hoisted(() => ({ push: vi.fn() }))
+const { push, refresh } = vi.hoisted(() => ({
+  push: vi.fn(),
+  refresh: vi.fn(),
+}))
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }))
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push, refresh }) }))
 vi.mock('next-intl', () => {
   const translate = (key: string) => key
   return { useTranslations: () => translate, useLocale: () => 'en' }
@@ -68,6 +73,7 @@ const ready = () =>
 
 beforeEach(() => {
   push.mockReset()
+  refresh.mockReset()
   vi.stubGlobal('fetch', vi.fn())
   useLanguageStore.setState({
     activeLanguage: null,
@@ -82,6 +88,7 @@ beforeEach(() => {
     maintenanceMode: false,
   })
   useLoadingStore.setState({ count: 0 })
+  useFreemiumStore.setState({ status: null, loaded: false, lastFetch: 0 })
 })
 
 afterEach(() => {
@@ -133,6 +140,253 @@ describe.each([
       expect(screen.queryByText('unavailable')).not.toBeInTheDocument()
       expect(
         screen.queryByRole('button', { name: 'retry' })
+      ).not.toBeInTheDocument()
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.some(([, options]) => options?.method === 'POST')
+      ).toBe(false)
+    }
+  )
+
+  it('recovers a persisted language switch and discards the switcher’s older response', async () => {
+    const original = {
+      ...languages(),
+      languages: [
+        ...languages().languages,
+        {
+          target_language: 'es-ES',
+          is_active: false,
+          plan: plan(9),
+          progress: null,
+        },
+      ],
+    }
+    const updated = {
+      ...original,
+      languages: original.languages.map((language) => ({
+        ...language,
+        is_active: language.target_language === 'es-ES',
+      })),
+    }
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: original.languages,
+    })
+    let finishOld: (response: Response) => void = () => {}
+    const oldSummary = new Promise<Response>((resolve) => {
+      finishOld = resolve
+    })
+    let summaryCalls = 0
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/languages/active') return json({})
+      if (url === '/api/languages') {
+        summaryCalls += 1
+        if (summaryCalls === 1) return oldSummary
+        return summaryCalls <= 3 ? json({}, 502) : json(updated)
+      }
+      const response = await ready().json()
+      if (String(url).includes('expected_target_language=es-ES')) {
+        response.context = {
+          study_plan_id: 9,
+          target_language: 'es-ES',
+          level: 'A1',
+        }
+        response.exercise.target_language = 'es-ES'
+      }
+      return json(response)
+    })
+    render(
+      <>
+        <LanguageSwitcher />
+        <Page />
+      </>
+    )
+    expect(await screen.findByText(/Fresh exercise/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /en-GB/ }))
+    fireEvent.click(screen.getByRole('button', { name: /es-ES/ }))
+    expect(await screen.findByText('unavailable')).toBeInTheDocument()
+    expect(screen.queryByText('switched')).not.toBeInTheDocument()
+    expect(refresh).not.toHaveBeenCalled()
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(lookups()).toHaveLength(1)
+    await act(async () => {
+      finishOld(json(original))
+    })
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    // Recover from the switcher without repeating the server-side mutation.
+    fireEvent.click(screen.getAllByRole('button', { name: 'retry' })[0])
+    await waitFor(() =>
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('es-ES')
+    )
+    expect(await screen.findByText(/Fresh exercise/)).toBeInTheDocument()
+    expect(lookups()).toHaveLength(2)
+    expect(String(lookups()[1][0])).toContain('expected_study_plan_id=9')
+    expect(String(lookups()[1][0])).toContain('expected_target_language=es-ES')
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([, options]) => options?.method === 'PUT')
+    ).toHaveLength(1)
+  })
+
+  it.each([
+    { replay: false, rejected: false },
+    { replay: false, rejected: true },
+    { replay: true, rejected: false },
+    { replay: true, rejected: true },
+  ])(
+    'submits the captured context (replay: $replay, rejected: $rejected)',
+    async ({ replay, rejected }) => {
+      const response = await ready().json()
+      response.exercise.questions = Array.from({ length: 5 }, (_, index) => ({
+        index,
+        question: `Question ${index}`,
+        options: { A: `Answer ${index}`, B: `Other ${index}` },
+      }))
+      const historyContext = {
+        study_plan_id: 8,
+        target_language: 'en-GB',
+        level: 'B2',
+      }
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (String(url).startsWith(`/api/${feature}/history`))
+          return json({
+            context: historyContext,
+            total: 1,
+            items: [
+              {
+                id: 1,
+                score: 5,
+                xp_earned: 50,
+                exercise: response.exercise,
+                text: response.exercise.text,
+                answers: {},
+                correct_answers: [],
+              },
+            ],
+          })
+        if (url === `/api/${feature}/attempt`)
+          return rejected
+            ? json({ detail: 'study_context_changed' }, 409)
+            : json({
+                score: 5,
+                xp_earned: replay ? 0 : 50,
+                correct_answers: [],
+                text: response.exercise.text,
+              })
+        if (String(url).startsWith('/api/reviews')) return json({})
+        return json(response)
+      })
+      render(<Page />)
+      expect(await screen.findByText(/Fresh exercise/)).toBeInTheDocument()
+      if (replay) {
+        fireEvent.click(screen.getByRole('button', { name: 'history' }))
+        fireEvent.click(
+          await screen.findByRole('button', { name: 'practiceAgain' })
+        )
+      }
+      for (let index = 0; index < 5; index += 1) {
+        fireEvent.click(
+          screen.getByRole('button', { name: new RegExp(`Answer ${index}`) })
+        )
+      }
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      expect(
+        await screen.findByText(rejected ? 'contextChanged' : 'resultsLabel')
+      ).toBeInTheDocument()
+      const attempts = vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === `/api/${feature}/attempt`)
+      expect(attempts).toHaveLength(1)
+      expect(JSON.parse(String(attempts[0][1]?.body))).toEqual({
+        exercise_id: 42,
+        replay,
+        context: replay ? historyContext : response.context,
+        answers: { 0: 'A', 1: 'A', 2: 'A', 3: 'A', 4: 'A' },
+      })
+      if (rejected)
+        expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+    }
+  )
+
+  it.each(['missing', 'invalidated'])(
+    'recovers %s context with an exhausted quota without enabling generation',
+    async (contextState) => {
+      useConfigStore.setState({ stripeEnabled: true })
+      useAuthStore.setState({
+        user: {
+          id: 1,
+          username: 'learner',
+          displayName: 'Learner',
+          role: 'user',
+          conversation_max_duration: 300,
+          conversation_inactivity_timeout: 60,
+          subscription_status: 'none',
+        },
+      })
+      useFreemiumStore.setState({
+        loaded: true,
+        lastFetch: Date.now(),
+        status: {
+          trial_active: false,
+          trial_ends_at: null,
+          chat_remaining: 0,
+          chat_limit: 5,
+          lessons_remaining: 0,
+          lessons_limit: 5,
+          listening_remaining: 0,
+          listening_limit: 5,
+          reading_remaining: 0,
+          reading_limit: 5,
+          voice_remaining_seconds: 0,
+          voice_limit_seconds: 300,
+        },
+      })
+      if (contextState === 'invalidated') {
+        useLanguageStore.setState({
+          activeLanguage: getLanguageByCode('en-GB') ?? null,
+          userLanguages: languages(7).languages,
+          needsRefresh: true,
+        })
+      }
+      vi.mocked(fetch)
+        .mockResolvedValueOnce(json({}, 502))
+        .mockResolvedValueOnce(json(languages()))
+        .mockResolvedValueOnce(
+          json({
+            available: false,
+            exercise: null,
+            context: {
+              study_plan_id: 8,
+              target_language: 'en-GB',
+              level: 'A1',
+            },
+            generation_status: 'idle',
+          })
+        )
+
+      render(<Page />)
+      expect(await screen.findByText('unavailable')).toBeInTheDocument()
+      expect(screen.getByText('paywallLabel')).toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'generate' })
+      ).not.toBeInTheDocument()
+      expect(lookups()).toHaveLength(0)
+
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      await waitFor(assertFreshLookup)
+      expect(await screen.findByText('paywallLabel')).toBeInTheDocument()
+      expect(screen.queryByText('unavailable')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'retry' })
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'generate' })
       ).not.toBeInTheDocument()
       expect(
         vi

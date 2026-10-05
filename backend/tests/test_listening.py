@@ -314,20 +314,26 @@ async def test_generate_lock_already_held(user_with_plan) -> None:
 # ---------------------------------------------------------------------------
 
 
+@pytest_asyncio.fixture
+async def attempt_context(user_with_plan):
+    ac, _, headers, _, _ = user_with_plan
+    return (await ac.get("/api/listening/next", headers=headers)).json()["context"]
+
+
 @pytest.mark.asyncio
-async def test_attempt_exercise_not_found(user_with_plan) -> None:
+async def test_attempt_exercise_not_found(user_with_plan, attempt_context) -> None:
     ac, _, headers, _user, _db = user_with_plan
     r = await ac.post(
         "/api/listening/attempt",
         headers=headers,
-        json={"exercise_id": 9999, "answers": _ALL_CORRECT},
+        json={"exercise_id": 9999, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r.status_code == 404
     assert r.json()["detail"] == "exercise_not_found"
 
 
 @pytest.mark.asyncio
-async def test_attempt_scores_correctly(user_with_plan) -> None:
+async def test_attempt_scores_correctly(user_with_plan, attempt_context) -> None:
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
     await db.commit()
@@ -335,7 +341,7 @@ async def test_attempt_scores_correctly(user_with_plan) -> None:
     r = await ac.post(
         "/api/listening/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r.status_code == 200
     data = r.json()
@@ -350,7 +356,7 @@ async def test_attempt_scores_correctly(user_with_plan) -> None:
 
 
 @pytest.mark.asyncio
-async def test_attempt_zero_score(user_with_plan) -> None:
+async def test_attempt_zero_score(user_with_plan, attempt_context) -> None:
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
     await db.commit()
@@ -358,7 +364,7 @@ async def test_attempt_zero_score(user_with_plan) -> None:
     r = await ac.post(
         "/api/listening/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_WRONG},
+        json={"exercise_id": ex.id, "answers": _ALL_WRONG, "context": attempt_context},
     )
     assert r.status_code == 200
     data = r.json()
@@ -367,7 +373,7 @@ async def test_attempt_zero_score(user_with_plan) -> None:
 
 
 @pytest.mark.asyncio
-async def test_attempt_duplicate_rejected(user_with_plan) -> None:
+async def test_attempt_duplicate_rejected(user_with_plan, attempt_context) -> None:
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
     await db.commit()
@@ -375,14 +381,14 @@ async def test_attempt_duplicate_rejected(user_with_plan) -> None:
     r1 = await ac.post(
         "/api/listening/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r1.status_code == 200
 
     r2 = await ac.post(
         "/api/listening/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r2.status_code == 409
     assert r2.json()["detail"] == "already_attempted"

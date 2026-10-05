@@ -98,6 +98,7 @@ export async function resolveExercise<T>({
   voice = '',
   context: expectedContext,
   onGenerating,
+  onContext,
 }: {
   feature: Feature
   signal: AbortSignal
@@ -105,6 +106,7 @@ export async function resolveExercise<T>({
   voice?: string
   context: Pick<ExerciseContext, 'target_language'> & Partial<ExerciseContext>
   onGenerating: () => void
+  onContext?: (context: ExerciseContext) => void
 }): Promise<T | null> {
   const base = `/api/${feature}`
   let mayStart = generate
@@ -153,6 +155,7 @@ export async function resolveExercise<T>({
         ) {
           throw new ExerciseGenerationError('contextChanged')
         }
+        onContext?.(data.context)
         return data.exercise
       }
       if (data.generation_status === 'generating') {

@@ -302,8 +302,14 @@ async def test_generate_and_next(user_with_plan) -> None:
 # ---------------------------------------------------------------------------
 
 
+@pytest_asyncio.fixture
+async def attempt_context(user_with_plan):
+    ac, _, headers, _, _ = user_with_plan
+    return (await ac.get("/api/reading/next", headers=headers)).json()["context"]
+
+
 @pytest.mark.asyncio
-async def test_submit_correct(user_with_plan) -> None:
+async def test_submit_correct(user_with_plan, attempt_context) -> None:
     """All correct → score=5, xp=50, correct_answers revealed."""
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
@@ -312,7 +318,7 @@ async def test_submit_correct(user_with_plan) -> None:
     r = await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r.status_code == 200
     data = r.json()
@@ -326,7 +332,7 @@ async def test_submit_correct(user_with_plan) -> None:
 
 
 @pytest.mark.asyncio
-async def test_submit_wrong(user_with_plan) -> None:
+async def test_submit_wrong(user_with_plan, attempt_context) -> None:
     """All wrong → score=0, xp=0."""
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
@@ -335,7 +341,7 @@ async def test_submit_wrong(user_with_plan) -> None:
     r = await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_WRONG},
+        json={"exercise_id": ex.id, "answers": _ALL_WRONG, "context": attempt_context},
     )
     assert r.status_code == 200
     data = r.json()
@@ -344,7 +350,7 @@ async def test_submit_wrong(user_with_plan) -> None:
 
 
 @pytest.mark.asyncio
-async def test_submit_duplicate(user_with_plan) -> None:
+async def test_submit_duplicate(user_with_plan, attempt_context) -> None:
     """Submitting the same exercise twice → 409."""
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
@@ -353,19 +359,19 @@ async def test_submit_duplicate(user_with_plan) -> None:
     await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     r = await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r.status_code == 409
     assert r.json()["detail"] == "already_attempted"
 
 
 @pytest.mark.asyncio
-async def test_replay_no_xp(user_with_plan) -> None:
+async def test_replay_no_xp(user_with_plan, attempt_context) -> None:
     """Replaying an exercise with replay=True earns 0 XP."""
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
@@ -375,7 +381,7 @@ async def test_replay_no_xp(user_with_plan) -> None:
     r1 = await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
     assert r1.status_code == 200
     assert r1.json()["xp_earned"] == 50
@@ -384,7 +390,12 @@ async def test_replay_no_xp(user_with_plan) -> None:
     r2 = await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "replay": True},
+        json={
+            "exercise_id": ex.id,
+            "answers": _ALL_CORRECT,
+            "replay": True,
+            "context": attempt_context,
+        },
     )
     assert r2.status_code == 200
     assert r2.json()["xp_earned"] == 0
@@ -406,7 +417,7 @@ async def test_history_empty(user_with_plan) -> None:
 
 
 @pytest.mark.asyncio
-async def test_history_after_attempt(user_with_plan) -> None:
+async def test_history_after_attempt(user_with_plan, attempt_context) -> None:
     """After a submission the history contains the attempt with correct_answers."""
     ac, _, headers, _user, db = user_with_plan
     ex = await _make_exercise(db)
@@ -415,7 +426,7 @@ async def test_history_after_attempt(user_with_plan) -> None:
     await ac.post(
         "/api/reading/attempt",
         headers=headers,
-        json={"exercise_id": ex.id, "answers": _ALL_CORRECT},
+        json={"exercise_id": ex.id, "answers": _ALL_CORRECT, "context": attempt_context},
     )
 
     r = await ac.get("/api/reading/history", headers=headers)

@@ -40,7 +40,10 @@ describe('useExerciseGeneration lifecycle', () => {
             finishOld = done
           })
       )
-      .mockResolvedValueOnce({ id: 2, target_language: 'es' })
+      .mockImplementationOnce(async ({ onContext }) => {
+        onContext?.({ study_plan_id: 2, target_language: 'es', level: 'B1' })
+        return { id: 2, target_language: 'es' }
+      })
     const { rerender } = renderHook(
       ({ language }) => useExerciseGeneration({ ...options, language }),
       {
@@ -50,7 +53,10 @@ describe('useExerciseGeneration lifecycle', () => {
     const oldSignal = resolve.mock.calls[0][0].signal
     rerender({ language: 'es' })
     await waitFor(() =>
-      expect(onExercise).toHaveBeenCalledWith({ id: 2, target_language: 'es' })
+      expect(onExercise).toHaveBeenCalledWith(
+        { id: 2, target_language: 'es' },
+        { study_plan_id: 2, target_language: 'es', level: 'B1' }
+      )
     )
     await act(async () => {
       finishOld({ id: 1, target_language: 'en-GB' })

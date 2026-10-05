@@ -14,6 +14,7 @@ from app.core.deps import (
     require_subscription_or_freemium_readonly,
 )
 from app.core.limiter import limiter
+from app.models.reading import ReadingExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.schemas.exercise_generation import ExerciseContext
@@ -181,6 +182,18 @@ async def submit_reading_attempt(
     db: AsyncSession = Depends(get_db),
 ) -> ReadingSubmitResponse:
     """Submit answers and receive score, XP, and correct answers."""
+    await get_exercise_study_plan(
+        plan=plan,
+        expected_study_plan_id=body.context.study_plan_id,
+        expected_target_language=body.context.target_language,
+        expected_level=body.context.level,
+    )
+    exercise = await db.get(ReadingExercise, body.exercise_id)
+    if exercise is not None and (
+        exercise.target_language != plan.target_language
+        or (not body.replay and exercise.level != plan.cefr_level)
+    ):
+        raise HTTPException(status_code=409, detail="study_context_changed")
     try:
         attempt, exercise = await submit_attempt(
             body.exercise_id,
@@ -253,4 +266,12 @@ async def get_reading_history(
         )
         for attempt, exercise in rows
     ]
-    return ReadingHistoryResponse(items=items, total=total, skip=skip, limit=limit)
+    return ReadingHistoryResponse(
+        context=ExerciseContext(
+            study_plan_id=plan.id, target_language=plan.target_language, level=plan.cefr_level
+        ),
+        items=items,
+        total=total,
+        skip=skip,
+        limit=limit,
+    )

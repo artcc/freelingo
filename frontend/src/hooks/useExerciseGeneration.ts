@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useLanguageStore } from '@/store/language'
 import {
   ExerciseGenerationError,
+  type ExerciseContext,
   resolveExercise,
 } from '@/lib/exercise-generation'
 
@@ -22,7 +23,7 @@ export function useExerciseGeneration<T>({
   language: string | undefined
   studyPlanId?: number
   level?: string | null
-  onExercise: (exercise: T) => void
+  onExercise: (exercise: T, context: ExerciseContext) => void
   setPageState: (state: 'loading' | 'generating' | 'idle' | 'exercise') => void
   setError: (error: string) => void
   dismissTooltip: () => void
@@ -31,6 +32,7 @@ export function useExerciseGeneration<T>({
   const tCommon = useTranslations('common')
   const active = useRef<AbortController | null>(null)
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
 
   const run = useCallback(
@@ -46,6 +48,8 @@ export function useExerciseGeneration<T>({
         generate && language && !needsRefresh ? 'generating' : 'loading'
       )
       try {
+        // The switch owns its summary refresh. Wait for it before querying a pool.
+        if (isSwitching) return
         if (!language || needsRefresh) {
           const loaded = await fetchLanguages(controller.signal)
           if (controller.signal.aborted) return
@@ -55,6 +59,7 @@ export function useExerciseGeneration<T>({
           // The updated context reruns the effect below with a read-only lookup.
           return
         }
+        let exerciseContext: ExerciseContext | undefined
         const exercise = await resolveExercise<T>({
           feature,
           context: {
@@ -65,12 +70,15 @@ export function useExerciseGeneration<T>({
           signal: controller.signal,
           generate,
           voice,
+          onContext: (context) => {
+            exerciseContext = context
+          },
           onGenerating: () => {
             if (!controller.signal.aborted) setPageState('generating')
           },
         })
         if (controller.signal.aborted) return
-        if (exercise) onExercise(exercise)
+        if (exercise && exerciseContext) onExercise(exercise, exerciseContext)
         setPageState(exercise ? 'exercise' : 'idle')
       } catch (error) {
         if (controller.signal.aborted) return
@@ -88,6 +96,7 @@ export function useExerciseGeneration<T>({
       studyPlanId,
       level,
       needsRefresh,
+      isSwitching,
       fetchLanguages,
       setError,
       dismissTooltip,

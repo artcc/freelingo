@@ -165,14 +165,19 @@ Changing the active context in another tab stops the stale operation and prompts
 
 - Rate limit: `20/minute`.
 - Access: freemium consuming-feature policy.
-- Accepts `exercise_id`, an answer dictionary, and optional `replay`.
+- Accepts `exercise_id`, an answer dictionary, optional `replay`, and required
+  `context: {study_plan_id, target_language, level}` captured when loading the exercise or history.
+- Resolves the authenticated user's active plan independently and compares all context fields before
+  saving. A mismatch returns `409 study_context_changed` without recording attempts, XP, play count,
+  or quota usage. Context identifies the expected selection; it cannot authorize another plan.
+- The exercise must match the plan language and, for normal attempts, its level. Replays may use an
+  earlier-level exercise in the same language and continue to award zero XP.
 - A normal duplicate returns `409 already_attempted`.
 - An unknown exercise returns `404 exercise_not_found`.
 - The response includes score, XP, correct answers, and the full transcript.
 
 The current request schema does not require exactly five Listening answers. Missing answers score as
-incorrect. The endpoint resolves the plan independently but does not currently compare the submitted
-exercise's level or language with that plan before persisting the attempt.
+incorrect. Omitting the submission context returns validation HTTP `422`.
 
 ### `GET /api/listening/history`
 
@@ -183,6 +188,8 @@ exercise's level or language with that plan before persisting the attempt.
 - Returns newest attempts first with exercise metadata, submitted answers, transcript, score, XP,
   total count, skip, and effective limit.
 - Includes normal attempts and replay rows.
+- Returns the active plan's `context` alongside the page of results. The frontend retains it with
+  those results and submits it when replaying, rather than reading mutable language-store state.
 
 The backend currently does not impose minimum values for `skip` or `limit`, and ordering has no ID
 tie-breaker for equal timestamps.

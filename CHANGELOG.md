@@ -18,6 +18,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Exercise polling detects active language, plan, or level changes across tabs instead of switching pools, and uses a clock-independent budget that also bounds retry delays and authentication-refresh waits.
 - Cancelled authentication consumers release their loading state without interrupting shared token rotation. Listening removes audio written by work aborted before commit, preserves confirmed audio after refresh failures, and classifies OpenAI speech timeouts consistently.
 - Completing Assessment refreshes the shared plan context so Listening and Reading can use the new plan without a browser reload. Missing or stale language context has a bounded load and a retry action instead of leaving those pages indefinitely loading after a connection failure.
+- Listening and Reading keep context recovery available when the free quota is exhausted, while exercise generation remains restricted.
+- Listening and Reading reject answer submissions after the active language, plan, or level changes, preventing attempts and XP from being attributed to another context while preserving zero-XP replays of earlier-level exercises.
+- Language switches invalidate the cached summary and offer recovery when its refresh fails. Success feedback waits for the refreshed summary, and late language responses cannot restore an obsolete context.
 
 ## [1.9.25] - 2026-09-25
 

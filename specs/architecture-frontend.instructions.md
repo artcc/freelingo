@@ -69,6 +69,16 @@ shared by requests and retry pauses. Errors use the shared
 `exerciseGeneration` namespace in all interface catalogs. Detailed status and timing rules belong
 to the Listening and Reading specifications.
 
+Exercise delivery also captures the server-returned plan/language/level context. Pages submit that
+snapshot with answers; history pages capture their response context for replay, including exercises
+from an earlier level. A `study_context_changed` submission response displays the shared localized
+context-conflict message instead of showing results or decrementing the local quota.
+
+The language store invalidates cached context after a persisted switch and rejects responses from
+queries predating invalidation or a newer request. The exercise hook waits for the switch's refresh
+to finish before fetching context or exercises. Failed summary refreshes remain recoverable through
+the selector, language settings, and exercise pages; success feedback requires a refreshed summary.
+
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
 

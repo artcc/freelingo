@@ -289,7 +289,7 @@ export default function AssessmentPage() {
       setCreatedPlanId(data.plan_id)
       // The previous plan is no longer valid even if refreshing the summary fails.
       // Completion already succeeded: do not make the user create the plan again.
-      useLanguageStore.setState({ needsRefresh: true })
+      useLanguageStore.getState().invalidateLanguages()
       await useLanguageStore.getState().fetchLanguages()
       if (data.voice_trial?.available && data.voice_trial.token) {
         setVoiceTrial(data.voice_trial)
