@@ -1834,6 +1834,8 @@
     }
   },
   "contact": {
+  "description": "Envíanos tu pregunta, comentario o solicitud y te responderemos lo antes posible.",
+
     "title": "Contacto",
     "labelEmail": "Correo electrónico",
     "placeholderEmail": "tu@correo.com",
