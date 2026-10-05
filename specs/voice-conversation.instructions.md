@@ -209,9 +209,11 @@ A conversation can remain empty when a session ends before a persistible turn.
 Persisted answered contributions count as plan-owned daily activity. Three distinct answered learner
 contributions on the same UTC day grant 20 XP once per conversation/day, capped at 60 XP per plan/day.
 Lesson practice uses this same reward without an extra bonus. Greetings, failed/cancelled turns, and
-planless conversations do not earn rewards. The response completion timestamp fixes the activity day
-before asynchronous database writes and is reused by all reward/progress operations. Continuing the
-same conversation in text chat persists chat modality and uses chat rewards independently of voice.
+planless conversations do not earn rewards. Successful processing captures the response completion
+timestamp before scheduling the background transcript task, after response delivery and before the
+final `turn_complete` notification. The timestamp fixes the activity day even if the task starts or
+acquires its transcript/database lock after midnight; all reward/progress operations reuse it.
+Continuing the same conversation in text chat persists chat modality and uses chat rewards independently of voice.
 No client reward claim or new voice-control event is used.
 Reward rules and durable source keys are specified in `learning-resources.instructions.md`.
 

@@ -62,10 +62,12 @@ async def update_daily_progress(
 
     result = await db.execute(
         select(Progress)
-        .where(*base_filter, Progress.date == today)
+        .where(*base_filter, Progress.date >= today)
+        .order_by(Progress.date)
         .execution_options(populate_existing=True)
     )
-    entry = result.scalar_one_or_none()
+    following = list(result.scalars().all())
+    entry = following.pop(0) if following and following[0].date == today else None
 
     if not entry:
         yesterday = today - timedelta(days=1)
@@ -74,6 +76,7 @@ async def update_daily_progress(
             .where(*base_filter, Progress.date < today)
             .order_by(Progress.date.desc())
             .limit(1)
+            .execution_options(populate_existing=True)
         )
         previous = previous_result.scalar_one_or_none()
         streak = previous.streak_day + 1 if previous and previous.date == yesterday else 1
@@ -87,6 +90,7 @@ async def update_daily_progress(
             exercises_total=0,
             streak_day=streak,
             skills=dict(previous.skills or {}) if previous else {},
+            skill_updates={},
             study_plan_id=study_plan_id,
         )
         db.add(entry)
@@ -115,6 +119,28 @@ async def update_daily_progress(
         old = skills.get(skill, skill_score)
         skills[skill] = round(old * 0.7 + skill_score * 0.3, 3)
         entry.skills = skills
+        if entry.skill_updates is not None:
+            updates = dict(entry.skill_updates)
+            updates[skill] = [*updates.get(skill, []), skill_score]
+            entry.skill_updates = updates
+
+    # Lock acquisition order can differ from activity-date order around midnight.
+    # Replay each later day's own scores against its corrected predecessor, keeping
+    # the original per-update rounding and all later contributions intact.
+    previous = entry
+    for later in following:
+        later.streak_day = (
+            previous.streak_day + 1 if later.date == previous.date + timedelta(days=1) else 1
+        )
+        if later.skill_updates is not None:
+            skills = dict(previous.skills or {})
+            for later_skill, scores in later.skill_updates.items():
+                for score in scores:
+                    old = skills.get(later_skill, score)
+                    skills[later_skill] = round(old * 0.7 + score * 0.3, 3)
+            later.skills = skills
+        # A legacy row is an opaque skill checkpoint, not an empty list of updates.
+        previous = later
 
     if commit:
         await db.commit()

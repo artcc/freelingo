@@ -1,5 +1,6 @@
 """Regressions for mixed modalities, interleaved replies and UTC boundaries."""
 
+import asyncio
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime, time, timedelta
 from unittest.mock import AsyncMock
@@ -10,11 +11,18 @@ from sqlalchemy import select
 from app.models.chat_history import ChatHistory
 from app.models.progress import Progress
 from app.models.progress_reward import ProgressReward
-from app.services import listening_service, progress_rewards, progress_service, reading_service
+from app.services import (
+    conversation_pipeline,
+    listening_service,
+    progress_rewards,
+    progress_service,
+    reading_service,
+)
 from app.services.conversation_pipeline import ConversationPipeline
 from app.services.progress_rewards import reward_conversation
 from app.services.progress_service import progress_today
 from tests.conftest import make_study_plan
+from tests.test_conversation_pipeline_service import FakeWS
 from tests.test_progress_rewards import add_turns, conversation_for, reward_latest
 
 
@@ -234,6 +242,70 @@ async def test_legacy_and_empty_responses_do_not_infer_completed_turns(db_sessio
     assert (await db_session.scalars(select(Progress))).one().xp_earned == 0
 
 
+async def test_voice_completion_day_survives_background_task_starting_after_midnight(
+    db_session, test_user, monkeypatch
+):
+    user, _ = test_user
+    plan = await make_study_plan(db_session, user_id=user.id, cefr_level="A1")
+    conversation = await conversation_for(db_session, user, "voice", plan)
+    await add_turns(db_session, conversation, 2)
+    await reward_latest(db_session, conversation.id)
+    await db_session.commit()
+    day = progress_today()
+    finished_at = datetime.combine(day, time(23, 59, 59), tzinfo=UTC)
+    clock = [finished_at]
+    persistence_started = []
+
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return clock[0].astimezone(tz)
+
+    @asynccontextmanager
+    async def session():
+        persistence_started.append(clock[0])
+        yield db_session
+
+    async def stream():
+        yield "Lingu's third response."
+
+    monkeypatch.setattr(conversation_pipeline, "datetime", Clock)
+    monkeypatch.setattr(conversation_pipeline, "db_session", session)
+    monkeypatch.setattr(progress_service, "progress_today", lambda: clock[0].date())
+    monkeypatch.setattr(progress_rewards, "progress_today", lambda: clock[0].date())
+    pipeline = ConversationPipeline(
+        llm=AsyncMock(),
+        tts=AsyncMock(),
+        stt=AsyncMock(),
+        user_id=user.id,
+        conversation_id=conversation.id,
+        study_plan_id=plan.id,
+        target_language=plan.target_language,
+    )
+    monkeypatch.setattr(pipeline, "_refresh_memory_prompt", AsyncMock())
+    pipeline.stt.transcribe.return_value = "My third distinct contribution"
+    pipeline.llm.chat.return_value = stream()
+    pipeline.tts.synthesize.return_value = b"audio"
+    ws = FakeWS()
+    # In-memory providers/socket finish without yielding to the scheduled saves.
+    await pipeline._process(b"audio", ws)
+    assert "turn_complete" in ws.types()
+    assert persistence_started == []
+    clock[0] = finished_at + timedelta(seconds=2)
+    await asyncio.gather(*pipeline._pending_saves)
+    assert persistence_started == [clock[0]]
+
+    rows = (await db_session.scalars(select(ChatHistory).order_by(ChatHistory.id))).all()
+    assert len(rows) == 6
+    assert rows[-2].created_at == rows[-1].created_at == finished_at.replace(tzinfo=None)
+    assert rows[-1].reply_to_id == rows[-2].id
+    entry = (await db_session.scalars(select(Progress))).one()
+    reward = (await db_session.scalars(select(ProgressReward))).one()
+    assert entry.date == reward.date == day
+    assert entry.xp_earned == reward.xp == 20
+    assert reward.source_key == f"{conversation.id}:{day}:1"
+
+
 async def test_voice_turn_rolls_back_both_messages_when_reward_write_fails(
     db_session, test_user, monkeypatch
 ):
@@ -263,7 +335,9 @@ async def test_voice_turn_rolls_back_both_messages_when_reward_write_fails(
         study_plan_id=plan.id,
         target_language="en-US",
     )
-    await pipeline._save_turn("My answer", "Lingu's reply")
+    await pipeline._save_turn(
+        "My answer", "Lingu's reply", completed_at=datetime.now(UTC).replace(tzinfo=None)
+    )
     assert (await db_session.scalars(select(ChatHistory))).all() == []
     assert (await db_session.scalars(select(Progress))).all() == []
 

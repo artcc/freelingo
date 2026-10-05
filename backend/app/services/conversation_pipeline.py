@@ -713,6 +713,8 @@ class ConversationPipeline:
                 await self._send_json(ws, {"type": "turn_complete", "turn_id": turn_id})
                 return
 
+            completed_at = datetime.now(UTC).replace(tzinfo=None)
+
         except asyncio.CancelledError:
             logger.warning(
                 "[pipeline] Turn cancelled before completion: turn_id=%s",
@@ -776,7 +778,9 @@ class ConversationPipeline:
         self.history.append({"role": "assistant", "content": clean_full_response})
         # Persist both sides of the turn together — only reached on success.
         self._pending_saves.append(
-            asyncio.create_task(self._save_turn(user_text, clean_full_response))
+            asyncio.create_task(
+                self._save_turn(user_text, clean_full_response, completed_at=completed_at)
+            )
         )
 
         logger.info("[pipeline] Turn complete — assistant: %r", clean_full_response[:120])
@@ -827,8 +831,9 @@ class ConversationPipeline:
         except Exception:
             logger.debug("[pipeline] Failed to save token usage — ignored")
 
-    async def _save_turn(self, user_text: str, assistant_text: str) -> None:
-        completed_at = datetime.now(UTC).replace(tzinfo=None)
+    async def _save_turn(
+        self, user_text: str, assistant_text: str, *, completed_at: datetime
+    ) -> None:
         # Preserve transcript order even when background DB writes overlap turns.
         async with self._transcript_lock:
             await self._save_message(

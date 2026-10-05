@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from datetime import datetime, time, timedelta
+from datetime import UTC, datetime, time, timedelta
 from unittest.mock import AsyncMock
 
 import pytest
@@ -212,7 +212,11 @@ async def test_voice_persistence_credits_reward_with_ordered_transcript(
     )
     await pipeline._save_message("assistant", "Hello!")
     for i in range(3):
-        await pipeline._save_turn(f"This is answer {i}", f"Good response {i}")
+        await pipeline._save_turn(
+            f"This is answer {i}",
+            f"Good response {i}",
+            completed_at=datetime.now(UTC).replace(tzinfo=None),
+        )
     rows = (await db_session.scalars(select(ChatHistory).order_by(ChatHistory.id))).all()
     assert [row.role for row in rows] == [
         "assistant",

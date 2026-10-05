@@ -76,6 +76,11 @@ translation context. Generated cards receive target language from the persisted 
 `progress_service.py` updates daily XP, streak, exercise skill EMA, and unit competency EMA. It can
 flush without committing so lesson completion can include progress in one transaction. Progress is
 always credited to the resource-owning plan.
+New daily rows store ordered per-skill scores in `Progress.skill_updates`. A write to an earlier date
+reconciles subsequent streaks and replays subsequent days' own skill updates in date order, under the
+same plan lock and transaction. Every EMA step retains its three-decimal rounding; gaps reset only
+streaks. Legacy null score histories preserve their skill snapshots as opaque checkpoints rather than
+pretending they contain no scored activity. Daily counters and XP are not moved between dates.
 
 `progress_rewards.py` grants additional conversation, spaced-replay, unit, and level XP with durable
 source keys and plan-row serialization. Reward inserts and daily credit share a transaction. Activity
@@ -87,6 +92,8 @@ and attempt inserts. `reward_conversation` receives a persisted response ID, val
 learner-message association and actual modality, and counts paired responses on its completion date.
 Legacy unpaired messages do not qualify. Callers pass one activity date to award and daily-progress
 writes; these helpers must not independently recalculate the day after awaiting database operations.
+Voice fixes the completion timestamp before creating its background transcript task and passes it
+explicitly through persistence, including waits for the transcript lock.
 Chat context is bounded by its own learner-message ID so later concurrent prompts cannot replace the
 request being answered. Transcript reads order by timestamp and ID to keep equal-time voice pairs stable.
 

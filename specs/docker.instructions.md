@@ -85,9 +85,16 @@ Their in-code defaults therefore apply in containers.
 
 ## Startup and migrations
 
-The backend startup command applies existing Alembic revisions before starting Uvicorn. This does not
-create or review migration files. Migration generation/application outside normal startup belongs to
-the remote deployment maintainer; migrations are not created locally.
+Schema changes include their Alembic revision files in `backend/alembic/versions/`, linked to the
+previous revision through `down_revision` and committed with the corresponding model changes.
+The backend image includes these files. On deployment, the backend startup command automatically
+applies pending revisions with `alembic upgrade head` before starting Uvicorn. Startup does not
+generate revisions; preparing the versioned files is part of development, not a manual deployment step.
+
+The progress reward schema is supplied by `0053_progress_rewards`, following
+`0052_exercise_corrections`. It adds the reward ledger, nullable transcript pairing/modality, and
+nullable daily skill-update history while preserving existing data. Offline SQL checks do not
+replace verification of an actual PostgreSQL upgrade; tests using `metadata.create_all` bypass Alembic.
 
 ## GPU and provider selection
 

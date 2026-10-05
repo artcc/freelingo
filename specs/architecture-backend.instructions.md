@@ -93,13 +93,22 @@ ownership and PostgreSQL commit are separate operations; the pre-save guard is n
 progress while remaining compatible with FK `KEY SHARE` locks. Rewards use persisted resource
 ownership, explicit response-to-learner associations, actual turn modality, and a fixed UTC activity
 date. They commit with their progress credit; voice transcript pairs share that transaction.
+Voice captures completion before scheduling background persistence. Daily progress records ordered
+per-skill scores so writes arriving out of date order can reconcile later skill snapshots and streaks
+inside the same locked transaction, preserving subsequent scores and per-step rounding. Historical
+null score histories remain opaque skill checkpoints; no historical score reconstruction is attempted.
 
-Before serving the updated backend, the deployment maintainer generates, reviews, and applies the
-revision for `progress_rewards` and `chat_history.modality`/`reply_to_id`, including FK and unique
-constraints. Preserve the revision in the deployed artifact or persistent Alembic revisions location
-for every subsequent startup. Applying it only from a disposable container is insufficient: startup
-runs `upgrade head` and must resolve the database's recorded revision. Startup does not generate
-missing revisions. Legacy messages retain null pairing/modality; no inferred backfill is required.
+Schema changes include versioned Alembic files in `backend/alembic/versions/`, shipped in the backend
+image and automatically applied by deployment startup through `alembic upgrade head`.
+`0053_progress_rewards`, linked to `0052_exercise_corrections`, supplies `progress_rewards`,
+`chat_history.modality`/`reply_to_id`, and nullable `progress.skill_updates`, including foreign keys,
+indexes and unique constraints. Historical skill-update values remain null rather than empty
+histories, and legacy messages retain null pairing/modality without inferred backfill. Startup applies
+pending revisions; it does not generate missing files.
+
+`backend/tests/test_progress_migration.py` checks the revision chain and PostgreSQL upgrade/downgrade
+SQL offline, including model/DDL agreement and additive changes for existing tables. These checks do
+not connect to a database and do not replace an actual PostgreSQL upgrade test.
 
 PostgreSQL-specific reward regressions live in `backend/tests/test_progress_rewards_postgres.py`.
 They require an explicitly supplied `TEST_POSTGRES_URL` using the asyncpg dialect and a test database

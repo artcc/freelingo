@@ -79,4 +79,5 @@ Use the narrowest relevant spec first:
 - TypeScript uses no semicolons, single quotes, two-space indentation, ES5 trailing commas, ESLint, and Prettier with the Tailwind plugin.
 - The canonical formatter is `./scripts/format.sh` from repository root.
 - Do not add or update dependencies without explicit approval.
-- Do not create migrations locally; migration generation and application run on the remote deployment environment.
+- Every database schema change must include a versioned Alembic revision in `backend/alembic/versions/`, following the existing revision chain. Prepare the revision file in the repository alongside the model changes; do not leave it for the deployment maintainer to create.
+- Deployment automatically applies the committed revisions with `alembic upgrade head`. Do not apply migrations to a database, run downgrades, or modify a deployed schema without explicit authorization. Local tests that create tables from model metadata do not validate the migration path.

@@ -121,6 +121,13 @@ or zero replay XP; conversations count after a distinct learner contribution rec
 nonempty tutor response. Greetings, unanswered contributions, and planless conversations do not count.
 The current streak is the latest stored streak only if its date is today or yesterday; otherwise it is
 zero. New daily rows carry forward the previous row's skill snapshot before applying scored updates.
+Daily rows also retain ordered scores per skill in `skill_updates`. Under the same plan lock and
+transaction, a late write reconciles every later row's streak from consecutive activity dates and
+replays each later day's own scores against its corrected predecessor, rounding each EMA update to
+three decimals. Gaps reset streaks but do not discard skills; XP and daily counters stay on their
+original dates. Same-day scores retain their persistence order. Legacy rows with null `skill_updates`
+remain opaque skill checkpoints: their original score sequences are not inferred or backfilled.
+Reconciliation preserves those checkpoints and uses them as the baseline for following tracked days.
 
 Conversation activity uses the persisted assistant response's UTC completion date. Each eligible
 response has a unique `reply_to_id` pointing to its learner message; both messages carry the actual
@@ -132,6 +139,8 @@ history counts only toward chat thresholds/caps and does not consume the voice r
 Comprehension captures `completed_at` once on entry to submission. Its date is used for replay
 eligibility, source key, ledger, and daily progress. Conversation rewards likewise pass the persisted
 response date through all daily checks and writes. Database waits never recalculate the activity day.
+Voice captures the response completion timestamp in the successful processing path before scheduling
+the background transcript task, so task scheduling delays cannot move activity to another UTC day.
 
 Base rewards are 20 XP for lesson completion, 5/1 for correct/incorrect lesson exercises, 2 per
 flashcard review, and 10 per correct first-attempt Reading/Listening answer. Additional rewards:

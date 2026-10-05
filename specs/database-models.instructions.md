@@ -183,8 +183,16 @@ Daily progress record, one row per user per day per plan.
 - exercises_total — Type: integer; Notes: —
 - streak_day — Type: integer; Notes: Consecutive day count
 - skills — Type: JSON; Notes: Skill scores: `{"grammar": 0.6, "vocabulary": 0.4, ...}`
+- skill_updates — Type: nullable JSON; Notes: Ordered scores per skill for that day, for example
+  `{"grammar": [1.0, 0.5]}`. Progress service initializes new rows to `{}`; legacy rows remain null.
 
 **Constraint:** `UNIQUE(user_id, study_plan_id, date)` — one progress row per user per plan per day.
+
+Late activity reconciles subsequent streaks and replays their recorded skill updates against the
+corrected preceding snapshot, with rounding after each EMA step. Legacy null histories are opaque
+skill checkpoints and are preserved, not inferred from their aggregates. Revision `0053_progress_rewards`
+adds nullable `skill_updates` without replacing historical null values with empty objects. The
+column is internal persistence metadata and is not exposed in progress response schemas.
 
 ## ProgressReward (`progress_rewards`)
 
@@ -200,8 +208,8 @@ conversations or exercises; deleting those resources does not reopen reward elig
 - `xp`: required integer credit.
 - Unique `(study_plan_id, kind, source_key)` (`uq_progress_reward_source`).
 
-Award rules live in `learning-resources.instructions.md`. The table is registered in model metadata;
-its migration must be generated and applied through the remote deployment workflow before use.
+Award rules live in `learning-resources.instructions.md`. The table is registered in model metadata
+and created by versioned revision `0053_progress_rewards`, applied automatically on deployment.
 
 ## Conversation (`conversations`)
 
@@ -237,8 +245,9 @@ progress commit atomically. Greetings and historical messages remain unpaired an
 completed reward turns. The backend validates matching conversation, user, roles, and modality before
 crediting a pair. Deleting the learner message clears its association without deleting ledger credit.
 
-The remote migration must include both nullable columns, the self-reference and its unique constraint,
-alongside `progress_rewards`. Do not backfill modality from conversation origin or pair by adjacency.
+Revision `0053_progress_rewards` adds both nullable columns, the self-reference and its unique
+constraint, alongside `progress_rewards` and nullable `progress.skill_updates`. Do not backfill
+modality from conversation origin or pair by adjacency.
 
 ## UserCompetency (`user_competencies`)
 
