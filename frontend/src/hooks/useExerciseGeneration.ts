@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
+import { useLanguageStore } from '@/store/language'
 import {
   ExerciseGenerationError,
   resolveExercise,
@@ -29,10 +30,11 @@ export function useExerciseGeneration<T>({
   const t = useTranslations('exerciseGeneration')
   const tCommon = useTranslations('common')
   const active = useRef<AbortController | null>(null)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
 
   const run = useCallback(
     async (generate: boolean, voice = '') => {
-      if (!language) return
       // Prevent repeated clicks from starting concurrent operations, including before POST returns.
       if (generate && active.current) return
       active.current?.abort()
@@ -40,8 +42,19 @@ export function useExerciseGeneration<T>({
       active.current = controller
       setError('')
       dismissTooltip()
-      setPageState(generate ? 'generating' : 'loading')
+      setPageState(
+        generate && language && !needsRefresh ? 'generating' : 'loading'
+      )
       try {
+        if (!language || needsRefresh) {
+          const loaded = await fetchLanguages(controller.signal)
+          if (controller.signal.aborted) return
+          if (!loaded || !useLanguageStore.getState().activeLanguage) {
+            throw new ExerciseGenerationError('unavailable')
+          }
+          // The updated context reruns the effect below with a read-only lookup.
+          return
+        }
         const exercise = await resolveExercise<T>({
           feature,
           context: {
@@ -74,6 +87,8 @@ export function useExerciseGeneration<T>({
       language,
       studyPlanId,
       level,
+      needsRefresh,
+      fetchLanguages,
       setError,
       dismissTooltip,
       setPageState,
@@ -94,5 +109,5 @@ export function useExerciseGeneration<T>({
     }
   }, [loadNext, language])
 
-  return { loadNext, generate }
+  return { loadNext, generate, needsContext: !language || needsRefresh }
 }

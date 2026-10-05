@@ -63,6 +63,7 @@ describe('useLanguageStore — fetchLanguages', () => {
       supportedLanguages: SUPPORTED_TARGET_LANGUAGES,
       availableLanguageCodes: [],
       isSwitching: false,
+      needsRefresh: false,
     })
     vi.clearAllMocks()
   })
@@ -242,6 +243,30 @@ describe('useLanguageStore — fetchLanguages', () => {
     const state = useLanguageStore.getState()
     expect(state.userLanguages).toHaveLength(1)
   })
+
+  it('keeps an invalidated snapshot invalid until a successful refresh', async () => {
+    useLanguageStore.setState({ needsRefresh: true })
+    mockApiFetch.mockResolvedValueOnce(mockResponse({}, false, 502))
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    mockApiFetch.mockResolvedValueOnce(mockResponse(fullResponse))
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(true)
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
+  it('does not publish a cancelled language response', async () => {
+    const controller = new AbortController()
+    useLanguageStore.setState({ needsRefresh: true })
+    mockApiFetch.mockImplementationOnce(async () => {
+      controller.abort()
+      return mockResponse(fullResponse)
+    })
+    expect(
+      await useLanguageStore.getState().fetchLanguages(controller.signal)
+    ).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage).toBeNull()
+  })
 })
 
 describe('useLanguageStore — switchLanguage', () => {
@@ -326,7 +351,9 @@ describe('useLanguageStore — switchLanguage', () => {
     await useLanguageStore.getState().switchLanguage('en-US')
 
     expect(mockApiFetch).toHaveBeenCalledTimes(2)
-    expect(mockApiFetch).toHaveBeenNthCalledWith(2, '/api/languages')
+    expect(mockApiFetch).toHaveBeenNthCalledWith(2, '/api/languages', {
+      signal: expect.any(AbortSignal),
+    })
   })
 
   it('does not call fetchLanguages when PUT fails', async () => {

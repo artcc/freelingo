@@ -230,6 +230,11 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 `exercise`, `results`, and `history`.
 
 - Initial load and active-language changes request the next exercise.
+- Missing or invalidated language context is loaded first through the shared language store, with
+  cancellation and a 20-second timeout. Failure exits `loading`, shows the localized unavailable
+  message, and offers Retry. Retry reloads context and checks for existing exercises before any
+  generation can be requested. A successful language lookup with no active language is also an error;
+  a valid active language without a study plan is handled by the backend's no-active-plan response.
 - Idle state offers generation, history, quota information, or an inline paywall.
 - `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Reading.
 - Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay

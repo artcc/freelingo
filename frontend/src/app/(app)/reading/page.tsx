@@ -136,7 +136,7 @@ function ReadingPage() {
     setIsReplay(false)
   }, [])
 
-  const { loadNext, generate } = useExerciseGeneration({
+  const { loadNext, generate, needsContext } = useExerciseGeneration({
     feature: 'reading',
     language: activeLanguage?.code,
     studyPlanId: activePlan?.id,
@@ -469,10 +469,10 @@ function ReadingPage() {
               {t('noExercises')}
             </p>
             <button
-              onClick={() => generate()}
+              onClick={needsContext ? loadNext : () => generate()}
               className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 border px-8 py-3 font-mono text-sm tracking-widest uppercase transition-colors"
             >
-              {t('generate')}
+              {needsContext ? tCommon('retry') : t('generate')}
             </button>
           </div>
         )}

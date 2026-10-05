@@ -34,7 +34,8 @@ interface LanguageStore {
   supportedLanguages: TargetLanguage[]
   availableLanguageCodes: string[]
   isSwitching: boolean
-  fetchLanguages: () => Promise<void>
+  needsRefresh: boolean
+  fetchLanguages: (signal?: AbortSignal) => Promise<boolean>
   switchLanguage: (code: string) => Promise<boolean>
   addLanguage: (code: string) => Promise<boolean>
   removeLanguage: (code: string) => Promise<boolean>
@@ -46,12 +47,18 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
   supportedLanguages: SUPPORTED_TARGET_LANGUAGES,
   availableLanguageCodes: [],
   isSwitching: false,
+  needsRefresh: false,
 
-  fetchLanguages: async () => {
+  fetchLanguages: async (signal) => {
     try {
-      const res = await apiFetch('/api/languages')
-      if (!res.ok) return
+      const requestSignal = AbortSignal.any([
+        AbortSignal.timeout(20_000),
+        ...(signal ? [signal] : []),
+      ])
+      const res = await apiFetch('/api/languages', { signal: requestSignal })
+      if (!res.ok) return false
       const data = await res.json()
+      requestSignal.throwIfAborted()
 
       const languages: UserLanguageInfo[] = (data.languages || []).map(
         mapUserLanguageInfo
@@ -66,9 +73,12 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
         userLanguages: languages,
         activeLanguage: activeLang,
         availableLanguageCodes: data.all_supported_languages || [],
+        needsRefresh: false,
       })
+      return true
     } catch {
-      // silently ignore — store stays with current state
+      // Preserve the last snapshot and its invalidation state so callers can retry.
+      return false
     }
   },
 

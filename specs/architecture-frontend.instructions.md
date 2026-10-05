@@ -57,6 +57,9 @@ SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traff
 cancellation where supported.
 
 Listening and Reading share `hooks/useExerciseGeneration.ts` and `lib/exercise-generation.ts`.
+The hook loads missing or invalidated language context before querying exercises. Context loading
+is cancellable and bounded to 20 seconds; failure exits the loading screen with a localized error
+and a Retry action. Successful recovery starts a read-only exercise lookup with the refreshed context.
 They use immediate status queries, ten-second polling, bounded transport recovery, and at most one
 generation POST per operation. The hook prevents duplicate starts, resumes active work on entry,
 cancels on unmount or local language/plan/level changes, and guards late responses. Each operation

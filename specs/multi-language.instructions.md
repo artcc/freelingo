@@ -213,7 +213,15 @@ Dependencies that require a plan distinguish `No active language set` from
 - the static supported-language catalog;
 - the backend-provided available codes;
 - the language-switching busy state;
+- whether the cached summary needs refreshing after plan creation;
 - fetch, add, switch, and remove operations.
+
+`fetchLanguages` returns a success boolean and preserves the previous snapshot and invalidation
+state on failure. Requests have a 20-second timeout, including the caller's authentication-refresh
+wait, and accept an optional cancellation signal. Cancelled responses do not update the store.
+Assessment completion marks the summary as needing refresh and fetches it before navigation or
+the voice-trial offer. A failed refresh does not undo plan creation or repeat the completion POST;
+Listening and Reading reload invalidated context before consulting their exercise pools.
 
 The sidebar `LanguageSwitcher` is present in desktop and mobile navigation. With one language it
 shows the active language as a disabled indicator. With multiple languages it opens a selector,
