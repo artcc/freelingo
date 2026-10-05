@@ -95,15 +95,24 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
   switchLanguage: async (code: string): Promise<boolean> => {
     set({ isSwitching: true })
     try {
+      const signal = AbortSignal.timeout(20_000)
       const res = await apiFetch('/api/languages/active', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_language: code }),
+        signal,
       })
-      if (!res.ok) return false
+      signal.throwIfAborted()
+      if (!res.ok) {
+        // Server/proxy failures may hide a committed mutation; reconcile with GET.
+        if (res.status >= 500 || res.status === 408) get().invalidateLanguages()
+        return false
+      }
       get().invalidateLanguages()
       return await get().fetchLanguages()
     } catch {
+      // A lost response does not tell us whether the server applied the switch.
+      get().invalidateLanguages()
       return false
     } finally {
       set({ isSwitching: false })

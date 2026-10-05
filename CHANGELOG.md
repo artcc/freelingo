@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Listening and Reading keep context recovery available when the free quota is exhausted, while exercise generation remains restricted.
 - Listening and Reading reject answer submissions after the active language, plan, or level changes, preventing attempts and XP from being attributed to another context while preserving zero-XP replays of earlier-level exercises.
 - Language switches invalidate the cached summary and offer recovery when its refresh fails. Success feedback waits for the refreshed summary, and late language responses cannot restore an obsolete context.
+- Language-switch requests have a bounded authentication and network wait, with GET-only recovery for uncertain outcomes. Rejected switches preserve Listening and Reading answers and history replays instead of reloading the exercise.
 
 ## [1.9.25] - 2026-09-25
 

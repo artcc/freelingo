@@ -314,6 +314,190 @@ describe.each([
     }
   )
 
+  it.each([false, true])(
+    'preserves partial answers after a rejected switch (replay: %s)',
+    async (replay) => {
+      const response = await ready().json()
+      response.exercise.questions = Array.from({ length: 5 }, (_, index) => ({
+        index,
+        question: `Question ${index}`,
+        options: { A: `Answer ${index}`, B: `Other ${index}` },
+      }))
+      const historyExercise = {
+        ...response.exercise,
+        id: 77,
+        topic: 'History exercise',
+      }
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      let rejectSwitch: (response: Response) => void = () => {}
+      const pendingSwitch = new Promise<Response>((resolve) => {
+        rejectSwitch = resolve
+      })
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/languages/active') return pendingSwitch
+        if (String(url).startsWith(`/api/${feature}/history`))
+          return json({
+            context: response.context,
+            total: 1,
+            items: [
+              {
+                id: 1,
+                score: 5,
+                xp_earned: 50,
+                exercise: historyExercise,
+                text: historyExercise.text,
+                answers: {},
+                correct_answers: [],
+              },
+            ],
+          })
+        if (url === `/api/${feature}/attempt`)
+          return json({
+            score: 5,
+            xp_earned: replay ? 0 : 50,
+            correct_answers: [],
+            text: response.exercise.text,
+          })
+        if (String(url).startsWith('/api/reviews')) return json({})
+        return json(response)
+      })
+      render(<Page />)
+      expect(await screen.findByText(/Fresh exercise/)).toBeInTheDocument()
+      if (replay) {
+        fireEvent.click(screen.getByRole('button', { name: 'history' }))
+        fireEvent.click(
+          await screen.findByRole('button', { name: 'practiceAgain' })
+        )
+      }
+      fireEvent.click(screen.getByRole('button', { name: /Answer 0/ }))
+      let switching: Promise<boolean> = Promise.resolve(true)
+      act(() => {
+        switching = useLanguageStore.getState().switchLanguage('es-ES')
+      })
+      expect(useLanguageStore.getState().isSwitching).toBe(true)
+      expect(screen.getByRole('button', { name: /Answer 0/ })).toHaveClass(
+        'border-fl-accent'
+      )
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+      await act(async () => {
+        rejectSwitch(json({ detail: 'Language not available' }, 422))
+        expect(await switching).toBe(false)
+      })
+      expect(useLanguageStore.getState().needsRefresh).toBe(false)
+      expect(lookups()).toHaveLength(1)
+      expect(screen.getByRole('button', { name: /Answer 0/ })).toHaveClass(
+        'border-fl-accent'
+      )
+      for (let index = 1; index < 5; index += 1) {
+        fireEvent.click(
+          screen.getByRole('button', { name: new RegExp(`Answer ${index}`) })
+        )
+      }
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      expect(await screen.findByText('resultsLabel')).toBeInTheDocument()
+      const attempt = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === `/api/${feature}/attempt`)
+      expect(JSON.parse(String(attempt?.[1]?.body))).toEqual({
+        exercise_id: replay ? 77 : 42,
+        replay,
+        context: response.context,
+        answers: { 0: 'A', 1: 'A', 2: 'A', 3: 'A', 4: 'A' },
+      })
+    }
+  )
+
+  it.each(['PUT', 'auth refresh'])(
+    'bounds a pending %s during a language switch and recovers through GET',
+    async (pendingStage) => {
+      vi.useFakeTimers()
+      vi.spyOn(AbortSignal, 'timeout').mockImplementation((ms) => {
+        const controller = new AbortController()
+        setTimeout(
+          () => controller.abort(new DOMException('Timed out', 'TimeoutError')),
+          ms
+        )
+        return controller.signal
+      })
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      const updated = {
+        ...languages(9),
+        languages: [{ ...languages(9).languages[0], target_language: 'es-ES' }],
+      }
+      let finishRefresh: (response: Response) => void = () => {}
+      const refreshResponse = new Promise<Response>((resolve) => {
+        finishRefresh = resolve
+      })
+      let summaryCalls = 0
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/auth/refresh') return refreshResponse
+        if (url === '/api/languages/active') {
+          if (pendingStage === 'auth refresh') return json({}, 401)
+          return new Promise((_resolve, reject) => {
+            options?.signal?.addEventListener(
+              'abort',
+              () => reject(options.signal?.reason),
+              { once: true }
+            )
+          })
+        }
+        if (url === '/api/languages')
+          return ++summaryCalls === 1 ? json({}, 502) : json(updated)
+        const response = await ready().json()
+        response.context = {
+          study_plan_id: 9,
+          target_language: 'es-ES',
+          level: 'A1',
+        }
+        response.exercise.target_language = 'es-ES'
+        return json(response)
+      })
+      const switching = useLanguageStore.getState().switchLanguage('es-ES')
+      // Entering a page during the switch must also have a bounded wait.
+      render(<Page />)
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(19_999)
+      })
+      expect(useLanguageStore.getState().isSwitching).toBe(true)
+      expect(lookups()).toHaveLength(0)
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1)
+      })
+      expect(await switching).toBe(false)
+      expect(useLanguageStore.getState().isSwitching).toBe(false)
+      expect(useLanguageStore.getState().needsRefresh).toBe(true)
+      expect(screen.getByText('unavailable')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'retry' })).toBeInTheDocument()
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+      expect(useLoadingStore.getState().count).toBe(0)
+      await act(async () => {
+        finishRefresh(json({ access_token: 'new-token' }))
+        await vi.advanceTimersByTimeAsync(0)
+      })
+      if (pendingStage === 'auth refresh')
+        expect(useAuthStore.getState().accessToken).toBe('new-token')
+      vi.useRealTimers()
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      expect(await screen.findByText(/Fresh exercise/)).toBeInTheDocument()
+      expect(lookups()).toHaveLength(1)
+      expect(String(lookups()[0][0])).toContain('expected_study_plan_id=9')
+      expect(String(lookups()[0][0])).toContain(
+        'expected_target_language=es-ES'
+      )
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([, options]) => options?.method === 'PUT')
+      ).toHaveLength(1)
+    }
+  )
+
   it.each(['missing', 'invalidated'])(
     'recovers %s context with an exhausted quota without enabling generation',
     async (contextState) => {

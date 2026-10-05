@@ -37,6 +37,8 @@ export function useExerciseGeneration<T>({
 
   const run = useCallback(
     async (generate: boolean, voice = '') => {
+      // A pending switch is not a new exercise load. Keep the current screen intact.
+      if (useLanguageStore.getState().isSwitching) return
       // Prevent repeated clicks from starting concurrent operations, including before POST returns.
       if (generate && active.current) return
       active.current?.abort()
@@ -48,8 +50,6 @@ export function useExerciseGeneration<T>({
         generate && language && !needsRefresh ? 'generating' : 'loading'
       )
       try {
-        // The switch owns its summary refresh. Wait for it before querying a pool.
-        if (isSwitching) return
         if (!language || needsRefresh) {
           const loaded = await fetchLanguages(controller.signal)
           if (controller.signal.aborted) return
@@ -96,7 +96,6 @@ export function useExerciseGeneration<T>({
       studyPlanId,
       level,
       needsRefresh,
-      isSwitching,
       fetchLanguages,
       setError,
       dismissTooltip,
@@ -109,14 +108,32 @@ export function useExerciseGeneration<T>({
 
   const loadNext = useCallback(() => run(false), [run])
   const generate = useCallback((voice = '') => run(true, voice), [run])
+  const lastAutomaticLoad = useRef<typeof loadNext | null>(null)
 
   useEffect(() => {
-    void loadNext()
+    if (isSwitching) {
+      // Only interrupted requests need resuming after a rejected switch.
+      // A displayed exercise (including a replay) and its answers stay untouched.
+      if (active.current) {
+        active.current.abort()
+        active.current = null
+        lastAutomaticLoad.current = null
+      }
+      return
+    }
+    if (lastAutomaticLoad.current !== loadNext) {
+      lastAutomaticLoad.current = loadNext
+      void loadNext()
+    }
+  }, [loadNext, isSwitching])
+
+  useEffect(() => {
     return () => {
       active.current?.abort()
       active.current = null
+      lastAutomaticLoad.current = null
     }
-  }, [loadNext, language])
+  }, [])
 
   return { loadNext, generate, needsContext: !language || needsRefresh }
 }

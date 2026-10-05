@@ -75,9 +75,14 @@ from an earlier level. A `study_context_changed` submission response displays th
 context-conflict message instead of showing results or decrementing the local quota.
 
 The language store invalidates cached context after a persisted switch and rejects responses from
-queries predating invalidation or a newer request. The exercise hook waits for the switch's refresh
-to finish before fetching context or exercises. Failed summary refreshes remain recoverable through
-the selector, language settings, and exercise pages; success feedback requires a refreshed summary.
+queries predating invalidation or a newer request. The switch PUT has a 20-second timeout that also
+bounds its authentication-refresh wait. Transport/timeout failures and HTTP 408/5xx invalidate the
+summary for GET-only reconciliation; a definite rejection preserves the valid summary.
+The exercise hook pauses pending lookups during a switch, then resumes them through GET. A busy-flag
+transition alone does not reload an already displayed exercise or discard answers and replay mode.
+Changed or invalidated context still triggers recovery. Failed summary refreshes remain recoverable
+through the selector, language settings, and exercise pages; success feedback requires a refreshed
+summary.
 
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.

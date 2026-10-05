@@ -232,10 +232,19 @@ Listening and Reading reload invalidated context before consulting their exercis
 
 After a successful language-switch PUT, the store invalidates the summary and fetches it again.
 `switchLanguage` returns true only when that refresh succeeds. A failed refresh leaves `needsRefresh`
-set even though the server has persisted the switch. Listening and Reading cancel their current
-lookup and wait while `isSwitching` is true; afterward they reload any invalidated context before
-querying a pool. Both the sidebar selector and language settings offer a summary-only retry after
-a refresh failure, without repeating the PUT or announcing a fully synchronized switch.
+set even though the server has persisted the switch. The PUT has its own 20-second timeout,
+including its authentication-refresh wait; cancellation does not interrupt shared token rotation.
+Timeouts, transport failures, HTTP 408, and server/proxy 5xx responses leave the summary invalidated
+because the mutation outcome is uncertain. Reconciliation uses GET, never an automatic repeat PUT.
+Other rejected HTTP responses preserve the valid summary.
+
+Listening and Reading pause an in-flight exercise lookup while `isSwitching` is true. An already
+displayed exercise, its answers, and replay mode are preserved during the switch and after a definite
+rejection with unchanged context. The busy flag alone does not trigger another exercise lookup.
+Interrupted lookups resume through GET after the switch; changed or invalidated context triggers
+the normal reload/reconciliation flow. Both the sidebar selector and language settings offer a
+summary-only retry after a refresh failure or an uncertain PUT outcome, without repeating the PUT
+or announcing a fully synchronized switch.
 
 The sidebar `LanguageSwitcher` is present in desktop and mobile navigation. With one language it
 shows the active language as a disabled indicator. With multiple languages it opens a selector,

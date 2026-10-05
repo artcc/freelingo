@@ -362,6 +362,7 @@ describe('useLanguageStore — switchLanguage', () => {
 
     expect(result).toBe(false)
     expect(useLanguageStore.getState().isSwitching).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
   })
 
   it('resets isSwitching on non-ok response', async () => {
@@ -385,6 +386,7 @@ describe('useLanguageStore — switchLanguage', () => {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ target_language: 'it-IT' }),
+      signal: expect.any(AbortSignal),
     })
   })
 
@@ -403,13 +405,26 @@ describe('useLanguageStore — switchLanguage', () => {
   })
 
   it('does not call fetchLanguages when PUT fails', async () => {
-    mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, 500))
+    mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, 400))
 
     await useLanguageStore.getState().switchLanguage('en-US')
 
     expect(mockApiFetch).toHaveBeenCalledTimes(1)
     expect(useLanguageStore.getState().needsRefresh).toBe(false)
   })
+
+  it.each([408, 500, 502])(
+    'invalidates an uncertain HTTP %s switch result without repeating PUT',
+    async (status) => {
+      mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, status))
+      expect(await useLanguageStore.getState().switchLanguage('es-ES')).toBe(
+        false
+      )
+      expect(useLanguageStore.getState().needsRefresh).toBe(true)
+      expect(useLanguageStore.getState().isSwitching).toBe(false)
+      expect(mockApiFetch).toHaveBeenCalledTimes(1)
+    }
+  )
 
   it('reports a failed refresh after a persisted switch and recovers without another PUT', async () => {
     mockApiFetch

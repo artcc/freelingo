@@ -219,6 +219,10 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
 `exercise`, `results`, and `history`.
 
 - Initial load and active-language changes request the next exercise.
+- A pending language switch pauses an in-flight lookup without replacing an already displayed
+  exercise. A definite rejection with unchanged context preserves answers and replay mode; only
+  interrupted lookups need resuming. The switch PUT has a 20-second timeout including authentication
+  refresh. An uncertain outcome invalidates context for GET-only reconciliation and bounded recovery.
 - Missing or invalidated language context is loaded first through the shared language store, with
   cancellation and a 20-second timeout. Failure exits `loading`, shows the localized unavailable
   message, and offers Retry. Retry reloads context and checks for existing exercises before any

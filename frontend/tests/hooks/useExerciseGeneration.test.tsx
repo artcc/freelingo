@@ -2,6 +2,8 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
 import { resolveExercise } from '@/lib/exercise-generation'
+import { useLanguageStore } from '@/store/language'
+import { StrictMode } from 'react'
 
 vi.mock('@/lib/exercise-generation', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/exercise-generation')>()),
@@ -29,6 +31,7 @@ describe('useExerciseGeneration lifecycle', () => {
 
   beforeEach(() => {
     vi.resetAllMocks()
+    useLanguageStore.setState({ isSwitching: false, needsRefresh: false })
   })
 
   it('ignores late responses from the previous language', async () => {
@@ -126,5 +129,32 @@ describe('useExerciseGeneration lifecycle', () => {
       target_language: 'en-GB',
       level: 'B2',
     })
+  })
+
+  it('resumes an interrupted lookup after a rejected switch', async () => {
+    resolve
+      .mockImplementationOnce(() => new Promise(() => {}))
+      .mockResolvedValueOnce(null)
+    renderHook(() => useExerciseGeneration({ ...options, language: 'en-GB' }))
+    const signal = resolve.mock.calls[0][0].signal
+    act(() => useLanguageStore.setState({ isSwitching: true }))
+    expect(signal.aborted).toBe(true)
+    expect(resolve).toHaveBeenCalledTimes(1)
+    act(() => useLanguageStore.setState({ isSwitching: false }))
+    await waitFor(() => expect(setPageState).toHaveBeenCalledWith('idle'))
+    expect(resolve).toHaveBeenCalledTimes(2)
+    expect(resolve.mock.calls[1][0].generate).toBe(false)
+  })
+
+  it('restarts the initial lookup after StrictMode effect cleanup', async () => {
+    resolve
+      .mockImplementationOnce(() => new Promise(() => {}))
+      .mockResolvedValueOnce(null)
+    renderHook(() => useExerciseGeneration({ ...options, language: 'en-GB' }), {
+      wrapper: StrictMode,
+    })
+    await waitFor(() => expect(setPageState).toHaveBeenCalledWith('idle'))
+    expect(resolve).toHaveBeenCalledTimes(2)
+    expect(resolve.mock.calls[0][0].signal.aborted).toBe(true)
   })
 })
