@@ -38,8 +38,9 @@ export async function completeGameSession(sessionId:string,answers:Array<{questi
   return completeWithRecovery(sessionId,{session_id:sessionId,answers,interaction_trace:interactionTrace,daily_challenge:dailyChallenge,daily_challenge_date:dailyChallengeDate})
 }
 export type ArenaMove={action_id:string;version:number;kind:'flip'|'hide'|'pair'|'answer'|'timeout'|'continue'|'leave';value:string;order:string[]}
+export type ArenaSkill='memory'|'vocabulary'|'writing'
 export type ArenaState={
-  session_id:string;game:string;version:number;phase:'playing'|'feedback'|'finished';index:number;total:number;lives:number;correct:number;attempts:number;max_moves:number;deadline:number|null;server_time?:number;relaxed:boolean
+  session_id:string;game:string;skill:ArenaSkill;version:number;phase:'playing'|'feedback'|'finished';index:number;total:number;lives:number;correct:number;attempts:number;max_moves:number;deadline:number|null;server_time?:number;relaxed:boolean
   question?:{prompt:string;choices?:string[];tiles?:Array<{id:string;label:string}>}
   cards?:Array<{id:string;label:string|null;side:'word'|'meaning';opened:boolean;matched:boolean}>
   feedback:{correct:boolean;answer?:string;meaning?:string}|null
