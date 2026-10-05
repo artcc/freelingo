@@ -25,20 +25,6 @@ export default function MicButton({ status, onStart, onStop }: Props) {
     )
   }
 
-  if (status === 'warming') {
-    return (
-      <button
-        disabled
-        className="border-fl-border bg-fl-surface flex h-16 w-16 items-center justify-center rounded-full border-2 opacity-60"
-        aria-label={t('statusWarming')}
-      >
-        <span className="text-fl-muted-2 animate-pulse font-mono text-xl">
-          ○
-        </span>
-      </button>
-    )
-  }
-
   if (status === 'connecting') {
     return (
       <button
@@ -64,7 +50,7 @@ export default function MicButton({ status, onStart, onStop }: Props) {
     )
   }
 
-  if (status === 'live') {
+  if (status === 'live' || status === 'warming') {
     return (
       <button
         onClick={onStop}

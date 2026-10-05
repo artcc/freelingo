@@ -37,7 +37,7 @@ UI translation catalogs live in the repository-root `messages/` directory.
   under a shared layout. Onboarding and billing returns are included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
 - `(legal)`: terms and privacy pages with a minimal public layout.
-- `api/`: Next.js handlers that proxy chat SSE, TTS, and STT to the backend.
+- `api/`: Next.js handlers that proxy chat SSE, TTS, STT, and conversation warmup to the backend.
 
 Nested pages such as level test, vocabulary management, language settings, and memory settings belong
 to their parent domains. Their detailed behavior lives in the corresponding domain specs rather than
@@ -55,6 +55,15 @@ their loading-counter slot and prevents their retry; shared token rotation conti
 Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
+
+`api/conversation/warmup` uses a dedicated handler to accommodate speech-provider cold starts beyond
+the generic rewrite's 30-second timeout. It forwards authentication cookies, bearer authorization,
+and the optional trial-token body; preserves backend status, content type, and `Retry-After`; and
+propagates client cancellation to the backend fetch. Its 70-second deadline aborts the fetch and
+returns HTTP 504, between the backend's 60-second probe budget and the browser's 75-second deadline.
+The handler preserves `X-Real-IP` and `X-Forwarded-For` so the backend's IP-based limits retain client
+identity. The trusted ingress must overwrite forwarding headers as specified in
+`rate-limiting.instructions.md`.
 
 Listening and Reading share `hooks/useExerciseGeneration.ts` and `lib/exercise-generation.ts`.
 The hook loads missing or invalidated language context before querying exercises. Context loading

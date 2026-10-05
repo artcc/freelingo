@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Fixed
 
+- Voice startup allows time for cold speech-service preparation, supports cancellation while preparing, and records distinct timeout, network, and HTTP failure diagnostics.
 - Streaks expire after missed activity days, and daily skill scores carry forward instead of losing prior progress.
 - Listening and Reading recover from slow generation and temporary connection failures, resume pending exercises, and show localized errors instead of remaining indefinitely in a loading state.
 - Completing Assessment makes the new plan available to Listening and Reading without reloading the page.

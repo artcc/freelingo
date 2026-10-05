@@ -45,6 +45,7 @@ from app.utils.redis import redis_client as _redis_client
 logger = get_logger(__name__)
 
 router = APIRouter(tags=["conversation"])
+WARMUP_TIMEOUT_SECONDS = 60
 
 
 # ── Shared voice access check ──────────────────────────────────────────────────
@@ -132,9 +133,8 @@ async def conversation_warmup(
 ) -> JSONResponse:
     """Pre-heat TTS and STT services before a conversation session starts.
 
-    Awaits model loading synchronously so the caller knows the models are
-    ready before opening the WebSocket. The frontend must await this call
-    and only then connect the WebSocket.
+    Awaits best-effort provider probes within a shared time budget before
+    the frontend opens the WebSocket. This is not a strict health check.
     """
     allowed, _, _, _ = await _check_voice_access(
         current_user,
@@ -153,7 +153,12 @@ async def conversation_warmup(
     if stt_service:
         tasks.append(_warmup_stt(stt_service))
     if tasks:
-        await asyncio.gather(*tasks)
+        try:
+            await asyncio.wait_for(asyncio.gather(*tasks), timeout=WARMUP_TIMEOUT_SECONDS)
+        except TimeoutError:
+            logger.warning(
+                "[warmup] Provider preparation timed out after %s s", WARMUP_TIMEOUT_SECONDS
+            )
 
     return JSONResponse({"status": "ready"})
 

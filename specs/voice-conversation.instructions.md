@@ -22,13 +22,26 @@ The frontend startup order is:
 2. Create session and attempt identities plus an AudioContext.
 3. Request and own a mono microphone stream.
 4. Supply that stream to VAD and await serialized `vad.start()`.
-5. Call `POST /api/conversation/warmup` with a 15-second client timeout.
+5. Call `POST /api/conversation/warmup` with a 75-second abortable client timeout.
 6. Refresh the access token reference.
 7. Open `/ws/conversation` and send the authentication payload.
 
-Warmup requires authentication, voice access, and absence of maintenance for non-admin users. It
-warms TTS and STT in parallel, logs individual failures, and still returns `status: "ready"`; it is
-not a strict availability check.
+Warmup requires authentication, voice access, and absence of maintenance for non-admin users. TTS
+and STT probes run in parallel with a shared 60-second budget. Individual failures and exhaustion of
+that budget are logged; unfinished probes are cancelled at the deadline. The endpoint returns
+`status: "ready"` after these best-effort probes, not a strict provider-health guarantee.
+
+The Next.js warmup proxy has a 70-second deadline, forwards authentication and the optional trial
+token, and propagates client cancellation. It preserves backend HTTP errors and returns 504 if its
+own deadline expires, avoiding the generic rewrite's 30-second limit.
+
+The frontend remains in `warming` while awaiting the response and offers a stop control. Stopping
+or unmounting aborts the client request and clears its timer; success and failure also clear the
+timer. Attempt identities prevent late responses from opening a WebSocket or changing a newer
+session. A client timeout aborts the request and releases session audio resources. Client timeout,
+network failure details, and HTTP status failures are logged independently of audio-debug logging;
+the interface displays the localized connection error without transport diagnostics. Failed attempts
+can be restarted manually.
 
 After accepting the WebSocket handshake, the backend waits up to ten seconds for the first JSON
 frame. The payload can contain token, initial context, TTS voice, target language, post-assessment
