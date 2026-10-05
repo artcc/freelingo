@@ -218,6 +218,10 @@ and XP is 5 once per exercise/plan/UTC day if a prior-day attempt exists in that
 Replay still increments `play_count`, records activity, and consumes one freemium Listening
 use after a successful submission.
 
+The submission service captures `completed_at` once before awaiting database work. Its UTC date is
+reused for prior-day eligibility, reward source key, ledger date, and daily progress. Crossing midnight
+while waiting on queries or locks cannot move that attempt's credit or reopen the same day's reward.
+
 ## Freemium and maintenance
 
 When Stripe is disabled, Listening is unrestricted by subscription or freemium quota. With Stripe

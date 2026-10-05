@@ -122,6 +122,17 @@ nonempty tutor response. Greetings, unanswered contributions, and planless conve
 The current streak is the latest stored streak only if its date is today or yesterday; otherwise it is
 zero. New daily rows carry forward the previous row's skill snapshot before applying scored updates.
 
+Conversation activity uses the persisted assistant response's UTC completion date. Each eligible
+response has a unique `reply_to_id` pointing to its learner message; both messages carry the actual
+turn `modality` (`chat` or `voice`). Conversation origin is only descriptive. Counting follows these
+associations rather than message order, including replies completed after a prompt's UTC day ends.
+Unpaired legacy messages are not reconstructed or classified for rewards. Text continuation of voice
+history counts only toward chat thresholds/caps and does not consume the voice reward.
+
+Comprehension captures `completed_at` once on entry to submission. Its date is used for replay
+eligibility, source key, ledger, and daily progress. Conversation rewards likewise pass the persisted
+response date through all daily checks and writes. Database waits never recalculate the activity day.
+
 Base rewards are 20 XP for lesson completion, 5/1 for correct/incorrect lesson exercises, 2 per
 flashcard review, and 10 per correct first-attempt Reading/Listening answer. Additional rewards:
 
@@ -137,9 +148,11 @@ flashcard review, and 10 per correct first-attempt Reading/Listening answer. Add
   independently of the test score. Current/legacy completion-test slots are excluded.
 
 `progress_rewards.py` records additional awards in `progress_rewards`. A unique plan/kind/source key
-and a PostgreSQL plan-row lock protect repeat requests and daily limits; award and daily credit share
+and a PostgreSQL `FOR NO KEY UPDATE` plan-row lock protect repeat requests and daily limits without
+conflicting with FK `KEY SHARE` locks held by concurrent inserts. Award and daily credit share
 the caller's transaction. Comprehension attempt persistence shares that transaction. Existing totals
-are preserved; no historical reward backfill is performed. Rewards describe participation and
+are preserved; no historical reward backfill is performed. A qualifying milestone submitted again
+may receive its first award if its ledger key does not yet exist. Rewards describe participation and
 completion, not linguistic mastery. Ownership comes from the persisted conversation/lesson/plan or
 the validated comprehension attempt context, never from mutable client selection.
 

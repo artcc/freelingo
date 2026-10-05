@@ -828,12 +828,21 @@ class ConversationPipeline:
             logger.debug("[pipeline] Failed to save token usage — ignored")
 
     async def _save_turn(self, user_text: str, assistant_text: str) -> None:
+        completed_at = datetime.now(UTC).replace(tzinfo=None)
         # Preserve transcript order even when background DB writes overlap turns.
         async with self._transcript_lock:
-            await self._save_message("user", user_text)
-            await self._save_message("assistant", assistant_text)
+            await self._save_message(
+                "assistant", assistant_text, user_text=user_text, completed_at=completed_at
+            )
 
-    async def _save_message(self, role: str, content: str) -> None:
+    async def _save_message(
+        self,
+        role: str,
+        content: str,
+        *,
+        user_text: str | None = None,
+        completed_at: datetime | None = None,
+    ) -> None:
         """Persists a conversation transcript message to chat_history.
 
         Completely defensive — silently ignores any error.
@@ -849,25 +858,43 @@ class ConversationPipeline:
             from app.models.conversation import Conversation  # noqa: PLC0415
             from app.services.progress_rewards import reward_conversation  # noqa: PLC0415
 
+            completed_at = completed_at or datetime.now(UTC).replace(tzinfo=None)
             async with db_session() as db:
-                db.add(
-                    ChatHistory(
+                reply_to_id = None
+                if user_text is not None:
+                    user_message = ChatHistory(
                         user_id=self._user_id,
                         conversation_id=self._conversation_id,
-                        role=role,
-                        content=content,
+                        role="user",
+                        content=user_text,
                         study_plan_id=self._study_plan_id,
                         target_language=self._target_language,
+                        modality="voice",
+                        created_at=completed_at,
                     )
+                    db.add(user_message)
+                    await db.flush()
+                    reply_to_id = user_message.id
+                message = ChatHistory(
+                    user_id=self._user_id,
+                    conversation_id=self._conversation_id,
+                    role=role,
+                    content=content,
+                    study_plan_id=self._study_plan_id,
+                    target_language=self._target_language,
+                    modality="voice",
+                    reply_to_id=reply_to_id,
+                    created_at=completed_at,
                 )
+                db.add(message)
                 await db.execute(
                     update(Conversation)
                     .where(Conversation.id == self._conversation_id)
-                    .values(updated_at=datetime.now(UTC).replace(tzinfo=None))
+                    .values(updated_at=completed_at)
                 )
                 if role == "assistant":
                     await db.flush()
-                    await reward_conversation(db, self._conversation_id)
+                    await reward_conversation(db, message.id)
                 await db.commit()
         except Exception:
             logger.debug("[pipeline] Failed to save message — ignored")

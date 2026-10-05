@@ -509,7 +509,9 @@ async def test_process_llm_timeout_error_sends_error_frame() -> None:
 
     saved_roles: list[str] = []
 
-    async def _track_save(role, content):
+    async def _track_save(role, content, *, user_text=None, completed_at=None):
+        if user_text is not None:
+            saved_roles.append("user")
         saved_roles.append(role)
 
     pipeline._save_message = _track_save

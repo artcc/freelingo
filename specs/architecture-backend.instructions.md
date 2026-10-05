@@ -89,10 +89,25 @@ and rejects mismatches with 409. It does not authorize arbitrary client-supplied
 ownership and PostgreSQL commit are separate operations; the pre-save guard is not transactional fencing.
 
 `progress_rewards.py` owns additional XP awards, limits, and source-key deduplication through
-`ProgressReward`. Plan-row locks serialize reward decisions and daily-progress updates. Rewards use
-persisted resource ownership and commit with their progress credit. The `progress_rewards` table and
-its unique constraint must exist before serving reward-enabled requests; schema generation and
-application follow the remote deployment-maintainer migration workflow.
+`ProgressReward`. PostgreSQL `FOR NO KEY UPDATE` plan-row locks serialize reward decisions and daily
+progress while remaining compatible with FK `KEY SHARE` locks. Rewards use persisted resource
+ownership, explicit response-to-learner associations, actual turn modality, and a fixed UTC activity
+date. They commit with their progress credit; voice transcript pairs share that transaction.
+
+Before serving the updated backend, the deployment maintainer generates, reviews, and applies the
+revision for `progress_rewards` and `chat_history.modality`/`reply_to_id`, including FK and unique
+constraints. Preserve the revision in the deployed artifact or persistent Alembic revisions location
+for every subsequent startup. Applying it only from a disposable container is insufficient: startup
+runs `upgrade head` and must resolve the database's recorded revision. Startup does not generate
+missing revisions. Legacy messages retain null pairing/modality; no inferred backfill is required.
+
+PostgreSQL-specific reward regressions live in `backend/tests/test_progress_rewards_postgres.py`.
+They require an explicitly supplied `TEST_POSTGRES_URL` using the asyncpg dialect and a test database
+where the maintainer permits creating/deleting isolated random test schemas. With that environment
+configured, run `pytest tests/test_progress_rewards_postgres.py --no-cov -q -x` from `backend/`.
+The tests coordinate two independent sessions after FK inserts to exercise deadlock avoidance,
+first-day credit, shared caps, and interleaved replies. They skip without that URL; SQLite checks do
+not validate PostgreSQL locking. Local execution does not require or start PostgreSQL or Docker.
 
 ### Static learning data
 

@@ -9,8 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Added
 
 - Completed lessons offer voice practice with Lingu through a short confirmation dialog. Lingu uses the lesson's content and answered exercises throughout the conversation, can suggest when the main objectives have been practised, and lets the learner continue or finish using the existing voice controls and limits. Practice conversations appear in chat history with the lesson topic as their title.
-- Plan-owned XP rewards recognize voice and chat participation, spaced Listening/Reading reviews, and completed units and level journeys, with daily limits and durable reward deduplication.
-- A persistent `progress_rewards` ledger records additional XP provenance; its schema must be generated and applied through the deployment migration workflow before enabling the updated backend.
+- Plan-owned XP rewards recognize voice and chat participation through explicitly paired turns and their actual modality, spaced Listening/Reading reviews, and completed units and level journeys, with consistent activity dates, daily limits and durable reward deduplication.
+- A persistent `progress_rewards` ledger and nullable transcript modality/reply associations record additional XP provenance; their schema must be generated and applied through the deployment migration workflow, with the revision retained for subsequent startups, before enabling the updated backend.
 
 ### Changed
 

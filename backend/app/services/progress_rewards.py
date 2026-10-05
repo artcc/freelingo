@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
 
 from app.data.curriculum import COMPLETION_UNIT_IDS
 from app.models.chat_history import ChatHistory
@@ -22,6 +23,7 @@ async def award_progress_reward(
     kind: str,
     source_key: str,
     xp: int,
+    activity_date: date,
     daily_limit: int | None = None,
 ) -> int:
     """Credit once, in the caller's transaction and resource-owned plan."""
@@ -36,13 +38,12 @@ async def award_progress_reward(
     )
     if existing is not None:
         return 0
-    today = progress_today()
     if daily_limit is not None:
         earned = await db.scalar(
             select(func.coalesce(func.sum(ProgressReward.xp), 0)).where(
                 ProgressReward.study_plan_id == plan_id,
                 ProgressReward.kind == kind,
-                ProgressReward.date == today,
+                ProgressReward.date == activity_date,
             )
         )
         if earned + xp > daily_limit:
@@ -53,49 +54,81 @@ async def award_progress_reward(
             study_plan_id=plan_id,
             kind=kind,
             source_key=source_key,
-            date=today,
+            date=activity_date,
             xp=xp,
         )
     )
-    await update_daily_progress(db, user_id, study_plan_id=plan_id, xp=xp, commit=False)
+    await update_daily_progress(
+        db, user_id, study_plan_id=plan_id, xp=xp, activity_date=activity_date, commit=False
+    )
     return xp
 
 
-async def reward_conversation(db: AsyncSession, conversation_id: int) -> None:
-    conversation = await db.get(Conversation, conversation_id)
+async def reward_conversation(db: AsyncSession, response_id: int) -> None:
+    """Credit explicitly paired turns on the persisted response's UTC completion day."""
+    response = await db.get(ChatHistory, response_id)
+    if (
+        response is None
+        or response.role != "assistant"
+        or response.reply_to_id is None
+        or response.modality not in {"chat", "voice"}
+        or not response.content.strip()
+        or response.conversation_id is None
+    ):
+        return
+    contribution = await db.get(ChatHistory, response.reply_to_id)
+    if (
+        contribution is None
+        or contribution.role != "user"
+        or contribution.user_id != response.user_id
+        or contribution.conversation_id != response.conversation_id
+        or contribution.modality != response.modality
+        or not any(c.isalnum() for c in contribution.content)
+    ):
+        return
+    conversation = await db.get(Conversation, response.conversation_id)
     if conversation is None or conversation.study_plan_id is None:
+        return
+    if conversation.user_id != response.user_id:
         return
     plan = await lock_progress_plan(db, conversation.user_id, conversation.study_plan_id)
     if plan is None or plan.target_language != conversation.target_language:
         return
-    today = progress_today()
-    start = datetime.combine(today, time.min)
+    activity_date = response.created_at.date()
+    start = datetime.combine(activity_date, time.min)
+    learner = aliased(ChatHistory)
+    replies = aliased(ChatHistory)
+    # Pair by identity, not adjacency. A user message may precede midnight, and
+    # concurrent replies may be persisted in a different order from their prompts.
     messages = (
-        await db.scalars(
-            select(ChatHistory)
+        await db.execute(
+            select(learner.content, replies.content)
+            .join(replies, replies.reply_to_id == learner.id)
             .where(
-                ChatHistory.conversation_id == conversation.id,
-                ChatHistory.user_id == conversation.user_id,
-                ChatHistory.created_at >= start,
-                ChatHistory.created_at < start + timedelta(days=1),
+                learner.conversation_id == conversation.id,
+                learner.user_id == conversation.user_id,
+                learner.role == "user",
+                learner.modality == response.modality,
+                replies.conversation_id == conversation.id,
+                replies.user_id == conversation.user_id,
+                replies.role == "assistant",
+                replies.modality == response.modality,
+                replies.created_at >= start,
+                replies.created_at < start + timedelta(days=1),
             )
-            .order_by(ChatHistory.id)
         )
     ).all()
-    # Count answered, distinct learner contributions; ignore greetings, blanks and retries.
-    pending = ""
-    answered: set[str] = set()
-    for message in messages:
-        content = " ".join(message.content.split()).casefold()
-        if message.role == "user":
-            pending = content if any(c.isalnum() for c in content) else ""
-        elif message.role == "assistant" and content and pending:
-            answered.add(pending)
-            pending = ""
+    answered = {
+        " ".join(content.split()).casefold()
+        for content, reply_content in messages
+        if reply_content.strip() and any(c.isalnum() for c in content)
+    }
     if not answered:
         return
-    await update_daily_progress(db, conversation.user_id, study_plan_id=plan.id, commit=False)
-    voice = conversation.source == "voice"
+    await update_daily_progress(
+        db, conversation.user_id, study_plan_id=plan.id, activity_date=activity_date, commit=False
+    )
+    voice = response.modality == "voice"
     blocks = min(1, len(answered) // 3) if voice else min(3, len(answered) // 5)
     for block in range(1, blocks + 1):
         await award_progress_reward(
@@ -103,8 +136,9 @@ async def reward_conversation(db: AsyncSession, conversation_id: int) -> None:
             conversation.user_id,
             plan.id,
             kind="voice" if voice else "chat",
-            source_key=f"{conversation.id}:{today}:{block}",
+            source_key=f"{conversation.id}:{activity_date}:{block}",
             xp=20 if voice else 10,
+            activity_date=activity_date,
             daily_limit=60 if voice else 30,
         )
 
@@ -120,8 +154,14 @@ def _scheduled_lessons(plan: StudyPlan, unit_id: str | None = None) -> set[tuple
 
 
 async def reward_plan_completion(
-    db: AsyncSession, user_id: int, plan_id: int, *, unit_id: str | None = None
+    db: AsyncSession,
+    user_id: int,
+    plan_id: int,
+    *,
+    unit_id: str | None = None,
+    activity_date: date | None = None,
 ) -> int:
+    activity_date = activity_date if activity_date is not None else progress_today()
     plan = await lock_progress_plan(db, user_id, plan_id)
     if plan is None or (unit_id is None and not plan.completion_test_taken):
         return 0
@@ -146,4 +186,5 @@ async def reward_plan_completion(
         kind="unit" if unit_id else "level",
         source_key=unit_id or "completion",
         xp=30 if unit_id else 100,
+        activity_date=activity_date,
     )

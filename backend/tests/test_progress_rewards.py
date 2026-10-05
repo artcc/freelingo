@@ -23,23 +23,39 @@ from app.services.progress_service import progress_today, update_daily_progress
 from tests.conftest import make_study_plan
 
 
-async def add_turns(db, conversation, count, *, start=0, content=None):
+async def add_turns(db, conversation, count, *, start=0, content=None, modality=None):
     for i in range(start, start + count):
+        user_message = None
         for role, text in (
             ("user", content or f"I would like to discuss topic {i}"),
             ("assistant", f"Let's discuss topic {i}"),
         ):
-            db.add(
-                ChatHistory(
-                    user_id=conversation.user_id,
-                    conversation_id=conversation.id,
-                    study_plan_id=conversation.study_plan_id,
-                    target_language=conversation.target_language,
-                    role=role,
-                    content=text,
-                )
+            message = ChatHistory(
+                user_id=conversation.user_id,
+                conversation_id=conversation.id,
+                study_plan_id=conversation.study_plan_id,
+                target_language=conversation.target_language,
+                role=role,
+                content=text,
+                modality=modality or conversation.source,
+                reply_to_id=user_message.id if user_message else None,
             )
+            db.add(message)
+            await db.flush()
+            if role == "user":
+                user_message = message
     await db.flush()
+
+
+async def reward_latest(db, conversation_id):
+    response_id = await db.scalar(
+        select(ChatHistory.id)
+        .where(ChatHistory.conversation_id == conversation_id, ChatHistory.role == "assistant")
+        .order_by(ChatHistory.id.desc())
+        .limit(1)
+    )
+    if response_id is not None:
+        await reward_conversation(db, response_id)
 
 
 async def conversation_for(db, user, source, plan):
@@ -70,20 +86,20 @@ async def test_conversation_rewards_require_answered_turns_and_are_idempotent(
         )
     )
     await db_session.flush()
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     assert (await db_session.scalars(select(Progress))).all() == []
     await add_turns(db_session, conversation, threshold - 1)
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     entry = (await db_session.scalars(select(Progress))).one()
     assert entry.xp_earned == 0
     assert entry.study_plan_id == plan.id
     await add_turns(db_session, conversation, 1, start=threshold)
-    await reward_conversation(db_session, conversation.id)
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     assert entry.xp_earned == xp
     assert len((await db_session.scalars(select(ProgressReward))).all()) == 1
     await add_turns(db_session, conversation, 8, content="I would like to discuss topic 0")
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     assert entry.xp_earned == xp
 
 
@@ -96,7 +112,7 @@ async def test_conversation_daily_limit_spans_conversations(
     for _ in range(5):
         conversation = await conversation_for(db_session, user, source, plan)
         await add_turns(db_session, conversation, turns)
-        await reward_conversation(db_session, conversation.id)
+        await reward_latest(db_session, conversation.id)
     assert (await db_session.scalars(select(Progress))).one().xp_earned == limit
 
 
@@ -105,12 +121,13 @@ async def test_chat_long_conversation_awards_three_blocks_but_not_old_turns(db_s
     plan = await make_study_plan(db_session, user_id=user.id, cefr_level="A1")
     conversation = await conversation_for(db_session, user, "chat", plan)
     await add_turns(db_session, conversation, 20)
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     assert (await db_session.scalars(select(Progress))).one().xp_earned == 30
     for message in (await db_session.scalars(select(ChatHistory))).all():
         message.created_at = datetime.combine(progress_today() - timedelta(days=1), time(12))
     await db_session.flush()
-    await reward_conversation(db_session, conversation.id)
+    await add_turns(db_session, conversation, 1, start=20)
+    await reward_latest(db_session, conversation.id)
     assert len((await db_session.scalars(select(ProgressReward))).all()) == 3
 
 
@@ -118,7 +135,7 @@ async def test_unanswered_and_planless_conversations_do_not_award(db_session, te
     user, _ = test_user
     conversation = await conversation_for(db_session, user, "voice", None)
     await add_turns(db_session, conversation, 5)
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     plan = await make_study_plan(db_session, user_id=user.id, cefr_level="A1")
     conversation = await conversation_for(db_session, user, "chat", plan)
     for i in range(6):
@@ -131,7 +148,7 @@ async def test_unanswered_and_planless_conversations_do_not_award(db_session, te
             )
         )
     await db_session.flush()
-    await reward_conversation(db_session, conversation.id)
+    await reward_latest(db_session, conversation.id)
     assert (await db_session.scalars(select(Progress))).all() == []
 
 
@@ -143,13 +160,25 @@ async def test_reward_is_atomic_and_rejects_foreign_plan(db_session, test_user, 
     plan_id, user_id = plan.id, user.id
     assert (
         await award_progress_reward(
-            db_session, other.id, plan_id, kind="unit", source_key="u1", xp=30
+            db_session,
+            other.id,
+            plan_id,
+            kind="unit",
+            source_key="u1",
+            xp=30,
+            activity_date=progress_today(),
         )
         == 0
     )
     assert (
         await award_progress_reward(
-            db_session, user_id, plan_id, kind="unit", source_key="u1", xp=30
+            db_session,
+            user_id,
+            plan_id,
+            kind="unit",
+            source_key="u1",
+            xp=30,
+            activity_date=progress_today(),
         )
         == 30
     )
@@ -159,9 +188,9 @@ async def test_reward_is_atomic_and_rejects_foreign_plan(db_session, test_user, 
 
 
 async def test_voice_persistence_credits_reward_with_ordered_transcript(
-    db_session, test_user, monkeypatch
+    client, db_session, test_user, monkeypatch
 ):
-    user, _ = test_user
+    user, headers = test_user
     plan = await make_study_plan(db_session, user_id=user.id, cefr_level="A1")
     conversation = await conversation_for(db_session, user, "voice", plan)
     await db_session.commit()
@@ -195,6 +224,16 @@ async def test_voice_persistence_credits_reward_with_ordered_transcript(
         "assistant",
     ]
     assert (await db_session.scalars(select(Progress))).one().xp_earned == 20
+    assert all(row.modality == "voice" for row in rows)
+    assert rows[0].reply_to_id is None
+    assert [row.reply_to_id for row in rows[2::2]] == [row.id for row in rows[1::2]]
+    response = await client.get(
+        f"/api/chat/conversations/{conversation.id}/messages", headers=headers
+    )
+    assert response.status_code == 200
+    assert response.json()["messages"] == [
+        {"role": row.role, "content": row.content} for row in rows
+    ]
 
 
 async def test_unscored_activity_preserves_skills_across_days(db_session, test_user):

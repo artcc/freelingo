@@ -337,6 +337,7 @@ async def complete_lesson(
         lesson_completed=True,
         skill=lesson.lesson_type,
         study_plan_id=lesson.study_plan_id,
+        activity_date=lesson.completed_at.date(),
         commit=False,
     )
 
@@ -372,7 +373,11 @@ async def complete_lesson(
                     break
 
         await reward_plan_completion(
-            db, current_user.id, lesson.study_plan_id, unit_id=lesson.unit_id
+            db,
+            current_user.id,
+            lesson.study_plan_id,
+            unit_id=lesson.unit_id,
+            activity_date=lesson.completed_at.date(),
         )
 
     await db.commit()

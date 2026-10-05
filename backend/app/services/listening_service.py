@@ -4,7 +4,7 @@ import logging
 import os
 import random
 from collections.abc import Awaitable, Callable
-from datetime import datetime, time
+from datetime import UTC, datetime, time
 from typing import Any
 
 from sqlalchemy import func, select
@@ -18,7 +18,7 @@ from app.services.language_helpers import (
 )
 from app.services.llm_adapter import LLMResponseError, llm_adapter
 from app.services.progress_rewards import award_progress_reward
-from app.services.progress_service import lock_progress_plan, progress_today, update_daily_progress
+from app.services.progress_service import lock_progress_plan, update_daily_progress
 from app.services.prompts.common import get_language_prompt_overlay
 from app.services.prompts.comprehension import build_listening_generation_prompt
 
@@ -194,6 +194,8 @@ async def submit_attempt(
     and is_replay is False.
     Replays credit 5 XP once per UTC day when a prior-day attempt exists in this plan.
     """
+    completed_at = datetime.now(UTC).replace(tzinfo=None)
+    activity_date = completed_at.date()
     exercise = await db.get(ListeningExercise, exercise_id)
     if exercise is None:
         raise ValueError("exercise_not_found")
@@ -220,7 +222,7 @@ async def submit_attempt(
                 ListeningAttempt.user_id == user_id,
                 ListeningAttempt.study_plan_id == study_plan_id,
                 ListeningAttempt.exercise_id == exercise_id,
-                ListeningAttempt.completed_at < datetime.combine(progress_today(), time.min),
+                ListeningAttempt.completed_at < datetime.combine(activity_date, time.min),
             )
             .limit(1)
         )
@@ -230,8 +232,9 @@ async def submit_attempt(
                 user_id,
                 study_plan_id,
                 kind="listening_replay",
-                source_key=f"{exercise_id}:{progress_today()}",
+                source_key=f"{exercise_id}:{activity_date}",
                 xp=5,
+                activity_date=activity_date,
             )
 
     attempt = ListeningAttempt(
@@ -241,6 +244,7 @@ async def submit_attempt(
         answers=answers,
         score=score,
         xp_earned=xp_earned,
+        completed_at=completed_at,
     )
     db.add(attempt)
 
@@ -251,6 +255,7 @@ async def submit_attempt(
         user_id,
         xp=0 if is_replay else xp_earned,
         study_plan_id=study_plan_id,
+        activity_date=activity_date,
         commit=False,
     )
     await db.commit()

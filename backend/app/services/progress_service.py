@@ -27,12 +27,13 @@ def current_streak(entries: list[Progress]) -> int:
 
 
 async def lock_progress_plan(db: AsyncSession, user_id: int, plan_id: int) -> StudyPlan | None:
-    # Serialize daily counters and reward keys, including the first activity of a day.
+    # NO KEY UPDATE serializes counters without conflicting with FK KEY SHARE locks
+    # already held by concurrent transcript/attempt inserts referencing this plan.
     return (
         await db.execute(
             select(StudyPlan)
             .where(StudyPlan.id == plan_id, StudyPlan.user_id == user_id)
-            .with_for_update()
+            .with_for_update(key_share=True)
         )
     ).scalar_one_or_none()
 
@@ -48,9 +49,10 @@ async def update_daily_progress(
     xp: int = 0,
     skill: str | None = None,
     skill_score: float | None = None,
+    activity_date: date | None = None,
     commit: bool = True,
 ) -> Progress:
-    today = progress_today()
+    today = activity_date if activity_date is not None else progress_today()
     if study_plan_id is not None:
         await lock_progress_plan(db, user_id, study_plan_id)
 

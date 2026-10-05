@@ -672,7 +672,9 @@ async def test_pipeline_does_not_save_user_msg_on_llm_failure() -> None:
     )
 
     # Patch _save_message to track what gets saved instead of hitting the DB.
-    async def _track_save(role: str, content: str) -> None:
+    async def _track_save(role: str, content: str, *, user_text=None, completed_at=None) -> None:
+        if user_text is not None:
+            saved_roles.append("user")
         saved_roles.append(role)
 
     pipeline._save_message = _track_save  # type: ignore[method-assign]
@@ -718,7 +720,9 @@ async def test_pipeline_saves_both_messages_on_successful_turn() -> None:
         conversation_id=1,
     )
 
-    async def _track_save(role: str, content: str) -> None:
+    async def _track_save(role: str, content: str, *, user_text=None, completed_at=None) -> None:
+        if user_text is not None:
+            saved.append(("user", user_text))
         saved.append((role, content))
 
     pipeline._save_message = _track_save  # type: ignore[method-assign]

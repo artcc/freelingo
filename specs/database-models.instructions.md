@@ -212,7 +212,7 @@ Grouping of chat messages (text and voice) into named conversations.
 - study_plan_id — Type: integer (nullable); Notes: FK → study_plans (SET NULL), indexed
 - target_language — Type: string (nullable); Notes: Indexed conversation-language snapshot
 - title — Type: string; Notes: Auto-generated or user-set
-- source — Type: string; Notes: `'chat'` or `'voice'` (default `'chat'`)
+- source — Type: string; Notes: Creation origin, `'chat'` or `'voice'` (default `'chat'`); not the modality of subsequent turns
 - created_at — Type: datetime; Notes: —
 - updated_at — Type: datetime; Notes: —
 
@@ -228,6 +228,17 @@ Individual messages within text chat and voice conversations.
 - role — Type: string; Notes: `"user"` or `"assistant"`
 - content — Type: text; Notes: Message body
 - created_at — Type: datetime; Notes: —
+- modality — Type: nullable string(10); Notes: Actual message modality, `chat` or `voice`; null for legacy rows
+- reply_to_id — Type: nullable integer; Notes: Unique FK → chat_history (SET NULL), assistant's learner-message association
+
+The assistant completion timestamp fixes the UTC day of a completed turn. A prompt can have an
+earlier date; pairing is by ID, not position or date. Both sides of successful voice turns and their
+progress commit atomically. Greetings and historical messages remain unpaired and do not count as
+completed reward turns. The backend validates matching conversation, user, roles, and modality before
+crediting a pair. Deleting the learner message clears its association without deleting ledger credit.
+
+The remote migration must include both nullable columns, the self-reference and its unique constraint,
+alongside `progress_rewards`. Do not backfill modality from conversation origin or pair by adjacency.
 
 ## UserCompetency (`user_competencies`)
 

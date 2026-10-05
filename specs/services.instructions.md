@@ -82,6 +82,14 @@ source keys and plan-row serialization. Reward inserts and daily credit share a 
 uses UTC and can have zero XP; new days retain prior skill snapshots. Streak reads expire when the
 latest date is older than yesterday. Exact award thresholds live in `learning-resources.instructions.md`.
 
+Serialization uses PostgreSQL `FOR NO KEY UPDATE`, compatible with FK `KEY SHARE` locks from transcript
+and attempt inserts. `reward_conversation` receives a persisted response ID, validates its explicit
+learner-message association and actual modality, and counts paired responses on its completion date.
+Legacy unpaired messages do not qualify. Callers pass one activity date to award and daily-progress
+writes; these helpers must not independently recalculate the day after awaiting database operations.
+Chat context is bounded by its own learner-message ID so later concurrent prompts cannot replace the
+request being answered. Transcript reads order by timestamp and ID to keep equal-time voice pairs stable.
+
 ## Static-resource help
 
 `resource_native_help.py` hashes canonical resource source data, returns only hash-current cache rows,
@@ -132,6 +140,8 @@ accept plan/language context so progress and retrieval remain isolated.
 `reading_service.py` provides the equivalent text-only flow with language-aware cultural topics and
 length guidance. Replays use the same spaced-reward rules. Attempt, reward and daily progress commit
 together; even a zero-score or zero-XP attempt records activity.
+The service captures the attempt timestamp once before database awaits and reuses its UTC date for
+replay eligibility, source keys, reward limits, ledger dates, and progress dates.
 
 `exercise_generation.py` coordinates both domains' background tasks through unique-owner Redis
 leases, 60-second expiry, 20-second renewal, atomic owner-checked completion, and expiring status.
