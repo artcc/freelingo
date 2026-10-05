@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Completed comprehension attempts and answered conversations count toward activity even without XP; activity uses UTC, and daily skill snapshots retain prior progress.
 - What's New highlights lesson-linked voice practice and expanded rewards with the refreshed dashboard in all fifteen interface languages.
 - Listening and Reading expose generation status through immediate next-exercise responses, with a 60-per-minute read limit and a configurable total generation budget (`EXERCISE_GENERATION_TIMEOUT_SECONDS`, default 600 seconds).
+- Declined feature requests and bug reports are hidden from the default feedback board and admin queue, like completed entries, and appear only when their respective status filter is selected.
 
 ### Fixed
 
