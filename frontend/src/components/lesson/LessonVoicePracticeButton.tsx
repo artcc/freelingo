@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Mic } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
@@ -17,6 +17,7 @@ export function LessonVoicePracticeButton({
   targetLanguage?: string
 }) {
   const t = useTranslations('lessonPractice')
+  const locale = useLocale()
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
@@ -33,12 +34,16 @@ export function LessonVoicePracticeButton({
       <ConfirmDialog
         open={open}
         title={
-          <TargetLanguageText
-            languageCode={targetLanguage}
-            className="font-sans tracking-normal normal-case"
-          >
-            {t('title', { title })}
-          </TargetLanguageText>
+          <span lang={locale} className="font-sans tracking-normal normal-case">
+            {t.rich('title', {
+              title,
+              topic: (chunks) => (
+                <TargetLanguageText languageCode={targetLanguage}>
+                  {chunks}
+                </TargetLanguageText>
+              ),
+            })}
+          </span>
         }
         message={t('description')}
         confirmLabel={t('start')}

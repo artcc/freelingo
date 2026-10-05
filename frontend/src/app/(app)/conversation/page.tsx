@@ -66,7 +66,12 @@ function LessonConversationPage({ lessonId }: { lessonId: string }) {
     async function load() {
       try {
         const id = Number(lessonId)
-        if (!/^\d+$/.test(lessonId) || !Number.isSafeInteger(id) || id <= 0) {
+        if (
+          !/^\d+$/.test(lessonId) ||
+          !Number.isSafeInteger(id) ||
+          id <= 0 ||
+          id > 2_147_483_647
+        ) {
           throw new Error('Invalid lesson')
         }
         const res = await apiFetch(`/api/lessons/${id}`, {

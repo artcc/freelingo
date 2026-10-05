@@ -317,7 +317,7 @@ async def conversation_ws(
 
         lesson_practice = None
         if has_lesson_practice:
-            if type(lesson_id_raw) is int and lesson_id_raw > 0:
+            if type(lesson_id_raw) is int and 1 <= lesson_id_raw <= 2_147_483_647:
                 lesson_practice = await load_lesson_voice_practice(db, user_id, lesson_id_raw)
             if lesson_practice is None:
                 await websocket.send_json({"type": "error", "code": "lesson_practice_unavailable"})

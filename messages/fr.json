@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Pratiquer cette leçon avec Lingu",
-    "title": "Pratique : {title}",
+    "title": "Pratique : <topic>{title}</topic>",
     "description": "Pratique à l'oral le contenu de cette leçon. Lingu te posera des questions et t'aidera à utiliser ce que tu as appris. Tu décides quand terminer.",
     "start": "Commencer la pratique",
     "cancel": "Pas maintenant",

@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Harjoittele tätä oppituntia Lingun kanssa",
-    "title": "Harjoitus: {title}",
+    "title": "Harjoitus: <topic>{title}</topic>",
     "description": "Harjoittele tämän oppitunnin sisältöä puhumalla. Lingu esittää kysymyksiä ja auttaa sinua käyttämään oppimaasi. Päätät itse, milloin lopetat.",
     "start": "Aloita harjoitus",
     "cancel": "Ei nyt",

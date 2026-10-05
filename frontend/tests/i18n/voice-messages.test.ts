@@ -42,13 +42,14 @@ describe.each(SUPPORTED_LOCALES)('voice messages in %s', (locale) => {
     })
 
     for (const key of messageKeys) {
-      const rendered = t(key, { minutes: 5, title: 'Lesson topic' })
+      const values = { minutes: 5, title: 'Lesson topic', topic: (chunks: string) => chunks }
+      const rendered = t.markup(key, values)
       expect(rendered.trim()).not.toBe('')
       expect(rendered).not.toBe(key)
       expect(rendered).not.toContain('{minutes}')
       expect(rendered).not.toContain('{title}')
       if (locale !== 'en') {
-        expect(rendered).not.toBe(english(key, { minutes: 5, title: 'Lesson topic' }))
+        expect(rendered).not.toBe(english.markup(key, values))
       }
     }
   })

@@ -44,6 +44,7 @@ from app.services.llm_adapter import (
     llm_adapter,
 )
 from app.services.progress_service import update_daily_progress, upsert_unit_competency
+from app.utils.lesson_exercises import normalized_exercise_text
 
 router = APIRouter(prefix="/api/lessons", tags=["lessons"])
 
@@ -267,10 +268,7 @@ async def get_lesson(
 
     fixed: list[ExerciseResponse] = []
     for index, ex in enumerate(exercises):
-        q, exp = ex.question, ex.explanation
-        if ex.exercise_type == "fill_blank" and "___" not in q:
-            if exp and "___" in exp:
-                q, exp = exp, q
+        q, exp = normalized_exercise_text(ex)
         native_exp = None
         native_hint = None
         if index < len(content_exercises) and isinstance(content_exercises[index], dict):

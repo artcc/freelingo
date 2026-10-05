@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Diese Lektion mit Lingu üben",
-    "title": "Übung: {title}",
+    "title": "Übung: <topic>{title}</topic>",
     "description": "Übe den Inhalt dieser Lektion im Sprachgespräch. Lingu stellt dir Fragen und hilft dir, das Gelernte anzuwenden. Du entscheidest, wann du aufhörst.",
     "start": "Übung starten",
     "cancel": "Jetzt nicht",

@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Øv denne lektion med Lingu",
-    "title": "Øvelse: {title}",
+    "title": "Øvelse: <topic>{title}</topic>",
     "description": "Øv indholdet af denne lektion mundtligt. Lingu stiller spørgsmål og hjælper dig med at bruge det, du har lært. Du bestemmer, hvornår du vil afslutte.",
     "start": "Start øvelsen",
     "cancel": "Ikke nu",

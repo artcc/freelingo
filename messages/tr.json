@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Bu dersi Lingu ile pratik yap",
-    "title": "Pratik: {title}",
+    "title": "Pratik: <topic>{title}</topic>",
     "description": "Bu dersin içeriğini sesli konuşarak pekiştir. Lingu sorular soracak ve öğrendiklerini kullanmana yardımcı olacak. Ne zaman bitireceğine sen karar verirsin.",
     "start": "Pratiğe başla",
     "cancel": "Şimdi değil",

@@ -18,7 +18,7 @@ vi.mock('next/link', () => ({
   ),
 }))
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => Object.assign((key: string) => key, { rich: (key: string) => key }),
   useLocale: () => 'en',
 }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))

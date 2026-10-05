@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.lesson import Exercise, Lesson
 from app.models.study_plan import StudyPlan
 from app.models.user_language import UserLanguage
+from app.utils.lesson_exercises import normalized_exercise_text
 
 
 @dataclass(frozen=True)
@@ -46,9 +47,10 @@ def _items(value: object) -> list:
     return value if isinstance(value, list) else []
 
 
-async def load_lesson_voice_practice(
+async def get_lesson_practice_source(
     db: AsyncSession, user_id: int, lesson_id: int
-) -> LessonVoicePractice | None:
+) -> tuple[Lesson, StudyPlan] | None:
+    """Resolve the completed lesson's owner-checked plan, including historical plans."""
     result = await db.execute(
         select(Lesson, StudyPlan)
         .join(StudyPlan, Lesson.study_plan_id == StudyPlan.id)
@@ -61,6 +63,13 @@ async def load_lesson_voice_practice(
         )
     )
     row = result.one_or_none()
+    return (row[0], row[1]) if row is not None else None
+
+
+async def load_lesson_voice_practice(
+    db: AsyncSession, user_id: int, lesson_id: int
+) -> LessonVoicePractice | None:
+    row = await get_lesson_practice_source(db, user_id, lesson_id)
     if row is None:
         return None
     lesson, plan = row
@@ -86,17 +95,14 @@ async def load_lesson_voice_practice(
         .scalars()
         .all()
     )
-    data = {
-        "title": lesson.title,
-        "lesson_type": lesson.lesson_type,
-        "objectives": _bounded_data(objectives),
-        "explanation": _bounded_data(content.get("explanation")),
-        "vocabulary": _bounded_data(content.get("vocabulary")),
-        "grammar_refs": _bounded_data(content.get("grammar_refs")),
-        "answered_exercises": [
+    answered_exercises = []
+    for exercise in exercises:
+        question, explanation = normalized_exercise_text(exercise)
+        answered_exercises.append(
             _bounded_data(
                 {
-                    "question": exercise.question,
+                    "question": question,
+                    "explanation": explanation,
                     "answer": exercise.user_answer,
                     "correct_answer": exercise.correct_answer,
                     "score": exercise.score,
@@ -104,8 +110,15 @@ async def load_lesson_voice_practice(
                     "corrections": exercise.corrections,
                 }
             )
-            for exercise in exercises
-        ],
+        )
+    data = {
+        "title": lesson.title,
+        "lesson_type": lesson.lesson_type,
+        "objectives": _bounded_data(objectives),
+        "explanation": _bounded_data(content.get("explanation")),
+        "vocabulary": _bounded_data(content.get("vocabulary")),
+        "grammar_refs": _bounded_data(content.get("grammar_refs")),
+        "answered_exercises": answered_exercises,
     }
     context = escape(json.dumps(data, ensure_ascii=False))
     return LessonVoicePractice(lesson=lesson, plan=plan, context=context)

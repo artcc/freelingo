@@ -12,10 +12,18 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: mocks.push }),
   useSearchParams: () => new URLSearchParams(mocks.params),
 }))
-vi.mock('next-intl', () => ({
-  useTranslations: (namespace: string) => (key: string, values?: { title?: string }) =>
-    `${namespace}.${key}${values?.title ? `: ${values.title}` : ''}`,
-}))
+vi.mock('next-intl', async (importOriginal) => {
+  const { createTranslator } = await importOriginal<typeof import('next-intl')>()
+  const { default: messages } = await import('../../../messages/es.json')
+  const practice = createTranslator({ locale: 'es', messages, namespace: 'lessonPractice' })
+  return {
+    useLocale: () => 'es',
+    useTranslations: (namespace: string) => Object.assign(
+      (key: string) => `${namespace}.${key}`,
+      { rich: practice.rich }
+    ),
+  }
+})
 vi.mock('next/dynamic', () => ({
   default: () => function Voice(props: Record<string, unknown>) {
     mocks.voice(props)
@@ -89,7 +97,11 @@ describe('Lesson practice entry', () => {
     render(<LessonVoicePracticeButton lessonId={7} title="Raconter un voyage" targetLanguage="fr-FR" />)
     expect(screen.queryByRole('alertdialog')).toBeNull()
     fireEvent.click(screen.getByRole('button', { name: 'lessonPractice.action' }))
-    expect(screen.getByRole('alertdialog')).toHaveAccessibleName('lessonPractice.title: Raconter un voyage')
+    expect(screen.getByRole('alertdialog')).toHaveAccessibleName('Práctica: Raconter un voyage')
+    const topic = screen.getByText('Raconter un voyage')
+    expect(topic).toHaveAttribute('lang', 'fr-FR')
+    expect(topic.parentElement).toHaveAttribute('lang', 'es')
+    expect(topic.parentElement).toHaveTextContent('Práctica: Raconter un voyage')
     expect(screen.getByText('lessonPractice.description')).toBeInTheDocument()
     expect(mocks.push).not.toHaveBeenCalled()
     expect(mocks.apiFetch).not.toHaveBeenCalled()
@@ -121,12 +133,21 @@ describe('Lesson practice entry', () => {
     expect(mocks.voice.mock.lastCall?.[0].lessonId).toBe(7)
   })
 
-  it.each(['', '0', '-1', 'abc', '1.2', '9007199254740992'])('rejects invalid lesson query %s without starting generic voice', async (id) => {
+  it.each(['', '0', '-1', 'abc', '1.2', '2147483648', '9007199254740991', '9007199254740992', '9223372036854775808'])('rejects invalid lesson query %s without starting generic voice', async (id) => {
     mocks.params = `lesson=${id}`
     render(<ConversationPage />)
     await screen.findByRole('alert')
     expect(mocks.apiFetch).not.toHaveBeenCalled()
     expect(mocks.voice).not.toHaveBeenCalled()
+  })
+
+  it('accepts the largest lesson ID supported by the database', async () => {
+    mocks.params = 'lesson=2147483647'
+    mocks.apiFetch.mockResolvedValue(response(detail({ id: 2147483647 })))
+    render(<ConversationPage />)
+    await screen.findByTestId('voice')
+    expect(mocks.apiFetch).toHaveBeenCalledWith('/api/lessons/2147483647', expect.any(Object))
+    expect(mocks.voice.mock.lastCall?.[0].lessonId).toBe(2147483647)
   })
 
   it.each([

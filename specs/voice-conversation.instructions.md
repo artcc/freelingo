@@ -53,8 +53,8 @@ by the client. This association is not enforced by the WebSocket contract.
 
 ### Lesson practice context
 
-Authentication may include `lesson_id`, a strictly positive JSON integer (booleans, fractional
-numbers, strings, and null are invalid). The backend loads a completed lesson through its owned plan
+Authentication may include `lesson_id`, a JSON integer in `1..2147483647` (booleans, fractional
+numbers, strings, null, and out-of-range values are rejected before lesson SQL lookup). The backend loads a completed lesson through its owned plan
 and language track. Invalid, missing, foreign, or incomplete lessons produce
 `lesson_practice_unavailable` and close code 1008 before general session quotas are consumed.
 
@@ -65,7 +65,9 @@ access, maintenance, warmup, quotas, timeouts, microphone, playback, and manual 
 
 `lesson_voice_practice.py` supplies bounded, escaped reference data from the lesson title, content,
 scheduled objectives, vocabulary, grammar references, and up to eight answered exercises ordered by
-score then ID. This snapshot is included in the system prompt for the greeting, normal turns, memory
+score then ID. Exercise questions and explanations use the same read-time legacy fill-blank
+normalization as lesson detail, without mutating stored exercises; both fields are bounded in the
+context. This snapshot is included in the system prompt for the greeting, normal turns, memory
 refreshes, and no-tools fallbacks; trimming turn history cannot remove it. Lingu guides questions and
 help around the lesson and can suggest that the main objectives have been practised. This is ordinary
 conversational text, not a session-end event or a persisted completion flag. The learner can continue
@@ -75,6 +77,15 @@ The frontend entry `/conversation?lesson={id}` loads lesson metadata before usin
 automatic start flow. It shows the topic title and hides unrelated conversation starters for this
 mode. The lesson entry button first uses the shared confirmation dialog. All entry/error copy is
 localized under `lessonPractice`.
+
+The title uses rich interpolation: its localized prefix carries the interface locale, while only the
+lesson topic is rendered through `TargetLanguageText` with the learned language.
+
+Saving a selected transcript word sends `lesson_id` through the existing `/api/flashcards/from-word`
+endpoint. The backend rechecks ownership and completion and derives lookup language, level,
+deduplication, and storage from that lesson's plan. This also applies to historical plans and when
+the active language changes elsewhere. Missing or inaccessible lessons fail without active-plan
+fallback. Voice sessions without a lesson retain the existing word-save contract.
 
 ## Client-to-server protocol
 

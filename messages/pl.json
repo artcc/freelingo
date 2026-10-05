@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Przećwicz tę lekcję z Lingu",
-    "title": "Ćwiczenie: {title}",
+    "title": "Ćwiczenie: <topic>{title}</topic>",
     "description": "Przećwicz ustnie materiał z tej lekcji. Lingu będzie zadawać pytania i pomagać Ci stosować zdobytą wiedzę. Ty decydujesz, kiedy skończyć.",
     "start": "Rozpocznij ćwiczenie",
     "cancel": "Nie teraz",

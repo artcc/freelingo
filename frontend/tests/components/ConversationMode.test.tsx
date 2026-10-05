@@ -19,10 +19,15 @@ vi.mock('@ricky0123/vad-react', () => ({
     return { loading: false, errored: false, start: mocks.start, pause: mocks.pause }
   },
 }))
-vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
-  useTranslations: () => Object.assign((key: string) => key, { raw: () => [] }),
-}))
+vi.mock('next-intl', async (importOriginal) => {
+  const { createTranslator } = await importOriginal<typeof import('next-intl')>()
+  const { default: messages } = await import('../../../messages/en.json')
+  const practice = createTranslator({ locale: 'en', messages, namespace: 'lessonPractice' })
+  return {
+    useLocale: () => 'en',
+    useTranslations: () => Object.assign((key: string) => key, { raw: () => [], rich: practice.rich }),
+  }
+})
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
 vi.mock('@/lib/audio', async (importOriginal) => ({
@@ -109,6 +114,10 @@ afterEach(() => {
 describe('ConversationMode session lifecycle', () => {
   it('sends the lesson reference through the existing handshake and lets the user end practice', async () => {
     render(<ConversationMode lessonId={7} lessonTitle="Past experiences" targetLanguage="fr-FR" />)
+    const topic = screen.getByText('Past experiences')
+    expect(topic).toHaveAttribute('lang', 'fr-FR')
+    expect(topic.parentElement).toHaveAttribute('lang', 'en')
+    expect(topic.parentElement).toHaveTextContent('Practice: Past experiences')
     fireEvent.click(screen.getByRole('button', { name: 'start' }))
     await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
     const ws = MockWebSocket.instances[0]

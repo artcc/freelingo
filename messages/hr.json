@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Vježbaj ovu lekciju s Linguom",
-    "title": "Vježba: {title}",
+    "title": "Vježba: <topic>{title}</topic>",
     "description": "Usmeno vježbaj sadržaj ove lekcije. Lingu će postavljati pitanja i pomoći ti primijeniti naučeno. Ti odlučuješ kada završiti.",
     "start": "Započni vježbu",
     "cancel": "Ne sada",

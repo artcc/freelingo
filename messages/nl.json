@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Oefen deze les met Lingu",
-    "title": "Oefening: {title}",
+    "title": "Oefening: <topic>{title}</topic>",
     "description": "Oefen de inhoud van deze les hardop. Lingu stelt vragen en helpt je toe te passen wat je hebt geleerd. Jij beslist wanneer je stopt.",
     "start": "Begin met oefenen",
     "cancel": "Niet nu",

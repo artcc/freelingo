@@ -1506,7 +1506,7 @@
   },
   "lessonPractice": {
     "action": "Praticar esta lição com o Lingu",
-    "title": "Prática: {title}",
+    "title": "Prática: <topic>{title}</topic>",
     "description": "Pratica por voz o conteúdo desta lição. O Lingu vai fazer perguntas e ajudar-te a utilizar o que aprendeste. Tu decides quando terminar.",
     "start": "Começar a prática",
     "cancel": "Agora não",

@@ -292,6 +292,7 @@ export default function ConversationMode({
   const t = useTranslations('conversation')
   const tCommon = useTranslations('common')
   const tPractice = useTranslations('lessonPractice')
+  const locale = useLocale()
   const accessToken = useAuthStore((s) => s.accessToken)
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
@@ -319,7 +320,7 @@ export default function ConversationMode({
     handleTextSelection,
     handleSaveWord,
     dismissTooltip,
-  } = useWordSave()
+  } = useWordSave(lessonId)
 
   // 6 random starters picked once per component mount, shown alphabetically
   const visibleStarters = useMemo(
@@ -1134,9 +1135,16 @@ export default function ConversationMode({
           </p>
           <h1 className="text-fl-fg font-mono text-2xl font-bold tracking-tight">
             {lessonTitle ? (
-              <TargetLanguageText languageCode={targetLanguage}>
-                {tPractice('title', { title: lessonTitle })}
-              </TargetLanguageText>
+              <span lang={locale}>
+                {tPractice.rich('title', {
+                  title: lessonTitle,
+                  topic: (chunks) => (
+                    <TargetLanguageText languageCode={targetLanguage}>
+                      {chunks}
+                    </TargetLanguageText>
+                  ),
+                })}
+              </span>
             ) : (
               t('title')
             )}
