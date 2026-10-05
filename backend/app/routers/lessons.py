@@ -323,62 +323,71 @@ async def complete_lesson(
 ):
     lesson = await _get_lesson_for_user(lesson_id, current_user.id, db, for_update=True)
 
-    if lesson.is_completed:
-        return lesson
+    already_completed = lesson.is_completed
+    if not already_completed:
+        await check_subscription_or_freemium_access("lessons", redis, current_user)
 
-    await check_subscription_or_freemium_access("lessons", redis, current_user)
+    # A historical completion keeps its timestamp; newly claimed milestones use
+    # this request's UTC day rather than backdating rewards to that old timestamp.
+    completed_at = datetime.now(UTC).replace(tzinfo=None)
+    activity_date = completed_at.date()
 
-    lesson.is_completed = True
-    lesson.completed_at = datetime.now(UTC).replace(tzinfo=None)
+    if not already_completed:
+        lesson.is_completed = True
+        lesson.completed_at = completed_at
 
-    await update_daily_progress(
-        db,
-        current_user.id,
-        lesson_completed=True,
-        skill=lesson.lesson_type,
-        study_plan_id=lesson.study_plan_id,
-        activity_date=lesson.completed_at.date(),
-        commit=False,
-    )
+        await update_daily_progress(
+            db,
+            current_user.id,
+            lesson_completed=True,
+            skill=lesson.lesson_type,
+            study_plan_id=lesson.study_plan_id,
+            activity_date=activity_date,
+            commit=False,
+        )
+
+        if lesson.unit_id:
+            from app.data.curriculum import get_curriculum_units  # noqa: PLC0415
+            from app.models.study_plan import StudyPlan  # noqa: PLC0415
+
+            plan = await db.get(StudyPlan, lesson.study_plan_id)
+            if plan:
+                for u in get_curriculum_units(plan.cefr_level, plan.target_language):
+                    if u.id == lesson.unit_id:
+                        # Score this lesson: average of answered exercises
+                        result_ex = await db.execute(
+                            select(Exercise).where(
+                                Exercise.lesson_id == lesson.id,
+                                Exercise.score.is_not(None),
+                            )
+                        )
+                        exercises = result_ex.scalars().all()
+                        lesson_score = (
+                            sum(e.score for e in exercises if e.score is not None) / len(exercises)
+                            if exercises
+                            else 0.5
+                        )
+                        await upsert_unit_competency(
+                            db,
+                            current_user.id,
+                            unit_id=lesson.unit_id,
+                            competency_texts=u.competency_checklist,
+                            lesson_score=lesson_score,
+                            study_plan_id=lesson.study_plan_id,
+                        )
+                        break
 
     if lesson.unit_id:
-        from app.data.curriculum import get_curriculum_units  # noqa: PLC0415
-        from app.models.study_plan import StudyPlan  # noqa: PLC0415
-
-        plan = await db.get(StudyPlan, lesson.study_plan_id)
-        if plan:
-            for u in get_curriculum_units(plan.cefr_level, plan.target_language):
-                if u.id == lesson.unit_id:
-                    # Score this lesson: average of answered exercises
-                    result_ex = await db.execute(
-                        select(Exercise).where(
-                            Exercise.lesson_id == lesson.id,
-                            Exercise.score.is_not(None),
-                        )
-                    )
-                    exercises = result_ex.scalars().all()
-                    lesson_score = (
-                        sum(e.score for e in exercises if e.score is not None) / len(exercises)
-                        if exercises
-                        else 0.5
-                    )
-                    await upsert_unit_competency(
-                        db,
-                        current_user.id,
-                        unit_id=lesson.unit_id,
-                        competency_texts=u.competency_checklist,
-                        lesson_score=lesson_score,
-                        study_plan_id=lesson.study_plan_id,
-                    )
-                    break
-
         await reward_plan_completion(
             db,
             current_user.id,
             lesson.study_plan_id,
             unit_id=lesson.unit_id,
-            activity_date=lesson.completed_at.date(),
+            activity_date=activity_date,
         )
+    await reward_plan_completion(
+        db, current_user.id, lesson.study_plan_id, activity_date=activity_date
+    )
 
     await db.commit()
     await db.refresh(lesson)
@@ -386,7 +395,8 @@ async def complete_lesson(
     # Record freemium lesson usage only after the database transaction succeeds.
     from app.services.freemium_service import maybe_record_freemium_usage
 
-    await maybe_record_freemium_usage(current_user, "lessons")
+    if not already_completed:
+        await maybe_record_freemium_usage(current_user, "lessons")
 
     return lesson
 

@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Added
 
 - Voice practice with Lingu from completed lessons, using their content and answered exercises as conversation context. Practice sessions appear in chat history with the lesson title.
-- Plan-specific XP rewards for voice and chat participation, spaced Listening/Reading reviews, and completing units and levels, with daily limits and protection against duplicate rewards.
+- Plan-specific XP rewards for voice and chat participation, spaced Listening/Reading reviews, and completing units and levels, with daily limits and protection against duplicate rewards. Completion milestones recognize either order of lessons and final evaluation, and eligible historical completions can receive their first milestone reward when resubmitted.
 
 ### Changed
 

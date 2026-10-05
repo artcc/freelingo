@@ -161,7 +161,13 @@ and a PostgreSQL `FOR NO KEY UPDATE` plan-row lock protect repeat requests and d
 conflicting with FK `KEY SHARE` locks held by concurrent inserts. Award and daily credit share
 the caller's transaction. Comprehension attempt persistence shares that transaction. Existing totals
 are preserved; no historical reward backfill is performed. A qualifying milestone submitted again
-may receive its first award if its ledger key does not yet exist. Rewards describe participation and
+may receive its first award if its ledger key does not yet exist. Lesson completion checks both unit
+and level milestones, including when the level test was recorded before the last teaching lesson.
+Resubmitting an already-completed lesson checks the same milestones without repeating base lesson XP,
+completion counters, competencies, or quota consumption, and preserves its original `completed_at`.
+Any newly granted milestone uses the resubmission's UTC activity day; an already-awarded milestone
+does not create new activity. All eligible milestone awards share the completion transaction and its
+single captured activity date. Rewards describe participation and
 completion, not linguistic mastery. Ownership comes from the persisted conversation/lesson/plan or
 the validated comprehension attempt context, never from mutable client selection.
 
