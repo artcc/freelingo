@@ -1833,6 +1833,8 @@
     }
   },
   "contact": {
+  "description": "Trimite-ne întrebarea, feedbackul sau solicitarea ta și îți vom răspunde cât mai curând posibil.",
+
     "title": "Contact",
     "labelEmail": "E-mail",
     "placeholderEmail": "al_tau@email.com",
