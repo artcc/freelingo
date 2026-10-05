@@ -4,7 +4,16 @@ import time
 import unicodedata
 from uuid import uuid4
 
-GAMES = {"quick_choice", "spelling", "word_scramble", "memory", "matching"}
+# This is intentionally server-owned. The client may present these games, but it
+# cannot add an engine, change scoring, or make a non-arcade game enter this path.
+GAME_CATALOG = {
+    "quick_choice": {"engine": "arena", "skill": "vocabulary"},
+    "spelling": {"engine": "arena", "skill": "writing"},
+    "word_scramble": {"engine": "arena", "skill": "vocabulary"},
+    "memory": {"engine": "arena", "skill": "memory"},
+    "matching": {"engine": "arena", "skill": "vocabulary"},
+}
+GAMES = frozenset(GAME_CATALOG)
 
 
 def letters(word):
@@ -18,7 +27,7 @@ def letters(word):
 
 
 def create(game, entries, difficulty, relaxed=False, now=None):
-    if game not in GAMES:
+    if game not in GAME_CATALOG:
         raise ValueError("Unsupported arcade game")
     now = time.time() if now is None else now
     rng = random.SystemRandom()
