@@ -173,7 +173,7 @@ async def move_arena(request: Request, session_id: str, data: ArenaMove, user: U
             xp=earned['xp'], skill=skill, skill_score=earned['correct'] / max(1, earned['questions']), commit=False)
         await db.flush()
         total_xp = int(await db.scalar(select(func.sum(Progress.xp_earned)).where(Progress.user_id == user.id, Progress.study_plan_id == plan.id)) or 0)
-        state['result'] = dict(won=earned['won'], round_score=earned['round_score'], round_correct=earned['correct'],
+        state['result'] = dict(skill=state['skill'], won=earned['won'], round_score=earned['round_score'], round_correct=earned['correct'],
             round_questions=earned['questions'], xp_earned=earned['xp'], total_xp=total_xp,
             games_played=aggregate.games_played, questions_answered=aggregate.questions_answered,
             correct_answers=aggregate.correct_answers, best_round_score=aggregate.best_round_score,
