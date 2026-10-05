@@ -744,6 +744,16 @@
     "loadFailed": "تعذر التحميل"
   },
   "contact": {
+  "title": "تواصل معنا",
+  "labelEmail": "البريد الإلكتروني",
+  "placeholderEmail": "أدخل بريدك الإلكتروني",
+  "labelSubject": "الموضوع",
+  "placeholderSubject": "اكتب موضوع الرسالة",
+  "labelDescription": "الوصف",
+  "placeholderDescription": "اكتب رسالتك هنا...",
+  "sent": "تم الإرسال",
+  "errorGeneric": "حدث خطأ أثناء إرسال الرسالة.",
+
     "description": "هل لديك سؤال أو تحتاج إلى مساعدة أو ترغب في مشاركة ملاحظاتك؟ أرسل لنا رسالتك وسيرد عليك فريق JUBA LISAN.",
     "name": "الاسم",
     "email": "البريد الإلكتروني",
