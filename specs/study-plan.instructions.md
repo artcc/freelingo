@@ -186,9 +186,13 @@ response mapping must tolerate absent optional native-support and enriched-vocab
 `POST /api/lessons/{id}/start` exists but only verifies ownership and returns the lesson; the current
 lesson page does not call it and no in-progress state is persisted.
 
-Completion retries are idempotent. An already-completed row is returned before freemium quota checks
-and does not change timestamps, progress, XP, competencies, or quota. Freemium usage is recorded
-best-effort after the database transaction succeeds.
+Completion retries preserve the original `completed_at`, base lesson XP, completion counters,
+competencies, and quota, and skip freemium quota checks. Both first completions and retries check
+eligible unit and level milestones, including when the final evaluation predates the last teaching
+lesson. A retry can grant a first milestone reward missing from the ledger on the request's UTC day;
+already-awarded milestones do not create new activity. Completion and eligible rewards share one
+transaction and a single captured activity date. Freemium usage is recorded best-effort after the
+database transaction succeeds, only for the first completion.
 
 ## Exercise evaluation
 
