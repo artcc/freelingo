@@ -152,7 +152,7 @@ Changing the active context in another tab stops the stale operation and prompts
   saving. A mismatch returns `409 study_context_changed` without recording attempts, XP, view count,
   or quota usage. Context identifies the expected selection; it cannot authorize another plan.
 - The exercise must match the plan language and, for normal attempts, its level. Replays may use an
-  earlier-level exercise in the same language and continue to award zero XP.
+   earlier-level exercise in the same language and use the spaced-replay reward rules below.
 - An answer-count violation returns validation HTTP `422`.
 - A normal duplicate returns `409 already_attempted`.
 - An unknown exercise returns `404 exercise_not_found`.
@@ -187,16 +187,22 @@ A normal submission:
 2. Calculates score and XP.
 3. Stores the attempt against the active plan.
 4. Increments `view_count`.
-5. Commits the attempt.
-6. Credits positive XP through `update_daily_progress()` for that plan.
+5. Records daily activity and credits XP through `update_daily_progress()` for that plan.
+6. Commits the attempt and progress together.
 7. Records freemium Reading use on a best-effort basis.
 
-Attempt persistence and daily-progress credit occur in separate commits. Freemium usage is recorded
+Attempt persistence, reward keys, and daily-progress credit share one transaction. Zero-score attempts
+also record activity. Freemium usage is recorded
 afterward and does not roll back a successful attempt if Redis fails.
 
 With `replay=true`, duplicate protection is skipped, a new history row is stored, score is calculated,
-and XP is forced to zero. Replay still increments `view_count` and consumes one freemium Reading use
+and XP is 5 once per exercise/plan/UTC day if a prior-day attempt exists in that plan, otherwise zero.
+Replay still increments `view_count`, records activity, and consumes one freemium Reading use
 after a successful submission.
+
+The submission service captures `completed_at` once before awaiting database work. Its UTC date is
+reused for prior-day eligibility, reward source key, ledger date, and daily progress. Crossing midnight
+while waiting on queries or locks cannot move that attempt's credit or reopen the same day's reward.
 
 ## Freemium and maintenance
 

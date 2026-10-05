@@ -188,7 +188,9 @@ text-chat history display apply; subsequent practice sessions have separate rows
 title and their own timestamps. The lesson reference/context is session-local, not a new database
 association or a separately persisted report. Text chat retains its existing transcript-based flow.
 
-`ChatHistory` rows store role, content, target language, optional plan provenance, and conversation.
+`ChatHistory` rows store role, content, target language, optional plan provenance, conversation, and
+the actual turn modality. Normal assistant replies link to their learner message through `reply_to_id`;
+greetings remain unpaired. Existing unpaired messages remain readable but are not inferred as turns.
 Voice sessions are visible in text-chat history. Continuing from text chat supplies textual context
 but normally creates a separate voice conversation.
 
@@ -199,8 +201,21 @@ Persistence rules:
 - Empty STT, failed STT, failed LLM, empty LLM fallback, cancellation, or failed output transport:
   neither side of that turn.
 
-Writes use independent best-effort tasks and update conversation timestamps. Cleanup waits for
-pending writes. A conversation can remain empty when a session ends before a persistible turn.
+Writes use best-effort background tasks and update conversation timestamps. Normal-turn writes are
+serialized within the pipeline, saving user, associated assistant, activity, and reward in a single
+transaction; cleanup waits for pending writes. Failure rolls back the whole turn, not just its reply.
+A conversation can remain empty when a session ends before a persistible turn.
+
+Persisted answered contributions count as plan-owned daily activity. Three distinct answered learner
+contributions on the same UTC day grant 20 XP once per conversation/day, capped at 60 XP per plan/day.
+Lesson practice uses this same reward without an extra bonus. Greetings, failed/cancelled turns, and
+planless conversations do not earn rewards. Successful processing captures the response completion
+timestamp before scheduling the background transcript task, after response delivery and before the
+final `turn_complete` notification. The timestamp fixes the activity day even if the task starts or
+acquires its transcript/database lock after midnight; all reward/progress operations reuse it.
+Continuing the same conversation in text chat persists chat modality and uses chat rewards independently of voice.
+No client reward claim or new voice-control event is used.
+Reward rules and durable source keys are specified in `learning-resources.instructions.md`.
 
 LLM usage is stored best-effort with `source="conversation"` and optional plan provenance when token
 metadata is available. Greeting usage is not recorded.

@@ -1513,6 +1513,26 @@
     "unavailable": "Não foi possível preparar a prática. Verifica se a lição está concluída e tenta novamente.",
     "back": "Voltar ao plano"
   },
+  "dashboardProgress": {
+    "title": "O teu progresso",
+    "scope": "O teu idioma e plano de estudo atuais",
+    "details": "Ver progresso",
+    "experience": "Experiência",
+    "todayXp": "+{xp} XP hoje",
+    "experienceHint": "Cada prática contribui para o teu percurso.",
+    "streak": "Sequência de aprendizagem",
+    "days": "{count, plural, one {dia} other {dias}}",
+    "practisedToday": "Hoje já praticaste",
+    "readyToday": "Uma nova oportunidade para praticar",
+    "week": "Atividade dos últimos sete dias",
+    "activeDay": "Praticaste",
+    "inactiveDay": "Sem atividade registada",
+    "utcHint": "Últimos 7 dias",
+    "lessons": "Lições concluídas",
+    "accuracy": "Acertos nos exercícios das lições",
+    "correctAnswers": "{correct} de {total} respostas corretas",
+    "noExercises": "Os teus resultados aparecerão após o primeiro exercício."
+  },
   "whatsNew": {
     "title": "Novidades",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Inicia uma conversa por voz a partir de uma lição concluída. O Lingu ajuda-te a utilizar o que aprendeste e a conversa fica guardada com o título do tema praticado."
     },
     "entry2": {
+      "label": "Mais formas de ganhar XP",
+      "desc": "Ganha XP com <bold>voz, chat, revisões espaçadas de leitura e escuta e ao concluir unidades e níveis</bold>. O painel renovado destaca os XP de hoje, a tua sequência e a atividade recente."
+    },
+    "entry3": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

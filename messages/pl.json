@@ -1513,6 +1513,26 @@
     "unavailable": "Nie udało się przygotować ćwiczenia. Sprawdź, czy lekcja jest ukończona, i spróbuj ponownie.",
     "back": "Wróć do planu"
   },
+  "dashboardProgress": {
+    "title": "Twoje postępy",
+    "scope": "Twój obecny język i plan nauki",
+    "details": "Zobacz postępy",
+    "experience": "Doświadczenie",
+    "todayXp": "+{xp} XP dzisiaj",
+    "experienceHint": "Każde ćwiczenie wspiera Twoją naukę.",
+    "streak": "Seria nauki",
+    "days": "{count, plural, one {dzień} few {dni} many {dni} other {dnia}}",
+    "practisedToday": "Dzisiejsza praktyka zaliczona",
+    "readyToday": "Nowa okazja do ćwiczeń",
+    "week": "Aktywność z ostatnich siedmiu dni",
+    "activeDay": "Praktyka zaliczona",
+    "inactiveDay": "Brak zapisanej aktywności",
+    "utcHint": "Ostatnie 7 dni",
+    "lessons": "Ukończone lekcje",
+    "accuracy": "Poprawność ćwiczeń w lekcjach",
+    "correctAnswers": "{correct} z {total} poprawnych odpowiedzi",
+    "noExercises": "Wyniki pojawią się po pierwszym ćwiczeniu."
+  },
   "whatsNew": {
     "title": "Co nowego",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Rozpocznij rozmowę głosową z ukończonej lekcji. Lingu pomaga Ci stosować zdobytą wiedzę, a rozmowa jest zapisywana z tytułem ćwiczonego tematu."
     },
     "entry2": {
+      "label": "Więcej sposobów na zdobywanie XP",
+      "desc": "Zdobywaj XP za <bold>rozmowy głosowe, czat, rozłożone w czasie powtórki czytania i słuchania oraz ukończone jednostki i poziomy</bold>. Odświeżony panel pokazuje dzisiejsze XP, serię nauki i ostatnią aktywność."
+    },
+    "entry3": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

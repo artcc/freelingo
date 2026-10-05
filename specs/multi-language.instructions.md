@@ -74,6 +74,10 @@ that require a plan must handle this state explicitly.
 
 ## Data ownership and isolation
 
+Additional XP award keys and daily caps are scoped to the persisted owning plan. Voice lesson practice
+uses its historical plan even after a language switch. Planless conversations do not earn XP. Deleting
+a plan cascades its reward ledger; switching plans does not transfer rewards or totals.
+
 The following data is scoped to a study plan and therefore isolated between target languages:
 
 - lessons and exercises;
@@ -91,7 +95,8 @@ CEFR level. Attempts, completion state, and awarded XP remain tied to the learne
 Submissions carry the context captured at exercise or history lookup. The backend resolves the
 authenticated user's active plan and rejects a changed selection before persisting; it also verifies
 the exercise language and the level for normal attempts. Historical replays may use a previous
-exercise level in the same language and award no XP.
+exercise level in the same language. Spaced replay rewards require an earlier-day attempt in the
+validated destination plan; history in another plan does not qualify that plan for replay XP.
 
 Flashcard generation derives the target language from the active persisted plan rather than client
 state. A review credits progress to the `study_plan_id` stored on the card, even if the user changes
@@ -260,7 +265,7 @@ displays confirmation feedback.
 Settings > My Languages:
 
 - lists each language's active plan level and completion percentage when available;
-- summarizes XP, stored streak value, and lessons completed;
+- summarizes XP, the date-aware current streak, and lessons completed;
 - allows switching to an inactive language;
 - allows removing an inactive language when more than one exists;
 - offers only enabled languages not already owned;

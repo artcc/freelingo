@@ -1513,6 +1513,26 @@
     "unavailable": "Could not prepare the practice. Check that the lesson is completed and try again.",
     "back": "Back to plan"
   },
+  "dashboardProgress": {
+    "title": "Your progress",
+    "scope": "Your current language and study plan",
+    "details": "View progress",
+    "experience": "Experience",
+    "todayXp": "+{xp} XP today",
+    "experienceHint": "Every practice contributes to your journey.",
+    "streak": "Learning streak",
+    "days": "{count, plural, one {day} other {days}}",
+    "practisedToday": "Practised today",
+    "readyToday": "A new chance to practise",
+    "week": "Activity over the last seven days",
+    "activeDay": "Practised",
+    "inactiveDay": "No activity recorded",
+    "utcHint": "Last 7 days",
+    "lessons": "Lessons completed",
+    "accuracy": "Lesson exercise accuracy",
+    "correctAnswers": "{correct} of {total} answers correct",
+    "noExercises": "Your results will appear after your first exercise."
+  },
   "whatsNew": {
     "title": "What's New",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Start a voice conversation from a completed lesson. Lingu helps you use what you have learnt, and the conversation is saved with the title of the topic you practised."
     },
     "entry2": {
+      "label": "More ways to earn XP",
+      "desc": "Earn XP through <bold>voice, chat, spaced reading and listening reviews, and unit and level completion</bold>. Your refreshed dashboard highlights today's XP, your streak and your recent activity."
+    },
+    "entry3": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

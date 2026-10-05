@@ -32,6 +32,11 @@ Completed lessons also offer voice practice with Lingu: confirm a short topic pr
 the lesson's content with questions and help informed by your exercise answers. These conversations
 use the existing voice controls and limits and appear in chat history under the lesson topic.
 
+XP also recognizes meaningful voice and chat participation, spaced Listening/Reading reviews, and
+completed units and level journeys. The dashboard highlights today's XP, the current learning streak,
+seven days of activity, and plan progress. Rewards and activity remain isolated by study plan and
+language; daily activity is measured in UTC.
+
 ## Hosted service
 
 > **Don't want to manage your own server?**

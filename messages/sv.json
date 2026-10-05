@@ -1513,6 +1513,26 @@
     "unavailable": "Det gick inte att förbereda övningen. Kontrollera att lektionen är slutförd och försök igen.",
     "back": "Tillbaka till studieplanen"
   },
+  "dashboardProgress": {
+    "title": "Dina framsteg",
+    "scope": "Ditt nuvarande språk och din studieplan",
+    "details": "Visa framsteg",
+    "experience": "Erfarenhet",
+    "todayXp": "+{xp} XP idag",
+    "experienceHint": "Varje övning bidrar till din läranderesa.",
+    "streak": "Inlärningssvit",
+    "days": "{count, plural, one {dag} other {dagar}}",
+    "practisedToday": "Du har övat idag",
+    "readyToday": "En ny chans att öva",
+    "week": "Aktivitet de senaste sju dagarna",
+    "activeDay": "Övat",
+    "inactiveDay": "Ingen registrerad aktivitet",
+    "utcHint": "Senaste 7 dagarna",
+    "lessons": "Avslutade lektioner",
+    "accuracy": "Träffsäkerhet i lektionsövningar",
+    "correctAnswers": "{correct} av {total} rätta svar",
+    "noExercises": "Dina resultat visas efter din första övning."
+  },
   "whatsNew": {
     "title": "Nyheter",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Starta ett röstsamtal från en slutförd lektion. Lingu hjälper dig att använda det du har lärt dig, och samtalet sparas med titeln på ämnet du övade på."
     },
     "entry2": {
+      "label": "Fler sätt att tjäna XP",
+      "desc": "Tjäna XP genom <bold>röstsamtal, chatt, utspridda läs- och hörrepetitioner samt avslutade avsnitt och nivåer</bold>. Den förnyade översikten lyfter fram dagens XP, din svit och din senaste aktivitet."
+    },
+    "entry3": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

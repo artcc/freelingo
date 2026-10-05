@@ -21,6 +21,7 @@ from app.schemas.language import (
     UserLanguageListResponse,
     UserLanguageOut,
 )
+from app.services.progress_service import current_streak as get_current_streak
 from app.services.user_language_service import (
     add_language,
     get_active_language,
@@ -96,7 +97,7 @@ async def _build_progress_info(
     entries = entries_res.scalars().all()
 
     total_xp = sum(e.xp_earned for e in entries)
-    current_streak = entries[0].streak_day if entries else 0
+    current_streak = get_current_streak(entries)
     lessons_completed = sum(e.lessons_completed for e in entries)
 
     return LanguageProgressInfo(

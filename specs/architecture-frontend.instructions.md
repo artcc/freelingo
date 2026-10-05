@@ -111,6 +111,14 @@ Zustand stores shared cross-route state:
 Screen-specific forms, async state, playback, selections, and modal state remain local React state.
 Do not promote local state into a global store without a cross-route requirement.
 
+Dashboard's `components/dashboard/ProgressOverview.tsx` renders existing plan-scoped progress with
+prominent XP/streak cards, today's XP, a seven-day UTC strip, and compact lesson/accuracy metrics.
+`today_xp` and `activity_week` come from `/api/progress/summary` and stay in page-local state. Request
+sequence guards discard obsolete language responses and responses after unmount. Dates and numbers
+use the interface locale; dates use UTC to match the backend. Decorative charts/icons are hidden from
+assistive technology and activity dates have explicit accessible labels. Transitions respect reduced
+motion. Plan/vocabulary bars expose numeric progress and today's lesson segments reflect completions.
+
 ## Public registration surfaces
 
 The server-rendered landing page retains its one-hour `/api/config` revalidation and passes

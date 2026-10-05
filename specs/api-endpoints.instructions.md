@@ -162,7 +162,7 @@ Lesson viewing and exercise answering use `get_current_user` (always free). Only
 
 - **GET `/{lesson_id}`** — Rate limit: 60/min. Auth: get_current_user. Returns `{lesson, exercises, target_language}`; `target_language` comes from the lesson's persisted study plan, independently of the active language. Exercise responses include optional `native_explanation` and `native_hint` copied from generated lesson JSON when available. Lesson content may include enriched vocabulary items with optional native-language translation, example translation, usage note, and reading fields.
 - **POST `/{lesson_id}/start`** — Rate limit: 60/min. Auth: get_current_user. Validates ownership and returns the lesson; no in-progress state is persisted.
-- **POST `/{lesson_id}/complete`** — Rate limit: 60/min. Auth: get_current_user; subscription/freemium quota is checked only when applying the first completion. Locks the lesson row and atomically commits completion, progress, XP, and competencies. Repeated or concurrent calls for an already-completed lesson return its existing state without changing `completed_at`, quota, progress, XP, or competencies, including when the user's freemium quota is exhausted.
+- **POST `/{lesson_id}/complete`** — Rate limit: 60/min. Auth: get_current_user; subscription/freemium quota is checked only when applying the first completion. Locks the lesson row and atomically commits completion, progress, XP, competencies, and eligible unit/level rewards. Checks the level milestone even when the evaluation was recorded before the last teaching lesson, including lessons without a unit. Repeated calls preserve `completed_at`, base lesson XP, completion counters, competencies, and quota, including when the user's freemium quota is exhausted. They can grant a first eligible unit/level reward missing from the ledger, using the resubmission's UTC day. Existing reward keys prevent duplicate credit or new activity on further retries.
 - **POST `/{lesson_id}/native-explanation`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a native-language explanation for existing lessons at any CEFR level whose `content.native_explanation` is missing. Returned support includes translated text, key points, examples, common traps, and a mini-glossary. If already present, returns the cached explanation idempotently.
 - **POST `/exercises/{id}/native-explanation`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a concise native-language clarification for an exercise whose target-language `explanation` exists but whose generated JSON lacks `native_explanation`. If already present, returns the cached exercise-level explanation idempotently.
 - **POST `/exercises/{id}/native-hint`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a concise pre-answer native-language hint for an exercise whose generated JSON lacks `native_hint`. Hints must help without revealing the correct answer. If already present, returns the cached hint idempotently.
@@ -210,6 +210,12 @@ Chat endpoints require authentication and maintenance/access policy. Conversatio
 ---
 
 ## Progress — `/api/progress`
+
+The summary also returns `today_xp` and `activity_week`: seven chronological UTC-day objects with
+`date` (ISO date), `active` (whether a daily progress row exists), and `xp` (daily credit), ending today.
+Zero-XP activity counts. `current_streak` is zero if the latest entry is older than yesterday. Empty
+plans return seven inactive days. Reward rules live in `learning-resources.instructions.md`; rewards
+are server-triggered by persisted activity and have no client-claim endpoint.
 
 - GET — Path: `/summary`; Rate limit: 60/min; Description: Streak, XP, skills breakdown, and current-level vocabulary progress for the active study language
 - GET — Path: `/history`; Rate limit: 60/min; Description: Up to the 90 most recent daily progress rows for the active plan; no calendar-date cutoff is applied.
@@ -299,14 +305,15 @@ For both Listening and Reading, `/attempt` requires body `context: {study_plan_i
 level}` from the exercise lookup or history response. The backend independently resolves the user's
 active plan and rejects mismatches with `409 study_context_changed` before writing attempts, XP,
 exercise counters, or quota usage. The exercise language must match that plan; its level must also
-match for normal attempts. Replays can retain an earlier exercise level in the same language with
-zero XP. Missing context returns `422`. History responses include the active plan's `context` so
+match for normal attempts. Replays can retain an earlier exercise level in the same language and
+earn 5 XP once per exercise/plan/UTC day when a prior-day attempt exists in that plan, otherwise zero.
+Missing context returns `422`. History responses include the active plan's `context` so
 replays retain the selection under which their history was loaded.
 
 - **GET `/next`** — Rate limit: 60/min. Returns immediately with `{available, exercise, generation_status, generation_error, generation_deadline}`; transcript and correct answers are omitted. Status is `idle`, `generating`, or `failed`; error is null, `timeout`, `generation_failed`, or `interrupted`; deadline is nullable UTC. Available exercises take priority. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a renewable, owner-scoped language/level generation lease and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job. Returns `{"status":"available"}` without generating when the user's pool already has an exercise.
 - **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
-- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with zero XP.
+- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ## Reading — `/api/reading`
@@ -315,7 +322,7 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 
 - **GET `/next`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns immediately with the oldest uncompleted `ReadingExercise` for the current plan's CEFR level and language. Text and questions are included, correct answers are omitted. Response: `{available, exercise, generation_status, generation_error, generation_deadline}`, with the same status contract as Listening. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a renewable, owner-scoped per-(level, language) Redis lease and enqueues a bounded `BackgroundTask`. Returns HTTP 202 `{"status":"generating"}` for new or existing work, or `{"status":"available"}` when an exercise can already be used.
-- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with zero XP.
+- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ---
@@ -324,7 +331,7 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 
 All endpoints require `get_current_user`. Status update requires `require_admin`. Every embedded entry or comment `author` object contains `{id, username, display_name, role}` so clients can identify administrator-authored content.
 
-- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns paginated list of feedback entries. Query params: `q` (search by title, description, username, or display name; max 100 chars), `type` (`feature`\|`bug`), `status` (`pending`\|`planned`\|`in_progress`\|`done`\|`declined`), `sort` (`votes`\|`date`, default `votes`), `order` (`asc`\|`desc`, default `desc`), `skip` (default 0), `limit` (default 10, max 100). Ordering uses entry ID as a deterministic tie-breaker in the requested direction. When `status` is omitted, entries with `status=done` are excluded from the public board and admin queue; they are returned only with `status=done`. Response: `{items, total, skip, limit}`. Each item includes `voted_by_me`, `unread_by_me`, and `comment_count` fields injected server-side.
+- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns paginated list of feedback entries. Query params: `q` (search by title, description, username, or display name; max 100 chars), `type` (`feature`\|`bug`), `status` (`pending`\|`planned`\|`in_progress`\|`done`\|`declined`), `sort` (`votes`\|`date`, default `votes`), `order` (`asc`\|`desc`, default `desc`), `skip` (default 0), `limit` (default 10, max 100). Ordering uses entry ID as a deterministic tie-breaker in the requested direction. When `status` is omitted, entries with `status=done` or `status=declined` are excluded from the public board and admin queue; each is returned only with its respective status filter. Response: `{items, total, skip, limit}`. Each item includes `voted_by_me`, `unread_by_me`, and `comment_count` fields injected server-side.
 - **POST ``** — Rate limit: 10/hour. Auth: get_current_user. Creates a new feature request or bug report. Body: `{type, title, description}`. Returns HTTP 201 + the created entry.
 - **GET `/unread-summary`** — Rate limit: 60/min. Auth: get_current_user. Returns `{unread_count}` for the authenticated user's unread feedback threads. Counts threads with new entries or comments from other users, including `done` entries, and does not expose read state for other users.
 - **GET `/{id}`** — Rate limit: 60/min. Auth: get_current_user. Returns a single entry with its full comment thread ordered by `created_at ASC`, including `unread_by_me` for the current user.

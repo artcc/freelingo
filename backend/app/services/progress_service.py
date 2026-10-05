@@ -7,11 +7,35 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.competency import UserCompetency
 from app.models.progress import Progress
+from app.models.study_plan import StudyPlan
 
 XP_LESSON_COMPLETE = 20
 XP_EXERCISE_CORRECT = 5
 XP_EXERCISE_WRONG = 1
 XP_FLASHCARD_REVIEW = 2
+
+
+def progress_today() -> date:
+    return datetime.now(UTC).date()
+
+
+def current_streak(entries: list[Progress]) -> int:
+    """Entries are newest first. Yesterday's streak remains available today."""
+    if not entries or entries[0].date < progress_today() - timedelta(days=1):
+        return 0
+    return entries[0].streak_day
+
+
+async def lock_progress_plan(db: AsyncSession, user_id: int, plan_id: int) -> StudyPlan | None:
+    # NO KEY UPDATE serializes counters without conflicting with FK KEY SHARE locks
+    # already held by concurrent transcript/attempt inserts referencing this plan.
+    return (
+        await db.execute(
+            select(StudyPlan)
+            .where(StudyPlan.id == plan_id, StudyPlan.user_id == user_id)
+            .with_for_update(key_share=True)
+        )
+    ).scalar_one_or_none()
 
 
 async def update_daily_progress(
@@ -25,24 +49,37 @@ async def update_daily_progress(
     xp: int = 0,
     skill: str | None = None,
     skill_score: float | None = None,
+    activity_date: date | None = None,
     commit: bool = True,
 ) -> Progress:
-    today = date.today()
+    today = activity_date if activity_date is not None else progress_today()
+    if study_plan_id is not None:
+        await lock_progress_plan(db, user_id, study_plan_id)
 
     base_filter = [Progress.user_id == user_id]
     if study_plan_id is not None:
         base_filter.append(Progress.study_plan_id == study_plan_id)
 
-    result = await db.execute(select(Progress).where(*base_filter, Progress.date == today))
-    entry = result.scalar_one_or_none()
+    result = await db.execute(
+        select(Progress)
+        .where(*base_filter, Progress.date >= today)
+        .order_by(Progress.date)
+        .execution_options(populate_existing=True)
+    )
+    following = list(result.scalars().all())
+    entry = following.pop(0) if following and following[0].date == today else None
 
     if not entry:
         yesterday = today - timedelta(days=1)
-        yest_result = await db.execute(
-            select(Progress).where(*base_filter, Progress.date == yesterday)
+        previous_result = await db.execute(
+            select(Progress)
+            .where(*base_filter, Progress.date < today)
+            .order_by(Progress.date.desc())
+            .limit(1)
+            .execution_options(populate_existing=True)
         )
-        yest = yest_result.scalar_one_or_none()
-        streak = (yest.streak_day + 1) if yest else 1
+        previous = previous_result.scalar_one_or_none()
+        streak = previous.streak_day + 1 if previous and previous.date == yesterday else 1
 
         entry = Progress(
             user_id=user_id,
@@ -52,7 +89,8 @@ async def update_daily_progress(
             exercises_correct=0,
             exercises_total=0,
             streak_day=streak,
-            skills={},
+            skills=dict(previous.skills or {}) if previous else {},
+            skill_updates={},
             study_plan_id=study_plan_id,
         )
         db.add(entry)
@@ -81,6 +119,28 @@ async def update_daily_progress(
         old = skills.get(skill, skill_score)
         skills[skill] = round(old * 0.7 + skill_score * 0.3, 3)
         entry.skills = skills
+        if entry.skill_updates is not None:
+            updates = dict(entry.skill_updates)
+            updates[skill] = [*updates.get(skill, []), skill_score]
+            entry.skill_updates = updates
+
+    # Lock acquisition order can differ from activity-date order around midnight.
+    # Replay each later day's own scores against its corrected predecessor, keeping
+    # the original per-update rounding and all later contributions intact.
+    previous = entry
+    for later in following:
+        later.streak_day = (
+            previous.streak_day + 1 if later.date == previous.date + timedelta(days=1) else 1
+        )
+        if later.skill_updates is not None:
+            skills = dict(previous.skills or {})
+            for later_skill, scores in later.skill_updates.items():
+                for score in scores:
+                    old = skills.get(later_skill, score)
+                    skills[later_skill] = round(old * 0.7 + score * 0.3, 3)
+            later.skills = skills
+        # A legacy row is an opaque skill checkpoint, not an empty list of updates.
+        previous = later
 
     if commit:
         await db.commit()

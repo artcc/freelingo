@@ -1513,6 +1513,26 @@
     "unavailable": "Pratik hazırlanamadı. Dersin tamamlandığından emin ol ve tekrar dene.",
     "back": "Plana dön"
   },
+  "dashboardProgress": {
+    "title": "İlerlemen",
+    "scope": "Mevcut dilin ve çalışma planın",
+    "details": "İlerlemeyi gör",
+    "experience": "Deneyim",
+    "todayXp": "Bugün +{xp} XP",
+    "experienceHint": "Her pratik öğrenme yolculuğuna katkıda bulunur.",
+    "streak": "Öğrenme serisi",
+    "days": "gün",
+    "practisedToday": "Bugün pratik yaptın",
+    "readyToday": "Pratik için yeni bir fırsat",
+    "week": "Son yedi günün etkinliği",
+    "activeDay": "Pratik yapıldı",
+    "inactiveDay": "Kayıtlı etkinlik yok",
+    "utcHint": "Son 7 gün",
+    "lessons": "Tamamlanan dersler",
+    "accuracy": "Ders alıştırmalarındaki doğruluk",
+    "correctAnswers": "{total} yanıttan {correct} tanesi doğru",
+    "noExercises": "Sonuçların ilk alıştırmadan sonra görünecek."
+  },
   "whatsNew": {
     "title": "Yenilikler",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Tamamlanmış bir dersten sesli konuşma başlat. Lingu öğrendiklerini kullanmana yardımcı olur ve konuşma, pratik yaptığın konunun başlığıyla kaydedilir."
     },
     "entry2": {
+      "label": "XP kazanmanın daha fazla yolu",
+      "desc": "<bold>Sesli konuşma, sohbet, aralıklı okuma ve dinleme tekrarları ile ünite ve seviye tamamlama</bold> sayesinde XP kazan. Yenilenen panel bugünkü XP’ni, serini ve son etkinliklerini öne çıkarır."
+    },
+    "entry3": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

@@ -8,25 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
-- Completed lessons offer voice practice with Lingu through a short confirmation dialog. Lingu uses the lesson's content and answered exercises throughout the conversation, can suggest when the main objectives have been practised, and lets the learner continue or finish using the existing voice controls and limits. Practice conversations appear in chat history with the lesson topic as their title.
+- Voice practice with Lingu from completed lessons, using their content and answered exercises as conversation context. Practice sessions appear in chat history with the lesson title.
+- Plan-specific XP rewards for voice and chat participation, spaced Listening/Reading reviews, and completing units and levels, with daily limits and protection against duplicate rewards. Completion milestones recognize either order of lessons and final evaluation, and eligible historical completions can receive their first milestone reward when resubmitted.
 
 ### Changed
 
-- What's New highlights lesson-linked voice practice in all fifteen interface languages.
-- Listening and Reading expose generation status through immediate next-exercise responses, with a 60-per-minute read limit and a configurable total generation budget (`EXERCISE_GENERATION_TIMEOUT_SECONDS`, default 600 seconds).
+- Refreshed dashboard progress with today's XP, streaks, weekly activity, and clearer plan and vocabulary indicators in both themes.
+- Completed comprehension attempts and answered conversations count as daily activity even when they award no XP.
+- Listening and Reading return exercise-generation status immediately, with configurable generation timeouts.
+- Declined feedback is hidden from the default board and admin queue and remains available through its status filter.
 
 ### Fixed
 
-- Listening and Reading keep checking slow exercise generation through short, recoverable requests, resume existing work when reopening the page, and retrieve completed exercises after temporary connection failures.
-- Slow generation retains an owner-checked, renewable lock; obsolete tasks cannot release another task's lock, and bounded LLM calls avoid multiplying SDK and application retries.
-- Exercise generation reports localized failure, timeout, and connection-status errors, prevents duplicate clicks, and ignores late responses after leaving the page or changing language.
-- Exercise polling detects active language, plan, or level changes across tabs instead of switching pools, and uses a clock-independent budget that also bounds retry delays and authentication-refresh waits.
-- Cancelled authentication consumers release their loading state without interrupting shared token rotation. Listening removes audio written by work aborted before commit, preserves confirmed audio after refresh failures, and classifies OpenAI speech timeouts consistently.
-- Completing Assessment refreshes the shared plan context so Listening and Reading can use the new plan without a browser reload. Missing or stale language context has a bounded load and a retry action instead of leaving those pages indefinitely loading after a connection failure.
-- Listening and Reading keep context recovery available when the free quota is exhausted, while exercise generation remains restricted.
-- Listening and Reading reject answer submissions after the active language, plan, or level changes, preventing attempts and XP from being attributed to another context while preserving zero-XP replays of earlier-level exercises.
-- Language switches invalidate the cached summary and offer recovery when its refresh fails. Success feedback waits for the refreshed summary, and late language responses cannot restore an obsolete context.
-- Language-switch requests have a bounded authentication and network wait, with GET-only recovery for uncertain outcomes. Rejected switches preserve Listening and Reading answers and history replays instead of reloading the exercise.
+- Streaks expire after missed activity days, and daily skill scores carry forward instead of losing prior progress.
+- Listening and Reading recover from slow generation and temporary connection failures, resume pending exercises, and show localized errors instead of remaining indefinitely in a loading state.
+- Completing Assessment makes the new plan available to Listening and Reading without reloading the page.
+- Language and plan changes refresh progress consistently and prevent stale responses or submissions from assigning exercises and XP to the wrong context. Failed language switches preserve current answers and allow recovery.
 
 ## [1.9.25] - 2026-09-25
 

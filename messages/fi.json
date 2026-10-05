@@ -1513,6 +1513,26 @@
     "unavailable": "Harjoitusta ei voitu valmistella. Tarkista, että oppitunti on suoritettu, ja yritä uudelleen.",
     "back": "Takaisin opintosuunnitelmaan"
   },
+  "dashboardProgress": {
+    "title": "Edistymisesi",
+    "scope": "Nykyinen kielesi ja opiskelusuunnitelmasi",
+    "details": "Näytä edistyminen",
+    "experience": "Kokemus",
+    "todayXp": "+{xp} XP tänään",
+    "experienceHint": "Jokainen harjoitus edistää oppimistasi.",
+    "streak": "Oppimisputki",
+    "days": "{count, plural, one {päivä} other {päivää}}",
+    "practisedToday": "Harjoittelit tänään",
+    "readyToday": "Uusi tilaisuus harjoitella",
+    "week": "Viimeisten seitsemän päivän aktiivisuus",
+    "activeDay": "Harjoiteltu",
+    "inactiveDay": "Ei kirjattua toimintaa",
+    "utcHint": "Viimeiset 7 päivää",
+    "lessons": "Suoritetut oppitunnit",
+    "accuracy": "Oppituntien tehtävien tarkkuus",
+    "correctAnswers": "{correct} oikein {total} vastauksesta",
+    "noExercises": "Tuloksesi näkyvät ensimmäisen tehtävän jälkeen."
+  },
   "whatsNew": {
     "title": "Uutta",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Aloita äänikeskustelu suoritetulta oppitunnilta. Lingu auttaa sinua käyttämään oppimaasi, ja keskustelu tallennetaan harjoitellun aiheen otsikolla."
     },
     "entry2": {
+      "label": "Lisää tapoja ansaita XP:tä",
+      "desc": "Ansaitse XP:tä <bold>puheesta, chatista, hajautetuista luku- ja kuuntelukertauksista sekä osioiden ja tasojen suorittamisesta</bold>. Uudistettu näkymä korostaa päivän XP:tä, oppimisputkeasi ja viimeaikaista toimintaasi."
+    },
+    "entry3": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

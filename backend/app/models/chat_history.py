@@ -33,6 +33,11 @@ class ChatHistory(Base):
         index=True,
     )
     target_language: Mapped[str | None] = mapped_column(String(10), nullable=True, index=True)
+    # Legacy messages remain unclassified; conversation.source is not a turn modality.
+    modality: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    reply_to_id: Mapped[int | None] = mapped_column(
+        ForeignKey("chat_history.id", ondelete="SET NULL"), nullable=True, unique=True
+    )
 
     def __repr__(self) -> str:
         return f"<ChatHistory(id={self.id}, user_id={self.user_id}, role={self.role}, target_language={self.target_language})>"

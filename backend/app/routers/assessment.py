@@ -47,6 +47,7 @@ from app.services.llm_adapter import (
     LLMUnavailableError,
     llm_adapter,
 )
+from app.services.progress_rewards import reward_plan_completion
 from app.services.prompts.assessment import (
     LEGACY_ASSESSMENT_EVAL_PROMPT,
     build_legacy_assessment_eval_user_prompt,
@@ -651,6 +652,7 @@ async def submit_level_test(
     plan.completion_test_taken = True
     plan.completion_test_score = score
     plan.completion_test_recommendation = recommendation
+    await reward_plan_completion(db, current_user.id, plan.id)
     await db.commit()
     await db.refresh(plan)
 
