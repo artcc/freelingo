@@ -49,7 +49,7 @@ def create(game, entries, difficulty, relaxed=False, now=None):
     count = 3 + difficulty - 1 if game in {"memory", "matching"} else 5
     if len(bank) < max(count, 4):
         raise ValueError("Not enough authored vocabulary for this language and level")
-    state = dict(arena=1, game=game, difficulty=difficulty, relaxed=relaxed,
+    state = dict(arena=1, game=game, skill=skill_for(game), difficulty=difficulty, relaxed=relaxed,
         phase="playing", index=0, total=count, lives=3, correct=0,
         attempts=0, matched=[], opened=[], feedback=None, log=[],
         deadline=None, cooldown=0, started=now, questions=[], cards=[], max_moves=18 + difficulty * 4)
@@ -79,7 +79,7 @@ def create(game, entries, difficulty, relaxed=False, now=None):
 
 def public(state):
     """Strict allowlist: never send solutions, deck labels, pairs or move log."""
-    out = {key: state[key] for key in ("game", "difficulty", "phase", "index", "total", "lives", "correct",
+    out = {key: state[key] for key in ("game", "skill", "difficulty", "phase", "index", "total", "lives", "correct",
         "attempts", "max_moves", "feedback", "deadline", "relaxed")}
     out["version"] = len(state["log"])
     out["server_time"] = time.time()
