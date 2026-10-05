@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, field_serializer, field_validator
+
+from app.schemas.exercise_generation import ExerciseGenerationState
 
 
 class QuestionOut(BaseModel):
@@ -40,13 +43,13 @@ class ReadingExerciseOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
-class ReadingNextResponse(BaseModel):
+class ReadingNextResponse(ExerciseGenerationState):
     available: bool
     exercise: ReadingExerciseOut | None = None
 
 
 class ReadingGeneratingResponse(BaseModel):
-    status: str  # "generating"
+    status: Literal["generating", "available"]
 
 
 class ReadingSubmitRequest(BaseModel):

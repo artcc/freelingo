@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Razumijem",
     "entry1": {
       "label": "Pet novih jezika sučelja",
@@ -1557,6 +1557,11 @@
     "moreInHistory": "+{count} više",
     "practiceAgain": "Vježbaj ponovno",
     "replayNoXp": "Ponovi (bez XP-a)"
+  },
+  "exerciseGeneration": {
+    "failed": "Vježbu nije bilo moguće izraditi. Pokušaj ponovno.",
+    "timeout": "Izrada vježbe trajala je predugo. Pokušaj ponovno.",
+    "unavailable": "Nije bilo moguće provjeriti status vježbe. Pokušaj ponovno."
   },
   "reading": {
     "title": "Čitanje",

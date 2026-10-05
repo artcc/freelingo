@@ -49,9 +49,16 @@ an exhaustive route inventory here.
 through one serialized refresh only when the original request had an access token. Failed refresh
 clears auth state and routes to login.
 
-Ordinary JSON APIs are called directly against the configured backend URL. The chat handler preserves
+Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
+
+Listening and Reading share `hooks/useExerciseGeneration.ts` and `lib/exercise-generation.ts`.
+They use immediate status queries, ten-second polling, bounded transport recovery, and at most one
+generation POST per operation. The hook prevents duplicate starts, resumes active work on entry,
+cancels on unmount/language changes, and guards late responses. Errors use the shared
+`exerciseGeneration` namespace in all interface catalogs. Detailed status and timing rules belong
+to the Listening and Reading specifications.
 
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.

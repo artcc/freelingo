@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
 import { useLanguageStore } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
@@ -88,7 +89,6 @@ function ReadingPage() {
   const textRef = useRef<HTMLDivElement>(null)
   const [isReplay, setIsReplay] = useState(false)
   const [generatingWarn, setGeneratingWarn] = useState(false)
-  const generateAbortRef = useRef<AbortController | null>(null)
   const generatingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const user = useAuthStore((s) => s.user)
@@ -126,85 +126,21 @@ function ReadingPage() {
     }
   }, [pageState])
 
-  // Cancel in-flight long-poll on unmount
-  useEffect(() => {
-    return () => {
-      generateAbortRef.current?.abort()
-    }
+  const onExercise = useCallback((nextExercise: ReadingExercise) => {
+    setExercise(nextExercise)
+    setAnswers({})
+    setResult(null)
+    setIsReplay(false)
   }, [])
 
-  const loadNext = useCallback(async () => {
-    setPageState('loading')
-    setError('')
-    dismissTooltip()
-    try {
-      const res = await apiFetch('/api/reading/next')
-      if (!res.ok) {
-        setPageState('idle')
-        return
-      }
-      const data = (await res.json()) as {
-        available: boolean
-        exercise?: ReadingExercise
-      }
-      if (data.available && data.exercise) {
-        setExercise(data.exercise)
-        setAnswers({})
-        setResult(null)
-        setIsReplay(false)
-        setPageState('exercise')
-      } else {
-        setPageState('idle')
-      }
-    } catch {
-      setError(t('errorLoading'))
-      setPageState('idle')
-    }
-  }, [t, dismissTooltip])
-
-  useEffect(() => {
-    loadNext()
-  }, [loadNext, activeLanguage?.code])
-
-  async function handleGenerate() {
-    try {
-      const res = await apiFetch('/api/reading/generate', { method: 'POST' })
-      if (res.ok || res.status === 202) {
-        setPageState('generating')
-        const controller = new AbortController()
-        generateAbortRef.current = controller
-        const nextRes = await apiFetch('/api/reading/next?wait=true', {
-          signal: controller.signal,
-        })
-        generateAbortRef.current = null
-        if (nextRes.ok) {
-          const data = (await nextRes.json()) as {
-            available: boolean
-            exercise?: ReadingExercise
-          }
-          if (data.available && data.exercise) {
-            setExercise(data.exercise)
-            setAnswers({})
-            setResult(null)
-            setIsReplay(false)
-            setPageState('exercise')
-            return
-          }
-        }
-        setPageState('idle')
-      } else {
-        const d = (await res.json().catch(() => ({}))) as { detail?: string }
-        setError(
-          d.detail === 'No active study plan found'
-            ? tCommon('noActivePlan')
-            : t('errorLoading')
-        )
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return
-      setPageState('idle')
-    }
-  }
+  const { loadNext, generate } = useExerciseGeneration({
+    feature: 'reading',
+    language: activeLanguage?.code,
+    onExercise,
+    setPageState,
+    setError,
+    dismissTooltip,
+  })
 
   async function handleSubmit() {
     if (!exercise) return
@@ -528,7 +464,7 @@ function ReadingPage() {
               {t('noExercises')}
             </p>
             <button
-              onClick={handleGenerate}
+              onClick={() => generate()}
               className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 border px-8 py-3 font-mono text-sm tracking-widest uppercase transition-colors"
             >
               {t('generate')}

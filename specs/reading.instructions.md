@@ -79,7 +79,7 @@ The prompt requests five questions with A-D options, but the generation schema c
 field types rather than enforcing question count, option keys, index uniqueness, or correct-answer
 membership. Those prompt requirements are not database invariants.
 
-## Generation lock and long-poll
+## Generation lease and status
 
 Redis prevents ordinary duplicate generation with the key:
 
@@ -87,18 +87,25 @@ Redis prevents ordinary duplicate generation with the key:
 reading:generating:{level}:{target_language}
 ```
 
-- Acquisition uses `SET NX` with a 60-second TTL.
-- An existing lock still produces a successful `202` response.
-- The background task opens its own database and Redis resources.
-- The task deletes the lock in `finally`, whether generation succeeds or fails.
-- Generation failures are logged and are not returned through the already-completed HTTP request.
+- `exercise_generation.py` acquires a unique-owner lease with a 60-second TTL and renews it every
+  20 seconds. Lua operations atomically acquire the lease and state, compare-and-renew, and
+  compare-and-finish. An older task cannot release a replacement lease or overwrite its state.
+- The background task opens its own database and Redis resources. Loss of the lease, renewal failure,
+  or cancellation stops local work; persistence checks ownership before saving.
+- `EXERCISE_GENERATION_TIMEOUT_SECONDS` defaults to 600 and bounds the complete job from acquisition,
+  including structured generation, JSON correction, and persistence. The LLM receives the remaining
+  budget with SDK and adapter transport retries disabled for this flow; one JSON correction remains
+  possible within that budget.
+- Redis `{lock_key}:state` stores the generation status. Running state lives for the configured
+  budget plus 15 minutes; terminal state lives for 15 minutes. A running state without a lease is
+  reported as interrupted. Redis state is operational, not a durable job queue.
+- Available exercises take priority over generation status. Generation checks availability before
+  and after acquiring a lease and returns `status: "available"` without starting redundant work.
+- Failures are logged and exposed through `/next` as controlled error codes, not raw exceptions.
 
-After requesting generation, the frontend sends one `GET /api/reading/next?wait=true` request. The
-backend checks once per second for at most 90 seconds and returns early when an exercise appears or
-the generation lock disappears. This is server-side long-polling, not repeated client polling.
-
-The lock TTL is shorter than the maximum wait and has no ownership token. The current implementation
-does not guarantee single generation when a job lasts longer than the lock.
+`GET /api/reading/next` responds immediately. A supplied `wait` query parameter does not enable a
+long-poll. The frontend periodically queries the existing endpoint; closing the page or losing one
+HTTP response does not cancel the accepted background job.
 
 ## API
 
@@ -107,19 +114,22 @@ maintenance access. They derive level, language, and plan from persisted server 
 
 ### `GET /api/reading/next`
 
-- Rate limit: `10/minute`.
+- Rate limit: `60/minute`.
 - Access: freemium read-only policy.
-- Optional `wait=true` enables the 90-second long-poll.
+- Returns immediately, including while a generation is active.
 - Available response includes passage, metadata, questions, and options.
 - It never includes correct answers.
 - No available exercise returns `available: false` and a null exercise.
+- Every response includes `generation_status` (`idle`, `generating`, or `failed`), nullable
+  `generation_error` (`timeout`, `generation_failed`, or `interrupted`), and nullable UTC
+  `generation_deadline`. Available responses use idle state with no error or deadline.
 
 ### `POST /api/reading/generate`
 
 - Rate limit: `5/minute`.
 - Access: freemium consuming-feature policy, without consuming quota at generation time.
-- Returns HTTP `202` with `status: "generating"`, whether this request acquired the lock or found
-  generation already in progress.
+- Returns HTTP `202` with `status: "generating"`, whether this request acquired the lease or found
+  generation already in progress; returns `status: "available"` when an exercise can already be used.
 
 ### `POST /api/reading/attempt`
 
@@ -192,7 +202,18 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
 
 - Initial load and active-language changes request the next exercise.
 - Idle state offers generation, history, quota information, or an inline paywall.
-- Generating state waits on one cancelable long-poll and adds a delay warning after 15 seconds.
+- `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Listening.
+- Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay
+  warning after 15 seconds. Each HTTP request has a 20-second timeout.
+- The first server deadline bounds the wait, with 10 seconds of grace and a final result lookup.
+  Missing deadlines use a bounded 60-second observation window.
+- Network errors, 5xx, and 429 use progressive backoff; recovery stops after four consecutive failures.
+  `Retry-After` is respected up to 120 seconds; longer delays are surfaced as unavailable status.
+- An uncertain POST response is recovered using GET only. Checking status never resubmits generation.
+- Page entry resumes active generation or retrieves a saved result. Localized errors distinguish
+  generation failure, timeout, and unavailable status. A manual retry checks for existing work first.
+- Repeated clicks are blocked before POST completes. Unmount and active-language changes abort the
+  current lookup and its timers, and late responses cannot update a replacement operation.
 - Exercise state shows the passage and questions together; there is no audio or readiness gate.
 - Submission becomes available when every received question index has an answer.
 - Results show score, XP, correct options, and the learner's incorrect selections.

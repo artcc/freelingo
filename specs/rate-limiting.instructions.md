@@ -74,10 +74,14 @@ flashcard CRUD/review, admin operations, memories, feedback reads/mutations, and
 
 Both domains use:
 
-- `GET /api/{domain}/next`: `10/minute`.
+- `GET /api/{domain}/next`: `60/minute`.
 - `POST /api/{domain}/generate`: `5/minute`.
 - `POST /api/{domain}/attempt`: `20/minute`.
 - history and Listening audio retrieval: `60/minute`.
+
+Generation status uses immediate `/next` responses and non-overlapping client queries every ten
+seconds. The read budget allows this cadence with headroom for shared IPs. Clients back off on 429
+and honor `Retry-After` when present; generation itself remains limited to `5/minute`.
 
 ## Community, contact, and billing
 

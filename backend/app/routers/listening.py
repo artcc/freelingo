@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import asyncio
-import logging
 import os
 
 from fastapi import (
@@ -41,6 +39,7 @@ from app.schemas.listening import (
     ListeningSubmitResponse,
     QuestionOut,
 )
+from app.services.exercise_generation import GenerationLease, get_generation_state
 from app.services.listening_service import (
     generate_and_save_exercise,
     get_available_exercise,
@@ -51,7 +50,6 @@ from app.utils.db import db_session
 from app.utils.redis import redis_client as _redis_client
 
 router = APIRouter(prefix="/api/listening", tags=["listening"])
-logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -89,26 +87,26 @@ async def _background_generate(
     target_language: str,
     tts_service: object,
     storage_path: str,
-    lock_key: str,
+    lease: GenerationLease,
     voice: str = "",
 ) -> None:
-    """
-    Runs after the HTTP response is sent.
-    Creates its own DB session and Redis client (request resources are already closed).
-    Releases the Redis lock in all cases (success or failure).
-    """
+    """Generate with independent resources and a renewable, bounded lease."""
     async with _redis_client() as redis_conn:
-        try:
+
+        async def work(deadline: float) -> None:
             async with db_session() as db:
                 await generate_and_save_exercise(
-                    level, target_language, db, tts_service, storage_path, voice
+                    level,
+                    target_language,
+                    db,
+                    tts_service,
+                    storage_path,
+                    voice,
+                    deadline=deadline,
+                    before_save=lambda: lease.ensure_owner(redis_conn),
                 )
-        except Exception:
-            logger.exception(
-                "listening: generation failed level=%s lang=%s", level, target_language
-            )
-        finally:
-            await redis_conn.delete(lock_key)
+
+        await lease.run(redis_conn, work)
 
 
 # ---------------------------------------------------------------------------
@@ -117,49 +115,29 @@ async def _background_generate(
 
 
 @router.get("/next", response_model=ListeningNextResponse)
-@limiter.limit("10/minute")
+@limiter.limit("60/minute")
 async def get_next_exercise(
     request: Request,
     _maintenance: None = Depends(require_not_maintenance),
-    wait: bool = False,
     plan: StudyPlan = Depends(get_active_study_plan),
     current_user: User = Depends(require_subscription_or_freemium_readonly("listening")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> ListeningNextResponse:
-    """
-    Return the next uncompleted exercise for the user's CEFR level and language.
-
-    When ``wait=true`` the endpoint blocks (async) until an exercise becomes
-    available or the generation lock disappears (max 90 s). This eliminates the
-    need for client-side polling.
-    """
+    """Return an available exercise or the current generation state without waiting."""
     level, target_language = plan.cefr_level, plan.target_language
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
         return ListeningNextResponse(available=True, exercise=_build_exercise_out(exercise))
 
-    if not wait:
-        return ListeningNextResponse(available=False)
-
-    # Long-poll: wait up to 90 s for the background generation to finish.
     lock_key = f"listening:generating:{level}:{target_language}"
-    for _ in range(90):
-        await asyncio.sleep(1)
-        exercise = await get_available_exercise(level, target_language, current_user.id, db)
-        if exercise is not None:
-            return ListeningNextResponse(available=True, exercise=_build_exercise_out(exercise))
-        # If the lock is already gone and there is still no exercise, stop waiting.
-        if not await redis.exists(lock_key):
-            break
-
-    # Final check: the background task may have saved the exercise and deleted
-    # the lock between the two checks above (race condition).
+    generation = await get_generation_state(redis, lock_key)
+    # A commit may have happened between the first lookup and the state snapshot.
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
         return ListeningNextResponse(available=True, exercise=_build_exercise_out(exercise))
 
-    return ListeningNextResponse(available=False)
+    return ListeningNextResponse(available=False, **generation.model_dump())
 
 
 @router.post(
@@ -178,21 +156,23 @@ async def generate_exercise(
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> ListeningGeneratingResponse:
-    """
-    Trigger on-demand exercise generation.
-
-    - Acquires a Redis lock scoped to (level, target_language) with 60 s TTL.
-    - If the lock is already held (another generation in progress), returns 202 immediately.
-    - Otherwise, starts generation as a FastAPI BackgroundTask and returns 202.
-    - Frontend calls GET /next?wait=true once and awaits the response (long poll).
-    """
+    """Reuse available work or start one generation for this level and language."""
     level, target_language = plan.cefr_level, plan.target_language
+    if await get_available_exercise(level, target_language, current_user.id, db) is not None:
+        return ListeningGeneratingResponse(status="available")
     lock_key = f"listening:generating:{level}:{target_language}"
 
-    acquired = await redis.set(lock_key, "1", nx=True, ex=60)
-    if not acquired:
-        # Another generation is already running
+    lease = await GenerationLease.acquire(redis, lock_key)
+    if lease is None:
         return ListeningGeneratingResponse(status="generating")
+
+    try:
+        if await get_available_exercise(level, target_language, current_user.id, db) is not None:
+            await lease.finish(redis)
+            return ListeningGeneratingResponse(status="available")
+    except BaseException:
+        await lease.finish(redis, "interrupted")
+        raise
 
     tts_service = request.app.state.tts_service
     background_tasks.add_task(
@@ -201,7 +181,7 @@ async def generate_exercise(
         target_language,
         tts_service,
         settings.AUDIO_STORAGE_PATH,
-        lock_key,
+        lease,
         voice,
     )
     return ListeningGeneratingResponse(status="generating")

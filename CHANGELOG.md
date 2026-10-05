@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.30] - Unreleased
+
+### Changed
+
+- Listening and Reading expose generation status through immediate next-exercise responses, with a 60-per-minute read limit and a configurable total generation budget (`EXERCISE_GENERATION_TIMEOUT_SECONDS`, default 600 seconds).
+
+### Fixed
+
+- Listening and Reading keep checking slow exercise generation through short, recoverable requests, resume existing work when reopening the page, and retrieve completed exercises after temporary connection failures.
+- Slow generation retains an owner-checked, renewable lock; obsolete tasks cannot release another task's lock, and bounded LLM calls avoid multiplying SDK and application retries.
+- Exercise generation reports localized failure, timeout, and connection-status errors, prevents duplicate clicks, and ignores late responses after leaving the page or changing language.
+
 ## [1.9.25] - 2026-09-25
 
 ### Added

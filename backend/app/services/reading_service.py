@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
+from collections.abc import Awaitable, Callable
 from typing import Any
 
 from sqlalchemy import func, select
@@ -161,6 +162,9 @@ async def generate_and_save_exercise(
     level: str,
     target_language: str,
     db: AsyncSession,
+    *,
+    deadline: float | None = None,
+    before_save: Callable[[], Awaitable[None]] | None = None,
 ) -> ReadingExercise:
     """
     Generate exercise text via LLM and persist.
@@ -186,7 +190,9 @@ async def generate_and_save_exercise(
     messages = [{"role": "user", "content": prompt}]
 
     try:
-        parsed = await llm_adapter.structured_output(messages, ReadingGenerationResponse)
+        parsed = await llm_adapter.structured_output(
+            messages, ReadingGenerationResponse, deadline=deadline
+        )
     except LLMResponseError as exc:
         raise ValueError(f"LLM failed to produce valid reading exercise JSON: {exc}") from exc
 
@@ -203,6 +209,8 @@ async def generate_and_save_exercise(
         questions=questions,
     )
     db.add(exercise)
+    if before_save is not None:
+        await before_save()
     await db.commit()
     await db.refresh(exercise)
     return exercise

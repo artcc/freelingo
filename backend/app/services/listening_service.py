@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import os
 import random
+from collections.abc import Awaitable, Callable
 from typing import Any
 
 from sqlalchemy import func, select
@@ -86,6 +87,9 @@ async def generate_and_save_exercise(
     tts_service: Any,
     storage_path: str,
     voice: str = "",
+    *,
+    deadline: float | None = None,
+    before_save: Callable[[], Awaitable[None]] | None = None,
 ) -> ListeningExercise:
     """
     Generate exercise text via LLM, synthesise audio via TTS, persist both.
@@ -108,7 +112,9 @@ async def generate_and_save_exercise(
     messages = [{"role": "user", "content": prompt}]
 
     try:
-        parsed = await llm_adapter.structured_output(messages, ListeningGenerationResponse)
+        parsed = await llm_adapter.structured_output(
+            messages, ListeningGenerationResponse, deadline=deadline
+        )
     except LLMResponseError as exc:
         raise ValueError(f"LLM failed to produce valid listening exercise JSON: {exc}") from exc
 
@@ -118,6 +124,9 @@ async def generate_and_save_exercise(
 
     # TTS synthesis — use the voice of the user who triggered generation
     audio_bytes: bytes = await tts_service.synthesize(text, voice or None)
+
+    if before_save is not None:
+        await before_save()
 
     # Prepare audio directory
     audio_dir = os.path.join(storage_path, "listening")
@@ -142,6 +151,8 @@ async def generate_and_save_exercise(
         fh.write(audio_bytes)
 
     exercise.audio_path = audio_path
+    if before_save is not None:
+        await before_save()
     await db.commit()
     await db.refresh(exercise)
     return exercise

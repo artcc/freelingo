@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Forstået",
     "entry1": {
       "label": "Fem nye grænsefladesprog",
@@ -1557,6 +1557,11 @@
     "moreInHistory": "+{count} mere",
     "practiceAgain": "Øv igen",
     "replayNoXp": "Gentag (ingen XP)"
+  },
+  "exerciseGeneration": {
+    "failed": "Øvelsen kunne ikke oprettes. Prøv igen.",
+    "timeout": "Det tog for lang tid at oprette øvelsen. Prøv igen.",
+    "unavailable": "Øvelsens status kunne ikke kontrolleres. Prøv igen."
   },
   "reading": {
     "title": "Læsning",

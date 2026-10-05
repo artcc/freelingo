@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Begrepen",
     "entry1": {
       "label": "Vijf nieuwe interfacetalen",
@@ -1557,6 +1557,11 @@
     "moreInHistory": "+{count} meer",
     "practiceAgain": "Opnieuw oefenen",
     "replayNoXp": "Herhaling (geen XP)"
+  },
+  "exerciseGeneration": {
+    "failed": "De oefening kon niet worden gemaakt. Probeer het opnieuw.",
+    "timeout": "Het maken van de oefening duurde te lang. Probeer het opnieuw.",
+    "unavailable": "De status van de oefening kon niet worden gecontroleerd. Probeer het opnieuw."
   },
   "reading": {
     "title": "Lezen",

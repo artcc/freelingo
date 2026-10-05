@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Rozumiem",
     "entry1": {
       "label": "Pięć nowych języków interfejsu",
@@ -1557,6 +1557,11 @@
     "moreInHistory": "+{count} więcej",
     "practiceAgain": "Ćwicz ponownie",
     "replayNoXp": "Powtórka (brak XP)"
+  },
+  "exerciseGeneration": {
+    "failed": "Nie udało się wygenerować ćwiczenia. Spróbuj ponownie.",
+    "timeout": "Generowanie ćwiczenia trwało zbyt długo. Spróbuj ponownie.",
+    "unavailable": "Nie udało się sprawdzić stanu ćwiczenia. Spróbuj ponownie."
   },
   "reading": {
     "title": "Czytanie",

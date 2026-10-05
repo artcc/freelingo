@@ -14,6 +14,7 @@ from app.main import app
 from app.models.reading import ReadingExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
+from tests.exercise_redis import GenerationRedis as _MockRedis
 
 # ---------------------------------------------------------------------------
 # Shared test data
@@ -37,35 +38,6 @@ _PARTIAL = {"0": "B", "1": "B", "2": "A", "3": "A", "4": "A"}  # 2 correct
 # ---------------------------------------------------------------------------
 # In-memory Redis mock
 # ---------------------------------------------------------------------------
-
-
-class _MockRedis:
-    def __init__(self) -> None:
-        self._store: dict[str, str] = {}
-
-    async def set(self, key: str, value: str, *, nx: bool = False, ex: int | None = None):
-        if nx and key in self._store:
-            return None
-        self._store[key] = value
-        return True
-
-    async def get(self, key: str):
-        return self._store.get(key)
-
-    async def exists(self, key: str) -> int:
-        return 1 if key in self._store else 0
-
-    async def delete(self, key: str) -> None:
-        self._store.pop(key, None)
-
-    async def setex(self, key: str, ttl: int, value: str) -> None:
-        self._store[key] = value
-
-    async def getex(self, key: str):
-        return self._store.get(key)
-
-    async def aclose(self) -> None:
-        pass
 
 
 # ---------------------------------------------------------------------------

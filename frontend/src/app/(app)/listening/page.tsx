@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
 import { useLanguageStore } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
@@ -102,7 +103,6 @@ function ListeningPage() {
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
   const [isReplay, setIsReplay] = useState(false)
   const [generatingWarn, setGeneratingWarn] = useState(false)
-  const generateAbortRef = useRef<AbortController | null>(null)
   const generatingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Warn if exercise generation takes longer than 15 s
@@ -122,93 +122,28 @@ function ListeningPage() {
     }
   }, [pageState])
 
-  // Cancel in-flight long-poll on unmount
-  useEffect(() => {
-    return () => {
-      generateAbortRef.current?.abort()
-    }
+  const onExercise = useCallback((nextExercise: ListeningExercise) => {
+    setExercise(nextExercise)
+    setAnswers({})
+    setResult(null)
+    setIsReplay(false)
   }, [])
 
-  const loadNext = useCallback(async () => {
-    setPageState('loading')
-    setError('')
-    dismissTooltip()
-    try {
-      const res = await apiFetch('/api/listening/next')
-      if (!res.ok) {
-        setPageState('idle')
-        return
-      }
-      const data = (await res.json()) as {
-        available: boolean
-        exercise?: ListeningExercise
-      }
-      if (data.available && data.exercise) {
-        setExercise(data.exercise)
-        setAnswers({})
-        setResult(null)
-        setIsReplay(false)
-        setPageState('exercise')
-      } else {
-        setPageState('idle')
-      }
-    } catch {
-      setError(t('errorLoading'))
-      setPageState('idle')
-    }
-  }, [t, dismissTooltip])
+  const { loadNext, generate } = useExerciseGeneration({
+    feature: 'listening',
+    language: activeLanguage?.code,
+    onExercise,
+    setPageState,
+    setError,
+    dismissTooltip,
+  })
 
-  useEffect(() => {
-    loadNext()
-  }, [loadNext, activeLanguage?.code])
-
-  async function handleGenerate() {
+  function handleGenerate() {
     const voice =
       typeof window !== 'undefined'
         ? (localStorage.getItem('tts_voice') ?? '')
         : ''
-    const voiceQ = voice ? `?voice=${encodeURIComponent(voice)}` : ''
-    try {
-      const res = await apiFetch(`/api/listening/generate${voiceQ}`, {
-        method: 'POST',
-      })
-      if (res.ok || res.status === 202) {
-        setPageState('generating')
-        // Single long-poll request — server waits (async) until exercise is ready.
-        // AbortController cancels the request if the component unmounts first.
-        const controller = new AbortController()
-        generateAbortRef.current = controller
-        const nextRes = await apiFetch('/api/listening/next?wait=true', {
-          signal: controller.signal,
-        })
-        generateAbortRef.current = null
-        if (nextRes.ok) {
-          const data = (await nextRes.json()) as {
-            available: boolean
-            exercise?: ListeningExercise
-          }
-          if (data.available && data.exercise) {
-            setExercise(data.exercise)
-            setAnswers({})
-            setResult(null)
-            setIsReplay(false)
-            setPageState('exercise')
-            return
-          }
-        }
-        setPageState('idle')
-      } else {
-        const d = (await res.json().catch(() => ({}))) as { detail?: string }
-        setError(
-          d.detail === 'No active study plan found'
-            ? tCommon('noActivePlan')
-            : t('errorLoading')
-        )
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return
-      setPageState('idle')
-    }
+    void generate(voice)
   }
 
   async function handleSubmit() {

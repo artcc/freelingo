@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Verstanden",
     "entry1": {
       "label": "Fünf neue Oberflächensprachen",
@@ -1557,6 +1557,11 @@
     "moreInHistory": "+{count} weitere",
     "practiceAgain": "Erneut üben",
     "replayNoXp": "Wiederholung (kein XP)"
+  },
+  "exerciseGeneration": {
+    "failed": "Die Übung konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "timeout": "Das Erstellen der Übung hat zu lange gedauert. Bitte versuche es erneut.",
+    "unavailable": "Der Status der Übung konnte nicht überprüft werden. Bitte versuche es erneut."
   },
   "reading": {
     "title": "Lesen",
