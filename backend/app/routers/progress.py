@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import cast
 
 from fastapi import APIRouter, Depends, Request
@@ -13,11 +14,23 @@ from app.models.flashcard import Flashcard
 from app.models.progress import Progress
 from app.models.study_plan import StudyPlan
 from app.models.user import User
-from app.schemas.progress import ProgressHistoryResponse, ProgressSummary
-from app.services.progress_service import get_unit_competencies
+from app.schemas.progress import ProgressActivityDay, ProgressHistoryResponse, ProgressSummary
+from app.services.progress_service import current_streak, get_unit_competencies, progress_today
 from app.services.user_language_service import get_active_language
 
 router = APIRouter(prefix="/api/progress", tags=["progress"])
+
+
+def _activity_week(entries: list[Progress]) -> list[ProgressActivityDay]:
+    by_date = {entry.date: entry for entry in entries}
+    return [
+        ProgressActivityDay(
+            date=day,
+            active=day in by_date,
+            xp=by_date[day].xp_earned if day in by_date else 0,
+        )
+        for day in (progress_today() - timedelta(days=offset) for offset in range(6, -1, -1))
+    ]
 
 
 async def _get_active_plan_or_none(db: AsyncSession, user_id: int) -> StudyPlan | None:
@@ -76,6 +89,7 @@ async def get_summary(
             exercises_correct=0,
             accuracy=0.0,
             skills={},
+            activity_week=_activity_week([]),
         )
 
     vocabulary_mastered, vocabulary_total, vocabulary_progress = (
@@ -96,6 +110,7 @@ async def get_summary(
             exercises_correct=0,
             accuracy=0.0,
             skills={},
+            activity_week=_activity_week([]),
             vocabulary_level=plan.cefr_level,
             vocabulary_mastered=vocabulary_mastered,
             vocabulary_total=vocabulary_total,
@@ -112,12 +127,14 @@ async def get_summary(
 
     return ProgressSummary(
         total_xp=total_xp,
-        current_streak=all_entries[0].streak_day,
+        current_streak=current_streak(all_entries),
         total_lessons=total_lessons,
         total_exercises=total_exercises,
         exercises_correct=exercises_correct,
         accuracy=round(accuracy, 2),
         skills=latest_skills,
+        today_xp=all_entries[0].xp_earned if all_entries[0].date == progress_today() else 0,
+        activity_week=_activity_week(all_entries),
         vocabulary_level=plan.cefr_level,
         vocabulary_mastered=vocabulary_mastered,
         vocabulary_total=vocabulary_total,

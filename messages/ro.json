@@ -1513,6 +1513,26 @@
     "unavailable": "Practica nu a putut fi pregătită. Verifică dacă lecția este finalizată și încearcă din nou.",
     "back": "Înapoi la plan"
   },
+  "dashboardProgress": {
+    "title": "Progresul tău",
+    "scope": "Limba și planul tău de studiu actuale",
+    "details": "Vezi progresul",
+    "experience": "Experiență",
+    "todayXp": "+{xp} XP astăzi",
+    "experienceHint": "Fiecare exercițiu contribuie la parcursul tău.",
+    "streak": "Serie de învățare",
+    "days": "{count, plural, one {zi} few {zile} other {de zile}}",
+    "practisedToday": "Ai exersat astăzi",
+    "readyToday": "O nouă ocazie de a exersa",
+    "week": "Activitatea din ultimele șapte zile",
+    "activeDay": "Ai exersat",
+    "inactiveDay": "Nicio activitate înregistrată",
+    "utcHint": "Ultimele 7 zile",
+    "lessons": "Lecții finalizate",
+    "accuracy": "Răspunsuri corecte la exercițiile lecțiilor",
+    "correctAnswers": "{correct} răspunsuri corecte din {total}",
+    "noExercises": "Rezultatele vor apărea după primul exercițiu."
+  },
   "whatsNew": {
     "title": "Noutăți",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Începe o conversație vocală dintr-o lecție finalizată. Lingu te ajută să folosești ce ai învățat, iar conversația este salvată cu titlul subiectului exersat."
     },
     "entry2": {
+      "label": "Mai multe moduri de a câștiga XP",
+      "desc": "Câștigă XP prin <bold>voce, chat, recapitulări spațiate de citire și ascultare și finalizarea unităților și nivelurilor</bold>. Panoul reînnoit evidențiază XP de astăzi, seria ta și activitatea recentă."
+    },
+    "entry3": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

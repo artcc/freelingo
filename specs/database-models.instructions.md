@@ -186,6 +186,23 @@ Daily progress record, one row per user per day per plan.
 
 **Constraint:** `UNIQUE(user_id, study_plan_id, date)` — one progress row per user per plan per day.
 
+## ProgressReward (`progress_rewards`)
+
+Durable additional XP awards. The source key records provenance without cascading deletion from
+conversations or exercises; deleting those resources does not reopen reward eligibility.
+
+- `id`: integer primary key.
+- `user_id`: indexed, required FK to users, CASCADE.
+- `study_plan_id`: indexed, required FK to study_plans, CASCADE.
+- `kind`: required string(30), voice/chat/reading_replay/listening_replay/unit/level.
+- `source_key`: required string(160), service-generated resource/date/block or milestone key.
+- `date`: indexed UTC award date.
+- `xp`: required integer credit.
+- Unique `(study_plan_id, kind, source_key)` (`uq_progress_reward_source`).
+
+Award rules live in `learning-resources.instructions.md`. The table is registered in model metadata;
+its migration must be generated and applied through the remote deployment workflow before use.
+
 ## Conversation (`conversations`)
 
 Grouping of chat messages (text and voice) into named conversations.
@@ -259,7 +276,8 @@ Records user submissions for a listening exercise.
 - completed_at — Type: datetime; Notes: Auto-set on creation
 
 Initial duplicate submissions are rejected by the service. A replay creates an additional row and
-always awards zero XP; there is no database uniqueness constraint on user and exercise.
+awards 5 XP once per plan/exercise/UTC day if a prior-day attempt exists in that plan, otherwise zero.
+There is no database uniqueness constraint on user and exercise.
 
 ## ReadingExercise (`reading_exercises`)
 
@@ -291,7 +309,8 @@ Records user submissions for a reading exercise.
 - completed_at — Type: datetime; Notes: Auto-set on creation
 
 Initial duplicate submissions are rejected by the service. A replay creates an additional row and
-always awards zero XP; there is no database uniqueness constraint on user and exercise.
+awards 5 XP once per plan/exercise/UTC day if a prior-day attempt exists in that plan, otherwise zero.
+There is no database uniqueness constraint on user and exercise.
 
 ## FeedbackEntry (`feedback_entries`)
 

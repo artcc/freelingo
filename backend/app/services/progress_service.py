@@ -7,11 +7,34 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.competency import UserCompetency
 from app.models.progress import Progress
+from app.models.study_plan import StudyPlan
 
 XP_LESSON_COMPLETE = 20
 XP_EXERCISE_CORRECT = 5
 XP_EXERCISE_WRONG = 1
 XP_FLASHCARD_REVIEW = 2
+
+
+def progress_today() -> date:
+    return datetime.now(UTC).date()
+
+
+def current_streak(entries: list[Progress]) -> int:
+    """Entries are newest first. Yesterday's streak remains available today."""
+    if not entries or entries[0].date < progress_today() - timedelta(days=1):
+        return 0
+    return entries[0].streak_day
+
+
+async def lock_progress_plan(db: AsyncSession, user_id: int, plan_id: int) -> StudyPlan | None:
+    # Serialize daily counters and reward keys, including the first activity of a day.
+    return (
+        await db.execute(
+            select(StudyPlan)
+            .where(StudyPlan.id == plan_id, StudyPlan.user_id == user_id)
+            .with_for_update()
+        )
+    ).scalar_one_or_none()
 
 
 async def update_daily_progress(
@@ -27,22 +50,31 @@ async def update_daily_progress(
     skill_score: float | None = None,
     commit: bool = True,
 ) -> Progress:
-    today = date.today()
+    today = progress_today()
+    if study_plan_id is not None:
+        await lock_progress_plan(db, user_id, study_plan_id)
 
     base_filter = [Progress.user_id == user_id]
     if study_plan_id is not None:
         base_filter.append(Progress.study_plan_id == study_plan_id)
 
-    result = await db.execute(select(Progress).where(*base_filter, Progress.date == today))
+    result = await db.execute(
+        select(Progress)
+        .where(*base_filter, Progress.date == today)
+        .execution_options(populate_existing=True)
+    )
     entry = result.scalar_one_or_none()
 
     if not entry:
         yesterday = today - timedelta(days=1)
-        yest_result = await db.execute(
-            select(Progress).where(*base_filter, Progress.date == yesterday)
+        previous_result = await db.execute(
+            select(Progress)
+            .where(*base_filter, Progress.date < today)
+            .order_by(Progress.date.desc())
+            .limit(1)
         )
-        yest = yest_result.scalar_one_or_none()
-        streak = (yest.streak_day + 1) if yest else 1
+        previous = previous_result.scalar_one_or_none()
+        streak = previous.streak_day + 1 if previous and previous.date == yesterday else 1
 
         entry = Progress(
             user_id=user_id,
@@ -52,7 +84,7 @@ async def update_daily_progress(
             exercises_correct=0,
             exercises_total=0,
             streak_day=streak,
-            skills={},
+            skills=dict(previous.skills or {}) if previous else {},
             study_plan_id=study_plan_id,
         )
         db.add(entry)

@@ -104,6 +104,7 @@ class ConversationPipeline:
         self._user_id = user_id
         self._conversation_id = conversation_id
         self._study_plan_id = study_plan_id
+        self._transcript_lock = asyncio.Lock()
         # Build user context section
         _ctx_parts: list[str] = []
         if learning_goals:
@@ -774,9 +775,8 @@ class ConversationPipeline:
 
         self.history.append({"role": "assistant", "content": clean_full_response})
         # Persist both sides of the turn together — only reached on success.
-        self._pending_saves.append(asyncio.create_task(self._save_message("user", user_text)))
         self._pending_saves.append(
-            asyncio.create_task(self._save_message("assistant", clean_full_response))
+            asyncio.create_task(self._save_turn(user_text, clean_full_response))
         )
 
         logger.info("[pipeline] Turn complete — assistant: %r", clean_full_response[:120])
@@ -827,6 +827,12 @@ class ConversationPipeline:
         except Exception:
             logger.debug("[pipeline] Failed to save token usage — ignored")
 
+    async def _save_turn(self, user_text: str, assistant_text: str) -> None:
+        # Preserve transcript order even when background DB writes overlap turns.
+        async with self._transcript_lock:
+            await self._save_message("user", user_text)
+            await self._save_message("assistant", assistant_text)
+
     async def _save_message(self, role: str, content: str) -> None:
         """Persists a conversation transcript message to chat_history.
 
@@ -841,6 +847,7 @@ class ConversationPipeline:
 
             from app.models.chat_history import ChatHistory  # noqa: PLC0415
             from app.models.conversation import Conversation  # noqa: PLC0415
+            from app.services.progress_rewards import reward_conversation  # noqa: PLC0415
 
             async with db_session() as db:
                 db.add(
@@ -858,6 +865,9 @@ class ConversationPipeline:
                     .where(Conversation.id == self._conversation_id)
                     .values(updated_at=datetime.now(UTC).replace(tzinfo=None))
                 )
+                if role == "assistant":
+                    await db.flush()
+                    await reward_conversation(db, self._conversation_id)
                 await db.commit()
         except Exception:
             logger.debug("[pipeline] Failed to save message — ignored")

@@ -42,6 +42,7 @@ from app.services.memory_service import (
     execute_save_user_memory,
     get_user_memories,
 )
+from app.services.progress_rewards import reward_conversation
 from app.services.prompts.common import get_language_prompt_overlay
 from app.services.prompts.tutor import build_tutor_system_prompt
 from app.utils.db import db_session
@@ -449,6 +450,8 @@ async def chat(
                 )
             )
             conv.updated_at = datetime.now(UTC).replace(tzinfo=None)
+            await db.flush()
+            await reward_conversation(db, conversation_id)
             await db.commit()
 
             yield f"data: {json.dumps({'done': True})}\n\n"

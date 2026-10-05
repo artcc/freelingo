@@ -1513,6 +1513,26 @@
     "unavailable": "Øvelsen kunne ikke forberedes. Kontrollér, at lektionen er gennemført, og prøv igen.",
     "back": "Tilbage til studieplanen"
   },
+  "dashboardProgress": {
+    "title": "Dine fremskridt",
+    "scope": "Dit aktuelle sprog og din studieplan",
+    "details": "Se fremskridt",
+    "experience": "Erfaring",
+    "todayXp": "+{xp} XP i dag",
+    "experienceHint": "Hver øvelse bidrager til din læring.",
+    "streak": "Læringsstime",
+    "days": "{count, plural, one {dag} other {dage}}",
+    "practisedToday": "Du har øvet i dag",
+    "readyToday": "En ny mulighed for at øve",
+    "week": "Aktivitet de seneste syv dage",
+    "activeDay": "Øvet",
+    "inactiveDay": "Ingen registreret aktivitet",
+    "utcHint": "Seneste 7 dage",
+    "lessons": "Gennemførte lektioner",
+    "accuracy": "Korrekte svar i lektionsøvelser",
+    "correctAnswers": "{correct} af {total} korrekte svar",
+    "noExercises": "Dine resultater vises efter din første øvelse."
+  },
   "whatsNew": {
     "title": "Nyheder",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Start en stemmesamtale fra en gennemført lektion. Lingu hjælper dig med at bruge det, du har lært, og samtalen gemmes med titlen på det emne, du øvede."
     },
     "entry2": {
+      "label": "Flere måder at optjene XP på",
+      "desc": "Optjen XP med <bold>talesamtaler, chat, fordelte læse- og lytterepetitioner samt gennemførte enheder og niveauer</bold>. Det fornyede dashboard fremhæver dagens XP, din stime og din seneste aktivitet."
+    },
+    "entry3": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

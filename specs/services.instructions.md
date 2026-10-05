@@ -77,6 +77,11 @@ translation context. Generated cards receive target language from the persisted 
 flush without committing so lesson completion can include progress in one transaction. Progress is
 always credited to the resource-owning plan.
 
+`progress_rewards.py` grants additional conversation, spaced-replay, unit, and level XP with durable
+source keys and plan-row serialization. Reward inserts and daily credit share a transaction. Activity
+uses UTC and can have zero XP; new days retain prior skill snapshots. Streak reads expire when the
+latest date is older than yesterday. Exact award thresholds live in `learning-resources.instructions.md`.
+
 ## Static-resource help
 
 `resource_native_help.py` hashes canonical resource source data, returns only hash-current cache rows,
@@ -120,11 +125,13 @@ Provider details belong to `speech-services.instructions.md`.
 
 `listening_service.py` resolves reusable exercises, generates structured content and TTS audio, scores
 attempts, and returns paginated history. Generation accepts an optional voice. Initial duplicate
-attempts are rejected; `is_replay=True` creates another attempt with zero XP. Submission and history
+attempts are rejected; `is_replay=True` creates another attempt with 5 XP once per exercise/plan/day
+when a prior-day attempt exists in that plan, otherwise zero. Submission and history
 accept plan/language context so progress and retrieval remain isolated.
 
 `reading_service.py` provides the equivalent text-only flow with language-aware cultural topics and
-length guidance. Replays likewise persist with zero XP.
+length guidance. Replays use the same spaced-reward rules. Attempt, reward and daily progress commit
+together; even a zero-score or zero-XP attempt records activity.
 
 `exercise_generation.py` coordinates both domains' background tasks through unique-owner Redis
 leases, 60-second expiry, 20-second renewal, atomic owner-checked completion, and expiring status.

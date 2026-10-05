@@ -114,12 +114,42 @@ flashcards.
 Progress has daily rows per user, plan, and date with XP, lessons, exercises, streak, and skill JSON.
 `UserCompetency` stores one row per user, plan, unit, and competency text.
 
+### Activity and rewards
+
+Activity days use UTC. Submitted Reading/Listening attempts count even with zero correct answers
+or zero replay XP; conversations count after a distinct learner contribution receives a persisted
+nonempty tutor response. Greetings, unanswered contributions, and planless conversations do not count.
+The current streak is the latest stored streak only if its date is today or yesterday; otherwise it is
+zero. New daily rows carry forward the previous row's skill snapshot before applying scored updates.
+
+Base rewards are 20 XP for lesson completion, 5/1 for correct/incorrect lesson exercises, 2 per
+flashcard review, and 10 per correct first-attempt Reading/Listening answer. Additional rewards:
+
+- Voice: 20 XP after three distinct answered learner contributions in a conversation on a UTC day,
+  once per conversation/day, at most 60 XP per plan/day. Lesson practice shares this reward.
+- Text chat: 10 XP per block of five distinct answered contributions in a conversation/day, at most
+  30 XP per plan/day across conversations. Whitespace and case differences do not make a new contribution.
+- Reading/Listening replay: 5 XP per exercise/plan/UTC day when an attempt for that exercise in that
+  plan exists on an earlier UTC day. Other replays give zero XP. All submitted attempts count as activity.
+- Unit: 30 XP once per plan/unit, after all its persisted schedule slots have completed lesson rows.
+  Future scheduled lessons must also be complete, not just already generated lessons.
+- Level: 100 XP once per plan, after all scheduled teaching lessons and the level test are complete,
+  independently of the test score. Current/legacy completion-test slots are excluded.
+
+`progress_rewards.py` records additional awards in `progress_rewards`. A unique plan/kind/source key
+and a PostgreSQL plan-row lock protect repeat requests and daily limits; award and daily credit share
+the caller's transaction. Comprehension attempt persistence shares that transaction. Existing totals
+are preserved; no historical reward backfill is performed. Rewards describe participation and
+completion, not linguistic mastery. Ownership comes from the persisted conversation/lesson/plan or
+the validated comprehension attempt context, never from mutable client selection.
+
 Exercise skill uses lesson type as its key. Updates apply `0.7 * previous + 0.3 * latest`; a new skill
 starts at the latest score. Lesson completion applies the lesson's mean answered-exercise score, or
 0.5 when none is available, to every competency in the unit. Mastery is `score >= 0.80`.
 
 - `GET /api/progress/summary`: authenticated, `60/minute`; summarizes the active plan, returns zeros
-  without one, and exposes skill JSON from the latest daily row.
+  without one, and exposes skill JSON from the latest daily row. Includes `today_xp` and seven
+  chronological `activity_week` entries (`date`, `active`, `xp`), ending on the current UTC day.
 - `GET /api/progress/history`: authenticated, `60/minute`; returns up to 90 recent daily rows.
 - `GET /api/progress/competencies`: authenticated, `60/minute`; returns unit ID, average score,
   mastered count, and total count, or an empty list without a plan.

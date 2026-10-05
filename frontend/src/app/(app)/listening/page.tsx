@@ -387,7 +387,7 @@ function ListeningPage() {
               <p className="text-fl-label text-fl-muted-3 font-mono tracking-widest uppercase">
                 XP
               </p>
-              {isReplay ? (
+              {isReplay && result.xp_earned === 0 ? (
                 <p className="text-fl-label text-fl-muted-3 mt-1 font-mono">
                   {t('replayNoXp')}
                 </p>

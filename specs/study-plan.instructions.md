@@ -205,6 +205,11 @@ Lesson completion applies daily XP and skill progress to the lesson's owning pla
 use the mean answered-exercise score, or the established fallback when none is available, and update by
 EMA. Detailed XP and mastery rules live in `learning-resources.instructions.md`.
 
+Completion also checks the persisted schedule for a unit bonus: 30 XP once per plan/unit only when
+every scheduled lesson in that unit is complete. Completing the teaching schedule and submitting the
+level test grants 100 XP once per plan, independent of score. Reward keys and credits commit in the
+same transaction as completion; missing future lesson rows cannot qualify as completed slots.
+
 ## Frontend integration
 
 Dashboard loads progress and `/today` in parallel. It prioritizes the end-of-plan `completion` state:
@@ -240,7 +245,8 @@ reference rather than chat/demo session-storage context and does not request `/s
 The WebSocket independently verifies ownership and completion and loads a bounded reference snapshot
 of the lesson, scheduled objectives, and answered exercises. The lesson's plan owns the session
 language, level, and provenance, including when it is no longer the active plan. Voice access and
-quota rules remain authoritative. Practice does not change lesson completion, XP, or competencies.
+quota rules remain authoritative. Practice does not change lesson completion or competencies; it can
+credit the existing voice-participation reward to the lesson's persisted plan.
 See `voice-conversation.instructions.md` for prompt lifecycle and history titles.
 
 ## Related specifications

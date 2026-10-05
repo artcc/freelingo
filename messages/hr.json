@@ -1513,6 +1513,26 @@
     "unavailable": "Nije moguće pripremiti vježbu. Provjeri je li lekcija dovršena i pokušaj ponovno.",
     "back": "Natrag na plan"
   },
+  "dashboardProgress": {
+    "title": "Tvoj napredak",
+    "scope": "Tvoj trenutačni jezik i plan učenja",
+    "details": "Pogledaj napredak",
+    "experience": "Iskustvo",
+    "todayXp": "+{xp} XP danas",
+    "experienceHint": "Svaka vježba doprinosi tvojem učenju.",
+    "streak": "Niz učenja",
+    "days": "{count, plural, one {dan} few {dana} other {dana}}",
+    "practisedToday": "Danas si vježbao/la",
+    "readyToday": "Nova prilika za vježbanje",
+    "week": "Aktivnost u posljednjih sedam dana",
+    "activeDay": "Vježba odrađena",
+    "inactiveDay": "Nema zabilježene aktivnosti",
+    "utcHint": "Posljednjih 7 dana",
+    "lessons": "Završene lekcije",
+    "accuracy": "Točnost u vježbama lekcija",
+    "correctAnswers": "{correct} od {total} točnih odgovora",
+    "noExercises": "Rezultati će se pojaviti nakon prve vježbe."
+  },
   "whatsNew": {
     "title": "Novosti",
     "version": "v1.9.30",
@@ -1522,6 +1542,10 @@
       "desc": "Započni glasovni razgovor iz dovršene lekcije. Lingu ti pomaže primijeniti naučeno, a razgovor se sprema s naslovom teme koju si vježbao."
     },
     "entry2": {
+      "label": "Više načina za osvajanje XP-a",
+      "desc": "Osvoji XP uz <bold>glasovne razgovore, chat, razmaknuta ponavljanja čitanja i slušanja te završavanje jedinica i razina</bold>. Osvježena nadzorna ploča ističe današnji XP, tvoj niz i nedavnu aktivnost."
+    },
+    "entry3": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

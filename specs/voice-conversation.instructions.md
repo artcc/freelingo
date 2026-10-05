@@ -199,8 +199,15 @@ Persistence rules:
 - Empty STT, failed STT, failed LLM, empty LLM fallback, cancellation, or failed output transport:
   neither side of that turn.
 
-Writes use independent best-effort tasks and update conversation timestamps. Cleanup waits for
-pending writes. A conversation can remain empty when a session ends before a persistible turn.
+Writes use best-effort background tasks and update conversation timestamps. Normal-turn writes are
+serialized within the pipeline, saving the user before the assistant; cleanup waits for pending writes.
+A conversation can remain empty when a session ends before a persistible turn.
+
+Persisted answered contributions count as plan-owned daily activity. Three distinct answered learner
+contributions on the same UTC day grant 20 XP once per conversation/day, capped at 60 XP per plan/day.
+Lesson practice uses this same reward without an extra bonus. Greetings, failed/cancelled turns, and
+planless conversations do not earn rewards. No client reward claim or new voice-control event is used.
+Reward rules and durable source keys are specified in `learning-resources.instructions.md`.
 
 LLM usage is stored best-effort with `source="conversation"` and optional plan provenance when token
 metadata is available. Greeting usage is not recorded.

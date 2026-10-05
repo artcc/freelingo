@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import random
 from collections.abc import Awaitable, Callable
+from datetime import datetime, time
 from typing import Any
 
 from sqlalchemy import func, select
@@ -15,7 +16,8 @@ from app.services.language_helpers import (
     get_language_name,
 )
 from app.services.llm_adapter import LLMResponseError, llm_adapter
-from app.services.progress_service import update_daily_progress
+from app.services.progress_rewards import award_progress_reward
+from app.services.progress_service import lock_progress_plan, progress_today, update_daily_progress
 from app.services.prompts.common import get_language_prompt_overlay
 from app.services.prompts.comprehension import build_reading_generation_prompt
 
@@ -241,13 +243,14 @@ async def submit_attempt(
     Raises ValueError("exercise_not_found") if exercise_id is invalid.
     Raises ValueError("already_attempted") if user already submitted for this exercise
     and is_replay is False.
-    When is_replay=True the duplicate guard is skipped and xp_earned is forced to 0
-    (spec: replaying an exercise from history awards no additional XP).
+    Replays credit 5 XP once per UTC day when a prior-day attempt exists in this plan.
     """
     exercise = await db.get(ReadingExercise, exercise_id)
     if exercise is None:
         raise ValueError("exercise_not_found")
 
+    if study_plan_id is not None:
+        await lock_progress_plan(db, user_id, study_plan_id)
     if not is_replay:
         # Guard against duplicate submissions on first attempt
         existing = await db.execute(
@@ -261,7 +264,26 @@ async def submit_attempt(
 
     score, xp_earned = calculate_score(exercise.questions, answers)
     if is_replay:
-        xp_earned = 0  # replays never award XP
+        xp_earned = 0
+        earlier_attempt = await db.scalar(
+            select(ReadingAttempt.id)
+            .where(
+                ReadingAttempt.user_id == user_id,
+                ReadingAttempt.study_plan_id == study_plan_id,
+                ReadingAttempt.exercise_id == exercise_id,
+                ReadingAttempt.completed_at < datetime.combine(progress_today(), time.min),
+            )
+            .limit(1)
+        )
+        if earlier_attempt is not None and study_plan_id is not None:
+            xp_earned = await award_progress_reward(
+                db,
+                user_id,
+                study_plan_id,
+                kind="reading_replay",
+                source_key=f"{exercise_id}:{progress_today()}",
+                xp=5,
+            )
 
     attempt = ReadingAttempt(
         user_id=user_id,
@@ -275,12 +297,15 @@ async def submit_attempt(
 
     exercise.view_count += 1
 
+    await update_daily_progress(
+        db,
+        user_id,
+        xp=0 if is_replay else xp_earned,
+        study_plan_id=study_plan_id,
+        commit=False,
+    )
     await db.commit()
     await db.refresh(attempt)
-
-    # Award XP via the shared progress service (creates today's row if missing)
-    if xp_earned > 0:
-        await update_daily_progress(db, user_id, xp=xp_earned, study_plan_id=study_plan_id)
 
     return attempt, exercise
 

@@ -88,6 +88,12 @@ responses expose status without holding a database session open while waiting fo
 and rejects mismatches with 409. It does not authorize arbitrary client-supplied plan IDs. Redis lease
 ownership and PostgreSQL commit are separate operations; the pre-save guard is not transactional fencing.
 
+`progress_rewards.py` owns additional XP awards, limits, and source-key deduplication through
+`ProgressReward`. Plan-row locks serialize reward decisions and daily-progress updates. Rewards use
+persisted resource ownership and commit with their progress credit. The `progress_rewards` table and
+its unique constraint must exist before serving reward-enabled requests; schema generation and
+application follow the remote deployment-maintainer migration workflow.
+
 ### Static learning data
 
 `app/data/` contains the canonical curriculum, grammar, vocabulary, phrasebook, and assessment-bank

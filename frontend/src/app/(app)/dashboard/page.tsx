@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
@@ -19,6 +19,10 @@ import WhatsNew from '@/components/whats-new/WhatsNew'
 import { PageLoading } from '@/components/ui/page-loading'
 import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
 import { DashboardAnnouncement } from '@/components/dashboard/DashboardAnnouncement'
+import {
+  ProgressOverview,
+  type ActivityDay,
+} from '@/components/dashboard/ProgressOverview'
 
 interface TodayLessonItem {
   id: number | null
@@ -87,7 +91,9 @@ export default function DashboardPage() {
   const [totalLessons, setTotalLessons] = useState(0)
   const [totalExercises, setTotalExercises] = useState(0)
   const [exercisesCorrect, setExercisesCorrect] = useState(0)
-  const [accuracy, setAccuracy] = useState(0)
+  const [todayXp, setTodayXp] = useState(0)
+  const [activityWeek, setActivityWeek] = useState<ActivityDay[]>([])
+  const loadSequence = useRef(0)
   const [vocabularyLevel, setVocabularyLevel] = useState<string | null>(null)
   const [vocabularyMastered, setVocabularyMastered] = useState(0)
   const [vocabularyTotal, setVocabularyTotal] = useState(0)
@@ -98,13 +104,17 @@ export default function DashboardPage() {
   const [portalError, setPortalError] = useState<string | null>(null)
 
   const loadData = useCallback(async () => {
+    const sequence = ++loadSequence.current
     try {
       const [progRes, planRes] = await Promise.all([
         apiFetch('/api/progress/summary'),
         apiFetch('/api/study-plan/today'),
       ])
+      if (sequence !== loadSequence.current) return
+      const prog = progRes.ok ? await progRes.json() : null
+      const plan = planRes.ok ? await planRes.json() : null
+      if (sequence !== loadSequence.current) return
       if (progRes.ok) {
-        const prog = await progRes.json()
         setProgress({
           streak: prog.current_streak ?? 0,
           xp: prog.total_xp ?? 0,
@@ -113,7 +123,8 @@ export default function DashboardPage() {
         setTotalLessons(prog.total_lessons ?? 0)
         setTotalExercises(prog.total_exercises ?? 0)
         setExercisesCorrect(prog.exercises_correct ?? 0)
-        setAccuracy(prog.accuracy ?? 0)
+        setTodayXp(prog.today_xp ?? 0)
+        setActivityWeek(prog.activity_week ?? [])
         setVocabularyLevel(prog.vocabulary_level ?? null)
         setVocabularyMastered(prog.vocabulary_mastered ?? 0)
         setVocabularyTotal(prog.vocabulary_total ?? 0)
@@ -123,14 +134,14 @@ export default function DashboardPage() {
         setTotalLessons(0)
         setTotalExercises(0)
         setExercisesCorrect(0)
-        setAccuracy(0)
+        setTodayXp(0)
+        setActivityWeek([])
         setVocabularyLevel(null)
         setVocabularyMastered(0)
         setVocabularyTotal(0)
         setVocabularyProgress(0)
       }
       if (planRes.ok) {
-        const plan = await planRes.json()
         setCefrLevel(plan.cefr_level ?? null)
         setPlanId(plan.plan_id ?? null)
         setCompletion(plan.completion ?? null)
@@ -161,15 +172,20 @@ export default function DashboardPage() {
         setHasPlan(false)
       }
     } catch {
-      setLoadError(true)
+      if (sequence === loadSequence.current) setLoadError(true)
     } finally {
-      setLoading(false)
+      if (sequence === loadSequence.current) setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- re-fetch when active language changes
   }, [setProgress, setTodayLessons, activeLanguage?.code])
 
   useEffect(() => {
+    setLoading(true)
+    setLoadError(false)
     loadData()
+    return () => {
+      loadSequence.current += 1
+    }
   }, [loadData])
 
   async function skipDay() {
@@ -415,47 +431,15 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Stats row */}
-        <div className="bg-fl-border mb-8 grid grid-cols-2 gap-px sm:grid-cols-4">
-          {[
-            { label: t('streak'), value: `${streak}d`, accent: streak > 0 },
-            { label: t('xp'), value: xp, accent: false },
-            {
-              label: t('lessonsCompleted'),
-              value: totalLessons,
-              accent: false,
-            },
-            {
-              label: t('accuracy'),
-              value:
-                totalExercises > 0 ? `${Math.round(accuracy * 100)}%` : '—',
-              accent: false,
-              detail:
-                totalExercises > 0
-                  ? t('exerciseStats', {
-                      correct: exercisesCorrect,
-                      total: totalExercises,
-                    })
-                  : t('noExercisesYet'),
-            },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-fl-surface px-5 py-5">
-              <p className="text-fl-caption text-fl-muted-1 mb-2 font-mono tracking-widest uppercase">
-                {stat.label}
-              </p>
-              <p
-                className={`font-mono text-3xl font-bold tracking-tight ${stat.accent ? 'text-fl-accent' : 'text-fl-fg'}`}
-              >
-                {stat.value}
-              </p>
-              {'detail' in stat && stat.detail && (
-                <p className="text-fl-caption text-fl-muted-1 mt-2 font-mono">
-                  {stat.detail}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+        <ProgressOverview
+          xp={xp}
+          todayXp={todayXp}
+          streak={streak}
+          activity={activityWeek}
+          lessons={totalLessons}
+          correct={exercisesCorrect}
+          total={totalExercises}
+        />
 
         <div className="bg-fl-border mb-8 grid gap-px sm:grid-cols-2">
           {/* Plan progress */}
@@ -475,7 +459,14 @@ export default function DashboardPage() {
             </div>
             {hasPlan && totalDays > 0 ? (
               <>
-                <div className="bg-fl-border mb-4 h-1 w-full">
+                <div
+                  className="bg-fl-border mb-5 h-3 w-full"
+                  role="progressbar"
+                  aria-label={t('planProgress')}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={planCompletion}
+                >
                   <div
                     className="bg-fl-accent h-full transition-[width] duration-300 motion-reduce:transition-none"
                     style={{ width: `${planCompletion}%` }}
@@ -517,7 +508,16 @@ export default function DashboardPage() {
                         total: vocabularyTotal,
                       })}
                     </p>
-                    <div className="bg-fl-border mt-2 h-1 w-full">
+                    <div
+                      className="bg-fl-border mt-3 h-2 w-full"
+                      role="progressbar"
+                      aria-label={t('vocabularyProgress', {
+                        level: vocabularyLevel ?? cefrLevel ?? '',
+                      })}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={vocabularyProgressPct}
+                    >
                       <div
                         className="bg-fl-accent h-full transition-[width] duration-300 motion-reduce:transition-none"
                         style={{ width: `${vocabularyProgressPct}%` }}
@@ -545,7 +545,23 @@ export default function DashboardPage() {
             </div>
 
             {todayLessons.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
+                <div className="mb-4">
+                  <p className="text-fl-muted-1 mb-2 text-sm">
+                    {t('completedToday', {
+                      completed: completedLessonCount,
+                      total: todayLessons.length,
+                    })}
+                  </p>
+                  <div className="flex gap-1.5" aria-hidden="true">
+                    {todayLessons.map((lesson, index) => (
+                      <div
+                        key={index}
+                        className={`h-2 flex-1 transition-colors motion-reduce:transition-none ${(lesson.id && completedToday.includes(lesson.id)) || lesson.isCompleted ? 'bg-fl-accent' : 'bg-fl-border'}`}
+                      />
+                    ))}
+                  </div>
+                </div>
                 {todayLessons.map((lesson, i) => {
                   const isDone =
                     (lesson.id && completedToday.includes(lesson.id)) ||
