@@ -1833,6 +1833,8 @@
     }
   },
   "contact": {
+  "description": "Envie-nos a sua pergunta, comentário ou pedido e responderemos assim que possível.",
+
     "title": "Contacto",
     "labelEmail": "E-mail",
     "placeholderEmail": "o_seu@email.com",
