@@ -107,6 +107,36 @@ afterEach(() => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it('sends the lesson reference through the existing handshake and lets the user end practice', async () => {
+    render(<ConversationMode lessonId={7} lessonTitle="Past experiences" targetLanguage="fr-FR" />)
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+      type: 'auth', token: 'token', lesson_id: 7, target_language: 'fr-FR',
+    })
+    expect(mocks.apiFetch).toHaveBeenCalledWith('/api/conversation/warmup', expect.any(Object))
+    expect(screen.queryByText('startersHint')).toBeNull()
+    act(() => ws.message({
+      type: 'transcript', role: 'assistant', final: true,
+      text: 'We have practised the main points. You can finish or keep practising.',
+    }))
+    expect(ws.close).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'stop' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+    await waitFor(() => expect(ws.close).toHaveBeenCalledTimes(1))
+  })
+
+  it('does not add lesson context to ordinary voice sessions', async () => {
+    render(<ConversationMode />)
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({ type: 'auth', token: 'token' })
+  })
+
   it('retries denied permission without poisoning VAD', async () => {
     mocks.getUserMedia.mockRejectedValueOnce(new DOMException('Denied', 'NotAllowedError'))
     render(<ConversationMode />)
@@ -190,6 +220,7 @@ describe('ConversationMode session lifecycle', () => {
     ['quota_exceeded_time', 'quotaExceededTime'],
     ['quota_exceeded_tokens', 'quotaExceededTokens'],
     ['no_active_plan', 'noActivePlan'],
+    ['lesson_practice_unavailable', 'unavailable'],
     ['unknown_server_error', 'errorMessage'],
   ])('localizes %s without displaying the backend message', async (code, key) => {
     render(<ConversationMode />)

@@ -6,8 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.9.30] - Unreleased
 
+### Added
+
+- Completed lessons offer voice practice with Lingu through a short confirmation dialog. Lingu uses the lesson's content and answered exercises throughout the conversation, can suggest when the main objectives have been practised, and lets the learner continue or finish using the existing voice controls and limits. Practice conversations appear in chat history with the lesson topic as their title.
+
 ### Changed
 
+- What's New highlights lesson-linked voice practice in all fifteen interface languages.
 - Listening and Reading expose generation status through immediate next-exercise responses, with a 60-per-minute read limit and a configurable total generation budget (`EXERCISE_GENERATION_TIMEOUT_SECONDS`, default 600 seconds).
 
 ### Fixed

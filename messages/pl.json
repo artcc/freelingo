@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Nieograniczony dostęp",
     "requiresSubscription": "Tylko Premium"
   },
+  "lessonPractice": {
+    "action": "Przećwicz tę lekcję z Lingu",
+    "title": "Ćwiczenie: {title}",
+    "description": "Przećwicz ustnie materiał z tej lekcji. Lingu będzie zadawać pytania i pomagać Ci stosować zdobytą wiedzę. Ty decydujesz, kiedy skończyć.",
+    "start": "Rozpocznij ćwiczenie",
+    "cancel": "Nie teraz",
+    "unavailable": "Nie udało się przygotować ćwiczenia. Sprawdź, czy lekcja jest ukończona, i spróbuj ponownie.",
+    "back": "Wróć do planu"
+  },
   "whatsNew": {
     "title": "Co nowego",
     "version": "v1.9.30",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Pięć nowych języków interfejsu",
-      "desc": "FreeLingo jest dostępne po chorwacku, duńsku, fińsku, szwedzku i turecku. Wybierz język interfejsu w Ustawieniach."
+      "label": "Ćwicz lekcje z Lingu",
+      "desc": "Rozpocznij rozmowę głosową z ukończonej lekcji. Lingu pomaga Ci stosować zdobytą wiedzę, a rozmowa jest zapisywana z tytułem ćwiczonego tematu."
     },
     "entry2": {
       "label": "Płynniejsze korzystanie",

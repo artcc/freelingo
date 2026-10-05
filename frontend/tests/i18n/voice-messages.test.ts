@@ -17,6 +17,15 @@ const messageKeys = [
   'conversation.errorTranscription',
   'conversation.errorResponse',
   'conversation.errorSpeech',
+  'lessonPractice.action',
+  'lessonPractice.title',
+  'lessonPractice.description',
+  'lessonPractice.start',
+  'lessonPractice.cancel',
+  'lessonPractice.unavailable',
+  'lessonPractice.back',
+  'whatsNew.entry1.label',
+  'whatsNew.entry1.desc',
 ] as const
 
 const english = createTranslator({ locale: 'en', messages: en })
@@ -33,12 +42,13 @@ describe.each(SUPPORTED_LOCALES)('voice messages in %s', (locale) => {
     })
 
     for (const key of messageKeys) {
-      const rendered = t(key, { minutes: 5 })
+      const rendered = t(key, { minutes: 5, title: 'Lesson topic' })
       expect(rendered.trim()).not.toBe('')
       expect(rendered).not.toBe(key)
       expect(rendered).not.toContain('{minutes}')
+      expect(rendered).not.toContain('{title}')
       if (locale !== 'en') {
-        expect(rendered).not.toBe(english(key, { minutes: 5 }))
+        expect(rendered).not.toBe(english(key, { minutes: 5, title: 'Lesson topic' }))
       }
     }
   })

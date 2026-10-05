@@ -33,7 +33,8 @@ from app.services.freemium_service import (
     check_voice_quota,
     is_freemium_trial_active,
 )
-from app.services.language_helpers import voice_session_title
+from app.services.language_helpers import lesson_practice_title, voice_session_title
+from app.services.lesson_voice_practice import load_lesson_voice_practice
 from app.services.llm_adapter import llm_adapter
 from app.services.memory_service import get_user_memories
 from app.services.quota_service import check_all_quotas
@@ -201,6 +202,8 @@ async def conversation_ws(
         voice_pref: str = auth_msg.get("voice", "") or ""
         voice_trial_token: str | None = auth_msg.get("voice_trial_token")
         target_language_from_client: str | None = auth_msg.get("target_language")
+        lesson_id_raw = auth_msg.get("lesson_id")
+        has_lesson_practice = "lesson_id" in auth_msg
         client_conversation_id_raw = auth_msg.get(
             "conversation_id"
         )  # optional: reserved for future API use
@@ -312,8 +315,19 @@ async def conversation_ws(
         # --- CEFR level and target language from active StudyPlan ---
         from app.services.user_language_service import get_active_language
 
+        lesson_practice = None
+        if has_lesson_practice:
+            if type(lesson_id_raw) is int and lesson_id_raw > 0:
+                lesson_practice = await load_lesson_voice_practice(db, user_id, lesson_id_raw)
+            if lesson_practice is None:
+                await websocket.send_json({"type": "error", "code": "lesson_practice_unavailable"})
+                await websocket.close(code=1008)
+                return
+
         plan: StudyPlan | None = None
-        if target_language_from_client:
+        if lesson_practice:
+            plan = lesson_practice.plan
+        elif target_language_from_client:
             ul_result = await db.execute(
                 select(UserLanguage).where(
                     UserLanguage.user_id == user_id,
@@ -355,7 +369,9 @@ async def conversation_ws(
                 target_language = "en-GB"
         else:
             cefr_level = plan.cefr_level
-            if target_language_from_client:
+            if lesson_practice:
+                target_language = plan.target_language
+            elif target_language_from_client:
                 target_language = target_language_from_client
             else:
                 ul_row = await db.execute(
@@ -383,7 +399,7 @@ async def conversation_ws(
 
     # Validate and sanitize optional chat context passed from the tutor chat
     valid_context: list[dict] | None = None
-    if isinstance(initial_context_raw, list):
+    if not lesson_practice and isinstance(initial_context_raw, list):
         sanitized = [
             {"role": m["role"], "content": m["content"]}
             for m in initial_context_raw[:20]
@@ -465,7 +481,8 @@ async def conversation_ws(
                 # Reuse path: if a caller explicitly passes a valid conversation_id
                 # that belongs to this user, append to that conversation.
                 if (
-                    isinstance(client_conversation_id_raw, (int, float))
+                    not lesson_practice
+                    and isinstance(client_conversation_id_raw, (int, float))
                     and int(client_conversation_id_raw) > 0
                 ):
                     existing = await db_conv.get(ConversationModel, int(client_conversation_id_raw))
@@ -481,7 +498,11 @@ async def conversation_ws(
                 if conversation_id is None:
                     conv = ConversationModel(
                         user_id=user_id,
-                        title=voice_session_title(native_language),
+                        title=(
+                            lesson_practice_title(native_language, lesson_practice.lesson.title)
+                            if lesson_practice
+                            else voice_session_title(native_language)
+                        ),
                         source="voice",
                         study_plan_id=study_plan_id_for_conv,
                         target_language=target_language,
@@ -528,6 +549,7 @@ async def conversation_ws(
             memories=memories,
             voice=voice_pref,
             study_plan_id=study_plan_id_for_conv,
+            lesson_practice_context=lesson_practice.context if lesson_practice else "",
         )
         pipeline._redis = redis
         pipeline._freemium_voice = freemium_ok

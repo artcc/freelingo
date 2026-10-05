@@ -295,7 +295,10 @@ async def get_lesson(
             )
         )
 
-    return LessonDetailResponse(lesson=lesson, exercises=fixed)
+    plan = await db.get(StudyPlan, lesson.study_plan_id)
+    return LessonDetailResponse(
+        lesson=lesson, exercises=fixed, target_language=plan.target_language
+    )
 
 
 @router.post("/{lesson_id}/start", response_model=LessonResponse)

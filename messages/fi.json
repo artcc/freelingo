@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Rajaton käyttö",
     "requiresSubscription": "Vain Premium"
   },
+  "lessonPractice": {
+    "action": "Harjoittele tätä oppituntia Lingun kanssa",
+    "title": "Harjoitus: {title}",
+    "description": "Harjoittele tämän oppitunnin sisältöä puhumalla. Lingu esittää kysymyksiä ja auttaa sinua käyttämään oppimaasi. Päätät itse, milloin lopetat.",
+    "start": "Aloita harjoitus",
+    "cancel": "Ei nyt",
+    "unavailable": "Harjoitusta ei voitu valmistella. Tarkista, että oppitunti on suoritettu, ja yritä uudelleen.",
+    "back": "Takaisin opintosuunnitelmaan"
+  },
   "whatsNew": {
     "title": "Uutta",
     "version": "v1.9.30",
     "cta": "Selvä",
     "entry1": {
-      "label": "Viisi uutta käyttöliittymän kieltä",
-      "desc": "FreeLingo on saatavilla kroatiaksi, ruotsiksi, suomeksi, tanskaksi ja turkiksi. Valitse käyttöliittymän kieli Asetuksista."
+      "label": "Harjoittele oppitunteja Lingun kanssa",
+      "desc": "Aloita äänikeskustelu suoritetulta oppitunnilta. Lingu auttaa sinua käyttämään oppimaasi, ja keskustelu tallennetaan harjoitellun aiheen otsikolla."
     },
     "entry2": {
       "label": "Sujuvampi käyttökokemus",

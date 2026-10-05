@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Accès illimité",
     "requiresSubscription": "Premium uniquement"
   },
+  "lessonPractice": {
+    "action": "Pratiquer cette leçon avec Lingu",
+    "title": "Pratique : {title}",
+    "description": "Pratique à l'oral le contenu de cette leçon. Lingu te posera des questions et t'aidera à utiliser ce que tu as appris. Tu décides quand terminer.",
+    "start": "Commencer la pratique",
+    "cancel": "Pas maintenant",
+    "unavailable": "Impossible de préparer la pratique. Vérifie que la leçon est terminée et réessaie.",
+    "back": "Retour au programme"
+  },
   "whatsNew": {
     "title": "Nouveautés",
     "version": "v1.9.30",
     "cta": "Compris",
     "entry1": {
-      "label": "Cinq nouvelles langues d'interface",
-      "desc": "FreeLingo est disponible en croate, danois, finnois, suédois et turc. Choisis la langue de l'interface dans les paramètres."
+      "label": "Pratique tes leçons avec Lingu",
+      "desc": "Lance une conversation vocale depuis une leçon terminée. Lingu t'aide à utiliser ce que tu as appris et la conversation est enregistrée avec le titre du sujet travaillé."
     },
     "entry2": {
       "label": "Une expérience plus fluide",

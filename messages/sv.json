@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Obegränsad åtkomst",
     "requiresSubscription": "Endast Premium"
   },
+  "lessonPractice": {
+    "action": "Öva på den här lektionen med Lingu",
+    "title": "Övning: {title}",
+    "description": "Öva muntligt på innehållet i den här lektionen. Lingu ställer frågor och hjälper dig att använda det du har lärt dig. Du bestämmer när du vill avsluta.",
+    "start": "Börja öva",
+    "cancel": "Inte nu",
+    "unavailable": "Det gick inte att förbereda övningen. Kontrollera att lektionen är slutförd och försök igen.",
+    "back": "Tillbaka till studieplanen"
+  },
   "whatsNew": {
     "title": "Nyheter",
     "version": "v1.9.30",
     "cta": "Jag förstår",
     "entry1": {
-      "label": "Fem nya gränssnittsspråk",
-      "desc": "FreeLingo finns på danska, finska, kroatiska, svenska och turkiska. Välj gränssnittsspråk i Inställningar."
+      "label": "Öva på dina lektioner med Lingu",
+      "desc": "Starta ett röstsamtal från en slutförd lektion. Lingu hjälper dig att använda det du har lärt dig, och samtalet sparas med titeln på ämnet du övade på."
     },
     "entry2": {
       "label": "En smidigare upplevelse",

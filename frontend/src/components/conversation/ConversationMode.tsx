@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useMicVAD } from '@ricky0123/vad-react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
+import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { useAuthStore } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
@@ -266,6 +267,8 @@ export default function ConversationMode({
   autoStart,
   cefrLevel,
   targetLanguage,
+  lessonId,
+  lessonTitle,
   voiceTrialToken,
   voiceTrialDurationSeconds,
   trialMode,
@@ -277,6 +280,8 @@ export default function ConversationMode({
   autoStart?: boolean
   cefrLevel?: string | null
   targetLanguage?: string
+  lessonId?: number
+  lessonTitle?: string
   voiceTrialToken?: string
   voiceTrialDurationSeconds?: number
   trialMode?: boolean
@@ -286,6 +291,7 @@ export default function ConversationMode({
 }) {
   const t = useTranslations('conversation')
   const tCommon = useTranslations('common')
+  const tPractice = useTranslations('lessonPractice')
   const accessToken = useAuthStore((s) => s.accessToken)
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
@@ -707,6 +713,7 @@ export default function ConversationMode({
         if (context?.length) authPayload.context = context
         if (targetLanguage) authPayload.target_language = targetLanguage
         if (voiceTrialToken) authPayload.voice_trial_token = voiceTrialToken
+        if (lessonId !== undefined) authPayload.lesson_id = lessonId
         try {
           ws.send(JSON.stringify(authPayload))
         } catch {
@@ -857,6 +864,7 @@ export default function ConversationMode({
                 quota_exceeded_time: t('quotaExceededTime'),
                 quota_exceeded_tokens: t('quotaExceededTokens'),
                 no_active_plan: tCommon('noActivePlan'),
+                lesson_practice_unavailable: tPractice('unavailable'),
                 stt_failed: t('errorTranscription'),
                 llm_failed: t('errorResponse'),
                 tts_failed: t('errorSpeech'),
@@ -916,7 +924,9 @@ export default function ConversationMode({
     [
       t,
       tCommon,
+      tPractice,
       targetLanguage,
+      lessonId,
       voiceTrialToken,
       trialMode,
       refreshCurrentUser,
@@ -1123,7 +1133,13 @@ export default function ConversationMode({
             {t('subtitle')}
           </p>
           <h1 className="text-fl-fg font-mono text-2xl font-bold tracking-tight">
-            {t('title')}
+            {lessonTitle ? (
+              <TargetLanguageText languageCode={targetLanguage}>
+                {tPractice('title', { title: lessonTitle })}
+              </TargetLanguageText>
+            ) : (
+              t('title')
+            )}
           </h1>
         </div>
         {onClose && (
@@ -1207,6 +1223,7 @@ export default function ConversationMode({
 
       {/* Conversation starters — shown when idle, hidden as soon as session starts */}
       {!trialMode &&
+        lessonId === undefined &&
         !sessionActive &&
         (status === 'ready' || status === 'ended' || status === 'error') && (
           <div className="mb-4">

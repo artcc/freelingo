@@ -1504,13 +1504,22 @@
     "trialUnlimited": "Sınırsız erişim",
     "requiresSubscription": "Yalnızca Premium"
   },
+  "lessonPractice": {
+    "action": "Bu dersi Lingu ile pratik yap",
+    "title": "Pratik: {title}",
+    "description": "Bu dersin içeriğini sesli konuşarak pekiştir. Lingu sorular soracak ve öğrendiklerini kullanmana yardımcı olacak. Ne zaman bitireceğine sen karar verirsin.",
+    "start": "Pratiğe başla",
+    "cancel": "Şimdi değil",
+    "unavailable": "Pratik hazırlanamadı. Dersin tamamlandığından emin ol ve tekrar dene.",
+    "back": "Plana dön"
+  },
   "whatsNew": {
     "title": "Yenilikler",
     "version": "v1.9.30",
     "cta": "Anladım",
     "entry1": {
-      "label": "Beş yeni arayüz dili",
-      "desc": "FreeLingo, Danca, Fince, Hırvatça, İsveççe ve Türkçe dillerinde kullanılabilir. Arayüz dilini Ayarlar'dan seçin."
+      "label": "Derslerini Lingu ile pekiştir",
+      "desc": "Tamamlanmış bir dersten sesli konuşma başlat. Lingu öğrendiklerini kullanmana yardımcı olur ve konuşma, pratik yaptığın konunun başlığıyla kaydedilir."
     },
     "entry2": {
       "label": "Daha akıcı bir deneyim",
