@@ -9,10 +9,13 @@ from app.models.user_language import UserLanguage
 
 async def get_active_language(db: AsyncSession, user_id: int) -> UserLanguage | None:
     result = await db.execute(
-        select(UserLanguage).where(
+        select(UserLanguage)
+        .where(
             UserLanguage.user_id == user_id,
             UserLanguage.is_active.is_(True),
         )
+        .order_by(UserLanguage.created_at.desc(), UserLanguage.id.desc())
+        .limit(1)
     )
     return result.scalar_one_or_none()
 
