@@ -1833,6 +1833,8 @@
     }
   },
   "contact": {
+  "description": "Wyślij nam swoje pytanie, opinię lub prośbę, a odpowiemy tak szybko, jak to możliwe.",
+
     "title": "Kontakt",
     "labelEmail": "E-mail",
     "placeholderEmail": "twoj@email.pl",
