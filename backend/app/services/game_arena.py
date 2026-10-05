@@ -16,6 +16,14 @@ GAME_CATALOG = {
 GAMES = frozenset(GAME_CATALOG)
 
 
+def skill_for(game):
+    """Return the server-owned learning skill for a supported arcade game."""
+    try:
+        return GAME_CATALOG[game]["skill"]
+    except KeyError as exc:
+        raise ValueError("Unsupported arcade game") from exc
+
+
 def letters(word):
     result = []
     for character in unicodedata.normalize("NFC", word):
