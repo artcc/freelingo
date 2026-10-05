@@ -18,7 +18,8 @@ export type InteractiveGameChallenge=
  |{type:'matching';left:Array<{id:string;label:string}>;right:Array<{id:string;label:string}>}
  |{type:'ordering';items:Array<{id:string;label:string}>}
 export type InteractiveGameTrace={first:string;second:string}|{left:string;right:string}|{order:string[]}
-export type GameSessionResult=ServerGameStats&{round_score:number;round_correct:number;round_questions:number;xp_earned:number;skill_results:Record<string,{correct:number;questions:number;accuracy:number;mastery_before?:number;mastery_after?:number;mastery_delta?:number}>;new_achievements:string[]}
+export type ArenaSkill='memory'|'vocabulary'|'writing'
+export type GameSessionResult=ServerGameStats&{skill?:ArenaSkill;round_score:number;round_correct:number;round_questions:number;xp_earned:number;skill_results:Record<string,{correct:number;questions:number;accuracy:number;mastery_before?:number;mastery_after?:number;mastery_delta?:number}>;new_achievements:string[]}
 async function detail(response:Response):Promise<string>{
   try{const payload=await response.json();if(typeof payload.detail==='string')return payload.detail;if(Array.isArray(payload.detail))return payload.detail.map((i:{msg?:string})=>i.msg).filter(Boolean).join('; ')}catch{}
   return `Game request failed: ${response.status}`
@@ -38,7 +39,6 @@ export async function completeGameSession(sessionId:string,answers:Array<{questi
   return completeWithRecovery(sessionId,{session_id:sessionId,answers,interaction_trace:interactionTrace,daily_challenge:dailyChallenge,daily_challenge_date:dailyChallengeDate})
 }
 export type ArenaMove={action_id:string;version:number;kind:'flip'|'hide'|'pair'|'answer'|'timeout'|'continue'|'leave';value:string;order:string[]}
-export type ArenaSkill='memory'|'vocabulary'|'writing'
 export type ArenaState={
   session_id:string;game:string;skill:ArenaSkill;version:number;phase:'playing'|'feedback'|'finished';index:number;total:number;lives:number;correct:number;attempts:number;max_moves:number;deadline:number|null;server_time?:number;relaxed:boolean
   question?:{prompt:string;choices?:string[];tiles?:Array<{id:string;label:string}>}
