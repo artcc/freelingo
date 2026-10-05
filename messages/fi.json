@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Selvä",
     "entry1": {
       "label": "Viisi uutta käyttöliittymän kieltä",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} lisää",
     "practiceAgain": "Harjoittele uudelleen",
     "replayNoXp": "Toista (ei XP-pisteitä)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Aktiivinen kielesi tai opiskelusuunnitelmasi on muuttunut. Jatka lataamalla tämä sivu uudelleen.",
+    "failed": "Harjoitusta ei voitu luoda. Yritä uudelleen.",
+    "timeout": "Harjoituksen luominen kesti liian kauan. Yritä uudelleen.",
+    "unavailable": "Harjoituksen tilaa ei voitu tarkistaa. Yritä uudelleen."
   },
   "reading": {
     "title": "Lukeminen",

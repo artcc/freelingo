@@ -257,6 +257,23 @@ async def get_active_study_plan(
     return plan
 
 
+async def get_exercise_study_plan(
+    plan: StudyPlan = Depends(get_active_study_plan),
+    expected_study_plan_id: int | None = None,
+    expected_target_language: str | None = None,
+    expected_level: str | None = None,
+) -> StudyPlan:
+    """Reject stale comprehension requests without changing active-plan authorization."""
+    expected = (expected_study_plan_id, expected_target_language, expected_level)
+    actual = (plan.id, plan.target_language, plan.cefr_level)
+    if any(
+        value is not None and value != current
+        for value, current in zip(expected, actual, strict=True)
+    ):
+        raise HTTPException(status_code=409, detail="study_context_changed")
+    return plan
+
+
 async def get_active_study_plan_optional(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),

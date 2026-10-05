@@ -49,9 +49,40 @@ an exhaustive route inventory here.
 through one serialized refresh only when the original request had an access token. Failed refresh
 clears auth state and routes to login.
 
-Ordinary JSON APIs are called directly against the configured backend URL. The chat handler preserves
+Callers with an AbortSignal can stop waiting for shared refresh independently. Cancellation releases
+their loading-counter slot and prevents their retry; shared token rotation continues for other callers.
+
+Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
+
+Listening and Reading share `hooks/useExerciseGeneration.ts` and `lib/exercise-generation.ts`.
+The hook loads missing or invalidated language context before querying exercises. Context loading
+is cancellable and bounded to 20 seconds; failure exits the loading screen with a localized error
+and a Retry action. Successful recovery starts a read-only exercise lookup with the refreshed context.
+They use immediate status queries, ten-second polling, bounded transport recovery, and at most one
+generation POST per operation. The hook prevents duplicate starts, resumes active work on entry,
+cancels on unmount or local language/plan/level changes, and guards late responses. Each operation
+retains its expected plan/language/level; server-side changes return a context conflict rather than
+silently switching pools. Server-calculated remaining time is converted to a local monotonic budget
+shared by requests and retry pauses. Errors use the shared
+`exerciseGeneration` namespace in all interface catalogs. Detailed status and timing rules belong
+to the Listening and Reading specifications.
+
+Exercise delivery also captures the server-returned plan/language/level context. Pages submit that
+snapshot with answers; history pages capture their response context for replay, including exercises
+from an earlier level. A `study_context_changed` submission response displays the shared localized
+context-conflict message instead of showing results or decrementing the local quota.
+
+The language store invalidates cached context after a persisted switch and rejects responses from
+queries predating invalidation or a newer request. The switch PUT has a 20-second timeout that also
+bounds its authentication-refresh wait. Transport/timeout failures and HTTP 408/5xx invalidate the
+summary for GET-only reconciliation; a definite rejection preserves the valid summary.
+The exercise hook pauses pending lookups during a switch, then resumes them through GET. A busy-flag
+transition alone does not reload an already displayed exercise or discard answers and replay mode.
+Changed or invalidated context still triggers recovery. Failed summary refreshes remain recoverable
+through the selector, language settings, and exercise pages; success feedback requires a refreshed
+summary.
 
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.

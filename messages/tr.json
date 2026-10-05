@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Anladım",
     "entry1": {
       "label": "Beş yeni arayüz dili",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} tane daha",
     "practiceAgain": "Tekrar pratik yap",
     "replayNoXp": "Tekrar oyna (XP yok)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Etkin diliniz veya çalışma planınız değişti. Devam etmek için bu sayfayı yeniden yükleyin.",
+    "failed": "Alıştırma oluşturulamadı. Lütfen tekrar deneyin.",
+    "timeout": "Alıştırmanın oluşturulması çok uzun sürdü. Lütfen tekrar deneyin.",
+    "unavailable": "Alıştırmanın durumu kontrol edilemedi. Lütfen tekrar deneyin."
   },
   "reading": {
     "title": "Okuma",

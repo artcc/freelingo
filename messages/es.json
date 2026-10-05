@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Entendido",
     "entry1": {
       "label": "Cinco nuevos idiomas de interfaz",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} más",
     "practiceAgain": "Practicar de nuevo",
     "replayNoXp": "Repetición (sin XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Tu idioma activo o plan de estudio ha cambiado. Recarga esta página para continuar.",
+    "failed": "No se ha podido generar el ejercicio. Inténtalo de nuevo.",
+    "timeout": "La generación del ejercicio ha tardado demasiado. Inténtalo de nuevo.",
+    "unavailable": "No se ha podido comprobar el estado del ejercicio. Inténtalo de nuevo."
   },
   "reading": {
     "title": "Lectura",

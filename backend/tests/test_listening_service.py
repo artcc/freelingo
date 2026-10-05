@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -86,6 +87,48 @@ class TestGetAvailableExercise:
 
 
 class TestGenerateAndSaveExercise:
+    @pytest.mark.parametrize("failure", [RuntimeError("lease lost"), asyncio.CancelledError()])
+    async def test_audio_is_removed_when_second_guard_fails(self, db_session, tmp_path, failure):
+        from app.schemas.listening import ListeningGenerationResponse
+        from app.services.listening_service import generate_and_save_exercise
+
+        parsed = ListeningGenerationResponse(topic="Test", text="Test text", questions=_QUESTIONS)
+        guard = AsyncMock(side_effect=[None, failure])
+        with (
+            patch(
+                "app.services.listening_service.llm_adapter.structured_output", return_value=parsed
+            ),
+            pytest.raises(type(failure)),
+        ):
+            await generate_and_save_exercise(
+                "B1", "en-GB", db_session, _FakeTTS(), str(tmp_path), before_save=guard
+            )
+        await db_session.rollback()
+        assert guard.await_count == 2
+        assert not list(tmp_path.rglob("*.mp3"))
+        assert (await db_session.execute(select(ListeningExercise))).scalars().all() == []
+
+    async def test_audio_survives_a_refresh_failure_after_commit(self, db_session, tmp_path):
+        from pathlib import Path
+
+        from app.schemas.listening import ListeningGenerationResponse
+        from app.services.listening_service import generate_and_save_exercise
+
+        parsed = ListeningGenerationResponse(topic="Test", text="Test text", questions=_QUESTIONS)
+        with (
+            patch(
+                "app.services.listening_service.llm_adapter.structured_output", return_value=parsed
+            ),
+            patch.object(db_session, "refresh", side_effect=RuntimeError("refresh failed")),
+            pytest.raises(RuntimeError, match="refresh failed"),
+        ):
+            await generate_and_save_exercise(
+                "B1", "en-GB", db_session, _FakeTTS(), str(tmp_path), before_save=AsyncMock()
+            )
+        await db_session.rollback()
+        exercise = (await db_session.execute(select(ListeningExercise))).scalar_one()
+        assert Path(exercise.audio_path).read_bytes() == b"fake-mp3-bytes"
+
     @pytest.mark.asyncio
     async def test_uses_structured_output_schema_and_saves_exercise(self, db_session, tmp_path):
         from app.schemas.listening import ListeningGenerationResponse

@@ -66,6 +66,10 @@ Redis token before issuing a replacement. Logout deletes the current token and c
 one refresh request, stores the new access token, and retries. Failed refresh clears client auth and
 redirects to login.
 
+A caller's AbortSignal also cancels its wait for the shared refresh and releases its loading-counter
+slot. It does not abort shared token rotation or log out other callers. A cancelled caller does not
+retry its original request when that refresh later completes.
+
 Frontend middleware checks refresh-cookie presence only for an explicit protected-route list. This
 is a preliminary navigation guard, not authorization. Backend `get_current_user` decodes the JWT,
 loads the user, and requires the account to remain active.

@@ -67,7 +67,8 @@ async function _apiFetch(
   })
 
   if (res.status === 401 && token) {
-    const newToken = await refreshToken()
+    const newToken = await waitForRefresh(options.signal)
+    options.signal?.throwIfAborted()
     if (newToken) {
       headers['Authorization'] = `Bearer ${newToken}`
       res = await fetch(`${BASE_URL}${url}`, {
@@ -79,6 +80,27 @@ async function _apiFetch(
   }
 
   return res
+}
+
+function waitForRefresh(signal?: AbortSignal | null): Promise<string | null> {
+  signal?.throwIfAborted()
+  const pending = refreshToken()
+  if (!signal) return pending
+  // Cancel this consumer's wait, not the token rotation shared by other requests.
+  return new Promise((resolve, reject) => {
+    const abort = () => reject(signal.reason)
+    signal.addEventListener('abort', abort, { once: true })
+    pending.then(
+      (token) => {
+        signal.removeEventListener('abort', abort)
+        resolve(token)
+      },
+      (error) => {
+        signal.removeEventListener('abort', abort)
+        reject(error)
+      }
+    )
+  })
 }
 
 export function apiUrl(path: string): string {

@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import asyncio
-import logging
-
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,14 +7,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.deps import (
     get_active_study_plan,
+    get_exercise_study_plan,
     get_redis,
     require_not_maintenance,
     require_subscription_or_freemium,
     require_subscription_or_freemium_readonly,
 )
 from app.core.limiter import limiter
+from app.models.reading import ReadingExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
+from app.schemas.exercise_generation import ExerciseContext
 from app.schemas.reading import (
     CorrectAnswerOut,
     QuestionOut,
@@ -29,6 +29,7 @@ from app.schemas.reading import (
     ReadingSubmitRequest,
     ReadingSubmitResponse,
 )
+from app.services.exercise_generation import GenerationLease, get_generation_state
 from app.services.reading_service import (
     generate_and_save_exercise,
     get_available_exercise,
@@ -39,7 +40,6 @@ from app.utils.db import db_session
 from app.utils.redis import redis_client as _redis_client
 
 router = APIRouter(prefix="/api/reading", tags=["reading"])
-logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -75,21 +75,22 @@ def _build_exercise_out(exercise) -> ReadingExerciseOut:  # noqa: ANN001
 async def _background_generate(
     level: str,
     target_language: str,
-    lock_key: str,
+    lease: GenerationLease,
 ) -> None:
-    """
-    Runs after the HTTP response is sent.
-    Creates its own DB session and Redis client (request resources are already closed).
-    Releases the Redis lock in all cases (success or failure).
-    """
+    """Generate with independent resources and a renewable, bounded lease."""
     async with _redis_client() as redis_conn:
-        try:
+
+        async def work(deadline: float) -> None:
             async with db_session() as db:
-                await generate_and_save_exercise(level, target_language, db)
-        except Exception:
-            logger.exception("reading: generation failed level=%s lang=%s", level, target_language)
-        finally:
-            await redis_conn.delete(lock_key)
+                await generate_and_save_exercise(
+                    level,
+                    target_language,
+                    db,
+                    deadline=deadline,
+                    before_save=lambda: lease.ensure_owner(redis_conn),
+                )
+
+        await lease.run(redis_conn, work)
 
 
 # ---------------------------------------------------------------------------
@@ -98,46 +99,34 @@ async def _background_generate(
 
 
 @router.get("/next", response_model=ReadingNextResponse)
-@limiter.limit("10/minute")
+@limiter.limit("60/minute")
 async def get_next_exercise(
     request: Request,
     _maintenance: None = Depends(require_not_maintenance),
-    wait: bool = False,
-    plan: StudyPlan = Depends(get_active_study_plan),
+    plan: StudyPlan = Depends(get_exercise_study_plan),
     current_user: User = Depends(require_subscription_or_freemium_readonly("reading")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> ReadingNextResponse:
-    """
-    Return the next uncompleted reading exercise for the user's CEFR level.
-
-    When ``wait=true`` the endpoint blocks (async) until an exercise becomes
-    available or the generation lock disappears (max 90 s).
-    """
+    """Return an available exercise or the current generation state without waiting."""
     level, target_language = plan.cefr_level, plan.target_language
+    context = ExerciseContext(study_plan_id=plan.id, target_language=target_language, level=level)
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
-        return ReadingNextResponse(available=True, exercise=_build_exercise_out(exercise))
+        return ReadingNextResponse(
+            available=True, exercise=_build_exercise_out(exercise), context=context
+        )
 
-    if not wait:
-        return ReadingNextResponse(available=False)
-
-    # Long-poll: wait up to 90 s for background generation to finish.
     lock_key = f"reading:generating:{level}:{target_language}"
-    for _ in range(90):
-        await asyncio.sleep(1)
-        exercise = await get_available_exercise(level, target_language, current_user.id, db)
-        if exercise is not None:
-            return ReadingNextResponse(available=True, exercise=_build_exercise_out(exercise))
-        if not await redis.exists(lock_key):
-            break
-
-    # Final check after lock disappears
+    generation = await get_generation_state(redis, lock_key)
+    # A commit may have happened between the first lookup and the state snapshot.
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
-        return ReadingNextResponse(available=True, exercise=_build_exercise_out(exercise))
+        return ReadingNextResponse(
+            available=True, exercise=_build_exercise_out(exercise), context=context
+        )
 
-    return ReadingNextResponse(available=False)
+    return ReadingNextResponse(available=False, context=context, **generation.model_dump())
 
 
 @router.post(
@@ -150,30 +139,34 @@ async def generate_exercise(
     request: Request,
     background_tasks: BackgroundTasks,
     _maintenance: None = Depends(require_not_maintenance),
-    plan: StudyPlan = Depends(get_active_study_plan),
+    plan: StudyPlan = Depends(get_exercise_study_plan),
     current_user: User = Depends(require_subscription_or_freemium("reading")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> ReadingGeneratingResponse:
-    """
-    Trigger on-demand reading exercise generation.
-
-    Acquires a Redis lock scoped to (level, target_language) with 60 s TTL.
-    If the lock is already held, returns 202 immediately.
-    Frontend calls GET /next?wait=true once and awaits the long-poll response.
-    """
+    """Reuse available work or start one generation for this level and language."""
     level, target_language = plan.cefr_level, plan.target_language
+    if await get_available_exercise(level, target_language, current_user.id, db) is not None:
+        return ReadingGeneratingResponse(status="available")
     lock_key = f"reading:generating:{level}:{target_language}"
 
-    acquired = await redis.set(lock_key, "1", nx=True, ex=60)
-    if not acquired:
+    lease = await GenerationLease.acquire(redis, lock_key)
+    if lease is None:
         return ReadingGeneratingResponse(status="generating")
+
+    try:
+        if await get_available_exercise(level, target_language, current_user.id, db) is not None:
+            await lease.finish(redis)
+            return ReadingGeneratingResponse(status="available")
+    except BaseException:
+        await lease.finish(redis, "interrupted")
+        raise
 
     background_tasks.add_task(
         _background_generate,
         level,
         target_language,
-        lock_key,
+        lease,
     )
     return ReadingGeneratingResponse(status="generating")
 
@@ -189,6 +182,18 @@ async def submit_reading_attempt(
     db: AsyncSession = Depends(get_db),
 ) -> ReadingSubmitResponse:
     """Submit answers and receive score, XP, and correct answers."""
+    await get_exercise_study_plan(
+        plan=plan,
+        expected_study_plan_id=body.context.study_plan_id,
+        expected_target_language=body.context.target_language,
+        expected_level=body.context.level,
+    )
+    exercise = await db.get(ReadingExercise, body.exercise_id)
+    if exercise is not None and (
+        exercise.target_language != plan.target_language
+        or (not body.replay and exercise.level != plan.cefr_level)
+    ):
+        raise HTTPException(status_code=409, detail="study_context_changed")
     try:
         attempt, exercise = await submit_attempt(
             body.exercise_id,
@@ -261,4 +266,12 @@ async def get_reading_history(
         )
         for attempt, exercise in rows
     ]
-    return ReadingHistoryResponse(items=items, total=total, skip=skip, limit=limit)
+    return ReadingHistoryResponse(
+        context=ExerciseContext(
+            study_plan_id=plan.id, target_language=plan.target_language, level=plan.cefr_level
+        ),
+        items=items,
+        total=total,
+        skip=skip,
+        limit=limit,
+    )

@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Got it",
     "entry1": {
       "label": "Five new interface languages",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} more",
     "practiceAgain": "Practice again",
     "replayNoXp": "Replay (no XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Your active language or study plan has changed. Reload this page to continue.",
+    "failed": "The exercise could not be generated. Please try again.",
+    "timeout": "Exercise generation took too long. Please try again.",
+    "unavailable": "We could not check the exercise status. Please try again."
   },
   "reading": {
     "title": "Reading",

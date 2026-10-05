@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Capito",
     "entry1": {
       "label": "Cinque nuove lingue dell'interfaccia",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} altri",
     "practiceAgain": "Esercitarsi di nuovo",
     "replayNoXp": "Ripetizione (senza XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "La lingua attiva o il piano di studio è cambiato. Ricarica questa pagina per continuare.",
+    "failed": "Impossibile generare l'esercizio. Riprova.",
+    "timeout": "La generazione dell'esercizio ha richiesto troppo tempo. Riprova.",
+    "unavailable": "Impossibile verificare lo stato dell'esercizio. Riprova."
   },
   "reading": {
     "title": "Lettura",

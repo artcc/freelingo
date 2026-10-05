@@ -21,8 +21,9 @@ The frontend never calls an external provider directly.
   results and usage, and can reset visible output before a complete no-tools fallback.
 - Explicit tool incompatibility raises/records `LLMToolsUnsupportedError`; voice remembers that state
   only for its current WebSocket session.
-- `structured_output(messages, schema)` requests JSON and validates a Pydantic model, with one
-  correction generation after parse/validation failure.
+- `structured_output(messages, schema, deadline=None)` requests JSON and validates a Pydantic model,
+  with one correction generation after parse/validation failure. An optional monotonic deadline
+  bounds both calls, uses remaining time per request, and disables SDK/adapter transport retries.
 - `parse_llm_json(raw)` strips optional fences and parses JSON for callers that do not use structured
   output.
 - The exception hierarchy includes `LLMError`, `LLMTimeoutError`, `LLMUnavailableError`,
@@ -124,6 +125,18 @@ accept plan/language context so progress and retrieval remain isolated.
 
 `reading_service.py` provides the equivalent text-only flow with language-aware cultural topics and
 length guidance. Replays likewise persist with zero XP.
+
+`exercise_generation.py` coordinates both domains' background tasks through unique-owner Redis
+leases, 60-second expiry, 20-second renewal, atomic owner-checked completion, and expiring status.
+`EXERCISE_GENERATION_TIMEOUT_SECONDS` (default 600, positive integer) bounds the entire task from
+acquisition. The domain services accept a monotonic `deadline` and async `before_save` ownership
+guard. The coordinator cancels work on timeout or renewal failure, stops its heartbeat in all cases,
+and exposes controlled failure codes through immediate `/next` responses. Database content remains
+the authority when an exercise is available; Redis stores no learner answers or generated content.
+Status reads calculate remaining generation seconds on the server. Redis ownership checks do not
+form an atomic transaction with PostgreSQL commits. Listening compensates audio writes on failure or
+cancellation before commit is attempted, while preserving audio after an uncertain commit or failed
+post-commit refresh. The coordinator recognizes OpenAI TTS `APITimeoutError` as `timeout`.
 
 Pool, generation-lock, attempt, and history behavior belongs to the Listening and Reading specs.
 

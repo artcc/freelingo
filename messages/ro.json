@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Cinci limbi noi pentru interfață",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} mai multe",
     "practiceAgain": "Exersează din nou",
     "replayNoXp": "Repetare (fără XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Limba activă sau planul de studiu s-a schimbat. Reîncarcă această pagină pentru a continua.",
+    "failed": "Exercițiul nu a putut fi generat. Încearcă din nou.",
+    "timeout": "Generarea exercițiului a durat prea mult. Încearcă din nou.",
+    "unavailable": "Starea exercițiului nu a putut fi verificată. Încearcă din nou."
   },
   "reading": {
     "title": "Lectură",

@@ -1506,7 +1506,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.9.25",
+    "version": "v1.9.30",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Fem nya gränssnittsspråk",
@@ -1557,6 +1557,12 @@
     "moreInHistory": "+{count} till",
     "practiceAgain": "Öva igen",
     "replayNoXp": "Gör om (inga XP)"
+  },
+  "exerciseGeneration": {
+    "contextChanged": "Ditt aktiva språk eller din studieplan har ändrats. Ladda om sidan för att fortsätta.",
+    "failed": "Övningen kunde inte skapas. Försök igen.",
+    "timeout": "Det tog för lång tid att skapa övningen. Försök igen.",
+    "unavailable": "Övningens status kunde inte kontrolleras. Försök igen."
   },
   "reading": {
     "title": "Läsning",

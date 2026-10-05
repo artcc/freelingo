@@ -23,6 +23,7 @@ export default function MyLanguagesPage() {
   const tCommon = useTranslations('common')
   const router = useRouter()
   const userLanguages = useLanguageStore((s) => s.userLanguages)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
   const switchLanguage = useLanguageStore((s) => s.switchLanguage)
   const addLanguage = useLanguageStore((s) => s.addLanguage)
@@ -54,6 +55,7 @@ export default function MyLanguagesPage() {
   async function handleSwitch(info: UserLanguageInfo) {
     if (info.is_active) return
     setSwitchingCode(info.target_language)
+    setToast('')
     const ok = await switchLanguage(info.target_language)
     setSwitchingCode(null)
     if (ok) {
@@ -63,6 +65,8 @@ export default function MyLanguagesPage() {
       )
       setTimeout(() => setToast(''), 2500)
       router.refresh()
+    } else {
+      setToast(tCommon('errorMessage'))
     }
   }
 
@@ -103,6 +107,15 @@ export default function MyLanguagesPage() {
 
   return (
     <div className="mx-auto max-w-4xl p-6">
+      {needsRefresh && !switchingCode && (
+        <button
+          onClick={load}
+          disabled={loading}
+          className="text-fl-muted-2 hover:text-fl-fg mb-4 text-xs disabled:opacity-50"
+        >
+          {tCommon('retry')}
+        </button>
+      )}
       {/* Toast */}
       {toast && (
         <div className="pointer-events-none fixed inset-x-0 top-16 z-50 flex justify-center">

@@ -63,6 +63,7 @@ describe('useLanguageStore — fetchLanguages', () => {
       supportedLanguages: SUPPORTED_TARGET_LANGUAGES,
       availableLanguageCodes: [],
       isSwitching: false,
+      needsRefresh: false,
     })
     vi.clearAllMocks()
   })
@@ -242,6 +243,75 @@ describe('useLanguageStore — fetchLanguages', () => {
     const state = useLanguageStore.getState()
     expect(state.userLanguages).toHaveLength(1)
   })
+
+  it('keeps an invalidated snapshot invalid until a successful refresh', async () => {
+    useLanguageStore.setState({ needsRefresh: true })
+    mockApiFetch.mockResolvedValueOnce(mockResponse({}, false, 502))
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    mockApiFetch.mockResolvedValueOnce(mockResponse(fullResponse))
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(true)
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
+  it('discards a response started before invalidation even if the new refresh fails', async () => {
+    let finishOld: (response: Response) => void = () => {}
+    mockApiFetch.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishOld = resolve
+        })
+    )
+    const oldRequest = useLanguageStore.getState().fetchLanguages()
+    useLanguageStore.getState().invalidateLanguages()
+    mockApiFetch.mockResolvedValueOnce(mockResponse({}, false, 502))
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(false)
+    finishOld(mockResponse(fullResponse))
+    expect(await oldRequest).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage).toBeNull()
+  })
+
+  it('does not overwrite a newer summary with an older response', async () => {
+    let finishOld: (response: Response) => void = () => {}
+    mockApiFetch.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishOld = resolve
+        })
+    )
+    const oldRequest = useLanguageStore.getState().fetchLanguages()
+    useLanguageStore.getState().invalidateLanguages()
+    const updated = {
+      ...fullResponse,
+      languages: [
+        {
+          ...fullResponse.languages[0],
+          plan: { ...fullResponse.languages[0].plan, id: 8 },
+        },
+      ],
+    }
+    mockApiFetch.mockResolvedValueOnce(mockResponse(updated))
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(true)
+    finishOld(mockResponse(fullResponse))
+    expect(await oldRequest).toBe(false)
+    expect(useLanguageStore.getState().userLanguages[0].plan?.id).toBe(8)
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
+  it('does not publish a cancelled language response', async () => {
+    const controller = new AbortController()
+    useLanguageStore.setState({ needsRefresh: true })
+    mockApiFetch.mockImplementationOnce(async () => {
+      controller.abort()
+      return mockResponse(fullResponse)
+    })
+    expect(
+      await useLanguageStore.getState().fetchLanguages(controller.signal)
+    ).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage).toBeNull()
+  })
 })
 
 describe('useLanguageStore — switchLanguage', () => {
@@ -252,6 +322,7 @@ describe('useLanguageStore — switchLanguage', () => {
       supportedLanguages: SUPPORTED_TARGET_LANGUAGES,
       availableLanguageCodes: ['en-US', 'en-GB', 'es-ES'],
       isSwitching: false,
+      needsRefresh: false,
     })
     vi.clearAllMocks()
   })
@@ -291,6 +362,7 @@ describe('useLanguageStore — switchLanguage', () => {
 
     expect(result).toBe(false)
     expect(useLanguageStore.getState().isSwitching).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
   })
 
   it('resets isSwitching on non-ok response', async () => {
@@ -314,6 +386,7 @@ describe('useLanguageStore — switchLanguage', () => {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ target_language: 'it-IT' }),
+      signal: expect.any(AbortSignal),
     })
   })
 
@@ -326,15 +399,60 @@ describe('useLanguageStore — switchLanguage', () => {
     await useLanguageStore.getState().switchLanguage('en-US')
 
     expect(mockApiFetch).toHaveBeenCalledTimes(2)
-    expect(mockApiFetch).toHaveBeenNthCalledWith(2, '/api/languages')
+    expect(mockApiFetch).toHaveBeenNthCalledWith(2, '/api/languages', {
+      signal: expect.any(AbortSignal),
+    })
   })
 
   it('does not call fetchLanguages when PUT fails', async () => {
-    mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, 500))
+    mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, 400))
 
     await useLanguageStore.getState().switchLanguage('en-US')
 
     expect(mockApiFetch).toHaveBeenCalledTimes(1)
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
+  it.each([408, 500, 502])(
+    'invalidates an uncertain HTTP %s switch result without repeating PUT',
+    async (status) => {
+      mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, status))
+      expect(await useLanguageStore.getState().switchLanguage('es-ES')).toBe(
+        false
+      )
+      expect(useLanguageStore.getState().needsRefresh).toBe(true)
+      expect(useLanguageStore.getState().isSwitching).toBe(false)
+      expect(mockApiFetch).toHaveBeenCalledTimes(1)
+    }
+  )
+
+  it('reports a failed refresh after a persisted switch and recovers without another PUT', async () => {
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse({}, false, 502))
+    expect(await useLanguageStore.getState().switchLanguage('es-ES')).toBe(
+      false
+    )
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(useLanguageStore.getState().isSwitching).toBe(false)
+    mockApiFetch.mockResolvedValueOnce(
+      mockResponse({
+        languages: [
+          {
+            target_language: 'es-ES',
+            is_active: true,
+            plan: null,
+            progress: null,
+          },
+        ],
+      })
+    )
+    expect(await useLanguageStore.getState().fetchLanguages()).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('es-ES')
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+    expect(
+      mockApiFetch.mock.calls.filter(([, options]) => options?.method === 'PUT')
+    ).toHaveLength(1)
   })
 })
 

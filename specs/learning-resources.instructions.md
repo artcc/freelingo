@@ -142,6 +142,11 @@ grammar slug.
 - `POST /api/assessment/evaluate`: authenticated, `60/minute`; evaluates submitted answer records.
 - `POST /api/assessment/complete`: authenticated, `10/minute`; creates the selected-language plan.
 
+After successful completion, the frontend invalidates and refreshes the shared language/plan summary
+before navigating to Plan or showing the voice-trial offer. If this bounded refresh fails, completion
+still proceeds, and the summary remains marked for refresh. Listening and Reading recover that
+context before using it; a summary failure must not cause the plan-creation request to be repeated.
+
 The client calculates each `correct` boolean. Evaluation trusts submitted question metadata and does
 not retrieve the bank to verify selected options. The deterministic algorithm is described in
 `platform.instructions.md`.

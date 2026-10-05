@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, field_serializer, field_validator
+
+from app.schemas.exercise_generation import ExerciseContext, ExerciseGenerationState
 
 
 class QuestionOut(BaseModel):
@@ -40,16 +43,18 @@ class ReadingExerciseOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
-class ReadingNextResponse(BaseModel):
+class ReadingNextResponse(ExerciseGenerationState):
+    context: ExerciseContext
     available: bool
     exercise: ReadingExerciseOut | None = None
 
 
 class ReadingGeneratingResponse(BaseModel):
-    status: str  # "generating"
+    status: Literal["generating", "available"]
 
 
 class ReadingSubmitRequest(BaseModel):
+    context: ExerciseContext
     exercise_id: int
     answers: dict[str, str]  # {"0": "A", "1": "B", "2": "C", "3": "D", "4": "A"}
     replay: bool = False  # True → re-attempt from history; awards no XP
@@ -90,6 +95,7 @@ class ReadingAttemptOut(BaseModel):
 
 
 class ReadingHistoryResponse(BaseModel):
+    context: ExerciseContext
     items: list[ReadingAttemptOut]
     total: int
     skip: int

@@ -80,6 +80,14 @@ Redis, and database operations exposed to the frontend.
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
 
+Listening and Reading retain FastAPI background tasks with independent database/Redis resources.
+`exercise_generation.py` owns their renewable Redis leases, total generation deadline, cancellation,
+and temporary status. Domain services verify lease ownership before persistence. Immediate `/next`
+responses expose status without holding a database session open while waiting for inference.
+`get_exercise_study_plan` compares optional expected context with the authenticated user's active plan
+and rejects mismatches with 409. It does not authorize arbitrary client-supplied plan IDs. Redis lease
+ownership and PostgreSQL commit are separate operations; the pre-save guard is not transactional fencing.
+
 ### Static learning data
 
 `app/data/` contains the canonical curriculum, grammar, vocabulary, phrasebook, and assessment-bank

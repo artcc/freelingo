@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.30] - Unreleased
+
+### Changed
+
+- Listening and Reading expose generation status through immediate next-exercise responses, with a 60-per-minute read limit and a configurable total generation budget (`EXERCISE_GENERATION_TIMEOUT_SECONDS`, default 600 seconds).
+
+### Fixed
+
+- Listening and Reading keep checking slow exercise generation through short, recoverable requests, resume existing work when reopening the page, and retrieve completed exercises after temporary connection failures.
+- Slow generation retains an owner-checked, renewable lock; obsolete tasks cannot release another task's lock, and bounded LLM calls avoid multiplying SDK and application retries.
+- Exercise generation reports localized failure, timeout, and connection-status errors, prevents duplicate clicks, and ignores late responses after leaving the page or changing language.
+- Exercise polling detects active language, plan, or level changes across tabs instead of switching pools, and uses a clock-independent budget that also bounds retry delays and authentication-refresh waits.
+- Cancelled authentication consumers release their loading state without interrupting shared token rotation. Listening removes audio written by work aborted before commit, preserves confirmed audio after refresh failures, and classifies OpenAI speech timeouts consistently.
+- Completing Assessment refreshes the shared plan context so Listening and Reading can use the new plan without a browser reload. Missing or stale language context has a bounded load and a retry action instead of leaving those pages indefinitely loading after a connection failure.
+- Listening and Reading keep context recovery available when the free quota is exhausted, while exercise generation remains restricted.
+- Listening and Reading reject answer submissions after the active language, plan, or level changes, preventing attempts and XP from being attributed to another context while preserving zero-XP replays of earlier-level exercises.
+- Language switches invalidate the cached summary and offer recovery when its refresh fails. Success feedback waits for the refreshed summary, and late language responses cannot restore an obsolete context.
+- Language-switch requests have a bounded authentication and network wait, with GET-only recovery for uncertain outcomes. Rejected switches preserve Listening and Reading answers and history replays instead of reloading the exercise.
+
 ## [1.9.25] - 2026-09-25
 
 ### Added
