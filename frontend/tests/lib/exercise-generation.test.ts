@@ -5,13 +5,16 @@ import { resolveExercise } from '@/lib/exercise-generation'
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }))
 
 const api = vi.mocked(apiFetch)
-const exercise = { id: 42, target_language: 'en-GB' }
+const context = { study_plan_id: 7, target_language: 'en-GB', level: 'B1' }
+const exercise = { id: 42, target_language: 'en-GB', level: 'B1' }
 const idle = {
+  context,
   available: false,
   exercise: null,
   generation_status: 'idle',
   generation_error: null,
   generation_deadline: null,
+  generation_remaining_seconds: null,
 }
 const response = (body: object, status = 200, headers = {}) =>
   new Response(JSON.stringify(body), { status, headers })
@@ -19,6 +22,7 @@ const pending = () => ({
   ...idle,
   generation_status: 'generating',
   generation_deadline: new Date(Date.now() + 600_000).toISOString(),
+  generation_remaining_seconds: 600,
 })
 const ready = () => response({ ...idle, available: true, exercise })
 
@@ -31,6 +35,7 @@ describe('exercise generation recovery', () => {
   ) =>
     resolveExercise({
       feature,
+      context: { target_language: 'en-GB' },
       generate,
       signal: controller.signal,
       onGenerating,
@@ -151,7 +156,7 @@ describe('exercise generation recovery', () => {
       .mockResolvedValueOnce(
         response({
           ...pending(),
-          generation_deadline: new Date(Date.now()).toISOString(),
+          generation_remaining_seconds: 10,
         })
       )
       .mockResolvedValueOnce(ready())
@@ -179,4 +184,79 @@ describe('exercise generation recovery', () => {
     await vi.advanceTimersByTimeAsync(60_000)
     expect(api).toHaveBeenCalledTimes(1)
   })
+
+  it('pins the initial plan and level for POST and all subsequent lookups', async () => {
+    api
+      .mockResolvedValueOnce(response(idle))
+      .mockResolvedValueOnce(response({ status: 'generating' }, 202))
+      .mockResolvedValueOnce(response(pending()))
+      .mockResolvedValueOnce(ready())
+    const result = expect(start(true)).resolves.toEqual(exercise)
+    await vi.advanceTimersByTimeAsync(10_000)
+    await result
+    for (const [url] of api.mock.calls.slice(1)) {
+      const params = new URL(url, 'http://localhost').searchParams
+      expect(params.get('expected_study_plan_id')).toBe('7')
+      expect(params.get('expected_target_language')).toBe('en-GB')
+      expect(params.get('expected_level')).toBe('B1')
+    }
+  })
+
+  it('rejects a different language even if it has an available exercise', async () => {
+    api.mockResolvedValueOnce(
+      response({
+        ...idle,
+        available: true,
+        exercise: { ...exercise, target_language: 'es' },
+        context: { ...context, target_language: 'es' },
+      })
+    )
+    await expect(start(true)).rejects.toMatchObject({ code: 'contextChanged' })
+    expect(api).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not retry or restart when the backend detects a context change', async () => {
+    api.mockResolvedValueOnce(
+      response({ detail: 'study_context_changed' }, 409)
+    )
+    await expect(start(true)).rejects.toMatchObject({ code: 'contextChanged' })
+    expect(api).toHaveBeenCalledTimes(1)
+  })
+
+  it.each([429, 503])(
+    'bounds Retry-After on HTTP %s by the remaining operation budget',
+    async (status) => {
+      api
+        .mockResolvedValueOnce(
+          response({ ...pending(), generation_remaining_seconds: 20 })
+        )
+        .mockResolvedValueOnce(response({}, status, { 'Retry-After': '120' }))
+      const result = expect(start()).rejects.toMatchObject({ code: 'timeout' })
+      await vi.advanceTimersByTimeAsync(30_000)
+      await result
+      await vi.advanceTimersByTimeAsync(120_000)
+      expect(api).toHaveBeenCalledTimes(2)
+    }
+  )
+
+  it.each([-900_000, 900_000])(
+    'uses server remaining time with a client clock offset of %s ms',
+    async (offset) => {
+      const serverDeadline = new Date(Date.now() + 10_000).toISOString()
+      vi.setSystemTime(Date.now() + offset)
+      api
+        .mockResolvedValueOnce(
+          response({
+            ...pending(),
+            generation_deadline: serverDeadline,
+            generation_remaining_seconds: 10,
+          })
+        )
+        .mockResolvedValueOnce(ready())
+      const result = expect(start()).resolves.toEqual(exercise)
+      await vi.advanceTimersByTimeAsync(10_000)
+      await result
+      expect(api).toHaveBeenCalledTimes(2)
+    }
+  )
 })

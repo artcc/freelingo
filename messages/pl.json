@@ -1559,6 +1559,7 @@
     "replayNoXp": "Powtórka (brak XP)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Aktywny język lub plan nauki uległ zmianie. Odśwież tę stronę, aby kontynuować.",
     "failed": "Nie udało się wygenerować ćwiczenia. Spróbuj ponownie.",
     "timeout": "Generowanie ćwiczenia trwało zbyt długo. Spróbuj ponownie.",
     "unavailable": "Nie udało się sprawdzić stanu ćwiczenia. Spróbuj ponownie."

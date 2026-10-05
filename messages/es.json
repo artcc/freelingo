@@ -1559,6 +1559,7 @@
     "replayNoXp": "Repetición (sin XP)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Tu idioma activo o plan de estudio ha cambiado. Recarga esta página para continuar.",
     "failed": "No se ha podido generar el ejercicio. Inténtalo de nuevo.",
     "timeout": "La generación del ejercicio ha tardado demasiado. Inténtalo de nuevo.",
     "unavailable": "No se ha podido comprobar el estado del ejercicio. Inténtalo de nuevo."

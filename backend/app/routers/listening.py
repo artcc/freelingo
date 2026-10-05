@@ -19,6 +19,7 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import (
     get_active_study_plan,
+    get_exercise_study_plan,
     get_redis,
     require_not_maintenance,
     require_subscription_or_freemium,
@@ -28,6 +29,7 @@ from app.core.limiter import limiter
 from app.models.listening import ListeningExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
+from app.schemas.exercise_generation import ExerciseContext
 from app.schemas.listening import (
     CorrectAnswerOut,
     ListeningAttemptOut,
@@ -119,25 +121,30 @@ async def _background_generate(
 async def get_next_exercise(
     request: Request,
     _maintenance: None = Depends(require_not_maintenance),
-    plan: StudyPlan = Depends(get_active_study_plan),
+    plan: StudyPlan = Depends(get_exercise_study_plan),
     current_user: User = Depends(require_subscription_or_freemium_readonly("listening")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> ListeningNextResponse:
     """Return an available exercise or the current generation state without waiting."""
     level, target_language = plan.cefr_level, plan.target_language
+    context = ExerciseContext(study_plan_id=plan.id, target_language=target_language, level=level)
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
-        return ListeningNextResponse(available=True, exercise=_build_exercise_out(exercise))
+        return ListeningNextResponse(
+            available=True, exercise=_build_exercise_out(exercise), context=context
+        )
 
     lock_key = f"listening:generating:{level}:{target_language}"
     generation = await get_generation_state(redis, lock_key)
     # A commit may have happened between the first lookup and the state snapshot.
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
-        return ListeningNextResponse(available=True, exercise=_build_exercise_out(exercise))
+        return ListeningNextResponse(
+            available=True, exercise=_build_exercise_out(exercise), context=context
+        )
 
-    return ListeningNextResponse(available=False, **generation.model_dump())
+    return ListeningNextResponse(available=False, context=context, **generation.model_dump())
 
 
 @router.post(
@@ -151,7 +158,7 @@ async def generate_exercise(
     background_tasks: BackgroundTasks,
     _maintenance: None = Depends(require_not_maintenance),
     voice: str = Query(default=""),
-    plan: StudyPlan = Depends(get_active_study_plan),
+    plan: StudyPlan = Depends(get_exercise_study_plan),
     current_user: User = Depends(require_subscription_or_freemium("listening")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),

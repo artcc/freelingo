@@ -147,12 +147,22 @@ async def generate_and_save_exercise(
 
     # Write MP3 with the exercise ID as filename
     audio_path = os.path.join(audio_dir, f"{exercise.id}.mp3")
-    with open(audio_path, "wb") as fh:
-        fh.write(audio_bytes)
-
-    exercise.audio_path = audio_path
-    if before_save is not None:
-        await before_save()
+    try:
+        with open(audio_path, "wb") as fh:
+            fh.write(audio_bytes)
+        exercise.audio_path = audio_path
+        if before_save is not None:
+            await before_save()
+    except BaseException:
+        # No commit has been attempted, so this file cannot belong to a persisted exercise.
+        # Include cancellation; never apply this cleanup to an uncertain commit or failed refresh.
+        try:
+            os.remove(audio_path)
+        except FileNotFoundError:
+            pass
+        except OSError:
+            logger.exception("Could not remove uncommitted listening audio: %s", audio_path)
+        raise
     await db.commit()
     await db.refresh(exercise)
     return exercise

@@ -1559,6 +1559,7 @@
     "replayNoXp": "Gentag (ingen XP)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Dit aktive sprog eller din studieplan er ændret. Genindlæs denne side for at fortsætte.",
     "failed": "Øvelsen kunne ikke oprettes. Prøv igen.",
     "timeout": "Det tog for lang tid at oprette øvelsen. Prøv igen.",
     "unavailable": "Øvelsens status kunne ikke kontrolleres. Prøv igen."

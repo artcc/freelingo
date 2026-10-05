@@ -285,6 +285,13 @@ Both `POST /api/conversation/warmup` and `/ws/conversation` require an authentic
 
 Listening reads use read-only subscription/freemium access; generation and attempt submission use consumable access. Maintenance policy remains backend-enforced. Audio paths are derived from integer exercise IDs.
 
+Both comprehension domains expose `context: {study_plan_id, target_language, level}` and nullable
+`generation_remaining_seconds` in `/next` responses, in addition to the fields below. Remaining time
+is calculated on the server. Both `/next` and `/generate` accept optional `expected_study_plan_id`,
+`expected_target_language`, and `expected_level`. They are compared with the authenticated user's
+persisted active plan; a mismatch returns 409 `study_context_changed` before pool lookup or generation.
+These parameters cannot select or authorize a different plan.
+
 - **GET `/next`** — Rate limit: 60/min. Returns immediately with `{available, exercise, generation_status, generation_error, generation_deadline}`; transcript and correct answers are omitted. Status is `idle`, `generating`, or `failed`; error is null, `timeout`, `generation_failed`, or `interrupted`; deadline is nullable UTC. Available exercises take priority. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a renewable, owner-scoped language/level generation lease and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job. Returns `{"status":"available"}` without generating when the user's pool already has an exercise.
 - **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.

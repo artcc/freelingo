@@ -49,6 +49,9 @@ an exhaustive route inventory here.
 through one serialized refresh only when the original request had an access token. Failed refresh
 clears auth state and routes to login.
 
+Callers with an AbortSignal can stop waiting for shared refresh independently. Cancellation releases
+their loading-counter slot and prevents their retry; shared token rotation continues for other callers.
+
 Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
@@ -56,7 +59,10 @@ cancellation where supported.
 Listening and Reading share `hooks/useExerciseGeneration.ts` and `lib/exercise-generation.ts`.
 They use immediate status queries, ten-second polling, bounded transport recovery, and at most one
 generation POST per operation. The hook prevents duplicate starts, resumes active work on entry,
-cancels on unmount/language changes, and guards late responses. Errors use the shared
+cancels on unmount or local language/plan/level changes, and guards late responses. Each operation
+retains its expected plan/language/level; server-side changes return a context conflict rather than
+silently switching pools. Server-calculated remaining time is converted to a local monotonic budget
+shared by requests and retry pauses. Errors use the shared
 `exerciseGeneration` namespace in all interface catalogs. Detailed status and timing rules belong
 to the Listening and Reading specifications.
 

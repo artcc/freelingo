@@ -5,7 +5,7 @@ from typing import Literal
 
 from pydantic import BaseModel, field_serializer
 
-from app.schemas.exercise_generation import ExerciseGenerationState
+from app.schemas.exercise_generation import ExerciseContext, ExerciseGenerationState
 
 
 class QuestionOut(BaseModel):
@@ -44,6 +44,7 @@ class ListeningExerciseOut(BaseModel):
 
 
 class ListeningNextResponse(ExerciseGenerationState):
+    context: ExerciseContext
     available: bool
     exercise: ListeningExerciseOut | None = None
 

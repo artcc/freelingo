@@ -96,4 +96,29 @@ describe('useExerciseGeneration lifecycle', () => {
     expect(onExercise).not.toHaveBeenCalled()
     expect(setPageState).not.toHaveBeenCalled()
   })
+
+  it('cancels when the plan changes without changing language', async () => {
+    resolve
+      .mockImplementationOnce(() => new Promise(() => {}))
+      .mockResolvedValueOnce(null)
+    const { rerender } = renderHook(
+      ({ studyPlanId, level }) =>
+        useExerciseGeneration({
+          ...options,
+          language: 'en-GB',
+          studyPlanId,
+          level,
+        }),
+      { initialProps: { studyPlanId: 7, level: 'B1' } }
+    )
+    const signal = resolve.mock.calls[0][0].signal
+    rerender({ studyPlanId: 8, level: 'B2' })
+    await waitFor(() => expect(resolve).toHaveBeenCalledTimes(2))
+    expect(signal.aborted).toBe(true)
+    expect(resolve.mock.calls[1][0].context).toEqual({
+      study_plan_id: 8,
+      target_language: 'en-GB',
+      level: 'B2',
+    })
+  })
 })

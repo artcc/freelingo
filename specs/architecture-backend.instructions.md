@@ -84,6 +84,9 @@ Listening and Reading retain FastAPI background tasks with independent database/
 `exercise_generation.py` owns their renewable Redis leases, total generation deadline, cancellation,
 and temporary status. Domain services verify lease ownership before persistence. Immediate `/next`
 responses expose status without holding a database session open while waiting for inference.
+`get_exercise_study_plan` compares optional expected context with the authenticated user's active plan
+and rejects mismatches with 409. It does not authorize arbitrary client-supplied plan IDs. Redis lease
+ownership and PostgreSQL commit are separate operations; the pre-save guard is not transactional fencing.
 
 ### Static learning data
 

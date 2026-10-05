@@ -70,6 +70,10 @@ The service:
 6. Writes the MP3 as `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
 7. Stores the path and commits the exercise.
 
+If writing audio or the pre-commit ownership guard fails or is cancelled, the service removes the
+uncommitted MP3 on a best-effort basis; the session rolls back the uncommitted row. Audio is retained
+once commit has been attempted, including an uncertain commit outcome or a later refresh failure.
+
 Types currently used are `monologue`, `announcement`, `voicemail`, `dialogue`, `story`, `podcast`,
 `interview`, and `news`, with the available subset selected by CEFR level.
 
@@ -93,8 +97,10 @@ listening:generating:{level}:{target_language}
 - `exercise_generation.py` acquires a unique-owner lease with a 60-second TTL and renews it every
   20 seconds. Lua operations atomically acquire the lease and state, compare-and-renew, and
   compare-and-finish. An older task cannot release a replacement lease or overwrite its state.
-- The background task opens its own database and Redis resources. Loss of the lease, renewal failure,
-  or cancellation stops local work; persistence checks ownership before saving.
+- The background task opens its own database and Redis resources. Detected lease loss, renewal
+  failure, or cancellation stops local work; persistence checks ownership before saving. Redis and
+  PostgreSQL do not share a transaction: the lease prevents ordinary duplicate work but is not a
+  database fencing guarantee if ownership disappears between the final guard and commit.
 - `EXERCISE_GENERATION_TIMEOUT_SECONDS` defaults to 600 and bounds the complete job from acquisition,
   including structured generation, JSON correction, TTS, and persistence. Provider-specific TTS
   timeouts still apply. The LLM receives the remaining budget with SDK and adapter transport retries
@@ -115,6 +121,13 @@ HTTP response does not cancel the accepted background job.
 All endpoints require authentication, an active language, an active study plan, and normal
 maintenance access. They derive level, language, and plan from persisted server state.
 
+`/next` and `/generate` accept optional `expected_study_plan_id`, `expected_target_language`, and
+`expected_level` query parameters. These are consistency checks against the authenticated user's
+persisted active plan, not authorization or pool-selection inputs. A mismatch returns HTTP 409
+`study_context_changed` before selecting an exercise or starting work. The frontend sends its known
+context on the first lookup and preserves the full returned context for subsequent GET and POST calls.
+Changing the active context in another tab stops the stale operation and prompts a page reload.
+
 ### `GET /api/listening/next`
 
 - Rate limit: `60/minute`.
@@ -125,7 +138,9 @@ maintenance access. They derive level, language, and plan from persisted server 
 - No available exercise returns `available: false` and a null exercise.
 - Every response includes `generation_status` (`idle`, `generating`, or `failed`), nullable
   `generation_error` (`timeout`, `generation_failed`, or `interrupted`), and nullable UTC
-  `generation_deadline`. Available responses use idle state with no error or deadline.
+  `generation_deadline`, plus nullable `generation_remaining_seconds` calculated by the server.
+  Available responses use idle state with no error, deadline, or remaining time.
+- Every response includes `context: {study_plan_id, target_language, level}` from the resolved plan.
 
 ### `POST /api/listening/generate`
 
@@ -218,16 +233,21 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 - Idle state offers generation, history, quota information, or an inline paywall.
 - `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Reading.
 - Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay
-  warning after 15 seconds. Each HTTP request has a 20-second timeout.
-- The first server deadline bounds the wait, with 10 seconds of grace and a final result lookup.
-  Missing deadlines use a bounded 60-second observation window.
+  warning after 15 seconds. Each request uses at most 20 seconds or the remaining operation budget,
+  including the consumer's wait for shared authentication refresh.
+- The first server-calculated remaining time is anchored to the browser's monotonic clock. A final
+  result lookup at expiry has up to 10 seconds of grace. Missing remaining time uses a 60-second
+  observation window. Client wall-clock offsets do not change this budget.
 - Network errors, 5xx, and 429 use progressive backoff; recovery stops after four consecutive failures.
   `Retry-After` is respected up to 120 seconds; longer delays are surfaced as unavailable status.
+  Recovery pauses are capped by the remaining budget; when Retry-After cannot fit, the operation
+  expires without sending a request earlier than permitted or outside its budget.
 - An uncertain POST response is recovered using GET only. Checking status never resubmits generation.
 - Page entry resumes active generation or retrieves a saved result. Localized errors distinguish
   generation failure, timeout, and unavailable status. A manual retry checks for existing work first.
-- Repeated clicks are blocked before POST completes. Unmount and active-language changes abort the
-  current lookup and its timers, and late responses cannot update a replacement operation.
+- Repeated clicks are blocked before POST completes. Unmount and local language, plan, or level
+  changes abort the current lookup and its timers. Responses must match the operation's context;
+  late responses cannot update a replacement operation.
 - Exercise state shows topic, type, level, authenticated audio playback, and all questions.
 - Submission becomes available when every received question index has an answer.
 - Results reveal transcript, correct answers, score, and XP.

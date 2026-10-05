@@ -128,4 +128,58 @@ describe('apiFetch', () => {
     expect(headers['Content-Type']).toBe('application/json')
     expect(headers['Authorization']).toBe('Bearer token')
   })
+
+  it.each(['AbortError', 'TimeoutError'])(
+    'releases a %s consumer without cancelling shared refresh',
+    async (reason) => {
+      useAuthStore.setState({ accessToken: 'old-token' })
+      const controller = new AbortController()
+      let completeRefresh: (response: Response) => void = () => {}
+      const pendingRefresh = new Promise<Response>((resolve) => {
+        completeRefresh = resolve
+      })
+      let refreshStarted: () => void = () => {}
+      const started = new Promise<void>((resolve) => {
+        refreshStarted = resolve
+      })
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/auth/refresh') {
+          refreshStarted()
+          return pendingRefresh
+        }
+        if (
+          (options?.headers as Record<string, string>)?.Authorization ===
+          'Bearer new-token'
+        ) {
+          return new Response('ok')
+        }
+        return new Response(null, { status: 401 })
+      })
+      const cancelled = apiFetch('/api/reading/next', {
+        signal: controller.signal,
+      })
+      const result = expect(cancelled).rejects.toMatchObject({ name: reason })
+      await started
+      const survivor = apiFetch('/api/listening/next')
+      controller.abort(new DOMException('Consumer cancelled', reason))
+      await result
+      expect(useLoadingStore.getState().count).toBe(1)
+      completeRefresh(
+        new Response(JSON.stringify({ access_token: 'new-token' }))
+      )
+      expect((await survivor).ok).toBe(true)
+      expect(useLoadingStore.getState().count).toBe(0)
+      expect(useAuthStore.getState().accessToken).toBe('new-token')
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/auth/refresh')
+      ).toHaveLength(1)
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/reading/next')
+      ).toHaveLength(1)
+    }
+  )
 })

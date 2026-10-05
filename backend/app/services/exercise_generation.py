@@ -10,6 +10,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 from httpx import TimeoutException
+from openai import APITimeoutError
 from redis.asyncio import Redis
 
 from app.core.config import settings
@@ -60,6 +61,10 @@ async def get_generation_state(redis: Redis, key: str) -> ExerciseGenerationStat
         # Also tolerate a lease created by a worker running the older protocol.
         state.generation_status = "generating"
         state.generation_error = None
+        if state.generation_deadline is not None:
+            state.generation_remaining_seconds = max(
+                0.0, (state.generation_deadline - datetime.now(UTC)).total_seconds()
+            )
     elif state.generation_status == "generating":
         state.generation_status = "failed"
         state.generation_error = "interrupted"
@@ -137,7 +142,7 @@ class GenerationLease:
                     await heartbeat
                 await generation
                 error = None
-        except TimeoutError, LLMTimeoutError, TimeoutException:
+        except TimeoutError, LLMTimeoutError, TimeoutException, APITimeoutError:
             error = "timeout"
             logger.warning("Exercise generation timed out: %s owner=%s", self.key, self.owner)
         except GenerationInterruptedError:

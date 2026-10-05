@@ -65,6 +65,9 @@ function ReadingPage() {
   const t = useTranslations('reading')
   const tCommon = useTranslations('common')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const activePlan = useLanguageStore(
+    (s) => s.userLanguages.find((l) => l.is_active)?.plan
+  )
   const {
     selectedWord,
     tooltipPos,
@@ -136,6 +139,8 @@ function ReadingPage() {
   const { loadNext, generate } = useExerciseGeneration({
     feature: 'reading',
     language: activeLanguage?.code,
+    studyPlanId: activePlan?.id,
+    level: activePlan?.cefr_level,
     onExercise,
     setPageState,
     setError,

@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.deps import (
     get_active_study_plan,
+    get_exercise_study_plan,
     get_redis,
     require_not_maintenance,
     require_subscription_or_freemium,
@@ -15,6 +16,7 @@ from app.core.deps import (
 from app.core.limiter import limiter
 from app.models.study_plan import StudyPlan
 from app.models.user import User
+from app.schemas.exercise_generation import ExerciseContext
 from app.schemas.reading import (
     CorrectAnswerOut,
     QuestionOut,
@@ -100,25 +102,30 @@ async def _background_generate(
 async def get_next_exercise(
     request: Request,
     _maintenance: None = Depends(require_not_maintenance),
-    plan: StudyPlan = Depends(get_active_study_plan),
+    plan: StudyPlan = Depends(get_exercise_study_plan),
     current_user: User = Depends(require_subscription_or_freemium_readonly("reading")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> ReadingNextResponse:
     """Return an available exercise or the current generation state without waiting."""
     level, target_language = plan.cefr_level, plan.target_language
+    context = ExerciseContext(study_plan_id=plan.id, target_language=target_language, level=level)
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
-        return ReadingNextResponse(available=True, exercise=_build_exercise_out(exercise))
+        return ReadingNextResponse(
+            available=True, exercise=_build_exercise_out(exercise), context=context
+        )
 
     lock_key = f"reading:generating:{level}:{target_language}"
     generation = await get_generation_state(redis, lock_key)
     # A commit may have happened between the first lookup and the state snapshot.
     exercise = await get_available_exercise(level, target_language, current_user.id, db)
     if exercise is not None:
-        return ReadingNextResponse(available=True, exercise=_build_exercise_out(exercise))
+        return ReadingNextResponse(
+            available=True, exercise=_build_exercise_out(exercise), context=context
+        )
 
-    return ReadingNextResponse(available=False, **generation.model_dump())
+    return ReadingNextResponse(available=False, context=context, **generation.model_dump())
 
 
 @router.post(
@@ -131,7 +138,7 @@ async def generate_exercise(
     request: Request,
     background_tasks: BackgroundTasks,
     _maintenance: None = Depends(require_not_maintenance),
-    plan: StudyPlan = Depends(get_active_study_plan),
+    plan: StudyPlan = Depends(get_exercise_study_plan),
     current_user: User = Depends(require_subscription_or_freemium("reading")),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),

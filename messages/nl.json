@@ -1559,6 +1559,7 @@
     "replayNoXp": "Herhaling (geen XP)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Je actieve taal of studieplan is gewijzigd. Laad deze pagina opnieuw om door te gaan.",
     "failed": "De oefening kon niet worden gemaakt. Probeer het opnieuw.",
     "timeout": "Het maken van de oefening duurde te lang. Probeer het opnieuw.",
     "unavailable": "De status van de oefening kon niet worden gecontroleerd. Probeer het opnieuw."

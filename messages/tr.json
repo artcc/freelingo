@@ -1559,6 +1559,7 @@
     "replayNoXp": "Tekrar oyna (XP yok)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Etkin diliniz veya çalışma planınız değişti. Devam etmek için bu sayfayı yeniden yükleyin.",
     "failed": "Alıştırma oluşturulamadı. Lütfen tekrar deneyin.",
     "timeout": "Alıştırmanın oluşturulması çok uzun sürdü. Lütfen tekrar deneyin.",
     "unavailable": "Alıştırmanın durumu kontrol edilemedi. Lütfen tekrar deneyin."

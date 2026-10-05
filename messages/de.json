@@ -1559,6 +1559,7 @@
     "replayNoXp": "Wiederholung (kein XP)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Deine aktive Sprache oder dein Lernplan hat sich geändert. Lade diese Seite neu, um fortzufahren.",
     "failed": "Die Übung konnte nicht erstellt werden. Bitte versuche es erneut.",
     "timeout": "Das Erstellen der Übung hat zu lange gedauert. Bitte versuche es erneut.",
     "unavailable": "Der Status der Übung konnte nicht überprüft werden. Bitte versuche es erneut."

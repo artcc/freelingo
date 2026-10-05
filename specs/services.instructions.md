@@ -133,6 +133,10 @@ acquisition. The domain services accept a monotonic `deadline` and async `before
 guard. The coordinator cancels work on timeout or renewal failure, stops its heartbeat in all cases,
 and exposes controlled failure codes through immediate `/next` responses. Database content remains
 the authority when an exercise is available; Redis stores no learner answers or generated content.
+Status reads calculate remaining generation seconds on the server. Redis ownership checks do not
+form an atomic transaction with PostgreSQL commits. Listening compensates audio writes on failure or
+cancellation before commit is attempted, while preserving audio after an uncertain commit or failed
+post-commit refresh. The coordinator recognizes OpenAI TTS `APITimeoutError` as `timeout`.
 
 Pool, generation-lock, attempt, and history behavior belongs to the Listening and Reading specs.
 

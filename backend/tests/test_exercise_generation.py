@@ -1,9 +1,10 @@
 import asyncio
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from openai import APITimeoutError
 
 from app.services import exercise_generation as generation
 from app.services.exercise_generation import (
@@ -67,6 +68,7 @@ async def test_leases_are_isolated_by_feature_level_and_language():
     [
         (RuntimeError("TTS unavailable"), "generation_failed"),
         (LLMTimeoutError("LLM timed out"), "timeout"),
+        (APITimeoutError(request=MagicMock()), "timeout"),
     ],
 )
 async def test_background_failure_is_observable_and_retryable(failure, code):

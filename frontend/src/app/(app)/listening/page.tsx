@@ -63,6 +63,9 @@ function ListeningPage() {
   const t = useTranslations('listening')
   const tCommon = useTranslations('common')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const activePlan = useLanguageStore(
+    (s) => s.userLanguages.find((l) => l.is_active)?.plan
+  )
   const {
     selectedWord,
     tooltipPos,
@@ -132,6 +135,8 @@ function ListeningPage() {
   const { loadNext, generate } = useExerciseGeneration({
     feature: 'listening',
     language: activeLanguage?.code,
+    studyPlanId: activePlan?.id,
+    level: activePlan?.cefr_level,
     onExercise,
     setPageState,
     setError,

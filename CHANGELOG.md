@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Listening and Reading keep checking slow exercise generation through short, recoverable requests, resume existing work when reopening the page, and retrieve completed exercises after temporary connection failures.
 - Slow generation retains an owner-checked, renewable lock; obsolete tasks cannot release another task's lock, and bounded LLM calls avoid multiplying SDK and application retries.
 - Exercise generation reports localized failure, timeout, and connection-status errors, prevents duplicate clicks, and ignores late responses after leaving the page or changing language.
+- Exercise polling detects active language, plan, or level changes across tabs instead of switching pools, and uses a clock-independent budget that also bounds retry delays and authentication-refresh waits.
+- Cancelled authentication consumers release their loading state without interrupting shared token rotation. Listening removes audio written by work aborted before commit, preserves confirmed audio after refresh failures, and classifies OpenAI speech timeouts consistently.
 
 ## [1.9.25] - 2026-09-25
 

@@ -1559,6 +1559,7 @@
     "replayNoXp": "Ponovi (bez XP-a)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Tvoj aktivni jezik ili plan učenja se promijenio. Ponovno učitaj ovu stranicu za nastavak.",
     "failed": "Vježbu nije bilo moguće izraditi. Pokušaj ponovno.",
     "timeout": "Izrada vježbe trajala je predugo. Pokušaj ponovno.",
     "unavailable": "Nije bilo moguće provjeriti status vježbe. Pokušaj ponovno."

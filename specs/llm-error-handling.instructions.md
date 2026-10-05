@@ -37,6 +37,8 @@ disables adapter and SDK transport retries, sets each request timeout to the rem
 preserves timeout/provider exception types during JSON correction. It does not mutate shared client
 configuration or change the default retry policy of other features. The outer background-job budget
 also includes TTS and persistence and is configured by `EXERCISE_GENERATION_TIMEOUT_SECONDS`.
+The exercise coordinator maps Python, HTTPX, normalized LLM, and OpenAI SDK timeout exceptions to the
+same `timeout` status, including OpenAI TTS failures outside the LLM adapter.
 
 ## Structured output
 

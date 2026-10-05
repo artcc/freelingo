@@ -1559,6 +1559,7 @@
     "replayNoXp": "Toista (ei XP-pisteitä)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Aktiivinen kielesi tai opiskelusuunnitelmasi on muuttunut. Jatka lataamalla tämä sivu uudelleen.",
     "failed": "Harjoitusta ei voitu luoda. Yritä uudelleen.",
     "timeout": "Harjoituksen luominen kesti liian kauan. Yritä uudelleen.",
     "unavailable": "Harjoituksen tilaa ei voitu tarkistaa. Yritä uudelleen."

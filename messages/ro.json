@@ -1559,6 +1559,7 @@
     "replayNoXp": "Repetare (fără XP)"
   },
   "exerciseGeneration": {
+    "contextChanged": "Limba activă sau planul de studiu s-a schimbat. Reîncarcă această pagină pentru a continua.",
     "failed": "Exercițiul nu a putut fi generat. Încearcă din nou.",
     "timeout": "Generarea exercițiului a durat prea mult. Încearcă din nou.",
     "unavailable": "Starea exercițiului nu a putut fi verificată. Încearcă din nou."

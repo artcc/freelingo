@@ -10,6 +10,8 @@ import {
 export function useExerciseGeneration<T>({
   feature,
   language,
+  studyPlanId,
+  level,
   onExercise,
   setPageState,
   setError,
@@ -17,6 +19,8 @@ export function useExerciseGeneration<T>({
 }: {
   feature: 'listening' | 'reading'
   language: string | undefined
+  studyPlanId?: number
+  level?: string | null
   onExercise: (exercise: T) => void
   setPageState: (state: 'loading' | 'generating' | 'idle' | 'exercise') => void
   setError: (error: string) => void
@@ -28,6 +32,7 @@ export function useExerciseGeneration<T>({
 
   const run = useCallback(
     async (generate: boolean, voice = '') => {
+      if (!language) return
       // Prevent repeated clicks from starting concurrent operations, including before POST returns.
       if (generate && active.current) return
       active.current?.abort()
@@ -39,6 +44,11 @@ export function useExerciseGeneration<T>({
       try {
         const exercise = await resolveExercise<T>({
           feature,
+          context: {
+            target_language: language,
+            study_plan_id: studyPlanId,
+            level: level ?? undefined,
+          },
           signal: controller.signal,
           generate,
           voice,
@@ -59,7 +69,18 @@ export function useExerciseGeneration<T>({
         if (active.current === controller) active.current = null
       }
     },
-    [feature, setError, dismissTooltip, setPageState, onExercise, t, tCommon]
+    [
+      feature,
+      language,
+      studyPlanId,
+      level,
+      setError,
+      dismissTooltip,
+      setPageState,
+      onExercise,
+      t,
+      tCommon,
+    ]
   )
 
   const loadNext = useCallback(() => run(false), [run])
