@@ -258,6 +258,9 @@ const INTERRUPTION_MIN_UTTERANCE_MS = 1200
 const INTERRUPTION_RMS_THRESHOLD = 0.03
 const BARGE_IN_STARTUP_GUARD_MS = 900
 const VAD_MAX_RMS = 0.25
+// Allow the backend's 60-second provider budget plus transport/auth overhead.
+const WARMUP_TIMEOUT_MS = 75_000
+const warmupLogger = getLogger('conversation-warmup')
 const convLogger = ENABLE_CONVERSATION_AUDIO_DEBUG_LOGS
   ? getLogger('conversation-audio')
   : silentLogger
@@ -356,6 +359,10 @@ export default function ConversationMode({
   const cleanEndRef = useRef(false)
   const mountedRef = useRef(true)
   const startAttemptRef = useRef(0)
+  const warmupRef = useRef<{
+    controller: AbortController
+    timeout: ReturnType<typeof setTimeout>
+  } | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
   const vadOperationRef = useRef<Promise<void>>(Promise.resolve())
   const assistantSpeakingRef = useRef(false)
@@ -602,11 +609,17 @@ export default function ConversationMode({
         !sessionActiveRef.current &&
         !wsRef.current &&
         !micStreamRef.current &&
-        !audioCtxRef.current
+        !audioCtxRef.current &&
+        !warmupRef.current
       )
         return
       closeReasonRef.current = reason
       startAttemptRef.current++
+      if (warmupRef.current) {
+        clearTimeout(warmupRef.current.timeout)
+        warmupRef.current.controller.abort()
+        warmupRef.current = null
+      }
       sessionActiveRef.current = false
       activeTurnIdRef.current = null
       assistantTurnActiveRef.current = false
@@ -995,9 +1008,8 @@ export default function ConversationMode({
     sessionStartedAtRef.current = null
     refreshQuota()
 
-    // Trigger model warmup on TTS/STT services and WAIT for them to be ready
-    // before opening the WebSocket. Models are loaded lazily by the backend;
-    // this ensures the first transcription/synthesis in the session is fast.
+    // Await best-effort TTS/STT preparation before opening the WebSocket.
+    // Local models may need a cold start; provider health is not guaranteed.
     setStatus('warming')
 
     // Start mic (requests permission if not already granted)
@@ -1032,41 +1044,53 @@ export default function ConversationMode({
     }
     if (!mountedRef.current || startAttemptRef.current !== startAttempt) return
 
-    const warmupResponsePromise = apiFetch('/api/conversation/warmup', {
-      method: 'POST',
-      ...(voiceTrialToken
-        ? {
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ trial_token: voiceTrialToken }),
-          }
-        : {}),
-    })
-    const warmupTimeout = new Promise<Response>((_, reject) => {
-      setTimeout(() => reject(new Error('warmup timeout')), 15_000)
-    })
+    const controller = new AbortController()
+    let timedOut = false
+    const timeout = setTimeout(() => {
+      timedOut = true
+      controller.abort()
+    }, WARMUP_TIMEOUT_MS)
+    warmupRef.current = { controller, timeout }
     let warmupResponse: Response
     try {
-      warmupResponse = (await Promise.race([
-        warmupResponsePromise,
-        warmupTimeout,
-      ])) as Response
-    } catch {
+      warmupResponse = await apiFetch('/api/conversation/warmup', {
+        method: 'POST',
+        signal: controller.signal,
+        ...(voiceTrialToken
+          ? {
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ trial_token: voiceTrialToken }),
+            }
+          : {}),
+      })
+    } catch (error) {
       if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
         return
       }
-      setErrorMsg(`${t('errorConnection')} [warmup request failed]`)
-      convLogger.error('warmup request failed')
+      setErrorMsg(t('errorConnection'))
+      warmupLogger.error(
+        timedOut ? 'warmup timeout' : 'warmup request failed',
+        {
+          timeoutMs: WARMUP_TIMEOUT_MS,
+          error: error instanceof Error ? error.message : String(error),
+        }
+      )
       setStatus('error')
       finalizeSession()
       return
+    } finally {
+      clearTimeout(timeout)
+      if (warmupRef.current?.controller === controller) {
+        warmupRef.current = null
+      }
     }
 
     if (!warmupResponse.ok) {
       if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
         return
       }
-      setErrorMsg(`${t('errorConnection')} [warmup ${warmupResponse.status}]`)
-      convLogger.error('warmup bad status', { status: warmupResponse.status })
+      setErrorMsg(t('errorConnection'))
+      warmupLogger.error('warmup bad status', { status: warmupResponse.status })
       setStatus('error')
       finalizeSession()
       return

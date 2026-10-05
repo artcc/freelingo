@@ -153,6 +153,83 @@ async def test_warmup_stt_passes_explicit_language() -> None:
 
 
 @pytest.mark.asyncio
+async def test_warmup_waits_for_both_providers(client, test_user, monkeypatch) -> None:
+    _, headers = test_user
+    started = [asyncio.Event(), asyncio.Event()]
+    release = asyncio.Event()
+
+    async def prepare(index):
+        started[index].set()
+        await release.wait()
+
+    tts = type("LocalMock", (), {})()
+    stt = type("STTMock", (), {})()
+
+    async def prepare_tts(*args, **kwargs):
+        await prepare(0)
+
+    async def prepare_stt(*args, **kwargs):
+        await prepare(1)
+
+    tts.synthesize = AsyncMock(side_effect=prepare_tts)
+    stt.transcribe = AsyncMock(side_effect=prepare_stt)
+    monkeypatch.setattr(app.state, "tts_service", tts, raising=False)
+    monkeypatch.setattr(app.state, "stt_service", stt, raising=False)
+    request = asyncio.create_task(client.post("/api/conversation/warmup", headers=headers))
+    try:
+        await asyncio.wait_for(asyncio.gather(*(event.wait() for event in started)), timeout=2)
+        assert not request.done()
+        release.set()
+        response = await asyncio.wait_for(request, timeout=2)
+    finally:
+        release.set()
+        request.cancel()
+        await asyncio.gather(request, return_exceptions=True)
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ready"}
+    tts.synthesize.assert_awaited_once_with("ready")
+    stt.transcribe.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_warmup_cancels_slow_providers_at_shared_deadline(
+    client, test_user, monkeypatch
+) -> None:
+    _, headers = test_user
+    cancelled = [asyncio.Event(), asyncio.Event()]
+
+    async def slow_tts(*args, **kwargs):
+        try:
+            await asyncio.Event().wait()
+        finally:
+            cancelled[0].set()
+
+    async def slow_stt(*args, **kwargs):
+        try:
+            await asyncio.Event().wait()
+        finally:
+            cancelled[1].set()
+
+    tts = type("LocalMock", (), {})()
+    stt = type("STTMock", (), {})()
+    tts.synthesize = AsyncMock(side_effect=slow_tts)
+    stt.transcribe = AsyncMock(side_effect=slow_stt)
+    monkeypatch.setattr(app.state, "tts_service", tts, raising=False)
+    monkeypatch.setattr(app.state, "stt_service", stt, raising=False)
+    monkeypatch.setattr(conversation_router, "WARMUP_TIMEOUT_SECONDS", 0.05)
+    with patch.object(conversation_router.logger, "warning") as warning:
+        response = await asyncio.wait_for(
+            client.post("/api/conversation/warmup", headers=headers), timeout=2
+        )
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ready"}
+    assert all(event.is_set() for event in cancelled)
+    warning.assert_called_once_with("[warmup] Provider preparation timed out after %s s", 0.05)
+
+
+@pytest.mark.asyncio
 async def test_warmup_allows_valid_assessment_voice_trial(client, test_user, db_session) -> None:
     """Warmup accepts a valid post-assessment voice trial token without subscription."""
     user, headers = test_user
