@@ -188,6 +188,45 @@ options; the overall completion counter remains visible.
 
 ## Streaming and media
 
+The dashboard's `components/tour/OnboardingTour.tsx` is a native modal with seven localized screens.
+It keeps one `components/lingu/LinguAvatar.tsx` mounted across steps. The avatar dynamically loads
+`LinguScene.tsx` and Three.js only when visible and motion is allowed. The fixed-camera scene frames
+sampled animation bounds, cross-fades clips, caps pixel ratio, pauses animation updates in hidden tabs,
+and disposes its renderer, geometry, materials, and requests on unmount. Static Lingu artwork covers
+loading, reduced motion, and renderer/model failures.
+
+`lib/lingu-playback.ts` manages the 250 ms transitions using the current effective weights of all
+contributing actions. Interrupted fades preserve contributing clip times and poses; actions that
+finish fading out are stopped. Loop overrides preserve the current clip time when changing modes.
+
+`scripts/export-lingu-model.py` derives `public/models/lingu.glb` from `blender/lingu.glb`, retaining
+all thirteen clips, omitting rest-equivalent animation tracks, and repacking referenced buffers.
+It preserves mesh geometry, materials, skinning, and original Blender assets. `three` is the runtime
+renderer; `@types/three` supplies development types.
+
+`lib/lingu.ts` declares the reusable `LinguAnimation` type and playback defaults from
+`blender/lingu.animations.json`. `reposo`, `pensando`, `hablando`, and `escuchando` repeat. `saludo`,
+`celebracion`, `acierto`, `animando`, `explicando_l`, `explicando_r`, `tu_turno`, `despedida`, and
+`six_seven` play once and notify the caller through the optional `onFinished` callback. `LinguAvatar`
+accepts any of these animations independently of the tour. Its optional `loop` prop overrides the
+catalog playback default for that instance. The tour currently selects only its five contextual animations.
+
+The landing's `LanguageBubbles` reuses `LinguAvatar` in the centered 140 × 140 px slot and repeats
+`saludo` with `loop`. Its transparent canvas lets the landing's light/dark background show
+through. The surrounding language positions and container dimensions remain stable. An optional
+`className` overrides the avatar's default responsive dimensions so other surfaces can size it to
+their own container. Loading, reduced motion, and failures retain the static image fallback.
+
+Tour audio uses `AudioPlayer` with a localized listen label, speaker icon, playback-state callback,
+and a 75-second request budget. Playback starts only on a click; replacement and unmount release
+audio, Blob URLs, timers, and in-flight requests. Playback errors and rejected play requests share
+an idempotent error handler per attempt. Recovery timers belong to that attempt and cannot reset
+the state of a retry. The tour sets `audioMethod="POST"` to send its displayed i18n paragraph as `text`
+and the resolved `voice` in JSON. Custom audio URLs default to GET for existing consumers.
+The dedicated `api/tts/tour/[locale]/[step]` proxy forwards the JSON body, authentication and trusted
+IP headers, propagates cancellation, and uses a 70-second deadline. The backend validates the request,
+synthesizes the supplied text, and owns the persistent audio cache.
+
 Chat consumes JSON SSE events and must handle response reset before appending subsequent content.
 Voice conversation owns microphone/VAD and playback lifecycle with cancellation and late-callback
 guards. Resource audio components fetch authenticated blobs and release object URLs on replacement or

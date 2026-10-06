@@ -9,6 +9,10 @@ vi.mock('next-intl', () => ({
     namespace === 'targetLanguages' ? `Localized ${key}` : key,
 }))
 
+vi.mock('@/components/lingu/LinguAvatar', () => ({
+  default: () => null,
+}))
+
 vi.mock('next/image', () => ({
   default: function MockImage(
     props: React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -27,10 +31,11 @@ describe('LanguageBubbles', () => {
   it('renders one bubble per supported target language', () => {
     render(<LanguageBubbles />)
 
-    expect(screen.getAllByRole('img')).toHaveLength(
+    expect(screen.getAllByRole('img', { name: /^Localized / })).toHaveLength(
       SUPPORTED_TARGET_LANGUAGES.length
     )
     expect(screen.getByAltText('Localized de-DE')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
   })
 
   it('positions bubbles dynamically from the supported language count', () => {

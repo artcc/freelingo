@@ -153,6 +153,29 @@ availability remain governed by the Study Plan specification.
 Announcements come from public config state. Onboarding Tour and What's New coordinate their own
 display priority through their dedicated behavior.
 
+### Dashboard tour
+
+`OnboardingTour` is a seven-screen introduction: Lingu's welcome, study plan, text/voice practice,
+flashcards, listening/reading, games, and a dashboard-oriented closing. Games names are examples of
+the growing catalog, not an exhaustive list. Games have no blanket Premium marker.
+
+- Copy and manual narration use the interface locale, independently of native or target language.
+- Lingu greets once, rests between interactions, speaks during audio playback, encourages on the
+  Games screen, and celebrates at the closing. Entry gestures play only on the first visit to their
+  screen within the current tour. Gestures never delay narration or navigation.
+- Audio starts only from the button beside the current paragraph. It never autoplays the next screen.
+  Navigation, dismissal, and unmount stop playback and cancel pending browser requests. Failure leaves
+  the text and navigation available and permits retry.
+- The native modal dialog traps focus, closes on Escape, restores focus, and locks background scroll.
+  The character is decorative; reduced motion, loading, or unavailable WebGL use a static image.
+- Completion and skipping retain the browser-local `fl_tour_done` flag. Existing completed tours are
+  not reopened. What's New checks that flag on mount, so it does not overlap the initial tour or open
+  immediately behind its dismissal.
+- The final action closes the modal on Dashboard; it does not assume an existing plan or lesson.
+
+Narration persistence and the authenticated endpoint are specified in
+`speech-services.instructions.md`.
+
 ## Text tutor
 
 Text chat stores conversations and messages in PostgreSQL and isolates retrieval by target language.

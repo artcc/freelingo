@@ -8,10 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
+- Lingu greets visitors in a continuous loop at the center of the landing's language circle, preserving the existing 140 × 140 px slot and transparent integration with light and dark themes.
+- Animated Lingu dashboard tour with seven localized screens, an introduction to Games, and optional narration beside each paragraph. Audio follows the interface language and existing voice preferences, is generated on demand, and is persistently cached across users. Includes responsive presentation, keyboard navigation, reduced-motion artwork, and playback cancellation when navigating or closing. The reusable Lingu component supports all thirteen animations, with per-animation looping or one-shot playback.
 - Games section in desktop and mobile navigation, with localized messaging when no games are available and a link back to My Plan.
 - Error Detective: five-challenge language practice with separate error detection and correction, completed-lesson review, preparation for the next lesson and free practice at the plan's level. Includes native-language explanations, corrected-sentence audio, resumable games and history, up to 15 XP per game with a 45 XP daily plan limit, and three daily free games shared across languages. Generated content is validated and reviewed before consuming a game allowance.
 - Sentence Order: arrange fragments in five challenges with native-language clues and explanations, validated alternative orders, interchangeable repeated fragments, and correct-sentence audio. Supports CJK writing, completed-lesson review, next-lesson preparation and free practice, with resumable sessions and separate history. Shares the daily free-game allowance and plan XP limit with Error Detective.
 - Vocabulary Pairs: match five words or expressions with native-language meanings, retry mistakes without timers or lives, listen to resolved pairs and review examples with translations after completion. Includes resumable attempts, separate history, completed-lesson review, next-lesson preparation and level-based vocabulary practice. Awards first-try bonuses while sharing game quotas and the daily plan XP limit.
+
+### Fixed
+
+- Audio retries remain synchronized with playback when a media error also rejects the play request; obsolete recovery timers no longer reset an active retry.
 
 ## [1.9.30] - 2026-10-05
 

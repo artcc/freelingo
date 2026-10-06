@@ -1435,41 +1435,44 @@
     "skip": "Ohita",
     "prev": "Takaisin",
     "next": "Seuraava",
-    "done": "Aloita",
+    "done": "Tutustu omaan näkymääni",
+    "progress": "{current}/{total}",
+    "listen": "Kuuntele Lingua",
+    "audioError": "Ääntä ei voitu toistaa. Voit yrittää uudelleen.",
     "step1": {
       "label": "Tervetuloa",
       "title": "Tervetuloa FreeLingoon",
-      "desc": "FreeLingo on tekoälyä hyödyntävä kieltenopettajasi. Harjoittele omaan tahtiisi milloin tahansa keskusteluilla, oppitunneilla ja älykkäillä muistikorteilla."
+      "desc": "Hei! Olen Lingu, kieltenopiskelukaverisi. Näytän sinulle, miten voimme oppia yhdessä."
     },
     "step2": {
-      "label": "Tekstichatti",
-      "title": "Keskustele opettajasi kanssa",
-      "desc": "Keskustele kirjoittamalla AI-opettajasi kanssa. Kysy, saat korjauksia ja harjoittele kielioppia ja sanastoa luonnollisesti."
+      "label": "Opintosuunnitelma",
+      "title": "Oma opintosuunnitelmasi",
+      "desc": "Aloita valitsemalla tasosi tai tekemällä tasotesti. Saat opintosuunnitelman, jonka oppitunnit sopivat sinulle."
     },
     "step3": {
-      "label": "Ääni",
-      "title": "Puhu reaaliajassa",
-      "desc": "Harjoittele puhumista äänikeskustelussa. Saat reaaliaikaisen litteroinnin ja välitöntä palautetta ääntämisestäsi."
+      "label": "Keskustelu",
+      "title": "Harjoittele kanssani",
+      "desc": "Kirjoita minulle, kun haluat kysyä ja harjoitella, tai juttele kanssani ääneen."
     },
     "step4": {
       "label": "Muistikortit",
-      "title": "Älä unohda sanoja",
-      "desc": "Muistikortit käyttävät SM-2-aikavälikertausta, joka näyttää sanat juuri ennen kuin olet unohtamassa ne – näin muistat ne pidempään."
+      "title": "Muista oppimasi",
+      "desc": "Kertaa sanastoa korteilla, jotka palaavat näkyviin, kun on aika harjoitella."
     },
     "step5": {
-      "label": "Opintosuunnitelma",
-      "title": "Henkilökohtainen suunnitelmasi",
-      "desc": "Tasoarviosi perusteella FreeLingo laatii jäsennellyn opintosuunnitelman, jonka päivittäiset oppitunnit mukautuvat tavoitteisiisi ja edistymiseesi."
+      "label": "Kuuntelu ja lukeminen",
+      "title": "Harjoittele ymmärtämistä",
+      "desc": "Harjoittele kuuntelemalla ja lukemalla tasollesi sopivia tekstejä. Vastaa kysymyksiin ja tarkista, mitä ymmärsit."
     },
     "step6": {
-      "label": "Harjoittelu",
-      "title": "Kuuntelu ja lukeminen",
-      "desc": "Testaa ymmärrystäsi tekoälyn luomilla harjoituksilla. Kuuntele katkelma ja vastaa viiteen kysymykseen tai lue tasoasi vastaava teksti – ansaitset XP-pisteitä jokaisesta oikeasta vastauksesta."
+      "label": "Pelit",
+      "title": "Opi pelaamalla",
+      "desc": "Harjoittele omalla tasollasi esimerkiksi peleillä Virhe-etsivä, Järjestä lause ja Sanaparit. Oppiminen voi olla myös hauskaa!"
     },
     "step7": {
       "label": "Valmis",
-      "title": "Kaikki on valmista!",
-      "desc": "Aloita päivän oppitunnilla, avaa chatti tai harjoittele kuuntelua ja lukemista – FreeLingo mukautuu tapaasi oppia."
+      "title": "Aloitetaan",
+      "desc": "Edetään askel kerrallaan! Omasta näkymästäsi löydät, mitä tehdä seuraavaksi."
     }
   },
   "billing": {

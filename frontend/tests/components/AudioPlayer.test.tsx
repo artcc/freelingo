@@ -160,6 +160,24 @@ describe('AudioPlayer', () => {
     )
   })
 
+  it('keeps custom audio URLs as GET requests by default', async () => {
+    fetchMock.mockResolvedValueOnce(makeOkResponse())
+    const audioUrl = '/api/phrasebook/audio/greetings/0?language=es'
+    render(<AudioPlayer text="Hola" audioUrl={audioUrl} />)
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button'))
+    })
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      audioUrl,
+      expect.objectContaining({ credentials: 'include' })
+    )
+    expect(fetchMock.mock.calls[0][1].method).toBeUndefined()
+    expect(fetchMock.mock.calls[0][1].body).toBeUndefined()
+    expect(screen.getByText(PAUSE)).toBeDefined()
+  })
+
   it('sends X-TTS-Trace-ID header', async () => {
     fetchMock.mockResolvedValueOnce(makeOkResponse())
 
@@ -479,6 +497,129 @@ describe('AudioPlayer', () => {
   })
 
   // ───────────── UNMOUNT ─────────────
+
+  it.each(['before retry', 'after retry'] as const)(
+    'keeps a retry playing when onerror is followed by play rejection %s',
+    async (rejectionTiming) => {
+      vi.useFakeTimers()
+      try {
+        const failedAudio = makeAudioMock()
+        const retryAudio = makeAudioMock()
+        let rejectPlay!: (error: Error) => void
+        failedAudio.play.mockImplementation(
+          () =>
+            new Promise<void>((_, reject) => {
+              rejectPlay = reject
+            })
+        )
+        const audioConstructor = vi.fn(function () {
+          return retryAudio
+        })
+        audioConstructor.mockImplementationOnce(function () {
+          return failedAudio
+        })
+        globalThis.Audio = audioConstructor as unknown as typeof Audio
+        fetchMock.mockResolvedValue(makeOkResponse())
+        const { unmount } = render(<AudioPlayer text="Hello" />)
+
+        await act(async () => {
+          fireEvent.click(screen.getByRole('button'))
+        })
+        act(() => {
+          failedAudio.onerror!()
+        })
+        expect(screen.getByText(ERROR)).toBeDefined()
+        if (rejectionTiming === 'before retry') {
+          await act(async () => {
+            rejectPlay(new Error('Playback failed'))
+          })
+        }
+        expect(vi.getTimerCount()).toBe(1)
+
+        await act(async () => {
+          fireEvent.click(screen.getByRole('button'))
+        })
+        expect(screen.getByText(PAUSE)).toBeDefined()
+        if (rejectionTiming === 'after retry') {
+          await act(async () => {
+            rejectPlay(new Error('Playback failed'))
+          })
+        }
+        act(() => {
+          vi.advanceTimersByTime(2500)
+        })
+        expect(screen.getByText(PAUSE)).toBeDefined()
+        expect(retryAudio.pause).not.toHaveBeenCalled()
+
+        // The next click stops the retry instead of starting overlapping audio.
+        fireEvent.click(screen.getByRole('button'))
+        expect(screen.getByText(PLAY)).toBeDefined()
+        expect(retryAudio.pause).toHaveBeenCalledTimes(1)
+        expect(audioConstructor).toHaveBeenCalledTimes(2)
+        expect(fetchMock).toHaveBeenCalledTimes(2)
+        expect(revokeCalls).toEqual(['blob:fake-url-1', 'blob:fake-url-2'])
+        unmount()
+        expect(vi.getTimerCount()).toBe(0)
+      } finally {
+        vi.useRealTimers()
+      }
+    }
+  )
+
+  it('clears recovery after both playback error paths when unmounted', async () => {
+    vi.useFakeTimers()
+    try {
+      const audio = makeAudioMock()
+      audio.play.mockImplementation(() => {
+        audio.onerror!()
+        return Promise.reject(new Error('Playback failed'))
+      })
+      globalThis.Audio = function () {
+        return audio
+      } as unknown as typeof Audio
+      fetchMock.mockResolvedValue(makeOkResponse())
+      const { unmount } = render(<AudioPlayer text="Hello" />)
+      await act(async () => {
+        fireEvent.click(screen.getByRole('button'))
+      })
+      expect(screen.getByText(ERROR)).toBeDefined()
+      expect(audio.pause).toHaveBeenCalledTimes(1)
+      expect(revokeCalls).toEqual(['blob:fake-url-1'])
+      unmount()
+      expect(vi.getTimerCount()).toBe(0)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('still reports a request timeout and recovers', async () => {
+    vi.useFakeTimers()
+    try {
+      fetchMock.mockImplementation(
+        (_, { signal }: RequestInit) =>
+          new Promise((_, reject) => {
+            signal!.addEventListener('abort', () =>
+              reject(new DOMException('Aborted', 'AbortError'))
+            )
+          })
+      )
+      const { unmount } = render(<AudioPlayer text="Hello" timeoutMs={100} />)
+      await act(async () => {
+        fireEvent.click(screen.getByRole('button'))
+      })
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100)
+      })
+      expect(screen.getByText(ERROR)).toBeDefined()
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+      expect(screen.getByText(PLAY)).toBeDefined()
+      unmount()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 
   it('unmounts without throwing while idle', () => {
     const { unmount } = render(<AudioPlayer text="Hello" />)

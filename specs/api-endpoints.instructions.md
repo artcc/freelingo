@@ -281,6 +281,7 @@ are server-triggered by persisted activity and have no client-claim endpoint.
 
 - **POST ``** — Rate limit: 20/min. Auth: get_current_user. Text → MP3 audio using the selected TTS provider. Supports optional trace correlation via `X-TTS-Trace-ID` and returns timing headers.
 - **GET `/preview/{voice}`** — Rate limit: 60/min. Auth: get_current_user. Returns a short cached/generated MP3 preview for an OpenAI TTS voice when supported.
+- **POST `/tour/{locale}/{step}`** — Rate limit: 20/min. Auth: get_current_user. Returns persistent MP3 narration for the dashboard-tour text localized by the frontend through i18n. Accepts a supported UI locale, `step1`–`step7`, and a JSON body with `text` (1–5000 characters) and optional OpenAI `voice`; local TTS ignores that preference. Unknown locale/step returns 404, invalid text 422, invalid OpenAI voice 400, unavailable synthesis 503, and the 60-second generation deadline 504. Cache identity includes the supplied text, locale, effective provider/model/voice/speed and format. Files are shared across users, generation is serialized across workers, and responses use `Cache-Control: no-store` to reconsult the version-aware disk cache.
 
 ---
 

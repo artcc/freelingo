@@ -1435,41 +1435,44 @@
     "skip": "Passer",
     "prev": "Précédent",
     "next": "Suivant",
-    "done": "Commencer",
+    "done": "Explorer mon tableau de bord",
+    "progress": "{current} sur {total}",
+    "listen": "Écouter Lingu",
+    "audioError": "La lecture audio a échoué. Vous pouvez réessayer.",
     "step1": {
       "label": "Bienvenue",
       "title": "Bienvenue sur FreeLingo",
-      "desc": "FreeLingo est votre tuteur de langues alimenté par l'IA. Pratiquez à votre rythme, à tout moment, grâce à des conversations, des leçons et des cartes mémoire intelligentes."
+      "desc": "Bonjour ! Je suis Lingu, votre compagnon pour apprendre les langues. Découvrez comment nous pouvons apprendre ensemble."
     },
     "step2": {
-      "label": "Chat texte",
-      "title": "Discutez avec votre tuteur",
-      "desc": "Ayez des conversations écrites avec votre tuteur IA. Posez des questions, recevez des corrections et pratiquez la grammaire et le vocabulaire naturellement."
+      "label": "Plan d'étude",
+      "title": "Votre parcours d'apprentissage",
+      "desc": "Commencez par choisir votre niveau ou passer une évaluation. Vous aurez ainsi un plan d'étude avec des leçons adaptées à vous."
     },
     "step3": {
-      "label": "Voix",
-      "title": "Parlez en temps réel",
-      "desc": "Utilisez le mode conversation vocale pour pratiquer votre langue orale avec transcription en temps réel et retour immédiat sur votre prononciation."
+      "label": "Conversation",
+      "title": "Pratiquez avec moi",
+      "desc": "Écrivez-moi pour poser vos questions et pratiquer, ou discutez avec moi à l'oral."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "N'oubliez aucun mot",
-      "desc": "Les flashcards utilisent l'algorithme de répétition espacée SM-2 pour réviser les mots exactement quand vous êtes sur le point de les oublier."
+      "title": "Retenez ce que vous apprenez",
+      "desc": "Révisez le vocabulaire avec des cartes qui réapparaissent au bon moment pour vous entraîner."
     },
     "step5": {
-      "label": "Plan d'étude",
-      "title": "Votre plan personnalisé",
-      "desc": "En fonction de votre évaluation de niveau, FreeLingo crée un plan d'études structuré avec des leçons quotidiennes adaptées à vos objectifs."
+      "label": "Écoute et lecture",
+      "title": "Développez votre compréhension",
+      "desc": "Entraînez-vous à écouter et à lire des textes de votre niveau. Répondez aux questions et vérifiez ce que vous avez compris."
     },
     "step6": {
-      "label": "Pratique",
-      "title": "Écoute & Lecture",
-      "desc": "Testez votre compréhension avec des exercices générés par l'IA. Écoutez un passage et répondez à 5 questions, ou lisez un texte à votre niveau CECR — gagnez des XP pour chaque bonne réponse."
+      "label": "Jeux",
+      "title": "Apprenez en jouant",
+      "desc": "Pratiquez à votre niveau avec des jeux comme Détective des erreurs, Remets la phrase en ordre et Paires de vocabulaire, entre autres. Apprendre peut aussi être amusant !"
     },
     "step7": {
       "label": "Prêt",
-      "title": "Vous êtes prêt !",
-      "desc": "Commencez par la leçon du jour, ouvrez un chat ou pratiquez l'écoute et la lecture — FreeLingo s'adapte à votre façon d'apprendre."
+      "title": "C'est parti !",
+      "desc": "Avançons pas à pas ! Votre tableau de bord vous indiquera quoi faire ensuite."
     }
   },
   "billing": {

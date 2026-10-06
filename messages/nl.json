@@ -1435,41 +1435,44 @@
     "skip": "Overslaan",
     "prev": "Vorige",
     "next": "Volgende",
-    "done": "Aan de slag",
+    "done": "Mijn dashboard verkennen",
+    "progress": "{current} van {total}",
+    "listen": "Luister naar Lingu",
+    "audioError": "De audio kon niet worden afgespeeld. Probeer het opnieuw.",
     "step1": {
       "label": "Welkom",
       "title": "Welkom bij FreeLingo",
-      "desc": "FreeLingo is je AI-aangedreven taaltutor. Oefen in je eigen tempo, op elk moment, via gesprächen, lessen en slimme flashcards."
+      "desc": "Hoi! Ik ben Lingu, je maatje bij het leren van talen. Ik laat je zien hoe we samen kunnen leren."
     },
     "step2": {
-      "label": "Tekstchat",
-      "title": "Chat met je tutor",
-      "desc": "Voer schriftelijke gesprekken met je AI-tutor. Stel vragen, ontvang correcties en oefen grammatica en woordenschat op een natuurlijke manier."
+      "label": "Studieplan",
+      "title": "Jouw leerplan",
+      "desc": "Begin met het kiezen van je niveau of doe een niveautest. Zo krijg je een studieplan met lessen die bij je passen."
     },
     "step3": {
-      "label": "Stem",
-      "title": "Spreek in real time",
-      "desc": "Gebruik de spraakgespreksmodus om je gesproken taal te oefenen met realtime transcriptie en directe feedback op je uitspraak."
+      "label": "Gesprekken",
+      "title": "Oefen met mij",
+      "desc": "Schrijf me om vragen te stellen en te oefenen, of voer een gesproken gesprek met me."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "Vergeet geen enkel woord",
-      "desc": "Flashcards gebruiken het SM-2 gespreide herhalingsalgoritme zodat je woorden herhaalt precies wanneer je ze dreigt te vergeten."
+      "title": "Onthoud wat je leert",
+      "desc": "Herhaal woorden met flashcards die terugkomen wanneer het tijd is om te oefenen."
     },
     "step5": {
-      "label": "Studieplan",
-      "title": "Jouw persoonlijk plan",
-      "desc": "Op basis van je niveaubeoordeling maakt FreeLingo een gestructureerd studieplan met dagelijkse lessen afgestemd op jouw doelen."
+      "label": "Luisteren en lezen",
+      "title": "Train je begrip",
+      "desc": "Oefen met luister- en leesteksten op jouw niveau. Beantwoord vragen en controleer wat je hebt begrepen."
     },
     "step6": {
-      "label": "Oefening",
-      "title": "Luisteren & Lezen",
-      "desc": "Test je begrip met door AI gegenereerde oefeningen. Luister naar een fragment en beantwoord 5 vragen, of lees een tekst op jouw CEFR-niveau — verdien XP voor elk correct antwoord."
+      "label": "Spellen",
+      "title": "Leer spelenderwijs",
+      "desc": "Oefen op jouw niveau met onder andere Foutendetective, Zet de zin in volgorde en Woordparen. Leren kan ook leuk zijn!"
     },
     "step7": {
       "label": "Klaar",
-      "title": "Je bent er klaar voor!",
-      "desc": "Begin met de les van vandaag, open een chat of oefen luisteren en lezen — FreeLingo past zich aan hoe jij wilt leren."
+      "title": "Laten we beginnen",
+      "desc": "We doen het stap voor stap! Op je dashboard zie je wat je hierna kunt doen."
     }
   },
   "billing": {

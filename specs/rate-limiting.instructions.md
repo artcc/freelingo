@@ -68,6 +68,8 @@ flashcard CRUD/review, admin operations, memories, feedback reads/mutations, and
 - `POST /api/chat`: `30/minute`.
 - `POST /api/conversation/warmup`: `20/minute`.
 - `POST /api/tts`: `20/minute`.
+- `POST /api/tts/tour/{locale}/{step}`: `20/minute`, including cache hits. Its Next.js proxy forwards
+  the trusted ingress IP headers so requests retain the normal IP-based client key.
 - `POST /api/stt`: `20/minute`.
 
 ## Games

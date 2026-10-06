@@ -10,8 +10,10 @@ from app.core.config import settings
 from app.core.deps import get_current_user
 from app.core.limiter import limiter
 from app.models.user import User
+from app.schemas.auth import SUPPORTED_UI_LOCALES
 from app.schemas.tts_stt import TTSRequest
 from app.services.prompts.common import TUTOR_DISPLAY_NAME
+from app.services.tour_audio import OPENAI_VOICES, get_tour_audio
 
 router = APIRouter(prefix="/api", tags=["tts"])
 logger = get_logger(__name__)
@@ -24,6 +26,34 @@ _PREVIEW_TEXT = (
     f"Hello! I'm {TUTOR_DISPLAY_NAME}, your tutor. This is how I sound — warm, clear, "
     "and ready to help you practise every day. Let's get started!"
 )
+
+
+@router.post("/tts/tour/{locale}/{step}")
+@limiter.limit("20/minute")
+async def tour_narration(
+    request: Request,
+    locale: str,
+    step: str,
+    body: TTSRequest,
+    _current_user: User = Depends(get_current_user),
+) -> FileResponse:
+    """Speak frontend-localized tour text, reusing persistent audio across users."""
+    if locale not in SUPPORTED_UI_LOCALES or step not in {f"step{i}" for i in range(1, 8)}:
+        raise HTTPException(status_code=404, detail="Unknown tour narration")
+    if settings.TTS_PROVIDER == "openai" and body.voice and body.voice not in OPENAI_VOICES:
+        raise HTTPException(status_code=400, detail="Invalid voice name")
+    service = getattr(request.app.state, "tts_service", None)
+    if service is None:
+        raise HTTPException(status_code=503, detail="TTS service is not enabled")
+    try:
+        path = await get_tour_audio(service, locale=locale, text=body.text, voice=body.voice)
+    except TimeoutError:
+        raise HTTPException(status_code=504, detail="Tour narration timed out")
+    except Exception:
+        logger.exception("tour_narration_failed", locale=locale, step=step)
+        raise HTTPException(status_code=503, detail="Tour narration is unavailable")
+    # The URL doesn't contain the text/model revision; always consult the disk cache.
+    return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": "no-store"})
 
 
 @router.post("/tts")

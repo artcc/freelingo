@@ -1435,41 +1435,44 @@
     "skip": "Skip",
     "prev": "Back",
     "next": "Next",
-    "done": "Get started",
+    "done": "Explore my dashboard",
+    "progress": "{current} of {total}",
+    "listen": "Listen to Lingu",
+    "audioError": "The audio could not be played. You can try again.",
     "step1": {
       "label": "Welcome",
       "title": "Welcome to FreeLingo",
-      "desc": "FreeLingo is your AI-powered language tutor. Practice at your own pace, at any time, through conversation, lessons, and smart flashcards."
+      "desc": "Hi! I'm Lingu, your language-learning companion. Let me show you how we can learn together."
     },
     "step2": {
-      "label": "Text chat",
-      "title": "Chat with your tutor",
-      "desc": "Have written conversations with your AI tutor. Ask questions, get corrections, and practise grammar and vocabulary in a natural way."
+      "label": "Study plan",
+      "title": "Your learning plan",
+      "desc": "Start by choosing your level or taking an assessment. You'll get a study plan with lessons tailored to you."
     },
     "step3": {
-      "label": "Voice",
-      "title": "Speak in real time",
-      "desc": "Use voice conversation mode to practise your spoken language with real-time transcription and instant feedback on your pronunciation."
+      "label": "Conversation",
+      "title": "Practise with me",
+      "desc": "Write to me to ask questions and practise, or have a voice conversation with me."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "Never forget a word",
-      "desc": "Flashcards use the SM-2 spaced repetition algorithm so you review words exactly when you're about to forget them — maximising retention."
+      "title": "Remember what you've learnt",
+      "desc": "Review vocabulary with flashcards that reappear when it's time to practise."
     },
     "step5": {
-      "label": "Study plan",
-      "title": "Your personalised plan",
-      "desc": "Based on your level assessment, FreeLingo builds a structured study plan with daily lessons adapted to your goals and progress."
+      "label": "Listening & Reading",
+      "title": "Build your comprehension",
+      "desc": "Practise listening to and reading texts at your level. Answer questions and check what you've understood."
     },
     "step6": {
-      "label": "Practice",
-      "title": "Listening & Reading",
-      "desc": "Test your comprehension with AI-generated exercises. Listen to a passage and answer 5 questions, or read a text at your CEFR level — earn XP for every correct answer."
+      "label": "Games",
+      "title": "Learn through play",
+      "desc": "Practise at your level with games such as Error Detective, Sentence Order and Vocabulary Pairs, among others. Learning can be fun too!"
     },
     "step7": {
       "label": "Ready",
-      "title": "You're all set!",
-      "desc": "Start with today's lesson, open a chat, practise listening or reading — FreeLingo adapts to how you like to learn."
+      "title": "Let's get started",
+      "desc": "Let's take it step by step! Your dashboard will show you what to do next."
     }
   },
   "billing": {

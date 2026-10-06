@@ -1435,41 +1435,44 @@
     "skip": "Spring over",
     "prev": "Tilbage",
     "next": "Næste",
-    "done": "Kom i gang",
+    "done": "Udforsk mit overblik",
+    "progress": "{current} af {total}",
+    "listen": "Lyt til Lingu",
+    "audioError": "Lyden kunne ikke afspilles. Du kan prøve igen.",
     "step1": {
       "label": "Velkommen",
       "title": "Velkommen til FreeLingo",
-      "desc": "FreeLingo er din AI-drevne sproglærer. Øv dig i dit eget tempo, når du vil, gennem samtaler, lektioner og smarte flashcards."
+      "desc": "Hej! Jeg er Lingu, din makker i sprogindlæring. Lad mig vise dig, hvordan vi kan lære sammen."
     },
     "step2": {
-      "label": "Tekstchat",
-      "title": "Chat med din lærer",
-      "desc": "Før skriftlige samtaler med din AI-lærer. Stil spørgsmål, få rettelser, og øv grammatik og ordforråd på en naturlig måde."
+      "label": "Læringsplan",
+      "title": "Din læringsplan",
+      "desc": "Start med at vælge dit niveau eller tage en niveautest. Så får du en læringsplan med lektioner, der passer til dig."
     },
     "step3": {
-      "label": "Stemme",
-      "title": "Tal i realtid",
-      "desc": "Brug stemmesamtaler til at øve talesprog med transskription i realtid og hurtig feedback på din udtale."
+      "label": "Samtale",
+      "title": "Øv dig med mig",
+      "desc": "Skriv til mig for at stille spørgsmål og øve dig, eller tal med mig i en stemmesamtale."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "Glem aldrig et ord",
-      "desc": "Flashcards bruger SM-2-algoritmen til gentagelser fordelt over tid, så du repeterer ord, lige før du er ved at glemme dem – og husker dem bedre."
+      "title": "Husk det, du har lært",
+      "desc": "Repetér ordforråd med kort, der dukker op igen, når det er tid til at øve."
     },
     "step5": {
-      "label": "Læringsplan",
-      "title": "Din personlige plan",
-      "desc": "Ud fra din niveauvurdering opretter FreeLingo en struktureret læringsplan med daglige lektioner tilpasset dine mål og fremskridt."
+      "label": "Lytning og læsning",
+      "title": "Træn din forståelse",
+      "desc": "Øv dig ved at lytte til og læse tekster på dit niveau. Besvar spørgsmål, og tjek, hvad du har forstået."
     },
     "step6": {
-      "label": "Øvelse",
-      "title": "Lytning og læsning",
-      "desc": "Test din forståelse med AI-genererede øvelser. Lyt til et lydklip, og svar på fem spørgsmål, eller læs en tekst på dit CEFR-niveau – få XP for hvert rigtigt svar."
+      "label": "Spil",
+      "title": "Lær gennem leg",
+      "desc": "Øv dig på dit niveau med spil som Fejldetektiv, Sæt sætningen i orden og Ordpar, blandt andre. Det kan også være sjovt at lære!"
     },
     "step7": {
       "label": "Klar",
-      "title": "Nu er du klar!",
-      "desc": "Start med dagens lektion, åbn en chat, eller øv lytning og læsning – FreeLingo tilpasser sig den måde, du bedst kan lide at lære på."
+      "title": "Lad os komme i gang",
+      "desc": "Vi tager det skridt for skridt! Dit overblik viser dig, hvad du kan gøre som det næste."
     }
   },
   "billing": {

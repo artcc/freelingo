@@ -1435,41 +1435,44 @@
     "skip": "Überspringen",
     "prev": "Zurück",
     "next": "Weiter",
-    "done": "Loslegen",
+    "done": "Mein Dashboard erkunden",
+    "progress": "{current} von {total}",
+    "listen": "Lingu zuhören",
+    "audioError": "Das Audio konnte nicht abgespielt werden. Versuche es erneut.",
     "step1": {
       "label": "Willkommen",
       "title": "Willkommen bei FreeLingo",
-      "desc": "FreeLingo ist dein KI-gestützter Sprachtutor. Übe in deinem eigenen Tempo, jederzeit, durch Gespräche, Lektionen und smarte Karteikarten."
+      "desc": "Hallo! Ich bin Lingu, dein Begleiter beim Sprachenlernen. Ich zeige dir, wie wir gemeinsam lernen können."
     },
     "step2": {
-      "label": "Textchat",
-      "title": "Chatte mit deinem Tutor",
-      "desc": "Führe schriftliche Gespräche mit deinem KI-Tutor. Stelle Fragen, erhalte Korrekturen und übe Grammatik und Vokabular auf natürliche Weise."
+      "label": "Lernplan",
+      "title": "Dein persönlicher Lernplan",
+      "desc": "Wähle zuerst dein Niveau oder mache einen Einstufungstest. So erhältst du einen Lernplan mit passenden Lektionen."
     },
     "step3": {
-      "label": "Sprache",
-      "title": "Sprich in Echtzeit",
-      "desc": "Nutze den Sprachgesprächsmodus, um deine gesprochene Sprache mit Echtzeit-Transkription und sofortigem Aussprache-Feedback zu üben."
+      "label": "Gespräche",
+      "title": "Übe mit mir",
+      "desc": "Schreib mir, um Fragen zu stellen und zu üben, oder unterhalte dich mit mir per Sprache."
     },
     "step4": {
       "label": "Karteikarten",
-      "title": "Vergiss kein Wort",
-      "desc": "Karteikarten nutzen den SM-2-Algorithmus für verteiltes Wiederholen, damit du Wörter genau dann übst, wenn du sie zu vergessen drohst."
+      "title": "Behalte das Gelernte",
+      "desc": "Wiederhole Vokabeln mit Karteikarten, die wieder erscheinen, wenn es Zeit zum Üben ist."
     },
     "step5": {
-      "label": "Lernplan",
-      "title": "Dein persönlicher Plan",
-      "desc": "Basierend auf deiner Niveaubeurteilung erstellt FreeLingo einen strukturierten Lernplan mit täglichen Lektionen, die deinen Zielen angepasst sind."
+      "label": "Hören und Lesen",
+      "title": "Trainiere dein Verständnis",
+      "desc": "Übe mit Hör- und Lesetexten auf deinem Niveau. Beantworte Fragen und prüfe, was du verstanden hast."
     },
     "step6": {
-      "label": "Übung",
-      "title": "Hören & Lesen",
-      "desc": "Teste dein Verständnis mit KI-generierten Übungen. Höre einem Abschnitt zu und beantworte 5 Fragen, oder lies einen Text auf deinem CEFR-Niveau — verdiene XP für jede richtige Antwort."
+      "label": "Spiele",
+      "title": "Lerne spielerisch",
+      "desc": "Übe auf deinem Niveau mit Spielen wie Fehlerdetektiv, Ordne den Satz und Vokabelpaare, unter anderem. Lernen darf auch Spaß machen!"
     },
     "step7": {
       "label": "Bereit",
-      "title": "Du bist startklar!",
-      "desc": "Beginne mit der heutigen Lektion, öffne einen Chat oder übe Hören und Lesen – FreeLingo passt sich deiner Lernweise an."
+      "title": "Legen wir los",
+      "desc": "Gehen wir Schritt für Schritt vor! Dein Dashboard zeigt dir, was als Nächstes ansteht."
     }
   },
   "billing": {

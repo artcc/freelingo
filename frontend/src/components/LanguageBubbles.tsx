@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
+import LinguAvatar from '@/components/lingu/LinguAvatar'
 
 function circlePosition(index: number, total: number, radius: number) {
   const angle = (index / total) * 2 * Math.PI - Math.PI / 2
@@ -26,10 +27,12 @@ export function LanguageBubbles() {
   return (
     <div className="relative h-[360px] w-full sm:h-[380px]">
       <div
-        className="absolute top-1/2 left-1/2 z-[1] h-[140px] w-[140px] -translate-x-1/2 -translate-y-1/2 bg-contain bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/logo.png)' }}
+        className="absolute top-1/2 left-1/2 z-[1] h-[140px] w-[140px] -translate-x-1/2 -translate-y-1/2"
+        role="img"
         aria-label="FreeLingo"
-      />
+      >
+        <LinguAvatar animation="saludo" loop className="h-full w-full" />
+      </div>
 
       {SUPPORTED_TARGET_LANGUAGES.map((lang, i) => {
         const { x, y } = positions[i]
