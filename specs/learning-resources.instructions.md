@@ -155,10 +155,12 @@ flashcard review, and 10 per correct first-attempt Reading/Listening answer. Add
   Future scheduled lessons must also be complete, not just already generated lessons.
 - Level: 100 XP once per plan, after all scheduled teaching lessons and the level test are complete,
   independently of the test score. Current/legacy completion-test slots are excluded.
-- Games: 5 XP for finishing Error Detective plus 2 per challenge with both steps correct, at most
-  45 game XP per plan/UTC day. Remaining daily allowance can partially credit completion. Accepted
-  answers count as activity even when there is no XP. Games do not update lesson/exercise completion
-  counters, skills or competencies. Completion and rewards are transactional and retry-safe.
+- Games: 5 XP for completion plus 2 per fully correct challenge: both steps in Error Detective,
+  an accepted arrangement in Sentence Order, or a Vocabulary Pair with neither item involved in an
+  incorrect attempt. The three games share a limit of 45 game XP per plan/UTC day. Remaining daily
+  allowance can partially credit completion. Accepted answers count as activity even when there is
+  no XP. Games do not update lesson/exercise completion counters, skills or competencies. Completion
+  and rewards are transactional and retry-safe.
 
 `progress_rewards.py` records additional awards in `progress_rewards`. A unique plan/kind/source key
 and a PostgreSQL `FOR NO KEY UPDATE` plan-row lock protect repeat requests and daily limits without

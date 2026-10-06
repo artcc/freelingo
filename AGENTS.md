@@ -59,7 +59,6 @@ Use the narrowest relevant spec first:
 - Access and community: `subscriptions-freemium.instructions.md`, `feedback.instructions.md`, `reviews.instructions.md`, `whats-new.instructions.md`.
 - Contracts and operations: `database-models.instructions.md`, `services.instructions.md`, `api-endpoints.instructions.md`, `rate-limiting.instructions.md`, `docker.instructions.md`.
 - Project maintenance: `testing.instructions.md`, `readme.instructions.md`, `changelog.instructions.md`, `version.md`.
-- Future work: `family-plan.instructions.md` is not implemented.
 
 ## Development environment
 

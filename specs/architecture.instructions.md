@@ -12,9 +12,9 @@ the durable application store and Redis holds expiring operational state such as
 rate-limit buckets, invitations, quotas, and generation locks.
 
 The backend owns business logic, persistence, authorization, and every external integration. The
-frontend communicates only with FreeLingo backend endpoints, directly or through the three Next.js
-proxy handlers used for chat streaming, TTS, and STT. It must not call LLM, speech, email, or billing
-providers directly.
+frontend communicates only with FreeLingo backend endpoints, directly or through Next.js proxy
+handlers for chat streaming, TTS, STT, conversation warmup, and tour narration. It must not call LLM,
+speech, email, or billing providers directly.
 
 ## Repository boundaries
 

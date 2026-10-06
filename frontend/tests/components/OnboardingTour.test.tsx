@@ -84,7 +84,8 @@ afterEach(() => {
 })
 
 describe('dashboard tour', () => {
-  it('greets silently and presents seven steps including the initial games', async () => {
+  it('reopens all seven steps after legacy completion and defers the news modal', async () => {
+    localStorage.setItem('fl_tour_done', '1')
     showTour(true)
     expect(await screen.findByRole('dialog')).toBeVisible()
     expect(screen.getByTestId('lingu')).toHaveAttribute(
@@ -119,7 +120,8 @@ describe('dashboard tour', () => {
     expect(fetch).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: es.tour.done }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(localStorage.getItem('fl_tour_done')).toBe('1')
+    expect(localStorage.getItem('fl_tour_done_v1.10.0')).toBe('1')
+    expect(screen.queryByText(es.whatsNew.title)).not.toBeInTheDocument()
     expect(document.body.style.overflow).toBe('')
   })
 
@@ -222,8 +224,8 @@ describe('dashboard tour', () => {
     )
   })
 
-  it('respects the existing completion flag and allows the news modal instead', () => {
-    localStorage.setItem('fl_tour_done', '1')
+  it('respects the current completion flag and allows the news modal instead', () => {
+    localStorage.setItem('fl_tour_done_v1.10.0', '1')
     showTour(true)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(screen.getByText(es.whatsNew.title)).toBeVisible()

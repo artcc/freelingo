@@ -20,9 +20,9 @@ import LinguAvatar, {
   type LinguAnimation,
 } from '@/components/lingu/LinguAvatar'
 import { AudioPlayer, type PlayerState } from '@/components/ui/AudioPlayer'
+import { TOUR_STORAGE_KEY } from '@/lib/onboarding-tour'
 import { useConfigStore } from '@/store/config'
 
-const STORAGE_KEY = 'fl_tour_done'
 const STEPS = [
   { id: 'step1', icon: Sparkles, gesture: 'saludo' },
   { id: 'step2', icon: BookOpen },
@@ -52,7 +52,7 @@ export default function OnboardingTour() {
 
   useEffect(() => {
     try {
-      setVisible(!localStorage.getItem(STORAGE_KEY))
+      setVisible(!localStorage.getItem(TOUR_STORAGE_KEY))
       setVoice(localStorage.getItem('tts_voice'))
     } catch {
       setVisible(true)
@@ -61,7 +61,7 @@ export default function OnboardingTour() {
 
   const dismiss = useCallback(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, '1')
+      localStorage.setItem(TOUR_STORAGE_KEY, '1')
     } catch {
       // The tour must remain dismissible when browser storage is unavailable.
     }

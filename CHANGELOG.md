@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Sentence Order: arrange fragments in five challenges with native-language clues and explanations, validated alternative orders, interchangeable repeated fragments, and correct-sentence audio. Supports CJK writing, completed-lesson review, next-lesson preparation and free practice, with resumable sessions and separate history. Shares the daily free-game allowance and plan XP limit with Error Detective.
 - Vocabulary Pairs: match five words or expressions with native-language meanings, retry mistakes without timers or lives, listen to resolved pairs and review examples with translations after completion. Includes resumable attempts, separate history, completed-lesson review, next-lesson preparation and level-based vocabulary practice. Awards first-try bonuses while sharing game quotas and the daily plan XP limit.
 
+### Changed
+
+- The renewed onboarding tour is shown again for browsers that completed the previous tour, using a dedicated 1.10.0 completion key. Pending What's New announcements follow on the next dashboard visit after completing or skipping the tour.
+
 ### Fixed
 
 - Audio retries remain synchronized with playback when a media error also rejects the play request; obsolete recovery timers no longer reset an active retry.

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 
+import { TOUR_STORAGE_KEY } from '@/lib/onboarding-tour'
 import { useConfigStore } from '@/store/config'
 
 export type SubscriptionStatus =
@@ -92,7 +93,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     })),
   logout: () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('fl_tour_done')
+      localStorage.removeItem(TOUR_STORAGE_KEY)
     }
     set({ accessToken: null, user: null })
   },

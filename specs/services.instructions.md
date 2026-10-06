@@ -37,9 +37,11 @@ Retry, streaming-failure, and provider-output behavior is defined in
 `games.py` builds bounded source snapshots from completed lessons, curriculum and recent game errors;
 it never invokes lesson generation or plan advancement. It creates/resumes private sessions, reserves
 global daily admission under a user-row lock, and publishes structurally validated and semantically
-reviewed LLM content only before the persisted deadline. It evaluates two-step choices deterministically
-and credits the existing progress/reward ledger under plan/session serialization. Saved content and
-native language are stable across active-language/profile changes. See `games.instructions.md`.
+reviewed LLM content only before the persisted deadline. Deterministic evaluation handles Error
+Detective's detection/correction choices, Sentence Order's reconstructed sentences, and Vocabulary
+Pairs' term/meaning matches. It credits the progress/reward ledger under plan/session serialization.
+Saved content and native language are stable across active-language/profile changes. See
+`games.instructions.md`.
 
 ## Assessment
 
