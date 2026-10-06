@@ -380,7 +380,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.9.35
+            v1.10.0
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -576,7 +576,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </p>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.9.35
+                v1.10.0
               </p>
               <button
                 onClick={() => {

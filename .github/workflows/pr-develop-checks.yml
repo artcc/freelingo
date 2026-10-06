@@ -17,6 +17,20 @@ jobs:
   backend-tests:
     name: Backend tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: freelingo_ci
+          POSTGRES_PASSWORD: freelingo_ci
+          POSTGRES_DB: freelingo_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U freelingo_ci -d freelingo_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         working-directory: backend
@@ -39,9 +53,24 @@ jobs:
           python -m pip install pip==26.2.1
           python -m pip install -r requirements.txt
 
+      - name: Validate migrations on PostgreSQL
+        env:
+          DATABASE_URL: 'postgresql+asyncpg://freelingo_ci:freelingo_ci@localhost:5432/freelingo_ci'
+          SECRET_KEY: ci-secret-key
+        run: |
+          python - <<'PY'
+          from alembic import command
+          from alembic.config import Config
+
+          config = Config("alembic.ini")
+          config.set_main_option("script_location", "alembic")
+          command.upgrade(config, "head")
+          PY
+
       - name: Run backend tests
         env:
           DATABASE_URL: 'sqlite+aiosqlite:///:memory:'
+          TEST_POSTGRES_URL: 'postgresql+asyncpg://freelingo_ci:freelingo_ci@localhost:5432/freelingo_ci'
           SECRET_KEY: ci-secret-key
         run: pytest -v
 

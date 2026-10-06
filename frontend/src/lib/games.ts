@@ -7,4 +7,23 @@ interface GameDefinition {
 }
 
 // Register only implemented games with working routes and localized copy.
-export const availableGames: readonly GameDefinition[] = []
+export const availableGames: readonly GameDefinition[] = [
+  {
+    id: 'error-detective',
+    href: '/games/error-detective',
+    titleKey: 'detectiveTitle',
+    descriptionKey: 'detectiveDescription',
+  },
+  {
+    id: 'sentence-order',
+    href: '/games/sentence-order',
+    titleKey: 'sentenceOrderTitle',
+    descriptionKey: 'sentenceOrderDescription',
+  },
+  {
+    id: 'vocabulary-pairs',
+    href: '/games/vocabulary-pairs',
+    titleKey: 'vocabularyPairsTitle',
+    descriptionKey: 'vocabularyPairsDescription',
+  },
+]

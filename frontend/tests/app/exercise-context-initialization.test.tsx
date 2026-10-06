@@ -528,6 +528,8 @@ describe.each([
           listening_limit: 5,
           reading_remaining: 0,
           reading_limit: 5,
+          games_remaining: 3,
+          games_limit: 3,
           voice_remaining_seconds: 0,
           voice_limit_seconds: 300,
         },

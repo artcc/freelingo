@@ -32,6 +32,15 @@ The frontend never calls an external provider directly.
 Retry, streaming-failure, and provider-output behavior is defined in
 `llm-error-handling.instructions.md`.
 
+## Games
+
+`games.py` builds bounded source snapshots from completed lessons, curriculum and recent game errors;
+it never invokes lesson generation or plan advancement. It creates/resumes private sessions, reserves
+global daily admission under a user-row lock, and publishes structurally validated and semantically
+reviewed LLM content only before the persisted deadline. It evaluates two-step choices deterministically
+and credits the existing progress/reward ledger under plan/session serialization. Saved content and
+native language are stable across active-language/profile changes. See `games.instructions.md`.
+
 ## Assessment
 
 `assessment.py` evaluates adaptive quiz records deterministically and provides LLM-backed free-write

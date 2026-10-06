@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useTranslations, useMessages } from 'next-intl'
 import { CircleDot } from 'lucide-react'
 
-const WHATS_NEW_VERSION = 'v1.9.35'
+const WHATS_NEW_VERSION = 'v1.10.0'
 const STORAGE_KEY = `fl_whats_new_seen_${WHATS_NEW_VERSION}`
 const TOUR_KEY = 'fl_tour_done'
 

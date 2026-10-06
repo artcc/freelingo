@@ -4,11 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.35] - Unreleased
+## [1.10.0] - Unreleased
 
 ### Added
 
 - Games section in desktop and mobile navigation, with localized messaging when no games are available and a link back to My Plan.
+- Error Detective: five-challenge language practice with separate error detection and correction, completed-lesson review, preparation for the next lesson and free practice at the plan's level. Includes native-language explanations, corrected-sentence audio, resumable games and history, up to 15 XP per game with a 45 XP daily plan limit, and three daily free games shared across languages. Generated content is validated and reviewed before consuming a game allowance.
+- Sentence Order: arrange fragments in five challenges with native-language clues and explanations, validated alternative orders, interchangeable repeated fragments, and correct-sentence audio. Supports CJK writing, completed-lesson review, next-lesson preparation and free practice, with resumable sessions and separate history. Shares the daily free-game allowance and plan XP limit with Error Detective.
+- Vocabulary Pairs: match five words or expressions with native-language meanings, retry mistakes without timers or lives, listen to resolved pairs and review examples with translations after completion. Includes resumable attempts, separate history, completed-lesson review, next-lesson preparation and level-based vocabulary practice. Awards first-try bonuses while sharing game quotas and the daily plan XP limit.
 
 ## [1.9.30] - 2026-10-05
 
