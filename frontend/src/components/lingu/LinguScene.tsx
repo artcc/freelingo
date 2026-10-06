@@ -77,7 +77,7 @@ export default function LinguScene({
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
         renderer.setClearColor(0, 0)
         renderer.toneMapping = NeutralToneMapping
-        renderer.toneMappingExposure = 0.9
+        renderer.toneMappingExposure = 1.0
         renderer.domElement.addEventListener('webglcontextlost', contextLost)
         host!.appendChild(renderer.domElement)
 
@@ -100,7 +100,7 @@ export default function LinguScene({
         const key = new DirectionalLight(0xffffff, 1.8)
         key.position.set(5, 12, 10)
         scene.add(key)
-        const fill = new DirectionalLight(0xc5e4ff, 0.35)
+        const fill = new DirectionalLight(0xc5e4ff, 0.45)
         fill.position.set(-6, 7, 4)
         scene.add(fill)
         mixer = new AnimationMixer(model)

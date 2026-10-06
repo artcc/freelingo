@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Fixed
 
-- OpenAI speech synthesis with `gpt-4o-mini-tts` uses native-pronunciation instructions across the application, with explicit regional guidance when the language is available. Tour, phrasebook, and voice-preview caches distinguish the instructions; legacy OpenAI models remain compatible.
+- OpenAI speech synthesis with `gpt-4o-mini-tts` uses native-pronunciation instructions across the application, with regional and language-specific articulation guidance when the language is available, preserving each user's selected voice. Tour, phrasebook, and voice-preview caches distinguish the instructions; legacy OpenAI models remain compatible.
 - Lesson, flashcard, vocabulary, game, and chat audio uses its persisted plan/conversation language, preserving regional pronunciation such as American English. Audio without language context no longer forces a regional accent, and Phrasebook playback and Settings voice previews bypass stale browser audio while retaining their server caches.
 - The landing reveals animated Lingu and its language circle together once the first frame is ready, avoiding a preliminary PNG and preserving layout space during loading. Reduced motion and loading failures retain static artwork.
 - Audio retries remain synchronized with playback when a media error also rejects the play request; obsolete recovery timers no longer reset an active retry.

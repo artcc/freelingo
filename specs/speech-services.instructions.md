@@ -80,6 +80,13 @@ Phrasebook supply their full target-language code; the tour supplies its UI loca
 and Kokoro ignore this language argument. Model instructions do not alter the input text or select
 a different voice.
 
+Each supported language has focused pronunciation guidance for vowel and consonant quality, rhythm,
+stress, and relevant tonal/pitch distinctions. It asks for everyday native articulation without
+exaggeration, applying those details only to passages in the indicated language. The guidance applies
+to any selected voice, preserving its vocal identity. `fable` is the configured default, not a forced
+voice; user preferences continue to take precedence. These instructions guide the model rather than
+guaranteeing accent quality for every voice or text.
+
 Neither current TTS adapter chooses a model or voice automatically from the target language.
 
 ## STT adapters

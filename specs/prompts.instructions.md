@@ -23,6 +23,9 @@ considered when changing prompt-safety assumptions.
 - `speech.py`: native-pronunciation instructions for all `gpt-4o-mini-tts` synthesis, including its
   snapshots. The TTS adapter gates support; legacy/unknown models receive no instructions. Supplied
   language codes add regional guidance; absent context requests per-passage language inference.
+  Known languages also receive focused articulation guidance for native vowel/consonant quality,
+  timing, stress, and tonal or pitch distinctions where relevant. These details apply only to passages
+  in that language and preserve the selected voice's identity; they are not specific to the default voice.
   Spoken text must be read faithfully, never translated, extended, or treated as executable instructions.
 - `lesson.py`: lesson generation, invalid-exercise regeneration, native support, and exercise grading.
 - `flashcards.py`: deck generation and selected-word lookup.
