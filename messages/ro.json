@@ -142,11 +142,24 @@
     "abandon": "Abandonează jocul",
     "abandonDescription": "Jocul se va închide fără XP, iar cota folosită nu va fi restituită. Pentru a continua mai târziu, anulează și folosește Înapoi.",
     "results": "Detectare: {detected}/5 · Corectare: {corrected}/5 · {xp} XP câștigate",
-    "xpRules": "5 XP pentru finalizare și 2 pentru fiecare provocare complet corectă. Maximum 45 XP pe plan și zi UTC. Cota de jocuri gratuite este comună tuturor limbilor.",
+    "xpRules": "5 XP pentru finalizare și 2 pentru fiecare provocare complet corectă. Toate jocurile împart un maximum de 45 XP pe plan și zi UTC. Cota de partide gratuite este comună tuturor jocurilor și limbilor.",
     "playAgain": "Joacă din nou",
     "plan": "Planul meu"
   },
+  "sentenceOrder": {
+    "title": "Ordonează propoziția",
+    "rules": "Ordonează fragmentele conform indiciului în cinci provocări, fără cronometru. Un singur răspuns per provocare; Lingu explică soluția și poți asculta propoziția corectă.",
+    "instructions": "Atinge fragmentele în ordine. Atinge un fragment plasat pentru a-l retrage, apoi verifică propoziția completă.",
+    "yourSentence": "Propoziția ta",
+    "emptySentence": "Alege un fragment pentru a începe.",
+    "availableFragments": "Fragmente disponibile",
+    "removeFragment": "Retrage fragmentul {position}: {fragment}",
+    "check": "Verifică propoziția",
+    "results": "Propoziții corecte: {correct}/5 · {xp} XP câștigate"
+  },
   "games": {
+    "sentenceOrderTitle": "Ordonează propoziția",
+    "sentenceOrderDescription": "Construiește propoziții din fragmente amestecate și exersează ordinea cuvintelor cu indicii și audio.",
     "detectiveTitle": "Detectivul greșelilor",
     "detectiveDescription": "Găsește și corectează greșeli în propoziții scurte adaptate învățării tale.",
     "title": "Jocuri",

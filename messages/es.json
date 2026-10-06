@@ -142,11 +142,24 @@
     "abandon": "Abandonar partida",
     "abandonDescription": "La partida se cerrará sin XP y no se devolverá la cuota utilizada. Para continuar después, cancela y utiliza Volver.",
     "results": "Detección: {detected}/5 · Corrección: {corrected}/5 · {xp} XP obtenidos",
-    "xpRules": "5 XP por terminar y 2 por cada reto completamente acertado. Máximo de 45 XP por plan y día UTC. La cuota de partidas gratuitas se comparte entre idiomas.",
+    "xpRules": "5 XP por terminar y 2 por cada reto completamente acertado. Todos los juegos comparten un máximo de 45 XP por plan y día UTC. La cuota de partidas gratuitas se comparte entre juegos e idiomas.",
     "playAgain": "Volver a jugar",
     "plan": "Mi plan"
   },
+  "sentenceOrder": {
+    "title": "Ordena la frase",
+    "rules": "Ordena los fragmentos según la pista en cinco retos, sin cronómetro. Un envío por reto; Lingu explica la respuesta y puedes escuchar la frase correcta.",
+    "instructions": "Toca los fragmentos en orden. Toca uno colocado para devolverlo y comprueba la frase cuando esté completa.",
+    "yourSentence": "Tu frase",
+    "emptySentence": "Elige un fragmento para empezar.",
+    "availableFragments": "Fragmentos disponibles",
+    "removeFragment": "Devolver fragmento {position}: {fragment}",
+    "check": "Comprobar frase",
+    "results": "Frases correctas: {correct}/5 · {xp} XP obtenidos"
+  },
   "games": {
+    "sentenceOrderTitle": "Ordena la frase",
+    "sentenceOrderDescription": "Construye frases con fragmentos desordenados y practica el orden de las palabras con pistas y audio.",
     "detectiveTitle": "Detective de errores",
     "detectiveDescription": "Detecta y corrige errores en frases cortas adaptadas a tu aprendizaje.",
     "title": "Juegos",

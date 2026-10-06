@@ -142,11 +142,24 @@
     "abandon": "Lopeta peli",
     "abandonDescription": "Peli suljetaan ilman XP:tä eikä käytettyä kiintiötä palauteta. Jos haluat jatkaa myöhemmin, peruuta ja valitse Takaisin.",
     "results": "Tunnistus: {detected}/5 · Korjaus: {corrected}/5 · {xp} XP ansaittu",
-    "xpRules": "5 XP suorittamisesta ja 2 jokaisesta täysin oikeasta haasteesta. Enintään 45 XP suunnitelmaa ja UTC-päivää kohti. Ilmainen pelikiintiö on yhteinen kaikille kielille.",
+    "xpRules": "5 XP suorittamisesta ja 2 jokaisesta täysin oikeasta haasteesta. Kaikilla peleillä on yhteinen 45 XP:n raja suunnitelmaa ja UTC-päivää kohti. Ilmainen pelikiintiö on yhteinen kaikille peleille ja kielille.",
     "playAgain": "Pelaa uudelleen",
     "plan": "Oma suunnitelma"
   },
+  "sentenceOrder": {
+    "title": "Järjestä lause",
+    "rules": "Järjestä osat vihjeen mukaan viidessä haasteessa ilman aikarajaa. Yksi vastaus haastetta kohti; Lingu selittää ratkaisun, ja voit kuunnella oikean lauseen.",
+    "instructions": "Napauta osia järjestyksessä. Palauta sijoitettu osa napauttamalla sitä ja tarkista sitten valmis lause.",
+    "yourSentence": "Oma lauseesi",
+    "emptySentence": "Aloita valitsemalla osa.",
+    "availableFragments": "Käytettävissä olevat osat",
+    "removeFragment": "Palauta osa {position}: {fragment}",
+    "check": "Tarkista lause",
+    "results": "Oikeita lauseita: {correct}/5 · Ansaittu XP: {xp}"
+  },
   "games": {
+    "sentenceOrderTitle": "Järjestä lause",
+    "sentenceOrderDescription": "Rakenna lauseita sekoitetuista osista ja harjoittele sanajärjestystä vihjeiden ja äänen avulla.",
     "detectiveTitle": "Virhe-etsivä",
     "detectiveDescription": "Etsi ja korjaa virheitä lyhyistä lauseista, jotka on mukautettu oppimiseesi.",
     "title": "Pelit",

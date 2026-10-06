@@ -1,6 +1,6 @@
 ---
-description: "Games catalog and Error Detective: personalized generation, plan-owned sessions, two-step answers, quotas, rewards and audio."
-applyTo: "backend/app/{models/game,schemas/games,routers/games,services/games,services/prompts/games}.py, frontend/src/app/(app)/games/**, frontend/src/lib/{games,detective}.ts, messages/*.json"
+description: "Games catalog, Error Detective and Sentence Order: personalized generation, plan-owned sessions, quotas, rewards and audio."
+applyTo: "backend/app/{models/game,schemas/games,routers/games,services/games,services/prompts/games}.py, frontend/src/app/(app)/games/**, frontend/src/components/games/**, frontend/src/lib/{games,detective,sentence-order}.ts, messages/*.json"
 ---
 
 # Games
@@ -17,7 +17,8 @@ The catalog page has no subscription restriction or Premium badge.
 stable ID, `/games/` route, and title/description keys in the `games` translation namespace.
 Only implemented games with working routes and translations belong in this list.
 
-The catalog links to Error Detective at `/games/error-detective`. If no definitions are registered,
+The catalog links to Error Detective at `/games/error-detective` and Sentence Order at
+`/games/sentence-order`. Both use the existing shared catalog component. If no definitions are registered,
 the existing localized empty state links to `/plan`. Navigation metadata is presentation only.
 
 ## Error Detective
@@ -32,6 +33,35 @@ An incorrect detection still permits correction practice. Both steps must be cor
 challenge's XP bonus. Answers are deterministic comparisons against persisted content, not new LLM
 evaluations. Challenges must be answered in order. Repeating the same answer is idempotent; trying
 to change it returns 409. Future solutions and correction options are excluded from public responses.
+
+## Sentence Order
+
+A game has five short sentence-building challenges, without timers or lives. Each supplies a brief
+native-language clue and 3–12 target-language fragments. Learners tap fragments into a sentence;
+tapping a placed fragment returns it to the pool. Buttons support keyboard and touch input without
+requiring dragging. A preview joins fragments with the persisted separator, preserving exact text.
+Only a complete permutation can be submitted, once per challenge, in challenge order.
+Draft arrangements are local; submitted answers survive navigation and reloads.
+
+Each private challenge contains one canonical sentence, clue, fragments, separator (`""` or `" "`),
+one to eight distinct accepted orders, explanation and source ID. Every order uses each index exactly
+once and the first reconstructs the canonical sentence exactly. Fragments have no boundary whitespace;
+punctuation remains attached to meaningful text. CJK uses natural chunks and writing, without invented
+spaces or romanization. The generator avoids sentences with more alternatives than the bound allows.
+
+An independent semantic review checks validity and completeness of accepted arrangements against the
+clue, as well as source scope, level, regional language, segmentation and native explanations. This
+reduces ambiguity but cannot prove linguistic completeness. Before persistence the server shuffles
+fragments and remaps all accepted orders, requiring an initially unsolved arrangement. Five valid,
+reviewed challenges are required before consuming quota.
+
+Evaluation compares reconstructed text with the saved accepted sentences, so identical repeated
+fragments are interchangeable. No per-answer LLM call is made. Malformed permutations and answer
+shapes from the other game return 422. Exact retries return saved state; changing a submitted order
+returns 409. After answering, the API reveals correctness, explanation and the full correct sentence:
+the submitted variant if accepted, otherwise the canonical solution. Solutions and accepted orders
+are never exposed before submission. Results show submitted mistakes for review; only correct text
+is sent to the shared audio player.
 
 ## Context and modes
 
@@ -58,31 +88,32 @@ Context lookup does not call `/study-plan/today`, generate lessons, or advance t
 
 ## Generation and recovery
 
-`POST /api/games/detective` persists a UUID-keyed session and returns 202. FastAPI background work
+`POST /api/games/{game_type}`, accepting `detective` or `sentence-order`, persists a UUID-keyed
+session and returns 202. FastAPI background work
 uses an independent database session and the shared structured-output adapter. No provider call
 holds an open database transaction. The inference deadline comes from
 `EXERCISE_GENERATION_TIMEOUT_SECONDS`; the adapter receives the remaining monotonic budget.
 
-Pydantic requires five distinct sentences, three distinct options, valid indices and exact fragment
+For Detective, Pydantic requires five distinct sentences, three distinct options, valid indices and exact fragment
 reconstruction/replacement. Fragments retain spaces and punctuation and support CJK without inserting
 word separators. Every challenge cites an allowed source. A separate structured LLM review checks
 linguistic validity, unique correction, language, level and source scope. At most two candidates are
 generated within the same budget. Semantic review reduces ambiguity but is not a formal proof.
 
 Sessions have `generating`, `ready`, `completed`, `failed`, or `abandoned` state. A partial unique
-index permits one generating/ready session per plan. Repeated starts return the existing active
-session. Every accepted creation UUID is persisted in `game_requests` with its submitted plan/mode
+index permits one generating/ready session per plan and game type. Repeated starts return the existing active
+session of that type. Every accepted creation UUID is persisted in `game_requests` with its submitted plan/mode/type
 and the returned session ID, including when an active game is reused. A retry returns that same
 session even after completion or abandonment or a change of active language, without another
 reservation. A repeated request UUID
-cannot change its submitted mode or plan. Deleting the session leaves the request identity reserved;
+cannot change its submitted mode, plan or game type. Deleting the session leaves the request identity reserved;
 recovery then returns 404 and creation retries return 409. Expired generations become failed on
 lookup/start; late workers cannot publish content after the persisted deadline or replace terminal
 state. This is not a durable job queue: process interruption is recovered as a deadline failure.
 
 The browser uses bounded requests and non-overlapping status polling. An uncertain start is recovered
 by GET using its request UUID; an uncertain answer is recovered by reloading the session, not by
-resubmitting it. Ready games are resumable through their URL and language-filtered paginated history.
+resubmitting it. Ready games are resumable through their URL and game-type/language-filtered paginated history.
 Session endpoints accept both canonical IDs and owned creation UUIDs, and return the canonical ID.
 Leaving the catalog cancels its current request; late creation success/failure cannot navigate away
 from the user's next page.
@@ -90,7 +121,7 @@ Leaving preserves progress. Explicit abandonment closes a ready game without XP 
 
 ## Admission, activity and XP
 
-`FREEMIUM_GAMES_DAILY` defaults to three new games per user/UTC day across languages. Zero blocks
+`FREEMIUM_GAMES_DAILY` defaults to three new games per user/UTC day across languages and game types. Zero blocks
 new free games. Active/trialing subscriptions, active freemium trials and Stripe-disabled deployments
 bypass this quota. Normal maintenance blocks new generation for non-admins; saved games remain usable.
 
@@ -102,14 +133,15 @@ survive plan/language deletion and cascade only with the account. Finishing/resu
 admission, even after subscription expiry or quota exhaustion.
 
 Each newly accepted answer records activity in its plan on its captured UTC date. Completion awards
-5 XP plus 2 per fully correct challenge, capped at 45 game XP per plan/UTC day; remaining daily XP
+5 XP plus 2 per fully correct challenge (both Detective steps or the accepted Sentence Order submission),
+capped at 45 game XP shared by all game types per plan/UTC day; remaining daily XP
 can partially credit a game. All XP is awarded at completion. Session completion, reward ledger and
 daily progress share one transaction, serialized by the owning plan and session. Duplicate requests
 cannot repeat rewards. Games do not alter lesson completion, exercise counters, skill EMA or competencies.
 
 ## Audio
 
-After correction, the full corrected sentence uses the existing `AudioPlayer`, TTS proxy and backend
+After answering, the full correct sentence uses the existing `AudioPlayer`, TTS proxy and backend
 provider/voice rules, exactly as lesson examples. Explanations and erroneous sentences are not sent
 to speech synthesis. Playback is optional and does not gate completion or XP.
 

@@ -15,7 +15,7 @@ from app.core.limiter import limiter
 from app.models.game import GameSession
 from app.models.study_plan import StudyPlan
 from app.models.user import User
-from app.schemas.games import GameAnswer, GameCreate
+from app.schemas.games import GameAnswer, GameCreate, GameType, SentenceOrderAnswer
 from app.services.games import (
     answer_game,
     create_game,
@@ -34,10 +34,11 @@ from app.services.progress_service import lock_progress_plan
 router = APIRouter(prefix="/api/games", tags=["games"])
 
 
-@router.get("/detective")
+@router.get("/{game_type}")
 @limiter.limit("60/minute")
-async def detective_catalog(
+async def game_catalog(
     request: Request,
+    game_type: GameType,
     plan: StudyPlan = Depends(get_active_study_plan),
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -51,7 +52,11 @@ async def detective_catalog(
     for mode in ("review", "prepare", "free"):
         context = await source_context(db, plan, mode)
         modes[mode] = {"available": bool(context["sources"]), "reason": context.get("reason")}
-    filters = (GameSession.user_id == user.id, GameSession.target_language == plan.target_language)
+    filters = (
+        GameSession.user_id == user.id,
+        GameSession.target_language == plan.target_language,
+        GameSession.game_type == game_type,
+    )
     history = (
         await db.scalars(
             select(GameSession)
@@ -73,10 +78,11 @@ async def detective_catalog(
     }
 
 
-@router.post("/detective", status_code=202)
+@router.post("/{game_type}", status_code=202)
 @limiter.limit("5/minute")
-async def start_detective(
+async def start_game(
     request: Request,
+    game_type: GameType,
     body: GameCreate,
     background_tasks: BackgroundTasks,
     user: User = Depends(get_current_user),
@@ -84,7 +90,7 @@ async def start_detective(
     db: AsyncSession = Depends(get_db),
     _maintenance: None = Depends(require_not_maintenance),
 ) -> dict:
-    session, created = await create_game(db, user, plan, body)
+    session, created = await create_game(db, user, plan, body, game_type)
     if created:
         background_tasks.add_task(generate_game, session.id)
     return game_output(session)
@@ -109,7 +115,7 @@ async def get_session(
 async def submit_answer(
     request: Request,
     session_id: UUID,
-    body: GameAnswer,
+    body: GameAnswer | SentenceOrderAnswer,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:

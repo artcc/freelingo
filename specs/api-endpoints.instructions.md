@@ -32,31 +32,40 @@ return 404. Session language and XP ownership come from their persisted plan, no
 Session endpoints also resolve owned creation request UUIDs to their canonical session; the response
 always contains the canonical ID. A request whose session was deleted returns 404.
 
-- **GET `/detective`** — 60/min. Requires an active plan. Returns plan ID/language/level, availability
+- **GET `/{game_type}`** — `game_type` is `detective` or `sentence-order`; other values return 422.
+  60/min. Requires an active plan. Returns plan ID/language/level, availability
   and reason for `review`, `prepare`, `free`, global `quota: {remaining, limit}`, `limited`, `history`
-  and `total`. History includes all plans in the active language; `skip >= 0`, `limit=10`, maximum 50.
-- **POST `/detective`** — 5/min, maintenance checked, 202. Body: UUID `request_id`, positive
+  and `total`. History is filtered by game type and includes all plans in the active language;
+  `skip >= 0`, `limit=10`, maximum 50.
+- **POST `/{game_type}`** — same accepted types. 5/min, maintenance checked, 202. Body: UUID `request_id`, positive
   `study_plan_id`, `mode`. New request UUIDs require a matching active plan; a missing active plan
   returns 404. Returns a session, reusing its request UUID
-  or the plan's active game. Reserves quota for new free work; 402 when exhausted, 409 on changed
+  or the plan's active game of that type. Reserves the shared game quota for new free work;
+  402 when exhausted, 409 on changed
   context, conflicting UUID or missing mode sources. Only newly created work starts generation.
-  Every accepted request UUID is bound to its returned session and submitted plan/mode, even when
+  Every accepted request UUID is bound to its returned session and submitted plan/mode/game type, even when
   reusing an active game of another mode. Retrying returns that same session after completion or
   abandonment without new quota, even if the active language has no plan. Accepted UUIDs are resolved
   and their original parameters checked before requiring an active plan; changed parameters or a
   deleted result return 409.
 - **GET `/sessions/{id}`** — 60/min. Returns saved state and remaining generation seconds. Expired
   generation is reported failed and its reservation released. Does not require an active plan.
-- **POST `/sessions/{id}/answer`** — 60/min. Body: `challenge` (0–4), `step` (`detect` or `correct`),
-  `choice` (fragment/option index). Requires the next unanswered step. Same-choice retries return
-  stored state; changed choices/out-of-order steps return 409; invalid indices return 422.
+- **POST `/sessions/{id}/answer`** — 60/min. Detective body: `challenge` (0–4), `step` (`detect`
+  or `correct`), `choice` (fragment/option index). Sentence Order body: `challenge` (0–4),
+  `step: "order"`, `order` (3–12 strict integer indices, a permutation of every fragment).
+  Requires the next unanswered step. Same-answer retries return stored state; changed answers or
+  out-of-order steps return 409; invalid indices/permutations or the wrong game's answer shape return 422.
 - **POST `/sessions/{id}/abandon`** — 10/min. Closes a ready game without XP or quota refund;
   terminal retries are idempotent. A generating game returns 409.
 
-Session responses contain identity, plan, language/native language, level, mode, status, creation time,
-XP, error and challenges. Before detection a challenge exposes only its sentence/fragments and
+Session responses contain identity, `game_type`, plan, language/native language, level, mode, status,
+creation time, XP, error and challenges. Before detection a Detective challenge exposes only its sentence/fragments and
 answer state. After detection it adds error index/options; after correction it adds correct index,
 corrected sentence and native explanation. Source context and unrevealed solutions stay server-side.
+Sentence Order challenges expose `index`, native `clue`, shuffled `fragments`, `separator` (`""` or
+`" "`) and nullable submitted `order`. Only after answering do they expose `correct`,
+`corrected_sentence` (the accepted submitted variant when correct, otherwise the canonical solution)
+and `explanation`. Accepted orders, source IDs and canonical sentences are private before answering.
 
 ---
 

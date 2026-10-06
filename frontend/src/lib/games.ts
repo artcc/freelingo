@@ -14,4 +14,10 @@ export const availableGames: readonly GameDefinition[] = [
     titleKey: 'detectiveTitle',
     descriptionKey: 'detectiveDescription',
   },
+  {
+    id: 'sentence-order',
+    href: '/games/sentence-order',
+    titleKey: 'sentenceOrderTitle',
+    descriptionKey: 'sentenceOrderDescription',
+  },
 ]

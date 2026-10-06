@@ -72,11 +72,12 @@ flashcard CRUD/review, admin operations, memories, feedback reads/mutations, and
 
 ## Games
 
-- `GET /api/games/detective` and `GET /api/games/sessions/{id}`: `60/minute`.
-- `POST /api/games/detective`: `5/minute`.
-- `POST /api/games/sessions/{id}/answer`: `60/minute` for the two-step interaction.
+- `GET /api/games/{game_type}` and `GET /api/games/sessions/{id}`: `60/minute`.
+- `POST /api/games/{game_type}`: `5/minute`.
+- `POST /api/games/sessions/{id}/answer`: `60/minute` for Detective steps or Sentence Order submissions.
 - `POST /api/games/sessions/{id}/abandon`: `10/minute`.
 
+`game_type` accepts `detective` and `sentence-order` through shared catalog/start handlers.
 Generation polling is non-overlapping, normally every five seconds, with bounded transport recovery.
 Rate limiting is independent of the global per-user daily game admission quota.
 

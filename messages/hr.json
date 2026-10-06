@@ -142,11 +142,24 @@
     "abandon": "Napusti igru",
     "abandonDescription": "Igra će se zatvoriti bez XP-a, a iskorištena kvota neće biti vraćena. Za nastavak kasnije odustani i odaberi Natrag.",
     "results": "Otkrivanje: {detected}/5 · Ispravak: {corrected}/5 · Osvojeno {xp} XP",
-    "xpRules": "5 XP za završetak i 2 za svaki potpuno točan izazov. Najviše 45 XP po planu i UTC danu. Kvota besplatnih igara dijeli se među jezicima.",
+    "xpRules": "5 XP za završetak i 2 za svaki potpuno točan izazov. Sve igre dijele ograničenje od 45 XP po planu i UTC danu. Kvota besplatnih partija dijeli se među igrama i jezicima.",
     "playAgain": "Igraj ponovno",
     "plan": "Moj plan"
   },
+  "sentenceOrder": {
+    "title": "Složi rečenicu",
+    "rules": "Poredaj dijelove prema naznaci u pet izazova bez vremenskog ograničenja. Jedan odgovor po izazovu; Lingu objašnjava rješenje i možeš poslušati ispravnu rečenicu.",
+    "instructions": "Dodiruj dijelove redom. Dodirni postavljeni dio da ga vratiš, a zatim provjeri dovršenu rečenicu.",
+    "yourSentence": "Tvoja rečenica",
+    "emptySentence": "Odaberi dio za početak.",
+    "availableFragments": "Dostupni dijelovi",
+    "removeFragment": "Vrati dio {position}: {fragment}",
+    "check": "Provjeri rečenicu",
+    "results": "Točne rečenice: {correct}/5 · Osvojeni XP: {xp}"
+  },
   "games": {
+    "sentenceOrderTitle": "Složi rečenicu",
+    "sentenceOrderDescription": "Sastavljaj rečenice od izmiješanih dijelova i vježbaj redoslijed riječi uz naznake i zvuk.",
     "detectiveTitle": "Detektiv pogrešaka",
     "detectiveDescription": "Pronađi i ispravi pogreške u kratkim rečenicama prilagođenima tvom učenju.",
     "title": "Igre",

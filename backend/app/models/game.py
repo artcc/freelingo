@@ -10,8 +10,9 @@ class GameSession(Base):
     __tablename__ = "game_sessions"
     __table_args__ = (
         Index(
-            "uq_game_active_plan",
+            "uq_game_active_plan_type",
             "study_plan_id",
+            "game_type",
             unique=True,
             postgresql_where=text("status IN ('generating', 'ready')"),
             sqlite_where=text("status IN ('generating', 'ready')"),
@@ -24,6 +25,9 @@ class GameSession(Base):
         ForeignKey("study_plans.id", ondelete="CASCADE"), index=True
     )
     mode: Mapped[str] = mapped_column(String(16))
+    game_type: Mapped[str] = mapped_column(
+        String(24), default="detective", server_default="detective"
+    )
     target_language: Mapped[str] = mapped_column(String(10))
     native_language: Mapped[str] = mapped_column(String(10))
     level: Mapped[str] = mapped_column(String(10))
@@ -51,6 +55,9 @@ class GameRequest(Base):
     # Keep the original request identity even if its plan/session is deleted.
     study_plan_id: Mapped[int] = mapped_column(Integer)
     mode: Mapped[str] = mapped_column(String(16))
+    game_type: Mapped[str] = mapped_column(
+        String(24), default="detective", server_default="detective"
+    )
 
 
 class GameAdmission(Base):

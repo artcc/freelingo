@@ -142,11 +142,24 @@
     "abandon": "Abbandona la partita",
     "abandonDescription": "La partita si chiuderà senza XP e la quota usata non sarà restituita. Per riprendere più tardi, annulla e usa Indietro.",
     "results": "Individuazione: {detected}/5 · Correzione: {corrected}/5 · {xp} XP ottenuti",
-    "xpRules": "5 XP per completare e 2 per ogni sfida interamente corretta. Massimo 45 XP per piano e giorno UTC. La quota di partite gratuite è condivisa tra le lingue.",
+    "xpRules": "5 XP per completare e 2 per ogni sfida interamente corretta. Tutti i giochi condividono un massimo di 45 XP per piano e giorno UTC. La quota di partite gratuite è condivisa tra giochi e lingue.",
     "playAgain": "Gioca ancora",
     "plan": "Il mio piano"
   },
+  "sentenceOrder": {
+    "title": "Riordina la frase",
+    "rules": "Riordina i frammenti seguendo l’indizio in cinque sfide, senza cronometro. Una risposta per sfida; Lingu spiega la soluzione e puoi ascoltare la frase corretta.",
+    "instructions": "Tocca i frammenti nell’ordine giusto. Tocca un frammento già inserito per rimuoverlo, poi verifica la frase completa.",
+    "yourSentence": "La tua frase",
+    "emptySentence": "Scegli un frammento per iniziare.",
+    "availableFragments": "Frammenti disponibili",
+    "removeFragment": "Rimuovi frammento {position}: {fragment}",
+    "check": "Verifica frase",
+    "results": "Frasi corrette: {correct}/5 · {xp} XP guadagnati"
+  },
   "games": {
+    "sentenceOrderTitle": "Riordina la frase",
+    "sentenceOrderDescription": "Costruisci frasi con frammenti mescolati ed esercita l’ordine delle parole con indizi e audio.",
     "detectiveTitle": "Detective degli errori",
     "detectiveDescription": "Individua e correggi gli errori in brevi frasi adattate al tuo apprendimento.",
     "title": "Giochi",

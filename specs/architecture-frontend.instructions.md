@@ -39,9 +39,12 @@ UI translation catalogs live in the repository-root `messages/` directory.
 - `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
   Presentation metadata lives in `lib/games.ts`; an empty catalog shows localized guidance and a
   link to My Plan. See `games.instructions.md` for the section's contract.
-- `/games/error-detective` loads mode availability, global admission quota and language-filtered
-  history. Its `[id]` page resumes backend-owned sessions without retargeting them after a language
-  switch. `lib/detective.ts` supplies typed, bounded authenticated requests. Audio uses `AudioPlayer`.
+- `/games/error-detective` and `/games/sentence-order` use `components/games/GameCatalog.tsx` for
+  mode availability, global admission quota and game-type/language-filtered history. Their `[id]`
+  pages resume backend-owned sessions without retargeting them after a language switch, and reject
+  sessions from the other game. `lib/detective.ts` supplies shared bounded authenticated requests;
+  `lib/sentence-order.ts` adds the ordering contracts. Audio uses `AudioPlayer`. Sentence Order uses
+  keyboard-operable fragment buttons and an exact-spacing preview; only submitted answers persist.
 - `(legal)`: terms and privacy pages with a minimal public layout.
 - `api/`: Next.js handlers that proxy chat SSE, TTS, STT, and conversation warmup to the backend.
 

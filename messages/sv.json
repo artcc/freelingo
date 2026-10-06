@@ -142,11 +142,24 @@
     "abandon": "Avbryt spelet",
     "abandonDescription": "Spelet stängs utan XP och den använda kvoten återbetalas inte. Avbryt dialogen och välj Tillbaka för att fortsätta senare.",
     "results": "Upptäckt: {detected}/5 · Rättelse: {corrected}/5 · {xp} XP intjänade",
-    "xpRules": "5 XP för att slutföra och 2 per helt korrekt utmaning. Högst 45 XP per plan och UTC-dag. Gratis spelkvot delas mellan språken.",
+    "xpRules": "5 XP för att slutföra och 2 per helt korrekt utmaning. Alla spel delar högst 45 XP per plan och UTC-dag. Gratis spelkvot delas mellan spel och språk.",
     "playAgain": "Spela igen",
     "plan": "Min plan"
   },
+  "sentenceOrder": {
+    "title": "Ordna meningen",
+    "rules": "Ordna delarna efter ledtråden i fem utmaningar utan tidtagning. Ett svar per utmaning; Lingu förklarar lösningen och du kan lyssna på den rätta meningen.",
+    "instructions": "Tryck på delarna i ordning. Tryck på en placerad del för att lägga tillbaka den och kontrollera sedan hela meningen.",
+    "yourSentence": "Din mening",
+    "emptySentence": "Välj en del för att börja.",
+    "availableFragments": "Tillgängliga delar",
+    "removeFragment": "Lägg tillbaka del {position}: {fragment}",
+    "check": "Kontrollera meningen",
+    "results": "Rätta meningar: {correct}/5 · {xp} XP intjänade"
+  },
   "games": {
+    "sentenceOrderTitle": "Ordna meningen",
+    "sentenceOrderDescription": "Bygg meningar av blandade delar och öva ordföljd med ledtrådar och ljud.",
     "detectiveTitle": "Feldetektiv",
     "detectiveDescription": "Hitta och rätta fel i korta meningar anpassade till din inlärning.",
     "title": "Spel",

@@ -142,11 +142,24 @@
     "abandon": "Porzuć grę",
     "abandonDescription": "Gra zakończy się bez XP, a wykorzystany limit nie zostanie zwrócony. Aby wrócić później, anuluj i wybierz Wstecz.",
     "results": "Wykrycie: {detected}/5 · Poprawka: {corrected}/5 · Zdobyto {xp} XP",
-    "xpRules": "5 XP za ukończenie i 2 za każde w pełni poprawne wyzwanie. Maksymalnie 45 XP na plan dziennie według UTC. Limit darmowych gier jest wspólny dla wszystkich języków.",
+    "xpRules": "5 XP za ukończenie i 2 za każde w pełni poprawne wyzwanie. Wszystkie gry mają wspólny limit 45 XP na plan dziennie według UTC. Limit darmowych rozgrywek jest wspólny dla wszystkich gier i języków.",
     "playAgain": "Zagraj ponownie",
     "plan": "Mój plan"
   },
+  "sentenceOrder": {
+    "title": "Ułóż zdanie",
+    "rules": "Ułóż fragmenty zgodnie ze wskazówką w pięciu wyzwaniach, bez limitu czasu. Jedna odpowiedź na wyzwanie; Lingu wyjaśnia rozwiązanie i możesz odsłuchać poprawne zdanie.",
+    "instructions": "Dotykaj fragmentów w odpowiedniej kolejności. Dotknij ułożonego fragmentu, aby go cofnąć, a następnie sprawdź całe zdanie.",
+    "yourSentence": "Twoje zdanie",
+    "emptySentence": "Wybierz fragment, aby rozpocząć.",
+    "availableFragments": "Dostępne fragmenty",
+    "removeFragment": "Cofnij fragment {position}: {fragment}",
+    "check": "Sprawdź zdanie",
+    "results": "Poprawne zdania: {correct}/5 · Zdobyte XP: {xp}"
+  },
   "games": {
+    "sentenceOrderTitle": "Ułóż zdanie",
+    "sentenceOrderDescription": "Buduj zdania z pomieszanych fragmentów i ćwicz szyk wyrazów ze wskazówkami i nagraniami.",
     "detectiveTitle": "Detektyw błędów",
     "detectiveDescription": "Znajduj i poprawiaj błędy w krótkich zdaniach dostosowanych do twojej nauki.",
     "title": "Gry",

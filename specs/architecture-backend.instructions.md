@@ -34,8 +34,10 @@ CORS and security headers, and manages database/Redis startup and shutdown.
 The Games domain uses `models/game.py`, `schemas/games.py`, `routers/games.py`, `services/games.py`
 and `services/prompts/games.py`. Sessions belong to persisted study plans. Global daily admission
 reservations live in PostgreSQL and are serialized with a user-row lock; generation state and its
-deadline fence late background results. Answers and plan-owned XP commit atomically. Its schema is
-supplied by revision `0054_detective_games`; see `games.instructions.md` for the domain contract.
+deadline fence late background results. Detective and Sentence Order use game-specific schemas,
+prompts and deterministic answer evaluation through the same admission and reward service.
+Answers and plan-owned XP commit atomically. Revisions `0054_detective_games` and
+`0055_sentence_order` define its schema; see `games.instructions.md` for the domain contract.
 
 ### Core
 

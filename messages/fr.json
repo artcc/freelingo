@@ -142,11 +142,24 @@
     "abandon": "Abandonner la partie",
     "abandonDescription": "La partie sera fermée sans XP et le quota utilisé ne sera pas remboursé. Pour reprendre plus tard, annule et utilise Retour.",
     "results": "Détection : {detected}/5 · Correction : {corrected}/5 · {xp} XP gagnés",
-    "xpRules": "5 XP pour terminer, plus 2 par défi entièrement réussi. Maximum 45 XP par plan et jour UTC. Le quota de parties gratuites est partagé entre les langues.",
+    "xpRules": "5 XP pour terminer, plus 2 par défi entièrement réussi. Tous les jeux partagent un maximum de 45 XP par plan et jour UTC. Le quota de parties gratuites est partagé entre les jeux et les langues.",
     "playAgain": "Rejouer",
     "plan": "Mon plan"
   },
+  "sentenceOrder": {
+    "title": "Remets la phrase en ordre",
+    "rules": "Remets les fragments en ordre selon l’indice dans cinq défis, sans chronomètre. Une seule réponse par défi ; Lingu explique la solution et tu peux écouter la phrase correcte.",
+    "instructions": "Touche les fragments dans l’ordre. Touche un fragment placé pour le retirer, puis vérifie la phrase une fois complète.",
+    "yourSentence": "Ta phrase",
+    "emptySentence": "Choisis un fragment pour commencer.",
+    "availableFragments": "Fragments disponibles",
+    "removeFragment": "Retirer le fragment {position} : {fragment}",
+    "check": "Vérifier la phrase",
+    "results": "Phrases correctes : {correct}/5 · {xp} XP gagnés"
+  },
   "games": {
+    "sentenceOrderTitle": "Remets la phrase en ordre",
+    "sentenceOrderDescription": "Construis des phrases à partir de fragments mélangés et travaille l’ordre des mots avec des indices et de l’audio.",
     "detectiveTitle": "Détective des erreurs",
     "detectiveDescription": "Repère et corrige les erreurs dans des phrases courtes adaptées à ton apprentissage.",
     "title": "Jeux",

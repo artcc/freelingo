@@ -10,20 +10,28 @@ All models use SQLAlchemy 2.0 declarative style with `Mapped[T]` type annotation
 ## Games (`game_sessions`, `game_admissions`, `game_requests`)
 
 `GameSession` uses a UUID string primary key as creation idempotency key. Required user and plan
-foreign keys cascade on deletion. It stores mode, target/native languages, level, status, bounded
+foreign keys cascade on deletion. It stores game type (`detective` or `sentence-order`), mode,
+target/native languages, level, status, bounded
 source-context JSON, private challenge JSON, answer JSON, creation/deadline timestamps, nullable
-completion/error and awarded XP. User and plan columns are indexed. `uq_game_active_plan` is unique
-on plan only while status is `generating` or `ready`.
+completion/error and awarded XP. User and plan columns are indexed. `uq_game_active_plan_type` is unique
+on `(study_plan_id, game_type)` while status is `generating` or `ready`.
 
 `GameAdmission` uses the same request UUID as its primary key, with user FK (account cascade), UTC
 date, status (`reserved`, `consumed`, `released`) and deadline. Its `(user_id, date)` index supports
 quota lookup. It intentionally has no plan/session FK: deleting learning data must not restore a
 consumed global quota. Creation serializes on the user row. Models and migration
-`0054_detective_games` define the game tables; reward amounts remain in the existing plan-owned ledger.
+`0054_detective_games` define the game tables. Revision `0055_sentence_order` adds non-null
+`String(24)` game-type columns to sessions and requests, with ORM/server default `detective`, and
+the per-type active index. Existing sessions and request identities retain their Detective ownership.
+Downgrading requires an online check and refuses to remove the discriminator while any non-Detective
+session or request exists, including completed sessions and request identities whose result was deleted.
+On PostgreSQL it acquires `ACCESS EXCLUSIVE` locks on both tables before checking data and retains
+them until the migration transaction ends, preventing concurrent writes from evading the check.
+Reward amounts remain in the existing plan-owned ledger.
 
 `GameRequest` persists every accepted creation UUID, including those returning an existing active
 session. Its primary key is the request UUID; it stores the owning user FK (account cascade), the
-submitted plan ID and mode, and a nullable session FK (`ON DELETE SET NULL`). User and session are
+submitted plan ID, mode and game type, and a nullable session FK (`ON DELETE SET NULL`). User and session are
 indexed. The submitted plan ID has no FK so the identity survives learning-data deletion. Retries
 check the stored request parameters, not the mode of a reused session. A null session prevents
 reusing that UUID for a different result. These records do not consume admission quota.

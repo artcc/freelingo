@@ -142,11 +142,24 @@
     "abandon": "Spel opgeven",
     "abandonDescription": "Het spel sluit zonder XP en het gebruikte tegoed wordt niet teruggegeven. Annuleer en kies Terug om later verder te gaan.",
     "results": "Herkenning: {detected}/5 · Correctie: {corrected}/5 · {xp} XP verdiend",
-    "xpRules": "5 XP voor afronden en 2 per volledig juiste uitdaging. Maximaal 45 XP per plan per UTC-dag. Gratis speltegoed wordt gedeeld tussen talen.",
+    "xpRules": "5 XP voor afronden en 2 per volledig juiste uitdaging. Alle spellen delen maximaal 45 XP per plan per UTC-dag. Gratis speltegoed wordt gedeeld tussen spellen en talen.",
     "playAgain": "Opnieuw spelen",
     "plan": "Mijn plan"
   },
+  "sentenceOrder": {
+    "title": "Zet de zin in volgorde",
+    "rules": "Zet de fragmenten in de juiste volgorde met de aanwijzing in vijf uitdagingen, zonder tijdslimiet. Eén antwoord per uitdaging; Lingu legt de oplossing uit en je kunt de juiste zin beluisteren.",
+    "instructions": "Tik de fragmenten in volgorde aan. Tik op een geplaatst fragment om het terug te leggen en controleer de volledige zin.",
+    "yourSentence": "Jouw zin",
+    "emptySentence": "Kies een fragment om te beginnen.",
+    "availableFragments": "Beschikbare fragmenten",
+    "removeFragment": "Fragment {position} terugleggen: {fragment}",
+    "check": "Zin controleren",
+    "results": "Juiste zinnen: {correct}/5 · {xp} XP verdiend"
+  },
   "games": {
+    "sentenceOrderTitle": "Zet de zin in volgorde",
+    "sentenceOrderDescription": "Bouw zinnen met door elkaar gehusselde fragmenten en oefen de woordvolgorde met aanwijzingen en audio.",
     "detectiveTitle": "Foutendetective",
     "detectiveDescription": "Vind en verbeter fouten in korte zinnen die aansluiten op wat je leert.",
     "title": "Spellen",

@@ -7,25 +7,26 @@ import { useTranslations } from 'next-intl'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
-import {
-  gameRequest,
-  GameRequestError,
-  type DetectiveSession,
-  type Challenge,
-} from '@/lib/detective'
+import { gameRequest, GameRequestError } from '@/lib/detective'
+import type {
+  SentenceOrderSession,
+  SentenceOrderChallenge,
+} from '@/lib/sentence-order'
 import { useLanguageStore } from '@/store/language'
 import { useFreemiumStore } from '@/store/freemium'
 
 const button =
   'border-fl-border hover:border-fl-border-2 text-fl-fg border px-4 py-2 text-sm disabled:opacity-40'
 
-export default function DetectiveSessionPage() {
+export default function SentenceOrderSessionPage() {
   const { id } = useParams<{ id: string }>()
-  const t = useTranslations('detective')
+  const t = useTranslations('sentenceOrder')
+  const shared = useTranslations('detective')
   const common = useTranslations('common')
   const tTarget = useTranslations('targetLanguages')
-  const [session, setSession] = useState<DetectiveSession | null>(null)
+  const [session, setSession] = useState<SentenceOrderSession | null>(null)
   const [index, setIndex] = useState(0)
+  const [order, setOrder] = useState<number[]>([])
   const [error, setError] = useState(false)
   const [busy, setBusy] = useState(false)
   const [retry, setRetry] = useState(0)
@@ -42,18 +43,22 @@ export default function DetectiveSessionPage() {
     setError(false)
     setBusy(false)
     setAbandon(false)
+    setOrder([])
     async function load() {
       try {
-        const data = await gameRequest<DetectiveSession>(`/sessions/${id}`, {
-          signal: controller.signal,
-        })
+        const data = await gameRequest<SentenceOrderSession>(
+          `/sessions/${id}`,
+          {
+            signal: controller.signal,
+          }
+        )
         if (controller.signal.aborted) return
-        if (data.game_type && data.game_type !== 'detective') {
+        if (data.game_type !== 'sentence-order') {
           setError(true)
           return
         }
         setSession(data)
-        const next = data.challenges.findIndex((c) => c.correction === null)
+        const next = data.challenges.findIndex((c) => c.order === null)
         setIndex(next < 0 ? 0 : next)
         failures = 0
         if (data.status === 'generating') {
@@ -87,28 +92,33 @@ export default function DetectiveSessionPage() {
     }
   }, [id, retry])
 
-  async function submit(step: 'detect' | 'correct' | 'abandon', choice = 0) {
+  async function submit(action: 'answer' | 'abandon') {
     if (!session || busyRef.current || error) return
+    if (
+      action === 'answer' &&
+      order.length !== session.challenges[index].fragments.length
+    )
+      return
     busyRef.current = true
     setBusy(true)
     const controller = new AbortController()
     mutation.current = controller
     try {
-      const data = await gameRequest<DetectiveSession>(
-        `/sessions/${id}/${step === 'abandon' ? 'abandon' : 'answer'}`,
+      const data = await gameRequest<SentenceOrderSession>(
+        `/sessions/${id}/${action}`,
         {
           method: 'POST',
           signal: controller.signal,
           body:
-            step === 'abandon'
+            action === 'abandon'
               ? undefined
-              : JSON.stringify({ challenge: index, step, choice }),
+              : JSON.stringify({ challenge: index, step: 'order', order }),
         }
       )
       if (controller.signal.aborted) return
       setSession(data)
       setAbandon(false)
-      if (step !== 'abandon') useLanguageStore.getState().invalidateLanguages()
+      if (action === 'answer') useLanguageStore.getState().invalidateLanguages()
     } catch {
       if (!controller.signal.aborted) {
         setError(true)
@@ -122,33 +132,40 @@ export default function DetectiveSessionPage() {
     }
   }
 
-  function feedback(challenge: Challenge) {
-    if (challenge.correction === null) return null
+  function feedback(challenge: SentenceOrderChallenge) {
+    if (challenge.order === null) return null
     return (
-      <div className="space-y-3" key={challenge.index}>
-        <p className="text-fl-muted-2 text-sm">
-          {t('detectionResult')}:{' '}
-          {t(
-            challenge.detection === challenge.error_index
-              ? 'correct'
-              : 'incorrect'
-          )}{' '}
-          · {t('correctionResult')}:{' '}
-          {t(
-            challenge.correction === challenge.correct_index
-              ? 'correct'
-              : 'incorrect'
-          )}
+      <div className="space-y-3">
+        <p className="text-sm">
+          {shared(challenge.correct ? 'correct' : 'incorrect')}
         </p>
+        {!challenge.correct && (
+          <div className="space-y-2">
+            <p className="text-fl-muted-2 text-sm">{t('yourSentence')}</p>
+            <TargetLanguageText
+              as="p"
+              languageCode={session?.target_language}
+              className="text-lg whitespace-pre-wrap"
+            >
+              {challenge.order
+                .map((i) => challenge.fragments[i])
+                .join(challenge.separator)}
+            </TargetLanguageText>
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <TargetLanguageText
             languageCode={session?.target_language}
-            className="text-fl-fg text-lg"
+            className="text-fl-fg text-lg whitespace-pre-wrap"
           >
             {challenge.corrected_sentence}
           </TargetLanguageText>
           {challenge.corrected_sentence && (
-            <AudioPlayer text={challenge.corrected_sentence} size="sm" />
+            <AudioPlayer
+              key={challenge.index}
+              text={challenge.corrected_sentence}
+              size="sm"
+            />
           )}
         </div>
         <p
@@ -164,7 +181,7 @@ export default function DetectiveSessionPage() {
   const challenge = session?.challenges[index]
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-6 font-sans">
-      <Link href="/games/error-detective" className="text-fl-muted-2 text-sm">
+      <Link href="/games/sentence-order" className="text-fl-muted-2 text-sm">
         ← {common('back')}
       </Link>
       <header className="border-fl-border bg-fl-surface space-y-2 border p-6">
@@ -172,20 +189,14 @@ export default function DetectiveSessionPage() {
         {session && (
           <p className="text-fl-muted-2 text-sm">
             {tTarget(session.target_language)} · {session.level} ·{' '}
-            {t(session.mode)}
+            {shared(session.mode)}
           </p>
         )}
       </header>
       {error && (
         <div role="alert" className="space-y-3">
           <p>{common('errorMessage')}</p>
-          <button
-            className={button}
-            onClick={() => {
-              setBusy(false)
-              setRetry((n) => n + 1)
-            }}
-          >
+          <button className={button} onClick={() => setRetry((n) => n + 1)}>
             {common('retry')}
           </button>
         </div>
@@ -193,13 +204,13 @@ export default function DetectiveSessionPage() {
       {!session && !error && <p role="status">{common('loading')}</p>}
       {session?.status === 'generating' && !error && (
         <p role="status" className="text-fl-muted-2">
-          {t('generatingDescription')}
+          {shared('generatingDescription')}
         </p>
       )}
       {session?.status === 'failed' && (
         <div role="alert" className="space-y-4">
-          <p>{t('failedDescription')}</p>
-          <Link href="/games/error-detective" className={button}>
+          <p>{shared('failedDescription')}</p>
+          <Link href="/games/sentence-order" className={button}>
             {common('back')}
           </Link>
         </div>
@@ -210,153 +221,166 @@ export default function DetectiveSessionPage() {
           aria-busy={busy}
         >
           <h2 className="font-semibold">
-            {t('challenge', { current: index + 1, total: 5 })}
+            {shared('challenge', { current: index + 1, total: 5 })}
           </h2>
-          <p>
-            {t(
-              challenge.detection === null
-                ? 'detect'
-                : challenge.correction === null
-                  ? 'chooseCorrection'
-                  : 'explanation'
-            )}
+          <p
+            lang={session.native_language}
+            className="text-fl-muted-2 leading-relaxed"
+          >
+            {challenge.clue}
           </p>
-          {challenge.detection === null ? (
-            <div className="flex flex-wrap gap-2">
-              {challenge.fragments.map((fragment, i) => (
-                <button
-                  key={i}
-                  className={button}
-                  disabled={busy || error}
-                  onClick={() => void submit('detect', i)}
-                >
-                  <TargetLanguageText
-                    languageCode={session.target_language}
-                    className="text-lg whitespace-pre-wrap"
-                  >
-                    {fragment}
-                  </TargetLanguageText>
-                </button>
-              ))}
-            </div>
-          ) : (
+          {challenge.order === null ? (
             <>
-              <TargetLanguageText
-                as="p"
-                languageCode={session.target_language}
-                className="text-lg leading-relaxed"
+              <p className="text-sm">{t('instructions')}</p>
+              <div
+                role="group"
+                aria-label={t('yourSentence')}
+                className="border-fl-border min-h-20 space-y-3 border p-4"
               >
-                {challenge.fragments.map((fragment, i) =>
-                  i === challenge.error_index ? (
-                    <mark
-                      key={i}
-                      className="bg-fl-surface-2 text-fl-fg rounded-sm underline decoration-2 underline-offset-4"
-                    >
-                      {fragment}
-                    </mark>
-                  ) : (
-                    <span key={i}>{fragment}</span>
-                  )
+                {order.length === 0 && (
+                  <p className="text-fl-muted-2 text-sm">
+                    {t('emptySentence')}
+                  </p>
                 )}
-              </TargetLanguageText>
-              <p role="status" className="text-sm">
-                {t('detectionResult')}:{' '}
-                {t(
-                  challenge.detection === challenge.error_index
-                    ? 'correct'
-                    : 'incorrect'
-                )}
-              </p>
-              {challenge.correction === null && (
-                <div className="grid gap-3 sm:grid-cols-3">
-                  {challenge.options?.map((option, i) => (
+                <div className="flex flex-wrap gap-2">
+                  {order.map((fragmentIndex, position) => (
                     <button
-                      key={i}
+                      key={fragmentIndex}
                       className={button}
                       disabled={busy || error}
-                      onClick={() => void submit('correct', i)}
+                      aria-label={t('removeFragment', {
+                        fragment: challenge.fragments[fragmentIndex],
+                        position: position + 1,
+                      })}
+                      onClick={() =>
+                        setOrder((current) =>
+                          current.filter((i) => i !== fragmentIndex)
+                        )
+                      }
                     >
                       <TargetLanguageText
                         languageCode={session.target_language}
+                        className="text-lg"
                       >
-                        {option}
+                        {challenge.fragments[fragmentIndex]}
                       </TargetLanguageText>
                     </button>
                   ))}
                 </div>
-              )}
+                <TargetLanguageText
+                  as="p"
+                  languageCode={session.target_language}
+                  className="text-lg whitespace-pre-wrap"
+                  aria-live="polite"
+                >
+                  {order
+                    .map((i) => challenge.fragments[i])
+                    .join(challenge.separator)}
+                </TargetLanguageText>
+              </div>
+              <div
+                role="group"
+                aria-label={t('availableFragments')}
+                className="flex flex-wrap gap-2"
+              >
+                {challenge.fragments.map((fragment, i) => (
+                  <button
+                    key={i}
+                    className={button}
+                    disabled={busy || error || order.includes(i)}
+                    onClick={() =>
+                      setOrder((current) =>
+                        current.includes(i) ? current : [...current, i]
+                      )
+                    }
+                  >
+                    <TargetLanguageText
+                      languageCode={session.target_language}
+                      className="text-lg"
+                    >
+                      {fragment}
+                    </TargetLanguageText>
+                  </button>
+                ))}
+              </div>
+              <button
+                className={button}
+                disabled={
+                  busy || error || order.length !== challenge.fragments.length
+                }
+                onClick={() => void submit('answer')}
+              >
+                {t('check')}
+              </button>
             </>
-          )}
-          {challenge.correction !== null && (
-            <div aria-live="polite">
+          ) : (
+            <div aria-live="polite" className="space-y-5">
               {feedback(challenge)}
               <button
-                className={`${button} mt-5`}
-                onClick={() => setIndex(index + 1)}
+                className={button}
+                disabled={busy || error}
+                onClick={() => {
+                  setIndex(index + 1)
+                  setOrder([])
+                }}
               >
                 {common('next')}
               </button>
             </div>
           )}
-          <p className="text-fl-muted-2 text-xs">{t('saved')}</p>
+          <p className="text-fl-muted-2 text-xs">{shared('saved')}</p>
           <button
             className={button}
             disabled={busy || error}
             onClick={() => setAbandon(true)}
           >
-            {t('abandon')}
+            {shared('abandon')}
           </button>
         </section>
       )}
       {session && ['completed', 'abandoned'].includes(session.status) && (
         <section className="space-y-5">
-          <h2 className="font-semibold">{t(session.status)}</h2>
+          <h2 className="font-semibold">{shared(session.status)}</h2>
           {session.status === 'completed' && (
             <p>
               {t('results', {
-                detected: session.challenges.filter(
-                  (c) => c.detection === c.error_index
-                ).length,
-                corrected: session.challenges.filter(
-                  (c) => c.correction === c.correct_index
-                ).length,
+                correct: session.challenges.filter((c) => c.correct).length,
                 xp: session.xp_earned,
               })}
             </p>
           )}
           {session.challenges
-            .filter((c) => c.correction !== null)
+            .filter((c) => c.order !== null)
             .map((c) => (
               <div
                 className="border-fl-border bg-fl-surface space-y-3 border p-5"
                 key={c.index}
               >
-                <TargetLanguageText
-                  as="p"
-                  languageCode={session.target_language}
-                  className="text-fl-muted-2"
+                <p
+                  lang={session.native_language}
+                  className="text-fl-muted-2 text-sm"
                 >
-                  {c.sentence}
-                </TargetLanguageText>
+                  {c.clue}
+                </p>
                 {feedback(c)}
               </div>
             ))}
-          <p className="text-fl-muted-2 text-sm">{t('xpRules')}</p>
+          <p className="text-fl-muted-2 text-sm">{shared('xpRules')}</p>
           <div className="flex flex-wrap gap-3">
-            <Link className={button} href="/games/error-detective">
-              {t('playAgain')}
+            <Link className={button} href="/games/sentence-order">
+              {shared('playAgain')}
             </Link>
             <Link className={button} href="/plan">
-              {t('plan')}
+              {shared('plan')}
             </Link>
           </div>
         </section>
       )}
       <ConfirmDialog
         open={abandon}
-        title={t('abandon')}
-        message={t('abandonDescription')}
-        confirmLabel={t('abandon')}
+        title={shared('abandon')}
+        message={shared('abandonDescription')}
+        confirmLabel={shared('abandon')}
         cancelLabel={common('cancel')}
         confirming={busy}
         onConfirm={() => void submit('abandon')}

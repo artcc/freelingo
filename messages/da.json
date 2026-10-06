@@ -142,11 +142,24 @@
     "abandon": "Opgiv spil",
     "abandonDescription": "Spillet lukkes uden XP, og den brugte kvote tilbagebetales ikke. Annuller og brug Tilbage for at fortsætte senere.",
     "results": "Opdagelse: {detected}/5 · Rettelse: {corrected}/5 · {xp} XP optjent",
-    "xpRules": "5 XP for at gennemføre og 2 for hver helt korrekt udfordring. Højst 45 XP pr. plan pr. UTC-dag. Gratis spilkvote deles mellem sprog.",
+    "xpRules": "5 XP for at gennemføre og 2 for hver helt korrekt udfordring. Alle spil deler højst 45 XP pr. plan pr. UTC-dag. Gratis spilkvote deles mellem spil og sprog.",
     "playAgain": "Spil igen",
     "plan": "Min plan"
   },
+  "sentenceOrder": {
+    "title": "Sæt sætningen i orden",
+    "rules": "Sæt delene i rækkefølge efter ledetråden i fem udfordringer uden tidtagning. Ét svar pr. udfordring; Lingu forklarer løsningen, og du kan høre den korrekte sætning.",
+    "instructions": "Tryk på delene i rækkefølge. Tryk på en placeret del for at lægge den tilbage, og tjek derefter hele sætningen.",
+    "yourSentence": "Din sætning",
+    "emptySentence": "Vælg en del for at begynde.",
+    "availableFragments": "Tilgængelige dele",
+    "removeFragment": "Læg del {position} tilbage: {fragment}",
+    "check": "Tjek sætningen",
+    "results": "Korrekte sætninger: {correct}/5 · {xp} XP optjent"
+  },
   "games": {
+    "sentenceOrderTitle": "Sæt sætningen i orden",
+    "sentenceOrderDescription": "Byg sætninger af blandede dele, og øv ordstilling med ledetråde og lyd.",
     "detectiveTitle": "Fejldetektiv",
     "detectiveDescription": "Find og ret fejl i korte sætninger tilpasset din læring.",
     "title": "Spil",

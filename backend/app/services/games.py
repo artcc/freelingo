@@ -1,4 +1,4 @@
-"""Plan-owned detective sessions; admission is global, learning rewards are not."""
+"""Plan-owned game sessions; admission is global, learning rewards are not."""
 
 import asyncio
 import logging
@@ -17,12 +17,26 @@ from app.models.lesson import Exercise, Lesson
 from app.models.progress_reward import ProgressReward
 from app.models.study_plan import StudyPlan
 from app.models.user import User
-from app.schemas.games import DetectiveContent, DetectiveReview, GameAnswer, GameCreate
+from app.schemas.games import (
+    DetectiveContent,
+    DetectiveReview,
+    GameAnswer,
+    GameCreate,
+    GameType,
+    SentenceOrderAnswer,
+    SentenceOrderChallenge,
+    SentenceOrderContent,
+)
 from app.services.freemium_service import is_freemium_trial_active
 from app.services.llm_adapter import LLMResponseError, LLMTimeoutError, llm_adapter
 from app.services.progress_rewards import award_progress_reward
 from app.services.progress_service import lock_progress_plan, update_daily_progress
-from app.services.prompts.games import detective_prompt, detective_review_prompt
+from app.services.prompts.games import (
+    detective_prompt,
+    detective_review_prompt,
+    sentence_order_prompt,
+    sentence_order_review_prompt,
+)
 from app.services.subscription_service import is_subscribed
 from app.utils.db import db_session
 
@@ -196,7 +210,12 @@ async def source_context(db: AsyncSession, plan: StudyPlan, mode: str) -> dict:
     for session in previous:
         for challenge, answer in zip(session.challenges, session.answers, strict=False):
             recent_sentences.append(challenge["sentence"])
-            if answer.get("correction") is not None and (
+            if session.game_type == "sentence-order":
+                if "order" in answer and not answer["correct"]:
+                    mistakes.append(
+                        {"question": challenge["clue"], "correction": challenge["sentence"]}
+                    )
+            elif answer.get("correction") is not None and (
                 answer.get("detection") != challenge["error_index"]
                 or answer["correction"] != challenge["correct_index"]
             ):
@@ -216,7 +235,11 @@ async def source_context(db: AsyncSession, plan: StudyPlan, mode: str) -> dict:
 
 
 async def create_game(
-    db: AsyncSession, user: User, plan: StudyPlan | None, body: GameCreate
+    db: AsyncSession,
+    user: User,
+    plan: StudyPlan | None,
+    body: GameCreate,
+    game_type: GameType = "detective",
 ) -> tuple[GameSession, bool]:
     await lock_user(db, user.id)
     now = now_utc()
@@ -228,6 +251,7 @@ async def create_game(
         if (
             previous_request.study_plan_id != body.study_plan_id
             or previous_request.mode != body.mode
+            or previous_request.game_type != game_type
             or previous_request.session_id is None
         ):
             raise HTTPException(409, "request_conflict")
@@ -238,7 +262,11 @@ async def create_game(
     if existing is not None:
         if existing.user_id != user.id:
             raise HTTPException(404, "game_not_found")
-        if existing.study_plan_id != body.study_plan_id or existing.mode != body.mode:
+        if (
+            existing.study_plan_id != body.study_plan_id
+            or existing.mode != body.mode
+            or existing.game_type != game_type
+        ):
             raise HTTPException(409, "request_conflict")
         await db.commit()
         return existing, False
@@ -250,11 +278,16 @@ async def create_game(
     if plan.id != body.study_plan_id:
         raise HTTPException(409, "study_context_changed")
     request = GameRequest(
-        id=str(body.request_id), user_id=user.id, study_plan_id=body.study_plan_id, mode=body.mode
+        id=str(body.request_id),
+        user_id=user.id,
+        study_plan_id=body.study_plan_id,
+        mode=body.mode,
+        game_type=game_type,
     )
     active = await db.scalar(
         select(GameSession).where(
             GameSession.study_plan_id == plan.id,
+            GameSession.game_type == game_type,
             GameSession.status.in_(["generating", "ready"]),
         )
     )
@@ -276,6 +309,7 @@ async def create_game(
         user_id=user.id,
         study_plan_id=plan.id,
         mode=body.mode,
+        game_type=game_type,
         target_language=plan.target_language,
         native_language=user.native_language,
         level=plan.cefr_level,
@@ -305,8 +339,38 @@ async def create_game(
     return session, True
 
 
-async def generate_content(session: GameSession, deadline: float) -> DetectiveContent:
-    prompt = detective_prompt(
+def shuffled_order_challenge(challenge: SentenceOrderChallenge) -> SentenceOrderChallenge:
+    """Persist an unsolved shuffle, remapping solutions without changing their text."""
+    accepted = {
+        challenge.separator.join(challenge.fragments[i] for i in order)
+        for order in challenge.accepted_orders
+    }
+    indices = list(range(len(challenge.fragments)))
+    for _ in range(100):
+        SystemRandom().shuffle(indices)
+        fragments = [challenge.fragments[i] for i in indices]
+        if challenge.separator.join(fragments) not in accepted:
+            positions = {old: new for new, old in enumerate(indices)}
+            return SentenceOrderChallenge.model_validate(
+                {
+                    **challenge.model_dump(),
+                    "fragments": fragments,
+                    "accepted_orders": [
+                        [positions[i] for i in order] for order in challenge.accepted_orders
+                    ],
+                }
+            )
+    raise LLMResponseError("Sentence Order challenge cannot be shuffled into an unsolved order")
+
+
+async def generate_content(
+    session: GameSession, deadline: float
+) -> DetectiveContent | SentenceOrderContent:
+    ordering = session.game_type == "sentence-order"
+    prompt_builder = sentence_order_prompt if ordering else detective_prompt
+    review_builder = sentence_order_review_prompt if ordering else detective_review_prompt
+    schema = SentenceOrderContent if ordering else DetectiveContent
+    prompt = prompt_builder(
         session.target_language,
         session.native_language,
         session.level,
@@ -317,7 +381,7 @@ async def generate_content(session: GameSession, deadline: float) -> DetectiveCo
     rejection = ""
     for _ in range(2):
         content = await llm_adapter.structured_output(
-            [{"role": "system", "content": prompt + rejection}], DetectiveContent, deadline=deadline
+            [{"role": "system", "content": prompt + rejection}], schema, deadline=deadline
         )
         if any(c.source_id not in permitted for c in content.challenges):
             rejection = "\nPrevious candidate rejected: use only supplied source IDs."
@@ -328,14 +392,18 @@ async def generate_content(session: GameSession, deadline: float) -> DetectiveCo
             rejection = "\nPrevious candidate rejected: do not repeat recent sentences."
             continue
         review = await llm_adapter.structured_output(
-            [{"role": "system", "content": detective_review_prompt(prompt, content.model_dump())}],
+            [{"role": "system", "content": review_builder(prompt, content.model_dump())}],
             DetectiveReview,
             deadline=deadline,
         )
         if review.valid:
+            if ordering:
+                return SentenceOrderContent(
+                    challenges=[shuffled_order_challenge(c) for c in content.challenges]
+                )
             return content
         rejection = "\nPrevious candidate rejected; create a new one. Audit: " + review.reason
-    raise LLMResponseError("Detective content did not pass review")
+    raise LLMResponseError("Game content did not pass review")
 
 
 async def generate_game(session_id: str) -> None:
@@ -357,7 +425,7 @@ async def generate_game(session_id: str) -> None:
             error = "timeout"
         except Exception:
             error = "generation_failed"
-            logger.exception("Detective generation failed: %s", session_id)
+            logger.exception("Game generation failed: %s", session_id)
         await lock_user(db, user_id)
         session = await db.scalar(
             select(GameSession)
@@ -408,6 +476,24 @@ def game_output(session: GameSession) -> dict:
     challenges = []
     for i, challenge in enumerate(session.challenges):
         answer = session.answers[i]
+        if session.game_type == "sentence-order":
+            item = {
+                "index": i,
+                "clue": challenge["clue"],
+                "fragments": challenge["fragments"],
+                "separator": challenge["separator"],
+                "order": answer.get("order"),
+            }
+            if "order" in answer:
+                item.update(
+                    correct=answer["correct"],
+                    corrected_sentence=(
+                        answer["sentence"] if answer["correct"] else challenge["sentence"]
+                    ),
+                    explanation=challenge["explanation"],
+                )
+            challenges.append(item)
+            continue
         item = {
             "index": i,
             "sentence": challenge["sentence"],
@@ -426,6 +512,7 @@ def game_output(session: GameSession) -> dict:
         challenges.append(item)
     return {
         "id": session.id,
+        "game_type": session.game_type,
         "study_plan_id": session.study_plan_id,
         "target_language": session.target_language,
         "native_language": session.native_language,
@@ -445,7 +532,7 @@ def game_output(session: GameSession) -> dict:
 
 
 async def answer_game(
-    db: AsyncSession, user_id: int, session_id: str, body: GameAnswer
+    db: AsyncSession, user_id: int, session_id: str, body: GameAnswer | SentenceOrderAnswer
 ) -> GameSession:
     completed_at = now_utc()
     activity_date = completed_at.date()
@@ -462,28 +549,45 @@ async def answer_game(
         raise HTTPException(404, "game_not_found")
     if session.status not in {"ready", "completed"}:
         raise HTTPException(409, "game_not_ready")
+    ordering = session.game_type == "sentence-order"
+    if ordering != isinstance(body, SentenceOrderAnswer):
+        raise HTTPException(422, "invalid_game_answer")
     answer = session.answers[body.challenge]
-    key = "detection" if body.step == "detect" else "correction"
+    key = "order" if ordering else "detection" if body.step == "detect" else "correction"
+    choice = body.order if ordering else body.choice
     if key in answer:
-        if answer[key] != body.choice:
+        if answer[key] != choice:
             raise HTTPException(409, "already_answered")
         return session
-    first_unfinished = next((i for i, a in enumerate(session.answers) if "correction" not in a), 5)
+    completion_key = "order" if ordering else "correction"
+    first_unfinished = next(
+        (i for i, a in enumerate(session.answers) if completion_key not in a), 5
+    )
     if body.challenge != first_unfinished:
         raise HTTPException(409, "answer_out_of_order")
     challenge = session.challenges[body.challenge]
-    if body.step == "correct" and "detection" not in answer:
-        raise HTTPException(409, "detect_first")
-    choices = challenge["fragments"] if body.step == "detect" else challenge["options"]
-    if body.choice >= len(choices):
-        raise HTTPException(422, "invalid_choice")
     answers = [dict(a) for a in session.answers]
-    answers[body.challenge][key] = body.choice
+    if ordering:
+        if sorted(body.order) != list(range(len(challenge["fragments"]))):
+            raise HTTPException(422, "invalid_order")
+        sentence = challenge["separator"].join(challenge["fragments"][i] for i in body.order)
+        accepted = {
+            challenge["separator"].join(challenge["fragments"][i] for i in order)
+            for order in challenge["accepted_orders"]
+        }
+        answers[body.challenge].update(sentence=sentence, correct=sentence in accepted)
+    else:
+        if body.step == "correct" and "detection" not in answer:
+            raise HTTPException(409, "detect_first")
+        choices = challenge["fragments"] if body.step == "detect" else challenge["options"]
+        if body.choice >= len(choices):
+            raise HTTPException(422, "invalid_choice")
+    answers[body.challenge][key] = choice
     session.answers = answers
     await update_daily_progress(
         db, user_id, study_plan_id=session.study_plan_id, activity_date=activity_date, commit=False
     )
-    if all("correction" in a for a in answers):
+    if all(completion_key in a for a in answers):
         session.status = "completed"
         session.completed_at = completed_at
         earned = await db.scalar(
@@ -494,7 +598,11 @@ async def answer_game(
             )
         )
         correct = sum(
-            a["detection"] == c["error_index"] and a["correction"] == c["correct_index"]
+            (
+                a["correct"]
+                if ordering
+                else a["detection"] == c["error_index"] and a["correction"] == c["correct_index"]
+            )
             for a, c in zip(answers, session.challenges, strict=True)
         )
         xp = min(5 + 2 * correct, max(0, 45 - earned))

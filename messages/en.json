@@ -142,11 +142,24 @@
     "abandon": "Abandon game",
     "abandonDescription": "This game will close without XP. Its game quota will not be refunded. To resume later, cancel and use Back instead.",
     "results": "Detection: {detected}/5 · Correction: {corrected}/5 · {xp} XP earned",
-    "xpRules": "5 XP for finishing, plus 2 per fully correct challenge. Maximum 45 XP per plan per UTC day. Free game quotas are shared between languages.",
+    "xpRules": "5 XP for finishing, plus 2 per fully correct challenge. All games share a maximum of 45 XP per plan per UTC day. Free game quotas are shared between games and languages.",
     "playAgain": "Play again",
     "plan": "My plan"
   },
+  "sentenceOrder": {
+    "title": "Sentence Order",
+    "rules": "Arrange the fragments to match the clue in five challenges, without a timer. One submission per challenge; Lingu explains the answer and you can listen to the correct sentence.",
+    "instructions": "Tap fragments in order. Tap a placed fragment to return it, then check your sentence when it is complete.",
+    "yourSentence": "Your sentence",
+    "emptySentence": "Choose a fragment to begin.",
+    "availableFragments": "Available fragments",
+    "removeFragment": "Return fragment {position}: {fragment}",
+    "check": "Check sentence",
+    "results": "Correct sentences: {correct}/5 · {xp} XP earned"
+  },
   "games": {
+    "sentenceOrderTitle": "Sentence Order",
+    "sentenceOrderDescription": "Build sentences from shuffled fragments and practise word order with clues and audio.",
     "detectiveTitle": "Error Detective",
     "detectiveDescription": "Find and correct mistakes in short sentences adapted to your learning.",
     "title": "Games",

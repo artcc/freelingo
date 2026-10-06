@@ -15,6 +15,7 @@ export interface Challenge {
 }
 export interface DetectiveSession {
   id: string
+  game_type?: 'detective' | 'sentence-order'
   study_plan_id: number
   target_language: string
   native_language: string
@@ -34,7 +35,7 @@ export interface DetectiveCatalog {
   modes: Record<GameMode, { available: boolean; reason: string | null }>
   quota: { remaining: number; limit: number }
   limited: boolean
-  history: DetectiveSession[]
+  history: Omit<DetectiveSession, 'challenges'>[]
   total: number
 }
 

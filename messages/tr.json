@@ -142,11 +142,24 @@
     "abandon": "Oyunu bırak",
     "abandonDescription": "Oyun XP verilmeden kapanır ve kullanılan kota iade edilmez. Daha sonra devam etmek için iptal edip Geri düğmesini kullan.",
     "results": "Tespit: {detected}/5 · Düzeltme: {corrected}/5 · {xp} XP kazanıldı",
-    "xpRules": "Bitirmek için 5 XP, tamamen doğru her görev için 2 XP. Plan başına UTC gününde en fazla 45 XP. Ücretsiz oyun kotası diller arasında ortaktır.",
+    "xpRules": "Bitirmek için 5 XP, tamamen doğru her görev için 2 XP. Tüm oyunlar plan başına UTC gününde en fazla 45 XP sınırını paylaşır. Ücretsiz oyun kotası oyunlar ve diller arasında ortaktır.",
     "playAgain": "Tekrar oyna",
     "plan": "Planım"
   },
+  "sentenceOrder": {
+    "title": "Cümleyi sırala",
+    "rules": "Süre sınırı olmadan beş görevde parçaları ipucuna göre sırala. Her görevde bir yanıt gönderilir; Lingu çözümü açıklar ve doğru cümleyi dinleyebilirsin.",
+    "instructions": "Parçalara sırayla dokun. Yerleştirdiğin bir parçayı geri almak için ona dokun, ardından tamamlanan cümleyi kontrol et.",
+    "yourSentence": "Cümlen",
+    "emptySentence": "Başlamak için bir parça seç.",
+    "availableFragments": "Kullanılabilir parçalar",
+    "removeFragment": "{position}. parçayı geri al: {fragment}",
+    "check": "Cümleyi kontrol et",
+    "results": "Doğru cümleler: {correct}/5 · Kazanılan XP: {xp}"
+  },
   "games": {
+    "sentenceOrderTitle": "Cümleyi sırala",
+    "sentenceOrderDescription": "Karışık parçalardan cümleler kur, ipuçları ve sesle kelime sırasını çalış.",
     "detectiveTitle": "Hata Dedektifi",
     "detectiveDescription": "Öğrenimine uyarlanmış kısa cümlelerdeki hataları bul ve düzelt.",
     "title": "Oyunlar",

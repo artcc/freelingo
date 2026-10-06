@@ -142,11 +142,24 @@
     "abandon": "Spiel abbrechen",
     "abandonDescription": "Das Spiel wird ohne XP beendet. Das verbrauchte Kontingent wird nicht erstattet. Um später fortzufahren, schließe diesen Dialog und wähle Zurück.",
     "results": "Erkennung: {detected}/5 · Korrektur: {corrected}/5 · {xp} XP erhalten",
-    "xpRules": "5 XP fürs Abschließen und 2 pro vollständig richtiger Aufgabe. Maximal 45 XP pro Plan und UTC-Tag. Das kostenlose Spielkontingent gilt sprachübergreifend.",
+    "xpRules": "5 XP fürs Abschließen und 2 pro vollständig richtiger Aufgabe. Alle Spiele teilen sich maximal 45 XP pro Plan und UTC-Tag. Das kostenlose Kontingent gilt spiel- und sprachübergreifend.",
     "playAgain": "Erneut spielen",
     "plan": "Mein Plan"
   },
+  "sentenceOrder": {
+    "title": "Ordne den Satz",
+    "rules": "Ordne die Satzteile passend zum Hinweis in fünf Aufgaben ohne Zeitlimit. Eine Antwort pro Aufgabe; Lingu erklärt die Lösung und du kannst den richtigen Satz anhören.",
+    "instructions": "Tippe die Satzteile in der richtigen Reihenfolge an. Tippe einen platzierten Teil an, um ihn zurückzulegen, und prüfe den vollständigen Satz.",
+    "yourSentence": "Dein Satz",
+    "emptySentence": "Wähle einen Satzteil, um zu beginnen.",
+    "availableFragments": "Verfügbare Satzteile",
+    "removeFragment": "Satzteil {position} zurücklegen: {fragment}",
+    "check": "Satz prüfen",
+    "results": "Richtige Sätze: {correct}/5 · {xp} XP verdient"
+  },
   "games": {
+    "sentenceOrderTitle": "Ordne den Satz",
+    "sentenceOrderDescription": "Bilde Sätze aus gemischten Satzteilen und übe die Wortstellung mit Hinweisen und Audio.",
     "detectiveTitle": "Fehlerdetektiv",
     "detectiveDescription": "Finde und korrigiere Fehler in kurzen Sätzen, die zu deinem Lernstand passen.",
     "title": "Spiele",
