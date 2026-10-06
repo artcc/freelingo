@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "model": "lingu.glb",
   "format": "glTF 2.0 binary",
-  "sha256": "808a56c3705628b77674c323c2b8255ac879bf9e5c317652e28de8c9614e9d4b",
+  "sha256": "42d5e8bebdbb7f915b830d731accc20b7c3e7357268babd7e39115edfea9f935",
   "source": "Lingu.blend",
   "fps": 24,
   "upAxis": "+Y",
@@ -139,6 +139,15 @@
       "sourceFrameStart": 1,
       "sourceFrameEnd": 72,
       "closingKeyframe": 73
+    },
+    {
+      "name": "six_seven",
+      "sourceAction": "SIX SEVEN | 5 segundos",
+      "durationSeconds": 5.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 120,
+      "closingKeyframe": 121
     }
   ],
   "facialAnimation": {
