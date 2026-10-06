@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Fixed
 
+- The landing reveals animated Lingu and its language circle together once the first frame is ready, avoiding a preliminary PNG and preserving layout space during loading. Reduced motion and loading failures retain static artwork.
 - Audio retries remain synchronized with playback when a media error also rejects the play request; obsolete recovery timers no longer reset an active retry.
 
 ## [1.9.30] - 2026-10-05

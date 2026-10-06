@@ -313,22 +313,6 @@ html[data-theme='light'] {
   }
 }
 
-@keyframes bubble-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 .animate-float {
   animation: float 3s ease-in-out infinite;
-}
-
-.animate-bubble-in {
-  animation: bubble-in 0.4s ease-out forwards;
-  opacity: 0;
 }

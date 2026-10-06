@@ -193,7 +193,9 @@ It keeps one `components/lingu/LinguAvatar.tsx` mounted across steps. The avatar
 `LinguScene.tsx` and Three.js only when visible and motion is allowed. The fixed-camera scene frames
 sampled animation bounds, cross-fades clips, caps pixel ratio, pauses animation updates in hidden tabs,
 and disposes its renderer, geometry, materials, and requests on unmount. Static Lingu artwork covers
-loading, reduced motion, and renderer/model failures.
+loading, reduced motion, and renderer/model failures. The optional `onReady` callback signals the
+first rendered animation frame or the resolved static fallback, after the browser's motion preference
+is known.
 
 `lib/lingu-playback.ts` manages the 250 ms transitions using the current effective weights of all
 contributing actions. Interrupted fades preserve contributing clip times and poses; actions that
@@ -213,9 +215,13 @@ catalog playback default for that instance. The tour currently selects only its 
 
 The landing's `LanguageBubbles` reuses `LinguAvatar` in the centered 140 × 140 px slot and repeats
 `saludo` with `loop`. Its transparent canvas lets the landing's light/dark background show
-through. The surrounding language positions and container dimensions remain stable. An optional
-`className` overrides the avatar's default responsive dimensions so other surfaces can size it to
-their own container. Loading, reduced motion, and failures retain the static image fallback.
+through. The avatar and language circle remain transparent and hidden from assistive technology
+until `onReady`, then fade in together without a preliminary PNG or staggered bubble entrances.
+The reserved space, surrounding language positions, and container dimensions remain stable.
+Bubble floating starts when the group is ready. Reduced motion disables the entrance transition
+and floating; reduced motion and loading failures reveal the group with static Lingu artwork.
+An optional `className` overrides the avatar's default responsive dimensions so other surfaces
+can size it to their own container.
 
 Tour audio uses `AudioPlayer` with a localized listen label, speaker icon, playback-state callback,
 and a 75-second request budget. Playback starts only on a click; replacement and unmount release
