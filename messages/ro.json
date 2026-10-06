@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Note despre cuvinte",
     "nativeHelpPractice": "Practică"
   },
+  "games": {
+    "title": "Jocuri",
+    "description": "Un spațiu pentru a consolida ce ai învățat și a continua să exersezi limbile prin jocuri scurte.",
+    "emptyTitle": "Pregătim primele jocuri",
+    "emptyDescription": "Nu există încă jocuri disponibile. Vom adăuga activități noi; între timp, poți continua să înveți cu planul tău de studiu.",
+    "goToPlan": "Mergi la planul meu"
+  },
   "nav": {
+    "games": "Jocuri",
     "home": "Acasă",
     "myPlan": "Planul meu",
     "progress": "Progres",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Exersează lecțiile cu Lingu",
@@ -1546,6 +1554,10 @@
       "desc": "Câștigă XP prin <bold>voce, chat, recapitulări spațiate de citire și ascultare și finalizarea unităților și nivelurilor</bold>. Panoul reînnoit evidențiază XP de astăzi, seria ta și activitatea recentă."
     },
     "entry3": {
+      "label": "Noua secțiune Jocuri",
+      "desc": "Un spațiu nou pentru a exersa limbile prin jocuri. Intră în Jocuri pentru a consulta activitățile disponibile; vom adăuga propuneri noi."
+    },
+    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

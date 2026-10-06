@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Woordnotities",
     "nativeHelpPractice": "Oefening"
   },
+  "games": {
+    "title": "Spellen",
+    "description": "Een plek om het geleerde te versterken en talen te blijven oefenen met korte spellen.",
+    "emptyTitle": "We bereiden de eerste spellen voor",
+    "emptyDescription": "Er zijn nog geen spellen beschikbaar. We zullen nieuwe activiteiten toevoegen; ondertussen kun je verder leren met je studieplan.",
+    "goToPlan": "Naar mijn plan"
+  },
   "nav": {
+    "games": "Spellen",
     "home": "Home",
     "myPlan": "Mijn plan",
     "progress": "Voortgang",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Begrepen",
     "entry1": {
       "label": "Oefen je lessen met Lingu",
@@ -1546,6 +1554,10 @@
       "desc": "Verdien XP met <bold>spraak, chat, gespreide lees- en luisterherhalingen en het afronden van onderdelen en niveaus</bold>. Je vernieuwde dashboard toont de XP van vandaag, je leerreeks en je recente activiteit."
     },
     "entry3": {
+      "label": "Nieuwe sectie Spellen",
+      "desc": "Een nieuwe plek om talen te oefenen met spellen. Ga naar Spellen om de beschikbare activiteiten te bekijken; we zullen nieuwe toevoegen."
+    },
+    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

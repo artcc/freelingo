@@ -36,6 +36,9 @@ UI translation catalogs live in the repository-root `messages/` directory.
 - `(auth)`: login, registration, onboarding, account recovery/verification, and billing-return pages
   under a shared layout. Onboarding and billing returns are included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
+- `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
+  Presentation metadata lives in `lib/games.ts`; an empty catalog shows localized guidance and a
+  link to My Plan. See `games.instructions.md` for the section's contract.
 - `(legal)`: terms and privacy pages with a minimal public layout.
 - `api/`: Next.js handlers that proxy chat SSE, TTS, STT, and conversation warmup to the backend.
 

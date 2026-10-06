@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Notas de palabras",
     "nativeHelpPractice": "Práctica"
   },
+  "games": {
+    "title": "Juegos",
+    "description": "Un espacio para reforzar lo aprendido y seguir practicando idiomas con partidas cortas.",
+    "emptyTitle": "Estamos preparando los primeros juegos",
+    "emptyDescription": "Todavía no hay juegos disponibles. Iremos añadiendo nuevas actividades; mientras tanto, puedes seguir aprendiendo en tu plan de estudio.",
+    "goToPlan": "Ir a mi plan"
+  },
   "nav": {
+    "games": "Juegos",
     "home": "Inicio",
     "myPlan": "Mi plan",
     "progress": "Progreso",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Entendido",
     "entry1": {
       "label": "Practica tus lecciones con Lingu",
@@ -1546,6 +1554,10 @@
       "desc": "Gana XP con <bold>voz, chat, repasos espaciados de lectura y escucha y al completar unidades y niveles</bold>. El dashboard renovado destaca los XP de hoy, tu racha y tu actividad reciente."
     },
     "entry3": {
+      "label": "Nueva sección de juegos",
+      "desc": "Un nuevo espacio para practicar idiomas con juegos. Entra en Juegos para consultar las actividades disponibles; iremos incorporando nuevas propuestas."
+    },
+    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

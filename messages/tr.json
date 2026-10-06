@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Kelime notları",
     "nativeHelpPractice": "Pratik"
   },
+  "games": {
+    "title": "Oyunlar",
+    "description": "Öğrendiklerini pekiştirmek ve kısa oyunlarla dil pratiğine devam etmek için bir alan.",
+    "emptyTitle": "İlk oyunları hazırlıyoruz",
+    "emptyDescription": "Henüz kullanıma hazır oyun yok. Yeni etkinlikler ekleyeceğiz; bu sırada çalışma planınla öğrenmeye devam edebilirsin.",
+    "goToPlan": "Planıma git"
+  },
   "nav": {
+    "games": "Oyunlar",
     "home": "Ana sayfa",
     "myPlan": "Planım",
     "progress": "İlerleme",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Anladım",
     "entry1": {
       "label": "Derslerini Lingu ile pekiştir",
@@ -1546,6 +1554,10 @@
       "desc": "<bold>Sesli konuşma, sohbet, aralıklı okuma ve dinleme tekrarları ile ünite ve seviye tamamlama</bold> sayesinde XP kazan. Yenilenen panel bugünkü XP’ni, serini ve son etkinliklerini öne çıkarır."
     },
     "entry3": {
+      "label": "Yeni Oyunlar bölümü",
+      "desc": "Oyunlarla dil pratiği yapmak için yeni bir alan. Mevcut etkinlikleri görmek için Oyunlar bölümüne göz at; yeni seçenekler ekleyeceğiz."
+    },
+    "entry4": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

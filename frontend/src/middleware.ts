@@ -14,6 +14,7 @@ const PROTECTED_ROUTES = [
   '/faq',
   '/feedback',
   '/flashcards',
+  '/games',
   '/grammar',
   '/lesson',
   '/listening',

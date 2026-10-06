@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Napomene o riječima",
     "nativeHelpPractice": "Vježba"
   },
+  "games": {
+    "title": "Igre",
+    "description": "Prostor za utvrđivanje naučenog i nastavak vježbanja jezika kroz kratke igre.",
+    "emptyTitle": "Pripremamo prve igre",
+    "emptyDescription": "Još nema dostupnih igara. Dodavat ćemo nove aktivnosti; u međuvremenu možeš nastaviti učiti uz svoj plan učenja.",
+    "goToPlan": "Idi na moj plan"
+  },
   "nav": {
+    "games": "Igre",
     "home": "Početna",
     "myPlan": "Moj plan",
     "progress": "Napredak",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Razumijem",
     "entry1": {
       "label": "Vježbaj lekcije s Linguom",
@@ -1546,6 +1554,10 @@
       "desc": "Osvoji XP uz <bold>glasovne razgovore, chat, razmaknuta ponavljanja čitanja i slušanja te završavanje jedinica i razina</bold>. Osvježena nadzorna ploča ističe današnji XP, tvoj niz i nedavnu aktivnost."
     },
     "entry3": {
+      "label": "Novi odjeljak Igre",
+      "desc": "Novi prostor za vježbanje jezika kroz igre. Posjeti Igre i pogledaj dostupne aktivnosti; dodavat ćemo nove prijedloge."
+    },
+    "entry4": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

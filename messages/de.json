@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Worthinweise",
     "nativeHelpPractice": "Übung"
   },
+  "games": {
+    "title": "Spiele",
+    "description": "Ein Bereich, um Gelerntes zu festigen und mit kurzen Spielen weiter Sprachen zu üben.",
+    "emptyTitle": "Wir bereiten die ersten Spiele vor",
+    "emptyDescription": "Es sind noch keine Spiele verfügbar. Wir werden neue Aktivitäten hinzufügen. Bis dahin kannst du mit deinem Lernplan weiterlernen.",
+    "goToPlan": "Zu meinem Plan"
+  },
   "nav": {
+    "games": "Spiele",
     "home": "Startseite",
     "myPlan": "Mein Plan",
     "progress": "Fortschritt",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Verstanden",
     "entry1": {
       "label": "Übe deine Lektionen mit Lingu",
@@ -1546,6 +1554,10 @@
       "desc": "Sammle XP mit <bold>Sprachgesprächen, Chats, zeitversetzten Lese- und Hörwiederholungen sowie abgeschlossenen Einheiten und Niveaus</bold>. Das überarbeitete Dashboard zeigt deine heutigen XP, deine Lernserie und deine letzten Aktivitäten."
     },
     "entry3": {
+      "label": "Neuer Spielebereich",
+      "desc": "Ein neuer Bereich, um Sprachen spielerisch zu üben. Unter Spiele findest du die verfügbaren Aktivitäten. Wir werden weitere Angebote hinzufügen."
+    },
+    "entry4": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

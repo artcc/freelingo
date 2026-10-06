@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Sanojen huomioita",
     "nativeHelpPractice": "Harjoitus"
   },
+  "games": {
+    "title": "Pelit",
+    "description": "Paikka, jossa voit vahvistaa oppimaasi ja jatkaa kielten harjoittelua lyhyillä peleillä.",
+    "emptyTitle": "Valmistelemme ensimmäisiä pelejä",
+    "emptyDescription": "Pelejä ei ole vielä saatavilla. Lisäämme uusia tehtäviä; sillä välin voit jatkaa opiskelua oman opiskelusuunnitelmasi mukaan.",
+    "goToPlan": "Siirry omaan suunnitelmaan"
+  },
   "nav": {
+    "games": "Pelit",
     "home": "Etusivu",
     "myPlan": "Oma suunnitelma",
     "progress": "Edistyminen",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Selvä",
     "entry1": {
       "label": "Harjoittele oppitunteja Lingun kanssa",
@@ -1546,6 +1554,10 @@
       "desc": "Ansaitse XP:tä <bold>puheesta, chatista, hajautetuista luku- ja kuuntelukertauksista sekä osioiden ja tasojen suorittamisesta</bold>. Uudistettu näkymä korostaa päivän XP:tä, oppimisputkeasi ja viimeaikaista toimintaasi."
     },
     "entry3": {
+      "label": "Uusi Pelit-osio",
+      "desc": "Uusi paikka kielten harjoitteluun pelien avulla. Käy Pelit-osiossa katsomassa saatavilla olevat tehtävät; lisäämme uusia vaihtoehtoja."
+    },
+    "entry4": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }
