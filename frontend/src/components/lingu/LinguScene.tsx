@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import {
-  ACESFilmicToneMapping,
   AnimationMixer,
   Box3,
   DirectionalLight,
   HemisphereLight,
   Mesh,
+  NeutralToneMapping,
   OrthographicCamera,
   Scene,
   Vector3,
@@ -35,19 +35,20 @@ export default function LinguScene({
   animation,
   loop,
   onFinished,
+  onReady,
   onError,
 }: LinguSceneProps) {
   const hostRef = useRef<HTMLDivElement>(null)
   const controlRef = useRef<
     ((name: LinguAnimation, loop?: boolean) => void) | null
   >(null)
-  const callbacks = useRef({ animation, loop, onFinished, onError })
+  const callbacks = useRef({ animation, loop, onFinished, onReady, onError })
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    callbacks.current = { animation, loop, onFinished, onError }
+    callbacks.current = { animation, loop, onFinished, onReady, onError }
     controlRef.current?.(animation, loop)
-  }, [animation, loop, onFinished, onError])
+  }, [animation, loop, onFinished, onReady, onError])
 
   useEffect(() => {
     const host = hostRef.current
@@ -75,8 +76,8 @@ export default function LinguScene({
         })
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
         renderer.setClearColor(0, 0)
-        renderer.toneMapping = ACESFilmicToneMapping
-        renderer.toneMappingExposure = 1.25
+        renderer.toneMapping = NeutralToneMapping
+        renderer.toneMappingExposure = 0.9
         renderer.domElement.addEventListener('webglcontextlost', contextLost)
         host!.appendChild(renderer.domElement)
 
@@ -94,11 +95,12 @@ export default function LinguScene({
         model = gltf.scene
         const scene = new Scene()
         scene.add(model)
-        scene.add(new HemisphereLight(0xffffff, 0x527080, 3))
-        const key = new DirectionalLight(0xffffff, 4)
+        // Keep studio-style contrast without washing out Lingu's green enamel.
+        scene.add(new HemisphereLight(0xffffff, 0x527080, 0.45))
+        const key = new DirectionalLight(0xffffff, 1.8)
         key.position.set(5, 12, 10)
         scene.add(key)
-        const fill = new DirectionalLight(0xc5e4ff, 2)
+        const fill = new DirectionalLight(0xc5e4ff, 0.35)
         fill.position.set(-6, 7, 4)
         scene.add(fill)
         mixer = new AnimationMixer(model)
@@ -150,6 +152,7 @@ export default function LinguScene({
         controlRef.current(callbacks.current.animation, callbacks.current.loop)
 
         let lastTime = performance.now()
+        let ready = false
         const render = (now: number) => {
           if (disposed) return
           const delta = Math.min((now - lastTime) / 1000, 0.05)
@@ -158,11 +161,15 @@ export default function LinguScene({
             playback.update(delta)
             mixer!.update(delta)
             renderer!.render(scene, camera)
+            if (!ready) {
+              ready = true
+              setLoaded(true)
+              callbacks.current.onReady?.()
+            }
           }
           frame = requestAnimationFrame(render)
         }
         frame = requestAnimationFrame(render)
-        setLoaded(true)
       } catch {
         if (!disposed) callbacks.current.onError()
       }

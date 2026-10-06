@@ -1,9 +1,12 @@
+import hashlib
+import json
 import time
 
 import httpx
 import openai
 
 from app.core.app_logger import get_logger
+from app.services.prompts.speech import build_speech_instructions
 
 logger = get_logger(__name__)
 
@@ -58,11 +61,32 @@ class OpenAITTSService:
         """Raise if OpenAI TTS is unreachable (lightweight models list call)."""
         await self._client.models.list()
 
+    def get_instructions(self, language: str | None = None) -> str | None:
+        if self.model == "gpt-4o-mini-tts" or self.model.startswith("gpt-4o-mini-tts-"):
+            return build_speech_instructions(language)
+        return None
+
+    def get_cache_key(
+        self, text: str, voice: str | None = None, language: str | None = None
+    ) -> str:
+        identity = {
+            "text": text,
+            "locale": language,
+            "provider": "openai",
+            "model": self.model,
+            "voice": voice or self.voice,
+            "speed": self.speed,
+            "format": "mp3",
+        }
+        instructions = self.get_instructions(language)
+        if instructions:
+            identity["instructions"] = instructions
+        return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+
     async def synthesize(
         self, text: str, voice: str | None = None, language: str | None = None
     ) -> bytes:
         """Call OpenAI TTS API and return MP3 audio bytes."""
-        _ = language
         text = text.strip()
         if not text:
             logger.warning("[tts-openai] Empty text received for synthesis")
@@ -84,6 +108,9 @@ class OpenAITTSService:
             "response_format": "mp3",
             "speed": self.speed,
         }
+        instructions = self.get_instructions(language)
+        if instructions:
+            request_payload["instructions"] = instructions
         if self.timeout is not None:
             request_payload["timeout"] = self.timeout
 

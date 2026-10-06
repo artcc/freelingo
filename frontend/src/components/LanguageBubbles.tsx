@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
@@ -16,6 +16,8 @@ function circlePosition(index: number, total: number, radius: number) {
 export function LanguageBubbles() {
   const t = useTranslations('landing')
   const tTarget = useTranslations('targetLanguages')
+  const [ready, setReady] = useState(false)
+  const onReady = useCallback(() => setReady(true), [])
   const positions = useMemo(
     () =>
       SUPPORTED_TARGET_LANGUAGES.map((_, i) =>
@@ -25,13 +27,21 @@ export function LanguageBubbles() {
   )
 
   return (
-    <div className="relative h-[360px] w-full sm:h-[380px]">
+    <div
+      aria-hidden={!ready}
+      className={`relative h-[360px] w-full transition-opacity duration-300 motion-reduce:transition-none sm:h-[380px] ${ready ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+    >
       <div
         className="absolute top-1/2 left-1/2 z-[1] h-[140px] w-[140px] -translate-x-1/2 -translate-y-1/2"
         role="img"
         aria-label="FreeLingo"
       >
-        <LinguAvatar animation="saludo" loop className="h-full w-full" />
+        <LinguAvatar
+          animation="saludo"
+          loop
+          onReady={onReady}
+          className="h-full w-full"
+        />
       </div>
 
       {SUPPORTED_TARGET_LANGUAGES.map((lang, i) => {
@@ -49,10 +59,11 @@ export function LanguageBubbles() {
             }}
           >
             <div
-              className="animate-float animate-bubble-in w-max"
+              className="animate-float w-max motion-reduce:animate-none"
               style={{
-                animationDelay: `${delay}s, ${delay}s`,
-                animationDuration: '3.4s, 0.4s',
+                animationDelay: `${delay}s`,
+                animationDuration: '3.4s',
+                animationPlayState: ready ? 'running' : 'paused',
               }}
             >
               <div className="border-fl-border bg-fl-surface flex items-center gap-1.5 rounded-full border px-2.5 py-1 shadow-sm transition-shadow hover:shadow-md">

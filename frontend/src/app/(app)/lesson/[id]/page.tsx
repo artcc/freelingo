@@ -679,7 +679,11 @@ export default function LessonPage() {
                             >
                               {ex.sentence}
                             </TargetLanguageText>
-                            <AudioPlayer text={ex.sentence} size="sm" />
+                            <AudioPlayer
+                              text={ex.sentence}
+                              studyPlanId={lesson?.study_plan_id}
+                              size="sm"
+                            />
                           </div>
                           {ex.note && (
                             <p className="text-fl-muted-1 mt-0.5 font-sans text-sm leading-relaxed">
@@ -1008,7 +1012,11 @@ export default function LessonPage() {
                     >
                       {exercise.correct_answer}
                     </TargetLanguageText>
-                    <AudioPlayer text={exercise.correct_answer} size="md" />
+                    <AudioPlayer
+                      text={exercise.correct_answer}
+                      studyPlanId={lesson?.study_plan_id}
+                      size="md"
+                    />
                   </div>
                   {exercise.options?.[0] && (
                     <TargetLanguageText
@@ -1294,7 +1302,11 @@ export default function LessonPage() {
                         )}
                       </div>
                       {item.example && (
-                        <AudioPlayer text={item.example} size="sm" />
+                        <AudioPlayer
+                          text={item.example}
+                          studyPlanId={lesson?.study_plan_id}
+                          size="sm"
+                        />
                       )}
                     </div>
                     {item.definition && (

@@ -983,7 +983,7 @@ async def test_process_discards_partial_text_after_tool_stream_reset() -> None:
     pipeline.tts.synthesize.assert_awaited_once_with(
         "Complete normal response.",
         None,
-        "en",
+        "en-GB",
     )
     assistant_transcripts = [
         message
@@ -993,6 +993,17 @@ async def test_process_discards_partial_text_after_tool_stream_reset() -> None:
     assert assistant_transcripts[0]["text"] == "Complete normal response."
     assert pipeline.history[-1]["content"] == "Complete normal response."
     assert ws.types().count("memory_updated") == 1
+
+
+@pytest.mark.parametrize("language", ["en-GB", "en-US", "pt-PT"])
+async def test_tts_preserves_regional_language_while_stt_uses_iso(language):
+    pipeline = _make_pipeline(target_language=language)
+    pipeline.tts.synthesize = AsyncMock(return_value=b"audio")
+
+    assert await pipeline._synthesize_chunk("Hello.") == b"audio"
+
+    pipeline.tts.synthesize.assert_awaited_once_with("Hello.", None, language)
+    assert pipeline._stt_language == language.split("-")[0]
 
 
 @pytest.mark.asyncio

@@ -17,10 +17,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
+- The default OpenAI TTS voice is now `fable`. Existing user-selected voices continue to take precedence.
 - The renewed onboarding tour is shown again for browsers that completed the previous tour, using a dedicated 1.10.0 completion key. Pending What's New announcements follow on the next dashboard visit after completing or skipping the tour.
 
 ### Fixed
 
+- OpenAI speech synthesis with `gpt-4o-mini-tts` uses native-pronunciation instructions across the application, with explicit regional guidance when the language is available. Tour, phrasebook, and voice-preview caches distinguish the instructions; legacy OpenAI models remain compatible.
+- Lesson, flashcard, vocabulary, game, and chat audio uses its persisted plan/conversation language, preserving regional pronunciation such as American English. Audio without language context no longer forces a regional accent, and Phrasebook playback and Settings voice previews bypass stale browser audio while retaining their server caches.
+- The landing reveals animated Lingu and its language circle together once the first frame is ready, avoiding a preliminary PNG and preserving layout space during loading. Reduced motion and loading failures retain static artwork.
 - Audio retries remain synchronized with playback when a media error also rejects the play request; obsolete recovery timers no longer reset an active retry.
 
 ## [1.9.30] - 2026-10-05

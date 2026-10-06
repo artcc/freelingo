@@ -283,7 +283,7 @@ class ConversationPipeline:
                     attempt,
                     attempts,
                 )
-                audio = await self.tts.synthesize(text, self._voice or None, self._stt_language)
+                audio = await self.tts.synthesize(text, self._voice or None, self._target_language)
                 if not audio:
                     raise RuntimeError("TTS returned empty audio payload")
                 return audio

@@ -25,16 +25,19 @@ async def get_tour_audio(
 ) -> Path:
     is_openai = isinstance(service, OpenAITTSService)
     effective_voice = (voice or service.voice) if is_openai else service.voice
-    identity = {
-        "text": text,
-        "locale": locale,
-        "provider": "openai" if is_openai else "local",
-        "model": service.model if is_openai else "kokoro",
-        "voice": effective_voice,
-        "speed": service.speed if is_openai else 1.0,
-        "format": "mp3",
-    }
-    key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+    if is_openai:
+        key = service.get_cache_key(text, effective_voice, locale)
+    else:
+        identity = {
+            "text": text,
+            "locale": locale,
+            "provider": "local",
+            "model": "kokoro",
+            "voice": effective_voice,
+            "speed": 1.0,
+            "format": "mp3",
+        }
+        key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
     directory = Path(settings.AUDIO_STORAGE_PATH) / "tour" / locale
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / f"{key}.mp3"

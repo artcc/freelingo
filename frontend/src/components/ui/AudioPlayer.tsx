@@ -12,6 +12,8 @@ const ttsLogger = getLogger('tts')
 interface AudioPlayerProps {
   text: string
   voice?: string
+  studyPlanId?: number
+  conversationId?: number
   size?: 'sm' | 'md'
   className?: string
   /** Custom audio endpoint; uses GET unless audioMethod is overridden. */
@@ -38,6 +40,8 @@ function storedVoice() {
 export function AudioPlayer({
   text,
   voice,
+  studyPlanId,
+  conversationId,
   size = 'sm',
   className = '',
   audioUrl,
@@ -79,7 +83,15 @@ export function AudioPlayer({
       if (recoveryRef.current) clearTimeout(recoveryRef.current)
       releaseAudio()
     }
-  }, [text, audioUrl, audioMethod, resolvedVoice, releaseAudio])
+  }, [
+    text,
+    audioUrl,
+    audioMethod,
+    resolvedVoice,
+    studyPlanId,
+    conversationId,
+    releaseAudio,
+  ])
 
   useEffect(() => {
     onStateChange?.(state)
@@ -131,6 +143,7 @@ export function AudioPlayer({
                   : {}),
               },
               credentials: 'include' as RequestCredentials,
+              cache: 'no-store',
               signal: controller.signal,
             }
           : {
@@ -142,7 +155,12 @@ export function AudioPlayer({
                   ? { Authorization: `Bearer ${accessToken}` }
                   : {}),
               },
-              body: JSON.stringify({ text, voice: resolvedVoice }),
+              body: JSON.stringify({
+                text,
+                voice: resolvedVoice,
+                study_plan_id: studyPlanId,
+                conversation_id: conversationId,
+              }),
               signal: controller.signal,
             }
       )

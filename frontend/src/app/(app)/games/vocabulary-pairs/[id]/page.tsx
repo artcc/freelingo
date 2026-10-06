@@ -295,7 +295,11 @@ export default function VocabularyPairsSessionPage() {
                   >
                     {c.term}
                   </TargetLanguageText>
-                  <AudioPlayer text={c.term} size="sm" />
+                  <AudioPlayer
+                    text={c.term}
+                    studyPlanId={session.study_plan_id}
+                    size="sm"
+                  />
                   <span lang={session.native_language}>
                     {session.meanings.find((m) => m.index === c.choice)?.text}
                   </span>

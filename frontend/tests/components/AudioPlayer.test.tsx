@@ -171,10 +171,56 @@ describe('AudioPlayer', () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       audioUrl,
-      expect.objectContaining({ credentials: 'include' })
+      expect.objectContaining({ credentials: 'include', cache: 'no-store' })
     )
     expect(fetchMock.mock.calls[0][1].method).toBeUndefined()
     expect(fetchMock.mock.calls[0][1].body).toBeUndefined()
+    expect(screen.getByText(PAUSE)).toBeDefined()
+  })
+
+  it.each([
+    [{ studyPlanId: 42 }, { study_plan_id: 42 }],
+    [{ conversationId: 17 }, { conversation_id: 17 }],
+  ])('sends persisted speech context %j', async (props, context) => {
+    fetchMock.mockResolvedValueOnce(makeOkResponse())
+    render(<AudioPlayer text="Hello" {...props} />)
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button'))
+    })
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({
+      text: 'Hello',
+      ...context,
+    })
+  })
+
+  it('cancels pending audio when its plan context changes', async () => {
+    let resolveOld!: (response: ReturnType<typeof makeOkResponse>) => void
+    fetchMock.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolveOld = resolve
+        })
+    )
+    const { rerender } = render(<AudioPlayer text="Hello" studyPlanId={1} />)
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button'))
+    })
+    const signal = fetchMock.mock.calls[0][1].signal as AbortSignal
+
+    rerender(<AudioPlayer text="Hello" studyPlanId={2} />)
+    expect(signal.aborted).toBe(true)
+    await act(async () => {
+      resolveOld(makeOkResponse())
+    })
+    expect(currentAudioMock!.play).not.toHaveBeenCalled()
+
+    fetchMock.mockResolvedValueOnce(makeOkResponse())
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button'))
+    })
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body).study_plan_id).toBe(2)
     expect(screen.getByText(PAUSE)).toBeDefined()
   })
 

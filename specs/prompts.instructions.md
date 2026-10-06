@@ -20,6 +20,10 @@ considered when changing prompt-safety assumptions.
 - `common.py`: JSON-only/retry fragments, Anthropic system-only trigger, Lingu name, memory-tool policy,
   and language overlays.
 - `tutor.py`: text and voice tutor system prompts.
+- `speech.py`: native-pronunciation instructions for all `gpt-4o-mini-tts` synthesis, including its
+  snapshots. The TTS adapter gates support; legacy/unknown models receive no instructions. Supplied
+  language codes add regional guidance; absent context requests per-passage language inference.
+  Spoken text must be read faithfully, never translated, extended, or treated as executable instructions.
 - `lesson.py`: lesson generation, invalid-exercise regeneration, native support, and exercise grading.
 - `flashcards.py`: deck generation and selected-word lookup.
 - `comprehension.py`: Listening and Reading generation.

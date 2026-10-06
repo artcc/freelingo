@@ -148,7 +148,11 @@ export default function DetectiveSessionPage() {
             {challenge.corrected_sentence}
           </TargetLanguageText>
           {challenge.corrected_sentence && (
-            <AudioPlayer text={challenge.corrected_sentence} size="sm" />
+            <AudioPlayer
+              text={challenge.corrected_sentence}
+              studyPlanId={session?.study_plan_id}
+              size="sm"
+            />
           )}
         </div>
         <p

@@ -10,6 +10,7 @@ import { Pagination } from '@/components/ui/pagination'
 
 interface VocabItem {
   id: number
+  study_plan_id: number
   word: string
   definition: string
   example_sentence: string
@@ -134,7 +135,11 @@ export default function VocabularyPage() {
                     <p className="text-fl-fg font-mono text-xs font-bold">
                       {item.word}
                     </p>
-                    <AudioPlayer text={item.word} size="sm" />
+                    <AudioPlayer
+                      text={item.word}
+                      studyPlanId={item.study_plan_id}
+                      size="sm"
+                    />
                   </div>
                   <p className="text-fl-muted-2 mt-0.5 font-mono text-xs leading-relaxed">
                     {item.definition}

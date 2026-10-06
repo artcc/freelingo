@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useSyncExternalStore } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import type { LinguAnimation } from '@/lib/lingu'
@@ -11,10 +11,15 @@ export interface LinguSceneProps {
   animation: LinguAnimation
   loop?: boolean
   onFinished?: () => void
+  onReady?: () => void
   onError: () => void
 }
 
-function Placeholder() {
+function Placeholder({ onReady }: { onReady?: () => void }) {
+  useEffect(() => {
+    onReady?.()
+  }, [onReady])
+
   return (
     <Image
       src="/logo.png"
@@ -28,7 +33,7 @@ function Placeholder() {
 
 const Scene = dynamic<LinguSceneProps>(
   () => import('./LinguScene').catch(() => ({ default: Placeholder })),
-  { ssr: false, loading: Placeholder }
+  { ssr: false, loading: () => <Placeholder /> }
 )
 
 function subscribe(callback: () => void) {
@@ -41,24 +46,28 @@ export default function LinguAvatar({
   animation,
   loop,
   onFinished,
+  onReady,
   className = 'h-44 w-44 sm:h-52 sm:w-52 md:h-80 md:w-full',
 }: Omit<LinguSceneProps, 'onError'> & { className?: string }) {
   const [failed, setFailed] = useState(false)
   const reducedMotion = useSyncExternalStore(
     subscribe,
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    () => true
+    () => null
   )
 
   return (
     <div aria-hidden="true" className={`relative mx-auto ${className}`}>
-      {reducedMotion || failed ? (
+      {reducedMotion === null ? (
         <Placeholder />
+      ) : reducedMotion || failed ? (
+        <Placeholder onReady={onReady} />
       ) : (
         <Scene
           animation={animation}
           loop={loop}
           onFinished={onFinished}
+          onReady={onReady}
           onError={() => setFailed(true)}
         />
       )}
