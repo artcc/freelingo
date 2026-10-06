@@ -108,7 +108,15 @@
     "nativeHelpWordNotes": "Anteckningar om ord",
     "nativeHelpPractice": "Övning"
   },
+  "games": {
+    "title": "Spel",
+    "description": "En plats för att befästa det du har lärt dig och fortsätta öva språk med korta spel.",
+    "emptyTitle": "Vi förbereder de första spelen",
+    "emptyDescription": "Det finns inga spel tillgängliga ännu. Vi kommer att lägga till nya aktiviteter; under tiden kan du fortsätta lära dig med din studieplan.",
+    "goToPlan": "Gå till min plan"
+  },
   "nav": {
+    "games": "Spel",
     "home": "Hem",
     "myPlan": "Min plan",
     "progress": "Framsteg",
@@ -1535,7 +1543,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.9.30",
+    "version": "v1.9.35",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Öva på dina lektioner med Lingu",
@@ -1546,6 +1554,10 @@
       "desc": "Tjäna XP genom <bold>röstsamtal, chatt, utspridda läs- och hörrepetitioner samt avslutade avsnitt och nivåer</bold>. Den förnyade översikten lyfter fram dagens XP, din svit och din senaste aktivitet."
     },
     "entry3": {
+      "label": "Ny spelsektion",
+      "desc": "En ny plats för att öva språk genom spel. Besök Spel för att se tillgängliga aktiviteter; vi kommer att lägga till nya alternativ."
+    },
+    "entry4": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

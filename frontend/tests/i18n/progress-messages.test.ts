@@ -4,7 +4,7 @@ import { SUPPORTED_LOCALES } from '@/lib/locales'
 import en from '../../../messages/en.json'
 
 describe.each(SUPPORTED_LOCALES)('progress messages in %s', (locale) => {
-  it('renders progress metrics and the three ordered release entries', async () => {
+  it('renders progress metrics, games guidance, and the four ordered release entries', async () => {
     const messages = (await import(`../../../messages/${locale}.json`)).default
     const t = createTranslator({
       locale,
@@ -28,10 +28,22 @@ describe.each(SUPPORTED_LOCALES)('progress messages in %s', (locale) => {
     }
     expect(
       Object.keys(messages.whatsNew).filter((key) => /^entry\d+$/.test(key))
-    ).toEqual(['entry1', 'entry2', 'entry3'])
+    ).toEqual(['entry1', 'entry2', 'entry3', 'entry4'])
+    for (const key of [
+      'nav.games',
+      ...Object.keys(en.games).map((key) => `games.${key}`),
+      'whatsNew.entry3.label',
+      'whatsNew.entry3.desc',
+      'whatsNew.entry4.label',
+      'whatsNew.entry4.desc',
+    ]) {
+      const text = t(key)
+      expect(text.trim()).not.toBe('')
+      expect(text).not.toBe(key)
+    }
     expect(
       t.markup('whatsNew.entry2.desc', { bold: (chunks) => chunks })
     ).toContain('XP')
-    expect(messages.whatsNew.version).toBe('v1.9.30')
+    expect(messages.whatsNew.version).toBe('v1.9.35')
   })
 })
