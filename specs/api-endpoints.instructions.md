@@ -32,7 +32,7 @@ return 404. Session language and XP ownership come from their persisted plan, no
 Session endpoints also resolve owned creation request UUIDs to their canonical session; the response
 always contains the canonical ID. A request whose session was deleted returns 404.
 
-- **GET `/{game_type}`** — `game_type` is `detective` or `sentence-order`; other values return 422.
+- **GET `/{game_type}`** — `game_type` is `detective`, `sentence-order` or `vocabulary-pairs`; other values return 422.
   60/min. Requires an active plan. Returns plan ID/language/level, availability
   and reason for `review`, `prepare`, `free`, global `quota: {remaining, limit}`, `limited`, `history`
   and `total`. History is filtered by game type and includes all plans in the active language;
@@ -55,6 +55,11 @@ always contains the canonical ID. A request whose session was deleted returns 40
   `step: "order"`, `order` (3–12 strict integer indices, a permutation of every fragment).
   Requires the next unanswered step. Same-answer retries return stored state; changed answers or
   out-of-order steps return 409; invalid indices/permutations or the wrong game's answer shape return 422.
+  Vocabulary Pairs body: `step: "match"`, `attempt` (strict integer 0–24), `challenge` and `choice`
+  (strict integers 0–4). Pairs may be solved in any order, but attempt numbers must be sequential
+  from zero. Exact retries return current state. Reusing an attempt number with different choices,
+  skipping an attempt number, selecting a solved item or resubmitting a previously tried combination
+  returns 409. Incorrect matches persist and allow further attempts with other combinations.
 - **POST `/sessions/{id}/abandon`** — 10/min. Closes a ready game without XP or quota refund;
   terminal retries are idempotent. A generating game returns 409.
 
@@ -66,6 +71,11 @@ Sentence Order challenges expose `index`, native `clue`, shuffled `fragments`, `
 `" "`) and nullable submitted `order`. Only after answering do they expose `correct`,
 `corrected_sentence` (the accepted submitted variant when correct, otherwise the canonical solution)
 and `explanation`. Accepted orders, source IDs and canonical sentences are private before answering.
+Vocabulary Pairs exposes `challenges: [{index, term, matched}]`, an independently ordered
+`meanings: [{index, text}]` list and chronological `attempts: [{attempt, challenge, choice, correct}]`.
+Solved challenges additionally expose `choice` and `assisted`. Only completed games expose each
+challenge's `sentence` and `translation`. Unmatched correspondence indices, assistance flags and
+source IDs remain private; failed attempts never reveal the solution.
 
 ---
 

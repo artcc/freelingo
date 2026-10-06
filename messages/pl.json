@@ -157,7 +157,27 @@
     "check": "Sprawdź zdanie",
     "results": "Poprawne zdania: {correct}/5 · Zdobyte XP: {xp}"
   },
+  "vocabularyPairs": {
+    "title": "Pary słówek",
+    "rules": "Połącz pięć słów lub wyrażeń z ich znaczeniami. Bez limitu czasu i żyć; próbuj, aż znajdziesz wszystkie pary.",
+    "instructions": "Wybierz po jednym elemencie z każdej kolumny i sprawdź parę. Przed sprawdzeniem możesz zmienić wybór.",
+    "terms": "Słowa",
+    "meanings": "Znaczenia",
+    "check": "Sprawdź parę",
+    "progress": "Znalezione pary: {count}/5",
+    "matched": "Znalezione pary",
+    "matchCorrect": "Poprawna para:",
+    "matchIncorrect": "Te elementy nie pasują. Obie pary tracą premię za pierwszą próbę:",
+    "alreadyTried": "Ta kombinacja była już sprawdzona. Wybierz inną.",
+    "firstTry": "Za pierwszym razem",
+    "withHelp": "Przećwiczone z pomocą",
+    "results": "Pary za pierwszym razem: {correct}/5 · Zdobyte XP: {xp}",
+    "freeDescription": "Ćwicz słownictwo na poziomie swojego obecnego planu.",
+    "xpRules": "5 XP za ukończenie i 2 za parę rozwiązaną bez błędów. Błąd usuwa premię obu powiązanych par. Wszystkie gry dzielą limit 45 XP na plan i dzień UTC oraz darmowy limit rozgrywek między językami."
+  },
   "games": {
+    "vocabularyPairsTitle": "Pary słówek",
+    "vocabularyPairsDescription": "Łącz słowa ze znaczeniami i powtarzaj je z nagraniami i przykładami.",
     "sentenceOrderTitle": "Ułóż zdanie",
     "sentenceOrderDescription": "Buduj zdania z pomieszanych fragmentów i ćwicz szyk wyrazów ze wskazówkami i nagraniami.",
     "detectiveTitle": "Detektyw błędów",

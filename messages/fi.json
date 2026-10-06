@@ -157,7 +157,27 @@
     "check": "Tarkista lause",
     "results": "Oikeita lauseita: {correct}/5 · Ansaittu XP: {xp}"
   },
+  "vocabularyPairs": {
+    "title": "Sanaparit",
+    "rules": "Yhdistä viisi sanaa tai ilmausta niiden merkityksiin. Ei aikarajaa tai elämiä; yritä, kunnes löydät kaikki parit.",
+    "instructions": "Valitse yksi kohde kummastakin sarakkeesta ja tarkista pari. Voit vaihtaa valintaa ennen tarkistusta.",
+    "terms": "Sanat",
+    "meanings": "Merkitykset",
+    "check": "Tarkista pari",
+    "progress": "Löydetyt parit: {count}/5",
+    "matched": "Löydetyt parit",
+    "matchCorrect": "Oikea pari:",
+    "matchIncorrect": "Nämä eivät kuulu yhteen. Molemmat parit menettävät ensimmäisen yrityksen bonuksen:",
+    "alreadyTried": "Olet jo kokeillut tätä yhdistelmää. Valitse toinen.",
+    "firstTry": "Ensimmäisellä yrityksellä",
+    "withHelp": "Harjoiteltu avun kanssa",
+    "results": "Pareja ensimmäisellä yrityksellä: {correct}/5 · Ansaittu XP: {xp}",
+    "freeDescription": "Harjoittele sanastoa nykyisen suunnitelmasi tasolla.",
+    "xpRules": "5 XP suorittamisesta ja 2 jokaisesta virheettömästä parista. Virhe poistaa molempien parien bonuksen. Kaikilla peleillä on yhteinen 45 XP:n raja suunnitelmaa ja UTC-päivää kohti sekä kielten yhteinen ilmainen pelikiintiö."
+  },
   "games": {
+    "vocabularyPairsTitle": "Sanaparit",
+    "vocabularyPairsDescription": "Yhdistä sanat merkityksiin ja kertaa äänen ja esimerkkien avulla.",
     "sentenceOrderTitle": "Järjestä lause",
     "sentenceOrderDescription": "Rakenna lauseita sekoitetuista osista ja harjoittele sanajärjestystä vihjeiden ja äänen avulla.",
     "detectiveTitle": "Virhe-etsivä",

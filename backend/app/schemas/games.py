@@ -5,7 +5,37 @@ from uuid import UUID
 from pydantic import BaseModel, Field, model_validator
 
 GameMode = Literal["review", "prepare", "free"]
-GameType = Literal["detective", "sentence-order"]
+GameType = Literal["detective", "sentence-order", "vocabulary-pairs"]
+
+
+class VocabularyPairAnswer(BaseModel):
+    step: Literal["match"]
+    attempt: int = Field(strict=True, ge=0, le=24)
+    challenge: int = Field(strict=True, ge=0, le=4)
+    choice: int = Field(strict=True, ge=0, le=4)
+
+
+class VocabularyPair(BaseModel):
+    term: str = Field(min_length=1, max_length=200)
+    meaning: str = Field(min_length=1, max_length=300)
+    sentence: str = Field(min_length=3, max_length=500)
+    translation: str = Field(min_length=3, max_length=500)
+    source_id: str = Field(min_length=1, max_length=100)
+
+
+class VocabularyPairsContent(BaseModel):
+    challenges: list[VocabularyPair] = Field(min_length=5, max_length=5)
+
+    @model_validator(mode="after")
+    def distinct_pairs(self) -> Self:
+        for field in ("term", "meaning"):
+            values = [
+                unicodedata.normalize("NFKC", getattr(c, field)).strip().casefold()
+                for c in self.challenges
+            ]
+            if any(not value for value in values) or len(set(values)) != 5:
+                raise ValueError("Five distinct nonempty terms and meanings are required")
+        return self
 
 
 class GameCreate(BaseModel):

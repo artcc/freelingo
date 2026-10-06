@@ -15,7 +15,13 @@ from app.core.limiter import limiter
 from app.models.game import GameSession
 from app.models.study_plan import StudyPlan
 from app.models.user import User
-from app.schemas.games import GameAnswer, GameCreate, GameType, SentenceOrderAnswer
+from app.schemas.games import (
+    GameAnswer,
+    GameCreate,
+    GameType,
+    SentenceOrderAnswer,
+    VocabularyPairAnswer,
+)
 from app.services.games import (
     answer_game,
     create_game,
@@ -50,7 +56,7 @@ async def game_catalog(
     await db.commit()
     modes = {}
     for mode in ("review", "prepare", "free"):
-        context = await source_context(db, plan, mode)
+        context = await source_context(db, plan, mode, game_type)
         modes[mode] = {"available": bool(context["sources"]), "reason": context.get("reason")}
     filters = (
         GameSession.user_id == user.id,
@@ -115,7 +121,7 @@ async def get_session(
 async def submit_answer(
     request: Request,
     session_id: UUID,
-    body: GameAnswer | SentenceOrderAnswer,
+    body: GameAnswer | SentenceOrderAnswer | VocabularyPairAnswer,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:

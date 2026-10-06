@@ -157,7 +157,27 @@
     "check": "Provjeri rečenicu",
     "results": "Točne rečenice: {correct}/5 · Osvojeni XP: {xp}"
   },
+  "vocabularyPairs": {
+    "title": "Parovi riječi",
+    "rules": "Poveži pet riječi ili izraza s njihovim značenjima. Bez vremenskog ograničenja i života; pokušavaj dok ne pronađeš sve parove.",
+    "instructions": "Odaberi po jedan element iz svakog stupca i provjeri par. Prije provjere možeš promijeniti odabir.",
+    "terms": "Riječi",
+    "meanings": "Značenja",
+    "check": "Provjeri par",
+    "progress": "Pronađeni parovi: {count}/5",
+    "matched": "Pronađeni parovi",
+    "matchCorrect": "Točan par:",
+    "matchIncorrect": "Ovi elementi ne odgovaraju. Oba para gube bonus za prvi pokušaj:",
+    "alreadyTried": "Već si pokušao ovu kombinaciju. Odaberi drugu.",
+    "firstTry": "Iz prvog pokušaja",
+    "withHelp": "Uvježbano uz pomoć",
+    "results": "Parovi iz prvog pokušaja: {correct}/5 · Osvojeni XP: {xp}",
+    "freeDescription": "Vježbaj vokabular na razini svojeg trenutačnog plana.",
+    "xpRules": "5 XP za završetak i 2 za svaki par bez pogreške. Pogreška uklanja bonus oba uključena para. Sve igre dijele ograničenje od 45 XP po planu i UTC danu te besplatnu kvotu među jezicima."
+  },
   "games": {
+    "vocabularyPairsTitle": "Parovi riječi",
+    "vocabularyPairsDescription": "Poveži riječi sa značenjima i ponavljaj uz zvuk i primjere.",
     "sentenceOrderTitle": "Složi rečenicu",
     "sentenceOrderDescription": "Sastavljaj rečenice od izmiješanih dijelova i vježbaj redoslijed riječi uz naznake i zvuk.",
     "detectiveTitle": "Detektiv pogrešaka",

@@ -20,4 +20,10 @@ export const availableGames: readonly GameDefinition[] = [
     titleKey: 'sentenceOrderTitle',
     descriptionKey: 'sentenceOrderDescription',
   },
+  {
+    id: 'vocabulary-pairs',
+    href: '/games/vocabulary-pairs',
+    titleKey: 'vocabularyPairsTitle',
+    descriptionKey: 'vocabularyPairsDescription',
+  },
 ]

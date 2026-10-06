@@ -1,6 +1,6 @@
 ---
-description: "Games catalog, Error Detective and Sentence Order: personalized generation, plan-owned sessions, quotas, rewards and audio."
-applyTo: "backend/app/{models/game,schemas/games,routers/games,services/games,services/prompts/games}.py, frontend/src/app/(app)/games/**, frontend/src/components/games/**, frontend/src/lib/{games,detective,sentence-order}.ts, messages/*.json"
+description: "Games catalog, Error Detective, Sentence Order and Vocabulary Pairs: personalized generation, plan-owned sessions, quotas, rewards and audio."
+applyTo: "backend/app/{models/game,schemas/games,routers/games,services/games,services/prompts/games}.py, frontend/src/app/(app)/games/**, frontend/src/components/games/**, frontend/src/lib/{games,detective,sentence-order,vocabulary-pairs}.ts, messages/*.json"
 ---
 
 # Games
@@ -17,8 +17,9 @@ The catalog page has no subscription restriction or Premium badge.
 stable ID, `/games/` route, and title/description keys in the `games` translation namespace.
 Only implemented games with working routes and translations belong in this list.
 
-The catalog links to Error Detective at `/games/error-detective` and Sentence Order at
-`/games/sentence-order`. Both use the existing shared catalog component. If no definitions are registered,
+The catalog links to Error Detective at `/games/error-detective`, Sentence Order at
+`/games/sentence-order` and Vocabulary Pairs at `/games/vocabulary-pairs`.
+All use the shared catalog component. If no definitions are registered,
 the existing localized empty state links to `/plan`. Navigation metadata is presentation only.
 
 ## Error Detective
@@ -63,6 +64,33 @@ the submitted variant if accepted, otherwise the canonical solution. Solutions a
 are never exposed before submission. Results show submitted mistakes for review; only correct text
 is sent to the shared audio player.
 
+## Vocabulary Pairs
+
+A game has five target-language terms or short expressions and five native-language meanings in
+independently shuffled columns. No timer or lives apply. Learners select one item from each column
+with keyboard-operable buttons, may change their selection, then explicitly check the pair.
+Pairs can be solved in any order. A correct pair is disabled in both columns and its term can be
+played through `AudioPlayer`. An incorrect combination leaves both items available for other matches.
+Previously tried combinations cannot be submitted again as new attempts.
+
+Each private pair stores its term, meaning, target-language example sentence, native translation,
+source ID and randomized meaning index. Structural validation requires exactly five distinct,
+nonempty terms and meanings after Unicode normalization and case folding. The independent semantic
+review checks all 25 possible correspondences and rejects ambiguous/overlapping meanings, unsupported
+terms, incorrect languages or examples. This is not a formal linguistic guarantee. CJK preserves
+natural script and spacing; source glosses are translated to the captured native language.
+
+Attempts persist with a zero-based sequential number, term index, meaning index and correctness.
+Exact retries return current saved state; conflicting reuse of an attempt number, stale/future
+attempts, already-solved items or previously tried combinations return 409. At most 25 distinct
+combinations exist. Reloading recovers failures and successes without resubmitting uncertain work.
+Wrong attempts mark BOTH involved pairs as assisted, permanently losing their first-try bonuses.
+This flag is private until that pair is solved, so it cannot reveal the other term's correct meaning.
+
+Completion awards 5 XP plus 2 per pair never involved in an incorrect attempt. Only when all five
+pairs are solved are their example sentences and translations revealed for review. Abandonment
+retains solved pairs and attempt history without XP, new examples or a quota refund.
+
 ## Context and modes
 
 New creation requests require an active owned study plan and an expected plan ID; a missing active
@@ -81,14 +109,16 @@ rewrite existing content. Target-language text uses `TargetLanguageText` and exa
   Upcoming objectives guide relevance but do not authorize testing new material. Final assessment
   slots are excluded. Missing upcoming slots or completed sources disable the mode with guidance.
 - `free`: a sample of up to eight canonical grammar topics at the plan language and CEFR level.
-  Completed lessons are not required; a missing plan leads to assessment guidance.
+  Vocabulary Pairs instead samples up to four canonical vocabulary sets at that language/level,
+  with up to twenty entries per set. Completed lessons are not required; a missing plan leads to
+  assessment guidance.
 
 Recent game sentences discourage repetition and incorrect answers inform practice priorities.
 Context lookup does not call `/study-plan/today`, generate lessons, or advance the plan.
 
 ## Generation and recovery
 
-`POST /api/games/{game_type}`, accepting `detective` or `sentence-order`, persists a UUID-keyed
+`POST /api/games/{game_type}`, accepting `detective`, `sentence-order` or `vocabulary-pairs`, persists a UUID-keyed
 session and returns 202. FastAPI background work
 uses an independent database session and the shared structured-output adapter. No provider call
 holds an open database transaction. The inference deadline comes from
@@ -133,7 +163,8 @@ survive plan/language deletion and cascade only with the account. Finishing/resu
 admission, even after subscription expiry or quota exhaustion.
 
 Each newly accepted answer records activity in its plan on its captured UTC date. Completion awards
-5 XP plus 2 per fully correct challenge (both Detective steps or the accepted Sentence Order submission),
+5 XP plus 2 per fully correct challenge (both Detective steps, the accepted Sentence Order submission,
+or a Vocabulary Pair resolved without either item participating in an incorrect attempt),
 capped at 45 game XP shared by all game types per plan/UTC day; remaining daily XP
 can partially credit a game. All XP is awarded at completion. Session completion, reward ledger and
 daily progress share one transaction, serialized by the owning plan and session. Duplicate requests
@@ -144,6 +175,7 @@ cannot repeat rewards. Games do not alter lesson completion, exercise counters, 
 After answering, the full correct sentence uses the existing `AudioPlayer`, TTS proxy and backend
 provider/voice rules, exactly as lesson examples. Explanations and erroneous sentences are not sent
 to speech synthesis. Playback is optional and does not gate completion or XP.
+Vocabulary Pairs plays only the resolved target-language term or expression, never the native meaning.
 
 ## Presentation and languages
 

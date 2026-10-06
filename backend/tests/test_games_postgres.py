@@ -16,7 +16,7 @@ from app.models.game import GameAdmission, GameRequest, GameSession
 from app.models.progress_reward import ProgressReward
 from app.models.study_plan import StudyPlan
 from app.models.user import User
-from app.schemas.games import GameAnswer, GameCreate, SentenceOrderAnswer
+from app.schemas.games import GameAnswer, GameCreate, SentenceOrderAnswer, VocabularyPairAnswer
 from app.services.games import answer_game, create_game, now_utc
 from app.services.progress_rewards import award_progress_reward
 from tests import test_progress_rewards_postgres as postgres_helpers
@@ -24,6 +24,7 @@ from tests.conftest import make_study_plan
 from tests.test_games import ready_game
 from tests.test_sentence_order import ready_order_game
 from tests.test_sentence_order_migration import config
+from tests.test_vocabulary_pairs import match, ready_pairs
 
 postgres_sessions = postgres_helpers.postgres_sessions
 
@@ -82,7 +83,10 @@ async def test_concurrent_last_answer_credits_once(postgres_sessions):
         assert await db.scalar(select(func.count()).select_from(ProgressReward)) == 1
 
 
-async def test_different_game_types_contend_for_the_same_quota(postgres_sessions, monkeypatch):
+@pytest.mark.parametrize("second_type", ["sentence-order", "vocabulary-pairs"])
+async def test_different_game_types_contend_for_the_same_quota(
+    postgres_sessions, monkeypatch, second_type
+):
     monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
     monkeypatch.setattr(settings, "FREEMIUM_GAMES_DAILY", 1)
     user, plan = await postgres_helpers.seed(postgres_sessions)
@@ -105,9 +109,7 @@ async def test_different_game_types_contend_for_the_same_quota(postgres_sessions
             except HTTPException as exc:
                 return exc.status_code
 
-    results = await asyncio.wait_for(
-        asyncio.gather(start("detective"), start("sentence-order")), 15
-    )
+    results = await asyncio.wait_for(asyncio.gather(start("detective"), start(second_type)), 15)
     assert sorted(results) == [202, 402]
 
 
@@ -150,6 +152,39 @@ async def test_concurrent_completion_of_both_games_preserves_shared_xp_cap(postg
     assert sorted(results) == [0, 5]
     async with postgres_sessions() as db:
         assert await db.scalar(select(func.sum(ProgressReward.xp))) == 45
+
+
+@pytest.mark.parametrize("conflict", [False, True])
+async def test_concurrent_pair_attempts_are_idempotent_or_conflict(postgres_sessions, conflict):
+    user, plan = await postgres_helpers.seed(postgres_sessions)
+    async with postgres_sessions() as db:
+        session = await ready_pairs(db, user, plan)
+        for i in range(4):
+            await match(db, user, session, i)
+        session_id = session.id
+    barrier = asyncio.Barrier(2)
+
+    async def answer(choice):
+        async with postgres_sessions() as db:
+            await barrier.wait()
+            try:
+                await answer_game(
+                    db,
+                    user.id,
+                    session_id,
+                    VocabularyPairAnswer(step="match", attempt=4, challenge=4, choice=choice),
+                )
+                return 200
+            except HTTPException as exc:
+                return exc.status_code
+
+    results = await asyncio.wait_for(asyncio.gather(answer(3), answer(0 if conflict else 3)), 15)
+    assert sorted(results) == ([200, 409] if conflict else [200, 200])
+    async with postgres_sessions() as db:
+        session = await db.get(GameSession, session_id)
+        assert session.status == "completed" and session.xp_earned == 15
+        assert sum(len(a.get("attempts", [])) for a in session.answers) == 5
+        assert await db.scalar(select(func.count()).select_from(ProgressReward)) == 1
 
 
 @pytest.mark.parametrize("with_session", [True, False], ids=["session-and-request", "request-only"])

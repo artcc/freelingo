@@ -157,7 +157,27 @@
     "check": "Comprobar frase",
     "results": "Frases correctas: {correct}/5 · {xp} XP obtenidos"
   },
+  "vocabularyPairs": {
+    "title": "Parejas de vocabulario",
+    "rules": "Relaciona cinco palabras o expresiones con sus significados. Sin cronómetro ni vidas; sigue intentándolo hasta resolver las cinco parejas.",
+    "instructions": "Selecciona un elemento de cada columna y comprueba la pareja. Puedes cambiar la selección antes de comprobar.",
+    "terms": "Palabras",
+    "meanings": "Significados",
+    "check": "Comprobar pareja",
+    "progress": "Parejas resueltas: {count}/5",
+    "matched": "Parejas resueltas",
+    "matchCorrect": "Pareja correcta:",
+    "matchIncorrect": "No corresponden. Ambas parejas pierden el bonus del primer intento:",
+    "alreadyTried": "Ya has probado esta combinación. Elige otra.",
+    "firstTry": "Al primer intento",
+    "withHelp": "Practicada con ayuda",
+    "results": "Parejas al primer intento: {correct}/5 · {xp} XP obtenidos",
+    "freeDescription": "Practica vocabulario al nivel de tu plan actual.",
+    "xpRules": "5 XP por terminar y 2 por pareja resuelta sin errores. Un fallo elimina el bonus de las dos parejas implicadas. Todos los juegos comparten el límite de 45 XP por plan y día UTC y la cuota gratuita entre idiomas."
+  },
   "games": {
+    "vocabularyPairsTitle": "Parejas de vocabulario",
+    "vocabularyPairsDescription": "Relaciona palabras con sus significados y repásalas con audio y ejemplos.",
     "sentenceOrderTitle": "Ordena la frase",
     "sentenceOrderDescription": "Construye frases con fragmentos desordenados y practica el orden de las palabras con pistas y audio.",
     "detectiveTitle": "Detective de errores",

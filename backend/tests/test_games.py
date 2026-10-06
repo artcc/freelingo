@@ -493,7 +493,10 @@ async def test_background_review_charges_only_valid_persisted_content(
     assert "deadline" in mocked.call_args.kwargs
 
 
-async def test_modes_use_completed_sources_and_do_not_advance_plan(db_session, test_user_with_plan):
+@pytest.mark.parametrize("game_type", ["detective", "sentence-order", "vocabulary-pairs"])
+async def test_modes_use_completed_sources_and_do_not_advance_plan(
+    db_session, test_user_with_plan, game_type
+):
     user, _ = test_user_with_plan
     plan = await db_session.scalar(select(StudyPlan))
     plan.progress_day = 1
@@ -539,14 +542,16 @@ async def test_modes_use_completed_sources_and_do_not_advance_plan(db_session, t
     )
     db_session.add_all([known, uncompleted])
     await db_session.commit()
-    context = await games.source_context(db_session, plan, "prepare")
+    context = await games.source_context(db_session, plan, "prepare", game_type)
     assert context["upcoming"]["title"] == "Future"
     assert [s["source_id"] for s in context["sources"]] == [f"lesson:{known.id}"]
     assert "New content" not in str(context["sources"])
     assert plan.progress_day == 1
     assert await db_session.scalar(select(func.count()).select_from(Lesson)) == 2
     plan.progress_day = 2
-    assert (await games.source_context(db_session, plan, "prepare"))["reason"] == "noUpcoming"
+    assert (await games.source_context(db_session, plan, "prepare", game_type))[
+        "reason"
+    ] == "noUpcoming"
 
 
 async def test_catalog_requires_plan_and_native_language_is_profile_owned(

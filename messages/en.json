@@ -157,7 +157,27 @@
     "check": "Check sentence",
     "results": "Correct sentences: {correct}/5 · {xp} XP earned"
   },
+  "vocabularyPairs": {
+    "title": "Vocabulary Pairs",
+    "rules": "Match five words or expressions with their meanings. No timer or lives; keep trying until all five pairs are matched.",
+    "instructions": "Select one item from each column, then check the pair. You can change your selection before checking.",
+    "terms": "Words",
+    "meanings": "Meanings",
+    "check": "Check pair",
+    "progress": "Pairs matched: {count}/5",
+    "matched": "Matched pairs",
+    "matchCorrect": "Correct pair:",
+    "matchIncorrect": "These do not match. Both pairs lose their first-try bonus:",
+    "alreadyTried": "You have already tried this combination. Choose another.",
+    "firstTry": "First try",
+    "withHelp": "Practised with help",
+    "results": "First-try pairs: {correct}/5 · {xp} XP earned",
+    "freeDescription": "Practise vocabulary at your current plan’s level.",
+    "xpRules": "5 XP for finishing, plus 2 per pair matched without errors. A mistake removes the bonus from both pairs involved. All games share a 45 XP limit per plan per UTC day and a free-game allowance across languages."
+  },
   "games": {
+    "vocabularyPairsTitle": "Vocabulary Pairs",
+    "vocabularyPairsDescription": "Match words with their meanings and review them with audio and examples.",
     "sentenceOrderTitle": "Sentence Order",
     "sentenceOrderDescription": "Build sentences from shuffled fragments and practise word order with clues and audio.",
     "detectiveTitle": "Error Detective",

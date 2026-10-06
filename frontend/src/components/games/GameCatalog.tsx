@@ -23,14 +23,17 @@ const button =
 export function GameCatalog({
   gameType,
 }: {
-  gameType: 'detective' | 'sentence-order'
+  gameType: 'detective' | 'sentence-order' | 'vocabulary-pairs'
 }) {
   const t = useTranslations('detective')
   const game = useTranslations(
-    gameType === 'detective' ? 'detective' : 'sentenceOrder'
+    gameType === 'detective'
+      ? 'detective'
+      : gameType === 'sentence-order'
+        ? 'sentenceOrder'
+        : 'vocabularyPairs'
   )
-  const gamePath =
-    gameType === 'detective' ? 'error-detective' : 'sentence-order'
+  const gamePath = gameType === 'detective' ? 'error-detective' : gameType
   const common = useTranslations('common')
   const tTarget = useTranslations('targetLanguages')
   const router = useRouter()
@@ -149,7 +152,7 @@ export function GameCatalog({
           {game('rules')}
         </p>
         <p className="text-fl-muted-2 text-sm leading-relaxed">
-          {t('xpRules')}
+          {gameType === 'vocabulary-pairs' ? game('xpRules') : t('xpRules')}
         </p>
         {catalog && (
           <p className="text-fl-muted-2 text-sm">
@@ -190,7 +193,9 @@ export function GameCatalog({
               >
                 <h2 className="font-semibold">{t(mode)}</h2>
                 <p className="text-fl-muted-2 flex-1 text-sm">
-                  {t(`${mode}Description`)}
+                  {gameType === 'vocabulary-pairs' && mode === 'free'
+                    ? game('freeDescription')
+                    : t(`${mode}Description`)}
                 </p>
                 {!catalog.modes[mode].available && (
                   <p className="text-fl-muted-2 text-sm">

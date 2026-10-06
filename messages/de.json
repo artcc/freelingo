@@ -157,7 +157,27 @@
     "check": "Satz prüfen",
     "results": "Richtige Sätze: {correct}/5 · {xp} XP verdient"
   },
+  "vocabularyPairs": {
+    "title": "Vokabelpaare",
+    "rules": "Ordne fünf Wörter oder Ausdrücke ihren Bedeutungen zu. Ohne Zeitlimit oder Leben; versuche es, bis alle fünf Paare stimmen.",
+    "instructions": "Wähle einen Eintrag aus jeder Spalte und prüfe das Paar. Du kannst deine Auswahl vorher ändern.",
+    "terms": "Wörter",
+    "meanings": "Bedeutungen",
+    "check": "Paar prüfen",
+    "progress": "Gefundene Paare: {count}/5",
+    "matched": "Gefundene Paare",
+    "matchCorrect": "Richtiges Paar:",
+    "matchIncorrect": "Diese passen nicht zusammen. Beide Paare verlieren den Erstversuchsbonus:",
+    "alreadyTried": "Diese Kombination hast du bereits versucht. Wähle eine andere.",
+    "firstTry": "Beim ersten Versuch",
+    "withHelp": "Mit Hilfe geübt",
+    "results": "Paare beim ersten Versuch: {correct}/5 · {xp} XP verdient",
+    "freeDescription": "Übe Vokabeln auf dem Niveau deines aktuellen Plans.",
+    "xpRules": "5 XP fürs Abschließen und 2 pro fehlerfrei gefundenem Paar. Ein Fehler entfernt den Bonus beider betroffenen Paare. Alle Spiele teilen das Limit von 45 XP pro Plan und UTC-Tag sowie das kostenlose Kontingent über alle Sprachen."
+  },
   "games": {
+    "vocabularyPairsTitle": "Vokabelpaare",
+    "vocabularyPairsDescription": "Ordne Wörter ihren Bedeutungen zu und wiederhole sie mit Audio und Beispielen.",
     "sentenceOrderTitle": "Ordne den Satz",
     "sentenceOrderDescription": "Bilde Sätze aus gemischten Satzteilen und übe die Wortstellung mit Hinweisen und Audio.",
     "detectiveTitle": "Fehlerdetektiv",

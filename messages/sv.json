@@ -157,7 +157,27 @@
     "check": "Kontrollera meningen",
     "results": "Rätta meningar: {correct}/5 · {xp} XP intjänade"
   },
+  "vocabularyPairs": {
+    "title": "Ordpar",
+    "rules": "Para ihop fem ord eller uttryck med deras betydelser. Utan tidtagning eller liv; försök tills du hittar alla par.",
+    "instructions": "Välj ett alternativ i varje kolumn och kontrollera paret. Du kan ändra ditt val innan du kontrollerar.",
+    "terms": "Ord",
+    "meanings": "Betydelser",
+    "check": "Kontrollera paret",
+    "progress": "Hittade par: {count}/5",
+    "matched": "Hittade par",
+    "matchCorrect": "Rätt par:",
+    "matchIncorrect": "Dessa passar inte ihop. Båda paren förlorar bonusen för första försöket:",
+    "alreadyTried": "Du har redan provat denna kombination. Välj en annan.",
+    "firstTry": "På första försöket",
+    "withHelp": "Övat med hjälp",
+    "results": "Par på första försöket: {correct}/5 · {xp} XP intjänade",
+    "freeDescription": "Öva ordförråd på din nuvarande plans nivå.",
+    "xpRules": "5 XP för att slutföra och 2 per felfritt par. Ett fel tar bort bonusen för båda berörda paren. Alla spel delar gränsen på 45 XP per plan och UTC-dag samt gratiskvoten mellan språk."
+  },
   "games": {
+    "vocabularyPairsTitle": "Ordpar",
+    "vocabularyPairsDescription": "Para ihop ord med betydelser och repetera med ljud och exempel.",
     "sentenceOrderTitle": "Ordna meningen",
     "sentenceOrderDescription": "Bygg meningar av blandade delar och öva ordföljd med ledtrådar och ljud.",
     "detectiveTitle": "Feldetektiv",

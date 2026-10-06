@@ -157,7 +157,27 @@
     "check": "Zin controleren",
     "results": "Juiste zinnen: {correct}/5 · {xp} XP verdiend"
   },
+  "vocabularyPairs": {
+    "title": "Woordparen",
+    "rules": "Koppel vijf woorden of uitdrukkingen aan hun betekenis. Zonder tijdslimiet of levens; probeer tot je alle vijf paren hebt gevonden.",
+    "instructions": "Kies een item uit elke kolom en controleer het paar. Je kunt je keuze vooraf wijzigen.",
+    "terms": "Woorden",
+    "meanings": "Betekenissen",
+    "check": "Paar controleren",
+    "progress": "Gevonden paren: {count}/5",
+    "matched": "Gevonden paren",
+    "matchCorrect": "Juist paar:",
+    "matchIncorrect": "Deze horen niet bij elkaar. Beide paren verliezen hun bonus voor de eerste poging:",
+    "alreadyTried": "Je hebt deze combinatie al geprobeerd. Kies een andere.",
+    "firstTry": "Bij de eerste poging",
+    "withHelp": "Met hulp geoefend",
+    "results": "Paren bij de eerste poging: {correct}/5 · {xp} XP verdiend",
+    "freeDescription": "Oefen woordenschat op het niveau van je huidige plan.",
+    "xpRules": "5 XP voor afronden en 2 per foutloos gevonden paar. Een fout verwijdert de bonus van beide betrokken paren. Alle spellen delen de limiet van 45 XP per plan per UTC-dag en het gratis tegoed tussen talen."
+  },
   "games": {
+    "vocabularyPairsTitle": "Woordparen",
+    "vocabularyPairsDescription": "Koppel woorden aan hun betekenis en herhaal met audio en voorbeelden.",
     "sentenceOrderTitle": "Zet de zin in volgorde",
     "sentenceOrderDescription": "Bouw zinnen met door elkaar gehusselde fragmenten en oefen de woordvolgorde met aanwijzingen en audio.",
     "detectiveTitle": "Foutendetective",

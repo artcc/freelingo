@@ -15,7 +15,7 @@ export interface Challenge {
 }
 export interface DetectiveSession {
   id: string
-  game_type?: 'detective' | 'sentence-order'
+  game_type?: 'detective' | 'sentence-order' | 'vocabulary-pairs'
   study_plan_id: number
   target_language: string
   native_language: string

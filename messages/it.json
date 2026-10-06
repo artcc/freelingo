@@ -157,7 +157,27 @@
     "check": "Verifica frase",
     "results": "Frasi corrette: {correct}/5 · {xp} XP guadagnati"
   },
+  "vocabularyPairs": {
+    "title": "Coppie di vocaboli",
+    "rules": "Abbina cinque parole o espressioni ai loro significati. Senza cronometro né vite; riprova fino a completare tutte le coppie.",
+    "instructions": "Seleziona un elemento per colonna, poi verifica la coppia. Puoi cambiare la selezione prima della verifica.",
+    "terms": "Parole",
+    "meanings": "Significati",
+    "check": "Verifica coppia",
+    "progress": "Coppie risolte: {count}/5",
+    "matched": "Coppie risolte",
+    "matchCorrect": "Coppia corretta:",
+    "matchIncorrect": "Non corrispondono. Entrambe le coppie perdono il bonus del primo tentativo:",
+    "alreadyTried": "Hai già provato questa combinazione. Scegline un’altra.",
+    "firstTry": "Al primo tentativo",
+    "withHelp": "Esercitata con aiuto",
+    "results": "Coppie al primo tentativo: {correct}/5 · {xp} XP guadagnati",
+    "freeDescription": "Esercita il vocabolario al livello del tuo piano attuale.",
+    "xpRules": "5 XP per completare e 2 per coppia risolta senza errori. Un errore elimina il bonus di entrambe le coppie coinvolte. Tutti i giochi condividono il limite di 45 XP per piano e giorno UTC e la quota gratuita tra le lingue."
+  },
   "games": {
+    "vocabularyPairsTitle": "Coppie di vocaboli",
+    "vocabularyPairsDescription": "Abbina parole e significati e ripassa con audio ed esempi.",
     "sentenceOrderTitle": "Riordina la frase",
     "sentenceOrderDescription": "Costruisci frasi con frammenti mescolati ed esercita l’ordine delle parole con indizi e audio.",
     "detectiveTitle": "Detective degli errori",

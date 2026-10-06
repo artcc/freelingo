@@ -157,7 +157,27 @@
     "check": "Vérifier la phrase",
     "results": "Phrases correctes : {correct}/5 · {xp} XP gagnés"
   },
+  "vocabularyPairs": {
+    "title": "Paires de vocabulaire",
+    "rules": "Associe cinq mots ou expressions à leur sens. Sans chronomètre ni vies ; réessaie jusqu’à trouver les cinq paires.",
+    "instructions": "Sélectionne un élément dans chaque colonne, puis vérifie la paire. Tu peux changer ta sélection avant de vérifier.",
+    "terms": "Mots",
+    "meanings": "Sens",
+    "check": "Vérifier la paire",
+    "progress": "Paires trouvées : {count}/5",
+    "matched": "Paires trouvées",
+    "matchCorrect": "Paire correcte :",
+    "matchIncorrect": "Ces éléments ne correspondent pas. Les deux paires perdent leur bonus du premier essai :",
+    "alreadyTried": "Tu as déjà essayé cette combinaison. Choisis-en une autre.",
+    "firstTry": "Au premier essai",
+    "withHelp": "Travaillée avec de l’aide",
+    "results": "Paires au premier essai : {correct}/5 · {xp} XP gagnés",
+    "freeDescription": "Travaille le vocabulaire au niveau de ton plan actuel.",
+    "xpRules": "5 XP pour terminer et 2 par paire trouvée sans erreur. Une erreur retire le bonus aux deux paires concernées. Tous les jeux partagent la limite de 45 XP par plan et jour UTC et le quota gratuit entre les langues."
+  },
   "games": {
+    "vocabularyPairsTitle": "Paires de vocabulaire",
+    "vocabularyPairsDescription": "Associe les mots à leur sens et révise avec de l’audio et des exemples.",
     "sentenceOrderTitle": "Remets la phrase en ordre",
     "sentenceOrderDescription": "Construis des phrases à partir de fragments mélangés et travaille l’ordre des mots avec des indices et de l’audio.",
     "detectiveTitle": "Détective des erreurs",

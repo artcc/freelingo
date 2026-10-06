@@ -157,7 +157,27 @@
     "check": "Verificar frase",
     "results": "Frases corretas: {correct}/5 · {xp} XP ganhos"
   },
+  "vocabularyPairs": {
+    "title": "Pares de vocabulário",
+    "rules": "Liga cinco palavras ou expressões aos seus significados. Sem cronómetro nem vidas; continua até resolver os cinco pares.",
+    "instructions": "Seleciona um elemento de cada coluna e verifica o par. Podes alterar a seleção antes de verificar.",
+    "terms": "Palavras",
+    "meanings": "Significados",
+    "check": "Verificar par",
+    "progress": "Pares resolvidos: {count}/5",
+    "matched": "Pares resolvidos",
+    "matchCorrect": "Par correto:",
+    "matchIncorrect": "Não correspondem. Ambos os pares perdem o bónus da primeira tentativa:",
+    "alreadyTried": "Já tentaste esta combinação. Escolhe outra.",
+    "firstTry": "À primeira tentativa",
+    "withHelp": "Praticado com ajuda",
+    "results": "Pares à primeira tentativa: {correct}/5 · {xp} XP ganhos",
+    "freeDescription": "Pratica vocabulário ao nível do teu plano atual.",
+    "xpRules": "5 XP por terminar e 2 por par resolvido sem erros. Um erro elimina o bónus dos dois pares envolvidos. Todos os jogos partilham o limite de 45 XP por plano e dia UTC e a quota gratuita entre idiomas."
+  },
   "games": {
+    "vocabularyPairsTitle": "Pares de vocabulário",
+    "vocabularyPairsDescription": "Liga palavras aos seus significados e revê com áudio e exemplos.",
     "sentenceOrderTitle": "Ordena a frase",
     "sentenceOrderDescription": "Constrói frases com fragmentos baralhados e pratica a ordem das palavras com pistas e áudio.",
     "detectiveTitle": "Detetive de erros",

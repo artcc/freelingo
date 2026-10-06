@@ -157,7 +157,27 @@
     "check": "Tjek sætningen",
     "results": "Korrekte sætninger: {correct}/5 · {xp} XP optjent"
   },
+  "vocabularyPairs": {
+    "title": "Ordpar",
+    "rules": "Forbind fem ord eller udtryk med deres betydninger. Uden tidtagning eller liv; prøv, til du finder alle par.",
+    "instructions": "Vælg et element fra hver kolonne, og tjek parret. Du kan ændre dit valg, før du tjekker.",
+    "terms": "Ord",
+    "meanings": "Betydninger",
+    "check": "Tjek parret",
+    "progress": "Fundne par: {count}/5",
+    "matched": "Fundne par",
+    "matchCorrect": "Korrekt par:",
+    "matchIncorrect": "Disse passer ikke sammen. Begge par mister bonussen for første forsøg:",
+    "alreadyTried": "Du har allerede prøvet denne kombination. Vælg en anden.",
+    "firstTry": "I første forsøg",
+    "withHelp": "Øvet med hjælp",
+    "results": "Par i første forsøg: {correct}/5 · {xp} XP optjent",
+    "freeDescription": "Øv ordforråd på din nuværende plans niveau.",
+    "xpRules": "5 XP for at gennemføre og 2 pr. fejlfrit par. En fejl fjerner bonussen for begge berørte par. Alle spil deler grænsen på 45 XP pr. plan og UTC-dag samt gratiskvoten på tværs af sprog."
+  },
   "games": {
+    "vocabularyPairsTitle": "Ordpar",
+    "vocabularyPairsDescription": "Forbind ord med betydninger, og øv dem med lyd og eksempler.",
     "sentenceOrderTitle": "Sæt sætningen i orden",
     "sentenceOrderDescription": "Byg sætninger af blandede dele, og øv ordstilling med ledetråde og lyd.",
     "detectiveTitle": "Fejldetektiv",

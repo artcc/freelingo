@@ -157,7 +157,27 @@
     "check": "Cümleyi kontrol et",
     "results": "Doğru cümleler: {correct}/5 · Kazanılan XP: {xp}"
   },
+  "vocabularyPairs": {
+    "title": "Kelime çiftleri",
+    "rules": "Beş kelime veya ifadeyi anlamlarıyla eşleştir. Süre sınırı ve can yok; tüm çiftleri bulana kadar dene.",
+    "instructions": "Her sütundan bir öğe seç ve çifti kontrol et. Kontrol etmeden önce seçimini değiştirebilirsin.",
+    "terms": "Kelimeler",
+    "meanings": "Anlamlar",
+    "check": "Çifti kontrol et",
+    "progress": "Eşleşen çiftler: {count}/5",
+    "matched": "Eşleşen çiftler",
+    "matchCorrect": "Doğru çift:",
+    "matchIncorrect": "Bunlar eşleşmiyor. İki çift de ilk deneme bonusunu kaybeder:",
+    "alreadyTried": "Bu kombinasyonu zaten denedin. Başka birini seç.",
+    "firstTry": "İlk denemede",
+    "withHelp": "Yardımla çalışıldı",
+    "results": "İlk denemede bulunan çiftler: {correct}/5 · Kazanılan XP: {xp}",
+    "freeDescription": "Mevcut planının seviyesinde kelime çalış.",
+    "xpRules": "Bitirmek için 5 XP, hatasız bulunan her çift için 2 XP. Bir hata ilgili iki çiftin bonusunu kaldırır. Tüm oyunlar plan başına UTC gününde 45 XP sınırını ve diller arasındaki ücretsiz kotayı paylaşır."
+  },
   "games": {
+    "vocabularyPairsTitle": "Kelime çiftleri",
+    "vocabularyPairsDescription": "Kelimeleri anlamlarıyla eşleştir, ses ve örneklerle tekrar et.",
     "sentenceOrderTitle": "Cümleyi sırala",
     "sentenceOrderDescription": "Karışık parçalardan cümleler kur, ipuçları ve sesle kelime sırasını çalış.",
     "detectiveTitle": "Hata Dedektifi",

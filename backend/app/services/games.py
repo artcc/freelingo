@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.data.curriculum import COMPLETION_UNIT_IDS, get_curriculum_units
 from app.data.grammar import get_grammar_topics
+from app.data.vocabulary import get_vocabulary_by_level
 from app.models.game import GameAdmission, GameRequest, GameSession
 from app.models.lesson import Exercise, Lesson
 from app.models.progress_reward import ProgressReward
@@ -26,6 +27,8 @@ from app.schemas.games import (
     SentenceOrderAnswer,
     SentenceOrderChallenge,
     SentenceOrderContent,
+    VocabularyPairAnswer,
+    VocabularyPairsContent,
 )
 from app.services.freemium_service import is_freemium_trial_active
 from app.services.llm_adapter import LLMResponseError, LLMTimeoutError, llm_adapter
@@ -36,6 +39,8 @@ from app.services.prompts.games import (
     detective_review_prompt,
     sentence_order_prompt,
     sentence_order_review_prompt,
+    vocabulary_pairs_prompt,
+    vocabulary_pairs_review_prompt,
 )
 from app.services.subscription_service import is_subscribed
 from app.utils.db import db_session
@@ -104,7 +109,9 @@ def compact(value: object, length: int = 1500) -> str:
     return str(value or "")[:length]
 
 
-async def source_context(db: AsyncSession, plan: StudyPlan, mode: str) -> dict:
+async def source_context(
+    db: AsyncSession, plan: StudyPlan, mode: str, game_type: GameType = "detective"
+) -> dict:
     completed = list(
         (
             await db.scalars(
@@ -119,7 +126,20 @@ async def source_context(db: AsyncSession, plan: StudyPlan, mode: str) -> dict:
     )
     sources: list[dict] = []
     upcoming = None
-    if mode == "free":
+    if mode == "free" and game_type == "vocabulary-pairs":
+        sets = get_vocabulary_by_level(plan.cefr_level, plan.target_language)
+        for group in SystemRandom().sample(sets, min(4, len(sets))):
+            sources.append(
+                {
+                    "source_id": f"vocabulary:{group.id}",
+                    "title": group.topic,
+                    "vocabulary": [
+                        {"term": w.word, "meaning": w.definition, "example": w.example}
+                        for w in group.words[:20]
+                    ],
+                }
+            )
+    elif mode == "free":
         topics = [t for t in get_grammar_topics(plan.target_language) if t.level == plan.cefr_level]
         for topic in SystemRandom().sample(topics, min(8, len(topics))):
             sources.append(
@@ -210,7 +230,12 @@ async def source_context(db: AsyncSession, plan: StudyPlan, mode: str) -> dict:
     for session in previous:
         for challenge, answer in zip(session.challenges, session.answers, strict=False):
             recent_sentences.append(challenge["sentence"])
-            if session.game_type == "sentence-order":
+            if session.game_type == "vocabulary-pairs":
+                if answer.get("assisted"):
+                    mistakes.append(
+                        {"question": challenge["term"], "correction": challenge["meaning"]}
+                    )
+            elif session.game_type == "sentence-order":
                 if "order" in answer and not answer["correct"]:
                     mistakes.append(
                         {"question": challenge["clue"], "correction": challenge["sentence"]}
@@ -300,7 +325,7 @@ async def create_game(
     quota = await game_quota(db, user.id, now)
     if limited and quota["remaining"] == 0:
         raise HTTPException(402, {"reason": "freemium_exhausted", "feature": "games", **quota})
-    context = await source_context(db, plan, body.mode)
+    context = await source_context(db, plan, body.mode, game_type)
     if not context["sources"]:
         raise HTTPException(409, context["reason"])
     deadline = now + timedelta(seconds=settings.EXERCISE_GENERATION_TIMEOUT_SECONDS)
@@ -365,11 +390,15 @@ def shuffled_order_challenge(challenge: SentenceOrderChallenge) -> SentenceOrder
 
 async def generate_content(
     session: GameSession, deadline: float
-) -> DetectiveContent | SentenceOrderContent:
+) -> DetectiveContent | SentenceOrderContent | VocabularyPairsContent:
     ordering = session.game_type == "sentence-order"
     prompt_builder = sentence_order_prompt if ordering else detective_prompt
     review_builder = sentence_order_review_prompt if ordering else detective_review_prompt
     schema = SentenceOrderContent if ordering else DetectiveContent
+    if session.game_type == "vocabulary-pairs":
+        prompt_builder = vocabulary_pairs_prompt
+        review_builder = vocabulary_pairs_review_prompt
+        schema = VocabularyPairsContent
     prompt = prompt_builder(
         session.target_language,
         session.native_language,
@@ -446,6 +475,12 @@ async def generate_game(session_id: str) -> None:
                 admission.status = "released"
         else:
             session.challenges = [c.model_dump() for c in content.challenges]
+            if session.game_type == "vocabulary-pairs":
+                SystemRandom().shuffle(session.challenges)
+                choices = SystemRandom().sample(range(5), 5)
+                session.challenges = [
+                    {**c, "choice_index": choices[i]} for i, c in enumerate(session.challenges)
+                ]
             session.answers = [{} for _ in content.challenges]
             session.status = "ready"
             if admission:
@@ -476,6 +511,16 @@ def game_output(session: GameSession) -> dict:
     challenges = []
     for i, challenge in enumerate(session.challenges):
         answer = session.answers[i]
+        if session.game_type == "vocabulary-pairs":
+            item = {"index": i, "term": challenge["term"], "matched": answer.get("matched", False)}
+            if item["matched"]:
+                item.update(
+                    choice=challenge["choice_index"], assisted=answer.get("assisted", False)
+                )
+            if session.status == "completed":
+                item.update(sentence=challenge["sentence"], translation=challenge["translation"])
+            challenges.append(item)
+            continue
         if session.game_type == "sentence-order":
             item = {
                 "index": i,
@@ -510,7 +555,7 @@ def game_output(session: GameSession) -> dict:
                 explanation=challenge["explanation"],
             )
         challenges.append(item)
-    return {
+    output = {
         "id": session.id,
         "game_type": session.game_type,
         "study_plan_id": session.study_plan_id,
@@ -529,13 +574,65 @@ def game_output(session: GameSession) -> dict:
             else None
         ),
     }
+    if session.game_type == "vocabulary-pairs":
+        output["meanings"] = sorted(
+            [{"index": c["choice_index"], "text": c["meaning"]} for c in session.challenges],
+            key=lambda c: c["index"],
+        )
+        output["attempts"] = sorted(
+            [
+                {**attempt, "challenge": i}
+                for i, a in enumerate(session.answers)
+                for attempt in a.get("attempts", [])
+            ],
+            key=lambda a: a["attempt"],
+        )
+    return output
+
+
+def match_pair(session: GameSession, body: VocabularyPairAnswer) -> list[dict] | None:
+    """Apply a bounded, versioned attempt without revealing the unmatched pairing map."""
+    attempts = [
+        (i, a) for i, answer in enumerate(session.answers) for a in answer.get("attempts", [])
+    ]
+    previous = next(((i, a) for i, a in attempts if a["attempt"] == body.attempt), None)
+    if previous:
+        if previous[0] != body.challenge or previous[1]["choice"] != body.choice:
+            raise HTTPException(409, "attempt_conflict")
+        return None
+    if body.attempt != len(attempts):
+        raise HTTPException(409, "attempt_out_of_order")
+    other = next(i for i, c in enumerate(session.challenges) if c["choice_index"] == body.choice)
+    if session.answers[body.challenge].get("matched") or session.answers[other].get("matched"):
+        raise HTTPException(409, "pair_already_matched")
+    if any(i == body.challenge and a["choice"] == body.choice for i, a in attempts):
+        raise HTTPException(409, "pair_already_tried")
+    answers = [dict(a) for a in session.answers]
+    correct = other == body.challenge
+    answer = answers[body.challenge]
+    answer["attempts"] = [
+        *answer.get("attempts", []),
+        {
+            "attempt": body.attempt,
+            "choice": body.choice,
+            "correct": correct,
+        },
+    ]
+    if correct:
+        answer["matched"] = True
+    else:
+        answer["assisted"] = True
+        answers[other]["assisted"] = True
+    return answers
 
 
 async def answer_game(
-    db: AsyncSession, user_id: int, session_id: str, body: GameAnswer | SentenceOrderAnswer
+    db: AsyncSession,
+    user_id: int,
+    session_id: str,
+    body: GameAnswer | SentenceOrderAnswer | VocabularyPairAnswer,
 ) -> GameSession:
     completed_at = now_utc()
-    activity_date = completed_at.date()
     session = await owned_game(db, user_id, session_id)
     session_id = session.id
     await lock_progress_plan(db, user_id, session.study_plan_id)
@@ -550,6 +647,22 @@ async def answer_game(
     if session.status not in {"ready", "completed"}:
         raise HTTPException(409, "game_not_ready")
     ordering = session.game_type == "sentence-order"
+    pairing = session.game_type == "vocabulary-pairs"
+    if pairing != isinstance(body, VocabularyPairAnswer):
+        raise HTTPException(422, "invalid_game_answer")
+    if pairing:
+        answers = match_pair(session, body)
+        if answers is None:
+            return session
+        session.answers = answers
+        await finish_answer(
+            db,
+            session,
+            completed_at,
+            all(a.get("matched") for a in answers),
+            sum(not a.get("assisted", False) for a in answers),
+        )
+        return session
     if ordering != isinstance(body, SentenceOrderAnswer):
         raise HTTPException(422, "invalid_game_answer")
     answer = session.answers[body.challenge]
@@ -584,10 +697,30 @@ async def answer_game(
             raise HTTPException(422, "invalid_choice")
     answers[body.challenge][key] = choice
     session.answers = answers
+    correct = sum(
+        (
+            a.get("correct", False)
+            if ordering
+            else a.get("detection") == c["error_index"]
+            and a.get("correction") == c["correct_index"]
+        )
+        for a, c in zip(answers, session.challenges, strict=True)
+    )
+    await finish_answer(
+        db, session, completed_at, all(completion_key in a for a in answers), correct
+    )
+    return session
+
+
+async def finish_answer(
+    db: AsyncSession, session: GameSession, completed_at: datetime, complete: bool, correct: int
+) -> None:
+    user_id = session.user_id
+    activity_date = completed_at.date()
     await update_daily_progress(
         db, user_id, study_plan_id=session.study_plan_id, activity_date=activity_date, commit=False
     )
-    if all(completion_key in a for a in answers):
+    if complete:
         session.status = "completed"
         session.completed_at = completed_at
         earned = await db.scalar(
@@ -596,14 +729,6 @@ async def answer_game(
                 ProgressReward.kind == "games",
                 ProgressReward.date == activity_date,
             )
-        )
-        correct = sum(
-            (
-                a["correct"]
-                if ordering
-                else a["detection"] == c["error_index"] and a["correction"] == c["correct_index"]
-            )
-            for a, c in zip(answers, session.challenges, strict=True)
         )
         xp = min(5 + 2 * correct, max(0, 45 - earned))
         session.xp_earned = await award_progress_reward(
@@ -616,4 +741,3 @@ async def answer_game(
             activity_date=activity_date,
         )
     await db.commit()
-    return session

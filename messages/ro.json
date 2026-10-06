@@ -157,7 +157,27 @@
     "check": "Verifică propoziția",
     "results": "Propoziții corecte: {correct}/5 · {xp} XP câștigate"
   },
+  "vocabularyPairs": {
+    "title": "Perechi de vocabular",
+    "rules": "Asociază cinci cuvinte sau expresii cu sensurile lor. Fără cronometru sau vieți; încearcă până rezolvi toate perechile.",
+    "instructions": "Selectează un element din fiecare coloană și verifică perechea. Poți schimba selecția înainte de verificare.",
+    "terms": "Cuvinte",
+    "meanings": "Sensuri",
+    "check": "Verifică perechea",
+    "progress": "Perechi rezolvate: {count}/5",
+    "matched": "Perechi rezolvate",
+    "matchCorrect": "Pereche corectă:",
+    "matchIncorrect": "Nu se potrivesc. Ambele perechi pierd bonusul primei încercări:",
+    "alreadyTried": "Ai încercat deja această combinație. Alege alta.",
+    "firstTry": "Din prima încercare",
+    "withHelp": "Exersată cu ajutor",
+    "results": "Perechi din prima încercare: {correct}/5 · {xp} XP câștigate",
+    "freeDescription": "Exersează vocabularul la nivelul planului tău actual.",
+    "xpRules": "5 XP pentru finalizare și 2 pentru fiecare pereche rezolvată fără greșeli. O greșeală elimină bonusul ambelor perechi implicate. Toate jocurile împart limita de 45 XP pe plan și zi UTC și cota gratuită între limbi."
+  },
   "games": {
+    "vocabularyPairsTitle": "Perechi de vocabular",
+    "vocabularyPairsDescription": "Asociază cuvintele cu sensurile lor și recapitulează cu audio și exemple.",
     "sentenceOrderTitle": "Ordonează propoziția",
     "sentenceOrderDescription": "Construiește propoziții din fragmente amestecate și exersează ordinea cuvintelor cu indicii și audio.",
     "detectiveTitle": "Detectivul greșelilor",
