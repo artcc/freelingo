@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings
 
@@ -17,6 +19,9 @@ class Settings(BaseSettings):
     EXERCISE_GENERATION_TIMEOUT_SECONDS: int = Field(default=600, ge=1)
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
+    OPENAI_REASONING_EFFORT: Literal[
+        "", "none", "minimal", "low", "medium", "high", "xhigh", "max"
+    ] = ""
     ANTHROPIC_API_KEY: str = ""
     ANTHROPIC_MODEL: str = "claude-3-5-haiku-latest"
     ANTHROPIC_MAX_TOKENS: int = 8192

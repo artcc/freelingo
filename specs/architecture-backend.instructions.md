@@ -45,6 +45,8 @@ contracts and `games.instructions.md` for domain behavior.
 
 `app/core/config.py` is the authoritative `Settings` schema. `.env.example` documents deployable
 values, while Docker determines which values are passed into containers.
+`OPENAI_REASONING_EFFORT` is optional for `LLM_PROVIDER=openai` requests and is forwarded by both
+Compose files. An empty value preserves the model/provider default.
 
 Database sessions come from the async SQLAlchemy engine. Redis is optional at process startup but
 features that require Redis expose their own degraded or unavailable behavior.

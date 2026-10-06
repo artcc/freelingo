@@ -376,6 +376,35 @@ class TestChatNonStreaming:
             assert result == "Hello from OpenAI!"
 
     @pytest.mark.asyncio
+    async def test_openai_reasoning_effort_applies_to_chat_and_structured_output(self, monkeypatch):
+        monkeypatch.setattr("app.core.config.settings.LLM_PROVIDER", "openai")
+        monkeypatch.setattr("app.core.config.settings.OPENAI_API_KEY", "sk-test")
+        monkeypatch.setattr("app.core.config.settings.OPENAI_MODEL", "z-ai/glm-5.3-flash")
+        monkeypatch.setattr("app.core.config.settings.OPENAI_REASONING_EFFORT", "low")
+
+        from app.services.llm_adapter import LLMAdapter
+
+        response = MagicMock()
+        response.choices[0].message.content = '{"answer": "Paris", "confidence": 0.95}'
+        adapter = LLMAdapter()
+
+        with patch.object(
+            adapter.client.chat.completions,
+            "create",
+            new_callable=AsyncMock,
+            return_value=response,
+        ) as create:
+            await adapter.chat([{"role": "user", "content": "Hello"}])
+            await adapter.structured_output(
+                [{"role": "user", "content": "Capital of France?"}], FakeSchema
+            )
+
+        assert [call.kwargs["reasoning_effort"] for call in create.call_args_list] == [
+            "low",
+            "low",
+        ]
+
+    @pytest.mark.asyncio
     async def test_empty_response_raises(self, monkeypatch):
         _make_ollama_settings(monkeypatch)
 

@@ -157,6 +157,7 @@ disable this behavior.
 - The recommended model for Ollama is `gemma4:e4b`. It can be changed in `.env`.
 - The backend proxies all LLM, TTS, and STT calls so the frontend never talks directly to providers.
 - The `LLM_PROVIDER` field controls the LLM provider: `ollama` (local, recommended), `openai`, `anthropic`, or `deepseek`.
+- `OPENAI_REASONING_EFFORT` optionally sets reasoning effort when `LLM_PROVIDER=openai`, including gateways such as OpenRouter. Leave it empty for the model/provider default; supported values depend on the selected model.
 - Anthropic's output budget is configurable with `ANTHROPIC_MAX_TOKENS` (default: `8192`) and must stay within the selected model's supported output limit.
 - `TTS_PROVIDER` and `STT_PROVIDER` are independent: `local` (Kokoro / faster-whisper) or `openai` (OpenAI API).
 - Conversation, token, freemium, and trial limits are configurable in `.env.example`. In general

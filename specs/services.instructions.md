@@ -17,6 +17,9 @@ The frontend never calls an external provider directly.
 
 - `chat(messages, stream=False, tools=None, tool_executor=None, fallback_messages=None)` returns text
   or a normalized async stream.
+- Requests with `LLM_PROVIDER=openai` use `OPENAI_REASONING_EFFORT` when set. It applies to chat,
+  structured generation, and no-tools fallbacks; explicit model-specific tool settings take priority.
+  An empty setting leaves reasoning effort to the model/provider default.
 - Tool streaming executes at most the first tool call, performs one native continuation, exposes tool
   results and usage, and can reset visible output before a complete no-tools fallback.
 - Explicit tool incompatibility raises/records `LLMToolsUnsupportedError`; voice remembers that state

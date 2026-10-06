@@ -691,6 +691,11 @@ class LLMAdapter:
                 }
                 for tool in tools
             ]
+        # Apply the operator default at the shared request boundary so chat,
+        # structured generation, and no-tools fallbacks receive the same setting.
+        # An explicit effort still takes precedence for model-specific tool handling.
+        if reasoning_effort is None and self.provider == "openai":
+            reasoning_effort = settings.OPENAI_REASONING_EFFORT or None
         if reasoning_effort is not None:
             extra["reasoning_effort"] = reasoning_effort
 

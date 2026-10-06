@@ -61,6 +61,10 @@ public.
 values; a field present in backend `Settings` but absent from Compose is not configurable merely by
 placing it in `.env`.
 
+Both Compose files forward optional `OPENAI_REASONING_EFFORT`. An empty value leaves the selected
+OpenAI LLM provider's reasoning at its model default; supported nonempty values depend on
+the model/provider.
+
 Both Compose files forward `EXERCISE_GENERATION_TIMEOUT_SECONDS` with a default of 600. This positive
 integer limits the complete Listening/Reading background job, including LLM output, JSON correction,
 audio synthesis where applicable, and persistence. `.env.example` documents it for operators using
