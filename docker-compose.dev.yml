@@ -58,7 +58,7 @@ services:
       TTS_BASE_URL: ${TTS_BASE_URL:-http://kokoro:8880}
       TTS_VOICE: ${TTS_VOICE:-af_heart}
       OPENAI_TTS_MODEL: ${OPENAI_TTS_MODEL:-gpt-4o-mini-tts}
-      OPENAI_TTS_VOICE: ${OPENAI_TTS_VOICE:-fable}
+      OPENAI_TTS_VOICE: ${OPENAI_TTS_VOICE:-nova}
       OPENAI_TTS_SPEED: ${OPENAI_TTS_SPEED:-1.0}
       STT_PROVIDER: ${STT_PROVIDER:-local}
       STT_BASE_URL: ${STT_BASE_URL:-http://whisper:9000}

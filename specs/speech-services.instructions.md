@@ -22,7 +22,7 @@ TTS configuration:
 - `TTS_BASE_URL` defaults to `http://kokoro:8880`.
 - `TTS_VOICE` defaults to `af_heart` for Kokoro.
 - `OPENAI_TTS_MODEL` defaults to `tts-1`.
-- `OPENAI_TTS_VOICE` defaults to `fable`.
+- `OPENAI_TTS_VOICE` defaults to `nova`.
 - `OPENAI_TTS_SPEED` defaults to `1.0`.
 
 STT configuration:
@@ -83,7 +83,7 @@ a different voice.
 Each supported language has focused pronunciation guidance for vowel and consonant quality, rhythm,
 stress, and relevant tonal/pitch distinctions. It asks for everyday native articulation without
 exaggeration, applying those details only to passages in the indicated language. The guidance applies
-to any selected voice, preserving its vocal identity. `fable` is the configured default, not a forced
+to any selected voice, preserving its vocal identity. `nova` is the configured default, not a forced
 voice; user preferences continue to take precedence. These instructions guide the model rather than
 guaranteeing accent quality for every voice or text.
 

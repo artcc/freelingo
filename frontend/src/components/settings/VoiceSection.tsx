@@ -36,7 +36,7 @@ export function VoiceSection({ title }: { title?: string } = {}) {
         : null
     const voices: readonly string[] = OPENAI_VOICES
     setSelectedVoice(
-      stored && voices.includes(stored) ? stored : openaiTtsVoice || 'fable'
+      stored && voices.includes(stored) ? stored : openaiTtsVoice || 'nova'
     )
   }, [ttsProvider, openaiTtsVoice])
 

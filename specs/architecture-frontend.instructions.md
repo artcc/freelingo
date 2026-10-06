@@ -197,6 +197,13 @@ loading, reduced motion, and renderer/model failures. The optional `onReady` cal
 first rendered animation frame or the resolved static fallback, after the browser's motion preference
 is known.
 
+Landing and tour share the rendering configuration in `components/lingu/LinguScene.tsx`:
+
+- `NeutralToneMapping` with exposure `1.08` and a transparent canvas.
+- Hemisphere light with white sky, blue-gray ground (`0x527080`), and intensity `0.65`.
+- White directional key light with intensity `1.8` at `(5, 12, 10)`.
+- Pale-blue (`0xc5e4ff`) directional fill light with intensity `0.65` at `(-6, 7, 4)`.
+
 `lib/lingu-playback.ts` manages the 250 ms transitions using the current effective weights of all
 contributing actions. Interrupted fades preserve contributing clip times and poses; actions that
 finish fading out are stopped. Loop overrides preserve the current clip time when changing modes.

@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
-- The default OpenAI TTS voice is now `fable`. Existing user-selected voices continue to take precedence.
+- Increased Lingu's exposure, ambient light, and fill light on the landing and onboarding tour to brighten shaded areas while retaining neutral tone mapping.
 - The renewed onboarding tour is shown again for browsers that completed the previous tour, using a dedicated 1.10.0 completion key. Pending What's New announcements follow on the next dashboard visit after completing or skipping the tour.
 
 ### Fixed
