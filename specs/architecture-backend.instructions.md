@@ -38,8 +38,8 @@ deadline fence late background results. Detective, Sentence Order and Vocabulary
 prompts and deterministic answer evaluation through the same admission and reward service.
 Vocabulary Pairs uses canonical vocabulary sources in free mode and a bounded, sequential attempt
 log in the existing JSON answer state; failed attempts permanently mark both involved pairs as assisted.
-Answers and plan-owned XP commit atomically. Revisions `0054_detective_games` and
-`0055_sentence_order` define its schema; see `games.instructions.md` for the domain contract.
+Answers and plan-owned XP commit atomically. See `database-models.instructions.md` for persistence
+contracts and `games.instructions.md` for domain behavior.
 
 ### Core
 
@@ -61,8 +61,8 @@ SQLAlchemy models define durable state and relationships. Domain ownership follo
 keys: plan-owned resources remain tied to their plan even when the user switches active language.
 Detailed columns, constraints, and deletion behavior live in `database-models.instructions.md`.
 
-Alembic revisions are applied automatically when the production backend container starts. Creating
-and reviewing a new revision remains a separate deployment-maintainer operation.
+Schema changes include a versioned Alembic revision prepared and reviewed with the model changes.
+Deployment applies the committed revisions automatically when the backend container starts.
 
 ### Schemas
 
@@ -110,11 +110,8 @@ null score histories remain opaque skill checkpoints; no historical score recons
 
 Schema changes include versioned Alembic files in `backend/alembic/versions/`, shipped in the backend
 image and automatically applied by deployment startup through `alembic upgrade head`.
-`0053_progress_rewards`, linked to `0052_exercise_corrections`, supplies `progress_rewards`,
-`chat_history.modality`/`reply_to_id`, and nullable `progress.skill_updates`, including foreign keys,
-indexes and unique constraints. Historical skill-update values remain null rather than empty
-histories, and legacy messages retain null pairing/modality without inferred backfill. Startup applies
-pending revisions; it does not generate missing files.
+Transcript pairing/modality and daily skill-update history are nullable; missing values are not
+inferred or backfilled. Startup applies pending revisions; it does not generate missing files.
 
 `backend/tests/test_progress_migration.py` checks the revision chain and PostgreSQL upgrade/downgrade
 SQL offline, including model/DDL agreement and additive changes for existing tables. These checks do

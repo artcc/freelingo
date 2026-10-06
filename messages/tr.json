@@ -1435,41 +1435,44 @@
     "skip": "Atla",
     "prev": "Geri",
     "next": "İleri",
-    "done": "Başlayalım",
+    "done": "Panelimi keşfet",
+    "progress": "{current} / {total}",
+    "listen": "Lingu'yu dinle",
+    "audioError": "Ses oynatılamadı. Tekrar deneyebilirsiniz.",
     "step1": {
       "label": "Hoş geldiniz",
       "title": "FreeLingo'ya hoş geldiniz",
-      "desc": "FreeLingo, yapay zekâ destekli dil eğitmeninizdir. Konuşmalar, dersler ve akıllı bilgi kartlarıyla, istediğiniz zaman kendi hızınızda pratik yapın."
+      "desc": "Merhaba! Ben Lingu, dil öğrenme arkadaşınız. Birlikte nasıl öğrenebileceğimizi göstereyim."
     },
     "step2": {
-      "label": "Yazılı sohbet",
-      "title": "Eğitmeninizle sohbet edin",
-      "desc": "Yapay zekâ eğitmeninizle yazılı konuşmalar yapın. Soru sorun, düzeltmeler alın ve dil bilgisi ile kelime bilginizi doğal bir şekilde geliştirin."
+      "label": "Çalışma planı",
+      "title": "Öğrenme planınız",
+      "desc": "Önce seviyenizi seçin veya seviye tespiti yapın. Böylece size uygun derslerden oluşan bir çalışma planınız olur."
     },
     "step3": {
-      "label": "Ses",
-      "title": "Gerçek zamanlı konuşun",
-      "desc": "Gerçek zamanlı deşifre ve telaffuzunuz hakkında anında geri bildirimle konuşma becerinizi geliştirmek için sesli konuşma modunu kullanın."
+      "label": "Sohbet",
+      "title": "Benimle pratik yapın",
+      "desc": "Soru sormak ve pratik yapmak için bana yazın veya benimle sesli konuşun."
     },
     "step4": {
       "label": "Bilgi Kartları",
-      "title": "Hiçbir kelimeyi unutmayın",
-      "desc": "Bilgi kartları SM-2 aralıklı tekrar algoritmasını kullanır; böylece kelimeleri tam unutmak üzereyken tekrar edersiniz ve akılda kalıcılık en üst düzeye çıkar."
+      "title": "Öğrendiklerinizi hatırlayın",
+      "desc": "Pratik zamanı geldiğinde yeniden karşınıza çıkan kartlarla kelimeleri tekrar edin."
     },
     "step5": {
-      "label": "Çalışma planı",
-      "title": "Size özel planınız",
-      "desc": "FreeLingo, seviye tespitinize göre hedeflerinize ve ilerlemenize uyarlanmış günlük derslerden oluşan yapılandırılmış bir çalışma planı oluşturur."
+      "label": "Dinleme ve okuma",
+      "title": "Anlama becerinizi geliştirin",
+      "desc": "Seviyenize uygun metinleri dinleyerek ve okuyarak pratik yapın. Soruları yanıtlayın ve anladıklarınızı kontrol edin."
     },
     "step6": {
-      "label": "Pratik",
-      "title": "Dinleme ve Okuma",
-      "desc": "Yapay zekâ ile üretilmiş alıştırmalarla anlama becerinizi sınayın. Bir metni dinleyip 5 soruyu cevaplayın ya da CEFR seviyenize uygun bir metin okuyun — her doğru cevap için XP kazanın."
+      "label": "Oyunlar",
+      "title": "Oynayarak öğrenin",
+      "desc": "Hata Dedektifi, Cümleyi sırala ve Kelime çiftleri gibi çeşitli oyunlarla seviyenize uygun pratik yapın. Öğrenmek eğlenceli de olabilir!"
     },
     "step7": {
       "label": "Hazır",
-      "title": "Her şey hazır!",
-      "desc": "Bugünün dersiyle başlayın, bir sohbet açın, dinleme veya okuma pratiği yapın — FreeLingo sizin öğrenme tarzınıza uyum sağlar."
+      "title": "Haydi başlayalım",
+      "desc": "Adım adım ilerleyelim! Sırada ne yapabileceğinizi panelinizde bulabilirsiniz."
     }
   },
   "billing": {

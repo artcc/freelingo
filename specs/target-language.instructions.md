@@ -39,9 +39,9 @@ Static curriculum, Grammar, Vocabulary, Phrasebook, and assessment dispatchers c
 `en-GB` for unknown inputs rather than rejecting them. Validated product flows should still reject
 unsupported codes before dispatch.
 
-Earlier database migrations installed `en-US` server defaults on some columns. Ordinary application
-creation paths provide `en-GB` explicitly through schema/ORM defaults; direct inserts relying only on
-historical database defaults are not the supported application path.
+The Alembic-managed schema defines `en-US` server defaults for `users.target_language` and
+`study_plans.target_language`. Application creation paths provide `en-GB` through schema/ORM defaults;
+direct inserts relying only on those server defaults are not the supported application path.
 
 ## Metadata
 

@@ -153,6 +153,31 @@ availability remain governed by the Study Plan specification.
 Announcements come from public config state. Onboarding Tour and What's New coordinate their own
 display priority through their dedicated behavior.
 
+### Dashboard tour
+
+`OnboardingTour` is a seven-screen introduction: Lingu's welcome, study plan, text/voice practice,
+flashcards, listening/reading, games, and a dashboard-oriented closing. Games names are examples of
+the growing catalog, not an exhaustive list. Games have no blanket Premium marker.
+
+- Copy and manual narration use the interface locale, independently of native or target language.
+- Lingu greets once, rests between interactions, speaks during audio playback, encourages on the
+  Games screen, and celebrates at the closing. Entry gestures play only on the first visit to their
+  screen within the current tour. Gestures never delay narration or navigation.
+- Audio starts only from the button beside the current paragraph. It never autoplays the next screen.
+  Navigation, dismissal, and unmount stop playback and cancel pending browser requests. Failure leaves
+  the text and navigation available and permits retry.
+- The native modal dialog traps focus, closes on Escape, restores focus, and locks background scroll.
+  The character is decorative; reduced motion, loading, or unavailable WebGL use a static image.
+- Completion and skipping write the browser-local `fl_tour_done_v1.10.0` flag, centralized as
+  `TOUR_STORAGE_KEY` in `lib/onboarding-tour.ts`. Other completion keys do not suppress the current
+  tour. Change this key only to intentionally reintroduce the tour, independently of app releases.
+  Logout clears the current key. What's New checks it only on mount, so it does not overlap the tour
+  or open immediately behind its dismissal; pending news can appear on the next Dashboard mount.
+- The final action closes the modal on Dashboard; it does not assume an existing plan or lesson.
+
+Narration persistence and the authenticated endpoint are specified in
+`speech-services.instructions.md`.
+
 ## Text tutor
 
 Text chat stores conversations and messages in PostgreSQL and isolates retrieval by target language.

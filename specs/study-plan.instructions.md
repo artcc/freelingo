@@ -89,8 +89,8 @@ end-of-level assessment; see the completion section below.
 ## End-of-plan completion and assessment eligibility
 
 The final `completion-test` slot is the real end-of-level assessment position, not a teachable lesson.
-Plans generated before v1.7.0 stored that same reserved slot as `unit_id="level-test"`; both ids
-identify the reserved position and receive identical treatment.
+Both `unit_id="completion-test"` and `unit_id="level-test"` identify the reserved position and
+receive identical treatment.
 Eligibility is derived from the persisted plan by `completion_service.py` and is the same everywhere:
 
 - The learner is eligible after reaching the final position (`progress_day >= total_days - 1`) with no
@@ -111,10 +111,10 @@ The dashboard and My Plan use this field as the single source of truth for the e
 assessment endpoints enforce eligibility server-side; see `learning-resources.instructions.md` and
 `api-endpoints.instructions.md`.
 
-The reserved slot never runs the ordinary lesson generator. A legacy lesson persisted for that slot
-before this contract remains readable: it is returned while the assessment is pending and is neither
-rewritten nor deleted. Once a result exists, the final slot presents only the result. A legacy result
-persisted before the final position does not fabricate completion: `GET /api/study-plan/today` still
+The reserved slot never runs the ordinary lesson generator. A lesson already persisted for that slot
+remains readable: it is returned while the assessment is pending and is neither rewritten nor deleted.
+Once a result exists, the final slot presents only the result. A result persisted before the final
+position does not fabricate completion: `GET /api/study-plan/today` still
 reports `in_progress`, the stored result remains visible in My Plan, and the plan keeps running until
 the final position is reached. Taking the assessment does not rewrite `progress_day`, and no plan path
 mutates it to fabricate completion.

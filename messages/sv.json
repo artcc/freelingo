@@ -1435,41 +1435,44 @@
     "skip": "Hoppa över",
     "prev": "Tillbaka",
     "next": "Nästa",
-    "done": "Kom igång",
+    "done": "Utforska min översikt",
+    "progress": "{current} av {total}",
+    "listen": "Lyssna på Lingu",
+    "audioError": "Ljudet kunde inte spelas upp. Du kan försöka igen.",
     "step1": {
       "label": "Välkommen",
       "title": "Välkommen till FreeLingo",
-      "desc": "FreeLingo är din AI-drivna språkhandledare. Öva i din egen takt, när som helst, genom samtal, lektioner och smarta gloskort."
+      "desc": "Hej! Jag är Lingu, din kompis när du lär dig språk. Jag visar dig hur vi kan lära oss tillsammans."
     },
     "step2": {
-      "label": "Textchatt",
-      "title": "Chatta med din handledare",
-      "desc": "Ha skriftliga samtal med din AI-handledare. Ställ frågor, få rättelser och öva grammatik och ordförråd på ett naturligt sätt."
+      "label": "Studieplan",
+      "title": "Din studieplan",
+      "desc": "Börja med att välja din nivå eller göra ett nivåtest. Då får du en studieplan med lektioner som passar dig."
     },
     "step3": {
-      "label": "Röst",
-      "title": "Prata i realtid",
-      "desc": "Använd röstsamtal för att öva talspråk med transkription i realtid och omedelbar återkoppling på ditt uttal."
+      "label": "Samtal",
+      "title": "Öva med mig",
+      "desc": "Skriv till mig för att ställa frågor och öva, eller prata med mig i ett röstsamtal."
     },
     "step4": {
       "label": "Gloskort",
-      "title": "Glöm aldrig ett ord",
-      "desc": "Gloskorten använder SM-2-algoritmen för utspridd repetition så att du repeterar orden precis innan du håller på att glömma dem – för bättre minne på lång sikt."
+      "title": "Kom ihåg det du lärt dig",
+      "desc": "Repetera ordförråd med kort som dyker upp igen när det är dags att öva."
     },
     "step5": {
-      "label": "Studieplan",
-      "title": "Din personliga plan",
-      "desc": "Utifrån din nivåbedömning skapar FreeLingo en strukturerad studieplan med dagliga lektioner som anpassas till dina mål och framsteg."
+      "label": "Lyssna och läsa",
+      "title": "Träna din förståelse",
+      "desc": "Öva genom att lyssna på och läsa texter på din nivå. Svara på frågor och kontrollera vad du har förstått."
     },
     "step6": {
-      "label": "Öva",
-      "title": "Hörförståelse och läsning",
-      "desc": "Testa din förståelse med AI-genererade övningar. Lyssna på ett avsnitt och svara på fem frågor eller läs en text på din GERS-nivå – få XP för varje rätt svar."
+      "label": "Spel",
+      "title": "Lär genom att spela",
+      "desc": "Öva på din nivå med spel som Feldetektiv, Ordna meningen och Ordpar, bland andra. Det kan också vara roligt att lära sig!"
     },
     "step7": {
       "label": "Redo",
-      "title": "Nu är du redo!",
-      "desc": "Börja med dagens lektion, öppna en chatt eller öva hörförståelse och läsning – FreeLingo anpassar sig till hur du vill lära dig."
+      "title": "Nu sätter vi igång",
+      "desc": "Vi tar det steg för steg! Din översikt visar vad du kan göra härnäst."
     }
   },
   "billing": {

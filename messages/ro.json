@@ -1435,41 +1435,44 @@
     "skip": "Sari peste",
     "prev": "Înapoi",
     "next": "Următor",
-    "done": "Să începem",
+    "done": "Explorează panoul meu",
+    "progress": "{current} din {total}",
+    "listen": "Ascultă-l pe Lingu",
+    "audioError": "Sunetul nu a putut fi redat. Poți încerca din nou.",
     "step1": {
       "label": "Bun venit",
       "title": "Bun venit la FreeLingo",
-      "desc": "FreeLingo este tutorul tău de limbi străine bazat pe inteligență artificială. Exersează în ritmul tău, oricând, prin conversații, lecții și flashcard-uri inteligente."
+      "desc": "Salut! Sunt Lingu, partenerul tău pentru învățarea limbilor. Îți arăt cum putem învăța împreună."
     },
     "step2": {
-      "label": "Chat text",
-      "title": "Discută cu tutorul tău",
-      "desc": "Poartă conversații scrise cu tutorul tău IA. Pune întrebări, primește corecturi și exersează gramatică și vocabular în mod natural."
+      "label": "Plan de studiu",
+      "title": "Planul tău de învățare",
+      "desc": "Începe prin a-ți alege nivelul sau a face o evaluare. Vei avea un plan de studiu cu lecții adaptate ție."
     },
     "step3": {
-      "label": "Voce",
-      "title": "Vorbește în timp real",
-      "desc": "Folosește modul de conversație vocală pentru a-ți exersa limba vorbită cu transcriere în timp real și feedback imediat despre pronunție."
+      "label": "Conversație",
+      "title": "Exersează cu mine",
+      "desc": "Scrie-mi pentru a pune întrebări și a exersa sau vorbește cu mine prin voce."
     },
     "step4": {
       "label": "Flashcard-uri",
-      "title": "Nu uita niciun cuvânt",
-      "desc": "Flashcard-urile folosesc algoritmul de repetiție spațiată SM-2 pentru a revizui cuvintele exact când ești pe cale să le uiți."
+      "title": "Reține ce ai învățat",
+      "desc": "Repetă vocabularul cu fișe care reapar când este momentul potrivit să exersezi."
     },
     "step5": {
-      "label": "Plan de studiu",
-      "title": "Planul tău personalizat",
-      "desc": "Pe baza evaluării nivelului tău, FreeLingo creează un plan de studiu structurat cu lecții zilnice adaptate obiectivelor tale."
+      "label": "Ascultare și lectură",
+      "title": "Antrenează-ți înțelegerea",
+      "desc": "Exersează ascultând și citind texte de nivelul tău. Răspunde la întrebări și verifică ce ai înțeles."
     },
     "step6": {
-      "label": "Practică",
-      "title": "Ascultare & Lectură",
-      "desc": "Testează-ți înțelegerea cu exerciții generate de IA. Ascultă un pasaj și răspunde la 5 întrebări, sau citește un text la nivelul tău CEFR — câștigă XP pentru fiecare răspuns corect."
+      "label": "Jocuri",
+      "title": "Învață jucându-te",
+      "desc": "Exersează la nivelul tău cu jocuri precum Detectivul greșelilor, Ordonează propoziția și Perechi de vocabular, printre altele. Învățarea poate fi și distractivă!"
     },
     "step7": {
       "label": "Gata",
-      "title": "Ești pregătit!",
-      "desc": "Începe cu lecția de azi, deschide un chat sau exersează ascultarea și lectura — FreeLingo se adaptează modului tău de a învăța."
+      "title": "Să începem",
+      "desc": "Să o luăm pas cu pas! În panoul tău vei găsi ce poți face în continuare."
     }
   },
   "billing": {

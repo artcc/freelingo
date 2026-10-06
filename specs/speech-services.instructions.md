@@ -109,6 +109,29 @@ There is no implicit English fallback.
 - Invalid voices return `400`; a missing service object returns `503`.
 - Generates the Lingu preview once and atomically caches it as `/app/tts_previews/{voice}.mp3`.
 
+### `POST /api/tts/tour/{locale}/{step}`
+
+- Requires authentication; rate limit `20/minute`.
+- Accepts one of the fifteen UI locales and `step1` through `step7`; unknown values return `404`.
+- `messages/*.json` owns tour copy. The frontend resolves the displayed paragraph through i18n and
+  sends it as `text` in the JSON request body. The backend validates text length (1–5000 characters;
+  invalid or missing text returns `422`) and synthesizes that supplied text.
+- An optional JSON `voice` selects a supported OpenAI voice (`400` for an invalid selection).
+  Omission uses the configured default. Kokoro always uses its configured default, ignoring client voice preferences.
+  Locale follows the interface, not the learned language; provider language/voice behavior is unchanged.
+- `services/tour_audio.py` stores shared MP3 files at
+  `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.mp3`. The hash includes the exact text, locale,
+  effective provider/model/voice/speed, and output format. Requests never overwrite a different version.
+- Shared-volume file locks serialize generation across workers; cancellable acquisition and synthesis
+  share a 60-second deadline. A second request rechecks the file after obtaining the lock. Writes use
+  unique temporary files and atomic replacement; empty output and failures do not publish audio.
+- Returns `audio/mpeg` and `Cache-Control: no-store`: the backend disk cache is authoritative because
+  the URL does not identify text or provider revisions. Missing service/provider failure returns `503`;
+  the generation deadline returns `504`. The UI permits retry without blocking the tour.
+- The Next.js proxy has a 70-second deadline and the browser a 75-second budget. Browser navigation
+  cancels its request and discards late responses; already-started backend generation may finish and
+  populate the shared cache after the browser leaves.
+
 ### `POST /api/stt`
 
 - Requires authentication.
@@ -151,6 +174,15 @@ Error Detective also uses this same component and endpoint for the full correcte
 the correction step has been submitted. Generated explanations are not spoken. Existing provider
 and voice-preference rules apply; audio failure does not change the game result or block completion.
 
+`AudioPlayer` defaults to POST `/api/tts`; a custom `audioUrl` defaults to GET. Setting `audioMethod`
+to POST sends the text and resolved voice as JSON to that URL.
+
+The dashboard tour posts its displayed i18n text and voice to its locale/step audio URL with this
+player. Optional playback-state notifications coordinate Lingu's speaking animation; they do not
+provide phoneme-level lip sync.
+Stopping, replacing content, and unmounting abort requests, stop playback, remove audio handlers, and
+release Blob URLs and timers. Each tour screen requires its own manual playback action.
+
 `VoiceRecorder`:
 
 - requires a resource-owning plan ID;
@@ -175,6 +207,7 @@ Persistent MP3 uses include:
 - Listening: `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
 - Phrasebook: hashed files below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`.
 - OpenAI previews: `/app/tts_previews/{voice}.mp3`.
+- Dashboard tour: `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.mp3`.
 
 The compose stack mounts persistent host storage for generated audio and previews. Local Kokoro and
 Whisper services use internal network addresses and are not called from the frontend.

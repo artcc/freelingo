@@ -1435,41 +1435,44 @@
     "skip": "Preskoči",
     "prev": "Natrag",
     "next": "Dalje",
-    "done": "Započni",
+    "done": "Istraži moju nadzornu ploču",
+    "progress": "{current} od {total}",
+    "listen": "Poslušaj Lingua",
+    "audioError": "Zvuk nije moguće reproducirati. Možeš pokušati ponovno.",
     "step1": {
       "label": "Dobrodošli",
       "title": "Dobrodošli u FreeLingo",
-      "desc": "FreeLingo je tvoj AI učitelj jezika. Vježbaj svojim tempom, kad god želiš, uz razgovore, lekcije i pametne kartice."
+      "desc": "Bok! Ja sam Lingu, tvoj suputnik u učenju jezika. Pokazat ću ti kako možemo učiti zajedno."
     },
     "step2": {
-      "label": "Tekstualni chat",
-      "title": "Razgovaraj sa svojim učiteljem",
-      "desc": "Razgovaraj pisanjem s AI učiteljem. Postavljaj pitanja, dobivaj ispravke i vježbaj gramatiku i rječnik na prirodan način."
+      "label": "Plan učenja",
+      "title": "Tvoj plan učenja",
+      "desc": "Započni odabirom razine ili procjenom znanja. Tako ćeš dobiti plan učenja s lekcijama prilagođenima tebi."
     },
     "step3": {
-      "label": "Glas",
-      "title": "Govori u stvarnom vremenu",
-      "desc": "U glasovnim razgovorima vježbaj govor uz prijepis u stvarnom vremenu i trenutne povratne informacije o izgovoru."
+      "label": "Razgovor",
+      "title": "Vježbaj sa mnom",
+      "desc": "Piši mi kako bi postavljao pitanja i vježbao ili razgovaraj sa mnom glasom."
     },
     "step4": {
       "label": "Kartice",
-      "title": "Ne zaboravi nijednu riječ",
-      "desc": "Kartice koriste SM-2 algoritam ponavljanja u razmacima kako bi ponovio riječi upravo kad ih počinješ zaboravljati – za dugotrajnije pamćenje."
+      "title": "Zapamti naučeno",
+      "desc": "Ponavljaj riječi uz kartice koje se ponovno pojavljuju kad je vrijeme za vježbu."
     },
     "step5": {
-      "label": "Plan učenja",
-      "title": "Tvoj osobni plan",
-      "desc": "Na temelju procjene razine FreeLingo stvara strukturirani plan s dnevnim lekcijama prilagođenima tvojim ciljevima i napretku."
+      "label": "Slušanje i čitanje",
+      "title": "Vježbaj razumijevanje",
+      "desc": "Vježbaj slušajući i čitajući tekstove na svojoj razini. Odgovaraj na pitanja i provjeri što razumiješ."
     },
     "step6": {
-      "label": "Vježba",
-      "title": "Slušanje i čitanje",
-      "desc": "Provjeri razumijevanje uz vježbe koje stvara AI. Poslušaj ulomak i odgovori na pet pitanja ili pročitaj tekst na svojoj CEFR razini – osvoji XP za svaki točan odgovor."
+      "label": "Igre",
+      "title": "Uči igrajući se",
+      "desc": "Vježbaj na svojoj razini uz igre poput Detektiv pogrešaka, Složi rečenicu i Parovi riječi, među ostalima. Učenje može biti i zabavno!"
     },
     "step7": {
       "label": "Spremno",
-      "title": "Sve je spremno!",
-      "desc": "Započni današnjom lekcijom, otvori chat ili vježbaj slušanje i čitanje – FreeLingo se prilagođava tvojem načinu učenja."
+      "title": "Krenimo",
+      "desc": "Idemo korak po korak! Na svojoj nadzornoj ploči pronaći ćeš što možeš raditi dalje."
     }
   },
   "billing": {

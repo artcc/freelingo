@@ -80,7 +80,7 @@ Currently gated operations are:
 - completing a lesson;
 - generating and submitting Listening attempts;
 - generating and submitting Reading attempts;
-- creating new Error Detective games (durable reservation policy below);
+- creating new Error Detective, Sentence Order, or Vocabulary Pairs games (durable reservation policy below);
 - voice-conversation warmup and WebSocket connection.
 
 Read-only policy protects chat history, Listening next/audio/history, and Reading next/history.
@@ -225,8 +225,9 @@ the WebSocket session context.
 ## Maintenance mode
 
 Maintenance is a Redis runtime flag managed from Admin > System and exposed through public config.
-It blocks chat, voice conversation, Listening, and Reading for non-admin users with HTTP `503` or
-WebSocket close 1013. Administrators bypass maintenance. Other learning areas remain available.
+It blocks chat, voice conversation, Listening, Reading, and game creation for non-admin users with
+HTTP `503` or WebSocket close 1013. Administrators bypass maintenance. Saved game sessions and other
+learning areas remain available.
 
 Redis failure while checking maintenance is fail-open. Maintenance is checked when requests or
 WebSocket sessions start; changing the flag does not terminate existing sessions. Frontend gates

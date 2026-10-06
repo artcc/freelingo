@@ -1435,41 +1435,44 @@
     "skip": "Pomiń",
     "prev": "Wstecz",
     "next": "Dalej",
-    "done": "Zaczynamy",
+    "done": "Odkryj mój panel",
+    "progress": "{current} z {total}",
+    "listen": "Posłuchaj Lingu",
+    "audioError": "Nie udało się odtworzyć dźwięku. Spróbuj ponownie.",
     "step1": {
       "label": "Witaj",
       "title": "Witaj w FreeLingo",
-      "desc": "FreeLingo to Twój korepetytor językowy oparty na sztucznej inteligencji. Ćwicz we własnym tempie, o dowolnej porze, przez rozmowy, lekcje i inteligentne fiszki."
+      "desc": "Cześć! Jestem Lingu, Twój towarzysz nauki języków. Pokażę Ci, jak możemy uczyć się razem."
     },
     "step2": {
-      "label": "Czat tekstowy",
-      "title": "Rozmawiaj z tutorem",
-      "desc": "Prowadź pisemne rozmowy z tutorem AI. Zadawaj pytania, otrzymuj poprawki i ćwicz gramatykę i słownictwo w naturalny sposób."
+      "label": "Plan nauki",
+      "title": "Twój plan nauki",
+      "desc": "Zacznij od wyboru poziomu lub testu poziomującego. Otrzymasz plan nauki z lekcjami dopasowanymi do Ciebie."
     },
     "step3": {
-      "label": "Głos",
-      "title": "Mów w czasie rzeczywistym",
-      "desc": "Korzystaj z trybu rozmowy głosowej, aby ćwiczyć mówiony język z transkrypcją na żywo i natychmiastową informacją zwrotną o wymowie."
+      "label": "Rozmowa",
+      "title": "Ćwicz ze mną",
+      "desc": "Pisz do mnie, aby zadawać pytania i ćwiczyć, albo porozmawiaj ze mną głosowo."
     },
     "step4": {
       "label": "Fiszki",
-      "title": "Nie zapomnij żadnego słowa",
-      "desc": "Fiszki używają algorytmu powtórek rozłożonych w czasie SM-2, dzięki czemu powtarzasz słowa dokładnie wtedy, gdy jesteś bliski ich zapomnienia."
+      "title": "Zapamiętaj to, czego się uczysz",
+      "desc": "Powtarzaj słownictwo z fiszkami, które wracają, gdy nadchodzi pora na ćwiczenie."
     },
     "step5": {
-      "label": "Plan nauki",
-      "title": "Twój spersonalizowany plan",
-      "desc": "Na podstawie oceny poziomu FreeLingo tworzy ustrukturyzowany plan nauki z codziennymi lekcjami dostosowanymi do Twoich celów."
+      "label": "Słuchanie i czytanie",
+      "title": "Ćwicz rozumienie",
+      "desc": "Ćwicz słuchanie i czytanie tekstów na swoim poziomie. Odpowiadaj na pytania i sprawdzaj, ile rozumiesz."
     },
     "step6": {
-      "label": "Ćwiczenia",
-      "title": "Słuchanie & Czytanie",
-      "desc": "Sprawdź swoje rozumienie dzięki ćwiczeniom generowanym przez AI. Posłuchaj fragmentu i odpowiedz na 5 pytań lub przeczytaj tekst na swoim poziomie CEFR — zdobywaj XP za każdą poprawną odpowiedź."
+      "label": "Gry",
+      "title": "Ucz się przez zabawę",
+      "desc": "Ćwicz na swoim poziomie w grach takich jak Detektyw błędów, Ułóż zdanie i Pary słówek, między innymi. Nauka też może być zabawą!"
     },
     "step7": {
       "label": "Gotowy",
-      "title": "Wszystko gotowe!",
-      "desc": "Zacznij od dzisiejszej lekcji, otwórz czat lub ćwicz słuchanie i czytanie — FreeLingo dostosowuje się do Twojego stylu nauki."
+      "title": "Zaczynajmy",
+      "desc": "Działajmy krok po kroku! W swoim panelu znajdziesz wskazówki, co robić dalej."
     }
   },
   "billing": {

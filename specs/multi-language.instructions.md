@@ -85,8 +85,8 @@ The following data is scoped to a study plan and therefore isolated between targ
 - flashcards and their review state;
 - user competencies;
 - Listening attempts;
-- Reading attempts.
-- Error Detective sessions, source content, answers and game XP.
+- Reading attempts;
+- Error Detective, Sentence Order, and Vocabulary Pairs sessions, source content, answers, and game XP.
 
 `progress`, `flashcards`, `user_competencies`, `listening_attempts`, and `reading_attempts` have a
 required `study_plan_id` with `ON DELETE CASCADE`. Lessons also cascade with their plan.

@@ -4,10 +4,10 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { useTranslations, useMessages } from 'next-intl'
 import { CircleDot } from 'lucide-react'
+import { TOUR_STORAGE_KEY } from '@/lib/onboarding-tour'
 
 const WHATS_NEW_VERSION = 'v1.10.0'
 const STORAGE_KEY = `fl_whats_new_seen_${WHATS_NEW_VERSION}`
-const TOUR_KEY = 'fl_tour_done'
 
 export default function WhatsNew() {
   const t = useTranslations('whatsNew')
@@ -29,7 +29,7 @@ export default function WhatsNew() {
   }, [messages])
 
   useEffect(() => {
-    const tourDone = localStorage.getItem(TOUR_KEY)
+    const tourDone = localStorage.getItem(TOUR_STORAGE_KEY)
     const seen = localStorage.getItem(STORAGE_KEY)
     if (tourDone && !seen) {
       setVisible(true)
