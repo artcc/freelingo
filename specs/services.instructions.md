@@ -138,7 +138,11 @@ best-effort and must not fail the visible tutor response.
 ## Speech
 
 `tts_service.py` exposes `synthesize(text, voice=None, language=None) -> bytes` through local Kokoro or
-OpenAI. Both adapters currently ignore `language`; provider voice configuration determines output.
+OpenAI. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts` and its snapshots,
+using the supplied language/region when available and requesting language inference otherwise.
+Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
+Voice selection remains independent of language. OpenAI synthesis cache keys include instructions
+only when supported by the configured model.
 
 `stt_service.py` exposes
 `transcribe(audio_bytes, filename, mime_type, *, language) -> str` through local faster-whisper or

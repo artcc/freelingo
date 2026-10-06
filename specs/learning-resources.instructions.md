@@ -97,9 +97,12 @@ romanization. CJK resources provide romanization data, though the current page d
 - `GET /api/phrasebook/audio/{category_id}/{phrase_index}`: authenticated, `30/minute`; returns
   cached MP3, `404` for invalid category/index, or `503` without TTS.
 
-Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/` under a hash of language,
-category, index, and text. Generation writes a temporary file and replaces atomically. Responses use
-a one-day public cache header. The endpoint sends text to TTS without an explicit language argument.
+Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`. Instruction-capable OpenAI
+models use a synthesis hash covering text, language, model, voice, speed, format, and instructions;
+other providers/models retain a hash of language, category, index, and text. Generation writes a
+temporary file and replaces atomically. Responses use `Cache-Control: no-store`, and browser playback
+bypasses its HTTP cache while retaining the backend disk cache. The endpoint passes the full target
+language to TTS for pronunciation guidance when supported by the configured model.
 
 The page filters A1-C2, register, and target text. It searches phrase text but not context. Categories
 display phrases directly rather than through expansion controls. Each phrase has explicit audio and

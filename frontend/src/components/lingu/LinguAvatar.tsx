@@ -33,7 +33,7 @@ function Placeholder({ onReady }: { onReady?: () => void }) {
 
 const Scene = dynamic<LinguSceneProps>(
   () => import('./LinguScene').catch(() => ({ default: Placeholder })),
-  { ssr: false, loading: Placeholder }
+  { ssr: false, loading: () => <Placeholder /> }
 )
 
 function subscribe(callback: () => void) {

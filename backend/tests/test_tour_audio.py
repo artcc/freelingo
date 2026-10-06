@@ -82,6 +82,19 @@ async def test_cache_identity_covers_effective_settings_and_text(tour_service):
     assert tour_service.synthesize.await_count == 6
 
 
+async def test_tour_regenerates_when_pronunciation_changes(tour_service, monkeypatch):
+    tour_service.model = "gpt-4o-mini-tts"
+    original = await get_tour_audio(tour_service, locale="es", text=TEXT, voice=None)
+    monkeypatch.setattr(
+        "app.services.tts_service.build_speech_instructions",
+        lambda language: "Revised pronunciation",
+    )
+    revised = await get_tour_audio(tour_service, locale="es", text=TEXT, voice=None)
+    assert revised != original
+    assert original.is_file()
+    assert tour_service.synthesize.await_count == 2
+
+
 async def test_kokoro_keeps_configured_voice(client, test_user, tour_service, monkeypatch):
     service = KokoroTTSService("http://unused", "af_heart")
     service.synthesize = AsyncMock(return_value=b"ID3kokoro")

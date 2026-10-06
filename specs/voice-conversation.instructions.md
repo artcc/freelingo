@@ -59,7 +59,9 @@ language and plan. Without a plan, the session uses CEFR A2, a null plan referen
 active, or default `en-GB` language.
 
 The pipeline converts the resolved target language to ISO 639-1 and declares it in every STT call.
-Both TTS adapters currently ignore the language argument.
+TTS receives the full resolved BCP-47 target language so regional distinctions such as `en-GB` and
+`en-US` remain available. OpenAI uses it in pronunciation instructions for `gpt-4o-mini-tts` and its
+snapshots; legacy/unknown OpenAI models and Kokoro ignore it.
 
 The current fallback path can combine a fallback active plan with a different target language sent
 by the client. This association is not enforced by the WebSocket contract.

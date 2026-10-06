@@ -233,6 +233,12 @@ The dedicated `api/tts/tour/[locale]/[step]` proxy forwards the JSON body, authe
 IP headers, propagates cancellation, and uses a 70-second deadline. The backend validates the request,
 synthesizes the supplied text, and owns the persistent audio cache.
 
+For generic TTS, `AudioPlayer` posts an optional `studyPlanId` as `study_plan_id` or `conversationId`
+as `conversation_id`. Lessons, flashcards, saved vocabulary, and games use their persisted resource's
+plan ID; chat uses its conversation ID. The backend authorizes that context and resolves its language.
+Context changes cancel pending requests and release playback. Custom audio GET requests bypass browser
+caches with `cache: 'no-store'`; Phrasebook retains its backend disk cache and returns HTTP `no-store`.
+
 Chat consumes JSON SSE events and must handle response reset before appending subsequent content.
 Voice conversation owns microphone/VAD and playback lifecycle with cancellation and late-callback
 guards. Resource audio components fetch authenticated blobs and release object URLs on replacement or

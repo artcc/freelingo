@@ -164,6 +164,7 @@ export default function SentenceOrderSessionPage() {
             <AudioPlayer
               key={challenge.index}
               text={challenge.corrected_sentence}
+              studyPlanId={session?.study_plan_id}
               size="sm"
             />
           )}

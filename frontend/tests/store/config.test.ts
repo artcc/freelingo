@@ -11,7 +11,7 @@ describe('useConfigStore', () => {
       stripeTrialDays: 7,
       freemiumTrialEnabled: true,
       ttsProvider: 'local',
-      openaiTtsVoice: 'nova',
+      openaiTtsVoice: 'fable',
       maintenanceMode: false,
       dashboardBanner: null,
       loaded: false,
@@ -162,7 +162,7 @@ describe('useConfigStore', () => {
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
     expect(useConfigStore.getState().stripeTrialDays).toBe(7)
     expect(useConfigStore.getState().ttsProvider).toBe('local')
-    expect(useConfigStore.getState().openaiTtsVoice).toBe('nova')
+    expect(useConfigStore.getState().openaiTtsVoice).toBe('fable')
     expect(useConfigStore.getState().maintenanceMode).toBe(false)
     expect(useConfigStore.getState().freemiumTrialEnabled).toBe(true)
     expect(useConfigStore.getState().dashboardBanner).toBeNull()

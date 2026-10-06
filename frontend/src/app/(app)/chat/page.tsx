@@ -549,7 +549,11 @@ export default function ChatPage() {
                       msg.content &&
                       !(sending && i === messages.length - 1) && (
                         <div className="mt-1">
-                          <AudioPlayer text={msg.content} size="sm" />
+                          <AudioPlayer
+                            text={msg.content}
+                            conversationId={activeId ?? undefined}
+                            size="sm"
+                          />
                         </div>
                       )}
                   </div>

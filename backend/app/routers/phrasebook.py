@@ -37,6 +37,7 @@ from app.services.resource_native_help import (
     native_help_lock_key,
     upsert_native_help,
 )
+from app.services.tts_service import OpenAITTSService
 
 router = APIRouter(prefix="/api/phrasebook", tags=["phrasebook"])
 logger = get_logger(__name__)
@@ -246,11 +247,13 @@ async def get_phrase_audio(
     cache_key = hashlib.sha256(
         f"{language}:{category_id}:{phrase_index}:{phrase.text}".encode()
     ).hexdigest()[:16]
+    tts_service = getattr(request.app.state, "tts_service", None)
+    if isinstance(tts_service, OpenAITTSService) and tts_service.get_instructions(language):
+        cache_key = tts_service.get_cache_key(phrase.text, language=language)
     audio_dir = os.path.join(settings.AUDIO_STORAGE_PATH, "phrasebook", iso)
     cache_path = os.path.join(audio_dir, f"{cache_key}.mp3")
 
     if not os.path.isfile(cache_path):
-        tts_service = getattr(request.app.state, "tts_service", None)
         if tts_service is None:
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -258,7 +261,7 @@ async def get_phrase_audio(
             )
 
         os.makedirs(audio_dir, exist_ok=True)
-        audio = await tts_service.synthesize(phrase.text)
+        audio = await tts_service.synthesize(phrase.text, language=language)
         tmp_path = cache_path + ".tmp"
         with open(tmp_path, "wb") as fh:  # noqa: PTH123
             fh.write(audio)
@@ -275,5 +278,5 @@ async def get_phrase_audio(
     return FileResponse(
         path=cache_path,
         media_type="audio/mpeg",
-        headers={"Cache-Control": "public, max-age=86400"},
+        headers={"Cache-Control": "no-store"},
     )

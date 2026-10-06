@@ -333,7 +333,11 @@ export default function FlashcardsPage() {
                         {cards[current].word}
                       </TargetLanguageText>
                       <span onClick={(e) => e.stopPropagation()}>
-                        <AudioPlayer text={cards[current].word} size="md" />
+                        <AudioPlayer
+                          text={cards[current].word}
+                          studyPlanId={cards[current].study_plan_id}
+                          size="md"
+                        />
                       </span>
                     </div>
                   ) : (
