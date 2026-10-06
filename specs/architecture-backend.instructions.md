@@ -31,6 +31,12 @@ CORS and security headers, and manages database/Redis startup and shutdown.
 
 ## Layers
 
+The Games domain uses `models/game.py`, `schemas/games.py`, `routers/games.py`, `services/games.py`
+and `services/prompts/games.py`. Sessions belong to persisted study plans. Global daily admission
+reservations live in PostgreSQL and are serialized with a user-row lock; generation state and its
+deadline fence late background results. Answers and plan-owned XP commit atomically. Its schema is
+supplied by revision `0054_detective_games`; see `games.instructions.md` for the domain contract.
+
 ### Core
 
 `app/core/config.py` is the authoritative `Settings` schema. `.env.example` documents deployable

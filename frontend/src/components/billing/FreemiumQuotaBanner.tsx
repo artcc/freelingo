@@ -7,7 +7,7 @@ import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 
 interface FreemiumQuotaBannerProps {
-  feature: 'chat' | 'lessons' | 'listening' | 'reading' | 'voice'
+  feature: 'chat' | 'lessons' | 'listening' | 'reading' | 'voice' | 'games'
   className?: string
 }
 
@@ -58,6 +58,11 @@ export function FreemiumQuotaBanner({
     string,
     { remaining: number; limit: number; label: string }
   > = {
+    games: {
+      remaining: status.games_remaining,
+      limit: status.games_limit,
+      label: t('gamesLabel'),
+    },
     chat: {
       remaining: status.chat_remaining,
       limit: status.chat_limit,

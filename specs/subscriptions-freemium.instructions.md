@@ -80,6 +80,7 @@ Currently gated operations are:
 - completing a lesson;
 - generating and submitting Listening attempts;
 - generating and submitting Reading attempts;
+- creating new Error Detective games (durable reservation policy below);
 - voice-conversation warmup and WebSocket connection.
 
 Read-only policy protects chat history, Listening next/audio/history, and Reading next/history.
@@ -161,6 +162,7 @@ Defaults are:
 - Listening: 3 successful attempts per ISO week.
 - Reading: 3 successful attempts per ISO week.
 - Voice: 5 elapsed conversation minutes per ISO week, stored as seconds.
+- Games: 3 new games per UTC day, configured by `FREEMIUM_GAMES_DAILY`.
 
 Freemium counters are global per user, not per learning language. Zero means blocked for that feature.
 Daily keys expire at the next UTC midnight; weekly keys expire at the next Monday UTC.
@@ -180,8 +182,16 @@ recording are separate operations, so concurrent requests can be admitted from t
 balance. Usage recording is best-effort and does not roll back completed product work when Redis
 fails.
 
+Games uses a separate durable PostgreSQL admission contract: under a user-row lock, generation
+reserves availability and successful validated content consumes it in the same transaction. Failure
+releases the slot; expired reservations do not count. The creation UTC day owns consumption. Consumed
+admissions survive plan deletion. Subscription/trial/Stripe-disabled bypass rules remain the same.
+Session reads, answers and abandonment require ownership but no additional quota, so admitted games
+remain playable after exhaustion or subscription expiry. Games creation is maintenance-gated;
+saved games remain accessible. `GET /api/freemium/status` includes `games_remaining` and `games_limit`.
+
 `GET /api/freemium/status` requires authentication, is limited to `60/minute`, and returns trial
-state plus remaining and configured limits for all five features. The route exists when Stripe is
+state plus remaining and configured limits for all six features. The route exists when Stripe is
 disabled, although the policy is inactive and the frontend normally does not request it.
 
 ## General quotas and subscription activation

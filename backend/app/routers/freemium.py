@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Request
 from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.database import get_db
 from app.core.deps import get_current_user, get_redis
 from app.core.limiter import limiter
 from app.models.user import User
@@ -19,13 +21,19 @@ async def freemium_status(
     request: Request,
     current_user: User = Depends(get_current_user),
     redis: Redis = Depends(get_redis),
+    db: AsyncSession = Depends(get_db),
 ) -> dict:
     status = await get_freemium_status(
         redis,
         current_user.id,
         current_user.freemium_trial_ends_at,
     )
+    from app.services.games import game_quota
+
+    games = await game_quota(db, current_user.id)
     return {
+        "games_remaining": games["remaining"],
+        "games_limit": games["limit"],
         "trial_active": status.trial_active,
         "trial_ends_at": status.trial_ends_at,
         "chat_remaining": status.chat_remaining,

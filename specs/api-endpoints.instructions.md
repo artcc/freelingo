@@ -23,7 +23,40 @@ Most REST endpoints are prefixed under `/api`. The public health check is at `/h
 
 ## Freemium — `/api/freemium`
 
-- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. A configured freemium feature limit of `0` means blocked. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+
+## Games — `/api/games`
+
+All endpoints require an authenticated active user. Session IDs are UUIDs; missing or foreign sessions
+return 404. Session language and XP ownership come from their persisted plan, not active selection.
+Session endpoints also resolve owned creation request UUIDs to their canonical session; the response
+always contains the canonical ID. A request whose session was deleted returns 404.
+
+- **GET `/detective`** — 60/min. Requires an active plan. Returns plan ID/language/level, availability
+  and reason for `review`, `prepare`, `free`, global `quota: {remaining, limit}`, `limited`, `history`
+  and `total`. History includes all plans in the active language; `skip >= 0`, `limit=10`, maximum 50.
+- **POST `/detective`** — 5/min, maintenance checked, 202. Body: UUID `request_id`, positive
+  `study_plan_id`, `mode`. New request UUIDs require a matching active plan; a missing active plan
+  returns 404. Returns a session, reusing its request UUID
+  or the plan's active game. Reserves quota for new free work; 402 when exhausted, 409 on changed
+  context, conflicting UUID or missing mode sources. Only newly created work starts generation.
+  Every accepted request UUID is bound to its returned session and submitted plan/mode, even when
+  reusing an active game of another mode. Retrying returns that same session after completion or
+  abandonment without new quota, even if the active language has no plan. Accepted UUIDs are resolved
+  and their original parameters checked before requiring an active plan; changed parameters or a
+  deleted result return 409.
+- **GET `/sessions/{id}`** — 60/min. Returns saved state and remaining generation seconds. Expired
+  generation is reported failed and its reservation released. Does not require an active plan.
+- **POST `/sessions/{id}/answer`** — 60/min. Body: `challenge` (0–4), `step` (`detect` or `correct`),
+  `choice` (fragment/option index). Requires the next unanswered step. Same-choice retries return
+  stored state; changed choices/out-of-order steps return 409; invalid indices return 422.
+- **POST `/sessions/{id}/abandon`** — 10/min. Closes a ready game without XP or quota refund;
+  terminal retries are idempotent. A generating game returns 409.
+
+Session responses contain identity, plan, language/native language, level, mode, status, creation time,
+XP, error and challenges. Before detection a challenge exposes only its sentence/fragments and
+answer state. After detection it adds error index/options; after correction it adds correct index,
+corrected sentence and native explanation. Source context and unrevealed solutions stay server-side.
 
 ---
 

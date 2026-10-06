@@ -147,6 +147,9 @@ Voice conversation uses its own capture pipeline and WebSocket contract, describ
 `AudioPlayer` requests TTS, creates a Blob URL, and plays it with the browser Audio API. Voice
 precedence is explicit prop, stored `tts_voice`, then backend default. It supports loading, playing,
 stop, and error states and is used across lessons, flashcards, vocabulary, chat, and phrasebook.
+Error Detective also uses this same component and endpoint for the full corrected sentence, after
+the correction step has been submitted. Generated explanations are not spoken. Existing provider
+and voice-preference rules apply; audio failure does not change the game result or block completion.
 
 `VoiceRecorder`:
 

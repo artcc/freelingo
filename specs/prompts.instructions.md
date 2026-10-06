@@ -23,6 +23,10 @@ considered when changing prompt-safety assumptions.
 - `lesson.py`: lesson generation, invalid-exercise regeneration, native support, and exercise grading.
 - `flashcards.py`: deck generation and selected-word lookup.
 - `comprehension.py`: Listening and Reading generation.
+- `games.py`: Error Detective generation and separate semantic review. Plan language/level, profile
+  native language, completed-source identifiers and bounded mistakes are explicit inputs. Reference
+  data is not instructions. The upcoming lesson guides relevance without becoming permitted new
+  tested material. Structured schemas enforce exact fragments, replacement and option uniqueness.
 - `assessment.py`: free-write placement, level test, and alternate assessment flow.
 - `grammar.py`, `vocabulary.py`, and `phrasebook.py`: native-language resource support.
 

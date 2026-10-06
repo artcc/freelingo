@@ -67,6 +67,12 @@ audio synthesis where applicable, and persistence. `.env.example` documents it f
 slow local models. The frontend receives the generation deadline through the API rather than a
 separate environment variable.
 
+Error Detective shares `EXERCISE_GENERATION_TIMEOUT_SECONDS` for its generation and semantic review.
+Both Compose files forward `FREEMIUM_GAMES_DAILY` (default 3), also documented in `.env.example`.
+Zero prevents new free games; subscriptions, active trials and Stripe-disabled deployments bypass it.
+Game sessions and global admission reservations are persisted in PostgreSQL through the committed
+`0054_detective_games` revision. Games needs no extra service or volume.
+
 Operators must review database/data path, Redis password, JWT secret, CORS/cookie security,
 registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, logging, and
 analytics settings.
@@ -95,6 +101,11 @@ The progress reward schema is supplied by `0053_progress_rewards`, following
 `0052_exercise_corrections`. It adds the reward ledger, nullable transcript pairing/modality, and
 nullable daily skill-update history while preserving existing data. Offline SQL checks do not
 replace verification of an actual PostgreSQL upgrade; tests using `metadata.create_all` bypass Alembic.
+
+PR checks targeting `develop` apply the migration chain to an empty ephemeral PostgreSQL 16 database
+before running backend tests. CI overrides Alembic's Docker-specific script location for that step;
+the deployment configuration remains `/app/alembic`. The CI check covers fresh installation, not
+data-dependent upgrades of existing deployments. See `testing.instructions.md`.
 
 ## GPU and provider selection
 

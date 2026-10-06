@@ -70,6 +70,16 @@ flashcard CRUD/review, admin operations, memories, feedback reads/mutations, and
 - `POST /api/tts`: `20/minute`.
 - `POST /api/stt`: `20/minute`.
 
+## Games
+
+- `GET /api/games/detective` and `GET /api/games/sessions/{id}`: `60/minute`.
+- `POST /api/games/detective`: `5/minute`.
+- `POST /api/games/sessions/{id}/answer`: `60/minute` for the two-step interaction.
+- `POST /api/games/sessions/{id}/abandon`: `10/minute`.
+
+Generation polling is non-overlapping, normally every five seconds, with bounded transport recovery.
+Rate limiting is independent of the global per-user daily game admission quota.
+
 ## Listening and Reading
 
 Both domains use:

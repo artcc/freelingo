@@ -26,8 +26,9 @@ Backend tests live in `backend/tests/` and use:
 - targeted data-integrity tests for curriculum/resource cross-references.
 
 SQLite does not prove PostgreSQL-specific regex, locking, index, JSONB, or concurrency behavior.
-Deployment-specific behavior remains a maintainer check unless a focused PostgreSQL test environment is
-introduced.
+Focused PostgreSQL concurrency tests use `TEST_POSTGRES_URL`, create an isolated random schema per
+test and remove it afterward. They are skipped locally when that variable is absent and run in PR CI.
+Their tables come from model metadata; migration validation is a separate CI step.
 
 Backend pytest enforces the configured aggregate coverage threshold. Targeted pytest commands may fail
 that aggregate threshold unless coverage is disabled for the focused run.
@@ -82,8 +83,14 @@ CI does not autoformat or modify the worktree.
 Pushes to `develop` and `main` trigger image-publication workflows, not this quality workflow.
 
 Backend CI uses Python 3.14, pip 26.2.1, pinned requirements/constraints, SQLite tests, and configured
-coverage enforcement. Frontend CI uses Node 25, installs npm 11, runs `npm ci`, then lint, typecheck,
-and Vitest.
+coverage enforcement. The existing backend job also starts an ephemeral PostgreSQL 16 service with a
+health check. Before pytest, it applies `alembic upgrade head` to its empty database, overriding only
+the CI Alembic script location to the repository's `backend/alembic` directory. Migration failure
+fails the job. This checks the fresh-install migration chain, not upgrades with existing user data.
+
+The same pytest invocation receives `TEST_POSTGRES_URL` for the PostgreSQL concurrency tests; ordinary
+tests retain their SQLite fixture. PostgreSQL schemas created by tests are separate from the migrated
+public schema. Frontend CI uses Node 25, installs npm 11, runs `npm ci`, then lint, typecheck, and Vitest.
 
 ## Rules
 

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Added
 
 - Games section in desktop and mobile navigation, with localized messaging when no games are available and a link back to My Plan.
+- Error Detective: five-challenge language practice with separate error detection and correction, completed-lesson review, preparation for the next lesson and free practice at the plan's level. Includes native-language explanations, corrected-sentence audio, resumable games and history, up to 15 XP per game with a 45 XP daily plan limit, and three daily free games shared across languages. Generated content is validated and reviewed before consuming a game allowance.
 
 ## [1.9.30] - 2026-10-05
 

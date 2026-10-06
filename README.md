@@ -37,8 +37,10 @@ completed units and level journeys. The dashboard highlights today's XP, the cur
 seven days of activity, and plan progress. Rewards and activity remain isolated by study plan and
 language; daily activity is measured in UTC.
 
-The [Games section](specs/games.instructions.md) is accessible from the main navigation. Its catalog
-currently has no playable games and displays guidance with a link back to My Plan.
+The [Games section](specs/games.instructions.md) includes Error Detective: five short challenges to
+find and correct mistakes, with native-language explanations and lesson-style audio. Review completed
+lessons, prepare familiar foundations for the next lesson, or practise at your plan's level. Games
+are saved for later, with language-specific history and plan-owned XP; free users share a daily game quota.
 
 ## Hosted service
 
