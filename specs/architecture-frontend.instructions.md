@@ -37,8 +37,9 @@ UI translation catalogs live in the repository-root `messages/` directory.
   under a shared layout. Onboarding and billing returns are included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
 - `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
-  Presentation metadata lives in `lib/games.ts`; an empty catalog shows localized guidance and a
-  link to My Plan. See `games.instructions.md` for the section's contract.
+  Presentation metadata lives in `lib/games.ts`; each catalog card uses the matching
+  `public/game/{id}.jpeg` illustration above its title and description. An empty catalog shows
+  localized guidance and a link to My Plan. See `games.instructions.md` for the section's contract.
 - `/games/error-detective`, `/games/sentence-order` and `/games/vocabulary-pairs` use `components/games/GameCatalog.tsx` for
   mode availability, global admission quota and game-type/language-filtered history. Their `[id]`
   pages resume backend-owned sessions without retargeting them after a language switch, and reject

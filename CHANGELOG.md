@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.10.5] - 2026-10-07
 
+### Changed
+
+- The Games catalog now shows a dedicated illustration above each game's title and description.
+
 ### Fixed
 
 - The shared Lingu avatar shows a loading indicator while its 3D model loads instead of briefly flashing the static logo.
