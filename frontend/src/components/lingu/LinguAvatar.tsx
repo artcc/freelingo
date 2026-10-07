@@ -3,6 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { Loader2 } from 'lucide-react'
 import type { LinguAnimation } from '@/lib/lingu'
 
 export type { LinguAnimation } from '@/lib/lingu'
@@ -31,9 +32,18 @@ function Placeholder({ onReady }: { onReady?: () => void }) {
   )
 }
 
+function Loading() {
+  return (
+    <Loader2
+      aria-hidden="true"
+      className="text-fl-muted-2 absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2 animate-spin"
+    />
+  )
+}
+
 const Scene = dynamic<LinguSceneProps>(
   () => import('./LinguScene').catch(() => ({ default: Placeholder })),
-  { ssr: false, loading: () => <Placeholder /> }
+  { ssr: false, loading: () => <Loading /> }
 )
 
 function subscribe(callback: () => void) {
@@ -58,9 +68,7 @@ export default function LinguAvatar({
 
   return (
     <div aria-hidden="true" className={`relative mx-auto ${className}`}>
-      {reducedMotion === null ? (
-        <Placeholder />
-      ) : reducedMotion || failed ? (
+      {reducedMotion === null ? null : reducedMotion || failed ? (
         <Placeholder onReady={onReady} />
       ) : (
         <Scene

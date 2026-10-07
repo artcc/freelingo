@@ -112,8 +112,9 @@ Voice conversations show the animated Lingu avatar between the transcript and co
 px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
 response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
 conversation header, switching between thinking while a response is generated and resting otherwise.
-Both use `components/lingu/LinguAvatar`, which falls back to static artwork for reduced motion or
-model-loading failures. The shared 3D scene uses neutral tone mapping at exposure 1.0, with a white/blue
+Both use `components/lingu/LinguAvatar`, which shows a loading indicator while the 3D model loads and
+falls back to static artwork for reduced motion or model-loading failures. The shared 3D scene uses
+neutral tone mapping at exposure 1.0, with a white/blue
 hemisphere light at intensity 2, a white key light at intensity 4, and a pale-blue fill light at
 intensity 3. These lighting values apply consistently in both interface themes; the scene background
 remains transparent.
@@ -202,10 +203,10 @@ The dashboard's `components/tour/OnboardingTour.tsx` is a native modal with seve
 It keeps one `components/lingu/LinguAvatar.tsx` mounted across steps. The avatar dynamically loads
 `LinguScene.tsx` and Three.js only when visible and motion is allowed. The fixed-camera scene frames
 sampled animation bounds, cross-fades clips, caps pixel ratio, pauses animation updates in hidden tabs,
-and disposes its renderer, geometry, materials, and requests on unmount. Static Lingu artwork covers
-loading, reduced motion, and renderer/model failures. The optional `onReady` callback signals the
-first rendered animation frame or the resolved static fallback, after the browser's motion preference
-is known.
+and disposes its renderer, geometry, materials, and requests on unmount. A loading indicator remains
+visible until the first rendered frame; static Lingu artwork is used for reduced motion and
+renderer/model failures. The optional `onReady` callback signals the first rendered animation frame or
+the resolved static fallback, after the browser's motion preference is known.
 
 Landing and tour share the rendering configuration in `components/lingu/LinguScene.tsx`:
 
