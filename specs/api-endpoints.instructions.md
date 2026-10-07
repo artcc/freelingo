@@ -259,6 +259,10 @@ Chat endpoints require authentication and maintenance/access policy. Conversatio
 - POST — Path: `/`; Description: Rate limit: 30/min. Sends a message and streams the AI tutor response as SSE. Events can contain `conversation_id`, `token`, `memory_updated`, `response_reset`, `done`, or `error`. `response_reset=true` instructs the client to discard text already emitted for the current assistant turn before consuming a complete no-tools fallback. A confirmed committed memory can emit `memory_updated=true` before a later reset or terminal error. Only non-empty completed responses are persisted as assistant history.
 - GET — Path: `/history`; Description: Rate limit: 60/min. Returns the authenticated user's chat history.
 
+Written assistant responses may contain optional Markdown bold, italics, bullet/numbered lists and
+paragraphs. SSE tokens and persisted/history `content` retain the original text; rendering and spoken
+conversion are separate consumers. Text-only voice history remains compatible.
+
 ---
 
 ## Progress — `/api/progress`
@@ -278,6 +282,11 @@ are server-triggered by persisted activity and have no client-claim endpoint.
 ---
 
 ## TTS — `/api/tts`
+
+Requests with `conversation_id` convert the supplied text from Markdown to plain spoken content
+after validating ownership and resolving the persisted language. They omit presentation markers,
+preserve words and block boundaries, and return `422` if no speakable content remains. Plan-only and
+context-free requests retain literal-text synthesis. This does not alter the WebSocket voice pipeline.
 
 - **POST ``** — Rate limit: 20/min. Auth: get_current_user. Text → MP3 audio using the selected TTS provider. Accepts text, optional voice, and optionally one of `study_plan_id` or `conversation_id` (strict positive PostgreSQL-range IDs). Invalid/conflicting context returns 422; missing/foreign resources return 404. Pronunciation language comes from the owned plan, or from the conversation's owned plan when present and its stored target language otherwise. With no context, instruction-capable OpenAI models infer languages from the text without imposing a regional accent. Supports optional trace correlation via `X-TTS-Trace-ID` and returns timing headers.
 - **GET `/preview/{voice}`** — Rate limit: 60/min. Auth: get_current_user. Returns a short cached/generated MP3 preview for an OpenAI TTS voice when supported. Instruction-capable models use synthesis-specific cache keys including the model and instructions; other models retain voice-only cache files. Responses use `Cache-Control: no-store`, and Settings bypasses its browser HTTP cache so playback consults the backend disk cache.

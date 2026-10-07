@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.10.5**
+**Current version: 1.10.10**
 
 ## Project
 
@@ -33,8 +33,8 @@ Any code change affecting behavior, models, endpoints, configuration, or depende
 
 1. Identify and list affected docs before closing the task.
 2. State exactly which spec or Markdown files need changes and obtain explicit user approval before editing them.
-3. Keep specs focused on current structure, behavior, invariants, and operating rules. Do not add release narratives or validation logs.
-4. Record user-visible changes in `CHANGELOG.md`.
+3. Keep specs focused on current structure, behavior, invariants, and operating rules. Specs are not a change history. Do not add release narratives or validation logs.
+4. Record user-visible changes in `CHANGELOG.md`. For changes not yet in production, explicitly ask the user whether a changelog entry is warranted before adding one; documenting intermediate changes may not make sense.
 5. Follow `specs/version.md` when a version bump is warranted.
 6. Do not use Markdown tables in long-form project docs or specs; use concise lists.
 

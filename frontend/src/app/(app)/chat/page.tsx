@@ -18,6 +18,7 @@ import { isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
+import { ChatMarkdown } from '@/components/chat/ChatMarkdown'
 import { AuthAvatarImage } from '@/components/AuthAvatarImage'
 import { MemorySavedToast } from '@/components/memory/MemorySavedToast'
 import { useTransientToast } from '@/hooks/useTransientToast'
@@ -542,12 +543,15 @@ export default function ChatPage() {
                           : undefined
                       }
                     >
-                      {msg.content ||
-                        (sending && i === messages.length - 1 ? (
-                          <span className="text-fl-muted-2 animate-pulse">
-                            ▌
-                          </span>
-                        ) : null)}
+                      {msg.content ? (
+                        msg.role === 'assistant' ? (
+                          <ChatMarkdown>{msg.content}</ChatMarkdown>
+                        ) : (
+                          msg.content
+                        )
+                      ) : sending && i === messages.length - 1 ? (
+                        <span className="text-fl-muted-2 animate-pulse">▌</span>
+                      ) : null}
                     </TargetLanguageText>
                     {msg.role === 'assistant' &&
                       msg.content &&

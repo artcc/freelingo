@@ -27,6 +27,7 @@ jiter==0.16.0
 limits==5.8.0
 Mako==1.4.1
 MarkupSafe==3.0.3
+mdurl==0.1.2
 packaging==26.3
 pluggy==1.6.0
 pycparser==3.0

@@ -1,6 +1,6 @@
 # Version
 
-**1.10.5**
+**1.10.10**
 
 This is the canonical current development version. Its publication state and date belong to
 `CHANGELOG.md`; the canonical value may therefore correspond to a changelog section marked

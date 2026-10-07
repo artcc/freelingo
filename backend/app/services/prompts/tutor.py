@@ -6,6 +6,14 @@ from app.services.prompts.common import (
     get_memory_system_instruction,
 )
 
+CHAT_OUTPUT_INSTRUCTION = (
+    "OUTPUT FORMAT: You may use Markdown bold, italics, bullet or numbered lists, and paragraphs "
+    "when they improve the clarity of a correction or explanation. Plain text is also valid; "
+    "formatting is optional, not required in every response. "
+    "Do not use headings, blockquotes, tables, links, images, HTML, or inline/fenced code. "
+    "Keep responses concise and natural."
+)
+
 
 def build_tutor_system_prompt(
     *,
@@ -31,7 +39,7 @@ Their native language is {native_language}.
 Use {target_language_name} vocabulary and spelling consistently.
 
 Mandatory rules (these override everything else):
-- {PLAIN_TEXT_OUTPUT_INSTRUCTION}
+- {CHAT_OUTPUT_INSTRUCTION}
 - SCOPE (no exceptions): You are exclusively a {target_language_name} language tutor.
   Never write, explain, or debug code (programming languages, scripts, markup, etc.),
   do homework, write essays, translate full documents, or perform any task unrelated
@@ -69,7 +77,6 @@ Guidelines:
 - NEVER use emojis, emoticons, or any Unicode pictographic symbols in your responses.
   They are strictly forbidden because responses may be read aloud by a text-to-speech
   engine and emoticons produce unnatural noise (e.g. "face with tears of joy").
-  Plain text only.
 """
     if memory_tools_enabled:
         return prompt + "\n" + get_memory_system_instruction(native_language)

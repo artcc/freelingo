@@ -17,6 +17,7 @@ from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.schemas.auth import SUPPORTED_UI_LOCALES
 from app.schemas.tts_stt import ContextualTTSRequest, TTSRequest
+from app.services.chat_markdown import chat_markdown_to_speech
 from app.services.prompts.common import TUTOR_DISPLAY_NAME
 from app.services.tour_audio import OPENAI_VOICES, get_tour_audio
 from app.services.tts_service import OpenAITTSService
@@ -105,12 +106,18 @@ async def text_to_speech(
             raise HTTPException(status_code=404, detail="Study plan not found")
         language = plan.target_language
 
+    text = body.text
+    if body.conversation_id is not None:
+        text = chat_markdown_to_speech(text, language)
+        if not text.strip():
+            raise HTTPException(status_code=422, detail="No speakable text")
+
     synth_t0 = time.perf_counter()
     # For local Kokoro TTS, ignore the client voice param — only OpenAI voices
     # should be forwarded. Prevents 400 errors when user switches from OpenAI
     # to local and stale OpenAI voice names (e.g. "nova") remain in localStorage.
     voice = body.voice if settings.TTS_PROVIDER != "local" else None
-    audio = await tts_service.synthesize(body.text, voice, language=language)
+    audio = await tts_service.synthesize(text, voice, language=language)
     synth_ms = (time.perf_counter() - synth_t0) * 1000
     total_ms = (time.perf_counter() - t0) * 1000
 

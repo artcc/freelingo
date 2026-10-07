@@ -168,7 +168,7 @@ the growing catalog, not an exhaustive list. Games have no blanket Premium marke
   the text and navigation available and permits retry.
 - The native modal dialog traps focus, closes on Escape, restores focus, and locks background scroll.
   The character is decorative; reduced motion, loading, or unavailable WebGL use a static image.
-- Completion and skipping write the browser-local `fl_tour_done_v1.10.5` flag, centralized as
+- Completion and skipping write the browser-local `fl_tour_done_v2` flag, centralized as
   `TOUR_STORAGE_KEY` in `lib/onboarding-tour.ts`. Other completion keys do not suppress the current
   tour. Change this key only to intentionally reintroduce the tour, independently of app releases.
   Logout clears the current key. What's New checks it only on mount, so it does not overlap the tour
@@ -188,8 +188,26 @@ Tutor context includes profile, goals, plan/progress information, native and tar
 global memories. It does not currently inject a current-unit topic list or recent-mistake list.
 Lingu responds primarily in the target language and may use concise native-language correction when
 helpful.
-The tutor system prompt requires plain text without Markdown formatting, following the shared output
-policy in `prompts.instructions.md`. This rule also applies to tool-free fallback responses.
+The written tutor permits optional Markdown bold, italics, bullet/numbered lists and paragraphs,
+following the chat-specific policy in `prompts.instructions.md`. Plain text remains valid. The same
+policy applies to tool-free fallback responses; voice and generated learning resources retain their
+plain-text policies.
+
+Assistant messages use `components/chat/ChatMarkdown.tsx` inside `TargetLanguageText` in the chat
+page, both during streaming and when loading history. User messages remain literal text. The
+renderer preserves learned-language typography and word selection, renders only basic formatting,
+and reduces unsupported presentation to readable text without interactive links, images or HTML.
+Incomplete Markdown may change appearance as tokens arrive; a response reset replaces the entire
+partial response.
+
+The original Markdown is stored in the existing message `content` field and remains the context
+passed to word lookup and when continuing in voice. Text-only voice transcripts also render in chat
+history; continuing them by text uses the written-chat prompt for new replies. Continuing in voice
+creates a separate voice conversation with the existing plain-text prompt and pipeline.
+
+The chat audio button sends the original text and conversation ID to `/api/tts`. After resolving
+ownership and language, the backend derives spoken text from Markdown while preserving words,
+punctuation and block boundaries. Storage and streaming retain the original response.
 
 Sending is subject to maintenance, subscription/freemium access, and monthly token quota. Read-only
 conversation history can remain available when consumable chat quota is exhausted and the configured

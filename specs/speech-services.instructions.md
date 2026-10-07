@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for text-to-speech and speech-to-text providers, backend gateways, plan-derived recognition language, persistent audio, and reusable frontend audio components."
-applyTo: "backend/app/services/{tts_service,stt_service}.py, backend/app/routers/{tts,stt}.py, backend/app/schemas/tts_stt.py, backend/app/core/config.py, backend/app/main.py, frontend/src/components/ui/{AudioPlayer,VoiceRecorder,exercise-audio-player}.tsx, frontend/src/app/api/{tts,stt}/**, docker-compose*.yml, .env.example"
+applyTo: "backend/app/services/{tts_service,stt_service,chat_markdown}.py, backend/app/routers/{tts,stt}.py, backend/app/schemas/tts_stt.py, backend/app/core/config.py, backend/app/main.py, frontend/src/components/ui/{AudioPlayer,VoiceRecorder,exercise-audio-player}.tsx, frontend/src/app/api/{tts,stt}/**, docker-compose*.yml, .env.example"
 ---
 
 # Speech Services
@@ -124,6 +124,14 @@ There is no implicit English fallback.
   is never used to resolve supplied context. Without context, synthesis infers language from the text.
 - Ignores the client voice when the configured provider is local, preventing stale OpenAI voice
   preferences from reaching Kokoro.
+- With `conversation_id`, converts the supplied Markdown to spoken text through
+  `chat_markdown_to_speech()` after ownership and language resolution. Bold/italic markers and list
+  numbering/bullets are omitted; words, literal punctuation and paragraph/list boundaries are kept.
+  Bare list items receive a sentence boundary, using a full-width stop for Japanese and Chinese.
+  Formatting carries no guaranteed vocal emphasis. Content without speakable text returns `422`
+  without calling the provider. This also applies to replaying voice-origin history from the chat page.
+- Plan-only and context-free requests pass their text directly to the provider. The WebSocket voice
+  pipeline does not use this conversion. Stored transcripts retain their original content.
 - Returns `audio/mpeg` bytes.
 - Accepts or creates `X-TTS-Trace-ID` and returns backend synthesis and total latency headers.
 - Returns `503` only when no TTS service object is registered; provider exceptions otherwise
