@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
+import { Loader2 } from 'lucide-react'
 import {
   AnimationMixer,
   Box3,
@@ -198,12 +198,9 @@ export default function LinguScene({
   return (
     <>
       {!loaded && (
-        <Image
-          src="/logo.png"
-          alt=""
-          fill
-          sizes="280px"
-          className="object-contain p-2"
+        <Loader2
+          aria-hidden="true"
+          className="text-fl-muted-2 absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2 animate-spin"
         />
       )}
       <div

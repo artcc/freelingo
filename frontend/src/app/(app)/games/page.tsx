@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { availableGames } from '@/lib/games'
 
@@ -52,14 +53,25 @@ export default function GamesPage() {
             <Link
               key={game.id}
               href={game.href}
-              className="border-fl-border bg-fl-surface hover:border-fl-border-2 hover:bg-fl-surface-2 group block space-y-2 border px-4 py-4 transition-colors"
+              className="border-fl-border bg-fl-surface hover:border-fl-border-2 hover:bg-fl-surface-2 group block overflow-hidden border transition-colors"
             >
-              <h2 className="text-fl-fg group-hover:text-fl-fg-bright font-sans text-sm font-semibold transition-colors">
-                {t(game.titleKey)}
-              </h2>
-              <p className="text-fl-muted-2 font-sans text-sm leading-relaxed">
-                {t(game.descriptionKey)}
-              </p>
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image
+                  src={`/game/${game.id}.jpeg`}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="space-y-2 p-4">
+                <h2 className="text-fl-fg group-hover:text-fl-fg-bright font-sans text-sm font-semibold transition-colors">
+                  {t(game.titleKey)}
+                </h2>
+                <p className="text-fl-muted-2 font-sans text-sm leading-relaxed">
+                  {t(game.descriptionKey)}
+                </p>
+              </div>
             </Link>
           ))}
         </div>

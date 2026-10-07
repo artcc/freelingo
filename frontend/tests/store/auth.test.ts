@@ -86,12 +86,12 @@ describe('useAuthStore', () => {
 
   it('logout clears token, user, and the current tour completion flag', () => {
     useAuthStore.setState({ accessToken: 'token', user: { id: 1 } as User })
-    localStorage.setItem('fl_tour_done_v1.10.0', 'true')
+    localStorage.setItem('fl_tour_done_v1.10.5', 'true')
 
     useAuthStore.getState().logout()
 
     expect(useAuthStore.getState().accessToken).toBeNull()
     expect(useAuthStore.getState().user).toBeNull()
-    expect(localStorage.getItem('fl_tour_done_v1.10.0')).toBeNull()
+    expect(localStorage.getItem('fl_tour_done_v1.10.5')).toBeNull()
   })
 })
