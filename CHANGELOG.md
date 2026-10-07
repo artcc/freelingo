@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.0] - Unreleased
+## [1.10.0] - 2026-10-07
 
 ### Added
 
@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
-- Increased Lingu's exposure, ambient light, and fill light on the landing and onboarding tour to brighten shaded areas while retaining neutral tone mapping.
+- Increased Lingu's hemisphere, key, and fill lights across the landing, onboarding tour, voice conversations, and written chat to brighten shaded areas in both themes while retaining neutral tone mapping and the model's material colors.
 - The renewed onboarding tour is shown again for browsers that completed the previous tour, using a dedicated 1.10.0 completion key. Pending What's New announcements follow on the next dashboard visit after completing or skipping the tour.
 
 ### Fixed
