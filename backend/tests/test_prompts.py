@@ -27,6 +27,7 @@ from app.services.prompts.assessment import (
 )
 from app.services.prompts.common import (
     JSON_ONLY_INSTRUCTION,
+    PLAIN_TEXT_OUTPUT_INSTRUCTION,
     TUTOR_DISPLAY_NAME,
     get_language_prompt_overlay,
     get_memory_system_instruction,
@@ -165,6 +166,7 @@ def test_tutor_prompts_include_shared_memory_instruction() -> None:
     )
 
     assert get_memory_system_instruction("Spanish") in prompt
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
     assert "save_user_memory" in prompt
     assert "<<MEMORY>>" not in prompt
 
@@ -198,6 +200,7 @@ def test_tutor_prompts_omit_memory_tool_instruction_when_disabled(builder, kwarg
 
     assert "Le gusta caminar" in prompt
     assert "save_user_memory" not in prompt
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
 
 
 def test_tutor_prompts_use_central_tutor_display_name() -> None:
@@ -224,6 +227,8 @@ def test_tutor_prompts_use_central_tutor_display_name() -> None:
 
     assert f"named {TUTOR_DISPLAY_NAME}" in tutor_prompt
     assert f"named {TUTOR_DISPLAY_NAME}" in conversation_prompt
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in tutor_prompt
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in conversation_prompt
     assert "named FreeLingo" not in tutor_prompt
     assert "named FreeLingo" not in conversation_prompt
 
@@ -265,10 +270,14 @@ def test_conversation_prompt_can_include_language_overlay() -> None:
 
 
 def test_json_only_instruction_is_single_shared_block() -> None:
-    assert JSON_ONLY_INSTRUCTION == (
+    assert JSON_ONLY_INSTRUCTION.startswith(
         "IMPORTANT: Respond with ONLY a valid JSON object. "
         "No markdown, no code fences, no extra text."
     )
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in JSON_ONLY_INSTRUCTION
+    assert "including text inside JSON string values" in JSON_ONLY_INSTRUCTION
+    assert "Preserve the requested JSON structure, keys, arrays, data types" in JSON_ONLY_INSTRUCTION
+    assert "Keep required exercise markers such as ___" in JSON_ONLY_INSTRUCTION
 
 
 def test_lesson_generation_prompt_uses_target_language_and_schema() -> None:
@@ -473,6 +482,8 @@ def test_assessment_prompts_use_language_schema_and_delimiters() -> None:
     )
 
     assert "European Portuguese writing sample" in free_write
+    assert JSON_ONLY_INSTRUCTION in free_write
+    assert JSON_ONLY_INSTRUCTION in level_test
     assert "Avoid Brazilian Portuguese" in free_write
     assert "<<<WRITING_PROMPT" in free_write
     assert "<<<STUDENT_ANSWER" in free_write

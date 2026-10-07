@@ -188,6 +188,8 @@ Tutor context includes profile, goals, plan/progress information, native and tar
 global memories. It does not currently inject a current-unit topic list or recent-mistake list.
 Lingu responds primarily in the target language and may use concise native-language correction when
 helpful.
+The tutor system prompt requires plain text without Markdown formatting, following the shared output
+policy in `prompts.instructions.md`. This rule also applies to tool-free fallback responses.
 
 Sending is subject to maintenance, subscription/freemium access, and monthly token quota. Read-only
 conversation history can remain available when consumable chat quota is exhausted and the configured

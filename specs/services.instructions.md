@@ -15,6 +15,21 @@ The frontend never calls an external provider directly.
 
 `llm_adapter.py` provides provider-neutral access to Ollama, OpenAI, Anthropic, and DeepSeek.
 
+OpenAI uses the Responses API for every LLM request; Ollama and DeepSeek use Chat Completions and
+Anthropic uses its native API. The OpenAI model defaults to `gpt-6-luna`. Optional
+`OPENAI_REASONING_EFFORT` is sent as `reasoning.effort` on chat, structured generation, tool
+continuations, and fallbacks. An empty value omits it. Supported values depend on the model; the
+adapter does not infer reasoning settings from model names or force `none` for tools.
+
+OpenAI requests use `store=false` with application-managed history and request encrypted reasoning
+items for stateless tool continuation. `OpenAIResponsesStream` exposes text deltas, maps input/output
+usage to the shared token counters (including reasoning output tokens), and retains native output
+per stream. Only a completed response makes tool calls executable. Its continuation replays the
+native output, including reasoning, plus `function_call_output` items linked by `call_id`, without
+`previous_response_id` or a provider-managed conversation. Reasoning and tool arguments never become
+visible tutor text. Function definitions explicitly use `strict=false` to preserve the existing
+validation contract, and `parallel_tool_calls=false`; the adapter still enforces its one-call limit.
+
 - `chat(messages, stream=False, tools=None, tool_executor=None, fallback_messages=None)` returns text
   or a normalized async stream.
 - Tool streaming executes at most the first tool call, performs one native continuation, exposes tool

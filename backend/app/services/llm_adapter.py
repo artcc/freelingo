@@ -7,6 +7,7 @@ from contextlib import aclosing
 from dataclasses import dataclass
 
 import anthropic as _anthropic
+import httpx2
 from openai import APITimeoutError, AsyncOpenAI
 from pydantic import BaseModel
 
@@ -136,9 +137,14 @@ async def _safe_stream_events(stream: object, provider: str) -> AsyncGenerator:
             yield event
     except LLMError:
         raise
-    except (TimeoutError, _anthropic.APITimeoutError) as exc:
+    except (
+        TimeoutError,
+        APITimeoutError,
+        httpx2.TimeoutException,
+        _anthropic.APITimeoutError,
+    ) as exc:
         raise LLMTimeoutError(f"{provider} timed out while streaming") from exc
-    except _anthropic.APIConnectionError as exc:
+    except (_anthropic.APIConnectionError, httpx2.NetworkError) as exc:
         raise LLMUnavailableError(f"{provider} is unreachable") from exc
     except _anthropic.RateLimitError as exc:
         raise LLMUnavailableError(f"{provider} rate limit exceeded") from exc
@@ -207,6 +213,72 @@ class LLMStream:
             yield chunk
 
 
+def _check_openai_response(response: object) -> None:
+    """A successful HTTP request can still contain a failed or incomplete response."""
+    status = getattr(response, "status", None)
+    if status == "completed":
+        return
+    if status == "incomplete":
+        reason = getattr(getattr(response, "incomplete_details", None), "reason", None)
+        raise LLMResponseError(f"OpenAI returned an incomplete response: {reason}")
+    error = getattr(response, "error", None)
+    if getattr(error, "code", None) == "rate_limit_exceeded":
+        raise LLMUnavailableError("openai rate limit exceeded")
+    message = getattr(error, "message", None) or f"Unexpected response status: {status}"
+    if _is_tools_unsupported_error(RuntimeError(message)):
+        raise LLMToolsUnsupportedError("openai does not support tools")
+    raise LLMError(f"OpenAI response failed: {message}")
+
+
+class OpenAIResponsesStream(LLMStream):
+    """Expose only visible text; keep native output local to this request's tool round."""
+
+    def __init__(self, stream: object, *, tools_requested: bool = False) -> None:
+        super().__init__(stream)
+        self.output: list[dict] = []
+        self._tools_requested = tools_requested
+
+    async def _iterate(self):
+        text_emitted = False
+        try:
+            async for event in _safe_stream_events(self._stream, "openai"):
+                event_type = getattr(event, "type", "")
+                if event_type == "response.output_text.delta":
+                    text = event.delta
+                    if text:
+                        text_emitted = True
+                        yield text
+                elif event_type in (
+                    "response.completed",
+                    "response.incomplete",
+                    "response.failed",
+                ):
+                    response = event.response
+                    usage = getattr(response, "usage", None)
+                    if usage is not None:
+                        self.prompt_tokens = usage.input_tokens
+                        self.completion_tokens = usage.output_tokens
+                        self.total_tokens = usage.total_tokens
+                    _check_openai_response(response)
+                    self.output = [item.model_dump(exclude_none=True) for item in response.output]
+                    has_calls = any(item["type"] == "function_call" for item in self.output)
+                    if has_calls and not self._tools_requested:
+                        raise LLMResponseError("OpenAI returned an unexpected tool call")
+                    if not text_emitted and not has_calls:
+                        raise LLMResponseError("LLM returned empty response")
+                    return
+                elif event_type == "error":
+                    if getattr(event, "code", None) == "rate_limit_exceeded":
+                        raise LLMUnavailableError("openai rate limit exceeded")
+                    message = getattr(event, "message", "OpenAI stream error")
+                    if _is_tools_unsupported_error(RuntimeError(message)):
+                        raise LLMToolsUnsupportedError("openai does not support tools")
+                    raise LLMError(f"OpenAI streaming error: {message}")
+            raise LLMResponseError("OpenAI stream ended without a completed response")
+        finally:
+            await self._stream.close()
+
+
 class AnthropicLLMStream(LLMStream):
     """Yield normalized text from an ordinary Anthropic stream."""
 
@@ -238,7 +310,6 @@ class LLMToolStream(LLMStream):
         stream: object,
         messages: list[dict],
         fallback_messages: list[dict],
-        tools: list[LLMTool],
         tool_executor: ToolExecutor,
         *,
         using_fallback: bool = False,
@@ -248,7 +319,6 @@ class LLMToolStream(LLMStream):
         self._adapter = adapter
         self._messages = messages
         self._fallback_messages = fallback_messages
-        self._tools = tools
         self._tool_executor = tool_executor
         self._using_fallback = using_fallback
         self.tool_calls: list[LLMToolCall] = []
@@ -266,6 +336,34 @@ class LLMToolStream(LLMStream):
     async def _provider_text_and_calls(
         self, stream: object, *, collect_calls: bool
     ) -> AsyncGenerator[str]:
+        if self._adapter.provider == "openai":
+            try:
+                async with aclosing(stream.__aiter__()) as parts:
+                    async for text in parts:
+                        yield text
+            finally:
+                self._add_usage(stream.prompt_tokens, stream.completion_tokens)
+            if collect_calls:
+                for item in stream.output:
+                    if item["type"] != "function_call":
+                        continue
+                    raw_arguments = item["arguments"]
+                    try:
+                        arguments = json.loads(raw_arguments)
+                        if not isinstance(arguments, dict):
+                            arguments = {}
+                    except json.JSONDecodeError:
+                        arguments = {}
+                    self.tool_calls.append(
+                        LLMToolCall(
+                            id=item["call_id"],
+                            name=item["name"],
+                            arguments=arguments,
+                            raw_arguments=raw_arguments,
+                        )
+                    )
+            return
+
         calls: dict[int, dict[str, str]] = {}
         prompt_tokens: int | None = None
         completion_tokens: int | None = None
@@ -475,6 +573,7 @@ class LLMToolStream(LLMStream):
             initial_text,
             self.tool_calls,
             self.tool_results,
+            response_output=self._stream.output if self._adapter.provider == "openai" else None,
         )
         try:
             continuation = await self._adapter._call_with_retry(
@@ -482,7 +581,6 @@ class LLMToolStream(LLMStream):
                 continuation_messages,
                 True,
                 None,
-                reasoning_effort=self._adapter._tool_reasoning_effort(self._tools),
             )
             async with aclosing(
                 self._provider_text_and_calls(continuation, collect_calls=False)
@@ -605,7 +703,6 @@ class LLMAdapter:
                 stream,
                 tools,
                 tools_requested=bool(tools),
-                reasoning_effort=self._tool_reasoning_effort(tools),
             )
         except LLMToolsUnsupportedError as exc:
             logger.info(
@@ -647,13 +744,14 @@ class LLMAdapter:
                 result,
                 messages,
                 messages_without_tools,
-                tools,
                 tool_executor,
                 using_fallback=using_fallback,
                 tools_unsupported=tools_unsupported,
             )
         if self.provider == "anthropic":
             return AnthropicLLMStream(result)
+        if self.provider == "openai":
+            return result
         return LLMStream(result)
 
     async def _do_chat(
@@ -662,7 +760,6 @@ class LLMAdapter:
         stream: bool = False,
         tools: list[LLMTool] | None = None,
         *,
-        reasoning_effort: str | None = None,
         request_timeout: float = REQUEST_TIMEOUT,
         sdk_max_retries: int | None = None,
     ):
@@ -673,7 +770,16 @@ class LLMAdapter:
                 )
             return await self._anthropic_chat(messages, stream, tools)
 
-        # For Ollama, OpenAI and DeepSeek (all OpenAI-compatible):
+        if self.provider == "openai":
+            return await self._openai_responses(
+                messages,
+                stream,
+                tools,
+                request_timeout=request_timeout,
+                sdk_max_retries=sdk_max_retries,
+            )
+
+        # For Ollama and DeepSeek (OpenAI-compatible Chat Completions):
         # pass stream_options so the final chunk includes token usage.
         # Defensively build kwargs to stay compatible with older SDK versions.
         extra: dict = {}
@@ -691,9 +797,6 @@ class LLMAdapter:
                 }
                 for tool in tools
             ]
-        if reasoning_effort is not None:
-            extra["reasoning_effort"] = reasoning_effort
-
         client = self.client
         if sdk_max_retries is not None:
             client = client.with_options(max_retries=sdk_max_retries)
@@ -722,10 +825,51 @@ class LLMAdapter:
         )
         self._native_tools_available_logged = True
 
-    def _tool_reasoning_effort(self, tools: list[LLMTool] | None) -> str | None:
-        if tools and self.provider == "openai" and self.model.startswith("gpt-5.6"):
-            return "none"
-        return None
+    async def _openai_responses(
+        self,
+        messages: list[dict],
+        stream: bool,
+        tools: list[LLMTool] | None,
+        *,
+        request_timeout: float,
+        sdk_max_retries: int | None,
+    ):
+        extra: dict = {}
+        if settings.OPENAI_REASONING_EFFORT:
+            extra["reasoning"] = {"effort": settings.OPENAI_REASONING_EFFORT}
+        if tools:
+            extra["tools"] = [
+                {
+                    "type": "function",
+                    "name": tool.name,
+                    "description": tool.description,
+                    "parameters": tool.input_schema,
+                    # Preserve the existing non-strict function contract.
+                    "strict": False,
+                }
+                for tool in tools
+            ]
+            extra["parallel_tool_calls"] = False
+
+        client = self.client
+        if sdk_max_retries is not None:
+            client = client.with_options(max_retries=sdk_max_retries)
+        response = await client.responses.create(
+            model=self.model,
+            input=messages,
+            stream=stream,
+            store=False,
+            include=["reasoning.encrypted_content"],
+            timeout=request_timeout,
+            **extra,
+        )
+        if stream:
+            return OpenAIResponsesStream(response, tools_requested=bool(tools))
+        _check_openai_response(response)
+        content = response.output_text
+        if not content:
+            raise LLMResponseError("LLM returned empty response")
+        return content
 
     async def structured_output(
         self, messages: list[dict], schema: type[BaseModel], *, deadline: float | None = None
@@ -806,7 +950,24 @@ class LLMAdapter:
         initial_text: str,
         calls: list[LLMToolCall],
         results: list[LLMToolResult],
+        *,
+        response_output: list[dict] | None = None,
     ) -> list[dict]:
+        if self.provider == "openai":
+            # Replay all native items (including encrypted reasoning) with store=False.
+            # This state belongs to the stream, never to the shared adapter instance.
+            return (
+                messages
+                + (response_output or [])
+                + [
+                    {
+                        "type": "function_call_output",
+                        "call_id": result.call.id,
+                        "output": json.dumps(result.content),
+                    }
+                    for result in results
+                ]
+            )
         if self.provider == "anthropic":
             assistant_content: list[dict] = []
             if initial_text:
