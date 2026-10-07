@@ -359,15 +359,11 @@ class TestChatNonStreaming:
 
         from app.services.llm_adapter import LLMAdapter
 
-        msg = MagicMock()
-        msg.content = "Hello from OpenAI!"
-        response = MagicMock()
-        response.choices = [MagicMock()]
-        response.choices[0].message = msg
+        response = SimpleNamespace(status="completed", output_text="Hello from OpenAI!")
 
         adapter = LLMAdapter()
         with patch.object(
-            adapter.client.chat.completions,
+            adapter.client.responses,
             "create",
             new_callable=AsyncMock,
             return_value=response,
@@ -1560,10 +1556,8 @@ class TestNativeToolStreaming:
         assert create.call_args_list[1].kwargs["messages"] == fallback_messages
 
     @pytest.mark.asyncio
-    async def test_openai_tool_call_executes_and_continues(self, monkeypatch, caplog):
-        monkeypatch.setattr("app.core.config.settings.LLM_PROVIDER", "openai")
-        monkeypatch.setattr("app.core.config.settings.OPENAI_API_KEY", "sk-test")
-        monkeypatch.setattr("app.core.config.settings.OPENAI_MODEL", "gpt-5.6-luna")
+    async def test_chat_completions_tool_call_executes_and_continues(self, monkeypatch, caplog):
+        _make_ollama_settings(monkeypatch)
         from app.services.llm_adapter import (
             LLMAdapter,
             LLMTool,
@@ -1627,16 +1621,14 @@ class TestNativeToolStreaming:
         assert stream.prompt_tokens == 22
         assert stream.completion_tokens == 7
         assert "tools" in create.call_args_list[0].kwargs
-        assert create.call_args_list[0].kwargs["reasoning_effort"] == "none"
+        assert "reasoning_effort" not in create.call_args_list[0].kwargs
         assert "tools" not in create.call_args_list[1].kwargs
-        assert create.call_args_list[1].kwargs["reasoning_effort"] == "none"
+        assert "reasoning_effort" not in create.call_args_list[1].kwargs
         continuation = create.call_args_list[1].kwargs["messages"]
         assert continuation[-2]["role"] == "assistant"
         assert continuation[-1]["role"] == "tool"
         adapter._log_native_tools_available()
-        assert (
-            caplog.text.count("Native tools available for provider=openai model=gpt-5.6-luna") == 1
-        )
+        assert caplog.text.count("Native tools available for provider=ollama model=llama3") == 1
 
     @pytest.mark.asyncio
     async def test_anthropic_tool_call_uses_native_result_blocks(self, monkeypatch):

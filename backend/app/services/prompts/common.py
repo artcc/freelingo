@@ -1,8 +1,19 @@
 """Shared prompt fragments used across LLM-backed services."""
 
+PLAIN_TEXT_OUTPUT_INSTRUCTION = (
+    "OUTPUT FORMAT: The interface displays text literally and does not render Markdown. "
+    "Use plain text for all learner-facing content, including text inside JSON string values. "
+    "Do not add Markdown formatting: bold or italic markers, headings, blockquotes, "
+    "bullet or numbered list markup, tables, Markdown links, or inline/fenced code. "
+    "Use ordinary sentences and paragraph breaks instead. "
+    "Preserve the requested JSON structure, keys, arrays, data types, and tool-call format. "
+    "Keep required exercise markers such as ___ and meaningful punctuation unchanged."
+)
+
 JSON_ONLY_INSTRUCTION = (
     "IMPORTANT: Respond with ONLY a valid JSON object. "
-    "No markdown, no code fences, no extra text."
+    "No markdown, no code fences, no extra text. "
+    + PLAIN_TEXT_OUTPUT_INSTRUCTION
 )
 
 STRUCTURED_OUTPUT_RETRY_PROMPT = (

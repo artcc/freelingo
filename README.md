@@ -5,7 +5,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.10.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.10.5-brightgreen?style=flat-square)
 
 <p align="left">
   <img src="assets/logo_large.png" alt="FreeLingo logo" />
@@ -157,6 +157,8 @@ disable this behavior.
 - The recommended model for Ollama is `gemma4:e4b`. It can be changed in `.env`.
 - The backend proxies all LLM, TTS, and STT calls so the frontend never talks directly to providers.
 - The `LLM_PROVIDER` field controls the LLM provider: `ollama` (local, recommended), `openai`, `anthropic`, or `deepseek`.
+- `LLM_PROVIDER=openai` uses the Responses API for all LLM requests, with `OPENAI_MODEL=gpt-6-luna` by default. The selected model and endpoint must support Responses; a Chat Completions-only gateway is insufficient. Conversation context is managed by FreeLingo and requests use `store=false`.
+- Optional `OPENAI_REASONING_EFFORT` sets reasoning across OpenAI chat, memory-tool turns, and content generation. Leave it empty for the model default; accepted values are `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, and `max`, subject to model support. There are no model-specific overrides. Ollama and DeepSeek use Chat Completions, and Anthropic uses its native API.
 - Anthropic's output budget is configurable with `ANTHROPIC_MAX_TOKENS` (default: `8192`) and must stay within the selected model's supported output limit.
 - `TTS_PROVIDER` and `STT_PROVIDER` are independent: `local` (Kokoro / faster-whisper) or `openai` (OpenAI API).
 - Conversation, token, freemium, and trial limits are configurable in `.env.example`. In general
