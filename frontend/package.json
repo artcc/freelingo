@@ -22,6 +22,7 @@
     "next-intl": "^4.13.7",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0",
     "shadcn": "^4.21.0",
     "tailwind-merge": "^3.5.0",
     "three": "^0.186.1",

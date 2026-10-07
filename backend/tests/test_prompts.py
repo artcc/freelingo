@@ -49,6 +49,7 @@ from app.services.prompts.lesson import (
     build_pronunciation_eval_prompt,
 )
 from app.services.prompts.tutor import (
+    CHAT_OUTPUT_INSTRUCTION,
     build_conversation_system_prompt,
     build_tutor_system_prompt,
 )
@@ -166,7 +167,9 @@ def test_tutor_prompts_include_shared_memory_instruction() -> None:
     )
 
     assert get_memory_system_instruction("Spanish") in prompt
-    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
+    assert CHAT_OUTPUT_INSTRUCTION in prompt
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION not in prompt
+    assert "Plain text only." not in prompt
     assert "save_user_memory" in prompt
     assert "<<MEMORY>>" not in prompt
 
@@ -200,7 +203,12 @@ def test_tutor_prompts_omit_memory_tool_instruction_when_disabled(builder, kwarg
 
     assert "Le gusta caminar" in prompt
     assert "save_user_memory" not in prompt
-    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
+    expected_format = (
+        CHAT_OUTPUT_INSTRUCTION
+        if builder is build_tutor_system_prompt
+        else PLAIN_TEXT_OUTPUT_INSTRUCTION
+    )
+    assert expected_format in prompt
 
 
 def test_tutor_prompts_use_central_tutor_display_name() -> None:
@@ -227,7 +235,7 @@ def test_tutor_prompts_use_central_tutor_display_name() -> None:
 
     assert f"named {TUTOR_DISPLAY_NAME}" in tutor_prompt
     assert f"named {TUTOR_DISPLAY_NAME}" in conversation_prompt
-    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in tutor_prompt
+    assert CHAT_OUTPUT_INSTRUCTION in tutor_prompt
     assert PLAIN_TEXT_OUTPUT_INSTRUCTION in conversation_prompt
     assert "named FreeLingo" not in tutor_prompt
     assert "named FreeLingo" not in conversation_prompt
@@ -276,7 +284,9 @@ def test_json_only_instruction_is_single_shared_block() -> None:
     )
     assert PLAIN_TEXT_OUTPUT_INSTRUCTION in JSON_ONLY_INSTRUCTION
     assert "including text inside JSON string values" in JSON_ONLY_INSTRUCTION
-    assert "Preserve the requested JSON structure, keys, arrays, data types" in JSON_ONLY_INSTRUCTION
+    assert (
+        "Preserve the requested JSON structure, keys, arrays, data types" in JSON_ONLY_INSTRUCTION
+    )
     assert "Keep required exercise markers such as ___" in JSON_ONLY_INSTRUCTION
 
 

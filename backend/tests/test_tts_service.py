@@ -263,3 +263,70 @@ async def test_tts_without_context_does_not_impose_a_regional_accent(
     instructions = service._client.audio.speech.create.await_args.kwargs["instructions"]
     assert "British" not in instructions
     assert "primary language" not in instructions
+
+
+@pytest.mark.parametrize("source", ["chat", "voice"])
+@pytest.mark.parametrize("provider", ["openai", "local"])
+async def test_chat_playback_converts_markdown_before_synthesis(
+    client, test_user, db_session, monkeypatch, source, provider
+):
+    user, headers = test_user
+    conversation = Conversation(user_id=user.id, target_language="en-US", source=source)
+    db_session.add(conversation)
+    await db_session.commit()
+    service = SimpleNamespace(synthesize=AsyncMock(return_value=b"ID3audio"))
+    monkeypatch.setattr(app.state, "tts_service", service, raising=False)
+    monkeypatch.setattr(settings, "TTS_PROVIDER", provider)
+
+    response = await client.post(
+        "/api/tts",
+        headers=headers,
+        json={
+            "text": "Use **went**, not *goed*.\n\n- I went home\n- She went shopping.",
+            "conversation_id": conversation.id,
+            "voice": "coral",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.content == b"ID3audio"
+    service.synthesize.assert_awaited_once_with(
+        "Use went, not goed.\n\nI went home.\nShe went shopping.",
+        "coral" if provider == "openai" else None,
+        language="en-US",
+    )
+
+
+@pytest.mark.parametrize("with_plan", [False, True])
+async def test_tts_preserves_literal_text_outside_chat(
+    client, test_user, db_session, service, monkeypatch, with_plan
+):
+    user, headers = test_user
+    body = {"text": "Keep **this**, ___ and 1. intact."}
+    if with_plan:
+        plan = await make_study_plan(db_session, user_id=user.id, cefr_level="A1")
+        await db_session.commit()
+        body["study_plan_id"] = plan.id
+    monkeypatch.setattr(app.state, "tts_service", service, raising=False)
+
+    response = await client.post("/api/tts", headers=headers, json=body)
+
+    assert response.status_code == 200
+    assert service._client.audio.speech.create.await_args.kwargs["input"] == body["text"]
+
+
+async def test_chat_tts_rejects_content_without_speakable_text(
+    client, test_user, db_session, service, monkeypatch
+):
+    user, headers = test_user
+    conversation = Conversation(user_id=user.id, target_language="en-GB")
+    db_session.add(conversation)
+    await db_session.commit()
+    monkeypatch.setattr(app.state, "tts_service", service, raising=False)
+
+    response = await client.post(
+        "/api/tts", headers=headers, json={"text": "---", "conversation_id": conversation.id}
+    )
+
+    assert response.status_code == 422
+    service._client.audio.speech.create.assert_not_awaited()

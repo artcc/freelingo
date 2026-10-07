@@ -19,7 +19,7 @@ considered when changing prompt-safety assumptions.
 
 - `common.py`: plain-text output policy, JSON-only/retry fragments, Anthropic system-only trigger,
   Lingu name, memory-tool policy, and language overlays.
-- `tutor.py`: text and voice tutor system prompts.
+- `tutor.py`: text and voice tutor system prompts, including the written-chat formatting policy.
 - `speech.py`: native-pronunciation instructions for all `gpt-4o-mini-tts` synthesis, including its
   snapshots. The TTS adapter gates support; legacy/unknown models receive no instructions. Supplied
   language codes add regional guidance; absent context requests per-passage language inference.
@@ -47,16 +47,22 @@ considered when changing prompt-safety assumptions.
 `LLMAdapter.structured_output()`. Assessment free-write and level-test callers instead use raw chat
 plus explicit JSON parsing; their builders include the same `JSON_ONLY_INSTRUCTION`.
 
-`PLAIN_TEXT_OUTPUT_INSTRUCTION` forbids Markdown formatting in learner-facing output, including
-JSON string values, because the interface displays that text literally. It excludes emphasis markers,
+`PLAIN_TEXT_OUTPUT_INSTRUCTION` forbids Markdown formatting in voice replies and generated resource
+text, including JSON string values, because those surfaces display text literally. It excludes emphasis markers,
 headings, blockquotes, list markup, tables, Markdown links, and inline/fenced code. Ordinary sentences
 and paragraph breaks are preferred. Required JSON structure, keys, arrays, data types, tool-call
 format, exercise blanks such as `___`, and meaningful punctuation must be preserved.
 
-The policy is part of both tutor system prompts and `JSON_ONLY_INSTRUCTION`, covering chat, voice,
-structured generation, and raw-JSON assessment across providers. Greetings and tool-free fallbacks
-use the same tutor builders; tool continuations retain the system prompt. This is a prompt-level
-formatting instruction, not a Markdown parser or output sanitizer.
+The policy is part of the voice tutor system prompt and `JSON_ONLY_INSTRUCTION`, covering voice,
+structured generation, and raw-JSON assessment across providers. Voice greetings and tool-free
+fallbacks use the same voice builder; tool continuations retain the system prompt. This is a
+prompt-level formatting instruction, not a Markdown parser or output sanitizer.
+
+Written chat instead uses `CHAT_OUTPUT_INSTRUCTION` from `tutor.py`. It permits optional Markdown
+bold, italics, bullet/numbered lists and paragraphs when useful for corrections or explanations.
+Plain text remains valid; the model must not add formatting to every response. Headings, blockquotes,
+tables, links, images, HTML and inline/fenced code are excluded. Normal turns and tool-free fallbacks
+use the same policy. The prohibition on emojis remains independent of formatting.
 
 `get_language_prompt_overlay(target_language)` supplies regional and writing-system guidance for
 canonical BCP-47 codes and supported short aliases. It is composed into tutor, voice, lesson,
@@ -73,7 +79,7 @@ Text and voice prompts lock the Lingu persona, learning scope, safety behavior, 
 support, learner context, and optional memories.
 
 Text tutoring responds primarily in the target language and may briefly explain corrections in the
-learner's native language. Voice output uses short TTS-safe plain text. Detailed persistence, access,
+learner's native language, with optional basic formatting. Voice output uses short TTS-safe plain text. Detailed persistence, access,
 and streaming behavior belongs to Platform and Voice Conversation specs.
 
 Lesson-linked voice sessions additionally receive `lesson_practice_context`. The service loads this

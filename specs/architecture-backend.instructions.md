@@ -91,6 +91,13 @@ Redis, and database operations exposed to the frontend.
 
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
+
+`services/chat_markdown.py` uses `markdown-it-py` to derive spoken text for conversation-owned HTTP
+TTS requests. The TTS router resolves authorization and persisted language before conversion; the
+helper owns parsing and spoken boundaries. Original chat content remains in storage and SSE, and
+provider adapters continue receiving ordinary text. Direct and transitive parser dependencies are
+pinned in `requirements.txt` and `constraints.txt`.
+
 The LLM adapter uses Responses for OpenAI, Chat Completions for Ollama/DeepSeek, and Anthropic's native
 API. OpenAI requests use `store=false`; each tool stream owns its native output and replays it only
 into its own continuation. Provider response IDs, reasoning items, and tool payloads are not shared

@@ -12,8 +12,7 @@ PLAIN_TEXT_OUTPUT_INSTRUCTION = (
 
 JSON_ONLY_INSTRUCTION = (
     "IMPORTANT: Respond with ONLY a valid JSON object. "
-    "No markdown, no code fences, no extra text. "
-    + PLAIN_TEXT_OUTPUT_INSTRUCTION
+    "No markdown, no code fences, no extra text. " + PLAIN_TEXT_OUTPUT_INSTRUCTION
 )
 
 STRUCTURED_OUTPUT_RETRY_PROMPT = (
