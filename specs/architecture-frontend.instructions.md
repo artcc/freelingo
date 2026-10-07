@@ -120,6 +120,27 @@ hemisphere light at intensity 2, a white key light at intensity 4, and a pale-bl
 intensity 3. These lighting values apply consistently in both interface themes; the scene background
 remains transparent.
 
+## Written-chat response presentation
+
+`components/chat/ChatMarkdown.tsx` uses `react-markdown` for assistant replies only in the written
+chat page, including streamed responses and history. It supports bold, italics, bullet/numbered
+lists and paragraphs with compact spacing inside the existing `TargetLanguageText` bubble.
+The component inherits learned-language fonts and `fl-*` colors. Headings and code blocks fall back
+to paragraphs, code and image descriptions to text, and links/blockquotes are unwrapped. HTML is
+omitted and remote images are never loaded. No GFM plugins are enabled.
+Hard breaks produce a single `<br>` without an auxiliary text newline, including inside compact
+lists. Soft breaks remain text newlines; paragraphs preserve them through `white-space: pre-line`.
+
+`remark-chat-image-text.ts` adjusts image descriptions before the Markdown parser flattens them:
+hard breaks retain separators, HTML tokens are omitted, and decoded entities, escaped characters
+and literal code content are preserved. This applies to inline and reference images. Autolink labels
+retain their original text, including percent escapes and punycode, matching the spoken conversion.
+
+The page retains raw message text for storage/context, selected-word lookup and `AudioPlayer`.
+Only completed assistant replies expose word selection and audio. `/api/tts` converts conversation
+text to a spoken representation on the backend. Voice transcripts use their existing component;
+text-only transcripts remain compatible with the chat history renderer.
+
 ## Canonical learning data
 
 Curriculum, grammar, vocabulary, phrasebook, and assessment datasets are backend-owned resources.

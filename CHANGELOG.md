@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.10] - 2026-10-07
+
+### Added
+
+- Lingu's written-chat replies can optionally use bold, italics, lists and paragraphs for clearer corrections and explanations, including streamed replies and chat history, with learned-language typography and word selection.
+
+### Changed
+
+- Chat playback converts Markdown to spoken text, preserving words and paragraph/list boundaries without reading presentation markers aloud.
+
 ## [1.10.5] - 2026-10-07
 
 ### Changed

@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   decrementFreemium: vi.fn(),
   dismissTooltip: vi.fn(),
   handleTextSelection: vi.fn(),
+  audioPlayer: vi.fn(),
 }))
 
 vi.mock('next-intl', () => ({
@@ -52,7 +53,12 @@ vi.mock('@/components/billing/PaywallBanner', () => ({
 vi.mock('@/components/billing/FreemiumQuotaBanner', () => ({
   FreemiumQuotaBanner: () => null,
 }))
-vi.mock('@/components/ui/AudioPlayer', () => ({ AudioPlayer: () => null }))
+vi.mock('@/components/ui/AudioPlayer', () => ({
+  AudioPlayer: (props: object) => {
+    mocks.audioPlayer(props)
+    return null
+  },
+}))
 vi.mock('@/components/ui/confirm-dialog', () => ({
   ConfirmDialog: () => null,
 }))
@@ -157,6 +163,7 @@ describe('chat memory stream', () => {
     mocks.decrementFreemium.mockReset()
     mocks.dismissTooltip.mockReset()
     mocks.handleTextSelection.mockReset()
+    mocks.audioPlayer.mockReset()
     Element.prototype.scrollIntoView = vi.fn()
     chatEvents = [
       { conversation_id: 7 },
@@ -187,7 +194,7 @@ describe('chat memory stream', () => {
 
     await act(async () => {
       stream.enqueue({ conversation_id: 7 })
-      stream.enqueue({ token: 'Partial response.' })
+      stream.enqueue({ token: '**Partial response.**' })
     })
     expect(await screen.findByText('Partial response.')).toBeInTheDocument()
 
@@ -199,7 +206,7 @@ describe('chat memory stream', () => {
     )
 
     await act(async () => {
-      stream.enqueue({ token: 'Complete normal response.' })
+      stream.enqueue({ token: '*Complete normal response.*' })
       stream.enqueue({ done: true })
       stream.close()
     })
@@ -231,9 +238,11 @@ describe('chat memory stream', () => {
 
     await act(async () => {
       stream.enqueue({ conversation_id: 7 })
-      stream.enqueue({ token: 'Streaming response.' })
+      stream.enqueue({ token: '- **Streaming** response.' })
     })
-    const response = await screen.findByText('Streaming response.')
+    const response = await screen.findByText('Streaming')
+    expect(response.tagName).toBe('STRONG')
+    expect(response.closest('li')).not.toBeNull()
     fireEvent.pointerUp(response)
     expect(mocks.handleTextSelection).not.toHaveBeenCalled()
 
@@ -244,7 +253,49 @@ describe('chat memory stream', () => {
     await waitFor(() => expect(input).not.toBeDisabled())
     fireEvent.pointerUp(response)
     expect(mocks.handleTextSelection).toHaveBeenCalledWith(
-      'Streaming response.'
+      '- **Streaming** response.'
+    )
+    expect(mocks.audioPlayer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        text: '- **Streaming** response.',
+        conversationId: 7,
+      })
+    )
+  })
+
+  it('renders mixed voice/chat history while keeping learner text literal', async () => {
+    mocks.apiFetch.mockImplementation((path: string) => {
+      if (path === '/api/chat/conversations') {
+        return Promise.resolve(
+          jsonResponse([{ id: 7, title: 'Practice', source: 'voice' }])
+        )
+      }
+      if (path === '/api/chat/conversations/7/messages') {
+        return Promise.resolve(
+          jsonResponse({
+            messages: [
+              { role: 'assistant', content: 'Hello from voice.' },
+              { role: 'user', content: '**Keep my text literal**' },
+              { role: 'assistant', content: 'Try **went**.\n\n- I went home.' },
+            ],
+          })
+        )
+      }
+      return Promise.resolve(jsonResponse([]))
+    })
+    render(<ChatPage />)
+
+    expect(await screen.findByText('Hello from voice.')).toBeInTheDocument()
+    const learner = screen.getByText('**Keep my text literal**')
+    expect(learner.querySelector('strong')).toBeNull()
+    const word = screen.getByText('went')
+    expect(word.tagName).toBe('STRONG')
+    fireEvent.pointerUp(word)
+    expect(mocks.handleTextSelection).toHaveBeenCalledWith(
+      'Try **went**.\n\n- I went home.'
+    )
+    expect(mocks.audioPlayer).toHaveBeenCalledWith(
+      expect.objectContaining({ text: 'Hello from voice.', conversationId: 7 })
     )
   })
 
@@ -285,24 +336,27 @@ describe('chat memory stream', () => {
     [429, 'Monthly token limit reached (10/10 tokens).', 'quotaExceededTokens'],
     [429, 'Rate limit exceeded: 30 per 1 minute', 'errorMessage'],
     [502, 'Provider unavailable', 'errorMessage'],
-  ])('localizes HTTP %i errors instead of showing backend details', async (status, detail, label) => {
-    mocks.apiFetch.mockImplementation((path: string) =>
-      Promise.resolve(
-        path === '/api/chat'
-          ? new Response(JSON.stringify({ detail }), {
-              status,
-              headers: { 'Content-Type': 'application/json' },
-            })
-          : jsonResponse([])
+  ])(
+    'localizes HTTP %i errors instead of showing backend details',
+    async (status, detail, label) => {
+      mocks.apiFetch.mockImplementation((path: string) =>
+        Promise.resolve(
+          path === '/api/chat'
+            ? new Response(JSON.stringify({ detail }), {
+                status,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            : jsonResponse([])
+        )
       )
-    )
-    render(<ChatPage />)
+      render(<ChatPage />)
 
-    const input = await screen.findByPlaceholderText('placeholder')
-    fireEvent.change(input, { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByRole('button', { name: 'send' }))
+      const input = await screen.findByPlaceholderText('placeholder')
+      fireEvent.change(input, { target: { value: 'Hello' } })
+      fireEvent.click(screen.getByRole('button', { name: 'send' }))
 
-    expect(await screen.findByText(new RegExp(label))).toBeInTheDocument()
-    expect(screen.queryByText(detail)).toBeNull()
-  })
+      expect(await screen.findByText(new RegExp(label))).toBeInTheDocument()
+      expect(screen.queryByText(detail)).toBeNull()
+    }
+  )
 })

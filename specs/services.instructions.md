@@ -152,6 +152,17 @@ best-effort and must not fail the visible tutor response.
 
 ## Speech
 
+`chat_markdown.py` uses `markdown-it-py` CommonMark tokens to derive spoken content from written-chat
+Markdown. It retains inline wording, literal punctuation and paragraph/list boundaries, omits HTML
+and presentation markers, and adds a sentence boundary to bare list items. Image descriptions retain
+decoded entities, escaped characters and line breaks while omitting HTML tokens. Autolink labels
+remain verbatim, including percent escapes and punycode. The extraction-only parser recognizes link/image destinations
+regardless of protocol and discards them, retaining their labels; it is never used to render HTML or
+fetch destinations. The owned language determines whether the added stop is Latin or full-width.
+It does not call a provider or persist anything. The HTTP TTS router invokes it only for an authorized
+`conversation_id`; other TTS callers
+and the voice pipeline continue supplying their existing text.
+
 `tts_service.py` exposes `synthesize(text, voice=None, language=None) -> bytes` through local Kokoro or
 OpenAI. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts` and its snapshots,
 using the supplied language/region when available and requesting language inference otherwise.
