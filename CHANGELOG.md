@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Fixed
 
 - The shared Lingu avatar shows a loading indicator while its 3D model loads instead of briefly flashing the static logo.
+- Shared model instructions explicitly prohibit Markdown formatting in chat, voice, and generated text fields, while preserving JSON contracts and exercise blanks.
 
 ## [1.10.0] - 2026-10-07
 

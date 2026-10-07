@@ -17,8 +17,8 @@ considered when changing prompt-safety assumptions.
 
 ## Package responsibilities
 
-- `common.py`: JSON-only/retry fragments, Anthropic system-only trigger, Lingu name, memory-tool policy,
-  and language overlays.
+- `common.py`: plain-text output policy, JSON-only/retry fragments, Anthropic system-only trigger,
+  Lingu name, memory-tool policy, and language overlays.
 - `tutor.py`: text and voice tutor system prompts.
 - `speech.py`: native-pronunciation instructions for all `gpt-4o-mini-tts` synthesis, including its
   snapshots. The TTS adapter gates support; legacy/unknown models receive no instructions. Supplied
@@ -45,7 +45,18 @@ considered when changing prompt-safety assumptions.
 
 `JSON_ONLY_INSTRUCTION` and `STRUCTURED_OUTPUT_RETRY_PROMPT` support callers using
 `LLMAdapter.structured_output()`. Assessment free-write and level-test callers instead use raw chat
-plus explicit JSON parsing.
+plus explicit JSON parsing; their builders include the same `JSON_ONLY_INSTRUCTION`.
+
+`PLAIN_TEXT_OUTPUT_INSTRUCTION` forbids Markdown formatting in learner-facing output, including
+JSON string values, because the interface displays that text literally. It excludes emphasis markers,
+headings, blockquotes, list markup, tables, Markdown links, and inline/fenced code. Ordinary sentences
+and paragraph breaks are preferred. Required JSON structure, keys, arrays, data types, tool-call
+format, exercise blanks such as `___`, and meaningful punctuation must be preserved.
+
+The policy is part of both tutor system prompts and `JSON_ONLY_INSTRUCTION`, covering chat, voice,
+structured generation, and raw-JSON assessment across providers. Greetings and tool-free fallbacks
+use the same tutor builders; tool continuations retain the system prompt. This is a prompt-level
+formatting instruction, not a Markdown parser or output sanitizer.
 
 `get_language_prompt_overlay(target_language)` supplies regional and writing-system guidance for
 canonical BCP-47 codes and supported short aliases. It is composed into tutor, voice, lesson,

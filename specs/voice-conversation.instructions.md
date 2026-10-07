@@ -135,6 +135,10 @@ The initial greeting is a cancellable task started while the receive loop is alr
 memory context loaded at connection, does not offer memory tools, and persists only the assistant
 message after successful completion. Greeting failure is logged without a client error.
 
+The voice system prompt requires plain text without Markdown formatting for spoken replies and
+transcripts. The shared output policy in `prompts.instructions.md` also applies to greetings,
+lesson-linked practice, and tool-free fallbacks.
+
 A normal turn:
 
 1. Assigns a turn ID and emits `transcribing`.
