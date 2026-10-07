@@ -108,6 +108,13 @@ summary.
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
 
+Voice conversations show the animated Lingu avatar between the transcript and controls, at 150 × 150
+px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
+response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
+conversation header, switching between thinking while a response is generated and resting otherwise.
+Both use `components/lingu/LinguAvatar`, which falls back to static artwork for reduced motion or
+model-loading failures.
+
 ## Canonical learning data
 
 Curriculum, grammar, vocabulary, phrasebook, and assessment datasets are backend-owned resources.

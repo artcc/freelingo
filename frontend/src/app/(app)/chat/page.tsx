@@ -22,6 +22,7 @@ import { AuthAvatarImage } from '@/components/AuthAvatarImage'
 import { MemorySavedToast } from '@/components/memory/MemorySavedToast'
 import { useTransientToast } from '@/hooks/useTransientToast'
 import { readSseData } from '@/lib/sse'
+import LinguAvatar from '@/components/lingu/LinguAvatar'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -430,15 +431,18 @@ export default function ChatPage() {
             >
               {sidebarOpen ? '◀' : '☰'}
             </button>
-            <span className="text-fl-label text-fl-muted-3">●</span>
-            <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+            <LinguAvatar
+              animation={sending ? 'pensando' : 'reposo'}
+              className="!mx-0 h-[55px] w-[55px] shrink-0"
+            />
+            <span className="text-fl-label text-fl-muted-2 min-w-0 flex-1 truncate font-mono tracking-widest uppercase">
               {activeId
                 ? (conversations.find((c) => c.id === activeId)?.title ??
                   t('title'))
                 : t('newConversation')}
             </span>
             {sending ? (
-              <div className="ml-auto flex flex-col items-end gap-0.5">
+              <div className="ml-auto flex shrink-0 flex-col items-end gap-0.5">
                 <span className="text-fl-hint text-fl-muted-3 animate-pulse font-mono tracking-widest uppercase">
                   {t('thinking')}
                 </span>
