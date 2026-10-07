@@ -45,6 +45,8 @@ contracts and `games.instructions.md` for domain behavior.
 
 `app/core/config.py` is the authoritative `Settings` schema. `.env.example` documents deployable
 values, while Docker determines which values are passed into containers.
+`OPENAI_MODEL` defaults to `gpt-6-luna`. Optional `OPENAI_REASONING_EFFORT` is forwarded by both
+Compose files; an empty value omits the reasoning option and preserves the model default.
 
 Database sessions come from the async SQLAlchemy engine. Redis is optional at process startup but
 features that require Redis expose their own degraded or unavailable behavior.
@@ -89,6 +91,10 @@ Redis, and database operations exposed to the frontend.
 
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
+The LLM adapter uses Responses for OpenAI, Chat Completions for Ollama/DeepSeek, and Anthropic's native
+API. OpenAI requests use `store=false`; each tool stream owns its native output and replays it only
+into its own continuation. Provider response IDs, reasoning items, and tool payloads are not shared
+through the singleton adapter or added to the persisted conversation transcript.
 
 Listening and Reading retain FastAPI background tasks with independent database/Redis resources.
 `exercise_generation.py` owns their renewable Redis leases, total generation deadline, cancellation,

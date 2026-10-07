@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Changed
 
 - The Games catalog now shows a dedicated illustration above each game's title and description.
+- OpenAI LLM calls use the Responses API with application-managed context and `store=false`, allowing reasoning and memory tools without model-name exceptions. The backend default model is aligned with `gpt-6-luna`; optional `OPENAI_REASONING_EFFORT` controls reasoning across chat and generation, with an empty value preserving the model default.
 
 ### Fixed
 

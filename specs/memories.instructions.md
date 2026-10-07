@@ -75,13 +75,21 @@ memory.
 `save_user_memory` has a strict input schema with one required `content` string, maximum 200
 characters, and no additional properties.
 
-The normalized LLM adapter supports OpenAI-compatible and Anthropic native tool protocols:
+The normalized LLM adapter supports OpenAI Responses, Ollama/DeepSeek Chat Completions, and
+Anthropic native tool protocols:
 
 1. Visible initial text streams normally while tool-call fragments stay internal.
 2. Fragments become normalized calls.
 3. Only the first call is executed; additional calls receive an internal `tool_limit_exceeded` result.
 4. One provider-native continuation receives the assistant call and tool result.
 5. Tools are omitted from continuation, preventing another round.
+
+For OpenAI, calls become executable only after the complete response succeeds. Each stream retains
+its own native output, including encrypted reasoning, and replays it with `function_call_output`
+items linked by `call_id` in its one continuation. Requests use `store=false` and never rely on a
+provider-managed conversation. Reasoning stays internal to the tool round and is not saved as chat
+history. Parallel tool calls are disabled in the request, with the one-execution limit also enforced
+locally. A continuation retry or no-tools fallback cannot execute the saved tool again.
 
 Unknown tools, invalid content, exact duplicates, and persistence failure produce internal structured
 results. Tool payloads and errors are not exposed as tutor text or audio.
