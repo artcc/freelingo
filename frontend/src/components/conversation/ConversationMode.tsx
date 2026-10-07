@@ -31,6 +31,7 @@ import {
 import { shouldShowVoiceReviewPrompt } from '@/lib/review-prompt-triggers'
 import { MemorySavedToast } from '@/components/memory/MemorySavedToast'
 import { useTransientToast } from '@/hooks/useTransientToast'
+import LinguAvatar from '@/components/lingu/LinguAvatar'
 
 interface TranscriptEntry {
   id: number
@@ -309,6 +310,7 @@ export default function ConversationMode({
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [userSpeaking, setUserSpeaking] = useState(false)
   const [assistantSpeaking, setAssistantSpeaking] = useState(false)
+  const [assistantThinking, setAssistantThinking] = useState(false)
   const {
     visible: memoryToast,
     announcementId: memoryToastId,
@@ -441,6 +443,7 @@ export default function ConversationMode({
       })
       speechStartedAtRef.current = performance.now()
       setUserSpeaking(true)
+      setAssistantThinking(false)
     },
     onVADMisfire: () => {
       speechStartedAtRef.current = null
@@ -661,6 +664,7 @@ export default function ConversationMode({
       }
       if (mountedRef.current) {
         setAssistantSpeaking(false)
+        setAssistantThinking(false)
         setUserSpeaking(false)
         setStreamingText(null)
         setWarningSeconds(null)
@@ -756,9 +760,11 @@ export default function ConversationMode({
         if (!audioQueueRef.current) {
           convLogger.warn('audio queue missing for playback')
           setAssistantSpeaking(false)
+          setAssistantThinking(false)
           return
         }
         assistantSpeakingRef.current = true
+        setAssistantThinking(false)
         setAssistantSpeaking(true)
         void audioQueueRef.current.enqueue(arrayBuffer).catch((error) => {
           if (!isCurrent()) return
@@ -797,6 +803,7 @@ export default function ConversationMode({
             case 'transcript':
               if (msg.role === 'user') {
                 // STT result — always final
+                setAssistantThinking(true)
                 setTranscript((prev) => [
                   ...prev,
                   {
@@ -826,11 +833,13 @@ export default function ConversationMode({
 
             case 'turn_complete':
               assistantTurnActiveRef.current = false
+              setAssistantThinking(false)
               break
 
             case 'barge_in':
               convLogger.warn('barge_in message from backend')
               audioQueueRef.current?.cancel()
+              setAssistantThinking(false)
               setAssistantSpeaking(false)
               setStreamingText(null)
               break
@@ -847,13 +856,17 @@ export default function ConversationMode({
               convLogger.debug('status update', { value: msg.value })
               if (msg.value === 'transcribing') {
                 assistantTurnActiveRef.current = true
+                setAssistantThinking(true)
                 setAssistantSpeaking(false)
               } else if (msg.value === 'speaking') {
+                setAssistantThinking(false)
                 setAssistantSpeaking(true)
               } else if (msg.value === 'thinking') {
                 assistantTurnActiveRef.current = true
+                setAssistantThinking(true)
               } else if (msg.value === 'listening') {
                 assistantTurnActiveRef.current = false
+                setAssistantThinking(false)
               }
               break
 
@@ -892,6 +905,7 @@ export default function ConversationMode({
                 setStatus('live')
                 audioQueueRef.current?.cancel()
                 assistantSpeakingRef.current = false
+                setAssistantThinking(false)
                 setAssistantSpeaking(false)
                 setStreamingText(null)
               } else {
@@ -996,6 +1010,7 @@ export default function ConversationMode({
     setStatus('connecting')
     setSessionActive(true)
     setAssistantSpeaking(false)
+    setAssistantThinking(false)
     setTranscript([])
     setStreamingText(null)
     dismissTooltip()
@@ -1003,6 +1018,7 @@ export default function ConversationMode({
     setErrorMsg(null)
     setUserSpeaking(false)
     setAssistantSpeaking(false)
+    setAssistantThinking(false)
     activeTurnIdRef.current = null
     assistantTurnActiveRef.current = false
     sessionStartedAtRef.current = null
@@ -1148,6 +1164,16 @@ export default function ConversationMode({
   }, [])
   /* eslint-enable react-hooks/exhaustive-deps */
 
+  const linguAnimation = assistantSpeaking
+    ? 'hablando'
+    : userSpeaking
+      ? 'escuchando'
+      : assistantThinking || status === 'warming' || status === 'connecting'
+        ? 'pensando'
+        : status === 'live'
+          ? 'escuchando'
+          : 'reposo'
+
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="mx-auto flex h-full max-w-4xl flex-col overflow-hidden p-4 md:p-6">
@@ -1282,6 +1308,11 @@ export default function ConversationMode({
             </div>
           </div>
         )}
+
+      <LinguAvatar
+        animation={linguAnimation}
+        className="h-[150px] w-[150px] shrink-0 md:h-[200px] md:w-[200px]"
+      />
 
       {/* Controls */}
       <div className="flex flex-col items-center gap-4 pb-2">

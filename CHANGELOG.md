@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.0] - Unreleased
+## [1.10.0] - 2026-10-07
 
 ### Added
 
 - Lingu greets visitors in a continuous loop at the center of the landing's language circle, preserving the existing 140 × 140 px slot and transparent integration with light and dark themes.
+- Lingu's animated avatar appears in voice conversations (150 × 150 px on mobile, 200 × 200 px on desktop) and in the written-chat header (55 × 55 px), reflecting listening, speaking, and thinking states.
 - Animated Lingu dashboard tour with seven localized screens, an introduction to Games, and optional narration beside each paragraph. Audio follows the interface language and existing voice preferences, is generated on demand, and is persistently cached across users. Includes responsive presentation, keyboard navigation, reduced-motion artwork, and playback cancellation when navigating or closing. The reusable Lingu component supports all thirteen animations, with per-animation looping or one-shot playback.
 - Games section in desktop and mobile navigation, with localized messaging when no games are available and a link back to My Plan.
 - Error Detective: five-challenge language practice with separate error detection and correction, completed-lesson review, preparation for the next lesson and free practice at the plan's level. Includes native-language explanations, corrected-sentence audio, resumable games and history, up to 15 XP per game with a 45 XP daily plan limit, and three daily free games shared across languages. Generated content is validated and reviewed before consuming a game allowance.
@@ -17,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
-- Increased Lingu's exposure, ambient light, and fill light on the landing and onboarding tour to brighten shaded areas while retaining neutral tone mapping.
+- Increased Lingu's hemisphere, key, and fill lights across the landing, onboarding tour, voice conversations, and written chat to brighten shaded areas in both themes while retaining neutral tone mapping and the model's material colors.
 - The renewed onboarding tour is shown again for browsers that completed the previous tour, using a dedicated 1.10.0 completion key. Pending What's New announcements follow on the next dashboard visit after completing or skipping the tour.
 
 ### Fixed

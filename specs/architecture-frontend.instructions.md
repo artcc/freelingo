@@ -108,6 +108,16 @@ summary.
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
 
+Voice conversations show the animated Lingu avatar between the transcript and controls, at 150 × 150
+px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
+response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
+conversation header, switching between thinking while a response is generated and resting otherwise.
+Both use `components/lingu/LinguAvatar`, which falls back to static artwork for reduced motion or
+model-loading failures. The shared 3D scene uses neutral tone mapping at exposure 1.0, with a white/blue
+hemisphere light at intensity 2, a white key light at intensity 4, and a pale-blue fill light at
+intensity 3. These lighting values apply consistently in both interface themes; the scene background
+remains transparent.
+
 ## Canonical learning data
 
 Curriculum, grammar, vocabulary, phrasebook, and assessment datasets are backend-owned resources.
