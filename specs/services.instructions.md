@@ -32,6 +32,17 @@ The frontend never calls an external provider directly.
 Retry, streaming-failure, and provider-output behavior is defined in
 `llm-error-handling.instructions.md`.
 
+## Games
+
+`games.py` builds bounded source snapshots from completed lessons, curriculum and recent game errors;
+it never invokes lesson generation or plan advancement. It creates/resumes private sessions, reserves
+global daily admission under a user-row lock, and publishes structurally validated and semantically
+reviewed LLM content only before the persisted deadline. Deterministic evaluation handles Error
+Detective's detection/correction choices, Sentence Order's reconstructed sentences, and Vocabulary
+Pairs' term/meaning matches. It credits the progress/reward ledger under plan/session serialization.
+Saved content and native language are stable across active-language/profile changes. See
+`games.instructions.md`.
+
 ## Assessment
 
 `assessment.py` evaluates adaptive quiz records deterministically and provides LLM-backed free-write
@@ -127,7 +138,11 @@ best-effort and must not fail the visible tutor response.
 ## Speech
 
 `tts_service.py` exposes `synthesize(text, voice=None, language=None) -> bytes` through local Kokoro or
-OpenAI. Both adapters currently ignore `language`; provider voice configuration determines output.
+OpenAI. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts` and its snapshots,
+using the supplied language/region when available and requesting language inference otherwise.
+Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
+Voice selection remains independent of language. OpenAI synthesis cache keys include instructions
+only when supported by the configured model.
 
 `stt_service.py` exposes
 `transcribe(audio_bytes, filename, mime_type, *, language) -> str` through local faster-whisper or

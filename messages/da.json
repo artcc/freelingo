@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Noter om ord",
     "nativeHelpPractice": "Øvelse"
   },
+  "detective": {
+    "title": "Fejldetektiv",
+    "rules": "Fem korte udfordringer uden tidspres. Find det forkerte tekststykke og vælg rettelsen. Ét forsøg pr. trin; Lingu forklarer svaret.",
+    "review": "Gentag det lærte",
+    "prepare": "Forbered næste lektion",
+    "free": "Fri øvelse",
+    "reviewDescription": "Øv gennemførte lektioner med fokus på dine seneste fejl.",
+    "prepareDescription": "Gentag kendt stof, der hjælper dig med næste lektion.",
+    "freeDescription": "Øv grammatik på din plans aktuelle niveau.",
+    "noSources": "Gennemfør relevante lektioner for at låse denne tilstand op.",
+    "noUpcoming": "Der er ingen kommende undervisningslektion i denne plan.",
+    "assessment": "Vurder mit niveau",
+    "history": "Dine spil på dette sprog",
+    "noHistory": "Dine gemte spil vises her.",
+    "generating": "Forbereder",
+    "ready": "Fortsæt spil",
+    "completed": "Spil gennemført",
+    "failed": "Generering mislykkedes",
+    "abandoned": "Spil opgivet",
+    "generatingDescription": "Lingu forbereder og gennemgår fem udfordringer. Du kan forlade siden og vende tilbage senere.",
+    "failedDescription": "Vi kunne ikke forberede et gyldigt spil. Ingen spilkvote blev brugt. Gå tilbage til menuen og prøv igen.",
+    "contextChanged": "Din læringskontekst er ændret, eller tilstanden er utilgængelig. Opdater før du starter.",
+    "challenge": "Udfordring {current} af {total}",
+    "detect": "Vælg tekststykket med fejlen.",
+    "chooseCorrection": "Det forkerte tekststykke er understreget. Vælg rettelsen.",
+    "explanation": "Lingus forklaring",
+    "correct": "Korrekt",
+    "incorrect": "Forkert",
+    "detectionResult": "Opdagelse",
+    "correctionResult": "Rettelse",
+    "saved": "Dine svar er gemt. Du kan fortsætte senere.",
+    "abandon": "Opgiv spil",
+    "abandonDescription": "Spillet lukkes uden XP, og den brugte kvote tilbagebetales ikke. Annuller og brug Tilbage for at fortsætte senere.",
+    "results": "Opdagelse: {detected}/5 · Rettelse: {corrected}/5 · {xp} XP optjent",
+    "xpRules": "5 XP for at gennemføre og 2 for hver helt korrekt udfordring. Alle spil deler højst 45 XP pr. plan pr. UTC-dag. Gratis spilkvote deles mellem spil og sprog.",
+    "playAgain": "Spil igen",
+    "plan": "Min plan"
+  },
+  "sentenceOrder": {
+    "title": "Sæt sætningen i orden",
+    "rules": "Sæt delene i rækkefølge efter ledetråden i fem udfordringer uden tidtagning. Ét svar pr. udfordring; Lingu forklarer løsningen, og du kan høre den korrekte sætning.",
+    "instructions": "Tryk på delene i rækkefølge. Tryk på en placeret del for at lægge den tilbage, og tjek derefter hele sætningen.",
+    "yourSentence": "Din sætning",
+    "emptySentence": "Vælg en del for at begynde.",
+    "availableFragments": "Tilgængelige dele",
+    "removeFragment": "Læg del {position} tilbage: {fragment}",
+    "check": "Tjek sætningen",
+    "results": "Korrekte sætninger: {correct}/5 · {xp} XP optjent"
+  },
+  "vocabularyPairs": {
+    "title": "Ordpar",
+    "rules": "Forbind fem ord eller udtryk med deres betydninger. Uden tidtagning eller liv; prøv, til du finder alle par.",
+    "instructions": "Vælg et element fra hver kolonne, og tjek parret. Du kan ændre dit valg, før du tjekker.",
+    "terms": "Ord",
+    "meanings": "Betydninger",
+    "check": "Tjek parret",
+    "progress": "Fundne par: {count}/5",
+    "matched": "Fundne par",
+    "matchCorrect": "Korrekt par:",
+    "matchIncorrect": "Disse passer ikke sammen. Begge par mister bonussen for første forsøg:",
+    "alreadyTried": "Du har allerede prøvet denne kombination. Vælg en anden.",
+    "firstTry": "I første forsøg",
+    "withHelp": "Øvet med hjælp",
+    "results": "Par i første forsøg: {correct}/5 · {xp} XP optjent",
+    "freeDescription": "Øv ordforråd på din nuværende plans niveau.",
+    "xpRules": "5 XP for at gennemføre og 2 pr. fejlfrit par. En fejl fjerner bonussen for begge berørte par. Alle spil deler grænsen på 45 XP pr. plan og UTC-dag samt gratiskvoten på tværs af sprog."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Ordpar",
+    "vocabularyPairsDescription": "Forbind ord med betydninger, og øv dem med lyd og eksempler.",
+    "sentenceOrderTitle": "Sæt sætningen i orden",
+    "sentenceOrderDescription": "Byg sætninger af blandede dele, og øv ordstilling med ledetråde og lyd.",
+    "detectiveTitle": "Fejldetektiv",
+    "detectiveDescription": "Find og ret fejl i korte sætninger tilpasset din læring.",
+    "title": "Spil",
+    "description": "Et sted, hvor du kan styrke det, du har lært, og fortsætte med at øve sprog gennem korte spil.",
+    "emptyTitle": "Vi forbereder de første spil",
+    "emptyDescription": "Der er endnu ingen spil tilgængelige. Vi tilføjer nye aktiviteter; i mellemtiden kan du fortsætte med at lære med din studieplan.",
+    "goToPlan": "Gå til min plan"
+  },
   "nav": {
+    "games": "Spil",
     "home": "Hjem",
     "myPlan": "Min plan",
     "progress": "Fremskridt",
@@ -1354,44 +1435,49 @@
     "skip": "Spring over",
     "prev": "Tilbage",
     "next": "Næste",
-    "done": "Kom i gang",
+    "done": "Udforsk mit overblik",
+    "progress": "{current} af {total}",
+    "listen": "Lyt til Lingu",
+    "audioError": "Lyden kunne ikke afspilles. Du kan prøve igen.",
     "step1": {
       "label": "Velkommen",
       "title": "Velkommen til FreeLingo",
-      "desc": "FreeLingo er din AI-drevne sproglærer. Øv dig i dit eget tempo, når du vil, gennem samtaler, lektioner og smarte flashcards."
+      "desc": "Hej! Jeg er Lingu, din makker i sprogindlæring. Lad mig vise dig, hvordan vi kan lære sammen."
     },
     "step2": {
-      "label": "Tekstchat",
-      "title": "Chat med din lærer",
-      "desc": "Før skriftlige samtaler med din AI-lærer. Stil spørgsmål, få rettelser, og øv grammatik og ordforråd på en naturlig måde."
+      "label": "Læringsplan",
+      "title": "Din læringsplan",
+      "desc": "Start med at vælge dit niveau eller tage en niveautest. Så får du en læringsplan med lektioner, der passer til dig."
     },
     "step3": {
-      "label": "Stemme",
-      "title": "Tal i realtid",
-      "desc": "Brug stemmesamtaler til at øve talesprog med transskription i realtid og hurtig feedback på din udtale."
+      "label": "Samtale",
+      "title": "Øv dig med mig",
+      "desc": "Skriv til mig for at stille spørgsmål og øve dig, eller tal med mig i en stemmesamtale."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "Glem aldrig et ord",
-      "desc": "Flashcards bruger SM-2-algoritmen til gentagelser fordelt over tid, så du repeterer ord, lige før du er ved at glemme dem – og husker dem bedre."
+      "title": "Husk det, du har lært",
+      "desc": "Repetér ordforråd med kort, der dukker op igen, når det er tid til at øve."
     },
     "step5": {
-      "label": "Læringsplan",
-      "title": "Din personlige plan",
-      "desc": "Ud fra din niveauvurdering opretter FreeLingo en struktureret læringsplan med daglige lektioner tilpasset dine mål og fremskridt."
+      "label": "Lytning og læsning",
+      "title": "Træn din forståelse",
+      "desc": "Øv dig ved at lytte til og læse tekster på dit niveau. Besvar spørgsmål, og tjek, hvad du har forstået."
     },
     "step6": {
-      "label": "Øvelse",
-      "title": "Lytning og læsning",
-      "desc": "Test din forståelse med AI-genererede øvelser. Lyt til et lydklip, og svar på fem spørgsmål, eller læs en tekst på dit CEFR-niveau – få XP for hvert rigtigt svar."
+      "label": "Spil",
+      "title": "Lær gennem leg",
+      "desc": "Øv dig på dit niveau med spil som Fejldetektiv, Sæt sætningen i orden og Ordpar, blandt andre. Det kan også være sjovt at lære!"
     },
     "step7": {
       "label": "Klar",
-      "title": "Nu er du klar!",
-      "desc": "Start med dagens lektion, åbn en chat, eller øv lytning og læsning – FreeLingo tilpasser sig den måde, du bedst kan lide at lære på."
+      "title": "Lad os komme i gang",
+      "desc": "Vi tager det skridt for skridt! Dit overblik viser dig, hvad du kan gøre som det næste."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Fortsæt med at øve gennem spil",
+    "paywallGamesDesc": "Din gratis spilkvote er opbrugt, eller spil kræver Premium. Du kan fortsætte eksisterende spil.",
     "paywallLabel": "Premium påkrævet",
     "paywallTitle": "Lås op for FreeLingo Premium",
     "paywallDesc": "Begynd din gratis prøveperiode på {days} dage, og lås op for alle Premium-øvelser før din første betaling.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Begrænset"
   },
   "freemium": {
+    "gamesLabel": "Spil i dag",
     "chatLabel": "Chat",
     "lessonsLabel": "Lektioner",
     "listeningLabel": "Lytning",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Forstået",
     "entry1": {
       "label": "Øv dine lektioner med Lingu",
@@ -1546,6 +1633,10 @@
       "desc": "Optjen XP med <bold>talesamtaler, chat, fordelte læse- og lytterepetitioner samt gennemførte enheder og niveauer</bold>. Det fornyede dashboard fremhæver dagens XP, din stime og din seneste aktivitet."
     },
     "entry3": {
+      "label": "Ny spilsektion",
+      "desc": "Et nyt sted at øve sprog gennem spil. Besøg Spil for at se de tilgængelige aktiviteter; vi tilføjer nye muligheder løbende."
+    },
+    "entry4": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

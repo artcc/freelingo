@@ -5,7 +5,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.9.30-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.10.0-brightgreen?style=flat-square)
 
 <p align="left">
   <img src="assets/logo_large.png" alt="FreeLingo logo" />
@@ -36,6 +36,11 @@ XP also recognizes meaningful voice and chat participation, spaced Listening/Rea
 completed units and level journeys. The dashboard highlights today's XP, the current learning streak,
 seven days of activity, and plan progress. Rewards and activity remain isolated by study plan and
 language; daily activity is measured in UTC.
+
+The [Games section](specs/games.instructions.md) includes Error Detective: five short challenges to
+find and correct mistakes, with native-language explanations and lesson-style audio. Review completed
+lessons, prepare familiar foundations for the next lesson, or practise at your plan's level. Games
+are saved for later, with language-specific history and plan-owned XP; free users share a daily game quota.
 
 ## Hosted service
 

@@ -62,7 +62,30 @@ not expose provider credentials or the selected STT provider.
 - trims input and returns empty bytes for empty trimmed text;
 - rejects an empty provider audio response;
 - records request metadata and latency without logging credentials;
-- accepts a language argument but does not use it.
+- sends pronunciation `instructions` only for `gpt-4o-mini-tts` and its snapshot identifiers;
+- omits `instructions` for `tts-1`, `tts-1-hd`, and unrecognized models, preserving compatibility.
+
+The model remains selected by `OPENAI_TTS_MODEL`; using the `gpt-4o-mini-tts` alias does not pin a
+snapshot. `prompts/speech.py` owns instructions shared by all OpenAI synthesis callers. They request
+faithful reading, native pronunciation and natural prosody for each language in the text, including
+language switches. Text is spoken content, not instructions to execute. Generic calls without a
+language ask the model to infer it from the text; isolated ambiguous words cannot reliably identify
+a language or regional variety.
+
+Known language arguments add explicit regional guidance for supported learned languages and UI
+locales: `es`/`es-ES` requests Spain pronunciation, `pt`/`pt-PT` requests Portugal pronunciation,
+`en`/`en-GB` requests British pronunciation, and `en-US` requests American pronunciation. Without a
+language argument, instructions do not impose a regional accent. Conversation, Listening, and
+Phrasebook supply their full target-language code; the tour supplies its UI locale. Legacy models
+and Kokoro ignore this language argument. Model instructions do not alter the input text or select
+a different voice.
+
+Each supported language has focused pronunciation guidance for vowel and consonant quality, rhythm,
+stress, and relevant tonal/pitch distinctions. It asks for everyday native articulation without
+exaggeration, applying those details only to passages in the indicated language. The guidance applies
+to any selected voice, preserving its vocal identity. `nova` is the configured default, not a forced
+voice; user preferences continue to take precedence. These instructions guide the model rather than
+guaranteeing accent quality for every voice or text.
 
 Neither current TTS adapter chooses a model or voice automatically from the target language.
 
@@ -93,6 +116,12 @@ There is no implicit English fallback.
 - Requires authentication.
 - Rate limit: `20/minute`.
 - Accepts JSON text of 1-5000 characters and an optional voice string.
+- Accepts an optional `study_plan_id` or `conversation_id`, but not both. IDs must be strict positive
+  PostgreSQL-range integers; invalid or conflicting context returns `422`.
+- Verifies that a supplied plan/conversation belongs to the authenticated user; missing or foreign
+  resources return `404`. A plan supplies its persisted BCP-47 language. A conversation uses its
+  owned plan's language when present, otherwise its stored target language. Active-language selection
+  is never used to resolve supplied context. Without context, synthesis infers language from the text.
 - Ignores the client voice when the configured provider is local, preventing stale OpenAI voice
   preferences from reaching Kokoro.
 - Returns `audio/mpeg` bytes.
@@ -107,7 +136,37 @@ There is no implicit English fallback.
 - Exists only for OpenAI TTS; local-provider requests return `404`.
 - Accepts `alloy`, `ash`, `coral`, `echo`, `fable`, `nova`, `onyx`, `sage`, or `shimmer`.
 - Invalid voices return `400`; a missing service object returns `503`.
-- Generates the Lingu preview once and atomically caches it as `/app/tts_previews/{voice}.mp3`.
+- Generates the Lingu preview and atomically caches it under `/app/tts_previews/`.
+  Instruction-capable OpenAI models use `{voice}-{sha256}.mp3`, with text, model, voice, speed, format,
+  language context, and instructions in the identity; other models retain `{voice}.mp3`.
+- Returns `Cache-Control: no-store`; Settings requests previews with `cache: 'no-store'` so browser
+  caches cannot mask synthesis changes behind the unchanged public URL. The backend disk cache is
+  retained.
+
+### `POST /api/tts/tour/{locale}/{step}`
+
+- Requires authentication; rate limit `20/minute`.
+- Accepts one of the fifteen UI locales and `step1` through `step7`; unknown values return `404`.
+- `messages/*.json` owns tour copy. The frontend resolves the displayed paragraph through i18n and
+  sends it as `text` in the JSON request body. The backend validates text length (1–5000 characters;
+  invalid or missing text returns `422`) and synthesizes that supplied text.
+- An optional JSON `voice` selects a supported OpenAI voice (`400` for an invalid selection).
+  Omission uses the configured default. Kokoro always uses its configured default, ignoring client voice preferences.
+  Locale follows the interface, not the learned language, and supplies pronunciation guidance when
+  the configured OpenAI model supports instructions.
+- `services/tour_audio.py` stores shared MP3 files at
+  `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.mp3`. The hash includes the exact text, locale,
+  effective provider/model/voice/speed, output format, and instructions when supported. Requests never
+  overwrite a different version.
+- Shared-volume file locks serialize generation across workers; cancellable acquisition and synthesis
+  share a 60-second deadline. A second request rechecks the file after obtaining the lock. Writes use
+  unique temporary files and atomic replacement; empty output and failures do not publish audio.
+- Returns `audio/mpeg` and `Cache-Control: no-store`: the backend disk cache is authoritative because
+  the URL does not identify text or provider revisions. Missing service/provider failure returns `503`;
+  the generation deadline returns `504`. The UI permits retry without blocking the tour.
+- The Next.js proxy has a 70-second deadline and the browser a 75-second budget. Browser navigation
+  cancels its request and discards late responses; already-started backend generation may finish and
+  populate the shared cache after the browser leaves.
 
 ### `POST /api/stt`
 
@@ -147,6 +206,21 @@ Voice conversation uses its own capture pipeline and WebSocket contract, describ
 `AudioPlayer` requests TTS, creates a Blob URL, and plays it with the browser Audio API. Voice
 precedence is explicit prop, stored `tts_voice`, then backend default. It supports loading, playing,
 stop, and error states and is used across lessons, flashcards, vocabulary, chat, and phrasebook.
+Error Detective also uses this same component and endpoint for the full corrected sentence, after
+the correction step has been submitted. Generated explanations are not spoken. Existing provider
+and voice-preference rules apply; audio failure does not change the game result or block completion.
+
+`AudioPlayer` defaults to POST `/api/tts`; a custom `audioUrl` defaults to GET. Setting `audioMethod`
+to POST sends the text, resolved voice, and optional context as JSON to that URL. Lessons, flashcards,
+saved vocabulary, and games pass their resource's `studyPlanId`; chat passes `conversationId`.
+Changing either context cancels pending playback and releases the previous audio. Custom GET requests
+use `cache: 'no-store'`, bypassing previously cached browser audio while retaining backend disk caches.
+
+The dashboard tour posts its displayed i18n text and voice to its locale/step audio URL with this
+player. Optional playback-state notifications coordinate Lingu's speaking animation; they do not
+provide phoneme-level lip sync.
+Stopping, replacing content, and unmounting abort requests, stop playback, remove audio handlers, and
+release Blob URLs and timers. Each tour screen requires its own manual playback action.
 
 `VoiceRecorder`:
 
@@ -171,7 +245,16 @@ Persistent MP3 uses include:
 
 - Listening: `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
 - Phrasebook: hashed files below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`.
-- OpenAI previews: `/app/tts_previews/{voice}.mp3`.
+- OpenAI previews: `/app/tts_previews/{voice}.mp3` or `{voice}-{sha256}.mp3`, depending on model support
+  for pronunciation instructions.
+- Dashboard tour: `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.mp3`.
+
+For instruction-capable OpenAI models, Phrasebook uses a synthesis hash covering text, language,
+model, voice, speed, format, and instructions. Other providers/models retain the category/phrase/text
+cache identity. Phrasebook responses use `Cache-Control: no-store` because their public URL does not
+identify the synthesis settings. Tour, Phrasebook, and voice-preview audio is generated on demand for a new key, leaving
+previous files intact. Listening recordings remain attached to their exercises and are not regenerated
+by model or prompt changes. A provider-side update behind a model alias does not change cache keys.
 
 The compose stack mounts persistent host storage for generated audio and previews. Local Kokoro and
 Whisper services use internal network addresses and are not called from the frontend.

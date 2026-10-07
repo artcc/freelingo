@@ -68,7 +68,20 @@ flashcard CRUD/review, admin operations, memories, feedback reads/mutations, and
 - `POST /api/chat`: `30/minute`.
 - `POST /api/conversation/warmup`: `20/minute`.
 - `POST /api/tts`: `20/minute`.
+- `POST /api/tts/tour/{locale}/{step}`: `20/minute`, including cache hits. Its Next.js proxy forwards
+  the trusted ingress IP headers so requests retain the normal IP-based client key.
 - `POST /api/stt`: `20/minute`.
+
+## Games
+
+- `GET /api/games/{game_type}` and `GET /api/games/sessions/{id}`: `60/minute`.
+- `POST /api/games/{game_type}`: `5/minute`.
+- `POST /api/games/sessions/{id}/answer`: `60/minute` for Detective steps, Sentence Order submissions or Vocabulary Pairs attempts.
+- `POST /api/games/sessions/{id}/abandon`: `10/minute`.
+
+`game_type` accepts `detective`, `sentence-order` and `vocabulary-pairs` through shared catalog/start handlers.
+Generation polling is non-overlapping, normally every five seconds, with bounded transport recovery.
+Rate limiting is independent of the global per-user daily game admission quota.
 
 ## Listening and Reading
 

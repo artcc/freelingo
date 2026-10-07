@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Kelime notları",
     "nativeHelpPractice": "Pratik"
   },
+  "detective": {
+    "title": "Hata Dedektifi",
+    "rules": "Süre sınırı olmayan beş kısa görev. Hatalı parçayı bul ve düzeltmesini seç. Her adımda tek deneme; Lingu yanıtı açıklar.",
+    "review": "Öğrendiklerini tekrar et",
+    "prepare": "Sonraki derse hazırlan",
+    "free": "Serbest pratik",
+    "reviewDescription": "Son hatalarına odaklanarak tamamlanan dersleri çalış.",
+    "prepareDescription": "Sonraki dersine yardımcı olacak bildiğin konuları tekrar et.",
+    "freeDescription": "Planının mevcut seviyesinde dil bilgisi pratiği yap.",
+    "noSources": "Bu modu açmak için ilgili dersleri tamamla.",
+    "noUpcoming": "Bu planda sıradaki bir öğrenme dersi yok.",
+    "assessment": "Seviyemi değerlendir",
+    "history": "Bu dildeki oyunların",
+    "noHistory": "Kaydedilen oyunların burada görünecek.",
+    "generating": "Hazırlanıyor",
+    "ready": "Oyuna devam et",
+    "completed": "Oyun tamamlandı",
+    "failed": "Oluşturma başarısız",
+    "abandoned": "Oyun bırakıldı",
+    "generatingDescription": "Lingu beş görev hazırlayıp kontrol ediyor. Bu sayfadan ayrılıp daha sonra dönebilirsin.",
+    "failedDescription": "Geçerli bir oyun hazırlanamadı. Oyun kotası kullanılmadı. Yeniden denemek için menüye dön.",
+    "contextChanged": "Öğrenme bağlamın değişti veya bu mod kullanılamıyor. Başlamadan önce yenile.",
+    "challenge": "Görev {current}/{total}",
+    "detect": "Hatayı içeren parçayı seç.",
+    "chooseCorrection": "Hatalı parçanın altı çizili. Düzeltmesini seç.",
+    "explanation": "Lingu’nun açıklaması",
+    "correct": "Doğru",
+    "incorrect": "Yanlış",
+    "detectionResult": "Tespit",
+    "correctionResult": "Düzeltme",
+    "saved": "Yanıtların kaydedildi. Daha sonra devam edebilirsin.",
+    "abandon": "Oyunu bırak",
+    "abandonDescription": "Oyun XP verilmeden kapanır ve kullanılan kota iade edilmez. Daha sonra devam etmek için iptal edip Geri düğmesini kullan.",
+    "results": "Tespit: {detected}/5 · Düzeltme: {corrected}/5 · {xp} XP kazanıldı",
+    "xpRules": "Bitirmek için 5 XP, tamamen doğru her görev için 2 XP. Tüm oyunlar plan başına UTC gününde en fazla 45 XP sınırını paylaşır. Ücretsiz oyun kotası oyunlar ve diller arasında ortaktır.",
+    "playAgain": "Tekrar oyna",
+    "plan": "Planım"
+  },
+  "sentenceOrder": {
+    "title": "Cümleyi sırala",
+    "rules": "Süre sınırı olmadan beş görevde parçaları ipucuna göre sırala. Her görevde bir yanıt gönderilir; Lingu çözümü açıklar ve doğru cümleyi dinleyebilirsin.",
+    "instructions": "Parçalara sırayla dokun. Yerleştirdiğin bir parçayı geri almak için ona dokun, ardından tamamlanan cümleyi kontrol et.",
+    "yourSentence": "Cümlen",
+    "emptySentence": "Başlamak için bir parça seç.",
+    "availableFragments": "Kullanılabilir parçalar",
+    "removeFragment": "{position}. parçayı geri al: {fragment}",
+    "check": "Cümleyi kontrol et",
+    "results": "Doğru cümleler: {correct}/5 · Kazanılan XP: {xp}"
+  },
+  "vocabularyPairs": {
+    "title": "Kelime çiftleri",
+    "rules": "Beş kelime veya ifadeyi anlamlarıyla eşleştir. Süre sınırı ve can yok; tüm çiftleri bulana kadar dene.",
+    "instructions": "Her sütundan bir öğe seç ve çifti kontrol et. Kontrol etmeden önce seçimini değiştirebilirsin.",
+    "terms": "Kelimeler",
+    "meanings": "Anlamlar",
+    "check": "Çifti kontrol et",
+    "progress": "Eşleşen çiftler: {count}/5",
+    "matched": "Eşleşen çiftler",
+    "matchCorrect": "Doğru çift:",
+    "matchIncorrect": "Bunlar eşleşmiyor. İki çift de ilk deneme bonusunu kaybeder:",
+    "alreadyTried": "Bu kombinasyonu zaten denedin. Başka birini seç.",
+    "firstTry": "İlk denemede",
+    "withHelp": "Yardımla çalışıldı",
+    "results": "İlk denemede bulunan çiftler: {correct}/5 · Kazanılan XP: {xp}",
+    "freeDescription": "Mevcut planının seviyesinde kelime çalış.",
+    "xpRules": "Bitirmek için 5 XP, hatasız bulunan her çift için 2 XP. Bir hata ilgili iki çiftin bonusunu kaldırır. Tüm oyunlar plan başına UTC gününde 45 XP sınırını ve diller arasındaki ücretsiz kotayı paylaşır."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Kelime çiftleri",
+    "vocabularyPairsDescription": "Kelimeleri anlamlarıyla eşleştir, ses ve örneklerle tekrar et.",
+    "sentenceOrderTitle": "Cümleyi sırala",
+    "sentenceOrderDescription": "Karışık parçalardan cümleler kur, ipuçları ve sesle kelime sırasını çalış.",
+    "detectiveTitle": "Hata Dedektifi",
+    "detectiveDescription": "Öğrenimine uyarlanmış kısa cümlelerdeki hataları bul ve düzelt.",
+    "title": "Oyunlar",
+    "description": "Öğrendiklerini pekiştirmek ve kısa oyunlarla dil pratiğine devam etmek için bir alan.",
+    "emptyTitle": "İlk oyunları hazırlıyoruz",
+    "emptyDescription": "Henüz kullanıma hazır oyun yok. Yeni etkinlikler ekleyeceğiz; bu sırada çalışma planınla öğrenmeye devam edebilirsin.",
+    "goToPlan": "Planıma git"
+  },
   "nav": {
+    "games": "Oyunlar",
     "home": "Ana sayfa",
     "myPlan": "Planım",
     "progress": "İlerleme",
@@ -1354,44 +1435,49 @@
     "skip": "Atla",
     "prev": "Geri",
     "next": "İleri",
-    "done": "Başlayalım",
+    "done": "Panelimi keşfet",
+    "progress": "{current} / {total}",
+    "listen": "Lingu'yu dinle",
+    "audioError": "Ses oynatılamadı. Tekrar deneyebilirsiniz.",
     "step1": {
       "label": "Hoş geldiniz",
       "title": "FreeLingo'ya hoş geldiniz",
-      "desc": "FreeLingo, yapay zekâ destekli dil eğitmeninizdir. Konuşmalar, dersler ve akıllı bilgi kartlarıyla, istediğiniz zaman kendi hızınızda pratik yapın."
+      "desc": "Merhaba! Ben Lingu, dil öğrenme arkadaşınız. Birlikte nasıl öğrenebileceğimizi göstereyim."
     },
     "step2": {
-      "label": "Yazılı sohbet",
-      "title": "Eğitmeninizle sohbet edin",
-      "desc": "Yapay zekâ eğitmeninizle yazılı konuşmalar yapın. Soru sorun, düzeltmeler alın ve dil bilgisi ile kelime bilginizi doğal bir şekilde geliştirin."
+      "label": "Çalışma planı",
+      "title": "Öğrenme planınız",
+      "desc": "Önce seviyenizi seçin veya seviye tespiti yapın. Böylece size uygun derslerden oluşan bir çalışma planınız olur."
     },
     "step3": {
-      "label": "Ses",
-      "title": "Gerçek zamanlı konuşun",
-      "desc": "Gerçek zamanlı deşifre ve telaffuzunuz hakkında anında geri bildirimle konuşma becerinizi geliştirmek için sesli konuşma modunu kullanın."
+      "label": "Sohbet",
+      "title": "Benimle pratik yapın",
+      "desc": "Soru sormak ve pratik yapmak için bana yazın veya benimle sesli konuşun."
     },
     "step4": {
       "label": "Bilgi Kartları",
-      "title": "Hiçbir kelimeyi unutmayın",
-      "desc": "Bilgi kartları SM-2 aralıklı tekrar algoritmasını kullanır; böylece kelimeleri tam unutmak üzereyken tekrar edersiniz ve akılda kalıcılık en üst düzeye çıkar."
+      "title": "Öğrendiklerinizi hatırlayın",
+      "desc": "Pratik zamanı geldiğinde yeniden karşınıza çıkan kartlarla kelimeleri tekrar edin."
     },
     "step5": {
-      "label": "Çalışma planı",
-      "title": "Size özel planınız",
-      "desc": "FreeLingo, seviye tespitinize göre hedeflerinize ve ilerlemenize uyarlanmış günlük derslerden oluşan yapılandırılmış bir çalışma planı oluşturur."
+      "label": "Dinleme ve okuma",
+      "title": "Anlama becerinizi geliştirin",
+      "desc": "Seviyenize uygun metinleri dinleyerek ve okuyarak pratik yapın. Soruları yanıtlayın ve anladıklarınızı kontrol edin."
     },
     "step6": {
-      "label": "Pratik",
-      "title": "Dinleme ve Okuma",
-      "desc": "Yapay zekâ ile üretilmiş alıştırmalarla anlama becerinizi sınayın. Bir metni dinleyip 5 soruyu cevaplayın ya da CEFR seviyenize uygun bir metin okuyun — her doğru cevap için XP kazanın."
+      "label": "Oyunlar",
+      "title": "Oynayarak öğrenin",
+      "desc": "Hata Dedektifi, Cümleyi sırala ve Kelime çiftleri gibi çeşitli oyunlarla seviyenize uygun pratik yapın. Öğrenmek eğlenceli de olabilir!"
     },
     "step7": {
       "label": "Hazır",
-      "title": "Her şey hazır!",
-      "desc": "Bugünün dersiyle başlayın, bir sohbet açın, dinleme veya okuma pratiği yapın — FreeLingo sizin öğrenme tarzınıza uyum sağlar."
+      "title": "Haydi başlayalım",
+      "desc": "Adım adım ilerleyelim! Sırada ne yapabileceğinizi panelinizde bulabilirsiniz."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Oyunlarla pratiğe devam et",
+    "paywallGamesDesc": "Ücretsiz oyun kotan bitti veya oyunlar Premium gerektiriyor. Mevcut oyunlara devam edebilirsin.",
     "paywallLabel": "Premium gerekli",
     "paywallTitle": "FreeLingo Premium'un kilidini açın",
     "paywallDesc": "{days} günlük ücretsiz denemenizi başlatın ve ilk ödemenizden önce tüm Premium pratik modlarının kilidini açın.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Sınırlı"
   },
   "freemium": {
+    "gamesLabel": "Bugünkü oyunlar",
     "chatLabel": "Sohbet",
     "lessonsLabel": "Dersler",
     "listeningLabel": "Dinleme",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Anladım",
     "entry1": {
       "label": "Derslerini Lingu ile pekiştir",
@@ -1546,6 +1633,10 @@
       "desc": "<bold>Sesli konuşma, sohbet, aralıklı okuma ve dinleme tekrarları ile ünite ve seviye tamamlama</bold> sayesinde XP kazan. Yenilenen panel bugünkü XP’ni, serini ve son etkinliklerini öne çıkarır."
     },
     "entry3": {
+      "label": "Yeni Oyunlar bölümü",
+      "desc": "Oyunlarla dil pratiği yapmak için yeni bir alan. Mevcut etkinlikleri görmek için Oyunlar bölümüne göz at; yeni seçenekler ekleyeceğiz."
+    },
+    "entry4": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

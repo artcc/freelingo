@@ -36,6 +36,18 @@ UI translation catalogs live in the repository-root `messages/` directory.
 - `(auth)`: login, registration, onboarding, account recovery/verification, and billing-return pages
   under a shared layout. Onboarding and billing returns are included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
+- `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
+  Presentation metadata lives in `lib/games.ts`; an empty catalog shows localized guidance and a
+  link to My Plan. See `games.instructions.md` for the section's contract.
+- `/games/error-detective`, `/games/sentence-order` and `/games/vocabulary-pairs` use `components/games/GameCatalog.tsx` for
+  mode availability, global admission quota and game-type/language-filtered history. Their `[id]`
+  pages resume backend-owned sessions without retargeting them after a language switch, and reject
+  sessions from the other game. `lib/detective.ts` supplies shared bounded authenticated requests;
+  `lib/sentence-order.ts` adds the ordering contracts. Audio uses `AudioPlayer`. Sentence Order uses
+  keyboard-operable fragment buttons and an exact-spacing preview; only submitted answers persist.
+  `lib/vocabulary-pairs.ts` defines matched pairs, meanings and the persisted attempt log.
+  Its session page uses two selectable columns and explicit checking, disables solved items and
+  prevents repeated combinations, recovers uncertain attempts via GET, and reveals examples at completion.
 - `(legal)`: terms and privacy pages with a minimal public layout.
 - `api/`: Next.js handlers that proxy chat SSE, TTS, STT, and conversation warmup to the backend.
 
@@ -95,6 +107,16 @@ summary.
 
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
+
+Voice conversations show the animated Lingu avatar between the transcript and controls, at 150 × 150
+px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
+response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
+conversation header, switching between thinking while a response is generated and resting otherwise.
+Both use `components/lingu/LinguAvatar`, which falls back to static artwork for reduced motion or
+model-loading failures. The shared 3D scene uses neutral tone mapping at exposure 1.0, with a white/blue
+hemisphere light at intensity 2, a white key light at intensity 4, and a pale-blue fill light at
+intensity 3. These lighting values apply consistently in both interface themes; the scene background
+remains transparent.
 
 ## Canonical learning data
 
@@ -175,6 +197,64 @@ incomplete translations with a localized pending suffix, without adding completi
 options; the overall completion counter remains visible.
 
 ## Streaming and media
+
+The dashboard's `components/tour/OnboardingTour.tsx` is a native modal with seven localized screens.
+It keeps one `components/lingu/LinguAvatar.tsx` mounted across steps. The avatar dynamically loads
+`LinguScene.tsx` and Three.js only when visible and motion is allowed. The fixed-camera scene frames
+sampled animation bounds, cross-fades clips, caps pixel ratio, pauses animation updates in hidden tabs,
+and disposes its renderer, geometry, materials, and requests on unmount. Static Lingu artwork covers
+loading, reduced motion, and renderer/model failures. The optional `onReady` callback signals the
+first rendered animation frame or the resolved static fallback, after the browser's motion preference
+is known.
+
+Landing and tour share the rendering configuration in `components/lingu/LinguScene.tsx`:
+
+- `NeutralToneMapping` with exposure `1.08` and a transparent canvas.
+- Hemisphere light with white sky, blue-gray ground (`0x527080`), and intensity `0.65`.
+- White directional key light with intensity `1.8` at `(5, 12, 10)`.
+- Pale-blue (`0xc5e4ff`) directional fill light with intensity `0.65` at `(-6, 7, 4)`.
+
+`lib/lingu-playback.ts` manages the 250 ms transitions using the current effective weights of all
+contributing actions. Interrupted fades preserve contributing clip times and poses; actions that
+finish fading out are stopped. Loop overrides preserve the current clip time when changing modes.
+
+`scripts/export-lingu-model.py` derives `public/models/lingu.glb` from `blender/lingu.glb`, retaining
+all thirteen clips, omitting rest-equivalent animation tracks, and repacking referenced buffers.
+It preserves mesh geometry, materials, skinning, and original Blender assets. `three` is the runtime
+renderer; `@types/three` supplies development types.
+
+`lib/lingu.ts` declares the reusable `LinguAnimation` type and playback defaults from
+`blender/lingu.animations.json`. `reposo`, `pensando`, `hablando`, and `escuchando` repeat. `saludo`,
+`celebracion`, `acierto`, `animando`, `explicando_l`, `explicando_r`, `tu_turno`, `despedida`, and
+`six_seven` play once and notify the caller through the optional `onFinished` callback. `LinguAvatar`
+accepts any of these animations independently of the tour. Its optional `loop` prop overrides the
+catalog playback default for that instance. The tour currently selects only its five contextual animations.
+
+The landing's `LanguageBubbles` reuses `LinguAvatar` in the centered 140 × 140 px slot and repeats
+`saludo` with `loop`. Its transparent canvas lets the landing's light/dark background show
+through. The avatar and language circle remain transparent and hidden from assistive technology
+until `onReady`, then fade in together without a preliminary PNG or staggered bubble entrances.
+The reserved space, surrounding language positions, and container dimensions remain stable.
+Bubble floating starts when the group is ready. Reduced motion disables the entrance transition
+and floating; reduced motion and loading failures reveal the group with static Lingu artwork.
+An optional `className` overrides the avatar's default responsive dimensions so other surfaces
+can size it to their own container.
+
+Tour audio uses `AudioPlayer` with a localized listen label, speaker icon, playback-state callback,
+and a 75-second request budget. Playback starts only on a click; replacement and unmount release
+audio, Blob URLs, timers, and in-flight requests. Playback errors and rejected play requests share
+an idempotent error handler per attempt. Recovery timers belong to that attempt and cannot reset
+the state of a retry. The tour sets `audioMethod="POST"` to send its displayed i18n paragraph as `text`
+and the resolved `voice` in JSON. Custom audio URLs default to GET for existing consumers.
+The dedicated `api/tts/tour/[locale]/[step]` proxy forwards the JSON body, authentication and trusted
+IP headers, propagates cancellation, and uses a 70-second deadline. The backend validates the request,
+synthesizes the supplied text, and owns the persistent audio cache.
+
+For generic TTS, `AudioPlayer` posts an optional `studyPlanId` as `study_plan_id` or `conversationId`
+as `conversation_id`. Lessons, flashcards, saved vocabulary, and games use their persisted resource's
+plan ID; chat uses its conversation ID. The backend authorizes that context and resolves its language.
+Context changes cancel pending requests and release playback. Custom audio GET requests bypass browser
+caches with `cache: 'no-store'`; Phrasebook retains its backend disk cache and returns HTTP `no-store`.
 
 Chat consumes JSON SSE events and must handle response reset before appending subsequent content.
 Voice conversation owns microphone/VAD and playback lifecycle with cancellation and late-callback

@@ -16,6 +16,11 @@ import { useConfigStore } from '@/store/config'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 
 const PAYWALL_CONTEXT = {
+  games: {
+    icon: GraduationCap,
+    title: 'paywallGamesTitle',
+    desc: 'paywallGamesDesc',
+  },
   chat: {
     icon: MessageSquare,
     title: 'paywallChatTitle',

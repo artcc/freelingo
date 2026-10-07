@@ -7,6 +7,42 @@ applyTo: "backend/app/models/**, backend/alembic/**"
 
 All models use SQLAlchemy 2.0 declarative style with `Mapped[T]` type annotations and async engine (`asyncpg` driver). PostgreSQL JSON columns store structured content for lessons, plans, exercises, and skill scores.
 
+## Games (`game_sessions`, `game_admissions`, `game_requests`)
+
+`GameSession` uses a UUID string primary key as creation idempotency key. Required user and plan
+foreign keys cascade on deletion. It stores game type (`detective`, `sentence-order` or `vocabulary-pairs`), mode,
+target/native languages, level, status, bounded
+source-context JSON, private challenge JSON, answer JSON, creation/deadline timestamps, nullable
+completion/error and awarded XP. User and plan columns are indexed. `uq_game_active_plan_type` is unique
+on `(study_plan_id, game_type)` while status is `generating` or `ready`.
+
+`GameAdmission` uses the same request UUID as its primary key, with user FK (account cascade), UTC
+date, status (`reserved`, `consumed`, `released`) and deadline. Its `(user_id, date)` index supports
+quota lookup. It intentionally has no plan/session FK: deleting learning data must not restore a
+consumed global quota. Creation serializes on the user row.
+
+`game_sessions.game_type` and `game_requests.game_type` are non-null `String(24)` columns with
+ORM/server default `detective`. The active-session uniqueness constraint is scoped by plan and game type.
+The `0055_sentence_order` downgrade requires an online check and refuses to remove the discriminator
+while any non-Detective session or request exists, including completed sessions and request identities
+whose result was deleted.
+On PostgreSQL it acquires `ACCESS EXCLUSIVE` locks on both tables before checking data and retains
+them until the migration transaction ends, preventing concurrent writes from evading the check.
+Reward amounts remain in the existing plan-owned ledger.
+
+Vocabulary Pairs uses the existing game-type string and JSON columns. Private challenges store
+`term`, `meaning`, `sentence`, `translation`, `source_id` and `choice_index`. Each answer stores
+optional `matched`/`assisted` flags and an `attempts` list of `{attempt, choice, correct}` records.
+Attempt numbers are sequential across the session and unique under the existing plan/session locks;
+only distinct term/meaning combinations are accepted, bounding the total to 25 records.
+
+`GameRequest` persists every accepted creation UUID, including those returning an existing active
+session. Its primary key is the request UUID; it stores the owning user FK (account cascade), the
+submitted plan ID, mode and game type, and a nullable session FK (`ON DELETE SET NULL`). User and session are
+indexed. The submitted plan ID has no FK so the identity survives learning-data deletion. Retries
+check the stored request parameters, not the mode of a reused session. A null session prevents
+reusing that UUID for a different result. These records do not consume admission quota.
+
 ## User (`users`)
 
 Registration, authentication, and user preferences.
@@ -23,7 +59,7 @@ Registration, authentication, and user preferences.
 - `target_language` — BCP-47 compatibility mirror, default `en-GB`; active context comes from `UserLanguage` and resource context from `StudyPlan`.
 - `ui_locale` — nullable UI locale code.
 - `is_active` — boolean; `false` means the account is disabled by an admin.
-- `is_verified` — boolean; `false` until email verification. Existing users were set to `true` on migration.
+- `is_verified` — boolean email-verification flag; ORM default `false`.
 - `conversation_max_duration` — integer max voice session duration in seconds. Default comes from `DEFAULT_CONVERSATION_MAX_DURATION` (`1800`).
 - `conversation_inactivity_timeout` — integer seconds of silence before disconnect. Default comes from `DEFAULT_CONVERSATION_INACTIVITY_TIMEOUT` (`180`).
 - `conversation_speech_pause` — integer milliseconds of silence that end a spoken turn in voice conversation. Allowed values are `0`, `1000`, `2000`, and `3000`; `0` (the default) means the window is derived from the learner's CEFR level.
@@ -189,10 +225,9 @@ Daily progress record, one row per user per day per plan.
 **Constraint:** `UNIQUE(user_id, study_plan_id, date)` — one progress row per user per plan per day.
 
 Late activity reconciles subsequent streaks and replays their recorded skill updates against the
-corrected preceding snapshot, with rounding after each EMA step. Legacy null histories are opaque
-skill checkpoints and are preserved, not inferred from their aggregates. Revision `0053_progress_rewards`
-adds nullable `skill_updates` without replacing historical null values with empty objects. The
-column is internal persistence metadata and is not exposed in progress response schemas.
+corrected preceding snapshot, with rounding after each EMA step. Null histories are opaque skill
+checkpoints and are preserved, not inferred from their aggregates or replaced with empty objects.
+The column is internal persistence metadata and is not exposed in progress response schemas.
 
 ## ProgressReward (`progress_rewards`)
 
@@ -202,14 +237,14 @@ conversations or exercises; deleting those resources does not reopen reward elig
 - `id`: integer primary key.
 - `user_id`: indexed, required FK to users, CASCADE.
 - `study_plan_id`: indexed, required FK to study_plans, CASCADE.
-- `kind`: required string(30), voice/chat/reading_replay/listening_replay/unit/level.
+- `kind`: required string(30); current writers use `voice`, `chat`, `reading_replay`, `listening_replay`, `unit`, `level`, and `games`.
 - `source_key`: required string(160), service-generated resource/date/block or milestone key.
 - `date`: indexed UTC award date.
 - `xp`: required integer credit.
 - Unique `(study_plan_id, kind, source_key)` (`uq_progress_reward_source`).
 
 Award rules live in `learning-resources.instructions.md`. The table is registered in model metadata
-and created by versioned revision `0053_progress_rewards`, applied automatically on deployment.
+and managed through the versioned Alembic schema.
 
 ## Conversation (`conversations`)
 
@@ -245,9 +280,8 @@ progress commit atomically. Greetings and historical messages remain unpaired an
 completed reward turns. The backend validates matching conversation, user, roles, and modality before
 crediting a pair. Deleting the learner message clears its association without deleting ledger credit.
 
-Revision `0053_progress_rewards` adds both nullable columns, the self-reference and its unique
-constraint, alongside `progress_rewards` and nullable `progress.skill_updates`. Do not backfill
-modality from conversation origin or pair by adjacency.
+Null modality and reply associations remain unset. Do not infer modality from conversation origin
+or pair messages by adjacency.
 
 ## UserCompetency (`user_competencies`)
 

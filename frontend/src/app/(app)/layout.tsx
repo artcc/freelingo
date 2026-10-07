@@ -31,6 +31,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     { href: '/listening', label: tNav('listening') },
     { href: '/reading', label: tNav('reading') },
     { href: '/conversation', label: tNav('conversation') },
+    { href: '/games', label: tNav('games') },
     { href: '/assessment', label: tNav('assessment') },
   ]
 
@@ -379,7 +380,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.9.30
+            v1.10.0
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -575,7 +576,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </p>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.9.30
+                v1.10.0
               </p>
               <button
                 onClick={() => {

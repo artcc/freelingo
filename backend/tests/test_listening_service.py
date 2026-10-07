@@ -139,6 +139,7 @@ class TestGenerateAndSaveExercise:
             text="A short listening text.",
             questions=_QUESTIONS,
         )
+        tts = _FakeTTS()
 
         with patch(
             "app.services.listening_service.llm_adapter.structured_output",
@@ -148,7 +149,7 @@ class TestGenerateAndSaveExercise:
                 level="A1",
                 target_language="es-ES",
                 db=db_session,
-                tts_service=_FakeTTS(),
+                tts_service=tts,
                 storage_path=str(tmp_path),
             )
 
@@ -156,6 +157,7 @@ class TestGenerateAndSaveExercise:
         assert exercise.text == "A short listening text."
         assert exercise.questions == _QUESTIONS
         assert exercise.target_language == "es-ES"
+        tts.synthesize.assert_awaited_once_with(response.text, None, language="es-ES")
         assert mock_structured.await_args.args[1] is ListeningGenerationResponse
 
     @pytest.mark.asyncio

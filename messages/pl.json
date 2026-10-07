@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Notatki do słów",
     "nativeHelpPractice": "Ćwiczenie"
   },
+  "detective": {
+    "title": "Detektyw błędów",
+    "rules": "Pięć krótkich wyzwań bez limitu czasu. Znajdź błędny fragment i wybierz poprawkę. Jedna próba na krok; Lingu wyjaśni odpowiedź.",
+    "review": "Powtórz zdobytą wiedzę",
+    "prepare": "Przygotuj się do następnej lekcji",
+    "free": "Swobodna praktyka",
+    "reviewDescription": "Ćwicz ukończone lekcje, skupiając się na ostatnich błędach.",
+    "prepareDescription": "Powtórz znany materiał przydatny w następnej lekcji.",
+    "freeDescription": "Ćwicz gramatykę na aktualnym poziomie swojego planu.",
+    "noSources": "Ukończ powiązane lekcje, aby odblokować ten tryb.",
+    "noUpcoming": "W tym planie nie ma kolejnej lekcji do nauki.",
+    "assessment": "Oceń mój poziom",
+    "history": "Twoje rozgrywki w tym języku",
+    "noHistory": "Tutaj pojawią się zapisane rozgrywki.",
+    "generating": "Przygotowywanie",
+    "ready": "Wznów grę",
+    "completed": "Gra ukończona",
+    "failed": "Błąd generowania",
+    "abandoned": "Gra porzucona",
+    "generatingDescription": "Lingu przygotowuje i sprawdza pięć wyzwań. Możesz opuścić stronę i wrócić później.",
+    "failedDescription": "Nie udało się przygotować poprawnej gry. Limit gier nie został zużyty. Wróć do menu i spróbuj ponownie.",
+    "contextChanged": "Kontekst nauki się zmienił lub ten tryb jest niedostępny. Odśwież przed rozpoczęciem.",
+    "challenge": "Wyzwanie {current} z {total}",
+    "detect": "Wybierz fragment zawierający błąd.",
+    "chooseCorrection": "Błędny fragment jest podkreślony. Wybierz poprawkę.",
+    "explanation": "Wyjaśnienie Lingu",
+    "correct": "Poprawnie",
+    "incorrect": "Niepoprawnie",
+    "detectionResult": "Wykrycie",
+    "correctionResult": "Poprawka",
+    "saved": "Odpowiedzi są zapisane. Możesz kontynuować później.",
+    "abandon": "Porzuć grę",
+    "abandonDescription": "Gra zakończy się bez XP, a wykorzystany limit nie zostanie zwrócony. Aby wrócić później, anuluj i wybierz Wstecz.",
+    "results": "Wykrycie: {detected}/5 · Poprawka: {corrected}/5 · Zdobyto {xp} XP",
+    "xpRules": "5 XP za ukończenie i 2 za każde w pełni poprawne wyzwanie. Wszystkie gry mają wspólny limit 45 XP na plan dziennie według UTC. Limit darmowych rozgrywek jest wspólny dla wszystkich gier i języków.",
+    "playAgain": "Zagraj ponownie",
+    "plan": "Mój plan"
+  },
+  "sentenceOrder": {
+    "title": "Ułóż zdanie",
+    "rules": "Ułóż fragmenty zgodnie ze wskazówką w pięciu wyzwaniach, bez limitu czasu. Jedna odpowiedź na wyzwanie; Lingu wyjaśnia rozwiązanie i możesz odsłuchać poprawne zdanie.",
+    "instructions": "Dotykaj fragmentów w odpowiedniej kolejności. Dotknij ułożonego fragmentu, aby go cofnąć, a następnie sprawdź całe zdanie.",
+    "yourSentence": "Twoje zdanie",
+    "emptySentence": "Wybierz fragment, aby rozpocząć.",
+    "availableFragments": "Dostępne fragmenty",
+    "removeFragment": "Cofnij fragment {position}: {fragment}",
+    "check": "Sprawdź zdanie",
+    "results": "Poprawne zdania: {correct}/5 · Zdobyte XP: {xp}"
+  },
+  "vocabularyPairs": {
+    "title": "Pary słówek",
+    "rules": "Połącz pięć słów lub wyrażeń z ich znaczeniami. Bez limitu czasu i żyć; próbuj, aż znajdziesz wszystkie pary.",
+    "instructions": "Wybierz po jednym elemencie z każdej kolumny i sprawdź parę. Przed sprawdzeniem możesz zmienić wybór.",
+    "terms": "Słowa",
+    "meanings": "Znaczenia",
+    "check": "Sprawdź parę",
+    "progress": "Znalezione pary: {count}/5",
+    "matched": "Znalezione pary",
+    "matchCorrect": "Poprawna para:",
+    "matchIncorrect": "Te elementy nie pasują. Obie pary tracą premię za pierwszą próbę:",
+    "alreadyTried": "Ta kombinacja była już sprawdzona. Wybierz inną.",
+    "firstTry": "Za pierwszym razem",
+    "withHelp": "Przećwiczone z pomocą",
+    "results": "Pary za pierwszym razem: {correct}/5 · Zdobyte XP: {xp}",
+    "freeDescription": "Ćwicz słownictwo na poziomie swojego obecnego planu.",
+    "xpRules": "5 XP za ukończenie i 2 za parę rozwiązaną bez błędów. Błąd usuwa premię obu powiązanych par. Wszystkie gry dzielą limit 45 XP na plan i dzień UTC oraz darmowy limit rozgrywek między językami."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Pary słówek",
+    "vocabularyPairsDescription": "Łącz słowa ze znaczeniami i powtarzaj je z nagraniami i przykładami.",
+    "sentenceOrderTitle": "Ułóż zdanie",
+    "sentenceOrderDescription": "Buduj zdania z pomieszanych fragmentów i ćwicz szyk wyrazów ze wskazówkami i nagraniami.",
+    "detectiveTitle": "Detektyw błędów",
+    "detectiveDescription": "Znajduj i poprawiaj błędy w krótkich zdaniach dostosowanych do twojej nauki.",
+    "title": "Gry",
+    "description": "Miejsce do utrwalania zdobytej wiedzy i dalszego ćwiczenia języków w krótkich rozgrywkach.",
+    "emptyTitle": "Przygotowujemy pierwsze gry",
+    "emptyDescription": "Nie ma jeszcze dostępnych gier. Będziemy dodawać nowe aktywności; tymczasem możesz kontynuować naukę ze swoim planem.",
+    "goToPlan": "Przejdź do mojego planu"
+  },
   "nav": {
+    "games": "Gry",
     "home": "Strona główna",
     "myPlan": "Mój plan",
     "progress": "Postępy",
@@ -1354,44 +1435,49 @@
     "skip": "Pomiń",
     "prev": "Wstecz",
     "next": "Dalej",
-    "done": "Zaczynamy",
+    "done": "Odkryj mój panel",
+    "progress": "{current} z {total}",
+    "listen": "Posłuchaj Lingu",
+    "audioError": "Nie udało się odtworzyć dźwięku. Spróbuj ponownie.",
     "step1": {
       "label": "Witaj",
       "title": "Witaj w FreeLingo",
-      "desc": "FreeLingo to Twój korepetytor językowy oparty na sztucznej inteligencji. Ćwicz we własnym tempie, o dowolnej porze, przez rozmowy, lekcje i inteligentne fiszki."
+      "desc": "Cześć! Jestem Lingu, Twój towarzysz nauki języków. Pokażę Ci, jak możemy uczyć się razem."
     },
     "step2": {
-      "label": "Czat tekstowy",
-      "title": "Rozmawiaj z tutorem",
-      "desc": "Prowadź pisemne rozmowy z tutorem AI. Zadawaj pytania, otrzymuj poprawki i ćwicz gramatykę i słownictwo w naturalny sposób."
+      "label": "Plan nauki",
+      "title": "Twój plan nauki",
+      "desc": "Zacznij od wyboru poziomu lub testu poziomującego. Otrzymasz plan nauki z lekcjami dopasowanymi do Ciebie."
     },
     "step3": {
-      "label": "Głos",
-      "title": "Mów w czasie rzeczywistym",
-      "desc": "Korzystaj z trybu rozmowy głosowej, aby ćwiczyć mówiony język z transkrypcją na żywo i natychmiastową informacją zwrotną o wymowie."
+      "label": "Rozmowa",
+      "title": "Ćwicz ze mną",
+      "desc": "Pisz do mnie, aby zadawać pytania i ćwiczyć, albo porozmawiaj ze mną głosowo."
     },
     "step4": {
       "label": "Fiszki",
-      "title": "Nie zapomnij żadnego słowa",
-      "desc": "Fiszki używają algorytmu powtórek rozłożonych w czasie SM-2, dzięki czemu powtarzasz słowa dokładnie wtedy, gdy jesteś bliski ich zapomnienia."
+      "title": "Zapamiętaj to, czego się uczysz",
+      "desc": "Powtarzaj słownictwo z fiszkami, które wracają, gdy nadchodzi pora na ćwiczenie."
     },
     "step5": {
-      "label": "Plan nauki",
-      "title": "Twój spersonalizowany plan",
-      "desc": "Na podstawie oceny poziomu FreeLingo tworzy ustrukturyzowany plan nauki z codziennymi lekcjami dostosowanymi do Twoich celów."
+      "label": "Słuchanie i czytanie",
+      "title": "Ćwicz rozumienie",
+      "desc": "Ćwicz słuchanie i czytanie tekstów na swoim poziomie. Odpowiadaj na pytania i sprawdzaj, ile rozumiesz."
     },
     "step6": {
-      "label": "Ćwiczenia",
-      "title": "Słuchanie & Czytanie",
-      "desc": "Sprawdź swoje rozumienie dzięki ćwiczeniom generowanym przez AI. Posłuchaj fragmentu i odpowiedz na 5 pytań lub przeczytaj tekst na swoim poziomie CEFR — zdobywaj XP za każdą poprawną odpowiedź."
+      "label": "Gry",
+      "title": "Ucz się przez zabawę",
+      "desc": "Ćwicz na swoim poziomie w grach takich jak Detektyw błędów, Ułóż zdanie i Pary słówek, między innymi. Nauka też może być zabawą!"
     },
     "step7": {
       "label": "Gotowy",
-      "title": "Wszystko gotowe!",
-      "desc": "Zacznij od dzisiejszej lekcji, otwórz czat lub ćwicz słuchanie i czytanie — FreeLingo dostosowuje się do Twojego stylu nauki."
+      "title": "Zaczynajmy",
+      "desc": "Działajmy krok po kroku! W swoim panelu znajdziesz wskazówki, co robić dalej."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Ćwicz dalej z grami",
+    "paywallGamesDesc": "Darmowy limit został wyczerpany lub gry wymagają Premium. Możesz wznowić istniejące rozgrywki.",
     "paywallLabel": "Wymagane Premium",
     "paywallTitle": "Odblokuj FreeLingo Premium",
     "paywallDesc": "Rozpocznij bezpłatny okres próbny na {days} dni i odblokuj wszystkie tryby Premium przed pierwszą płatnością.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Limitowane"
   },
   "freemium": {
+    "gamesLabel": "Dzisiejsze gry",
     "chatLabel": "Chat",
     "lessonsLabel": "Lekcje",
     "listeningLabel": "Słuchanie",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Rozumiem",
     "entry1": {
       "label": "Ćwicz lekcje z Lingu",
@@ -1546,6 +1633,10 @@
       "desc": "Zdobywaj XP za <bold>rozmowy głosowe, czat, rozłożone w czasie powtórki czytania i słuchania oraz ukończone jednostki i poziomy</bold>. Odświeżony panel pokazuje dzisiejsze XP, serię nauki i ostatnią aktywność."
     },
     "entry3": {
+      "label": "Nowa sekcja Gry",
+      "desc": "Nowe miejsce do ćwiczenia języków poprzez gry. Zajrzyj do sekcji Gry, aby sprawdzić dostępne aktywności; będziemy dodawać kolejne propozycje."
+    },
+    "entry4": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

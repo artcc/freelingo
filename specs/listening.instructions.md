@@ -65,7 +65,9 @@ The service:
 1. Selects an exercise type allowed for the CEFR level.
 2. Builds a language-aware prompt with level-specific length guidance.
 3. Requests structured output through `llm_adapter.structured_output()`.
-4. Synthesizes the generated text with the configured TTS service and optional requested voice.
+4. Synthesizes the generated text with the configured TTS service, optional requested voice, and full
+   BCP-47 target language. Instruction-capable OpenAI models use that language for native regional
+   pronunciation, as described in `speech-services.instructions.md`.
 5. Inserts the exercise to obtain its database ID.
 6. Writes the MP3 as `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
 7. Stores the path and commits the exercise.

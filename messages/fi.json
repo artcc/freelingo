@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Sanojen huomioita",
     "nativeHelpPractice": "Harjoitus"
   },
+  "detective": {
+    "title": "Virhe-etsivä",
+    "rules": "Viisi lyhyttä haastetta ilman aikarajaa. Etsi virheellinen osa ja valitse korjaus. Yksi yritys vaihetta kohti; Lingu selittää vastauksen.",
+    "review": "Kertaa oppimaasi",
+    "prepare": "Valmistaudu seuraavaan oppituntiin",
+    "free": "Vapaa harjoittelu",
+    "reviewDescription": "Harjoittele suoritettuja oppitunteja ja keskity viimeaikaisiin virheisiin.",
+    "prepareDescription": "Kertaa tuttua sisältöä, joka auttaa seuraavalla oppitunnilla.",
+    "freeDescription": "Harjoittele kielioppia suunnitelmasi nykyisellä tasolla.",
+    "noSources": "Suorita aiheeseen liittyviä oppitunteja avataksesi tämän tilan.",
+    "noUpcoming": "Tässä suunnitelmassa ei ole tulevaa opetustuntia.",
+    "assessment": "Arvioi tasoni",
+    "history": "Pelisi tällä kielellä",
+    "noHistory": "Tallennetut pelisi näkyvät täällä.",
+    "generating": "Valmistellaan",
+    "ready": "Jatka peliä",
+    "completed": "Peli suoritettu",
+    "failed": "Luonti epäonnistui",
+    "abandoned": "Peli keskeytetty",
+    "generatingDescription": "Lingu valmistelee ja tarkistaa viisi haastetta. Voit poistua sivulta ja palata myöhemmin.",
+    "failedDescription": "Kelvollista peliä ei voitu valmistella. Pelikiintiötä ei kulutettu. Palaa valikkoon ja yritä uudelleen.",
+    "contextChanged": "Oppimiskontekstisi muuttui tai tila ei ole käytettävissä. Päivitä ennen aloittamista.",
+    "challenge": "Haaste {current}/{total}",
+    "detect": "Valitse osa, jossa virhe on.",
+    "chooseCorrection": "Virheellinen osa on alleviivattu. Valitse korjaus.",
+    "explanation": "Lingun selitys",
+    "correct": "Oikein",
+    "incorrect": "Väärin",
+    "detectionResult": "Tunnistus",
+    "correctionResult": "Korjaus",
+    "saved": "Vastauksesi on tallennettu. Voit jatkaa myöhemmin.",
+    "abandon": "Lopeta peli",
+    "abandonDescription": "Peli suljetaan ilman XP:tä eikä käytettyä kiintiötä palauteta. Jos haluat jatkaa myöhemmin, peruuta ja valitse Takaisin.",
+    "results": "Tunnistus: {detected}/5 · Korjaus: {corrected}/5 · {xp} XP ansaittu",
+    "xpRules": "5 XP suorittamisesta ja 2 jokaisesta täysin oikeasta haasteesta. Kaikilla peleillä on yhteinen 45 XP:n raja suunnitelmaa ja UTC-päivää kohti. Ilmainen pelikiintiö on yhteinen kaikille peleille ja kielille.",
+    "playAgain": "Pelaa uudelleen",
+    "plan": "Oma suunnitelma"
+  },
+  "sentenceOrder": {
+    "title": "Järjestä lause",
+    "rules": "Järjestä osat vihjeen mukaan viidessä haasteessa ilman aikarajaa. Yksi vastaus haastetta kohti; Lingu selittää ratkaisun, ja voit kuunnella oikean lauseen.",
+    "instructions": "Napauta osia järjestyksessä. Palauta sijoitettu osa napauttamalla sitä ja tarkista sitten valmis lause.",
+    "yourSentence": "Oma lauseesi",
+    "emptySentence": "Aloita valitsemalla osa.",
+    "availableFragments": "Käytettävissä olevat osat",
+    "removeFragment": "Palauta osa {position}: {fragment}",
+    "check": "Tarkista lause",
+    "results": "Oikeita lauseita: {correct}/5 · Ansaittu XP: {xp}"
+  },
+  "vocabularyPairs": {
+    "title": "Sanaparit",
+    "rules": "Yhdistä viisi sanaa tai ilmausta niiden merkityksiin. Ei aikarajaa tai elämiä; yritä, kunnes löydät kaikki parit.",
+    "instructions": "Valitse yksi kohde kummastakin sarakkeesta ja tarkista pari. Voit vaihtaa valintaa ennen tarkistusta.",
+    "terms": "Sanat",
+    "meanings": "Merkitykset",
+    "check": "Tarkista pari",
+    "progress": "Löydetyt parit: {count}/5",
+    "matched": "Löydetyt parit",
+    "matchCorrect": "Oikea pari:",
+    "matchIncorrect": "Nämä eivät kuulu yhteen. Molemmat parit menettävät ensimmäisen yrityksen bonuksen:",
+    "alreadyTried": "Olet jo kokeillut tätä yhdistelmää. Valitse toinen.",
+    "firstTry": "Ensimmäisellä yrityksellä",
+    "withHelp": "Harjoiteltu avun kanssa",
+    "results": "Pareja ensimmäisellä yrityksellä: {correct}/5 · Ansaittu XP: {xp}",
+    "freeDescription": "Harjoittele sanastoa nykyisen suunnitelmasi tasolla.",
+    "xpRules": "5 XP suorittamisesta ja 2 jokaisesta virheettömästä parista. Virhe poistaa molempien parien bonuksen. Kaikilla peleillä on yhteinen 45 XP:n raja suunnitelmaa ja UTC-päivää kohti sekä kielten yhteinen ilmainen pelikiintiö."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Sanaparit",
+    "vocabularyPairsDescription": "Yhdistä sanat merkityksiin ja kertaa äänen ja esimerkkien avulla.",
+    "sentenceOrderTitle": "Järjestä lause",
+    "sentenceOrderDescription": "Rakenna lauseita sekoitetuista osista ja harjoittele sanajärjestystä vihjeiden ja äänen avulla.",
+    "detectiveTitle": "Virhe-etsivä",
+    "detectiveDescription": "Etsi ja korjaa virheitä lyhyistä lauseista, jotka on mukautettu oppimiseesi.",
+    "title": "Pelit",
+    "description": "Paikka, jossa voit vahvistaa oppimaasi ja jatkaa kielten harjoittelua lyhyillä peleillä.",
+    "emptyTitle": "Valmistelemme ensimmäisiä pelejä",
+    "emptyDescription": "Pelejä ei ole vielä saatavilla. Lisäämme uusia tehtäviä; sillä välin voit jatkaa opiskelua oman opiskelusuunnitelmasi mukaan.",
+    "goToPlan": "Siirry omaan suunnitelmaan"
+  },
   "nav": {
+    "games": "Pelit",
     "home": "Etusivu",
     "myPlan": "Oma suunnitelma",
     "progress": "Edistyminen",
@@ -1354,44 +1435,49 @@
     "skip": "Ohita",
     "prev": "Takaisin",
     "next": "Seuraava",
-    "done": "Aloita",
+    "done": "Tutustu omaan näkymääni",
+    "progress": "{current}/{total}",
+    "listen": "Kuuntele Lingua",
+    "audioError": "Ääntä ei voitu toistaa. Voit yrittää uudelleen.",
     "step1": {
       "label": "Tervetuloa",
       "title": "Tervetuloa FreeLingoon",
-      "desc": "FreeLingo on tekoälyä hyödyntävä kieltenopettajasi. Harjoittele omaan tahtiisi milloin tahansa keskusteluilla, oppitunneilla ja älykkäillä muistikorteilla."
+      "desc": "Hei! Olen Lingu, kieltenopiskelukaverisi. Näytän sinulle, miten voimme oppia yhdessä."
     },
     "step2": {
-      "label": "Tekstichatti",
-      "title": "Keskustele opettajasi kanssa",
-      "desc": "Keskustele kirjoittamalla AI-opettajasi kanssa. Kysy, saat korjauksia ja harjoittele kielioppia ja sanastoa luonnollisesti."
+      "label": "Opintosuunnitelma",
+      "title": "Oma opintosuunnitelmasi",
+      "desc": "Aloita valitsemalla tasosi tai tekemällä tasotesti. Saat opintosuunnitelman, jonka oppitunnit sopivat sinulle."
     },
     "step3": {
-      "label": "Ääni",
-      "title": "Puhu reaaliajassa",
-      "desc": "Harjoittele puhumista äänikeskustelussa. Saat reaaliaikaisen litteroinnin ja välitöntä palautetta ääntämisestäsi."
+      "label": "Keskustelu",
+      "title": "Harjoittele kanssani",
+      "desc": "Kirjoita minulle, kun haluat kysyä ja harjoitella, tai juttele kanssani ääneen."
     },
     "step4": {
       "label": "Muistikortit",
-      "title": "Älä unohda sanoja",
-      "desc": "Muistikortit käyttävät SM-2-aikavälikertausta, joka näyttää sanat juuri ennen kuin olet unohtamassa ne – näin muistat ne pidempään."
+      "title": "Muista oppimasi",
+      "desc": "Kertaa sanastoa korteilla, jotka palaavat näkyviin, kun on aika harjoitella."
     },
     "step5": {
-      "label": "Opintosuunnitelma",
-      "title": "Henkilökohtainen suunnitelmasi",
-      "desc": "Tasoarviosi perusteella FreeLingo laatii jäsennellyn opintosuunnitelman, jonka päivittäiset oppitunnit mukautuvat tavoitteisiisi ja edistymiseesi."
+      "label": "Kuuntelu ja lukeminen",
+      "title": "Harjoittele ymmärtämistä",
+      "desc": "Harjoittele kuuntelemalla ja lukemalla tasollesi sopivia tekstejä. Vastaa kysymyksiin ja tarkista, mitä ymmärsit."
     },
     "step6": {
-      "label": "Harjoittelu",
-      "title": "Kuuntelu ja lukeminen",
-      "desc": "Testaa ymmärrystäsi tekoälyn luomilla harjoituksilla. Kuuntele katkelma ja vastaa viiteen kysymykseen tai lue tasoasi vastaava teksti – ansaitset XP-pisteitä jokaisesta oikeasta vastauksesta."
+      "label": "Pelit",
+      "title": "Opi pelaamalla",
+      "desc": "Harjoittele omalla tasollasi esimerkiksi peleillä Virhe-etsivä, Järjestä lause ja Sanaparit. Oppiminen voi olla myös hauskaa!"
     },
     "step7": {
       "label": "Valmis",
-      "title": "Kaikki on valmista!",
-      "desc": "Aloita päivän oppitunnilla, avaa chatti tai harjoittele kuuntelua ja lukemista – FreeLingo mukautuu tapaasi oppia."
+      "title": "Aloitetaan",
+      "desc": "Edetään askel kerrallaan! Omasta näkymästäsi löydät, mitä tehdä seuraavaksi."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Jatka harjoittelua peleillä",
+    "paywallGamesDesc": "Ilmainen pelikiintiösi on käytetty tai pelit vaativat Premiumin. Voit jatkaa olemassa olevia pelejä.",
     "paywallLabel": "Premium vaaditaan",
     "paywallTitle": "Avaa FreeLingo Premium",
     "paywallDesc": "Aloita {days} päivän ilmainen kokeilu ja avaa kaikki Premium-harjoitukset ennen ensimmäistä maksua.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Rajoitettu"
   },
   "freemium": {
+    "gamesLabel": "Pelit tänään",
     "chatLabel": "Chatti",
     "lessonsLabel": "Oppitunnit",
     "listeningLabel": "Kuuntelu",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Selvä",
     "entry1": {
       "label": "Harjoittele oppitunteja Lingun kanssa",
@@ -1546,6 +1633,10 @@
       "desc": "Ansaitse XP:tä <bold>puheesta, chatista, hajautetuista luku- ja kuuntelukertauksista sekä osioiden ja tasojen suorittamisesta</bold>. Uudistettu näkymä korostaa päivän XP:tä, oppimisputkeasi ja viimeaikaista toimintaasi."
     },
     "entry3": {
+      "label": "Uusi Pelit-osio",
+      "desc": "Uusi paikka kielten harjoitteluun pelien avulla. Käy Pelit-osiossa katsomassa saatavilla olevat tehtävät; lisäämme uusia vaihtoehtoja."
+    },
+    "entry4": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

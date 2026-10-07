@@ -23,7 +23,59 @@ Most REST endpoints are prefixed under `/api`. The public health check is at `/h
 
 ## Freemium — `/api/freemium`
 
-- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. A configured freemium feature limit of `0` means blocked. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+
+## Games — `/api/games`
+
+All endpoints require an authenticated active user. Session IDs are UUIDs; missing or foreign sessions
+return 404. Session language and XP ownership come from their persisted plan, not active selection.
+Session endpoints also resolve owned creation request UUIDs to their canonical session; the response
+always contains the canonical ID. A request whose session was deleted returns 404.
+
+- **GET `/{game_type}`** — `game_type` is `detective`, `sentence-order` or `vocabulary-pairs`; other values return 422.
+  60/min. Requires an active plan. Returns plan ID/language/level, availability
+  and reason for `review`, `prepare`, `free`, global `quota: {remaining, limit}`, `limited`, `history`
+  and `total`. History is filtered by game type and includes all plans in the active language;
+  `skip >= 0`, `limit=10`, maximum 50.
+- **POST `/{game_type}`** — same accepted types. 5/min, maintenance checked, 202. Body: UUID `request_id`, positive
+  `study_plan_id`, `mode`. New request UUIDs require a matching active plan; a missing active plan
+  returns 404. Returns a session, reusing its request UUID
+  or the plan's active game of that type. Reserves the shared game quota for new free work;
+  402 when exhausted, 409 on changed
+  context, conflicting UUID or missing mode sources. Only newly created work starts generation.
+  Every accepted request UUID is bound to its returned session and submitted plan/mode/game type, even when
+  reusing an active game of another mode. Retrying returns that same session after completion or
+  abandonment without new quota, even if the active language has no plan. Accepted UUIDs are resolved
+  and their original parameters checked before requiring an active plan; changed parameters or a
+  deleted result return 409.
+- **GET `/sessions/{id}`** — 60/min. Returns saved state and remaining generation seconds. Expired
+  generation is reported failed and its reservation released. Does not require an active plan.
+- **POST `/sessions/{id}/answer`** — 60/min. Detective body: `challenge` (0–4), `step` (`detect`
+  or `correct`), `choice` (fragment/option index). Sentence Order body: `challenge` (0–4),
+  `step: "order"`, `order` (3–12 strict integer indices, a permutation of every fragment).
+  Requires the next unanswered step. Same-answer retries return stored state; changed answers or
+  out-of-order steps return 409; invalid indices/permutations or the wrong game's answer shape return 422.
+  Vocabulary Pairs body: `step: "match"`, `attempt` (strict integer 0–24), `challenge` and `choice`
+  (strict integers 0–4). Pairs may be solved in any order, but attempt numbers must be sequential
+  from zero. Exact retries return current state. Reusing an attempt number with different choices,
+  skipping an attempt number, selecting a solved item or resubmitting a previously tried combination
+  returns 409. Incorrect matches persist and allow further attempts with other combinations.
+- **POST `/sessions/{id}/abandon`** — 10/min. Closes a ready game without XP or quota refund;
+  terminal retries are idempotent. A generating game returns 409.
+
+Session responses contain identity, `game_type`, plan, language/native language, level, mode, status,
+creation time, XP, error and challenges. Before detection a Detective challenge exposes only its sentence/fragments and
+answer state. After detection it adds error index/options; after correction it adds correct index,
+corrected sentence and native explanation. Source context and unrevealed solutions stay server-side.
+Sentence Order challenges expose `index`, native `clue`, shuffled `fragments`, `separator` (`""` or
+`" "`) and nullable submitted `order`. Only after answering do they expose `correct`,
+`corrected_sentence` (the accepted submitted variant when correct, otherwise the canonical solution)
+and `explanation`. Accepted orders, source IDs and canonical sentences are private before answering.
+Vocabulary Pairs exposes `challenges: [{index, term, matched}]`, an independently ordered
+`meanings: [{index, text}]` list and chronological `attempts: [{attempt, challenge, choice, correct}]`.
+Solved challenges additionally expose `choice` and `assisted`. Only completed games expose each
+challenge's `sentence` and `translation`. Unmatched correspondence indices, assistance flags and
+source IDs remain private; failed attempts never reveal the solution.
 
 ---
 
@@ -227,8 +279,9 @@ are server-triggered by persisted activity and have no client-claim endpoint.
 
 ## TTS — `/api/tts`
 
-- **POST ``** — Rate limit: 20/min. Auth: get_current_user. Text → MP3 audio using the selected TTS provider. Supports optional trace correlation via `X-TTS-Trace-ID` and returns timing headers.
-- **GET `/preview/{voice}`** — Rate limit: 60/min. Auth: get_current_user. Returns a short cached/generated MP3 preview for an OpenAI TTS voice when supported.
+- **POST ``** — Rate limit: 20/min. Auth: get_current_user. Text → MP3 audio using the selected TTS provider. Accepts text, optional voice, and optionally one of `study_plan_id` or `conversation_id` (strict positive PostgreSQL-range IDs). Invalid/conflicting context returns 422; missing/foreign resources return 404. Pronunciation language comes from the owned plan, or from the conversation's owned plan when present and its stored target language otherwise. With no context, instruction-capable OpenAI models infer languages from the text without imposing a regional accent. Supports optional trace correlation via `X-TTS-Trace-ID` and returns timing headers.
+- **GET `/preview/{voice}`** — Rate limit: 60/min. Auth: get_current_user. Returns a short cached/generated MP3 preview for an OpenAI TTS voice when supported. Instruction-capable models use synthesis-specific cache keys including the model and instructions; other models retain voice-only cache files. Responses use `Cache-Control: no-store`, and Settings bypasses its browser HTTP cache so playback consults the backend disk cache.
+- **POST `/tour/{locale}/{step}`** — Rate limit: 20/min. Auth: get_current_user. Returns persistent MP3 narration for the dashboard-tour text localized by the frontend through i18n. Accepts a supported UI locale, `step1`–`step7`, and a JSON body with `text` (1–5000 characters) and optional OpenAI `voice`; local TTS ignores that preference. Unknown locale/step returns 404, invalid text 422, invalid OpenAI voice 400, unavailable synthesis 503, and the 60-second generation deadline 504. Cache identity includes the supplied text, locale, effective provider/model/voice/speed, format, and pronunciation instructions when supported. Files are shared across users, generation is serialized across workers, and responses use `Cache-Control: no-store` to reconsult the version-aware disk cache.
 
 ---
 
@@ -372,4 +425,4 @@ All endpoints require `get_current_user`.
 - **GET `/level/{level}`** — Rate limit: 60/min. Auth: get_current_user. Returns phrasebook categories filtered by CEFR level (A1–C2). Returns 400 for invalid levels. Query param: `language`.
 - **GET `/{category_id}`** — Rate limit: 60/min. Auth: get_current_user. Returns a single phrasebook category by ID. Query param: `language`. Returns 404 if not found.
 - **POST `/{category_id}/native-help`** — Rate limit: 10/min. Auth: get_current_user. Query param: `language` (BCP-47, default `en-GB`). Generates or returns cached native-language study help for a phrasebook category, keyed globally by category ID, target language, and native language; the source hash determines cache freshness. Response: `{native_help: {summary, usage_tips, register_notes, phrase_notes, common_traps, mini_glossary}}`. Returns 404 if the category does not exist and 503 if generation is unavailable or already in progress.
-- **GET `/audio/{category_id}/{phrase_index}`** — Rate limit: 30/min. Auth: get_current_user. Returns cached TTS audio (audio/mpeg) for a specific phrase. Generates and caches on first request; subsequent requests serve from disk. Query param: `language`. Returns 404 if category or phrase index not found, 503 if TTS service unavailable.
+- **GET `/audio/{category_id}/{phrase_index}`** — Rate limit: 30/min. Auth: get_current_user. Returns cached TTS audio (audio/mpeg) for a specific phrase. Generates and caches on first request; subsequent requests serve from disk. Query param: `language`, also passed to synthesis for pronunciation guidance when supported. Instruction-capable OpenAI models use synthesis-specific cache keys including model and instructions. Responses use `Cache-Control: no-store` so browser caches do not mask synthesis changes. Returns 404 if category or phrase index not found, 503 if TTS service unavailable.

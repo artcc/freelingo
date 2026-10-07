@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "model": "lingu.glb",
+  "format": "glTF 2.0 binary",
+  "sha256": "42d5e8bebdbb7f915b830d731accc20b7c3e7357268babd7e39115edfea9f935",
+  "source": "Lingu.blend",
+  "fps": 24,
+  "upAxis": "+Y",
+  "forwardAxis": "+Z",
+  "units": "meters",
+  "defaultAnimation": "reposo",
+  "geometry": {
+    "meshObjects": 176,
+    "triangles": 248540,
+    "vertices": 142027,
+    "materials": 10,
+    "bounds": {
+      "min": [
+        -2.5679731823903995,
+        -1.6461241883342081e-06,
+        -0.7224999889731407
+      ],
+      "max": [
+        2.5679729868297825,
+        8.310000538825989,
+        1.1190000511705875
+      ]
+    }
+  },
+  "materialExtensions": [
+    "KHR_materials_clearcoat",
+    "KHR_materials_emissive_strength"
+  ],
+  "animations": [
+    {
+      "name": "reposo",
+      "sourceAction": "REPOSO | 8 segundos - bucle",
+      "durationSeconds": 8.0,
+      "recommendedPlayback": "repeat",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 192,
+      "closingKeyframe": 193
+    },
+    {
+      "name": "saludo",
+      "sourceAction": "SALUDO | 8 segundos - bucle",
+      "durationSeconds": 8.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 192,
+      "closingKeyframe": 193
+    },
+    {
+      "name": "pensando",
+      "sourceAction": "PENSANDO | 8 segundos - bucle",
+      "durationSeconds": 8.0,
+      "recommendedPlayback": "repeat",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 192,
+      "closingKeyframe": 193
+    },
+    {
+      "name": "hablando",
+      "sourceAction": "HABLANDO | 8 segundos - bucle",
+      "durationSeconds": 8.0,
+      "recommendedPlayback": "repeat",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 192,
+      "closingKeyframe": 193
+    },
+    {
+      "name": "celebracion",
+      "sourceAction": "CELEBRACION | 8 segundos - bucle",
+      "durationSeconds": 8.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 192,
+      "closingKeyframe": 193
+    },
+    {
+      "name": "escuchando",
+      "sourceAction": "ESCUCHANDO | 8 segundos - bucle",
+      "durationSeconds": 8.0,
+      "recommendedPlayback": "repeat",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 192,
+      "closingKeyframe": 193
+    },
+    {
+      "name": "acierto",
+      "sourceAction": "ACIERTO | 2 segundos",
+      "durationSeconds": 2.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 48,
+      "closingKeyframe": 49
+    },
+    {
+      "name": "animando",
+      "sourceAction": "ANIMANDO | 4 segundos",
+      "durationSeconds": 4.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 96,
+      "closingKeyframe": 97
+    },
+    {
+      "name": "explicando_l",
+      "sourceAction": "EXPLICANDO L | 5 segundos",
+      "durationSeconds": 5.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 120,
+      "closingKeyframe": 121
+    },
+    {
+      "name": "explicando_r",
+      "sourceAction": "EXPLICANDO R | 5 segundos",
+      "durationSeconds": 5.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 120,
+      "closingKeyframe": 121
+    },
+    {
+      "name": "tu_turno",
+      "sourceAction": "TU TURNO | 4 segundos",
+      "durationSeconds": 4.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 96,
+      "closingKeyframe": 97
+    },
+    {
+      "name": "despedida",
+      "sourceAction": "DESPEDIDA | 3 segundos",
+      "durationSeconds": 3.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 72,
+      "closingKeyframe": 73
+    },
+    {
+      "name": "six_seven",
+      "sourceAction": "SIX SEVEN | 5 segundos",
+      "durationSeconds": 5.0,
+      "recommendedPlayback": "once",
+      "sourceFrameStart": 1,
+      "sourceFrameEnd": 120,
+      "closingKeyframe": 121
+    }
+  ],
+  "facialAnimation": {
+    "type": "baked node transforms",
+    "synchronizedToAudio": false,
+    "nodes": {
+      "mouth": "EXP | Sonrisa",
+      "leftEyelid": "EXP | Parpado L",
+      "rightEyelid": "EXP | Parpado R",
+      "leftGaze": "EXP | Mirada L",
+      "rightGaze": "EXP | Mirada R"
+    }
+  }
+}

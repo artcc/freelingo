@@ -198,6 +198,8 @@ describe('Lesson practice entry', () => {
         listening_limit: 3,
         reading_remaining: 3,
         reading_limit: 3,
+        games_remaining: 3,
+        games_limit: 3,
         voice_remaining_seconds: 0,
         voice_limit_seconds: 300,
       },

@@ -19,14 +19,16 @@ application version unless intentionally synchronized.
 fl_whats_new_seen_<WHATS_NEW_VERSION>
 ```
 
-On mount it opens only when `fl_tour_done` exists and the current What's New key does not. Dismissal by
-button or backdrop writes the key and hides the modal. Logout does not clear What's New keys, while it
-can clear onboarding-tour state.
+On mount it opens only when the completion flag identified by `TOUR_STORAGE_KEY` from
+`lib/onboarding-tour.ts` exists and the current What's New key does not.
+Dismissal by button or backdrop writes the What's New key and hides the modal. Logout does not clear
+What's New keys, but clears the current onboarding-tour key.
 
 Consequences:
 
-- a browser that has not completed the onboarding tour sees the tour, not What's New;
-- a browser with the tour completed and an unseen content version sees What's New;
+- a browser that has not completed or skipped the current tour sees the tour, not What's New;
+- a browser with the current tour completed or skipped and an unseen content version sees What's New;
+- closing the tour does not immediately open What's New; eligibility is checked on the next Dashboard mount;
 - another browser or cleared local storage can show it again for the same account;
 - changing `WHATS_NEW_VERSION` makes the content eligible to appear again.
 

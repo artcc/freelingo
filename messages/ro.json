@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Note despre cuvinte",
     "nativeHelpPractice": "Practică"
   },
+  "detective": {
+    "title": "Detectivul greșelilor",
+    "rules": "Cinci provocări scurte, fără cronometru. Găsește fragmentul greșit și alege corectarea. O încercare pe pas; Lingu explică răspunsul.",
+    "review": "Recapitulează ce ai învățat",
+    "prepare": "Pregătește următoarea lecție",
+    "free": "Practică liberă",
+    "reviewDescription": "Exersează lecțiile finalizate, cu atenție la greșelile recente.",
+    "prepareDescription": "Recapitulează noțiuni cunoscute, utile pentru următoarea lecție.",
+    "freeDescription": "Exersează gramatica la nivelul actual al planului tău.",
+    "noSources": "Finalizează lecții relevante pentru a debloca acest mod.",
+    "noUpcoming": "Nu mai există o lecție de învățare viitoare în acest plan.",
+    "assessment": "Evaluează-mi nivelul",
+    "history": "Jocurile tale în această limbă",
+    "noHistory": "Jocurile salvate vor apărea aici.",
+    "generating": "Se pregătește",
+    "ready": "Reia jocul",
+    "completed": "Joc finalizat",
+    "failed": "Generare eșuată",
+    "abandoned": "Joc abandonat",
+    "generatingDescription": "Lingu pregătește și verifică cinci provocări. Poți părăsi pagina și reveni mai târziu.",
+    "failedDescription": "Nu am putut pregăti un joc valid. Nu s-a consumat cota de jocuri. Revino la meniu pentru a încerca din nou.",
+    "contextChanged": "Contextul de învățare s-a schimbat sau modul nu este disponibil. Reîmprospătează înainte de a începe.",
+    "challenge": "Provocarea {current} din {total}",
+    "detect": "Selectează fragmentul care conține greșeala.",
+    "chooseCorrection": "Fragmentul greșit este subliniat. Alege corectarea.",
+    "explanation": "Explicația lui Lingu",
+    "correct": "Corect",
+    "incorrect": "Incorect",
+    "detectionResult": "Detectare",
+    "correctionResult": "Corectare",
+    "saved": "Răspunsurile sunt salvate. Poți continua mai târziu.",
+    "abandon": "Abandonează jocul",
+    "abandonDescription": "Jocul se va închide fără XP, iar cota folosită nu va fi restituită. Pentru a continua mai târziu, anulează și folosește Înapoi.",
+    "results": "Detectare: {detected}/5 · Corectare: {corrected}/5 · {xp} XP câștigate",
+    "xpRules": "5 XP pentru finalizare și 2 pentru fiecare provocare complet corectă. Toate jocurile împart un maximum de 45 XP pe plan și zi UTC. Cota de partide gratuite este comună tuturor jocurilor și limbilor.",
+    "playAgain": "Joacă din nou",
+    "plan": "Planul meu"
+  },
+  "sentenceOrder": {
+    "title": "Ordonează propoziția",
+    "rules": "Ordonează fragmentele conform indiciului în cinci provocări, fără cronometru. Un singur răspuns per provocare; Lingu explică soluția și poți asculta propoziția corectă.",
+    "instructions": "Atinge fragmentele în ordine. Atinge un fragment plasat pentru a-l retrage, apoi verifică propoziția completă.",
+    "yourSentence": "Propoziția ta",
+    "emptySentence": "Alege un fragment pentru a începe.",
+    "availableFragments": "Fragmente disponibile",
+    "removeFragment": "Retrage fragmentul {position}: {fragment}",
+    "check": "Verifică propoziția",
+    "results": "Propoziții corecte: {correct}/5 · {xp} XP câștigate"
+  },
+  "vocabularyPairs": {
+    "title": "Perechi de vocabular",
+    "rules": "Asociază cinci cuvinte sau expresii cu sensurile lor. Fără cronometru sau vieți; încearcă până rezolvi toate perechile.",
+    "instructions": "Selectează un element din fiecare coloană și verifică perechea. Poți schimba selecția înainte de verificare.",
+    "terms": "Cuvinte",
+    "meanings": "Sensuri",
+    "check": "Verifică perechea",
+    "progress": "Perechi rezolvate: {count}/5",
+    "matched": "Perechi rezolvate",
+    "matchCorrect": "Pereche corectă:",
+    "matchIncorrect": "Nu se potrivesc. Ambele perechi pierd bonusul primei încercări:",
+    "alreadyTried": "Ai încercat deja această combinație. Alege alta.",
+    "firstTry": "Din prima încercare",
+    "withHelp": "Exersată cu ajutor",
+    "results": "Perechi din prima încercare: {correct}/5 · {xp} XP câștigate",
+    "freeDescription": "Exersează vocabularul la nivelul planului tău actual.",
+    "xpRules": "5 XP pentru finalizare și 2 pentru fiecare pereche rezolvată fără greșeli. O greșeală elimină bonusul ambelor perechi implicate. Toate jocurile împart limita de 45 XP pe plan și zi UTC și cota gratuită între limbi."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Perechi de vocabular",
+    "vocabularyPairsDescription": "Asociază cuvintele cu sensurile lor și recapitulează cu audio și exemple.",
+    "sentenceOrderTitle": "Ordonează propoziția",
+    "sentenceOrderDescription": "Construiește propoziții din fragmente amestecate și exersează ordinea cuvintelor cu indicii și audio.",
+    "detectiveTitle": "Detectivul greșelilor",
+    "detectiveDescription": "Găsește și corectează greșeli în propoziții scurte adaptate învățării tale.",
+    "title": "Jocuri",
+    "description": "Un spațiu pentru a consolida ce ai învățat și a continua să exersezi limbile prin jocuri scurte.",
+    "emptyTitle": "Pregătim primele jocuri",
+    "emptyDescription": "Nu există încă jocuri disponibile. Vom adăuga activități noi; între timp, poți continua să înveți cu planul tău de studiu.",
+    "goToPlan": "Mergi la planul meu"
+  },
   "nav": {
+    "games": "Jocuri",
     "home": "Acasă",
     "myPlan": "Planul meu",
     "progress": "Progres",
@@ -1354,44 +1435,49 @@
     "skip": "Sari peste",
     "prev": "Înapoi",
     "next": "Următor",
-    "done": "Să începem",
+    "done": "Explorează panoul meu",
+    "progress": "{current} din {total}",
+    "listen": "Ascultă-l pe Lingu",
+    "audioError": "Sunetul nu a putut fi redat. Poți încerca din nou.",
     "step1": {
       "label": "Bun venit",
       "title": "Bun venit la FreeLingo",
-      "desc": "FreeLingo este tutorul tău de limbi străine bazat pe inteligență artificială. Exersează în ritmul tău, oricând, prin conversații, lecții și flashcard-uri inteligente."
+      "desc": "Salut! Sunt Lingu, partenerul tău pentru învățarea limbilor. Îți arăt cum putem învăța împreună."
     },
     "step2": {
-      "label": "Chat text",
-      "title": "Discută cu tutorul tău",
-      "desc": "Poartă conversații scrise cu tutorul tău IA. Pune întrebări, primește corecturi și exersează gramatică și vocabular în mod natural."
+      "label": "Plan de studiu",
+      "title": "Planul tău de învățare",
+      "desc": "Începe prin a-ți alege nivelul sau a face o evaluare. Vei avea un plan de studiu cu lecții adaptate ție."
     },
     "step3": {
-      "label": "Voce",
-      "title": "Vorbește în timp real",
-      "desc": "Folosește modul de conversație vocală pentru a-ți exersa limba vorbită cu transcriere în timp real și feedback imediat despre pronunție."
+      "label": "Conversație",
+      "title": "Exersează cu mine",
+      "desc": "Scrie-mi pentru a pune întrebări și a exersa sau vorbește cu mine prin voce."
     },
     "step4": {
       "label": "Flashcard-uri",
-      "title": "Nu uita niciun cuvânt",
-      "desc": "Flashcard-urile folosesc algoritmul de repetiție spațiată SM-2 pentru a revizui cuvintele exact când ești pe cale să le uiți."
+      "title": "Reține ce ai învățat",
+      "desc": "Repetă vocabularul cu fișe care reapar când este momentul potrivit să exersezi."
     },
     "step5": {
-      "label": "Plan de studiu",
-      "title": "Planul tău personalizat",
-      "desc": "Pe baza evaluării nivelului tău, FreeLingo creează un plan de studiu structurat cu lecții zilnice adaptate obiectivelor tale."
+      "label": "Ascultare și lectură",
+      "title": "Antrenează-ți înțelegerea",
+      "desc": "Exersează ascultând și citind texte de nivelul tău. Răspunde la întrebări și verifică ce ai înțeles."
     },
     "step6": {
-      "label": "Practică",
-      "title": "Ascultare & Lectură",
-      "desc": "Testează-ți înțelegerea cu exerciții generate de IA. Ascultă un pasaj și răspunde la 5 întrebări, sau citește un text la nivelul tău CEFR — câștigă XP pentru fiecare răspuns corect."
+      "label": "Jocuri",
+      "title": "Învață jucându-te",
+      "desc": "Exersează la nivelul tău cu jocuri precum Detectivul greșelilor, Ordonează propoziția și Perechi de vocabular, printre altele. Învățarea poate fi și distractivă!"
     },
     "step7": {
       "label": "Gata",
-      "title": "Ești pregătit!",
-      "desc": "Începe cu lecția de azi, deschide un chat sau exersează ascultarea și lectura — FreeLingo se adaptează modului tău de a învăța."
+      "title": "Să începem",
+      "desc": "Să o luăm pas cu pas! În panoul tău vei găsi ce poți face în continuare."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Continuă să exersezi prin jocuri",
+    "paywallGamesDesc": "Ai epuizat cota gratuită sau jocurile necesită Premium. Poți relua jocurile existente.",
     "paywallLabel": "Premium necesar",
     "paywallTitle": "Deblochează FreeLingo Premium",
     "paywallDesc": "Încearcă gratuit {days} zile și deblochează toată practica Premium înainte de prima plată.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Limitat"
   },
   "freemium": {
+    "gamesLabel": "Jocurile de azi",
     "chatLabel": "Chat",
     "lessonsLabel": "Lecții",
     "listeningLabel": "Ascultare",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Exersează lecțiile cu Lingu",
@@ -1546,6 +1633,10 @@
       "desc": "Câștigă XP prin <bold>voce, chat, recapitulări spațiate de citire și ascultare și finalizarea unităților și nivelurilor</bold>. Panoul reînnoit evidențiază XP de astăzi, seria ta și activitatea recentă."
     },
     "entry3": {
+      "label": "Noua secțiune Jocuri",
+      "desc": "Un spațiu nou pentru a exersa limbile prin jocuri. Intră în Jocuri pentru a consulta activitățile disponibile; vom adăuga propuneri noi."
+    },
+    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

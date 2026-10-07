@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Loader2, Square, Volume2, RotateCcw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAuthStore } from '@/store/auth'
 import { getLogger } from '@/lib/logger'
@@ -11,51 +12,122 @@ const ttsLogger = getLogger('tts')
 interface AudioPlayerProps {
   text: string
   voice?: string
+  studyPlanId?: number
+  conversationId?: number
   size?: 'sm' | 'md'
   className?: string
-  /** If set, fetches pre-cached audio via GET from this URL instead of POST /api/tts */
+  /** Custom audio endpoint; uses GET unless audioMethod is overridden. */
   audioUrl?: string
+  audioMethod?: 'GET' | 'POST'
+  onStateChange?: (state: PlayerState) => void
+  timeoutMs?: number
+  icon?: boolean
+  listenLabel?: string
 }
 
-type PlayerState = 'idle' | 'loading' | 'playing' | 'error'
+export type PlayerState = 'idle' | 'loading' | 'playing' | 'error'
+
+function storedVoice() {
+  try {
+    return typeof window !== 'undefined'
+      ? (localStorage.getItem('tts_voice') ?? undefined)
+      : undefined
+  } catch {
+    return undefined
+  }
+}
 
 export function AudioPlayer({
   text,
   voice,
+  studyPlanId,
+  conversationId,
   size = 'sm',
   className = '',
   audioUrl,
+  audioMethod = audioUrl ? 'GET' : 'POST',
+  onStateChange,
+  timeoutMs = TTS_TIMEOUT_MS,
+  icon = false,
+  listenLabel,
 }: AudioPlayerProps) {
   const [state, setState] = useState<PlayerState>('idle')
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const controllerRef = useRef<AbortController | null>(null)
+  const urlRef = useRef<string | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const recoveryRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const accessToken = useAuthStore((s) => s.accessToken)
   const t = useTranslations('audioPlayer')
 
   // Resolve voice: explicit prop > user localStorage preference > backend default
-  const resolvedVoice =
-    voice ??
-    (typeof window !== 'undefined'
-      ? (localStorage.getItem('tts_voice') ?? undefined)
-      : undefined)
+  const resolvedVoice = voice ?? storedVoice()
 
-  useEffect(() => () => controllerRef.current?.abort(), [])
+  const releaseAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.onended = null
+      audioRef.current.onerror = null
+      audioRef.current.pause()
+      audioRef.current = null
+    }
+    if (urlRef.current) URL.revokeObjectURL(urlRef.current)
+    urlRef.current = null
+  }, [])
+
+  useEffect(() => {
+    setState('idle')
+    return () => {
+      controllerRef.current?.abort()
+      controllerRef.current = null
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (recoveryRef.current) clearTimeout(recoveryRef.current)
+      releaseAudio()
+    }
+  }, [
+    text,
+    audioUrl,
+    audioMethod,
+    resolvedVoice,
+    studyPlanId,
+    conversationId,
+    releaseAudio,
+  ])
+
+  useEffect(() => {
+    onStateChange?.(state)
+  }, [state, onStateChange])
 
   async function handleClick() {
     if (state === 'loading') return
 
     if (state === 'playing') {
-      audioRef.current?.pause()
-      audioRef.current = null
+      controllerRef.current?.abort()
+      releaseAudio()
       setState('idle')
       return
     }
 
     setState('loading')
+    if (recoveryRef.current) clearTimeout(recoveryRef.current)
+    recoveryRef.current = null
     controllerRef.current?.abort()
     const controller = new AbortController()
     controllerRef.current = controller
-    const timeoutId = setTimeout(() => controller.abort(), TTS_TIMEOUT_MS)
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+    timeoutRef.current = timeoutId
+    let failed = false
+    const showError = () => {
+      if (failed || controllerRef.current !== controller) return
+      failed = true
+      clearTimeout(timeoutId)
+      releaseAudio()
+      setState('error')
+      recoveryRef.current = setTimeout(() => {
+        if (controllerRef.current !== controller) return
+        recoveryRef.current = null
+        setState('idle')
+      }, 2000)
+    }
     try {
       const traceId = `tts-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
       const t0 = performance.now()
@@ -63,7 +135,7 @@ export function AudioPlayer({
       const fetchStart = performance.now()
       const res = await fetch(
         audioUrl ?? '/api/tts',
-        audioUrl
+        audioMethod === 'GET'
           ? {
               headers: {
                 ...(accessToken
@@ -71,6 +143,7 @@ export function AudioPlayer({
                   : {}),
               },
               credentials: 'include' as RequestCredentials,
+              cache: 'no-store',
               signal: controller.signal,
             }
           : {
@@ -82,25 +155,44 @@ export function AudioPlayer({
                   ? { Authorization: `Bearer ${accessToken}` }
                   : {}),
               },
-              body: JSON.stringify({ text, voice: resolvedVoice }),
+              body: JSON.stringify({
+                text,
+                voice: resolvedVoice,
+                study_plan_id: studyPlanId,
+                conversation_id: conversationId,
+              }),
               signal: controller.signal,
             }
       )
-      clearTimeout(timeoutId)
       const fetchMs = performance.now() - fetchStart
       if (!res.ok) throw new Error(`TTS error ${res.status}`)
 
       const blobStart = performance.now()
       const blob = await res.blob()
+      clearTimeout(timeoutId)
+      if (controller.signal.aborted || controllerRef.current !== controller)
+        return
       const blobMs = performance.now() - blobStart
 
       const url = URL.createObjectURL(blob)
+      urlRef.current = url
       const audio = new Audio(url)
       audioRef.current = audio
-      setState('playing')
+
+      audio.onended = () => {
+        if (controllerRef.current !== controller || controller.signal.aborted)
+          return
+        releaseAudio()
+        setState('idle')
+      }
+      audio.onerror = showError
 
       const playStart = performance.now()
       await audio.play()
+      if (controller.signal.aborted || controllerRef.current !== controller)
+        return
+      if (audioRef.current !== audio) return
+      setState('playing')
       const playMs = performance.now() - playStart
       const totalMs = performance.now() - t0
 
@@ -134,22 +226,9 @@ export function AudioPlayer({
           },
         })
       }
-
-      audio.onended = () => {
-        URL.revokeObjectURL(url)
-        audioRef.current = null
-        setState('idle')
-      }
-      audio.onerror = () => {
-        URL.revokeObjectURL(url)
-        audioRef.current = null
-        setState('error')
-        setTimeout(() => setState('idle'), 2000)
-      }
     } catch {
       clearTimeout(timeoutId)
-      setState('error')
-      setTimeout(() => setState('idle'), 2000)
+      showError()
     }
   }
 
@@ -176,12 +255,31 @@ export function AudioPlayer({
 
   return (
     <button
+      type="button"
       onClick={handleClick}
-      title={state === 'playing' ? t('stop') : t('listen')}
-      aria-label={state === 'playing' ? t('ariaStop') : t('ariaListen')}
+      title={state === 'playing' ? t('stop') : (listenLabel ?? t('listen'))}
+      aria-label={
+        state === 'playing' ? t('ariaStop') : (listenLabel ?? t('ariaListen'))
+      }
+      aria-busy={state === 'loading'}
       className={`border font-mono tracking-widest uppercase transition-colors ${colorClass} ${sizeClass} ${className}`}
     >
-      {label}
+      {icon ? (
+        state === 'loading' ? (
+          <Loader2
+            className="h-4 w-4 motion-safe:animate-spin"
+            aria-hidden="true"
+          />
+        ) : state === 'playing' ? (
+          <Square className="h-4 w-4" aria-hidden="true" />
+        ) : state === 'error' ? (
+          <RotateCcw className="h-4 w-4" aria-hidden="true" />
+        ) : (
+          <Volume2 className="h-4 w-4" aria-hidden="true" />
+        )
+      ) : (
+        label
+      )}
     </button>
   )
 }

@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Woordnotities",
     "nativeHelpPractice": "Oefening"
   },
+  "detective": {
+    "title": "Foutendetective",
+    "rules": "Vijf korte uitdagingen zonder tijdslimiet. Vind het onjuiste fragment en kies de correctie. Eén poging per stap; Lingu legt het antwoord uit.",
+    "review": "Herhaal wat je hebt geleerd",
+    "prepare": "Bereid je volgende les voor",
+    "free": "Vrij oefenen",
+    "reviewDescription": "Oefen afgeronde lessen, met extra aandacht voor recente fouten.",
+    "prepareDescription": "Herhaal bekende stof die helpt bij je volgende les.",
+    "freeDescription": "Oefen grammatica op het huidige niveau van je plan.",
+    "noSources": "Rond relevante lessen af om deze modus te ontgrendelen.",
+    "noUpcoming": "Dit plan bevat geen volgende leerles.",
+    "assessment": "Mijn niveau bepalen",
+    "history": "Je spellen in deze taal",
+    "noHistory": "Je opgeslagen spellen verschijnen hier.",
+    "generating": "Voorbereiden",
+    "ready": "Spel hervatten",
+    "completed": "Spel voltooid",
+    "failed": "Genereren mislukt",
+    "abandoned": "Spel opgegeven",
+    "generatingDescription": "Lingu bereidt vijf uitdagingen voor en controleert ze. Je kunt deze pagina verlaten en later terugkomen.",
+    "failedDescription": "We konden geen geldig spel voorbereiden. Er is geen speltegoed verbruikt. Ga terug naar het menu om opnieuw te proberen.",
+    "contextChanged": "Je leercontext is veranderd of deze modus is niet beschikbaar. Vernieuw voordat je begint.",
+    "challenge": "Uitdaging {current} van {total}",
+    "detect": "Selecteer het fragment met de fout.",
+    "chooseCorrection": "Het onjuiste fragment is onderstreept. Kies de correctie.",
+    "explanation": "Uitleg van Lingu",
+    "correct": "Goed",
+    "incorrect": "Fout",
+    "detectionResult": "Herkenning",
+    "correctionResult": "Correctie",
+    "saved": "Je antwoorden zijn opgeslagen. Je kunt later verdergaan.",
+    "abandon": "Spel opgeven",
+    "abandonDescription": "Het spel sluit zonder XP en het gebruikte tegoed wordt niet teruggegeven. Annuleer en kies Terug om later verder te gaan.",
+    "results": "Herkenning: {detected}/5 · Correctie: {corrected}/5 · {xp} XP verdiend",
+    "xpRules": "5 XP voor afronden en 2 per volledig juiste uitdaging. Alle spellen delen maximaal 45 XP per plan per UTC-dag. Gratis speltegoed wordt gedeeld tussen spellen en talen.",
+    "playAgain": "Opnieuw spelen",
+    "plan": "Mijn plan"
+  },
+  "sentenceOrder": {
+    "title": "Zet de zin in volgorde",
+    "rules": "Zet de fragmenten in de juiste volgorde met de aanwijzing in vijf uitdagingen, zonder tijdslimiet. Eén antwoord per uitdaging; Lingu legt de oplossing uit en je kunt de juiste zin beluisteren.",
+    "instructions": "Tik de fragmenten in volgorde aan. Tik op een geplaatst fragment om het terug te leggen en controleer de volledige zin.",
+    "yourSentence": "Jouw zin",
+    "emptySentence": "Kies een fragment om te beginnen.",
+    "availableFragments": "Beschikbare fragmenten",
+    "removeFragment": "Fragment {position} terugleggen: {fragment}",
+    "check": "Zin controleren",
+    "results": "Juiste zinnen: {correct}/5 · {xp} XP verdiend"
+  },
+  "vocabularyPairs": {
+    "title": "Woordparen",
+    "rules": "Koppel vijf woorden of uitdrukkingen aan hun betekenis. Zonder tijdslimiet of levens; probeer tot je alle vijf paren hebt gevonden.",
+    "instructions": "Kies een item uit elke kolom en controleer het paar. Je kunt je keuze vooraf wijzigen.",
+    "terms": "Woorden",
+    "meanings": "Betekenissen",
+    "check": "Paar controleren",
+    "progress": "Gevonden paren: {count}/5",
+    "matched": "Gevonden paren",
+    "matchCorrect": "Juist paar:",
+    "matchIncorrect": "Deze horen niet bij elkaar. Beide paren verliezen hun bonus voor de eerste poging:",
+    "alreadyTried": "Je hebt deze combinatie al geprobeerd. Kies een andere.",
+    "firstTry": "Bij de eerste poging",
+    "withHelp": "Met hulp geoefend",
+    "results": "Paren bij de eerste poging: {correct}/5 · {xp} XP verdiend",
+    "freeDescription": "Oefen woordenschat op het niveau van je huidige plan.",
+    "xpRules": "5 XP voor afronden en 2 per foutloos gevonden paar. Een fout verwijdert de bonus van beide betrokken paren. Alle spellen delen de limiet van 45 XP per plan per UTC-dag en het gratis tegoed tussen talen."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Woordparen",
+    "vocabularyPairsDescription": "Koppel woorden aan hun betekenis en herhaal met audio en voorbeelden.",
+    "sentenceOrderTitle": "Zet de zin in volgorde",
+    "sentenceOrderDescription": "Bouw zinnen met door elkaar gehusselde fragmenten en oefen de woordvolgorde met aanwijzingen en audio.",
+    "detectiveTitle": "Foutendetective",
+    "detectiveDescription": "Vind en verbeter fouten in korte zinnen die aansluiten op wat je leert.",
+    "title": "Spellen",
+    "description": "Een plek om het geleerde te versterken en talen te blijven oefenen met korte spellen.",
+    "emptyTitle": "We bereiden de eerste spellen voor",
+    "emptyDescription": "Er zijn nog geen spellen beschikbaar. We zullen nieuwe activiteiten toevoegen; ondertussen kun je verder leren met je studieplan.",
+    "goToPlan": "Naar mijn plan"
+  },
   "nav": {
+    "games": "Spellen",
     "home": "Home",
     "myPlan": "Mijn plan",
     "progress": "Voortgang",
@@ -1354,44 +1435,49 @@
     "skip": "Overslaan",
     "prev": "Vorige",
     "next": "Volgende",
-    "done": "Aan de slag",
+    "done": "Mijn dashboard verkennen",
+    "progress": "{current} van {total}",
+    "listen": "Luister naar Lingu",
+    "audioError": "De audio kon niet worden afgespeeld. Probeer het opnieuw.",
     "step1": {
       "label": "Welkom",
       "title": "Welkom bij FreeLingo",
-      "desc": "FreeLingo is je AI-aangedreven taaltutor. Oefen in je eigen tempo, op elk moment, via gesprächen, lessen en slimme flashcards."
+      "desc": "Hoi! Ik ben Lingu, je maatje bij het leren van talen. Ik laat je zien hoe we samen kunnen leren."
     },
     "step2": {
-      "label": "Tekstchat",
-      "title": "Chat met je tutor",
-      "desc": "Voer schriftelijke gesprekken met je AI-tutor. Stel vragen, ontvang correcties en oefen grammatica en woordenschat op een natuurlijke manier."
+      "label": "Studieplan",
+      "title": "Jouw leerplan",
+      "desc": "Begin met het kiezen van je niveau of doe een niveautest. Zo krijg je een studieplan met lessen die bij je passen."
     },
     "step3": {
-      "label": "Stem",
-      "title": "Spreek in real time",
-      "desc": "Gebruik de spraakgespreksmodus om je gesproken taal te oefenen met realtime transcriptie en directe feedback op je uitspraak."
+      "label": "Gesprekken",
+      "title": "Oefen met mij",
+      "desc": "Schrijf me om vragen te stellen en te oefenen, of voer een gesproken gesprek met me."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "Vergeet geen enkel woord",
-      "desc": "Flashcards gebruiken het SM-2 gespreide herhalingsalgoritme zodat je woorden herhaalt precies wanneer je ze dreigt te vergeten."
+      "title": "Onthoud wat je leert",
+      "desc": "Herhaal woorden met flashcards die terugkomen wanneer het tijd is om te oefenen."
     },
     "step5": {
-      "label": "Studieplan",
-      "title": "Jouw persoonlijk plan",
-      "desc": "Op basis van je niveaubeoordeling maakt FreeLingo een gestructureerd studieplan met dagelijkse lessen afgestemd op jouw doelen."
+      "label": "Luisteren en lezen",
+      "title": "Train je begrip",
+      "desc": "Oefen met luister- en leesteksten op jouw niveau. Beantwoord vragen en controleer wat je hebt begrepen."
     },
     "step6": {
-      "label": "Oefening",
-      "title": "Luisteren & Lezen",
-      "desc": "Test je begrip met door AI gegenereerde oefeningen. Luister naar een fragment en beantwoord 5 vragen, of lees een tekst op jouw CEFR-niveau — verdien XP voor elk correct antwoord."
+      "label": "Spellen",
+      "title": "Leer spelenderwijs",
+      "desc": "Oefen op jouw niveau met onder andere Foutendetective, Zet de zin in volgorde en Woordparen. Leren kan ook leuk zijn!"
     },
     "step7": {
       "label": "Klaar",
-      "title": "Je bent er klaar voor!",
-      "desc": "Begin met de les van vandaag, open een chat of oefen luisteren en lezen — FreeLingo past zich aan hoe jij wilt leren."
+      "title": "Laten we beginnen",
+      "desc": "We doen het stap voor stap! Op je dashboard zie je wat je hierna kunt doen."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Blijf oefenen met spellen",
+    "paywallGamesDesc": "Je gratis speltegoed is op of spellen vereisen Premium. Bestaande spellen kun je hervatten.",
     "paywallLabel": "Premium vereist",
     "paywallTitle": "Ontgrendel FreeLingo Premium",
     "paywallDesc": "Start je gratis proefperiode van {days} dagen en ontgrendel alle Premium-oefenmodi vóór je eerste betaling.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Beperkt"
   },
   "freemium": {
+    "gamesLabel": "Spellen vandaag",
     "chatLabel": "Chat",
     "lessonsLabel": "Lessen",
     "listeningLabel": "Luisteren",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Begrepen",
     "entry1": {
       "label": "Oefen je lessen met Lingu",
@@ -1546,6 +1633,10 @@
       "desc": "Verdien XP met <bold>spraak, chat, gespreide lees- en luisterherhalingen en het afronden van onderdelen en niveaus</bold>. Je vernieuwde dashboard toont de XP van vandaag, je leerreeks en je recente activiteit."
     },
     "entry3": {
+      "label": "Nieuwe sectie Spellen",
+      "desc": "Een nieuwe plek om talen te oefenen met spellen. Ga naar Spellen om de beschikbare activiteiten te bekijken; we zullen nieuwe toevoegen."
+    },
+    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

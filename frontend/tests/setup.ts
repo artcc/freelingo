@@ -27,6 +27,20 @@ Object.defineProperty(globalThis, 'localStorage', {
   writable: true,
 })
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn((media: string): MediaQueryList => ({
+    matches: true,
+    media,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(() => false),
+  })),
+})
+
 afterEach(() => {
   vi.restoreAllMocks()
   localStorageMock.clear()

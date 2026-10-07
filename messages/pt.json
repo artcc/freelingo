@@ -108,7 +108,88 @@
     "nativeHelpWordNotes": "Notas de palavras",
     "nativeHelpPractice": "Prática"
   },
+  "detective": {
+    "title": "Detetive de erros",
+    "rules": "Cinco desafios curtos, sem cronómetro. Encontra o fragmento incorreto e escolhe a correção. Uma tentativa por passo; o Lingu explica a resposta.",
+    "review": "Rever o que aprendeste",
+    "prepare": "Preparar a próxima lição",
+    "free": "Prática livre",
+    "reviewDescription": "Pratica lições concluídas, dando atenção aos erros recentes.",
+    "prepareDescription": "Revê conhecimentos anteriores úteis para a próxima lição.",
+    "freeDescription": "Pratica gramática do nível atual do teu plano.",
+    "noSources": "Conclui lições relacionadas para desbloquear este modo.",
+    "noUpcoming": "Não há mais lições de aprendizagem neste plano.",
+    "assessment": "Avaliar o meu nível",
+    "history": "As tuas partidas neste idioma",
+    "noHistory": "As tuas partidas guardadas aparecerão aqui.",
+    "generating": "A preparar",
+    "ready": "Retomar partida",
+    "completed": "Partida concluída",
+    "failed": "Falha na geração",
+    "abandoned": "Partida abandonada",
+    "generatingDescription": "O Lingu está a preparar e a rever cinco desafios. Podes sair desta página e voltar depois.",
+    "failedDescription": "Não foi possível preparar uma partida válida. Não foi consumida quota de jogos. Volta ao menu para tentar novamente.",
+    "contextChanged": "O teu contexto de aprendizagem mudou ou este modo está indisponível. Atualiza antes de começar.",
+    "challenge": "Desafio {current} de {total}",
+    "detect": "Seleciona o fragmento que contém o erro.",
+    "chooseCorrection": "O fragmento incorreto está sublinhado. Escolhe a correção.",
+    "explanation": "Explicação do Lingu",
+    "correct": "Correto",
+    "incorrect": "Incorreto",
+    "detectionResult": "Deteção",
+    "correctionResult": "Correção",
+    "saved": "As tuas respostas estão guardadas. Podes sair e continuar depois.",
+    "abandon": "Abandonar partida",
+    "abandonDescription": "A partida será encerrada sem XP e a quota usada não será devolvida. Para continuar depois, cancela e usa Voltar.",
+    "results": "Deteção: {detected}/5 · Correção: {corrected}/5 · {xp} XP ganhos",
+    "xpRules": "5 XP por terminar e 2 por cada desafio totalmente correto. Todos os jogos partilham um máximo de 45 XP por plano e dia UTC. A quota de partidas gratuitas é partilhada entre jogos e idiomas.",
+    "playAgain": "Jogar novamente",
+    "plan": "O meu plano"
+  },
+  "sentenceOrder": {
+    "title": "Ordena a frase",
+    "rules": "Ordena os fragmentos de acordo com a pista em cinco desafios, sem cronómetro. Uma resposta por desafio; o Lingu explica a solução e podes ouvir a frase correta.",
+    "instructions": "Toca nos fragmentos por ordem. Toca num fragmento colocado para o devolver e verifica a frase quando estiver completa.",
+    "yourSentence": "A tua frase",
+    "emptySentence": "Escolhe um fragmento para começar.",
+    "availableFragments": "Fragmentos disponíveis",
+    "removeFragment": "Devolver fragmento {position}: {fragment}",
+    "check": "Verificar frase",
+    "results": "Frases corretas: {correct}/5 · {xp} XP ganhos"
+  },
+  "vocabularyPairs": {
+    "title": "Pares de vocabulário",
+    "rules": "Liga cinco palavras ou expressões aos seus significados. Sem cronómetro nem vidas; continua até resolver os cinco pares.",
+    "instructions": "Seleciona um elemento de cada coluna e verifica o par. Podes alterar a seleção antes de verificar.",
+    "terms": "Palavras",
+    "meanings": "Significados",
+    "check": "Verificar par",
+    "progress": "Pares resolvidos: {count}/5",
+    "matched": "Pares resolvidos",
+    "matchCorrect": "Par correto:",
+    "matchIncorrect": "Não correspondem. Ambos os pares perdem o bónus da primeira tentativa:",
+    "alreadyTried": "Já tentaste esta combinação. Escolhe outra.",
+    "firstTry": "À primeira tentativa",
+    "withHelp": "Praticado com ajuda",
+    "results": "Pares à primeira tentativa: {correct}/5 · {xp} XP ganhos",
+    "freeDescription": "Pratica vocabulário ao nível do teu plano atual.",
+    "xpRules": "5 XP por terminar e 2 por par resolvido sem erros. Um erro elimina o bónus dos dois pares envolvidos. Todos os jogos partilham o limite de 45 XP por plano e dia UTC e a quota gratuita entre idiomas."
+  },
+  "games": {
+    "vocabularyPairsTitle": "Pares de vocabulário",
+    "vocabularyPairsDescription": "Liga palavras aos seus significados e revê com áudio e exemplos.",
+    "sentenceOrderTitle": "Ordena a frase",
+    "sentenceOrderDescription": "Constrói frases com fragmentos baralhados e pratica a ordem das palavras com pistas e áudio.",
+    "detectiveTitle": "Detetive de erros",
+    "detectiveDescription": "Deteta e corrige erros em frases curtas adaptadas à tua aprendizagem.",
+    "title": "Jogos",
+    "description": "Um espaço para reforçar o que aprendeste e continuar a praticar idiomas com partidas curtas.",
+    "emptyTitle": "Estamos a preparar os primeiros jogos",
+    "emptyDescription": "Ainda não há jogos disponíveis. Vamos adicionar novas atividades; entretanto, podes continuar a aprender com o teu plano de estudo.",
+    "goToPlan": "Ir para o meu plano"
+  },
   "nav": {
+    "games": "Jogos",
     "home": "Início",
     "myPlan": "Meu plano",
     "progress": "Progresso",
@@ -1354,44 +1435,49 @@
     "skip": "Pular",
     "prev": "Anterior",
     "next": "Próximo",
-    "done": "Começar",
+    "done": "Explorar meu painel",
+    "progress": "{current} de {total}",
+    "listen": "Ouvir o Lingu",
+    "audioError": "Não foi possível reproduzir o áudio. Você pode tentar novamente.",
     "step1": {
       "label": "Bem-vindo",
       "title": "Bem-vindo ao FreeLingo",
-      "desc": "O FreeLingo é o seu tutor de idiomas com inteligência artificial. Pratique no seu ritmo, a qualquer momento, por meio de conversas, lições e flashcards inteligentes."
+      "desc": "Olá! Sou o Lingu, seu companheiro de idiomas. Vou mostrar como podemos aprender juntos."
     },
     "step2": {
-      "label": "Chat de texto",
-      "title": "Converse com seu tutor",
-      "desc": "Tenha conversas escritas com seu tutor de IA. Faça perguntas, receba correções e pratique gramática e vocabulário de forma natural."
+      "label": "Plano de estudos",
+      "title": "Seu plano de aprendizagem",
+      "desc": "Comece escolhendo seu nível ou fazendo uma avaliação. Assim, você terá um plano de estudos com lições adaptadas a você."
     },
     "step3": {
-      "label": "Voz",
-      "title": "Fale em tempo real",
-      "desc": "Use o modo de conversa por voz para praticar seu idioma falado com transcrição em tempo real e feedback imediato sobre sua pronúncia."
+      "label": "Conversa",
+      "title": "Pratique comigo",
+      "desc": "Escreva para mim para tirar dúvidas e praticar, ou converse comigo por voz."
     },
     "step4": {
       "label": "Flashcards",
-      "title": "Nunca esqueça uma palavra",
-      "desc": "Os flashcards usam o algoritmo de repetição espaçada SM-2 para que você revise palavras exatamente quando está prestes a esquecê-las."
+      "title": "Lembre-se do que aprendeu",
+      "desc": "Revise o vocabulário com cartões que reaparecem quando é hora de praticar."
     },
     "step5": {
-      "label": "Plano de estudos",
-      "title": "Seu plano personalizado",
-      "desc": "Com base na avaliação do seu nível, o FreeLingo cria um plano de estudos estruturado com lições diárias adaptadas aos seus objetivos."
+      "label": "Escuta e leitura",
+      "title": "Treine sua compreensão",
+      "desc": "Pratique ouvindo e lendo textos do seu nível. Responda às perguntas e confira o que entendeu."
     },
     "step6": {
-      "label": "Prática",
-      "title": "Escuta & Leitura",
-      "desc": "Teste a sua compreensão com exercícios gerados por IA. Ouça uma passagem e responda a 5 perguntas, ou leia um texto no seu nível CEFR — ganhe XP por cada resposta correta."
+      "label": "Jogos",
+      "title": "Aprenda jogando",
+      "desc": "Pratique no seu nível com jogos como Detetive de erros, Ordena a frase e Pares de vocabulário, entre outros. Aprender também pode ser divertido!"
     },
     "step7": {
       "label": "Pronto",
-      "title": "Tudo pronto!",
-      "desc": "Comece com a lição de hoje, abra um chat ou pratique escuta e leitura — o FreeLingo se adapta à sua forma de aprender."
+      "title": "Vamos começar",
+      "desc": "Vamos passo a passo! No seu painel, você encontrará o que fazer a seguir."
     }
   },
   "billing": {
+    "paywallGamesTitle": "Continua a praticar com jogos",
+    "paywallGamesDesc": "Esgotaste as partidas gratuitas ou os jogos requerem Premium. Podes retomar as partidas existentes.",
     "paywallLabel": "Premium necessário",
     "paywallTitle": "Desbloquear FreeLingo Premium",
     "paywallDesc": "Inicie o teste gratuito de {days} dias e desbloqueie toda a prática Premium antes do primeiro pagamento.",
@@ -1494,6 +1580,7 @@
     "limitedLabel": "Limitado"
   },
   "freemium": {
+    "gamesLabel": "Partidas de hoje",
     "chatLabel": "Chat",
     "lessonsLabel": "Lições",
     "listeningLabel": "Audição",
@@ -1535,7 +1622,7 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.9.30",
+    "version": "v1.10.0",
     "cta": "Entendido",
     "entry1": {
       "label": "Pratica as tuas lições com o Lingu",
@@ -1546,6 +1633,10 @@
       "desc": "Ganha XP com <bold>voz, chat, revisões espaçadas de leitura e escuta e ao concluir unidades e níveis</bold>. O painel renovado destaca os XP de hoje, a tua sequência e a atividade recente."
     },
     "entry3": {
+      "label": "Nova secção de jogos",
+      "desc": "Um novo espaço para praticar idiomas com jogos. Visita Jogos para consultar as atividades disponíveis; vamos adicionar novas propostas."
+    },
+    "entry4": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

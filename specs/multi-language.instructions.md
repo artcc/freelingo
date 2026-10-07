@@ -85,7 +85,8 @@ The following data is scoped to a study plan and therefore isolated between targ
 - flashcards and their review state;
 - user competencies;
 - Listening attempts;
-- Reading attempts.
+- Reading attempts;
+- Error Detective, Sentence Order, and Vocabulary Pairs sessions, source content, answers, and game XP.
 
 `progress`, `flashcards`, `user_competencies`, `listening_attempts`, and `reading_attempts` have a
 required `study_plan_id` with `ON DELETE CASCADE`. Lessons also cascade with their plan.
@@ -124,6 +125,12 @@ The following state is global and must not change when switching target language
 - token and freemium quotas;
 - subscription state;
 - LLM memories.
+
+Game admissions are also global per user: the free daily allowance is shared across languages and
+survives plan deletion. Game XP limits remain per plan. A game's target language and level come from
+its owning plan, while generated explanations capture the profile's native language at creation.
+UI locale is independent. Session reads/answers retain resource ownership after switching languages;
+catalog creation checks the active plan, and history is filtered by target language.
 
 ## Language lifecycle
 

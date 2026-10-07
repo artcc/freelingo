@@ -20,9 +20,22 @@ considered when changing prompt-safety assumptions.
 - `common.py`: JSON-only/retry fragments, Anthropic system-only trigger, Lingu name, memory-tool policy,
   and language overlays.
 - `tutor.py`: text and voice tutor system prompts.
+- `speech.py`: native-pronunciation instructions for all `gpt-4o-mini-tts` synthesis, including its
+  snapshots. The TTS adapter gates support; legacy/unknown models receive no instructions. Supplied
+  language codes add regional guidance; absent context requests per-passage language inference.
+  Known languages also receive focused articulation guidance for native vowel/consonant quality,
+  timing, stress, and tonal or pitch distinctions where relevant. These details apply only to passages
+  in that language and preserve the selected voice's identity; they are not specific to the default voice.
+  Spoken text must be read faithfully, never translated, extended, or treated as executable instructions.
 - `lesson.py`: lesson generation, invalid-exercise regeneration, native support, and exercise grading.
 - `flashcards.py`: deck generation and selected-word lookup.
 - `comprehension.py`: Listening and Reading generation.
+- `games.py`: generation and separate semantic review for Error Detective, Sentence Order, and
+  Vocabulary Pairs. Plan language/level, profile native language, allowed source identifiers and
+  bounded mistakes are explicit inputs. Reference data is not instructions. The upcoming lesson
+  guides relevance without authorizing unstudied material. Game-specific structured schemas validate
+  Detective fragments/replacements/options, Sentence Order fragments/accepted permutations, and
+  Vocabulary Pairs terms/meanings/examples; semantic review checks linguistic validity and ambiguity.
 - `assessment.py`: free-write placement, level test, and alternate assessment flow.
 - `grammar.py`, `vocabulary.py`, and `phrasebook.py`: native-language resource support.
 

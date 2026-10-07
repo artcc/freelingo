@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { LanguageBubbles } from '@/components/LanguageBubbles'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
@@ -7,6 +7,12 @@ import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => (key: string) =>
     namespace === 'targetLanguages' ? `Localized ${key}` : key,
+}))
+
+vi.mock('@/components/lingu/LinguAvatar', () => ({
+  default: ({ onReady }: { onReady?: () => void }) => (
+    <button data-testid="lingu-ready" onClick={onReady} />
+  ),
 }))
 
 vi.mock('next/image', () => ({
@@ -24,13 +30,34 @@ vi.mock('next/image', () => ({
 }))
 
 describe('LanguageBubbles', () => {
+  it('reveals Lingu and the language circle together when the avatar is ready', () => {
+    const { container } = render(<LanguageBubbles />)
+    const group = container.firstElementChild
+
+    expect(group).toHaveAttribute('aria-hidden', 'true')
+    expect(group).toHaveClass('opacity-0')
+    expect(screen.queryByRole('img', { name: 'FreeLingo' })).toBeNull()
+    expect(screen.queryAllByRole('img', { name: /^Localized / })).toHaveLength(0)
+
+    fireEvent.click(screen.getByTestId('lingu-ready'))
+
+    expect(group).toHaveAttribute('aria-hidden', 'false')
+    expect(group).toHaveClass('opacity-100')
+    expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
+    expect(screen.getAllByRole('img', { name: /^Localized / })).toHaveLength(
+      SUPPORTED_TARGET_LANGUAGES.length
+    )
+  })
+
   it('renders one bubble per supported target language', () => {
     render(<LanguageBubbles />)
+    fireEvent.click(screen.getByTestId('lingu-ready'))
 
-    expect(screen.getAllByRole('img')).toHaveLength(
+    expect(screen.getAllByRole('img', { name: /^Localized / })).toHaveLength(
       SUPPORTED_TARGET_LANGUAGES.length
     )
     expect(screen.getByAltText('Localized de-DE')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
   })
 
   it('positions bubbles dynamically from the supported language count', () => {

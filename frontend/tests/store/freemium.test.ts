@@ -19,6 +19,8 @@ const status = {
   listening_limit: 2,
   reading_remaining: 2,
   reading_limit: 2,
+  games_remaining: 3,
+  games_limit: 3,
   voice_remaining_seconds: 900,
   voice_limit_seconds: 900,
 }

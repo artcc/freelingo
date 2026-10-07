@@ -39,9 +39,9 @@ Static curriculum, Grammar, Vocabulary, Phrasebook, and assessment dispatchers c
 `en-GB` for unknown inputs rather than rejecting them. Validated product flows should still reject
 unsupported codes before dispatch.
 
-Earlier database migrations installed `en-US` server defaults on some columns. Ordinary application
-creation paths provide `en-GB` explicitly through schema/ORM defaults; direct inserts relying only on
-historical database defaults are not the supported application path.
+The Alembic-managed schema defines `en-US` server defaults for `users.target_language` and
+`study_plans.target_language`. Application creation paths provide `en-GB` through schema/ORM defaults;
+direct inserts relying only on those server defaults are not the supported application path.
 
 ## Metadata
 
@@ -115,8 +115,11 @@ Generic `POST /api/stt` requires a user-owned `study_plan_id`, derives language 
 always passes ISO explicitly. Voice conversation passes the resolved session language. There is no
 implicit English default inside either STT adapter.
 
-TTS currently accepts but ignores a language argument; regional speech output depends on configured
-provider voice rather than automatic target-language selection.
+TTS accepts a full BCP-47 language argument. OpenAI `gpt-4o-mini-tts` and its snapshots use it for
+native regional pronunciation instructions; without context, instructions request language inference
+without imposing a regional accent. Legacy/unknown OpenAI models and Kokoro ignore this argument.
+Model and voice selection remain configured independently of the target language. Provider and
+resource-owned language contracts are defined in `speech-services.instructions.md`.
 
 ## Validation boundaries
 

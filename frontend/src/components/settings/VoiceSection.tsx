@@ -67,7 +67,9 @@ export function VoiceSection({ title }: { title?: string } = {}) {
     }
     setLoadingVoice(voice)
     try {
-      const res = await apiFetch(`/api/tts/preview/${voice}`)
+      const res = await apiFetch(`/api/tts/preview/${voice}`, {
+        cache: 'no-store',
+      })
       if (!res.ok) return
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)

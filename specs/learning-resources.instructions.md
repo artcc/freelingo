@@ -97,9 +97,12 @@ romanization. CJK resources provide romanization data, though the current page d
 - `GET /api/phrasebook/audio/{category_id}/{phrase_index}`: authenticated, `30/minute`; returns
   cached MP3, `404` for invalid category/index, or `503` without TTS.
 
-Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/` under a hash of language,
-category, index, and text. Generation writes a temporary file and replaces atomically. Responses use
-a one-day public cache header. The endpoint sends text to TTS without an explicit language argument.
+Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`. Instruction-capable OpenAI
+models use a synthesis hash covering text, language, model, voice, speed, format, and instructions;
+other providers/models retain a hash of language, category, index, and text. Generation writes a
+temporary file and replaces atomically. Responses use `Cache-Control: no-store`, and browser playback
+bypasses its HTTP cache while retaining the backend disk cache. The endpoint passes the full target
+language to TTS for pronunciation guidance when supported by the configured model.
 
 The page filters A1-C2, register, and target text. It searches phrase text but not context. Categories
 display phrases directly rather than through expansion controls. Each phrase has explicit audio and
@@ -155,6 +158,12 @@ flashcard review, and 10 per correct first-attempt Reading/Listening answer. Add
   Future scheduled lessons must also be complete, not just already generated lessons.
 - Level: 100 XP once per plan, after all scheduled teaching lessons and the level test are complete,
   independently of the test score. Current/legacy completion-test slots are excluded.
+- Games: 5 XP for completion plus 2 per fully correct challenge: both steps in Error Detective,
+  an accepted arrangement in Sentence Order, or a Vocabulary Pair with neither item involved in an
+  incorrect attempt. The three games share a limit of 45 game XP per plan/UTC day. Remaining daily
+  allowance can partially credit completion. Accepted answers count as activity even when there is
+  no XP. Games do not update lesson/exercise completion counters, skills or competencies. Completion
+  and rewards are transactional and retry-safe.
 
 `progress_rewards.py` records additional awards in `progress_rewards`. A unique plan/kind/source key
 and a PostgreSQL `FOR NO KEY UPDATE` plan-row lock protect repeat requests and daily limits without
