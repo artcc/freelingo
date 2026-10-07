@@ -44,6 +44,6 @@ describe.each(SUPPORTED_LOCALES)('progress messages in %s', (locale) => {
     expect(
       t.markup('whatsNew.entry2.desc', { bold: (chunks) => chunks })
     ).toContain('XP')
-    expect(messages.whatsNew.version).toBe('v1.10.0')
+    expect(messages.whatsNew.version).toBe('v1.10.5')
   })
 })

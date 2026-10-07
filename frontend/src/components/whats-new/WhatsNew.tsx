@@ -6,7 +6,7 @@ import { useTranslations, useMessages } from 'next-intl'
 import { CircleDot } from 'lucide-react'
 import { TOUR_STORAGE_KEY } from '@/lib/onboarding-tour'
 
-const WHATS_NEW_VERSION = 'v1.10.0'
+const WHATS_NEW_VERSION = 'v1.10.5'
 const STORAGE_KEY = `fl_whats_new_seen_${WHATS_NEW_VERSION}`
 
 export default function WhatsNew() {
