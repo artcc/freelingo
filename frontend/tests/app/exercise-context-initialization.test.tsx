@@ -230,6 +230,186 @@ describe.each([
   { feature: 'listening', Page: ListeningPage },
 ])('$feature context initialization', ({ feature, Page }) => {
   it.each([
+    'during-switch',
+    'after-switch',
+    'unmount',
+    'new-session',
+    'new-session-failure',
+    'network',
+    'server-error',
+    'invalid-body',
+    'overlapping-refresh',
+  ])(
+    'settles global quota independently of the exercise presentation (%s)',
+    async (scenario) => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      useConfigStore.setState({ stripeEnabled: true })
+      const initialRemaining = [
+        'after-switch',
+        'invalid-body',
+        'overlapping-refresh',
+      ].includes(scenario)
+        ? 2
+        : 1
+      const quota = {
+        trial_active: false,
+        trial_ends_at: null,
+        chat_remaining: 5,
+        chat_limit: 5,
+        lessons_remaining: 5,
+        lessons_limit: 5,
+        listening_remaining: initialRemaining,
+        listening_limit: 5,
+        reading_remaining: initialRemaining,
+        reading_limit: 5,
+        games_remaining: 3,
+        games_limit: 3,
+        voice_remaining_seconds: 300,
+        voice_limit_seconds: 300,
+      }
+      useFreemiumStore.setState({
+        status: quota,
+        loaded: true,
+        lastFetch: Date.now(),
+      })
+      const quotaKey =
+        feature === 'reading' ? 'reading_remaining' : 'listening_remaining'
+      const transport = deferred<Response>()
+      const switchResponse = deferred<Response>()
+      const result = {
+        score: 5,
+        xp_earned: 50,
+        text: 'Transcript',
+        correct_answers: Array.from({ length: 5 }, (_, index) => ({
+          index,
+          correct: 'A',
+        })),
+      }
+      const attempts: RequestInit[] = []
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === `/api/${feature}/attempt`) {
+          attempts.push(options!)
+          const response = await transport.promise
+          if (scenario === 'network' || scenario === 'new-session-failure')
+            throw new TypeError('Lost response')
+          return response
+        }
+        if (url === '/api/languages/active') return switchResponse.promise
+        if (url === '/api/languages')
+          return json({
+            languages: [
+              { ...languages(9).languages[0], target_language: 'de-DE' },
+            ],
+          })
+        if (url === '/api/freemium/status')
+          return json({ ...quota, [quotaKey]: initialRemaining - 1 })
+        if (String(url).startsWith('/api/reviews')) return json({})
+        const body = await ready().json()
+        if (useLanguageStore.getState().activeLanguage?.code === 'de-DE') {
+          body.context = {
+            study_plan_id: 9,
+            target_language: 'de-DE',
+            level: 'A1',
+          }
+          body.exercise = {
+            ...body.exercise,
+            id: 43,
+            topic: 'Replacement exercise',
+            target_language: 'de-DE',
+          }
+        }
+        return json(body)
+      })
+      const { unmount } = render(<Page />)
+      await screen.findByText(/Fresh exercise/)
+      answerExercise()
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      await waitFor(() => expect(attempts).toHaveLength(1))
+      if (scenario === 'unmount') unmount()
+      else if (scenario.startsWith('new-session')) {
+        act(() => {
+          useAuthStore.getState().startSession('another-user')
+          useFreemiumStore.setState({
+            status: { ...quota, [quotaKey]: 5 },
+            loaded: true,
+            lastFetch: Date.now(),
+          })
+        })
+      } else {
+        let switching!: Promise<boolean>
+        act(() => {
+          switching = useLanguageStore.getState().switchLanguage('de-DE')
+        })
+        if (scenario === 'during-switch') {
+          await act(async () => transport.resolve(json(result)))
+          expect(useFreemiumStore.getState().status?.[quotaKey]).toBe(0)
+          expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+        }
+        await act(async () => {
+          switchResponse.resolve(json({}))
+          expect(await switching).toBe(true)
+        })
+        expect(useLanguageStore.getState().activeLanguage?.code).toBe('de-DE')
+        if (feature === 'listening' && scenario === 'during-switch') {
+          expect(
+            await screen.findByText('paywallListeningTitle')
+          ).toBeInTheDocument()
+          expect(
+            screen.queryByRole('button', { name: 'submit' })
+          ).not.toBeInTheDocument()
+        } else {
+          await screen.findByText(/Replacement exercise/)
+        }
+      }
+      expect(attempts[0].signal?.aborted).not.toBe(true)
+      if (scenario === 'overlapping-refresh') {
+        await act(async () => useFreemiumStore.getState().fetchStatus(true))
+        expect(useFreemiumStore.getState().status?.[quotaKey]).toBe(1)
+      }
+      if (scenario !== 'during-switch')
+        await act(async () =>
+          transport.resolve(
+            scenario === 'invalid-body'
+              ? new Response('invalid json')
+              : json(result, scenario === 'server-error' ? 503 : 200)
+          )
+        )
+      const expectedQuota = scenario.startsWith('new-session')
+        ? 5
+        : initialRemaining - 1
+      await waitFor(() =>
+        expect(useFreemiumStore.getState().status?.[quotaKey]).toBe(
+          expectedQuota
+        )
+      )
+      expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+      expect(screen.queryByText('errorSubmit')).not.toBeInTheDocument()
+      expect(attempts).toHaveLength(1)
+      expect(JSON.parse(String(attempts[0].body)).answers).toEqual({
+        0: 'A',
+        1: 'A',
+        2: 'A',
+        3: 'A',
+        4: 'A',
+      })
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/freemium/status')
+      ).toHaveLength(
+        scenario === 'overlapping-refresh'
+          ? 2
+          : scenario === 'network' || scenario === 'server-error'
+            ? 1
+            : 0
+      )
+    }
+  )
+
+  it.each([
     { replay: false, status: 422, timing: 'during' },
     { replay: false, status: 422, timing: 'after' },
     { replay: false, status: 429, timing: 'during' },
@@ -325,7 +505,7 @@ describe.each([
       expect(
         screen.getByRole('button', { name: submittingLabel })
       ).toBeDisabled()
-      expect(attemptSignal?.aborted).toBe(false)
+      expect(attemptSignal?.aborted).not.toBe(true)
       if (timing === 'during') {
         await act(async () => attemptBody.resolve(result))
         expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
@@ -348,7 +528,7 @@ describe.each([
       expect(await screen.findByText('resultsLabel')).toBeInTheDocument()
       expect(screen.getByText('5/5')).toBeInTheDocument()
       expect(screen.queryByText('alreadyAttempted')).not.toBeInTheDocument()
-      expect(attemptSignal?.aborted).toBe(false)
+      expect(attemptSignal?.aborted).not.toBe(true)
       expect(persisted).toBe(1)
       const attempt = vi
         .mocked(fetch)
@@ -385,7 +565,7 @@ describe.each([
       let planId = 8
       const attempts: {
         resolve: (response: Response) => void
-        signal: AbortSignal
+        signal?: AbortSignal
       }[] = []
       vi.mocked(fetch).mockImplementation(async (url, options) => {
         if (url === `/api/${feature}/attempt`)
@@ -448,7 +628,8 @@ describe.each([
         })
       )
       await screen.findByText(/Replacement exercise/)
-      expect(attempts[0].signal.aborted).toBe(true)
+      // Local presentation is cancelled, but the POST remains observed for quota.
+      expect(attempts[0].signal?.aborted).not.toBe(true)
       answerExercise()
       fireEvent.click(screen.getByRole('button', { name: 'submit' }))
       await waitFor(() => expect(attempts).toHaveLength(2))

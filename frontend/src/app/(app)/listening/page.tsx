@@ -201,10 +201,25 @@ function ListeningPage() {
     attemptRequest.current = controller
     setSubmitting(true)
     setError('')
+    let quotaConfirmed = false
+    const quotaAtStart = useFreemiumStore.getState().status
+    let reconciliationStarted = false
+    const tracksQuota =
+      !isSubscribed(user, stripeEnabled) &&
+      !isFreemiumTrialActive(user, stripeEnabled)
+    const sameSession = () =>
+      useAuthStore.getState().sessionVersion === sessionVersion
+    const reconcileQuota = () => {
+      if (tracksQuota && sameSession() && !reconciliationStarted) {
+        reconciliationStarted = true
+        void fetchFreemium(true)
+      }
+    }
     try {
       const res = await apiFetch('/api/listening/attempt', {
         method: 'POST',
-        signal: controller.signal,
+        // Transport outlives the local presentation so confirmed global usage
+        // is still observed after a language change or unmount.
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           exercise_id: exercise.id,
@@ -214,6 +229,7 @@ function ListeningPage() {
         }),
       })
       if (!res.ok) {
+        if (res.status >= 500 || res.status === 408) reconcileQuota()
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
         await waitForLanguageSwitch(controller.signal)
         if (!current()) return
@@ -226,23 +242,25 @@ function ListeningPage() {
         )
         return
       }
+      quotaConfirmed = true
+      if (tracksQuota && sameSession()) {
+        // A newer snapshot may already include this POST's consumption.
+        if (useFreemiumStore.getState().status === quotaAtStart)
+          decrementFreemium('listening_remaining')
+        else reconcileQuota()
+      }
       const data = (await res.json()) as SubmitResult
       await waitForLanguageSwitch(controller.signal)
       if (!current()) return
       setResult(data)
       setPageState('results')
       if (
-        !isSubscribed(user, stripeEnabled) &&
-        !isFreemiumTrialActive(user, stripeEnabled)
-      ) {
-        decrementFreemium('listening_remaining')
-      }
-      if (
         shouldShowExerciseReviewPrompt(getReviewPromptDismissal(), !isReplay)
       ) {
         setReviewPromptOpen(true)
       }
     } catch {
+      if (!quotaConfirmed) reconcileQuota()
       await waitForLanguageSwitch(controller.signal)
       if (current()) setError(t('errorSubmit'))
     } finally {

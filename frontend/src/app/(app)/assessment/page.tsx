@@ -50,6 +50,7 @@ interface AssessmentFlow {
   language: string
   sessionVersion: number
   controller: AbortController
+  completionInvalidationVersion?: number
 }
 
 function isCurrentFlow(flow: AssessmentFlow | null): flow is AssessmentFlow {
@@ -109,6 +110,7 @@ export default function AssessmentPage() {
   const router = useRouter()
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const invalidationVersion = useLanguageStore((s) => s.invalidationVersion)
   const isSwitching = useLanguageStore((s) => s.isSwitching)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
   const user = useAuthStore((s) => s.user)
@@ -173,7 +175,9 @@ export default function AssessmentPage() {
       completedFlow.current &&
       completedFlow.current === flowRef.current &&
       completedFlow.current.language === activeLanguage?.code &&
-      completedFlow.current.sessionVersion === sessionVersion
+      completedFlow.current.sessionVersion === sessionVersion &&
+      completedFlow.current.completionInvalidationVersion ===
+        invalidationVersion
     )
       return
     flowRef.current?.controller.abort()
@@ -258,6 +262,7 @@ export default function AssessmentPage() {
   }, [
     activeLanguage?.code,
     needsRefresh,
+    invalidationVersion,
     sessionVersion,
     fetchLanguages,
     contextAttempt,
@@ -408,6 +413,8 @@ export default function AssessmentPage() {
       setCreatedPlanId(data.plan_id)
       // The previous plan is no longer valid even if refreshing the summary fails.
       // Completion already succeeded: do not make the user create the plan again.
+      flow.completionInvalidationVersion =
+        useLanguageStore.getState().invalidationVersion + 1
       useLanguageStore.getState().invalidateLanguages()
       await useLanguageStore.getState().fetchLanguages()
       await waitForLanguageSwitch(flow.controller.signal)
@@ -416,6 +423,8 @@ export default function AssessmentPage() {
         flow.controller.signal.aborted ||
         flowRef.current !== flow ||
         completedFlow.current !== flow ||
+        flow.completionInvalidationVersion !==
+          useLanguageStore.getState().invalidationVersion ||
         useAuthStore.getState().sessionVersion !== flow.sessionVersion ||
         useLanguageStore.getState().isSwitching ||
         useLanguageStore.getState().activeLanguage?.code !== flow.language
@@ -424,6 +433,7 @@ export default function AssessmentPage() {
       if (data.voice_trial?.available && data.voice_trial.token) {
         setVoiceTrial(data.voice_trial)
         setStep('voice-trial-offer')
+        setContextError(useLanguageStore.getState().needsRefresh)
         setSubmitting(false)
         return
       }
@@ -440,13 +450,7 @@ export default function AssessmentPage() {
   function startVoiceTrial() {
     if (!voiceTrial?.token) return
     const flow = flowRef.current
-    if (
-      !flow ||
-      useAuthStore.getState().sessionVersion !== flow.sessionVersion ||
-      useLanguageStore.getState().isSwitching ||
-      useLanguageStore.getState().activeLanguage?.code !== flow.language
-    )
-      return
+    if (!isCurrentFlow(flow)) return
     sessionStorage.setItem(
       'assessment_voice_trial',
       JSON.stringify({
@@ -502,9 +506,27 @@ export default function AssessmentPage() {
         </p>
         <button
           className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
-          onClick={() => {
-            setContextError(false)
-            setContextAttempt((value) => value + 1)
+          disabled={submitting}
+          onClick={async () => {
+            const flow = completedFlow.current
+            if (!flow) {
+              setContextError(false)
+              setContextAttempt((value) => value + 1)
+              return
+            }
+            // Recover a committed completion's own summary without another POST.
+            setSubmitting(true)
+            const ok = await fetchLanguages(flow.controller.signal)
+            if (
+              flow.controller.signal.aborted ||
+              completedFlow.current !== flow ||
+              useAuthStore.getState().sessionVersion !== flow.sessionVersion ||
+              flow.completionInvalidationVersion !==
+                useLanguageStore.getState().invalidationVersion
+            )
+              return
+            setContextError(!ok)
+            setSubmitting(false)
           }}
         >
           {tCommon('retry')}

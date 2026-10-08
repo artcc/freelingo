@@ -220,19 +220,30 @@ function PlanContent({ language }: { language: TargetLanguage }) {
       setLoading(true)
       setError('')
       setCompletion(null)
+      setActiveLessonId(null)
+      // /today can generate a lesson. Its transport lifetime belongs to this
+      // context, but it must not consume the read-only plan's 20-second budget.
+      const todayRequest = apiFetch('/api/study-plan/today', {
+        signal: controller.signal,
+      })
+        .then(async (res) =>
+          res.ok
+            ? ((await res.json()) as {
+                lessons: TodayLesson[]
+                completion?: CompletionState
+              })
+            : null
+        )
+        .catch(() => null)
       try {
-        const [planRes, compRes, todayRes, pendingRes, lessonsRes] =
-          await Promise.all([
-            apiFetch('/api/study-plan/current', { signal }),
-            apiFetch('/api/progress/competencies', { signal }).catch(
-              () => null
-            ),
-            apiFetch('/api/study-plan/today', { signal }).catch(() => null),
-            apiFetch('/api/study-plan/pending-lessons', { signal }).catch(
-              () => null
-            ),
-            apiFetch('/api/study-plan/lessons', { signal }).catch(() => null),
-          ])
+        const [planRes, compRes, pendingRes, lessonsRes] = await Promise.all([
+          apiFetch('/api/study-plan/current', { signal }),
+          apiFetch('/api/progress/competencies', { signal }).catch(() => null),
+          apiFetch('/api/study-plan/pending-lessons', { signal }).catch(
+            () => null
+          ),
+          apiFetch('/api/study-plan/lessons', { signal }).catch(() => null),
+        ])
 
         if (obsolete()) return
         signal.throwIfAborted()
@@ -305,29 +316,29 @@ function PlanContent({ language }: { language: TargetLanguage }) {
           }
         }
 
-        if (todayRes?.ok) {
-          const todayData = (await todayRes.json()) as {
-            lessons: TodayLesson[]
-            completion?: CompletionState
-          }
-          if (obsolete()) return
-          signal.throwIfAborted()
-          setCompletion(todayData.completion ?? null)
-          const nextLesson = todayData.lessons.find(
-            (l) => l.id != null && !l.is_completed
-          )
-          setActiveLessonId(nextLesson?.id ?? null)
-          for (const lesson of todayData.lessons) {
-            if (lesson.id == null) continue
-            states[lessonKey(lesson.week, lesson.day, lesson.title)] = {
-              id: lesson.id,
-              completed: lesson.is_completed ?? false,
-              action: lesson.is_completed ? 'review' : 'start',
-            }
-          }
-        }
-
         setLessonStates(states)
+        void todayRequest
+          .then((todayData) => {
+            if (obsolete() || !todayData) return
+            setCompletion(todayData.completion ?? null)
+            const nextLesson = todayData.lessons.find(
+              (l) => l.id != null && !l.is_completed
+            )
+            setActiveLessonId(nextLesson?.id ?? null)
+            const todayStates: typeof states = {}
+            for (const lesson of todayData.lessons) {
+              if (lesson.id == null) continue
+              todayStates[lessonKey(lesson.week, lesson.day, lesson.title)] = {
+                id: lesson.id,
+                completed: lesson.is_completed ?? false,
+                action: lesson.is_completed ? 'review' : 'start',
+              }
+            }
+            setLessonStates((previous) => ({ ...previous, ...todayStates }))
+          })
+          .catch(() => {
+            // An unavailable supplementary response must not hide the loaded plan.
+          })
       } catch (err) {
         if (!obsolete())
           setError(err instanceof Error ? err.message : 'Failed to load')

@@ -36,6 +36,7 @@ interface LanguageStore {
   availableLanguageCodes: string[]
   isSwitching: boolean
   needsRefresh: boolean
+  invalidationVersion: number
   invalidateLanguages: () => void
   fetchLanguages: (signal?: AbortSignal) => Promise<boolean>
   switchLanguage: (code: string) => Promise<boolean>
@@ -74,10 +75,14 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
   availableLanguageCodes: [],
   isSwitching: false,
   needsRefresh: false,
+  invalidationVersion: 0,
 
   invalidateLanguages: () => {
     ++languageRequestId
-    set({ needsRefresh: true })
+    set((state) => ({
+      needsRefresh: true,
+      invalidationVersion: state.invalidationVersion + 1,
+    }))
   },
 
   fetchLanguages: async (signal) => {

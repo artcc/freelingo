@@ -113,9 +113,15 @@ Attempt submissions have a separate cancellation lifecycle from exercise lookup.
 cannot publish results, errors, review prompts, or overwrite the submitting state of a newer attempt.
 The server may already have persisted a cancelled attempt; cancellation does not undo that write.
 Starting a provisional language switch does not cancel an answer submission or release its submitting
-lock. `waitForLanguageSwitch` holds its response until the switch settles (or the owner is cancelled).
-A definite rejection with unchanged context publishes the original result and quota decrement once;
-changed or invalidated context still discards the old presentation.
+lock. `waitForLanguageSwitch` holds local presentation until the switch settles (or the owner is cancelled).
+A definite rejection with unchanged context publishes the original result; changed or invalidated context
+discards the old presentation. The POST remains observed after local cancellation or unmount so a successful
+HTTP response can update global quota once for its originating authentication session, independently of
+exercise visibility and body decoding. Transport failures, HTTP 408 and 5xx trigger a forced quota GET
+for that session. A changed quota snapshot during the POST also triggers reconciliation instead of a
+decrement that might count already-included usage twice. Quota reads reject obsolete sessions and superseded requests; reads overlapping confirmed
+consumption are reconciled again rather than restoring a potentially older balance. Failed forced reads
+expire the cache window so a later visit can retry.
 
 The language store shares pending queries for the current context and session. Cancelling a page's
 wait does not cancel global recovery; a persistent selector can still receive the result. Context

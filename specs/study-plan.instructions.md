@@ -232,8 +232,12 @@ real assessment and `taken` shows the persisted result.
 
 My Plan waits for a resolved language before loading these resources. Missing or invalidated context
 uses the shared language GET with a recoverable retry on failure. A switch unmounts the old content;
-the language and cached plan identity key each content instance. The full plan load is cancellable and
-bounded to 20 seconds. Every response-body publication, error, navigation, and loading completion is
+the language and cached plan identity key each content instance. The read-only plan and metadata load
+is cancellable and bounded to 20 seconds. `/today` runs independently because it can generate a lesson:
+it uses the transport/backend limits rather than the read-only deadline and cannot keep the plan's
+loading screen open or turn a valid plan into a general error. A successful response merges today's
+lesson actions and completion state into the loaded plan; an unavailable response leaves them unset.
+Every response-body publication, error, navigation, and loading completion is
 discarded after unmount or context/session replacement. Plan-load failures offer retry; a successful
 null plan remains distinct from a request failure.
 

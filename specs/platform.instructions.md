@@ -134,6 +134,11 @@ rejection resumes that flow; a changed language or external invalidation cancels
 completion refreshes the summary without restarting assessment or repeating its POST. Its flow identity
 survives its own summary invalidation, but not replacement or unmount: returning to the same language
 does not authorize a previous completion to navigate or publish a voice-trial offer.
+Language invalidations carry a monotonically increasing version, including when the summary is already
+invalid. A completed flow records only its own invalidation version; a later external invalidation
+suspends its offer/continuation and recovers context through GET even when the cached language is unchanged.
+Voice-trial navigation requires a reconciled context. If completion's own summary refresh fails, its
+voice offer is retained behind a recoverable error; retry refreshes the summary without repeating completion.
 
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { useLanguageStore } from '@/store/language'
@@ -129,6 +129,7 @@ function mockPlan(
 }
 
 describe('My Plan level test node', () => {
+  afterEach(() => vi.useRealTimers())
   beforeEach(() => {
     mockApiFetch.mockReset()
     mockPush.mockReset()
@@ -355,4 +356,127 @@ describe('My Plan level test node', () => {
       '/api/languages',
     ])
   })
+
+  it.each(['success', 'server-error', 'network'])(
+    'keeps the plan usable while /today takes more than 20 seconds (%s)',
+    async (outcome) => {
+      vi.useFakeTimers()
+      vi.spyOn(AbortSignal, 'timeout').mockImplementation((ms) => {
+        const controller = new AbortController()
+        setTimeout(
+          () => controller.abort(new DOMException('Timed out', 'TimeoutError')),
+          ms
+        )
+        return controller.signal
+      })
+      mockPlan('in_progress')
+      const normal = mockApiFetch.getMockImplementation()!
+      let finish!: (response: Response) => void
+      let fail!: (error: Error) => void
+      let todaySignal!: AbortSignal
+      mockApiFetch.mockImplementation((url: string, options?: RequestInit) => {
+        if (url !== '/api/study-plan/today') return normal(url)
+        todaySignal = options!.signal as AbortSignal
+        return new Promise<Response>((resolve, reject) => {
+          finish = resolve
+          fail = reject
+          todaySignal.addEventListener(
+            'abort',
+            () => reject(todaySignal.reason),
+            { once: true }
+          )
+        })
+      })
+      await act(async () => {
+        render(<PlanPage />)
+      })
+      expect(screen.getByText('Unit One')).toBeInTheDocument()
+      expect(useLoadingStore.getState().count).toBe(0)
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(25_000)
+      })
+      expect(todaySignal.aborted).toBe(false)
+      expect(screen.getByText('Unit One')).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      await act(async () => {
+        if (outcome === 'network') fail(new TypeError('Offline'))
+        else
+          finish(
+            jsonResponse(
+              {
+                completion: { state: 'ready' },
+                lessons: [
+                  {
+                    id: 101,
+                    title: 'Day 1 Lesson',
+                    lesson_type: 'grammar',
+                    week: 1,
+                    day: 1,
+                    is_completed: false,
+                  },
+                ],
+              },
+              outcome === 'success' ? 200 : 503
+            )
+          )
+      })
+      expect(screen.getByText('Unit One')).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      if (outcome === 'success')
+        expect(screen.getByText('levelComplete')).toBeInTheDocument()
+      else
+        expect(
+          screen.getByText('completionTestTitle').closest('button')
+        ).toBeDisabled()
+      expect(
+        mockApiFetch.mock.calls.filter(
+          ([url]) => url === '/api/study-plan/current'
+        )
+      ).toHaveLength(1)
+    }
+  )
+
+  it.each(['language', 'unmount'])(
+    'discards an independently delayed /today body after %s',
+    async (change) => {
+      mockPlan('in_progress')
+      const normal = mockApiFetch.getMockImplementation()!
+      let finish!: (body: unknown) => void
+      const response = jsonResponse({})
+      const readBody = vi.spyOn(response, 'json').mockReturnValue(
+        new Promise((resolve) => {
+          finish = resolve
+        })
+      )
+      mockApiFetch.mockImplementation((url: string) =>
+        url === '/api/study-plan/today'
+          ? Promise.resolve(response)
+          : normal(url)
+      )
+      const { unmount } = render(<PlanPage />)
+      await screen.findByText('Unit One')
+      expect(readBody).toHaveBeenCalled()
+      const signal = mockApiFetch.mock.calls.find(
+        ([url]) => url === '/api/study-plan/today'
+      )![1].signal as AbortSignal
+      if (change === 'unmount') unmount()
+      else {
+        mockPlan('in_progress', { id: 28, cefr_level: 'B2' })
+        act(() =>
+          useLanguageStore.setState({
+            activeLanguage: getLanguageByCode('de-DE') ?? null,
+          })
+        )
+        await screen.findByText('B2')
+      }
+      expect(signal.aborted).toBe(true)
+      await act(async () =>
+        finish({ lessons: [], completion: { state: 'ready' } })
+      )
+      expect(screen.queryByText('levelComplete')).not.toBeInTheDocument()
+      expect(mockPush).not.toHaveBeenCalled()
+      if (change === 'language')
+        expect(screen.getByText('B2')).toBeInTheDocument()
+    }
+  )
 })

@@ -197,10 +197,25 @@ function ReadingPage() {
     attemptRequest.current = controller
     setSubmitting(true)
     setError('')
+    let quotaConfirmed = false
+    const quotaAtStart = useFreemiumStore.getState().status
+    let reconciliationStarted = false
+    const tracksQuota =
+      !isSubscribed(user, stripeEnabled) &&
+      !isFreemiumTrialActive(user, stripeEnabled)
+    const sameSession = () =>
+      useAuthStore.getState().sessionVersion === sessionVersion
+    const reconcileQuota = () => {
+      if (tracksQuota && sameSession() && !reconciliationStarted) {
+        reconciliationStarted = true
+        void fetchFreemium(true)
+      }
+    }
     try {
       const res = await apiFetch('/api/reading/attempt', {
         method: 'POST',
-        signal: controller.signal,
+        // Keep observing the POST after local cancellation: the server may
+        // persist it and consume the user's global quota in another context.
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           exercise_id: exercise.id,
@@ -210,6 +225,7 @@ function ReadingPage() {
         }),
       })
       if (!res.ok) {
+        if (res.status >= 500 || res.status === 408) reconcileQuota()
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
         await waitForLanguageSwitch(controller.signal)
         if (!current()) return
@@ -222,17 +238,18 @@ function ReadingPage() {
         )
         return
       }
+      quotaConfirmed = true
+      if (tracksQuota && sameSession()) {
+        // A newer snapshot may already include this POST's consumption.
+        if (useFreemiumStore.getState().status === quotaAtStart)
+          decrementFreemium('reading_remaining')
+        else reconcileQuota()
+      }
       const data = (await res.json()) as SubmitResult
       await waitForLanguageSwitch(controller.signal)
       if (!current()) return
       setResult(data)
       dismissTooltip()
-      if (
-        !isSubscribed(user, stripeEnabled) &&
-        !isFreemiumTrialActive(user, stripeEnabled)
-      ) {
-        decrementFreemium('reading_remaining')
-      }
       setPageState('results')
       if (
         shouldShowExerciseReviewPrompt(getReviewPromptDismissal(), !isReplay)
@@ -240,6 +257,7 @@ function ReadingPage() {
         setReviewPromptOpen(true)
       }
     } catch {
+      if (!quotaConfirmed) reconcileQuota()
       await waitForLanguageSwitch(controller.signal)
       if (current()) setError(t('errorSubmit'))
     } finally {

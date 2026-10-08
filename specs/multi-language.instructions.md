@@ -259,6 +259,9 @@ Assessment preserves its in-progress quiz, result, and choices during a provisio
 suspending interaction. Pending responses wait for the switch outcome; a definite rejection resumes
 the same flow. A completion retains its identity through its own summary refresh, but a replacement
 flow invalidates it even when the learner later returns to the original language.
+`invalidationVersion` advances on every invalidation, even while `needsRefresh` is already true.
+Assessment records its completion's version so a failed external switch reconciliation cannot be mistaken
+for its own refresh. An unresolved context blocks the old voice offer and is recovered through GET.
 
 After a successful language-switch PUT, the store invalidates the summary and fetches it again.
 `switchLanguage` returns true only when that refresh succeeds. A failed refresh leaves `needsRefresh`
@@ -279,12 +282,15 @@ Interrupted lookups resume through GET after the switch; changed or invalidated 
 the normal reload/reconciliation flow. Both the sidebar selector and language settings offer a
 summary-only retry after a refresh failure or an uncertain PUT outcome, without repeating the PUT
 or announcing a fully synchronized switch.
-Pending answer submissions have their own cancellation lifecycle: unmount, a confirmed language change,
-invalidation, exercise replacement, plan/level change, or session replacement makes their responses
-obsolete. This does not roll back an attempt already persisted by the backend.
+Pending answer submissions have their own presentation lifecycle: unmount, a confirmed language change,
+invalidation, exercise replacement, plan/level change, or session replacement makes their local results
+obsolete. The HTTP operation remains observed; a successful response updates the user's global quota
+once while its authentication session is still current. This does not roll back an attempt already
+persisted by the backend. Uncertain transport/408/5xx failures reconcile quota through a forced GET.
 The provisional `isSwitching` flag alone keeps the pending submission and its lock intact. Responses
-wait for the switch to settle; if it is rejected with unchanged context, the original result and quota
-update are applied once before another submission can be enabled. The same rule applies to replay.
+wait for the switch to settle before local presentation; if it is rejected with unchanged context, the
+original result is shown before another submission can be enabled. Global quota accounting does not
+wait for that language decision. The same rule applies to replay.
 
 The sidebar `LanguageSwitcher` is present in desktop and mobile navigation. With one language it
 shows the active language as a disabled indicator. With multiple languages it opens a selector,

@@ -69,6 +69,7 @@ const summary = (active = 'en-GB') => ({
 
 beforeEach(() => {
   push.mockReset()
+  sessionStorage.clear()
   vi.stubGlobal('fetch', vi.fn())
   useAuthStore.getState().startSession('token')
   useLanguageStore.setState({
@@ -113,6 +114,146 @@ async function answerQuestions(count: number, finish = true) {
 }
 
 describe('Assessment provisional language switches', () => {
+  it.each([
+    { stage: 'offer', voiceOffer: true, uncertain: false },
+    { stage: 'offer', voiceOffer: true, uncertain: true },
+    { stage: 'reconciling', voiceOffer: true, uncertain: false },
+    { stage: 'reconciling', voiceOffer: false, uncertain: false },
+  ])(
+    'recovers an external invalidation without repeating completion ($stage, voice: $voiceOffer, uncertain: $uncertain)',
+    async ({ stage, voiceOffer, uncertain }) => {
+      let active = 'en-GB'
+      let recover = false
+      let summaryCalls = 0
+      const oldSummary = deferred<Response>()
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/languages/active') {
+          active = 'de-DE'
+          if (uncertain) throw new TypeError('Lost switch response')
+          return json({})
+        }
+        if (url === '/api/languages') {
+          summaryCalls += 1
+          if (summaryCalls === 1)
+            return stage === 'reconciling'
+              ? oldSummary.promise
+              : json(summary())
+          return recover ? json(summary(active)) : json({}, 503)
+        }
+        if (url === '/api/study-plan/current')
+          return json(
+            active === 'en-GB'
+              ? null
+              : { cefr_level: 'B2', created_at: '2026-01-01' }
+          )
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: bank })
+        if (url === '/api/assessment/complete')
+          return json({
+            plan_id: 8,
+            cefr_level: 'A1',
+            voice_trial: {
+              available: voiceOffer,
+              token: voiceOffer ? 'old-trial' : null,
+            },
+          })
+        return json({}, 404)
+      })
+      render(<AssessmentPage />)
+      fireEvent.click(
+        await screen.findByRole('button', { name: /beginnerOption/ })
+      )
+      fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+      await waitFor(() => expect(summaryCalls).toBe(1))
+      if (stage === 'offer') await screen.findByText('voiceTrialTitle')
+      const completionVersion = useLanguageStore.getState().invalidationVersion
+      await act(async () =>
+        expect(await useLanguageStore.getState().switchLanguage('de-DE')).toBe(
+          false
+        )
+      )
+      expect(useLanguageStore.getState()).toMatchObject({
+        needsRefresh: true,
+        activeLanguage: { code: 'en-GB' },
+      })
+      expect(useLanguageStore.getState().invalidationVersion).toBeGreaterThan(
+        completionVersion
+      )
+      expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+      if (stage === 'reconciling')
+        await act(async () => oldSummary.resolve(json(summary())))
+      expect(screen.queryByText('voiceTrialTitle')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /voiceTrialStart/ })
+      ).not.toBeInTheDocument()
+      expect(push).not.toHaveBeenCalled()
+      expect(sessionStorage.getItem('assessment_voice_trial')).toBeNull()
+      recover = true
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      expect(await screen.findByText('B2')).toBeInTheDocument()
+      expect(useLanguageStore.getState()).toMatchObject({
+        needsRefresh: false,
+        activeLanguage: { code: 'de-DE' },
+      })
+      expect(screen.queryByText('voiceTrialTitle')).not.toBeInTheDocument()
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/assessment/complete')
+      ).toHaveLength(1)
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/languages/active')
+      ).toHaveLength(1)
+    }
+  )
+
+  it('recovers its own failed summary before enabling the committed voice offer', async () => {
+    let recover = false
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current') return json(null)
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      if (url === '/api/languages')
+        return recover ? json(summary()) : json({}, 503)
+      if (url === '/api/assessment/complete')
+        return json({
+          plan_id: 8,
+          cefr_level: 'A1',
+          voice_trial: {
+            available: true,
+            token: 'trial',
+            duration_seconds: 300,
+          },
+        })
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+    expect(
+      screen.queryByRole('button', { name: /voiceTrialStart/ })
+    ).not.toBeInTheDocument()
+    recover = true
+    fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    fireEvent.click(
+      await screen.findByRole('button', { name: /voiceTrialStart/ })
+    )
+    expect(push).toHaveBeenCalledWith('/conversation')
+    expect(
+      JSON.parse(sessionStorage.getItem('assessment_voice_trial')!)
+    ).toMatchObject({ token: 'trial', planId: 8, targetLanguage: 'en-GB' })
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === '/api/assessment/complete')
+    ).toHaveLength(1)
+  })
+
   it('resumes the next-question timer after a rejected switch', async () => {
     const change = deferred<Response>()
     vi.mocked(fetch).mockImplementation(async (url) => {
