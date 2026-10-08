@@ -114,6 +114,206 @@ async function answerQuestions(count: number, finish = true) {
 }
 
 describe('Assessment provisional language switches', () => {
+  it.each(['headers', 'body', 'summary'])(
+    'does not reconcile a completion into a replacement session during %s',
+    async (stage) => {
+      const headers = deferred<Response>()
+      const body = deferred<unknown>()
+      const languages = deferred<Response>()
+      const response = json({})
+      const readBody = vi.spyOn(response, 'json').mockReturnValue(body.promise)
+      let summaryCalls = 0
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: bank })
+        if (url === '/api/assessment/complete') return headers.promise
+        if (url === '/api/languages') {
+          summaryCalls += 1
+          return languages.promise
+        }
+        return json({}, 404)
+      })
+      const { unmount } = render(<AssessmentPage />)
+      fireEvent.click(
+        await screen.findByRole('button', { name: /beginnerOption/ })
+      )
+      fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+      await waitFor(() =>
+        expect(
+          vi
+            .mocked(fetch)
+            .mock.calls.some(([url]) => url === '/api/assessment/complete')
+        ).toBe(true)
+      )
+      if (stage !== 'headers') {
+        await act(async () => headers.resolve(response))
+        await waitFor(() => expect(readBody).toHaveBeenCalled())
+      }
+      if (stage === 'summary')
+        await act(async () => body.resolve({ plan_id: 99, cefr_level: 'A1' }))
+      unmount()
+      useAuthStore.getState().startSession('replacement-session')
+      const replacement = summary('de-DE')
+      replacement.languages[1].plan.id = 200
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('de-DE') ?? null,
+        userLanguages: replacement.languages,
+        needsRefresh: false,
+      })
+      const version = useLanguageStore.getState().invalidationVersion
+      const old = summary()
+      old.languages[0].plan.id = 99
+      await act(async () => {
+        headers.resolve(response)
+        body.resolve({
+          plan_id: 99,
+          cefr_level: 'A1',
+          voice_trial: { available: true, token: 'old-trial' },
+        })
+        languages.resolve(json(old))
+      })
+      expect(summaryCalls).toBe(stage === 'headers' ? 0 : 1)
+      expect(useLanguageStore.getState()).toMatchObject({
+        userLanguages: replacement.languages,
+        needsRefresh: false,
+        invalidationVersion: version,
+      })
+      expect(push).not.toHaveBeenCalled()
+      expect(sessionStorage.getItem('assessment_voice_trial')).toBeNull()
+    }
+  )
+
+  it('reconciles an abandoned completion after a confirmed language switch without restoring its offer', async () => {
+    const completion = deferred<Response>()
+    let active = 'en-GB'
+    let planId = 8
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current') return json(null)
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      if (url === '/api/assessment/complete') return completion.promise
+      if (url === '/api/languages/active') {
+        active = 'de-DE'
+        return json({})
+      }
+      if (url === '/api/languages') {
+        const data = summary(active)
+        data.languages[0].plan.id = planId
+        return json(data)
+      }
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+    await act(async () =>
+      expect(await useLanguageStore.getState().switchLanguage('de-DE')).toBe(
+        true
+      )
+    )
+    await screen.findByRole('button', { name: /beginnerOption/ })
+    await act(async () => {
+      planId = 99
+      completion.resolve(
+        json({
+          plan_id: 99,
+          cefr_level: 'A1',
+          voice_trial: { available: true, token: 'old-trial' },
+        })
+      )
+    })
+    await waitFor(() =>
+      expect(useLanguageStore.getState().userLanguages[0].plan?.id).toBe(99)
+    )
+    expect(useLanguageStore.getState()).toMatchObject({
+      activeLanguage: { code: 'de-DE' },
+      needsRefresh: false,
+    })
+    expect(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    ).toBeInTheDocument()
+    expect(screen.queryByText('voiceTrialTitle')).not.toBeInTheDocument()
+    expect(push).not.toHaveBeenCalled()
+  })
+
+  it('recovers a committed plan with an unreadable completion body without another POST', async () => {
+    let committed = false
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current')
+        return json(
+          committed ? { cefr_level: 'B2', created_at: '2026-01-01' } : null
+        )
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      if (url === '/api/assessment/complete') {
+        committed = true
+        return new Response('invalid json')
+      }
+      if (url === '/api/languages') {
+        const data = summary()
+        data.languages[0].plan.id = 99
+        data.languages[0].plan.cefr_level = 'B2'
+        return json(data)
+      }
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+    expect(
+      await screen.findByRole('button', { name: 'retake' })
+    ).toBeInTheDocument()
+    expect(screen.getByText('B2')).toBeInTheDocument()
+    expect(useLanguageStore.getState().userLanguages[0].plan?.id).toBe(99)
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === '/api/assessment/complete')
+    ).toHaveLength(1)
+    expect(push).not.toHaveBeenCalled()
+  })
+
+  it('keeps the current summary after a definite completion rejection', async () => {
+    const rejection = deferred<Response>()
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current') return json(null)
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      if (url === '/api/assessment/complete') return rejection.promise
+      return json({}, 422)
+    })
+    const version = useLanguageStore.getState().invalidationVersion
+    render(<AssessmentPage />)
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+    expect(screen.getByRole('button', { name: 'buildingPlan' })).toBeDisabled()
+    await act(async () => rejection.resolve(json({}, 422)))
+    expect(
+      await screen.findByRole('button', { name: /startMyPlan/ })
+    ).toBeEnabled()
+    expect(useLanguageStore.getState()).toMatchObject({
+      userLanguages: summary().languages,
+      needsRefresh: false,
+      invalidationVersion: version,
+    })
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === '/api/assessment/complete')
+    ).toHaveLength(1)
+    expect(
+      vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/languages')
+    ).toBe(false)
+    expect(push).not.toHaveBeenCalled()
+  })
+
   it.each([
     { stage: 'offer', voiceOffer: true, uncertain: false },
     { stage: 'offer', voiceOffer: true, uncertain: true },

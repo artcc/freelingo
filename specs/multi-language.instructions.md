@@ -251,6 +251,11 @@ the reference to a newer pending query.
 Assessment completion marks the summary as needing refresh and fetches it before navigation or
 the voice-trial offer. A failed refresh does not undo plan creation or repeat the completion POST;
 Listening and Reading reload invalidated context before consulting their exercise pools.
+Completion's global recovery is independent of its visual flow: the POST remains observed after leaving
+Assessment, and HTTP success invalidates pre-commit reads and starts a fresh summary GET before body
+decoding. Both invalidation and publication are session-scoped; an old account's completion cannot
+invalidate or replace the new account's summary. A failed GET leaves the summary invalidated so the
+next consumer can recover the committed plan. Abandoned flows cannot resume offers or navigation.
 Assessment entry and My Plan also reconcile missing or invalidated context before loading dependent
 resources, with a recoverable error when reconciliation fails. A confirmed language addition remains
 successful if its summary refresh fails; Assessment retries only the summary GET and never uses the

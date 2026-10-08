@@ -123,6 +123,123 @@ function answerExercise() {
 }
 
 describe('Assessment context recovery', () => {
+  it.each([
+    { feature: 'reading', stage: 'headers' },
+    { feature: 'listening', stage: 'headers' },
+    { feature: 'reading', stage: 'body' },
+    { feature: 'listening', stage: 'body' },
+    { feature: 'reading', stage: 'failed-summary' },
+    { feature: 'listening', stage: 'failed-summary' },
+    { feature: 'reading', stage: 'old-summary' },
+    { feature: 'listening', stage: 'old-summary' },
+  ])(
+    'recovers the committed plan in $feature after leaving Assessment during $stage',
+    async ({ feature, stage }) => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      let serverPlan = 8
+      let failSummary = stage === 'failed-summary'
+      let summaryCalls = 0
+      const headers = deferred<Response>()
+      const body = deferred<unknown>()
+      const oldSummary = deferred<Response>()
+      const response = json({})
+      const readBody = vi.spyOn(response, 'json').mockReturnValue(body.promise)
+      const completionRequests: RequestInit[] = []
+      const exercisePlans: number[] = []
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/study-plan/current')
+          return json({ cefr_level: 'A1', created_at: '2026-01-01' })
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: [] })
+        if (url === '/api/assessment/complete') {
+          completionRequests.push(options!)
+          const result = await headers.promise
+          options?.signal?.throwIfAborted()
+          return result
+        }
+        if (url === '/api/languages') {
+          summaryCalls += 1
+          if (stage === 'old-summary' && summaryCalls === 1)
+            return oldSummary.promise
+          return failSummary ? json({}, 503) : json(languages(serverPlan))
+        }
+        if (String(url).startsWith(`/api/${feature}/next?`)) {
+          const requestedPlan = Number(
+            new URL(String(url), 'http://localhost').searchParams.get(
+              'expected_study_plan_id'
+            )
+          )
+          exercisePlans.push(requestedPlan)
+          if (requestedPlan !== serverPlan)
+            return json({ detail: 'study_context_changed' }, 409)
+          const data = await ready().json()
+          data.context.study_plan_id = serverPlan
+          data.exercise.topic = `Exercise for plan ${serverPlan}`
+          return json(data)
+        }
+        return json({}, 404)
+      })
+      const { unmount } = render(<AssessmentPage />)
+      fireEvent.click(await screen.findByRole('button', { name: 'retake' }))
+      fireEvent.click(screen.getByRole('button', { name: /beginnerOption/ }))
+      fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+      await waitFor(() => expect(completionRequests).toHaveLength(1))
+      let staleRead: Promise<boolean> | undefined
+      if (stage === 'old-summary') {
+        act(() => {
+          staleRead = useLanguageStore.getState().fetchLanguages()
+        })
+        await waitFor(() => expect(summaryCalls).toBe(1))
+      }
+      if (stage === 'headers' || stage === 'old-summary') unmount()
+      await act(async () => {
+        serverPlan = 99 // /complete commits before returning HTTP success.
+        headers.resolve(response)
+      })
+      await waitFor(() => expect(readBody).toHaveBeenCalled())
+      if (stage === 'body' || stage === 'failed-summary') unmount()
+      if (stage === 'failed-summary') {
+        expect(useLanguageStore.getState().needsRefresh).toBe(true)
+        expect(useLanguageStore.getState().userLanguages[0].plan?.id).toBe(8)
+        failSummary = false
+      } else {
+        // Recovery must finish even though the completion body is still pending.
+        await waitFor(() =>
+          expect(useLanguageStore.getState().userLanguages[0].plan?.id).toBe(99)
+        )
+        expect(useLanguageStore.getState().needsRefresh).toBe(false)
+      }
+      if (staleRead)
+        await act(async () => {
+          oldSummary.resolve(json(languages(8)))
+          expect(await staleRead).toBe(false)
+        })
+      const Page = feature === 'reading' ? ReadingPage : ListeningPage
+      render(<Page />)
+      expect(
+        await screen.findByText(/Exercise for plan 99/)
+      ).toBeInTheDocument()
+      await act(async () =>
+        body.resolve({
+          plan_id: 99,
+          cefr_level: 'A1',
+          voice_trial: { available: true, token: 'abandoned-trial' },
+        })
+      )
+      expect(useLanguageStore.getState().userLanguages[0].plan?.id).toBe(99)
+      expect(useLanguageStore.getState().needsRefresh).toBe(false)
+      expect(exercisePlans.length).toBeGreaterThan(0)
+      expect(exercisePlans.every((id) => id === 99)).toBe(true)
+      expect(screen.queryByText('contextChanged')).not.toBeInTheDocument()
+      expect(screen.queryByText('voiceTrialTitle')).not.toBeInTheDocument()
+      expect(push).not.toHaveBeenCalled()
+      expect(completionRequests).toHaveLength(1)
+    }
+  )
+
   it('recovers a committed language addition using GET and completes only the resolved language', async () => {
     useLanguageStore.setState({
       activeLanguage: getLanguageByCode('en-GB') ?? null,

@@ -139,6 +139,11 @@ invalid. A completed flow records only its own invalidation version; a later ext
 suspends its offer/continuation and recovers context through GET even when the cached language is unchanged.
 Voice-trial navigation requires a reconciled context. If completion's own summary refresh fails, its
 voice offer is retained behind a recoverable error; retry refreshes the summary without repeating completion.
+The completion POST remains observed after unmount or flow replacement. HTTP success invalidates and
+refreshes the global language summary for the originating authentication session before decoding the
+response body; neither visual cancellation nor a delayed/unreadable body can skip that recovery.
+Only the surviving flow may publish the offer or navigate. An unreadable successful completion body
+recovers the existing plan through GET instead of enabling another completion POST.
 
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after

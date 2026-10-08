@@ -386,6 +386,16 @@ export default function AssessmentPage() {
     if (!result || submitting || !isCurrentFlow(flow)) return
     setSubmitting(true)
     setError('')
+    const ownsCompletion = () =>
+      mounted.current &&
+      !flow.controller.signal.aborted &&
+      flowRef.current === flow &&
+      completedFlow.current === flow &&
+      flow.completionInvalidationVersion ===
+        useLanguageStore.getState().invalidationVersion &&
+      useAuthStore.getState().sessionVersion === flow.sessionVersion &&
+      !useLanguageStore.getState().isSwitching &&
+      useLanguageStore.getState().activeLanguage?.code === flow.language
     try {
       const res = await apiFetch('/api/assessment/complete', {
         method: 'POST',
@@ -403,33 +413,33 @@ export default function AssessmentPage() {
           // completing assessment for a newly added language.
           target_language: flow.language,
         }),
-        signal: flow.controller.signal,
+        // Observe the mutation even after its visual flow is abandoned: the
+        // server may already have replaced the user's active plan.
       })
       if (!res.ok) throw new Error(tCommon('errorMessage'))
-      const data = (await res.json()) as AssessmentCompleteResponse
-      await waitForLanguageSwitch(flow.controller.signal)
-      if (!isCurrentFlow(flow)) return
-      completedFlow.current = flow
-      setCreatedPlanId(data.plan_id)
-      // The previous plan is no longer valid even if refreshing the summary fails.
-      // Completion already succeeded: do not make the user create the plan again.
-      flow.completionInvalidationVersion =
-        useLanguageStore.getState().invalidationVersion + 1
-      useLanguageStore.getState().invalidateLanguages()
-      await useLanguageStore.getState().fetchLanguages()
-      await waitForLanguageSwitch(flow.controller.signal)
+      if (useAuthStore.getState().sessionVersion !== flow.sessionVersion) return
+      const context = useLanguageStore.getState()
+      // Only the surviving flow may claim this as its own invalidation. A
+      // provisional switch can still be rejected, so keep that flow suspended.
       if (
-        !mounted.current ||
-        flow.controller.signal.aborted ||
-        flowRef.current !== flow ||
-        completedFlow.current !== flow ||
-        flow.completionInvalidationVersion !==
-          useLanguageStore.getState().invalidationVersion ||
-        useAuthStore.getState().sessionVersion !== flow.sessionVersion ||
-        useLanguageStore.getState().isSwitching ||
-        useLanguageStore.getState().activeLanguage?.code !== flow.language
-      )
-        return
+        mounted.current &&
+        !flow.controller.signal.aborted &&
+        flowRef.current === flow &&
+        !context.needsRefresh &&
+        context.activeLanguage?.code === flow.language
+      ) {
+        completedFlow.current = flow
+        flow.completionInvalidationVersion = context.invalidationVersion + 1
+      }
+      // HTTP success confirms persistence. Reconcile globally before decoding
+      // the body, independent of unmount, language changes or body failure.
+      context.invalidateLanguages()
+      const reconciliation = context.fetchLanguages()
+      const data = (await res.json()) as AssessmentCompleteResponse
+      await reconciliation
+      await waitForLanguageSwitch(flow.controller.signal)
+      if (!ownsCompletion()) return
+      setCreatedPlanId(data.plan_id)
       if (data.voice_trial?.available && data.voice_trial.token) {
         setVoiceTrial(data.voice_trial)
         setStep('voice-trial-offer')
@@ -440,6 +450,13 @@ export default function AssessmentPage() {
       router.push('/plan')
     } catch {
       await waitForLanguageSwitch(flow.controller.signal)
+      if (ownsCompletion()) {
+        // The plan was committed but its response body was unreadable. Recover
+        // the existing plan through GET rather than enabling another completion.
+        completedFlow.current = null
+        setContextAttempt((value) => value + 1)
+        return
+      }
       if (isCurrentFlow(flow)) {
         setError(tCommon('errorMessage'))
         setSubmitting(false)
