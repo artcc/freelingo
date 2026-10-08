@@ -1,6 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
+import { useLanguageStore } from '@/store/language'
+import { getLanguageByCode } from '@/lib/target-languages'
+import { useLoadingStore } from '@/store/loading'
 
 const { mockApiFetch, mockPush } = vi.hoisted(() => ({
   mockApiFetch: vi.fn(),
@@ -11,9 +14,10 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }))
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
+vi.mock('next/navigation', () => {
+  const router = { push: mockPush }
+  return { useRouter: () => router }
+})
 
 vi.mock('next/link', () => ({
   default: ({
@@ -26,14 +30,6 @@ vi.mock('next/link', () => ({
 
 vi.mock('@/lib/api', () => ({
   apiFetch: mockApiFetch,
-}))
-
-vi.mock('@/store/language', () => ({
-  useLanguageStore: (
-    selector: (state: {
-      activeLanguage: { code: string; name: string }
-    }) => unknown
-  ) => selector({ activeLanguage: { code: 'en-US', name: 'English' } }),
 }))
 
 import PlanPage from '@/app/(app)/plan/page'
@@ -133,9 +129,17 @@ function mockPlan(
 }
 
 describe('My Plan level test node', () => {
+  afterEach(() => vi.useRealTimers())
   beforeEach(() => {
     mockApiFetch.mockReset()
     mockPush.mockReset()
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-US') ?? null,
+      userLanguages: [],
+      needsRefresh: false,
+      isSwitching: false,
+    })
+    useLoadingStore.setState({ count: 0 })
   })
 
   it('opens the real level test when the final position is reached', async () => {
@@ -194,4 +198,285 @@ describe('My Plan level test node', () => {
     fireEvent.click(cardButton as HTMLButtonElement)
     expect(mockPush).not.toHaveBeenCalled()
   })
+
+  it.each([429, 503])(
+    'offers a curriculum-only retry after HTTP %s',
+    async (status) => {
+      mockPlan('in_progress')
+      const normal = mockApiFetch.getMockImplementation()!
+      let recover = false
+      mockApiFetch.mockImplementation((url: string) =>
+        url.startsWith('/api/curriculum/') && !recover
+          ? Promise.resolve(jsonResponse({}, status))
+          : normal(url)
+      )
+      render(<PlanPage />)
+      expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+      expect(screen.queryByText('noUnitsForLevel')).not.toBeInTheDocument()
+      expect(screen.getByText('unitsLabel').parentElement).toHaveTextContent(
+        '—'
+      )
+      const planRequests = mockApiFetch.mock.calls.filter(
+        ([url]) => url === '/api/study-plan/current'
+      ).length
+      recover = true
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      expect(await screen.findByText('Unit One')).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(
+        mockApiFetch.mock.calls.filter(
+          ([url]) => url === '/api/study-plan/current'
+        )
+      ).toHaveLength(planRequests)
+    }
+  )
+
+  it('shows no units only after a successful empty curriculum response', async () => {
+    mockPlan('in_progress')
+    const normal = mockApiFetch.getMockImplementation()!
+    let finish!: (response: Response) => void
+    const pending = new Promise<Response>((resolve) => {
+      finish = resolve
+    })
+    mockApiFetch.mockImplementation((url: string) =>
+      url.startsWith('/api/curriculum/') ? pending : normal(url)
+    )
+    render(<PlanPage />)
+    await screen.findByText('unitsLabel')
+    expect(screen.queryByText('noUnitsForLevel')).not.toBeInTheDocument()
+    expect(screen.getByText('unitsLabel').parentElement).toHaveTextContent('—')
+    await act(async () => finish(jsonResponse([])))
+    expect(screen.getByText('noUnitsForLevel')).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('ignores the old curriculum response after a language change', async () => {
+    mockPlan('in_progress')
+    const normal = mockApiFetch.getMockImplementation()!
+    let finishOld!: (response: Response) => void
+    const pending = new Promise<Response>((resolve) => {
+      finishOld = resolve
+    })
+    mockApiFetch.mockImplementation((url: string) =>
+      url === '/api/curriculum/A1?language=en-US' ? pending : normal(url)
+    )
+    render(<PlanPage />)
+    await waitFor(() =>
+      expect(mockApiFetch).toHaveBeenCalledWith(
+        '/api/curriculum/A1?language=en-US'
+      )
+    )
+    act(() =>
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('de-DE') ?? null,
+      })
+    )
+    expect(await screen.findByText('Unit One')).toBeInTheDocument()
+    await act(async () => finishOld(jsonResponse({}, 503)))
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.getByText('Unit One')).toBeInTheDocument()
+  })
+
+  it('recovers missing language context before loading the plan and releases loading after failure', async () => {
+    useLanguageStore.setState({ activeLanguage: null })
+    mockPlan('in_progress')
+    const normal = mockApiFetch.getMockImplementation()!
+    let recover = false
+    mockApiFetch.mockImplementation((url: string) =>
+      url === '/api/languages'
+        ? Promise.resolve(
+            recover
+              ? jsonResponse({
+                  languages: [{ target_language: 'de-DE', is_active: true }],
+                })
+              : jsonResponse({}, 503)
+          )
+        : normal(url)
+    )
+    render(<PlanPage />)
+    expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+    expect(useLoadingStore.getState().count).toBe(0)
+    expect(
+      mockApiFetch.mock.calls.every(([url]) => url === '/api/languages')
+    ).toBe(true)
+    recover = true
+    fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    expect(await screen.findByText('Unit One')).toBeInTheDocument()
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      '/api/curriculum/A1?language=de-DE'
+    )
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(useLoadingStore.getState().count).toBe(0)
+  })
+
+  it.each([200, 503])(
+    'ignores a previous full plan load (HTTP %s) after switching',
+    async (status) => {
+      mockPlan('ready', { cefr_level: 'B1' })
+      const old = mockApiFetch.getMockImplementation()!
+      let finish!: (response: Response) => void
+      const pending = new Promise<Response>((resolve) => {
+        finish = resolve
+      })
+      mockApiFetch.mockImplementation((url: string) =>
+        url === '/api/study-plan/current' ? pending : old(url)
+      )
+      render(<PlanPage />)
+      const signal = mockApiFetch.mock.calls.find(
+        ([url]) => url === '/api/study-plan/current'
+      )![1].signal as AbortSignal
+      act(() => useLanguageStore.setState({ isSwitching: true }))
+      expect(signal.aborted).toBe(true)
+      mockPlan('in_progress', { id: 28, cefr_level: 'B2' })
+      act(() =>
+        useLanguageStore.setState({
+          activeLanguage: getLanguageByCode('de-DE') ?? null,
+          isSwitching: false,
+        })
+      )
+      expect(await screen.findByText('B2')).toBeInTheDocument()
+      await screen.findByText('Unit One')
+      await act(async () =>
+        finish(jsonResponse({ ...planPayload, cefr_level: 'B1' }, status))
+      )
+      expect(screen.getByText('B2')).toBeInTheDocument()
+      expect(screen.queryByText('B1')).not.toBeInTheDocument()
+      expect(screen.queryByText('levelComplete')).not.toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(mockPush).not.toHaveBeenCalled()
+    }
+  )
+
+  it('does not load a plan while a cached language needs reconciliation', async () => {
+    useLanguageStore.setState({ needsRefresh: true })
+    mockApiFetch.mockResolvedValue(jsonResponse({}, 503))
+    render(<PlanPage />)
+    await screen.findByRole('alert')
+    expect(mockApiFetch.mock.calls.map(([url]) => url)).toEqual([
+      '/api/languages',
+    ])
+  })
+
+  it.each(['success', 'server-error', 'network'])(
+    'keeps the plan usable while /today takes more than 20 seconds (%s)',
+    async (outcome) => {
+      vi.useFakeTimers()
+      vi.spyOn(AbortSignal, 'timeout').mockImplementation((ms) => {
+        const controller = new AbortController()
+        setTimeout(
+          () => controller.abort(new DOMException('Timed out', 'TimeoutError')),
+          ms
+        )
+        return controller.signal
+      })
+      mockPlan('in_progress')
+      const normal = mockApiFetch.getMockImplementation()!
+      let finish!: (response: Response) => void
+      let fail!: (error: Error) => void
+      let todaySignal!: AbortSignal
+      mockApiFetch.mockImplementation((url: string, options?: RequestInit) => {
+        if (url !== '/api/study-plan/today') return normal(url)
+        todaySignal = options!.signal as AbortSignal
+        return new Promise<Response>((resolve, reject) => {
+          finish = resolve
+          fail = reject
+          todaySignal.addEventListener(
+            'abort',
+            () => reject(todaySignal.reason),
+            { once: true }
+          )
+        })
+      })
+      await act(async () => {
+        render(<PlanPage />)
+      })
+      expect(screen.getByText('Unit One')).toBeInTheDocument()
+      expect(useLoadingStore.getState().count).toBe(0)
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(25_000)
+      })
+      expect(todaySignal.aborted).toBe(false)
+      expect(screen.getByText('Unit One')).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      await act(async () => {
+        if (outcome === 'network') fail(new TypeError('Offline'))
+        else
+          finish(
+            jsonResponse(
+              {
+                completion: { state: 'ready' },
+                lessons: [
+                  {
+                    id: 101,
+                    title: 'Day 1 Lesson',
+                    lesson_type: 'grammar',
+                    week: 1,
+                    day: 1,
+                    is_completed: false,
+                  },
+                ],
+              },
+              outcome === 'success' ? 200 : 503
+            )
+          )
+      })
+      expect(screen.getByText('Unit One')).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      if (outcome === 'success')
+        expect(screen.getByText('levelComplete')).toBeInTheDocument()
+      else
+        expect(
+          screen.getByText('completionTestTitle').closest('button')
+        ).toBeDisabled()
+      expect(
+        mockApiFetch.mock.calls.filter(
+          ([url]) => url === '/api/study-plan/current'
+        )
+      ).toHaveLength(1)
+    }
+  )
+
+  it.each(['language', 'unmount'])(
+    'discards an independently delayed /today body after %s',
+    async (change) => {
+      mockPlan('in_progress')
+      const normal = mockApiFetch.getMockImplementation()!
+      let finish!: (body: unknown) => void
+      const response = jsonResponse({})
+      const readBody = vi.spyOn(response, 'json').mockReturnValue(
+        new Promise((resolve) => {
+          finish = resolve
+        })
+      )
+      mockApiFetch.mockImplementation((url: string) =>
+        url === '/api/study-plan/today'
+          ? Promise.resolve(response)
+          : normal(url)
+      )
+      const { unmount } = render(<PlanPage />)
+      await screen.findByText('Unit One')
+      expect(readBody).toHaveBeenCalled()
+      const signal = mockApiFetch.mock.calls.find(
+        ([url]) => url === '/api/study-plan/today'
+      )![1].signal as AbortSignal
+      if (change === 'unmount') unmount()
+      else {
+        mockPlan('in_progress', { id: 28, cefr_level: 'B2' })
+        act(() =>
+          useLanguageStore.setState({
+            activeLanguage: getLanguageByCode('de-DE') ?? null,
+          })
+        )
+        await screen.findByText('B2')
+      }
+      expect(signal.aborted).toBe(true)
+      await act(async () =>
+        finish({ lessons: [], completion: { state: 'ready' } })
+      )
+      expect(screen.queryByText('levelComplete')).not.toBeInTheDocument()
+      expect(mockPush).not.toHaveBeenCalled()
+      if (change === 'language')
+        expect(screen.getByText('B2')).toBeInTheDocument()
+    }
+  )
 })

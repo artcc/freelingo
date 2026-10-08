@@ -117,6 +117,14 @@ flashcards.
 Progress has daily rows per user, plan, and date with XP, lessons, exercises, streak, and skill JSON.
 `UserCompetency` stores one row per user, plan, unit, and competency text.
 
+The Progress screen shows current-plan XP, today's XP, the current streak, seven-day activity,
+lesson count and lesson-exercise accuracy through the shared dashboard overview. Accuracy remains
+unset before any lesson exercises. Daily history supplies a rolling 28-day XP chart and activity
+calendar, including zero-XP practice and inactive gaps, using UTC dates. A reward guide explains
+the existing sources, thresholds and daily limits with links to practice. It is guidance rather
+than a per-source XP breakdown or a record of earned milestones. Competencies, vocabulary coverage
+and recent skill performance remain separate from participation rewards.
+
 ### Activity and rewards
 
 Activity days use UTC. Submitted Reading/Listening attempts count even with zero correct answers
@@ -191,8 +199,13 @@ starts at the latest score. Lesson completion applies the lesson's mean answered
 - `GET /api/progress/competencies`: authenticated, `60/minute`; returns unit ID, average score,
   mastered count, and total count, or an empty list without a plan.
 
-The Progress page does not request daily history. It combines summary, unit aggregates, plan,
-curriculum, and flashcards. Because the API does not return individual competency status, the page
+The Progress page combines summary, daily history, unit aggregates, plan, curriculum, vocabulary,
+and flashcards. It waits for local language switching to finish and reconciles missing or invalidated
+language context before loading these resources. Failed reconciliation and curriculum HTTP errors
+show a retry action; an unsuccessful curriculum request is not treated as an empty collection.
+These frontend guards do not make active-plan endpoints atomic across concurrent changes in other
+tabs; their responses do not expose a shared context identity for verification.
+Because the API does not return individual competency status, the page
 presents the first `mastered_count` curriculum competencies as mastered and cannot identify the
 actual mastered items. Unit bars use mastered count rather than average score.
 

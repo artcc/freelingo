@@ -24,6 +24,7 @@ export default function MyLanguagesPage() {
   const router = useRouter()
   const userLanguages = useLanguageStore((s) => s.userLanguages)
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
   const switchLanguage = useLanguageStore((s) => s.switchLanguage)
   const addLanguage = useLanguageStore((s) => s.addLanguage)
@@ -53,7 +54,7 @@ export default function MyLanguagesPage() {
   }
 
   async function handleSwitch(info: UserLanguageInfo) {
-    if (info.is_active) return
+    if (info.is_active || useLanguageStore.getState().isSwitching) return
     setSwitchingCode(info.target_language)
     setToast('')
     const ok = await switchLanguage(info.target_language)
@@ -248,7 +249,7 @@ export default function MyLanguagesPage() {
                       <>
                         <button
                           onClick={() => handleSwitch(ulang)}
-                          disabled={switchingCode === ulang.target_language}
+                          disabled={isSwitching}
                           className="text-fl-bg bg-fl-fg hover:bg-fl-accent/90 px-3 py-1 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-40"
                         >
                           {switchingCode === ulang.target_language

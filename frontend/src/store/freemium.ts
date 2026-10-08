@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { apiFetch } from '@/lib/api'
+import { useAuthStore } from '@/store/auth'
 
 interface FreemiumStatus {
   trial_active: boolean
@@ -33,6 +34,9 @@ type NumericFreemiumKey =
   | 'listening_remaining'
   | 'reading_remaining'
 
+let statusRequestId = 0
+let consumptionVersion = 0
+
 export const useFreemiumStore = create<FreemiumStore>((set, get) => ({
   status: null,
   loaded: false,
@@ -41,16 +45,31 @@ export const useFreemiumStore = create<FreemiumStore>((set, get) => ({
     const now = Date.now()
     // Cache for 60 seconds
     if (!force && get().loaded && now - get().lastFetch < 60_000) return
+    const requestId = ++statusRequestId
+    const version = consumptionVersion
+    const { sessionVersion } = useAuthStore.getState()
+    if (force) set({ lastFetch: 0 })
     try {
       const res = await apiFetch('/api/freemium/status')
       if (!res.ok) return
       const data: FreemiumStatus = await res.json()
+      if (
+        requestId !== statusRequestId ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
+      )
+        return
+      // A read started before a confirmed consumption may contain the old quota.
+      if (version !== consumptionVersion) {
+        await get().fetchStatus(true)
+        return
+      }
       set({ status: data, loaded: true, lastFetch: now })
     } catch {
       // Non-fatal
     }
   },
   decrement: (feature: NumericFreemiumKey) => {
+    ++consumptionVersion
     const current = get().status
     if (!current) return
     set({

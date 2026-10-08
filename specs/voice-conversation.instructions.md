@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for voice conversation: startup, WebSocket protocol, VAD capture, STT-LLM-TTS turns, playback, persistence, memory, quotas, timeouts, and recovery."
-applyTo: "backend/app/routers/conversation.py, backend/app/services/conversation_pipeline.py, backend/app/services/{assessment_voice_trial,quota_service,memory_service}.py, backend/app/models/{conversation,chat_history,llm_usage}.py, frontend/src/app/(app)/conversation/**, frontend/src/components/conversation/**, frontend/src/lib/{audio,conversation-vad,conversation-ws}.ts, frontend/public/vad/**"
+applyTo: "backend/app/routers/conversation.py, backend/app/services/conversation_pipeline.py, backend/app/services/{assessment_voice_trial,quota_service,memory_service}.py, backend/app/models/{conversation,chat_history,llm_usage}.py, frontend/src/app/(app)/conversation/**, frontend/src/components/conversation/**, frontend/src/lib/{audio,conversation-vad,conversation-ws}.ts, frontend/public/vad/**, frontend/scripts/{patch-vad,copy-vad-models}.js, frontend/package.json"
 ---
 
 # Voice Conversation
@@ -51,6 +51,10 @@ demo token, and conversation ID. A missing or invalid token produces `auth_faile
 The session fixes user, plan, target language, CEFR level, native language, voice, limits, and access
 mode at connection time. They are not refreshed globally during the session, except memories and
 native language before each normal user turn.
+
+Suggested conversation topics supply a learner message about the selected topic without naming a
+practice language. The session's resolved target language remains authoritative; starters do not
+request English when a different target language is selected.
 
 ## Language and plan resolution
 
@@ -164,6 +168,16 @@ turn emits `tts_failed` and is not persisted.
 
 The frontend uses `@ricky0123/vad-react`, Silero VAD v5, and assets served from `/vad/`. ONNX runtime
 is configured with one thread.
+
+`frontend/package.json` runs `scripts/patch-vad.js` before copying VAD assets during `postinstall`.
+The patch targets `@ricky0123/vad-web` 0.0.30 and `@ricky0123/vad-react` 0.0.36. It verifies both
+package versions and source hashes before writing either package, accepts repeated application, and
+fails installation on unexpected contents. Dependency upgrades require reviewing this contract.
+
+The patched lifecycle shares pending starts and makes destruction idempotent. Destruction waits for
+an in-flight start/resume, safely releases instances that never started, disconnects the VAD node,
+releases the model, and closes only an owned AudioContext. Cancelled React initialization ignores late
+successes and failures; asynchronous destruction errors are caught and logged.
 
 End-of-turn pause is either the user's explicit 1, 2, or 3 seconds or the CEFR-derived automatic
 value:

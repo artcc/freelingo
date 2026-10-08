@@ -6,17 +6,29 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAuthStore, isSubscribed } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, requestAccessToken } from '@/lib/api'
 import { mapUser } from '@/lib/mappers'
 import { useLogout } from '@/hooks/useLogout'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { ContactFormModal } from '@/components/ui/contact-form-modal'
 import { LoadingBar } from '@/components/ui/loading-bar'
 import { PageLoading } from '@/components/ui/page-loading'
+import {
+  PageLoadingProvider,
+  PageLoadingViewport,
+} from '@/components/ui/page-loading-boundary'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { AuthAvatarImage } from '@/components/AuthAvatarImage'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <PageLoadingProvider>
+      <AppLayoutContent>{children}</AppLayoutContent>
+    </PageLoadingProvider>
+  )
+}
+
+function AppLayoutContent({ children }: { children: React.ReactNode }) {
   const tNav = useTranslations('nav')
   const tCommon = useTranslations('common')
   const tBilling = useTranslations('billing')
@@ -83,31 +95,32 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   // On every page load, Zustand is empty. Use the httpOnly refresh cookie
   // to silently get a new access token, then fetch /me to populate the user.
   useEffect(() => {
+    let canceled = false
+    const controller = new AbortController()
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      canceled || useAuthStore.getState().sessionVersion !== sessionVersion
     async function init() {
       // Load Stripe config once (non-blocking)
       loadConfig()
       try {
         if (!accessToken) {
-          const res = await fetch('/api/auth/refresh', {
-            method: 'POST',
-            credentials: 'include',
-          })
-          if (!res.ok) {
-            logout()
-            router.push('/login')
-            return
-          }
-          const { access_token } = await res.json()
+          const access_token = await requestAccessToken()
+          if (obsolete()) return
           setTokens(access_token)
         }
         // Fetch user info if not already loaded
-        const meRes = await apiFetch('/api/auth/me')
+        const meRes = await apiFetch('/api/auth/me', {
+          signal: controller.signal,
+        })
+        if (obsolete()) return
         if (!meRes.ok) {
           logout()
           router.push('/login')
           return
         }
         const me = await meRes.json()
+        if (obsolete()) return
         setUser(mapUser(me))
 
         if (me.learning_goals === null) {
@@ -115,13 +128,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           return
         }
       } catch {
+        if (obsolete()) return
         logout()
         router.push('/login')
       } finally {
-        setInitializing(false)
+        if (!canceled) setInitializing(false)
       }
     }
     init()
+    return () => {
+      canceled = true
+      controller.abort()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -193,11 +211,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (initializing) {
     return (
-      <PageLoading
-        label={tCommon('initializing')}
-        minHeight="min-h-screen"
-        className="bg-fl-bg"
-      />
+      <PageLoadingViewport className="h-dvh">
+        <PageLoading label={tCommon('initializing')} className="bg-fl-bg" />
+      </PageLoadingViewport>
     )
   }
 
@@ -209,7 +225,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         : ''
 
   return (
-    <div className="bg-fl-bg flex min-h-screen md:h-screen md:overflow-hidden">
+    <div className="bg-fl-bg flex h-dvh overflow-hidden">
       {/* Sidebar */}
       <aside className="border-fl-border bg-fl-bg hidden w-52 shrink-0 flex-col border-r px-0 py-0 md:flex">
         {/* Logo area */}
@@ -380,7 +396,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.10.10
+            v1.10.15
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -576,7 +592,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </p>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.10.10
+                v1.10.15
               </p>
               <button
                 onClick={() => {
@@ -602,10 +618,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Main */}
-      <main className="flex min-h-[100dvh] flex-1 flex-col overflow-hidden pt-14 md:min-h-screen md:pt-0">
+      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pt-14 md:pt-0">
         {/* Email verification banner */}
         {user && user.is_verified === false && (
-          <div className="border-fl-border bg-fl-surface flex flex-wrap items-center gap-x-4 gap-y-1 border-b px-4 py-2">
+          <div className="border-fl-border bg-fl-surface flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 border-b px-4 py-2">
             <span className="text-fl-muted-1 font-mono text-xs tracking-wide">
               ● {tCommon('verifyEmailBanner')}
             </span>
@@ -623,7 +639,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </div>
         )}
-        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        <PageLoadingViewport>{children}</PageLoadingViewport>
       </main>
 
       <LoadingBar />

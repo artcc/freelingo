@@ -5,13 +5,14 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
-import { useLanguageStore } from '@/store/language'
+import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { type ReadingExercise } from '@/types/api'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
+import { ExerciseGenerationLoading } from '@/components/ui/exercise-generation-loading'
 import { Pagination } from '@/components/ui/pagination'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import {
@@ -70,6 +71,8 @@ function ReadingPage() {
   const activePlan = useLanguageStore(
     (s) => s.userLanguages.find((l) => l.is_active)?.plan
   )
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const {
     selectedWord,
     tooltipPos,
@@ -95,6 +98,22 @@ function ReadingPage() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
+  const attemptRequest = useRef<AbortController | null>(null)
+  useEffect(() => {
+    setSubmitting(false)
+    setReviewPromptOpen(false)
+    return () => {
+      attemptRequest.current?.abort()
+      attemptRequest.current = null
+    }
+  }, [
+    exercise,
+    activeLanguage?.code,
+    activePlan?.id,
+    activePlan?.cefr_level,
+    needsRefresh,
+    sessionVersion,
+  ])
 
   const textRef = useRef<HTMLDivElement>(null)
   const [isReplay, setIsReplay] = useState(false)
@@ -159,12 +178,44 @@ function ReadingPage() {
   })
 
   async function handleSubmit() {
-    if (!exercise || !exerciseContext) return
+    if (!exercise || !exerciseContext || attemptRequest.current) return
+    const controller = new AbortController()
+    const current = () => {
+      const context = useLanguageStore.getState()
+      const plan = context.userLanguages.find((l) => l.is_active)?.plan
+      return (
+        !controller.signal.aborted &&
+        !context.isSwitching &&
+        !context.needsRefresh &&
+        context.activeLanguage?.code === activeLanguage?.code &&
+        plan?.id === activePlan?.id &&
+        plan?.cefr_level === activePlan?.cefr_level &&
+        useAuthStore.getState().sessionVersion === sessionVersion
+      )
+    }
+    if (!current()) return
+    attemptRequest.current = controller
     setSubmitting(true)
     setError('')
+    let quotaConfirmed = false
+    const quotaAtStart = useFreemiumStore.getState().status
+    let reconciliationStarted = false
+    const tracksQuota =
+      !isSubscribed(user, stripeEnabled) &&
+      !isFreemiumTrialActive(user, stripeEnabled)
+    const sameSession = () =>
+      useAuthStore.getState().sessionVersion === sessionVersion
+    const reconcileQuota = () => {
+      if (tracksQuota && sameSession() && !reconciliationStarted) {
+        reconciliationStarted = true
+        void fetchFreemium(true)
+      }
+    }
     try {
       const res = await apiFetch('/api/reading/attempt', {
         method: 'POST',
+        // Keep observing the POST after local cancellation: the server may
+        // persist it and consume the user's global quota in another context.
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           exercise_id: exercise.id,
@@ -174,7 +225,10 @@ function ReadingPage() {
         }),
       })
       if (!res.ok) {
+        if (res.status >= 500 || res.status === 408) reconcileQuota()
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
+        await waitForLanguageSwitch(controller.signal)
+        if (!current()) return
         setError(
           d.detail === 'study_context_changed'
             ? tGeneration('contextChanged')
@@ -184,15 +238,18 @@ function ReadingPage() {
         )
         return
       }
+      quotaConfirmed = true
+      if (tracksQuota && sameSession()) {
+        // A newer snapshot may already include this POST's consumption.
+        if (useFreemiumStore.getState().status === quotaAtStart)
+          decrementFreemium('reading_remaining')
+        else reconcileQuota()
+      }
       const data = (await res.json()) as SubmitResult
+      await waitForLanguageSwitch(controller.signal)
+      if (!current()) return
       setResult(data)
       dismissTooltip()
-      if (
-        !isSubscribed(user, stripeEnabled) &&
-        !isFreemiumTrialActive(user, stripeEnabled)
-      ) {
-        decrementFreemium('reading_remaining')
-      }
       setPageState('results')
       if (
         shouldShowExerciseReviewPrompt(getReviewPromptDismissal(), !isReplay)
@@ -200,9 +257,14 @@ function ReadingPage() {
         setReviewPromptOpen(true)
       }
     } catch {
-      setError(t('errorSubmit'))
+      if (!quotaConfirmed) reconcileQuota()
+      await waitForLanguageSwitch(controller.signal)
+      if (current()) setError(t('errorSubmit'))
     } finally {
-      setSubmitting(false)
+      if (attemptRequest.current === controller) {
+        attemptRequest.current = null
+        if (current()) setSubmitting(false)
+      }
     }
   }
 
@@ -240,20 +302,16 @@ function ReadingPage() {
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (pageState === 'loading') {
-    return <PageLoading minHeight="min-h-[calc(100vh-56px)] md:min-h-screen" />
+    return <PageLoading />
   }
 
   // ── Generating (long-poll) ────────────────────────────────────────────────
   if (pageState === 'generating') {
     return (
-      <PageLoading
+      <ExerciseGenerationLoading
         label={t('generating')}
-        subtext={
-          generatingWarn
-            ? `${t('generatingDesc')} ${t('generatingLong')}`
-            : t('generatingDesc')
-        }
-        minHeight="min-h-[calc(100vh-56px)] md:min-h-screen"
+        description={t('generatingDesc')}
+        warning={generatingWarn ? t('generatingLong') : undefined}
       />
     )
   }

@@ -27,7 +27,8 @@ vi.mock('next/link', () => ({
     React.createElement('a', { href: String(href), ...props }, children),
 }))
 
-vi.mock('@/lib/api', () => ({
+vi.mock('@/lib/api', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/api')>()),
   apiFetch: mockApiFetch,
 }))
 
@@ -69,6 +70,38 @@ afterEach(() => {
 })
 
 describe('BillingSuccessPage', () => {
+  it('does not restore a token after the confirmation page unmounts', async () => {
+    useAuthStore.setState({ accessToken: null })
+    let finish!: (response: Response) => void
+    const mock = vi.spyOn(globalThis, 'fetch').mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve
+      })
+    )
+    const { unmount } = render(<BillingSuccessPage />)
+    unmount()
+    await act(async () => finish(jsonResponse({ access_token: 'obsolete' })))
+    expect(useAuthStore.getState().accessToken).toBeNull()
+    expect(mockApiFetch).not.toHaveBeenCalled()
+    mock.mockRestore()
+  })
+
+  it('does not publish a profile whose body finishes after session replacement', async () => {
+    let finish!: (body: unknown) => void
+    mockApiFetch.mockResolvedValue({
+      ok: true,
+      json: () =>
+        new Promise((resolve) => {
+          finish = resolve
+        }),
+    })
+    render(<BillingSuccessPage />)
+    await waitFor(() => expect(finish).toBeDefined())
+    useAuthStore.getState().startSession('new-session')
+    await act(async () => finish(me('active')))
+    expect(useAuthStore.getState().user).toBeNull()
+    expect(mockPush).not.toHaveBeenCalled()
+  })
   it('shows confirmed Premium copy only after /me returns an active subscription', async () => {
     mockApiFetch.mockResolvedValueOnce(jsonResponse(me('active')))
 
@@ -85,9 +118,9 @@ describe('BillingSuccessPage', () => {
 
   it('refreshes the session before checking /me when the access token is missing', async () => {
     useAuthStore.setState({ accessToken: null, user: null })
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      jsonResponse({ access_token: 'new-token' })
-    )
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(jsonResponse({ access_token: 'new-token' }))
     mockApiFetch.mockResolvedValueOnce(jsonResponse(me('trialing')))
 
     render(<BillingSuccessPage />)
@@ -103,7 +136,9 @@ describe('BillingSuccessPage', () => {
 
   it('does not show active Premium copy when /me never confirms the subscription', async () => {
     vi.useFakeTimers()
-    mockApiFetch.mockImplementation(() => Promise.resolve(jsonResponse(me('none'))))
+    mockApiFetch.mockImplementation(() =>
+      Promise.resolve(jsonResponse(me('none')))
+    )
 
     render(<BillingSuccessPage />)
 

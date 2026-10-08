@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { ElementType, HTMLAttributes, ReactNode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -174,10 +174,32 @@ function mockApi(
   })
 }
 
+async function renderLesson() {
+  let result!: ReturnType<typeof render>
+  // Finish the mocked load and answer-restoration effect before interacting.
+  // Finding the textarea alone can observe the DOM before that effect runs.
+  await act(async () => {
+    result = render(<LessonPage />)
+  })
+  return result
+}
+
 async function submitFreeWriteAnswer() {
-  const textarea = await screen.findByPlaceholderText('yourAnswer')
+  const textarea = screen.getByPlaceholderText('yourAnswer')
   fireEvent.change(textarea, { target: { value: ANSWER } })
-  fireEvent.click(screen.getByRole('button', { name: 'submitAnswer' }))
+  expect(textarea).toHaveValue(ANSWER)
+  const submitButton = screen.getByRole('button', { name: 'submitAnswer' })
+  expect(submitButton).toBeEnabled()
+  fireEvent.click(submitButton)
+  await waitFor(() =>
+    expect(mocks.apiFetch).toHaveBeenCalledWith(
+      '/api/lessons/exercises/10/answer',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ answer: ANSWER }),
+      })
+    )
+  )
 }
 
 function annotatedBlock(container: HTMLElement): HTMLElement {
@@ -197,13 +219,13 @@ describe('LessonPage free-write corrections', () => {
 
   it('offers voice practice when reviewing a completed lesson', async () => {
     mockApi(lessonDetail({ isCompleted: true }))
-    render(<LessonPage />)
+    await renderLesson()
     expect(await screen.findByRole('button', { name: 'action' })).toBeInTheDocument()
   })
 
   it('does not offer lesson practice before completion', async () => {
     mockApi(lessonDetail({}))
-    render(<LessonPage />)
+    await renderLesson()
     await screen.findByPlaceholderText('yourAnswer')
     expect(screen.queryByRole('button', { name: 'action' })).toBeNull()
   })
@@ -217,7 +239,7 @@ describe('LessonPage free-write corrections', () => {
       }
       return Promise.resolve(new Response(null, { status: 404 }))
     })
-    render(<LessonPage />)
+    await renderLesson()
     fireEvent.click(await screen.findByRole('button', { name: 'completeLesson' }))
     await screen.findByText('lessonDone')
     expect(screen.getByRole('button', { name: 'action' })).toBeInTheDocument()
@@ -231,21 +253,13 @@ describe('LessonPage free-write corrections', () => {
       correct_answer: 'Sample answer.',
       corrections: CORRECTIONS,
     })
-    const { container } = render(<LessonPage />)
+    const { container } = await renderLesson()
 
     await submitFreeWriteAnswer()
 
     await waitFor(() =>
       expect(screen.queryByPlaceholderText('yourAnswer')).toBeNull()
     )
-    expect(mocks.apiFetch).toHaveBeenCalledWith(
-      '/api/lessons/exercises/10/answer',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ answer: ANSWER }),
-      })
-    )
-
     const block = annotatedBlock(container)
     expect(block.textContent).toBe(
       'Ich habe viele abenteuer Abenteuer gehabt. Ich bin mit auto mit dem Auto gefahren.'
@@ -292,7 +306,7 @@ describe('LessonPage free-write corrections', () => {
         },
       })
     )
-    const { container } = render(<LessonPage />)
+    const { container } = await renderLesson()
 
     await screen.findByText('corrections')
 
@@ -316,7 +330,7 @@ describe('LessonPage free-write corrections', () => {
       correct_answer: 'Sample answer.',
       corrections: null,
     })
-    const { container } = render(<LessonPage />)
+    const { container } = await renderLesson()
 
     await submitFreeWriteAnswer()
 
@@ -338,7 +352,7 @@ describe('LessonPage free-write corrections', () => {
       correct_answer: 'Sample answer.',
       corrections: [],
     })
-    render(<LessonPage />)
+    await renderLesson()
 
     await submitFreeWriteAnswer()
 

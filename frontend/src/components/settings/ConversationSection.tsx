@@ -34,6 +34,7 @@ export function ConversationSection({ title }: { title?: string } = {}) {
   }, [user])
 
   async function handleSaveConversation() {
+    const { sessionVersion } = useAuthStore.getState()
     setSavingConv(true)
     setConvMessage(null)
     try {
@@ -48,6 +49,7 @@ export function ConversationSection({ title }: { title?: string } = {}) {
       })
       if (!res.ok) throw new Error(t('saveFailed'))
       const updated = await res.json()
+      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
       setUser(mapUser(updated, user))
       setConvMessage({ type: 'ok', text: t('conversationSaved') })
     } catch {

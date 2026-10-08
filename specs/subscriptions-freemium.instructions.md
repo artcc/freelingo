@@ -204,8 +204,11 @@ General conversation and LLM quotas apply independently of freemium:
 - maximum conversation duration;
 - inactivity timeout.
 
-For these user quotas, zero means unlimited. Verified checkout activation resets them from the
-configured defaults. Administrators may override them regardless of Stripe state.
+Zero means unlimited for weekly sessions, daily/weekly minutes, and monthly tokens. Maximum duration
+and inactivity are bounded settings instead: configuration and profile updates accept 900 or 1800
+seconds for maximum duration, and 60, 180, or 300 seconds for inactivity. Zero is not an unlimited
+option for these settings. Verified checkout activation resets quotas and timeouts from configured
+defaults. Administrators may override them regardless of Stripe state.
 
 ## Post-assessment voice demo
 

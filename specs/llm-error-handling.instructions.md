@@ -60,11 +60,12 @@ not enable provider-side JSON Schema enforcement.
 Only callers using `structured_output()` receive this correction behavior. Assessment free-write and
 end-of-level test generation use raw `chat()` plus `json.loads()` and do not receive Pydantic recovery.
 
-Error Detective uses the same deadline-aware structured-output path for generation and semantic
-review. Up to two candidates share one inference budget; each structured call retains the adapter's
-bounded JSON repair. Terminal state is stored in PostgreSQL. Timeout, rejected content or provider
-failure prevents publication and releases the admission reservation. Interrupted processes leave a
-generation that expires at its persisted deadline; late results cannot overwrite terminal state.
+Error Detective, Sentence Order, and Vocabulary Pairs use the same deadline-aware structured-output
+path for generation and semantic review. Up to two candidates share one inference budget; each
+structured call retains the adapter's bounded JSON repair. Terminal state is stored in PostgreSQL.
+Timeout, rejected content or provider failure prevents publication and releases the admission
+reservation. Interrupted processes leave a generation that expires at its persisted deadline; late
+results cannot overwrite terminal state.
 
 ## Context size
 

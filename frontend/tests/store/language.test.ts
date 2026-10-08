@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { useLanguageStore } from '@/store/language'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
+import { useAuthStore } from '@/store/auth'
 
 vi.mock('@/lib/api', () => ({
   apiFetch: vi.fn(),
@@ -299,19 +300,102 @@ describe('useLanguageStore — fetchLanguages', () => {
     expect(useLanguageStore.getState().needsRefresh).toBe(false)
   })
 
-  it('does not publish a cancelled language response', async () => {
+  it('cancels only the local wait and still publishes the shared language response', async () => {
     const controller = new AbortController()
     useLanguageStore.setState({ needsRefresh: true })
-    mockApiFetch.mockImplementationOnce(async () => {
-      controller.abort()
-      return mockResponse(fullResponse)
-    })
+    let finish!: (response: Response) => void
+    mockApiFetch.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve
+      })
+    )
+    const page = useLanguageStore.getState().fetchLanguages(controller.signal)
+    const selector = useLanguageStore.getState().fetchLanguages()
+    controller.abort()
+    expect(await page).toBe(false)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage).toBeNull()
+    expect(mockApiFetch).toHaveBeenCalledTimes(1)
+    expect(mockApiFetch.mock.calls[0][1]?.signal?.aborted).toBe(false)
+    finish(mockResponse(fullResponse))
+    expect(await selector).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
+  it('does not start a global query for an already cancelled consumer', async () => {
+    const controller = new AbortController()
+    controller.abort()
     expect(
       await useLanguageStore.getState().fetchLanguages(controller.signal)
     ).toBe(false)
-    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    expect(mockApiFetch).not.toHaveBeenCalled()
+  })
+
+  it('does not let an invalidated query clear the newer in-flight query', async () => {
+    let finishOld!: (response: Response) => void
+    let finishNew!: (response: Response) => void
+    mockApiFetch
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          finishOld = resolve
+        })
+      )
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          finishNew = resolve
+        })
+      )
+    const old = useLanguageStore.getState().fetchLanguages()
+    useLanguageStore.getState().invalidateLanguages()
+    const current = useLanguageStore.getState().fetchLanguages()
+    finishOld(mockResponse(fullResponse))
+    expect(await old).toBe(false)
+    const subscriber = useLanguageStore.getState().fetchLanguages()
+    expect(mockApiFetch).toHaveBeenCalledTimes(2)
+    finishNew(mockResponse(fullResponse))
+    expect(await current).toBe(true)
+    expect(await subscriber).toBe(true)
+  })
+
+  it('does not publish recovery from a previous authentication session', async () => {
+    let finish!: (response: Response) => void
+    mockApiFetch.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve
+      })
+    )
+    const old = useLanguageStore.getState().fetchLanguages()
+    useAuthStore.getState().startSession('another-session')
+    finish(mockResponse(fullResponse))
+    expect(await old).toBe(false)
     expect(useLanguageStore.getState().activeLanguage).toBeNull()
   })
+
+  it.each(['add', 'remove'])(
+    'does not reuse a pre-mutation query after %s',
+    async (operation) => {
+      let finishOld!: (response: Response) => void
+      mockApiFetch.mockReturnValueOnce(
+        new Promise((resolve) => {
+          finishOld = resolve
+        })
+      )
+      const old = useLanguageStore.getState().fetchLanguages()
+      mockApiFetch
+        .mockResolvedValueOnce(mockResponse({}))
+        .mockResolvedValueOnce(mockResponse(fullResponse))
+      const ok =
+        operation === 'add'
+          ? await useLanguageStore.getState().addLanguage('de-DE')
+          : await useLanguageStore.getState().removeLanguage('it-IT')
+      expect(ok).toBe(true)
+      expect(mockApiFetch).toHaveBeenCalledTimes(3)
+      finishOld(mockResponse({ languages: [] }))
+      expect(await old).toBe(false)
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+    }
+  )
 })
 
 describe('useLanguageStore — switchLanguage', () => {
@@ -353,6 +437,43 @@ describe('useLanguageStore — switchLanguage', () => {
 
     expect(result).toBe(true)
     expect(useLanguageStore.getState().isSwitching).toBe(false)
+  })
+
+  it('rejects overlapping switches throughout PUT and reconciliation without releasing the lock', async () => {
+    let finishPut!: (response: Response) => void
+    let finishGet!: (response: Response) => void
+    mockApiFetch
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          finishPut = resolve
+        })
+      )
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          finishGet = resolve
+        })
+      )
+    const first = useLanguageStore.getState().switchLanguage('de-DE')
+    expect(await useLanguageStore.getState().switchLanguage('fr-FR')).toBe(
+      false
+    )
+    expect(mockApiFetch).toHaveBeenCalledTimes(1)
+    expect(useLanguageStore.getState().isSwitching).toBe(true)
+    finishPut(mockResponse({}))
+    await vi.waitFor(() => expect(mockApiFetch).toHaveBeenCalledTimes(2))
+    expect(await useLanguageStore.getState().switchLanguage('fr-FR')).toBe(
+      false
+    )
+    expect(useLanguageStore.getState().isSwitching).toBe(true)
+    expect(mockApiFetch).toHaveBeenCalledTimes(2)
+    finishGet(
+      mockResponse({
+        languages: [{ target_language: 'de-DE', is_active: true }],
+      })
+    )
+    expect(await first).toBe(true)
+    expect(useLanguageStore.getState().isSwitching).toBe(false)
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('de-DE')
   })
 
   it('resets isSwitching even on API failure', async () => {

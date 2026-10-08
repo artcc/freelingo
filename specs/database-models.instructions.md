@@ -50,7 +50,7 @@ Registration, authentication, and user preferences.
 **Columns:**
 
 - `id` — integer primary key.
-- `username` — unique string used for login.
+- `username` — unique public account identifier; login uses email and password.
 - `email` — unique string; nullable at DB level for legacy rows, but required by public registration and admin user creation.
 - `display_name` — string shown in the UI.
 - `hashed_password` — bcrypt hash.
@@ -128,7 +128,7 @@ One active plan per user per language, generated after CEFR assessment.
 - **duration_weeks** — Type: integer. Notes: UI presets are 4, 8, 12, or 16; the schema does not enforce this set.
 - **days_per_week** — Type: integer. Notes: UI-derived values are 5, 5, 4, or 3; the schema does not enforce this set.
 - **current_unit** — Type: string. Notes: Initialized to the first curriculum unit; current production flows do not advance this field.
-- **progress_day** — Type: integer. Notes: 0-indexed count of days completed. `N` means N days done; user is on day index N. Default 0. See `specs/study-plan.instructions.md` for full semantics.
+- **progress_day** — Type: integer. Notes: Number of completed or passed plan days, including skipped days; also the zero-based current day index. Default 0. It is not a count of completed lessons. See `study-plan.instructions.md` for advancement and exhaustion rules.
 - **generated_plan** — Type: JSON. Notes: Full week-by-week plan (WeekPlan → DayPlan → Unit assignments)
 - **is_active** — Type: boolean. Notes: True for the current plan
 - **completion_test_taken** — Type: boolean. Notes: Whether end-of-level test was completed
@@ -141,12 +141,16 @@ One active plan per user per language, generated after CEFR assessment.
 
 - Partial unique index `uq_active_plan_per_lang` on `(user_language_id)` WHERE `is_active = true` — enforces one active plan per user per language.
 
-**Intensity / duration mapping:**
+**UI intensity / duration presets:**
 
-- Intensive — Weeks: 4; Days/week: 5; Total lessons: ~20
-- Standard — Weeks: 8; Days/week: 5; Total lessons: ~40
-- Relaxed (default) — Weeks: 12; Days/week: 4; Total lessons: ~48
-- Very relaxed — Weeks: 16; Days/week: 3; Total lessons: ~48
+- Intensive: 4 weeks × 5 days = 20 slots.
+- Standard: 8 weeks × 5 days = 40 slots.
+- Relaxed (default): 12 weeks × 4 days = 48 slots.
+- Very relaxed: 16 weeks × 3 days = 48 slots.
+
+The final slot is reserved for the level-completion test; the remaining slots schedule teaching
+lessons. These presets are not database constraints. Plan creation validates curriculum capacity as
+defined in `study-plan.instructions.md`.
 
 ## Lesson (`lessons`)
 
@@ -419,8 +423,8 @@ One moderated product review per user.
 
 - id — Type: integer; Notes: Primary key
 - user_id — Type: integer; Notes: FK -> users (CASCADE DELETE), unique, indexed
-- user_display_name — Type: string(150); Notes: Snapshot of the user's visible name when the review is created
-- target_language — Type: string(10); Notes: Active learning language when the review is created, indexed
+- user_display_name — Type: string(150); Notes: Snapshot of the user's visible name, refreshed on creation and user edits
+- target_language — Type: string(10); Notes: Learning-language snapshot, refreshed on creation and user edits from the active language or the user's compatibility field when no language is active; indexed
 - rating — Type: integer; Notes: Required 1-5 star rating
 - comment — Type: text; Notes: Optional review comment
 - is_approved — Type: boolean; Notes: Admin moderation flag, default `false`, indexed
@@ -429,7 +433,7 @@ One moderated product review per user.
 
 **Constraints and indexes:**
 
-- `uq_reviews_user_id` - enforces exactly one review per user.
+- `uq_reviews_user_id` - permits at most one review per user.
 - `ck_reviews_rating_range` - enforces `rating >= 1 AND rating <= 5`.
 - Indexes: `user_id`, `target_language`, `is_approved`, `created_at`.
 
