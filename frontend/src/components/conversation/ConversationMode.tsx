@@ -1288,23 +1288,32 @@ export default function ConversationMode({
             <p className="text-fl-hint text-fl-muted-3 mb-3 text-center font-mono tracking-widest uppercase">
               {t('startersHint')}
             </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {visibleStarters.map((topic) => (
-                <button
-                  key={topic}
-                  onClick={() =>
-                    void handleStart([
-                      {
-                        role: 'user',
-                        content: `I'd like to practice English by talking about ${topic}.`,
-                      },
-                    ])
-                  }
-                  className="text-fl-muted-1 border-fl-border hover:border-fl-border-2 hover:text-fl-fg border px-3 py-2 font-mono text-xs tracking-wide transition-colors"
-                >
-                  {topic}
-                </button>
-              ))}
+            <div className="flex flex-wrap justify-center gap-2 md:flex-col md:items-center">
+              {[visibleStarters.slice(0, 3), visibleStarters.slice(3)].map(
+                (row, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    className="contents md:flex md:justify-center md:gap-2"
+                  >
+                    {row.map((topic) => (
+                      <button
+                        key={topic}
+                        onClick={() =>
+                          void handleStart([
+                            {
+                              role: 'user',
+                              content: `I'd like to practice English by talking about ${topic}.`,
+                            },
+                          ])
+                        }
+                        className="text-fl-muted-1 border-fl-border hover:border-fl-border-2 hover:text-fl-fg border px-3 py-2 font-mono text-xs tracking-wide transition-colors"
+                      >
+                        {topic}
+                      </button>
+                    ))}
+                  </div>
+                )
+              )}
             </div>
           </div>
         )}

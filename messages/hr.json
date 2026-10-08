@@ -1600,6 +1600,24 @@
     "unavailable": "Nije moguće pripremiti vježbu. Provjeri je li lekcija dovršena i pokušaj ponovno.",
     "back": "Natrag na plan"
   },
+  "progressActivity": {
+    "title": "Tvoj ritam učenja",
+    "period": "Posljednjih 28 dana · UTC",
+    "totals": "{xp} XP · Aktivni dani: {days}/28",
+    "activityHint": "Istaknuti dani uključuju i vježbanje koje je donijelo 0 XP. Dani i dnevna ograničenja računaju se prema UTC-u.",
+    "empty": "Tvoje sljedeće vježbanje počet će popunjavati ovaj kalendar."
+  },
+  "progressRewards": {
+    "title": "Kako zaraditi XP",
+    "scope": "Nagrade pripadaju tvojem trenutačnom planu učenja. Dnevna ograničenja računaju se prema UTC-u. XP nagrađuje sudjelovanje i dovršene aktivnosti, a ne poznavanje jezika.",
+    "lessons": "Lekcije: 20 XP za dovršetak. Svaka vježba u lekciji donosi 5 XP za točan odgovor ili 1 XP za netočan odgovor.",
+    "flashcards": "Kartice: 2 XP po ponavljanju.",
+    "voice": "Glasovni razgovor s Linguom: 20 XP nakon 3 različita doprinosa s odgovorom u istom razgovoru i danu, jednom po razgovoru/danu. Najviše 60 XP dnevno, uključujući vježbanje lekcija.",
+    "chat": "Chat s Linguom: 10 XP za svaku skupinu od 5 različitih doprinosa s odgovorom u istom razgovoru i danu. Najviše 30 XP dnevno.",
+    "comprehension": "Čitanje i slušanje: 10 XP po točnom odgovoru u prvom pokušaju. Ponavljanje donosi 5 XP jednom po vježbi/danu ako si je pokušao riješiti nekog ranijeg UTC dana; inače 0 XP.",
+    "games": "Igre: do 15 XP po dovršenoj igri. Sve igre dijele dnevno ograničenje od 45 XP.",
+    "milestones": "Prekretnice: 30 XP jednom po dovršenoj cjelini. Dovršetak svih planiranih lekcija i završnog testa razine donosi 100 XP jednom, bez obzira na rezultat testa."
+  },
   "dashboardProgress": {
     "title": "Tvoj napredak",
     "scope": "Tvoj trenutačni jezik i plan učenja",

@@ -212,6 +212,18 @@ use the interface locale; dates use UTC to match the backend. Decorative charts/
 assistive technology and activity dates have explicit accessible labels. Transitions respect reduced
 motion. Plan/vocabulary bars expose numeric progress and today's lesson segments reflect completions.
 
+The Progress page reuses `ProgressOverview` without its details link. Its page-local load includes
+summary, daily history, competencies, current plan, flashcards, vocabulary, and curriculum units.
+Language-keyed content resets immediately on a language change; effect cleanup discards obsolete
+responses, including delayed JSON and curriculum loads. A null current plan shows `NoPlanBanner`;
+loading failures show a retry action rather than fabricated zero progress.
+`components/progress/ActivityHistory.tsx` presents daily XP and a rolling 28-day activity calendar,
+anchored to the summary's latest UTC day. It filters history to that window and counts persisted
+zero-XP days as active. Accessible day labels expose dates, activity and XP; the duplicate bar chart
+is decorative. `RewardGuide.tsx` provides a localized, collapsible explanation of existing XP rules
+and links to the corresponding activities. Competency/vocabulary/skill bars expose numeric progress,
+vocabulary filters expose selection, and learned-language curriculum text uses `TargetLanguageText`.
+
 ## Public registration surfaces
 
 The server-rendered landing page retains its one-hour `/api/config` revalidation and passes

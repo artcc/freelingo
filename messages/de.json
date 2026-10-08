@@ -1600,6 +1600,24 @@
     "unavailable": "Die Übung konnte nicht vorbereitet werden. Prüfe, ob die Lektion abgeschlossen ist, und versuche es erneut.",
     "back": "Zurück zum Lernplan"
   },
+  "progressActivity": {
+    "title": "Dein Lernrhythmus",
+    "period": "Letzte 28 Tage · UTC",
+    "totals": "{xp} XP · Aktive Tage: {days}/28",
+    "activityHint": "Markierte Tage enthalten auch Übungen mit 0 XP. Für Tage und Tageslimits gilt UTC.",
+    "empty": "Mit deiner nächsten Übung beginnt sich dieser Kalender zu füllen."
+  },
+  "progressRewards": {
+    "title": "So verdienst du XP",
+    "scope": "Belohnungen gehören zu deinem aktuellen Lernplan. Tageslimits richten sich nach UTC. XP würdigen Teilnahme und abgeschlossene Aktivitäten, nicht die Sprachbeherrschung.",
+    "lessons": "Lektionen: 20 XP pro Abschluss. Jede Lektionsübung bringt 5 XP für eine richtige oder 1 XP für eine falsche Antwort.",
+    "flashcards": "Karteikarten: 2 XP pro Wiederholung.",
+    "voice": "Sprechen mit Lingu: 20 XP nach 3 unterschiedlichen beantworteten Beiträgen im selben Gespräch am selben Tag, einmal pro Gespräch/Tag. Maximal 60 XP pro Tag, einschließlich Lektionspraxis.",
+    "chat": "Chat mit Lingu: 10 XP pro Block aus 5 unterschiedlichen beantworteten Beiträgen im selben Gespräch am selben Tag. Maximal 30 XP pro Tag.",
+    "comprehension": "Lesen und Hören: 10 XP pro richtiger Antwort beim ersten Versuch. Wiederholungen bringen einmal pro Übung/Tag 5 XP, wenn du die Übung an einem früheren UTC-Tag versucht hast; sonst 0 XP.",
+    "games": "Spiele: bis zu 15 XP pro abgeschlossenem Spiel. Alle Spiele teilen sich ein Tageslimit von 45 XP.",
+    "milestones": "Meilensteine: einmalig 30 XP pro abgeschlossener Einheit. Alle geplanten Lektionen und den abschließenden Niveautest abzuschließen bringt einmalig 100 XP, unabhängig vom Testergebnis."
+  },
   "dashboardProgress": {
     "title": "Dein Fortschritt",
     "scope": "Deine aktuelle Sprache und dein Lernplan",

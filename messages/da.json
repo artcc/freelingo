@@ -1600,6 +1600,24 @@
     "unavailable": "Øvelsen kunne ikke forberedes. Kontrollér, at lektionen er gennemført, og prøv igen.",
     "back": "Tilbage til studieplanen"
   },
+  "progressActivity": {
+    "title": "Din læringsrytme",
+    "period": "Seneste 28 dage · UTC",
+    "totals": "{xp} XP · Aktive dage: {days}/28",
+    "activityHint": "Markerede dage omfatter også øvelse, der gav 0 XP. Dage og daglige grænser følger UTC.",
+    "empty": "Din næste øvelse vil begynde at fylde denne kalender."
+  },
+  "progressRewards": {
+    "title": "Sådan optjener du XP",
+    "scope": "Belønninger tilhører din nuværende studieplan. Daglige grænser følger UTC. XP belønner deltagelse og gennemførte aktiviteter, ikke sprogfærdighed.",
+    "lessons": "Lektioner: 20 XP ved gennemførelse. Hver lektionsøvelse giver 5 XP for et korrekt svar eller 1 XP for et forkert svar.",
+    "flashcards": "Huskekort: 2 XP pr. repetition.",
+    "voice": "Tale med Lingu: 20 XP efter 3 forskellige besvarede bidrag i samme samtale og på samme dag, én gang pr. samtale/dag. Højst 60 XP om dagen, inklusive lektionsøvelser.",
+    "chat": "Chat med Lingu: 10 XP pr. gruppe på 5 forskellige besvarede bidrag i samme samtale og på samme dag. Højst 30 XP om dagen.",
+    "comprehension": "Læsning og lytning: 10 XP pr. korrekt svar ved første forsøg. Gentagelser giver 5 XP én gang pr. øvelse/dag, hvis du har forsøgt øvelsen på en tidligere UTC-dag; ellers 0 XP.",
+    "games": "Spil: op til 15 XP pr. gennemført spil. Alle spil deler en grænse på 45 XP om dagen.",
+    "milestones": "Milepæle: 30 XP én gang pr. gennemført enhed. Gennemførelse af alle planlagte lektioner og den afsluttende niveautest giver 100 XP én gang, uanset testresultatet."
+  },
   "dashboardProgress": {
     "title": "Dine fremskridt",
     "scope": "Dit aktuelle sprog og din studieplan",

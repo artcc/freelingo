@@ -160,6 +160,17 @@ availability remain governed by the Study Plan specification.
 Announcements come from public config state. Onboarding Tour and What's New coordinate their own
 display priority through their dedicated behavior.
 
+### Progress detail
+
+The Progress page expands the dashboard summary for the current language and study plan. It shares
+the XP/streak overview, shows daily XP and an activity calendar for the last 28 UTC days, and provides
+a collapsible reward guide linking to learning activities. Days with recorded practice count even
+when they earned no XP. History is filtered to the displayed calendar window; it is not a complete
+reward ledger. Language changes reset the page and obsolete asynchronous results are ignored.
+A null current plan shows the assessment entry point; request failures offer retry. Lesson-exercise
+accuracy is unset until exercises exist. Competency, vocabulary and recent-performance sections
+use readable interface typography, target-language text rendering and accessible progress values.
+
 ### Dashboard tour
 
 `OnboardingTour` is a seven-screen introduction: Lingu's welcome, study plan, text/voice practice,

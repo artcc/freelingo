@@ -1600,6 +1600,24 @@
     "unavailable": "No se pudo preparar la práctica. Comprueba que la lección está completada e inténtalo de nuevo.",
     "back": "Volver al plan"
   },
+  "progressActivity": {
+    "title": "Tu ritmo de aprendizaje",
+    "period": "Últimos 28 días · UTC",
+    "totals": "{xp} XP · Días activos: {days}/28",
+    "activityHint": "Los días destacados incluyen práctica que ha dado 0 XP. Los días y límites diarios se calculan en UTC.",
+    "empty": "Tu próxima práctica empezará a llenar este calendario."
+  },
+  "progressRewards": {
+    "title": "Cómo ganar XP",
+    "scope": "Las recompensas pertenecen a tu plan de estudio actual. Los límites diarios se calculan en UTC. Los XP reconocen la participación y las actividades completadas, no el dominio del idioma.",
+    "lessons": "Lecciones: 20 XP al completarlas. Cada ejercicio de lección da 5 XP por respuesta correcta o 1 XP por respuesta incorrecta.",
+    "flashcards": "Tarjetas: 2 XP por repaso.",
+    "voice": "Voz con Lingu: 20 XP tras 3 intervenciones distintas respondidas en una misma conversación y día, una vez por conversación/día. Máximo de 60 XP diarios, incluida la práctica de lecciones.",
+    "chat": "Chat con Lingu: 10 XP por cada bloque de 5 intervenciones distintas respondidas en una misma conversación y día. Máximo de 30 XP diarios.",
+    "comprehension": "Lectura y escucha: 10 XP por respuesta correcta en el primer intento. Los repasos dan 5 XP una vez por ejercicio/día si lo intentaste en un día UTC anterior; en otro caso, 0 XP.",
+    "games": "Juegos: hasta 15 XP por partida completada. Todos los juegos comparten un máximo de 45 XP diarios.",
+    "milestones": "Hitos: 30 XP una sola vez por unidad completada. Completar todas las lecciones programadas y la evaluación final del nivel da 100 XP una sola vez, independientemente de la nota."
+  },
   "dashboardProgress": {
     "title": "Tu progreso",
     "scope": "Tu idioma y plan de estudio actuales",

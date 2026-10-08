@@ -1600,6 +1600,24 @@
     "unavailable": "Could not prepare the practice. Check that the lesson is completed and try again.",
     "back": "Back to plan"
   },
+  "progressActivity": {
+    "title": "Your learning rhythm",
+    "period": "Last 28 days · UTC",
+    "totals": "{xp} XP · Active days: {days}/28",
+    "activityHint": "Highlighted days include practice that earned 0 XP. Days and daily limits follow UTC.",
+    "empty": "Your next practice will start filling this calendar."
+  },
+  "progressRewards": {
+    "title": "How to earn XP",
+    "scope": "Rewards belong to your current study plan. Daily limits follow UTC. XP recognises participation and completion, not language proficiency.",
+    "lessons": "Lessons: 20 XP for completion. Each lesson exercise awards 5 XP for a correct answer or 1 XP for an incorrect answer.",
+    "flashcards": "Flashcards: 2 XP per review.",
+    "voice": "Voice with Lingu: 20 XP after 3 distinct answered contributions in the same conversation and day, once per conversation/day. Maximum 60 XP per day, including lesson practice.",
+    "chat": "Chat with Lingu: 10 XP per block of 5 distinct answered contributions in the same conversation and day. Maximum 30 XP per day.",
+    "comprehension": "Reading and listening: 10 XP per correct answer on the first attempt. Replays award 5 XP once per exercise/day if you attempted it on an earlier UTC day; otherwise 0 XP.",
+    "games": "Games: up to 15 XP per completed game. All games share a maximum of 45 XP per day.",
+    "milestones": "Milestones: 30 XP once per completed unit. Completing all scheduled lessons and the final level test awards 100 XP once, regardless of the test score."
+  },
   "dashboardProgress": {
     "title": "Your progress",
     "scope": "Your current language and study plan",

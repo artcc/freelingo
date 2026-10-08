@@ -1600,6 +1600,24 @@
     "unavailable": "De oefening kon niet worden voorbereid. Controleer of de les is afgerond en probeer het opnieuw.",
     "back": "Terug naar het leerplan"
   },
+  "progressActivity": {
+    "title": "Je leerritme",
+    "period": "Laatste 28 dagen · UTC",
+    "totals": "{xp} XP · Actieve dagen: {days}/28",
+    "activityHint": "Gemarkeerde dagen bevatten ook oefeningen die 0 XP opleverden. Dagen en daglimieten volgen UTC.",
+    "empty": "Met je volgende oefening begint deze kalender zich te vullen."
+  },
+  "progressRewards": {
+    "title": "Zo verdien je XP",
+    "scope": "Beloningen horen bij je huidige studieplan. Daglimieten volgen UTC. XP belonen deelname en afgeronde activiteiten, niet je taalbeheersing.",
+    "lessons": "Lessen: 20 XP per afgeronde les. Elke lesoefening levert 5 XP op voor een goed antwoord of 1 XP voor een fout antwoord.",
+    "flashcards": "Flitskaarten: 2 XP per herhaling.",
+    "voice": "Spreken met Lingu: 20 XP na 3 verschillende beantwoorde bijdragen in hetzelfde gesprek op dezelfde dag, eenmaal per gesprek/dag. Maximaal 60 XP per dag, inclusief lesoefeningen.",
+    "chat": "Chat met Lingu: 10 XP per blok van 5 verschillende beantwoorde bijdragen in hetzelfde gesprek op dezelfde dag. Maximaal 30 XP per dag.",
+    "comprehension": "Lezen en luisteren: 10 XP per goed antwoord bij de eerste poging. Herhalingen leveren eenmaal per oefening/dag 5 XP op als je de oefening op een eerdere UTC-dag hebt geprobeerd; anders 0 XP.",
+    "games": "Spellen: tot 15 XP per voltooid spel. Alle spellen delen een maximum van 45 XP per dag.",
+    "milestones": "Mijlpalen: eenmalig 30 XP per afgeronde eenheid. Alle geplande lessen en de afsluitende niveautoets voltooien levert eenmalig 100 XP op, ongeacht de toetsscore."
+  },
   "dashboardProgress": {
     "title": "Je voortgang",
     "scope": "Je huidige taal en studieplan",

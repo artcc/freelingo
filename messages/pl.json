@@ -1600,6 +1600,24 @@
     "unavailable": "Nie udało się przygotować ćwiczenia. Sprawdź, czy lekcja jest ukończona, i spróbuj ponownie.",
     "back": "Wróć do planu"
   },
+  "progressActivity": {
+    "title": "Twój rytm nauki",
+    "period": "Ostatnie 28 dni · UTC",
+    "totals": "{xp} XP · Aktywne dni: {days}/28",
+    "activityHint": "Wyróżnione dni obejmują też ćwiczenia za 0 XP. Dni i limity dzienne są liczone według UTC.",
+    "empty": "Twoje kolejne ćwiczenie zacznie wypełniać ten kalendarz."
+  },
+  "progressRewards": {
+    "title": "Jak zdobywać XP",
+    "scope": "Nagrody należą do bieżącego planu nauki. Limity dzienne są liczone według UTC. XP nagradzają udział i ukończone aktywności, a nie biegłość językową.",
+    "lessons": "Lekcje: 20 XP za ukończenie. Każde ćwiczenie w lekcji daje 5 XP za poprawną odpowiedź lub 1 XP za błędną.",
+    "flashcards": "Fiszki: 2 XP za powtórkę.",
+    "voice": "Rozmowa głosowa z Lingu: 20 XP po 3 różnych wypowiedziach z odpowiedzią w tej samej rozmowie i tego samego dnia, raz na rozmowę/dzień. Maksymalnie 60 XP dziennie, łącznie z ćwiczeniem lekcji.",
+    "chat": "Czat z Lingu: 10 XP za każdy blok 5 różnych wypowiedzi z odpowiedzią w tej samej rozmowie i tego samego dnia. Maksymalnie 30 XP dziennie.",
+    "comprehension": "Czytanie i słuchanie: 10 XP za poprawną odpowiedź przy pierwszej próbie. Powtórki dają 5 XP raz na ćwiczenie/dzień, jeśli wcześniejsza próba odbyła się we wcześniejszym dniu UTC; w przeciwnym razie 0 XP.",
+    "games": "Gry: do 15 XP za ukończoną grę. Wszystkie gry mają wspólny limit 45 XP dziennie.",
+    "milestones": "Kamienie milowe: jednorazowo 30 XP za ukończony dział. Ukończenie wszystkich zaplanowanych lekcji i końcowego testu poziomu daje jednorazowo 100 XP, niezależnie od wyniku testu."
+  },
   "dashboardProgress": {
     "title": "Twoje postępy",
     "scope": "Twój obecny język i plan nauki",

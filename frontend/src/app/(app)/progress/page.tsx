@@ -14,6 +14,17 @@ import {
   type CEFRLevel,
 } from '@/data/curriculum'
 import type { VocabularySet } from '@/data/types'
+import { Check, Circle, CircleDashed } from 'lucide-react'
+import {
+  ProgressOverview,
+  type ActivityDay,
+} from '@/components/dashboard/ProgressOverview'
+import {
+  ActivityHistory,
+  type ProgressHistoryEntry,
+} from '@/components/progress/ActivityHistory'
+import { RewardGuide } from '@/components/progress/RewardGuide'
+import { TargetLanguageText } from '@/components/TargetLanguageText'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -32,6 +43,8 @@ interface ProgressSummary {
   exercises_correct: number
   accuracy: number
   skills: Record<string, number>
+  today_xp: number
+  activity_week: ActivityDay[]
 }
 
 interface FlashcardProgress {
@@ -60,10 +73,16 @@ function getCompetencyStatus(
   return 'not-started'
 }
 
-const STATUS_ICON: Record<CompetencyStatus, string> = {
-  mastered: '✅',
-  'in-progress': '🔄',
-  'not-started': '⬜',
+const STATUS_ICON = {
+  mastered: Check,
+  'in-progress': CircleDashed,
+  'not-started': Circle,
+}
+
+const STATUS_LABEL = {
+  mastered: 'mastered',
+  'in-progress': 'inProgress',
+  'not-started': 'notStarted',
 }
 
 const STATUS_COLOR: Record<CompetencyStatus, string> = {
@@ -77,12 +96,15 @@ const STATUS_COLOR: Record<CompetencyStatus, string> = {
 function UnitCompetencyBlock({
   unit,
   record,
+  languageCode,
 }: {
   unit: CurriculumUnit
   record: CompetencyRecord | undefined
+  languageCode: string
 }) {
   const t = useTranslations('progress')
   const tPlan = useTranslations('plan')
+  const number = new Intl.NumberFormat(useLocale())
   const masteredCount = record?.mastered_count ?? 0
   const totalCount = unit.competency_checklist.length
   const score = record?.score ?? 0
@@ -92,31 +114,43 @@ function UnitCompetencyBlock({
   return (
     <div className="border-fl-border bg-fl-surface border">
       {/* Unit header */}
-      <div className="border-fl-border flex items-center justify-between border-b px-5 py-4">
-        <div className="flex items-center gap-2">
-          <span className="text-fl-label text-fl-muted-3 font-mono tracking-widest uppercase">
-            {tPlan('unitLabel')} {unit.unit_number}
+      <div className="border-fl-border flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4">
+        <div className="min-w-0 space-y-1">
+          <span className="text-fl-muted-2 text-xs">
+            {tPlan('unitLabel')} {number.format(unit.unit_number)}
           </span>
-          <span className="text-fl-fg font-mono text-xs font-bold">
+          <TargetLanguageText
+            as="h3"
+            languageCode={languageCode}
+            className="text-fl-fg font-semibold"
+          >
             {unit.title}
-          </span>
+          </TargetLanguageText>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-fl-label text-fl-muted-3 font-mono">
-            {masteredCount}/{totalCount} {t('mastered')}
+          <span className="text-fl-muted-2 text-xs tabular-nums">
+            {number.format(masteredCount)}/{number.format(totalCount)}{' '}
+            {t('mastered')}
           </span>
           {record && (
-            <span className="text-fl-label text-fl-muted-2 font-mono">
-              {Math.round(score * 100)}%
+            <span className="text-fl-muted-2 text-xs tabular-nums">
+              {number.format(Math.round(score * 100))}%
             </span>
           )}
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="bg-fl-border h-0.5">
+      <div
+        className="bg-fl-border h-1"
+        role="progressbar"
+        aria-label={`${unit.title}: ${t('mastered')}`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={pct}
+      >
         <div
-          className="bg-fl-accent h-full transition-all"
+          className="bg-fl-accent h-full transition-[width] motion-reduce:transition-none"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -130,19 +164,22 @@ function UnitCompetencyBlock({
             record?.total_count ?? 0,
             score
           )
+          const Icon = STATUS_ICON[status]
           return (
             <li key={idx} className="flex items-start gap-3">
-              <span className="mt-0.5 shrink-0 text-base leading-none">
-                {STATUS_ICON[status]}
+              <span className={`mt-0.5 shrink-0 ${STATUS_COLOR[status]}`}>
+                <Icon className="size-4" aria-hidden="true" />
+                <span className="sr-only">{t(STATUS_LABEL[status])}: </span>
               </span>
-              <span
-                className={`font-mono text-xs leading-relaxed ${STATUS_COLOR[status]}`}
+              <TargetLanguageText
+                languageCode={languageCode}
+                className={STATUS_COLOR[status]}
               >
                 {text}
-              </span>
+              </TargetLanguageText>
               {status === 'in-progress' && record && (
-                <span className="text-fl-label text-fl-muted-3 ml-auto shrink-0 font-mono">
-                  {Math.round(score * 100)}%
+                <span className="text-fl-muted-2 ml-auto shrink-0 text-xs tabular-nums">
+                  {number.format(Math.round(score * 100))}%
                 </span>
               )}
             </li>
@@ -156,71 +193,145 @@ function UnitCompetencyBlock({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ProgressPage() {
+  const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
+  return (
+    <ProgressContent
+      key={targetLanguageCode}
+      targetLanguageCode={targetLanguageCode}
+      languageName={activeLanguage?.name}
+    />
+  )
+}
+
+interface ProgressData {
+  summary: ProgressSummary
+  competencies: CompetencyRecord[]
+  plan: StudyPlan
+  flashcards: FlashcardProgress[]
+  levelUnits: CurriculumUnit[]
+  vocabSets: VocabularySet[]
+  history: ProgressHistoryEntry[]
+}
+
+function ProgressContent({
+  targetLanguageCode,
+  languageName,
+}: {
+  targetLanguageCode: string
+  languageName?: string
+}) {
   const locale = useLocale()
   const t = useTranslations('progress')
   const tVocab = useTranslations('vocabulary')
-  const activeLanguage = useLanguageStore((s) => s.activeLanguage)
-  const [summary, setSummary] = useState<ProgressSummary | null>(null)
-  const [competencies, setCompetencies] = useState<CompetencyRecord[]>([])
-  const [plan, setPlan] = useState<StudyPlan | null>(null)
+  const common = useTranslations('common')
+  const tDashboard = useTranslations('dashboard')
+  const tPlan = useTranslations('plan')
+  const [data, setData] = useState<ProgressData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [levelUnits, setLevelUnits] = useState<CurriculumUnit[]>([])
-  const [flashcards, setFlashcards] = useState<FlashcardProgress[]>([])
+  const [loadError, setLoadError] = useState(false)
+  const [retry, setRetry] = useState(0)
   const [showAllLevels, setShowAllLevels] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
     async function load() {
       try {
-        const [sumRes, compRes, planRes, flashRes] = await Promise.all([
-          apiFetch('/api/progress/summary'),
-          apiFetch('/api/progress/competencies'),
-          apiFetch('/api/study-plan/current'),
-          apiFetch('/api/flashcards/all').catch(() => null),
-        ])
-        if (sumRes.ok) setSummary((await sumRes.json()) as ProgressSummary)
-        if (compRes.ok)
-          setCompetencies((await compRes.json()) as CompetencyRecord[])
-        if (planRes.ok) setPlan((await planRes.json()) as StudyPlan)
-        if (flashRes?.ok)
-          setFlashcards((await flashRes.json()) as FlashcardProgress[])
+        const [sumRes, compRes, planRes, flashRes, historyRes, vocabRes] =
+          await Promise.all([
+            apiFetch('/api/progress/summary'),
+            apiFetch('/api/progress/competencies'),
+            apiFetch('/api/study-plan/current'),
+            apiFetch('/api/flashcards/all'),
+            apiFetch('/api/progress/history'),
+            apiFetch(
+              `/api/vocabulary?language=${encodeURIComponent(targetLanguageCode)}`
+            ),
+          ])
+        if (cancelled) return
+        if (!planRes.ok) throw new Error('Could not load study plan')
+        const plan = (await planRes.json()) as StudyPlan | null
+        if (cancelled || !plan) return
+        if (
+          [sumRes, compRes, flashRes, historyRes, vocabRes].some(
+            (res) => !res.ok
+          )
+        ) {
+          throw new Error('Could not load progress')
+        }
+        const [summary, competencies, flashcards, history, vocabulary] =
+          await Promise.all([
+            sumRes.json() as Promise<ProgressSummary>,
+            compRes.json() as Promise<CompetencyRecord[]>,
+            flashRes.json() as Promise<FlashcardProgress[]>,
+            historyRes.json() as Promise<{ entries: ProgressHistoryEntry[] }>,
+            vocabRes.json() as Promise<{ sets: VocabularySet[] }>,
+          ])
+        if (cancelled) return
+        const levelUnits = await getCurriculumUnits(
+          plan.cefr_level,
+          targetLanguageCode
+        )
+        if (cancelled) return
+        setData({
+          summary,
+          competencies,
+          plan,
+          flashcards,
+          levelUnits,
+          vocabSets: vocabulary.sets,
+          history: history.entries,
+        })
       } catch {
-        /* ignore */
+        if (!cancelled) setLoadError(true)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     void load()
-  }, [activeLanguage?.code])
-
-  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
-
-  useEffect(() => {
-    if (plan?.cefr_level) {
-      getCurriculumUnits(plan.cefr_level, targetLanguageCode)
-        .then(setLevelUnits)
-        .catch(() => setLevelUnits([]))
+    return () => {
+      cancelled = true
     }
-  }, [plan?.cefr_level, targetLanguageCode])
-
-  const [vocabSets, setVocabSets] = useState<VocabularySet[]>([])
-
-  useEffect(() => {
-    apiFetch(`/api/vocabulary?language=${targetLanguageCode}`)
-      .then((r) => r.json())
-      .then((d: { sets: VocabularySet[] }) => setVocabSets(d.sets))
-      .catch(() => setVocabSets([]))
-  }, [targetLanguageCode])
-
-  const compMap = Object.fromEntries(competencies.map((c) => [c.unit_id, c]))
+  }, [targetLanguageCode, retry])
 
   if (loading) {
     return <PageLoading label={t('loading')} />
   }
 
-  if (!plan) {
+  if (loadError) {
+    return (
+      <div className="mx-auto max-w-4xl space-y-4 p-6 text-center">
+        <p role="alert" className="text-fl-muted-1">
+          {common('errorMessage')}
+        </p>
+        <button
+          className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
+          onClick={() => {
+            setLoadError(false)
+            setLoading(true)
+            setRetry((value) => value + 1)
+          }}
+        >
+          {common('retry')}
+        </button>
+      </div>
+    )
+  }
+
+  if (!data) {
     return <NoPlanBanner />
   }
 
+  const {
+    summary,
+    competencies,
+    plan,
+    flashcards,
+    levelUnits,
+    vocabSets,
+    history,
+  } = data
+  const compMap = Object.fromEntries(competencies.map((c) => [c.unit_id, c]))
   const cefrLevel = plan.cefr_level as CEFRLevel
   const displayVocabSets = showAllLevels
     ? vocabSets
@@ -231,68 +342,53 @@ export default function ProgressPage() {
   )
 
   const masteredWordSet = new Set(
-    flashcards.filter((f) => f.repetitions > 0).map((f) => f.word.toLowerCase())
+    flashcards
+      .filter((f) => f.repetitions > 0)
+      .map((f) => f.word.trim().toLowerCase())
   )
   const totalMastered = displayVocabSets.reduce(
     (a, s) =>
       a +
-      s.words.filter((w) => masteredWordSet.has(w.word.toLowerCase())).length,
+      s.words.filter((w) => masteredWordSet.has(w.word.trim().toLowerCase()))
+        .length,
     0
   )
+  const today = summary.activity_week.at(-1)?.date
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 p-6">
       {/* Header */}
-      <div className="border-fl-border bg-fl-surface border">
-        <div className="border-fl-border flex items-center gap-2 border-b px-6 py-4">
-          <span className="text-fl-label text-fl-muted-3">●</span>
-          <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
-            {t('subtitle')}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-fl-fg text-2xl font-semibold">{t('title')}</h1>
+        {languageName && (
+          <span className="border-fl-border text-fl-muted-1 border px-3 py-1 text-sm">
+            {languageName} · {cefrLevel}
           </span>
-          {activeLanguage && cefrLevel && (
-            <span className="border-fl-border text-fl-label text-fl-muted-3 ml-auto border px-2 py-0.5 font-mono tracking-widest uppercase">
-              {activeLanguage.name} · {cefrLevel}
-            </span>
-          )}
-        </div>
-
-        {/* XP + streak */}
-        {summary && (
-          <div className="divide-fl-border border-fl-border grid grid-cols-2 divide-x border-b sm:grid-cols-4">
-            {[
-              {
-                label: t('xp'),
-                value: summary.total_xp.toLocaleString(locale),
-              },
-              { label: t('streak'), value: `${summary.current_streak} 🔥` },
-              { label: t('lessons'), value: summary.total_lessons },
-              {
-                label: t('accuracy'),
-                value: `${Math.round(summary.accuracy * 100)}%`,
-              },
-            ].map(({ label, value }) => (
-              <div key={label} className="px-5 py-4 text-center">
-                <p className="text-fl-label text-fl-muted-3 mb-1 font-mono tracking-widest uppercase">
-                  {label}
-                </p>
-                <p className="text-fl-fg font-mono text-sm font-bold">
-                  {value}
-                </p>
-              </div>
-            ))}
-          </div>
         )}
       </div>
+
+      <ProgressOverview
+        xp={summary.total_xp}
+        todayXp={summary.today_xp}
+        streak={summary.current_streak}
+        activity={summary.activity_week}
+        lessons={summary.total_lessons}
+        correct={summary.exercises_correct}
+        total={summary.total_exercises}
+        showDetails={false}
+      />
+      {today && <ActivityHistory entries={history} endDate={today} />}
+      <RewardGuide />
 
       {/* Grammar Competencies */}
       {levelUnits.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center gap-3">
-            <span className="text-fl-fg font-mono text-base font-bold tracking-widest">
+            <h2 className="text-fl-fg text-lg font-semibold">
               {cefrLevel
                 ? t('competenciesSection', { level: cefrLevel })
                 : t('competencies')}
-            </span>
+            </h2>
             <div className="bg-fl-border h-px flex-1" />
           </div>
 
@@ -301,17 +397,18 @@ export default function ProgressPage() {
               key={unit.id}
               unit={unit}
               record={compMap[unit.id]}
+              languageCode={targetLanguageCode}
             />
           ))}
 
           {competencies.length === 0 && (
             <div className="border-fl-border bg-fl-surface border px-6 py-8 text-center">
-              <p className="text-fl-muted-3 font-mono text-xs leading-relaxed">
+              <p className="text-fl-muted-2 text-sm leading-relaxed">
                 {t('noCompetencies')}
               </p>
               <Link
                 href="/plan"
-                className="text-fl-label text-fl-muted-2 hover:text-fl-fg mt-4 inline-block font-mono tracking-widest uppercase transition-colors"
+                className="text-fl-accent mt-4 inline-block text-sm font-medium hover:underline"
               >
                 {t('goToMyPlan')}
               </Link>
@@ -323,24 +420,26 @@ export default function ProgressPage() {
       {/* Vocabulary Progress */}
       {displayVocabSets.length > 0 && (
         <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <span className="text-fl-fg font-mono text-base font-bold tracking-widest">
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="text-fl-fg text-lg font-semibold">
               {showAllLevels
                 ? t('vocabularySection')
                 : cefrLevel
                   ? t('vocabularyHeader', { level: cefrLevel })
                   : t('vocabularySection')}
-            </span>
+            </h2>
             <div className="bg-fl-border h-px flex-1" />
-            <span className="text-fl-label text-fl-muted-3 font-mono">
-              {totalMastered}/{totalDisplayWords} {tVocab('words')}
+            <span className="text-fl-muted-2 text-sm tabular-nums">
+              {totalMastered.toLocaleString(locale)}/
+              {totalDisplayWords.toLocaleString(locale)} {tVocab('words')}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowAllLevels(false)}
-              className={`text-fl-label border px-3 py-1.5 font-mono tracking-widest uppercase transition-colors ${
+              aria-pressed={!showAllLevels}
+              className={`border px-3 py-1.5 text-sm transition-colors ${
                 !showAllLevels
                   ? 'border-fl-fg text-fl-fg bg-fl-surface-2'
                   : 'border-fl-border text-fl-muted-3 hover:border-fl-border-2 hover:text-fl-fg'
@@ -350,7 +449,8 @@ export default function ProgressPage() {
             </button>
             <button
               onClick={() => setShowAllLevels(true)}
-              className={`text-fl-label border px-3 py-1.5 font-mono tracking-widest uppercase transition-colors ${
+              aria-pressed={showAllLevels}
+              className={`border px-3 py-1.5 text-sm transition-colors ${
                 showAllLevels
                   ? 'border-fl-fg text-fl-fg bg-fl-surface-2'
                   : 'border-fl-border text-fl-muted-3 hover:border-fl-border-2 hover:text-fl-fg'
@@ -363,7 +463,7 @@ export default function ProgressPage() {
           <div className="border-fl-border bg-fl-surface divide-fl-border divide-y border">
             {displayVocabSets.map((s) => {
               const mastered = s.words.filter((w) =>
-                masteredWordSet.has(w.word.toLowerCase())
+                masteredWordSet.has(w.word.trim().toLowerCase())
               ).length
               const pct =
                 s.words.length > 0
@@ -373,19 +473,29 @@ export default function ProgressPage() {
                 <div key={s.id} className="flex items-center gap-4 px-5 py-3">
                   <Link
                     href={`/vocabulary/${s.id}`}
-                    className="text-fl-muted-1 hover:text-fl-fg min-w-0 flex-1 truncate font-mono text-xs transition-colors"
+                    className="text-fl-muted-1 hover:text-fl-fg min-w-0 flex-1 truncate text-sm transition-colors"
                   >
-                    {s.topic}
+                    <TargetLanguageText languageCode={targetLanguageCode}>
+                      {s.topic}
+                    </TargetLanguageText>
                   </Link>
                   <div className="flex items-center gap-3">
-                    <div className="bg-fl-border h-1.5 w-24">
+                    <div
+                      className="bg-fl-border h-1 w-16 sm:w-24"
+                      role="progressbar"
+                      aria-label={s.topic}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={pct}
+                    >
                       <div
-                        className="bg-fl-accent h-full transition-all"
+                        className="bg-fl-accent h-full transition-[width] motion-reduce:transition-none"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="text-fl-label text-fl-muted-3 w-12 text-right font-mono">
-                      {mastered}/{s.words.length}
+                    <span className="text-fl-muted-2 min-w-12 text-right text-xs tabular-nums">
+                      {mastered.toLocaleString(locale)}/
+                      {s.words.length.toLocaleString(locale)}
                     </span>
                   </div>
                 </div>
@@ -399,25 +509,41 @@ export default function ProgressPage() {
       {summary && Object.keys(summary.skills).length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center gap-3">
-            <span className="text-fl-fg font-mono text-base font-bold tracking-widest">
-              {t('skills')}
-            </span>
+            <h2 className="text-fl-fg text-lg font-semibold">
+              {tDashboard('recentPerformance')}
+            </h2>
             <div className="bg-fl-border h-px flex-1" />
           </div>
+          <p className="text-fl-muted-2 text-sm">
+            {tDashboard('recentPerformanceDescription')}
+          </p>
           <div className="border-fl-border bg-fl-surface divide-fl-border divide-y border">
             {Object.entries(summary.skills).map(([skill, value]) => (
               <div key={skill} className="flex items-center gap-4 px-5 py-3">
-                <span className="text-fl-label text-fl-muted-2 w-24 font-mono tracking-widest uppercase">
-                  {skill}
+                <span className="text-fl-muted-1 w-28 text-sm">
+                  {tPlan.has(`lessonTypes.${skill}`)
+                    ? tPlan(`lessonTypes.${skill}`)
+                    : skill}
                 </span>
-                <div className="bg-fl-border h-1.5 flex-1">
+                <div
+                  className="bg-fl-border h-1 flex-1"
+                  role="progressbar"
+                  aria-label={
+                    tPlan.has(`lessonTypes.${skill}`)
+                      ? tPlan(`lessonTypes.${skill}`)
+                      : skill
+                  }
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(value * 100)}
+                >
                   <div
                     className="bg-fl-accent h-full"
                     style={{ width: `${Math.round(value * 100)}%` }}
                   />
                 </div>
-                <span className="text-fl-label text-fl-muted-2 w-10 text-right font-mono">
-                  {Math.round(value * 100)}%
+                <span className="text-fl-muted-2 w-10 text-right text-xs tabular-nums">
+                  {Math.round(value * 100).toLocaleString(locale)}%
                 </span>
               </div>
             ))}

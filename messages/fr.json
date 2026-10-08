@@ -1600,6 +1600,24 @@
     "unavailable": "Impossible de préparer la pratique. Vérifie que la leçon est terminée et réessaie.",
     "back": "Retour au programme"
   },
+  "progressActivity": {
+    "title": "Votre rythme d’apprentissage",
+    "period": "28 derniers jours · UTC",
+    "totals": "{xp} XP · Jours actifs : {days}/28",
+    "activityHint": "Les jours mis en évidence incluent la pratique ayant rapporté 0 XP. Les jours et les limites quotidiennes suivent l’heure UTC.",
+    "empty": "Votre prochaine séance commencera à remplir ce calendrier."
+  },
+  "progressRewards": {
+    "title": "Comment gagner des XP",
+    "scope": "Les récompenses sont liées à votre plan d’étude actuel. Les limites quotidiennes suivent l’heure UTC. Les XP récompensent la participation et les activités terminées, pas la maîtrise de la langue.",
+    "lessons": "Leçons : 20 XP par leçon terminée. Chaque exercice de leçon rapporte 5 XP pour une bonne réponse ou 1 XP pour une mauvaise réponse.",
+    "flashcards": "Cartes mémoire : 2 XP par révision.",
+    "voice": "À l’oral avec Lingu : 20 XP après 3 interventions distinctes ayant reçu une réponse dans la même conversation et le même jour, une fois par conversation/jour. Maximum de 60 XP par jour, pratique des leçons comprise.",
+    "chat": "Chat avec Lingu : 10 XP par groupe de 5 interventions distinctes ayant reçu une réponse dans la même conversation et le même jour. Maximum de 30 XP par jour.",
+    "comprehension": "Lecture et écoute : 10 XP par bonne réponse au premier essai. Les révisions rapportent 5 XP une fois par exercice/jour si vous l’avez tenté un jour UTC antérieur ; sinon, 0 XP.",
+    "games": "Jeux : jusqu’à 15 XP par partie terminée. Tous les jeux partagent un maximum de 45 XP par jour.",
+    "milestones": "Étapes : 30 XP une seule fois par unité terminée. Terminer toutes les leçons prévues et le test final du niveau rapporte 100 XP une seule fois, quelle que soit la note."
+  },
   "dashboardProgress": {
     "title": "Votre progression",
     "scope": "Votre langue et votre programme actuels",

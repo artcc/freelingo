@@ -1600,6 +1600,24 @@
     "unavailable": "Harjoitusta ei voitu valmistella. Tarkista, että oppitunti on suoritettu, ja yritä uudelleen.",
     "back": "Takaisin opintosuunnitelmaan"
   },
+  "progressActivity": {
+    "title": "Oppimisrytmisi",
+    "period": "Viimeiset 28 päivää · UTC",
+    "totals": "{xp} XP · Aktiiviset päivät: {days}/28",
+    "activityHint": "Korostetut päivät sisältävät myös harjoittelun, josta sai 0 XP:tä. Päivät ja päivärajat määräytyvät UTC-ajan mukaan.",
+    "empty": "Seuraava harjoittelukertasi alkaa täyttää tätä kalenteria."
+  },
+  "progressRewards": {
+    "title": "Näin ansaitset XP:tä",
+    "scope": "Palkinnot kuuluvat nykyiseen opiskelusuunnitelmaasi. Päivärajat määräytyvät UTC-ajan mukaan. XP palkitsee osallistumista ja suorituksia, ei mittaa kielitaitoa.",
+    "lessons": "Oppitunnit: 20 XP suorittamisesta. Jokainen oppitunnin harjoitus antaa 5 XP oikeasta tai 1 XP väärästä vastauksesta.",
+    "flashcards": "Muistikortit: 2 XP kertauksesta.",
+    "voice": "Puhe Lingu-tuutorin kanssa: 20 XP, kun olet saanut vastauksen 3 erilaiseen puheenvuoroon samassa keskustelussa saman päivän aikana, kerran keskustelua ja päivää kohti. Enintään 60 XP päivässä, myös oppituntien puheharjoittelu mukaan lukien.",
+    "chat": "Chat Lingu-tuutorin kanssa: 10 XP jokaista 5 erilaista vastattua viestiä kohti samassa keskustelussa saman päivän aikana. Enintään 30 XP päivässä.",
+    "comprehension": "Lukeminen ja kuuntelu: 10 XP oikeasta vastauksesta ensimmäisellä yrityksellä. Kertaus antaa 5 XP kerran harjoitusta ja päivää kohti, jos yritit harjoitusta aiempana UTC-päivänä; muuten 0 XP.",
+    "games": "Pelit: enintään 15 XP suoritetusta pelistä. Kaikkien pelien yhteinen päiväkohtainen enimmäismäärä on 45 XP.",
+    "milestones": "Virstanpylväät: 30 XP kerran suoritettua osiota kohti. Kaikkien suunniteltujen oppituntien ja tason lopputestin suorittaminen antaa 100 XP kerran testituloksesta riippumatta."
+  },
   "dashboardProgress": {
     "title": "Edistymisesi",
     "scope": "Nykyinen kielesi ja opiskelusuunnitelmasi",

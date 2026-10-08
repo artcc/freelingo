@@ -1600,6 +1600,24 @@
     "unavailable": "Practica nu a putut fi pregătită. Verifică dacă lecția este finalizată și încearcă din nou.",
     "back": "Înapoi la plan"
   },
+  "progressActivity": {
+    "title": "Ritmul tău de învățare",
+    "period": "Ultimele 28 de zile · UTC",
+    "totals": "{xp} XP · Zile active: {days}/28",
+    "activityHint": "Zilele evidențiate includ și practica recompensată cu 0 XP. Zilele și limitele zilnice sunt calculate în UTC.",
+    "empty": "Următoarea ta sesiune de practică va începe să umple acest calendar."
+  },
+  "progressRewards": {
+    "title": "Cum câștigi XP",
+    "scope": "Recompensele aparțin planului tău de studiu actual. Limitele zilnice sunt calculate în UTC. XP recompensează participarea și activitățile finalizate, nu stăpânirea limbii.",
+    "lessons": "Lecții: 20 XP la finalizare. Fiecare exercițiu din lecție oferă 5 XP pentru un răspuns corect sau 1 XP pentru un răspuns greșit.",
+    "flashcards": "Fișe: 2 XP pentru fiecare recapitulare.",
+    "voice": "Conversație vocală cu Lingu: 20 XP după 3 intervenții distincte cu răspuns în aceeași conversație și zi, o dată pe conversație/zi. Maximum 60 XP pe zi, inclusiv practica lecțiilor.",
+    "chat": "Chat cu Lingu: 10 XP pentru fiecare grup de 5 intervenții distincte cu răspuns în aceeași conversație și zi. Maximum 30 XP pe zi.",
+    "comprehension": "Citire și ascultare: 10 XP pentru fiecare răspuns corect la prima încercare. Repetările oferă 5 XP o dată pe exercițiu/zi dacă l-ai încercat într-o zi UTC anterioară; altfel, 0 XP.",
+    "games": "Jocuri: până la 15 XP pentru fiecare joc finalizat. Toate jocurile au o limită comună de 45 XP pe zi.",
+    "milestones": "Etape: 30 XP o singură dată pentru fiecare unitate finalizată. Finalizarea tuturor lecțiilor programate și a testului final de nivel oferă 100 XP o singură dată, indiferent de rezultat."
+  },
   "dashboardProgress": {
     "title": "Progresul tău",
     "scope": "Limba și planul tău de studiu actuale",

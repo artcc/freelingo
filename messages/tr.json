@@ -1600,6 +1600,24 @@
     "unavailable": "Pratik hazırlanamadı. Dersin tamamlandığından emin ol ve tekrar dene.",
     "back": "Plana dön"
   },
+  "progressActivity": {
+    "title": "Öğrenme ritmin",
+    "period": "Son 28 gün · UTC",
+    "totals": "{xp} XP · Aktif günler: {days}/28",
+    "activityHint": "Vurgulanan günler 0 XP kazandıran pratikleri de içerir. Günler ve günlük sınırlar UTC’ye göre hesaplanır.",
+    "empty": "Bir sonraki pratiğin bu takvimi doldurmaya başlayacak."
+  },
+  "progressRewards": {
+    "title": "Nasıl XP kazanılır?",
+    "scope": "Ödüller mevcut çalışma planına aittir. Günlük sınırlar UTC’ye göre hesaplanır. XP dil yeterliliğini değil, katılımı ve tamamlanan etkinlikleri ödüllendirir.",
+    "lessons": "Dersler: tamamlama başına 20 XP. Her ders alıştırması doğru yanıt için 5 XP, yanlış yanıt için 1 XP verir.",
+    "flashcards": "Kelime kartları: tekrar başına 2 XP.",
+    "voice": "Lingu ile sesli konuşma: aynı konuşmada ve günde yanıtlanmış 3 farklı katkıdan sonra, konuşma başına günde bir kez 20 XP. Ders pratiği dâhil günlük en fazla 60 XP.",
+    "chat": "Lingu ile sohbet: aynı konuşmada ve günde yanıtlanmış her 5 farklı katkı için 10 XP. Günlük en fazla 30 XP.",
+    "comprehension": "Okuma ve dinleme: ilk denemede doğru yanıt başına 10 XP. Alıştırmayı daha önceki bir UTC gününde denediysen tekrarlar alıştırma başına günde bir kez 5 XP verir; aksi hâlde 0 XP.",
+    "games": "Oyunlar: tamamlanan oyun başına en fazla 15 XP. Tüm oyunların ortak günlük sınırı 45 XP’dir.",
+    "milestones": "Kilometre taşları: tamamlanan ünite başına bir kez 30 XP. Planlanan tüm dersleri ve seviye sonu testini tamamlamak, test puanından bağımsız olarak bir kez 100 XP verir."
+  },
   "dashboardProgress": {
     "title": "İlerlemen",
     "scope": "Mevcut dilin ve çalışma planın",

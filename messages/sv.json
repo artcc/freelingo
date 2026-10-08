@@ -1600,6 +1600,24 @@
     "unavailable": "Det gick inte att förbereda övningen. Kontrollera att lektionen är slutförd och försök igen.",
     "back": "Tillbaka till studieplanen"
   },
+  "progressActivity": {
+    "title": "Din inlärningsrytm",
+    "period": "Senaste 28 dagarna · UTC",
+    "totals": "{xp} XP · Aktiva dagar: {days}/28",
+    "activityHint": "Markerade dagar inkluderar även övning som gav 0 XP. Dagar och dagliga gränser följer UTC.",
+    "empty": "Nästa gång du övar börjar den här kalendern fyllas."
+  },
+  "progressRewards": {
+    "title": "Så tjänar du XP",
+    "scope": "Belöningar hör till din nuvarande studieplan. Dagliga gränser följer UTC. XP belönar deltagande och slutförda aktiviteter, inte språkfärdighet.",
+    "lessons": "Lektioner: 20 XP när du slutför en lektion. Varje lektionsövning ger 5 XP för ett rätt svar eller 1 XP för ett felaktigt svar.",
+    "flashcards": "Ordkort: 2 XP per repetition.",
+    "voice": "Röst med Lingu: 20 XP efter 3 olika besvarade inlägg i samma samtal och på samma dag, en gång per samtal/dag. Högst 60 XP per dag, inklusive lektionsövning.",
+    "chat": "Chatt med Lingu: 10 XP per grupp av 5 olika besvarade inlägg i samma samtal och på samma dag. Högst 30 XP per dag.",
+    "comprehension": "Läsning och hörförståelse: 10 XP per rätt svar vid första försöket. Repetitioner ger 5 XP en gång per övning/dag om du försökte med övningen en tidigare UTC-dag; annars 0 XP.",
+    "games": "Spel: upp till 15 XP per slutfört spel. Alla spel delar en gräns på 45 XP per dag.",
+    "milestones": "Milstolpar: 30 XP en gång per slutförd enhet. Att slutföra alla planerade lektioner och nivåns slutprov ger 100 XP en gång, oavsett provresultat."
+  },
   "dashboardProgress": {
     "title": "Dina framsteg",
     "scope": "Ditt nuvarande språk och din studieplan",

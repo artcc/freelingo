@@ -117,6 +117,14 @@ flashcards.
 Progress has daily rows per user, plan, and date with XP, lessons, exercises, streak, and skill JSON.
 `UserCompetency` stores one row per user, plan, unit, and competency text.
 
+The Progress screen shows current-plan XP, today's XP, the current streak, seven-day activity,
+lesson count and lesson-exercise accuracy through the shared dashboard overview. Accuracy remains
+unset before any lesson exercises. Daily history supplies a rolling 28-day XP chart and activity
+calendar, including zero-XP practice and inactive gaps, using UTC dates. A reward guide explains
+the existing sources, thresholds and daily limits with links to practice. It is guidance rather
+than a per-source XP breakdown or a record of earned milestones. Competencies, vocabulary coverage
+and recent skill performance remain separate from participation rewards.
+
 ### Activity and rewards
 
 Activity days use UTC. Submitted Reading/Listening attempts count even with zero correct answers

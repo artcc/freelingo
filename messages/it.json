@@ -1600,6 +1600,24 @@
     "unavailable": "Impossibile preparare la pratica. Verifica che la lezione sia completata e riprova.",
     "back": "Torna al piano"
   },
+  "progressActivity": {
+    "title": "Il tuo ritmo di apprendimento",
+    "period": "Ultimi 28 giorni · UTC",
+    "totals": "{xp} XP · Giorni attivi: {days}/28",
+    "activityHint": "I giorni evidenziati includono anche la pratica che ha assegnato 0 XP. Giorni e limiti giornalieri seguono l’UTC.",
+    "empty": "La tua prossima sessione inizierà a riempire questo calendario."
+  },
+  "progressRewards": {
+    "title": "Come guadagnare XP",
+    "scope": "Le ricompense appartengono al piano di studio attuale. I limiti giornalieri seguono l’UTC. Gli XP riconoscono la partecipazione e le attività completate, non la padronanza della lingua.",
+    "lessons": "Lezioni: 20 XP al completamento. Ogni esercizio di lezione assegna 5 XP per una risposta corretta o 1 XP per una risposta errata.",
+    "flashcards": "Schede: 2 XP per ripasso.",
+    "voice": "Voce con Lingu: 20 XP dopo 3 interventi distinti con risposta nella stessa conversazione e nello stesso giorno, una volta per conversazione/giorno. Massimo 60 XP al giorno, inclusa la pratica delle lezioni.",
+    "chat": "Chat con Lingu: 10 XP per ogni blocco di 5 interventi distinti con risposta nella stessa conversazione e nello stesso giorno. Massimo 30 XP al giorno.",
+    "comprehension": "Lettura e ascolto: 10 XP per risposta corretta al primo tentativo. I ripassi assegnano 5 XP una volta per esercizio/giorno se lo hai tentato in un giorno UTC precedente; altrimenti 0 XP.",
+    "games": "Giochi: fino a 15 XP per partita completata. Tutti i giochi condividono un massimo di 45 XP al giorno.",
+    "milestones": "Traguardi: 30 XP una sola volta per unità completata. Completare tutte le lezioni programmate e il test finale del livello assegna 100 XP una sola volta, indipendentemente dal risultato."
+  },
   "dashboardProgress": {
     "title": "I tuoi progressi",
     "scope": "La lingua e il piano di studio attuali",
