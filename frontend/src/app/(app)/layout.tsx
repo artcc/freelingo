@@ -96,25 +96,31 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   // to silently get a new access token, then fetch /me to populate the user.
   useEffect(() => {
     let canceled = false
+    const controller = new AbortController()
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      canceled || useAuthStore.getState().sessionVersion !== sessionVersion
     async function init() {
       // Load Stripe config once (non-blocking)
       loadConfig()
       try {
         if (!accessToken) {
           const access_token = await requestAccessToken()
-          if (canceled) return
+          if (obsolete()) return
           setTokens(access_token)
         }
         // Fetch user info if not already loaded
-        const meRes = await apiFetch('/api/auth/me')
-        if (canceled) return
+        const meRes = await apiFetch('/api/auth/me', {
+          signal: controller.signal,
+        })
+        if (obsolete()) return
         if (!meRes.ok) {
           logout()
           router.push('/login')
           return
         }
         const me = await meRes.json()
-        if (canceled) return
+        if (obsolete()) return
         setUser(mapUser(me))
 
         if (me.learning_goals === null) {
@@ -122,7 +128,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
           return
         }
       } catch {
-        if (canceled) return
+        if (obsolete()) return
         logout()
         router.push('/login')
       } finally {
@@ -132,6 +138,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     init()
     return () => {
       canceled = true
+      controller.abort()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

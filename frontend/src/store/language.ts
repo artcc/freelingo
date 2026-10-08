@@ -6,6 +6,7 @@ import {
 import type { TargetLanguage } from '@/lib/target-languages'
 import { apiFetch } from '@/lib/api'
 import { mapUserLanguageInfo } from '@/lib/mappers'
+import { useAuthStore } from '@/store/auth'
 
 export interface UserLanguagePlan {
   id: number
@@ -43,6 +44,28 @@ interface LanguageStore {
 }
 
 let languageRequestId = 0
+let languageRequest: {
+  id: number
+  sessionVersion: number
+  promise: Promise<boolean>
+} | null = null
+
+// A page owns its wait, not the shared recovery of the global language snapshot.
+function waitForLanguages(
+  promise: Promise<boolean>,
+  signal?: AbortSignal
+): Promise<boolean> {
+  if (!signal) return promise
+  if (signal.aborted) return Promise.resolve(false)
+  return new Promise((resolve) => {
+    const abort = () => resolve(false)
+    signal.addEventListener('abort', abort, { once: true })
+    void promise.then((ok) => {
+      signal.removeEventListener('abort', abort)
+      resolve(!signal.aborted && ok)
+    })
+  })
+}
 
 export const useLanguageStore = create<LanguageStore>((set, get) => ({
   activeLanguage: null,
@@ -58,41 +81,57 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
   },
 
   fetchLanguages: async (signal) => {
-    const requestId = ++languageRequestId
-    try {
-      const requestSignal = AbortSignal.any([
-        AbortSignal.timeout(20_000),
-        ...(signal ? [signal] : []),
-      ])
-      const res = await apiFetch('/api/languages', { signal: requestSignal })
-      if (!res.ok) return false
-      const data = await res.json()
-      requestSignal.throwIfAborted()
-      if (requestId !== languageRequestId) return false
-
-      const languages: UserLanguageInfo[] = (data.languages || []).map(
-        mapUserLanguageInfo
-      )
-
-      const active = languages.find((l) => l.is_active)
-      const activeLang = active
-        ? (getLanguageByCode(active.target_language) ?? null)
-        : null
-
-      set({
-        userLanguages: languages,
-        activeLanguage: activeLang,
-        availableLanguageCodes: data.all_supported_languages || [],
-        needsRefresh: false,
-      })
-      return true
-    } catch {
-      // Preserve the last snapshot and its invalidation state so callers can retry.
-      return false
+    if (signal?.aborted) return false
+    const { sessionVersion } = useAuthStore.getState()
+    if (
+      languageRequest?.id === languageRequestId &&
+      languageRequest.sessionVersion === sessionVersion
+    ) {
+      return waitForLanguages(languageRequest.promise, signal)
     }
+    const requestId = ++languageRequestId
+    const promise = (async () => {
+      try {
+        const requestSignal = AbortSignal.timeout(20_000)
+        const res = await apiFetch('/api/languages', { signal: requestSignal })
+        if (!res.ok) return false
+        const data = await res.json()
+        requestSignal.throwIfAborted()
+        if (
+          requestId !== languageRequestId ||
+          sessionVersion !== useAuthStore.getState().sessionVersion
+        )
+          return false
+
+        const languages: UserLanguageInfo[] = (data.languages || []).map(
+          mapUserLanguageInfo
+        )
+
+        const active = languages.find((l) => l.is_active)
+        const activeLang = active
+          ? (getLanguageByCode(active.target_language) ?? null)
+          : null
+
+        set({
+          userLanguages: languages,
+          activeLanguage: activeLang,
+          availableLanguageCodes: data.all_supported_languages || [],
+          needsRefresh: false,
+        })
+        return true
+      } catch {
+        // Preserve the last snapshot and its invalidation state so callers can retry.
+        return false
+      }
+    })().finally(() => {
+      if (languageRequest?.id === requestId) languageRequest = null
+    })
+    languageRequest = { id: requestId, sessionVersion, promise }
+    return waitForLanguages(promise, signal)
   },
 
   switchLanguage: async (code: string): Promise<boolean> => {
+    if (get().isSwitching) return false
     set({ isSwitching: true })
     try {
       const signal = AbortSignal.timeout(20_000)
@@ -127,6 +166,7 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
         body: JSON.stringify({ target_language: code }),
       })
       if (!res.ok) return false
+      get().invalidateLanguages()
       await get().fetchLanguages()
       return true
     } catch {
@@ -140,6 +180,7 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
         method: 'DELETE',
       })
       if (!res.ok) return false
+      get().invalidateLanguages()
       await get().fetchLanguages()
       return true
     } catch {

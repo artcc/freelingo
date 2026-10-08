@@ -1,19 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 
-const { mockApiFetch, mockPush } = vi.hoisted(() => ({
+const { mockApiFetch, mockPush, language } = vi.hoisted(() => ({
   mockApiFetch: vi.fn(),
   mockPush: vi.fn(),
+  language: { code: 'en-US', name: 'English' },
 }))
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }))
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
+vi.mock('next/navigation', () => {
+  const router = { push: mockPush }
+  return { useRouter: () => router }
+})
 
 vi.mock('next/link', () => ({
   default: ({
@@ -33,7 +35,7 @@ vi.mock('@/store/language', () => ({
     selector: (state: {
       activeLanguage: { code: string; name: string }
     }) => unknown
-  ) => selector({ activeLanguage: { code: 'en-US', name: 'English' } }),
+  ) => selector({ activeLanguage: language }),
 }))
 
 import PlanPage from '@/app/(app)/plan/page'
@@ -136,6 +138,8 @@ describe('My Plan level test node', () => {
   beforeEach(() => {
     mockApiFetch.mockReset()
     mockPush.mockReset()
+    language.code = 'en-US'
+    language.name = 'English'
   })
 
   it('opens the real level test when the final position is reached', async () => {
@@ -193,5 +197,81 @@ describe('My Plan level test node', () => {
     expect(cardButton).toBeDisabled()
     fireEvent.click(cardButton as HTMLButtonElement)
     expect(mockPush).not.toHaveBeenCalled()
+  })
+
+  it.each([429, 503])(
+    'offers a curriculum-only retry after HTTP %s',
+    async (status) => {
+      mockPlan('in_progress')
+      const normal = mockApiFetch.getMockImplementation()!
+      let recover = false
+      mockApiFetch.mockImplementation((url: string) =>
+        url.startsWith('/api/curriculum/') && !recover
+          ? Promise.resolve(jsonResponse({}, status))
+          : normal(url)
+      )
+      render(<PlanPage />)
+      expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+      expect(screen.queryByText('noUnitsForLevel')).not.toBeInTheDocument()
+      expect(screen.getByText('unitsLabel').parentElement).toHaveTextContent(
+        '—'
+      )
+      const planRequests = mockApiFetch.mock.calls.filter(
+        ([url]) => url === '/api/study-plan/current'
+      ).length
+      recover = true
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      expect(await screen.findByText('Unit One')).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(
+        mockApiFetch.mock.calls.filter(
+          ([url]) => url === '/api/study-plan/current'
+        )
+      ).toHaveLength(planRequests)
+    }
+  )
+
+  it('shows no units only after a successful empty curriculum response', async () => {
+    mockPlan('in_progress')
+    const normal = mockApiFetch.getMockImplementation()!
+    let finish!: (response: Response) => void
+    const pending = new Promise<Response>((resolve) => {
+      finish = resolve
+    })
+    mockApiFetch.mockImplementation((url: string) =>
+      url.startsWith('/api/curriculum/') ? pending : normal(url)
+    )
+    render(<PlanPage />)
+    await screen.findByText('unitsLabel')
+    expect(screen.queryByText('noUnitsForLevel')).not.toBeInTheDocument()
+    expect(screen.getByText('unitsLabel').parentElement).toHaveTextContent('—')
+    await act(async () => finish(jsonResponse([])))
+    expect(screen.getByText('noUnitsForLevel')).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('ignores the old curriculum response after a language change', async () => {
+    mockPlan('in_progress')
+    const normal = mockApiFetch.getMockImplementation()!
+    let finishOld!: (response: Response) => void
+    const pending = new Promise<Response>((resolve) => {
+      finishOld = resolve
+    })
+    mockApiFetch.mockImplementation((url: string) =>
+      url === '/api/curriculum/A1?language=en-US' ? pending : normal(url)
+    )
+    const { rerender } = render(<PlanPage />)
+    await waitFor(() =>
+      expect(mockApiFetch).toHaveBeenCalledWith(
+        '/api/curriculum/A1?language=en-US'
+      )
+    )
+    language.code = 'de-DE'
+    language.name = 'German'
+    rerender(<PlanPage />)
+    expect(await screen.findByText('Unit One')).toBeInTheDocument()
+    await act(async () => finishOld(jsonResponse({}, 503)))
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.getByText('Unit One')).toBeInTheDocument()
   })
 })

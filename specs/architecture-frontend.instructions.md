@@ -64,6 +64,11 @@ clears auth state and routes to login.
 
 Callers with an AbortSignal can stop waiting for shared refresh independently. Cancellation releases
 their loading-counter slot and prevents their retry; shared token rotation continues for other callers.
+Authentication has a local session version advanced by login, registration, and logout, but not normal
+access-token rotation. API 401 recovery checks this identity before renewal, global auth updates and
+retry. A response belonging to a replaced session cannot start recovery or clear/replace current auth.
+In-flight refreshes are shared only within the same session; obsolete completion cannot clear a newer
+session's pending refresh. Delayed 401s within the same session reuse an already rotated access token.
 
 Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
@@ -96,8 +101,11 @@ snapshot with answers; history pages capture their response context for replay, 
 from an earlier level. A `study_context_changed` submission response displays the shared localized
 context-conflict message instead of showing results or decrementing the local quota.
 
-The language store invalidates cached context after a persisted switch and rejects responses from
-queries predating invalidation or a newer request. The switch PUT has a 20-second timeout that also
+The language store shares pending queries for the current context and session. Cancelling a page's
+wait does not cancel global recovery; a persistent selector can still receive the result. Context
+invalidation rejects older responses, and add/remove/switch mutations invalidate before reconciliation.
+Overlapping switch calls are rejected by the store; switch controls are disabled until the current
+PUT and reconciliation finish. The switch PUT has a 20-second timeout that also
 bounds its authentication-refresh wait. Transport/timeout failures and HTTP 408/5xx invalidate the
 summary for GET-only reconciliation; a definite rejection preserves the valid summary.
 The exercise hook pauses pending lookups during a switch, then resumes them through GET. A busy-flag
@@ -218,7 +226,8 @@ Language-keyed content resets immediately on a language change; effect cleanup d
 responses, including delayed JSON and curriculum loads. Local switching or context invalidation
 unmounts the content even if the cached language code has not changed. Missing or invalidated language
 context is reconciled through the language store before any progress resources are loaded; failures
-offer retry. Context recovery is cancellable and uses the store's 20-second timeout.
+offer retry. The page's recovery wait is cancellable; the shared query uses the store's 20-second timeout
+and can finish updating global context after the page unmounts.
 A null current plan shows `NoPlanBanner`; loading failures, including curriculum HTTP errors,
 show a retry action rather than fabricated zero progress. `getCurriculumUnits` rejects unsuccessful
 HTTP responses; an empty array represents a successful response with no units.

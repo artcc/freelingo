@@ -12,7 +12,9 @@ vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
 vi.mock('@/components/LanguageSwitcher', () => ({ default: () => null }))
 vi.mock('@/components/AuthAvatarImage', () => ({ AuthAvatarImage: () => null }))
 vi.mock('@/components/ui/confirm-dialog', () => ({ ConfirmDialog: () => null }))
-vi.mock('@/components/ui/contact-form-modal', () => ({ ContactFormModal: () => null }))
+vi.mock('@/components/ui/contact-form-modal', () => ({
+  ContactFormModal: () => null,
+}))
 vi.mock('@/components/ui/loading-bar', () => ({ LoadingBar: () => null }))
 vi.mock('@/components/ui/page-loading', () => ({
   PageLoading: () => <div>Restoring session</div>,
@@ -80,11 +82,16 @@ describe('AppLayout session restoration after a full reload', () => {
             ? json(profile)
             : json({ detail: 'Unauthorized' }, 401)
         }
-        if (url === '/api/feedback/unread-summary') return json({ unread_count: 0 })
+        if (url === '/api/feedback/unread-summary')
+          return json({ unread_count: 0 })
         throw new Error(`Unexpected request: ${String(url)}`)
       })
 
-      const layout = <AppLayout><div>Authenticated content</div></AppLayout>
+      const layout = (
+        <AppLayout>
+          <div>Authenticated content</div>
+        </AppLayout>
+      )
       render(strict ? <StrictMode>{layout}</StrictMode> : layout)
       await act(async () => {
         completeRefresh(json({ access_token: 'restored-token' }))
@@ -97,10 +104,13 @@ describe('AppLayout session restoration after a full reload', () => {
       expect.soft(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
       expect.soft(localStorage.getItem('fl_cookie_consent')).toBe('accepted')
       expect(screen.getByText('Authenticated content')).toBeInTheDocument()
-      expect(fetch).toHaveBeenCalledWith('/api/auth/refresh', expect.objectContaining({
-        method: 'POST',
-        credentials: 'include',
-      }))
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/auth/refresh',
+        expect.objectContaining({
+          method: 'POST',
+          credentials: 'include',
+        })
+      )
     }
   )
 
@@ -109,12 +119,17 @@ describe('AppLayout session restoration after a full reload', () => {
       if (url === '/api/auth/refresh') {
         return json({ detail: 'Invalid or expired refresh token' }, 401)
       }
-      if (url === '/api/feedback/unread-summary') return json({ unread_count: 0 })
+      if (url === '/api/feedback/unread-summary')
+        return json({ unread_count: 0 })
       throw new Error(`Unexpected request: ${String(url)}`)
     })
 
     await act(async () => {
-      render(<AppLayout><div>Authenticated content</div></AppLayout>)
+      render(
+        <AppLayout>
+          <div>Authenticated content</div>
+        </AppLayout>
+      )
     })
 
     expect(navigation.push).toHaveBeenCalledWith('/login')
@@ -124,66 +139,137 @@ describe('AppLayout session restoration after a full reload', () => {
     expect(localStorage.getItem('fl_cookie_consent')).toBe('accepted')
   })
 
-  it.each([200, 401])('ignores a refresh response with status %s after unmount', async (status) => {
-    let complete!: (response: Response) => void
-    vi.mocked(fetch).mockReturnValue(new Promise<Response>((resolve) => {
-      complete = resolve
-    }))
-    const { unmount } = render(<AppLayout><div>Authenticated content</div></AppLayout>)
-    unmount()
+  it.each([200, 401])(
+    'ignores a refresh response with status %s after unmount',
+    async (status) => {
+      let complete!: (response: Response) => void
+      vi.mocked(fetch).mockReturnValue(
+        new Promise<Response>((resolve) => {
+          complete = resolve
+        })
+      )
+      const { unmount } = render(
+        <AppLayout>
+          <div>Authenticated content</div>
+        </AppLayout>
+      )
+      unmount()
 
-    await act(async () => {
-      complete(status === 200
-        ? json({ access_token: 'obsolete-token' })
-        : json({ detail: 'Invalid refresh token' }, status))
-    })
+      await act(async () => {
+        complete(
+          status === 200
+            ? json({ access_token: 'obsolete-token' })
+            : json({ detail: 'Invalid refresh token' }, status)
+        )
+      })
 
-    expect(fetch).toHaveBeenCalledTimes(1)
-    expect(useAuthStore.getState().accessToken).toBeNull()
-    expect(useAuthStore.getState().user).toBeNull()
-    expect(navigation.push).not.toHaveBeenCalled()
-    expect(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
-  })
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(useAuthStore.getState().accessToken).toBeNull()
+      expect(useAuthStore.getState().user).toBeNull()
+      expect(navigation.push).not.toHaveBeenCalled()
+      expect(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
+    }
+  )
 
   it('shares a pending rotation across an actual unmount and remount', async () => {
     let complete!: (response: Response) => void
-    const pending = new Promise<Response>((resolve) => { complete = resolve })
+    const pending = new Promise<Response>((resolve) => {
+      complete = resolve
+    })
     vi.mocked(fetch).mockImplementation(async (url) => {
       if (url === '/api/auth/refresh') return pending
       if (url === '/api/auth/me') return json(profile)
-      if (url === '/api/feedback/unread-summary') return json({ unread_count: 0 })
+      if (url === '/api/feedback/unread-summary')
+        return json({ unread_count: 0 })
       throw new Error(`Unexpected request: ${String(url)}`)
     })
-    const first = render(<AppLayout><div>Previous page</div></AppLayout>)
+    const first = render(
+      <AppLayout>
+        <div>Previous page</div>
+      </AppLayout>
+    )
     first.unmount()
-    render(<AppLayout><div>Current page</div></AppLayout>)
+    render(
+      <AppLayout>
+        <div>Current page</div>
+      </AppLayout>
+    )
 
-    await act(async () => { complete(json({ access_token: 'restored-token' })) })
+    await act(async () => {
+      complete(json({ access_token: 'restored-token' }))
+    })
 
-    expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/auth/refresh')).toHaveLength(1)
-    expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/auth/me')).toHaveLength(1)
+    expect(
+      vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/auth/refresh')
+    ).toHaveLength(1)
+    expect(
+      vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/auth/me')
+    ).toHaveLength(1)
     expect(useAuthStore.getState().accessToken).toBe('restored-token')
     expect(screen.getByText('Current page')).toBeInTheDocument()
     expect(navigation.push).not.toHaveBeenCalled()
     expect(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
   })
 
-  it.each([200, 503])('ignores an obsolete profile response with status %s', async (status) => {
-    useAuthStore.setState({ accessToken: 'previous-token' })
-    let complete!: (response: Response) => void
-    vi.mocked(fetch).mockReturnValue(new Promise<Response>((resolve) => {
-      complete = resolve
-    }))
-    const { unmount } = render(<AppLayout><div>Previous page</div></AppLayout>)
-    unmount()
-    useAuthStore.setState({ accessToken: 'current-token' })
+  it.each([200, 401, 503])(
+    'ignores an obsolete profile response with status %s',
+    async (status) => {
+      useAuthStore.setState({ accessToken: 'previous-token' })
+      let complete!: (response: Response) => void
+      vi.mocked(fetch).mockReturnValue(
+        new Promise<Response>((resolve) => {
+          complete = resolve
+        })
+      )
+      const { unmount } = render(
+        <AppLayout>
+          <div>Previous page</div>
+        </AppLayout>
+      )
+      unmount()
+      expect(vi.mocked(fetch).mock.calls[0][1]?.signal?.aborted).toBe(true)
+      useAuthStore.setState({ accessToken: 'current-token' })
 
-    await act(async () => { complete(json(profile, status)) })
+      await act(async () => {
+        complete(json(profile, status))
+      })
 
-    expect(useAuthStore.getState().accessToken).toBe('current-token')
-    expect(useAuthStore.getState().user).toBeNull()
-    expect(navigation.push).not.toHaveBeenCalled()
-    expect(navigation.replace).not.toHaveBeenCalled()
-    expect(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
-  })
+      expect(useAuthStore.getState().accessToken).toBe('current-token')
+      expect(useAuthStore.getState().user).toBeNull()
+      expect(navigation.push).not.toHaveBeenCalled()
+      expect(navigation.replace).not.toHaveBeenCalled()
+      expect(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
+      expect(fetch).toHaveBeenCalledTimes(1)
+    }
+  )
+
+  it.each([200, 401])(
+    'preserves a newer session when an initializer refresh finishes with %s',
+    async (status) => {
+      let complete!: (response: Response) => void
+      vi.mocked(fetch).mockReturnValue(
+        new Promise<Response>((resolve) => {
+          complete = resolve
+        })
+      )
+      const { unmount } = render(
+        <AppLayout>
+          <div>Previous page</div>
+        </AppLayout>
+      )
+      unmount()
+      useAuthStore.getState().startSession('current-token')
+      await act(async () =>
+        complete(
+          status === 200
+            ? json({ access_token: 'obsolete-token' })
+            : json({}, status)
+        )
+      )
+      expect(useAuthStore.getState().accessToken).toBe('current-token')
+      expect(navigation.push).not.toHaveBeenCalled()
+      expect(localStorage.getItem(TOUR_STORAGE_KEY)).toBe('1')
+      expect(fetch).toHaveBeenCalledTimes(1)
+    }
+  )
 })

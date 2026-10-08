@@ -239,11 +239,15 @@ Dependencies that require a plan distinguish `No active language set` from
 - fetch, add, switch, and remove operations.
 
 `fetchLanguages` returns a success boolean and preserves the previous snapshot and invalidation
-state on failure. Requests have a 20-second timeout, including the caller's authentication-refresh
-wait, and accept an optional cancellation signal. Cancelled responses do not update the store.
-Only the most recently started language query may publish its response. `invalidateLanguages`
-also invalidates pending queries, preventing pre-mutation responses from restoring an old summary
-or clearing its invalidation flag.
+state on failure. Consumers share the in-flight query for the current context and authentication
+session, with a 20-second timeout including authentication-refresh wait. An optional caller signal
+cancels only that consumer's wait (returning false); the shared query can still update the store for
+the persistent selector and other pages. An already cancelled caller starts no query.
+`invalidateLanguages` makes pending queries obsolete, preventing pre-mutation responses from
+restoring an old summary or clearing its invalidation flag. Successful add/remove operations also
+invalidate before refreshing, so they cannot join a query started before their mutation. A response
+from an earlier authentication session cannot publish. Completion of an obsolete query cannot clear
+the reference to a newer pending query.
 Assessment completion marks the summary as needing refresh and fetches it before navigation or
 the voice-trial offer. A failed refresh does not undo plan creation or repeat the completion POST;
 Listening and Reading reload invalidated context before consulting their exercise pools.
@@ -255,6 +259,10 @@ including its authentication-refresh wait; cancellation does not interrupt share
 Timeouts, transport failures, HTTP 408, and server/proxy 5xx responses leave the summary invalidated
 because the mutation outcome is uncertain. Reconciliation uses GET, never an automatic repeat PUT.
 Other rejected HTTP responses preserve the valid summary.
+
+The store rejects overlapping `switchLanguage` calls without sending another PUT or releasing the
+existing busy state. `isSwitching` stays true through both the PUT and its reconciliation. The
+sidebar/mobile selector and language-settings switch buttons are disabled while it is true.
 
 Listening and Reading pause an in-flight exercise lookup while `isSwitching` is true. An already
 displayed exercise, its answers, and replay mode are preserved during the switch and after a definite

@@ -62,14 +62,23 @@ The refresh token is an opaque `secrets.token_urlsafe(64)` value stored in an `h
 under `refresh:{token}` in Redis for the configured 30-day default. Refresh rotation deletes the old
 Redis token before issuing a replacement. Logout deletes the current token and clears the cookie.
 
-`apiFetch` adds the bearer token. When a request that had an access token returns 401, it serializes
-one refresh request, stores the new access token, and retries. Failed refresh clears client auth and
-redirects to login.
+`apiFetch` adds the bearer token. When a request that had an access token returns 401 within the same
+authentication session, it shares one refresh request, stores the new access token, and retries. A
+delayed 401 reuses a token already rotated by another request in that session. Failed refresh clears
+client auth and redirects to login only if both the session and token being recovered are still current.
+Login and registration use `startSession`, which advances a local session version and clears the old
+profile. Logout also advances this version; normal `setTokens` rotation preserves it. Recovery from
+an earlier session raises an abort error rather than renewing, retrying under, or altering a newer
+session. These checks protect client state; backend authentication and refresh-cookie rotation remain
+authoritative.
 
 `requestAccessToken()` shares one in-flight refresh HTTP request between shell initialization and
-`apiFetch` recovery. It returns the token without changing auth state itself; each consumer owns those
-state changes. Shell initialization ignores results and errors after its effect is cancelled, so an
-obsolete initializer cannot replace the profile, clear the session, or redirect the current render.
+`apiFetch` recovery within the same session version. It returns the token without changing auth state
+itself; each consumer owns those state changes. Shell initialization aborts its `/me` request on cleanup
+and ignores results and errors after cancellation or session replacement. API recovery also checks
+session identity before applying a pending renewal's success/failure, so an obsolete initializer cannot
+replace the profile, clear the newer session, or redirect it. Completing an old refresh does not clear
+the pending-request reference of a newer session.
 
 A caller's AbortSignal also cancels its wait for the shared refresh and releases its loading-counter
 slot. It does not abort shared token rotation or log out other callers. A cancelled caller does not

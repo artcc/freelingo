@@ -122,6 +122,7 @@ function lessonKey(week: number, day: number, title: string): string {
 
 export default function PlanPage() {
   const t = useTranslations('plan')
+  const tCommon = useTranslations('common')
   const router = useRouter()
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const langName = activeLanguage?.name ?? ''
@@ -138,6 +139,9 @@ export default function PlanPage() {
   >({})
   const [completion, setCompletion] = useState<CompletionState | null>(null)
   const [units, setUnits] = useState<CurriculumUnit[]>([])
+  const [unitsLoading, setUnitsLoading] = useState(true)
+  const [unitsError, setUnitsError] = useState(false)
+  const [unitsAttempt, setUnitsAttempt] = useState(0)
 
   const loadPlan = useCallback(async () => {
     setLoading(true)
@@ -244,12 +248,26 @@ export default function PlanPage() {
   }, [loadPlan])
 
   useEffect(() => {
+    let cancelled = false
+    setUnits([])
+    setUnitsLoading(true)
+    setUnitsError(false)
     if (plan?.cefr_level && activeLanguage?.code) {
-      getCurriculumUnits(plan.cefr_level, activeLanguage.code)
-        .then(setUnits)
-        .catch(() => setUnits([]))
+      void getCurriculumUnits(plan.cefr_level, activeLanguage.code)
+        .then((data) => {
+          if (!cancelled) setUnits(data)
+        })
+        .catch(() => {
+          if (!cancelled) setUnitsError(true)
+        })
+        .finally(() => {
+          if (!cancelled) setUnitsLoading(false)
+        })
     }
-  }, [plan?.cefr_level, activeLanguage?.code])
+    return () => {
+      cancelled = true
+    }
+  }, [plan?.id, plan?.cefr_level, activeLanguage?.code, unitsAttempt])
 
   if (loading) {
     return <PageLoading />
@@ -308,7 +326,7 @@ export default function PlanPage() {
               {t('unitsLabel')}
             </p>
             <p className="text-fl-body text-fl-muted-1 font-mono">
-              {units.length}
+              {unitsLoading || unitsError ? '—' : units.length}
             </p>
           </div>
         </div>
@@ -316,15 +334,34 @@ export default function PlanPage() {
 
       {/* ── Unit list ── */}
       <div className="space-y-2">
-        {units.length === 0 && (
+        {unitsLoading ? (
+          <PageLoading fullScreen={false} />
+        ) : unitsError ? (
           <div className="border-fl-border bg-fl-surface space-y-3 border px-6 py-10 text-center">
-            <p className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
-              {t('noUnitsForLevel', { level })}
+            <p role="alert" className="text-fl-muted-1 text-sm">
+              {tCommon('errorMessage')}
             </p>
-            <p className="text-fl-label text-fl-muted-4 font-mono">
-              {t('noUnitsDesc')}
-            </p>
+            <button
+              className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
+              onClick={() => {
+                setUnitsLoading(true)
+                setUnitsAttempt((value) => value + 1)
+              }}
+            >
+              {tCommon('retry')}
+            </button>
           </div>
+        ) : (
+          units.length === 0 && (
+            <div className="border-fl-border bg-fl-surface space-y-3 border px-6 py-10 text-center">
+              <p className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
+                {t('noUnitsForLevel', { level })}
+              </p>
+              <p className="text-fl-label text-fl-muted-4 font-mono">
+                {t('noUnitsDesc')}
+              </p>
+            </div>
+          )
         )}
         {units.map((unit, i) => {
           const unitLessons = byUnit[unit.id] ?? []

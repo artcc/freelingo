@@ -614,23 +614,48 @@ describe.each([
     expect(useLoadingStore.getState().count).toBe(0)
   })
 
-  it('aborts context loading on unmount', async () => {
-    let signal: AbortSignal | null | undefined
-    vi.mocked(fetch).mockImplementationOnce(
-      (_url, options) =>
-        new Promise((_resolve, reject) => {
-          signal = options?.signal
-          signal?.addEventListener('abort', () => reject(signal?.reason), {
-            once: true,
+  it.each([200, 503])(
+    'preserves shared context loading after unmount without starting exercises (HTTP %s)',
+    async (status) => {
+      let signal: AbortSignal | null | undefined
+      let finish!: (response: Response) => void
+      vi.mocked(fetch).mockImplementationOnce(
+        (_url, options) =>
+          new Promise((resolve, reject) => {
+            finish = resolve
+            signal = options?.signal
+            signal?.addEventListener('abort', () => reject(signal?.reason), {
+              once: true,
+            })
           })
-        })
-    )
-    const { unmount } = render(<Page />)
-    unmount()
-    await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
-    expect(signal?.aborted).toBe(true)
-    expect(lookups()).toHaveLength(0)
-  })
+      )
+      const { unmount } = render(<Page />)
+      render(<LanguageSwitcher />)
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith('/api/languages', expect.any(Object))
+
+      unmount()
+      // Only the shared HTTP request remains; the page's loading owner is gone.
+      await waitFor(() => expect(useLoadingStore.getState().count).toBe(1))
+      expect(signal?.aborted).toBe(false)
+      expect(lookups()).toHaveLength(0)
+
+      await act(async () =>
+        finish(json(status === 200 ? languages() : {}, status))
+      )
+      await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
+      if (status === 200) {
+        expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+        expect(
+          screen.getByRole('button', { name: /en-GB/ })
+        ).toBeInTheDocument()
+      } else {
+        expect(useLanguageStore.getState().activeLanguage).toBeNull()
+      }
+      expect(lookups()).toHaveLength(0)
+      expect(fetch).toHaveBeenCalledTimes(1)
+    }
+  )
 
   it.each([false, true])(
     'uses the new plan after retaking Assessment (voice offer: %s)',

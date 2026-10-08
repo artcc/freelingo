@@ -14,6 +14,7 @@ import { useLanguageStore } from '@/store/language'
 import { getLanguageByCode } from '@/lib/target-languages'
 import ProgressPage from '@/app/(app)/progress/page'
 import { ActivityHistory } from '@/components/progress/ActivityHistory'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 const { mockApiFetch } = vi.hoisted(() => ({ mockApiFetch: vi.fn() }))
 vi.mock('@/lib/api', () => ({ apiFetch: mockApiFetch }))
@@ -234,7 +235,9 @@ describe('progress page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
     expect(await screen.findByText('777')).toBeInTheDocument()
     expect(mockApiFetch).toHaveBeenCalledWith('/api/vocabulary?language=de-DE')
-    expect(mockApiFetch).toHaveBeenCalledWith('/api/curriculum/A1?language=de-DE')
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      '/api/curriculum/A1?language=de-DE'
+    )
     expect(mockApiFetch).not.toHaveBeenCalledWith(
       '/api/curriculum/A1?language=en-GB'
     )
@@ -280,7 +283,9 @@ describe('progress page', () => {
     useLanguageStore.setState({ activeLanguage: null })
     mockApiFetch.mockImplementation(async (url: string) => {
       if (url === '/api/languages') {
-        return json({ languages: [{ target_language: 'ja-JP', is_active: true }] })
+        return json({
+          languages: [{ target_language: 'ja-JP', is_active: true }],
+        })
       }
       return responseFor(url)
     })
@@ -291,6 +296,54 @@ describe('progress page', () => {
       '/api/vocabulary?language=en-GB'
     )
   })
+
+  it.each([false, true])(
+    'finishes shared selector recovery after navigation with StrictMode=%s',
+    async (strict) => {
+      useLanguageStore.setState({ activeLanguage: null })
+      let finish!: (response: Response) => void
+      mockApiFetch.mockReturnValue(
+        new Promise((resolve) => {
+          finish = resolve
+        })
+      )
+      function Shell({ progress }: { progress: boolean }) {
+        return (
+          <NextIntlClientProvider
+            locale="en-GB"
+            messages={messages}
+            timeZone="UTC"
+          >
+            <LanguageSwitcher />
+            {progress ? <ProgressPage /> : <div>Another page</div>}
+          </NextIntlClientProvider>
+        )
+      }
+      const view = (progress: boolean) =>
+        strict ? (
+          <React.StrictMode>
+            <Shell progress={progress} />
+          </React.StrictMode>
+        ) : (
+          <Shell progress={progress} />
+        )
+      const { rerender } = render(view(true))
+      expect(mockApiFetch).toHaveBeenCalledTimes(1)
+      rerender(view(false))
+      expect(screen.getByText('Another page')).toBeInTheDocument()
+      expect(mockApiFetch.mock.calls[0][1].signal.aborted).toBe(false)
+      await act(async () =>
+        finish(
+          json({
+            languages: [{ target_language: 'de-DE', is_active: true }],
+          })
+        )
+      )
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('de-DE')
+      expect(screen.getByRole('button', { name: /German/ })).toBeInTheDocument()
+      expect(mockApiFetch).toHaveBeenCalledTimes(1)
+    }
+  )
 
   it.each([429, 503])(
     'offers retry on curriculum HTTP %s and renders recovered competencies',
@@ -367,7 +420,10 @@ describe('progress page', () => {
         'lang',
         'en-GB'
       )
-      expect(screen.getByText('Meeting people')).toHaveAttribute('lang', 'en-GB')
+      expect(screen.getByText('Meeting people')).toHaveAttribute(
+        'lang',
+        'en-GB'
+      )
     }
   )
 })

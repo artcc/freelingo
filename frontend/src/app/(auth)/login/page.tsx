@@ -24,7 +24,7 @@ function LoginForm() {
     void loadConfig()
   }, [loadConfig])
 
-  const setTokens = useAuthStore((s) => s.setTokens)
+  const startSession = useAuthStore((s) => s.startSession)
   const setUser = useAuthStore((s) => s.setUser)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -66,7 +66,7 @@ function LoginForm() {
           throw new Error(t('error'))
         }
         const { access_token } = await res.json()
-        setTokens(access_token)
+        startSession(access_token)
         const meRes = await apiFetch('/api/auth/me')
         if (meRes.ok) setUser(mapUser(await meRes.json()))
         router.push('/dashboard')
@@ -81,7 +81,7 @@ function LoginForm() {
         setLoading(false)
       }
     },
-    [email, password, router, setTokens, setUser, t]
+    [email, password, router, startSession, setUser, t]
   )
 
   return (

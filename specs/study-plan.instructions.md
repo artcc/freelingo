@@ -234,6 +234,12 @@ The lesson page disables answer/regeneration/completion controls for completed l
 completion it refreshes `/today`, can show day-complete state, refreshes freemium status, and may trigger
 the review prompt when the next returned lesson belongs to another unit or the plan is exhausted.
 
+My Plan loads its curriculum separately, distinguishing loading, failure, and a successful empty
+collection. The unit count is unset during loading or failure. HTTP/transport errors show a localized
+error and a curriculum-only retry; retry does not reload or generate lessons. The empty-level message
+appears only after a successful empty response. Responses from a previous curriculum load are ignored
+after a language, plan, level, retry, or unmount change.
+
 ## Lesson-linked voice practice
 
 The completion screen and completed-lesson review offer an optional practice button. The shared

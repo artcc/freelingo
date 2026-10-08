@@ -43,7 +43,7 @@ function RegisterForm() {
   const searchParams = useSearchParams()
   const invite = searchParams.get('invite')
   const selectedPlan = getSelectedPlan(searchParams.get('plan'))
-  const setTokens = useAuthStore((s) => s.setTokens)
+  const startSession = useAuthStore((s) => s.startSession)
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -123,7 +123,7 @@ function RegisterForm() {
           throw new Error(msg)
         }
         const data = await res.json()
-        setTokens(data.access_token)
+        startSession(data.access_token)
         router.push(
           selectedPlan ? `/onboarding?plan=${selectedPlan}` : '/onboarding'
         )
@@ -158,7 +158,7 @@ function RegisterForm() {
       selectedPlan,
       router,
       t,
-      setTokens,
+      startSession,
     ]
   )
 

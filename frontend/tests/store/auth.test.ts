@@ -57,8 +57,19 @@ describe('useAuthStore', () => {
   })
 
   it('setTokens updates accessToken', () => {
+    const version = useAuthStore.getState().sessionVersion
     useAuthStore.getState().setTokens('abc123')
     expect(useAuthStore.getState().accessToken).toBe('abc123')
+    expect(useAuthStore.getState().sessionVersion).toBe(version)
+  })
+
+  it('advances session identity on login and logout, even with the same token', () => {
+    const version = useAuthStore.getState().sessionVersion
+    useAuthStore.getState().startSession('same-token')
+    useAuthStore.getState().startSession('same-token')
+    expect(useAuthStore.getState().sessionVersion).toBe(version + 2)
+    useAuthStore.getState().logout()
+    expect(useAuthStore.getState().sessionVersion).toBe(version + 3)
   })
 
   it('setUser updates user', () => {
