@@ -109,21 +109,53 @@ summary.
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
 
+## Lingu avatar
+
 Voice conversations show the animated Lingu avatar between the transcript and controls, at 150 × 150
 px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
 response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
 conversation header, switching between thinking while a response is generated and resting otherwise.
 Both use `components/lingu/LinguAvatar`, which shows a loading indicator while the 3D model loads and
-falls back to static artwork for reduced motion or model-loading failures. The shared 3D scene uses
-neutral tone mapping at exposure 1.0, with a white/blue
-hemisphere light at intensity 2, a white key light at intensity 4, and a pale-blue fill light at
-intensity 3. These lighting values apply consistently in both interface themes; the scene background
-remains transparent.
+falls back to static artwork for reduced motion or model-loading failures. All avatar surfaces share
+the rendering configuration described under Streaming and media, independently of interface theme.
+
+## Page loading
+
+`components/ui/page-loading.tsx` provides general page loading with `LinguAvatar` playing `reposo`
+at 150 × 150 px on mobile and 195 × 195 px on desktop, centered localized text, and optional subtext
+in Geist Sans. Text is visible independently of avatar readiness. A spinner is shown while the 3D
+module/model loads; static artwork is reserved for reduced motion or loading failures. Inline mode
+stays compact, with a decorative spinner disabled by `showDot={false}`; its rotation respects reduced
+motion. Both modes hold one global loading-counter slot while mounted and release it on unmount.
+General and generation screens reuse `PageLoadingPresentation`: the avatar/title block is centered
+between equal flexible grid tracks, with descriptions and delay warnings in the lower track so they
+do not shift that block. Short viewports allow the presentation to scroll rather than clipping text.
+Page-specific minimum-height overrides are not supported; standalone loading uses the dynamic viewport.
+
+`app/(app)/loading.tsx` reuses `PageLoading` and the application background, keeping the route Suspense
+fallback consistent with client-side loading. Once hydrated,
+the fallback participates in the same mounted loading counter.
+
+`components/ui/page-loading-boundary.tsx` coordinates a 500 ms minimum presentation inside the
+authenticated app layout. A persistent `PageLoadingProvider` shares the clock across route fallback,
+initialization, page loading, and exercise generation. `PageLoadingViewport` presents the loading UI
+while underlying content remains mounted but invisible, inert, and hidden from assistive technology.
+The app shell occupies `100dvh`; the main loading viewport fills the remaining area beside the desktop
+sidebar and below the mobile header and any verification banner. The viewport contains a persistent
+full-height content scroller and a sibling loading overlay. Hidden page height and content scroll
+position do not determine loading placement. Initialization uses the entire dynamic viewport.
+Requests and page effects continue normally; the minimum is presentation-only and does not delay
+authentication, exercise delivery, or retry timers. Consecutive loading states share the same deadline,
+including handoffs after 500 ms; slow loads end without an additional minimum wait. Once the
+presentation has finished, a new loading cycle gets a new minimum. Provider unmount cancels pending
+timers. Retained presentation does not hold extra global activity-counter slots. Inline indicators
+and consumers outside this provider retain their normal lifetime. Avatar readiness never gates content.
 
 Reading and Listening share `components/ui/exercise-generation-loading.tsx` for their generation
 screens, with `LinguAvatar` playing `pensando` at 150 × 150 px on mobile and 195 × 195 px on desktop.
-Each page supplies its localized status text independently of avatar readiness, with reserved space
-for the delay warning and the avatar's existing static fallback for reduced motion or loading failures.
+Each page supplies its localized status text independently of avatar readiness, with descriptions and
+delay warnings below the centered avatar/title block. A spinner precedes the first animated frame; reduced motion and loading
+failures use static artwork. Generation participates in the shared minimum presentation above.
 The component retains the mounted loading-counter lifecycle used by `PageLoading`. See
 `reading.instructions.md` and `listening.instructions.md` for generation behavior.
 
@@ -243,12 +275,12 @@ visible until the first rendered frame; static Lingu artwork is used for reduced
 renderer/model failures. The optional `onReady` callback signals the first rendered animation frame or
 the resolved static fallback, after the browser's motion preference is known.
 
-Landing and tour share the rendering configuration in `components/lingu/LinguScene.tsx`:
+All `LinguAvatar` consumers share the rendering configuration in `components/lingu/LinguScene.tsx`:
 
-- `NeutralToneMapping` with exposure `1.08` and a transparent canvas.
-- Hemisphere light with white sky, blue-gray ground (`0x527080`), and intensity `0.65`.
-- White directional key light with intensity `1.8` at `(5, 12, 10)`.
-- Pale-blue (`0xc5e4ff`) directional fill light with intensity `0.65` at `(-6, 7, 4)`.
+- `NeutralToneMapping` with exposure `1.0` and a transparent canvas.
+- Hemisphere light with white sky, blue-gray ground (`0x527080`), and intensity `2`.
+- White directional key light with intensity `4` at `(5, 12, 10)`.
+- Pale-blue (`0xc5e4ff`) directional fill light with intensity `3` at `(-6, 7, 4)`.
 
 `lib/lingu-playback.ts` manages the 250 ms transitions using the current effective weights of all
 contributing actions. Interrupted fades preserve contributing clip times and poses; actions that

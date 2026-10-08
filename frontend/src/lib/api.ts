@@ -5,6 +5,25 @@ const BASE_URL = ''
 
 let isRefreshing = false
 let refreshPromise: Promise<string | null> | null = null
+let accessTokenRequest: Promise<string> | null = null
+
+// Share the HTTP rotation between session restoration and API recovery. Consumers
+// own state changes so an unmounted initializer cannot log out a newer session.
+export function requestAccessToken(): Promise<string> {
+  if (accessTokenRequest) return accessTokenRequest
+  accessTokenRequest = (async () => {
+    const res = await fetch(`${BASE_URL}/api/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+    if (!res.ok) throw new Error('refresh failed')
+    const { access_token } = await res.json()
+    return access_token
+  })().finally(() => {
+    accessTokenRequest = null
+  })
+  return accessTokenRequest
+}
 
 async function refreshToken(): Promise<string | null> {
   if (isRefreshing && refreshPromise) {
@@ -13,12 +32,7 @@ async function refreshToken(): Promise<string | null> {
   isRefreshing = true
   refreshPromise = (async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/refresh`, {
-        method: 'POST',
-        credentials: 'include',
-      })
-      if (!res.ok) throw new Error('refresh failed')
-      const { access_token } = await res.json()
+      const access_token = await requestAccessToken()
       useAuthStore.getState().setTokens(access_token)
       return access_token
     } catch {

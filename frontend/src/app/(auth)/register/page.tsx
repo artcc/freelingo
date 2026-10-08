@@ -465,7 +465,7 @@ function RegistrationGate() {
 
   // Token validity is checked only by the backend when the form is submitted.
   if (invite || allowRegistration) return <RegisterForm />
-  if (configLoading) return <PageLoading minHeight="min-h-screen" />
+  if (configLoading) return <PageLoading />
 
   return (
     <div className="bg-fl-bg flex min-h-screen items-center justify-center px-4">

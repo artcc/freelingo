@@ -24,7 +24,7 @@ import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { useFreemiumStore } from '@/store/freemium'
 
 function ConversationLoading() {
-  return <PageLoading minHeight="min-h-[calc(100vh-56px)] md:min-h-screen" />
+  return <PageLoading />
 }
 
 const ConversationMode = dynamic(

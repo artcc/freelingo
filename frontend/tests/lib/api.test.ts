@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, requestAccessToken } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
 import { useLoadingStore } from '@/store/loading'
 
@@ -98,6 +98,46 @@ describe('apiFetch', () => {
     await Promise.all([apiFetch('/api/test1'), apiFetch('/api/test2')])
 
     expect(refreshCallCount).toBe(1)
+  })
+
+  it('shares the HTTP rotation between session restoration and API recovery', async () => {
+    useAuthStore.setState({ accessToken: 'old-token' })
+    let completeRefresh!: (response: Response) => void
+    const pending = new Promise<Response>((resolve) => { completeRefresh = resolve })
+    let started!: () => void
+    const refreshStarted = new Promise<void>((resolve) => { started = resolve })
+    vi.mocked(fetch).mockImplementation(async (url, options) => {
+      if (url === '/api/auth/refresh') {
+        started()
+        return pending
+      }
+      const authenticated = new Headers(options?.headers).get('Authorization') === 'Bearer new-token'
+      return new Response(null, { status: authenticated ? 200 : 401 })
+    })
+
+    const request = apiFetch('/api/test')
+    await refreshStarted
+    const restoration = requestAccessToken()
+    completeRefresh(new Response(JSON.stringify({ access_token: 'new-token' })))
+    const [response, token] = await Promise.all([request, restoration])
+
+    expect(response.ok).toBe(true)
+    expect(token).toBe('new-token')
+    expect(useAuthStore.getState().accessToken).toBe('new-token')
+    expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/auth/refresh')).toHaveLength(1)
+  })
+
+  it('allows another rotation after failure and leaves authentication decisions to the consumer', async () => {
+    useAuthStore.setState({ accessToken: 'current-token' })
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(new Response(null, { status: 401 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'new-token' })))
+
+    await expect(requestAccessToken()).rejects.toThrow('refresh failed')
+    expect(useAuthStore.getState().accessToken).toBe('current-token')
+    await expect(requestAccessToken()).resolves.toBe('new-token')
+    expect(useAuthStore.getState().accessToken).toBe('current-token')
+    expect(fetch).toHaveBeenCalledTimes(2)
   })
 
   it('increments and decrements loading counter', async () => {

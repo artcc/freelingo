@@ -216,7 +216,7 @@ export default function DashboardPage() {
   }
 
   if (loading) {
-    return <PageLoading label={t('loadingProgress')} minHeight="min-h-screen" />
+    return <PageLoading label={t('loadingProgress')} />
   }
 
   if (loadError) {

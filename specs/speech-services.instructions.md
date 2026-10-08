@@ -21,7 +21,8 @@ TTS configuration:
 - `TTS_PROVIDER=local` selects Kokoro; `openai` selects OpenAI TTS.
 - `TTS_BASE_URL` defaults to `http://kokoro:8880`.
 - `TTS_VOICE` defaults to `af_heart` for Kokoro.
-- `OPENAI_TTS_MODEL` defaults to `tts-1`.
+- `OPENAI_TTS_MODEL` defaults to `tts-1` in backend `Settings`. Both Compose files instead supply
+  `gpt-4o-mini-tts` when the operator omits the variable; this model is used when `TTS_PROVIDER=openai`.
 - `OPENAI_TTS_VOICE` defaults to `nova`.
 - `OPENAI_TTS_SPEED` defaults to `1.0`.
 

@@ -238,8 +238,11 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
 - `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Listening.
 - Generating state shares `components/ui/exercise-generation-loading.tsx` with Listening. It shows
   Lingu's repeating `pensando` animation at 150 × 150 px on mobile and 195 × 195 px on desktop. The title and
-  description remain visible while the avatar loads, and space is reserved below them for the delay
-  warning. The shared avatar provides static artwork for reduced motion or model-loading failures.
+  description remain visible while the avatar loads. The avatar/title block uses the same visible-area
+  centering as general page loading; the description and delay warning sit below it without shifting
+  its position. The avatar shows a spinner while loading and static artwork for reduced motion or failures.
+  The app layout retains loading presentation for at least 500 ms, sharing the deadline across
+  consecutive navigation, initial-loading, and generation states without delaying requests or retries.
   Avatar readiness does not gate exercise delivery. The component holds one global loading-counter
   slot while mounted and releases it on unmount; initial and history loading still use `PageLoading`.
 - Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay

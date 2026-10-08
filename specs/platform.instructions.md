@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for the FreeLingo platform core: account entry, authentication, onboarding, placement boundary, dashboard, text tutoring, baseline progress, authenticated shell, i18n, and runtime configuration."
-applyTo: "backend/app/core/**, backend/app/routers/{auth,assessment,chat,config,progress,flashcards}.py, backend/app/services/{assessment,progress_service,flashcard_sm2,llm_adapter}.py, frontend/src/app/(auth)/**, frontend/src/app/(app)/{layout,dashboard,chat,flashcards}/**, frontend/src/app/api/chat/**, frontend/src/{store,lib,i18n}/**, messages/*.json"
+applyTo: "backend/app/core/**, backend/app/routers/{auth,assessment,chat,config,progress,flashcards}.py, backend/app/services/{assessment,progress_service,flashcard_sm2,llm_adapter}.py, frontend/src/app/(auth)/**, frontend/src/app/(app)/layout.tsx, frontend/src/app/(app)/{dashboard,chat,flashcards}/**, frontend/src/app/api/chat/**, frontend/src/{store,lib,i18n}/**, messages/*.json"
 ---
 
 # Platform Core
@@ -66,6 +66,11 @@ Redis token before issuing a replacement. Logout deletes the current token and c
 one refresh request, stores the new access token, and retries. Failed refresh clears client auth and
 redirects to login.
 
+`requestAccessToken()` shares one in-flight refresh HTTP request between shell initialization and
+`apiFetch` recovery. It returns the token without changing auth state itself; each consumer owns those
+state changes. Shell initialization ignores results and errors after its effect is cancelled, so an
+obsolete initializer cannot replace the profile, clear the session, or redirect the current render.
+
 A caller's AbortSignal also cancels its wait for the shared refresh and releases its loading-counter
 slot. It does not abort shared token rotation or log out other callers. A cancelled caller does not
 retry its original request when that refresh later completes.
@@ -104,7 +109,9 @@ Assessment is language-specific and separate from account onboarding.
 - Skill strengths start at 0.65; weaknesses are below 0.45 or have declared gaps on at least half of
   that skill's answers.
 - The learner may override the suggested A1-C2 level.
-- Plan durations are 4, 8, 12, or 16 weeks, with 12 as the default.
+- The UI offers plan durations of 4, 8, 12, or 16 weeks, with 12 as the default. Backend request
+  schemas accept any positive integer; plan creation also enforces the curriculum-capacity rules
+  in `study-plan.instructions.md`.
 - Assessment completion creates the plan directly; the normal frontend does not require a separate
   plan-generation request.
 
@@ -167,7 +174,8 @@ the growing catalog, not an exhaustive list. Games have no blanket Premium marke
   Navigation, dismissal, and unmount stop playback and cancel pending browser requests. Failure leaves
   the text and navigation available and permits retry.
 - The native modal dialog traps focus, closes on Escape, restores focus, and locks background scroll.
-  The character is decorative; reduced motion, loading, or unavailable WebGL use a static image.
+  The character is decorative. A spinner covers 3D loading; reduced motion or renderer/model-loading
+  failure uses static artwork.
 - Completion and skipping write the browser-local `fl_tour_done_v2` flag, centralized as
   `TOUR_STORAGE_KEY` in `lib/onboarding-tour.ts`. Other completion keys do not suppress the current
   tour. Change this key only to intentionally reintroduce the tour, independently of app releases.

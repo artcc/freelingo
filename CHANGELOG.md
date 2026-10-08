@@ -9,12 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Changed
 
 - Refreshed product wording across all interface languages to highlight Lingu as the tutor.
-- Improved Reading and Listening exercise-generation loading screens with animated Lingu and clearer messaging.
+- Unified navigation and general page loading, and improved Reading/Listening generation screens with Lingu, a spinner while the animation loads, clearer text, and compact inline indicators. App loading screens share consistent visible-area centering and a 500 ms minimum display to avoid flashes.
 
 ### Fixed
 
 - Corrected the local development setup: localhost application URLs in `.env.dev`, backend port exposure and conversation WebSocket configuration in `docker-compose.dev.yml`, and matching setup instructions in `DEVELOPMENT.md`.
 - Fixed voice conversation initialization in development by safely releasing unstarted VAD instances and preventing canceled initialization errors from blocking the active session.
+- Fixed unexpected logout and repeated onboarding tours on development reloads by sharing session refresh requests and ignoring canceled session initialization results.
 
 ## [1.10.10] - 2026-10-07
 
