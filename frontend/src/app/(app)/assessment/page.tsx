@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
-import { useLanguageStore } from '@/store/language'
+import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { isSubscribed, useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import BeginnerGate from '@/components/assessment/BeginnerGate'
@@ -112,6 +112,7 @@ export default function AssessmentPage() {
   const isSwitching = useLanguageStore((s) => s.isSwitching)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
   const user = useAuthStore((s) => s.user)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const configLoaded = useConfigStore((s) => s.loaded)
   const loadConfig = useConfigStore((s) => s.load)
@@ -123,13 +124,14 @@ export default function AssessmentPage() {
   const [contextError, setContextError] = useState(false)
   const [contextAttempt, setContextAttempt] = useState(0)
   const flowRef = useRef<AssessmentFlow | null>(null)
-  const completedLanguage = useRef<string | null>(null)
+  const completedFlow = useRef<AssessmentFlow | null>(null)
   const mounted = useRef(false)
 
   useEffect(() => {
     mounted.current = true
     return () => {
       mounted.current = false
+      flowRef.current?.controller.abort()
     }
   }, [])
 
@@ -167,13 +169,19 @@ export default function AssessmentPage() {
 
   useEffect(() => {
     // A committed assessment only needs summary recovery, never another assessment.
-    if (completedLanguage.current === activeLanguage?.code && !isSwitching)
+    if (
+      completedFlow.current &&
+      completedFlow.current === flowRef.current &&
+      completedFlow.current.language === activeLanguage?.code &&
+      completedFlow.current.sessionVersion === sessionVersion
+    )
       return
-    completedLanguage.current = null
+    flowRef.current?.controller.abort()
+    completedFlow.current = null
     const controller = new AbortController()
     const flow: AssessmentFlow = {
       language: activeLanguage?.code ?? '',
-      sessionVersion: useAuthStore.getState().sessionVersion,
+      sessionVersion,
       controller,
     }
     flowRef.current = flow
@@ -189,9 +197,14 @@ export default function AssessmentPage() {
     setEvaluating(false)
     setSubmitting(false)
     setTrialLoading(false)
-    if (isSwitching) return () => controller.abort()
+    setCreatedPlanId(null)
+    setVoiceTrial(null)
     async function check() {
       try {
+        if (useLanguageStore.getState().isSwitching) {
+          await waitForLanguageSwitch(controller.signal)
+        }
+        if (controller.signal.aborted) return
         if (!flow.language || needsRefresh) {
           const ok = await fetchLanguages(controller.signal)
           if (controller.signal.aborted) return
@@ -218,6 +231,7 @@ export default function AssessmentPage() {
           ? ((await planRes.json()) as ExistingPlan | null)
           : null
         signal.throwIfAborted()
+        await waitForLanguageSwitch(controller.signal)
         if (!isCurrentFlow(flow)) return
         setBank(bankData.questions)
         if (plan?.cefr_level) {
@@ -227,6 +241,7 @@ export default function AssessmentPage() {
           setStep('beginner-gate')
         }
       } catch {
+        await waitForLanguageSwitch(controller.signal)
         if (
           !controller.signal.aborted &&
           useAuthStore.getState().sessionVersion === flow.sessionVersion
@@ -235,11 +250,15 @@ export default function AssessmentPage() {
       }
     }
     void check()
-    return () => controller.abort()
+    return () => {
+      // Our own successful completion invalidates the summary, not this flow.
+      // A later flow or unmount still cancels its outstanding continuation.
+      if (completedFlow.current !== flow) controller.abort()
+    }
   }, [
     activeLanguage?.code,
     needsRefresh,
-    isSwitching,
+    sessionVersion,
     fetchLanguages,
     contextAttempt,
   ])
@@ -324,7 +343,9 @@ export default function AssessmentPage() {
     setCurrentLevel(newLevel)
     setQuestionNumber((n) => n + 1)
     setTimeout(() => {
-      if (isCurrentFlow(flow)) loadNextQuestion(newLevel, usedIds)
+      void waitForLanguageSwitch(flow.controller.signal).then(() => {
+        if (isCurrentFlow(flow)) loadNextQuestion(newLevel, usedIds)
+      })
     }, 150)
   }
 
@@ -342,11 +363,13 @@ export default function AssessmentPage() {
       })
       if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentResult
+      await waitForLanguageSwitch(flow.controller.signal)
       if (!isCurrentFlow(flow)) return
       setResult(data)
       setSelectedLevel(data.cefr_level as CEFRLevel)
       setStep('result')
     } catch {
+      await waitForLanguageSwitch(flow.controller.signal)
       if (isCurrentFlow(flow)) setError(tCommon('errorMessage'))
     } finally {
       if (isCurrentFlow(flow)) setEvaluating(false)
@@ -379,15 +402,20 @@ export default function AssessmentPage() {
       })
       if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentCompleteResponse
+      await waitForLanguageSwitch(flow.controller.signal)
       if (!isCurrentFlow(flow)) return
-      completedLanguage.current = flow.language
+      completedFlow.current = flow
       setCreatedPlanId(data.plan_id)
       // The previous plan is no longer valid even if refreshing the summary fails.
       // Completion already succeeded: do not make the user create the plan again.
       useLanguageStore.getState().invalidateLanguages()
       await useLanguageStore.getState().fetchLanguages()
+      await waitForLanguageSwitch(flow.controller.signal)
       if (
         !mounted.current ||
+        flow.controller.signal.aborted ||
+        flowRef.current !== flow ||
+        completedFlow.current !== flow ||
         useAuthStore.getState().sessionVersion !== flow.sessionVersion ||
         useLanguageStore.getState().isSwitching ||
         useLanguageStore.getState().activeLanguage?.code !== flow.language
@@ -401,6 +429,7 @@ export default function AssessmentPage() {
       }
       router.push('/plan')
     } catch {
+      await waitForLanguageSwitch(flow.controller.signal)
       if (isCurrentFlow(flow)) {
         setError(tCommon('errorMessage'))
         setSubmitting(false)
@@ -425,7 +454,7 @@ export default function AssessmentPage() {
         durationSeconds: voiceTrial.duration_seconds ?? 300,
         cefrLevel: selectedLevel,
         planId: createdPlanId,
-        targetLanguage: completedLanguage.current ?? flowRef.current?.language,
+        targetLanguage: flow.language,
       })
     )
     router.push('/conversation')
@@ -445,6 +474,7 @@ export default function AssessmentPage() {
       })
       if (!res.ok) throw new Error(tCommon('errorMessage'))
       const data = (await res.json()) as AssessmentCompleteResponse
+      await waitForLanguageSwitch(flow.controller.signal)
       if (!isCurrentFlow(flow)) return
       if (data.voice_trial?.available && data.voice_trial.token) {
         setCreatedPlanId(data.plan_id)
@@ -455,6 +485,7 @@ export default function AssessmentPage() {
       }
       setError(tCommon('errorMessage'))
     } catch {
+      await waitForLanguageSwitch(flow.controller.signal)
       if (isCurrentFlow(flow)) setError(tCommon('errorMessage'))
     } finally {
       if (isCurrentFlow(flow)) setTrialLoading(false)
@@ -462,6 +493,7 @@ export default function AssessmentPage() {
   }
 
   // ── Loading ────────────────────────────────────────────────────────────────
+  if (isSwitching) return <PageLoading label={tCommon('loading')} />
   if (contextError)
     return (
       <div className="mx-auto max-w-md space-y-4 p-6 text-center">

@@ -62,7 +62,16 @@ const ready = () =>
       exercise_type: 'story',
       topic: 'Fresh exercise',
       text: 'A new passage.',
-      questions: [],
+      questions: Array.from({ length: 5 }, (_, index) => ({
+        index,
+        question: `Question ${index}`,
+        options: {
+          A: `Answer ${index}`,
+          B: `Other ${index}`,
+          C: `Third ${index}`,
+          D: `Fourth ${index}`,
+        },
+      })),
       duration_seconds: 10,
     },
     generation_status: 'idle',
@@ -96,6 +105,22 @@ afterEach(() => {
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
+
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((done) => {
+    resolve = done
+  })
+  return { promise, resolve }
+}
+
+function answerExercise() {
+  for (let index = 0; index < 5; index += 1) {
+    fireEvent.click(
+      screen.getByRole('button', { name: new RegExp(`Answer ${index}`) })
+    )
+  }
+}
 
 describe('Assessment context recovery', () => {
   it('recovers a committed language addition using GET and completes only the resolved language', async () => {
@@ -204,9 +229,154 @@ describe.each([
   { feature: 'reading', Page: ReadingPage },
   { feature: 'listening', Page: ListeningPage },
 ])('$feature context initialization', ({ feature, Page }) => {
-  it.each([200, 503])(
-    'ignores a late attempt (HTTP %s) without unlocking the replacement submission',
-    async (status) => {
+  it.each([
+    { replay: false, status: 422, timing: 'during' },
+    { replay: false, status: 422, timing: 'after' },
+    { replay: false, status: 429, timing: 'during' },
+    { replay: false, status: 429, timing: 'after' },
+    { replay: true, status: 422, timing: 'during' },
+    { replay: true, status: 422, timing: 'after' },
+    { replay: true, status: 429, timing: 'during' },
+    { replay: true, status: 429, timing: 'after' },
+  ])(
+    'keeps a persisted attempt through a rejected $status switch (replay: $replay, body: $timing)',
+    async ({ replay, status, timing }) => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      useConfigStore.setState({ stripeEnabled: true })
+      useFreemiumStore.setState({
+        loaded: true,
+        lastFetch: Date.now(),
+        status: {
+          trial_active: false,
+          trial_ends_at: null,
+          chat_remaining: 5,
+          chat_limit: 5,
+          lessons_remaining: 5,
+          lessons_limit: 5,
+          listening_remaining: 5,
+          listening_limit: 5,
+          reading_remaining: 5,
+          reading_limit: 5,
+          games_remaining: 3,
+          games_limit: 3,
+          voice_remaining_seconds: 300,
+          voice_limit_seconds: 300,
+        },
+      })
+      const exercise = await ready().json()
+      const switchResponse = deferred<Response>()
+      const attemptBody = deferred<unknown>()
+      const result = {
+        score: 5,
+        xp_earned: replay ? 0 : 50,
+        correct_answers: Array.from({ length: 5 }, (_, index) => ({
+          index,
+          correct: 'A',
+        })),
+        text: exercise.exercise.text,
+      }
+      let attemptSignal: AbortSignal | undefined
+      let persisted = 0
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/languages/active') return switchResponse.promise
+        if (String(url).startsWith(`/api/${feature}/history`))
+          return json({
+            context: exercise.context,
+            total: 1,
+            items: [
+              {
+                id: 1,
+                ...result,
+                exercise: exercise.exercise,
+                answers: {},
+                completed_at: '2026-01-01',
+              },
+            ],
+          })
+        if (url === `/api/${feature}/attempt`) {
+          persisted += 1
+          attemptSignal = options!.signal as AbortSignal
+          const response = json(result)
+          vi.spyOn(response, 'json').mockReturnValue(attemptBody.promise)
+          return response
+        }
+        if (String(url).startsWith('/api/reviews')) return json({})
+        return json(exercise)
+      })
+      render(<Page />)
+      await screen.findByText(/Fresh exercise/)
+      if (replay) {
+        fireEvent.click(screen.getByRole('button', { name: 'history' }))
+        fireEvent.click(
+          await screen.findByRole('button', { name: 'practiceAgain' })
+        )
+      }
+      answerExercise()
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      await waitFor(() => expect(persisted).toBe(1))
+      let switching!: Promise<boolean>
+      act(() => {
+        switching = useLanguageStore.getState().switchLanguage('es-ES')
+      })
+      const submittingLabel = feature === 'reading' ? '...' : 'checking'
+      expect(
+        screen.getByRole('button', { name: submittingLabel })
+      ).toBeDisabled()
+      expect(attemptSignal?.aborted).toBe(false)
+      if (timing === 'during') {
+        await act(async () => attemptBody.resolve(result))
+        expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: submittingLabel })
+        ).toBeDisabled()
+      }
+      await act(async () => {
+        switchResponse.resolve(json({ detail: 'Rejected' }, status))
+        expect(await switching).toBe(false)
+      })
+      if (timing === 'after') {
+        expect(
+          screen.getByRole('button', { name: submittingLabel })
+        ).toBeDisabled()
+        fireEvent.click(screen.getByRole('button', { name: submittingLabel }))
+        expect(persisted).toBe(1)
+        await act(async () => attemptBody.resolve(result))
+      }
+      expect(await screen.findByText('resultsLabel')).toBeInTheDocument()
+      expect(screen.getByText('5/5')).toBeInTheDocument()
+      expect(screen.queryByText('alreadyAttempted')).not.toBeInTheDocument()
+      expect(attemptSignal?.aborted).toBe(false)
+      expect(persisted).toBe(1)
+      const attempt = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === `/api/${feature}/attempt`)!
+      expect(JSON.parse(String(attempt[1]?.body))).toEqual({
+        exercise_id: 42,
+        replay,
+        context: exercise.context,
+        answers: { 0: 'A', 1: 'A', 2: 'A', 3: 'A', 4: 'A' },
+      })
+      expect(
+        useFreemiumStore.getState().status?.[
+          feature === 'reading' ? 'reading_remaining' : 'listening_remaining'
+        ]
+      ).toBe(4)
+      expect(lookups()).toHaveLength(1)
+      await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
+    }
+  )
+
+  it.each([
+    { status: 200, timing: 'during' },
+    { status: 503, timing: 'during' },
+    { status: 200, timing: 'after' },
+    { status: 503, timing: 'after' },
+  ])(
+    'ignores an old attempt (HTTP $status, response $timing switch) without unlocking the replacement submission',
+    async ({ status, timing }) => {
       useLanguageStore.setState({
         activeLanguage: getLanguageByCode('en-GB') ?? null,
         userLanguages: languages().languages,
@@ -243,9 +413,24 @@ describe.each([
       })
       render(<Page />)
       await screen.findByText(/Fresh exercise/)
+      answerExercise()
       fireEvent.click(screen.getByRole('button', { name: 'submit' }))
       await waitFor(() => expect(attempts).toHaveLength(1))
       act(() => useLanguageStore.setState({ isSwitching: true }))
+      const result = {
+        score: 0,
+        xp_earned: 0,
+        correct_answers: Array.from({ length: 5 }, (_, index) => ({
+          index,
+          correct: 'B',
+        })),
+        text: 'Transcript',
+      }
+      if (timing === 'during') {
+        await act(async () => attempts[0].resolve(json(result, status)))
+        expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+        expect(screen.queryByText('errorSubmit')).not.toBeInTheDocument()
+      }
       targetLanguage = 'de-DE'
       planId = 9
       act(() =>
@@ -264,15 +449,11 @@ describe.each([
       )
       await screen.findByText(/Replacement exercise/)
       expect(attempts[0].signal.aborted).toBe(true)
+      answerExercise()
       fireEvent.click(screen.getByRole('button', { name: 'submit' }))
       await waitFor(() => expect(attempts).toHaveLength(2))
-      const result = {
-        score: 0,
-        xp_earned: 0,
-        correct_answers: [],
-        text: 'Transcript',
-      }
-      await act(async () => attempts[0].resolve(json(result, status)))
+      if (timing === 'after')
+        await act(async () => attempts[0].resolve(json(result, status)))
       expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
       expect(screen.queryByText('errorSubmit')).not.toBeInTheDocument()
       expect(

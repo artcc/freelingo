@@ -75,6 +75,9 @@ restoration errors remain owned by the caller. Avatar failures retain the image 
 independently logging out. Avatar cache entries and pending work are session-scoped. Profile consumers
 check session identity after reading response bodies before updating the global user; login and
 conversation profile requests are also aborted on unmount.
+Landing subscription lookup obtains a fresh token through the shared refresh before `/me`, even if
+an in-memory token exists. Public-page failures do not force logout or redirect; only successful
+subscription responses are cached for the session, so a failed lookup can be retried on a later visit.
 
 Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
@@ -109,6 +112,10 @@ context-conflict message instead of showing results or decrementing the local qu
 Attempt submissions have a separate cancellation lifecycle from exercise lookup. An obsolete response
 cannot publish results, errors, review prompts, or overwrite the submitting state of a newer attempt.
 The server may already have persisted a cancelled attempt; cancellation does not undo that write.
+Starting a provisional language switch does not cancel an answer submission or release its submitting
+lock. `waitForLanguageSwitch` holds its response until the switch settles (or the owner is cancelled).
+A definite rejection with unchanged context publishes the original result and quota decrement once;
+changed or invalidated context still discards the old presentation.
 
 The language store shares pending queries for the current context and session. Cancelling a page's
 wait does not cancel global recovery; a persistent selector can still receive the result. Context

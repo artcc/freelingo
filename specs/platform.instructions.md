@@ -86,6 +86,10 @@ only if its session is unchanged and its caller has not been cancelled; it prese
 published by another consumer. Failed restoration is handled by the caller rather than forcing logout.
 Avatar renewal failures fall back to the image placeholder. Avatar cache publication checks session
 identity after reading the blob, and obsolete completion cannot clear newer pending work.
+Landing subscription checks refresh before reading `/me`, including when the stored access token may
+have expired while browsing public pages. They cache successful reads by session identity, not failed
+authentication/network responses. Failures retain the public-page fallback without logout or redirect;
+an obsolete response cannot clear a newer session's cached lookup.
 
 Login, conversation-trial profile refresh, billing confirmation, onboarding profile updates, and profile/
 conversation settings check session identity before publishing the returned user. Login and conversation
@@ -124,9 +128,12 @@ Assessment is language-specific and separate from account onboarding.
 Before checking the existing plan or loading the question bank, Assessment reconciles missing or
 invalidated language context. Failures show an error with GET-only retry rather than treating the
 context as a beginner without a plan. Checks are cancellable and bounded to 20 seconds. The flow keeps
-its resolved language for completion and voice-trial requests; a switch or invalidation cancels old work
-and prevents stale checks, evaluations, or submissions from advancing the replacement flow. A confirmed
-completion refreshes the summary without restarting assessment or repeating its POST.
+its resolved language for completion and voice-trial requests. A provisional switch suspends interaction
+and defers pending responses while retaining questions, answers, results, and plan choices. A definite
+rejection resumes that flow; a changed language or external invalidation cancels obsolete work. A confirmed
+completion refreshes the summary without restarting assessment or repeating its POST. Its flow identity
+survives its own summary invalidation, but not replacement or unmount: returning to the same language
+does not authorize a previous completion to navigate or publish a voice-trial offer.
 
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after

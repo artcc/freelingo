@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
-import { useLanguageStore } from '@/store/language'
+import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
@@ -72,7 +72,6 @@ function ReadingPage() {
     (s) => s.userLanguages.find((l) => l.is_active)?.plan
   )
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
-  const isSwitching = useLanguageStore((s) => s.isSwitching)
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const {
     selectedWord,
@@ -113,7 +112,6 @@ function ReadingPage() {
     activePlan?.id,
     activePlan?.cefr_level,
     needsRefresh,
-    isSwitching,
     sessionVersion,
   ])
 
@@ -213,6 +211,7 @@ function ReadingPage() {
       })
       if (!res.ok) {
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
+        await waitForLanguageSwitch(controller.signal)
         if (!current()) return
         setError(
           d.detail === 'study_context_changed'
@@ -224,6 +223,7 @@ function ReadingPage() {
         return
       }
       const data = (await res.json()) as SubmitResult
+      await waitForLanguageSwitch(controller.signal)
       if (!current()) return
       setResult(data)
       dismissTooltip()
@@ -240,6 +240,7 @@ function ReadingPage() {
         setReviewPromptOpen(true)
       }
     } catch {
+      await waitForLanguageSwitch(controller.signal)
       if (current()) setError(t('errorSubmit'))
     } finally {
       if (attemptRequest.current === controller) {

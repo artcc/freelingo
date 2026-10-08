@@ -188,3 +188,23 @@ export const useLanguageStore = create<LanguageStore>((set, get) => ({
     }
   },
 }))
+
+// A provisional switch may be rejected. Keep an operation's response until the
+// switch settles; its owner then decides whether the original context survived.
+// Cancellation releases this wait too, without changing the shared switch.
+export function waitForLanguageSwitch(signal: AbortSignal): Promise<void> {
+  if (signal.aborted || !useLanguageStore.getState().isSwitching) {
+    return Promise.resolve()
+  }
+  return new Promise((resolve) => {
+    const finish = () => {
+      unsubscribe()
+      signal.removeEventListener('abort', finish)
+      resolve()
+    }
+    const unsubscribe = useLanguageStore.subscribe((state) => {
+      if (!state.isSwitching) finish()
+    })
+    signal.addEventListener('abort', finish, { once: true })
+  })
+}
