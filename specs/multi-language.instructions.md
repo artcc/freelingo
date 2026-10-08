@@ -264,6 +264,12 @@ Assessment preserves its in-progress quiz, result, and choices during a provisio
 suspending interaction. Pending responses wait for the switch outcome; a definite rejection resumes
 the same flow. A completion retains its identity through its own summary refresh, but a replacement
 flow invalidates it even when the learner later returns to the original language.
+Evaluation errors and their exact retry payload belong to that same flow. A provisional switch hides
+the retry action and defers evaluation success or failure, including delayed response-body decoding.
+A definite switch rejection such as 422 or 429 restores the error or pending outcome without losing
+answers. A confirmed switch, external context invalidation, authentication-session replacement, or
+unmount discards the old evaluation and its retry; returning A → B → A cannot revive them. An obsolete
+evaluation cannot publish a result/error or release a replacement flow's evaluation lock.
 `invalidationVersion` advances on every invalidation, even while `needsRefresh` is already true.
 Assessment records its completion's version so a failed external switch reconciliation cannot be mistaken
 for its own refresh. An unresolved context blocks the old voice offer and is recovered through GET.

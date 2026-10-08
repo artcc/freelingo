@@ -23,10 +23,12 @@ vi.mock('next-intl', () => {
 
 function deferred<T>() {
   let resolve!: (value: T) => void
-  const promise = new Promise<T>((done) => {
+  let reject!: (reason: unknown) => void
+  const promise = new Promise<T>((done, fail) => {
     resolve = done
+    reject = fail
   })
-  return { promise, resolve }
+  return { promise, resolve, reject }
 }
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status })
@@ -112,6 +114,325 @@ async function answerQuestions(count: number, finish = true) {
     }
   }
 }
+
+describe('Assessment evaluation recovery', () => {
+  const shortBank = bank.filter((q) => q.difficulty === 'A2').slice(0, 2)
+  const evaluations = () =>
+    vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === '/api/assessment/evaluate')
+
+  async function finishQuiz(count: number) {
+    const expected = []
+    for (let i = 0; i < count; i += 1) {
+      const question = bank.find(
+        (q) =>
+          q.question === screen.getByText(/^Placement question /).textContent
+      )!
+      const last = i === count - 1
+      expected.push({
+        question_id: question.id,
+        skill: question.skill,
+        difficulty: question.difficulty,
+        correct: !last,
+        dont_know: last,
+      })
+      if (last)
+        fireEvent.click(screen.getByRole('button', { name: 'dontKnow' }))
+      else await answerQuestions(1, false)
+    }
+    return expected
+  }
+
+  it.each(
+    ['limit', 'exhaustion'].flatMap((trigger) =>
+      ['503', '429', 'transport', 'json'].map((failure) => ({
+        trigger,
+        failure,
+      }))
+    )
+  )(
+    'recovers $failure at $trigger with the exact answers and a single retry in flight',
+    async ({ trigger, failure }) => {
+      const body = deferred<unknown>()
+      const response = json({})
+      const readBody = vi.spyOn(response, 'json').mockReturnValue(body.promise)
+      let attempts = 0
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: trigger === 'limit' ? bank : shortBank })
+        if (url === '/api/assessment/evaluate') {
+          attempts += 1
+          if (attempts > 2) return response
+          if (failure === 'transport')
+            throw new TypeError('Network unavailable')
+          if (failure === 'json') return new Response('unreadable json')
+          return json({}, Number(failure))
+        }
+        return json({}, 404)
+      })
+      render(<AssessmentPage />)
+      await startQuiz()
+      const expected = await finishQuiz(trigger === 'limit' ? 15 : 2)
+      expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+      expect(evaluations()).toHaveLength(1)
+      expect(JSON.parse(String(evaluations()[0][1]?.body))).toEqual({
+        answers: expected,
+      })
+
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+      expect(evaluations()).toHaveLength(2)
+      const retry = screen.getByRole('button', { name: 'retry' })
+      act(() => {
+        fireEvent.click(retry)
+        fireEvent.click(retry)
+      })
+      await waitFor(() => expect(readBody).toHaveBeenCalledTimes(1))
+      expect(evaluations()).toHaveLength(3)
+      expect(
+        screen.getByRole('status', { name: 'evaluating' })
+      ).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'retry' })
+      ).not.toBeInTheDocument()
+      await act(async () => body.resolve(evaluation))
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      expect(screen.queryByText('errorMessage')).not.toBeInTheDocument()
+      expect(evaluations().map(([, options]) => options?.body)).toEqual(
+        Array(3).fill(JSON.stringify({ answers: expected }))
+      )
+      // Evaluation recovery cannot reload the bank, reconcile plans, or complete.
+      expect(vi.mocked(fetch).mock.calls.map(([url]) => url)).toEqual([
+        '/api/study-plan/current',
+        '/api/assessment/bank?language=en-GB',
+        ...Array(3).fill('/api/assessment/evaluate'),
+      ])
+      expect(push).not.toHaveBeenCalled()
+    }
+  )
+
+  it.each(
+    [422, 429].flatMap((status) =>
+      ['error', 'initial-failure', 'retry-success', 'retry-failure'].map(
+        (stage) => ({
+          status,
+          stage,
+        })
+      )
+    )
+  )(
+    'preserves $stage through a rejected $status switch',
+    async ({ status, stage }) => {
+      const change = deferred<Response>()
+      const body = deferred<unknown>()
+      const response = json({})
+      const readBody = vi.spyOn(response, 'json').mockReturnValue(body.promise)
+      let attempts = 0
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/languages/active') return change.promise
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: shortBank })
+        if (url === '/api/assessment/evaluate') {
+          attempts += 1
+          if (attempts === 1)
+            return stage === 'initial-failure' ? response : json({}, 503)
+          if (attempts === 2 && stage.startsWith('retry-')) return response
+          return json(evaluation)
+        }
+        return json({}, 404)
+      })
+      render(<AssessmentPage />)
+      await startQuiz()
+      const expected = await finishQuiz(2)
+      if (stage !== 'initial-failure') {
+        await screen.findByRole('alert')
+        if (stage !== 'error')
+          fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      }
+      if (stage !== 'error')
+        await waitFor(() => expect(readBody).toHaveBeenCalledTimes(1))
+      const signal = evaluations().at(-1)![1]!.signal!
+      let switching!: Promise<boolean>
+      act(() => {
+        switching = useLanguageStore.getState().switchLanguage('de-DE')
+      })
+      if (stage !== 'error') {
+        await act(async () => {
+          if (stage === 'retry-success') body.resolve(evaluation)
+          else body.reject(new SyntaxError('Unreadable delayed body'))
+        })
+      }
+      expect(
+        screen.getByRole('status', { name: 'loading' })
+      ).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'retry' })
+      ).not.toBeInTheDocument()
+      expect(screen.queryByText('resultStep')).not.toBeInTheDocument()
+      expect(signal.aborted).toBe(false)
+      await act(async () => {
+        change.resolve(json({}, status))
+        expect(await switching).toBe(false)
+      })
+      if (stage !== 'retry-success') {
+        expect(await screen.findByRole('alert')).toHaveTextContent(
+          'errorMessage'
+        )
+        fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      }
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      expect(screen.queryByText('errorMessage')).not.toBeInTheDocument()
+      const count = stage === 'retry-failure' ? 3 : 2
+      expect(evaluations().map(([, options]) => options?.body)).toEqual(
+        Array(count).fill(JSON.stringify({ answers: expected }))
+      )
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/study-plan/current')
+      ).toHaveLength(1)
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.some(([url]) => url === '/api/assessment/complete')
+      ).toBe(false)
+      expect(push).not.toHaveBeenCalled()
+    }
+  )
+
+  it.each(
+    ['language', 'roundtrip', 'invalidation', 'session', 'unmount'].flatMap(
+      (change) =>
+        ['error', 'retry-success', 'retry-failure'].map((stage) => ({
+          change,
+          stage,
+        }))
+    )
+  )(
+    'discards $stage after $change without reviving it or unlocking a new evaluation',
+    async ({ change, stage }) => {
+      const oldBody = deferred<unknown>()
+      const oldResponse = json({})
+      const readOldBody = vi
+        .spyOn(oldResponse, 'json')
+        .mockReturnValue(oldBody.promise)
+      const newBody = deferred<unknown>()
+      const newResponse = json({})
+      const readNewBody = vi
+        .spyOn(newResponse, 'json')
+        .mockReturnValue(newBody.promise)
+      let active = 'en-GB'
+      let replaced = false
+      let attempts = 0
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/languages/active') {
+          active = JSON.parse(String(options?.body)).target_language
+          return json({})
+        }
+        if (url === '/api/languages') return json(summary(active))
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: shortBank.slice(0, 1) })
+        if (url === '/api/assessment/evaluate') {
+          attempts += 1
+          if (replaced) return newResponse
+          return attempts === 1 ? json({}, 503) : oldResponse
+        }
+        return json({}, 404)
+      })
+      const { unmount } = render(<AssessmentPage />)
+      await startQuiz()
+      await finishQuiz(1)
+      await screen.findByRole('alert')
+      if (stage !== 'error') {
+        fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+        await waitFor(() => expect(readOldBody).toHaveBeenCalledTimes(1))
+      }
+      const oldSignal = evaluations().at(-1)![1]!.signal!
+      const oldCount = evaluations().length
+      replaced = true
+      if (change === 'unmount') {
+        unmount()
+        render(<AssessmentPage />)
+      } else {
+        await act(async () => {
+          if (change === 'session')
+            useAuthStore.getState().startSession('replacement-session')
+          else if (change === 'invalidation')
+            useLanguageStore.getState().invalidateLanguages()
+          else
+            expect(
+              await useLanguageStore.getState().switchLanguage('de-DE')
+            ).toBe(true)
+        })
+      }
+      await screen.findByRole('button', { name: /beginnerOption/ })
+      if (change === 'roundtrip') {
+        await act(async () =>
+          expect(
+            await useLanguageStore.getState().switchLanguage('en-GB')
+          ).toBe(true)
+        )
+        await screen.findByRole('button', { name: /beginnerOption/ })
+      }
+      expect(oldSignal.aborted).toBe(true)
+      expect(evaluations()).toHaveLength(oldCount)
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'retry' })
+      ).not.toBeInTheDocument()
+
+      await startQuiz()
+      await answerQuestions(1)
+      await waitFor(() => expect(readNewBody).toHaveBeenCalledTimes(1))
+      // Resolve an obsolete body while a replacement flow owns its own request.
+      if (stage !== 'error') {
+        await act(async () => {
+          if (stage === 'retry-success')
+            oldBody.resolve({ ...evaluation, cefr_level: 'C2' })
+          else oldBody.reject(new SyntaxError('Obsolete body'))
+        })
+      }
+      expect(
+        screen.getByRole('status', { name: 'evaluating' })
+      ).toBeInTheDocument()
+      expect(screen.queryByText('resultStep')).not.toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'retry' })
+      ).not.toBeInTheDocument()
+      expect(evaluations()).toHaveLength(oldCount + 1)
+      expect(
+        JSON.parse(String(evaluations().at(-1)![1]?.body)).answers
+      ).toEqual([
+        {
+          question_id: shortBank[0].id,
+          skill: 'grammar',
+          difficulty: 'A2',
+          correct: true,
+          dont_know: false,
+        },
+      ])
+      await act(async () => newBody.resolve(evaluation))
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'B1' })).toHaveClass(
+        'border-fl-accent'
+      )
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.some(([url]) => url === '/api/assessment/complete')
+      ).toBe(false)
+      expect(push).not.toHaveBeenCalled()
+    }
+  )
+})
 
 describe('Assessment provisional language switches', () => {
   it.each(['headers', 'body', 'summary'])(

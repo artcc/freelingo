@@ -148,6 +148,12 @@ recovers the existing plan through GET instead of enabling another completion PO
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after
   two consecutive correct or incorrect answers.
+- Evaluation starts at the answer limit or when no unused question remains at the selected level.
+  Both paths include the last answer, including its `dont_know` flag. HTTP, transport, and response-body
+  decoding failures show a localized error and a manual retry instead of leaving the quiz loading.
+  The originating flow retains the exact serialized answer payload; retries send only `/evaluate`,
+  allow one in-flight evaluation, and clear the error when starting. They do not reload the bank,
+  reset answers, or create a plan. A successful retry displays the normal result.
 - `I don't know` is always incorrect and contributes to explicit weakness detection.
 - Deterministic backend evaluation selects the highest level with at least two answers and at least
   60% accuracy.
