@@ -130,7 +130,7 @@ the rendering configuration described under Streaming and media, independently o
 ## Page loading
 
 `components/ui/page-loading.tsx` provides general page loading with `LinguAvatar` playing `reposo`
-at 150 × 150 px on mobile and 195 × 195 px on desktop, centered localized text, and optional subtext
+at 75 × 75 px on mobile and 150 × 150 px on desktop, centered localized text, and optional subtext
 in Geist Sans. Text is visible independently of avatar readiness. A spinner is shown while the 3D
 module/model loads; static artwork is reserved for reduced motion or loading failures. Inline mode
 stays compact, with a decorative spinner disabled by `showDot={false}`; its rotation respects reduced
@@ -160,7 +160,7 @@ timers. Retained presentation does not hold extra global activity-counter slots.
 and consumers outside this provider retain their normal lifetime. Avatar readiness never gates content.
 
 Reading and Listening share `components/ui/exercise-generation-loading.tsx` for their generation
-screens, with `LinguAvatar` playing `pensando` at 150 × 150 px on mobile and 195 × 195 px on desktop.
+screens, with `LinguAvatar` playing `pensando` at 75 × 75 px on mobile and 150 × 150 px on desktop.
 Each page supplies its localized status text independently of avatar readiness, with descriptions and
 delay warnings below the centered avatar/title block. A spinner precedes the first animated frame; reduced motion and loading
 failures use static artwork. Generation participates in the shared minimum presentation above.

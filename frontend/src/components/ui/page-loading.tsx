@@ -103,7 +103,7 @@ export function PageLoadingPresentation({
       <div className="flex w-full max-w-sm flex-col items-center gap-6">
         <LinguAvatar
           animation={animation}
-          className="h-[150px] w-[150px] shrink-0 md:h-[195px] md:w-[195px]"
+          className="h-[75px] w-[75px] shrink-0 md:h-[150px] md:w-[150px]"
         />
         <Label className="text-fl-fg font-sans text-lg leading-7 font-medium">
           {label}
