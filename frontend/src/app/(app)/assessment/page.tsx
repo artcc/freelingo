@@ -50,6 +50,10 @@ interface AssessmentFlow {
   language: string
   sessionVersion: number
   controller: AbortController
+  evaluation?: {
+    body: string
+    pending: boolean
+  }
   completionInvalidationVersion?: number
 }
 
@@ -70,6 +74,7 @@ type FlowStep =
   | 'existing'
   | 'beginner-gate'
   | 'quiz'
+  | 'evaluation-error'
   | 'result'
   | 'duration'
   | 'voice-trial-offer'
@@ -275,14 +280,18 @@ export default function AssessmentPage() {
     !isSubscribed(user, stripeEnabled) &&
     !user.assessment_voice_trial_used
 
-  function loadNextQuestion(level: CEFRLevel, usedSet: Set<string>) {
+  function loadNextQuestion(
+    level: CEFRLevel,
+    usedSet: Set<string>,
+    answersToSend: AnswerRecord[]
+  ) {
     if (!isCurrentFlow(flowRef.current)) return
     const q = pickNextQuestion(bank, usedSet, level)
     if (q) {
       usedSet.add(q.id)
       setCurrentQuestion(q)
     } else {
-      void evaluateQuiz([...answers])
+      void evaluateQuiz(answersToSend)
     }
   }
 
@@ -349,21 +358,32 @@ export default function AssessmentPage() {
     setQuestionNumber((n) => n + 1)
     setTimeout(() => {
       void waitForLanguageSwitch(flow.controller.signal).then(() => {
-        if (isCurrentFlow(flow)) loadNextQuestion(newLevel, usedIds)
+        if (isCurrentFlow(flow)) loadNextQuestion(newLevel, usedIds, newAnswers)
       })
     }, 150)
   }
 
-  async function evaluateQuiz(answersToSend: AnswerRecord[]) {
+  async function evaluateQuiz(answersToSend?: AnswerRecord[]) {
     const flow = flowRef.current
-    if (!isCurrentFlow(flow)) return
+    if (!isCurrentFlow(flow) || flow.evaluation?.pending) return
+    // Keep the exact payload and synchronous request lock with their owning flow.
+    const evaluation =
+      flow.evaluation ??
+      (answersToSend
+        ? { body: JSON.stringify({ answers: answersToSend }), pending: false }
+        : null)
+    if (!evaluation) return
+    flow.evaluation = evaluation
+    evaluation.pending = true
+    setError('')
     setEvaluating(true)
+    setStep('quiz')
     setCurrentQuestion(null)
     try {
       const res = await apiFetch('/api/assessment/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: answersToSend }),
+        body: evaluation.body,
         signal: flow.controller.signal,
       })
       if (!res.ok) throw new Error(tCommon('errorMessage'))
@@ -375,8 +395,12 @@ export default function AssessmentPage() {
       setStep('result')
     } catch {
       await waitForLanguageSwitch(flow.controller.signal)
-      if (isCurrentFlow(flow)) setError(tCommon('errorMessage'))
+      if (isCurrentFlow(flow)) {
+        setError(tCommon('errorMessage'))
+        setStep('evaluation-error')
+      }
     } finally {
+      evaluation.pending = false
       if (isCurrentFlow(flow)) setEvaluating(false)
     }
   }
@@ -556,6 +580,22 @@ export default function AssessmentPage() {
   ) {
     return (
       <PageLoading label={evaluating ? t('evaluating') : tCommon('loading')} />
+    )
+  }
+
+  if (step === 'evaluation-error') {
+    return (
+      <div className="mx-auto max-w-md space-y-4 p-6 text-center">
+        <p role="alert" className="text-fl-muted-1">
+          {error}
+        </p>
+        <button
+          className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
+          onClick={() => void evaluateQuiz()}
+        >
+          {tCommon('retry')}
+        </button>
+      </div>
     )
   }
 

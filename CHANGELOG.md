@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Fixed
 
+- Assessment shows a recoverable error when quiz evaluation fails and retries with the exact answers, including the final answer when questions run out, while preserving language and session isolation.
 - Progress discards obsolete language responses, clears the previous plan when switching languages, offers retry on loading failures, and leaves accuracy unset until lesson exercises exist.
 - Corrected the local development setup: localhost application URLs in `.env.dev`, backend port exposure and conversation WebSocket configuration in `docker-compose.dev.yml`, and matching setup instructions in `DEVELOPMENT.md`.
 - Fixed voice conversation initialization in development by safely releasing unstarted VAD instances and preventing canceled initialization errors from blocking the active session.
