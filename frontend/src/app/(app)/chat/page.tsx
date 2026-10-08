@@ -54,6 +54,7 @@ export default function ChatPage() {
   const tQuota = useTranslations('conversation')
   const router = useRouter()
   const user = useAuthStore((s) => s.user)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const {
     selectedWord,
@@ -299,7 +300,8 @@ export default function ChatPage() {
           streamCompleted = true
           if (
             !isSubscribed(user, stripeEnabled) &&
-            !isFreemiumTrialActive(user, stripeEnabled)
+            !isFreemiumTrialActive(user, stripeEnabled) &&
+            useAuthStore.getState().sessionVersion === sessionVersion
           ) {
             decrementFreemium('chat_remaining')
           }
