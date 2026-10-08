@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "vitest",
     "test:run": "vitest run",
-    "postinstall": "node scripts/copy-vad-models.js"
+    "postinstall": "node scripts/patch-vad.js && node scripts/copy-vad-models.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.15] - Unreleased
+
+### Changed
+
+- Refreshed product wording across all interface languages to highlight Lingu as the tutor.
+- Improved Reading and Listening exercise-generation loading screens with animated Lingu and clearer messaging.
+
+### Fixed
+
+- Corrected the local development setup: localhost application URLs in `.env.dev`, backend port exposure and conversation WebSocket configuration in `docker-compose.dev.yml`, and matching setup instructions in `DEVELOPMENT.md`.
+- Fixed voice conversation initialization in development by safely releasing unstarted VAD instances and preventing canceled initialization errors from blocking the active session.
+
 ## [1.10.10] - 2026-10-07
 
 ### Added

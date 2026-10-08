@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for AI-generated Listening exercises: shared exercise pool, audio generation and storage, attempts, scoring, replay, history, freemium access, and frontend behavior."
-applyTo: "backend/app/models/listening.py, backend/app/schemas/listening.py, backend/app/services/listening_service.py, backend/app/routers/listening.py, backend/app/services/prompts/comprehension.py, frontend/src/app/(app)/listening/**, frontend/src/components/ui/exercise-audio-player.tsx, frontend/src/components/ui/WordTooltip.tsx, frontend/src/components/ui/pagination.tsx, frontend/src/store/freemium.ts, messages/*.json"
+applyTo: "backend/app/models/listening.py, backend/app/schemas/listening.py, backend/app/services/listening_service.py, backend/app/routers/listening.py, backend/app/services/prompts/comprehension.py, frontend/src/app/(app)/listening/**, frontend/src/components/ui/exercise-generation-loading.tsx, frontend/src/components/ui/exercise-audio-player.tsx, frontend/src/components/ui/WordTooltip.tsx, frontend/src/components/ui/pagination.tsx, frontend/src/store/freemium.ts, messages/*.json"
 ---
 
 # Listening
@@ -256,6 +256,12 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
   a valid active language without a study plan is handled by the backend's no-active-plan response.
 - Idle state offers generation, history, quota information, or an inline paywall.
 - `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Reading.
+- Generating state shares `components/ui/exercise-generation-loading.tsx` with Reading. It shows
+  Lingu's repeating `pensando` animation at 150 × 150 px on mobile and 195 × 195 px on desktop. The title and
+  description remain visible while the avatar loads, and space is reserved below them for the delay
+  warning. The shared avatar provides static artwork for reduced motion or model-loading failures.
+  Avatar readiness does not gate exercise delivery. The component holds one global loading-counter
+  slot while mounted and releases it on unmount; initial and history loading still use `PageLoading`.
 - Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay
   warning after 15 seconds. Each request uses at most 20 seconds or the remaining operation budget,
   including the consumer's wait for shared authentication refresh.

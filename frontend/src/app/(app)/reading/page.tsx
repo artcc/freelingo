@@ -12,6 +12,7 @@ import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { type ReadingExercise } from '@/types/api'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
+import { ExerciseGenerationLoading } from '@/components/ui/exercise-generation-loading'
 import { Pagination } from '@/components/ui/pagination'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import {
@@ -246,14 +247,10 @@ function ReadingPage() {
   // ── Generating (long-poll) ────────────────────────────────────────────────
   if (pageState === 'generating') {
     return (
-      <PageLoading
+      <ExerciseGenerationLoading
         label={t('generating')}
-        subtext={
-          generatingWarn
-            ? `${t('generatingDesc')} ${t('generatingLong')}`
-            : t('generatingDesc')
-        }
-        minHeight="min-h-[calc(100vh-56px)] md:min-h-screen"
+        description={t('generatingDesc')}
+        warning={generatingWarn ? t('generatingLong') : undefined}
       />
     )
   }

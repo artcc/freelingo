@@ -120,6 +120,13 @@ hemisphere light at intensity 2, a white key light at intensity 4, and a pale-bl
 intensity 3. These lighting values apply consistently in both interface themes; the scene background
 remains transparent.
 
+Reading and Listening share `components/ui/exercise-generation-loading.tsx` for their generation
+screens, with `LinguAvatar` playing `pensando` at 150 × 150 px on mobile and 195 × 195 px on desktop.
+Each page supplies its localized status text independently of avatar readiness, with reserved space
+for the delay warning and the avatar's existing static fallback for reduced motion or loading failures.
+The component retains the mounted loading-counter lifecycle used by `PageLoading`. See
+`reading.instructions.md` and `listening.instructions.md` for generation behavior.
+
 ## Written-chat response presentation
 
 `components/chat/ChatMarkdown.tsx` uses `react-markdown` for assistant replies only in the written
@@ -218,6 +225,12 @@ into the source fields before translation. Both banner language selectors sort t
 names alphabetically using the active UI locale's collation. The translation editor marks only
 incomplete translations with a localized pending suffix, without adding completion checkmarks to
 options; the overall completion counter remains visible.
+
+Product copy names Lingu when describing the tutor's actions, conversations, and exercise preparation.
+References to AI remain appropriate for technology, providers, and usage; this editorial convention
+does not replace disclosures in privacy policies or terms. Apply wording consistently by meaning
+across all fifteen UI catalogs, preserving translation keys, interpolation variables, and rich-text
+tags. Reading and Listening generation descriptions name Lingu without promising a fixed wait time.
 
 ## Streaming and media
 
