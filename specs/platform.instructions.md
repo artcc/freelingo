@@ -167,7 +167,12 @@ the XP/streak overview, shows daily XP and an activity calendar for the last 28 
 a collapsible reward guide linking to learning activities. Days with recorded practice count even
 when they earned no XP. History is filtered to the displayed calendar window; it is not a complete
 reward ledger. Language changes reset the page and obsolete asynchronous results are ignored.
-A null current plan shows the assessment entry point; request failures offer retry. Lesson-exercise
+Local switches and invalidated context suspend progress content; missing or invalidated language
+context must be reconciled before loading resources. Failed reconciliation offers retry rather than
+mixing cached language labels/content with server-active progress. This does not provide an atomic
+snapshot across concurrent server-side language changes from other tabs.
+A null current plan shows the assessment entry point; request failures, including unsuccessful
+curriculum HTTP responses, offer retry. Lesson-exercise
 accuracy is unset until exercises exist. Competency, vocabulary and recent-performance sections
 use readable interface typography, target-language text rendering and accessible progress values.
 

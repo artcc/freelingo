@@ -52,6 +52,10 @@ The session fixes user, plan, target language, CEFR level, native language, voic
 mode at connection time. They are not refreshed globally during the session, except memories and
 native language before each normal user turn.
 
+Suggested conversation topics supply a learner message about the selected topic without naming a
+practice language. The session's resolved target language remains authoritative; starters do not
+request English when a different target language is selected.
+
 ## Language and plan resolution
 
 The router first tries the client-requested owned language and its active plan, then the user's active

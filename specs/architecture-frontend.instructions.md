@@ -111,7 +111,7 @@ forward `/ws/*` to the backend.
 
 ## Lingu avatar
 
-Voice conversations show the animated Lingu avatar between the transcript and controls, at 150 × 150
+Voice conversations show the animated Lingu avatar between the transcript and controls, at 65 × 65
 px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
 response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
 conversation header, switching between thinking while a response is generated and resting otherwise.
@@ -215,8 +215,13 @@ motion. Plan/vocabulary bars expose numeric progress and today's lesson segments
 The Progress page reuses `ProgressOverview` without its details link. Its page-local load includes
 summary, daily history, competencies, current plan, flashcards, vocabulary, and curriculum units.
 Language-keyed content resets immediately on a language change; effect cleanup discards obsolete
-responses, including delayed JSON and curriculum loads. A null current plan shows `NoPlanBanner`;
-loading failures show a retry action rather than fabricated zero progress.
+responses, including delayed JSON and curriculum loads. Local switching or context invalidation
+unmounts the content even if the cached language code has not changed. Missing or invalidated language
+context is reconciled through the language store before any progress resources are loaded; failures
+offer retry. Context recovery is cancellable and uses the store's 20-second timeout.
+A null current plan shows `NoPlanBanner`; loading failures, including curriculum HTTP errors,
+show a retry action rather than fabricated zero progress. `getCurriculumUnits` rejects unsuccessful
+HTTP responses; an empty array represents a successful response with no units.
 `components/progress/ActivityHistory.tsx` presents daily XP and a rolling 28-day activity calendar,
 anchored to the summary's latest UTC day. It filters history to that window and counts persisted
 zero-XP days as active. Accessible day labels expose dates, activity and XP; the duplicate bar chart

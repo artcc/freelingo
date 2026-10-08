@@ -30,6 +30,6 @@ export async function getCurriculumUnits(
 ): Promise<CurriculumUnit[]> {
   const url = `/api/curriculum/${encodeURIComponent(level)}?language=${encodeURIComponent(targetLanguage)}`
   const res = await apiFetch(url)
-  if (!res.ok) return []
+  if (!res.ok) throw new Error(`Could not load curriculum (${res.status})`)
   return res.json()
 }

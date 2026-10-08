@@ -62,7 +62,12 @@ describe('progress page', () => {
   beforeEach(() => {
     mockApiFetch.mockReset()
     mockApiFetch.mockImplementation(async (url: string) => responseFor(url))
-    useLanguageStore.setState({ activeLanguage: getLanguageByCode('en-GB')! })
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB')!,
+      needsRefresh: false,
+      isSwitching: false,
+      userLanguages: [],
+    })
   })
 
   it('shows zero-XP activity and leaves accuracy unset before the first exercise', async () => {
@@ -197,6 +202,174 @@ describe('progress page', () => {
       await screen.findByRole('heading', { name: 'Your learning rhythm' })
     ).toBeInTheDocument()
   })
+
+  it('reconciles a persisted switch with a failed refresh before loading progress', async () => {
+    mockApiFetch.mockImplementation(async (url: string) => {
+      if (url === '/api/languages/active') return json({})
+      if (url === '/api/languages') return json({}, 503)
+      return responseFor(url)
+    })
+    expect(await useLanguageStore.getState().switchLanguage('de-DE')).toBe(
+      false
+    )
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+
+    renderWithMessages(<ProgressPage />)
+    expect(await screen.findByRole('alert')).toBeInTheDocument()
+    expect(mockApiFetch).not.toHaveBeenCalledWith('/api/progress/summary')
+    expect(mockApiFetch).not.toHaveBeenCalledWith(
+      '/api/vocabulary?language=en-GB'
+    )
+
+    mockApiFetch.mockImplementation(async (url: string) => {
+      if (url === '/api/languages') {
+        return json({
+          languages: [{ target_language: 'de-DE', is_active: true }],
+          all_supported_languages: ['en-GB', 'de-DE'],
+        })
+      }
+      return responseFor(url, 777)
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
+    expect(await screen.findByText('777')).toBeInTheDocument()
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/vocabulary?language=de-DE')
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/curriculum/A1?language=de-DE')
+    expect(mockApiFetch).not.toHaveBeenCalledWith(
+      '/api/curriculum/A1?language=en-GB'
+    )
+  })
+
+  it('discards pending data on invalidation even when the cached language stays the same', async () => {
+    let resolveOld!: (data: unknown) => void
+    const oldBody = new Promise((resolve) => {
+      resolveOld = resolve
+    })
+    const oldJson = vi.fn(() => oldBody)
+    mockApiFetch.mockImplementation(async (url: string) => {
+      if (url === '/api/progress/summary') return { ok: true, json: oldJson }
+      if (url === '/api/languages') return json({}, 503)
+      return responseFor(url)
+    })
+    renderWithMessages(<ProgressPage />)
+    await waitFor(() => expect(oldJson).toHaveBeenCalled())
+    act(() => useLanguageStore.getState().invalidateLanguages())
+    expect(await screen.findByRole('alert')).toBeInTheDocument()
+    await act(async () =>
+      resolveOld(await responseFor('/api/progress/summary', 999).json())
+    )
+    expect(screen.queryByText('999')).not.toBeInTheDocument()
+    expect(mockApiFetch).not.toHaveBeenCalledWith(
+      '/api/curriculum/A1?language=en-GB'
+    )
+  })
+
+  it('pauses loaded progress during a switch before activeLanguage changes', async () => {
+    renderWithMessages(<ProgressPage />)
+    expect(await screen.findByText('125')).toBeInTheDocument()
+    mockApiFetch.mockClear()
+    act(() => useLanguageStore.setState({ isSwitching: true }))
+    expect(screen.queryByText('125')).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toBeInTheDocument()
+    expect(mockApiFetch).not.toHaveBeenCalled()
+    act(() => useLanguageStore.setState({ isSwitching: false }))
+    expect(await screen.findByText('125')).toBeInTheDocument()
+  })
+
+  it('resolves missing language context instead of requesting English by default', async () => {
+    useLanguageStore.setState({ activeLanguage: null })
+    mockApiFetch.mockImplementation(async (url: string) => {
+      if (url === '/api/languages') {
+        return json({ languages: [{ target_language: 'ja-JP', is_active: true }] })
+      }
+      return responseFor(url)
+    })
+    renderWithMessages(<ProgressPage />)
+    expect(await screen.findByText('125')).toBeInTheDocument()
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/vocabulary?language=ja-JP')
+    expect(mockApiFetch).not.toHaveBeenCalledWith(
+      '/api/vocabulary?language=en-GB'
+    )
+  })
+
+  it.each([429, 503])(
+    'offers retry on curriculum HTTP %s and renders recovered competencies',
+    async (status) => {
+      mockApiFetch.mockImplementation(async (url: string) =>
+        url.startsWith('/api/curriculum/') ? json({}, status) : responseFor(url)
+      )
+      renderWithMessages(<ProgressPage />)
+      expect(await screen.findByRole('alert')).toBeInTheDocument()
+      expect(screen.queryByText('125')).not.toBeInTheDocument()
+
+      mockApiFetch.mockImplementation(async (url: string) => {
+        if (url.startsWith('/api/curriculum/')) {
+          return json([
+            {
+              id: 'a1-unit-1',
+              level: 'A1',
+              unit_number: 1,
+              title: 'Greetings',
+              default_weeks: 1,
+              grammar_points: [],
+              vocabulary_set_ids: ['greetings'],
+              lesson_types: ['grammar'],
+              competency_checklist: ['Introduce yourself', 'Ask a name'],
+            },
+          ])
+        }
+        if (url === '/api/progress/competencies') {
+          return json([
+            {
+              unit_id: 'a1-unit-1',
+              score: 0.6,
+              mastered_count: 1,
+              total_count: 2,
+            },
+          ])
+        }
+        if (url.startsWith('/api/vocabulary?')) {
+          return json({
+            sets: [
+              {
+                id: 'greetings',
+                level: 'A1',
+                topic: 'Meeting people',
+                unit_ref: 'a1-unit-1',
+                words: ['hello', 'goodbye'].map((word) => ({
+                  word,
+                  pos: 'phrase',
+                  definition: word,
+                  example: word,
+                })),
+              },
+            ],
+          })
+        }
+        if (url === '/api/flashcards/all') {
+          return json([{ id: 1, word: ' HELLO ', repetitions: 1 }])
+        }
+        return responseFor(url)
+      })
+      fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
+      expect(
+        await screen.findByRole('heading', { name: 'Greetings' })
+      ).toHaveAttribute('lang', 'en-GB')
+      expect(
+        screen.getByRole('progressbar', {
+          name: `Greetings: ${messages.progress.mastered}`,
+        })
+      ).toHaveAttribute('aria-valuenow', '50')
+      expect(
+        screen.getByRole('progressbar', { name: 'Meeting people' })
+      ).toHaveAttribute('aria-valuenow', '50')
+      expect(screen.getByText('Introduce yourself')).toHaveAttribute(
+        'lang',
+        'en-GB'
+      )
+      expect(screen.getByText('Meeting people')).toHaveAttribute('lang', 'en-GB')
+    }
+  )
 })
 
 describe('activity history', () => {

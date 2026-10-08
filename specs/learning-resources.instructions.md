@@ -199,8 +199,13 @@ starts at the latest score. Lesson completion applies the lesson's mean answered
 - `GET /api/progress/competencies`: authenticated, `60/minute`; returns unit ID, average score,
   mastered count, and total count, or an empty list without a plan.
 
-The Progress page does not request daily history. It combines summary, unit aggregates, plan,
-curriculum, and flashcards. Because the API does not return individual competency status, the page
+The Progress page combines summary, daily history, unit aggregates, plan, curriculum, vocabulary,
+and flashcards. It waits for local language switching to finish and reconciles missing or invalidated
+language context before loading these resources. Failed reconciliation and curriculum HTTP errors
+show a retry action; an unsuccessful curriculum request is not treated as an empty collection.
+These frontend guards do not make active-plan endpoints atomic across concurrent changes in other
+tabs; their responses do not expose a shared context identity for verification.
+Because the API does not return individual competency status, the page
 presents the first `mastered_count` curriculum competencies as mastered and cannot identify the
 actual mastered items. Unit bars use mastered count rather than average score.
 

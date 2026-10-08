@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   enqueue: vi.fn(),
   cancel: vi.fn(),
   closeAudio: vi.fn(),
+  starters: [] as string[],
 }))
 
 vi.mock('@ricky0123/vad-react', () => ({
@@ -25,7 +26,7 @@ vi.mock('next-intl', async (importOriginal) => {
   const practice = createTranslator({ locale: 'en', messages, namespace: 'lessonPractice' })
   return {
     useLocale: () => 'en',
-    useTranslations: () => Object.assign((key: string) => key, { raw: () => [], rich: practice.rich }),
+    useTranslations: () => Object.assign((key: string) => key, { raw: () => mocks.starters, rich: practice.rich }),
   }
 })
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }))
@@ -111,6 +112,7 @@ function speak() {
 beforeEach(() => {
   vi.clearAllMocks()
   MockWebSocket.instances = []
+  mocks.starters = []
   mocks.getUserMedia.mockReset().mockResolvedValue(microphone().stream)
   mocks.start.mockImplementation(async () => { await mocks.options.getStream?.() })
   mocks.pause.mockResolvedValue(undefined)
@@ -135,6 +137,29 @@ afterEach(() => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it.each(['de-DE', 'ja-JP'])(
+    'starts a suggested topic without overriding %s with English',
+    async (targetLanguage) => {
+      mocks.starters = ['Travel']
+      render(<ConversationMode targetLanguage={targetLanguage} />)
+      fireEvent.click(screen.getByRole('button', { name: 'Travel' }))
+      await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+      const ws = MockWebSocket.instances[0]
+      act(() => ws.onopen?.())
+      expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+        type: 'auth',
+        token: 'token',
+        target_language: targetLanguage,
+        context: [
+          {
+            role: 'user',
+            content: "I'd like to practise by talking about Travel.",
+          },
+        ],
+      })
+    }
+  )
+
   it.each([undefined, 7])('waits through a 30-second cold start for lesson %s', async (lessonId) => {
     vi.useFakeTimers()
     const pending = deferWarmup()

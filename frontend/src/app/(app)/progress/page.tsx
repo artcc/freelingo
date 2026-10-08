@@ -193,15 +193,74 @@ function UnitCompetencyBlock({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ProgressPage() {
+  const t = useTranslations('progress')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
-  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+
+  // Unmount the old content even if a failed reconciliation preserves its code.
+  if (isSwitching) return <PageLoading label={t('loading')} />
+  if (needsRefresh || !activeLanguage) return <ProgressLanguageRecovery />
+
   return (
     <ProgressContent
-      key={targetLanguageCode}
-      targetLanguageCode={targetLanguageCode}
-      languageName={activeLanguage?.name}
+      key={activeLanguage.code}
+      targetLanguageCode={activeLanguage.code}
+      languageName={activeLanguage.name}
     />
   )
+}
+
+function ProgressLoadError({ onRetry }: { onRetry: () => void }) {
+  const t = useTranslations('common')
+  return (
+    <div className="mx-auto max-w-4xl space-y-4 p-6 text-center">
+      <p role="alert" className="text-fl-muted-1">
+        {t('errorMessage')}
+      </p>
+      <button
+        className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
+        onClick={onRetry}
+      >
+        {t('retry')}
+      </button>
+    </div>
+  )
+}
+
+function ProgressLanguageRecovery() {
+  const t = useTranslations('progress')
+  const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
+  const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    let cancelled = false
+    void fetchLanguages(controller.signal).then((ok) => {
+      if (cancelled) return
+      setFailed(!ok)
+      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+      controller.abort()
+    }
+  }, [fetchLanguages, attempt])
+
+  if (loading) return <PageLoading label={t('loading')} />
+  if (failed) {
+    return (
+      <ProgressLoadError
+        onRetry={() => {
+          setLoading(true)
+          setAttempt((value) => value + 1)
+        }}
+      />
+    )
+  }
+  return <NoPlanBanner />
 }
 
 interface ProgressData {
@@ -224,7 +283,6 @@ function ProgressContent({
   const locale = useLocale()
   const t = useTranslations('progress')
   const tVocab = useTranslations('vocabulary')
-  const common = useTranslations('common')
   const tDashboard = useTranslations('dashboard')
   const tPlan = useTranslations('plan')
   const [data, setData] = useState<ProgressData | null>(null)
@@ -300,21 +358,13 @@ function ProgressContent({
 
   if (loadError) {
     return (
-      <div className="mx-auto max-w-4xl space-y-4 p-6 text-center">
-        <p role="alert" className="text-fl-muted-1">
-          {common('errorMessage')}
-        </p>
-        <button
-          className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
-          onClick={() => {
-            setLoadError(false)
-            setLoading(true)
-            setRetry((value) => value + 1)
-          }}
-        >
-          {common('retry')}
-        </button>
-      </div>
+      <ProgressLoadError
+        onRetry={() => {
+          setLoadError(false)
+          setLoading(true)
+          setRetry((value) => value + 1)
+        }}
+      />
     )
   }
 

@@ -1302,7 +1302,7 @@ export default function ConversationMode({
                           void handleStart([
                             {
                               role: 'user',
-                              content: `I'd like to practice English by talking about ${topic}.`,
+                              content: `I'd like to practise by talking about ${topic}.`,
                             },
                           ])
                         }
@@ -1320,7 +1320,7 @@ export default function ConversationMode({
 
       <LinguAvatar
         animation={linguAnimation}
-        className="h-[150px] w-[150px] shrink-0 md:h-[200px] md:w-[200px]"
+        className="h-[65px] w-[65px] shrink-0 md:h-[200px] md:w-[200px]"
       />
 
       {/* Controls */}
