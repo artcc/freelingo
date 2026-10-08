@@ -24,4 +24,6 @@ if [ "$missing" = true ]; then
   exit 1
 fi
 
-docker compose -f docker-compose.dev.yml --env-file .env.dev up -d
+# Rebuild images and refresh anonymous dependency volumes from the new images.
+# Persistent application data uses bind mounts under DATA_PATH.
+docker compose -f docker-compose.dev.yml --env-file .env.dev up -d --build --force-recreate --renew-anon-volumes

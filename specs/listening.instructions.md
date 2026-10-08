@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for AI-generated Listening exercises: shared exercise pool, audio generation and storage, attempts, scoring, replay, history, freemium access, and frontend behavior."
-applyTo: "backend/app/models/listening.py, backend/app/schemas/listening.py, backend/app/services/listening_service.py, backend/app/routers/listening.py, backend/app/services/prompts/comprehension.py, frontend/src/app/(app)/listening/**, frontend/src/components/ui/exercise-audio-player.tsx, frontend/src/components/ui/WordTooltip.tsx, frontend/src/components/ui/pagination.tsx, frontend/src/store/freemium.ts, messages/*.json"
+applyTo: "backend/app/models/listening.py, backend/app/schemas/listening.py, backend/app/services/listening_service.py, backend/app/routers/listening.py, backend/app/services/prompts/comprehension.py, frontend/src/app/(app)/listening/**, frontend/src/components/ui/exercise-generation-loading.tsx, frontend/src/components/ui/exercise-audio-player.tsx, frontend/src/components/ui/WordTooltip.tsx, frontend/src/components/ui/pagination.tsx, frontend/src/store/freemium.ts, messages/*.json"
 ---
 
 # Listening
@@ -274,6 +274,17 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
   late responses cannot update a replacement operation.
 - Exercise state shows topic, type, level, authenticated audio playback, and all questions.
 - Submission becomes available when every received question index has an answer.
+- Local submission results are discarded after unmount, session replacement, a confirmed language change,
+  context invalidation, or exercise/plan/level replacement. Results, errors, review prompts, and the
+  submitting indicator belong to that attempt only. Cancelling the client wait does not undo a saved
+  attempt; a newer exercise cannot display its result or have its own submission unlocked by it.
+- A provisional language switch keeps the pending submission and its lock. Responses received during
+  the switch wait for its outcome. If rejected with unchanged context, the original result is shown
+  without resubmitting the attempt, including replay.
+- The POST remains observed after local cancellation. A successful HTTP response updates global quota
+  once for the originating session even if the exercise is no longer visible or body decoding fails.
+  Transport failures and HTTP 408/5xx reconcile quota through a forced GET; old-session responses cannot
+  change the current user's balance.
 - Results reveal transcript, correct answers, score, and XP.
 - A successful first attempt may open the shared review prompt; replay never does.
 - History displays ten attempts per page through the shared pagination component.

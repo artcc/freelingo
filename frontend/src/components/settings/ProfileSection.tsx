@@ -93,6 +93,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
   }, [user, currentLocale])
 
   async function handleAvatarUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const { sessionVersion } = useAuthStore.getState()
     const file = e.target.files?.[0]
     e.target.value = ''
     if (!file) return
@@ -104,6 +105,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
     setAvatarError(null)
     try {
       const blob = await resizeImage(file, 1024)
+      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
       if (blob.size > 2 * 1024 * 1024) {
         setAvatarError(t('avatarSizeError'))
         return
@@ -116,6 +118,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       })
       if (!res.ok) throw new Error()
       const updated = await res.json()
+      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
       clearAvatarCache()
       setUser({ ...user!, avatar: updated.avatar })
     } catch {
@@ -126,11 +129,13 @@ export function ProfileSection({ title }: { title?: string } = {}) {
   }
 
   async function handleAvatarRemove() {
+    const { sessionVersion } = useAuthStore.getState()
     setAvatarUploading(true)
     setAvatarError(null)
     try {
       const res = await apiFetch('/api/auth/me/avatar', { method: 'DELETE' })
       if (!res.ok) throw new Error()
+      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
       clearAvatarCache()
       setUser({ ...user!, avatar: null })
     } catch {
@@ -141,6 +146,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
   }
 
   async function handleSave() {
+    const { sessionVersion } = useAuthStore.getState()
     setSaving(true)
     setMessage(null)
     if (password && password !== confirmPassword) {
@@ -163,6 +169,7 @@ export function ProfileSection({ title }: { title?: string } = {}) {
       })
       if (!res.ok) throw new Error(t('saveFailed'))
       const updated = await res.json()
+      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
       setUser(mapUser(updated, user))
       setMessage({ type: 'ok', text: t('saved') })
       setPassword('')

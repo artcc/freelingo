@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -24,12 +24,14 @@ function LoginForm() {
     void loadConfig()
   }, [loadConfig])
 
-  const setTokens = useAuthStore((s) => s.setTokens)
+  const startSession = useAuthStore((s) => s.startSession)
   const setUser = useAuthStore((s) => s.setUser)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
+  const activeRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => activeRequest.current?.abort(), [])
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = useCallback(
@@ -45,11 +47,19 @@ function LoginForm() {
         return
       }
       setLoading(true)
+      activeRequest.current?.abort()
+      const controller = new AbortController()
+      activeRequest.current = controller
+      let sessionVersion = useAuthStore.getState().sessionVersion
+      const obsolete = () =>
+        controller.signal.aborted ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
       try {
         const res = await apiFetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
+          signal: controller.signal,
         })
         if (!res.ok) {
           const data = await res.json().catch(() => ({}))
@@ -66,11 +76,21 @@ function LoginForm() {
           throw new Error(t('error'))
         }
         const { access_token } = await res.json()
-        setTokens(access_token)
-        const meRes = await apiFetch('/api/auth/me')
-        if (meRes.ok) setUser(mapUser(await meRes.json()))
+        if (obsolete()) return
+        startSession(access_token)
+        sessionVersion = useAuthStore.getState().sessionVersion
+        const meRes = await apiFetch('/api/auth/me', {
+          signal: controller.signal,
+        })
+        if (meRes.ok) {
+          const data = await meRes.json()
+          if (obsolete()) return
+          setUser(mapUser(data))
+        }
+        if (obsolete()) return
         router.push('/dashboard')
       } catch (err: unknown) {
+        if (obsolete()) return
         setError(
           err instanceof Error &&
             (err.message === t('error') || err.message === t('invalidEmail'))
@@ -78,10 +98,10 @@ function LoginForm() {
             : t('loginFailed')
         )
       } finally {
-        setLoading(false)
+        if (!obsolete()) setLoading(false)
       }
     },
-    [email, password, router, setTokens, setUser, t]
+    [email, password, router, startSession, setUser, t]
   )
 
   return (

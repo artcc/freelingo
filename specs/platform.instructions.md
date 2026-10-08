@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for the FreeLingo platform core: account entry, authentication, onboarding, placement boundary, dashboard, text tutoring, baseline progress, authenticated shell, i18n, and runtime configuration."
-applyTo: "backend/app/core/**, backend/app/routers/{auth,assessment,chat,config,progress,flashcards}.py, backend/app/services/{assessment,progress_service,flashcard_sm2,llm_adapter}.py, frontend/src/app/(auth)/**, frontend/src/app/(app)/{layout,dashboard,chat,flashcards}/**, frontend/src/app/api/chat/**, frontend/src/{store,lib,i18n}/**, messages/*.json"
+applyTo: "backend/app/core/**, backend/app/routers/{auth,assessment,chat,config,progress,flashcards}.py, backend/app/services/{assessment,progress_service,flashcard_sm2,llm_adapter}.py, frontend/src/app/(auth)/**, frontend/src/app/(app)/layout.tsx, frontend/src/app/(app)/{dashboard,chat,flashcards}/**, frontend/src/app/api/chat/**, frontend/src/{store,lib,i18n}/**, messages/*.json"
 ---
 
 # Platform Core
@@ -62,9 +62,45 @@ The refresh token is an opaque `secrets.token_urlsafe(64)` value stored in an `h
 under `refresh:{token}` in Redis for the configured 30-day default. Refresh rotation deletes the old
 Redis token before issuing a replacement. Logout deletes the current token and clears the cookie.
 
-`apiFetch` adds the bearer token. When a request that had an access token returns 401, it serializes
-one refresh request, stores the new access token, and retries. Failed refresh clears client auth and
-redirects to login.
+`apiFetch` adds the bearer token. When a request that had an access token returns 401 within the same
+authentication session, it shares one refresh request, stores the new access token, and retries. A
+delayed 401 reuses a token already rotated by another request in that session. Failed refresh clears
+client auth and redirects to login only if both the session and token being recovered are still current.
+Login and registration use `startSession`, which advances a local session version and clears the old
+profile. Logout also advances this version; normal `setTokens` rotation preserves it. Recovery from
+an earlier session raises an abort error rather than renewing, retrying under, or altering a newer
+session. These checks protect client state; backend authentication and refresh-cookie rotation remain
+authoritative.
+
+`requestAccessToken()` shares one in-flight refresh HTTP request between shell initialization and
+`apiFetch` recovery within the same session version. It returns the token without changing auth state
+itself; each consumer owns those state changes. Shell initialization aborts its `/me` request on cleanup
+and ignores results and errors after cancellation or session replacement. API recovery also checks
+session identity before applying a pending renewal's success/failure, so an obsolete initializer cannot
+replace the profile, clear the newer session, or redirect it. Completing an old refresh does not clear
+the pending-request reference of a newer session.
+
+The freemium cache observes this session version synchronously: logout and `startSession` clear both
+the exposed quota snapshot and its cache validity. The next consumer requests the current session's
+balance; pending or failed reads cannot retain the previous account's balance or paywall. Ordinary
+token rotation and active-language changes preserve the user's global quota cache. Delayed quota
+responses and chat consumption cannot update a replacement session.
+
+Avatar recovery, landing subscription checks, onboarding checkout, pricing checkout, and billing-return
+restoration use the same refresh HTTP coordination. `restoreAccessToken` fills a missing access token
+only if its session is unchanged and its caller has not been cancelled; it preserves any token already
+published by another consumer. Failed restoration is handled by the caller rather than forcing logout.
+Avatar renewal failures fall back to the image placeholder. Avatar cache publication checks session
+identity after reading the blob, and obsolete completion cannot clear newer pending work.
+Landing subscription checks refresh before reading `/me`, including when the stored access token may
+have expired while browsing public pages. They cache successful reads by session identity, not failed
+authentication/network responses. Failures retain the public-page fallback without logout or redirect;
+an obsolete response cannot clear a newer session's cached lookup.
+
+Login, conversation-trial profile refresh, billing confirmation, onboarding profile updates, and profile/
+conversation settings check session identity before publishing the returned user. Login and conversation
+profile requests are cancelled on unmount, including protection after response-body decoding. A successful
+HTTP response alone is not proof that its profile still belongs to the current client session.
 
 A caller's AbortSignal also cancels its wait for the shared refresh and releases its loading-counter
 slot. It does not abort shared token rotation or log out other callers. A cancelled caller does not
@@ -95,16 +131,44 @@ The authenticated shell redirects users with null learning goals back to onboard
 
 Assessment is language-specific and separate from account onboarding.
 
+Before checking the existing plan or loading the question bank, Assessment reconciles missing or
+invalidated language context. Failures show an error with GET-only retry rather than treating the
+context as a beginner without a plan. Checks are cancellable and bounded to 20 seconds. The flow keeps
+its resolved language for completion and voice-trial requests. A provisional switch suspends interaction
+and defers pending responses while retaining questions, answers, results, and plan choices. A definite
+rejection resumes that flow; a changed language or external invalidation cancels obsolete work. A confirmed
+completion refreshes the summary without restarting assessment or repeating its POST. Its flow identity
+survives its own summary invalidation, but not replacement or unmount: returning to the same language
+does not authorize a previous completion to navigate or publish a voice-trial offer.
+Language invalidations carry a monotonically increasing version, including when the summary is already
+invalid. A completed flow records only its own invalidation version; a later external invalidation
+suspends its offer/continuation and recovers context through GET even when the cached language is unchanged.
+Voice-trial navigation requires a reconciled context. If completion's own summary refresh fails, its
+voice offer is retained behind a recoverable error; retry refreshes the summary without repeating completion.
+The completion POST remains observed after unmount or flow replacement. HTTP success invalidates and
+refreshes the global language summary for the originating authentication session before decoding the
+response body; neither visual cancellation nor a delayed/unreadable body can skip that recovery.
+Only the surviving flow may publish the offer or navigate. An unreadable successful completion body
+recovers the existing plan through GET instead of enabling another completion POST.
+
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after
   two consecutive correct or incorrect answers.
+- Evaluation starts at the answer limit or when no unused question remains at the selected level.
+  Both paths include the last answer, including its `dont_know` flag. HTTP, transport, and response-body
+  decoding failures show a localized error and a manual retry instead of leaving the quiz loading.
+  The originating flow retains the exact serialized answer payload; retries send only `/evaluate`,
+  allow one in-flight evaluation, and clear the error when starting. They do not reload the bank,
+  reset answers, or create a plan. A successful retry displays the normal result.
 - `I don't know` is always incorrect and contributes to explicit weakness detection.
 - Deterministic backend evaluation selects the highest level with at least two answers and at least
   60% accuracy.
 - Skill strengths start at 0.65; weaknesses are below 0.45 or have declared gaps on at least half of
   that skill's answers.
 - The learner may override the suggested A1-C2 level.
-- Plan durations are 4, 8, 12, or 16 weeks, with 12 as the default.
+- The UI offers plan durations of 4, 8, 12, or 16 weeks, with 12 as the default. Backend request
+  schemas accept any positive integer; plan creation also enforces the curriculum-capacity rules
+  in `study-plan.instructions.md`.
 - Assessment completion creates the plan directly; the normal frontend does not require a separate
   plan-generation request.
 
@@ -153,6 +217,22 @@ availability remain governed by the Study Plan specification.
 Announcements come from public config state. Onboarding Tour and What's New coordinate their own
 display priority through their dedicated behavior.
 
+### Progress detail
+
+The Progress page expands the dashboard summary for the current language and study plan. It shares
+the XP/streak overview, shows daily XP and an activity calendar for the last 28 UTC days, and provides
+a collapsible reward guide linking to learning activities. Days with recorded practice count even
+when they earned no XP. History is filtered to the displayed calendar window; it is not a complete
+reward ledger. Language changes reset the page and obsolete asynchronous results are ignored.
+Local switches and invalidated context suspend progress content; missing or invalidated language
+context must be reconciled before loading resources. Failed reconciliation offers retry rather than
+mixing cached language labels/content with server-active progress. This does not provide an atomic
+snapshot across concurrent server-side language changes from other tabs.
+A null current plan shows the assessment entry point; request failures, including unsuccessful
+curriculum HTTP responses, offer retry. Lesson-exercise
+accuracy is unset until exercises exist. Competency, vocabulary and recent-performance sections
+use readable interface typography, target-language text rendering and accessible progress values.
+
 ### Dashboard tour
 
 `OnboardingTour` is a seven-screen introduction: Lingu's welcome, study plan, text/voice practice,
@@ -167,7 +247,8 @@ the growing catalog, not an exhaustive list. Games have no blanket Premium marke
   Navigation, dismissal, and unmount stop playback and cancel pending browser requests. Failure leaves
   the text and navigation available and permits retry.
 - The native modal dialog traps focus, closes on Escape, restores focus, and locks background scroll.
-  The character is decorative; reduced motion, loading, or unavailable WebGL use a static image.
+  The character is decorative. A spinner covers 3D loading; reduced motion or renderer/model-loading
+  failure uses static artwork.
 - Completion and skipping write the browser-local `fl_tour_done_v2` flag, centralized as
   `TOUR_STORAGE_KEY` in `lib/onboarding-tour.ts`. Other completion keys do not suppress the current
   tour. Change this key only to intentionally reintroduce the tour, independently of app releases.

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, restoreAccessToken } from '@/lib/api'
 import { mapUser } from '@/lib/mappers'
 import { useAuthStore } from '@/store/auth'
 
@@ -31,26 +31,25 @@ export default function BillingSuccessPage() {
   // Confirm the subscription from /me before claiming Premium is active.
   useEffect(() => {
     let cancelled = false
+    const controller = new AbortController()
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      cancelled || useAuthStore.getState().sessionVersion !== sessionVersion
 
     async function confirmSubscription() {
       try {
         if (!useAuthStore.getState().accessToken) {
-          const refreshRes = await fetch('/api/auth/refresh', {
-            method: 'POST',
-            credentials: 'include',
-          })
-          if (!refreshRes.ok) {
-            if (!cancelled) setStatus('error')
-            return
-          }
-          const { access_token } = await refreshRes.json()
-          useAuthStore.getState().setTokens(access_token)
+          await restoreAccessToken(controller.signal)
         }
 
         for (let attempt = 0; attempt < CONFIRMATION_ATTEMPTS; attempt += 1) {
-          const res = await apiFetch('/api/auth/me')
+          if (obsolete()) return
+          const res = await apiFetch('/api/auth/me', {
+            signal: controller.signal,
+          })
           if (!res.ok) throw new Error('me failed')
           const me = await res.json()
+          if (obsolete()) return
           const mappedUser = mapUser(me)
           if (!cancelled) setUser(mappedUser)
 
@@ -64,9 +63,9 @@ export default function BillingSuccessPage() {
           }
         }
 
-        if (!cancelled) setStatus('pending')
+        if (!obsolete()) setStatus('pending')
       } catch {
-        if (!cancelled) setStatus('error')
+        if (!obsolete()) setStatus('error')
       }
     }
 
@@ -74,6 +73,7 @@ export default function BillingSuccessPage() {
 
     return () => {
       cancelled = true
+      controller.abort()
     }
   }, [setUser])
 

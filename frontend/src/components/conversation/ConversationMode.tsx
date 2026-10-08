@@ -575,11 +575,22 @@ export default function ConversationMode({
     pauseVadRef.current = vad.pause
   }, [vad.pause])
 
+  const profileRequestRef = useRef<AbortController | null>(null)
   const refreshCurrentUser = useCallback(async () => {
+    profileRequestRef.current?.abort()
+    const controller = new AbortController()
+    profileRequestRef.current = controller
+    const { sessionVersion } = useAuthStore.getState()
     try {
-      const res = await apiFetch('/api/auth/me')
+      const res = await apiFetch('/api/auth/me', { signal: controller.signal })
       if (!res.ok) return
       const data = await res.json()
+      if (
+        controller.signal.aborted ||
+        !mountedRef.current ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
+      )
+        return
       setUser(mapUser(data, useAuthStore.getState().user))
     } catch {
       // Non-fatal: the backend remains authoritative and the next /me refresh will sync state.
@@ -1157,6 +1168,7 @@ export default function ConversationMode({
     mountedRef.current = true
     return () => {
       mountedRef.current = false
+      profileRequestRef.current?.abort()
       cleanEndRef.current = true
       finalizeSession('route_unload')
       sessionStartedAtRef.current = null
@@ -1288,30 +1300,39 @@ export default function ConversationMode({
             <p className="text-fl-hint text-fl-muted-3 mb-3 text-center font-mono tracking-widest uppercase">
               {t('startersHint')}
             </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {visibleStarters.map((topic) => (
-                <button
-                  key={topic}
-                  onClick={() =>
-                    void handleStart([
-                      {
-                        role: 'user',
-                        content: `I'd like to practice English by talking about ${topic}.`,
-                      },
-                    ])
-                  }
-                  className="text-fl-muted-1 border-fl-border hover:border-fl-border-2 hover:text-fl-fg border px-3 py-2 font-mono text-xs tracking-wide transition-colors"
-                >
-                  {topic}
-                </button>
-              ))}
+            <div className="flex flex-wrap justify-center gap-2 md:flex-col md:items-center">
+              {[visibleStarters.slice(0, 3), visibleStarters.slice(3)].map(
+                (row, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    className="contents md:flex md:justify-center md:gap-2"
+                  >
+                    {row.map((topic) => (
+                      <button
+                        key={topic}
+                        onClick={() =>
+                          void handleStart([
+                            {
+                              role: 'user',
+                              content: `I'd like to practise by talking about ${topic}.`,
+                            },
+                          ])
+                        }
+                        className="text-fl-muted-1 border-fl-border hover:border-fl-border-2 hover:text-fl-fg border px-3 py-2 font-mono text-xs tracking-wide transition-colors"
+                      >
+                        {topic}
+                      </button>
+                    ))}
+                  </div>
+                )
+              )}
             </div>
           </div>
         )}
 
       <LinguAvatar
         animation={linguAnimation}
-        className="h-[150px] w-[150px] shrink-0 md:h-[200px] md:w-[200px]"
+        className="h-[65px] w-[65px] shrink-0 md:h-[200px] md:w-[200px]"
       />
 
       {/* Controls */}

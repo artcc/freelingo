@@ -7,6 +7,11 @@ applyTo: "backend/**"
 
 Most REST endpoints are prefixed under `/api`. The public health check is at `/health`. The WebSocket endpoint is at `/ws/conversation`.
 
+Paths below a router heading are relative to its prefix unless they show the full `/api/...` path.
+Router-root endpoints use their full path to make trailing-slash behavior explicit. Each entry states
+its HTTP method, rate limit, and relevant authentication or payload contract. Limit policy is defined
+in `rate-limiting.instructions.md`.
+
 ---
 
 ## Health — `/health`
@@ -126,9 +131,9 @@ Requires `role="admin"`. All endpoints return 403 for non-admin users.
 
 Requires `role="admin"`. Translation previews and saves must contain exactly `en`, `es`, `fr`, `pt`, `de`, `it`, `ru`, `nl`, `pl`, `ro`, `tr`, `sv`, `da`, `fi`, and `hr`, each with nonblank plain-text `title` (max 160), `subtitle` (max 240), and `description` (max 2000). Stored ten- through fourteen-locale banners remain readable but cannot be saved without all fifteen translations.
 
-- **GET ``** — Rate limit: 60/min. Returns the singleton with `revision`, translations, `source_locale`, `is_active`, and timestamps, or `null` before the first save. Incomplete stored maps are returned unchanged for editing.
+- **GET `/api/admin/dashboard-banner`** — Rate limit: 60/min. Returns the singleton with `revision`, translations, `source_locale`, `is_active`, and timestamps, or `null` before the first save. Incomplete stored maps are returned unchanged for editing.
 - **POST `/translate`** — Rate limit: 10/min. Uses the configured LLM to translate `{source_locale, title, subtitle, description}` into all fifteen UI locales, preserving the validated source text exactly after trimming. Returns `{translations}` as an editable preview without saving; LLM failure returns HTTP 502.
-- **PUT ``** — Rate limit: 60/min. Creates or updates the singleton from `{source_locale, is_active, translations}`. The server starts at revision 1 and increments the revision when source locale or translated content changes; changing only `is_active` does not increment it.
+- **PUT `/api/admin/dashboard-banner`** — Rate limit: 60/min. Creates or updates the singleton from `{source_locale, is_active, translations}`. The server starts at revision 1 and increments the revision when source locale or translated content changes; changing only `is_active` does not increment it.
 
 ---
 
@@ -169,9 +174,9 @@ Placement assessment, plan creation, post-assessment voice trial, and end-of-lev
 
 All endpoints require `get_current_user`. These endpoints manage the user's independent target-language study tracks.
 
-- **GET ``** — Rate limit: 60/min. Lists all learning languages for the authenticated user.
+- **GET `/api/languages`** — Rate limit: 60/min. Lists all learning languages for the authenticated user.
 - **GET `/active`** — Rate limit: 60/min. Returns the user's active learning language.
-- **POST ``** — Rate limit: 60/min. Adds a new target language and initializes the associated language record.
+- **POST `/api/languages`** — Rate limit: 60/min. Adds a new target language and initializes the associated language record.
 - **PUT `/active`** — Rate limit: 60/min. Switches the active target language.
 - **DELETE `/{target_language}`** — Rate limit: 5/min. Deletes a target-language track and its associated study data according to backend ownership checks.
 
@@ -181,8 +186,8 @@ All endpoints require `get_current_user`. These endpoints manage the user's inde
 
 Auth required (`get_current_user`). Returns static curriculum data for all supported target languages.
 
-- GET — Path: ``; Rate limit: 60/min; Auth: get_current_user; Description: Full curriculum for all CEFR levels. Query param: `language` (BCP-47, default `en-GB`).
-- GET — Path: `/{level}`; Rate limit: 60/min; Auth: get_current_user; Description: Units for a specific CEFR level. Query param: `language` (BCP-47).
+- **GET `/api/curriculum`** — Rate limit: 60/min. Full curriculum for all CEFR levels. Query param: `language` (BCP-47, default `en-GB`).
+- **GET `/{level}`** — Rate limit: 60/min. Units for a specific CEFR level. Query param: `language` (BCP-47).
 
 ---
 
@@ -190,7 +195,7 @@ Auth required (`get_current_user`). Returns static curriculum data for all suppo
 
 Auth required (`get_current_user`). Serves canonical backend vocabulary data organized by language and CEFR level.
 
-- **GET ``** — Rate limit: 60/min. Auth: get_current_user. All vocabulary sets for the given language. Query param: `language` (BCP-47, default `en-GB`). Response: `{sets: [{id, level, topic, unit_ref, words: [{word, pos, definition, example, ipa?, frequency_rank?}]}]}`.
+- **GET `/api/vocabulary`** — Rate limit: 60/min. Auth: get_current_user. All vocabulary sets for the given language. Query param: `language` (BCP-47, default `en-GB`). Response: `{sets: [{id, level, topic, unit_ref, words: [{word, pos, definition, example, ipa?, frequency_rank?}]}]}`.
 - **GET `/level/{level}`** — Rate limit: 60/min. Auth: get_current_user. Vocabulary sets filtered by CEFR level (A1–C2). Query param: `language` (BCP-47). Returns 400 for invalid levels.
 - **GET `/{set_id}`** — Rate limit: 60/min. Auth: get_current_user. A single vocabulary set by ID. Query param: `language` (BCP-47). Response: `{set: {...}}`. Returns 404 if not found.
 - **POST `/{set_id}/native-help`** — Rate limit: 10/min. Auth: get_current_user. Query param: `language` (BCP-47, default `en-GB`). Generates or returns cached native-language study help for a vocabulary set, keyed globally by set ID, target language, and native language; the source hash determines cache freshness. Response: `{native_help: {summary, study_tips, word_notes, common_traps, mini_glossary, practice_prompts}}`. Returns 404 if the set does not exist and 503 if generation is unavailable or already in progress.
@@ -227,7 +232,7 @@ Lesson viewing and exercise answering use `get_current_user` (always free). Only
 
 - **GET `/due`** — Rate limit: 60/min. Cards pending review today (SM-2 ordering)
 - **GET `/all`** — Rate limit: 60/min. All user's flashcards
-- **POST `/`** — Rate limit: 60/min. Creates flashcard manually
+- **POST `/api/flashcards`** — Rate limit: 60/min. Creates a flashcard manually.
 - **POST `/bulk`** — Rate limit: 60/min. Creates multiple cards and skips normalized-word duplicates within the active plan.
 - **POST `/{card_id}/review`** — Rate limit: 60/min. Records an SM-2 review (quality 0–5) and credits vocabulary progress to the card's persisted `study_plan_id`, not transient active-language state
 - **POST `/generate`** — Rate limit: 20/min. Generates N flashcards via LLM with native-language translations. The backend derives the target language from the authenticated user's active study plan; the request body has no client-supplied `target_language`. Persisted cards and `FlashcardResponse` include that plan's `study_plan_id`.
@@ -242,7 +247,7 @@ Lesson viewing and exercise answering use `get_current_user` (always free). Only
 
 All endpoints require `get_current_user`.
 
-- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns all grammar topics for the given target language. Query param: `language` (BCP-47, default `en-GB`). Response: `{topics: [{slug, title, level, category, summary, explanation, structure, rules, examples, common_mistakes, related}]}`.
+- **GET `/api/grammar`** — Rate limit: 60/min. Auth: get_current_user. Returns all grammar topics for the given target language. Query param: `language` (BCP-47, default `en-GB`). Response: `{topics: [{slug, title, level, category, summary, explanation, structure, rules, examples, common_mistakes, related}]}`.
 - **GET `/{slug}`** — Rate limit: 60/min. Auth: get_current_user. Returns a single grammar topic by slug. Query param: `language`. Returns 404 if not found.
 - **POST `/{slug}/native-help`** — Rate limit: 10/min. Auth: get_current_user. Query param: `language` (BCP-47, default `en-GB`). Generates or returns cached native-language study help for a static grammar topic, keyed globally by grammar slug, target language, and native language; the source hash determines cache freshness. Response: `{native_help: {summary, explanation, key_points, examples, common_traps, mini_glossary}}`. Returns 404 if the topic does not exist and 503 if generation is unavailable or already in progress.
 
@@ -252,12 +257,12 @@ All endpoints require `get_current_user`.
 
 Chat endpoints require authentication and maintenance/access policy. Conversation/history reads use the read-only subscription/freemium dependency, which remains available after consumable quota is exhausted when the feature limit is nonzero. Sending a message uses the consumable dependency. Memory management is separate and requires authentication only.
 
-- GET — Path: `/conversations`; Description: Rate limit: 60/min. Lists user's conversations (text + voice), ordered by `updated_at` desc. Response includes `source` (`chat` or `voice`).
-- POST — Path: `/conversations`; Description: Rate limit: 60/min. Creates new conversation
-- DELETE — Path: `/conversations/{id}`; Description: Rate limit: 60/min. Deletes conversation and its messages (CASCADE)
-- GET — Path: `/conversations/{id}/messages`; Description: Rate limit: 60/min. Returns messages for a conversation
-- POST — Path: `/`; Description: Rate limit: 30/min. Sends a message and streams the AI tutor response as SSE. Events can contain `conversation_id`, `token`, `memory_updated`, `response_reset`, `done`, or `error`. `response_reset=true` instructs the client to discard text already emitted for the current assistant turn before consuming a complete no-tools fallback. A confirmed committed memory can emit `memory_updated=true` before a later reset or terminal error. Only non-empty completed responses are persisted as assistant history.
-- GET — Path: `/history`; Description: Rate limit: 60/min. Returns the authenticated user's chat history.
+- **GET `/conversations`** — Rate limit: 60/min. Lists user's conversations (text + voice), ordered by `updated_at` desc. Response includes `source` (`chat` or `voice`).
+- **POST `/conversations`** — Rate limit: 60/min. Creates a new conversation.
+- **DELETE `/conversations/{id}`** — Rate limit: 60/min. Deletes a conversation and its messages (CASCADE).
+- **GET `/conversations/{id}/messages`** — Rate limit: 60/min. Returns messages for a conversation.
+- **POST `/api/chat`** — Rate limit: 30/min. Sends a message and streams Lingu's response as SSE. Events can contain `conversation_id`, `token`, `memory_updated`, `response_reset`, `done`, or `error`. `response_reset=true` instructs the client to discard text already emitted for the current assistant turn before consuming a complete no-tools fallback. A confirmed committed memory can emit `memory_updated=true` before a later reset or terminal error. Only non-empty completed responses are persisted as assistant history.
+- **GET `/history`** — Rate limit: 60/min. Returns the authenticated user's chat history.
 
 Written assistant responses may contain optional Markdown bold, italics, bullet/numbered lists and
 paragraphs. SSE tokens and persisted/history `content` retain the original text; rendering and spoken
@@ -273,9 +278,9 @@ Zero-XP activity counts. `current_streak` is zero if the latest entry is older t
 plans return seven inactive days. Reward rules live in `learning-resources.instructions.md`; rewards
 are server-triggered by persisted activity and have no client-claim endpoint.
 
-- GET — Path: `/summary`; Rate limit: 60/min; Description: Streak, XP, skills breakdown, and current-level vocabulary progress for the active study language
-- GET — Path: `/history`; Rate limit: 60/min; Description: Up to the 90 most recent daily progress rows for the active plan; no calendar-date cutoff is applied.
-- GET — Path: `/competencies`; Rate limit: 60/min; Description: Per-unit competency scores and mastery status
+- **GET `/summary`** — Rate limit: 60/min. Streak, XP, skills breakdown, and current-level vocabulary progress for the active study language.
+- **GET `/history`** — Rate limit: 60/min. Up to the 90 most recent daily progress rows for the active plan; no calendar-date cutoff is applied.
+- **GET `/competencies`** — Rate limit: 60/min. Unit-level competency aggregates: average score, mastered count, and total count.
 
 `GET /api/progress/summary` returns totals scoped to the active study plan/language: `total_xp`, `current_streak`, `total_lessons`, `total_exercises`, `exercises_correct`, `accuracy`, `skills`, plus vocabulary summary fields for the plan's current CEFR level and `target_language`: `vocabulary_level`, `vocabulary_mastered`, `vocabulary_total`, and `vocabulary_progress`. Vocabulary progress counts words from the current level's backend vocabulary sets whose flashcard exists in the active `study_plan_id` with `repetitions > 0`.
 
@@ -288,7 +293,7 @@ after validating ownership and resolving the persisted language. They omit prese
 preserve words and block boundaries, and return `422` if no speakable content remains. Plan-only and
 context-free requests retain literal-text synthesis. This does not alter the WebSocket voice pipeline.
 
-- **POST ``** — Rate limit: 20/min. Auth: get_current_user. Text → MP3 audio using the selected TTS provider. Accepts text, optional voice, and optionally one of `study_plan_id` or `conversation_id` (strict positive PostgreSQL-range IDs). Invalid/conflicting context returns 422; missing/foreign resources return 404. Pronunciation language comes from the owned plan, or from the conversation's owned plan when present and its stored target language otherwise. With no context, instruction-capable OpenAI models infer languages from the text without imposing a regional accent. Supports optional trace correlation via `X-TTS-Trace-ID` and returns timing headers.
+- **POST `/api/tts`** — Rate limit: 20/min. Auth: get_current_user. Text → MP3 audio using the selected TTS provider. Accepts text, optional voice, and optionally one of `study_plan_id` or `conversation_id` (strict positive PostgreSQL-range IDs). Invalid/conflicting context returns 422; missing/foreign resources return 404. Pronunciation language comes from the owned plan, or from the conversation's owned plan when present and its stored target language otherwise. With no context, instruction-capable OpenAI models infer languages from the text without imposing a regional accent. Supports optional trace correlation via `X-TTS-Trace-ID` and returns timing headers.
 - **GET `/preview/{voice}`** — Rate limit: 60/min. Auth: get_current_user. Returns a short cached/generated MP3 preview for an OpenAI TTS voice when supported. Instruction-capable models use synthesis-specific cache keys including the model and instructions; other models retain voice-only cache files. Responses use `Cache-Control: no-store`, and Settings bypasses its browser HTTP cache so playback consults the backend disk cache.
 - **POST `/tour/{locale}/{step}`** — Rate limit: 20/min. Auth: get_current_user. Returns persistent MP3 narration for the dashboard-tour text localized by the frontend through i18n. Accepts a supported UI locale, `step1`–`step7`, and a JSON body with `text` (1–5000 characters) and optional OpenAI `voice`; local TTS ignores that preference. Unknown locale/step returns 404, invalid text 422, invalid OpenAI voice 400, unavailable synthesis 503, and the 60-second generation deadline 504. Cache identity includes the supplied text, locale, effective provider/model/voice/speed, format, and pronunciation instructions when supported. Files are shared across users, generation is serialized across workers, and responses use `Cache-Control: no-store` to reconsult the version-aware disk cache.
 
@@ -302,7 +307,7 @@ context-free requests retain literal-text synthesis. This does not alter the Web
 
 ## Contact — `/api/contact`
 
-- **POST ``** — Rate limit: 5/hour. Submits a contact form. Body: `{ email, subject, description }`. Forwards the message to `CONTACT_EMAIL` via SMTP. Returns 204 on success, 502 if email sending fails. No auth required.
+- **POST `/api/contact`** — Rate limit: 5/hour. Submits a contact form. Body: `{ email, subject, description }`. Forwards the message to `CONTACT_EMAIL` via SMTP. Returns 204 on success, 502 if email sending fails. No auth required.
 
 ---
 
@@ -344,7 +349,7 @@ Both `POST /api/conversation/warmup` and `/ws/conversation` require an authentic
 - **Barge-in protocol**: explicit interrupts or new audio input can cancel the initial greeting or any ongoing LLM/TTS response server-side; the current frontend disables automatic interruption during active tutor turns
 - **Empty STT guard**: empty/whitespace transcriptions are ignored and do not trigger an assistant reply
 - **Serialized server sends**: JSON frames, binary audio chunks, timeout warnings, and close frames are written through one send lock to avoid concurrent WebSocket writes
-- **VAD**: browser-level voice activity detection (`@ricky0123/vad-react` + onnxruntime-web threaded WASM)
+- **VAD**: browser-level voice activity detection with `@ricky0123/vad-react`, Silero VAD v5, and ONNX WASM configured with one thread. Installation and lifecycle rules live in `voice-conversation.instructions.md`.
 - **Gapless playback**: `AudioQueue` schedules consecutive `AudioBufferSourceNode`s
 - **Session timeouts**: max duration (default 30 min) and inactivity (default 3 min), each with 60 s warning
 - **History**: a bounded in-memory buffer supplies LLM context; complete transcript messages are persisted in `chat_history` under the parent conversation.
@@ -374,9 +379,9 @@ replays retain the selection under which their history was loaded.
 
 - **GET `/next`** — Rate limit: 60/min. Returns immediately with `{available, exercise, generation_status, generation_error, generation_deadline}`; transcript and correct answers are omitted. Status is `idle`, `generating`, or `failed`; error is null, `timeout`, `generation_failed`, or `interrupted`; deadline is nullable UTC. Available exercises take priority. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a renewable, owner-scoped language/level generation lease and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job. Returns `{"status":"available"}` without generating when the user's pool already has an exercise.
-- **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
+- **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
 - **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
-- **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
+- **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ## Reading — `/api/reading`
 
@@ -385,7 +390,7 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 - **GET `/next`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns immediately with the oldest uncompleted `ReadingExercise` for the current plan's CEFR level and language. Text and questions are included, correct answers are omitted. Response: `{available, exercise, generation_status, generation_error, generation_deadline}`, with the same status contract as Listening. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a renewable, owner-scoped per-(level, language) Redis lease and enqueues a bounded `BackgroundTask`. Returns HTTP 202 `{"status":"generating"}` for new or existing work, or `{"status":"available"}` when an exercise can already be used.
 - **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
-- **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
+- **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ---
 
@@ -393,8 +398,8 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 
 All endpoints require `get_current_user`. Status update requires `require_admin`. Every embedded entry or comment `author` object contains `{id, username, display_name, role}` so clients can identify administrator-authored content.
 
-- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns paginated list of feedback entries. Query params: `q` (search by title, description, username, or display name; max 100 chars), `type` (`feature`\|`bug`), `status` (`pending`\|`planned`\|`in_progress`\|`done`\|`declined`), `sort` (`votes`\|`date`, default `votes`), `order` (`asc`\|`desc`, default `desc`), `skip` (default 0), `limit` (default 10, max 100). Ordering uses entry ID as a deterministic tie-breaker in the requested direction. When `status` is omitted, entries with `status=done` or `status=declined` are excluded from the public board and admin queue; each is returned only with its respective status filter. Response: `{items, total, skip, limit}`. Each item includes `voted_by_me`, `unread_by_me`, and `comment_count` fields injected server-side.
-- **POST ``** — Rate limit: 10/hour. Auth: get_current_user. Creates a new feature request or bug report. Body: `{type, title, description}`. Returns HTTP 201 + the created entry.
+- **GET `/api/feedback`** — Rate limit: 60/min. Auth: get_current_user. Returns paginated list of feedback entries. Query params: `q` (search by title, description, username, or display name; max 100 chars), `type` (`feature`\|`bug`), `status` (`pending`\|`planned`\|`in_progress`\|`done`\|`declined`), `sort` (`votes`\|`date`, default `votes`), `order` (`asc`\|`desc`, default `desc`), `skip` (default 0), `limit` (default 10, max 100). Ordering uses entry ID as a deterministic tie-breaker in the requested direction. When `status` is omitted, entries with `status=done` or `status=declined` are excluded from the public board and admin queue; each is returned only with its respective status filter. Response: `{items, total, skip, limit}`. Each item includes `voted_by_me`, `unread_by_me`, and `comment_count` fields injected server-side.
+- **POST `/api/feedback`** — Rate limit: 10/hour. Auth: get_current_user. Creates a new feature request or bug report. Body: `{type, title, description}`. Returns HTTP 201 + the created entry.
 - **GET `/unread-summary`** — Rate limit: 60/min. Auth: get_current_user. Returns `{unread_count}` for the authenticated user's unread feedback threads. Counts threads with new entries or comments from other users, including `done` entries, and does not expose read state for other users.
 - **GET `/{id}`** — Rate limit: 60/min. Auth: get_current_user. Returns a single entry with its full comment thread ordered by `created_at ASC`, including `unread_by_me` for the current user.
 - **POST `/{id}/read`** — Rate limit: 60/min. Auth: get_current_user. Creates or updates the current user's read marker for that single feedback thread only. Returns `{entry_id, last_read_at}`.
@@ -410,7 +415,7 @@ All endpoints require `get_current_user`. Status update requires `require_admin`
 User review endpoints. Admin moderation endpoints live under `/api/admin/reviews`.
 
 - **GET `/me`** — Rate limit: 60/min. Auth: get_current_user. Returns `{has_review, review}` for the authenticated user. `review` is `null` when the user has not submitted one.
-- **POST ``** — Rate limit: 5/hour. Auth: get_current_user. Creates the authenticated user's single review and queues an admin email notification to `CONTACT_EMAIL` when email is configured. Body: `{rating: 1-5, comment?: string}`. Stores display-name and active-learning-language snapshots server-side, creates with `is_approved=false`, returns HTTP 201, and returns HTTP 409 with `review_already_exists` if the user already has a review.
+- **POST `/api/reviews`** — Rate limit: 5/hour. Auth: get_current_user. Creates the authenticated user's single review and queues an admin email notification to `CONTACT_EMAIL` when email is configured. Body: `{rating: 1-5, comment?: string}`. Stores display-name and active-learning-language snapshots server-side, creates with `is_approved=false`, returns HTTP 201, and returns HTTP 409 with `review_already_exists` if the user already has a review.
 - **PATCH `/me`** — Rate limit: 10/hour. Auth: get_current_user. Updates the authenticated user's existing review. Body: `{rating: 1-5, comment?: string}`. Refreshes display-name and active-learning-language snapshots, resets `is_approved=false`, returns the updated review, and returns HTTP 404 with `review_not_found` if the user has not submitted one yet.
 - **DELETE `/me`** — Rate limit: 10/hour. Auth: get_current_user. Deletes the authenticated user's existing review and returns HTTP 204. Returns HTTP 404 with `review_not_found` if the user has not submitted one yet.
 - **GET `/public`** — Rate limit: 60/min. Public. Returns approved landing reviews only (`is_approved=true` and `rating >= 4`), ordered newest-first. Query param: `limit` (default 100, max 100). The landing carousel requests 100 reviews. Response omits `user_id` and `is_approved`.
@@ -419,10 +424,10 @@ User review endpoints. Admin moderation endpoints live under `/api/admin/reviews
 
 All endpoints require `get_current_user` only. Memory management is not subscription-gated or maintenance-gated so every authenticated user can inspect and control stored personal context.
 
-- GET — Path: ``; Rate limit: 60/min; Auth: get_current_user; Description: Returns all global memories for the authenticated user, oldest-first. Response: `{memories: [{id, content, source, created_at}]}`.
-- POST — Path: ``; Rate limit: 10/min; Auth: get_current_user; Description: Creates one trimmed 1-200 character memory with source `manual`. Returns HTTP 201, or 409 `memory_already_exists` for an exact duplicate.
-- DELETE — Path: `/{id}`; Rate limit: 60/min; Auth: get_current_user; Description: Deletes a single memory by ID. Returns HTTP 204. Returns 404 if not found or not owned by the user.
-- DELETE — Path: ``; Rate limit: 10/min; Auth: get_current_user; Description: Clears all global memories for the authenticated user. Response: `{deleted: int}`.
+- **GET `/api/memories`** — Rate limit: 60/min. Returns all global memories for the authenticated user, oldest-first. Response: `{memories: [{id, content, source, created_at}]}`.
+- **POST `/api/memories`** — Rate limit: 10/min. Creates one trimmed 1-200 character memory with source `manual`. Returns HTTP 201, or 409 `memory_already_exists` for an exact duplicate.
+- **DELETE `/{id}`** — Rate limit: 60/min. Deletes a single memory by ID. Returns HTTP 204. Returns 404 if not found or not owned by the user.
+- **DELETE `/api/memories`** — Rate limit: 10/min. Clears all global memories for the authenticated user. Response: `{deleted: int}`.
 
 ---
 
@@ -430,7 +435,7 @@ All endpoints require `get_current_user` only. Memory management is not subscrip
 
 All endpoints require `get_current_user`.
 
-- **GET ``** — Rate limit: 60/min. Auth: get_current_user. Returns all phrasebook categories for the given target language. Query param: `language` (BCP-47, default `en-GB`). Response: `{categories: [{id, level, situation, icon, phrases: [{text, context, register, unit_ref, romanization?}]}]}`.
+- **GET `/api/phrasebook`** — Rate limit: 60/min. Auth: get_current_user. Returns all phrasebook categories for the given target language. Query param: `language` (BCP-47, default `en-GB`). Response: `{categories: [{id, level, situation, icon, phrases: [{text, context, register, unit_ref, romanization?}]}]}`.
 - **GET `/level/{level}`** — Rate limit: 60/min. Auth: get_current_user. Returns phrasebook categories filtered by CEFR level (A1–C2). Returns 400 for invalid levels. Query param: `language`.
 - **GET `/{category_id}`** — Rate limit: 60/min. Auth: get_current_user. Returns a single phrasebook category by ID. Query param: `language`. Returns 404 if not found.
 - **POST `/{category_id}/native-help`** — Rate limit: 10/min. Auth: get_current_user. Query param: `language` (BCP-47, default `en-GB`). Generates or returns cached native-language study help for a phrasebook category, keyed globally by category ID, target language, and native language; the source hash determines cache freshness. Response: `{native_help: {summary, usage_tips, register_notes, phrase_notes, common_traps, mini_glossary}}`. Returns 404 if the category does not exist and 503 if generation is unavailable or already in progress.

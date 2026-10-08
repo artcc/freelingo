@@ -64,6 +64,20 @@ clears auth state and routes to login.
 
 Callers with an AbortSignal can stop waiting for shared refresh independently. Cancellation releases
 their loading-counter slot and prevents their retry; shared token rotation continues for other callers.
+Authentication has a local session version advanced by login, registration, and logout, but not normal
+access-token rotation. API 401 recovery checks this identity before renewal, global auth updates and
+retry. A response belonging to a replaced session cannot start recovery or clear/replace current auth.
+In-flight refreshes are shared only within the same session; obsolete completion cannot clear a newer
+session's pending refresh. Delayed 401s within the same session reuse an already rotated access token.
+Avatar recovery and landing/checkout restoration also use `requestAccessToken` for this shared HTTP
+rotation. `restoreAccessToken` publishes a missing token only for the original, uncancelled session;
+restoration errors remain owned by the caller. Avatar failures retain the image fallback without
+independently logging out. Avatar cache entries and pending work are session-scoped. Profile consumers
+check session identity after reading response bodies before updating the global user; login and
+conversation profile requests are also aborted on unmount.
+Landing subscription lookup obtains a fresh token through the shared refresh before `/me`, even if
+an in-memory token exists. Public-page failures do not force logout or redirect; only successful
+subscription responses are cached for the session, so a failed lookup can be retried on a later visit.
 
 Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
@@ -95,9 +109,32 @@ Exercise delivery also captures the server-returned plan/language/level context.
 snapshot with answers; history pages capture their response context for replay, including exercises
 from an earlier level. A `study_context_changed` submission response displays the shared localized
 context-conflict message instead of showing results or decrementing the local quota.
+Attempt submissions have a separate cancellation lifecycle from exercise lookup. An obsolete response
+cannot publish results, errors, review prompts, or overwrite the submitting state of a newer attempt.
+The server may already have persisted a cancelled attempt; cancellation does not undo that write.
+Starting a provisional language switch does not cancel an answer submission or release its submitting
+lock. `waitForLanguageSwitch` holds local presentation until the switch settles (or the owner is cancelled).
+A definite rejection with unchanged context publishes the original result; changed or invalidated context
+discards the old presentation. The POST remains observed after local cancellation or unmount so a successful
+HTTP response can update global quota once for its originating authentication session, independently of
+exercise visibility and body decoding. Transport failures, HTTP 408 and 5xx trigger a forced quota GET
+for that session. A changed quota snapshot during the POST also triggers reconciliation instead of a
+decrement that might count already-included usage twice. Quota reads reject obsolete sessions and superseded requests; reads overlapping confirmed
+consumption are reconciled again rather than restoring a potentially older balance. Failed forced reads
+expire the cache window so a later visit can retry.
 
-The language store invalidates cached context after a persisted switch and rejects responses from
-queries predating invalidation or a newer request. The switch PUT has a 20-second timeout that also
+The freemium store subscribes to authentication session-version changes and synchronously clears
+`status`, `loaded`, and `lastFetch`, invalidating pending quota reads. This binds both direct selectors
+and the 60-second cache window to the session. Logout or replacement leaves no snapshot while the next
+session's GET is pending or has failed; banners hide unknown balances and quota paywalls require a
+known exhausted snapshot. Normal token rotation and language changes do not clear global user quotas.
+Chat's delayed stream completion checks its originating session before applying an optimistic decrement.
+
+The language store shares pending queries for the current context and session. Cancelling a page's
+wait does not cancel global recovery; a persistent selector can still receive the result. Context
+invalidation rejects older responses, and add/remove/switch mutations invalidate before reconciliation.
+Overlapping switch calls are rejected by the store; switch controls are disabled until the current
+PUT and reconciliation finish. The switch PUT has a 20-second timeout that also
 bounds its authentication-refresh wait. Transport/timeout failures and HTTP 408/5xx invalidate the
 summary for GET-only reconciliation; a definite rejection preserves the valid summary.
 The exercise hook pauses pending lookups during a switch, then resumes them through GET. A busy-flag
@@ -109,16 +146,55 @@ summary.
 WebSocket voice conversation connects from the browser to `/ws/conversation`; production routing must
 forward `/ws/*` to the backend.
 
-Voice conversations show the animated Lingu avatar between the transcript and controls, at 150 × 150
+## Lingu avatar
+
+Voice conversations show the animated Lingu avatar between the transcript and controls, at 65 × 65
 px on mobile and 200 × 200 px on desktop. Its animation follows assistant speech, user speech, and
 response preparation; listening is the idle fallback. Written chat shows a 55 × 55 px avatar in the
 conversation header, switching between thinking while a response is generated and resting otherwise.
 Both use `components/lingu/LinguAvatar`, which shows a loading indicator while the 3D model loads and
-falls back to static artwork for reduced motion or model-loading failures. The shared 3D scene uses
-neutral tone mapping at exposure 1.0, with a white/blue
-hemisphere light at intensity 2, a white key light at intensity 4, and a pale-blue fill light at
-intensity 3. These lighting values apply consistently in both interface themes; the scene background
-remains transparent.
+falls back to static artwork for reduced motion or model-loading failures. All avatar surfaces share
+the rendering configuration described under Streaming and media, independently of interface theme.
+
+## Page loading
+
+`components/ui/page-loading.tsx` provides general page loading with `LinguAvatar` playing `reposo`
+at 75 × 75 px on mobile and 150 × 150 px on desktop, centered localized text, and optional subtext
+in Geist Sans. Text is visible independently of avatar readiness. A spinner is shown while the 3D
+module/model loads; static artwork is reserved for reduced motion or loading failures. Inline mode
+stays compact, with a decorative spinner disabled by `showDot={false}`; its rotation respects reduced
+motion. Both modes hold one global loading-counter slot while mounted and release it on unmount.
+General and generation screens reuse `PageLoadingPresentation`: the avatar/title block is centered
+between equal flexible grid tracks, with descriptions and delay warnings in the lower track so they
+do not shift that block. Short viewports allow the presentation to scroll rather than clipping text.
+Page-specific minimum-height overrides are not supported; standalone loading uses the dynamic viewport.
+
+`app/(app)/loading.tsx` reuses `PageLoading` and the application background, keeping the route Suspense
+fallback consistent with client-side loading. Once hydrated,
+the fallback participates in the same mounted loading counter.
+
+`components/ui/page-loading-boundary.tsx` coordinates a 500 ms minimum presentation inside the
+authenticated app layout. A persistent `PageLoadingProvider` shares the clock across route fallback,
+initialization, page loading, and exercise generation. `PageLoadingViewport` presents the loading UI
+while underlying content remains mounted but invisible, inert, and hidden from assistive technology.
+The app shell occupies `100dvh`; the main loading viewport fills the remaining area beside the desktop
+sidebar and below the mobile header and any verification banner. The viewport contains a persistent
+full-height content scroller and a sibling loading overlay. Hidden page height and content scroll
+position do not determine loading placement. Initialization uses the entire dynamic viewport.
+Requests and page effects continue normally; the minimum is presentation-only and does not delay
+authentication, exercise delivery, or retry timers. Consecutive loading states share the same deadline,
+including handoffs after 500 ms; slow loads end without an additional minimum wait. Once the
+presentation has finished, a new loading cycle gets a new minimum. Provider unmount cancels pending
+timers. Retained presentation does not hold extra global activity-counter slots. Inline indicators
+and consumers outside this provider retain their normal lifetime. Avatar readiness never gates content.
+
+Reading and Listening share `components/ui/exercise-generation-loading.tsx` for their generation
+screens, with `LinguAvatar` playing `pensando` at 75 × 75 px on mobile and 150 × 150 px on desktop.
+Each page supplies its localized status text independently of avatar readiness, with descriptions and
+delay warnings below the centered avatar/title block. A spinner precedes the first animated frame; reduced motion and loading
+failures use static artwork. Generation participates in the shared minimum presentation above.
+The component retains the mounted loading-counter lifecycle used by `PageLoading`. See
+`reading.instructions.md` and `listening.instructions.md` for generation behavior.
 
 ## Written-chat response presentation
 
@@ -173,6 +249,24 @@ use the interface locale; dates use UTC to match the backend. Decorative charts/
 assistive technology and activity dates have explicit accessible labels. Transitions respect reduced
 motion. Plan/vocabulary bars expose numeric progress and today's lesson segments reflect completions.
 
+The Progress page reuses `ProgressOverview` without its details link. Its page-local load includes
+summary, daily history, competencies, current plan, flashcards, vocabulary, and curriculum units.
+Language-keyed content resets immediately on a language change; effect cleanup discards obsolete
+responses, including delayed JSON and curriculum loads. Local switching or context invalidation
+unmounts the content even if the cached language code has not changed. Missing or invalidated language
+context is reconciled through the language store before any progress resources are loaded; failures
+offer retry. The page's recovery wait is cancellable; the shared query uses the store's 20-second timeout
+and can finish updating global context after the page unmounts.
+A null current plan shows `NoPlanBanner`; loading failures, including curriculum HTTP errors,
+show a retry action rather than fabricated zero progress. `getCurriculumUnits` rejects unsuccessful
+HTTP responses; an empty array represents a successful response with no units.
+`components/progress/ActivityHistory.tsx` presents daily XP and a rolling 28-day activity calendar,
+anchored to the summary's latest UTC day. It filters history to that window and counts persisted
+zero-XP days as active. Accessible day labels expose dates, activity and XP; the duplicate bar chart
+is decorative. `RewardGuide.tsx` provides a localized, collapsible explanation of existing XP rules
+and links to the corresponding activities. Competency/vocabulary/skill bars expose numeric progress,
+vocabulary filters expose selection, and learned-language curriculum text uses `TargetLanguageText`.
+
 ## Public registration surfaces
 
 The server-rendered landing page retains its one-hour `/api/config` revalidation and passes
@@ -219,6 +313,12 @@ names alphabetically using the active UI locale's collation. The translation edi
 incomplete translations with a localized pending suffix, without adding completion checkmarks to
 options; the overall completion counter remains visible.
 
+Product copy names Lingu when describing the tutor's actions, conversations, and exercise preparation.
+References to AI remain appropriate for technology, providers, and usage; this editorial convention
+does not replace disclosures in privacy policies or terms. Apply wording consistently by meaning
+across all fifteen UI catalogs, preserving translation keys, interpolation variables, and rich-text
+tags. Reading and Listening generation descriptions name Lingu without promising a fixed wait time.
+
 ## Streaming and media
 
 The dashboard's `components/tour/OnboardingTour.tsx` is a native modal with seven localized screens.
@@ -230,12 +330,12 @@ visible until the first rendered frame; static Lingu artwork is used for reduced
 renderer/model failures. The optional `onReady` callback signals the first rendered animation frame or
 the resolved static fallback, after the browser's motion preference is known.
 
-Landing and tour share the rendering configuration in `components/lingu/LinguScene.tsx`:
+All `LinguAvatar` consumers share the rendering configuration in `components/lingu/LinguScene.tsx`:
 
-- `NeutralToneMapping` with exposure `1.08` and a transparent canvas.
-- Hemisphere light with white sky, blue-gray ground (`0x527080`), and intensity `0.65`.
-- White directional key light with intensity `1.8` at `(5, 12, 10)`.
-- Pale-blue (`0xc5e4ff`) directional fill light with intensity `0.65` at `(-6, 7, 4)`.
+- `NeutralToneMapping` with exposure `1.0` and a transparent canvas.
+- Hemisphere light with white sky, blue-gray ground (`0x527080`), and intensity `2`.
+- White directional key light with intensity `4` at `(5, 12, 10)`.
+- Pale-blue (`0xc5e4ff`) directional fill light with intensity `3` at `(-6, 7, 4)`.
 
 `lib/lingu-playback.ts` manages the 250 ms transitions using the current effective weights of all
 contributing actions. Interrupted fades preserve contributing clip times and poses; actions that

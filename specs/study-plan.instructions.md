@@ -230,9 +230,26 @@ completed lessons open read-only review, and ungenerated future slots have no ac
 node and banner are gated by the backend `completion` state, not by unit competency: `ready` opens the
 real assessment and `taken` shows the persisted result.
 
+My Plan waits for a resolved language before loading these resources. Missing or invalidated context
+uses the shared language GET with a recoverable retry on failure. A switch unmounts the old content;
+the language and cached plan identity key each content instance. The read-only plan and metadata load
+is cancellable and bounded to 20 seconds. `/today` runs independently because it can generate a lesson:
+it uses the transport/backend limits rather than the read-only deadline and cannot keep the plan's
+loading screen open or turn a valid plan into a general error. A successful response merges today's
+lesson actions and completion state into the loaded plan; an unavailable response leaves them unset.
+Every response-body publication, error, navigation, and loading completion is
+discarded after unmount or context/session replacement. Plan-load failures offer retry; a successful
+null plan remains distinct from a request failure.
+
 The lesson page disables answer/regeneration/completion controls for completed lessons. After first
 completion it refreshes `/today`, can show day-complete state, refreshes freemium status, and may trigger
 the review prompt when the next returned lesson belongs to another unit or the plan is exhausted.
+
+My Plan loads its curriculum separately, distinguishing loading, failure, and a successful empty
+collection. The unit count is unset during loading or failure. HTTP/transport errors show a localized
+error and a curriculum-only retry; retry does not reload or generate lessons. The empty-level message
+appears only after a successful empty response. Responses from a previous curriculum load are ignored
+after a language, plan, level, retry, or unmount change.
 
 ## Lesson-linked voice practice
 

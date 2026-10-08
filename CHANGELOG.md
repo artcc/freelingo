@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.15] - 2026-10-08
+
+### Changed
+
+- Refreshed Progress with the dashboard's XP and streak cards, a 28-day UTC activity calendar and daily XP chart, a reward guide in all interface languages, and clearer competency, vocabulary and recent-performance indicators.
+- Refreshed product wording across all interface languages to highlight Lingu as the tutor.
+- Unified navigation and general page loading, and improved Reading/Listening generation screens with Lingu, a spinner while the animation loads, clearer text, and compact inline indicators. App loading screens share consistent visible-area centering and a 500 ms minimum display to avoid flashes.
+
+### Fixed
+
+- Freemium balances and paywalls reset immediately when signing out or switching accounts, preventing reuse of another account's quota; delayed chat completions cannot decrement the new session's balance.
+- Assessment shows a recoverable error when quiz evaluation fails and retries with the exact answers, including the final answer when questions run out, while preserving language and session isolation.
+- Progress discards obsolete language responses, clears the previous plan when switching languages, offers retry on loading failures, and leaves accuracy unset until lesson exercises exist.
+- Corrected the local development setup: localhost application URLs in `.env.dev`, backend port exposure and conversation WebSocket configuration in `docker-compose.dev.yml`, and matching setup instructions in `DEVELOPMENT.md`.
+- Fixed voice conversation initialization in development by safely releasing unstarted VAD instances and preventing canceled initialization errors from blocking the active session.
+- Fixed unexpected logout and repeated onboarding tours on development reloads by sharing session refresh requests and ignoring canceled session initialization results.
+
 ## [1.10.10] - 2026-10-07
 
 ### Added

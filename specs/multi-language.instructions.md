@@ -239,14 +239,40 @@ Dependencies that require a plan distinguish `No active language set` from
 - fetch, add, switch, and remove operations.
 
 `fetchLanguages` returns a success boolean and preserves the previous snapshot and invalidation
-state on failure. Requests have a 20-second timeout, including the caller's authentication-refresh
-wait, and accept an optional cancellation signal. Cancelled responses do not update the store.
-Only the most recently started language query may publish its response. `invalidateLanguages`
-also invalidates pending queries, preventing pre-mutation responses from restoring an old summary
-or clearing its invalidation flag.
+state on failure. Consumers share the in-flight query for the current context and authentication
+session, with a 20-second timeout including authentication-refresh wait. An optional caller signal
+cancels only that consumer's wait (returning false); the shared query can still update the store for
+the persistent selector and other pages. An already cancelled caller starts no query.
+`invalidateLanguages` makes pending queries obsolete, preventing pre-mutation responses from
+restoring an old summary or clearing its invalidation flag. Successful add/remove operations also
+invalidate before refreshing, so they cannot join a query started before their mutation. A response
+from an earlier authentication session cannot publish. Completion of an obsolete query cannot clear
+the reference to a newer pending query.
 Assessment completion marks the summary as needing refresh and fetches it before navigation or
 the voice-trial offer. A failed refresh does not undo plan creation or repeat the completion POST;
 Listening and Reading reload invalidated context before consulting their exercise pools.
+Completion's global recovery is independent of its visual flow: the POST remains observed after leaving
+Assessment, and HTTP success invalidates pre-commit reads and starts a fresh summary GET before body
+decoding. Both invalidation and publication are session-scoped; an old account's completion cannot
+invalidate or replace the new account's summary. A failed GET leaves the summary invalidated so the
+next consumer can recover the committed plan. Abandoned flows cannot resume offers or navigation.
+Assessment entry and My Plan also reconcile missing or invalidated context before loading dependent
+resources, with a recoverable error when reconciliation fails. A confirmed language addition remains
+successful if its summary refresh fails; Assessment retries only the summary GET and never uses the
+preserved, invalidated language to create a plan. Completion retains the language resolved for its flow.
+Assessment preserves its in-progress quiz, result, and choices during a provisional switch while
+suspending interaction. Pending responses wait for the switch outcome; a definite rejection resumes
+the same flow. A completion retains its identity through its own summary refresh, but a replacement
+flow invalidates it even when the learner later returns to the original language.
+Evaluation errors and their exact retry payload belong to that same flow. A provisional switch hides
+the retry action and defers evaluation success or failure, including delayed response-body decoding.
+A definite switch rejection such as 422 or 429 restores the error or pending outcome without losing
+answers. A confirmed switch, external context invalidation, authentication-session replacement, or
+unmount discards the old evaluation and its retry; returning A → B → A cannot revive them. An obsolete
+evaluation cannot publish a result/error or release a replacement flow's evaluation lock.
+`invalidationVersion` advances on every invalidation, even while `needsRefresh` is already true.
+Assessment records its completion's version so a failed external switch reconciliation cannot be mistaken
+for its own refresh. An unresolved context blocks the old voice offer and is recovered through GET.
 
 After a successful language-switch PUT, the store invalidates the summary and fetches it again.
 `switchLanguage` returns true only when that refresh succeeds. A failed refresh leaves `needsRefresh`
@@ -256,6 +282,10 @@ Timeouts, transport failures, HTTP 408, and server/proxy 5xx responses leave the
 because the mutation outcome is uncertain. Reconciliation uses GET, never an automatic repeat PUT.
 Other rejected HTTP responses preserve the valid summary.
 
+The store rejects overlapping `switchLanguage` calls without sending another PUT or releasing the
+existing busy state. `isSwitching` stays true through both the PUT and its reconciliation. The
+sidebar/mobile selector and language-settings switch buttons are disabled while it is true.
+
 Listening and Reading pause an in-flight exercise lookup while `isSwitching` is true. An already
 displayed exercise, its answers, and replay mode are preserved during the switch and after a definite
 rejection with unchanged context. The busy flag alone does not trigger another exercise lookup.
@@ -263,6 +293,15 @@ Interrupted lookups resume through GET after the switch; changed or invalidated 
 the normal reload/reconciliation flow. Both the sidebar selector and language settings offer a
 summary-only retry after a refresh failure or an uncertain PUT outcome, without repeating the PUT
 or announcing a fully synchronized switch.
+Pending answer submissions have their own presentation lifecycle: unmount, a confirmed language change,
+invalidation, exercise replacement, plan/level change, or session replacement makes their local results
+obsolete. The HTTP operation remains observed; a successful response updates the user's global quota
+once while its authentication session is still current. This does not roll back an attempt already
+persisted by the backend. Uncertain transport/408/5xx failures reconcile quota through a forced GET.
+The provisional `isSwitching` flag alone keeps the pending submission and its lock intact. Responses
+wait for the switch to settle before local presentation; if it is rejected with unchanged context, the
+original result is shown before another submission can be enabled. Global quota accounting does not
+wait for that language decision. The same rule applies to replay.
 
 The sidebar `LanguageSwitcher` is present in desktop and mobile navigation. With one language it
 shows the active language as a disabled indicator. With multiple languages it opens a selector,

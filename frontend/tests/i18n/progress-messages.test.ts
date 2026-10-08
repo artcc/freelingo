@@ -35,6 +35,17 @@ describe.each(SUPPORTED_LOCALES)('progress messages in %s', (locale) => {
       expect(text.trim()).not.toBe('')
       expect(text).not.toBe(key)
     }
+    for (const namespace of ['progressActivity', 'progressRewards'] as const) {
+      expect(Object.keys(messages[namespace]).sort()).toEqual(
+        Object.keys(en[namespace]).sort()
+      )
+      for (const key of Object.keys(en[namespace])) {
+        const text = t(`${namespace}.${key}`, { xp: '125', days: '3' })
+        expect(text.trim()).not.toBe('')
+        expect(text).not.toContain(`${namespace}.`)
+        expect(text).not.toMatch(/[{}]/)
+      }
+    }
   })
 
   it('keeps announcement versions and entry keys consistent and translations renderable', async () => {

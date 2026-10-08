@@ -44,7 +44,11 @@ export default function LanguageSwitcher() {
 
   async function handleSwitch(code: string) {
     setOpen(false)
-    if (code === activeLanguage?.code) return
+    if (
+      useLanguageStore.getState().isSwitching ||
+      code === activeLanguage?.code
+    )
+      return
     setToast(false)
     setSwitchFailed(false)
     // Capture target language info before switching (store will update after)
@@ -80,7 +84,7 @@ export default function LanguageSwitcher() {
           {tCommon('errorMessage')}
         </p>
         <button
-          disabled={recovering}
+          disabled={recovering || isSwitching}
           onClick={async () => {
             setRecovering(true)
             await fetchLanguages()
@@ -112,7 +116,7 @@ export default function LanguageSwitcher() {
 
       <button
         onClick={() => multiple && setOpen(!open)}
-        disabled={!multiple}
+        disabled={!multiple || isSwitching}
         className="text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface flex w-full items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest uppercase transition-colors"
       >
         <Image
@@ -147,6 +151,7 @@ export default function LanguageSwitcher() {
                 <button
                   key={ulang.target_language}
                   onClick={() => handleSwitch(ulang.target_language)}
+                  disabled={isSwitching}
                   className={`flex w-full items-center gap-2 px-5 py-2.5 text-left font-mono text-xs tracking-widest uppercase transition-colors ${
                     ulang.is_active
                       ? 'text-fl-fg bg-fl-surface'

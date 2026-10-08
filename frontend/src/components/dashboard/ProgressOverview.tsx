@@ -25,6 +25,7 @@ export function ProgressOverview({
   lessons,
   correct,
   total,
+  showDetails = true,
 }: {
   xp: number
   todayXp: number
@@ -33,6 +34,7 @@ export function ProgressOverview({
   lessons: number
   correct: number
   total: number
+  showDetails?: boolean
 }) {
   const t = useTranslations('dashboardProgress')
   const locale = useLocale()
@@ -55,13 +57,15 @@ export function ProgressOverview({
           </h2>
           <p className="text-fl-muted-2 mt-1 text-sm">{t('scope')}</p>
         </div>
-        <Link
-          href="/progress"
-          className="text-fl-accent inline-flex items-center gap-1 text-sm font-medium hover:underline"
-        >
-          {t('details')}
-          <ArrowUpRight className="size-4" aria-hidden="true" />
-        </Link>
+        {showDetails && (
+          <Link
+            href="/progress"
+            className="text-fl-accent inline-flex items-center gap-1 text-sm font-medium hover:underline"
+          >
+            {t('details')}
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </Link>
+        )}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="border-fl-accent/35 bg-fl-surface relative overflow-hidden border p-5 sm:p-6">

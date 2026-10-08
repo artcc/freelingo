@@ -72,8 +72,10 @@ export function isFreemiumTrialActive(
 }
 
 interface AuthStore {
+  sessionVersion: number
   accessToken: string | null
   user: User | null
+  startSession: (access: string) => void
   setTokens: (access: string) => void
   setUser: (user: User) => void
   setDismissedDashboardBannerRevision: (revision: number) => void
@@ -81,8 +83,16 @@ interface AuthStore {
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
+  sessionVersion: 0,
   accessToken: null,
   user: null,
+  startSession: (access: string) =>
+    set((state) => ({
+      sessionVersion: state.sessionVersion + 1,
+      accessToken: access,
+      user: null,
+    })),
+  // Token rotation preserves the session identity used by in-flight requests.
   setTokens: (access: string) => set({ accessToken: access }),
   setUser: (user: User) => set({ user }),
   setDismissedDashboardBannerRevision: (revision: number) =>
@@ -95,6 +105,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
     if (typeof window !== 'undefined') {
       localStorage.removeItem(TOUR_STORAGE_KEY)
     }
-    set({ accessToken: null, user: null })
+    set((state) => ({
+      sessionVersion: state.sessionVersion + 1,
+      accessToken: null,
+      user: null,
+    }))
   },
 }))

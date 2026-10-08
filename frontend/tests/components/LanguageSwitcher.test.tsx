@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { act, render, screen, fireEvent, waitFor } from '@testing-library/react'
 import React from 'react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { useLanguageStore } from '@/store/language'
@@ -75,6 +75,33 @@ describe('LanguageSwitcher', () => {
   it('renders the active language name', () => {
     render(<LanguageSwitcher />)
     expect(screen.getByText('en-US')).toBeDefined()
+  })
+
+  it('disables both the selector and open choices during a global switch', () => {
+    useLanguageStore.setState({
+      userLanguages: [
+        {
+          target_language: 'en-US',
+          is_active: true,
+          plan: null,
+          progress: null,
+        },
+        {
+          target_language: 'de-DE',
+          is_active: false,
+          plan: null,
+          progress: null,
+        },
+      ],
+    })
+    render(<LanguageSwitcher />)
+    fireEvent.click(screen.getByRole('button'))
+    act(() => useLanguageStore.setState({ isSwitching: true }))
+    for (const button of screen.getAllByRole('button')) {
+      expect(button).toBeDisabled()
+      fireEvent.click(button)
+    }
+    expect(useLanguageStore.getState().switchLanguage).not.toHaveBeenCalled()
   })
 
   it('renders a loading skeleton when no active language', () => {

@@ -96,8 +96,11 @@ Generation status uses immediate `/next` responses and non-overlapping client qu
 seconds. The read budget allows this cadence with headroom for shared IPs. Clients back off on 429
 and honor `Retry-After` when present; generation itself remains limited to `5/minute`.
 
-## Community, contact, and billing
+## Memories, community, contact, and billing
 
+- `POST /api/memories`: `10/minute`.
+- `DELETE /api/memories`: `10/minute` for clearing the collection; single-memory deletion remains
+  `60/minute`.
 - `POST /api/contact`: `5/hour`.
 - `POST /api/feedback`: `10/hour`.
 - `POST /api/feedback/{entry_id}/comments`: `20/hour`.

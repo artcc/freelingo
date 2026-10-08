@@ -26,6 +26,12 @@ Ollama is not a Compose service. The default configuration expects it on the hos
 `docker-compose.dev.yml` defines PostgreSQL, Redis, a locally built backend with source mount and
 Uvicorn reload, and a locally built frontend with source/message mounts and `npm run dev`.
 
+The frontend is exposed at `http://localhost:3000`. The backend publishes port 8000 only on
+`127.0.0.1`. Server-side frontend requests use `BACKEND_URL=http://backend:8000`; browser voice
+connections use `NEXT_PUBLIC_API_URL=http://localhost:8000`, producing
+`ws://localhost:8000/ws/conversation`. Next.js HTTP rewrites do not forward this WebSocket route.
+`.env.dev` supplies localhost application and billing return URLs for this topology.
+
 It does not define Kokoro or Whisper. Development must therefore select external/cloud speech
 providers or compose the missing local services separately. Its default local speech hostnames are not
 services contained in that file.

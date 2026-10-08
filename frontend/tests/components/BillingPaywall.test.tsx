@@ -440,8 +440,10 @@ describe('billing paywall UI', () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plan: 'monthly' }),
+          signal: expect.any(AbortSignal),
         })
       )
+      expect(mockApiFetch.mock.calls[0][1].signal.aborted).toBe(false)
       expect(window.location.assign).toHaveBeenCalledWith(
         'https://checkout.stripe.com/pay/monthly'
       )

@@ -204,8 +204,11 @@ General conversation and LLM quotas apply independently of freemium:
 - maximum conversation duration;
 - inactivity timeout.
 
-For these user quotas, zero means unlimited. Verified checkout activation resets them from the
-configured defaults. Administrators may override them regardless of Stripe state.
+Zero means unlimited for weekly sessions, daily/weekly minutes, and monthly tokens. Maximum duration
+and inactivity are bounded settings instead: configuration and profile updates accept 900 or 1800
+seconds for maximum duration, and 60, 180, or 300 seconds for inactivity. Zero is not an unlimited
+option for these settings. Verified checkout activation resets quotas and timeouts from configured
+defaults. Administrators may override them regardless of Stripe state.
 
 ## Post-assessment voice demo
 
@@ -252,9 +255,18 @@ frontend toggle. The UI's monthly/yearly override maps locally to active access 
 
 ## Frontend behavior
 
-The config store loads public runtime flags. The freemium store caches status for 60 seconds and
-provides optimistic decrement for chat, Listening, and Reading. Lessons refresh authoritative status
-after completion; voice refreshes after session end.
+The config store loads public runtime flags. The freemium store caches status for 60 seconds within
+the current authentication session. A synchronous auth subscription clears the snapshot, loaded flag,
+and cache timestamp on logout or session replacement, before another account can reuse them. Token
+rotation and language switches preserve the cache because quotas are global per user. Until the new
+session loads its own status, including after a failed GET, the snapshot stays null: quota banners
+show no balance and quota-based paywalls do not infer exhaustion. Backend access checks remain
+authoritative, and a later fetch can retry.
+
+The store provides optimistic decrement for chat, Listening, and Reading. A delayed chat completion
+can decrement only its originating authentication session. Lessons refresh authoritative status after
+completion; voice refreshes after session end. Quota GETs reject superseded requests and old-session
+responses, including delayed body decoding; reads overlapping confirmed consumption reconcile again.
 
 `FreemiumQuotaBanner` shows active-trial time, remaining/limit values, Premium-only state for zero
 limits, and low-balance emphasis. `PaywallBanner` renders inline upgrade or payment-recovery actions.

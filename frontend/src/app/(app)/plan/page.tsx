@@ -1,12 +1,14 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { PageLoading } from '@/components/ui/page-loading'
 import { apiFetch } from '@/lib/api'
 import { getCurriculumUnits, type CurriculumUnit } from '@/data/curriculum'
 import { useLanguageStore } from '@/store/language'
+import { useAuthStore } from '@/store/auth'
+import type { TargetLanguage } from '@/lib/target-languages'
 import UnitCard from '@/components/plan/UnitCard'
 import UnitDrawer from '@/components/plan/UnitDrawer'
 import LevelTestBanner from '@/components/plan/LevelTestBanner'
@@ -121,10 +123,64 @@ function lessonKey(week: number, day: number, title: string): string {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function PlanPage() {
+  const language = useLanguageStore((s) => s.activeLanguage)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const planId = useLanguageStore(
+    (s) => s.userLanguages.find((l) => l.is_active)?.plan?.id
+  )
+
+  if (isSwitching) return <PageLoading />
+  if (!language || needsRefresh) return <PlanLanguageRecovery />
+  return (
+    <PlanContent key={`${language.code}:${planId ?? ''}`} language={language} />
+  )
+}
+
+function PlanLoadError({ onRetry }: { onRetry: () => void }) {
+  const t = useTranslations('common')
+  return (
+    <div className="mx-auto max-w-4xl space-y-4 p-6 text-center">
+      <p role="alert" className="text-fl-muted-1">
+        {t('errorMessage')}
+      </p>
+      <button
+        className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
+        onClick={onRetry}
+      >
+        {t('retry')}
+      </button>
+    </div>
+  )
+}
+
+function PlanLanguageRecovery() {
+  const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
+  const [loading, setLoading] = useState(true)
+  const [attempt, setAttempt] = useState(0)
+  useEffect(() => {
+    const controller = new AbortController()
+    void fetchLanguages(controller.signal).then(() => {
+      if (!controller.signal.aborted) setLoading(false)
+    })
+    return () => controller.abort()
+  }, [fetchLanguages, attempt])
+  if (loading) return <PageLoading />
+  return (
+    <PlanLoadError
+      onRetry={() => {
+        setLoading(true)
+        setAttempt((value) => value + 1)
+      }}
+    />
+  )
+}
+
+function PlanContent({ language }: { language: TargetLanguage }) {
   const t = useTranslations('plan')
+  const tCommon = useTranslations('common')
   const router = useRouter()
-  const activeLanguage = useLanguageStore((s) => s.activeLanguage)
-  const langName = activeLanguage?.name ?? ''
+  const langName = language.name
 
   const [plan, setPlan] = useState<StudyPlan | null>(null)
   const [loading, setLoading] = useState(true)
@@ -138,124 +194,193 @@ export default function PlanPage() {
   >({})
   const [completion, setCompletion] = useState<CompletionState | null>(null)
   const [units, setUnits] = useState<CurriculumUnit[]>([])
+  const [unitsLoading, setUnitsLoading] = useState(true)
+  const [unitsError, setUnitsError] = useState(false)
+  const [unitsAttempt, setUnitsAttempt] = useState(0)
+  const [planAttempt, setPlanAttempt] = useState(0)
 
-  const loadPlan = useCallback(async () => {
-    setLoading(true)
-    setError('')
-    setCompletion(null)
-    try {
-      const [planRes, compRes, todayRes, pendingRes, lessonsRes] =
-        await Promise.all([
-          apiFetch('/api/study-plan/current'),
-          apiFetch('/api/progress/competencies').catch(() => null),
-          apiFetch('/api/study-plan/today').catch(() => null),
-          apiFetch('/api/study-plan/pending-lessons').catch(() => null),
-          apiFetch('/api/study-plan/lessons').catch(() => null),
+  useEffect(() => {
+    const controller = new AbortController()
+    const signal = AbortSignal.any([
+      controller.signal,
+      AbortSignal.timeout(20_000),
+    ])
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () => {
+      const context = useLanguageStore.getState()
+      return (
+        controller.signal.aborted ||
+        context.isSwitching ||
+        context.needsRefresh ||
+        context.activeLanguage?.code !== language.code ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
+      )
+    }
+    async function loadPlan() {
+      setLoading(true)
+      setError('')
+      setCompletion(null)
+      setActiveLessonId(null)
+      // /today can generate a lesson. Its transport lifetime belongs to this
+      // context, but it must not consume the read-only plan's 20-second budget.
+      const todayRequest = apiFetch('/api/study-plan/today', {
+        signal: controller.signal,
+      })
+        .then(async (res) =>
+          res.ok
+            ? ((await res.json()) as {
+                lessons: TodayLesson[]
+                completion?: CompletionState
+              })
+            : null
+        )
+        .catch(() => null)
+      try {
+        const [planRes, compRes, pendingRes, lessonsRes] = await Promise.all([
+          apiFetch('/api/study-plan/current', { signal }),
+          apiFetch('/api/progress/competencies', { signal }).catch(() => null),
+          apiFetch('/api/study-plan/pending-lessons', { signal }).catch(
+            () => null
+          ),
+          apiFetch('/api/study-plan/lessons', { signal }).catch(() => null),
         ])
 
-      if (!planRes.ok) {
-        if (planRes.status === 404) {
-          router.push('/assessment')
-          return
-        }
-        throw new Error(`Failed to load plan (${planRes.status})`)
-      }
-
-      const planData = (await planRes.json()) as StudyPlan
-      setPlan(planData)
-
-      if (compRes?.ok) {
-        const compData = await compRes.json()
-        // Backend returns [{unit_id, score}, ...] or Record<string, number>
-        if (Array.isArray(compData)) {
-          const map: CompetencyMap = {}
-          for (const item of compData as { unit_id: string; score: number }[]) {
-            map[item.unit_id] = item.score
+        if (obsolete()) return
+        signal.throwIfAborted()
+        if (!planRes.ok) {
+          if (planRes.status === 404) {
+            router.push('/assessment')
+            return
           }
-          setCompetencies(map)
-        } else {
-          setCompetencies(compData as CompetencyMap)
+          throw new Error(`Failed to load plan (${planRes.status})`)
         }
-      }
 
-      const states: Record<
-        string,
-        Pick<Lesson, 'id' | 'completed' | 'action'>
-      > = {}
+        const planData = (await planRes.json()) as StudyPlan | null
+        if (obsolete()) return
+        signal.throwIfAborted()
+        setPlan(planData)
+        if (!planData) return
 
-      if (lessonsRes?.ok) {
-        const generatedLessons = (await lessonsRes.json()) as PlanLesson[]
-        for (const lesson of generatedLessons) {
-          states[
-            lessonKey(lesson.week_number, lesson.day_number, lesson.title)
-          ] = {
-            id: lesson.id,
-            completed: lesson.is_completed,
-            action: lesson.is_completed ? 'review' : undefined,
+        if (compRes?.ok) {
+          const compData = await compRes.json()
+          if (obsolete()) return
+          signal.throwIfAborted()
+          // Backend returns [{unit_id, score}, ...] or Record<string, number>
+          if (Array.isArray(compData)) {
+            const map: CompetencyMap = {}
+            for (const item of compData as {
+              unit_id: string
+              score: number
+            }[]) {
+              map[item.unit_id] = item.score
+            }
+            setCompetencies(map)
+          } else {
+            setCompetencies(compData as CompetencyMap)
           }
         }
-      }
 
-      if (pendingRes?.ok) {
-        const pendingData = (await pendingRes.json()) as PendingLesson[]
-        setPendingLessons(pendingData)
-        for (const lesson of pendingData) {
-          states[
-            lessonKey(lesson.week_number, lesson.day_number, lesson.title)
-          ] = {
-            id: lesson.id,
-            completed: false,
-            action: 'continue',
+        const states: Record<
+          string,
+          Pick<Lesson, 'id' | 'completed' | 'action'>
+        > = {}
+
+        if (lessonsRes?.ok) {
+          const generatedLessons = (await lessonsRes.json()) as PlanLesson[]
+          if (obsolete()) return
+          signal.throwIfAborted()
+          for (const lesson of generatedLessons) {
+            states[
+              lessonKey(lesson.week_number, lesson.day_number, lesson.title)
+            ] = {
+              id: lesson.id,
+              completed: lesson.is_completed,
+              action: lesson.is_completed ? 'review' : undefined,
+            }
           }
         }
-      }
 
-      if (todayRes?.ok) {
-        const todayData = (await todayRes.json()) as {
-          lessons: TodayLesson[]
-          completion?: CompletionState
-        }
-        setCompletion(todayData.completion ?? null)
-        const nextLesson = todayData.lessons.find(
-          (l) => l.id != null && !l.is_completed
-        )
-        setActiveLessonId(nextLesson?.id ?? null)
-        for (const lesson of todayData.lessons) {
-          if (lesson.id == null) continue
-          states[lessonKey(lesson.week, lesson.day, lesson.title)] = {
-            id: lesson.id,
-            completed: lesson.is_completed ?? false,
-            action: lesson.is_completed ? 'review' : 'start',
+        if (pendingRes?.ok) {
+          const pendingData = (await pendingRes.json()) as PendingLesson[]
+          if (obsolete()) return
+          signal.throwIfAborted()
+          setPendingLessons(pendingData)
+          for (const lesson of pendingData) {
+            states[
+              lessonKey(lesson.week_number, lesson.day_number, lesson.title)
+            ] = {
+              id: lesson.id,
+              completed: false,
+              action: 'continue',
+            }
           }
         }
-      }
 
-      setLessonStates(states)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load')
-    } finally {
-      setLoading(false)
+        setLessonStates(states)
+        void todayRequest
+          .then((todayData) => {
+            if (obsolete() || !todayData) return
+            setCompletion(todayData.completion ?? null)
+            const nextLesson = todayData.lessons.find(
+              (l) => l.id != null && !l.is_completed
+            )
+            setActiveLessonId(nextLesson?.id ?? null)
+            const todayStates: typeof states = {}
+            for (const lesson of todayData.lessons) {
+              if (lesson.id == null) continue
+              todayStates[lessonKey(lesson.week, lesson.day, lesson.title)] = {
+                id: lesson.id,
+                completed: lesson.is_completed ?? false,
+                action: lesson.is_completed ? 'review' : 'start',
+              }
+            }
+            setLessonStates((previous) => ({ ...previous, ...todayStates }))
+          })
+          .catch(() => {
+            // An unavailable supplementary response must not hide the loaded plan.
+          })
+      } catch (err) {
+        if (!obsolete())
+          setError(err instanceof Error ? err.message : 'Failed to load')
+      } finally {
+        if (!obsolete()) setLoading(false)
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-fetch when active language changes
-  }, [router, activeLanguage?.code])
-
-  useEffect(() => {
     void loadPlan()
-  }, [loadPlan])
+    return () => controller.abort()
+  }, [router, language.code, planAttempt])
 
   useEffect(() => {
-    if (plan?.cefr_level && activeLanguage?.code) {
-      getCurriculumUnits(plan.cefr_level, activeLanguage.code)
-        .then(setUnits)
-        .catch(() => setUnits([]))
+    let cancelled = false
+    setUnits([])
+    setUnitsLoading(true)
+    setUnitsError(false)
+    if (plan?.cefr_level) {
+      void getCurriculumUnits(plan.cefr_level, language.code)
+        .then((data) => {
+          if (!cancelled) setUnits(data)
+        })
+        .catch(() => {
+          if (!cancelled) setUnitsError(true)
+        })
+        .finally(() => {
+          if (!cancelled) setUnitsLoading(false)
+        })
     }
-  }, [plan?.cefr_level, activeLanguage?.code])
+    return () => {
+      cancelled = true
+    }
+  }, [plan?.id, plan?.cefr_level, language.code, unitsAttempt])
 
   if (loading) {
     return <PageLoading />
   }
 
-  if (error || !plan) {
+  if (error)
+    return (
+      <PlanLoadError onRetry={() => setPlanAttempt((value) => value + 1)} />
+    )
+  if (!plan) {
     return <NoPlanBanner />
   }
 
@@ -308,7 +433,7 @@ export default function PlanPage() {
               {t('unitsLabel')}
             </p>
             <p className="text-fl-body text-fl-muted-1 font-mono">
-              {units.length}
+              {unitsLoading || unitsError ? '—' : units.length}
             </p>
           </div>
         </div>
@@ -316,15 +441,34 @@ export default function PlanPage() {
 
       {/* ── Unit list ── */}
       <div className="space-y-2">
-        {units.length === 0 && (
+        {unitsLoading ? (
+          <PageLoading fullScreen={false} />
+        ) : unitsError ? (
           <div className="border-fl-border bg-fl-surface space-y-3 border px-6 py-10 text-center">
-            <p className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
-              {t('noUnitsForLevel', { level })}
+            <p role="alert" className="text-fl-muted-1 text-sm">
+              {tCommon('errorMessage')}
             </p>
-            <p className="text-fl-label text-fl-muted-4 font-mono">
-              {t('noUnitsDesc')}
-            </p>
+            <button
+              className="border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm"
+              onClick={() => {
+                setUnitsLoading(true)
+                setUnitsAttempt((value) => value + 1)
+              }}
+            >
+              {tCommon('retry')}
+            </button>
           </div>
+        ) : (
+          units.length === 0 && (
+            <div className="border-fl-border bg-fl-surface space-y-3 border px-6 py-10 text-center">
+              <p className="text-fl-muted-3 font-mono text-xs tracking-widest uppercase">
+                {t('noUnitsForLevel', { level })}
+              </p>
+              <p className="text-fl-label text-fl-muted-4 font-mono">
+                {t('noUnitsDesc')}
+              </p>
+            </div>
+          )
         )}
         {units.map((unit, i) => {
           const unitLessons = byUnit[unit.id] ?? []
