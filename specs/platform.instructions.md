@@ -80,6 +80,12 @@ session identity before applying a pending renewal's success/failure, so an obso
 replace the profile, clear the newer session, or redirect it. Completing an old refresh does not clear
 the pending-request reference of a newer session.
 
+The freemium cache observes this session version synchronously: logout and `startSession` clear both
+the exposed quota snapshot and its cache validity. The next consumer requests the current session's
+balance; pending or failed reads cannot retain the previous account's balance or paywall. Ordinary
+token rotation and active-language changes preserve the user's global quota cache. Delayed quota
+responses and chat consumption cannot update a replacement session.
+
 Avatar recovery, landing subscription checks, onboarding checkout, pricing checkout, and billing-return
 restoration use the same refresh HTTP coordination. `restoreAccessToken` fills a missing access token
 only if its session is unchanged and its caller has not been cancelled; it preserves any token already

@@ -123,6 +123,13 @@ decrement that might count already-included usage twice. Quota reads reject obso
 consumption are reconciled again rather than restoring a potentially older balance. Failed forced reads
 expire the cache window so a later visit can retry.
 
+The freemium store subscribes to authentication session-version changes and synchronously clears
+`status`, `loaded`, and `lastFetch`, invalidating pending quota reads. This binds both direct selectors
+and the 60-second cache window to the session. Logout or replacement leaves no snapshot while the next
+session's GET is pending or has failed; banners hide unknown balances and quota paywalls require a
+known exhausted snapshot. Normal token rotation and language changes do not clear global user quotas.
+Chat's delayed stream completion checks its originating session before applying an optimistic decrement.
+
 The language store shares pending queries for the current context and session. Cancelling a page's
 wait does not cancel global recovery; a persistent selector can still receive the result. Context
 invalidation rejects older responses, and add/remove/switch mutations invalidate before reconciliation.

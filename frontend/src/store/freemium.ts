@@ -80,3 +80,11 @@ export const useFreemiumStore = create<FreemiumStore>((set, get) => ({
     })
   },
 }))
+
+// Clear the snapshot itself, not just its TTL: banners and paywalls read it
+// directly, including while the next session's request is pending or fails.
+useAuthStore.subscribe((state, previous) => {
+  if (state.sessionVersion === previous.sessionVersion) return
+  ++statusRequestId
+  useFreemiumStore.setState({ status: null, loaded: false, lastFetch: 0 })
+})
