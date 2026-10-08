@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/store/auth'
+import { requestAccessToken } from '@/lib/api'
 
 type Subscriber = (src: string | null) => void
 
@@ -34,7 +35,10 @@ export function clearAvatarCache() {
 }
 
 export function loadAvatar(avatar: string, accessToken: string | null) {
-  const key = `${avatar}:${accessToken ?? ''}`
+  const { sessionVersion } = useAuthStore.getState()
+  const sameSession = () =>
+    useAuthStore.getState().sessionVersion === sessionVersion
+  const key = `${sessionVersion}:${avatar}:${accessToken ?? ''}`
   if (cacheKey === key && objectUrl) return Promise.resolve(objectUrl)
   if (cacheKey === key && pending) return pending
 
@@ -54,30 +58,36 @@ export function loadAvatar(avatar: string, accessToken: string | null) {
       credentials: 'include',
     })
 
-  pending = fetchAvatar(accessToken)
+  const request = fetchAvatar(accessToken)
     .then(async (res) => {
+      if (!sameSession()) return null
       if (res.status === 401 && accessToken) {
-        const refresh = await fetch('/api/auth/refresh', {
-          method: 'POST',
-          credentials: 'include',
-        })
-        if (refresh.ok) {
-          const { access_token } = await refresh.json()
-          useAuthStore.getState().setTokens(access_token)
-          res = await fetchAvatar(access_token)
-        }
+        const currentToken = useAuthStore.getState().accessToken
+        const token =
+          currentToken !== accessToken
+            ? currentToken
+            : await requestAccessToken()
+        if (!sameSession()) return null
+        const state = useAuthStore.getState()
+        // Another consumer may have published this shared rotation already.
+        const nextToken =
+          state.accessToken !== accessToken ? state.accessToken : token
+        if (!nextToken) return null
+        if (state.accessToken === accessToken) state.setTokens(nextToken)
+        res = await fetchAvatar(nextToken)
       }
       if (!res.ok) return null
       const blob = await res.blob()
-      if (cacheKey !== key) return null
+      if (!sameSession() || cacheKey !== key) return null
       objectUrl = URL.createObjectURL(blob)
       notify()
       return objectUrl
     })
     .catch(() => null)
     .finally(() => {
-      pending = null
+      if (pending === request) pending = null
     })
 
-  return pending
+  pending = request
+  return request
 }

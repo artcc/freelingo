@@ -43,6 +43,21 @@ export function requestAccessToken(): Promise<string> {
   return promise
 }
 
+// Restore without logging out on failure; public/checkout pages own their error UI.
+export async function restoreAccessToken(
+  signal?: AbortSignal
+): Promise<string> {
+  signal?.throwIfAborted()
+  const { sessionVersion, accessToken } = useAuthStore.getState()
+  if (accessToken) return accessToken
+  const token = await requestAccessToken()
+  signal?.throwIfAborted()
+  const state = currentSession(sessionVersion)
+  if (state.accessToken) return state.accessToken
+  state.setTokens(token)
+  return token
+}
+
 async function refreshToken(sessionVersion: number): Promise<string | null> {
   const { accessToken } = currentSession(sessionVersion)
   if (refreshRequest?.sessionVersion === sessionVersion) {

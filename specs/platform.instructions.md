@@ -80,6 +80,18 @@ session identity before applying a pending renewal's success/failure, so an obso
 replace the profile, clear the newer session, or redirect it. Completing an old refresh does not clear
 the pending-request reference of a newer session.
 
+Avatar recovery, landing subscription checks, onboarding checkout, pricing checkout, and billing-return
+restoration use the same refresh HTTP coordination. `restoreAccessToken` fills a missing access token
+only if its session is unchanged and its caller has not been cancelled; it preserves any token already
+published by another consumer. Failed restoration is handled by the caller rather than forcing logout.
+Avatar renewal failures fall back to the image placeholder. Avatar cache publication checks session
+identity after reading the blob, and obsolete completion cannot clear newer pending work.
+
+Login, conversation-trial profile refresh, billing confirmation, onboarding profile updates, and profile/
+conversation settings check session identity before publishing the returned user. Login and conversation
+profile requests are cancelled on unmount, including protection after response-body decoding. A successful
+HTTP response alone is not proof that its profile still belongs to the current client session.
+
 A caller's AbortSignal also cancels its wait for the shared refresh and releases its loading-counter
 slot. It does not abort shared token rotation or log out other callers. A cancelled caller does not
 retry its original request when that refresh later completes.
@@ -108,6 +120,13 @@ The authenticated shell redirects users with null learning goals back to onboard
 ## Placement and plan boundary
 
 Assessment is language-specific and separate from account onboarding.
+
+Before checking the existing plan or loading the question bank, Assessment reconciles missing or
+invalidated language context. Failures show an error with GET-only retry rather than treating the
+context as a beginner without a plan. Checks are cancellable and bounded to 20 seconds. The flow keeps
+its resolved language for completion and voice-trial requests; a switch or invalidation cancels old work
+and prevents stale checks, evaluations, or submissions from advancing the replacement flow. A confirmed
+completion refreshes the summary without restarting assessment or repeating its POST.
 
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after

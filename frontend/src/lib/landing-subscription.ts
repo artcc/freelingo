@@ -1,22 +1,25 @@
+import { requestAccessToken } from '@/lib/api'
+import { useAuthStore } from '@/store/auth'
+
 interface LandingSubscriptionState {
   subscribed: boolean
   trialUsed: boolean
 }
 
 let subscriptionStatusPromise: Promise<LandingSubscriptionState> | null = null
+let subscriptionSession: number | null = null
 
 export async function getLandingSubscriptionState(): Promise<LandingSubscriptionState> {
-  if (subscriptionStatusPromise) return subscriptionStatusPromise
+  const { sessionVersion, accessToken } = useAuthStore.getState()
+  if (subscriptionStatusPromise && subscriptionSession === sessionVersion)
+    return subscriptionStatusPromise
+  subscriptionSession = sessionVersion
 
   subscriptionStatusPromise = (async () => {
     try {
-      const refreshRes = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include',
-      })
-      if (!refreshRes.ok) return { subscribed: false, trialUsed: false }
-
-      const { access_token } = await refreshRes.json()
+      const access_token = accessToken ?? (await requestAccessToken())
+      if (useAuthStore.getState().sessionVersion !== sessionVersion)
+        return { subscribed: false, trialUsed: false }
 
       const meRes = await fetch('/api/auth/me', {
         headers: { Authorization: `Bearer ${access_token}` },
@@ -25,6 +28,8 @@ export async function getLandingSubscriptionState(): Promise<LandingSubscription
       if (!meRes.ok) return { subscribed: false, trialUsed: false }
 
       const me = await meRes.json()
+      if (useAuthStore.getState().sessionVersion !== sessionVersion)
+        return { subscribed: false, trialUsed: false }
       const status: string = me.subscription_status ?? 'none'
       return {
         subscribed: status === 'active' || status === 'trialing',

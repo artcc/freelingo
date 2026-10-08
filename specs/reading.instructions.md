@@ -254,6 +254,10 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
   late responses cannot update a replacement operation.
 - Exercise state shows the passage and questions together; there is no audio or readiness gate.
 - Submission becomes available when every received question index has an answer.
+- Pending submission responses are discarded after unmount, session replacement, a language switch,
+  context invalidation, or exercise/plan/level replacement. Results, errors, review prompts, and the
+  submitting indicator belong to that attempt only. Cancelling the client wait does not undo a saved
+  attempt; a newer exercise cannot display its result or have its own submission unlocked by it.
 - Results show score, XP, correct options, and the learner's incorrect selections.
 - A successful first attempt may open the shared review prompt; replay never does.
 - History displays ten attempts per page through the shared pagination component.

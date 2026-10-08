@@ -69,6 +69,12 @@ access-token rotation. API 401 recovery checks this identity before renewal, glo
 retry. A response belonging to a replaced session cannot start recovery or clear/replace current auth.
 In-flight refreshes are shared only within the same session; obsolete completion cannot clear a newer
 session's pending refresh. Delayed 401s within the same session reuse an already rotated access token.
+Avatar recovery and landing/checkout restoration also use `requestAccessToken` for this shared HTTP
+rotation. `restoreAccessToken` publishes a missing token only for the original, uncancelled session;
+restoration errors remain owned by the caller. Avatar failures retain the image fallback without
+independently logging out. Avatar cache entries and pending work are session-scoped. Profile consumers
+check session identity after reading response bodies before updating the global user; login and
+conversation profile requests are also aborted on unmount.
 
 Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites to `BACKEND_URL`. The chat handler preserves
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
@@ -100,6 +106,9 @@ Exercise delivery also captures the server-returned plan/language/level context.
 snapshot with answers; history pages capture their response context for replay, including exercises
 from an earlier level. A `study_context_changed` submission response displays the shared localized
 context-conflict message instead of showing results or decrementing the local quota.
+Attempt submissions have a separate cancellation lifecycle from exercise lookup. An obsolete response
+cannot publish results, errors, review prompts, or overwrite the submitting state of a newer attempt.
+The server may already have persisted a cancelled attempt; cancellation does not undo that write.
 
 The language store shares pending queries for the current context and session. Cancelling a page's
 wait does not cancel global recovery; a persistent selector can still receive the result. Context

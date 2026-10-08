@@ -251,6 +251,10 @@ the reference to a newer pending query.
 Assessment completion marks the summary as needing refresh and fetches it before navigation or
 the voice-trial offer. A failed refresh does not undo plan creation or repeat the completion POST;
 Listening and Reading reload invalidated context before consulting their exercise pools.
+Assessment entry and My Plan also reconcile missing or invalidated context before loading dependent
+resources, with a recoverable error when reconciliation fails. A confirmed language addition remains
+successful if its summary refresh fails; Assessment retries only the summary GET and never uses the
+preserved, invalidated language to create a plan. Completion retains the language resolved for its flow.
 
 After a successful language-switch PUT, the store invalidates the summary and fetches it again.
 `switchLanguage` returns true only when that refresh succeeds. A failed refresh leaves `needsRefresh`
@@ -271,6 +275,9 @@ Interrupted lookups resume through GET after the switch; changed or invalidated 
 the normal reload/reconciliation flow. Both the sidebar selector and language settings offer a
 summary-only retry after a refresh failure or an uncertain PUT outcome, without repeating the PUT
 or announcing a fully synchronized switch.
+Pending answer submissions have their own cancellation lifecycle: unmount, a language switch,
+invalidation, exercise replacement, plan/level change, or session replacement makes their responses
+obsolete. This does not roll back an attempt already persisted by the backend.
 
 The sidebar `LanguageSwitcher` is present in desktop and mobile navigation. With one language it
 shows the active language as a disabled indicator. With multiple languages it opens a selector,

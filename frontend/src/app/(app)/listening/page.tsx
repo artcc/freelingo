@@ -69,6 +69,9 @@ function ListeningPage() {
   const activePlan = useLanguageStore(
     (s) => s.userLanguages.find((l) => l.is_active)?.plan
   )
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const {
     selectedWord,
     tooltipPos,
@@ -112,6 +115,23 @@ function ListeningPage() {
   }, [stripeEnabled, user, fetchFreemium])
   const [submitting, setSubmitting] = useState(false)
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
+  const attemptRequest = useRef<AbortController | null>(null)
+  useEffect(() => {
+    setSubmitting(false)
+    setReviewPromptOpen(false)
+    return () => {
+      attemptRequest.current?.abort()
+      attemptRequest.current = null
+    }
+  }, [
+    exercise,
+    activeLanguage?.code,
+    activePlan?.id,
+    activePlan?.cefr_level,
+    needsRefresh,
+    isSwitching,
+    sessionVersion,
+  ])
   const [isReplay, setIsReplay] = useState(false)
   const [generatingWarn, setGeneratingWarn] = useState(false)
   const generatingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -164,12 +184,29 @@ function ListeningPage() {
   }
 
   async function handleSubmit() {
-    if (!exercise || !exerciseContext) return
+    if (!exercise || !exerciseContext || attemptRequest.current) return
+    const controller = new AbortController()
+    const current = () => {
+      const context = useLanguageStore.getState()
+      const plan = context.userLanguages.find((l) => l.is_active)?.plan
+      return (
+        !controller.signal.aborted &&
+        !context.isSwitching &&
+        !context.needsRefresh &&
+        context.activeLanguage?.code === activeLanguage?.code &&
+        plan?.id === activePlan?.id &&
+        plan?.cefr_level === activePlan?.cefr_level &&
+        useAuthStore.getState().sessionVersion === sessionVersion
+      )
+    }
+    if (!current()) return
+    attemptRequest.current = controller
     setSubmitting(true)
     setError('')
     try {
       const res = await apiFetch('/api/listening/attempt', {
         method: 'POST',
+        signal: controller.signal,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           exercise_id: exercise.id,
@@ -180,6 +217,7 @@ function ListeningPage() {
       })
       if (!res.ok) {
         const d = (await res.json().catch(() => ({}))) as { detail?: string }
+        if (!current()) return
         setError(
           d.detail === 'study_context_changed'
             ? tGeneration('contextChanged')
@@ -190,6 +228,7 @@ function ListeningPage() {
         return
       }
       const data = (await res.json()) as SubmitResult
+      if (!current()) return
       setResult(data)
       setPageState('results')
       if (
@@ -204,9 +243,12 @@ function ListeningPage() {
         setReviewPromptOpen(true)
       }
     } catch {
-      setError(t('errorSubmit'))
+      if (current()) setError(t('errorSubmit'))
     } finally {
-      setSubmitting(false)
+      if (attemptRequest.current === controller) {
+        attemptRequest.current = null
+        if (current()) setSubmitting(false)
+      }
     }
   }
 

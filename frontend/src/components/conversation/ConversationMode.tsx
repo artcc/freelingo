@@ -575,11 +575,22 @@ export default function ConversationMode({
     pauseVadRef.current = vad.pause
   }, [vad.pause])
 
+  const profileRequestRef = useRef<AbortController | null>(null)
   const refreshCurrentUser = useCallback(async () => {
+    profileRequestRef.current?.abort()
+    const controller = new AbortController()
+    profileRequestRef.current = controller
+    const { sessionVersion } = useAuthStore.getState()
     try {
-      const res = await apiFetch('/api/auth/me')
+      const res = await apiFetch('/api/auth/me', { signal: controller.signal })
       if (!res.ok) return
       const data = await res.json()
+      if (
+        controller.signal.aborted ||
+        !mountedRef.current ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
+      )
+        return
       setUser(mapUser(data, useAuthStore.getState().user))
     } catch {
       // Non-fatal: the backend remains authoritative and the next /me refresh will sync state.
@@ -1157,6 +1168,7 @@ export default function ConversationMode({
     mountedRef.current = true
     return () => {
       mountedRef.current = false
+      profileRequestRef.current?.abort()
       cleanEndRef.current = true
       finalizeSession('route_unload')
       sessionStartedAtRef.current = null

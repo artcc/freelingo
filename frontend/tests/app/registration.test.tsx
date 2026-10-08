@@ -80,6 +80,46 @@ async function fillAndSubmit(container: HTMLElement) {
 }
 
 describe('registration availability', () => {
+  it.each(['replace-session', 'unmount'])(
+    'ignores a late login profile after %s',
+    async (action) => {
+      let finish!: (body: unknown) => void
+      apiFetch
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ access_token: 'first-token' }))
+        )
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () =>
+            new Promise((resolve) => {
+              finish = resolve
+            }),
+        })
+      const { container, unmount } = render(<LoginPage />)
+      fireEvent.change(
+        container.querySelector('input[autocomplete="username"]')!,
+        {
+          target: { value: 'user@example.com' },
+        }
+      )
+      fireEvent.change(container.querySelector('input[type="password"]')!, {
+        target: { value: 'password' },
+      })
+      fireEvent.submit(container.querySelector('form')!)
+      await waitFor(() => expect(finish).toBeDefined())
+      if (action === 'unmount') unmount()
+      else useAuthStore.getState().startSession('second-token')
+      await act(async () =>
+        finish({ id: 1, username: 'old-user', role: 'user' })
+      )
+      expect(useAuthStore.getState().user).toBeNull()
+      expect(push).not.toHaveBeenCalled()
+      if (action === 'unmount')
+        expect(apiFetch.mock.calls[1][1].signal.aborted).toBe(true)
+      else expect(useAuthStore.getState().accessToken).toBe('second-token')
+    }
+  )
+
   it('shows loading without flashing a form or closed message, then opens public signup', async () => {
     let resolveConfig!: (response: Response) => void
     vi.mocked(fetch).mockReturnValueOnce(

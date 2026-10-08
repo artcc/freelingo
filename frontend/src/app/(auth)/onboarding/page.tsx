@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, restoreAccessToken } from '@/lib/api'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import { mapUser } from '@/lib/mappers'
 import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
@@ -68,6 +68,8 @@ export default function OnboardingPage() {
   const [checkoutLoading, setCheckoutLoading] =
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState('')
+  const checkoutRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => checkoutRequest.current?.abort(), [])
 
   const targetLanguageName = tLang(
     getLanguageByCode(targetLanguage)?.iso639 ??
@@ -103,6 +105,7 @@ export default function OnboardingPage() {
   const totalSteps = showTrial || freemiumTrialActive ? 3 : 2
 
   async function handleStep2() {
+    const { sessionVersion } = useAuthStore.getState()
     setLoading(true)
     setError('')
     try {
@@ -117,6 +120,7 @@ export default function OnboardingPage() {
       })
       if (!res.ok) throw new Error(t('saveFailed'))
       const updated = await res.json()
+      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
       const mapped = mapUser(updated, user)
       setUser(mapped)
       const trialActive = isFreemiumTrialActive(mapped, stripeEnabled)
@@ -134,33 +138,40 @@ export default function OnboardingPage() {
   }
 
   async function handleCheckout(interval: BillingInterval) {
+    checkoutRequest.current?.abort()
+    const controller = new AbortController()
+    checkoutRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
     setCheckoutLoading(interval)
     setCheckoutError('')
     try {
       if (!useAuthStore.getState().accessToken) {
-        const refreshRes = await fetch('/api/auth/refresh', {
-          method: 'POST',
-          credentials: 'include',
-        })
-        if (!refreshRes.ok) {
-          router.push('/login')
+        try {
+          await restoreAccessToken(controller.signal)
+        } catch {
+          if (!obsolete()) router.push('/login')
           return
         }
-        const { access_token } = await refreshRes.json()
-        useAuthStore.getState().setTokens(access_token)
       }
+      if (obsolete()) return
 
       const res = await apiFetch('/api/billing/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan: interval }),
+        signal: controller.signal,
       })
       if (!res.ok) {
         throw new Error(t('trialError'))
       }
       const { url } = await res.json()
+      if (obsolete()) return
       window.location.assign(url)
     } catch {
+      if (obsolete()) return
       setCheckoutError(t('trialError'))
       setCheckoutLoading(null)
     }

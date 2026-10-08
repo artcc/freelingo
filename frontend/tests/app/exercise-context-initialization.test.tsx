@@ -97,10 +97,193 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
+describe('Assessment context recovery', () => {
+  it('recovers a committed language addition using GET and completes only the resolved language', async () => {
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    let recover = false
+    vi.mocked(fetch).mockImplementation(async (url, options) => {
+      if (url === '/api/languages' && options?.method === 'POST')
+        return json({})
+      if (url === '/api/languages')
+        return recover
+          ? json({
+              languages: [
+                {
+                  target_language: 'de-DE',
+                  is_active: true,
+                  plan: null,
+                  progress: null,
+                },
+              ],
+            })
+          : json({}, 503)
+      if (url === '/api/study-plan/current') return json(null)
+      if (url === '/api/assessment/bank?language=de-DE')
+        return json({ questions: [] })
+      if (url === '/api/assessment/complete')
+        return json({ plan_id: 9, cefr_level: 'A1' })
+      return json({}, 404)
+    })
+    expect(await useLanguageStore.getState().addLanguage('de-DE')).toBe(true)
+    expect(useLanguageStore.getState().needsRefresh).toBe(true)
+    render(<AssessmentPage />)
+    expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+    expect(
+      vi.mocked(fetch).mock.calls.every(([url]) => url === '/api/languages')
+    ).toBe(true)
+    recover = true
+    fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/plan'))
+    const completed = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === '/api/assessment/complete')
+    expect(completed).toHaveLength(1)
+    expect(JSON.parse(completed[0][1]!.body as string).target_language).toBe(
+      'de-DE'
+    )
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(
+          ([url, options]) =>
+            url === '/api/languages' && options?.method === 'POST'
+        )
+    ).toHaveLength(1)
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([url]) => String(url).includes('bank?language=en-GB'))
+    ).toBe(false)
+  })
+
+  it('discards an earlier plan check after the assessment language changes', async () => {
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    let finish!: (response: Response) => void
+    const old = new Promise<Response>((resolve) => {
+      finish = resolve
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current')
+        return useLanguageStore.getState().activeLanguage?.code === 'en-GB'
+          ? old
+          : json(null)
+      return json({ questions: [] })
+    })
+    render(<AssessmentPage />)
+    const oldSignal = vi.mocked(fetch).mock.calls[0][1]!.signal!
+    act(() =>
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('de-DE') ?? null,
+      })
+    )
+    await screen.findByRole('button', { name: /beginnerOption/ })
+    await act(async () =>
+      finish(json({ cefr_level: 'C1', created_at: '2026-01-01' }))
+    )
+    expect(oldSignal.aborted).toBe(true)
+    expect(
+      screen.queryByRole('button', { name: 'retake' })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /beginnerOption/ })
+    ).toBeInTheDocument()
+  })
+})
+
 describe.each([
   { feature: 'reading', Page: ReadingPage },
   { feature: 'listening', Page: ListeningPage },
 ])('$feature context initialization', ({ feature, Page }) => {
+  it.each([200, 503])(
+    'ignores a late attempt (HTTP %s) without unlocking the replacement submission',
+    async (status) => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      let targetLanguage = 'en-GB'
+      let planId = 8
+      const attempts: {
+        resolve: (response: Response) => void
+        signal: AbortSignal
+      }[] = []
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === `/api/${feature}/attempt`)
+          return new Promise<Response>((resolve) => {
+            attempts.push({ resolve, signal: options!.signal as AbortSignal })
+          })
+        const body = await ready().json()
+        return json({
+          ...body,
+          context: {
+            ...body.context,
+            study_plan_id: planId,
+            target_language: targetLanguage,
+          },
+          exercise: {
+            ...body.exercise,
+            id: planId,
+            target_language: targetLanguage,
+            topic:
+              targetLanguage === 'en-GB'
+                ? 'Fresh exercise'
+                : 'Replacement exercise',
+          },
+        })
+      })
+      render(<Page />)
+      await screen.findByText(/Fresh exercise/)
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      await waitFor(() => expect(attempts).toHaveLength(1))
+      act(() => useLanguageStore.setState({ isSwitching: true }))
+      targetLanguage = 'de-DE'
+      planId = 9
+      act(() =>
+        useLanguageStore.setState({
+          isSwitching: false,
+          activeLanguage: getLanguageByCode('de-DE') ?? null,
+          userLanguages: [
+            {
+              target_language: 'de-DE',
+              is_active: true,
+              plan: plan(9),
+              progress: null,
+            },
+          ],
+        })
+      )
+      await screen.findByText(/Replacement exercise/)
+      expect(attempts[0].signal.aborted).toBe(true)
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      await waitFor(() => expect(attempts).toHaveLength(2))
+      const result = {
+        score: 0,
+        xp_earned: 0,
+        correct_answers: [],
+        text: 'Transcript',
+      }
+      await act(async () => attempts[0].resolve(json(result, status)))
+      expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+      expect(screen.queryByText('errorSubmit')).not.toBeInTheDocument()
+      expect(
+        screen.getByRole('button', {
+          name: feature === 'reading' ? '...' : 'checking',
+        })
+      ).toBeDisabled()
+      await act(async () => attempts[1].resolve(json(result)))
+      expect(await screen.findByText('resultsLabel')).toBeInTheDocument()
+    }
+  )
   const lookups = () =>
     vi
       .mocked(fetch)

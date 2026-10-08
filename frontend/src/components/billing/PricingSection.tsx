@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Circle, CircleDot, Diamond, Check, Minus } from 'lucide-react'
 import { PageLoading } from '@/components/ui/page-loading'
 import { getLandingSubscriptionState } from '@/lib/landing-subscription'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, restoreAccessToken } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
 
 type BillingInterval = 'monthly' | 'yearly'
@@ -42,6 +42,8 @@ export default function PricingSection({
   const [checkoutLoading, setCheckoutLoading] =
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const checkoutRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => checkoutRequest.current?.abort(), [])
 
   useEffect(() => {
     if (!hasSession) return
@@ -68,31 +70,35 @@ export default function PricingSection({
 
   async function startCheckout(plan: BillingInterval) {
     if (checkoutLoading) return
+    const controller = new AbortController()
+    checkoutRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
     setCheckoutLoading(plan)
     setCheckoutError(null)
 
     try {
       if (!useAuthStore.getState().accessToken) {
-        const refreshRes = await fetch('/api/auth/refresh', {
-          method: 'POST',
-          credentials: 'include',
-        })
-        if (!refreshRes.ok) throw new Error(tBilling('checkoutError'))
-        const { access_token } = await refreshRes.json()
-        useAuthStore.getState().setTokens(access_token)
+        await restoreAccessToken(controller.signal)
       }
+      if (obsolete()) return
 
       const res = await apiFetch('/api/billing/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan }),
+        signal: controller.signal,
       })
       if (!res.ok) {
         throw new Error(tBilling('checkoutError'))
       }
       const { url } = await res.json()
+      if (obsolete()) return
       window.location.assign(url)
     } catch {
+      if (obsolete()) return
       setCheckoutError(tBilling('checkoutError'))
       setCheckoutLoading(null)
     }

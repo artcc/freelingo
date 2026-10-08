@@ -230,6 +230,13 @@ completed lessons open read-only review, and ungenerated future slots have no ac
 node and banner are gated by the backend `completion` state, not by unit competency: `ready` opens the
 real assessment and `taken` shows the persisted result.
 
+My Plan waits for a resolved language before loading these resources. Missing or invalidated context
+uses the shared language GET with a recoverable retry on failure. A switch unmounts the old content;
+the language and cached plan identity key each content instance. The full plan load is cancellable and
+bounded to 20 seconds. Every response-body publication, error, navigation, and loading completion is
+discarded after unmount or context/session replacement. Plan-load failures offer retry; a successful
+null plan remains distinct from a request failure.
+
 The lesson page disables answer/regeneration/completion controls for completed lessons. After first
 completion it refreshes `/today`, can show day-complete state, refreshes freemium status, and may trigger
 the review prompt when the next returned lesson belongs to another unit or the plan is exhausted.

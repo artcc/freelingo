@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { apiFetch, requestAccessToken } from '@/lib/api'
+import { apiFetch, requestAccessToken, restoreAccessToken } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
 import { useLoadingStore } from '@/store/loading'
 
@@ -16,6 +16,35 @@ function tokenResponse(token: string) {
 }
 
 describe('apiFetch', () => {
+  it('does not publish restoration into a replaced session', async () => {
+    const pending = deferredResponse()
+    vi.mocked(fetch).mockReturnValueOnce(pending.promise)
+    const restoration = restoreAccessToken()
+    const rejected = expect(restoration).rejects.toMatchObject({
+      name: 'AbortError',
+    })
+    useAuthStore.getState().startSession('new-session')
+    pending.resolve(tokenResponse('old-session'))
+    await rejected
+    expect(useAuthStore.getState().accessToken).toBe('new-session')
+  })
+
+  it('cancels a restoration consumer without cancelling shared restoration', async () => {
+    const pending = deferredResponse()
+    vi.mocked(fetch).mockReturnValueOnce(pending.promise)
+    const controller = new AbortController()
+    const cancelled = restoreAccessToken(controller.signal)
+    const rejected = expect(cancelled).rejects.toMatchObject({
+      name: 'AbortError',
+    })
+    const current = restoreAccessToken()
+    controller.abort()
+    pending.resolve(tokenResponse('restored'))
+    await rejected
+    expect(await current).toBe('restored')
+    expect(useAuthStore.getState().accessToken).toBe('restored')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
   const originalFetch = global.fetch
 
   beforeEach(() => {
