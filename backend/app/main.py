@@ -11,6 +11,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from alembic import command
+from app.core.analytics import AnalyticsMiddleware
 from app.core.config import settings
 from app.core.limiter import limiter
 
@@ -25,6 +26,7 @@ _TTS_PREVIEWS_DIR = "/app/tts_previews"
 from app.routers import (
     admin,
     admin_dashboard_banner,
+    analytics,
     assessment,
     auth,
     chat,
@@ -131,7 +133,11 @@ async def security_headers_middleware(request: Request, call_next) -> Response:
     return response
 
 
+app.add_middleware(AnalyticsMiddleware)
+
+
 app.include_router(auth.router)
+app.include_router(analytics.router)
 app.include_router(admin.router)
 app.include_router(admin_dashboard_banner.router)
 app.include_router(assessment.router)

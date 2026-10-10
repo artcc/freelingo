@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Datenschutzerklärung",
-      "updated": "Zuletzt aktualisiert: August 2026",
+      "updated": "Zuletzt aktualisiert: 10. Oktober 2026",
       "s1Title": "1. Überblick",
       "s1Body": "FreeLingo ist als selbst gehostete Anwendung und als gehosteter Dienst verfügbar. Bei selbst gehosteten Installationen werden alle Daten ausschließlich auf dem Server des Betreibers gespeichert, und die Autoren des FreeLingo-Projekts haben keinen Zugriff darauf. Beim gehosteten Dienst agiert das FreeLingo-Team als Verantwortlicher und diese Richtlinie beschreibt, wie Ihre personenbezogenen Daten erhoben, genutzt und geschützt werden.",
       "s2Title": "2. Erhobene Daten",
@@ -482,8 +482,8 @@
       "s3Footer": "Ihre Daten werden niemals verkauft, vermietet oder an Drittanbieter-Marketingdienste weitergegeben.",
       "s4Title": "4. Externe KI-Dienste",
       "s4Body": "Beim gehosteten Dienst werden KI-Chat, Sprachsynthese (TTS) und Sprachtranskription (STT) über die OpenAI-API bereitgestellt. Ihre Gesprächsinhalte und Audiodaten werden zur Verarbeitung an OpenAI übermittelt, gemäß der Datenschutzrichtlinie von OpenAI (openai.com/privacy). Die Zahlungsabwicklung erfolgt durch Stripe, Inc. (USA); Stripe verarbeitet Zahlungsdaten direkt und wir speichern keine Zahlungskartendaten auf unseren Servern — Ihre Transaktionsdaten unterliegen der Datenschutzrichtlinie von Stripe (stripe.com/privacy). Bei selbst gehosteten Installationen wählt der Betreiber den KI-Anbieter; standardmäßig wird eine lokale Ollama-Instanz verwendet und keine Daten verlassen den Server.",
-      "s5Title": "5. Cookies und Sitzungstoken",
-      "s5Body": "FreeLingo verwendet zwei technisch notwendige Cookies für den Betrieb des Dienstes: ein refresh_token (httpOnly, 30-tägige Gültigkeit) für die Sitzungsauthentifizierung und NEXT_LOCALE (1-jährige Gültigkeit) zur Speicherung Ihrer Sprachpräferenz. Es werden keine Tracking- oder Werbe-Cookies verwendet. Zur anonymen Verkehrsmessung nutzen wir Umami — ein selbst gehostetes, quelloffenes Analyse-Tool, das keine Cookies einsetzt, keine personenbezogenen Daten erhebt und alle Daten auf unseren Servern speichert.",
+      "s5Title": "5. Cookies, lokaler Speicher und Nutzungsanalyse",
+      "s5Body": "FreeLingo verwendet technische Cookies und Präferenz-Cookies: refresh_token (httpOnly, standardmäßig 30 Tage), um Ihre Sitzung aufrechtzuerhalten, sowie NEXT_LOCALE und LOCALE_DETECTED (bis zu einem Jahr), um die Sprache der Benutzeroberfläche zu speichern und zu verwalten. Der lokale Browserspeicher speichert außerdem Oberflächen- und Stimmeinstellungen sowie den Status von Hinweisen und Anleitungen; der Sitzungsspeicher ermöglicht die vorübergehende Fortsetzung von Funktionen. Lokale Werte bleiben gespeichert, bis die Anwendung oder Sie diese löschen; Sitzungswerte werden nach ihrer Verwendung oder beim Schließen des Tabs entfernt. Im gehosteten Dienst verwenden wir Umami, ein quelloffenes Analysewerkzeug, das wir auf derselben Infrastruktur wie FreeLingo selbst betreiben, um anonyme, aggregierte Statistiken über Nutzung und Betrieb des Dienstes zu erstellen und das Lernerlebnis zu verbessern. Diese Analyse verwendet technische Nutzungsdaten, setzt keine Cookies ein, ist nicht mit Konten verknüpft und dient weder der Erstellung individueller Profile noch Werbezwecken. Analysedaten werden weder verkauft noch an Dritte übertragen oder mit ihnen geteilt. Umami-Statistiken werden nicht automatisch gelöscht und bleiben bis zur manuellen Löschung gespeichert. Bei selbst gehosteten Installationen ist der Betreiber der Instanz für die Analysekonfiguration verantwortlich. Der Cookie-Hinweis dient der Information; beim Schließen wird lediglich gespeichert, dass er geschlossen wurde.",
       "s6Title": "6. Ihre Rechte (DSGVO)",
       "s6Body": "Im Europäischen Wirtschaftsraum haben Sie die DSGVO-Rechte auf Auskunft, Berichtigung, Löschung, Widerspruch und Datenübertragbarkeit. Ihr Konto können Sie direkt in den Einstellungen löschen. Andere Anfragen werden manuell über den Kontakt in Abschnitt 8 bearbeitet; FreeLingo bietet kein automatisches Exportwerkzeug. Die Verarbeitung erfolgt zur Bereitstellung des Dienstes (Art. 6 Abs. 1 lit. b DSGVO). OpenAI und Stripe können Daten in den USA unter den geltenden Garantien für internationale Übermittlungen verarbeiten. Beschwerden können Sie bei Ihrer Datenschutzaufsichtsbehörde einreichen.",
       "s7Title": "7. Datenspeicherung und Löschung",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Nutzen Sie den Bereich <feedbackLink>Feedback</feedbackLink> in der Seitenleiste. Sie können Vorschläge für neue Funktionen einreichen oder Fehler melden. Stimmen Sie für Ideen anderer Nutzer ab, hinterlassen Sie Kommentare und verfolgen Sie den Status jeder Anfrage. Alle Einreichungen sind öffentlich und werden vom Administrator geprüft."
   },
   "cookieBanner": {
-    "message": "Wir verwenden ausschließlich notwendige Cookies, um dich eingeloggt zu halten. Es werden keine Tracking- oder Werbe-Cookies verwendet.",
+    "message": "Wir verwenden technische Cookies und lokalen Speicher für deine Sitzung und Einstellungen. Die Analyse des gehosteten Dienstes ist anonym, aggregiert und ohne Cookies, ohne Verknüpfung mit deinem Konto oder Werbezwecke.",
     "learnMore": "Datenschutzrichtlinie",
     "accept": "Verstanden"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Verstanden",
     "entry1": {
       "label": "Übe deine Lektionen mit Lingu",

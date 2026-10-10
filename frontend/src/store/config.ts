@@ -12,6 +12,7 @@ export interface DashboardBanner {
 }
 
 interface ConfigStore {
+  analyticsEnabled: boolean
   allowRegistration: boolean
   stripeEnabled: boolean
   stripeTrialDays: number
@@ -29,6 +30,7 @@ interface ConfigStore {
 }
 
 export const useConfigStore = create<ConfigStore>((set, get) => ({
+  analyticsEnabled: false,
   allowRegistration: false,
   stripeEnabled: false,
   stripeTrialDays: 7,
@@ -49,6 +51,7 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
       if (!res.ok) return
       const data = await res.json()
       set({
+        analyticsEnabled: data.analytics_enabled === true,
         allowRegistration: data.allow_registration === true,
         stripeEnabled: data.stripe_enabled ?? false,
         stripeTrialDays: data.stripe_trial_days ?? 7,

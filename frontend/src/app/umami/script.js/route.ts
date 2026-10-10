@@ -1,11 +1,13 @@
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const url = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL
-  if (!url) return new Response('Umami not configured', { status: 404 })
+  const config = getUmamiConfig()
+  if (!config) return new Response('Umami not configured', { status: 404 })
 
   try {
-    const res = await fetch(url)
+    const res = await fetch(config.scriptUrl, {
+      signal: AbortSignal.timeout(3_000),
+    })
     if (!res.ok) return new Response(null, { status: res.status })
     const body = await res.text()
     return new Response(body, {
@@ -18,3 +20,4 @@ export async function GET() {
     return new Response(null, { status: 502 })
   }
 }
+import { getUmamiConfig } from '@/lib/umami-config'

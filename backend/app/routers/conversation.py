@@ -555,6 +555,7 @@ async def conversation_ws(
             voice=voice_pref,
             study_plan_id=study_plan_id_for_conv,
             lesson_practice_context=lesson_practice.context if lesson_practice else "",
+            user_agent=websocket.headers.get("user-agent", ""),
         )
         pipeline._redis = redis
         pipeline._freemium_voice = freemium_ok

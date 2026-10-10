@@ -7,6 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { Profiler } from 'react'
 import AssessmentPage from '@/app/(app)/assessment/page'
 import ListeningPage from '@/app/(app)/listening/page'
 import ReadingPage from '@/app/(app)/reading/page'
@@ -93,6 +94,7 @@ beforeEach(() => {
   useAuthStore.setState({ user: null, accessToken: 'token' })
   useConfigStore.setState({
     loaded: true,
+    analyticsEnabled: false,
     stripeEnabled: false,
     maintenanceMode: false,
   })
@@ -102,6 +104,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  useConfigStore.setState({ analyticsEnabled: false })
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
@@ -121,6 +124,168 @@ function answerExercise() {
     )
   }
 }
+
+describe.each([
+  { feature: 'listening', Page: ListeningPage },
+  { feature: 'reading', Page: ReadingPage },
+])('$feature analytics integration', ({ feature, Page }) => {
+  it('keeps the first-answer signal when interaction precedes passive effect cleanup', async () => {
+    useConfigStore.setState({ analyticsEnabled: true })
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+      return new Response(null, { status: 204 })
+    })
+    let answered = false
+    await act(async () => {
+      render(
+        <Profiler
+          id="first-answer"
+          onRender={() => {
+            // Interact with the committed UI before its passive effects run.
+            const button = screen.queryByRole('button', { name: /Answer 0/ })
+            if (!button || answered) return
+            answered = true
+            button.click()
+          }}
+        >
+          <Page />
+        </Profiler>
+      )
+    })
+    expect(answered).toBe(true)
+    answerExercise()
+    const starts = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === `/api/${feature}/started`)
+    expect(starts).toHaveLength(1)
+    expect(starts[0][1]?.signal?.aborted).toBe(false)
+  })
+
+  it.each(['disabled', 'pending', 'disabled-after-start', 're-enabled'])(
+    'preserves submission without analytics when config is %s',
+    async (state) => {
+      const active = state === 'disabled-after-start' || state === 're-enabled'
+      useConfigStore.setState({
+        loaded: state !== 'pending',
+        analyticsEnabled: active,
+      })
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+        if (url === `/api/${feature}/started`) {
+          const signal = options!.signal!
+          return new Promise<Response>((_resolve, reject) => {
+            signal.throwIfAborted()
+            signal.addEventListener('abort', () => reject(signal.reason), {
+              once: true,
+            })
+          })
+        }
+        if (url === `/api/${feature}/attempt`)
+          return json({
+            score: 5,
+            xp_earned: 50,
+            text: 'Transcript',
+            correct_answers: Array.from({ length: 5 }, (_, index) => ({
+              index,
+              correct: 'A',
+            })),
+          })
+        return json({}, 404)
+      })
+      const uuid = vi.spyOn(crypto, 'randomUUID')
+      render(<Page />)
+      await screen.findByText(/Fresh exercise/)
+      answerExercise()
+      if (active) {
+        const start = vi
+          .mocked(fetch)
+          .mock.calls.find(([url]) => url === `/api/${feature}/started`)!
+        expect(start[1]?.signal?.aborted).toBe(false)
+        act(() => {
+          useConfigStore.setState({ analyticsEnabled: false })
+          if (state === 're-enabled')
+            useConfigStore.setState({ analyticsEnabled: true })
+        })
+        expect(start[1]?.signal?.aborted).toBe(true)
+      }
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      await screen.findByText('resultsLabel')
+      const starts = vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === `/api/${feature}/started`)
+      expect(starts).toHaveLength(active ? 1 : 0)
+      if (!active) expect(uuid).not.toHaveBeenCalled()
+      const submission = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === `/api/${feature}/attempt`)!
+      expect(
+        new Headers(submission[1]?.headers).has('X-Exercise-Attempt')
+      ).toBe(false)
+      expect(JSON.parse(String(submission[1]?.body))).toMatchObject({
+        exercise_id: 42,
+        answers: { 0: 'A', 1: 'A', 2: 'A', 3: 'A', 4: 'A' },
+      })
+    }
+  )
+
+  it('signals the first answer only and reuses its UUID for successful submission', async () => {
+    useConfigStore.setState({ analyticsEnabled: true })
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+      if (url === `/api/${feature}/started`) return json({}, 503)
+      if (url === `/api/${feature}/attempt`)
+        return json({
+          score: 5,
+          xp_earned: 50,
+          text: 'Transcript',
+          correct_answers: Array.from({ length: 5 }, (_, index) => ({
+            index,
+            correct: 'A',
+          })),
+        })
+      return json({}, 404)
+    })
+    render(<Page />)
+    await screen.findByText(/Fresh exercise/)
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([url]) => url === `/api/${feature}/started`)
+    ).toBe(false)
+    answerExercise()
+    const starts = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === `/api/${feature}/started`)
+    expect(starts).toHaveLength(1)
+    const operation = new Headers(starts[0][1]?.headers).get(
+      'X-Exercise-Attempt'
+    )
+    expect(operation).toMatch(/^[0-9a-f-]{36}$/)
+    expect(JSON.parse(String(starts[0][1]?.body))).not.toHaveProperty('answers')
+    fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+    await screen.findByText('resultsLabel')
+    const submits = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === `/api/${feature}/attempt`)
+    expect(submits).toHaveLength(1)
+    expect(new Headers(submits[0][1]?.headers).get('X-Exercise-Attempt')).toBe(
+      operation
+    )
+    expect(push).not.toHaveBeenCalled()
+  })
+})
 
 describe('Assessment context recovery', () => {
   it.each([

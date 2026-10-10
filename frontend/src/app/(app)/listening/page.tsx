@@ -1,10 +1,17 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
+import { useExerciseAnalytics } from '@/hooks/useExerciseAnalytics'
 import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
@@ -72,6 +79,11 @@ function ListeningPage() {
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const {
+    start: startAnalytics,
+    reset: resetAnalytics,
+    headers: analyticsHeaders,
+  } = useExerciseAnalytics('listening')
+  const {
     selectedWord,
     tooltipPos,
     saveState,
@@ -115,12 +127,14 @@ function ListeningPage() {
   const [submitting, setSubmitting] = useState(false)
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
   const attemptRequest = useRef<AbortController | null>(null)
-  useEffect(() => {
+  // Clear the previous attempt before the new exercise can receive an answer.
+  useLayoutEffect(() => {
     setSubmitting(false)
     setReviewPromptOpen(false)
     return () => {
       attemptRequest.current?.abort()
       attemptRequest.current = null
+      resetAnalytics()
     }
   }, [
     exercise,
@@ -129,6 +143,7 @@ function ListeningPage() {
     activePlan?.cefr_level,
     needsRefresh,
     sessionVersion,
+    resetAnalytics,
   ])
   const [isReplay, setIsReplay] = useState(false)
   const [generatingWarn, setGeneratingWarn] = useState(false)
@@ -153,13 +168,14 @@ function ListeningPage() {
 
   const onExercise = useCallback(
     (nextExercise: ListeningExercise, context: ExerciseContext) => {
+      resetAnalytics()
       setExercise(nextExercise)
       setExerciseContext(context)
       setAnswers({})
       setResult(null)
       setIsReplay(false)
     },
-    []
+    [resetAnalytics]
   )
 
   const { loadNext, generate, needsContext } = useExerciseGeneration({
@@ -220,7 +236,7 @@ function ListeningPage() {
         method: 'POST',
         // Transport outlives the local presentation so confirmed global usage
         // is still observed after a language change or unmount.
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...analyticsHeaders() },
         body: JSON.stringify({
           exercise_id: exercise.id,
           answers,
@@ -380,6 +396,7 @@ function ListeningPage() {
                 </TargetLanguageText>
                 <button
                   onClick={() => {
+                    resetAnalytics()
                     setExercise(item.exercise)
                     setExerciseContext(historyContext)
                     setAnswers({})
@@ -687,12 +704,17 @@ function ListeningPage() {
                       return (
                         <button
                           key={k}
-                          onClick={() =>
+                          onClick={() => {
+                            startAnalytics(
+                              exercise.id,
+                              exerciseContext,
+                              isReplay
+                            )
                             setAnswers((prev) => ({
                               ...prev,
                               [String(q.index)]: k,
                             }))
-                          }
+                          }}
                           className={`w-full border px-3 py-2 text-left transition-colors ${
                             selected
                               ? 'border-fl-accent bg-fl-surface-2 text-fl-fg'

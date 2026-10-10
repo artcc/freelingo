@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Política de privacidade",
-      "updated": "Última atualização: agosto de 2026",
+      "updated": "Última atualização: 10 de outubro de 2026",
       "s1Title": "1. Visão geral",
       "s1Body": "FreeLingo está disponível como aplicativo auto-hospedado e como serviço hospedado. Para implantações auto-hospedadas, todos os dados são armazenados exclusivamente no servidor do operador e os autores do projeto FreeLingo não têm acesso a eles. Para o serviço hospedado, a equipe FreeLingo atua como controladora de dados e esta política descreve como seus dados pessoais são coletados, usados e protegidos.",
       "s2Title": "2. Dados que coletamos",
@@ -482,8 +482,8 @@
       "s3Footer": "Seus dados nunca são vendidos, alugados ou compartilhados com serviços de marketing de terceiros.",
       "s4Title": "4. Serviços de IA externos",
       "s4Body": "No serviço hospedado, o chat com IA, síntese de voz (TTS) e transcrição de voz (STT) são fornecidos via API da OpenAI. O conteúdo de suas conversas e áudio são enviados à OpenAI para processamento, sujeito à Política de privacidade da OpenAI (openai.com/privacy). O processamento de pagamentos é realizado pela Stripe, Inc. (EUA); a Stripe processa os dados de pagamento diretamente e não armazenamos os dados do seu cartão em nossos servidores — seus dados de transação estão sujeitos à Política de privacidade da Stripe (stripe.com/privacy). Para implantações auto-hospedadas, o operador escolhe o provedor de IA; por padrão, uma instância local do Ollama é usada e nenhum dado sai do servidor.",
-      "s5Title": "5. Cookies e tokens de sessão",
-      "s5Body": "O FreeLingo usa dois cookies técnicos estritamente necessários para o funcionamento do serviço: refresh_token (httpOnly, validade de 30 dias) para autenticação de sessão, e NEXT_LOCALE (validade de 1 ano) para lembrar sua preferência de idioma. Não são usados cookies de rastreamento ou publicidade. Para medição anónima de tráfego utilizamos o Umami — uma ferramenta de análise auto-hospedada e de código aberto que não utiliza cookies, não recolhe dados pessoais e mantém todos os dados nos nossos servidores.",
+      "s5Title": "5. Cookies, armazenamento local e análise estatística",
+      "s5Body": "O FreeLingo utiliza cookies técnicos e de preferências: refresh_token (httpOnly, 30 dias por padrão) para manter sua sessão, e NEXT_LOCALE e LOCALE_DETECTED (até um ano) para lembrar e gerir o idioma da interface. Também utiliza o armazenamento local do navegador para preferências de interface e voz e para o estado de avisos e guias, além do armazenamento de sessão para a continuidade temporária das funcionalidades. Os valores locais permanecem até serem eliminados pela aplicação ou por você; os de sessão são removidos após o uso ou ao fechar a aba. No serviço hospedado utilizamos o Umami, uma ferramenta de análise de código aberto auto-hospedada na mesma infraestrutura do FreeLingo, para obter estatísticas anónimas e agregadas sobre o uso e o funcionamento do serviço e melhorar a experiência de aprendizagem. Esta análise utiliza dados técnicos de uso, não usa cookies, não está ligada às contas e não serve para criar perfis individuais nem para fins publicitários. Os dados de análise não são vendidos, cedidos nem partilhados com terceiros. As estatísticas do Umami não são eliminadas automaticamente e são conservadas até à sua remoção manual. Em instalações auto-hospedadas, a configuração da análise é da responsabilidade do operador da instância. O aviso sobre cookies é informativo; fechá-lo apenas regista que foi fechado.",
       "s6Title": "6. Seus direitos (LGPD/RGPD)",
       "s6Body": "No Espaço Económico Europeu tem os direitos de acesso, retificação, eliminação, oposição e portabilidade previstos no RGPD. Pode eliminar a conta nas Configurações. Outros pedidos são tratados manualmente através do contacto da secção 8; o FreeLingo não oferece ferramenta automática de exportação. Os dados são tratados para prestar o serviço (Art. 6.º(1)(b) RGPD). OpenAI e Stripe podem tratar dados nos EUA com as garantias aplicáveis às transferências internacionais. Pode reclamar junto da autoridade de controlo competente.",
       "s7Title": "7. Retenção e exclusão de dados",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Use a secção de <feedbackLink>Feedback</feedbackLink> na barra lateral. Pode criar sugestões de novas funcionalidades ou reportar bugs. Vote nas ideias de outros utilizadores, deixe comentários e acompanhe o estado de cada pedido. Todos os envios são públicos e são revistos pelo administrador."
   },
   "cookieBanner": {
-    "message": "Utilizamos cookies estritamente necessários para manter a sua sessão ativa. Não são utilizados cookies de rastreamento ou publicidade.",
+    "message": "Utilizamos cookies técnicos e armazenamento local para sua sessão e preferências. A análise do serviço hospedado é anónima, agregada e sem cookies, sem ligação à sua conta nem fins publicitários.",
     "learnMore": "Política de privacidade",
     "accept": "Entendido"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Entendido",
     "entry1": {
       "label": "Pratica as tuas lições com o Lingu",

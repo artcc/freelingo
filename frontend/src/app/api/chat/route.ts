@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
 
   const headers = new Headers()
   headers.set('Content-Type', 'application/json')
+  const userAgent = request.headers.get('User-Agent')
+  if (userAgent) headers.set('User-Agent', userAgent)
 
   const auth = request.headers.get('Authorization')
   if (auth) headers.set('Authorization', auth)

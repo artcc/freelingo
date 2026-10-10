@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.app_logger import get_logger
 from app.core.database import get_db
 from app.core.deps import get_active_study_plan, get_current_user
@@ -24,6 +25,7 @@ from app.schemas.study_plan import (
     TodayResponse,
 )
 from app.services.completion_service import get_completion_state
+from app.services.learning_analytics import LearningEvent, record_learning_event
 from app.services.lesson_generator import generate_lesson
 from app.services.study_plan_generator import (
     PlanCapacityError,
@@ -132,6 +134,13 @@ async def create_study_plan(
     )
     db.add(plan)
     await db.commit()
+    enqueue_analytics(
+        request,
+        record_learning_event,
+        LearningEvent.STUDY_PLAN_CREATED,
+        source_id=plan.id,
+        user_agent=request.headers.get("user-agent", ""),
+    )
     await db.refresh(plan)
     return plan
 

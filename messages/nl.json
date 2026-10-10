@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Privacybeleid",
-      "updated": "Laatst bijgewerkt: augustus 2026",
+      "updated": "Laatst bijgewerkt: 10 oktober 2026",
       "s1Title": "1. Overzicht",
       "s1Body": "FreeLingo is beschikbaar als zelf gehoste applicatie en als gehoste service. Voor zelf gehoste implementaties worden alle gegevens uitsluitend opgeslagen op de server van de operator en hebben de auteurs van het FreeLingo-project er geen toegang toe.",
       "s2Title": "2. Gegevens die we verzamelen",
@@ -482,8 +482,8 @@
       "s3Footer": "Je gegevens worden nooit verkocht, verhuurd of gedeeld met marketingdiensten van derden.",
       "s4Title": "4. Externe AI-diensten",
       "s4Body": "In de gehoste service worden AI-chat, spraaksynthese (TTS) en spraaktranscriptie (STT) aangeboden via de API van OpenAI. Je gespreksinhoud en audio worden naar OpenAI gestuurd voor verwerking, conform het privacybeleid van OpenAI (openai.com/privacy). Betalingsverwerking wordt uitgevoerd door Stripe, Inc. (VS); Stripe verwerkt betalingsgegevens rechtstreeks en wij slaan geen betaalkaartnummers op onze servers op — je transactiegegevens vallen onder het privacybeleid van Stripe (stripe.com/privacy). Voor zelf gehoste implementaties kiest de operator de AI-provider; standaard wordt een lokale Ollama-instantie gebruikt en verlaat er geen data de server.",
-      "s5Title": "5. Cookies en sessietokens",
-      "s5Body": "FreeLingo gebruikt twee technische cookies die strikt noodzakelijk zijn voor de service: een refresh_token (httpOnly, vervaldatum 30 dagen) voor sessieauthenticatie, en NEXT_LOCALE (vervaldatum 1 jaar) om je taalvoorkeur te onthouden. Er worden geen tracking- of advertentiecookies gebruikt. Voor anonieme verkeersmeting gebruiken we Umami — een zelf gehoste, open-source analysetool die geen cookies gebruikt, geen persoonsgegevens verzamelt en alle data op onze servers bewaart.",
+      "s5Title": "5. Cookies, lokale opslag en statistische analyse",
+      "s5Body": "FreeLingo gebruikt technische cookies en voorkeurscookies: refresh_token (httpOnly, standaard 30 dagen) om je sessie te behouden, en NEXT_LOCALE en LOCALE_DETECTED (maximaal één jaar) om de interfacetaal te onthouden en te beheren. Lokale browseropslag bewaart ook interface- en stemvoorkeuren en de status van meldingen en rondleidingen; sessieopslag zorgt voor tijdelijke continuïteit van functies. Lokale waarden blijven bewaard totdat de applicatie of jij ze verwijdert; sessiewaarden worden na gebruik of bij het sluiten van het tabblad verwijderd. In de gehoste service gebruiken we Umami, een open-source analysetool die we zelf op dezelfde infrastructuur als FreeLingo hosten, voor anonieme, geaggregeerde statistieken over het gebruik en de werking van de service en om de leerervaring te verbeteren. Deze analyse gebruikt technische gebruiksgegevens, gebruikt geen cookies, is niet aan accounts gekoppeld en dient niet om individuele profielen te maken of voor reclame. Analysegegevens worden niet verkocht, overgedragen of gedeeld met derden. Umami-statistieken worden niet automatisch verwijderd en blijven bewaard totdat ze handmatig worden verwijderd. Bij zelf gehoste installaties is de beheerder van de instantie verantwoordelijk voor de analyseconfiguratie. De cookiemelding is informatief; sluiten slaat alleen op dat de melding is gesloten.",
       "s6Title": "6. Jouw rechten (AVG)",
       "s6Body": "In de Europese Economische Ruimte heb je AVG-rechten op inzage, correctie, verwijdering, bezwaar en overdraagbaarheid. Je kunt je account verwijderen via Instellingen. Andere verzoeken worden handmatig afgehandeld via het contact in sectie 8; FreeLingo biedt geen automatische exporttool. Gegevens worden verwerkt om de service te leveren (Art. 6(1)(b) AVG). OpenAI en Stripe kunnen gegevens in de VS verwerken onder de toepasselijke waarborgen voor internationale doorgiften. Je kunt een klacht indienen bij de bevoegde toezichthouder.",
       "s7Title": "7. Bewaring en verwijdering van gegevens",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Gebruik de <feedbackLink>Feedback</feedbackLink> sectie in de zijbalk. Je kunt suggesties voor nieuwe functies indienen of bugs melden. Stem op ideeën van andere gebruikers, laat reacties achter en volg de status van elk verzoek. Alle inzendingen zijn openbaar en worden beoordeeld door de beheerder."
   },
   "cookieBanner": {
-    "message": "Wij gebruiken strikt noodzakelijke cookies om je ingelogd te houden. Er worden geen tracking- of advertentiecookies gebruikt.",
+    "message": "We gebruiken technische cookies en lokale opslag voor je sessie en voorkeuren. De analyse van de gehoste service is anoniem, geaggregeerd en zonder cookies, zonder koppeling aan je account of reclamedoeleinden.",
     "learnMore": "Privacybeleid",
     "accept": "Begrepen"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Begrepen",
     "entry1": {
       "label": "Oefen je lessen met Lingu",

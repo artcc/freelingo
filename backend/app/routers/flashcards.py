@@ -261,6 +261,7 @@ async def review_flashcard(
         skill_score=min(data.quality / 5.0, 1.0),
         study_plan_id=card.study_plan_id,
     )
+    request.state.vocabulary_reviewed = card.source == "from_text"
     return card
 
 
@@ -354,6 +355,8 @@ async def create_flashcard_from_word(
     if existing is not None:
         response = await _respond_with_existing_flashcard(db, existing)
         if response is not None:
+            request.state.vocabulary_saved = not response.already_saved
+            request.state.vocabulary_saved_id = response.id
             return response
 
     try:
@@ -388,6 +391,8 @@ async def create_flashcard_from_word(
     if existing is not None:
         response = await _respond_with_existing_flashcard(db, existing)
         if response is not None:
+            request.state.vocabulary_saved = not response.already_saved
+            request.state.vocabulary_saved_id = response.id
             return response
 
     card = Flashcard(
@@ -402,6 +407,8 @@ async def create_flashcard_from_word(
     db.add(card)
     await db.commit()
     await db.refresh(card)
+    request.state.vocabulary_saved = True
+    request.state.vocabulary_saved_id = card.id
     return FlashcardFromWordResponse.model_validate(card)
 
 

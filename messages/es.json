@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Política de privacidad",
-      "updated": "Última actualización: agosto de 2026",
+      "updated": "Última actualización: 10 de octubre de 2026",
       "s1Title": "1. Descripción general",
       "s1Body": "FreeLingo está disponible como aplicación autoalojada y como servicio alojado. En los despliegues autoalojados, todos los datos se almacenan exclusivamente en el servidor del operador y los autores del proyecto FreeLingo no tienen acceso a ellos. En el servicio alojado, el equipo de FreeLingo actúa como responsable del tratamiento y esta política describe cómo se recogen, usan y protegen tus datos personales.",
       "s2Title": "2. Datos que recopilamos",
@@ -482,8 +482,8 @@
       "s3Footer": "Tus datos nunca se venden, alquilan ni comparten con servicios de marketing de terceros.",
       "s4Title": "4. Servicios de IA externos",
       "s4Body": "En el servicio alojado, el chat con IA, la síntesis de voz (TTS) y la transcripción de voz (STT) se proporcionan a través de la API de OpenAI. El contenido de tus conversaciones y el audio se envían a OpenAI para su procesamiento, sujeto a la Política de privacidad de OpenAI (openai.com/privacy). El procesamiento de pagos lo gestiona Stripe, Inc. (EE.UU.); Stripe procesa los datos de pago directamente y no almacenamos los datos de tu tarjeta en nuestros servidores — tus datos de transacción están sujetos a la Política de privacidad de Stripe (stripe.com/privacy). En despliegues autoalojados, el operador elige el proveedor de IA; por defecto se usa una instancia local de Ollama y ningún dato sale del servidor.",
-      "s5Title": "5. Cookies y tokens de sesión",
-      "s5Body": "FreeLingo usa dos cookies técnicas estrictamente necesarias para el funcionamiento del servicio: refresh_token (httpOnly, 30 días de validez) para la autenticación de sesión, y NEXT_LOCALE (1 año de validez) para recordar tu preferencia de idioma. No se usan cookies de seguimiento ni publicidad. Para la medición anónima de tráfico utilizamos Umami, una herramienta de analítica autoalojada y de código abierto que no usa cookies, no recopila datos personales y mantiene toda la información en nuestros servidores.",
+      "s5Title": "5. Cookies, almacenamiento local y analítica",
+      "s5Body": "FreeLingo utiliza cookies técnicas y de preferencias: refresh_token (httpOnly, 30 días por defecto) para mantener tu sesión, y NEXT_LOCALE y LOCALE_DETECTED (hasta un año) para recordar y gestionar el idioma de la interfaz. También utiliza almacenamiento local del navegador para preferencias de interfaz y voz, y el estado de avisos y guías, así como almacenamiento de sesión para la continuidad temporal de las funciones. Los valores locales permanecen hasta que la aplicación o tú los eliminéis; los de sesión se eliminan al consumirse o al cerrar la pestaña. En el servicio alojado utilizamos Umami, una herramienta de analítica de código abierto autoalojada en la misma infraestructura que FreeLingo, para obtener estadísticas anónimas y agregadas sobre el uso y funcionamiento del servicio y mejorar la experiencia de aprendizaje. Esta analítica utiliza datos técnicos de uso, no usa cookies y no se vincula con las cuentas ni se utiliza para crear perfiles individuales o con fines publicitarios. Los datos de analítica no se venden, ceden ni comparten con terceros. Las estadísticas de Umami no tienen borrado automático y se conservan hasta su eliminación manual. En instalaciones autoalojadas, la configuración de la analítica corresponde al operador de la instancia. El aviso sobre cookies es informativo; cerrarlo solo guarda que se ha cerrado.",
       "s6Title": "6. Tus derechos (RGPD)",
       "s6Body": "Si te encuentras en el Espacio Económico Europeo, tienes los derechos de acceso, rectificación, supresión, oposición y portabilidad previstos por el RGPD. Puedes eliminar tu cuenta directamente desde Ajustes. Las demás solicitudes se atienden manualmente a través del contacto del apartado 8; FreeLingo no ofrece una herramienta automática de exportación. Tratamos los datos para prestar el servicio (Art. 6.1.b RGPD). OpenAI y Stripe pueden procesar datos en EE.UU. mediante las garantías aplicables a las transferencias internacionales. Puedes reclamar ante la AEPD (aepd.es) o la autoridad de control de tu país.",
       "s7Title": "7. Conservación y eliminación de datos",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Usa la sección de <feedbackLink>Feedback</feedbackLink> en la barra lateral. Puedes crear sugerencias de nuevas funcionalidades o reportar errores. Vota las ideas de otros usuarios, deja comentarios y sigue el estado de cada solicitud. Todos los envíos son públicos y los revisa el administrador."
   },
   "cookieBanner": {
-    "message": "Usamos cookies estrictamente necesarias para mantenerte conectado. No se usan cookies de seguimiento ni publicidad.",
+    "message": "Usamos cookies técnicas y almacenamiento local para tu sesión y preferencias. La analítica del servicio alojado es anónima, agregada y sin cookies, sin vinculación con tu cuenta ni fines publicitarios.",
     "learnMore": "Política de privacidad",
     "accept": "Entendido"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Entendido",
     "entry1": {
       "label": "Practica tus lecciones con Lingu",

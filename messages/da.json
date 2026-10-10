@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Privatlivspolitik",
-      "updated": "Senest opdateret: august 2026",
+      "updated": "Senest opdateret: 10. oktober 2026",
       "s1Title": "1. Overblik",
       "s1Body": "FreeLingo tilbydes som en selvhostet app og som en hostet tjeneste. Ved selvhosting opbevares alle data udelukkende på operatørens server, og FreeLingo-projektets ophavspersoner har ikke adgang til dem. For den hostede tjeneste er FreeLingo-teamet dataansvarlig, og denne politik beskriver, hvordan dine personoplysninger indsamles, bruges og beskyttes.",
       "s2Title": "2. Oplysninger, vi indsamler",
@@ -482,8 +482,8 @@
       "s3Footer": "Dine oplysninger bliver aldrig solgt, udlejet eller delt med tredjeparters markedsføringstjenester.",
       "s4Title": "4. Eksterne AI-tjenester",
       "s4Body": "I den hostede tjeneste leveres AI-chat, talesyntese (TTS) og transskription af tale (STT) via OpenAI's API. Indholdet af dine samtaler og lyd sendes til OpenAI til behandling i henhold til OpenAI's privatlivspolitik (openai.com/privacy). Betalinger håndteres af Stripe, Inc. (USA); Stripe behandler betalingsoplysninger direkte, og vi gemmer ikke kortoplysninger på vores servere – dine transaktionsoplysninger er omfattet af Stripes privatlivspolitik (stripe.com/privacy). Ved selvhosting vælger operatøren AI-udbyder; som standard bruges en lokal Ollama-instans, og ingen data forlader serveren.",
-      "s5Title": "5. Cookies og sessionstokens",
-      "s5Body": "FreeLingo bruger to tekniske cookies, som er strengt nødvendige for tjenestens funktion: refresh_token (httpOnly, udløber efter 30 dage) til at bekræfte sessionen og NEXT_LOCALE (udløber efter et år) til at huske dit sprogvalg. Der bruges ingen sporings- eller reklamecookies. Til anonym trafikmåling bruger vi Umami – et selvhostet open source-analyseværktøj, der ikke bruger cookies, ikke indsamler personoplysninger og gemmer alle data på vores egne servere.",
+      "s5Title": "5. Cookies, lokal lagring og analyse",
+      "s5Body": "FreeLingo bruger tekniske cookies og præferencecookies: refresh_token (httpOnly, som standard 30 dage) til at opretholde din session samt NEXT_LOCALE og LOCALE_DETECTED (op til et år) til at huske og administrere grænsefladens sprog. Browserens lokale lagring gemmer også grænseflade- og stemmepræferencer samt status for meddelelser og vejledninger, mens sessionslagring sikrer midlertidig kontinuitet i funktioner. Lokale værdier gemmes, indtil appen eller du sletter dem; sessionsværdier fjernes efter brug eller når fanen lukkes. I den hostede tjeneste bruger vi Umami, et open source-analyseværktøj, som vi selv hoster på samme infrastruktur som FreeLingo, til at få anonyme, aggregerede statistikker om tjenestens brug og drift og forbedre læringsoplevelsen. Analysen bruger tekniske brugsdata, bruger ikke cookies, er ikke knyttet til konti og bruges hverken til individuelle profiler eller reklame. Analysedata sælges, overdrages eller deles ikke med tredjeparter. Umami-statistikker slettes ikke automatisk og opbevares, indtil de fjernes manuelt. Ved selvhostede installationer er instansens operatør ansvarlig for analysekonfigurationen. Cookiemeddelelsen er informativ; når den lukkes, gemmes kun, at den er lukket.",
       "s6Title": "6. Dine rettigheder (GDPR)",
       "s6Body": "Hvis du befinder dig i Det Europæiske Økonomiske Samarbejdsområde, har du efter GDPR ret til indsigt, berigtigelse, sletning, indsigelse og dataportabilitet. Du kan selv slette din konto under Indstillinger. Andre anmodninger behandles manuelt via kontakten i afsnit 8; FreeLingo tilbyder ikke et automatisk eksportværktøj. Vi behandler personoplysninger for at levere tjenesten (GDPR artikel 6, stk. 1, litra b). OpenAI og Stripe kan behandle oplysninger i USA under de sikkerhedsforanstaltninger, der gælder for internationale overførsler. Du kan klage til den spanske databeskyttelsesmyndighed (aepd.es) eller din lokale tilsynsmyndighed.",
       "s7Title": "7. Opbevaring og sletning af oplysninger",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Brug <feedbackLink>Feedback</feedbackLink> i sidepanelet. Du kan foreslå nye funktioner eller rapportere fejl. Stem på andres idéer, skriv kommentarer, og følg status for hvert indlæg. Alle indlæg er offentlige og gennemgås af administratoren."
   },
   "cookieBanner": {
-    "message": "Vi bruger kun nødvendige cookies for at holde dig logget ind. Vi bruger ikke sporings- eller reklamecookies.",
+    "message": "Vi bruger tekniske cookies og lokal lagring til din session og dine præferencer. Den hostede tjenestes analyse er anonym, aggregeret og uden cookies, uden tilknytning til din konto eller reklameformål.",
     "learnMore": "Privatlivspolitik",
     "accept": "Forstået"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Forstået",
     "entry1": {
       "label": "Øv dine lektioner med Lingu",

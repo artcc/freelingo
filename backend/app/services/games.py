@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from random import SystemRandom
 
@@ -626,12 +627,20 @@ def match_pair(session: GameSession, body: VocabularyPairAnswer) -> list[dict] |
     return answers
 
 
+@dataclass(frozen=True)
+class GameAnswerResult:
+    session: GameSession
+    # None means an idempotent retry, not a newly persisted action.
+    answer_number: int | None = None
+    correct: bool = False
+
+
 async def answer_game(
     db: AsyncSession,
     user_id: int,
     session_id: str,
     body: GameAnswer | SentenceOrderAnswer | VocabularyPairAnswer,
-) -> GameSession:
+) -> GameAnswerResult:
     completed_at = now_utc()
     session = await owned_game(db, user_id, session_id)
     session_id = session.id
@@ -648,12 +657,21 @@ async def answer_game(
         raise HTTPException(409, "game_not_ready")
     ordering = session.game_type == "sentence-order"
     pairing = session.game_type == "vocabulary-pairs"
+    previous_count = (
+        sum(len(a.get("attempts", [])) for a in session.answers)
+        if pairing
+        else (
+            sum("order" in a for a in session.answers)
+            if ordering
+            else sum(("detection" in a) + ("correction" in a) for a in session.answers)
+        )
+    )
     if pairing != isinstance(body, VocabularyPairAnswer):
         raise HTTPException(422, "invalid_game_answer")
     if pairing:
         answers = match_pair(session, body)
         if answers is None:
-            return session
+            return GameAnswerResult(session)
         session.answers = answers
         await finish_answer(
             db,
@@ -662,7 +680,9 @@ async def answer_game(
             all(a.get("matched") for a in answers),
             sum(not a.get("assisted", False) for a in answers),
         )
-        return session
+        return GameAnswerResult(
+            session, previous_count + 1, answers[body.challenge]["attempts"][-1]["correct"]
+        )
     if ordering != isinstance(body, SentenceOrderAnswer):
         raise HTTPException(422, "invalid_game_answer")
     answer = session.answers[body.challenge]
@@ -671,7 +691,7 @@ async def answer_game(
     if key in answer:
         if answer[key] != choice:
             raise HTTPException(409, "already_answered")
-        return session
+        return GameAnswerResult(session)
     completion_key = "order" if ordering else "correction"
     first_unfinished = next(
         (i for i, a in enumerate(session.answers) if completion_key not in a), 5
@@ -709,7 +729,12 @@ async def answer_game(
     await finish_answer(
         db, session, completed_at, all(completion_key in a for a in answers), correct
     )
-    return session
+    action_correct = (
+        answers[body.challenge]["correct"]
+        if ordering
+        else body.choice == challenge["error_index" if body.step == "detect" else "correct_index"]
+    )
+    return GameAnswerResult(session, previous_count + 1, action_correct)
 
 
 async def finish_answer(

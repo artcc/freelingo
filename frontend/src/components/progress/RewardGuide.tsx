@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ArrowUpRight, ChevronDown, Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { trackBrowserEvent } from '@/lib/analytics'
 
 const REWARDS = [
   { key: 'lessons', links: [{ label: 'myPlan', href: '/plan' }] },
@@ -25,7 +26,13 @@ export function RewardGuide() {
   const nav = useTranslations('nav')
 
   return (
-    <details className="border-fl-border bg-fl-surface group border">
+    <details
+      className="border-fl-border bg-fl-surface group border"
+      onToggle={(event) => {
+        if (event.currentTarget.open)
+          trackBrowserEvent('progress_rewards_viewed')
+      }}
+    >
       <summary className="text-fl-fg flex cursor-pointer list-none items-center gap-3 p-5 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden">
         <Sparkles
           className="text-fl-accent size-5 shrink-0"

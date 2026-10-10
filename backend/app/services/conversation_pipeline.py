@@ -14,6 +14,7 @@ from app.services.language_helpers import (
     get_language_name,
     get_native_language_name,
 )
+from app.services.learning_analytics import record_lingu_practice
 from app.services.llm_adapter import (
     LLMError,
     LLMStream,
@@ -94,6 +95,7 @@ class ConversationPipeline:
         voice: str = "",
         study_plan_id: int | None = None,
         lesson_practice_context: str = "",
+        user_agent: str = "",
     ) -> None:
         self.llm = llm
         self.tts = tts
@@ -104,6 +106,7 @@ class ConversationPipeline:
         self._user_id = user_id
         self._conversation_id = conversation_id
         self._study_plan_id = study_plan_id
+        self._user_agent = user_agent
         self._transcript_lock = asyncio.Lock()
         # Build user context section
         _ctx_parts: list[str] = []
@@ -836,9 +839,11 @@ class ConversationPipeline:
     ) -> None:
         # Preserve transcript order even when background DB writes overlap turns.
         async with self._transcript_lock:
-            await self._save_message(
+            response_id = await self._save_message(
                 "assistant", assistant_text, user_text=user_text, completed_at=completed_at
             )
+        if response_id is not None:
+            await record_lingu_practice(response_id, user_agent=self._user_agent)
 
     async def _save_message(
         self,
@@ -847,7 +852,7 @@ class ConversationPipeline:
         *,
         user_text: str | None = None,
         completed_at: datetime | None = None,
-    ) -> None:
+    ) -> int | None:
         """Persists a conversation transcript message to chat_history.
 
         Completely defensive — silently ignores any error.
@@ -901,6 +906,8 @@ class ConversationPipeline:
                     await db.flush()
                     await reward_conversation(db, message.id)
                 await db.commit()
+                response_id = message.id
+            return response_id
         except Exception:
             logger.debug("[pipeline] Failed to save message — ignored")
 

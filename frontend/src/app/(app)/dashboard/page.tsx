@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
+import { trackDashboardLink } from '@/lib/analytics'
 import {
   isSubscribed,
   needsPaymentRecovery,
@@ -278,7 +279,17 @@ export default function DashboardPage() {
     <>
       <OnboardingTour />
       <WhatsNew />
-      <div className="mx-auto max-w-4xl p-6">
+      <div
+        className="mx-auto max-w-4xl p-6"
+        onClick={(event) => {
+          const link =
+            event.target instanceof Element
+              ? event.target.closest('a[href]')
+              : null
+          if (link && event.currentTarget.contains(link))
+            trackDashboardLink(link.getAttribute('href') ?? '')
+        }}
+      >
         {/* Header */}
         <div className="border-fl-border mb-6 border-b pb-4">
           <p className="text-fl-label text-fl-muted-2 mb-1 font-mono tracking-widest uppercase">

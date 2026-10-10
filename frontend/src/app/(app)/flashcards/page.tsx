@@ -10,6 +10,8 @@ import { VoiceRecorder } from '@/components/ui/VoiceRecorder'
 import { PageLoading } from '@/components/ui/page-loading'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { CEFR_LEVELS } from '@/data/curriculum'
+import { trackBrowserEvent } from '@/lib/analytics'
+import { useAuthStore } from '@/store/auth'
 
 interface CardData {
   id: number
@@ -42,6 +44,7 @@ export default function FlashcardsPage() {
   const [speakingMode, setSpeakingMode] = useState(false)
   const [reviewing, setReviewing] = useState(false)
   const reviewingRef = useRef(false)
+  const sessionRecorded = useRef(false)
 
   const loadDue = useCallback(async () => {
     setLoading(true)
@@ -53,6 +56,7 @@ export default function FlashcardsPage() {
         setTotal(data.total)
         setCurrent(0)
         setFlipped(false)
+        sessionRecorded.current = false
       }
     } catch {
       /* ignore */
@@ -72,6 +76,7 @@ export default function FlashcardsPage() {
     reviewingRef.current = true
     setReviewing(true)
     const card = cards[current]
+    const sessionVersion = useAuthStore.getState().sessionVersion
     try {
       const response = await apiFetch(`/api/flashcards/${card.id}/review`, {
         method: 'POST',
@@ -79,6 +84,11 @@ export default function FlashcardsPage() {
         body: JSON.stringify({ quality }),
       })
       if (!response.ok) return
+      if (!sessionRecorded.current)
+        sessionRecorded.current = trackBrowserEvent(
+          'flashcard_session_started',
+          { sessionVersion }
+        )
       if (current < cards.length - 1) {
         setCurrent(current + 1)
         setFlipped(false)
