@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useThemeStore } from '@/store/theme'
+import { trackBrowserEvent } from '@/lib/analytics'
 
 export function AppearanceSection({ title }: { title?: string } = {}) {
   const t = useTranslations('settings')
@@ -33,7 +34,10 @@ export function AppearanceSection({ title }: { title?: string } = {}) {
           {(['system', 'dark', 'light'] as const).map((opt) => (
             <button
               key={opt}
-              onClick={() => setTheme(opt)}
+              onClick={() => {
+                if (theme !== opt) trackBrowserEvent('appearance_changed')
+                setTheme(opt)
+              }}
               className={`border px-3 py-2 font-mono text-xs tracking-widest uppercase transition-colors ${
                 theme === opt
                   ? 'border-fl-border-2 text-fl-fg bg-fl-surface-2'

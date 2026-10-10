@@ -75,7 +75,7 @@ async def ready_pairs(db, user, plan):
 
 
 async def match(db, user, session, word, choice=None, attempt=None):
-    return await games.answer_game(
+    result = await games.answer_game(
         db,
         user.id,
         session.id,
@@ -86,6 +86,7 @@ async def match(db, user, session, word, choice=None, attempt=None):
             attempt=len(games.game_output(session)["attempts"]) if attempt is None else attempt,
         ),
     )
+    return result.session
 
 
 async def test_wrong_matches_persist_both_penalties_without_revealing_other_pair(

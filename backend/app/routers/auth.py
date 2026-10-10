@@ -367,6 +367,7 @@ async def update_me(
 
     await db.commit()
     await db.refresh(current_user)
+    request.state.preferences_saved = bool(data.model_fields_set)
     return current_user
 
 

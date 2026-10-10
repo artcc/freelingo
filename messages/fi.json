@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Tietosuojakäytäntö",
-      "updated": "Päivitetty viimeksi: elokuu 2026",
+      "updated": "Päivitetty viimeksi: 10. lokakuuta 2026",
       "s1Title": "1. Yleiskatsaus",
       "s1Body": "FreeLingo on saatavilla itse ylläpidettävänä sovelluksena ja ylläpidettynä palveluna. Itse ylläpidettävässä asennuksessa kaikki tiedot tallennetaan yksinomaan ylläpitäjän palvelimelle eikä FreeLingo-projektin tekijöillä ole pääsyä niihin. Ylläpidetyssä palvelussa FreeLingo-tiimi toimii rekisterinpitäjänä. Tässä käytännössä kuvataan, miten henkilötietojasi kerätään, käytetään ja suojataan.",
       "s2Title": "2. Keräämämme tiedot",
@@ -482,8 +482,8 @@
       "s3Footer": "Tietojasi ei koskaan myydä, vuokrata tai jaeta kolmansien osapuolten markkinointipalveluille.",
       "s4Title": "4. Ulkoiset tekoälypalvelut",
       "s4Body": "Ylläpidetyssä palvelussa AI-chat, puhesynteesi (TTS) ja puheen litterointi (STT) toteutetaan OpenAI:n rajapinnan kautta. Keskustelujesi sisältö ja ääni lähetetään OpenAI:lle käsiteltäväksi OpenAI:n tietosuojakäytännön mukaisesti (openai.com/privacy). Maksut käsittelee Stripe, Inc. (Yhdysvallat); Stripe käsittelee maksutiedot suoraan emmekä tallenna maksukorttitietoja palvelimillemme – maksutapahtumiasi koskee Stripen tietosuojakäytäntö (stripe.com/privacy). Itse ylläpidettävässä asennuksessa ylläpitäjä valitsee tekoälypalvelun; oletuksena käytetään paikallista Ollama-asennusta eivätkä tiedot poistu palvelimelta.",
-      "s5Title": "5. Evästeet ja istuntotunnukset",
-      "s5Body": "FreeLingo käyttää kahta palvelun toiminnalle välttämätöntä teknistä evästettä: refresh_token (httpOnly, voimassa 30 päivää) istunnon tunnistamiseen ja NEXT_LOCALE (voimassa vuoden) kielivalintasi muistamiseen. Seuranta- tai mainosevästeitä ei käytetä. Nimettömään kävijämäärien mittaamiseen käytämme Umamia – itse ylläpidettävää avoimen lähdekoodin analytiikkatyökalua, joka ei käytä evästeitä, ei kerää henkilötietoja ja säilyttää kaikki tiedot omilla palvelimillamme.",
+      "s5Title": "5. Evästeet, paikallinen tallennus ja analytiikka",
+      "s5Body": "FreeLingo käyttää teknisiä evästeitä ja asetusevästeitä: refresh_token (httpOnly, oletuksena 30 päivää) ylläpitää istuntoasi, ja NEXT_LOCALE sekä LOCALE_DETECTED (enintään yksi vuosi) tallentavat ja hallitsevat käyttöliittymän kieltä. Selaimen paikalliseen tallennustilaan tallennetaan myös käyttöliittymä- ja ääniasetukset sekä ilmoitusten ja oppaiden tila, ja istuntotallennus mahdollistaa toimintojen tilapäisen jatkuvuuden. Paikalliset arvot säilyvät, kunnes sovellus tai sinä poistat ne; istuntoarvot poistetaan käytön jälkeen tai välilehden sulkeutuessa. Ylläpidetyssä palvelussa käytämme Umamia, avoimen lähdekoodin analytiikkatyökalua, jota ylläpidämme itse samalla infrastruktuurilla kuin FreeLingoa, saadaksemme anonyymejä, koottuja tilastoja palvelun käytöstä ja toiminnasta sekä parantaaksemme oppimiskokemusta. Analytiikka hyödyntää teknisiä käyttötietoja, ei käytä evästeitä, ei yhdisty käyttäjätileihin eikä sitä käytetä yksilöllisten profiilien luomiseen tai mainontaan. Analytiikkatietoja ei myydä, luovuteta eikä jaeta kolmansille osapuolille. Umami-tilastoja ei poisteta automaattisesti, vaan ne säilyvät manuaaliseen poistamiseen asti. Itse ylläpidetyissä asennuksissa analytiikan määrityksistä vastaa asennuksen ylläpitäjä. Evästeilmoitus on tiedottava; sen sulkeminen tallentaa vain tiedon siitä, että se on suljettu.",
       "s6Title": "6. Oikeutesi (GDPR)",
       "s6Body": "Jos olet Euroopan talousalueella, sinulla on GDPR:n mukaiset oikeudet saada pääsy tietoihisi, oikaista ja poistaa niitä, vastustaa käsittelyä ja siirtää tietoja. Voit poistaa tilisi itse Asetuksissa. Muut pyynnöt käsitellään manuaalisesti kohdassa 8 mainittua yhteystapaa käyttäen; FreeLingo ei tarjoa automaattista vientityökalua. Käsittelemme tietoja palvelun tarjoamiseksi (GDPR:n 6 artiklan 1 kohdan b alakohta). OpenAI ja Stripe voivat käsitellä tietoja Yhdysvalloissa kansainvälisiin siirtoihin sovellettavien suojatoimien mukaisesti. Voit valittaa Espanjan tietosuojaviranomaiselle (aepd.es) tai oman maasi valvontaviranomaiselle.",
       "s7Title": "7. Tietojen säilyttäminen ja poistaminen",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Käytä sivupalkin <feedbackLink>Palaute</feedbackLink>-osiota. Voit ehdottaa uusia ominaisuuksia tai raportoida virheistä. Äänestä muiden ideoita, jätä kommentteja ja seuraa pyyntöjen tilaa. Kaikki ilmoitukset ovat julkisia ja ylläpitäjä tarkistaa ne."
   },
   "cookieBanner": {
-    "message": "Käytämme vain välttämättömiä evästeitä pitääksemme sinut kirjautuneena. Seuranta- tai mainosevästeitä ei käytetä.",
+    "message": "Käytämme teknisiä evästeitä ja paikallista tallennusta istuntoasi ja asetuksiasi varten. Ylläpidetyn palvelun analytiikka on anonyymiä, koottua ja evästeetöntä, eikä sitä yhdistetä tiliisi tai käytetä mainontaan.",
     "learnMore": "Tietosuojakäytäntö",
     "accept": "Selvä"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Selvä",
     "entry1": {
       "label": "Harjoittele oppitunteja Lingun kanssa",

@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from sqlalchemy import select, text, update
+from starlette.datastructures import Headers
 
 from app.core.config import settings
 from app.models.conversation import Conversation
@@ -151,6 +152,7 @@ def voice_runtime(monkeypatch, db_session, mock_redis, test_user):
 
     async def start(**payload):
         ws = SimpleNamespace(
+            headers=Headers({"User-Agent": "Browser test agent"}),
             accept=AsyncMock(),
             receive_json=AsyncMock(
                 return_value={"token": headers["Authorization"].removeprefix("Bearer "), **payload}
@@ -359,6 +361,7 @@ async def test_voice_practice_overrides_client_context_and_preserves_limits(
     assert args["cefr_level"] == "B1"
     assert args["study_plan_id"] == plan.id
     assert args["initial_context"] is None
+    assert args["user_agent"] == "Browser test agent"
     assert "Describe a past trip" in args["lesson_practice_context"]
     assert args["max_duration"] == runtime.user.conversation_max_duration
     assert args["inactivity_timeout"] == runtime.user.conversation_inactivity_timeout

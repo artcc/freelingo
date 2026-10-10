@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { trackBrowserEvent } from '@/lib/analytics'
+import { useConfigStore } from '@/store/config'
 
 const FAQ_KEYS = [
   'q_start',
@@ -21,6 +23,9 @@ const FAQ_KEYS = [
 export function LandingFAQ() {
   const t = useTranslations('faq')
   const [open, setOpen] = useState<number | null>(null)
+  useEffect(() => {
+    void useConfigStore.getState().load()
+  }, [])
 
   const strong = (chunks: React.ReactNode) => (
     <strong className="text-fl-fg">{chunks}</strong>
@@ -79,7 +84,10 @@ export function LandingFAQ() {
           className={i < FAQ_KEYS.length - 1 ? 'border-fl-border border-b' : ''}
         >
           <button
-            onClick={() => setOpen(open === i ? null : i)}
+            onClick={() => {
+              if (open !== i) trackBrowserEvent('faq_viewed')
+              setOpen(open === i ? null : i)
+            }}
             className="hover:bg-fl-surface flex w-full items-center justify-between px-5 py-4 text-left transition-colors"
           >
             <span className="text-fl-fg pr-4 font-sans text-sm">{t(key)}</span>

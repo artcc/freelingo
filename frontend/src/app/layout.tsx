@@ -11,6 +11,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { CookieBanner } from '@/components/CookieBanner'
+import { getUmamiConfig } from '@/lib/umami-config'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -104,6 +105,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const umami = getUmamiConfig()
 
   return (
     <html
@@ -118,12 +120,14 @@ export default async function RootLayout({
             __html: `(function(){if(document.cookie.indexOf('LOCALE_DETECTED=')!==-1)return;var m=document.cookie.match(/(^| )NEXT_LOCALE=([^;]+)/);var cl=m?m[2]:null;var bl=(navigator.language||'').split('-')[0].toLowerCase();var s=['es','fr','pt','de','it','pl','nl','ro','ru','tr','sv','da','fi','hr'];document.cookie='LOCALE_DETECTED=1;path=/;max-age=31536000;SameSite=Lax';if(cl==='en'||s.indexOf(cl)!==-1)return;if(bl!=='en'&&s.indexOf(bl)!==-1&&cl!==bl){document.cookie='NEXT_LOCALE='+bl+';path=/;max-age=31536000;SameSite=Lax';location.reload()}})();`,
           }}
         />
-        {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+        {umami && (
           <script
             defer
             src="/umami/script.js"
             data-host-url="/umami"
-            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            data-website-id={umami.websiteId}
+            data-exclude-search="true"
+            data-exclude-hash="true"
           />
         )}
       </head>

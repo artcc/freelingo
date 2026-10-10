@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
+import { useAnalyticsView } from '@/hooks/useAnalyticsView'
 
 export interface ProgressHistoryEntry {
   date: string
@@ -15,6 +16,7 @@ export function ActivityHistory({
   endDate: string
 }) {
   const locale = useLocale()
+  const analyticsRef = useAnalyticsView('progress_calendar_viewed')
   const t = useTranslations('progressActivity')
   const tOverview = useTranslations('dashboardProgress')
   const number = new Intl.NumberFormat(locale)
@@ -44,7 +46,11 @@ export function ActivityHistory({
   const activeDays = days.filter((day) => day.active).length
 
   return (
-    <section aria-labelledby="progress-history-title" className="space-y-4">
+    <section
+      ref={analyticsRef}
+      aria-labelledby="progress-history-title"
+      className="space-y-4"
+    >
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2

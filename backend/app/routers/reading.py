@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
+from uuid import UUID
+
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Request, status
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.database import get_db
 from app.core.deps import (
     get_active_study_plan,
@@ -18,6 +21,7 @@ from app.models.reading import ReadingExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.schemas.exercise_generation import ExerciseContext
+from app.schemas.learning_analytics import ExerciseStartedRequest
 from app.schemas.reading import (
     CorrectAnswerOut,
     QuestionOut,
@@ -30,6 +34,11 @@ from app.schemas.reading import (
     ReadingSubmitResponse,
 )
 from app.services.exercise_generation import GenerationLease, get_generation_state
+from app.services.learning_analytics import (
+    LearningEvent,
+    record_exercise_completed,
+    record_learning_event,
+)
 from app.services.reading_service import (
     generate_and_save_exercise,
     get_available_exercise,
@@ -171,11 +180,45 @@ async def generate_exercise(
     return ReadingGeneratingResponse(status="generating")
 
 
+@router.post("/started", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("20/minute")
+async def report_reading_started(
+    request: Request,
+    body: ExerciseStartedRequest,
+    attempt_id: UUID = Header(alias="X-Exercise-Attempt"),
+    _maintenance: None = Depends(require_not_maintenance),
+    plan: StudyPlan = Depends(get_active_study_plan),
+    _current_user: User = Depends(require_subscription_or_freemium_readonly("reading")),
+    db: AsyncSession = Depends(get_db),
+) -> None:
+    await get_exercise_study_plan(
+        plan=plan,
+        expected_study_plan_id=body.context.study_plan_id,
+        expected_target_language=body.context.target_language,
+        expected_level=body.context.level,
+    )
+    exercise = await db.get(ReadingExercise, body.exercise_id)
+    if exercise is None:
+        raise HTTPException(404, "exercise_not_found")
+    if exercise.target_language != plan.target_language or (
+        not body.replay and exercise.level != plan.cefr_level
+    ):
+        raise HTTPException(409, "study_context_changed")
+    enqueue_analytics(
+        request,
+        record_learning_event,
+        LearningEvent.READING_STARTED,
+        source_id=attempt_id,
+        user_agent=request.headers.get("user-agent", ""),
+    )
+
+
 @router.post("/attempt", response_model=ReadingSubmitResponse)
 @limiter.limit("20/minute")
 async def submit_reading_attempt(
     request: Request,
     body: ReadingSubmitRequest,
+    attempt_id: UUID | None = Header(default=None, alias="X-Exercise-Attempt"),
     _maintenance: None = Depends(require_not_maintenance),
     plan: StudyPlan = Depends(get_active_study_plan),
     current_user: User = Depends(require_subscription_or_freemium("reading")),
@@ -215,6 +258,14 @@ async def submit_reading_attempt(
             ) from exc
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=detail) from exc
 
+    enqueue_analytics(
+        request,
+        record_exercise_completed,
+        "reading",
+        source_id=attempt_id if attempt_id is not None else attempt.id,
+        replay=body.replay,
+        user_agent=request.headers.get("user-agent", ""),
+    )
     correct_answers = [
         CorrectAnswerOut(index=q["index"], correct=q["correct"]) for q in exercise.questions
     ]

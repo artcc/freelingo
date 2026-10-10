@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Privacy Policy",
-      "updated": "Last updated: August 2026",
+      "updated": "Last updated: October 10, 2026",
       "s1Title": "1. Overview",
       "s1Body": "FreeLingo is available as a self-hosted application and as a hosted service. For self-hosted deployments, all data is stored exclusively on the operator's server and the FreeLingo project authors have no access to it. For the hosted service, the FreeLingo team acts as the data controller and this policy describes how your personal data is collected, used, and protected.",
       "s2Title": "2. Data We Collect",
@@ -482,8 +482,8 @@
       "s3Footer": "Your data is never sold, rented, or shared with third-party marketing services.",
       "s4Title": "4. External AI Services",
       "s4Body": "In the hosted service, AI chat, voice synthesis (TTS), and voice transcription (STT) are provided via OpenAI's API. Your conversation content and audio are sent to OpenAI for processing, subject to OpenAI's Privacy Policy (openai.com/privacy). Payment processing is handled by Stripe, Inc. (USA); Stripe processes payment data directly and we do not store payment card details on our servers — your transaction data is subject to Stripe's Privacy Policy (stripe.com/privacy). For self-hosted deployments, the operator chooses the AI provider; by default a local Ollama instance is used and no data leaves the server.",
-      "s5Title": "5. Cookies & Session Tokens",
-      "s5Body": "FreeLingo uses two technical cookies strictly necessary for the service to function: a refresh_token (httpOnly, 30-day expiry) used for session authentication, and NEXT_LOCALE (1-year expiry) to remember your language preference. No tracking or advertising cookies are used. For anonymous traffic measurement, we use Umami — a self-hosted, open-source analytics tool that does not use cookies, collects no personal data, and keeps all data on our servers.",
+      "s5Title": "5. Cookies, Local Storage & Analytics",
+      "s5Body": "FreeLingo uses technical and preference cookies: refresh_token (httpOnly, 30 days by default) to maintain your session, and NEXT_LOCALE and LOCALE_DETECTED (up to one year) to remember and manage the interface language. It also uses browser local storage for interface and voice preferences and the state of notices and guides, as well as session storage for temporary continuity of features. Local values remain until the application or you remove them; session values are removed when consumed or when the tab is closed. In the hosted service, we use Umami, an open-source analytics tool self-hosted on the same infrastructure as FreeLingo, to obtain anonymous, aggregate statistics about service usage and operation and improve the learning experience. This analytics uses technical usage data, does not use cookies, is not linked to accounts, and is not used to create individual profiles or for advertising. Analytics data is not sold, transferred, or shared with third parties. Umami statistics are not automatically deleted and are retained until manually removed. In self-hosted installations, analytics configuration is the responsibility of the instance operator. The cookie notice is informational; dismissing it only records that it has been dismissed.",
       "s6Title": "6. Your Rights (GDPR)",
       "s6Body": "If you are in the European Economic Area, you have the GDPR rights of access, correction, deletion, objection, and data portability. You can delete your account directly from Settings. Other requests are handled manually through the contact in section 8; FreeLingo does not provide an automated export tool. We process data to provide the service (Art. 6(1)(b) GDPR). OpenAI and Stripe may process data in the USA under the safeguards applicable to international transfers. You may complain to the Spanish Data Protection Authority (aepd.es) or your local supervisory authority.",
       "s7Title": "7. Data Retention & Deletion",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Use the <feedbackLink>Feedback</feedbackLink> section in the sidebar. You can create suggestions for new features or report bugs. Vote on other users' ideas, leave comments, and track the status of each request. All submissions are public and are reviewed by the admin."
   },
   "cookieBanner": {
-    "message": "We use strictly necessary cookies to keep you logged in. No tracking or advertising cookies are used.",
+    "message": "We use technical cookies and local storage for your session and preferences. Hosted-service analytics is anonymous, aggregated, and cookie-free, with no link to your account or advertising purpose.",
     "learnMore": "Privacy policy",
     "accept": "Got it"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Got it",
     "entry1": {
       "label": "Practise your lessons with Lingu",

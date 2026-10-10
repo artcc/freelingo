@@ -6,6 +6,7 @@ describe('useConfigStore', () => {
 
   beforeEach(() => {
     useConfigStore.setState({
+      analyticsEnabled: false,
       allowRegistration: false,
       stripeEnabled: false,
       stripeTrialDays: 7,
@@ -28,6 +29,7 @@ describe('useConfigStore', () => {
     vi.mocked(fetch).mockResolvedValueOnce(
       new Response(
         JSON.stringify({
+          analytics_enabled: true,
           allow_registration: true,
           stripe_enabled: true,
           stripe_trial_days: 14,
@@ -49,6 +51,7 @@ describe('useConfigStore', () => {
     await useConfigStore.getState().load()
 
     expect(useConfigStore.getState().allowRegistration).toBe(true)
+    expect(useConfigStore.getState().analyticsEnabled).toBe(true)
     expect(useConfigStore.getState().stripeEnabled).toBe(true)
     expect(useConfigStore.getState().stripeTrialDays).toBe(14)
     expect(useConfigStore.getState().ttsProvider).toBe('openai')

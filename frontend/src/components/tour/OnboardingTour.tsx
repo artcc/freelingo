@@ -22,6 +22,7 @@ import LinguAvatar, {
 import { AudioPlayer, type PlayerState } from '@/components/ui/AudioPlayer'
 import { TOUR_STORAGE_KEY } from '@/lib/onboarding-tour'
 import { useConfigStore } from '@/store/config'
+import { trackBrowserEvent } from '@/lib/analytics'
 
 const STEPS = [
   { id: 'step1', icon: Sparkles, gesture: 'saludo' },
@@ -40,6 +41,8 @@ export default function OnboardingTour() {
   const locale = useLocale()
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const [visible, setVisible] = useState(false)
+  const analyticsEnabled = useConfigStore((s) => s.analyticsEnabled)
+  const tourRecorded = useRef(false)
   const [step, setStep] = useState(0)
   const [animation, setAnimation] = useState<LinguAnimation>('saludo')
   const [audioState, setAudioState] = useState<PlayerState>('idle')
@@ -59,14 +62,20 @@ export default function OnboardingTour() {
     }
   }, [])
 
-  const dismiss = useCallback(() => {
+  const dismiss = useCallback((completed = false) => {
     try {
       localStorage.setItem(TOUR_STORAGE_KEY, '1')
     } catch {
       // The tour must remain dismissible when browser storage is unavailable.
     }
     setVisible(false)
+    trackBrowserEvent(completed ? 'tour_completed' : 'tour_skipped')
   }, [])
+
+  useEffect(() => {
+    if (visible && analyticsEnabled && !tourRecorded.current)
+      tourRecorded.current = trackBrowserEvent('tour_started')
+  }, [visible, analyticsEnabled])
 
   useEffect(() => {
     if (!visible) return
@@ -161,7 +170,7 @@ export default function OnboardingTour() {
             </span>
             <button
               type="button"
-              onClick={dismiss}
+              onClick={() => dismiss()}
               className="text-fl-muted-2 hover:text-fl-fg min-h-10 text-sm underline-offset-4 hover:underline"
             >
               {t('skip')}
@@ -244,7 +253,7 @@ export default function OnboardingTour() {
           <button
             type="button"
             onClick={() =>
-              step === STEPS.length - 1 ? dismiss() : goTo(step + 1)
+              step === STEPS.length - 1 ? dismiss(true) : goTo(step + 1)
             }
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 flex min-h-11 items-center justify-center gap-2 px-4 py-2 text-sm font-semibold transition-colors"
           >

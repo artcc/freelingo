@@ -6,6 +6,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.app_logger import get_logger
 from app.core.database import get_db
 from app.core.deps import (
@@ -27,6 +28,7 @@ from app.schemas.chat import (
     ConversationResponse,
 )
 from app.services.language_helpers import get_language_name, get_native_language_name
+from app.services.learning_analytics import record_lingu_practice
 from app.services.llm_adapter import (
     LLMError,
     LLMStream,
@@ -458,6 +460,12 @@ async def chat(
             await db.flush()
             await reward_conversation(db, assistant_message.id)
             await db.commit()
+            enqueue_analytics(
+                request,
+                record_lingu_practice,
+                assistant_message.id,
+                user_agent=request.headers.get("user-agent", ""),
+            )
 
             yield f"data: {json.dumps({'done': True})}\n\n"
 

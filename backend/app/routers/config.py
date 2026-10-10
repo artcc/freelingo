@@ -16,6 +16,7 @@ from app.core.database import get_db
 from app.core.deps import MAINTENANCE_KEY, get_redis
 from app.core.limiter import limiter
 from app.models.dashboard_banner import DashboardBanner
+from app.services.analytics_service import analytics_service
 
 router = APIRouter(tags=["config"])
 
@@ -43,6 +44,7 @@ async def get_config(
         }
 
     return {
+        "analytics_enabled": analytics_service.enabled,
         "allow_registration": settings.ALLOW_REGISTRATION,
         "stripe_enabled": settings.STRIPE_ENABLED,
         "stripe_trial_days": settings.STRIPE_TRIAL_DAYS,

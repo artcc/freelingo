@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useLanguageStore } from '@/store/language'
 import { getLanguageByCode } from '@/lib/target-languages'
+import { trackBrowserEvent } from '@/lib/analytics'
 
 export default function LanguageSwitcher() {
   const tLang = useTranslations('languages')
@@ -115,7 +116,11 @@ export default function LanguageSwitcher() {
       )}
 
       <button
-        onClick={() => multiple && setOpen(!open)}
+        onClick={() => {
+          if (!multiple) return
+          if (!open) trackBrowserEvent('language_selector_opened')
+          setOpen(!open)
+        }}
         disabled={!multiple || isSwitching}
         className="text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface flex w-full items-center gap-2 px-5 py-2.5 font-mono text-xs tracking-widest uppercase transition-colors"
       >

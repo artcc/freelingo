@@ -82,6 +82,7 @@ beforeEach(() => {
   })
   useConfigStore.setState({
     loaded: true,
+    analyticsEnabled: true,
     stripeEnabled: false,
     maintenanceMode: false,
   })
@@ -89,6 +90,7 @@ beforeEach(() => {
 })
 afterEach(() => {
   cleanup()
+  useConfigStore.setState({ analyticsEnabled: false })
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
@@ -205,10 +207,21 @@ describe('Assessment evaluation recovery', () => {
       expect(evaluations().map(([, options]) => options?.body)).toEqual(
         Array(3).fill(JSON.stringify({ answers: expected }))
       )
+      const start = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === '/api/assessment/started')!
+      const attempt = new Headers(start[1]?.headers).get('X-Assessment-Attempt')
+      expect(attempt).toMatch(/^[0-9a-f-]{36}$/)
+      expect(
+        evaluations().map(([, options]) =>
+          new Headers(options?.headers).get('X-Assessment-Attempt')
+        )
+      ).toEqual(Array(3).fill(attempt))
       // Evaluation recovery cannot reload the bank, reconcile plans, or complete.
       expect(vi.mocked(fetch).mock.calls.map(([url]) => url)).toEqual([
         '/api/study-plan/current',
         '/api/assessment/bank?language=en-GB',
+        '/api/assessment/started',
         ...Array(3).fill('/api/assessment/evaluate'),
       ])
       expect(push).not.toHaveBeenCalled()
@@ -391,6 +404,13 @@ describe('Assessment evaluation recovery', () => {
       await startQuiz()
       await answerQuestions(1)
       await waitFor(() => expect(readNewBody).toHaveBeenCalledTimes(1))
+      expect(
+        new Headers(evaluations().at(-1)![1]?.headers).get(
+          'X-Assessment-Attempt'
+        )
+      ).not.toBe(
+        new Headers(evaluations()[0][1]?.headers).get('X-Assessment-Attempt')
+      )
       // Resolve an obsolete body while a replacement flow owns its own request.
       if (stage !== 'error') {
         await act(async () => {
@@ -432,6 +452,175 @@ describe('Assessment evaluation recovery', () => {
       expect(push).not.toHaveBeenCalled()
     }
   )
+})
+
+describe('Assessment start analytics', () => {
+  it.each(['disabled', 're-enabled', 'disabled-during-evaluation'])(
+    'cancels pending telemetry without interrupting assessment when %s',
+    async (state) => {
+      const pendingEvaluation = deferred<Response>()
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({
+            questions: bank.filter((q) => q.difficulty === 'A2').slice(0, 1),
+          })
+        if (url === '/api/assessment/started') {
+          const signal = options!.signal!
+          return new Promise<Response>((_resolve, reject) => {
+            signal.throwIfAborted()
+            signal.addEventListener('abort', () => reject(signal.reason), {
+              once: true,
+            })
+          })
+        }
+        if (url === '/api/assessment/evaluate') return pendingEvaluation.promise
+        return json({}, 404)
+      })
+      const evaluations = () =>
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/assessment/evaluate')
+      render(<AssessmentPage />)
+      await startQuiz()
+      const start = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === '/api/assessment/started')!
+      expect(start[1]?.signal?.aborted).toBe(false)
+
+      if (state === 'disabled-during-evaluation') {
+        await answerQuestions(1)
+        await waitFor(() => expect(evaluations()).toHaveLength(1))
+      }
+      act(() => {
+        useConfigStore.setState({ analyticsEnabled: false })
+        // A quick reactivation must not resurrect the previous operation UUID.
+        if (state === 're-enabled')
+          useConfigStore.setState({ analyticsEnabled: true })
+      })
+      expect(start[1]?.signal?.aborted).toBe(true)
+      if (state !== 'disabled-during-evaluation') await answerQuestions(1)
+      await waitFor(() => expect(evaluations()).toHaveLength(1))
+      const submission = evaluations()[0][1]!
+      expect(submission.signal?.aborted).toBe(false)
+      expect(new Headers(submission.headers).has('X-Assessment-Attempt')).toBe(
+        state === 'disabled-during-evaluation'
+      )
+      expect(JSON.parse(String(submission.body)).answers).toHaveLength(1)
+      await act(async () => pendingEvaluation.resolve(json(evaluation)))
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      expect(submission.signal?.aborted).toBe(false)
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/assessment/started')
+      ).toHaveLength(1)
+    }
+  )
+
+  it.each(['disabled', 'pending', 'invalid', 'disabled-after-start'])(
+    'finishes assessment with no analytics header when config is %s',
+    async (state) => {
+      const active = state === 'disabled-after-start'
+      useConfigStore.setState({
+        loaded: state !== 'pending' && state !== 'invalid',
+        analyticsEnabled: active,
+      })
+      const pending = deferred<Response>()
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/config')
+          return state === 'pending'
+            ? pending.promise
+            : new Response('invalid JSON')
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({
+            questions: bank.filter((q) => q.difficulty === 'A2').slice(0, 1),
+          })
+        if (url === '/api/assessment/started')
+          return new Response(null, { status: 204 })
+        if (url === '/api/assessment/evaluate') return json(evaluation)
+        return json({}, 404)
+      })
+      const uuid = vi.spyOn(crypto, 'randomUUID')
+      render(<AssessmentPage />)
+      await startQuiz()
+      if (active)
+        act(() => useConfigStore.setState({ analyticsEnabled: false }))
+      await answerQuestions(1)
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      const starts = vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === '/api/assessment/started')
+      expect(starts).toHaveLength(active ? 1 : 0)
+      if (!active) expect(uuid).not.toHaveBeenCalled()
+      const submission = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === '/api/assessment/evaluate')!
+      expect(
+        new Headers(submission[1]?.headers).has('X-Assessment-Attempt')
+      ).toBe(false)
+      expect(JSON.parse(String(submission[1]?.body)).answers).toHaveLength(1)
+      await act(async () => pending.resolve(json({ analytics_enabled: false })))
+    }
+  )
+
+  it.each(['401', '503', 'transport'])(
+    'starts the quiz despite a %s analytics failure without refreshing auth',
+    async (failure) => {
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: bank })
+        if (url === '/api/assessment/started') {
+          if (failure === 'transport') throw new TypeError('Unavailable')
+          return json({}, Number(failure))
+        }
+        return json({}, 404)
+      })
+      render(<AssessmentPage />)
+      await screen.findByRole('button', { name: /beginnerOption/ })
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.some(([url]) => url === '/api/assessment/started')
+      ).toBe(false)
+      await startQuiz()
+      expect(screen.getByText(/^Placement question /)).toBeInTheDocument()
+      const calls = vi.mocked(fetch).mock.calls
+      const signals = calls.filter(([url]) => url === '/api/assessment/started')
+      expect(signals).toHaveLength(1)
+      expect(signals[0][1]?.body).toBeUndefined()
+      expect(new Headers(signals[0][1]?.headers).get('Authorization')).toBe(
+        'Bearer token'
+      )
+      expect(calls.some(([url]) => String(url).includes('/auth/refresh'))).toBe(
+        false
+      )
+      expect(useAuthStore.getState().accessToken).toBe('token')
+    }
+  )
+
+  it('does not count the beginner shortcut as a started quiz', async () => {
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current') return json(null)
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    expect(
+      await screen.findByRole('button', { name: /startMyPlan/ })
+    ).toBeInTheDocument()
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([url]) => url === '/api/assessment/started')
+    ).toBe(false)
+  })
 })
 
 describe('Assessment provisional language switches', () => {

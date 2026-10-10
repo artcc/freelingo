@@ -4,6 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, R
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.database import get_db
 from app.core.deps import (
     get_active_study_plan,
@@ -35,6 +36,7 @@ from app.services.games import (
     owned_game,
     source_context,
 )
+from app.services.learning_analytics import record_game_abandoned, record_game_answer
 from app.services.progress_service import lock_progress_plan
 
 router = APIRouter(prefix="/api/games", tags=["games"])
@@ -125,7 +127,20 @@ async def submit_answer(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    return game_output(await answer_game(db, user.id, str(session_id), body))
+    result = await answer_game(db, user.id, str(session_id), body)
+    session = result.session
+    if result.answer_number is not None:
+        enqueue_analytics(
+            request,
+            record_game_answer,
+            session.game_type,
+            session_id=session.id,
+            answer_number=result.answer_number,
+            correct=result.correct,
+            completed=session.status == "completed",
+            user_agent=request.headers.get("user-agent", ""),
+        )
+    return game_output(session)
 
 
 @router.post("/sessions/{session_id}/abandon")
@@ -149,7 +164,16 @@ async def abandon_session(
         raise HTTPException(404, "game_not_found")
     if session.status == "generating":
         raise HTTPException(409, "game_not_ready")
+    abandoned = session.status == "ready" and any(session.answers)
     if session.status == "ready":
         session.status = "abandoned"
     await db.commit()
+    if abandoned:
+        enqueue_analytics(
+            request,
+            record_game_abandoned,
+            session.game_type,
+            session_id=session.id,
+            user_agent=request.headers.get("user-agent", ""),
+        )
     return game_output(session)

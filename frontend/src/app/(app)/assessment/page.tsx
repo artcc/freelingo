@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api'
+import { apiFetch, apiUrl } from '@/lib/api'
 import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { isSubscribed, useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
@@ -50,6 +50,8 @@ interface AssessmentFlow {
   language: string
   sessionVersion: number
   controller: AbortController
+  analyticsAttemptId?: string
+  analyticsController?: AbortController
   evaluation?: {
     body: string
     pending: boolean
@@ -141,6 +143,20 @@ export default function AssessmentPage() {
       flowRef.current?.controller.abort()
     }
   }, [])
+
+  useEffect(
+    () =>
+      useConfigStore.subscribe((state) => {
+        if (state.analyticsEnabled) return
+        const flow = flowRef.current
+        if (!flow) return
+        // Observe disabling immediately, independently of the educational flow.
+        flow.analyticsController?.abort()
+        delete flow.analyticsController
+        delete flow.analyticsAttemptId
+      }),
+    []
+  )
 
   const [currentQuestion, setCurrentQuestion] =
     useState<AssessmentQuestion | null>(null)
@@ -296,7 +312,8 @@ export default function AssessmentPage() {
   }
 
   function startQuiz() {
-    if (!isCurrentFlow(flowRef.current)) return
+    const flow = flowRef.current
+    if (!isCurrentFlow(flow)) return
     if (bank.length === 0) {
       setError(tCommon('errorMessage'))
       return
@@ -312,6 +329,32 @@ export default function AssessmentPage() {
       setCurrentQuestion(q)
       setQuestionNumber(1)
       setStep('quiz')
+      if (
+        useConfigStore.getState().analyticsEnabled &&
+        !flow.analyticsAttemptId
+      ) {
+        try {
+          const token = useAuthStore.getState().accessToken
+          if (!token) return
+          flow.analyticsAttemptId = crypto.randomUUID()
+          flow.analyticsController = new AbortController()
+          // Best-effort signal: analytics must not trigger auth refresh or page loading.
+          void fetch(apiUrl('/api/assessment/started'), {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'X-Assessment-Attempt': flow.analyticsAttemptId,
+            },
+            signal: AbortSignal.any([
+              flow.controller.signal,
+              flow.analyticsController.signal,
+              AbortSignal.timeout(5_000),
+            ]),
+          }).catch(() => {})
+        } catch {
+          // Unsupported browser APIs must not prevent starting the quiz.
+        }
+      }
     }
   }
 
@@ -382,7 +425,13 @@ export default function AssessmentPage() {
     try {
       const res = await apiFetch('/api/assessment/evaluate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(useConfigStore.getState().analyticsEnabled &&
+          flow.analyticsAttemptId
+            ? { 'X-Assessment-Attempt': flow.analyticsAttemptId }
+            : {}),
+        },
         body: evaluation.body,
         signal: flow.controller.signal,
       })

@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useConfigStore } from '@/store/config'
+import { trackBrowserEvent } from '@/lib/analytics'
+import { useAuthStore } from '@/store/auth'
 
 const OPENAI_VOICES = [
   'alloy',
@@ -51,6 +53,7 @@ export function VoiceSection({ title }: { title?: string } = {}) {
   function selectVoice(voice: string) {
     setSelectedVoice(voice)
     localStorage.setItem(TTS_VOICE_STORAGE_KEY, voice)
+    if (selectedVoice !== voice) trackBrowserEvent('voice_changed')
   }
 
   async function togglePreview(voice: string) {
@@ -66,6 +69,7 @@ export function VoiceSection({ title }: { title?: string } = {}) {
       setPlayingVoice(null)
     }
     setLoadingVoice(voice)
+    const analyticsSession = useAuthStore.getState().sessionVersion
     try {
       const res = await apiFetch(`/api/tts/preview/${voice}`, {
         cache: 'no-store',
@@ -87,6 +91,10 @@ export function VoiceSection({ title }: { title?: string } = {}) {
         audioRef.current = null
       }
       await audio.play()
+      if (audioRef.current === audio)
+        trackBrowserEvent('voice_preview_played', {
+          sessionVersion: analyticsSession,
+        })
     } finally {
       setLoadingVoice(null)
     }

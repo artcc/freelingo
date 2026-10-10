@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Integritetspolicy",
-      "updated": "Senast uppdaterad: augusti 2026",
+      "updated": "Senast uppdaterad: 10 oktober 2026",
       "s1Title": "1. Översikt",
       "s1Body": "FreeLingo finns som en app för egen drift och som en hostad tjänst. Vid egen drift lagras alla data uteslutande på operatörens server och FreeLingo-projektets upphovspersoner har inte tillgång till dem. För den hostade tjänsten är FreeLingo-teamet personuppgiftsansvarigt, och denna policy beskriver hur dina personuppgifter samlas in, används och skyddas.",
       "s2Title": "2. Uppgifter vi samlar in",
@@ -482,8 +482,8 @@
       "s3Footer": "Dina uppgifter säljs, hyrs ut eller delas aldrig med marknadsföringstjänster från tredje part.",
       "s4Title": "4. Externa AI-tjänster",
       "s4Body": "I den hostade tjänsten tillhandahålls AI-chatt, röstsyntes (TTS) och taltranskribering (STT) via OpenAI:s API. Ditt samtalsinnehåll och ljud skickas till OpenAI för behandling enligt OpenAI:s integritetspolicy (openai.com/privacy). Betalningar hanteras av Stripe, Inc. (USA); Stripe behandlar betalningsuppgifter direkt och vi lagrar inga betalkortsuppgifter på våra servrar – dina transaktionsuppgifter omfattas av Stripes integritetspolicy (stripe.com/privacy). Vid egen drift väljer operatören AI-leverantör; som standard används en lokal Ollama-instans och inga uppgifter lämnar servern.",
-      "s5Title": "5. Kakor och sessionstoken",
-      "s5Body": "FreeLingo använder två tekniska kakor som är nödvändiga för att tjänsten ska fungera: refresh_token (httpOnly, 30 dagars giltighet) för sessionens autentisering och NEXT_LOCALE (ett års giltighet) för att spara ditt språkval. Inga kakor för spårning eller reklam används. För anonym mätning av trafik använder vi Umami – ett självhostat verktyg med öppen källkod som inte använder kakor, inte samlar in personuppgifter och lagrar all data på våra egna servrar.",
+      "s5Title": "5. Kakor, lokal lagring och analys",
+      "s5Body": "FreeLingo använder tekniska kakor och inställningskakor: refresh_token (httpOnly, som standard 30 dagar) för att behålla din session samt NEXT_LOCALE och LOCALE_DETECTED (upp till ett år) för att komma ihåg och hantera gränssnittets språk. Webbläsarens lokala lagring sparar även gränssnitts- och röstinställningar samt status för meddelanden och guider, medan sessionslagring ger tillfällig kontinuitet i funktioner. Lokala värden finns kvar tills appen eller du tar bort dem; sessionsvärden tas bort efter användning eller när fliken stängs. I den hostade tjänsten använder vi Umami, ett analysverktyg med öppen källkod som vi själva driver på samma infrastruktur som FreeLingo, för anonym och aggregerad statistik om tjänstens användning och funktion och för att förbättra inlärningsupplevelsen. Analysen använder tekniska användningsdata, använder inga kakor, kopplas inte till konton och används inte för att skapa individuella profiler eller för reklam. Analysdata säljs, överlåts eller delas inte med tredje part. Umami-statistiken raderas inte automatiskt utan sparas tills den tas bort manuellt. I installationer med egen drift ansvarar instansens operatör för analysinställningarna. Meddelandet om kakor är informativt; när det stängs sparas endast att det har stängts.",
       "s6Title": "6. Dina rättigheter (GDPR)",
       "s6Body": "Om du befinner dig inom Europeiska ekonomiska samarbetsområdet har du enligt GDPR rätt till tillgång, rättelse, radering, invändning och dataportabilitet. Du kan själv radera ditt konto i Inställningar. Andra förfrågningar hanteras manuellt via kontakten i avsnitt 8; FreeLingo erbjuder inget automatiserat exportverktyg. Vi behandlar personuppgifter för att tillhandahålla tjänsten (artikel 6.1 b i GDPR). OpenAI och Stripe kan behandla uppgifter i USA enligt de skyddsåtgärder som gäller för internationella överföringar. Du kan lämna klagomål till den spanska dataskyddsmyndigheten (aepd.es) eller tillsynsmyndigheten i ditt land.",
       "s7Title": "7. Lagring och radering av uppgifter",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Använd <feedbackLink>Feedback</feedbackLink> i sidofältet. Du kan föreslå nya funktioner eller rapportera fel. Rösta på andras idéer, lämna kommentarer och följ statusen för varje ärende. Alla inlägg är offentliga och granskas av administratören."
   },
   "cookieBanner": {
-    "message": "Vi använder endast nödvändiga kakor för att hålla dig inloggad. Inga kakor för spårning eller reklam används.",
+    "message": "Vi använder tekniska kakor och lokal lagring för din session och dina inställningar. Den hostade tjänstens analys är anonym, aggregerad och utan kakor, utan koppling till ditt konto eller reklamsyften.",
     "learnMore": "Integritetspolicy",
     "accept": "Jag förstår"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Öva på dina lektioner med Lingu",

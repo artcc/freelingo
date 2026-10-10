@@ -12,6 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import OnboardingTour from '@/components/tour/OnboardingTour'
 import WhatsNew from '@/components/whats-new/WhatsNew'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 import es from '../../../messages/es.json'
 
 const originalDialogMethods = Object.getOwnPropertyDescriptors(
@@ -49,13 +50,14 @@ function showTour(withNews = false) {
 }
 
 beforeEach(() => {
+  useConfigStore.setState({ analyticsEnabled: false })
   localStorage.clear()
   MockAudio.instances = []
   useAuthStore.setState({ accessToken: 'test-token', user: null })
   vi.stubGlobal('Audio', MockAudio)
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue(audioResponse()))
   vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:tour-audio')
-  vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => { })
+  vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
   Object.defineProperties(HTMLDialogElement.prototype, {
     showModal: {
       configurable: true,
@@ -84,6 +86,35 @@ afterEach(() => {
 })
 
 describe('dashboard tour', () => {
+  it.each(['complete', 'skip'])(
+    'reports a tour start and its %s outcome without step content',
+    async (outcome) => {
+      useConfigStore.setState({ analyticsEnabled: true })
+      showTour()
+      await screen.findByRole('dialog')
+      if (outcome === 'complete') {
+        for (let i = 0; i < 6; i++)
+          fireEvent.click(screen.getByRole('button', { name: es.tour.next }))
+        fireEvent.click(screen.getByRole('button', { name: es.tour.done }))
+      } else {
+        fireEvent.click(screen.getByRole('button', { name: es.tour.skip }))
+      }
+      const events = vi
+        .mocked(fetch)
+        .mock.calls.map(([, options]) => JSON.parse(String(options?.body)))
+      expect(events.map((event) => event.event)).toEqual([
+        'tour_started',
+        outcome === 'complete' ? 'tour_completed' : 'tour_skipped',
+      ])
+      expect(
+        events.every(
+          (event) =>
+            Object.keys(event).sort().join(',') === 'event,operation_id'
+        )
+      ).toBe(true)
+    }
+  )
+
   it('reopens all seven steps after legacy completion and defers the news modal', async () => {
     localStorage.setItem('fl_tour_done', '1')
     showTour(true)

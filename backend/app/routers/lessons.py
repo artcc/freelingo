@@ -8,6 +8,7 @@ from redis.asyncio import Redis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.database import get_db
 from app.core.deps import (
     check_subscription_or_freemium_access,
@@ -30,6 +31,7 @@ from app.schemas.lessons import (
     NativeExplanationResponse,
 )
 from app.services.language_helpers import get_language_name, get_native_language_name
+from app.services.learning_analytics import LearningEvent, record_learning_event
 from app.services.lesson_generator import (
     evaluate_fill_blank,
     evaluate_free_write,
@@ -390,6 +392,14 @@ async def complete_lesson(
     )
 
     await db.commit()
+    if not already_completed:
+        enqueue_analytics(
+            request,
+            record_learning_event,
+            LearningEvent.LESSON_COMPLETED,
+            source_id=lesson.id,
+            user_agent=request.headers.get("user-agent", ""),
+        )
     await db.refresh(lesson)
 
     # Record freemium lesson usage only after the database transaction succeeds.

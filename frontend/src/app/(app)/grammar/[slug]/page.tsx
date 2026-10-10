@@ -13,6 +13,7 @@ import {
 } from '@/data/grammar'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { useAuthStore } from '@/store/auth'
+import { useAnalyticsView } from '@/hooks/useAnalyticsView'
 import { useLanguageStore } from '@/store/language'
 import { PageLoading } from '@/components/ui/page-loading'
 
@@ -101,6 +102,7 @@ export default function GrammarDetailPage({
   const { slug } = use(params)
 
   const [topics, setTopics] = useState<GrammarTopic[]>([])
+  const [topicsLanguage, setTopicsLanguage] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [nativeHelpOpen, setNativeHelpOpen] = useState(false)
@@ -110,6 +112,10 @@ export default function GrammarDetailPage({
 
   const topic = topics.find((t) => t.slug === slug)
   const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
+  const analyticsRef = useAnalyticsView(
+    'grammar_viewed',
+    `${targetLanguageCode}:${slug}`
+  )
 
   const fetchTopics = useCallback(async (lang: string) => {
     setLoading(true)
@@ -117,6 +123,7 @@ export default function GrammarDetailPage({
     try {
       const data = await getGrammarTopics(lang)
       setTopics(data)
+      setTopicsLanguage(lang)
     } catch {
       setLoadError(true)
       setTopics([])
@@ -190,7 +197,10 @@ export default function GrammarDetailPage({
     .filter(Boolean)
 
   return (
-    <div className="mx-auto max-w-4xl space-y-4 p-6">
+    <div
+      ref={topicsLanguage === targetLanguageCode ? analyticsRef : undefined}
+      className="mx-auto max-w-4xl space-y-4 p-6"
+    >
       <nav className="text-fl-label text-fl-muted-3 flex items-center gap-2 font-mono">
         <Link
           href="/grammar"

@@ -86,11 +86,9 @@ Game sessions, creation-request identities, and global admission reservations ar
 PostgreSQL. Games needs no extra service or volume.
 
 Operators must review database/data path, Redis password, JWT secret, CORS/cookie security,
-registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, logging, and
-analytics settings.
+registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, and logging.
 
-`BACKEND_URL` is the frontend's private backend-connectivity variable. The frontend also receives the
-optional public Umami script and site identifiers.
+`BACKEND_URL` is the frontend's private backend-connectivity variable.
 
 The production and development Compose files currently inject an `AVAILABLE_TARGET_LANGUAGES`
 fallback containing only `en-US` and `en-GB` when the variable is absent, while `Settings` and
