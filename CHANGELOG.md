@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.20] - Unreleased
+## [1.10.20] - 2026-10-10
 
 ### Added
 
-- Optional centralized backend Umami event service using the existing shared environment variables, with input validation, bounded delivery, and isolated failures. Product measurements are not yet connected.
+- Optional centralized backend Umami event service using the existing shared environment variables, with input validation, bounded delivery, and isolated failures.
+- Anonymous usage measurements sent to self-hosted Umami, without account identifiers or learning content.
 
 ### Changed
 
