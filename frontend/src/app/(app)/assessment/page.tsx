@@ -51,6 +51,7 @@ interface AssessmentFlow {
   sessionVersion: number
   controller: AbortController
   analyticsAttemptId?: string
+  analyticsController?: AbortController
   evaluation?: {
     body: string
     pending: boolean
@@ -142,6 +143,20 @@ export default function AssessmentPage() {
       flowRef.current?.controller.abort()
     }
   }, [])
+
+  useEffect(
+    () =>
+      useConfigStore.subscribe((state) => {
+        if (state.analyticsEnabled) return
+        const flow = flowRef.current
+        if (!flow) return
+        // Observe disabling immediately, independently of the educational flow.
+        flow.analyticsController?.abort()
+        delete flow.analyticsController
+        delete flow.analyticsAttemptId
+      }),
+    []
+  )
 
   const [currentQuestion, setCurrentQuestion] =
     useState<AssessmentQuestion | null>(null)
@@ -322,6 +337,7 @@ export default function AssessmentPage() {
           const token = useAuthStore.getState().accessToken
           if (!token) return
           flow.analyticsAttemptId = crypto.randomUUID()
+          flow.analyticsController = new AbortController()
           // Best-effort signal: analytics must not trigger auth refresh or page loading.
           void fetch(apiUrl('/api/assessment/started'), {
             method: 'POST',
@@ -331,6 +347,7 @@ export default function AssessmentPage() {
             },
             signal: AbortSignal.any([
               flow.controller.signal,
+              flow.analyticsController.signal,
               AbortSignal.timeout(5_000),
             ]),
           }).catch(() => {})

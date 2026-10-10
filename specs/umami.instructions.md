@@ -163,7 +163,11 @@ The UUID lives in the assessment
 flow's memory, is reused for evaluation retries, and is replaced with the flow on language/context or
 authentication-session replacement. It is not a user identifier, is not stored in browser storage,
 and is never exported to Umami. The start signal uses the current bearer token and a five-second,
-flow-cancellable fetch without auth refresh, loading indicators, or visible failure. Evaluation
+flow-cancellable fetch without auth refresh, loading indicators, or visible failure. A separate
+analytics controller cancels the pending start signal when runtime analytics is disabled and clears
+the operation UUID immediately, even if analytics is re-enabled before the next render. This does
+not cancel the educational flow or an evaluation already in flight. Browser cancellation cannot
+retract an event already accepted by the backend. Evaluation
 retains normal `apiFetch` behavior and adds the same header. Clients without the optional evaluation
 header retain the existing evaluation response but produce no assessment-completion event.
 

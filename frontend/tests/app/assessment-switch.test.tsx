@@ -455,6 +455,69 @@ describe('Assessment evaluation recovery', () => {
 })
 
 describe('Assessment start analytics', () => {
+  it.each(['disabled', 're-enabled', 'disabled-during-evaluation'])(
+    'cancels pending telemetry without interrupting assessment when %s',
+    async (state) => {
+      const pendingEvaluation = deferred<Response>()
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({
+            questions: bank.filter((q) => q.difficulty === 'A2').slice(0, 1),
+          })
+        if (url === '/api/assessment/started') {
+          const signal = options!.signal!
+          return new Promise<Response>((_resolve, reject) => {
+            signal.throwIfAborted()
+            signal.addEventListener('abort', () => reject(signal.reason), {
+              once: true,
+            })
+          })
+        }
+        if (url === '/api/assessment/evaluate') return pendingEvaluation.promise
+        return json({}, 404)
+      })
+      const evaluations = () =>
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/assessment/evaluate')
+      render(<AssessmentPage />)
+      await startQuiz()
+      const start = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === '/api/assessment/started')!
+      expect(start[1]?.signal?.aborted).toBe(false)
+
+      if (state === 'disabled-during-evaluation') {
+        await answerQuestions(1)
+        await waitFor(() => expect(evaluations()).toHaveLength(1))
+      }
+      act(() => {
+        useConfigStore.setState({ analyticsEnabled: false })
+        // A quick reactivation must not resurrect the previous operation UUID.
+        if (state === 're-enabled')
+          useConfigStore.setState({ analyticsEnabled: true })
+      })
+      expect(start[1]?.signal?.aborted).toBe(true)
+      if (state !== 'disabled-during-evaluation') await answerQuestions(1)
+      await waitFor(() => expect(evaluations()).toHaveLength(1))
+      const submission = evaluations()[0][1]!
+      expect(submission.signal?.aborted).toBe(false)
+      expect(new Headers(submission.headers).has('X-Assessment-Attempt')).toBe(
+        state === 'disabled-during-evaluation'
+      )
+      expect(JSON.parse(String(submission.body)).answers).toHaveLength(1)
+      await act(async () => pendingEvaluation.resolve(json(evaluation)))
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      expect(submission.signal?.aborted).toBe(false)
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.filter(([url]) => url === '/api/assessment/started')
+      ).toHaveLength(1)
+    }
+  )
+
   it.each(['disabled', 'pending', 'invalid', 'disabled-after-start'])(
     'finishes assessment with no analytics header when config is %s',
     async (state) => {
