@@ -76,9 +76,10 @@ async def test_concurrent_last_answer_credits_once(postgres_sessions):
             result = await answer_game(
                 db, user.id, session_id, GameAnswer(challenge=4, step="correct", choice=0)
             )
-            return result.xp_earned
+            return result.session.xp_earned, result.answer_number is not None
 
-    assert await asyncio.wait_for(asyncio.gather(answer(), answer()), 15) == [15, 15]
+    results = await asyncio.wait_for(asyncio.gather(answer(), answer()), 15)
+    assert sorted(results) == [(15, False), (15, True)]
     async with postgres_sessions() as db:
         assert await db.scalar(select(func.count()).select_from(ProgressReward)) == 1
 
@@ -140,7 +141,7 @@ async def test_concurrent_completion_of_both_games_preserves_shared_xp_cap(postg
     async def answer(session_id, body):
         async with postgres_sessions() as db:
             result = await answer_game(db, user.id, session_id, body)
-            return result.xp_earned
+            return result.session.xp_earned
 
     results = await asyncio.wait_for(
         asyncio.gather(

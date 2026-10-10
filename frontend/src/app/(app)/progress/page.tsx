@@ -25,6 +25,7 @@ import {
 } from '@/components/progress/ActivityHistory'
 import { RewardGuide } from '@/components/progress/RewardGuide'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
+import { useAnalyticsView } from '@/hooks/useAnalyticsView'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -281,6 +282,7 @@ function ProgressContent({
   languageName?: string
 }) {
   const locale = useLocale()
+  const skillsAnalyticsRef = useAnalyticsView('progress_skills_viewed')
   const t = useTranslations('progress')
   const tVocab = useTranslations('vocabulary')
   const tDashboard = useTranslations('dashboard')
@@ -557,7 +559,7 @@ function ProgressContent({
 
       {/* Skills breakdown */}
       {summary && Object.keys(summary.skills).length > 0 && (
-        <section className="space-y-4">
+        <section ref={skillsAnalyticsRef} className="space-y-4">
           <div className="flex items-center gap-3">
             <h2 className="text-fl-fg text-lg font-semibold">
               {tDashboard('recentPerformance')}

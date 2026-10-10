@@ -5,6 +5,7 @@ import { Loader2, Square, Volume2, RotateCcw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAuthStore } from '@/store/auth'
 import { getLogger } from '@/lib/logger'
+import { trackBrowserEvent } from '@/lib/analytics'
 
 const TTS_TIMEOUT_MS = 15_000
 const ttsLogger = getLogger('tts')
@@ -112,6 +113,8 @@ export function AudioPlayer({
     recoveryRef.current = null
     controllerRef.current?.abort()
     const controller = new AbortController()
+    const analyticsSession = useAuthStore.getState().sessionVersion
+    const analyticsPath = window.location.pathname
     controllerRef.current = controller
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
     timeoutRef.current = timeoutId
@@ -193,6 +196,17 @@ export function AudioPlayer({
         return
       if (audioRef.current !== audio) return
       setState('playing')
+      if (analyticsPath === '/phrasebook')
+        trackBrowserEvent('phrasebook_audio_played', {
+          sessionVersion: analyticsSession,
+        })
+      else if (
+        analyticsPath === '/flashcards' ||
+        analyticsPath === '/flashcards/vocabulary'
+      )
+        trackBrowserEvent('vocabulary_audio_played', {
+          sessionVersion: analyticsSession,
+        })
       const playMs = performance.now() - playStart
       const totalMs = performance.now() - t0
 

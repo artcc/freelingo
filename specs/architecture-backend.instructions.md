@@ -92,11 +92,6 @@ Redis, and database operations exposed to the frontend.
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
 
-`services/analytics_service.py` centralizes optional backend Umami event delivery through the shared
-`analytics_service` instance, configured from backend Settings at import time. It has no startup
-network request, lifecycle hook, ingestion router, or connected domain measurements. Browser pageviews
-still use Next.js proxies independently. See `umami.instructions.md` for the authoritative contract.
-
 `services/chat_markdown.py` uses `markdown-it-py` to derive spoken text for conversation-owned HTTP
 TTS requests. The TTS router resolves authorization and persisted language before conversion; the
 helper owns parsing and spoken boundaries. Original chat content remains in storage and SSE, and

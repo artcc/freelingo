@@ -122,6 +122,60 @@ function answerExercise() {
   }
 }
 
+describe.each([
+  { feature: 'listening', Page: ListeningPage },
+  { feature: 'reading', Page: ReadingPage },
+])('$feature analytics integration', ({ feature, Page }) => {
+  it('signals the first answer only and reuses its UUID for successful submission', async () => {
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+      if (url === `/api/${feature}/started`) return json({}, 503)
+      if (url === `/api/${feature}/attempt`)
+        return json({
+          score: 5,
+          xp_earned: 50,
+          text: 'Transcript',
+          correct_answers: Array.from({ length: 5 }, (_, index) => ({
+            index,
+            correct: 'A',
+          })),
+        })
+      return json({}, 404)
+    })
+    render(<Page />)
+    await screen.findByText(/Fresh exercise/)
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([url]) => url === `/api/${feature}/started`)
+    ).toBe(false)
+    answerExercise()
+    const starts = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === `/api/${feature}/started`)
+    expect(starts).toHaveLength(1)
+    const operation = new Headers(starts[0][1]?.headers).get(
+      'X-Exercise-Attempt'
+    )
+    expect(operation).toMatch(/^[0-9a-f-]{36}$/)
+    expect(JSON.parse(String(starts[0][1]?.body))).not.toHaveProperty('answers')
+    fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+    await screen.findByText('resultsLabel')
+    const submits = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === `/api/${feature}/attempt`)
+    expect(submits).toHaveLength(1)
+    expect(new Headers(submits[0][1]?.headers).get('X-Exercise-Attempt')).toBe(
+      operation
+    )
+    expect(push).not.toHaveBeenCalled()
+  })
+})
+
 describe('Assessment context recovery', () => {
   it.each([
     { feature: 'reading', stage: 'headers' },

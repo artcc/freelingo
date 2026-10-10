@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
+import { useExerciseAnalytics } from '@/hooks/useExerciseAnalytics'
 import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
@@ -74,6 +75,11 @@ function ReadingPage() {
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const {
+    start: startAnalytics,
+    reset: resetAnalytics,
+    headers: analyticsHeaders,
+  } = useExerciseAnalytics('reading')
+  const {
     selectedWord,
     tooltipPos,
     saveState,
@@ -105,6 +111,7 @@ function ReadingPage() {
     return () => {
       attemptRequest.current?.abort()
       attemptRequest.current = null
+      resetAnalytics()
     }
   }, [
     exercise,
@@ -113,6 +120,7 @@ function ReadingPage() {
     activePlan?.cefr_level,
     needsRefresh,
     sessionVersion,
+    resetAnalytics,
   ])
 
   const textRef = useRef<HTMLDivElement>(null)
@@ -157,13 +165,14 @@ function ReadingPage() {
 
   const onExercise = useCallback(
     (nextExercise: ReadingExercise, context: ExerciseContext) => {
+      resetAnalytics()
       setExercise(nextExercise)
       setExerciseContext(context)
       setAnswers({})
       setResult(null)
       setIsReplay(false)
     },
-    []
+    [resetAnalytics]
   )
 
   const { loadNext, generate, needsContext } = useExerciseGeneration({
@@ -216,7 +225,7 @@ function ReadingPage() {
         method: 'POST',
         // Keep observing the POST after local cancellation: the server may
         // persist it and consume the user's global quota in another context.
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...analyticsHeaders() },
         body: JSON.stringify({
           exercise_id: exercise.id,
           answers,
@@ -374,6 +383,7 @@ function ReadingPage() {
                 </TargetLanguageText>
                 <button
                   onClick={() => {
+                    resetAnalytics()
                     setExercise(item.exercise)
                     setExerciseContext(historyContext)
                     setAnswers({})
@@ -641,12 +651,17 @@ function ReadingPage() {
                         return (
                           <button
                             key={k}
-                            onClick={() =>
+                            onClick={() => {
+                              startAnalytics(
+                                exercise.id,
+                                exerciseContext,
+                                isReplay
+                              )
                               setAnswers((prev) => ({
                                 ...prev,
                                 [String(q.index)]: k,
                               }))
-                            }
+                            }}
                             className={`w-full border px-3 py-2 text-left transition-colors ${
                               selected
                                 ? 'border-fl-accent text-fl-fg bg-fl-surface-2'

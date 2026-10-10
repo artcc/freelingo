@@ -1,7 +1,7 @@
 import json
 from datetime import UTC, date, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,6 +27,7 @@ from app.schemas.chat import (
     ConversationResponse,
 )
 from app.services.language_helpers import get_language_name, get_native_language_name
+from app.services.learning_analytics import record_lingu_practice
 from app.services.llm_adapter import (
     LLMError,
     LLMStream,
@@ -458,6 +459,11 @@ async def chat(
             await db.flush()
             await reward_conversation(db, assistant_message.id)
             await db.commit()
+            analytics_tasks.add_task(
+                record_lingu_practice,
+                assistant_message.id,
+                user_agent=request.headers.get("user-agent", ""),
+            )
 
             yield f"data: {json.dumps({'done': True})}\n\n"
 
@@ -503,10 +509,12 @@ async def chat(
                 except Exception:
                     logger.debug("Failed to save LLM usage — ignored")
 
+    analytics_tasks = BackgroundTasks()
     return StreamingResponse(
         event_stream(),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        background=analytics_tasks,
     )
 
 

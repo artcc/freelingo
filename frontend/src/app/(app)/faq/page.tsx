@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useAuthStore } from '@/store/auth'
+import { trackBrowserEvent } from '@/lib/analytics'
 
 interface FAQItem {
   q: string
@@ -137,7 +138,10 @@ export default function FAQPage() {
             className={i < faqs.length - 1 ? 'border-fl-border border-b' : ''}
           >
             <button
-              onClick={() => setOpen(open === i ? null : i)}
+              onClick={() => {
+                if (open !== i) trackBrowserEvent('faq_viewed')
+                setOpen(open === i ? null : i)
+              }}
               className="hover:bg-fl-surface flex w-full items-center justify-between px-5 py-4 text-left transition-colors"
             >
               <span className="text-fl-fg pr-4 font-mono text-xs tracking-wide">

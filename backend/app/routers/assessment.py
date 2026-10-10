@@ -1,9 +1,18 @@
 from __future__ import annotations
 
 import json
-from uuid import uuid4
+from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    Header,
+    HTTPException,
+    Query,
+    Request,
+    status,
+)
 from pydantic import BaseModel
 from redis.asyncio import Redis
 from sqlalchemy import select
@@ -41,6 +50,11 @@ from app.services.completion_service import (
     next_cefr_level,
 )
 from app.services.language_helpers import get_language_name
+from app.services.learning_analytics import (
+    LearningEvent,
+    record_assessment_completed,
+    record_learning_event,
+)
 from app.services.llm_adapter import (
     LLMError,
     LLMTimeoutError,
@@ -314,18 +328,44 @@ async def submit_assessment(
     )
 
 
+@router.post("/started", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("10/minute")
+async def report_assessment_started(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    attempt_id: UUID = Header(alias="X-Assessment-Attempt"),
+    _current_user: User = Depends(get_current_user),
+) -> None:
+    """Receive the quiz's explicit start signal; the operation UUID is never sent to Umami."""
+    background_tasks.add_task(
+        record_learning_event,
+        LearningEvent.ASSESSMENT_STARTED,
+        source_id=attempt_id,
+        user_agent=request.headers.get("user-agent", ""),
+    )
+
+
 @router.post("/evaluate", response_model=AssessmentResult)
 @limiter.limit("60/minute")
 async def evaluate_quiz(
     request: Request,
     data: AssessmentSubmitRequest,
+    background_tasks: BackgroundTasks,
+    attempt_id: UUID | None = Header(default=None, alias="X-Assessment-Attempt"),
     _current_user: User = Depends(get_current_user),
 ):
     """
     Deterministic CEFR evaluation of the adaptive quiz answers.
     No LLM involved — pure algorithm.
     """
-    return evaluate_adaptive_quiz(data.answers)
+    result = evaluate_adaptive_quiz(data.answers)
+    if attempt_id is not None and data.answers:
+        background_tasks.add_task(
+            record_assessment_completed,
+            attempt_id,
+            user_agent=request.headers.get("user-agent", ""),
+        )
+    return result
 
 
 @router.post("/free-write", response_model=dict)
@@ -388,6 +428,7 @@ async def evaluate_free_write_endpoint(
 async def complete_assessment(
     request: Request,
     data: AssessmentCompleteRequest,
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
@@ -473,6 +514,12 @@ async def complete_assessment(
     )
     db.add(plan)
     await db.commit()
+    background_tasks.add_task(
+        record_learning_event,
+        LearningEvent.STUDY_PLAN_CREATED,
+        source_id=plan.id,
+        user_agent=request.headers.get("user-agent", ""),
+    )
     await db.refresh(plan)
     voice_trial = await create_assessment_voice_trial_token(
         redis,

@@ -86,17 +86,9 @@ Game sessions, creation-request identities, and global admission reservations ar
 PostgreSQL. Games needs no extra service or volume.
 
 Operators must review database/data path, Redis password, JWT secret, CORS/cookie security,
-registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, logging, and
-analytics settings.
+registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, and logging.
 
 `BACKEND_URL` is the frontend's private backend-connectivity variable.
-
-Both Compose files forward `NEXT_PUBLIC_UMAMI_SCRIPT_URL` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` to both
-backend and frontend, with empty defaults. The backend reuses these values rather than requiring
-separate analytics variables: it derives `/api/send` from the script URL's origin and uses
-`APP_BASE_URL` for the tracked application's hostname. Missing or invalid configuration disables
-backend event sending. Backend environment changes require a process restart. See
-`umami.instructions.md` for configuration validation and the independent browser tracker behavior.
 
 The production and development Compose files currently inject an `AVAILABLE_TARGET_LANGUAGES`
 fallback containing only `en-US` and `en-GB` when the variable is absent, while `Settings` and

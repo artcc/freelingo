@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,6 +24,7 @@ from app.schemas.study_plan import (
     TodayResponse,
 )
 from app.services.completion_service import get_completion_state
+from app.services.learning_analytics import LearningEvent, record_learning_event
 from app.services.lesson_generator import generate_lesson
 from app.services.study_plan_generator import (
     PlanCapacityError,
@@ -80,6 +81,7 @@ async def get_current_plan(
 async def create_study_plan(
     request: Request,
     data: GenerateStudyPlanRequest,
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -132,6 +134,12 @@ async def create_study_plan(
     )
     db.add(plan)
     await db.commit()
+    background_tasks.add_task(
+        record_learning_event,
+        LearningEvent.STUDY_PLAN_CREATED,
+        source_id=plan.id,
+        user_agent=request.headers.get("user-agent", ""),
+    )
     await db.refresh(plan)
     return plan
 

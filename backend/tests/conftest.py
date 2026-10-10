@@ -16,6 +16,14 @@ from app.core.security import create_access_token
 from app.main import app
 
 
+@pytest.fixture(autouse=True)
+def disable_analytics_network(monkeypatch):
+    # Local/CI operator configuration must never turn tests into real analytics traffic.
+    from app.services.analytics_service import analytics_service
+
+    monkeypatch.setattr(analytics_service, "_endpoint", None)
+
+
 def _set_sqlite_pragma(dbapi_connection, connection_record):
     """Enable foreign key support on SQLite connections."""
     cursor = dbapi_connection.cursor()

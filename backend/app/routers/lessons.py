@@ -3,7 +3,7 @@ import json
 import re
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 from redis.asyncio import Redis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,6 +30,7 @@ from app.schemas.lessons import (
     NativeExplanationResponse,
 )
 from app.services.language_helpers import get_language_name, get_native_language_name
+from app.services.learning_analytics import LearningEvent, record_learning_event
 from app.services.lesson_generator import (
     evaluate_fill_blank,
     evaluate_free_write,
@@ -317,6 +318,7 @@ async def start_lesson(
 async def complete_lesson(
     request: Request,
     lesson_id: int,
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     redis: Redis = Depends(get_redis),
     db: AsyncSession = Depends(get_db),
@@ -390,6 +392,13 @@ async def complete_lesson(
     )
 
     await db.commit()
+    if not already_completed:
+        background_tasks.add_task(
+            record_learning_event,
+            LearningEvent.LESSON_COMPLETED,
+            source_id=lesson.id,
+            user_agent=request.headers.get("user-agent", ""),
+        )
     await db.refresh(lesson)
 
     # Record freemium lesson usage only after the database transaction succeeds.

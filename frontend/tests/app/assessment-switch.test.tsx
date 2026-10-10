@@ -205,10 +205,21 @@ describe('Assessment evaluation recovery', () => {
       expect(evaluations().map(([, options]) => options?.body)).toEqual(
         Array(3).fill(JSON.stringify({ answers: expected }))
       )
+      const start = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === '/api/assessment/started')!
+      const attempt = new Headers(start[1]?.headers).get('X-Assessment-Attempt')
+      expect(attempt).toMatch(/^[0-9a-f-]{36}$/)
+      expect(
+        evaluations().map(([, options]) =>
+          new Headers(options?.headers).get('X-Assessment-Attempt')
+        )
+      ).toEqual(Array(3).fill(attempt))
       // Evaluation recovery cannot reload the bank, reconcile plans, or complete.
       expect(vi.mocked(fetch).mock.calls.map(([url]) => url)).toEqual([
         '/api/study-plan/current',
         '/api/assessment/bank?language=en-GB',
+        '/api/assessment/started',
         ...Array(3).fill('/api/assessment/evaluate'),
       ])
       expect(push).not.toHaveBeenCalled()
@@ -391,6 +402,13 @@ describe('Assessment evaluation recovery', () => {
       await startQuiz()
       await answerQuestions(1)
       await waitFor(() => expect(readNewBody).toHaveBeenCalledTimes(1))
+      expect(
+        new Headers(evaluations().at(-1)![1]?.headers).get(
+          'X-Assessment-Attempt'
+        )
+      ).not.toBe(
+        new Headers(evaluations()[0][1]?.headers).get('X-Assessment-Attempt')
+      )
       // Resolve an obsolete body while a replacement flow owns its own request.
       if (stage !== 'error') {
         await act(async () => {
@@ -432,6 +450,65 @@ describe('Assessment evaluation recovery', () => {
       expect(push).not.toHaveBeenCalled()
     }
   )
+})
+
+describe('Assessment start analytics', () => {
+  it.each(['401', '503', 'transport'])(
+    'starts the quiz despite a %s analytics failure without refreshing auth',
+    async (failure) => {
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({ questions: bank })
+        if (url === '/api/assessment/started') {
+          if (failure === 'transport') throw new TypeError('Unavailable')
+          return json({}, Number(failure))
+        }
+        return json({}, 404)
+      })
+      render(<AssessmentPage />)
+      await screen.findByRole('button', { name: /beginnerOption/ })
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.some(([url]) => url === '/api/assessment/started')
+      ).toBe(false)
+      await startQuiz()
+      expect(screen.getByText(/^Placement question /)).toBeInTheDocument()
+      const calls = vi.mocked(fetch).mock.calls
+      const signals = calls.filter(([url]) => url === '/api/assessment/started')
+      expect(signals).toHaveLength(1)
+      expect(signals[0][1]?.body).toBeUndefined()
+      expect(new Headers(signals[0][1]?.headers).get('Authorization')).toBe(
+        'Bearer token'
+      )
+      expect(calls.some(([url]) => String(url).includes('/auth/refresh'))).toBe(
+        false
+      )
+      expect(useAuthStore.getState().accessToken).toBe('token')
+    }
+  )
+
+  it('does not count the beginner shortcut as a started quiz', async () => {
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current') return json(null)
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    fireEvent.click(
+      await screen.findByRole('button', { name: /beginnerOption/ })
+    )
+    expect(
+      await screen.findByRole('button', { name: /startMyPlan/ })
+    ).toBeInTheDocument()
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([url]) => url === '/api/assessment/started')
+    ).toBe(false)
+  })
 })
 
 describe('Assessment provisional language switches', () => {

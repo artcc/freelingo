@@ -11,15 +11,6 @@ Services implement reusable domain behavior and external-provider adapters. Rout
 for authentication, ownership resolution, rate limits, transport framing, and HTTP status mapping.
 The frontend never calls an external provider directly.
 
-## Umami analytics
-
-`analytics_service.py` exposes `AnalyticsService` and the shared `analytics_service` instance for
-optional, explicit backend events. It reuses the frontend's Umami environment variables, validates
-configuration and event inputs, and isolates delivery failures with a three-second timeout. Domain
-callers own event meaning and successful-operation timing; no product measurements currently invoke
-the service. The existing browser tracker uses separate Next.js proxies. Configuration, the `track()`
-contract, delivery semantics, and browser boundaries are defined in `umami.instructions.md`.
-
 ## LLM adapter
 
 `llm_adapter.py` provides provider-neutral access to Ollama, OpenAI, Anthropic, and DeepSeek.
