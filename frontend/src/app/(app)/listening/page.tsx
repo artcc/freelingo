@@ -1,6 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
@@ -121,7 +127,8 @@ function ListeningPage() {
   const [submitting, setSubmitting] = useState(false)
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
   const attemptRequest = useRef<AbortController | null>(null)
-  useEffect(() => {
+  // Clear the previous attempt before the new exercise can receive an answer.
+  useLayoutEffect(() => {
     setSubmitting(false)
     setReviewPromptOpen(false)
     return () => {

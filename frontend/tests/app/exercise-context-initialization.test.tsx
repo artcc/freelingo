@@ -7,6 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { Profiler } from 'react'
 import AssessmentPage from '@/app/(app)/assessment/page'
 import ListeningPage from '@/app/(app)/listening/page'
 import ReadingPage from '@/app/(app)/reading/page'
@@ -128,6 +129,42 @@ describe.each([
   { feature: 'listening', Page: ListeningPage },
   { feature: 'reading', Page: ReadingPage },
 ])('$feature analytics integration', ({ feature, Page }) => {
+  it('keeps the first-answer signal when interaction precedes passive effect cleanup', async () => {
+    useConfigStore.setState({ analyticsEnabled: true })
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+      return new Response(null, { status: 204 })
+    })
+    let answered = false
+    await act(async () => {
+      render(
+        <Profiler
+          id="first-answer"
+          onRender={() => {
+            // Interact with the committed UI before its passive effects run.
+            const button = screen.queryByRole('button', { name: /Answer 0/ })
+            if (!button || answered) return
+            answered = true
+            button.click()
+          }}
+        >
+          <Page />
+        </Profiler>
+      )
+    })
+    expect(answered).toBe(true)
+    answerExercise()
+    const starts = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === `/api/${feature}/started`)
+    expect(starts).toHaveLength(1)
+    expect(starts[0][1]?.signal?.aborted).toBe(false)
+  })
+
   it.each(['disabled', 'pending', 'disabled-after-start'])(
     'preserves submission without analytics when config is %s',
     async (state) => {
