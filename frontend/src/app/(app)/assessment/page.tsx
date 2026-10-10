@@ -314,7 +314,10 @@ export default function AssessmentPage() {
       setCurrentQuestion(q)
       setQuestionNumber(1)
       setStep('quiz')
-      if (!flow.analyticsAttemptId) {
+      if (
+        useConfigStore.getState().analyticsEnabled &&
+        !flow.analyticsAttemptId
+      ) {
         try {
           const token = useAuthStore.getState().accessToken
           if (!token) return
@@ -407,7 +410,8 @@ export default function AssessmentPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(flow.analyticsAttemptId
+          ...(useConfigStore.getState().analyticsEnabled &&
+          flow.analyticsAttemptId
             ? { 'X-Assessment-Attempt': flow.analyticsAttemptId }
             : {}),
         },

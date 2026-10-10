@@ -1,10 +1,9 @@
 from datetime import UTC, date, datetime, timedelta
 from types import SimpleNamespace
-from unittest.mock import AsyncMock
 from uuid import uuid4
 
 import pytest
-from fastapi import BackgroundTasks, Request, Response
+from fastapi import Request
 
 from app.core.analytics import schedule_http_analytics
 from app.core.config import settings
@@ -116,27 +115,24 @@ async def test_manual_memory_operations_export_only_event_names(client, test_use
 
 
 @pytest.mark.parametrize("status_code", [200, 403, 422, 500])
-async def test_http_policy_preserves_background_and_uses_route_template_only(capture, status_code):
+async def test_http_policy_uses_route_template_only(capture, status_code):
     request = Request(
         {
             "type": "http",
             "method": "GET",
-            "path": "/api/grammar/private-topic",
+            "path": "/api/vocabulary/private-topic",
             "query_string": b"token=private",
             "headers": [(b"user-agent", USER_AGENT.encode())],
-            "route": SimpleNamespace(path="/api/grammar/{slug}"),
+            "route": SimpleNamespace(path="/api/vocabulary/{set_id}"),
         }
     )
-    existing = AsyncMock()
-    background = BackgroundTasks()
-    background.add_task(existing)
-    response = Response(status_code=status_code, background=background)
-    schedule_http_analytics(request, response)
-    await response.background()
-    existing.assert_awaited_once()
+    schedule_http_analytics(request, status_code)
+    tasks = getattr(request.state, "_analytics_tasks", None)
+    if tasks is not None:
+        await tasks()
     if status_code == 200:
         capture.sent.assert_awaited_once_with(
-            "grammar_viewed", user_agent=USER_AGENT, path="/grammar"
+            "vocabulary_viewed", user_agent=USER_AGENT, path="/vocabulary"
         )
     else:
         capture.sent.assert_not_awaited()

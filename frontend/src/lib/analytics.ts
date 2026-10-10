@@ -3,6 +3,7 @@ import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 
 export type BrowserEvent =
+  | 'grammar_viewed'
   | 'tour_started'
   | 'tour_completed'
   | 'tour_skipped'

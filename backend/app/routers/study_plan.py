@@ -1,11 +1,12 @@
 from collections import defaultdict
 from typing import Optional
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.app_logger import get_logger
 from app.core.database import get_db
 from app.core.deps import get_active_study_plan, get_current_user
@@ -81,7 +82,6 @@ async def get_current_plan(
 async def create_study_plan(
     request: Request,
     data: GenerateStudyPlanRequest,
-    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -134,7 +134,8 @@ async def create_study_plan(
     )
     db.add(plan)
     await db.commit()
-    background_tasks.add_task(
+    enqueue_analytics(
+        request,
         record_learning_event,
         LearningEvent.STUDY_PLAN_CREATED,
         source_id=plan.id,

@@ -82,6 +82,7 @@ beforeEach(() => {
   })
   useConfigStore.setState({
     loaded: true,
+    analyticsEnabled: true,
     stripeEnabled: false,
     maintenanceMode: false,
   })
@@ -89,6 +90,7 @@ beforeEach(() => {
 })
 afterEach(() => {
   cleanup()
+  useConfigStore.setState({ analyticsEnabled: false })
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
@@ -453,6 +455,53 @@ describe('Assessment evaluation recovery', () => {
 })
 
 describe('Assessment start analytics', () => {
+  it.each(['disabled', 'pending', 'invalid', 'disabled-after-start'])(
+    'finishes assessment with no analytics header when config is %s',
+    async (state) => {
+      const active = state === 'disabled-after-start'
+      useConfigStore.setState({
+        loaded: state !== 'pending' && state !== 'invalid',
+        analyticsEnabled: active,
+      })
+      const pending = deferred<Response>()
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (url === '/api/config')
+          return state === 'pending'
+            ? pending.promise
+            : new Response('invalid JSON')
+        if (url === '/api/study-plan/current') return json(null)
+        if (String(url).startsWith('/api/assessment/bank'))
+          return json({
+            questions: bank.filter((q) => q.difficulty === 'A2').slice(0, 1),
+          })
+        if (url === '/api/assessment/started')
+          return new Response(null, { status: 204 })
+        if (url === '/api/assessment/evaluate') return json(evaluation)
+        return json({}, 404)
+      })
+      const uuid = vi.spyOn(crypto, 'randomUUID')
+      render(<AssessmentPage />)
+      await startQuiz()
+      if (active)
+        act(() => useConfigStore.setState({ analyticsEnabled: false }))
+      await answerQuestions(1)
+      expect(await screen.findByText('resultStep')).toBeInTheDocument()
+      const starts = vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === '/api/assessment/started')
+      expect(starts).toHaveLength(active ? 1 : 0)
+      if (!active) expect(uuid).not.toHaveBeenCalled()
+      const submission = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === '/api/assessment/evaluate')!
+      expect(
+        new Headers(submission[1]?.headers).has('X-Assessment-Attempt')
+      ).toBe(false)
+      expect(JSON.parse(String(submission[1]?.body)).answers).toHaveLength(1)
+      await act(async () => pending.resolve(json({ analytics_enabled: false })))
+    }
+  )
+
   it.each(['401', '503', 'transport'])(
     'starts the quiz despite a %s analytics failure without refreshing auth',
     async (failure) => {

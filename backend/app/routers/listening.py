@@ -17,6 +17,7 @@ from fastapi.responses import FileResponse
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import (
@@ -240,7 +241,6 @@ async def get_audio(
 async def report_listening_started(
     request: Request,
     body: ExerciseStartedRequest,
-    background_tasks: BackgroundTasks,
     attempt_id: UUID = Header(alias="X-Exercise-Attempt"),
     _maintenance: None = Depends(require_not_maintenance),
     plan: StudyPlan = Depends(get_active_study_plan),
@@ -260,7 +260,8 @@ async def report_listening_started(
         not body.replay and exercise.level != plan.cefr_level
     ):
         raise HTTPException(409, "study_context_changed")
-    background_tasks.add_task(
+    enqueue_analytics(
+        request,
         record_learning_event,
         LearningEvent.LISTENING_STARTED,
         source_id=attempt_id,
@@ -273,7 +274,6 @@ async def report_listening_started(
 async def submit_listening_attempt(
     request: Request,
     body: ListeningSubmitRequest,
-    background_tasks: BackgroundTasks,
     attempt_id: UUID | None = Header(default=None, alias="X-Exercise-Attempt"),
     _maintenance: None = Depends(require_not_maintenance),
     plan: StudyPlan = Depends(get_active_study_plan),
@@ -314,7 +314,8 @@ async def submit_listening_attempt(
             ) from exc
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=detail) from exc
 
-    background_tasks.add_task(
+    enqueue_analytics(
+        request,
         record_exercise_completed,
         "listening",
         source_id=attempt_id if attempt_id is not None else attempt.id,

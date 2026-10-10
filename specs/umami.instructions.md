@@ -104,6 +104,9 @@ Product flows use fixed paths and no custom event properties, except the global 
 - Resources: grammar topic and vocabulary-set consultation, phrasebook consultation and translated
   grammar/phrasebook help; successful audio playback in flashcards, My Vocabulary and Phrasebook.
   The vocabulary-by-topic page has no audio player to instrument.
+  `grammar_viewed` comes from a visible, valid grammar detail view through the UI bridge, not the
+  grammar list or detail API. List loads and lesson preloads do not count. A local view key distinguishes
+  topic/language navigation without exporting either value; invalid or still-loading topics do not emit.
 - Progress: calendar and skills panels becoming visible, and opening the rewards guide.
 - Languages and settings: opening the language selector, successful additions/selections, preference
   saves, appearance/voice changes and successful voice-preview playback; no preference values are sent.
@@ -130,7 +133,9 @@ loading, and checks the runtime enablement flag. Public FAQ signals omit bearer 
 Successful-operation counters use explicit HTTP method and route-template pairs, never actual URLs,
 query strings, or request/response body inspection. Only 2xx responses qualify. Domain flags distinguish
 new vocabulary saves from existing words and saved-vocabulary reviews from other cards. Existing
-response background work is preserved. Each accepted operation is counted, not each distinct account.
+response background work is preserved. Route/state facts are captured when response headers are sent;
+delivery waits for the full inner ASGI application to return. Each accepted operation is counted,
+not each distinct account.
 
 ### D7 aggregate
 
@@ -151,7 +156,10 @@ history affect the retained-data calculation; this is not an immutable historica
 is limited to `10/minute`, and returns 204. Missing or invalid headers return 422. A valid 204 response
 does not guarantee analytics delivery. The endpoint accepts no custom event name or properties.
 
-The frontend generates a random operation UUID only when starting the quiz. It lives in the assessment
+The frontend generates a random operation UUID only when starting the quiz with `analyticsEnabled=true`.
+Disabled, pending, or invalid configuration creates no nonce or start request. Evaluation checks the
+current flag again before attaching its analytics header, without changing the learning payload.
+The UUID lives in the assessment
 flow's memory, is reused for evaluation retries, and is replaced with the flow on language/context or
 authentication-session replacement. It is not a user identifier, is not stored in browser storage,
 and is never exported to Umami. The start signal uses the current bearer token and a five-second,
@@ -167,7 +175,10 @@ owned plan/context and exercise language/level, permits older-level replays, con
 returns 204; its limit is `20/minute`. Missing/invalid input returns 422, missing exercise 404, and
 context mismatch 409. Resource context is used locally, never forwarded to Umami.
 
-`useExerciseAnalytics` creates an in-memory UUID on first answer selection, uses a five-second start
+`useExerciseAnalytics` checks `analyticsEnabled` before creating a nonce or start request and again
+before returning submission headers. Disabling it clears the nonce and aborts its pending start signal;
+it does not cancel learning requests. Pending/invalid configuration is disabled by default.
+When enabled, it creates an in-memory UUID on first answer selection, uses a five-second start
 signal without auth refresh/loading, and adds the same optional header to `/attempt`. Exercise/context
 or session replacement, unmount, and an explicit new replay reset it. A successful submission recovers
 its start signal. Without a header, the persisted attempt ID is the local key. With a header, even a
@@ -192,9 +203,16 @@ have reached Umami. There are no retries, historical replay, or exactly-once del
 Redis failure skips the event rather than blocking learning or sending an undeduplicated event.
 Disabled configuration or an empty User-Agent skips analytics without opening Redis or database clients.
 
-HTTP routes use response background tasks; chat attaches the task only after the reply transaction
-commits and runs it after the SSE response. Voice invokes analytics from its existing background save
-task after commit and after releasing the transcript lock. The WebSocket router supplies the request
+HTTP routes use `enqueue_analytics()` to collect scalar task arguments in request state.
+`AnalyticsMiddleware` is the outermost user ASGI middleware and drains them only after the inner
+application returns: serialization, streaming, existing response background work, and request-scoped
+dependency cleanup have finished. Telemetry is not attached to FastAPI response `BackgroundTasks`,
+which would execute before request dependency cleanup. Database dependency scope is unchanged, so
+streaming and product background work retain their existing access to request resources. Failed
+responses discard queued telemetry; provider errors cannot reopen or retain the request's DB session.
+Chat queues only committed replies and delivery waits for its SSE lifecycle to finish. Voice invokes
+analytics from its existing background save task after commit, session closure, and release of the
+transcript lock. The WebSocket router supplies the request
 User-Agent; the Next.js chat proxy forwards that header to the backend. No transcript content is sent.
 Practice eligibility reads have a two-second deadline; each operation claim plus send has a four-second
 deadline in addition to the transport's three-second timeout. Failures are isolated and logged without
@@ -259,8 +277,8 @@ headers, URLs, or provider response bodies. Task cancellation propagates normall
 
 Callers must invoke the service after successful domain work and must not make that work depend on
 the analytics result. The method is awaited; asynchronous I/O does not make it fire-and-forget.
-FastAPI `BackgroundTasks` may schedule delivery after a response, but the service does not schedule
-tasks itself or provide a delivery guarantee.
+HTTP callers must use the post-dependency ASGI queue rather than response background tasks. The
+transport itself does not schedule tasks or provide a delivery guarantee.
 
 ## Existing browser integration
 

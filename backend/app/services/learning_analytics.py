@@ -55,7 +55,6 @@ class LearningEvent(StrEnum):
     FLASHCARD_REVIEWED = "flashcard_reviewed"
     VOCABULARY_SAVED = "vocabulary_saved"
     SAVED_VOCABULARY_REVIEWED = "saved_vocabulary_reviewed"
-    GRAMMAR_VIEWED = "grammar_viewed"
     GRAMMAR_HELP_VIEWED = "grammar_help_viewed"
     VOCABULARY_VIEWED = "vocabulary_viewed"
     PHRASEBOOK_VIEWED = "phrasebook_viewed"
@@ -92,7 +91,7 @@ _EVENT_PATHS: dict[LearningEvent | BrowserEvent, str] = {
     LearningEvent.FLASHCARD_REVIEWED: "/flashcards",
     LearningEvent.VOCABULARY_SAVED: "/flashcards/vocabulary",
     LearningEvent.SAVED_VOCABULARY_REVIEWED: "/flashcards/vocabulary",
-    LearningEvent.GRAMMAR_VIEWED: "/grammar",
+    BrowserEvent.GRAMMAR_VIEWED: "/grammar",
     LearningEvent.GRAMMAR_HELP_VIEWED: "/grammar",
     LearningEvent.VOCABULARY_VIEWED: "/vocabulary",
     LearningEvent.PHRASEBOOK_VIEWED: "/phrasebook",

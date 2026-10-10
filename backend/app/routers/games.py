@@ -4,6 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, R
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.database import get_db
 from app.core.deps import (
     get_active_study_plan,
@@ -123,14 +124,14 @@ async def submit_answer(
     request: Request,
     session_id: UUID,
     body: GameAnswer | SentenceOrderAnswer | VocabularyPairAnswer,
-    background_tasks: BackgroundTasks,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     result = await answer_game(db, user.id, str(session_id), body)
     session = result.session
     if result.answer_number is not None:
-        background_tasks.add_task(
+        enqueue_analytics(
+            request,
             record_game_answer,
             session.game_type,
             session_id=session.id,
@@ -147,7 +148,6 @@ async def submit_answer(
 async def abandon_session(
     request: Request,
     session_id: UUID,
-    background_tasks: BackgroundTasks,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
@@ -169,7 +169,8 @@ async def abandon_session(
         session.status = "abandoned"
     await db.commit()
     if abandoned:
-        background_tasks.add_task(
+        enqueue_analytics(
+            request,
             record_game_abandoned,
             session.game_type,
             session_id=session.id,

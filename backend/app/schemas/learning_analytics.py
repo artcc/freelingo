@@ -18,6 +18,7 @@ class ExerciseStartedRequest(BaseModel):
 
 
 class BrowserEvent(StrEnum):
+    GRAMMAR_VIEWED = "grammar_viewed"
     TOUR_STARTED = "tour_started"
     TOUR_COMPLETED = "tour_completed"
     TOUR_SKIPPED = "tour_skipped"

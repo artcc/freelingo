@@ -5,7 +5,6 @@ from uuid import UUID, uuid4
 
 from fastapi import (
     APIRouter,
-    BackgroundTasks,
     Depends,
     Header,
     HTTPException,
@@ -18,6 +17,7 @@ from redis.asyncio import Redis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import get_current_user, get_redis
@@ -332,12 +332,12 @@ async def submit_assessment(
 @limiter.limit("10/minute")
 async def report_assessment_started(
     request: Request,
-    background_tasks: BackgroundTasks,
     attempt_id: UUID = Header(alias="X-Assessment-Attempt"),
     _current_user: User = Depends(get_current_user),
 ) -> None:
     """Receive the quiz's explicit start signal; the operation UUID is never sent to Umami."""
-    background_tasks.add_task(
+    enqueue_analytics(
+        request,
         record_learning_event,
         LearningEvent.ASSESSMENT_STARTED,
         source_id=attempt_id,
@@ -350,7 +350,6 @@ async def report_assessment_started(
 async def evaluate_quiz(
     request: Request,
     data: AssessmentSubmitRequest,
-    background_tasks: BackgroundTasks,
     attempt_id: UUID | None = Header(default=None, alias="X-Assessment-Attempt"),
     _current_user: User = Depends(get_current_user),
 ):
@@ -360,7 +359,8 @@ async def evaluate_quiz(
     """
     result = evaluate_adaptive_quiz(data.answers)
     if attempt_id is not None and data.answers:
-        background_tasks.add_task(
+        enqueue_analytics(
+            request,
             record_assessment_completed,
             attempt_id,
             user_agent=request.headers.get("user-agent", ""),
@@ -428,7 +428,6 @@ async def evaluate_free_write_endpoint(
 async def complete_assessment(
     request: Request,
     data: AssessmentCompleteRequest,
-    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
@@ -514,7 +513,8 @@ async def complete_assessment(
     )
     db.add(plan)
     await db.commit()
-    background_tasks.add_task(
+    enqueue_analytics(
+        request,
         record_learning_event,
         LearningEvent.STUDY_PLAN_CREATED,
         source_id=plan.id,

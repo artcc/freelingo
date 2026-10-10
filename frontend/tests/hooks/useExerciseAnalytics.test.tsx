@@ -4,10 +4,12 @@ import { useExerciseAnalytics } from '@/hooks/useExerciseAnalytics'
 import { useAuthStore } from '@/store/auth'
 import { useLanguageStore } from '@/store/language'
 import { getLanguageByCode } from '@/lib/target-languages'
+import { useConfigStore } from '@/store/config'
 
 const context = { study_plan_id: 8, target_language: 'en-GB', level: 'A1' }
 
 beforeEach(() => {
+  useConfigStore.setState({ loaded: true, analyticsEnabled: true })
   vi.stubGlobal(
     'fetch',
     vi.fn().mockResolvedValue(new Response(null, { status: 204 }))
@@ -36,10 +38,35 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  useConfigStore.setState({ analyticsEnabled: false })
   vi.unstubAllGlobals()
 })
 
 describe.each(['listening', 'reading'] as const)('%s analytics', (feature) => {
+  it.each([true, false])(
+    'creates no nonce or signal when disabled (config loaded: %s)',
+    (loaded) => {
+      useConfigStore.setState({ loaded, analyticsEnabled: false })
+      const uuid = vi.spyOn(crypto, 'randomUUID')
+      const { result } = renderHook(() => useExerciseAnalytics(feature))
+      act(() => result.current.start(42, context, false))
+      expect(uuid).not.toHaveBeenCalled()
+      expect(fetch).not.toHaveBeenCalled()
+      expect(result.current.headers()).toEqual({})
+    }
+  )
+
+  it('drops the header and cancels its signal when disabled mid-attempt', () => {
+    const { result } = renderHook(() => useExerciseAnalytics(feature))
+    act(() => result.current.start(42, context, false))
+    const signal = vi.mocked(fetch).mock.calls[0][1]?.signal
+    act(() => useConfigStore.setState({ analyticsEnabled: false }))
+    expect(signal?.aborted).toBe(true)
+    expect(result.current.headers()).toEqual({})
+    act(() => result.current.start(42, context, false))
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
   it('waits for interaction and uses one nonpersistent operation UUID until reset', () => {
     const { result, unmount } = renderHook(() => useExerciseAnalytics(feature))
     expect(fetch).not.toHaveBeenCalled()

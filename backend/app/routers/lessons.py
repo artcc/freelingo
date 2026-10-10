@@ -3,11 +3,12 @@ import json
 import re
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from redis.asyncio import Redis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.analytics import enqueue_analytics
 from app.core.database import get_db
 from app.core.deps import (
     check_subscription_or_freemium_access,
@@ -318,7 +319,6 @@ async def start_lesson(
 async def complete_lesson(
     request: Request,
     lesson_id: int,
-    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     redis: Redis = Depends(get_redis),
     db: AsyncSession = Depends(get_db),
@@ -393,7 +393,8 @@ async def complete_lesson(
 
     await db.commit()
     if not already_completed:
-        background_tasks.add_task(
+        enqueue_analytics(
+            request,
             record_learning_event,
             LearningEvent.LESSON_COMPLETED,
             source_id=lesson.id,

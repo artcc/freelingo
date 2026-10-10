@@ -93,6 +93,7 @@ beforeEach(() => {
   useAuthStore.setState({ user: null, accessToken: 'token' })
   useConfigStore.setState({
     loaded: true,
+    analyticsEnabled: false,
     stripeEnabled: false,
     maintenanceMode: false,
   })
@@ -102,6 +103,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  useConfigStore.setState({ analyticsEnabled: false })
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
@@ -126,7 +128,62 @@ describe.each([
   { feature: 'listening', Page: ListeningPage },
   { feature: 'reading', Page: ReadingPage },
 ])('$feature analytics integration', ({ feature, Page }) => {
+  it.each(['disabled', 'pending', 'disabled-after-start'])(
+    'preserves submission without analytics when config is %s',
+    async (state) => {
+      const active = state === 'disabled-after-start'
+      useConfigStore.setState({
+        loaded: state !== 'pending',
+        analyticsEnabled: active,
+      })
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+        if (url === `/api/${feature}/started`)
+          return new Response(null, { status: 204 })
+        if (url === `/api/${feature}/attempt`)
+          return json({
+            score: 5,
+            xp_earned: 50,
+            text: 'Transcript',
+            correct_answers: Array.from({ length: 5 }, (_, index) => ({
+              index,
+              correct: 'A',
+            })),
+          })
+        return json({}, 404)
+      })
+      const uuid = vi.spyOn(crypto, 'randomUUID')
+      render(<Page />)
+      await screen.findByText(/Fresh exercise/)
+      answerExercise()
+      if (active)
+        act(() => useConfigStore.setState({ analyticsEnabled: false }))
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      await screen.findByText('resultsLabel')
+      const starts = vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === `/api/${feature}/started`)
+      expect(starts).toHaveLength(active ? 1 : 0)
+      if (!active) expect(uuid).not.toHaveBeenCalled()
+      const submission = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) => url === `/api/${feature}/attempt`)!
+      expect(
+        new Headers(submission[1]?.headers).has('X-Exercise-Attempt')
+      ).toBe(false)
+      expect(JSON.parse(String(submission[1]?.body))).toMatchObject({
+        exercise_id: 42,
+        answers: { 0: 'A', 1: 'A', 2: 'A', 3: 'A', 4: 'A' },
+      })
+    }
+  )
+
   it('signals the first answer only and reuses its UUID for successful submission', async () => {
+    useConfigStore.setState({ analyticsEnabled: true })
     useLanguageStore.setState({
       activeLanguage: getLanguageByCode('en-GB') ?? null,
       userLanguages: languages().languages,

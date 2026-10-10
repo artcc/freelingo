@@ -5,8 +5,10 @@ import { apiUrl } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useAuthStore } from '@/store/auth'
 import { useLanguageStore } from '@/store/language'
+import { useConfigStore } from '@/store/config'
 
 export function useExerciseAnalytics(feature: 'listening' | 'reading') {
+  const enabled = useConfigStore((state) => state.analyticsEnabled)
   const attempt = useRef<{
     id: string
     sessionVersion: number
@@ -19,9 +21,13 @@ export function useExerciseAnalytics(feature: 'listening' | 'reading') {
   }, [])
 
   useEffect(() => reset, [reset])
+  useEffect(() => {
+    if (!enabled) reset()
+  }, [enabled, reset])
 
   const start = useCallback(
     (exerciseId: number, context: ExerciseContext | null, replay: boolean) => {
+      if (!useConfigStore.getState().analyticsEnabled) return
       if (!context) return
       const language = useLanguageStore.getState()
       const plan = language.userLanguages.find((item) => item.is_active)?.plan
@@ -66,6 +72,7 @@ export function useExerciseAnalytics(feature: 'listening' | 'reading') {
   )
 
   const headers = useCallback((): Record<string, string> => {
+    if (!useConfigStore.getState().analyticsEnabled) return {}
     const current = attempt.current
     return current &&
       current.sessionVersion === useAuthStore.getState().sessionVersion

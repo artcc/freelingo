@@ -11,7 +11,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from alembic import command
-from app.core.analytics import schedule_http_analytics
+from app.core.analytics import AnalyticsMiddleware
 from app.core.config import settings
 from app.core.limiter import limiter
 
@@ -130,8 +130,10 @@ async def security_headers_middleware(request: Request, call_next) -> Response:
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; object-src 'none'; base-uri 'self'"  # API-only responses (JSON/binary)
     )
-    schedule_http_analytics(request, response)
     return response
+
+
+app.add_middleware(AnalyticsMiddleware)
 
 
 app.include_router(auth.router)

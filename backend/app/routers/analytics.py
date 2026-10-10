@@ -1,5 +1,6 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
+from fastapi import APIRouter, Depends, Request, status
 
+from app.core.analytics import enqueue_analytics
 from app.core.deps import get_current_user
 from app.core.limiter import limiter
 from app.models.user import User
@@ -14,10 +15,10 @@ router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 async def report_ui_event(
     request: Request,
     body: BrowserEventRequest,
-    background_tasks: BackgroundTasks,
     _user: User = Depends(get_current_user),
 ) -> None:
-    background_tasks.add_task(
+    enqueue_analytics(
+        request,
         record_learning_event,
         body.event,
         source_id=body.operation_id,
@@ -27,10 +28,9 @@ async def report_ui_event(
 
 @router.post("/public", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("30/minute")
-async def report_public_event(
-    request: Request, body: PublicBrowserEventRequest, background_tasks: BackgroundTasks
-) -> None:
-    background_tasks.add_task(
+async def report_public_event(request: Request, body: PublicBrowserEventRequest) -> None:
+    enqueue_analytics(
+        request,
         record_learning_event,
         body.event,
         source_id=body.operation_id,
