@@ -316,7 +316,7 @@ options; the overall completion counter remains visible.
 Product copy names Lingu when describing the tutor's actions, conversations, and exercise preparation.
 References to AI remain appropriate for technology, providers, and usage; this editorial convention
 does not replace disclosures in privacy policies or terms. Apply wording consistently by meaning
-across all fifteen UI catalogs, preserving translation keys, interpolation variables, and rich-text
+across all sixteen UI catalogs, preserving translation keys, interpolation variables, and rich-text
 tags. Reading and Listening generation descriptions name Lingu without promising a fixed wait time.
 
 ## Streaming and media

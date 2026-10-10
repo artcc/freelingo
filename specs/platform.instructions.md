@@ -330,7 +330,7 @@ translation context from the user profile. Reviewing always credits the card's s
 The application distinguishes UI locale, native language, learned target language, active
 `UserLanguage`, and resource-owning `StudyPlan.target_language`.
 
-The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, `da`, `fi`, and `hr`. Locale
+The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, `da`, `fi`, `hr`, and `zh`. Locale
 resolution uses `NEXT_LOCALE`, then `Accept-Language`, then English. Only header entries with a parsed
 quality greater than 0 and no greater than 1 are considered. The initial browser script preserves a
 supported `NEXT_LOCALE` value even when `LOCALE_DETECTED` is absent. Middleware passes the selected

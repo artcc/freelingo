@@ -158,6 +158,13 @@ _ANSWER_FEEDBACK: dict[str, dict[str, str]] = {
         "good_pronunciation": "Dobar izgovor!",
         "target_phrase": "Ciljani izraz bio je: {answer}",
     },
+    "zh": {
+        "correct": "回答正确！",
+        "correct_answer": "正确答案是：{answer}",
+        "free_write_unavailable": "暂时无法评估你的书面回答。",
+        "good_pronunciation": "发音不错！",
+        "target_phrase": "目标句是：{answer}",
+    },
 }
 
 

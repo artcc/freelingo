@@ -162,6 +162,14 @@ _VERIFY_I18N: dict[str, dict[str, str]] = {
         "link_fallback": "Ako gumb ne radi, kopiraj ovu poveznicu i zalijepi je u preglednik:",
         "footer": "Ako nisi stvorio/la ovaj račun, možeš zanemariti ovu poruku.",
     },
+    "zh": {
+        "greeting": "你好 {name}，",
+        "subject": "验证你的 FreeLingo 账号",
+        "body": "感谢你注册 FreeLingo。<br />请点击下方按钮验证你的邮箱地址。链接有效期为 <strong>24 小时</strong>。",
+        "button": "验证我的账号",
+        "link_fallback": "如果按钮无法点击，请复制以下链接到浏览器打开：",
+        "footer": "如果这不是你注册的账号，可以忽略此邮件。",
+    },
 }
 
 _RESET_I18N: dict[str, dict[str, str]] = {
@@ -284,6 +292,14 @@ _RESET_I18N: dict[str, dict[str, str]] = {
         "button": "Postavi novu lozinku",
         "link_fallback": "Ako gumb ne radi, kopiraj ovu poveznicu i zalijepi je u preglednik:",
         "footer": "Ako nisi zatražio/la novu lozinku, možeš zanemariti ovu poruku.",
+    },
+    "zh": {
+        "greeting": "你好 {name}，",
+        "subject": "重置你的 FreeLingo 密码",
+        "body": "我们收到了重置你 FreeLingo 账号密码的请求。<br />点击下方按钮设置新密码。链接有效期为 <strong>1 小时</strong>。",
+        "button": "重置我的密码",
+        "link_fallback": "如果按钮无法点击，请复制以下链接到浏览器打开：",
+        "footer": "如果这不是你本人的操作，可以放心忽略此邮件。",
     },
 }
 
@@ -438,6 +454,16 @@ _WELCOME_I18N: dict[str, dict[str, str]] = {
         "button": "Idi na nadzornu ploču",
         "footer": "Sretno s učenjem!",
     },
+    "zh": {
+        "subject": "欢迎来到 FreeLingo！",
+        "greeting": "你好 {name}，",
+        "body": "你的账号已就绪。以下是开始学习的步骤：",
+        "step1": "完成<strong>分级测试</strong>——测出你当前的水平（A1–C2）以及强项和薄弱点。",
+        "step2": "生成你的<strong>学习计划</strong>——按你的水平和目标量身定制的每周安排。",
+        "step3": "完成第一节课，开始积累连续打卡。",
+        "button": "进入我的学习面板",
+        "footer": "学习愉快！",
+    },
 }
 
 
@@ -531,6 +557,12 @@ _DELETION_I18N: dict[str, dict[str, str]] = {
         "greeting": "Pozdrav {name},",
         "body": "Tvoj FreeLingo račun uspješno je izbrisan. Svi tvoji podaci trajno su uklonjeni s naših poslužitelja.",
         "footer": "Ako nisi zatražio/la brisanje, odmah nam se javi.",
+    },
+    "zh": {
+        "subject": "你的 FreeLingo 账号已删除",
+        "greeting": "你好 {name}，",
+        "body": "你的 FreeLingo 账号已成功删除，所有数据已从我们的服务器上永久移除。",
+        "footer": "如果这不是你本人的请求，请立即联系我们。",
     },
 }
 
@@ -669,6 +701,15 @@ _CONTACT_I18N: dict[str, dict[str, str]] = {
         "subject_label": "Predmet",
         "message_label": "Poruka",
         "footer": "Poslano putem FreeLingova kontaktnog obrasca",
+    },
+    "zh": {
+        "email_title": "联系表单留言",
+        "subject_prefix": "[FreeLingo 联系]",
+        "logo": "FreeLingo：联系表单",
+        "from_label": "来自",
+        "subject_label": "主题",
+        "message_label": "留言内容",
+        "footer": "通过 FreeLingo 联系表单发送",
     },
 }
 
@@ -868,6 +909,19 @@ _FEEDBACK_I18N: dict[str, dict[str, str]] = {
         "cta": "Pogledaj u administraciji",
         "footer": "FreeLingova ploča za povratne informacije",
     },
+    "zh": {
+        "email_title": "收到新的反馈",
+        "logo": "FreeLingo：新反馈",
+        "feature_label": "功能建议",
+        "bug_label": "问题反馈",
+        "feature_subject_prefix": "[功能建议]",
+        "bug_subject_prefix": "[问题反馈]",
+        "author_label": "提交者",
+        "title_label": "标题",
+        "description_label": "详细描述",
+        "cta": "在管理面板查看",
+        "footer": "FreeLingo 反馈板",
+    },
 }
 
 _REVIEW_I18N: dict[str, dict[str, str]] = {
@@ -1050,6 +1104,18 @@ _REVIEW_I18N: dict[str, dict[str, str]] = {
         "empty_comment": "Nema komentara.",
         "cta": "Pogledaj u administraciji",
         "footer": "Moderiranje FreeLingo recenzija",
+    },
+    "zh": {
+        "email_title": "收到新的评价",
+        "subject_prefix": "[新评价]",
+        "logo": "FreeLingo：新评价",
+        "author_label": "提交者",
+        "rating_label": "评分",
+        "language_label": "学习语言",
+        "comment_label": "评论",
+        "empty_comment": "没有填写评论。",
+        "cta": "在管理面板查看",
+        "footer": "FreeLingo 评价审核",
     },
 }
 

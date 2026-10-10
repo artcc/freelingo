@@ -155,7 +155,7 @@ There is no implicit English fallback.
 ### `POST /api/tts/tour/{locale}/{step}`
 
 - Requires authentication; rate limit `20/minute`.
-- Accepts one of the fifteen UI locales and `step1` through `step7`; unknown values return `404`.
+- Accepts one of the sixteen UI locales and `step1` through `step7`; unknown values return `404`.
 - `messages/*.json` owns tour copy. The frontend resolves the displayed paragraph through i18n and
   sends it as `text` in the JSON request body. The backend validates text length (1–5000 characters;
   invalid or missing text returns `422`) and synthesizes that supplied text.

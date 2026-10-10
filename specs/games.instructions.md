@@ -184,5 +184,5 @@ responsive card grid, `fl-*` tokens, and existing light/dark themes. Interface t
 The title is an `h1`; the empty state and game cards use `h2` headings. Game pages reuse the shared
 quota/paywall banners, confirmation dialog and pagination; choices are keyboard-operable buttons.
 
-Navigation and game UI text are localized in all fifteen interface catalogs. The shared app shell
+Navigation and game UI text are localized in all sixteen interface catalogs. The shared app shell
 retains its language selector; a saved game continues to identify and use its persisted language.

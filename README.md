@@ -85,7 +85,7 @@ freelingo/
 ├── data/                            # Shared data files
 ├── docs/                            # GitHub Pages landing site
 ├── frontend/                        # Next.js (React)
-├── messages/                        # i18n catalogs (da, de, en, es, fi, fr, hr, it, nl, pl, pt, ro, ru, sv, tr)
+├── messages/                        # i18n catalogs (da, de, en, es, fi, fr, hr, it, nl, pl, pt, ro, ru, sv, tr, zh)
 ├── specs/                           # Specification files
 ├── AGENTS.md                        # AI assistant instructions
 ├── CHANGELOG.md                     # Version history

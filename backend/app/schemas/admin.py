@@ -26,6 +26,7 @@ SUPPORTED_LANGUAGES = {
     "ru",  # Russian
     "sv",  # Swedish
     "tr",  # Turkish
+    "zh",  # Chinese
 }
 
 

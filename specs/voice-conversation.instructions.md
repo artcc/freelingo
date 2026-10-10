@@ -214,6 +214,7 @@ ID owned by the user and a compatible target language. The current frontend does
 so normal voice starts create a new `source="voice"` conversation.
 Voice conversation titles use a native-language label and date. German, Danish, Finnish, and Croatian
 dates place an ordinal dot after the day; Croatian dates also end with a dot after the year.
+Chinese titles use a year-month-day date.
 
 Lesson practice titles instead use the native-language equivalent of `Practice: {lesson title}`,
 bounded to the existing 200-character title column. The existing voice transcript persistence and

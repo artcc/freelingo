@@ -91,7 +91,7 @@ Registration, session, billing, and Redis quota behavior is defined in `platform
 Singleton global announcement managed by administrators and displayed on authenticated dashboards.
 
 - `id` — integer primary key constrained to `1` by `ck_dashboard_banners_singleton`.
-- `translations` — required PostgreSQL JSONB object containing `title`, `subtitle`, and `description` for the fifteen UI locales: `en`, `es`, `fr`, `pt`, `de`, `it`, `ru`, `nl`, `pl`, `ro`, `tr`, `sv`, `da`, `fi`, and `hr`. Saves require all fifteen; stored objects with ten to fourteen locales remain readable until an administrator completes them.
+- `translations` — required PostgreSQL JSONB object containing `title`, `subtitle`, and `description` for the sixteen UI locales: `en`, `es`, `fr`, `pt`, `de`, `it`, `ru`, `nl`, `pl`, `ro`, `tr`, `sv`, `da`, `fi`, `hr`, and `zh`. Saves require all sixteen; stored objects with ten to fifteen locales remain readable until an administrator completes them.
 - `source_locale` — required two-character UI locale used to create the translation set.
 - `is_active` — required boolean controlling public visibility; default `false` at the ORM level.
 - `revision` — required integer server revision, initially `1`. It increments when the source locale or translated content changes, but not for an active-state-only change.
