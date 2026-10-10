@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Gizlilik Politikası",
-      "updated": "Son güncelleme: Ağustos 2026",
+      "updated": "Son güncelleme: 10 Ekim 2026",
       "s1Title": "1. Genel Bakış",
       "s1Body": "FreeLingo, kendi kendine barındırılan bir uygulama ve barındırılan bir hizmet olarak kullanılabilir. Kendi kendine barındırılan kurulumlarda tüm veriler yalnızca işletmecinin sunucusunda saklanır ve FreeLingo proje yazarlarının bu verilere erişimi yoktur. Barındırılan hizmette veri sorumlusu FreeLingo ekibidir ve bu politika, kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar.",
       "s2Title": "2. Topladığımız Veriler",
@@ -482,8 +482,8 @@
       "s3Footer": "Verileriniz hiçbir zaman satılmaz, kiralanmaz veya üçüncü taraf pazarlama hizmetleriyle paylaşılmaz.",
       "s4Title": "4. Harici Yapay Zekâ Hizmetleri",
       "s4Body": "Barındırılan hizmette yapay zekâ sohbeti, ses sentezi (TTS) ve ses deşifresi (STT) OpenAI API'si üzerinden sağlanır. Konuşma içeriğiniz ve ses kayıtlarınız işlenmek üzere OpenAI'ye gönderilir ve OpenAI Gizlilik Politikası'na (openai.com/privacy) tabidir. Ödeme işlemleri Stripe, Inc. (ABD) tarafından yürütülür; Stripe ödeme verilerini doğrudan işler ve biz kart bilgilerini sunucularımızda saklamayız — işlem verileriniz Stripe Gizlilik Politikası'na (stripe.com/privacy) tabidir. Kendi kendine barındırılan kurulumlarda yapay zekâ sağlayıcısını işletmeci seçer; varsayılan olarak yerel bir Ollama kurulumu kullanılır ve hiçbir veri sunucudan çıkmaz.",
-      "s5Title": "5. Çerezler ve Oturum Anahtarları",
-      "s5Body": "FreeLingo, hizmetin çalışması için kesinlikle gerekli olan iki teknik çerez kullanır: oturum kimlik doğrulaması için kullanılan refresh_token (httpOnly, 30 gün geçerli) ve dil tercihinizi hatırlamak için NEXT_LOCALE (1 yıl geçerli). İzleme veya reklam çerezi kullanılmaz. Anonim trafik ölçümü için, çerez kullanmayan, kişisel veri toplamayan ve tüm verileri kendi sunucularımızda tutan, kendi kendine barındırılan açık kaynaklı bir analiz aracı olan Umami'yi kullanırız.",
+      "s5Title": "5. Çerezler, Yerel Depolama ve Analiz",
+      "s5Body": "FreeLingo teknik ve tercih çerezleri kullanır: oturumunuzu sürdürmek için refresh_token (httpOnly, varsayılan olarak 30 gün), arayüz dilini hatırlamak ve yönetmek için NEXT_LOCALE ve LOCALE_DETECTED (bir yıla kadar). Tarayıcının yerel depolaması ayrıca arayüz ve ses tercihleri ile bildirim ve kılavuzların durumunu saklar; oturum depolaması ise işlevlerin geçici sürekliliğini sağlar. Yerel değerler uygulama veya siz tarafından silinene kadar kalır; oturum değerleri kullanıldıktan sonra veya sekme kapatıldığında silinir. Barındırılan hizmette, hizmetin kullanımı ve işleyişi hakkında anonim ve toplu istatistikler elde etmek ve öğrenme deneyimini iyileştirmek için FreeLingo ile aynı altyapıda kendi bünyemizde barındırdığımız açık kaynaklı analiz aracı Umami'yi kullanırız. Bu analiz teknik kullanım verilerinden yararlanır, çerez kullanmaz, hesaplarla ilişkilendirilmez ve bireysel profiller oluşturmak veya reklam amacıyla kullanılmaz. Analiz verileri üçüncü taraflara satılmaz, devredilmez veya onlarla paylaşılmaz. Umami istatistikleri otomatik olarak silinmez ve elle silinene kadar saklanır. Kendi kendine barındırılan kurulumlarda analiz yapılandırmasından ilgili kurulumun işletmecisi sorumludur. Çerez bildirimi bilgilendirme amaçlıdır; kapatılması yalnızca kapatıldığını kaydeder.",
       "s6Title": "6. Haklarınız (GDPR)",
       "s6Body": "Avrupa Ekonomik Alanı'ndaysanız GDPR kapsamında erişim, düzeltme, silme, itiraz ve veri taşınabilirliği haklarına sahipsiniz. Hesabınızı doğrudan Ayarlar'dan silebilirsiniz. Diğer talepler 8. bölümdeki iletişim kanalı üzerinden elle işlenir; FreeLingo otomatik bir dışa aktarma aracı sunmaz. Verileri hizmeti sunmak için işleriz (GDPR md. 6(1)(b)). OpenAI ve Stripe, uluslararası aktarımlar için geçerli güvenceler kapsamında verileri ABD'de işleyebilir. İspanya Veri Koruma Kurumu'na (aepd.es) veya bulunduğunuz yerdeki denetim makamına şikâyette bulunabilirsiniz.",
       "s7Title": "7. Verilerin Saklanması ve Silinmesi",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Kenar çubuğundaki <feedbackLink>Geri Bildirim</feedbackLink> bölümünü kullanın. Yeni özellikler için öneri oluşturabilir veya hata bildirebilirsiniz. Diğer kullanıcıların fikirlerine oy verin, yorum bırakın ve her isteğin durumunu takip edin. Tüm gönderimler herkese açıktır ve yönetici tarafından incelenir."
   },
   "cookieBanner": {
-    "message": "Oturumunuzu açık tutmak için yalnızca kesinlikle gerekli çerezleri kullanıyoruz. İzleme veya reklam çerezi kullanılmaz.",
+    "message": "Oturumunuz ve tercihleriniz için teknik çerezler ve yerel depolama kullanıyoruz. Barındırılan hizmetin analizi anonim, toplu ve çerezsizdir; hesabınızla ilişkilendirilmez ve reklam amacı taşımaz.",
     "learnMore": "Gizlilik politikası",
     "accept": "Anladım"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Anladım",
     "entry1": {
       "label": "Derslerini Lingu ile pekiştir",

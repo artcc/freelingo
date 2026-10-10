@@ -51,10 +51,20 @@ UI translation catalogs live in the repository-root `messages/` directory.
   prevents repeated combinations, recovers uncertain attempts via GET, and reveals examples at completion.
 - `(legal)`: terms and privacy pages with a minimal public layout.
 - `api/`: Next.js handlers that proxy chat SSE, TTS, STT, and conversation warmup to the backend.
+- `umami/`: Next.js handlers that proxy the tracker script and collection requests to Umami.
 
 Nested pages such as level test, vocabulary management, language settings, and memory settings belong
 to their parent domains. Their detailed behavior lives in the corresponding domain specs rather than
 an exhaustive route inventory here.
+
+## Umami analytics
+
+The root layout loads the browser tracker when `NEXT_PUBLIC_UMAMI_WEBSITE_ID` is configured, using
+`/umami/script.js` and the `/umami` collection proxy. These handlers use
+`NEXT_PUBLIC_UMAMI_SCRIPT_URL`; browser pageviews do not pass through the backend's `AnalyticsService`.
+Both integrations share environment configuration, but the backend adapter's validation and delivery
+rules apply only to its explicit calls. No frontend product-event instrumentation or backend analytics
+ingestion endpoint is connected. See `umami.instructions.md` for the full integration contract.
 
 ## Backend access
 

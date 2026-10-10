@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Pravila privatnosti",
-      "updated": "Posljednje ažuriranje: kolovoz 2026.",
+      "updated": "Posljednje ažuriranje: 10. listopada 2026.",
       "s1Title": "1. Pregled",
       "s1Body": "FreeLingo je dostupan kao aplikacija za samostalno hostanje i kao hostirana usluga. Pri samostalnom hostanju svi se podaci pohranjuju isključivo na poslužitelju upravitelja i autori projekta FreeLingo nemaju pristup njima. Za hostiranu uslugu tim FreeLingo voditelj je obrade podataka; ova pravila objašnjavaju kako se tvoji osobni podaci prikupljaju, koriste i štite.",
       "s2Title": "2. Podaci koje prikupljamo",
@@ -482,8 +482,8 @@
       "s3Footer": "Tvoji se podaci nikada ne prodaju, ne iznajmljuju niti dijele s uslugama oglašavanja trećih strana.",
       "s4Title": "4. Vanjske AI usluge",
       "s4Body": "U hostiranoj usluzi AI chat, sinteza govora (TTS) i transkripcija govora (STT) pružaju se putem OpenAI API-ja. Sadržaj tvojih razgovora i zvuk šalju se OpenAI-ju na obradu u skladu s njegovim Pravilima privatnosti (openai.com/privacy). Plaćanja obrađuje Stripe, Inc. (SAD); Stripe izravno obrađuje podatke o plaćanju, a mi ne pohranjujemo podatke o karticama na svojim poslužiteljima – na podatke o transakcijama primjenjuju se Stripeova Pravila privatnosti (stripe.com/privacy). Pri samostalnom hostanju upravitelj bira AI pružatelja; zadano se koristi lokalna instanca Ollame i podaci ne napuštaju poslužitelj.",
-      "s5Title": "5. Kolačići i tokeni sesije",
-      "s5Body": "FreeLingo koristi dva tehnička kolačića nužna za rad usluge: refresh_token (httpOnly, istječe nakon 30 dana) za autentikaciju sesije i NEXT_LOCALE (istječe nakon jedne godine) za pamćenje odabranog jezika. Ne koriste se kolačići za praćenje ni oglašavanje. Za anonimno mjerenje prometa koristimo Umami – samostalno hostiran alat za analitiku otvorenog koda koji ne koristi kolačiće, ne prikuplja osobne podatke i čuva sve podatke na našim poslužiteljima.",
+      "s5Title": "5. Kolačići, lokalna pohrana i analitika",
+      "s5Body": "FreeLingo koristi tehničke kolačiće i kolačiće postavki: refresh_token (httpOnly, prema zadanim postavkama 30 dana) za održavanje sesije te NEXT_LOCALE i LOCALE_DETECTED (do jedne godine) za pamćenje i upravljanje jezikom sučelja. Lokalna pohrana preglednika čuva i postavke sučelja i glasa te stanje obavijesti i vodiča, dok pohrana sesije omogućuje privremeni kontinuitet funkcija. Lokalne vrijednosti ostaju dok ih aplikacija ili ti ne izbrišete; vrijednosti sesije uklanjaju se nakon upotrebe ili zatvaranja kartice. U hostiranoj usluzi koristimo Umami, alat za analitiku otvorenog koda koji samostalno hostamo na istoj infrastrukturi kao FreeLingo, kako bismo dobili anonimne, zbirne statistike o upotrebi i radu usluge te poboljšali iskustvo učenja. Analitika koristi tehničke podatke o upotrebi, ne koristi kolačiće, nije povezana s računima i ne služi za izradu pojedinačnih profila ni oglašavanje. Analitički podaci ne prodaju se, ne ustupaju niti dijele s trećim stranama. Statistike Umamija ne brišu se automatski i čuvaju se do ručnog uklanjanja. U samostalno hostanim instalacijama za konfiguraciju analitike odgovoran je upravitelj instance. Obavijest o kolačićima je informativna; njezinim zatvaranjem bilježi se samo da je zatvorena.",
       "s6Title": "6. Tvoja prava (GDPR)",
       "s6Body": "Ako si u Europskom gospodarskom prostoru, prema GDPR-u imaš pravo na pristup, ispravak, brisanje, prigovor i prenosivost podataka. Račun možeš izbrisati u Postavkama. Ostali zahtjevi obrađuju se ručno putem kontakta iz odjeljka 8; FreeLingo nema automatizirani alat za izvoz. Podatke obrađujemo radi pružanja usluge (čl. 6. st. 1. t. b GDPR-a). OpenAI i Stripe mogu obrađivati podatke u SAD-u uz zaštitne mjere primjenjive na međunarodne prijenose. Možeš podnijeti pritužbu španjolskom tijelu za zaštitu podataka (aepd.es) ili lokalnom nadzornom tijelu.",
       "s7Title": "7. Čuvanje i brisanje podataka",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Upotrijebi odjeljak <feedbackLink>Povratne informacije</feedbackLink> u bočnoj traci. Možeš predložiti novu značajku ili prijaviti pogrešku. Glasaj za ideje drugih korisnika, ostavljaj komentare i prati status svakog zahtjeva. Svi su podnesci javni, a administrator ih pregledava."
   },
   "cookieBanner": {
-    "message": "Koristimo samo nužne kolačiće kako bi ostao prijavljen. Ne koristimo kolačiće za praćenje ni oglašavanje.",
+    "message": "Koristimo tehničke kolačiće i lokalnu pohranu za sesiju i postavke. Analitika hostirane usluge anonimna je, zbirna i bez kolačića, nije povezana s tvojim računom i ne služi oglašavanju.",
     "learnMore": "Pravila privatnosti",
     "accept": "Razumijem"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Razumijem",
     "entry1": {
       "label": "Vježbaj lekcije s Linguom",

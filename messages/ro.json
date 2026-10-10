@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Politică de confidențialitate",
-      "updated": "Ultima actualizare: august 2026",
+      "updated": "Ultima actualizare: 10 octombrie 2026",
       "s1Title": "1. Prezentare generală",
       "s1Body": "FreeLingo este disponibil ca aplicație auto-găzduită și ca serviciu găzduit. Pentru implementările auto-găzduite, toate datele sunt stocate exclusiv pe serverul operatorului.",
       "s2Title": "2. Date pe care le colectăm",
@@ -482,8 +482,8 @@
       "s3Footer": "Datele tale nu vor fi niciodată vândute, închiriate sau partajate cu servicii de marketing terțe.",
       "s4Title": "4. Servicii AI externe",
       "s4Body": "În serviciul găzduit, chat-ul AI, sinteza vocală (TTS) şi transcrierea vocii (STT) sunt furnizate prin API-ul OpenAI. Conţinutul conversaţiilor şi audio-ul sunt trimise către OpenAI pentru procesare, conform Politicii de confidenţialitate a OpenAI (openai.com/privacy). Procesarea plăţilor este gestionată de Stripe, Inc. (SUA); Stripe procesează datele de plată direct şi nu stocăm datele cardului tău pe serverele noastre — datele tale de tranzacţie sunt supuse Politicii de confidenţialitate a Stripe (stripe.com/privacy).",
-      "s5Title": "5. Cookie-uri și tokenuri de sesiune",
-      "s5Body": "FreeLingo folosește două cookie-uri tehnice strict necesare: un refresh_token (httpOnly, expirare 30 de zile) și NEXT_LOCALE (expirare 1 an). Nu se folosesc cookie-uri de urmărire sau publicitate. Pentru măsurarea anonimă a traficului folosim Umami — un instrument de analiză auto-găzduit și open-source care nu utilizează cookie-uri, nu colectează date personale și păstrează toate datele pe serverele noastre.",
+      "s5Title": "5. Cookie-uri, stocare locală și analiză statistică",
+      "s5Body": "FreeLingo folosește cookie-uri tehnice și de preferințe: refresh_token (httpOnly, implicit 30 de zile) pentru menținerea sesiunii, iar NEXT_LOCALE și LOCALE_DETECTED (până la un an) pentru memorarea și gestionarea limbii interfeței. Stocarea locală a browserului păstrează și preferințele de interfață și voce, precum și starea notificărilor și ghidurilor; stocarea de sesiune asigură continuitatea temporară a funcțiilor. Valorile locale rămân până când sunt șterse de aplicație sau de tine; cele de sesiune sunt eliminate după utilizare sau la închiderea filei. În serviciul găzduit folosim Umami, un instrument de analiză cu sursă deschisă, auto-găzduit pe aceeași infrastructură ca FreeLingo, pentru a obține statistici anonime și agregate despre utilizarea și funcționarea serviciului și pentru a îmbunătăți experiența de învățare. Această analiză folosește date tehnice de utilizare, nu utilizează cookie-uri, nu este legată de conturi și nu servește la crearea de profiluri individuale sau în scopuri publicitare. Datele analitice nu sunt vândute, cedate sau partajate cu terți. Statisticile Umami nu sunt șterse automat și sunt păstrate până la eliminarea manuală. În instalările auto-găzduite, configurarea analizei revine operatorului instanței. Notificarea despre cookie-uri este informativă; închiderea ei salvează doar faptul că a fost închisă.",
       "s6Title": "6. Drepturile tale (GDPR)",
       "s6Body": "În Spațiul Economic European ai drepturile GDPR de acces, rectificare, ștergere, opoziție și portabilitate. Îți poți șterge contul din Setări. Alte cereri sunt gestionate manual prin contactul din secțiunea 8; FreeLingo nu oferă un instrument automat de export. Datele sunt prelucrate pentru furnizarea serviciului (Art. 6(1)(b) GDPR). OpenAI și Stripe pot prelucra date în SUA cu garanțiile aplicabile transferurilor internaționale. Poți depune o plângere la autoritatea de supraveghere competentă.",
       "s7Title": "7. Retenția și ștergerea datelor",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Folosește secțiunea <feedbackLink>Feedback</feedbackLink> din bara laterală. Poți crea sugestii pentru funcționalități noi sau raporta erori. Votează ideile altor utilizatori, lasă comentarii și urmărește statusul fiecărei cereri. Toate trimiterile sunt publice și sunt revizuite de administrator."
   },
   "cookieBanner": {
-    "message": "Folosim cookie-uri strict necesare pentru a te menține autentificat. Nu se folosesc cookie-uri de urmărire sau publicitate.",
+    "message": "Folosim cookie-uri tehnice și stocare locală pentru sesiune și preferințe. Analiza serviciului găzduit este anonimă, agregată și fără cookie-uri, fără legătură cu contul tău și fără scopuri publicitare.",
     "learnMore": "Politică de confidentialitate",
     "accept": "Am înțeles"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Exersează lecțiile cu Lingu",

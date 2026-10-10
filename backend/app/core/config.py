@@ -76,6 +76,10 @@ class Settings(BaseSettings):
     TOTAL_PRICE_MONTHLY: float = 0.0
     TOTAL_PRICE_YEARLY: float = 0.0
 
+    # Shared Umami configuration; both values are required to send backend events.
+    NEXT_PUBLIC_UMAMI_SCRIPT_URL: str = ""
+    NEXT_PUBLIC_UMAMI_WEBSITE_ID: str = ""
+
     # Email / SMTP
     EMAIL_ENABLED: bool = False
     CONTACT_EMAIL: str = ""

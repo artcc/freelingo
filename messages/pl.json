@@ -456,7 +456,7 @@
     },
     "privacy": {
       "pageTitle": "Polityka prywatności",
-      "updated": "Ostatnia aktualizacja: sierpień 2026",
+      "updated": "Ostatnia aktualizacja: 10 października 2026",
       "s1Title": "1. Przegląd",
       "s1Body": "FreeLingo jest dostępny jako aplikacja samodzielnie hostowana i jako usługa hostowana. W przypadku wdrożeń samodzielnie hostowanych wszystkie dane są przechowywane wyłącznie na serwerze operatora, a autorzy projektu FreeLingo nie mają do nich dostępu.",
       "s2Title": "2. Dane, które zbieramy",
@@ -482,8 +482,8 @@
       "s3Footer": "Twoje dane nigdy nie są sprzedawane, wynajmowane ani udostępniane stronom trzecim w celach marketingowych.",
       "s4Title": "4. Zewnętrzne usługi AI",
       "s4Body": "W usłudze hostowanej czat AI, synteza mowy (TTS) i transkrypcja mowy (STT) są świadczone za pośrednictwem API OpenAI. Treści rozmów i dźwięk są wysyłane do OpenAI w celu przetworzenia, zgodnie z Polityką prywatności OpenAI (openai.com/privacy). Przetwarzanie płatności jest obsługiwane przez Stripe, Inc. (USA); Stripe przetwarza dane płatnicze bezpośrednio i nie przechowujemy danych kart płatniczych na naszych serwerach — Twoje dane transakcyjne podlegają Polityce prywatności Stripe (stripe.com/privacy). W przypadku wdrożeń samodzielnie hostowanych operator wybiera dostawcę AI; domyślnie używana jest lokalna instancja Ollama i żadne dane nie opuszczają serwera.",
-      "s5Title": "5. Pliki cookie i tokeny sesji",
-      "s5Body": "FreeLingo używa dwóch technicznych plików cookie niezbędnych do działania usługi: refresh_token (httpOnly, ważność 30 dni) używany do uwierzytelniania sesji oraz NEXT_LOCALE (ważność 1 rok) do zapamiętania preferencji językowych. Nie są używane pliki cookie do śledzenia ani reklam. Do anonimowego pomiaru ruchu używamy Umami — samodzielnie hostowanego, otwartoźródłowego narzędzia analitycznego, które nie używa plików cookie, nie zbiera danych osobowych i przechowuje wszystkie dane na naszych serwerach.",
+      "s5Title": "5. Pliki cookie, pamięć lokalna i analityka",
+      "s5Body": "FreeLingo używa technicznych plików cookie i plików preferencji: refresh_token (httpOnly, domyślnie 30 dni) do utrzymywania sesji oraz NEXT_LOCALE i LOCALE_DETECTED (do jednego roku) do zapamiętywania języka interfejsu i zarządzania nim. Pamięć lokalna przeglądarki przechowuje również preferencje interfejsu i głosu oraz stan powiadomień i przewodników, a pamięć sesji zapewnia tymczasową ciągłość funkcji. Wartości lokalne pozostają do czasu usunięcia ich przez aplikację lub przez Ciebie; wartości sesji są usuwane po wykorzystaniu lub zamknięciu karty. W usłudze hostowanej korzystamy z Umami, otwartoźródłowego narzędzia analitycznego hostowanego samodzielnie na tej samej infrastrukturze co FreeLingo, aby uzyskiwać anonimowe, zagregowane statystyki dotyczące korzystania z usługi i jej działania oraz ulepszać doświadczenie nauki. Analityka wykorzystuje techniczne dane o użytkowaniu, nie używa plików cookie, nie jest powiązana z kontami i nie służy tworzeniu indywidualnych profili ani reklamie. Dane analityczne nie są sprzedawane, przekazywane ani udostępniane podmiotom trzecim. Statystyki Umami nie są automatycznie usuwane i pozostają do czasu ręcznego usunięcia. W instalacjach samodzielnie hostowanych za konfigurację analityki odpowiada operator instancji. Powiadomienie o plikach cookie ma charakter informacyjny; jego zamknięcie zapisuje tylko fakt zamknięcia.",
       "s6Title": "6. Twoje prawa (RODO)",
       "s6Body": "W Europejskim Obszarze Gospodarczym masz prawa RODO do dostępu, sprostowania, usunięcia, sprzeciwu i przenoszenia danych. Konto możesz usunąć w Ustawieniach. Inne wnioski są obsługiwane ręcznie przez kontakt z sekcji 8; FreeLingo nie zapewnia automatycznego eksportu. Dane są przetwarzane w celu świadczenia usługi (Art. 6 ust. 1 lit. b RODO). OpenAI i Stripe mogą przetwarzać dane w USA z zastosowaniem właściwych zabezpieczeń transferów międzynarodowych. Możesz złożyć skargę do właściwego organu nadzorczego.",
       "s7Title": "7. Przechowywanie i usuwanie danych",
@@ -1207,7 +1207,7 @@
     "a_feedback": "Skorzystaj z sekcji <feedbackLink>Feedback</feedbackLink> na pasku bocznym. Możesz zgłaszać pomysły na nowe funkcje lub błędy. Głosuj na pomysły innych użytkowników, zostawiaj komentarze i śledź status każdego zgłoszenia. Wszystkie zgłoszenia są publiczne i sprawdzane przez administratora."
   },
   "cookieBanner": {
-    "message": "Używamy wyłącznie niezbędnych plików cookie, aby utrzymać Cię zalogowanym. Nie używamy plików cookie do śledzenia ani reklam.",
+    "message": "Używamy technicznych plików cookie i pamięci lokalnej do obsługi sesji i preferencji. Analityka usługi hostowanej jest anonimowa, zagregowana i nie używa plików cookie; nie jest powiązana z kontem ani wykorzystywana do reklam.",
     "learnMore": "Polityka prywatności",
     "accept": "Rozumiem"
   },
@@ -1640,7 +1640,7 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.10.15",
+    "version": "v1.10.20",
     "cta": "Rozumiem",
     "entry1": {
       "label": "Ćwicz lekcje z Lingu",
