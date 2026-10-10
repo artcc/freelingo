@@ -165,10 +165,10 @@ describe.each([
     expect(starts[0][1]?.signal?.aborted).toBe(false)
   })
 
-  it.each(['disabled', 'pending', 'disabled-after-start'])(
+  it.each(['disabled', 'pending', 'disabled-after-start', 're-enabled'])(
     'preserves submission without analytics when config is %s',
     async (state) => {
-      const active = state === 'disabled-after-start'
+      const active = state === 'disabled-after-start' || state === 're-enabled'
       useConfigStore.setState({
         loaded: state !== 'pending',
         analyticsEnabled: active,
@@ -177,10 +177,17 @@ describe.each([
         activeLanguage: getLanguageByCode('en-GB') ?? null,
         userLanguages: languages().languages,
       })
-      vi.mocked(fetch).mockImplementation(async (url) => {
+      vi.mocked(fetch).mockImplementation(async (url, options) => {
         if (String(url).startsWith(`/api/${feature}/next`)) return ready()
-        if (url === `/api/${feature}/started`)
-          return new Response(null, { status: 204 })
+        if (url === `/api/${feature}/started`) {
+          const signal = options!.signal!
+          return new Promise<Response>((_resolve, reject) => {
+            signal.throwIfAborted()
+            signal.addEventListener('abort', () => reject(signal.reason), {
+              once: true,
+            })
+          })
+        }
         if (url === `/api/${feature}/attempt`)
           return json({
             score: 5,
@@ -197,8 +204,18 @@ describe.each([
       render(<Page />)
       await screen.findByText(/Fresh exercise/)
       answerExercise()
-      if (active)
-        act(() => useConfigStore.setState({ analyticsEnabled: false }))
+      if (active) {
+        const start = vi
+          .mocked(fetch)
+          .mock.calls.find(([url]) => url === `/api/${feature}/started`)!
+        expect(start[1]?.signal?.aborted).toBe(false)
+        act(() => {
+          useConfigStore.setState({ analyticsEnabled: false })
+          if (state === 're-enabled')
+            useConfigStore.setState({ analyticsEnabled: true })
+        })
+        expect(start[1]?.signal?.aborted).toBe(true)
+      }
       fireEvent.click(screen.getByRole('button', { name: 'submit' }))
       await screen.findByText('resultsLabel')
       const starts = vi

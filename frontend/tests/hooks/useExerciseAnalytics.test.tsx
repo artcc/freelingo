@@ -1,5 +1,6 @@
 import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { StrictMode } from 'react'
 import { useExerciseAnalytics } from '@/hooks/useExerciseAnalytics'
 import { useAuthStore } from '@/store/auth'
 import { useLanguageStore } from '@/store/language'
@@ -65,6 +66,44 @@ describe.each(['listening', 'reading'] as const)('%s analytics', (feature) => {
     expect(result.current.headers()).toEqual({})
     act(() => result.current.start(42, context, false))
     expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('clears pending telemetry across a batched disable and reactivation in Strict Mode', () => {
+    vi.mocked(fetch).mockImplementation((_url, options) => {
+      const signal = options!.signal!
+      return new Promise<Response>((_resolve, reject) => {
+        signal.throwIfAborted()
+        signal.addEventListener('abort', () => reject(signal.reason), {
+          once: true,
+        })
+      })
+    })
+    const { result, unmount } = renderHook(
+      () => useExerciseAnalytics(feature),
+      {
+        wrapper: StrictMode,
+      }
+    )
+    act(() => result.current.start(42, context, false))
+    const first = result.current.headers()['X-Exercise-Attempt']
+    const signal = vi.mocked(fetch).mock.calls[0][1]?.signal
+    expect(first).toBeTruthy()
+    expect(signal?.aborted).toBe(false)
+    act(() => {
+      useConfigStore.setState({ analyticsEnabled: false })
+      useConfigStore.setState({ analyticsEnabled: true })
+      expect(signal?.aborted).toBe(true)
+      expect(result.current.headers()).toEqual({})
+    })
+    expect(fetch).toHaveBeenCalledTimes(1)
+    act(() => result.current.start(42, context, false))
+    expect(fetch).toHaveBeenCalledTimes(2)
+    expect(result.current.headers()['X-Exercise-Attempt']).toBeTruthy()
+    expect(result.current.headers()['X-Exercise-Attempt']).not.toBe(first)
+    const nextSignal = vi.mocked(fetch).mock.calls[1][1]?.signal
+    expect(nextSignal?.aborted).toBe(false)
+    unmount()
+    expect(nextSignal?.aborted).toBe(true)
   })
 
   it('waits for interaction and uses one nonpersistent operation UUID until reset', () => {

@@ -8,7 +8,6 @@ import { useLanguageStore } from '@/store/language'
 import { useConfigStore } from '@/store/config'
 
 export function useExerciseAnalytics(feature: 'listening' | 'reading') {
-  const enabled = useConfigStore((state) => state.analyticsEnabled)
   const attempt = useRef<{
     id: string
     sessionVersion: number
@@ -21,9 +20,14 @@ export function useExerciseAnalytics(feature: 'listening' | 'reading') {
   }, [])
 
   useEffect(() => reset, [reset])
-  useEffect(() => {
-    if (!enabled) reset()
-  }, [enabled, reset])
+  useEffect(
+    () =>
+      useConfigStore.subscribe((state) => {
+        // Observe disabling even if React batches a subsequent reactivation.
+        if (!state.analyticsEnabled) reset()
+      }),
+    [reset]
+  )
 
   const start = useCallback(
     (exerciseId: number, context: ExerciseContext | null, replay: boolean) => {

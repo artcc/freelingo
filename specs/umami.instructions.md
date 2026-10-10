@@ -181,7 +181,10 @@ context mismatch 409. Resource context is used locally, never forwarded to Umami
 
 `useExerciseAnalytics` checks `analyticsEnabled` before creating a nonce or start request and again
 before returning submission headers. Disabling it clears the nonce and aborts its pending start signal;
-it does not cancel learning requests. Pending/invalid configuration is disabled by default.
+it does not cancel learning requests. A synchronous store subscription observes disabling even if
+analytics is re-enabled before the next render, and unsubscribes on unmount. Reactivation alone does
+not send a new start signal or restore the previous UUID. Pending/invalid configuration is disabled
+by default.
 When enabled, it creates an in-memory UUID on first answer selection, uses a five-second start
 signal without auth refresh/loading, and adds the same optional header to `/attempt`. Exercise/context
 or session replacement, unmount, and an explicit new replay reset it. A successful submission recovers
