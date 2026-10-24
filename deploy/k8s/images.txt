@@ -1,0 +1,20 @@
+# FreeLingo images mirrored into local-registry:5000 by mirror-images.sh.
+# Format: <upstream-ref>. Lines starting with # are ignored.
+# Destination layout strips registry hosts (ghcr.io, docker.io) and adds
+# library/ for Docker Hub official images, matching the manifest references.
+
+# FreeLingo application images (published by this repository's CI).
+ghcr.io/artcc/freelingo-backend:latest
+ghcr.io/artcc/freelingo-frontend:latest
+
+# Local speech services.
+ghcr.io/remsky/kokoro-fastapi-gpu:latest-cu128
+onerahmet/openai-whisper-asr-webservice:latest-gpu
+
+# Local LLM server. Pin a release tag and digest for reproducible restarts.
+vllm/vllm-openai:latest
+
+# Infrastructure. Tags match docker-compose.yml and the running cluster.
+postgres:16-alpine
+redis:7-alpine
+traefik:v3.3

@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: freelingo-config
+  namespace: freelingo
+data:
+  # Local, OpenAI-compatible Chat Completions endpoint served by vLLM.
+  # FreeLingo's "ollama" provider is the generic Chat Completions client.
+  LLM_PROVIDER: "ollama"
+  OLLAMA_BASE_URL: "http://llm:8000"
+  OLLAMA_MODEL: "freelingo-qwen3-4b"
+  EXERCISE_GENERATION_TIMEOUT_SECONDS: "600"
+
+  TTS_PROVIDER: "local"
+  TTS_BASE_URL: "http://kokoro:8880"
+  TTS_VOICE: "af_heart"
+
+  STT_PROVIDER: "local"
+  STT_BASE_URL: "http://whisper:9000"
+
+  # The frontend is served by Traefik on the same origin as /ws/conversation.
+  # Keep NEXT_PUBLIC_API_URL unset so the browser derives the WebSocket URL.
+  CORS_ORIGINS: '["https://freelingo.local:30444","https://192.168.10.30:30444","https://192.168.10.31:30444","https://192.168.10.32:30444","https://192.168.10.33:30444","https://192.168.18.30:30444","https://192.168.18.31:30444","https://192.168.18.32:30444","https://192.168.18.33:30444"]'
+  COOKIE_SECURE: "true"
+  APP_BASE_URL: "https://freelingo.local:30444"
+
+  ALLOW_REGISTRATION: "true"
+  FIRST_USER_IS_ADMIN: "true"
+  AVAILABLE_TARGET_LANGUAGES: '["de-DE","en-GB","en-US","es-ES","fr-FR","it-IT","ja-JP","ko-KR","pt-PT","zh-CN"]'
+
+  EMAIL_ENABLED: "false"
+  STRIPE_ENABLED: "false"
+
+  UVICORN_WORKERS: "2"
+  LOG_LEVEL: "INFO"
+  NEXT_PUBLIC_UMAMI_SCRIPT_URL: ""
+  NEXT_PUBLIC_UMAMI_WEBSITE_ID: ""

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kokoro
+  namespace: freelingo
+  labels:
+    app: kokoro
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: kokoro
+  template:
+    metadata:
+      labels:
+        app: kokoro
+    spec:
+      nodeName: node2
+      runtimeClassName: nvidia
+      imagePullSecrets:
+        - name: freelingo-registry
+      containers:
+        - name: kokoro
+          image: local-registry:5000/remsky/kokoro-fastapi-gpu:latest-cu128
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          ports:
+            - containerPort: 8880
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "2"
+              memory: 4Gi
+              nvidia.com/gpu: 1
+          startupProbe:
+            httpGet:
+              path: /v1/models
+              port: 8880
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /v1/models
+              port: 8880
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /v1/models
+              port: 8880
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kokoro
+  namespace: freelingo
+spec:
+  selector:
+    app: kokoro
+  ports:
+    - protocol: TCP
+      port: 8880
+      targetPort: 8880
+  type: ClusterIP

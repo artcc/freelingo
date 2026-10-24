@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: freelingo-traefik
+  namespace: freelingo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: freelingo-traefik
+rules:
+  - apiGroups: [""]
+    resources: ["services", "endpoints", "secrets", "nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses", "ingressclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses/status"]
+    verbs: ["update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: freelingo-traefik
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: freelingo-traefik
+subjects:
+  - kind: ServiceAccount
+    name: freelingo-traefik
+    namespace: freelingo
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: freelingo
+spec:
+  controller: traefik.io/ingress-controller
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+  namespace: freelingo
+  labels:
+    app: traefik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      nodeName: node1
+      serviceAccountName: freelingo-traefik
+      imagePullSecrets:
+        - name: freelingo-registry
+      containers:
+        - name: traefik
+          image: local-registry:5000/library/traefik:v3.3
+          imagePullPolicy: IfNotPresent
+          args:
+            - --entrypoints.websecure.address=:8443
+            - --entrypoints.websecure.http.tls=true
+            - --providers.kubernetesingress
+            - --providers.kubernetesingress.ingressclass=freelingo
+          ports:
+            - name: websecure
+              containerPort: 8443
+          resources:
+            requests:
+              cpu: "100m"
+              memory: 128Mi
+            limits:
+              cpu: "500m"
+              memory: 256Mi
+          readinessProbe:
+            tcpSocket:
+              port: 8443
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8443
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik
+  namespace: freelingo
+spec:
+  type: NodePort
+  selector:
+    app: traefik
+  ports:
+    - name: websecure
+      port: 8443
+      targetPort: 8443
+      nodePort: 30444

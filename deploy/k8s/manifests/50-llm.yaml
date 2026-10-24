@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm
+  namespace: freelingo
+  labels:
+    app: llm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: llm
+  template:
+    metadata:
+      labels:
+        app: llm
+    spec:
+      nodeName: node3
+      runtimeClassName: nvidia
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: freelingo-registry
+      containers:
+        - name: vllm
+          image: local-registry:5000/vllm/vllm-openai:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - /models
+            - --served-model-name
+            - freelingo-qwen3-4b
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "8000"
+            - --gpu-memory-utilization
+            - "0.90"
+            - --max-model-len
+            - "32768"
+            - --max-num-seqs
+            - "8"
+            - --enable-auto-tool-choice
+            - --tool-call-parser
+            - hermes
+          env:
+            - name: HF_HUB_OFFLINE
+              value: "1"
+            - name: TRANSFORMERS_OFFLINE
+              value: "1"
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: "4"
+              memory: 16Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "8"
+              memory: 32Gi
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: model
+              mountPath: /models
+              readOnly: true
+            - name: vllm-cache
+              mountPath: /root/.cache/vllm
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 10
+            failureThreshold: 90
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 15
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 30
+            failureThreshold: 3
+      volumes:
+        - name: vllm-cache
+          emptyDir: {}
+        - name: model
+          hostPath:
+            path: /mnt/local-fast/models/qwen3-4b-instruct-2507
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm
+  namespace: freelingo
+spec:
+  selector:
+    app: llm
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

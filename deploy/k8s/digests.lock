@@ -1,0 +1,8 @@
+ghcr.io/artcc/freelingo-backend:latest	local-registry:5000/artcc/freelingo-backend:latest	sha256:4391bfae669c55389c448ccaf5e7fe315e16c6fbf7667dd30984c1e489f1ccb2
+ghcr.io/artcc/freelingo-frontend:latest	local-registry:5000/artcc/freelingo-frontend:latest	sha256:556e3623fb6400c8f0dad98fee6656454edb0a8a24d3fc7785f045e6786cbad0
+ghcr.io/remsky/kokoro-fastapi-gpu:latest-cu128	local-registry:5000/remsky/kokoro-fastapi-gpu:latest-cu128	sha256:c6683ee24a3b3bc3b49130ecc52c32e8010a1052ae32781a91682fa09c6ba984
+onerahmet/openai-whisper-asr-webservice:latest-gpu	local-registry:5000/onerahmet/openai-whisper-asr-webservice:latest-gpu	sha256:3deb30cfd3d5614fd3885e6dfbef7dfcf95fe897300ecc703f7f3b3682b717ae
+postgres:16-alpine	local-registry:5000/library/postgres:16-alpine	sha256:f4610795587492cd4fb887c2dc3de301b813278bb6f616992061141b5f15ac36
+redis:7-alpine	local-registry:5000/library/redis:7-alpine	sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541
+traefik:v3.3	local-registry:5000/library/traefik:v3.3	sha256:2cd5cc75530c8d07ae0587c743d23eb30cae2436d07017a5ff78498b1a43d09f
+vllm/vllm-openai:latest	local-registry:5000/vllm/vllm-openai:latest	sha256:befccf0e7e4089aa23926bb6f887a85c0d46c2a99e6de5c5ffdf5cb7957c5b34

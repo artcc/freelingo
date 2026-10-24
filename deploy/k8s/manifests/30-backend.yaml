@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: freelingo
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      nodeName: node2
+      imagePullSecrets:
+        - name: freelingo-registry
+      initContainers:
+        - name: migrate
+          image: local-registry:5000/artcc/freelingo-backend:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              cd /tmp
+              export PYTHONPATH=/app
+              for i in $(seq 1 60); do
+                alembic -c /app/alembic.ini upgrade head && exit 0
+                echo "database not ready (attempt $i/60); retrying in 2s"
+                sleep 2
+              done
+              exit 1
+          envFrom:
+            - configMapRef:
+                name: freelingo-config
+            - secretRef:
+                name: freelingo-secrets
+          resources:
+            requests:
+              cpu: "100m"
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      containers:
+        - name: backend
+          image: local-registry:5000/artcc/freelingo-backend:latest
+          imagePullPolicy: IfNotPresent
+          command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+          envFrom:
+            - configMapRef:
+                name: freelingo-config
+            - secretRef:
+                name: freelingo-secrets
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: "1"
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          volumeMounts:
+            - name: audio
+              mountPath: /data/audio
+            - name: avatars
+              mountPath: /app/avatars
+            - name: previews
+              mountPath: /app/tts_previews
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 3
+      volumes:
+        - name: audio
+          persistentVolumeClaim:
+            claimName: backend-audio
+        - name: avatars
+          persistentVolumeClaim:
+            claimName: backend-avatars
+        - name: previews
+          persistentVolumeClaim:
+            claimName: backend-previews
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: freelingo
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

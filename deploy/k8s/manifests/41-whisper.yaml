@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whisper
+  namespace: freelingo
+  labels:
+    app: whisper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: whisper
+  template:
+    metadata:
+      labels:
+        app: whisper
+    spec:
+      nodeName: node2
+      runtimeClassName: nvidia
+      imagePullSecrets:
+        - name: freelingo-registry
+      containers:
+        - name: whisper
+          image: local-registry:5000/onerahmet/openai-whisper-asr-webservice:latest-gpu
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ASR_MODEL
+              value: large-v3-turbo
+            - name: ASR_ENGINE
+              value: faster_whisper
+            - name: ASR_DEVICE
+              value: cuda
+            - name: ASR_MODEL_PATH
+              value: /models
+            # The model is prefetched by prefetch-whisper.sh. Keep the
+            # container offline so it never waits on Hugging Face at runtime.
+            - name: HF_HUB_OFFLINE
+              value: "1"
+            - name: TRANSFORMERS_OFFLINE
+              value: "1"
+          ports:
+            - containerPort: 9000
+          resources:
+            requests:
+              cpu: "2"
+              memory: 4Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "4"
+              memory: 8Gi
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: model-cache
+              mountPath: /models
+          startupProbe:
+            httpGet:
+              path: /
+              port: 9000
+            periodSeconds: 5
+            failureThreshold: 120
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9000
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 3
+      volumes:
+        - name: model-cache
+          hostPath:
+            path: /opt/freelingo/whisper
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whisper
+  namespace: freelingo
+spec:
+  selector:
+    app: whisper
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+  type: ClusterIP
