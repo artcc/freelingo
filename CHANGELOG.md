@@ -27,6 +27,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Corrected ambiguous or invalid French, Italian, and Portuguese placement questions, clarified advanced exercises, and balanced correct-answer positions in their static banks.
 - Corrected grammar rules, examples, spelling, and greeting registers in French, Italian, and Portuguese, including reported speech, subjunctive usage, and sociolinguistic descriptions.
 - Replaced circular French vocabulary definitions, corrected Italian phonetic transcriptions, and fixed literal newline escapes in Portuguese grammar explanations.
+- Corrected Japanese grammar rules and false corrections across A1–C2, clarified A2 plain-negative formation, and corrected literary analysis, historical examples, and meaning-preserving reformulations.
+- Corrected Japanese phrasebook romanizations and their correspondence with the saved phrases.
+- Clarified ambiguous Japanese placement questions, replaced weak advanced items with contextual exercises, and balanced correct-answer positions within each level and skill.
 
 ## [1.10.60] - 2026-10-24
 

@@ -365,7 +365,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 "所要時間を伝える",
                 "neutral",
                 "a1-unit-6",
-                romanization="aruite jūbun gurai desu",
+                romanization="aruite juppun gurai desu",
             ),
             _p(
                 "ありがとうございます、助かりました。",

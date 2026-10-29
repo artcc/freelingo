@@ -7,7 +7,7 @@ from collections import Counter, defaultdict
 import pytest
 
 
-@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT"])
+@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "ja-JP"])
 def test_reviewed_banks_have_valid_answers_references_and_balanced_positions(language):
     from app.data.assessment_bank import get_assessment_bank
     from app.data.grammar import get_grammar_topics

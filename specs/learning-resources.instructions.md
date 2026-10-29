@@ -97,6 +97,28 @@ Placement questions specify the context, tense, or person needed for the keyed a
 positions are balanced within each level/skill group in these three static banks; the frontend displays
 the saved option order. Grammar references resolve within the selected target language.
 
+### Japanese curriculum and reference content
+
+Japanese (`ja-JP`) units from A1 through C2 include listening in their existing lesson-type lists.
+Actual coverage follows the shared plan-capacity and rotation rules.
+
+The A2 `plain-past` reference, used in unit 1 and consolidation, introduces the plain negative
+before deriving the negative past. Formation covers godan and ichidan verbs, `う → わない`,
+`ある → ない`, `する → しない`, and `来る → 来ない（こない）`.
+
+Reference content distinguishes grammatical errors from register and contextual choices, including
+negative forms, conditionals, quotation, indirect passives, and modality. Advanced reformulation
+preserves the source's information and degree of certainty; statistical significance does not imply
+a large effect. Literary analysis distinguishes noun-ending sentences from predicate endings, and
+constructed historical examples are identified as teaching examples rather than attributed quotations.
+Phrasebook romanizations correspond to the saved Japanese wording.
+
+Placement questions specify the perspective or context needed to distinguish valid alternatives.
+Advanced questions exercise interpretation, register, scope, inference, and reformulation in context.
+Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
+and grammar slugs remain stable, and the frontend displays the saved option order. Content review
+does not establish empirical CEFR calibration.
+
 ## Shared native-language help
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native
