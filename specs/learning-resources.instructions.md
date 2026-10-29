@@ -36,6 +36,19 @@ review in that order. Actual lesson allocation depends on plan capacity; declari
 not guarantee a complete cycle in every unit. See `study-plan.instructions.md` for scheduling and
 lazy-generation rules.
 
+### German curriculum and reference content
+
+Every German (`de-DE`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
+writing, and review in that order. Allocation uses the existing plan-capacity and rotation rules;
+individual units do not necessarily receive a complete cycle. Persisted schedules are retained, so
+the listening cycle applies to newly created plans. See `study-plan.instructions.md` for scheduling
+and lazy generation.
+
+German reference content distinguishes grammatical correctness from register or regional preferences,
+including the use of Perfekt and Präteritum. Vocabulary definitions explain meanings in German rather
+than merely repeating the headword. Placement questions provide the context needed for one accepted
+answer, do not require English knowledge, and vary the correct option's position in the static bank.
+
 ## Shared native-language help
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native

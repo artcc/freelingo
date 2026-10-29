@@ -16,6 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - New American English A1 plans include listening among their scheduled lesson types.
 - Corrected ambiguous present-perfect and advice questions in both English placement banks so valid alternative answers are not marked incorrect.
 - Corrected British English phonetic transcriptions for “euphoria” and “scenario”.
+- New German study plans include listening in every A1–C2 unit's lesson cycle.
+- Corrected German placement questions with invalid or ambiguous answers, removed English-dependent questions, and varied correct-answer positions in the static bank.
+- Corrected German grammar explanations, declension examples, spelling and noun genders, and replaced circular vocabulary definitions with meaningful explanations.
 
 ## [1.10.60] - 2026-10-24
 

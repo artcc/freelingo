@@ -30,11 +30,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
 - **Eigenschaften**: *Das Haus ist groß. / Mein Bruder ist nett.*
 - **Befinden**: *Mir ist kalt. / Wie geht es dir? — Mir geht es gut.*
 
-Im Gegensatz zum Englischen kann das Subjektpronomen im Deutschen **nicht** weggelassen werden: *Ich bin müde.* — *I am tired.*""",
+In vollständigen Aussagesätzen steht normalerweise ein Subjekt: *Ich bin müde.* Ein Subjektpronomen wird nicht allein deshalb weggelassen, weil die Verbform die Person erkennen lässt.""",
         structure="ich bin · du bist · er/sie/es ist · wir sind · ihr seid · sie/Sie sind",
         rules=[
-            "Das Subjektpronomen muss im Deutschen immer stehen (anders als im Spanischen).",
-            '"Sein" drückt Identität, Herkunft, Beruf und dauerhafte Eigenschaften aus.',
+            "In vollständigen Aussagesätzen braucht man normalerweise ein Subjekt, zum Beispiel ein Nomen oder ein Personalpronomen.",
+            '"Sein" drückt Identität, Herkunft, Beruf, Alter, Eigenschaften und vorübergehende Zustände aus.',
             'Die Höflichkeitsform "Sie" wird immer großgeschrieben und gilt für Singular und Plural.',
             'In der Frage steht das Verb an erster Position: "Bist du müde?"',
             'Nationalitäten werden ohne Artikel verwendet: "Ich bin Spanier."',
@@ -51,7 +51,7 @@ Im Gegensatz zum Englischen kann das Subjektpronomen im Deutschen **nicht** wegg
             GrammarMistake(
                 wrong="Ich bin heiße Tom.",
                 correct="Ich heiße Tom.",
-                note='Ich bin heißen gibt es nicht. Für den Namen verwendet man "heißen".',
+                note='Für den Namen verwendet man entweder "Ich heiße Tom" oder "Ich bin Tom", nicht beide Verben zusammen.',
             ),
             GrammarMistake(
                 wrong="Sind müde.",
@@ -66,7 +66,7 @@ Im Gegensatz zum Englischen kann das Subjektpronomen im Deutschen **nicht** wegg
         title='Das Verb "haben"',
         level="A1",
         category="Verben",
-        summary='Das Verb "haben" – Konjugation und Verwendung für Besitz, Alter und feste Ausdrücke.',
+        summary='Das Verb "haben" – Konjugation und Verwendung für Besitz, Beziehungen und feste Ausdrücke.',
         explanation="""Das Verb **haben** ist nach *sein* das zweitwichtigste Verb im Deutschen.
 
 **Konjugation:**

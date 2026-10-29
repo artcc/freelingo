@@ -17,7 +17,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "reformulierung",
         ],
         vocabulary_set_ids=["nuancen_de_c1", "wissenschaft_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Unterscheidet objektive (deontische) von subjektiven (epistemischen) Verwendungen der Modalverben: Er muss krank sein (Vermutung) vs Er muss zum Arzt (Verpflichtung)",
             "Drückt unterschiedliche Grade von Gewissheit mit Modalverben aus: Er könnte Recht haben (Möglichkeit), Er müsste bald kommen (Erwartung), Das kann nicht sein (Unmöglichkeit)",
@@ -40,7 +40,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "orthotypographie",
         ],
         vocabulary_set_ids=["formalitaet_de_c1", "wissenschaft_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet systematisch Nominalstil für formelles und akademisches Schreiben: Die Erhöhung der Steuern führte zu einer Verringerung des Konsums",
             "Beherrscht eine breite Palette von Funktionsverbgefügen: in Erwägung ziehen, zur Durchführung bringen, in Anspruch nehmen, in Zweifel ziehen, unter Beweis stellen",
@@ -63,7 +63,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "reformulierung",
         ],
         vocabulary_set_ids=["technisch_de_c1", "beruflich_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet produktive Präfixe systematisch, um neue Wörter zu bilden und zu verstehen: ver- (Veränderung, verstehen), be- (bearbeiten, betreten), ent- (entfernen, entdecken), zer- (zerstören, zerbrechen)",
             "Beherrscht häufige Suffixe und deren Bedeutungen: -heit/-keit (abstrakte Nomen), -ung (Prozess/Ergebnis), -bar (Möglichkeit: machbar, essbar), -los (ohne: arbeitslos), -mäßig (Entsprechung)",
@@ -86,7 +86,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "redewendungen",
         ],
         vocabulary_set_ids=["humor_de_c1", "kultur_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Erkennt verbale Ironie im Deutschen durch Intonation, Kontext und lexikalische Inkongruenz: Das hast du ja mal wieder toll gemacht! (nach einem Fehler gesagt)",
             "Versteht die Rolle von Konjunktiv II und Partikeln (ja, doch, wohl, eben) beim Ausdrücken von Ironie und impliziter Bedeutung",
@@ -109,7 +109,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "orthotypographie",
         ],
         vocabulary_set_ids=["rede_de_c1", "praesentation_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet rhetorische Figuren: Anapher, Parallelismus, Antithese, rhetorische Frage, Klimax, Trikolon, um die Überzeugungskraft in Reden und Essays zu steigern",
             "Setzt konzessive Muster für komplexe Argumentation ein: obgleich + Nebensatz, mag...auch sein + doch/trotzdem, nichtsdestotrotz (formell dennoch)",
@@ -132,7 +132,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "reformulierung",
         ],
         vocabulary_set_ids=["varietaeten_de_c1", "dialekte_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifiziert wichtige lexikalische Unterschiede zwischen österreichischem Deutsch, Schweizer Deutsch und Standarddeutsch: Jänner/Januar, Sackerl/Tüte, Marille/Aprikose, parkieren/parken, Velo/Fahrrad",
             "Erkennt regionale grammatische Besonderheiten: Präteritumgebrauch in Nord- vs Süddeutschland, fehlendes Präteritum im Schweizerdeutschen, österreichische Präferenz für sein mit sitzen/stehen/liegen im Perfekt",
@@ -155,7 +155,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "argumentation",
         ],
         vocabulary_set_ids=["analyse_de_c1", "synthese_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Synthetisiert Informationen aus zwei oder drei Quellen zu einer kohärenten Zusammenfassung mit expliziter Quellenangabe, ohne die ursprüngliche Bedeutung zu verzerren",
             "Bewertet die Zuverlässigkeit, interne Kohärenz und mögliche Verzerrungen von Argumenten in deutschen Texten",
@@ -186,7 +186,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "synthese",
         ],
         vocabulary_set_ids=["wiederholung_de_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produziert einen 400 Wörter umfassenden formellen Text mit Integration der C1-grammatischen Strukturen mit erkennbarer Kontrolle und natürlicher Flüssigkeit",
             "Drückt komplexe und nuancierte Ideen spontan aus, ohne sichtbares Suchen nach Wörtern oder Strukturen",

@@ -17,7 +17,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "textkonnektoren",
         ],
         vocabulary_set_ids=["gefuehle_de_b2", "hypothesen_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Konjunktiv II der Vergangenheit mit hätte/wäre + Partizip II: Wenn ich mehr gelernt hätte..., Ich wäre gern gekommen",
             "Drückt vergangene hypothetische Bedingungen und deren gedachte Folgen aus: Wenn ich das gewusst hätte, wäre ich nicht gegangen",
@@ -40,7 +40,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "verbalisierung",
         ],
         vocabulary_set_ids=["akademisch_de_b2", "gesellschaft_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Passiv mit Modalverben: Das Haus muss gebaut werden, Das Problem kann gelöst werden, Die Tür darf geöffnet werden",
             "Verwendet sein + zu + Infinitiv als Passiversatz mit Notwendigkeits-/Möglichkeitsbedeutung: Das Buch ist zu lesen, Das Problem ist nicht zu lösen",
@@ -63,7 +63,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "praepositionen-rektion",
         ],
         vocabulary_set_ids=["essays_de_b2", "akademisch_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Wandelt verbale Strukturen in Nominalisierungen um: produzieren → die Produktion, entwickeln → die Entwicklung, analysieren → die Analyse",
             "Erkennt den Nominalstil als typisch für akademisches und formelles Deutsch und wandelt ihn zur Verdeutlichung in Verbalstil um",
@@ -86,7 +86,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "relativsaetze-erweitert",
         ],
         vocabulary_set_ids=["literatur_de_b2", "kultur_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet Partizip I als Adjektiv mit aktiver/laufender Bedeutung: der laufende Mann, die singenden Kinder, das brennende Haus",
             "Verwendet Partizip II als Adjektiv mit passiver/abgeschlossener Bedeutung: das geschlossene Fenster, die geschriebene Prüfung, der verlorene Schlüssel",
@@ -109,7 +109,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "relativsaetze-erweitert",
         ],
         vocabulary_set_ids=["essays_de_b2", "debatten_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet satzverknüpfende Adverbien: allerdings, demnach, folglich, insofern, dennoch, immerhin",
             "Beherrscht konzessive Konnektoren: obwohl/obgleich (unterordnend), trotzdem/dennoch (Adverb), zwar...aber (zweiteilig), wenngleich (formell obgleich)",
@@ -132,7 +132,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "n-deklination",
         ],
         vocabulary_set_ids=["lektuere_de_b2", "literatur_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet Präteritum systematisch als Erzählzeit in schriftlichen Erzählungen und identifiziert dessen Funktion in literarischen Texten",
             "Erkennt Erzählperspektiven: Ich-Erzähler, personaler Erzähler (dritte Person beschränkt), auktorialer Erzähler (allwissend)",
@@ -155,7 +155,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "irreale-bedingungen",
         ],
         vocabulary_set_ids=["nachrichten_de_b2", "medien_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifiziert Passiv in Nachrichtenberichten als journalistische Konvention: Es wird berichtet, dass..., Es wurde bekannt gegeben, dass...",
             "Erkennt Konjunktiv I in journalistischen Texten als Marker für berichtete Rede und Distanzierung: Der Minister habe gesagt..., Die Polizei ermittele noch...",
@@ -186,7 +186,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "subjektive-modalverben",
         ],
         vocabulary_set_ids=["wiederholung_de_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Schreibt einen 200-Wörter-Aufsatz und integriert Konjunktiv II Vergangenheit, fortgeschrittene Konnektoren und klare argumentative Struktur",
             "Produziert einen 150-Wörter-Erzähltext mit korrektem Gebrauch von Präteritum, Plusquamperfekt und mindestens einem literarischen Stilmittel",

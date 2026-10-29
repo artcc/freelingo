@@ -17,7 +17,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "perfekt-vs-praeteritum",
         ],
         vocabulary_set_ids=["erfahrungen_de_a2", "reisen_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet das Perfekt mit haben + Partizip II für die meisten Verben: Ich habe gelernt, Er hat gearbeitet, Wir haben gespielt",
             "Konjugiert im Perfekt die Verben, die sein als Hilfsverb nehmen: gehen, fahren, kommen, fliegen, laufen, reisen, bleiben, werden, sein",
@@ -40,7 +40,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "indirekte-fragen",
         ],
         vocabulary_set_ids=["kindheit_de_a2", "erinnerungen_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produziert die Präteritumformen von sein (war) und haben (hatte) und verwendet sie korrekt in narrativen Kontexten",
             "Konjugiert Modalverben im Präteritum: konnte, wollte, musste, durfte, sollte, mochte",
@@ -63,7 +63,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "indirekte-fragen",
         ],
         vocabulary_set_ids=["einkaufen_de_a2", "geschenke_de_a2", "geld_preise_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet den Dativ als indirektes Objekt mit häufigen Verben: geben, schenken, helfen, danken, gehören, gefallen (Ich gebe dem Mann das Buch, Sie hilft ihrer Mutter)",
             "Beherrscht Wechselpräpositionen: wo? + Dativ (Ort) vs wohin? + Akkusativ (Richtung): Ich bin in der Stadt vs Ich gehe in die Stadt",
@@ -85,7 +85,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "vergleich-als-wie",
         ],
         vocabulary_set_ids=["staedte_de_a2", "kultur_de_a2", "tiere_natur_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet den Komparativ mit Adjektiv + -er: Berlin ist größer als München, Dieser Film ist interessanter",
             "Bildet den Superlativ mit am + Adjektiv + -(e)sten für Adverbien und der/die/das + Adjektiv + -(e)ste für attributive Adjektive: am schnellsten, der größte",
@@ -107,7 +107,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "adjektivdeklination-null",
         ],
         vocabulary_set_ids=["gesundheit_de_a2", "ratschlaege_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Dekliniert Adjektive nach bestimmtem Artikel: der alte Mann, die schöne Frau, das kleine Kind (immer schwache Endungen: -e oder -en)",
             "Dekliniert Adjektive nach unbestimmtem Artikel: ein alter Mann, eine schöne Frau, ein kleines Kind (gemischt: Nominativ mit Genusmarkierung, sonst schwach)",
@@ -131,7 +131,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "wortstellung-nebensatz",
         ],
         vocabulary_set_ids=["konnektoren_de_a2", "geschichten_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Nebensätze mit dass: Ich glaube, dass er heute kommt, Sie sagt, dass sie krank ist (Verb am Ende)",
             "Bildet kausale Nebensätze mit weil: Ich lerne Deutsch, weil ich in Berlin arbeiten möchte",
@@ -154,7 +154,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "personalpronomen-akk-dat",
         ],
         vocabulary_set_ids=["geschichten_de_a2", "erfahrungen_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Relativsätze mit der/die/das im Nominativ und Akkusativ: Der Mann, der dort steht..., Die Frau, die ich kenne...",
             "Verwendet Relativpronomen im Dativ: Der Mann, dem ich helfe..., Die Kollegin, mit der ich arbeite...",
@@ -185,7 +185,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "wortstellung-nebensatz",
         ],
         vocabulary_set_ids=["wiederholung_de_a2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bewältigt alltägliche soziale Situationen (Einkaufen, Termine, Wegbeschreibungen) mit angemessenem Gebrauch der Zeitformen",
             "Verwendet Dativ und Akkusativ korrekt mit Präpositionen und Personalpronomen in kurzen funktionalen Austauschen",
