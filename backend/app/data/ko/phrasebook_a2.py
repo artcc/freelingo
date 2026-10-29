@@ -415,7 +415,7 @@ A2_CATEGORIES.append(
                 "추후 확인을 약속할 때",
                 "formal",
                 "a2-unit-8",
-                romanization="hwaginago dasi malsseumdeurilgeyo.",
+                romanization="hwaginhago dasi malsseumdeurilgeyo.",
             ),
             _p(
                 "이 부분을 설명해 주세요.",

@@ -109,7 +109,7 @@ fails the job. This checks the fresh-install migration chain, not upgrades with 
 
 The same pytest invocation receives `TEST_POSTGRES_URL` for the PostgreSQL concurrency tests; ordinary
 tests retain their SQLite fixture. PostgreSQL schemas created by tests are separate from the migrated
-public schema. Frontend CI uses Node 26.12.1, installs npm 11.20.0, runs `npm ci`, then lint, typecheck,
+public schema. Frontend CI uses Node 26.13.0 LTS, installs npm 11.20.0, runs `npm ci`, then lint, typecheck,
 and Vitest. Exact runtime and package-manager versions match the local toolchain and container images.
 
 ## Rules

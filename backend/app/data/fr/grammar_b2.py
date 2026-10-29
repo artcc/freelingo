@@ -34,9 +34,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Après 'content que', on utilise le subjonctif.",
             ),
             GrammarMistake(
-                wrong="C'est le meilleur film que j'ai vu.",
-                correct="C'est le meilleur film que j'aie jamais vu.",
-                note="Après un superlatif, la relative est au subjonctif.",
+                wrong="Je regrette qu'il a menti.",
+                correct="Je regrette qu'il ait menti.",
+                note="Regretter que appelle le subjonctif; le passé exprime l'antériorité.",
             ),
         ],
         related=[

@@ -89,8 +89,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Antécédent dont l'existence n'est pas certaine → subjonctif.",
             "Antécédent défini → indicatif.",
-            "Toujours subjonctif après un superlatif + que.",
-            "Le seul, l'unique, le premier + que → subjonctif.",
+            "Après un superlatif, le subjonctif souligne l'appréciation; l'indicatif peut présenter un constat factuel.",
+            "Après le seul, l'unique ou le premier, le mode dépend du sens et de la perspective du locuteur.",
         ],
         examples=[
             GrammarExample(
@@ -114,9 +114,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Je cherche une maison qui a un jardin.",
+                wrong="Je cherche une maison qui aie un jardin.",
                 correct="Je cherche une maison qui ait un jardin.",
-                note="Si l'existence de la maison n'est pas certaine → subjonctif.",
+                note="Au subjonctif, la troisième personne est ait, pas aie. L'indicatif a reste possible pour une maison présentée comme existante.",
             ),
         ],
         related=["subjonctif-present", "subjonctif-concessif", "dont"],

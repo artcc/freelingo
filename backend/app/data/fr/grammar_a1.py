@@ -4,6 +4,39 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic
 
 A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     GrammarTopic(
+        slug="verbes-frequents-present",
+        title="Finir et les verbes fréquents au présent",
+        level="A1",
+        category="Verbes",
+        summary="Parler de ses activités avec finir, faire, prendre, venir et boire.",
+        explanation="**Finir** suit le modèle régulier en -ir avec -iss- au pluriel : je finis, tu finis, il/elle finit, nous finissons, vous finissez, ils/elles finissent. Choisir suit ce modèle, mais pas tous les verbes en -ir.\n\n**Faire** : je fais, tu fais, il fait, nous faisons, vous faites, ils font.\n**Prendre** : je prends, tu prends, il prend, nous prenons, vous prenez, ils prennent.\n**Venir** : je viens, tu viens, il vient, nous venons, vous venez, ils viennent.\n**Boire** : je bois, tu bois, il boit, nous buvons, vous buvez, ils boivent.\n\nLe présent décrit une habitude ou une activité actuelle : Je prends le bus chaque matin. Je bois un café maintenant.",
+        structure="sujet + verbe conjugué au présent",
+        rules=[
+            "Finir et choisir prennent -iss- au pluriel.",
+            "Les verbes fréquents ont des formes à mémoriser, notamment vous faites et ils font.",
+            "Le présent permet de parler d'habitudes et d'actions en cours.",
+        ],
+        examples=[
+            GrammarExample(text="Nous finissons le travail à six heures.", translation=None),
+            GrammarExample(text="Vous faites du sport ?", translation=None),
+            GrammarExample(text="Elle prend le train et vient chez nous.", translation=None),
+            GrammarExample(text="Nous buvons de l'eau.", translation=None),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Nous finons.",
+                correct="Nous finissons.",
+                note="Le pluriel de finir utilise -iss-.",
+            ),
+            GrammarMistake(
+                wrong="Vous faisez du sport.",
+                correct="Vous faites du sport.",
+                note="Faites est irrégulier.",
+            ),
+        ],
+        related=["verbes-er-present", "verbe-etre", "verbe-avoir"],
+    ),
+    GrammarTopic(
         slug="verbe-etre",
         title="Le verbe être",
         level="A1",

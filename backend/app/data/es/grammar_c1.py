@@ -13,7 +13,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         structure="aunque / a pesar de que / por más que / por mucho que + subjuntivo",
         rules=[
             "Concesivas con indicativo: hecho real. Con subjuntivo: hipotético o irrelevante.",
-            '"Aunque" + presente de subjuntivo = no sé si ocurre; "aunque" + imperfecto de subjuntivo = improbable.',
+            "El subjuntivo concesivo puede presentar una hipótesis o un hecho conocido que se considera irrelevante para la conclusión.",
             '"Por más que" + subjuntivo refuerza la idea de que el obstáculo no importa.',
             '"Por muy + adjetivo + que" siempre con subjuntivo: "Por muy difícil que sea".',
         ],
@@ -21,7 +21,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Aunque no estés de acuerdo, respeto tu opinión.",
                 translation=None,
-                note="subjuntivo: hipotético",
+                note="desacuerdo hipotético o conocido que no impide respetar la opinión",
             ),
             GrammarExample(
                 text="Por más que se lo explico, no lo entiende.",
@@ -39,9 +39,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Aunque llueva, sé que está lloviendo.",
-                correct="Aunque llueve, sé que está lloviendo. / Aunque llueva, saldré.",
-                note="Si el hecho es conocido, se usa indicativo. El subjuntivo implica incertidumbre.",
+                wrong="Por muy difícil que es, lo intentaré.",
+                correct="Por muy difícil que sea, lo intentaré.",
+                note="En la construcción concesiva por muy + adjetivo + que se emplea subjuntivo.",
             ),
         ],
         related=[
@@ -515,11 +515,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="espanol-latinoamerica",
-        title="Español de américa latina",
+        title="Español de América Latina",
         level="C1",
         category="Avanzado",
         summary="Principales rasgos del español hablado en Latinoamérica frente al español peninsular.",
-        explanation="El **español de América Latina** presenta variaciones respecto al español peninsular que no son errores, sino rasgos dialectales legítimos.\n\n**Rasgos fonéticos generales**:\n- **Seseo**: c/z y s suenan igual (/s/). *casa* y *caza* son homófonos.\n- **Yeísmo**: ll y y suenan igual (/ʝ/). Generalizado en casi toda América.\n- Aspiración o elisión de -s al final de sílaba: *ehtá* por *está*.\n\n**Rasgos gramaticales**:\n- **Ustedes** como único pronombre de segunda persona plural (no se usa vosotros).\n- **Voseo** en Argentina, Uruguay, Paraguay, partes de Centroamérica: *vos tenés*.\n- Mayor uso de diminutivos: *ahorita, cafecito, pancito*.\n- Pretérito indefinido preferido sobre el perfecto: *Ya lo hice* vs. *Ya lo he hecho*.\n\n**Rasgos léxicos**:\n- Vocabulario diferente según el país: *carro* (México) / *coche* (España); *computadora* / *ordenador*; *celular* / *móvil*.\n- Influencia de lenguas indígenas y africanas en el léxico.",
+        explanation="El **español de América Latina** reúne variedades diversas, con rasgos legítimos que no deben tratarse como errores.\n\n**Fonética**:\n- **Seseo**: s y las grafías z/c ante e/i representan /s/: *casa* y *caza* son homófonos. También existe en Canarias y partes de Andalucía.\n- **Yeísmo**: ll e y no se distinguen en numerosas variedades americanas y españolas. Su realización cambia por región, por ejemplo en el Río de la Plata.\n- La aspiración o pérdida de s final de sílaba aparece en algunas zonas, especialmente caribeñas y costeras, pero no es general en América.\n\n**Gramática**:\n- **Ustedes** es el tratamiento plural habitual tanto formal como informal.\n- El **voseo** tiene distintas formas y valoraciones regionales: *vos tenés* es un ejemplo rioplatense.\n- El uso del perfecto y el indefinido varía: *Ya lo hice* es frecuente en muchas zonas; el perfecto también tiene usos propios, no desaparece.\n- Los diminutivos, como *ahorita* o *cafecito*, tienen funciones que dependen de cada comunidad.\n\n**Léxico**: *carro, coche, auto*; *computadora, ordenador*; *celular, móvil*. Las preferencias varían dentro de cada país y hay aportaciones de lenguas indígenas y africanas.",
         rules=[
             "El seseo no es un error; es la norma culta en América Latina.",
             '"Ustedes" sustituye a "vosotros" en toda América; la conjugación es la de 3ª persona plural.',
@@ -540,7 +540,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Ahorita te llamo.",
                 translation=None,
-                note='dimitutivo; en México "ahorita" puede significar "en un rato"',
+                note='diminutivo; el alcance temporal de "ahorita" depende del contexto y de la región',
             ),
         ],
         common_mistakes=[],
@@ -552,7 +552,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzado",
         summary="Variación léxica y gramatical entre los países hispanohablantes.",
-        explanation="El español es una lengua pluricéntrica: no hay una sola norma correcta. Cada región tiene sus particularidades.\n\n**Variación léxica** (mismo concepto, distinta palabra):\n| Concepto | España | México | Argentina |\n|----------|--------|--------|-----------|\n| coche | coche | carro | auto |\n| ordenador | ordenador | computadora | computadora |\n| móvil | móvil | celular | celular |\n| zumo | zumo | jugo | jugo |\n| patata | patata | papa | papa |\n| conducir | conducir | manejar | manejar |\n| coger | coger (tomar) | NO usar (obsceno) | NO usar (obsceno) |\n\n**Variación gramatical**:\n- *Leísmo* en España: *Le vi* por *Lo vi*.\n- *Voseo* en Argentina/Uruguay/Centroamérica.\n- Perfecto vs. indefinido: *Hoy he ido* (España) vs. *Hoy fui* (América).\n\n**Variación pragmática**:\n- *Tú* vs. *usted*: en Colombia se usa *usted* incluso entre amigos.\n- Tratamiento informal: *güey* (México), *tío/tía* (España), *che* (Argentina), *pana* (Venezuela).",
+        explanation="El español es una lengua pluricéntrica con varias normas cultas. Las fronteras lingüísticas no coinciden siempre con las nacionales.\n\n**Léxico**:\n- *Coche, carro, auto* se distribuyen de forma diferente según la región; en México se usan tanto coche como carro.\n- *Ordenador/computadora* y *móvil/celular* muestran preferencias regionales.\n- *Papa* se usa en América, Canarias y zonas de Andalucía; *patata* es frecuente en el resto de España.\n- *Coger* es neutral en España y en parte de América; tiene un sentido sexual vulgar en países como México y Argentina. Hay que atender al país y al contexto.\n\n**Gramática**:\n- El leísmo es el uso de le/les como complemento directo. Se admite le para persona masculina singular: *A Juan le vi*. No todo leísmo pertenece a la norma general.\n- El voseo presenta diferentes patrones, no una única conjugación continental.\n- El perfecto y el indefinido varían dentro de España y América; no forman una oposición rígida entre continentes.\n\n**Tratamientos**: en algunas zonas de Colombia, usted también se usa entre personas cercanas. Ustedes es formal e informal en América y Canarias; en buena parte de España contrasta con vosotros/as informal. La relación entre interlocutores y la situación también condicionan la elección.",
         rules=[
             'No existe una variedad "correcta" del español; cada norma culta es válida.',
             "Al aprender español conviene elegir una variedad meta y ser consciente de las demás.",
@@ -563,7 +563,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Voy a coger el autobús.",
                 translation=None,
-                note="normal en España; evitar en Latinoamérica",
+                note="neutral en España y parte de América; puede tener connotaciones vulgares en otros países",
             ),
             GrammarExample(
                 text="Manejo hasta tu casa en media hora.",
@@ -573,7 +573,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="¿Me pasas la papa, por favor?",
                 translation=None,
-                note='Latinoamérica; en España sería "patata"',
+                note="papa se usa en América, Canarias y zonas de Andalucía; patata es frecuente en otras zonas españolas",
             ),
         ],
         common_mistakes=[],

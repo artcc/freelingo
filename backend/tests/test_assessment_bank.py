@@ -2,6 +2,34 @@
 
 from __future__ import annotations
 
+from collections import Counter, defaultdict
+
+import pytest
+
+
+@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "ja-JP", "ko-KR"])
+def test_reviewed_banks_have_valid_answers_references_and_balanced_positions(language):
+    from app.data.assessment_bank import get_assessment_bank
+    from app.data.grammar import get_grammar_topics
+
+    bank = get_assessment_bank(language)
+    slugs = {topic.slug for topic in get_grammar_topics(language)}
+    positions = defaultdict(Counter)
+    assert len({question.id for question in bank}) == len(bank)
+
+    for question in bank:
+        assert len(question.options) == len(set(question.options)) == 4, question.id
+        assert question.options.count(question.correct) == 1, question.id
+        if question.grammar_slug:
+            assert question.grammar_slug in slugs, question.id
+        positions[question.difficulty, question.skill][
+            question.options.index(question.correct)
+        ] += 1
+
+    for group, counts in positions.items():
+        totals = [counts[index] for index in range(4)]
+        assert max(totals) - min(totals) <= 1, (language, group, counts)
+
 
 class TestGetAssessmentBank:
     def test_english_returns_non_empty(self):

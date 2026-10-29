@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Capito",
     "entry1": {
+      "label": "Miglioramenti nell'apprendimento",
+      "desc": "Continuiamo a perfezionare i sistemi di apprendimento e i contenuti linguistici per offrirti una pratica più chiara, coerente e utile."
+    },
+    "entry2": {
       "label": "Conversazioni vocali più fluide",
       "desc": "Abbiamo migliorato le conversazioni con Lingu per una riproduzione vocale più fluida e indicazioni più chiare sui turni di parola."
     },
-    "entry2": {
+    "entry3": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

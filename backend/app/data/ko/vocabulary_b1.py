@@ -120,7 +120,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="사고 과정이 이치에 맞는 모양.",
                 example="그의 주장은 매우 논리적이에요.",
-                ipa="nonrijeok",
+                ipa="nollijeok",
                 frequency_rank=623,
             ),
             VocabularyEntry(
@@ -144,7 +144,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="신문, 방송 등의 매체를 통해 정보를 전달하는 조직.",
                 example="언론의 자유는 민주주의의 기본입니다.",
-                ipa="eonron",
+                ipa="eollon",
                 frequency_rank=672,
             ),
             VocabularyEntry(
@@ -280,7 +280,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="일자리를 얻다.",
                 example="졸업하고 큰 회사에 취직했어요.",
-                ipa="chwijikhada",
+                ipa="chwijikada",
                 frequency_rank=712,
             ),
             VocabularyEntry(
@@ -352,7 +352,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="굳게 믿고 의지함.",
                 example="서로 신뢰가 있어야 팀워크가 잘 돼요.",
-                ipa="sinroe",
+                ipa="silloe",
                 frequency_rank=667,
             ),
             VocabularyEntry(
@@ -456,7 +456,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="같은 직장에서 함께 일하는 사람.",
                 example="회사 동료들과 점심을 같이 먹었어요.",
-                ipa="dongryo",
+                ipa="dongnyo",
                 frequency_rank=629,
             ),
             VocabularyEntry(
@@ -472,7 +472,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="직장에서 맡아서 하는 일.",
                 example="오늘 업무가 너무 많아서 야근했어요.",
-                ipa="eopmu",
+                ipa="eommu",
                 frequency_rank=673,
             ),
             VocabularyEntry(
@@ -496,7 +496,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="일을 잘 해낼 수 있는 힘이나 재주.",
                 example="외국어 능력을 키우는 것이 중요해요.",
-                ipa="neungryeok",
+                ipa="neungnyeok",
                 frequency_rank=330,
             ),
         ],
@@ -544,7 +544,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="잘 돌보거나 통제하다.",
                 example="건강을 잘 관리하는 게 제일 중요해요.",
-                ipa="gwanrihada",
+                ipa="gwallihada",
                 frequency_rank=613,
             ),
             VocabularyEntry(
@@ -760,7 +760,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="phrase",
                 definition="무례를 범했을 때 사과하거나 상대의 주의를 끌 때 쓰는 정중한 말.",
                 example="실례합니다만, 길을 좀 여쭤 봐도 될까요?",
-                ipa="silryehapnida",
+                ipa="sillyehamnida",
                 frequency_rank=668,
             ),
             VocabularyEntry(
@@ -768,7 +768,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="phrase",
                 definition="애쓴 상대를 위로하거나 칭찬할 때 쓰는 인사.",
                 example="오늘 정말 수고하셨습니다.",
-                ipa="sugohasyeotseupnida",
+                ipa="sugohasyeotseumnida",
                 frequency_rank=662,
             ),
             VocabularyEntry(
@@ -840,7 +840,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="phrase",
                 definition="부탁을 받아들이기 힘들 때 쓰는 공손한 거절 표현.",
                 example="죄송하지만 그 날은 좀 어려울 것 같습니다.",
-                ipa="eoryeoul geot gatseupnida",
+                ipa="eoryeoul geot gatseumnida",
                 frequency_rank=671,
             ),
             VocabularyEntry(
@@ -1152,7 +1152,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="목표를 위해 힘을 들여 애쓰다.",
                 example="문제를 해결하기 위해 최선을 다해 노력했어요.",
-                ipa="noryeokhada",
+                ipa="noryeokada",
                 frequency_rank=622,
             ),
             VocabularyEntry(
@@ -1160,7 +1160,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="어려움을 이겨 내다.",
                 example="많은 어려움을 극복하고 성공했어요.",
-                ipa="geukbokhada",
+                ipa="geukbokada",
                 frequency_rank=617,
             ),
             VocabularyEntry(
@@ -1168,7 +1168,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="복잡한 내용을 낱낱이 나누어 살피다.",
                 example="문제의 원인을 꼼꼼히 분석해 봤어요.",
-                ipa="bunseokhada",
+                ipa="bunseokada",
                 frequency_rank=647,
             ),
         ],
@@ -1216,7 +1216,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="건물을 유지하는 데 드는 비용.",
                 example="월세 외에 관리비도 따로 내야 해요.",
-                ipa="gwanribi",
+                ipa="gwallibi",
                 frequency_rank=311,
             ),
             VocabularyEntry(
@@ -1280,7 +1280,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="사용하기 쉽고 편하다.",
                 example="스마트폰 덕분에 생활이 훨씬 편리해졌어요.",
-                ipa="pyeonrihada",
+                ipa="pyeollihada",
                 frequency_rank=716,
             ),
             VocabularyEntry(
@@ -1312,7 +1312,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="흩어진 것을 가지런하게 하다.",
                 example="배운 내용을 노트에 정리했어요.",
-                ipa="jeongrihada",
+                ipa="jeongnihada",
                 frequency_rank=409,
             ),
             VocabularyEntry(
@@ -1320,7 +1320,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="전체 내용을 간추리다.",
                 example="기사의 주요 내용을 한 문장으로 요약해 보세요.",
-                ipa="yoyakhada",
+                ipa="yoyakada",
                 frequency_rank=681,
             ),
             VocabularyEntry(
@@ -1336,7 +1336,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="생각이나 느낌을 나타내는 능력.",
                 example="글쓰기 연습을 하면 표현력이 늘어요.",
-                ipa="pyohyeonryeok",
+                ipa="pyohyeollyeok",
                 frequency_rank=717,
             ),
             VocabularyEntry(
@@ -1352,7 +1352,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="어떤 일을 해내는 능력.",
                 example="지난 학기보다 한국어 실력이 많이 늘었어요.",
-                ipa="silryeok",
+                ipa="sillyeok",
                 frequency_rank=378,
             ),
         ],

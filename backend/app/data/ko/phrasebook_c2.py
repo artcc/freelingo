@@ -45,7 +45,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "표현 강도를 조절할 때",
                 "formal",
                 "c2-unit-1",
-                romanization="ganghan danjeongeun pihaneun pyeoni joseumnida.",
+                romanization="ganghan danjeongeun pihaneun pyeoni jotseumnida.",
             ),
         ],
     ),
@@ -60,7 +60,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "전문 내용을 설명할 때",
                 "formal",
                 "c2-unit-2",
-                romanization="jeonmun yongeoreul swiun mallo pureo seolmyeonghagetsseumnida.",
+                romanization="jeonmun yongeoreul swiun mallo pureo seolmyeonghagetseumnida.",
             ),
             _p(
                 "핵심은 절차가 세 단계라는 점입니다.",
@@ -118,7 +118,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "번역 전략을 설명할 때",
                 "formal",
                 "c2-unit-4",
-                romanization="jigyeokboda gineungjeogeuro gakkaun pyohyeoni joseumnida.",
+                romanization="jigyeokboda gineungjeogeuro gakkaun pyohyeoni jotseumnida.",
             ),
             _p(
                 "문체와 공손성도 함께 옮겨야 합니다.",
@@ -164,21 +164,21 @@ C2_CATEGORIES.append(
                 "전달력 향상을 말할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="jeonmunseongeul yujihamyeonseodo pyohyeoneul swipge bakkugetsseumnida.",
+                romanization="jeonmunseongeul yujihamyeonseodo pyohyeoneul swipge bakkugetseumnida.",
             ),
             _p(
                 "원문의 함의를 해치지 않는 범위에서 재구성했습니다.",
                 "충실한 재구성을 설명할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="wonmunui hamuireul haechiji anneun beomwieseo jaeguseonghaetsseumnida.",
+                romanization="wonmunui hamuireul haechiji anneun beomwieseo jaeguseonghaetseumnida.",
             ),
             _p(
                 "직역하면 자연스럽지 않으므로 기능적으로 옮겼습니다.",
                 "의역 선택 이유를 말할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="jigyeokhamyeon jayeonseureopji aneumeuro gineungjeogeuro omgyeotsseumnida.",
+                romanization="jigyeokamyeon jayeonseureopji aneumeuro gineungjeogeuro omgyeotseumnida.",
             ),
             _p(
                 "문체와 공손성도 함께 반영해야 합니다.",
@@ -206,7 +206,7 @@ C2_CATEGORIES.append(
                 "전제의 미검토를 지적할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="i jujangui jeonjeneun ajik chungbunhi geomtodoeji anatsseumnida.",
+                romanization="i jujangui jeonjeneun ajik chungbunhi geomtodoeji anatseumnida.",
             ),
             _p(
                 "반증 사례를 포함하면 결론이 더 제한됩니다.",
@@ -220,7 +220,7 @@ C2_CATEGORIES.append(
                 "부분적 평가를 할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="nollineun myeonghwakhajiman geungeo jesiga yakamnida.",
+                romanization="nollineun myeonghwakajiman geungeo jesiga yakamnida.",
             ),
             _p(
                 "가치 판단을 명시해야 논의가 정리됩니다.",
@@ -241,7 +241,7 @@ C2_CATEGORIES.append(
                 "투명성-신뢰 관계를 말할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="tumyeongseongi hwakbodoeji aneumyeon silloereul eotgi eoryeopsseumnida.",
+                romanization="tumyeongseongi hwakbodoeji aneumyeon silloereul eotgi eoryeopseumnida.",
             ),
             _p(
                 "공정성과 효율성 사이에 긴장이 있습니다.",
@@ -269,7 +269,7 @@ C2_CATEGORIES.append(
                 "시간 차원 분리를 말할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="dangi seonggwawa janggi chaegimeul nanueo bogetsseumnida.",
+                romanization="dangi seonggwawa janggi chaegimeul nanueo bogetseumnida.",
             ),
             _p(
                 "합의 형성에는 충분한 설명이 필요합니다.",
@@ -283,7 +283,7 @@ C2_CATEGORIES.append(
                 "평이한 재설명을 약속할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="jeonmun yongeoreul pihaeseo dasi seolmyeonghagetsseumnida.",
+                romanization="jeonmun yongeoreul pihaeseo dasi seolmyeonghagetseumnida.",
             ),
             _p(
                 "엄밀히 말하면 두 조건을 구분해야 합니다.",
@@ -304,14 +304,14 @@ C2_CATEGORIES.append(
                 "논리적 오류를 경고할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="sanggwan gwangyewa ingwa gwangyereul hondonghamyeon an doemnida.",
+                romanization="sanggwangwangyewa ingwagwangyereul hondonghamyeon an doemnida.",
             ),
             _p(
                 "이 자료만으로는 단정하기 어렵습니다.",
                 "증거 불충분을 말할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="i jaryomaneuroneun danjeonghagi eoryeopsseumnida.",
+                romanization="i jaryomaneuroneun danjeonghagi eoryeopseumnida.",
             ),
             _p(
                 "배경 지식을 보충하면 이해하기 쉬워집니다.",
@@ -325,7 +325,7 @@ C2_CATEGORIES.append(
                 "최종 요약을 할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="gyeolloneul han munjangeuro yoyakagetsseumnida.",
+                romanization="gyeolloneul han munjangeuro yoyakagetseumnida.",
             ),
             _p(
                 "반대 의견을 포함하면 주장이 더 강해집니다.",
@@ -381,7 +381,7 @@ C2_CATEGORIES.append(
                 "정밀한 재구성을 약속할 때",
                 "formal",
                 "c2-unit-8",
-                romanization="nonuireul deo jeongmilhage jaeguseonghagetsseumnida.",
+                romanization="nonuireul deo jeongmilhage jaeguseonghagetseumnida.",
             ),
         ],
     )

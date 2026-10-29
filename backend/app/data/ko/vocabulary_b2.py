@@ -40,7 +40,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="상대방의 주장이나 의견에 반대하여 논리적으로 맞서다.",
                 example="의원은 상대당의 주장을 구체적인 통계 자료로 반박했다.",
-                ipa="banbakhada",
+                ipa="banbakada",
                 frequency_rank=927,
             ),
             VocabularyEntry(
@@ -56,7 +56,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="상대방을 이해시키거나 동의하게 만드는 힘.",
                 example="그의 연설은 논리적이면서도 감성적인 설득력이 뛰어났다.",
-                ipa="seoldeukryeok",
+                ipa="seoldeungnyeok",
                 frequency_rank=948,
             ),
             VocabularyEntry(
@@ -64,7 +64,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="서로 다른 입장을 가진 사람들이 동의할 수 있는 공통된 지점.",
                 example="여야는 긴 협상 끝에 예산안에 대한 합의점을 찾았다.",
-                ipa="hapuijeom",
+                ipa="habuijeom",
                 frequency_rank=1017,
             ),
         ],
@@ -104,7 +104,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="정보나 자료가 믿을 수 있는 정도.",
                 example="해당 보도의 신뢰성에 의문이 제기되어 재검증이 필요하다.",
-                ipa="sinroeseong",
+                ipa="silloeseong",
                 frequency_rank=955,
             ),
             VocabularyEntry(
@@ -264,7 +264,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="직장에서 맡은 일이나 작업.",
                 example="신입 사원은 업무에 적응하는 데 보통 한 달 정도 걸린다.",
-                ipa="eopmu",
+                ipa="eommu",
                 frequency_rank=673,
             ),
             VocabularyEntry(
@@ -280,7 +280,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="공동의 목표를 위해 함께 힘을 합쳐 일하다.",
                 example="마케팅팀과 개발팀이 협력하여 새로운 캠페인을 준비하고 있다.",
-                ipa="hyeopryeokhada",
+                ipa="hyeomnyeokada",
                 frequency_rank=1021,
             ),
             VocabularyEntry(
@@ -312,7 +312,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="어떤 일을 해낼 수 있는 능력이나 자질.",
                 example="이 회사는 직원들의 역량 강화를 위해 정기적으로 교육을 제공한다.",
-                ipa="yeokryang",
+                ipa="yeongnyang",
                 frequency_rank=963,
             ),
         ],
@@ -400,7 +400,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="앞으로의 일을 미리 짐작하여 말하다.",
                 example="기상청은 다음 주에 태풍이 북상할 것으로 예측했다.",
-                ipa="yecheukhada",
+                ipa="yecheukada",
                 frequency_rank=967,
             ),
             VocabularyEntry(
@@ -472,7 +472,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="사실을 다르게 비틀어 전하다.",
                 example="일부 매체는 사건의 진실을 왜곡하여 대중을 호도하고 있다.",
-                ipa="waegokhada",
+                ipa="waegokada",
                 frequency_rank=969,
             ),
             VocabularyEntry(
@@ -544,7 +544,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="어떤 현상이나 자료를 요소별로 나누어 자세히 살피다.",
                 example="데이터를 분석한 결과 소비 패턴에 의미 있는 변화가 발견되었다.",
-                ipa="bunseokhada",
+                ipa="bunseokada",
                 frequency_rank=647,
             ),
         ],
@@ -744,7 +744,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="상대방의 말이나 행동을 굳게 믿는 마음.",
                 example="비즈니스에서 가장 중요한 것은 고객과의 신뢰 관계이다.",
-                ipa="sinroe",
+                ipa="silloe",
                 frequency_rank=667,
             ),
             VocabularyEntry(
@@ -840,7 +840,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="기대되는 일을 앞두고 마음이 두근거리는 감정.",
                 example="첫 출근을 앞둔 그는 설렘과 긴장이 뒤섞인 표정이었다.",
-                ipa="seolrem",
+                ipa="seollem",
                 frequency_rank=949,
             ),
         ],
@@ -888,7 +888,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="서로 다른 의견을 가진 사람들이 의논하여 한 의견으로 모으는 일.",
                 example="3개월간의 협상 끝에 양측은 극적으로 합의에 도달했다.",
-                ipa="hapui",
+                ipa="habui",
                 frequency_rank=1016,
             ),
             VocabularyEntry(
@@ -896,7 +896,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="어느 한쪽으로 치우치지 않고 공평한 태도를 취하는.",
                 example="중재자는 중립적인 입장에서 양측의 의견을 경청해야 한다.",
-                ipa="jungripjeok",
+                ipa="jungnipjeok",
                 frequency_rank=992,
             ),
         ],
@@ -952,7 +952,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="어떤 학문이나 연구에서 사용하는 절차와 방법의 체계.",
                 example="이 연구는 정량적 방법론과 정성적 방법론을 병행하여 진행되었다.",
-                ipa="bangbeopron",
+                ipa="bangbeomnon",
                 frequency_rank=930,
             ),
             VocabularyEntry(
@@ -1040,7 +1040,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="앞으로 나아갈 직업이나 학업의 방향.",
                 example="고등학교 2학년이 되면서 진로 상담을 받는 학생들이 늘고 있다.",
-                ipa="jinro",
+                ipa="jillo",
                 frequency_rank=996,
             ),
             VocabularyEntry(
@@ -1048,7 +1048,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="대학 이상의 과정을 마친 사람에게 주는 자격이나 칭호.",
                 example="그는 서울대학교에서 경제학 학사 학위를 취득했다.",
-                ipa="hakwi",
+                ipa="hagwi",
                 frequency_rank=1015,
             ),
             VocabularyEntry(
@@ -1160,7 +1160,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="어떤 사안을 두고 사회적으로 의견이 갈려 다투는 일.",
                 example="이슈가 된 발언이 인터넷 커뮤니티에서 큰 논란을 불러일으켰다.",
-                ipa="nonran",
+                ipa="nollan",
                 frequency_rank=917,
             ),
             VocabularyEntry(
@@ -1176,7 +1176,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="자신의 이름이나 신분을 밝히지 않는 것.",
                 example="익명의 댓글은 책임감이 약해 악플로 이어질 위험이 크다.",
-                ipa="ikmyeong",
+                ipa="ingmyeong",
                 frequency_rank=975,
             ),
             VocabularyEntry(
@@ -1184,7 +1184,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="어떤 사실이나 내용이 확실한지 알아보는 일.",
                 example="온라인에서 공유된 정보를 무조건 믿지 말고 반드시 사실 확인을 거쳐야 한다.",
-                ipa="hwakin",
+                ipa="hwagin",
                 frequency_rank=183,
             ),
             VocabularyEntry(
@@ -1272,7 +1272,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="말이나 글의 핵심을 간추려 짧게 정리하다.",
                 example="이 장의 내용을 한 문단으로 요약해 보세요.",
-                ipa="yoyakhada",
+                ipa="yoyakada",
                 frequency_rank=681,
             ),
             VocabularyEntry(
@@ -1288,7 +1288,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="이론이나 지식을 실제 상황에 맞게 쓰다.",
                 example="배운 문법을 실제 대화에 적용하는 연습이 중요하다.",
-                ipa="jeokyonghada",
+                ipa="jeogyonghada",
                 frequency_rank=985,
             ),
             VocabularyEntry(
@@ -1304,7 +1304,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="흩어진 내용을 체계적으로 간추려 모으다.",
                 example="시험 전에 배운 내용을 한눈에 정리해 두면 복습에 도움이 된다.",
-                ipa="jeongrihada",
+                ipa="jeongnihada",
                 frequency_rank=409,
             ),
             VocabularyEntry(

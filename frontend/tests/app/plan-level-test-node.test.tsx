@@ -295,7 +295,7 @@ describe('My Plan level test node', () => {
     )
     render(<PlanPage />)
     expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
-    expect(useLoadingStore.getState().count).toBe(0)
+    await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
     expect(
       mockApiFetch.mock.calls.every(([url]) => url === '/api/languages')
     ).toBe(true)
@@ -306,7 +306,7 @@ describe('My Plan level test node', () => {
       '/api/curriculum/A1?language=de-DE'
     )
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
-    expect(useLoadingStore.getState().count).toBe(0)
+    await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
   })
 
   it.each([200, 503])(

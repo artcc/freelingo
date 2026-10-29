@@ -5,10 +5,10 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic
 C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     GrammarTopic(
         slug="subjuntivo-concessivo",
-        title="Conjuntivo em oracoes concessivas",
+        title="Conjuntivo em orações concessivas",
         level="C1",
         category="Conjuntivo",
-        summary="Uso avancado do conjuntivo em oracoes concessivas.",
+        summary="Uso avançado do conjuntivo em orações concessivas.",
         explanation="Por mais que, por muito que, ainda que, mesmo que, nem que + conjuntivo.",
         rules=[
             "Por mais/muito que + conjuntivo.",
@@ -20,7 +20,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Mesmo que me pagassem, nao faria esse trabalho.",
+                text="Mesmo que me pagassem, não faria esse trabalho.",
                 translation=None,
             ),
         ],
@@ -39,10 +39,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="subjuntivo-final",
-        title="Conjuntivo em oracoes finais",
+        title="Conjuntivo em orações finais",
         level="C1",
         category="Conjuntivo",
-        summary="Conjuntivo apos conectores finais.",
+        summary="Conjuntivo após conectores finais.",
         explanation="Para que/a fim de que/de modo a que + conjuntivo (sujeito diferente). Mesmo sujeito: para + infinitivo.",
         rules=[
             "Para que + conj. (sujeito diferente).",
@@ -56,41 +56,41 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Estudo para que eu passe.",
+                wrong="Estudo para eu passarão.",
                 correct="Estudo para passar.",
-                note="Mesmo sujeito: para + inf.",
+                note="Com o mesmo sujeito, para + infinitivo é geralmente mais económico; para que eu passe também pode ser gramatical.",
             ),
         ],
         related=["presente-conjuntivo", "conectores-avancados", "infinitivo-pessoal"],
     ),
     GrammarTopic(
         slug="subjuntivo-relativo",
-        title="Conjuntivo em oracoes relativas",
+        title="Conjuntivo em orações relativas",
         level="C1",
         category="Conjuntivo",
         summary="Conjuntivo com antecedente indeterminado.",
-        explanation="Conjuntivo para antecedente desconhecido. Indicativo para especifico. Ha quem / Nao ha quem + conjuntivo.",
+        explanation="Conjuntivo para antecedente desconhecido. Indicativo para específico. Há quem / Não há quem + conjuntivo.",
         rules=[
-            "Conjuntivo: hipotetico.",
-            "Indicativo: especifico.",
+            "Conjuntivo: hipotético.",
+            "Indicativo: específico.",
         ],
         examples=[
             GrammarExample(
-                text="Procuro alguem que fale chines.",
+                text="Procuro alguém que fale chinês.",
                 translation=None,
                 note="indeterminado",
             ),
             GrammarExample(
-                text="Conheco alguem que fala chines.",
+                text="Conheço alguém que fala chinês.",
                 translation=None,
-                note="especifico",
+                note="específico",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Procuro alguem que fala chines.",
-                correct="Procuro alguem que fale chines.",
-                note="Indeterminado -> conjuntivo.",
+                wrong="Procuro alguém que falem chinês.",
+                correct="Procuro alguém que fale chinês.",
+                note="Alguém exige singular. O conjuntivo apresenta um perfil desejado; o indicativo pode referir alguém cuja existência é assumida.",
             ),
         ],
         related=["presente-conjuntivo", "que-relativo"],
@@ -100,15 +100,15 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Voz passiva reflexa",
         level="C1",
         category="Voz passiva",
-        summary="Usos avancados da voz passiva com o pronome se.",
-        explanation="Aprecia-se, comenta-se, realizar-se-a (mesoclise), observa-se. Uso academico e jornalistico.",
+        summary="Usos avançados da voz passiva com o pronome se.",
+        explanation="Aprecia-se, comenta-se, realizar-se-á (mesóclise), observa-se. Uso académico e jornalístico.",
         rules=[
             "Aprecia-se/comenta-se = passiva reflexa.",
-            "Realizar-se-a = sera realizado.",
+            "Realizar-se-á = será realizado.",
         ],
         examples=[
             GrammarExample(
-                text="Comenta-se que o acordo sera assinado amanha.",
+                text="Comenta-se que o acordo será assinado amanhã.",
                 translation=None,
             ),
             GrammarExample(
@@ -121,25 +121,25 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="nominalizacao",
-        title="Nominalizacao",
+        title="Nominalização",
         level="C1",
-        category="Avancado",
+        category="Avançado",
         summary="Transformar verbos e adjetivos em substantivos.",
-        explanation="Implementar -> implementacao. Melhorar -> melhoria. Construir -> construcao. Evitar cadeias.",
+        explanation="Implementar -> implementação. Melhorar -> melhoria. Construir -> construção. Evitar cadeias.",
         rules=[
             "Verbo -> substantivo.",
-            "Evitar cadeias de nominalizacoes.",
+            "Evitar cadeias de nominalizações.",
         ],
         examples=[
             GrammarExample(
-                text="A implementacao do programa foi bem-sucedida.",
+                text="A implementação do programa foi bem-sucedida.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="A realizacao da implementacao da verificacao.",
-                correct="A verificacao dos dados.",
+                wrong="A realização da implementação da verificação.",
+                correct="A verificação dos dados.",
                 note="Evitar cadeias.",
             ),
         ],
@@ -149,13 +149,13 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="impessoalidade",
         title="Impessoalidade",
         level="C1",
-        category="Avancado",
-        summary="Tecnicas de impessoalidade no discurso formal.",
-        explanation="Voz passiva, se impessoal, nominalizacao, expressoes impessoais (Convem salientar que...).",
+        category="Avançado",
+        summary="Técnicas de impessoalidade no discurso formal.",
+        explanation="Voz passiva, se impessoal, nominalização, expressões impessoais (Convém salientar que...).",
         rules=[
             "Voz passiva, se impessoal.",
-            "Nominalizacoes.",
-            "Convem/importa + infinitivo.",
+            "Nominalizações.",
+            "Convém/importa + infinitivo.",
         ],
         examples=[
             GrammarExample(
@@ -165,7 +165,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Eu observei um aumento. (academico)",
+                wrong="Eu observei um aumento. (académico)",
                 correct="Foi observado um aumento.",
                 note="Evitar 1a pessoa.",
             ),
@@ -174,24 +174,24 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="campos-semanticos",
-        title="Campos semanticos",
+        title="Campos semânticos",
         level="C1",
-        category="Avancado",
-        summary="Agrupamentos lexicais por dominios.",
-        explanation="Exemplo: justica -> tribunal, juiz, advogado, reu, sentenca, julgar, condenar, absolver.",
+        category="Avançado",
+        summary="Agrupamentos lexicais por domínios.",
+        explanation="Exemplo: justiça -> tribunal, juiz, advogado, réu, sentença, julgar, condenar, absolver.",
         rules=[
-            "Agrupar vocabulario por areas.",
+            "Agrupar vocabulário por áreas.",
         ],
         examples=[
             GrammarExample(
-                text="O juiz condenou o reu com base nas provas. (campo: justica)",
+                text="O juiz condenou o réu com base nas provas. (campo: justiça)",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Usar lexico de campo errado.",
-                correct="Verificar o campo semantico adequado.",
+                wrong="Usar léxico de campo errado.",
+                correct="Verificar o campo semântico adequado.",
                 note="",
             ),
         ],
@@ -199,52 +199,52 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="derivacao",
-        title="Derivacao",
+        title="Derivação",
         level="C1",
-        category="Avancado",
-        summary="Mecanismos de formacao de palavras.",
-        explanation="Prefixos: re-, in-/im-, des-. Sufixos: -cao, -mento, -dade, -vel, -izar.",
+        category="Avançado",
+        summary="Mecanismos de formação de palavras.",
+        explanation="Prefixos: re-, in-/im-, des-. Sufixos: -ção, -mento, -dade, -vel, -izar.",
         rules=[
             "Prefixos e sufixos formam palavras.",
         ],
         examples=[
             GrammarExample(text="feliz -> infeliz -> felicidade", translation=None),
             GrammarExample(
-                text="construir -> construcao -> reconstrutivo",
+                text="construir -> construção -> reconstrutivo",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Infelicidade: verificar se e atestada.",
-                correct="Infelicidade: ver em dicionario.",
-                note="Nem todas as derivacoes sao validas.",
+                wrong="A desfelicidade dele era evidente.",
+                correct="A infelicidade dele era evidente.",
+                note="Infelicidade é a forma lexical estabelecida; nem todos os prefixos se combinam livremente com todas as bases.",
             ),
         ],
         related=["campos-semanticos", "precisao-lexica"],
     ),
     GrammarTopic(
         slug="precisao-lexica",
-        title="Precisao lexica",
+        title="Precisão léxica",
         level="C1",
-        category="Avancado",
+        category="Avançado",
         summary="Escolher a palavra exata.",
         explanation="Dizer vs falar, Ver vs olhar, Ouvir vs escutar, Saber vs conhecer.",
         rules=[
-            "Dizer (informacao) vs falar (comunicacao).",
+            "Dizer (informação) vs falar (comunicação).",
             "Saber (facto) vs conhecer (familiaridade).",
         ],
         examples=[
             GrammarExample(
-                text="Sei a resposta. / Conheco bem essa pessoa.",
+                text="Sei a resposta. / Conheço bem essa pessoa.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Conheco a resposta.",
-                correct="Sei a resposta.",
-                note="Conhecer = familiaridade.",
+                wrong="Conheço nadar.",
+                correct="Sei nadar.",
+                note="Saber + infinitivo exprime uma capacidade. Conheço a resposta e Sei a resposta são ambas construções válidas.",
             ),
         ],
         related=["derivacao", "campos-semanticos", "falsos-amigos"],
@@ -253,24 +253,24 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="ironia",
         title="Ironia",
         level="C1",
-        category="Avancado",
-        summary="A ironia como recurso retorico.",
-        explanation="Dizer o contrario do que se pensa. Traco cultural portugues.",
+        category="Avançado",
+        summary="A ironia como recurso retórico.",
+        explanation="A ironia cria uma distância entre o sentido literal e a intenção, frequentemente dizendo o contrário do que se pretende comunicar. A interpretação depende do contexto e da entoação; não é uma característica exclusiva de uma cultura.",
         rules=[
-            "Ironia = dizer o contrario.",
-            "Traco cultural portugues.",
+            "Ironia = dizer o contrário.",
+            "Interpretar segundo o contexto, a relação entre interlocutores e a entoação.",
         ],
         examples=[
             GrammarExample(
                 text="Pois sim, acredito muito nisso.",
                 translation=None,
-                note="ironico",
+                note="irónico",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
                 wrong="Interpretar ironia literalmente.",
-                correct="Prestar atencao a entoacao e contexto.",
+                correct="Prestar atenção à entoação e ao contexto.",
                 note="",
             ),
         ],
@@ -278,25 +278,25 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="humor-portugues",
-        title="Humor a portuguesa",
+        title="Humor à portuguesa",
         level="C1",
-        category="Avancado",
-        summary="Caracteristicas do humor portugues.",
-        explanation="Autoironia, sarcasmo afavel, resignacao comica, subentendido, desenrascanco.",
+        category="Avançado",
+        summary="Características do humor português.",
+        explanation="Autoironia, sarcasmo afável, resignação cómica, subentendido, desenrascanço.",
         rules=[
             "Autoironia, sarcasmo.",
-            "Resignacao comica.",
-            "Desenrascanco.",
+            "Resignação cómica.",
+            "Desenrascanço.",
         ],
         examples=[
-            GrammarExample(text="Como estas? -- Vai-se andando.", translation=None),
-            GrammarExample(text="Isto so acontece em Portugal.", translation=None),
+            GrammarExample(text="Como estás? -- Vai-se andando.", translation=None),
+            GrammarExample(text="Isto só acontece em Portugal.", translation=None),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Confundir sarcasmo portugues com grosseria.",
-                correct="O sarcasmo portugues e frequentemente afavel.",
-                note="",
+                wrong="Presumir que um comentário sarcástico é sempre amigável.",
+                correct="Avaliar o contexto e a reação do interlocutor.",
+                note="O sarcasmo pode ser afetuoso ou ofensivo; a nacionalidade não determina a intenção.",
             ),
         ],
         related=["ironia", "duplo-sentido", "expressoes-idiomaticas"],
@@ -305,22 +305,22 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="duplo-sentido",
         title="Duplo sentido",
         level="C1",
-        category="Avancado",
+        category="Avançado",
         summary="Jogos de palavras e ambiguidade.",
-        explanation="Ambiguidade lexical e sintatica. Usado em humor, publicidade e literatura.",
+        explanation="Ambiguidade lexical e sintática. Usado em humor, publicidade e literatura.",
         rules=[
-            "Ambiguidade lexical e sintatica.",
+            "Ambiguidade lexical e sintática.",
         ],
         examples=[
             GrammarExample(
-                text="Ele e um genio. (pode ser ironico)",
+                text="Vi o homem com os binóculos.",
                 translation=None,
-                note="duplo sentido",
+                note="Pode indicar o instrumento usado para ver ou identificar o homem que tinha os binóculos.",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Duplo sentido nao intencional em textos formais.",
+                wrong="Duplo sentido não intencional em textos formais.",
                 correct="Rever para evitar ambiguidades.",
                 note="",
             ),
@@ -329,22 +329,22 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="recursos-retoricos",
-        title="Recursos retoricos",
+        title="Recursos retóricos",
         level="C1",
-        category="Avancado",
-        summary="Catalogo de figuras de retorica.",
-        explanation="Pergunta retorica, anafora, gradacao, paradoxo, antitese.",
+        category="Avançado",
+        summary="Catálogo de figuras de retórica.",
+        explanation="Pergunta retórica, anáfora, gradação, paradoxo, antítese.",
         rules=[
-            "Pergunta retorica, anafora.",
-            "Paradoxo, antitese.",
+            "Pergunta retórica, anáfora.",
+            "Paradoxo, antítese.",
         ],
         examples=[
             GrammarExample(
-                text="Quem nunca errou? (pergunta retorica)",
+                text="Quem nunca errou? (pergunta retórica)",
                 translation=None,
             ),
             GrammarExample(
-                text="O silencio ensurdecedor da noite. (paradoxo)",
+                text="O silêncio ensurdecedor da noite. (paradoxo)",
                 translation=None,
             ),
         ],
@@ -355,23 +355,23 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="persuasao",
-        title="Persuasao",
+        title="Persuasão",
         level="C1",
-        category="Avancado",
-        summary="Tecnicas de persuasao no discurso.",
-        explanation="Ethos (credibilidade), Pathos (emocao), Logos (logica). Adaptar ao publico.",
+        category="Avançado",
+        summary="Técnicas de persuasão no discurso.",
+        explanation="Ethos (credibilidade), Pathos (emoção), Logos (lógica). Adaptar ao público.",
         rules=[
             "Ethos, Pathos, Logos.",
         ],
         examples=[
             GrammarExample(
-                text="Enquanto profissional com 20 anos de experiencia, recomendo... (ethos)",
+                text="Enquanto profissional com 20 anos de experiência, recomendo... (ethos)",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Apelos emocionais sem fundamentacao.",
+                wrong="Apelos emocionais sem fundamentação.",
                 correct="Combinar pathos com logos.",
                 note="",
             ),
@@ -380,23 +380,23 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="figuras-literarias",
-        title="Figuras literarias",
+        title="Figuras literárias",
         level="C1",
-        category="Avancado",
-        summary="Metafora, metonimia, sine doque e outras figuras.",
-        explanation="Metafora, comparacao, metonimia, sine doque, personificacao, hiperbole.",
+        category="Avançado",
+        summary="Metáfora, metonímia, sinédoque e outras figuras.",
+        explanation="Metáfora, comparação, metonímia, sinédoque, personificação, hipérbole.",
         rules=[
-            "Metafora, metonimia.",
-            "Personificacao, hiperbole.",
+            "Metáfora, metonímia.",
+            "Personificação, hipérbole.",
         ],
         examples=[
-            GrammarExample(text="O tempo e dinheiro. (metafora)", translation=None),
-            GrammarExample(text="Portugal venceu o jogo. (metonimia)", translation=None),
+            GrammarExample(text="O tempo é dinheiro. (metáfora)", translation=None),
+            GrammarExample(text="Portugal venceu o jogo. (metonímia)", translation=None),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Confundir metafora com comparacao.",
-                correct="Metafora = identificacao. Comparacao = como.",
+                wrong="Confundir metáfora com comparação.",
+                correct="Metáfora = identificação. Comparação = como.",
                 note="",
             ),
         ],
@@ -404,19 +404,19 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="portugues-brasileiro",
-        title="Portugues brasileiro vs europeu",
+        title="Português brasileiro vs europeu",
         level="C1",
-        category="Avancado",
-        summary="Principais diferencas entre PB e PE.",
-        explanation="PB: gerundio, proclise. PE: a + infinitivo, enclise. Lexico diferente.",
+        category="Avançado",
+        summary="Principais diferenças entre PB e PE.",
+        explanation="PB: gerúndio, próclise. PE: a + infinitivo, ênclise. Léxico diferente.",
         rules=[
-            "PB: gerundio. PE: a + inf.",
-            "PB: proclise. PE: enclise.",
+            "PB: gerúndio. PE: a + inf.",
+            "PB: próclise. PE: ênclise.",
         ],
         examples=[
-            GrammarExample(text="PE: pequeno-almoco. / PB: cafe da manha.", translation=None),
+            GrammarExample(text="PE: pequeno-almoço. / PB: café da manhã.", translation=None),
             GrammarExample(
-                text="PE: Da-me um cafe. / PB: Me da um cafe.",
+                text="PE: Dá-me um café. / PB: Me dá um café.",
                 translation=None,
             ),
         ],
@@ -431,47 +431,47 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="portugues-europeu",
-        title="Particularidades do portugues europeu",
+        title="Particularidades do português europeu",
         level="C1",
-        category="Avancado",
-        summary="Caracteristicas distintivas do PE.",
-        explanation="Estar a + inf., enclise/mesoclise, artigo + possessivo, artigo + nome proprio, tu + 2a pessoa, infinitivo pessoal.",
+        category="Avançado",
+        summary="Características distintivas do PE.",
+        explanation="Estar a + inf., ênclise/mesóclise, artigo + possessivo, artigo + nome próprio, tu + 2a pessoa, infinitivo pessoal.",
         rules=[
             "Estar a + inf.",
-            "Enclise e mesoclise.",
-            "Artigo + possessivo + nome proprio.",
+            "Ênclise e mesóclise.",
+            "Artigo + possessivo + nome próprio.",
         ],
         examples=[
             GrammarExample(
-                text="O Pedro esta a estudar para o exame.",
+                text="O Pedro está a estudar para o exame.",
                 translation=None,
             ),
             GrammarExample(
-                text="Dar-te-ei o livro amanha.",
+                text="Dar-te-ei o livro amanhã.",
                 translation=None,
-                note="mesoclise",
+                note="mesóclise",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
                 wrong="Me apetece sair.",
                 correct="Apetece-me sair.",
-                note="EP nao comeca frase com pronome atono.",
+                note="EP não começa frase com pronome átono.",
             ),
         ],
         related=["portugues-brasileiro", "diferencas-regionais", "estar-a-infinitivo"],
     ),
     GrammarTopic(
         slug="diferencas-regionais",
-        title="Diferencas regionais em portugal",
+        title="Diferenças regionais em Portugal",
         level="C1",
-        category="Avancado",
-        summary="Variacao dialetal dentro de Portugal.",
-        explanation="Norte: vos residual, fino, cimbalino. Sul: gerundio. Ilhas: lexico proprio. Padrao: Coimbra-Lisboa.",
+        category="Avançado",
+        summary="Variação dialetal dentro de Portugal.",
+        explanation="Norte: vós em alguns usos regionais, fino, cimbalino. Sul: gerúndio. Ilhas: léxico próprio. Padrão: Coimbra-Lisboa.",
         rules=[
-            "Norte: lexico proprio.",
-            "Sul: gerundio.",
-            "Padrao: Coimbra-Lisboa.",
+            "Norte: léxico próprio.",
+            "Sul: gerúndio.",
+            "Padrão: Coimbra-Lisboa.",
         ],
         examples=[
             GrammarExample(
@@ -482,8 +482,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Assumir que todo o pais fala igual.",
-                correct="Respeitar a variacao regional.",
+                wrong="Assumir que todo o país fala igual.",
+                correct="Respeitar a variação regional.",
                 note="",
             ),
         ],
@@ -491,48 +491,48 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="sintese-textual",
-        title="Sintese textual",
+        title="Síntese textual",
         level="C1",
-        category="Avancado",
-        summary="Tecnicas para resumir textos.",
-        explanation="Identificar ideia principal, eliminar redundancias, nominalizar, parafrasear. Sintese = 20-30% do original.",
+        category="Avançado",
+        summary="Técnicas para resumir textos.",
+        explanation="Identifica a ideia principal, preserva as relações entre argumentos e elimina detalhes dispensáveis sem acrescentar opiniões. A extensão da síntese depende do objetivo e das instruções, não de uma percentagem fixa.",
         rules=[
             "Ideia principal.",
-            "Eliminar redundancias.",
-            "20-30% do original.",
+            "Eliminar redundâncias.",
+            "Respeitar o limite e o objetivo pedidos, preservando o sentido do original.",
         ],
         examples=[
             GrammarExample(
-                text="Em suma, o autor defende que a globalizacao trouxe mais beneficios.",
+                text="Em suma, o autor defende que a globalização trouxe mais benefícios.",
                 translation=None,
             ),
         ],
         common_mistakes=[
-            GrammarMistake(wrong="Sintese demasiado longa.", correct="Sintese concisa.", note=""),
+            GrammarMistake(wrong="Síntese demasiado longa.", correct="Síntese concisa.", note=""),
         ],
         related=["coesao-textual", "critica-construtiva", "reformulacao"],
     ),
     GrammarTopic(
         slug="critica-construtiva",
-        title="Critica construtiva",
+        title="Crítica construtiva",
         level="C1",
-        category="Avancado",
-        summary="Formular criticas de forma elegante.",
-        explanation="Comecar pelo positivo, usar condicional, perguntar em vez de afirmar, focar na solucao.",
+        category="Avançado",
+        summary="Formular críticas de forma elegante.",
+        explanation="Começar pelo positivo, usar condicional, perguntar em vez de afirmar, focar na solução.",
         rules=[
             "Positivo primeiro.",
             "Condicional: seria, poderia.",
         ],
         examples=[
             GrammarExample(
-                text="O relatorio esta muito completo. Talvez fosse util incluir mais dados.",
+                text="O relatório está muito completo. Talvez fosse útil incluir mais dados.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Isto esta errado.",
-                correct="Esta seccao poderia beneficiar de uma revisao.",
+                wrong="Isto está errado.",
+                correct="Esta secção poderia beneficiar de uma revisão.",
                 note="",
             ),
         ],
@@ -540,18 +540,18 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="reformulacao",
-        title="Reformulacao",
+        title="Reformulação",
         level="C1",
-        category="Avancado",
-        summary="Tecnicas para reformular ideias.",
-        explanation="Isto e, ou seja, dito de outra forma. Parafrasear, mudar registo, alterar voz.",
+        category="Avançado",
+        summary="Técnicas para reformular ideias.",
+        explanation="Isto é, ou seja, dito de outra forma. Parafrasear, mudar registo, alterar voz.",
         rules=[
-            "Isto e / ou seja.",
+            "Isto é / ou seja.",
             "Adaptar registo.",
         ],
         examples=[
             GrammarExample(
-                text="O evento foi cancelado. Ou seja, nao havera concerto.",
+                text="O evento foi cancelado. Ou seja, não haverá concerto.",
                 translation=None,
             ),
         ],
@@ -559,7 +559,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Ou seja, tipo, quer dizer...",
                 correct="Ou seja,...",
-                note="Um reformulador e suficiente.",
+                note="Um reformulador é suficiente.",
             ),
         ],
         related=["sintese-textual", "critica-construtiva", "registo-formal"],

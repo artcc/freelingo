@@ -23,7 +23,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "saluti_a1",
             "presentazioni_a1",
         ],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Si presenta usando essere e avere: nome, età, nazionalità — Sono Marco, ho 25 anni, sono italiano",
             "Saluta e si congeda con il registro corretto: ciao, buongiorno, buonasera, arrivederci, a presto",
@@ -48,9 +48,9 @@ A1_UNITS: list[CurriculumUnit] = [
             "articoli-indeterminativi",
         ],
         vocabulary_set_ids=["nazionalità_a1", "professioni_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Indica nazionalità e professione usando essere con la forma corretta maschile/femminile: sono inglese/inglesa, sono medico/dottoressa",
+            "Indica nazionalità e professione usando essere: sono italiano/italiana, sono inglese (per entrambi i generi), sono medico/dottoressa",
             "Applica la concordanza di genere: i nomi italiani in -o sono di norma maschili, in -a di norma femminili, e in -e possono essere entrambi — verifica il genere del nome con l'articolo",
             "Usa correttamente un/uno/una/un', incluso uno davanti a s+consonante e z: uno studente, un amico, una pizza, un'amica",
             "Produce una breve autopresentazione (4-5 frasi) combinando essere, avere, nazionalità e professione",
@@ -76,7 +76,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "corpo_a1",
             "vestiti_a1",
         ],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa gli aggettivi possessivi (mio, tuo, suo, nostro, vostro, loro) con l'articolo nella maggior parte dei casi: la mia famiglia, il mio cane — ma omette l'articolo con i nomi di famiglia singolari non modificati: mia madre, tuo fratello, sua sorella",
             "Descrive aspetto fisico e personalità usando aggettivi concordati in genere e numero: alto/alta/alti/alte, simpatico/simpatica",
@@ -98,7 +98,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "verbi-riflessivi",
         ],
         vocabulary_set_ids=["routine_a1", "orari_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Coniuga i verbi regolari in -are (parlare), -ere (leggere) e -ire nei due modelli: dormire (dormo/dormi/dorme) e capire, che prende -isco al singolare e alla terza plurale: capisco, capisci, capisce, capiamo, capite, capiscono",
             "Usa i verbi riflessivi con il pronome corretto: mi alzo, ti lavi, si veste, ci svegliamo — e li combina in sequenza per descrivere la routine del mattino",
@@ -115,7 +115,7 @@ A1_UNITS: list[CurriculumUnit] = [
         title="Gusti e preferenze",
         grammar_points=["piacere", "verbi-modali", "anche-neanche"],
         vocabulary_set_ids=["cibo_a1", "attività_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa correttamente piacere: mi piace + nome singolare/infinito (Mi piace la pizza, Mi piace leggere) vs mi piacciono + nome plurale (Mi piacciono i libri)",
             "Usa dovere, potere e volere come verbi modali seguiti dall'infinito, coniugandoli in tutte le persone: devo studiare, puoi venire?, vuole mangiare",
@@ -136,7 +136,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "numeri-ordinali",
         ],
         vocabulary_set_ids=["luoghi_a1", "indicazioni_a1", "casa_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa correttamente le preposizioni articolate: nel, nello, nella, nei, negli, nelle; al, allo, alla, ai, agli, alle",
             "Dà indicazioni usando l'imperativo informale dei verbi chiave: vai/va', gira, prendi, continua, attraversa, segui — e lo combina con le preposizioni: gira a destra/sinistra, va' sempre dritto",
@@ -153,7 +153,7 @@ A1_UNITS: list[CurriculumUnit] = [
         title="Piani e futuro",
         grammar_points=["futuro-semplice", "stare-per", "giorni-settimana"],
         vocabulary_set_ids=["trasporti_a1", "meteo_a1", "date_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Coniuga il futuro semplice dei verbi regolari: parlerò, leggerai, partirà — e le radici irregolari più comuni: sar-, avrò, farò, andrò, verrò, dovrò, potrò, vorrò",
             "Usa stare per + infinito per esprimere un'azione imminente: Sto per uscire",
@@ -181,7 +181,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "preposizioni-articolate",
         ],
         vocabulary_set_ids=["ripasso_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Sostiene un breve scambio orale o scritto su temi familiari usando essere, avere e presente senza blocchi rilevanti",
             "Usa con coerenza le preposizioni articolate e la regola lo/gli senza errori sistematici",

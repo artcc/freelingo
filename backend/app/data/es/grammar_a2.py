@@ -4,12 +4,85 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic
 
 A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     GrammarTopic(
+        slug="preterito-perfecto",
+        title="Pretérito perfecto compuesto",
+        level="A2",
+        category="Tiempos verbales",
+        summary="He hablado, has comido, han vivido — experiencias y hechos pasados vinculados al presente.",
+        explanation="El **pretérito perfecto compuesto** se forma con el presente de **haber + participio**. El participio es invariable: *he comido*, no *he comida*.\n\n| Persona | Haber | Participio |\n|---------|-------|------------|\n| yo | he | hablado/comido/vivido |\n| tú | has | hablado/comido/vivido |\n| él/ella/usted | ha | hablado/comido/vivido |\n| nosotros/as | hemos | hablado/comido/vivido |\n| vosotros/as | habéis | hablado/comido/vivido |\n| ellos/ellas/ustedes | han | hablado/comido/vivido |\n\nSe utiliza para experiencias (*He visitado Japón*), resultados vinculados al presente (*He perdido las llaves*) y, en buena parte de España, hechos dentro de un periodo que se considera abierto (*Hoy he ido al médico*).\n\nEl contraste *hoy he ido / ayer fui* es frecuente en buena parte de España, pero no universal. En muchas variedades americanas y en algunas zonas españolas se usa también el indefinido en contextos como *Hoy fui al médico*. Los marcadores temporales orientan la elección, pero no imponen siempre un único tiempo.",
+        structure="haber (he/has/ha/hemos/habéis/han) + participio (-ado/-ido)",
+        rules=[
+            "El participio no concuerda con el sujeto: ella ha comido, ellas han comido.",
+            "Participios regulares: hablar → hablado, comer → comido, vivir → vivido.",
+            "Participios irregulares frecuentes: hecho, dicho, visto, escrito, puesto, vuelto, roto, muerto, abierto, cubierto.",
+            "Hoy, esta semana, ya, todavía no y alguna vez aparecen con frecuencia con el perfecto; su uso depende del contexto y de la variedad.",
+        ],
+        examples=[
+            GrammarExample(text="Hoy he comido paella.", translation=None),
+            GrammarExample(text="¿Has estado alguna vez en México?", translation=None),
+            GrammarExample(text="Todavía no hemos terminado el proyecto.", translation=None),
+            GrammarExample(text="Ya he visto esa película.", translation=None),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Ella ha comida paella.",
+                correct="Ella ha comido paella.",
+                note="Con haber, el participio es invariable.",
+            ),
+            GrammarMistake(
+                wrong="Han rompido la ventana.",
+                correct="Han roto la ventana.",
+                note='El participio de romper es "roto".',
+            ),
+        ],
+        related=["pluscuamperfecto", "marcadores-perfecto", "preterito-indefinido-regular"],
+    ),
+    GrammarTopic(
+        slug="por-para",
+        title="Por y para: usos y diferencias",
+        level="A2",
+        category="Preposiciones",
+        summary="Usos de por (causa, medio y recorrido) y para (finalidad, destinatario y plazo).",
+        explanation="**Por** y **para** tienen distintos usos según el contexto.\n\n**Por**:\n- Causa: *Llegué tarde por el tráfico*.\n- Medio: *Te llamo por teléfono*.\n- Recorrido: *Paseamos por el parque*.\n- Ubicación aproximada: *Está por aquí*.\n- Parte del día: *Llegaré por la tarde*.\n- Precio: *Lo compré por diez euros*.\n- Frecuencia: *Voy dos veces por semana*.\n- Sustitución: *Hoy trabajo por mi compañero*.\n\n**Para**:\n- Finalidad: *Estudio para aprender*.\n- Destinatario: *El regalo es para ti*.\n- Dirección: *Salgo para Madrid*.\n- Plazo: *Lo necesito para el lunes*.\n- Opinión: *Para mí, es la mejor opción*.\n\n**Ampliación**: por también introduce al agente de la pasiva (*El libro fue escrito por Ana*); para puede contrastar con una expectativa (*Para ser principiante, habla muy bien*). No hay una sustitución única que explique todos los usos: aprende cada preposición en su contexto.",
+        structure="POR: causa · medio · recorrido · precio · frecuencia · agente\nPARA: finalidad · destinatario · dirección · plazo · opinión",
+        rules=[
+            'Por introduce una causa: "Lo hice por necesidad".',
+            'Para + infinitivo expresa finalidad: "Ahorro para viajar".',
+            'El medio se expresa con por: "Lo envío por correo".',
+            'El destinatario se expresa con para: "El regalo es para Ana".',
+            'Por y para pueden formar frases correctas con sentidos distintos: "Trabaja por su familia" (motivo) y "Trabaja para una empresa" (destinatario de su trabajo).',
+        ],
+        examples=[
+            GrammarExample(
+                text="Estudio español para viajar por Latinoamérica.",
+                translation=None,
+                note="para = finalidad; por = recorrido",
+            ),
+            GrammarExample(text="Gracias por todo. El regalo es para ti.", translation=None),
+            GrammarExample(text="Pasé por tu oficina, pero no estabas.", translation=None),
+            GrammarExample(text="Este informe es para el viernes.", translation=None),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Gracias para la invitación.",
+                correct="Gracias por la invitación.",
+                note='Con "gracias" se usa por para introducir el motivo del agradecimiento.',
+            ),
+            GrammarMistake(
+                wrong="Estudio para aprenderé español.",
+                correct="Estudio para aprender español.",
+                note="Para expresar la finalidad con el mismo sujeto, se usa para + infinitivo.",
+            ),
+        ],
+        related=["preposiciones-lugar", "voz-pasiva", "conectores-avanzados"],
+    ),
+    GrammarTopic(
         slug="preterito-indefinido-regular",
         title="Pretérito indefinido regular",
         level="A2",
         category="Tiempos verbales",
         summary="El pasado simple para acciones terminadas: conjugación regular de -ar, -er, -ir.",
-        explanation="El **pretérito indefinido** (o pretérito perfecto simple) expresa **acciones pasadas y terminadas**, sin conexión con el presente.\n\n| Persona | -ar (hablar) | -er (comer) | -ir (vivir) |\n|--------|-------------|-------------|------------|\n| yo | hablé | comí | viví |\n| tú | hablaste | comiste | viviste |\n| él/ella/usted | habló | comió | vivió |\n| nosotros | hablamos | comimos | vivimos |\n| vosotros | hablasteis | comisteis | vivisteis |\n| ellos/ellas/ustedes | hablaron | comieron | vivieron |\n\nNota: las terminaciones de -er e -ir son **idénticas** en el indefinido. La primera persona de -ar y la de nosotros de -ar y -ir coinciden con el presente; el contexto aclara el tiempo.",
+        explanation="El **pretérito indefinido** (o pretérito perfecto simple) presenta hechos pasados como completos o delimitados. Pueden tener consecuencias actuales: *Ayer perdí las llaves y aún no las encuentro*.\n\n| Persona | -ar (hablar) | -er (comer) | -ir (vivir) |\n|--------|-------------|-------------|------------|\n| yo | hablé | comí | viví |\n| tú | hablaste | comiste | viviste |\n| él/ella/usted | habló | comió | vivió |\n| nosotros | hablamos | comimos | vivimos |\n| vosotros | hablasteis | comisteis | vivisteis |\n| ellos/ellas/ustedes | hablaron | comieron | vivieron |\n\nLas terminaciones de -er e -ir son idénticas en el indefinido. Las formas de nosotros/as de -ar y -ir coinciden con las del presente: *hablamos, vivimos*. El contexto aclara el tiempo. La primera persona singular no coincide: *hablo / hablé*.",
         structure="raíz + -é/-aste/-ó/-amos/-asteis/-aron (AR) · -í/-iste/-ió/-imos/-isteis/-ieron (ER/IR)",
         rules=[
             "-er e -ir comparten las mismas terminaciones en indefinido.",
@@ -37,9 +110,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note='"Hablo" es presente; para el pasado se necesita "hablé" con tilde.',
             ),
             GrammarMistake(
-                wrong="Ayer comí la paella.",
-                correct="Ayer comí paella.",
-                note="En general no se usa artículo definido con comidas cuando se habla de consumirlas.",
+                wrong="Ayer ellos comió paella.",
+                correct="Ayer ellos comieron paella.",
+                note="El verbo debe concordar con el sujeto plural: ellos comieron.",
             ),
         ],
         related=[
@@ -76,9 +149,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Hace dos años he viajado a Chile.",
-                correct="Hace dos años viajé a Chile.",
-                note='"Hace + tiempo" pide pretérito indefinido, no pretérito perfecto.',
+                wrong="Hace dos años viajemos a Chile.",
+                correct="Hace dos años viajamos a Chile.",
+                note="Para afirmar este hecho pasado se usa indicativo, no el presente de subjuntivo viajemos.",
             ),
             GrammarMistake(
                 wrong="Desde dos años vivo aquí.",
@@ -146,11 +219,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tiempos verbales",
         summary="Describir hábitos pasados, escenas y acciones en desarrollo en el pasado.",
-        explanation="El **pretérito imperfecto** describe acciones pasadas **no terminadas**, habituales o que servían de trasfondo a otros eventos. Solo hay **tres verbos irregulares**: *ir, ser, ver*.\n\n| Persona | -ar (hablar) | -er (comer) | -ir (vivir) |\n|--------|-------------|-------------|-------------|\n| yo | hablaba | comía | vivía |\n| tú | hablabas | comías | vivías |\n| él/ella/ud. | hablaba | comía | vivía |\n| nosotros | hablábamos | comíamos | vivíamos |\n| vosotros | hablabais | comíais | vivíais |\n| ellos/ellas/uds. | hablaban | comían | vivían |\n\nIrregulares: *ir → iba, ser → era, ver → veía*.\n\nUsos:\n- **Hábitos pasados**: *De pequeño jugaba al fútbol cada día.*\n- **Descripciones en el pasado**: *Era una noche oscura. Llovía.*\n- **Acciones en desarrollo**: *Mientras cocinaba, sonó el teléfono.*",
+        explanation="El **pretérito imperfecto** presenta situaciones pasadas sin enfocar su inicio o final: hábitos, descripciones y acciones en desarrollo. No significa que sigan ocurriendo ahora. Los irregulares básicos son *ir, ser, ver*.\n\n| Persona | -ar (hablar) | -er (comer) | -ir (vivir) |\n|--------|-------------|-------------|-------------|\n| yo | hablaba | comía | vivía |\n| tú | hablabas | comías | vivías |\n| él/ella/ud. | hablaba | comía | vivía |\n| nosotros | hablábamos | comíamos | vivíamos |\n| vosotros | hablabais | comíais | vivíais |\n| ellos/ellas/uds. | hablaban | comían | vivían |\n\nIrregulares: *ir → iba, ser → era, ver → veía*.\n\n- **Hábito**: *De pequeño jugaba al fútbol*.\n- **Descripción**: *Era una noche oscura*.\n- **Acción en desarrollo**: *Mientras cocinaba, sonó el teléfono*.\n\nUn hábito también puede resumirse como un periodo cerrado con indefinido: *Durante aquel verano fui a nadar todos los días*. La perspectiva, no solo el marcador temporal, determina la elección.",
         structure="raíz + -aba/-abas/-aba/-ábamos/-abais/-aban (AR) · -ía/-ías/-ía/-íamos/-íais/-ían (ER/IR)",
         rules=[
             "El imperfecto de -er e -ir es idéntico.",
-            "Indica acciones no terminadas, habituales o de fondo en el pasado.",
+            "Presenta situaciones pasadas desde dentro, sin enfocar su principio o final.",
             "Solo tres verbos irregulares: ir, ser y ver.",
             "Se usa para describir circunstancias que rodean una acción puntual (en indefinido).",
         ],
@@ -174,14 +247,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Cuando era pequeño, jugué al fútbol cada día.",
-                correct="Cuando era pequeño, jugaba al fútbol cada día.",
-                note="Los hábitos pasados requieren imperfecto, no indefinido.",
+                wrong="De pequeños, nosotros jugaban al fútbol.",
+                correct="De pequeños, nosotros jugábamos al fútbol.",
+                note="El imperfecto concuerda con el sujeto: nosotros jugábamos, ellos jugaban.",
             ),
             GrammarMistake(
-                wrong="Ayer iba al cine.",
-                correct="Ayer fui al cine.",
-                note='Con "ayer" y una acción concreta se usa indefinido, no imperfecto.',
+                wrong="Antes ellos iba al cine solos.",
+                correct="Antes ellos iban al cine solos.",
+                note="La forma de tercera persona plural de ir en imperfecto es iban.",
             ),
         ],
         related=["preterito-vs-imperfecto", "solia", "marcadores-temporales"],
@@ -192,12 +265,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tiempos verbales",
         summary="Cuándo usar cada pasado: acción puntual vs. descripción o hábito.",
-        explanation='La elección entre **pretérito indefinido** e **imperfecto** es uno de los mayores desafíos del español. La clave está en **cómo se presenta la acción**:\n\n**Pretérito indefinido**: acción completa, puntual, que "avanza la historia".\n- *A las ocho llegué a casa, cené y me acosté.*\n\n**Pretérito imperfecto**: contexto, descripción, hábito o acción en desarrollo.\n- *Eran las ocho. Llovía. Estaba cansado.*\n\n**Combinados**: el imperfecto describe la escena (fondo) y el indefinido cuenta lo que pasó (acción principal):\n- *Mientras **paseaba** (imperfecto), **vi** (indefinido) a un amigo.*\n\nCon verbos de estado (saber, creer, querer) el indefinido implica cambio: *Supe la verdad* (me enteré) vs. *Sabía la verdad* (ya la sabía).',
+        explanation="La elección entre **indefinido** e **imperfecto** depende de **cómo se presenta la situación**.\n\nEl indefinido presenta un hecho completo o delimitado: *Llegué a casa, cené y me acosté*. No tiene que ser breve: *Viví allí veinte años*.\n\nEl imperfecto presenta contexto, hábitos o acciones en desarrollo: *Eran las ocho. Llovía. Estaba cansado*.\n\nAmbos se combinan: *Mientras paseaba, vi a un amigo*. Ayer o mientras no imponen automáticamente un tiempo: *Ayer estaba cocinando cuando llamaste* es correcta.\n\nAlgunos verbos cambian de interpretación: *Supe la verdad* suele equivaler a *me enteré*; *sabía la verdad* presenta un conocimiento ya existente. No todo estado en indefinido implica un cambio: *Siempre creí en ti*.",
         rules=[
             'Imperfecto = descripción, hábito, acción de fondo, "escenario".',
             "Indefinido = acción concreta, terminada, que hace avanzar la narración.",
             'Imperfecto con "mientras" cuando dos acciones son simultáneas y durativas.',
-            "Con verbos de estado el indefinido implica cambio de estado: supe = me enteré.",
+            "Algunos verbos cambian de interpretación según el aspecto: supe suele significar me enteré; no todo estado en indefinido expresa un cambio.",
         ],
         examples=[
             GrammarExample(
@@ -219,14 +292,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Mientras cociné, sonó el teléfono.",
-                correct="Mientras cocinaba, sonó el teléfono.",
-                note='"Mientras + acción de fondo" pide imperfecto.',
+                wrong="Mientras yo cocinabas, sonó el teléfono.",
+                correct="Mientras yo cocinaba, sonó el teléfono.",
+                note="Cocinaba concuerda con yo y presenta la actividad en curso cuando sonó el teléfono.",
             ),
             GrammarMistake(
-                wrong="Ayer estaba en casa todo el día.",
-                correct="Ayer estuve en casa todo el día.",
-                note='Con "ayer" y periodo definido se usa indefinido.',
+                wrong="Ayer yo estuvé en casa todo el día.",
+                correct="Ayer yo estuve en casa todo el día.",
+                note="Estuve se escribe sin tilde. El indefinido presenta aquí el día como un periodo completo.",
             ),
         ],
         related=[
@@ -242,10 +315,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tiempos verbales",
         summary="Expresar acciones habituales en pasado y presente con el verbo soler.",
-        explanation='El verbo **soler** (cambio o->ue) significa "tener la costumbre de" y se usa para expresar **acciones habituales** tanto en presente como en pasado.\n\nEn **presente**: *Suelo desayunar a las ocho.*\nEn **imperfecto**: *Solía jugar al tenis.*\n\n**Solía + infinitivo** es una alternativa al imperfecto simple para enfatizar hábitos pasados.\n\nEl verbo soler **no existe en indefinido** (~~solí~~) ni en otros tiempos más que presente e imperfecto de indicativo.',
+        explanation='El verbo **soler** (cambio o→ue) significa "tener la costumbre de".\n\nEn **presente**: *Suelo desayunar a las ocho.*\nEn **imperfecto**: *Solía jugar al tenis.*\n\n**Solía + infinitivo** enfatiza un hábito pasado. En A2 se practican sobre todo estos dos tiempos. Soler tiene un uso defectivo: no se emplea normalmente en todos los tiempos, pero también existen usos en subjuntivo (*No creo que suela faltar*) o en perfecto compuesto (*Siempre he solido madrugar*).',
         structure="soler (conjugado) + infinitivo",
         rules=[
-            "Soler solo se usa en presente e imperfecto de indicativo.",
+            "Los tiempos más frecuentes de soler son el presente y el imperfecto de indicativo, pero no son los únicos posibles.",
             'Siempre va seguido de infinitivo: "Suelo comer a las dos".',
             '"Soler + infinitivo" expresa frecuencia habitual, no capacidad.',
             'No confundir "solía" (hábito) con "solo/a" (sin compañía).',
@@ -264,9 +337,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Solí ir al parque.",
-                correct="Solía ir al parque.",
-                note='"Soler" no tiene forma de indefinido. Se usa el imperfecto "solía".',
+                wrong="Yo sueles ir al parque.",
+                correct="Yo suelo ir al parque.",
+                note="La forma de primera persona es suelo; sueles corresponde a tú.",
             ),
             GrammarMistake(
                 wrong="Suelo a comer a las dos.",
@@ -486,9 +559,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note='"Mejor" ya es la forma superlativa de "bueno" para el relativo.',
             ),
             GrammarMistake(
-                wrong="Es el más bueno.",
-                correct="Es el mejor.",
-                note='"Bueno" tiene comparativo/superlativo irregular: mejor, el mejor.',
+                wrong="La sopa está buenísimos.",
+                correct="La sopa está buenísima.",
+                note="El superlativo absoluto concuerda con el sustantivo: sopa es femenino singular.",
             ),
         ],
         related=["comparativos", "tan-como", "adjetivos-descriptivos"],
@@ -851,14 +924,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Era un día soleado. De repente, alguien llamaba a la puerta.",
+                wrong="Era un día soleado. De repente, alguien llamaron a la puerta.",
                 correct="Era un día soleado. De repente, alguien llamó a la puerta.",
-                note='"De repente" introduce una acción puntual; pide indefinido.',
+                note="Alguien requiere un verbo en singular. El indefinido presenta aquí un hecho completo dentro del relato.",
             ),
             GrammarMistake(
-                wrong="Cuando llegué, ya cerraron.",
+                wrong="Cuando llegué, ya habían cerrar.",
                 correct="Cuando llegué, ya habían cerrado.",
-                note="Acción anterior a otra pasada → pluscuamperfecto.",
+                note="El pluscuamperfecto se forma con haber en imperfecto y participio, no infinitivo.",
             ),
         ],
         related=[
@@ -873,11 +946,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Estilo indirecto",
         summary="Contar lo que alguien dijo adaptando los tiempos verbales.",
-        explanation='El **estilo indirecto** consiste en reproducir lo que alguien ha dicho sin usar una cita textual. Cuando el verbo introductor está en **pasado** (dijo que, comentó que), los tiempos verbales y otras referencias se desplazan hacia el pasado:\n\n| Estilo directo | Estilo indirecto |\n|---------------|-----------------|\n| Presente: "Estoy cansado" | Imperfecto: Dijo que **estaba** cansado |\n| Pret. perfecto: "He comido" | Pluscuamperfecto: Dijo que **había comido** |\n| Indefinido: "Llegué ayer" | Pluscuamperfecto: Dijo que **había llegado** el día anterior |\n| Futuro: "Iré mañana" | Condicional: Dijo que **iría** al día siguiente |\n\nTambién cambian:\n- *hoy → aquel día*\n- *ayer → el día anterior*\n- *mañana → el día siguiente*\n- *aquí → allí*',
+        explanation='El **estilo indirecto** reproduce lo que alguien ha dicho sin una cita literal. Con un verbo introductor en pasado, es frecuente adoptar el punto de vista de aquel momento:\n\n| Estilo directo | Relato desde el pasado |\n|---------------|------------------------|\n| "Estoy cansado" | Dijo que **estaba** cansado |\n| "He comido" | Dijo que **había comido** |\n| "Iré mañana" | Dijo que **iría** al día siguiente |\n\nNo es una transformación automática: *Dijo que está cansado* es válida si el cansancio sigue vigente; *Dijo que vendrá mañana* puede referirse al día siguiente al momento en que hablamos. Las referencias de persona, tiempo y lugar se ajustan cuando cambia su punto de referencia. El pluscuamperfecto y las transformaciones más complejas se desarrollan en B1.',
         rules=[
             'Con verbo introductor en presente ("dice que"), no hay cambio de tiempos.',
-            'Con verbo introductor en pasado ("dijo que"), todos los tiempos retroceden un paso.',
-            "Los pronombres y referencias espaciales también se adaptan.",
+            "Con un verbo introductor en pasado, se puede adoptar una perspectiva pasada o mantener una referencia aún vigente.",
+            "Los pronombres y referencias espaciales se adaptan si cambia quién habla o desde dónde se habla.",
             '"Que" es obligatorio para introducir la subordinada: "Dijo que vendría".',
         ],
         examples=[
@@ -903,14 +976,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Dijo que está cansado.",
-                correct="Dijo que estaba cansado.",
-                note='Con "dijo" (pasado), el verbo subordinado debe concordar en pasado.',
+                wrong="Ana dijo de que estaba cansada.",
+                correct="Ana dijo que estaba cansada.",
+                note="Decir introduce aquí el contenido con que, sin de.",
             ),
             GrammarMistake(
-                wrong="Dijo que vendrá mañana.",
-                correct="Dijo que vendría al día siguiente.",
-                note='Futuro → condicional, y "mañana" → "al día siguiente".',
+                wrong="Ana dijo que ellos estaba cansados.",
+                correct="Ana dijo que ellos estaban cansados.",
+                note="El verbo subordinado concuerda con su propio sujeto: ellos estaban.",
             ),
         ],
         related=["cambios-temporales", "imperfecto", "condicional-simple"],
@@ -966,12 +1039,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Estilo indirecto",
         summary="Cómo cambian las referencias de tiempo y lugar al pasar al estilo indirecto.",
-        explanation='Cuando se pasa del **estilo directo al indirecto** con verbo introductor en pasado, no solo cambian los verbos. Las **referencias temporales y espaciales** también se adaptan:\n\n| Referencia directa | Indirecta (pasado) |\n|-------------------|-------------------|\n| hoy | aquel día / ese día |\n| ayer | el día anterior |\n| mañana | el día siguiente / al día siguiente |\n| esta semana | aquella semana |\n| la semana pasada | la semana anterior |\n| la semana que viene | la semana siguiente |\n| ahora | entonces / en aquel momento |\n| aquí / acá | allí / allá |\n| este / esta | aquel / aquella / ese / esa |\n| hace + tiempo | hacía + tiempo |\n\nEjemplo:\n- Directo: *"Mañana voy al médico."*\n- Indirecto (pasado): *Dijo que **al día siguiente** iba al médico.*',
+        explanation='Las referencias temporales y espaciales se adaptan al **punto de vista de quien reproduce el mensaje**, no automáticamente al tiempo de dijo.\n\nSi ya no compartimos el mismo día o lugar, son frecuentes estas correspondencias:\n- hoy → aquel día\n- ayer → el día anterior\n- mañana → el día siguiente\n- esta semana → aquella semana\n- la semana pasada → la semana anterior\n- la semana que viene → la semana siguiente\n- ahora → entonces\n- aquí → allí\n- este → aquel/ese\n- hace un año → hacía un año\n\nEl lunes Ana dice: "Mañana voy al médico". Si lo contamos el viernes: *Ana dijo que el martes iba al médico* o *que al día siguiente iba al médico*. Si lo contamos ese mismo lunes, es posible: *Ana ha dicho que mañana va al médico*.\n\nPodemos conservar hoy, mañana o aquí si siguen señalando el mismo día o lugar. También podemos usar fechas y nombres de lugares para evitar ambigüedad.',
         rules=[
-            '"Hoy" → "aquel día" o "ese día".',
-            '"Ahora" → "entonces" o "en aquel momento".',
-            '"Aquí" → "allí".',
-            '"Hace un año" → "hacía un año".',
+            "Hoy puede pasar a aquel día si el relato se hace en otro día.",
+            "Ahora puede pasar a entonces si cambia el momento de referencia.",
+            "Aquí puede mantenerse si seguimos en el mismo lugar.",
+            "Hace un año pasa a hacía un año al medir el intervalo desde un punto del pasado.",
         ],
         examples=[
             GrammarExample(
@@ -992,18 +1065,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
         ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="Dijo que ayer no había podido ir.",
-                correct="Dijo que el día anterior no había podido ir.",
-                note='"Ayer" se transforma en "el día anterior" al pasar al pasado.',
-            ),
-            GrammarMistake(
-                wrong="Me contó que hoy estaba cansado.",
-                correct="Me contó que aquel día estaba cansado.",
-                note="Referencia temporal debe desplazarse al pasado.",
-            ),
-        ],
+        common_mistakes=[],
         related=[
             "estilo-indirecto",
             "estilo-indirecto-pasado",

@@ -8,13 +8,13 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Ser (Verbo)",
         level="A1",
         category="Verbos",
-        summary="O verbo ser exprime identidade, características permanentes e origem.",
-        explanation="**Ser** é um dos verbos mais importantes do português. Usa-se para:\\n\\n- **Identidade**: *Eu sou o João.*\\n- **Nacionalidade / origem**: *Ela é portuguesa.*\\n- **Profissão**: *Sou professor.*\\n- **Características permanentes**: *A casa é grande.*\\n- **Horas e datas**: *São três horas.*\\n- **Posse** (com *de*): *O livro é do Pedro.*",
+        summary="O verbo ser exprime identidade, características, origem e localização de eventos.",
+        explanation="**Ser** apresenta identidade (Sou o João), origem (Ela é portuguesa), profissão (Sou professor), características (A casa é grande), horas (São três horas) e posse (O livro é do Pedro).\n\nPresente: sou, és, é, somos, sois, são.\n\nSer não significa necessariamente permanência: Hoje sou o responsável. Estar apresenta um estado ou situação: Estou cansado. A localização de eventos pode usar ser: A reunião é na sala dois.",
         rules=[
-            "Usa ser para identidade, nacionalidade, profissão, características permanentes.",
-            "Horas, datas e eventos usam sempre ser.",
+            "Usa ser para identidade, nacionalidade, profissão e caracterização.",
+            "Ser indica horas e datas e pode localizar eventos: A festa é aqui.",
             "Ser + de indica posse.",
-            "Não se usa artigo definido antes de nomes próprios com ser, exceto em Portugal coloquial.",
+            "Em português europeu é frequente o artigo antes do nome próprio: Sou a Inês.",
         ],
         examples=[
             GrammarExample(text="Eu sou português.", translation=None),
@@ -26,7 +26,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Eu estar feliz.",
                 correct="Eu estou feliz.",
-                note="Usa-se estar para estados temporários, não ser.",
+                note="Conjuga estar: estou feliz apresenta um estado; sou feliz caracteriza a pessoa.",
             ),
             GrammarMistake(
                 wrong="Sou tarde.",
@@ -42,11 +42,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="O verbo estar exprime estados temporários, localização e condições.",
-        explanation="**Estar** usa-se para:\\n\\n- **Estados temporários**: *Estou cansado.*\\n- **Localização** (física): *O livro está na mesa.*\\n- **Condições transitórias**: *A sopa está quente.*\\n- **Tempo atmosférico**: *Está a chover.*\\n- Em Portugal usa-se *estar a + infinitivo*: *Estou a estudar.*",
+        explanation="**Estar** usa-se para:\n\n- **Estados temporários**: *Estou cansado.*\n- **Localização** (física): *O livro está na mesa.*\n- **Condições transitórias**: *A sopa está quente.*\n- **Tempo atmosférico**: *Está a chover.*\n- Em Portugal usa-se *estar a + infinitivo*: *Estou a estudar.*",
         rules=[
             "Usa estar para localização, estados temporários e condições passageiras.",
             "Em português europeu, estar a + infinitivo expressa ação em curso.",
-            "Estar + adjetivo descreve um estado momentâneo.",
+            "Estar + adjetivo apresenta um estado, que pode ser duradouro: Está morto. A oposição não é simplesmente temporário/permanente.",
             "Não usar estar para nacionalidade ou profissão — usa-se ser.",
         ],
         examples=[
@@ -63,7 +63,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Sou em casa.",
                 correct="Estou em casa.",
-                note="Localização usa estar, nunca ser.",
+                note="A localização de uma pessoa usa estar; eventos podem usar ser: A festa é em casa.",
             ),
             GrammarMistake(
                 wrong="Estou português.",
@@ -79,7 +79,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Pronomes",
         summary="Os pronomes pessoais que funcionam como sujeito da oração.",
-        explanation="Os pronomes sujeito em português europeu:\\n\\n| Singular | Plural |\\n|----------|--------|\\n| eu (I) | nós (we) |\\n| tu (you, informal) | vocês (you, formal/plural) |\\n| ele / ela / você (he/she/you formal) | eles / elas (they) |\\n\\nNotas importantes:\\n- **Tu** é informal e usa-se com conjugação própria (2.ª pessoa).\\n- **Você** é semi-formal e usa a conjugação da 3.ª pessoa.\\n- **Vocês** é o plural de você.\\n- **A gente** equivale a *nós* mas usa verbo na 3.ª singular.\\n- Em Portugal, o pronome sujeito é frequentemente omitido (sujeito nulo).",
+        explanation="Os pronomes sujeito incluem eu, tu, ele/ela, nós, vós e eles/elas. Vós mantém usos regionais e cerimoniais; vocês é frequente para um grupo e usa a terceira pessoa do plural.\n\nTu usa a segunda pessoa em relações próximas. Você usa a terceira pessoa, mas o seu valor social varia em Portugal e pode ser mal recebido. Em contextos formais, são frequentes o senhor/a senhora, o nome ou a omissão do pronome.\n\nA gente equivale a nós em registo coloquial, mas usa a terceira pessoa do singular. O sujeito pode ser omitido quando é recuperável pelo contexto.",
         rules=[
             "Pronomes sujeito podem ser omitidos em português (língua de sujeito nulo).",
             "Tu usa-se com verbo na 2.ª pessoa.",
@@ -93,7 +93,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Você mora em Lisboa?",
                 translation=None,
-                note="semi-formal",
+                note="tratamento cujo valor social depende do contexto",
             ),
             GrammarExample(text="A gente gosta de café.", translation=None, note="coloquial"),
         ],
@@ -117,7 +117,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Artigos",
         summary="O, a, os, as — artigos que determinam substantivos específicos.",
-        explanation="Os artigos definidos concordam em género e número com o substantivo:\\n\\n| | Masculino | Feminino |\\n|---|-----------|----------|\\n| **Singular** | o | a |\\n| **Plural** | os | as |\\n\\nUsam-se para algo já conhecido, referências únicas, nomes próprios (EP), antes de possessivos (EP) e dias da semana.",
+        explanation="Os artigos definidos concordam em género e número com o substantivo:\n\n| | Masculino | Feminino |\n|---|-----------|----------|\n| **Singular** | o | a |\n| **Plural** | os | as |\n\nUsam-se para algo já conhecido, referências únicas, nomes próprios (EP), antes de possessivos (EP) e dias da semana.",
         rules=[
             "Concordam em género e número com o substantivo.",
             "Em Portugal, usa-se artigo antes de nomes próprios e possessivos.",
@@ -162,7 +162,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="Como expressar nacionalidades e países de origem com o verbo ser.",
-        explanation="Para expressar nacionalidade usa-se o verbo **ser** seguido do adjetivo de nacionalidade. Os adjetivos concordam em género e número com o sujeito.\\n\\nAlgumas nacionalidades: português/portuguesa, espanhol/espanhola, francês/francesa, inglês/inglesa, alemão/alemã, italiano/italiana, brasileiro/brasileira.",
+        explanation="Para expressar nacionalidade usa-se o verbo **ser** seguido do adjetivo de nacionalidade. Os adjetivos concordam em género e número com o sujeito.\n\nAlgumas nacionalidades: português/portuguesa, espanhol/espanhola, francês/francesa, inglês/inglesa, alemão/alemã, italiano/italiana, brasileiro/brasileira.",
         rules=[
             "O verbo ser exprime nacionalidade (permanente).",
             "O adjetivo de nacionalidade concorda em género e número.",
@@ -195,10 +195,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Substantivos",
         summary="Regras gerais para identificar o género (masculino/feminino) dos substantivos.",
-        explanation="Em português, todos os substantivos têm género: masculino ou feminino.\\n\\n**Regras gerais:**\\n- Palavras terminadas em **-o** são geralmente masculinas.\\n- Palavras terminadas em **-a** são geralmente femininas.\\n- Palavras terminadas em **-dade, -gem, -tude** são femininas.\\n- Palavras terminadas em **-or, -l, -r, -s** são geralmente masculinas.\\n\\n**Exceções:** *O dia, a mão, o problema, o sistema, o tema* (origem grega).",
+        explanation="Os substantivos têm género masculino ou feminino. Aprende cada nome com o artigo.\n\nAs terminações dão pistas, não garantias: -o é frequentemente masculino e -a feminino; -dade e -tude são habitualmente femininos. Muitos nomes em -gem são femininos (a viagem), mas personagem admite os dois géneros.\n\nHá exceções: o dia, a mão, o problema, o sistema, o tema. Problema, sistema e tema têm origem grega; essa origem não explica dia ou mão.",
         rules=[
             "Substantivos em -o são geralmente masculinos; em -a, femininos.",
-            "Substantivos em -dade, -gem, -tude são sempre femininos.",
+            "As terminações -dade e -tude são habitualmente femininas; em -gem, lembra a exceção o/a personagem.",
             "Substantivos de origem grega em -ma são masculinos.",
             "O artigo definido indica o género: memorize o artigo com o substantivo.",
         ],
@@ -225,7 +225,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="O viagem.",
                 correct="A viagem.",
-                note="Palavras em -gem são femininas.",
+                note="Viagem é feminino; a terminação -gem é uma pista, não uma regra sem exceções.",
             ),
         ],
         related=["artigos-definidos", "artigos-indefinidos", "adjetivos-descritivos"],
@@ -236,7 +236,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Artigos",
         summary="Um, uma, uns, umas — artigos para substantivos não específicos.",
-        explanation="| | Masculino | Feminino |\\n|---|-----------|----------|\\n| **Singular** | um | uma |\\n| **Plural** | uns | umas |\\n\\nUsam-se para algo mencionado pela primeira vez, quantidade aproximada ou algo não específico.",
+        explanation="| | Masculino | Feminino |\n|---|-----------|----------|\n| **Singular** | um | uma |\n| **Plural** | uns | umas |\n\nUsam-se para algo mencionado pela primeira vez, quantidade aproximada ou algo não específico.",
         rules=[
             "Usa-se um/uma para singular; uns/umas para plural indefinido.",
             "Uns/umas + numeral indica aproximação.",
@@ -272,7 +272,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="O verbo ter exprime posse, idade, existência e obrigação.",
-        explanation="**Ter** é um verbo irregular e essencial. Usa-se para:\\n\\n- **Posse**: *Tenho um carro.*\\n- **Idade**: *Tenho vinte e cinco anos.*\\n- **Obrigação**: *Tenho de estudar.*\\n- **Sensações**: *Tenho fome / sede / sono / medo.*\\n\\nConjugação: eu tenho / tu tens / ele-você tem / nós temos / eles-vocês têm",
+        explanation="**Ter** é um verbo irregular e essencial. Usa-se para:\n\n- **Posse**: *Tenho um carro.*\n- **Idade**: *Tenho vinte e cinco anos.*\n- **Obrigação**: *Tenho de estudar.*\n- **Sensações**: *Tenho fome / sede / sono / medo.*\n\nConjugação: eu tenho / tu tens / ele-você tem / nós temos / eles-vocês têm",
         rules=[
             "Idade expressa-se com ter (NUNCA ser).",
             "Sensações usam ter: fome, sede, sono, frio, calor, medo, pressa.",
@@ -311,9 +311,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="adjetivos-possessivos",
         title="Adjetivos possessivos",
         level="A1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Meu, teu, seu, nosso — indicam posse ou relação.",
-        explanation="Os possessivos concordam em género e número com a **coisa possuída**:\\n\\n**Nota EP**: possessivos são quase sempre precedidos de artigo definido: *o meu livro, a tua casa*.",
+        explanation="Os possessivos concordam em género e número com a **coisa possuída**:\n\n**Nota EP**: possessivos são quase sempre precedidos de artigo definido: *o meu livro, a tua casa*.",
         rules=[
             "Em Portugal, usa-se artigo definido antes do possessivo.",
             "O possessivo concorda com a coisa possuída, não com o possuidor.",
@@ -356,9 +356,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="adjetivos-descritivos",
         title="Adjetivos descritivos",
         level="A1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Adjetivos que descrevem qualidades e concordam em género e número.",
-        explanation="Os adjetivos em português concordam em género e número com o substantivo.\\n\\n**Adjetivos uniformes**: terminados em **-e** (*grande, inteligente*), **-l** (*ágil*), **-ista** (*egoísta*).\\n\\n**Posição:** Geralmente depois; antes pode mudar o sentido (*grande amigo* vs *amigo grande*).\\n\\n**Bom/mau** são irregulares: bom→boa, bons, boas; mau→má, maus, más.",
+        explanation="Os adjetivos em português concordam em género e número com o substantivo.\n\n**Adjetivos uniformes**: terminados em **-e** (*grande, inteligente*), **-l** (*ágil*), **-ista** (*egoísta*).\n\n**Posição:** Geralmente depois; antes pode mudar o sentido (*grande amigo* vs *amigo grande*).\n\n**Bom/mau** são irregulares: bom→boa, bons, boas; mau→má, maus, más.",
         rules=[
             "Adjetivos concordam em género e número com o substantivo.",
             "Adjetivos em -e e -l são uniformes.",
@@ -403,7 +403,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Tempos verbais",
         summary="Conjugação dos verbos regulares no presente em -ar, -er, -ir.",
-        explanation="| | fal**ar** | com**er** | abr**ir** |\\n|---|-----------|-----------|----------|\\n| eu | falo | como | abro |\\n| tu | falas | comes | abres |\\n| ele/você | fala | come | abre |\\n| nós | falamos | comemos | abrimos |\\n| eles/vocês | falam | comem | abrem |",
+        explanation="| | fal**ar** | com**er** | abr**ir** |\n|---|-----------|-----------|----------|\n| eu | falo | como | abro |\n| tu | falas | comes | abres |\n| ele/você | fala | come | abre |\n| nós | falamos | comemos | abrimos |\n| eles/vocês | falam | comem | abrem |",
         rules=[
             "-ar: -o, -as, -a, -amos, -am.",
             "-er: -o, -es, -e, -emos, -em.",
@@ -436,7 +436,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="Verbos em que a ação recai sobre o próprio sujeito.",
-        explanation="Os verbos reflexivos:\\n\\n| Pessoa | Pronome |\\n|--------|--------|\\n| eu | me |\\n| tu | te |\\n| ele/você | se |\\n| nós | nos |\\n| eles/vocês | se |\\n\\nExemplos: *levantar-se, deitar-se, vestir-se, lembrar-se, esquecer-se, chamar-se*.\\n\\nEm Portugal, o pronome vai geralmente **depois** do verbo (ênclise).",
+        explanation="Os verbos reflexivos:\n\n| Pessoa | Pronome |\n|--------|--------|\n| eu | me |\n| tu | te |\n| ele/você | se |\n| nós | nos |\n| eles/vocês | se |\n\nExemplos: *levantar-se, deitar-se, vestir-se, lembrar-se, esquecer-se, chamar-se*.\n\nEm Portugal, o pronome vai geralmente **depois** do verbo (ênclise).",
         rules=[
             "O pronome concorda com o sujeito.",
             "Em EP, o pronome tende a ficar depois do verbo (ênclise).",
@@ -473,7 +473,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Substantivos",
         summary="Como perguntar e dizer as horas em português europeu.",
-        explanation="Para perguntar: *Que horas são?* / *Tem horas?* (coloquial)\\n\\nPara responder:\\n- *É uma hora.* (1:00)\\n- *São duas horas.* (2:00)\\n- *São duas e um quarto.* (2:15)\\n- *São duas e meia.* (2:30)\\n- *São quinze para as três.* (2:45)\\n- *É meio-dia./É meia-noite.*",
+        explanation="Para perguntar: *Que horas são?* / *Tem horas?* (coloquial)\n\nPara responder:\n- *É uma hora.* (1:00)\n- *São duas horas.* (2:00)\n- *São duas e um quarto.* (2:15)\n- *São duas e meia.* (2:30)\n- *São quinze para as três.* (2:45)\n- *É meio-dia./É meia-noite.*",
         rules=[
             "Usa-se o verbo ser para as horas.",
             "1:00, meio-dia e meia-noite usam singular.",
@@ -506,7 +506,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="Expressar gostos e preferências com a preposição de.",
-        explanation="O verbo **gostar** exige sempre a preposição **de**:\\n\\n- *Gosto de café. / Gosto de cantar.*\\n\\nCom artigos, formam-se contrações: *Gosto do livro* (de+o), *Gosto da música* (de+a).",
+        explanation="O verbo **gostar** exige sempre a preposição **de**:\n\n- *Gosto de café. / Gosto de cantar.*\n\nCom artigos, formam-se contrações: *Gosto do livro* (de+o), *Gosto da música* (de+a).",
         rules=[
             "Gostar exige sempre a preposição de.",
             "De + artigo = contração: do, da, dos, das.",
@@ -541,9 +541,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="tambem-tampouco",
         title="Também e tampouco",
         level="A1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Expressar concordância e discordância.",
-        explanation="**Também** = also (frases afirmativas).\\n**Tampouco** = neither (formal).\\n**Também não** = neither (coloquial, mais comum).",
+        explanation="**Também** = also (frases afirmativas).\n**Tampouco** = neither (formal).\n**Também não** = neither (coloquial, mais comum).",
         rules=[
             "Também usa-se em frases afirmativas.",
             "Tampouco é formal.",
@@ -577,7 +577,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="muito-pouco",
         title="Muito e pouco",
         level="A1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Quantificadores que expressam quantidade ou intensidade.",
         explanation="**Muito** e **pouco** como adjetivos (variam): *Tenho muitos livros.* / Como advérbios (invariáveis): *Ela é muito bonita.*",
         rules=[
@@ -612,11 +612,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="Haver impessoal expressa existência, tempo decorrido e acontecimentos.",
-        explanation="**Haver** impessoal (sempre há):\\n\\n1. Existência: *Há um gato. / Há muitas pessoas.* (sempre singular!)\\n2. Tempo decorrido: *Cheguei há duas horas.*\\n3. Acontecimento: *Houve um acidente.*\\n\\nEP coloquial: *ter* substitui *haver*: *Tem um gato.*",
+        explanation="**Haver impessoal** fica na terceira pessoa do singular, mas varia de tempo: Há muitas pessoas; Havia muitas pessoas; Houve um acidente; Haverá uma reunião.\n\nHá + duração indica tempo decorrido: Cheguei há duas horas.\n\nPara existência, o modelo habitual em português europeu é haver. Ter existencial, como Tem um gato no jardim, é especialmente comum no português brasileiro coloquial; não é o modelo ensinado aqui.",
         rules=[
             "Haver impessoal usa-se sempre no singular.",
             "Tempo decorrido: há + período de tempo.",
-            "No coloquial EP, ter substitui haver.",
+            "Em português europeu, usa haver para existência; ter indica normalmente posse ou outras relações.",
             "Haver pode conjugar-se: haverá, houve, havia.",
         ],
         examples=[
@@ -648,7 +648,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Preposicoes",
         summary="Em, no, na, a, para, de — como indicar localização.",
-        explanation="Principais preposições:\\n\\n- em + artigo = no/na/nos/nas: *Estou na cozinha.*\\n- a: direção: *Vou a Lisboa.*\\n- para: destino final: *Vou para casa.*\\n- de: origem: *Sou de Lisboa.*\\n\\nContrações: em+o=no, em+a=na, a+o=ao, de+o=do, por+a=pela.",
+        explanation="Principais preposições:\n\n- em + artigo = no/na/nos/nas: *Estou na cozinha.*\n- a: direção: *Vou a Lisboa.*\n- para: destino final: *Vou para casa.*\n- de: origem: *Sou de Lisboa.*\n\nContrações: em+o=no, em+a=na, a+o=ao, de+o=do, por+a=pela.",
         rules=[
             "Em + artigo = no, na, nos, nas.",
             "Estar + em = localização estática.",
@@ -681,7 +681,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Preposicoes",
         summary="Combinações obrigatórias de preposições com artigos e pronomes.",
-        explanation="Contrações obrigatórias:\\n\\n**de:** de+o=do, de+a=da, de+os=dos, de+as=das\\n**em:** em+o=no, em+a=na, em+os=nos, em+as=nas\\n**a:** a+o=ao, a+os=aos\\n**por:** por+o=pelo, por+a=pela, por+os=pelos, por+as=pelas",
+        explanation="Contrações obrigatórias:\n\n**de:** de+o=do, de+a=da, de+os=dos, de+as=das\n**em:** em+o=no, em+a=na, em+os=nos, em+as=nas\n**a:** a+o=ao, a+os=aos\n**por:** por+o=pelo, por+a=pela, por+os=pelos, por+as=pelas",
         rules=[
             "As contrações são obrigatórias na escrita padrão.",
             "de+artigo=do, da, dos, das.",
@@ -718,7 +718,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Tempos verbais",
         summary="Expressar planos e futuro próximo com ir + infinitivo.",
-        explanation="O futuro próximo forma-se com o verbo **ir** no presente + infinitivo.\\n\\nConjugação de ir: eu vou / tu vais / ele-você vai / nós vamos / eles-vocês vão.\\n\\nNa fala portuguesa, esta construção é MUITO mais comum que o futuro simples.",
+        explanation="O futuro próximo forma-se com o verbo **ir** no presente + infinitivo.\n\nConjugação de ir: eu vou / tu vais / ele-você vai / nós vamos / eles-vocês vão.\n\nNa fala portuguesa, esta construção é MUITO mais comum que o futuro simples.",
         rules=[
             "Ir no presente + verbo principal no infinitivo.",
             "Não se usa preposição entre ir e o infinitivo.",
@@ -763,7 +763,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="Verbos irregulares que expressam desejo e capacidade.",
-        explanation="**Querer**: eu quero / tu queres / ele-você quer / nós queremos / eles-vocês querem\\n**Poder**: eu posso / tu podes / ele-você pode / nós podemos / eles-vocês podem",
+        explanation="**Querer**: eu quero / tu queres / ele-você quer / nós queremos / eles-vocês querem\n**Poder**: eu posso / tu podes / ele-você pode / nós podemos / eles-vocês podem",
         rules=[
             "Querer e Poder são irregulares na 1.ª pessoa (quero, posso).",
             "Querer + infinitivo = desejo.",
@@ -796,7 +796,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Substantivos",
         summary="Os dias da semana e como usá-los com artigos e preposições.",
-        explanation="Dias da semana: segunda-feira, terça-feira, quarta-feira, quinta-feira, sexta-feira, sábado, domingo.\\n\\nNotas:\\n- Dias úteis terminam em -feira.\\n- Na fala, omite-se -feira: *na segunda, na terça*.\\n- Com artigos: *na segunda-feira* (em+a); *no sábado* (em+o).",
+        explanation="Dias da semana: segunda-feira, terça-feira, quarta-feira, quinta-feira, sexta-feira, sábado, domingo.\n\nNotas:\n- Dias úteis terminam em -feira.\n- Na fala, omite-se -feira: *na segunda, na terça*.\n- Com artigos: *na segunda-feira* (em+a); *no sábado* (em+o).",
         rules=[
             "Dias podem usar-se com ou sem artigo.",
             "Com artigo: na segunda-feira.",
@@ -837,7 +837,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Tempos verbais",
         summary="A forma perifrástica do português europeu para ações em curso.",
-        explanation="Em **Português Europeu**, a ação em curso expressa-se com **estar a + infinitivo** — diferente do gerúndio usado no Brasil.\\n\\n- *Estou a ler um livro.* (EP) = *Estou lendo um livro.* (BP)\\n\\nO gerúndio em EP usa-se apenas em contextos específicos ou registo literário.",
+        explanation="Em **Português Europeu**, a ação em curso expressa-se com **estar a + infinitivo** — diferente do gerúndio usado no Brasil.\n\n- *Estou a ler um livro.* (EP) = *Estou lendo um livro.* (BP)\n\nO gerúndio em EP usa-se apenas em contextos específicos ou registo literário.",
         rules=[
             "EP: estar a + infinitivo (nunca gerúndio para presente contínuo).",
             "O verbo estar conjuga-se no tempo desejado.",
@@ -875,7 +875,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="demonstrativos",
         title="Os demonstrativos: este, esse, aquele",
         level="A1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Uso dos pronomes e adjetivos demonstrativos para indicar a posição de algo em relação às pessoas do discurso.",
         explanation="Os **demonstrativos** indicam a localização espacial ou temporal de algo em relação ao falante e ao ouvinte.\n\n- **Este/esta/estes/estas** → perto de quem fala: *Este livro é meu.*\n- **Esse/essa/esses/essas** → perto de quem ouve: *Essa caneta que tens na mão é bonita.*\n- **Aquele/aquela/aqueles/aquelas** → longe de ambos: *Aquele prédio ali é o museu.*\n\nAs formas **neutras** (isto, isso, aquilo) usam-se para referir ideias ou objetos não especificados:\n- *O que é isto?*\n- *Isso que disseste não é verdade.*\n\n**Como adjetivos**, precedem o nome e concordam em género e número: *este carro, esta casa, estes livros, estas flores.*\n\n**Como pronomes**, substituem o nome: *—Qual camisola queres? —Esta.*\n\nEm português europeu, as formas contraídas com preposições são comuns: *neste* (em+este), *desse* (de+esse), *àquele* (a+aquele).",
         structure="este/esta/estes/estas (perto de quem fala) · esse/essa/esses/essas (perto de quem ouve) · aquele/aquela/aqueles/aquelas (longe) · isto/isso/aquilo (neutro)",
@@ -927,7 +927,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="numeros-ordinais",
         title="Números ordinais",
         level="A1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Formação e uso dos números ordinais em português.",
         explanation="Os **números ordinais** indicam a ordem ou posição numa sequência.\n\n- 1.º — primeiro/primeira\n- 2.º — segundo/segunda\n- 3.º — terceiro/terceira\n- 4.º — quarto/quarta\n- 5.º — quinto/quinta\n- 6.º — sexto/sexta\n- 7.º — sétimo/sétima\n- 8.º — oitavo/oitava\n- 9.º — nono/nona\n- 10.º — décimo/décima\n\nUsam-se **antes do nome**: *o primeiro dia, a segunda aula.*\n\n**Abreviam-se** com ponto abreviativo e indicador de género:\n- 1.º (primeiro), 1.ª (primeira)\n- 2.º, 2.ª, etc.\n\nPara perguntar a posição: *Em que lugar ficaste? — Fiquei em terceiro.*",
         structure="primeiro · segundo · terceiro · quarto · quinto · sexto · sétimo · oitavo · nono · décimo",

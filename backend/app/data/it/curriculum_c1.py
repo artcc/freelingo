@@ -16,10 +16,10 @@ C1_UNITS: list[CurriculumUnit] = [
             "congiuntivo-relativo",
         ],
         vocabulary_set_ids=["sfumature_c1", "formalità_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa le congiunzioni concessive con il congiuntivo: sebbene, benché, nonostante, malgrado + congiuntivo in tutti e quattro i tempi",
-            "Usa le congiunzioni finali: affinché, perché (finale), a patto che, purché, a condizione che + congiuntivo e le distingue da perché + indicativo (causale)",
+            "Distingue le finali con affinché/perché + congiuntivo dalle condizionali con purché/a patto che/a condizione che e da perché + indicativo causale",
             "Usa il congiuntivo nelle relative restrittive con antecedenti negativi, indefiniti e superlativi: Non c'è nessuno che sappia rispondere, È la persona più intelligente che conosca, Cerco un appartamento che abbia il giardino",
             "Usa il congiuntivo dopo come se nei tempi appropriati: Parla come se fosse italiano, Si è comportato come se non fosse successo niente",
             "Controlla la concordanza dei tempi in frasi complesse con più subordinate che combinano indicativo e congiuntivo nella scrittura formale",
@@ -34,11 +34,11 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Registro formale e accademico",
         grammar_points=["nominalizzazione", "impersonalita", "passivo-accademico"],
         vocabulary_set_ids=["accademico_c1", "ricerca_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Trasforma sintagmi verbali in sintagmi nominali tramite nominalizzazione, tratto fondamentale dello stile accademico italiano: analizzare -> l'analisi, sviluppare -> lo sviluppo, crescere -> la crescita, approfondire -> l'approfondimento",
             "Costruisce frasi accademiche impersonali usando: si ritiene che + congiuntivo, si è dimostrato che, è stato osservato che, risulta evidente che, appare necessario, va sottolineato che",
-            "Usa la forma passiva con essere, venire e andare per diverse sfumature (stato/processo/obbligo) anche nei tempi composti della prosa accademica: è stato analizzato, viene considerato, va rispettata la norma",
+            "Usa essere per la passiva anche nei tempi composti (è stato analizzato), venire nei tempi semplici per il processo (viene considerato) e andare nei tempi semplici per l'obbligo (va rispettata la norma)",
             "Mantiene un registro formale coerente in un testo accademico di oltre 400 parole, evitando lessico colloquiale, abuso di fare, appelli diretti al lettore e connettivi informali",
             "Produce un paragrafo accademico strutturato con soggetto nominalizzato, predicato impersonale e connettivi formali tipici della scrittura accademica italiana",
         ],
@@ -52,7 +52,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Lessico specializzato italiano",
         grammar_points=["campi-semantici", "derivazione", "precisione-lessicale"],
         vocabulary_set_ids=["professionale_c1", "tecnico_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Deriva nuove parole in modo sistematico con suffissi produttivi italiani: -zione/-sione (produzione), -ità/-tà (qualità, libertà), -ezza/-ura (bellezza, scrittura), -oso (prezioso), -bile (realizzabile), -mente e prefissi in-/im-, ri-, sub-, inter-, pre-, post-",
             "Usa le alterazioni italiane: diminutivi (-ino/-etto: libretto, casetta), accrescitivi (-one: librone, donnona), peggiorativi (-accio: ragazzaccio, tempaccio), vezzeggiativi (-uccio/-uzzo: amoruccio)",
@@ -70,7 +70,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Ironia, umorismo e doppio senso",
         grammar_points=["ironia-italiana", "umorismo", "doppio-senso"],
         vocabulary_set_ids=["umorismo_c1", "cultura_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Riconosce ironia verbale e sarcasmo in italiano prestando attenzione a intonazione, contesto e incongruità lessicale: Che bella giornata! (detto durante un temporale); Sei proprio in gamba! (detto sarcasticamente)",
             "Comprende giochi di parole, doppi sensi e umorismo culturalmente marcato presenti in TV, pubblicità e parlato quotidiano italiano",
@@ -88,7 +88,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Discorso persuasivo e retorica",
         grammar_points=["figure-retoriche", "persuasione", "tecniche-oratorie"],
         vocabulary_set_ids=["oratoria_c1", "presentazioni_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa anafora, epifora, chiasmo e altre figure retoriche per aumentare la forza persuasiva di un discorso o di un saggio in italiano",
             "Usa strutture concessive per argomentare in modo sofisticato: pur ammettendo che + congiuntivo, anche se + congiuntivo, per quanto + congiuntivo: Per quanto si sforzi, non riesce a convincermi",
@@ -106,7 +106,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Varietà dell'italiano",
         grammar_points=["italiano-regionale", "dialetti", "italiano-standard"],
         vocabulary_set_ids=["varietà_c1", "dialetti_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Individua i principali tratti fonologici delle varietà regionali italiane: gorgia toscana, abbassamento vocalico romanesco, desonorizzazione settentrionale, rafforzamento consonantico meridionale",
             "Comprende differenze lessicali chiave tra italiano settentrionale e meridionale, inclusi regionalismi e uso variabile di diminutivi e alterazioni",
@@ -124,7 +124,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Analisi critica e sintesi",
         grammar_points=["sintesi-testuale", "critica-costruttiva", "riformulazione"],
         vocabulary_set_ids=["analisi_c1", "sintesi_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Sintetizza informazioni da due o tre fonti in un riassunto coerente e attribuito: Secondo X..., D'altra parte, Y sostiene che..., È necessario però considerare che...",
             "Valuta coerenza interna, affidabilità e possibili bias di un'argomentazione in un testo italiano usando lessico critico: presuppone che, si basa sull'ipotesi che, manca di evidenze concrete, è privo di fondamento",
@@ -150,7 +150,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "sintesi-testuale",
         ],
         vocabulary_set_ids=["ripasso_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produce un testo formale di circa 400 parole integrando tutte le strutture grammaticali C1 (congiuntivo in tutti i contesti, nominalizzazione, varianti passive) con controllo evidente e fluidità naturale",
             "Esprime spontaneamente idee complesse e sfumate senza ricerca evidente di strutture o lessico",

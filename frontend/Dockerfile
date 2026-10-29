@@ -1,11 +1,11 @@
-FROM node:26.12.1-alpine AS deps
+FROM node:26.13.0-alpine AS deps
 WORKDIR /app
 RUN npm install -g npm@11.20.0
 COPY frontend/package.json frontend/package-lock.json ./
 COPY frontend/scripts/ ./scripts/
 RUN npm ci
 
-FROM node:26.12.1-alpine AS builder
+FROM node:26.13.0-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/ .
@@ -16,7 +16,7 @@ RUN node scripts/copy-vad-models.js
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-FROM node:26.12.1-alpine AS runner
+FROM node:26.13.0-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1

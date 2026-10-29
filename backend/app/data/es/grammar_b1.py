@@ -268,50 +268,6 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         related=["subjuntivo-presente", "subjuntivo-duda", "expresiones-deseo"],
     ),
     GrammarTopic(
-        slug="preterito-perfecto",
-        title="Pretérito perfecto compuesto",
-        level="B1",
-        category="Tiempos verbales",
-        summary="He hablado, has comido, han vivido — acciones pasadas conectadas con el presente.",
-        explanation="El **pretérito perfecto compuesto** se forma con el presente del verbo **haber** + **participio**. El participio es **invariable** en esta construcción: *he comido* (no ~~he comida~~).\n\n| Persona | Haber | + Participio |\n|---------|-------|--------------|\n| yo | he | hablado/comido/vivido |\n| tú | has | hablado/comido/vivido |\n| él/ella/usted | ha | hablado/comido/vivido |\n| nosotros | hemos | hablado/comido/vivido |\n| vosotros | habéis | hablado/comido/vivido |\n| ellos/ellas/uds. | han | hablado/comido/vivido |\n\nSe usa para:\n- **Acciones pasadas en un periodo de tiempo no terminado**: *Hoy he ido al médico. / Esta semana hemos trabajado mucho.*\n- **Experiencias sin marcador temporal concreto**: *He visitado Japón tres veces.*\n- **Acciones con resultados en el presente**: *He perdido las llaves.* (y aún no las encuentro)\n\nEn algunas zonas de España se prefiere este tiempo para cualquier pasado reciente; en gran parte de América Latina se usa el indefinido.",
-        structure="haber (presente: he/has/ha/hemos/habéis/han) + participio (-ado/-ido)",
-        rules=[
-            "Se forma con haber (presente) + participio invariable.",
-            "Participios regulares: -ar → -ado (hablar → hablado); -er/-ir → -ido (comer → comido, vivir → vivido).",
-            "Participios irregulares: hacer → hecho, decir → dicho, ver → visto, escribir → escrito, poner → puesto, volver → vuelto, romper → roto, morir → muerto, abrir → abierto, cubrir → cubierto.",
-            "Se usa con marcadores como hoy, esta semana, este año, ya, todavía no, nunca, alguna vez.",
-        ],
-        examples=[
-            GrammarExample(text="Hoy he comido paella.", translation=None),
-            GrammarExample(
-                text="¿Has estado alguna vez en México?",
-                translation=None,
-            ),
-            GrammarExample(
-                text="Todavía no hemos terminado el proyecto.",
-                translation=None,
-            ),
-            GrammarExample(text="Ya he visto esa película.", translation=None),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="He visto la película ayer.",
-                correct="Ayer vi la película.",
-                note='Con "ayer" (periodo terminado) se usa indefinido, no perfecto.',
-            ),
-            GrammarMistake(
-                wrong="Han rompido la ventana.",
-                correct="Han roto la ventana.",
-                note='El participio de romper es "roto", irregular.',
-            ),
-        ],
-        related=[
-            "pluscuamperfecto",
-            "marcadores-perfecto",
-            "preterito-indefinido-regular",
-        ],
-    ),
-    GrammarTopic(
         slug="pluscuamperfecto",
         title="Pretérito pluscuamperfecto",
         level="B1",
@@ -345,9 +301,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Cuando llegué, ya empezó la película.",
-                correct="Cuando llegué, ya había empezado la película.",
-                note="Acción anterior a otra pasada requiere pluscuamperfecto.",
+                wrong="Cuando llegué, ellos ya habían comidos.",
+                correct="Cuando llegué, ellos ya habían comido.",
+                note="El participio con haber no concuerda con el sujeto: habían comido.",
             ),
             GrammarMistake(
                 wrong="Nunca he visto algo tan bonito hasta ese día.",
@@ -363,10 +319,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Adjetivos y adverbios",
         summary="Hoy, esta semana, ya, todavía no, nunca, alguna vez — marcadores del pretérito perfecto.",
-        explanation="Los **marcadores temporales** ayudan a decidir entre pretérito perfecto e indefinido. Cada tiempo tiene sus marcadores característicos:\n\n**Pretérito perfecto** (periodo no terminado o experiencia):\n- *hoy, esta mañana/tarde/noche, esta semana, este mes, este año, este verano...*\n- *ya, todavía no / aún no*\n- *alguna vez, nunca, siempre*\n- *últimamente, en los últimos días*\n- *hace un rato, hace poco*\n\n**Pretérito indefinido** (periodo terminado):\n- *ayer, anoche, anteayer*\n- *la semana pasada, el mes pasado, el año pasado*\n- *hace dos días / tres meses / mucho tiempo*\n- *en 2015, en julio*\n- *aquel día, entonces*\n\nLa clave es si el periodo de tiempo **incluye o no el presente**.",
+        explanation="Los **marcadores temporales** orientan la elección del pasado, pero no determinan por sí solos un único tiempo.\n\nEn buena parte de España, el perfecto es frecuente con periodos que se consideran abiertos (*hoy, esta semana, este año*) o experiencias conectadas con el presente (*alguna vez, todavía no, últimamente*). Para hechos en periodos cerrados, como *ayer* o *el año pasado*, suele emplearse el indefinido.\n\nHay variación regional y contextual: *Hoy fui al médico* es correcta y habitual en muchas zonas. *Nunca fui a ese colegio* y *Nunca he ido a ese colegio* presentan la experiencia desde perspectivas distintas. *Esta mañana* puede considerarse un periodo abierto o cerrado según cuándo y cómo se relate. No conviertas los marcadores en reglas automáticas.",
         rules=[
-            "Periodo no terminado (hoy, esta semana) → pretérito perfecto.",
-            "Periodo terminado (ayer, la semana pasada) → pretérito indefinido.",
+            "En buena parte de España, un periodo abierto favorece el perfecto, sin excluir otros usos regionales.",
+            "Un periodo presentado como cerrado favorece el indefinido; considera también el contexto y la variedad.",
             '"Ya" y "todavía no" van frecuentemente con perfecto para expresar acciones completadas o pendientes.',
             '"Nunca" y "alguna vez" con perfecto para experiencias vitales.',
         ],
@@ -388,13 +344,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
         ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="Hoy fui al médico.",
-                correct="Hoy he ido al médico.",
-                note='Con "hoy" (periodo no terminado) en España se prefiere el perfecto. En América se usa también el indefinido.',
-            ),
-        ],
+        common_mistakes=[],
         related=["preterito-perfecto", "pluscuamperfecto", "marcadores-temporales"],
     ),
     GrammarTopic(
@@ -436,9 +386,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="El participio debe concordar con el sujeto paciente (cena, femenino).",
             ),
             GrammarMistake(
-                wrong="El libro está escrito por Cervantes.",
-                correct="El libro fue escrito por Cervantes.",
-                note='"Estar + participio" indica resultado; "ser + participio" indica proceso/agente.',
+                wrong="Los libros fueron escrito por Cervantes.",
+                correct="Los libros fueron escritos por Cervantes.",
+                note="En la pasiva con ser, el participio concuerda con el sujeto paciente plural.",
             ),
         ],
         related=["se-impersonal", "se-pasivo", "pasiva-refleja"],
@@ -448,25 +398,25 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Se impersonal",
         level="B1",
         category="Voz pasiva",
-        summary='Construcciones impersonales con "se": Se habla español. Se vive bien aquí.',
-        explanation='El **se impersonal** se usa para expresar acciones sin mencionar quién las realiza.\n\n**Características**:\n- El verbo va siempre en **tercera persona del singular**.\n- No hay sujeto gramatical explícito.\n- La acción se presenta como general, sin responsable concreto.\n\nEjemplos:\n- *Se vive bien en esta ciudad.*\n- *Se habla español aquí.*\n- *Se necesita personal.*\n\nCuando el complemento es de persona, se usa la preposición "a":\n- *Se busca a los responsables.*\n- *Se recibió a los invitados.*',
+        summary='Construcciones impersonales con "se": Se vive bien aquí. Se recibió a los invitados.',
+        explanation="El **se impersonal** presenta acciones con un agente humano no especificado y **sin sujeto gramatical**. El verbo va en tercera persona del singular:\n- *Se vive bien en esta ciudad*.\n- *Se trabaja mucho aquí*.\n- *Se recibió a los invitados*.\n\nCon un complemento directo de persona determinada se conserva la a personal: *Se busca a los responsables*. No se hace concordar el verbo con ese complemento plural.\n\nNo debe confundirse con la pasiva refleja: en *Se necesitan camareros*, camareros es sujeto paciente y el verbo concuerda con él. Con un sintagma singular, como *Se habla español*, la forma del verbo no basta para distinguir las construcciones.",
         structure="se + verbo en 3ª persona singular",
         rules=[
             "El verbo va en 3ª persona singular, nunca en plural.",
             "La construcción es impersonal: no hay sujeto.",
-            'Con complementos de persona se usa "a": "Se busca a los testigos".',
-            "No confundir con la pasiva refleja, donde el verbo concuerda con el objeto.",
+            'Con complemento directo de persona determinada se mantiene la a personal: "Se busca a los testigos".',
+            "En la pasiva refleja el verbo concuerda con el sujeto paciente, no con un objeto.",
         ],
         examples=[
             GrammarExample(
-                text="Se habla inglés en la recepción.",
+                text="Se trabaja mucho en la recepción.",
                 translation=None,
             ),
             GrammarExample(
                 text="Se come muy bien en este restaurante.",
                 translation=None,
             ),
-            GrammarExample(text="Se necesita camarero.", translation=None),
+            GrammarExample(text="Se vive bien en esta ciudad.", translation=None),
             GrammarExample(
                 text="Se busca a los criminales.",
                 translation=None,
@@ -795,11 +745,11 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Estilo indirecto",
         summary="Transformaciones avanzadas del estilo indirecto con verbos en pretérito.",
-        explanation='Cuando el verbo introductor del estilo indirecto está en **pasado** (dijo, comentó, explicó, preguntó), se produce una **correlación de tiempos verbales** que afecta a toda la oración subordinada:\n\n| Estilo directo | Estilo indirecto (pasado) |\n|---------------|--------------------------|\n| Presente: "Voy" | Imperfecto: Dijo que **iba** |\n| Pret. perfecto: "He ido" | Pluscuamperfecto: Dijo que **había ido** |\n| Pret. indefinido: "Fui" | Pluscuamperfecto: Dijo que **había ido** |\n| Imperfecto: "Iba" | Imperfecto: Dijo que **iba** (no cambia) |\n| Pluscuamperfecto: "Había ido" | Pluscuamperfecto: Dijo que **había ido** (no cambia) |\n| Futuro simple: "Iré" | Condicional simple: Dijo que **iría** |\n| Futuro perfecto: "Habré ido" | Condicional compuesto: Dijo que **habría ido** |\n| Condicional: "Iría" | Condicional: Dijo que **iría** (no cambia) |\n\nLas órdenes y peticiones en imperativo pasan a subjuntivo:\n- *"Ven" → Dijo que **vinieras**.*\n- *"No salgas" → Dijo que no **salieras**.*',
+        explanation='Al reproducir palabras desde una perspectiva pasada, son frecuentes estas correspondencias:\n\n| Estilo directo | Relato desde el pasado |\n|---------------|------------------------|\n| "Voy" | Dijo que **iba** |\n| "He ido" | Dijo que **había ido** |\n| "Fui" | Dijo que **había ido** / que **fue**, según el contexto |\n| "Iba" | Dijo que **iba** |\n| "Había ido" | Dijo que **había ido** |\n| "Iré" | Dijo que **iría** |\n| "Habré ido" | Dijo que **habría ido** |\n| "Iría" | Dijo que **iría** |\n\nNo hay un retroceso obligatorio de todos los tiempos: *Dijo que vive aquí* es posible si sigue viviendo aquí; *Dijo que vendrá mañana* mantiene una referencia futura vigente.\n\nLas órdenes y peticiones se reproducen con subjuntivo: *Me pidió que fuera* o, si la petición se proyecta sobre un momento aún vigente, *Me pidió que vaya mañana*. Ajusta personas y referencias al contexto real.',
         rules=[
-            "Presente → imperfecto; perfecto/indefinido → pluscuamperfecto.",
-            "Imperfecto, pluscuamperfecto y condicional no cambian.",
-            "Futuro → condicional; imperativo → imperfecto de subjuntivo.",
+            "Desde una perspectiva pasada, el presente suele pasar a imperfecto y los hechos anteriores pueden expresarse en pluscuamperfecto.",
+            "El imperfecto, el pluscuamperfecto y el condicional pueden mantenerse; la elección depende de la relación temporal.",
+            "El futuro suele pasar a condicional desde una perspectiva pasada; las peticiones se reproducen con subjuntivo.",
             'Las preguntas indirectas no llevan signos de interrogación: "Preguntó qué quería".',
         ],
         examples=[
@@ -823,9 +773,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Dijo que ha ido al médico ayer.",
-                correct="Dijo que había ido al médico el día anterior.",
-                note="Con verbo introductor en pasado, el perfecto pasa a pluscuamperfecto.",
+                wrong="Dijo de que había ido al médico.",
+                correct="Dijo que había ido al médico.",
+                note="Decir introduce el contenido con que, sin de.",
             ),
             GrammarMistake(
                 wrong="Me pidió que le ayudo.",
@@ -834,62 +784,6 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
         ],
         related=["estilo-indirecto", "cambios-temporales", "subjuntivo-imperfecto"],
-    ),
-    GrammarTopic(
-        slug="por-para",
-        title="Por y para: usos y diferencias",
-        level="B1",
-        category="Preposiciones",
-        summary="Distinción entre las preposiciones por y para según expresen causa, finalidad, destinatario, medio, dirección y otros contextos.",
-        explanation='**Por** y **para** son dos preposiciones que en español se confunden con frecuencia porque en muchos idiomas se traducen por una sola palabra.\n\n### Usos principales de POR\n\n- **Causa o motivo:** *Llegué tarde por el tráfico.*\n- **Medio o canal:** *Te llamo por teléfono.*\n- **Lugar aproximado:** *El libro está por aquí.*\n- **Tiempo aproximado:** *Llegaré por la tarde.*\n- **Intercambio o precio:** *Lo compré por diez euros.*\n- **Agente en voz pasiva:** *Don Quijote fue escrito por Cervantes.*\n- **Frecuencia:** *Voy al gimnasio dos veces por semana.*\n- **Sustitución:** *Vino mi hermano por mí.*\n\n### Usos principales de PARA\n\n- **Finalidad o propósito:** *Estudio para aprender.*\n- **Destinatario:** *El regalo es para ti.*\n- **Dirección:** *Salgo para Madrid.*\n- **Plazo límite:** *Lo necesito para el lunes.*\n- **Opinión:** *Para mí, es la mejor opción.*\n- **Comparación con lo esperado:** *Para ser principiante, habla muy bien.*\n\n### Truco práctico\n\nSustituye mentalmente **por** con "a causa de" o "a través de" y **para** con "con el fin de" o "destinado a".',
-        structure="POR: causa/motivo · medio/canal · lugar aproximado · tiempo aproximado · intercambio · agente (voz pasiva) · opinión\nPARA: finalidad/propósito · destinatario · dirección · plazo límite · opinión · comparación",
-        rules=[
-            '"Por" expresa la causa o el motivo de una acción: "Lo hice por necesidad, no por gusto".',
-            '"Para" expresa la finalidad o el propósito: "Ahorro para comprarme un coche".',
-            '"Por" indica el medio: "Te lo envío por correo electrónico".',
-            '"Para" indica el destinatario: "He preparado la cena para todos".',
-            'En la voz pasiva, el agente se introduce con "por": "La ley fue aprobada por el Congreso".',
-        ],
-        examples=[
-            GrammarExample(
-                text="Estudio español para viajar por Latinoamérica.",
-                translation=None,
-                note="para = finalidad; por = lugar aproximado",
-            ),
-            GrammarExample(
-                text="Gracias por todo. El regalo es para ti.",
-                translation=None,
-                note="por = causa de agradecimiento; para = destinatario",
-            ),
-            GrammarExample(
-                text="Pasé por tu oficina pero no estabas.",
-                translation=None,
-                note="lugar aproximado",
-            ),
-            GrammarExample(
-                text="Este informe es para el viernes.",
-                translation=None,
-                note="plazo límite",
-            ),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="Gracias para la invitación.",
-                correct="Gracias por la invitación.",
-                note='Con "gracias" se usa "por", no "para".',
-            ),
-            GrammarMistake(
-                wrong="Estudio por ser médico.",
-                correct="Estudio para ser médico.",
-                note='"Para" + infinitivo expresa el propósito de la acción.',
-            ),
-            GrammarMistake(
-                wrong="El puente fue construido para los romanos.",
-                correct="El puente fue construido por los romanos.",
-                note='El agente de la voz pasiva se introduce con "por".',
-            ),
-        ],
-        related=["preposiciones-lugar", "voz-pasiva", "conectores-avanzados"],
     ),
     GrammarTopic(
         slug="tildes-diacriticas",

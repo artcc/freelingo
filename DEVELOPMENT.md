@@ -20,7 +20,7 @@ From the repository root:
 ./scripts/bootstrap.sh
 ```
 
-`scripts/toolchain.env` pins Python 3.14.9, Node 26.12.1, bundled npm 11.20.0 and pip 26.2.2. Bootstrap
+`scripts/toolchain.env` pins Python 3.14.9, Node 26.13.0 LTS, bundled npm 11.20.0 and pip 26.2.2. Bootstrap
 downloads standalone CPython from `astral-sh/python-build-standalone` and Node from `nodejs.org`,
 verifying their archives against committed SHA-256 checksums before extraction.
 

@@ -16,12 +16,12 @@ B2_UNITS: list[CurriculumUnit] = [
             "concordancia-temporal",
         ],
         vocabulary_set_ids=["sentimientos_b2", "hipótesis_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma el imperfecto de subjuntivo en sus variantes -ra y -se con verbos regulares e irregulares (hablara/hablase, tuviera/tuviese, fuera/fuese) y usa ambas con naturalidad",
             "Aplica el imperfecto de subjuntivo en condicionales de tipo 2 (Si tuviera tiempo, lo haría) y tras verbos en pasado en la principal (Me pidió que viniera, Quería que lo supiera)",
             "Forma el pluscuamperfecto de subjuntivo (hubiera/hubiese + participio) y lo usa en condicionales de tipo 3: Si hubiera estudiado más, habría aprobado",
-            "Aplica correctamente la concordancia temporal: presente/futuro en la principal -> presente de subjuntivo; pasado/condicional en la principal -> imperfecto de subjuntivo",
+            "Elige el tiempo del subjuntivo según anterioridad, simultaneidad o posterioridad y el punto de referencia: Quiero que vengas, No creo que viniera ayer, Quería que vinieras",
             "Expresa reproche y arrepentimiento con ojalá + imperfecto/pluscuamperfecto de subjuntivo: ojalá estuviera aquí, ojalá hubiera dicho la verdad",
         ],
         default_weeks=2,
@@ -38,7 +38,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "dejar-de-seguir",
         ],
         vocabulary_set_ids=["hábitos_b2", "cambios_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa estar + gerundio para acciones en curso en un momento concreto y llevar + expresión temporal + gerundio para duración: Llevo tres horas estudiando",
             "Usa ir + gerundio para cambios progresivos graduales (El proyecto va mejorando) y acabar de + infinitivo para acciones muy recientes (Acabo de llegar)",
@@ -62,7 +62,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "c-s-z",
         ],
         vocabulary_set_ids=["ensayos_b2", "académico_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa aunque + indicativo para hechos asumidos (Aunque llueve, salgo) frente a aunque + subjuntivo para hipótesis (Aunque llueva, saldré), reconociendo el matiz semántico",
             "Usa con propiedad conectores causales y consecutivos: ya que/puesto que/dado que (causa, formal) frente a porque (causa directa); por lo tanto/de ahí que (consecuencia, este último exige subjuntivo)",
@@ -81,7 +81,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Expresiones idiomáticas",
         grammar_points=["modismos-comunes", "expresiones-coloquiales", "refranes"],
         vocabulary_set_ids=["modismos_b2", "cultura_b2", "modismos_expresiones_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Comprende y usa más de 20 expresiones idiomáticas frecuentes en contexto: no hay mal que por bien no venga, a las duras y a las maduras, no dar pie con bola, ponerse las pilas, no tener pelos en la lengua",
             "Interpreta expresiones figuradas en textos auténticos sin recurrir a traducción literal: estar en las nubes, meter la pata, costar un ojo de la cara",
@@ -103,7 +103,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "matizadores",
         ],
         vocabulary_set_ids=["debates_b2", "temas-sociales_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Presenta una tesis clara y la desarrolla con argumentos de apoyo, ejemplos y evidencias usando conectores como en primer lugar, cabe destacar que, a modo de ejemplo",
             "Introduce contraargumentos y los rebate: es cierto que..., pero / si bien es verdad que..., no obstante / aunque reconozco que..., considero que",
@@ -121,7 +121,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Literatura y textos narrativos",
         grammar_points=["tiempos-narrativos", "descripcion-literaria", "metaforas"],
         vocabulary_set_ids=["literatura_b2", "lectura_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa juntos pretérito indefinido, imperfecto y pluscuamperfecto en narraciones literarias para distinguir acciones principales, descripciones de fondo y hechos previos al tiempo del relato",
             "Identifica y nombra recursos literarios frecuentes en español: metáfora, símil, hipérbole, metonimia, ironía, y los reconoce en fragmentos breves",
@@ -139,7 +139,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Medios y actualidad",
         grammar_points=["lenguaje-periodistico", "titulares", "discurso-reportado"],
         vocabulary_set_ids=["noticias_b2", "actualidad_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifica rasgos del lenguaje periodístico en español: nominalizaciones, voz pasiva, construcciones impersonales y conectores formales",
             "Interpreta la gramática de titulares: elipsis verbal, infinitivo con valor de inmediatez, omisión de artículos y presente con valor reciente",
@@ -167,7 +167,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "c-s-z",
         ],
         vocabulary_set_ids=["repaso_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Escribe un ensayo formal de 200 palabras integrando imperfecto de subjuntivo, conectores avanzados y estructura argumentativa clara",
             "Produce un texto narrativo (150 palabras) con uso correcto de pretérito indefinido, imperfecto y pluscuamperfecto, e incluye al menos un recurso literario",

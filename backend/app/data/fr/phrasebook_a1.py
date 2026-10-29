@@ -23,8 +23,8 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 text="Bonsoir.",
-                context="Saluer quelqu'un en soirée (à partir de ~18h)",
-                register="formal",
+                context="Saluer en fin de journée ou en soirée; le moment varie selon le contexte",
+                register="neutral",
                 unit_ref="a1-unit-1",
             ),
             PhrasebookEntry(
@@ -72,7 +72,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 text="Enchanté(e).",
                 context="Dire « ravi(e) de vous rencontrer » quand on vous présente quelqu'un",
-                register="formal",
+                register="neutral",
                 unit_ref="a1-unit-1",
             ),
             PhrasebookEntry(

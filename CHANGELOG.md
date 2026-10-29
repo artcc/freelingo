@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.65] - 2026-10-30
+
+### Changed
+
+- Aligned local tooling, CI, and frontend container images on Node.js 26.13.0 LTS (Lithium), retaining npm 11.20.0.
+
+### Fixed
+
+- British and American English study plans explicitly cover A1 plurals, demonstratives, and object pronouns, plus A2 past continuous, with corresponding consolidation practice.
+- New American English A1 plans include listening among their scheduled lesson types.
+- Corrected ambiguous present-perfect and advice questions in both English placement banks so valid alternative answers are not marked incorrect.
+- Corrected British English phonetic transcriptions for “euphoria” and “scenario”.
+- New German study plans include listening in every A1–C2 unit's lesson cycle.
+- Corrected German placement questions with invalid or ambiguous answers, removed English-dependent questions, and varied correct-answer positions in the static bank.
+- Corrected German grammar explanations, declension examples, spelling and noun genders, and replaced circular vocabulary definitions with meaningful explanations.
+- New Spanish study plans include listening throughout A1–C2, explicit A1 practice of `estar + gerundio`, and A2 perfect-compound and `por`/`para` coverage with consolidation.
+- Corrected ambiguous Spanish placement questions and varied correct-answer positions in the static bank.
+- Corrected Spanish grammar explanations and examples, regional and historical references, greeting registers, and a vocabulary example and phonetic transcription.
+- New French, Italian, and Portuguese study plans include listening in every A1–C2 unit's lesson cycle.
+- French A1 plans explicitly cover frequent present-tense verbs; Italian A2 plans introduce `stare + gerundio` with consolidation; Portuguese introductions include `ter` for age.
+- Corrected ambiguous or invalid French, Italian, and Portuguese placement questions, clarified advanced exercises, and balanced correct-answer positions in their static banks.
+- Corrected grammar rules, examples, spelling, and greeting registers in French, Italian, and Portuguese, including reported speech, subjunctive usage, and sociolinguistic descriptions.
+- Replaced circular French vocabulary definitions, corrected Italian phonetic transcriptions, and fixed literal newline escapes in Portuguese grammar explanations.
+- Corrected Japanese grammar rules and false corrections across A1–C2, clarified A2 plain-negative formation, and corrected literary analysis, historical examples, and meaning-preserving reformulations.
+- Corrected Japanese phrasebook romanizations and their correspondence with the saved phrases.
+- Clarified ambiguous Japanese placement questions, replaced weak advanced items with contextual exercises, and balanced correct-answer positions within each level and skill.
+- Corrected Korean A1–C2 conjugation rules, false corrections, honorific and register guidance, historical explanations, and reformulations that changed the source meaning; clarified foundational A1 forms in existing references.
+- Corrected Korean vocabulary meanings, examples, and vocabulary and phrasebook romanizations.
+- Clarified ambiguous Korean placement questions, replaced weak advanced items with contextual exercises, and balanced correct-answer positions within each level and skill.
+- Corrected remaining Italian concessive examples, past-tense accents, metonymy guidance, and a reported-speech reformulation that changed the unconfirmed claim.
+- Aligned a French literary-register example with its definition, distinguishing literary effects from language formality.
+- Corrected a German statistical-significance example that confused significance with its threshold.
+
 ## [1.10.60] - 2026-10-24
 
 ### Security

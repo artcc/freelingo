@@ -149,6 +149,10 @@ The response contains `plan_id`, `cefr_level`, `progress_day`, `total_days`, `pe
 A generation failure does not return a placeholder lesson with `id: null`. If every current slot fails,
 `lessons` is empty and a later `/today` call can retry generation.
 
+Lazy generation resolves the unit's full grammar and vocabulary references from the current
+language/level curriculum. This context can reflect curriculum edits even for an existing plan;
+its persisted schedule and already-generated lesson content remain unchanged.
+
 Auto-advance never crosses a day with no persisted lessons. An unvisited day must be generated and
 completed or explicitly skipped.
 

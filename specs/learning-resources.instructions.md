@@ -19,6 +19,130 @@ Static resource APIs accept an explicit language query and do not require it to 
 active language or owned plans. Frontend resource pages normally send the active language, with
 `en-GB` fallback.
 
+### English foundational curriculum
+
+Both `en-GB` and `en-US` place foundational grammar in the guided curriculum as well as the Grammar
+reference:
+
+- A1 unit 2, My World: articles, possessive adjectives, and regular/common irregular plurals.
+- A1 unit 3, Daily Life: present simple, question words, and adverbs of frequency.
+- A1 unit 4, Places & Location: there is/are, place prepositions, and demonstratives.
+- A1 unit 5, Actions Right Now: present continuous contrasted with present simple, and object pronouns.
+- A2 unit 1: past simple contrasted with past continuous, and past questions.
+- A1 and A2 consolidation units include the corresponding foundational grammar for mixed review.
+
+Every A1 unit in both English variants declares grammar, vocabulary, listening, reading, writing, and
+review in that order. Actual lesson allocation depends on plan capacity; declaring these types does
+not guarantee a complete cycle in every unit. See `study-plan.instructions.md` for scheduling and
+lazy-generation rules.
+
+### German curriculum and reference content
+
+Every German (`de-DE`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
+writing, and review in that order. Allocation uses the existing plan-capacity and rotation rules;
+individual units do not necessarily receive a complete cycle. Persisted schedules are retained, so
+the listening cycle applies to newly created plans. See `study-plan.instructions.md` for scheduling
+and lazy generation.
+
+German reference content distinguishes grammatical correctness from register or regional preferences,
+including the use of Perfekt and Präteritum. Vocabulary definitions explain meanings in German rather
+than merely repeating the headword; statistical examples distinguish significance from its threshold.
+Placement questions provide the context needed for one accepted
+answer, do not require English knowledge, and vary the correct option's position in the static bank.
+
+### Spanish curriculum and reference content
+
+Every Spanish (`es-ES`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
+writing, and review in that order. Scheduling follows the existing capacity and rotation rules;
+not every unit necessarily receives a complete cycle. Persisted schedules are retained, so this
+cycle applies to newly created plans. See `study-plan.instructions.md` for allocation rules.
+
+The foundational sequence includes:
+
+- A1 introductions distinguish `ser` for identity from `tener` for age.
+- A1 unit 6 and consolidation cover `estar + gerundio`, with formation and habitual-present contrast
+  in the existing `estar` reference topic.
+- A2 unit 1 and consolidation include the perfect compound alongside the simple past.
+- A2 unit 6 and consolidation cover basic `por`/`para` meanings.
+- The `preterito-perfecto` and `por-para` reference topics belong to A2 and retain their stable slugs;
+  B1 units reuse them for consolidation and broader contrasts.
+
+Spanish grammar distinguishes contextual tense choices and regional variation from grammatical
+errors, including reported speech, subjunctive concordance, and perfect/simple-past usage. Regional
+descriptions distinguish phonetic variation from grammatical phenomena such as leísmo. Placement
+questions specify the context, person, or tense needed for one accepted answer and vary the correct
+option's position in the static bank.
+
+### French, Italian, and Portuguese curriculum and reference content
+
+Every French (`fr-FR`), Italian (`it-IT`), and Portuguese (`pt-PT`) unit from A1 through C2
+declares grammar, vocabulary, listening, reading, writing, and review in that order. The existing
+capacity and rotation rules determine actual coverage; a short plan does not give every unit a full
+cycle. Persisted schedules are retained, so these declarations apply when creating new plans.
+
+The foundational sequence includes:
+
+- French A1 unit 4 and consolidation cover `finir`, `faire`, `prendre`, `venir`, and `boire` through
+  `verbes-frequents-present`, alongside regular `-er` and pronominal verbs.
+- Italian A2 unit 2 and consolidation include `stare-gerundio`. Its reference topic belongs to A2
+  and retains its stable slug; B2 reuses it when contrasting progressive periphrases.
+- Portuguese A1 introductions include `ter` for age. European Portuguese remains the teaching
+  variety, with `estar a + infinitivo` in A1 and the future subjunctive in B1.
+
+Reference explanations distinguish contextual tense choices from errors, including reported speech,
+French pronominal-participle agreement, Italian conditional versus interrogative `se` and factual versus
+hypothetical `anche se`, and Portuguese subjunctive selection. Italian reported-speech reformulations
+preserve which claim is unconfirmed. Portuguese grammar explanations use actual newline characters for rendering.
+Regional and sociolinguistic descriptions distinguish usage preferences from grammatical rules.
+French vocabulary distinguishes literary effects such as tragic or comic tone from language formality.
+
+Placement questions specify the context, tense, or person needed for the keyed answer. Correct-answer
+positions are balanced within each level/skill group in these three static banks; the frontend displays
+the saved option order. Grammar references resolve within the selected target language.
+
+### Japanese curriculum and reference content
+
+Japanese (`ja-JP`) units from A1 through C2 include listening in their existing lesson-type lists.
+Actual coverage follows the shared plan-capacity and rotation rules.
+
+The A2 `plain-past` reference, used in unit 1 and consolidation, introduces the plain negative
+before deriving the negative past. Formation covers godan and ichidan verbs, `う → わない`,
+`ある → ない`, `する → しない`, and `来る → 来ない（こない）`.
+
+Reference content distinguishes grammatical errors from register and contextual choices, including
+negative forms, conditionals, quotation, indirect passives, and modality. Advanced reformulation
+preserves the source's information and degree of certainty; statistical significance does not imply
+a large effect. Literary analysis distinguishes noun-ending sentences from predicate endings, and
+constructed historical examples are identified as teaching examples rather than attributed quotations.
+Phrasebook romanizations correspond to the saved Japanese wording.
+
+Placement questions specify the perspective or context needed to distinguish valid alternatives.
+Advanced questions exercise interpretation, register, scope, inference, and reformulation in context.
+Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
+and grammar slugs remain stable, and the frontend displays the saved option order. Content review
+does not establish empirical CEFR calibration.
+
+### Korean curriculum and reference content
+
+Korean (`ko-KR`) units from A1 through C2 include listening in their existing lesson-type lists.
+Actual coverage follows the shared plan-capacity and rotation rules.
+
+Existing A1 reference topics introduce `이에요/예요`, `이/가 아니에요`, basic `안/못` and
+`-지 않아요` negation, and final `ㅡ` deletion. Conjugation explanations distinguish retained `ㄹ`
+from endings that trigger its deletion. B2 uses `터예요/테니까` for intention and supposition.
+
+Reference content distinguishes grammar errors from particle omission, valid alternative forms,
+honorific choices, and register preferences. Advanced exercises preserve the source's participants,
+information, certainty, obligations, and causal scope when reformulating it. Historical explanations
+distinguish changes in writing, pronunciation, region, and register. Vocabulary definitions distinguish
+statistical significance from effect size or the probability that a hypothesis is true. Vocabulary and
+phrasebook pronunciation aids use Revised Romanization, including assimilation and aspiration.
+
+Placement questions supply the context or requested form needed to distinguish valid alternatives.
+Advanced items exercise interpretation, inference, register, and meaning-preserving reformulation.
+Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
+and grammar slugs remain stable. Content review does not establish empirical CEFR calibration.
+
 ## Shared native-language help
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native

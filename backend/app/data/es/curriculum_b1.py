@@ -12,7 +12,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Presente de subjuntivo",
         grammar_points=["subjuntivo-presente", "expresiones-deseo", "ojala"],
         vocabulary_set_ids=["emociones_b1", "deseos_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma el presente de subjuntivo en verbos regulares y en irregulares frecuentes: sea, esté, tenga, haya, vaya, quiera, pueda, sepa",
             "Usa subjuntivo tras verbos de deseo con cambio de sujeto: quiero que vengas, espero que llegue a tiempo (no *quiero que viene)",
@@ -35,7 +35,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "subjuntivo-valoracion",
         ],
         vocabulary_set_ids=["trabajo_b1", "estudios_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa subjuntivo tras verbos de recomendación: te recomiendo que pruebes, te aconsejo que estudies, sugiero que vayas",
             "Usa subjuntivo tras expresiones de duda e incertidumbre: no creo que sea verdad, dudo que lleguen a tiempo, no estoy seguro de que pueda",
@@ -57,7 +57,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "marcadores-perfecto",
         ],
         vocabulary_set_ids=["experiencias_b1", "logros_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma el pretérito perfecto con haber + participio y lo usa para hechos vinculados al presente en el uso peninsular: hoy he comido, esta semana he estudiado, nunca he estado en Japón",
             "Usa el pretérito perfecto con sus marcadores clave: hoy, esta semana/mañana/tarde, este mes/año, ya, todavía no, alguna vez, nunca, últimamente, recientemente",
@@ -75,7 +75,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Voz pasiva y construcciones impersonales",
         grammar_points=["voz-pasiva", "se-impersonal", "se-pasivo"],
         vocabulary_set_ids=["noticias_b1", "sociedad_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma la voz pasiva con ser + participio en presente y pasado, ajustando el participio en género y número: La novela fue escrita por Cervantes",
             "Usa se pasivo (pasiva refleja) para describir procesos o informar de normas y servicios: Se venden pisos, Se hablan cinco idiomas, Se prohíbe fumar",
@@ -93,7 +93,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Oraciones de relativo",
         grammar_points=["que-relativo", "donde-cuando-relativo", "cuyo"],
         vocabulary_set_ids=["descripciones_b1", "gente_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Construye relativas especificativas con que para personas y cosas: el libro que leí, la persona que vino ayer",
             "Usa donde para lugares y cuando para tiempo en oraciones de relativo: el café donde nos conocimos, el día cuando llegaste",
@@ -114,9 +114,9 @@ B1_UNITS: list[CurriculumUnit] = [
             "suposiciones-futuro",
         ],
         vocabulary_set_ids=["viajes_b1", "situaciones_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Forma y usa la condicional de tipo 1: si + presente de indicativo + futuro para condiciones reales y probables: Si tienes tiempo, llámame",
+            "Forma condicionales reales con si + presente de indicativo y futuro, presente o imperativo: Si tienes tiempo, llámame",
             "Forma y usa la condicional de tipo 2: si + imperfecto de subjuntivo + condicional para situaciones presentes irreales o poco probables: Si tuviera dinero, viajaría por el mundo",
             "Usa el futuro para expresar probabilidad sobre una situación presente: ¿Qué hora será? Serán las tres",
             "Usa el condicional para expresar probabilidad sobre una situación pasada: ¿Dónde estaba? Estaría en casa",
@@ -138,9 +138,9 @@ B1_UNITS: list[CurriculumUnit] = [
             "g-j-h",
         ],
         vocabulary_set_ids=["opiniones_b1", "debates_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Reformula lo que dijo otra persona aplicando la secuencia temporal necesaria: dijo que + imperfecto para presente original (Dijo que tenía hambre), dijo que + pluscuamperfecto para pasado original (Dijo que había salido)",
+            "Reformula lo que dijo otra persona según el contexto temporal: Dijo que tenía hambre o Dijo que había salido para una perspectiva pasada; Dijo que tiene hambre si sigue vigente",
             "Reproduce preguntas correctamente con preguntó si en preguntas totales y preguntó + interrogativo en preguntas parciales, manteniendo el orden enunciativo",
             "Usa conectores argumentativos con corrección: sin embargo (contraste), además (adición), por lo tanto (consecuencia), aunque + indicativo (hecho), es decir (aclaración)",
             "Expresa y defiende opiniones con en mi opinión, creo que, desde mi punto de vista, a mi juicio, y responde a contraargumentos",
@@ -167,7 +167,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "g-j-h",
         ],
         vocabulary_set_ids=["repaso_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Resuelve con seguridad la mayoría de situaciones cotidianas (viajes, trabajo, eventos sociales), expresando opiniones y reaccionando a otros",
             "Usa correctamente el presente de subjuntivo en sus contextos centrales de B1: deseo, emoción, duda, recomendación y valoración impersonal",
