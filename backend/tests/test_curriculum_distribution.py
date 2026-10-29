@@ -167,7 +167,14 @@ def test_modality_coverage_es_b1_4x5() -> None:
     assert [counts[u.id] for u in units] == [3, 3, 3, 2, 2, 2, 2, 2]
 
     unit_owned_types = {s["lesson_type"] for s in slots if s["unit_id"] != COMPLETION_UNIT_ID}
-    assert {"grammar", "vocabulary", "reading", "writing", "review"} <= unit_owned_types
+    assert {
+        "grammar",
+        "vocabulary",
+        "listening",
+        "reading",
+        "writing",
+        "review",
+    } <= unit_owned_types
 
     # The completion test still owns the final coordinate and is not a substitute
     # for a unit review lesson — it resolves to no unit and carries no unit context.

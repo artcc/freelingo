@@ -106,12 +106,12 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Subjuntivo",
         summary="Correlación de tiempos entre la oración principal y la subordinada en subjuntivo.",
-        explanation="La **concordancia temporal** (o *consecutio temporum*) es la relación obligatoria entre el tiempo de la oración principal y el de la subordinada cuando esta va en subjuntivo.\n\n**Principal en presente o futuro** → subordinada en **presente de subjuntivo** o **pretérito perfecto de subjuntivo**:\n- *Quiero que **vengas**.* (presente → presente subj.)\n- *No creo que **haya venido**.* (presente → perfecto subj.)\n\n**Principal en pasado o condicional** → subordinada en **imperfecto de subjuntivo** o **pluscuamperfecto de subjuntivo**:\n- *Quería que **vinieras**.* (imperfecto → imperfecto subj.)\n- *No creía que **hubiera venido**.* (imperfecto → pluscuamperfecto subj.)\n\nEl tiempo de la subordinada indica **anterioridad, simultaneidad o posterioridad** respecto al verbo principal.",
+        explanation="La **concordancia temporal** relaciona los tiempos de la principal y la subordinada según la perspectiva del hablante y la anterioridad, simultaneidad o posterioridad de los hechos.\n\n**Patrones frecuentes**:\n- *Quiero que vengas*: deseo actual sobre una acción presente o futura.\n- *No creo que haya venido*: valoración actual sobre un hecho anterior vinculado al presente.\n- *Quería que vinieras*: deseo situado en el pasado.\n- *No creía que hubiera venido*: valoración pasada sobre un hecho anterior.\n\nNo son correspondencias automáticas. Una principal en presente puede referirse a un pasado cerrado: *No creo que viniera ayer* o *Espero que lo pasaras bien*. Una principal en pasado puede introducir una acción aún vigente o futura: *Me pidió que vaya mañana*. La elección depende del marco temporal, del significado del verbo y, en ciertos usos, de la variedad regional.",
         rules=[
-            "Verbo principal en presente/futuro → subjuntivo presente o perfecto.",
-            "Verbo principal en pasado/condicional → subjuntivo imperfecto o pluscuamperfecto.",
+            "Con principal en presente son frecuentes el presente y el perfecto de subjuntivo; el imperfecto permite referirse a un pasado cerrado.",
+            "Desde una perspectiva pasada son frecuentes el imperfecto y el pluscuamperfecto de subjuntivo.",
             "La elección entre presente/imperfecto o perfecto/pluscuamperfecto depende de la relación temporal.",
-            "El condicional cuenta como pasado para la concordancia.",
+            "El condicional suele combinarse con imperfecto de subjuntivo: me gustaría que vinieras.",
         ],
         examples=[
             GrammarExample(
@@ -137,14 +137,14 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Quería que vengas.",
-                correct="Quería que vinieras.",
-                note="Con verbo principal en pasado, la subordinada debe ir en imperfecto de subjuntivo.",
+                wrong="Quería que tú viniera.",
+                correct="Quería que tú vinieras.",
+                note="La subordinada concuerda con tú: vinieras.",
             ),
             GrammarMistake(
-                wrong="Espero que vinieras ayer.",
-                correct="Espero que hayas venido ayer. / Esperaba que vinieras ayer.",
-                note="Si el principal está en presente, la acción pasada inmediata va en perfecto de subjuntivo.",
+                wrong="No creía que ellos hubiera terminado.",
+                correct="No creía que ellos hubieran terminado.",
+                note="El auxiliar concuerda con ellos: hubieran terminado.",
             ),
         ],
         related=[
@@ -207,12 +207,12 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Verbos",
         summary="Expresar obligación, necesidad o posibilidad: tener que, deber, hay que, poder, deber de.",
-        explanation="Las **perífrasis modales** expresan la actitud del hablante ante la acción: obligación, probabilidad, capacidad, permiso.\n\n**Obligación y necesidad**:\n- *Tener que + infinitivo*: obligación personal, la más común. *Tengo que terminar esto.*\n- *Deber + infinitivo*: obligación moral o consejo. *Debes respetar las normas.*\n- *Hay que + infinitivo*: obligación impersonal. *Hay que estudiar para aprobar.*\n- *Hacer falta + infinitivo*: necesidad. *Hace falta comprar pan.*\n\n**Probabilidad**:\n- *Deber de + infinitivo*: conjetura. *Deben de ser las diez.* (Probablemente son las diez.)\n\n**Capacidad y permiso**:\n- *Poder + infinitivo*: capacidad o permiso. *Puedo nadar. / ¿Puedo salir?*\n\nLa diferencia entre *deber + infinitivo* (obligación) y *deber de + infinitivo* (probabilidad) se mantiene en el registro culto, aunque en el habla coloquial se usa indistintamente.",
+        explanation="Las **perífrasis modales** expresan obligación, probabilidad, capacidad o permiso.\n\n**Obligación y necesidad**:\n- *Tener que + infinitivo*: *Tengo que terminar esto*.\n- *Deber + infinitivo*: *Debes respetar las normas*.\n- *Hay que + infinitivo*: *Hay que estudiar para aprobar*.\n- *Hacer falta + infinitivo*: *Hace falta comprar pan*.\n\n**Conjetura**:\n- *Deben de ser las diez* y *Deben ser las diez* son posibles para expresar probabilidad. No es obligatorio añadir de.\n\n**Capacidad y permiso**:\n- *Poder + infinitivo*: *Puedo nadar. / ¿Puedo salir?*\n\nPara practicar una distinción clara, usa deber sin de para obligación y deber de para conjetura, pero reconoce que deber sin de también expresa probabilidad. El contexto permite interpretar el sentido.",
         structure="verbo modal + (preposición) + infinitivo",
         rules=[
             '"Tener que" = obligación personal.',
             '"Hay que" = obligación impersonal, general.',
-            '"Deber" + infinitivo = obligación; "deber de" + infinitivo = conjetura.',
+            "Deber + infinitivo expresa obligación o conjetura; deber de + infinitivo es frecuente para conjeturas.",
             '"Poder" expresa capacidad y permiso; va sin preposición.',
         ],
         examples=[
@@ -241,9 +241,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note='"Hay que" es impersonal y va con infinitivo, no con forma conjugada.',
             ),
             GrammarMistake(
-                wrong="Deben de llegar temprano mañana.",
-                correct="Deben llegar temprano mañana.",
-                note='Para obligación: "deber + infinitivo". "Deber de" es conjetura.',
+                wrong="Deben de están dormidos.",
+                correct="Deben de estar dormidos.",
+                note="En esta perífrasis, el segundo verbo va en infinitivo.",
             ),
         ],
         related=["perifrasis-aspectuales", "querer-poder", "imperativo-afirmativo"],
@@ -803,7 +803,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             'Variar los verbos de habla evita la monotonía de "dijo que... dijo que...".',
             "Citas textuales van entre comillas con verbo en pasado o presente.",
-            "Citas indirectas requieren correlación de tiempos.",
+            "Las citas indirectas mantienen la coherencia temporal; pueden conservar un presente o futuro aún vigente.",
             '"Según + fuente" es fórmula estándar para atribución.',
         ],
         examples=[
@@ -834,7 +834,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avanzado",
         summary="Patrones frecuentes en -ción/-sión, -cer/-cir y alternancias c/z en derivación.",
-        explanation="La oposición **c/s/z** genera errores frecuentes en escritura formal. En español de España, además, hay distinción fonética entre /s/ y /z/ en gran parte del territorio, lo que puede ayudar a fijar grafías.\n\nPatrones útiles:\n- Sustantivos en **-ción** suelen derivar de verbos en -ar: *informar -> información*.\n- Sustantivos en **-sión** suelen derivar de formas con -s- o -d-: *dividir -> división*, *expresar -> expresión*.\n- Verbos en **-cer/-cir**: primera persona con **-zco** en muchos casos (*conocer -> conozco, traducir -> traduzco*).\n- Alternancia c/z ante a/o/u en algunas familias: *cruz -> cruzar*, *luz -> lucir* (familias distintas, conviene memorizar).\n\nObjetivo B2: escribir con seguridad en registros académicos y profesionales.",
+        explanation="Las grafías **c/s/z** generan dudas frecuentes. En buena parte de España se distinguen /s/ y /θ/: s representa /s/; z y c ante e/i representan /θ/. En las variedades seseantes ambas series se pronuncian /s/, pero se mantienen las mismas reglas ortográficas.\n\nPatrones útiles:\n- Muchas palabras en **-ción** derivan de verbos: *informar → información*.\n- **-sión** aparece en familias como *dividir → división* y *expresar → expresión*. No basta la terminación del verbo para predecir siempre la grafía.\n- Muchos verbos en **-cer/-cir** presentan **-zco** en primera persona: *conocer → conozco, traducir → traduzco*.\n- La z cambia a c ante e en plurales como *luz → luces* y *cruz → cruces*.\n\nConsolida la escritura de cada familia léxica con ejemplos en contexto.",
         structure="-cion/-sion · -cer/-cir -> -zco (1a persona) · alternancias c/z por contexto",
         rules=[
             "-ción es muy frecuente en derivados de verbos en -ar.",

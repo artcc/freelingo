@@ -31,7 +31,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Dominio técnico excepcional",
                 example="Su virtuosismo lingüístico es innegable.",
-                ipa="/biɾtwosˈismo/",
+                ipa="/biɾtwoˈsismo/",
             ),
             VocabularyEntry(
                 word="magistral",
@@ -134,7 +134,7 @@ C2_SETS: list[VocabularySet] = [
                 frequency_rank=944,
                 pos="noun",
                 definition="Palabra que imita un sonido",
-                example="El zumbido es una onomatopeya.",
+                example='"Tictac" es una onomatopeya que imita el sonido de un reloj.',
                 ipa="/onomatoˈpeʝa/",
             ),
             VocabularyEntry(

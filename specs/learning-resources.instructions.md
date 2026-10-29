@@ -49,6 +49,29 @@ including the use of Perfekt and Präteritum. Vocabulary definitions explain mea
 than merely repeating the headword. Placement questions provide the context needed for one accepted
 answer, do not require English knowledge, and vary the correct option's position in the static bank.
 
+### Spanish curriculum and reference content
+
+Every Spanish (`es-ES`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
+writing, and review in that order. Scheduling follows the existing capacity and rotation rules;
+not every unit necessarily receives a complete cycle. Persisted schedules are retained, so this
+cycle applies to newly created plans. See `study-plan.instructions.md` for allocation rules.
+
+The foundational sequence includes:
+
+- A1 introductions distinguish `ser` for identity from `tener` for age.
+- A1 unit 6 and consolidation cover `estar + gerundio`, with formation and habitual-present contrast
+  in the existing `estar` reference topic.
+- A2 unit 1 and consolidation include the perfect compound alongside the simple past.
+- A2 unit 6 and consolidation cover basic `por`/`para` meanings.
+- The `preterito-perfecto` and `por-para` reference topics belong to A2 and retain their stable slugs;
+  B1 units reuse them for consolidation and broader contrasts.
+
+Spanish grammar distinguishes contextual tense choices and regional variation from grammatical
+errors, including reported speech, subjunctive concordance, and perfect/simple-past usage. Regional
+descriptions distinguish phonetic variation from grammatical phenomena such as leísmo. Placement
+questions specify the context, person, or tense needed for one accepted answer and vary the correct
+option's position in the static bank.
+
 ## Shared native-language help
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native

@@ -8,12 +8,12 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="El verbo ser",
         level="A1",
         category="Tiempos verbales",
-        summary="Usos básicos del verbo ser: identidad, origen, características permanentes.",
-        explanation="El verbo **ser** es uno de los dos verbos copulativos principales del español. Se usa para expresar:\n\n- **Identidad**: *Yo soy Ana.*\n- **Origen o nacionalidad**: *Él es de México. / Somos españoles.*\n- **Características permanentes**: *La casa es grande. / Mi hermana es alta.*\n- **Profesión**: *Ella es médica.*\n- **Posesión**: *El libro es de Juan.*\n- **Hora y fecha**: *Son las tres. / Hoy es lunes.*\n- **Material**: *La mesa es de madera.*\n\nA diferencia del inglés, el español **no** usa el pronombre obligatoriamente: *Soy profesor* es más natural que *Yo soy profesor*.",
+        summary="Usos básicos del verbo ser: identidad, origen, profesión y características.",
+        explanation="El verbo **ser** es uno de los verbos copulativos del español. Se usa para expresar:\n\n- **Identidad**: *Yo soy Ana.*\n- **Origen o nacionalidad**: *Él es de México. / Somos españoles.*\n- **Características**: *La casa es grande. / Mi hermana es alta.*\n- **Profesión**: *Ella es médica.*\n- **Posesión**: *El libro es de Juan.*\n- **Hora y fecha**: *Son las tres. / Hoy es lunes.*\n- **Material**: *La mesa es de madera.*\n\nLa diferencia entre ser y estar no equivale siempre a permanente y temporal: *Soy joven* usa ser aunque la juventud no sea permanente.\n\nEl pronombre sujeto puede omitirse: *Soy profesor*. También puede aparecer por contexto, contraste o énfasis: *Yo soy profesor y ella es médica*. Para indicar simplemente una profesión, lo habitual es no usar artículo; con una caracterización es frecuente usarlo: *Es una profesora excelente*.",
         structure="yo soy · tú eres · él/ella/usted es · nosotros/as somos · vosotros/as sois · ellos/ellas/ustedes son",
         rules=[
             "El pronombre sujeto se omite con frecuencia porque la terminación del verbo indica la persona.",
-            '"Ser" expresa características esenciales, permanentes o inherentes.',
+            '"Ser" identifica o caracteriza al sujeto; no exige que la característica dure para siempre.',
             'La forma "es" cubre él, ella y usted indistintamente.',
             '"Ser de + lugar" indica origen o procedencia.',
             'En preguntas no se usa auxiliar: "¿Eres tú?".',
@@ -31,9 +31,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note='"Ser de" indica origen. "Estar" no se usa para procedencia.',
             ),
             GrammarMistake(
-                wrong="Soy un profesor.",
-                correct="Soy profesor.",
-                note="Con profesiones no se usa artículo indefinido salvo que haya adjetivo.",
+                wrong="Yo es profesor.",
+                correct="Yo soy profesor.",
+                note="El verbo concuerda con el sujeto: yo soy, él es.",
             ),
         ],
         related=["estar", "ser-nacionalidad", "pronombres-sujeto", "horas"],
@@ -44,10 +44,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Pronombres",
         summary="Los pronombres personales que realizan la acción del verbo.",
-        explanation="Los **pronombres de sujeto** indican quién realiza la acción. En español es muy frecuente **omitirlos** porque la conjugación verbal ya identifica a la persona.\n\n| Singular | Plural |\n|----------|--------|\n| yo | nosotros / nosotras |\n| tú (informal) · usted (formal) | vosotros/as (España) · ustedes (América / formal) |\n| él · ella | ellos · ellas |\n\nEn América Latina **ustedes** sustituye completamente a **vosotros/as** tanto en contextos formales como informales. En España, vosotros/as es informal y ustedes es formal. El pronombre **ello** es neutro y se usa raramente para ideas abstractas.",
+        explanation="Los **pronombres de sujeto** identifican a la persona de la que se habla. En español es frecuente **omitirlos** cuando la conjugación y el contexto permiten reconocerla.\n\n| Singular | Plural |\n|----------|--------|\n| yo | nosotros / nosotras |\n| tú · usted · vos (según la región) | vosotros/as · ustedes (según la región y el registro) |\n| él · ella | ellos · ellas |\n\nEn América y Canarias se usa **ustedes** tanto en contextos formales como informales. En buena parte de España, vosotros/as es informal y ustedes es formal. El pronombre **ello** es neutro y se refiere a ideas o situaciones, sobre todo en registros formales.",
         structure="yo · tú · él/ella/usted · nosotros/as · vosotros/as · ellos/ellas/ustedes",
         rules=[
-            "Los pronombres de sujeto se omiten normalmente. Solo se usan para énfasis, contraste o ambigüedad.",
+            "Los pronombres de sujeto pueden omitirse; su presencia depende del contexto, del énfasis y de la variedad de español.",
             '"Usted" es formal; "tú" es informal. En Argentina/Uruguay se usa "vos" en lugar de "tú".',
             '"Nosotros/as" y "vosotros/as" tienen forma femenina cuando todo el grupo es femenino.',
             'En América Latina "ustedes" reemplaza a "vosotros/as" en todos los contextos.',
@@ -65,9 +65,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Es de México.",
+                wrong="El es de México.",
                 correct="Él es de México. / Es de México.",
-                note='Sin tilde, "es" es verbo. Con tilde, "él" es pronombre. En contexto suele estar claro.',
+                note='El pronombre "él" lleva tilde; el artículo "el" no. Puede omitirse el sujeto si el contexto lo identifica.',
             ),
             GrammarMistake(
                 wrong="Tú eres de España?",
@@ -126,7 +126,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Tiempos verbales",
         summary="Expresar procedencia, nacionalidad y origen con el verbo ser.",
-        explanation="Para expresar el **origen** y la **nacionalidad** se usa el verbo **ser** con dos estructuras:\n\n1. **Ser + de + lugar** (ciudad, país, región): *Soy de Colombia. / Somos de Barcelona.*\n2. **Ser + adjetivo de nacionalidad**: *Es mexicana. / Son franceses.*\n\nLos adjetivos de nacionalidad **concuerdan en género y número** con el sujeto:\n- *Juan es español. / María es española.*\n- *Ellos son italianos. / Ellas son italianas.*\n\n**No** se usa artículo con la profesión ni con la nacionalidad, salvo que el sustantivo esté modificado: *Es un español muy simpático.*",
+        explanation="Para expresar el **origen** y la **nacionalidad** se usa el verbo **ser** con dos estructuras:\n\n1. **Ser + de + lugar** (ciudad, país, región): *Soy de Colombia. / Somos de Barcelona.*\n2. **Ser + adjetivo de nacionalidad**: *Es mexicana. / Son franceses.*\n\nLos adjetivos de nacionalidad **concuerdan en género y número** con el sujeto:\n- *Juan es español. / María es española.*\n- *Ellos son italianos. / Ellas son italianas.*\n\nPara indicar simplemente nacionalidad o profesión, lo habitual es no usar artículo: *Es española. / Es profesora.* El artículo puede aparecer al presentar o caracterizar a una persona: *Es una española muy simpática*.",
         structure="ser + de + lugar · ser + adjetivo de nacionalidad",
         rules=[
             '"Ser de + lugar" para origen geográfico. No se usa "estar" para este sentido.',
@@ -165,7 +165,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Todo sustantivo tiene género; no hay neutro para objetos.",
             "-o suele ser masculino; -a suele ser femenino, pero hay excepciones notables.",
-            "Las palabras de origen griego terminadas en -ma, -pa, -ta son masculinas: el problema, el planeta, el sistema.",
+            "Muchos sustantivos de origen griego en -ma son masculinos: el problema, el sistema. No es una regla universal: la crema. Aprende también el mapa y el planeta con su artículo.",
             "Los sustantivos terminados en -ista son invariables en género: el/la artista, el/la dentista.",
             'El artículo determina el género en casos ambiguos: "el mar" / "la mar" (poético).',
         ],
@@ -187,7 +187,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="La problema.",
                 correct="El problema.",
-                note="Las palabras de origen griego en -ma son masculinas.",
+                note='"Problema" es masculino: el problema. La terminación -a no basta para determinar el género.',
             ),
             GrammarMistake(
                 wrong="El día es bonita.",
@@ -207,12 +207,12 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Artículos",
         summary="un, una, unos, unas — el artículo indeterminado en español.",
-        explanation="Los **artículos indefinidos** acompañan a sustantivos no identificados, que se mencionan por primera vez o que son uno entre muchos.\n\n| | Singular | Plural |\n|---|----------|--------|\n| Masculino | un libro | unos libros |\n| Femenino | una casa | unas casas |\n\nSe usan para:\n- **Primera mención**: *Hay un gato en el jardín.*\n- **Cantidad aproximada**: *Tiene unos treinta años.*\n- **Sustantivo no específico**: *Busco un trabajo.*\n\n**No** se usan con profesiones, nacionalidades o religiones cuando no hay adjetivo modificador: *Es profesor.*",
+        explanation="Los **artículos indefinidos** acompañan a sustantivos no identificados, que se mencionan por primera vez o que son uno entre muchos.\n\n| | Singular | Plural |\n|---|----------|--------|\n| Masculino | un libro | unos libros |\n| Femenino | una casa | unas casas |\n\nSe usan para:\n- **Primera mención**: *Hay un gato en el jardín.*\n- **Cantidad aproximada**: *Tiene unos treinta años.*\n- **Sustantivo no específico**: *Busco un trabajo.*\n\nTras ser, al indicar simplemente profesión, nacionalidad o religión, suelen omitirse: *Es profesor.* El artículo es frecuente al caracterizar o presentar a alguien: *Es un profesor excelente.* Su presencia depende del significado y del contexto, no solo de si hay un adjetivo.",
         structure="un (masc. sing.) · una (fem. sing.) · unos (masc. pl.) · unas (fem. pl.)",
         rules=[
             '"Un" se usa también ante sustantivos femeninos con a tónica: *un águila, un arma*.',
             'En plural funciona como "algunos/as" o cantidad aproximada.',
-            "Se omite con profesiones, nacionalidades y religiones sin adjetivo modificador.",
+            "Tras ser, suele omitirse al indicar simplemente profesión, nacionalidad o religión; puede aparecer para caracterizar o presentar a una persona.",
             'No existe artículo indefinido neutro como el definido "lo".',
         ],
         examples=[
@@ -222,14 +222,14 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Es una arquitecta famosa.",
                 translation=None,
-                note="con adjetivo, sí lleva artículo",
+                note="artículo al caracterizar a una persona",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Es un profesor.",
-                correct="Es profesor.",
-                note="Sin adjetivo, no se usa artículo con profesiones.",
+                wrong="Es una profesor excelente.",
+                correct="Es un profesor excelente.",
+                note="El artículo debe concordar en género con el sustantivo.",
             ),
             GrammarMistake(
                 wrong="Una agua fría.",
@@ -317,12 +317,12 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Adjetivos y adverbios",
         summary="Cómo describir personas, objetos y lugares con adjetivos que concuerdan en género y número.",
-        explanation="En español los adjetivos **concuerdan en género y número** con el sustantivo al que modifican. Normalmente van **después del sustantivo**, aunque algunos pueden ir antes por énfasis o estilo.\n\n- **Masculino singular**: *el libro interesante*\n- **Femenino singular**: *la película interesante*\n- **Masculino plural**: *los libros interesantes*\n- **Femenino plural**: *las películas interesantes*\n\nLos adjetivos terminados en **-o** cambian a **-a** para el femenino: *alto → alta*. Los terminados en **-e** o consonante suelen ser invariables en género: *inteligente, feliz*. Para el plural se añade **-s** (o **-es** tras consonante).\n\nAlgunos adjetivos se apocopan delante de un sustantivo masculino singular: *bueno → buen, malo → mal, grande → gran*.",
+        explanation="En español los adjetivos **concuerdan en género y número** con el sustantivo al que modifican. Normalmente van **después del sustantivo**, aunque algunos pueden ir antes por énfasis o estilo.\n\n- **Masculino singular**: *el libro interesante*\n- **Femenino singular**: *la película interesante*\n- **Masculino plural**: *los libros interesantes*\n- **Femenino plural**: *las películas interesantes*\n\nLos adjetivos terminados en **-o** cambian a **-a** para el femenino: *alto → alta*. Los terminados en **-e** o consonante suelen ser invariables en género: *inteligente, feliz*. Para el plural se añade **-s** (o **-es** tras consonante).\n\nBueno y malo se acortan delante de un sustantivo masculino singular: *un buen amigo, un mal día*. Grande se acorta normalmente ante un sustantivo singular de ambos géneros: *un gran amigo, una gran amiga*.",
         structure="sustantivo + adjetivo (normalmente) — adjetivo concuerda en género y número",
         rules=[
             "El adjetivo concuerda en género y número con el sustantivo.",
             "Normalmente va detrás del sustantivo, especialmente en descripciones objetivas.",
-            "Algunos adjetivos se acortan delante de un sustantivo masculino singular: bueno → buen, malo → mal, grande → gran.",
+            "Bueno y malo se acortan ante masculino singular; grande se acorta normalmente ante singular masculino o femenino: un gran día, una gran idea.",
             'Varios adjetivos seguidos concuerdan todos: "una casa grande y luminosa".',
         ],
         examples=[
@@ -354,9 +354,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation="En español hay tres conjugaciones regulares según la terminación del infinitivo: **-ar**, **-er**, **-ir**. El presente de indicativo se usa para acciones habituales, hechos generales y descripciones.\n\n| Persona | -ar (hablar) | -er (comer) | -ir (vivir) |\n|--------|-------------|------------|-------------|\n| yo | hablo | como | vivo |\n| tú | hablas | comes | vives |\n| él/ella/usted | habla | come | vive |\n| nosotros/as | hablamos | comemos | vivimos |\n| vosotros/as | habláis | coméis | vivís |\n| ellos/ellas/ustedes | hablan | comen | viven |\n\nSe usa también para pedir cosas en presente: *¿Me pasas la sal?* y para hablar del futuro cercano: *Mañana te llamo.*",
         structure="raíz + -o/-as/-a/-amos/-áis/-an (AR) · -o/-es/-e/-emos/-éis/-en (ER) · -o/-es/-e/-imos/-ís/-en (IR)",
         rules=[
-            'Las terminaciones son distintas para cada conjugación, salvo "yo" y "él/ella/usted" en -er e -ir que coinciden (-o/-e).',
+            "Las terminaciones de -er e -ir coinciden salvo en nosotros/as (-emos/-imos) y vosotros/as (-éis/-ís).",
             'La "o" de la primera persona singular es idéntica en las tres conjugaciones.',
-            "Nosotros de -ar y -ir comparten vocal temática: hablamos / vivimos; nosotros de -er es distinta: comemos.",
+            "En nosotros/as cada conjugación conserva su vocal temática: hablamos, comemos, vivimos.",
             'No se usa auxiliar para negativas ni preguntas: "No hablo francés", "¿Comes carne?".',
         ],
         examples=[
@@ -575,12 +575,12 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Tiempos verbales",
         summary="Usos de estar: ubicación, estados temporales, el presente continuo.",
-        explanation="El verbo **estar** es el segundo verbo copulativo del español y se usa para:\n\n- **Ubicación espacial** de personas y cosas: *Estoy en casa. / El banco está en la plaza.*\n- **Estados temporales o cambiantes**: *Estoy cansado. / La sopa está fría.*\n- **Presente continuo**: *estar + gerundio* → *Estoy estudiando. / Está lloviendo.*\n- **Estado civil temporal**: *Estoy soltero/casado.* (aunque también se admite *soy soltero* como estado civil permanente).\n\nNo se usa **estar** para el origen (→ *ser*) ni para eventos (→ *ser*). La elección entre ser y estar depende de si la cualidad se percibe como permanente o temporal.",
+        explanation="El verbo **estar** se usa para:\n\n- **Ubicación espacial** de personas y cosas: *Estoy en casa. / El banco está en la plaza.*\n- **Estados o resultados**: *Estoy cansado. / La sopa está fría. / La puerta está abierta.*\n- **Acciones en curso**: *estar + gerundio* → *Estoy estudiando. / Está lloviendo.*\n- **Estado civil**: *Estoy soltero/casado.* También se usa ser, según el contexto y la variedad, para clasificar el estado civil: *Soy soltero*.\n\n**Formación del gerundio**: -ar → -ando (*hablando*); -er/-ir → -iendo (*comiendo, viviendo*). Algunas formas frecuentes son *leyendo, durmiendo, diciendo*. Contrasta una rutina (*Estudio cada día*) con una acción en curso (*Ahora estoy estudiando*).\n\nPara el origen se usa ser: *Soy de Madrid*. Para indicar dónde se celebra un evento, lo habitual es ser: *La reunión es en el salón*. La oposición ser/estar no equivale siempre a permanente/temporal: *Madrid está en España* y *Soy joven*.",
         structure="yo estoy · tú estás · él/ella/usted está · nosotros estamos · vosotros estáis · ellos/ellas/ustedes están",
         rules=[
             'Estar para ubicación: "Estoy en casa", "Madrid está en España".',
-            'Estar para estados temporales: "Estoy enfermo", "Está nublado".',
-            '"Estar + gerundio" forma el presente continuo.',
+            'Estar presenta estados o resultados, sin exigir que sean breves: "Estoy enfermo", "La puerta está cerrada".',
+            '"Estar + gerundio" expresa una acción en curso: -ando para -ar, -iendo para -er/-ir, con irregulares como leyendo y durmiendo.',
             "Nunca usar estar para origen o nacionalidad.",
         ],
         examples=[
@@ -596,9 +596,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note='Para ubicación se usa "estar", no "ser".',
             ),
             GrammarMistake(
-                wrong="La fiesta está en el salón.",
-                correct="La fiesta es en el salón.",
-                note='Para eventos se usa "ser", no "estar".',
+                wrong="Estoy estudiar español.",
+                correct="Estoy estudiando español.",
+                note="Para una acción en curso se usa estar + gerundio, no estar + infinitivo.",
             ),
         ],
         related=["ser", "hay", "preposiciones-lugar", "presente-regular"],

@@ -19,6 +19,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - New German study plans include listening in every A1–C2 unit's lesson cycle.
 - Corrected German placement questions with invalid or ambiguous answers, removed English-dependent questions, and varied correct-answer positions in the static bank.
 - Corrected German grammar explanations, declension examples, spelling and noun genders, and replaced circular vocabulary definitions with meaningful explanations.
+- New Spanish study plans include listening throughout A1–C2, explicit A1 practice of `estar + gerundio`, and A2 perfect-compound and `por`/`para` coverage with consolidation.
+- Corrected ambiguous Spanish placement questions and varied correct-answer positions in the static bank.
+- Corrected Spanish grammar explanations and examples, regional and historical references, greeting registers, and a vocabulary example and phonetic transcription.
 
 ## [1.10.60] - 2026-10-24
 
