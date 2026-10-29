@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Got it",
     "entry1": {
+      "label": "Learning improvements",
+      "desc": "We're continuing to refine our learning systems and language content to make your practice clearer, more consistent, and more useful."
+    },
+    "entry2": {
       "label": "Smoother voice conversations",
       "desc": "We've refined conversations with Lingu for smoother voice playback and clearer turn indicators."
     },
-    "entry2": {
+    "entry3": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

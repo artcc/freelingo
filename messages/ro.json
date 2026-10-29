@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Am înțeles",
     "entry1": {
+      "label": "Îmbunătățiri pentru învățare",
+      "desc": "Continuăm să perfecționăm sistemele de învățare și conținutul lingvistic pentru a-ți oferi exerciții mai clare, mai coerente și mai utile."
+    },
+    "entry2": {
       "label": "Conversații vocale mai fluide",
       "desc": "Am îmbunătățit conversațiile cu Lingu pentru o redare vocală mai fluidă și indicații mai clare despre când este rândul tău să vorbești."
     },
-    "entry2": {
+    "entry3": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

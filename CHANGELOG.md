@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.65] - Unreleased
+
+### Changed
+
+- Aligned local tooling, CI, and frontend container images on Node.js 26.13.0 LTS (Lithium), retaining npm 11.20.0.
+
+### Fixed
+
+- British and American English study plans explicitly cover A1 plurals, demonstratives, and object pronouns, plus A2 past continuous, with corresponding consolidation practice.
+- New American English A1 plans include listening among their scheduled lesson types.
+- Corrected ambiguous present-perfect and advice questions in both English placement banks so valid alternative answers are not marked incorrect.
+- Corrected British English phonetic transcriptions for “euphoria” and “scenario”.
+
 ## [1.10.60] - 2026-10-24
 
 ### Security

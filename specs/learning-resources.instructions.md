@@ -19,6 +19,23 @@ Static resource APIs accept an explicit language query and do not require it to 
 active language or owned plans. Frontend resource pages normally send the active language, with
 `en-GB` fallback.
 
+### English foundational curriculum
+
+Both `en-GB` and `en-US` place foundational grammar in the guided curriculum as well as the Grammar
+reference:
+
+- A1 unit 2, My World: articles, possessive adjectives, and regular/common irregular plurals.
+- A1 unit 3, Daily Life: present simple, question words, and adverbs of frequency.
+- A1 unit 4, Places & Location: there is/are, place prepositions, and demonstratives.
+- A1 unit 5, Actions Right Now: present continuous contrasted with present simple, and object pronouns.
+- A2 unit 1: past simple contrasted with past continuous, and past questions.
+- A1 and A2 consolidation units include the corresponding foundational grammar for mixed review.
+
+Every A1 unit in both English variants declares grammar, vocabulary, listening, reading, writing, and
+review in that order. Actual lesson allocation depends on plan capacity; declaring these types does
+not guarantee a complete cycle in every unit. See `study-plan.instructions.md` for scheduling and
+lazy-generation rules.
+
 ## Shared native-language help
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native

@@ -10,7 +10,7 @@ A2_UNITS: list[CurriculumUnit] = [
         level="A2",
         unit_number=1,
         title="Irregular Verbs & Past Narratives",
-        grammar_points=["past-simple", "question-words", "adverbs-manner"],
+        grammar_points=["past-simple", "past-continuous", "question-words"],
         vocabulary_set_ids=["irregular_verbs_a2", "past_time_a2"],
         lesson_types=[
             "grammar",
@@ -24,6 +24,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "Uses 40+ common irregular past forms correctly",
             "Narrates a sequence of past events in a short paragraph",
             "Asks past questions using Did, Where did, When did",
+            "Contrasts past continuous background actions with past simple events using when and while",
         ],
         default_weeks=2,
         prerequisite_unit=None,
@@ -187,6 +188,7 @@ A2_UNITS: list[CurriculumUnit] = [
         title="A2 Consolidation",
         grammar_points=[
             "past-simple",
+            "past-continuous",
             "going-to-future",
             "will-future",
             "comparatives-superlatives",

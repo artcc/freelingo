@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Anladım",
     "entry1": {
+      "label": "Öğrenimde iyileştirmeler",
+      "desc": "Daha anlaşılır, tutarlı ve faydalı bir pratik deneyimi sunmak için öğrenme sistemlerimizi ve dil içeriklerimizi geliştirmeye devam ediyoruz."
+    },
+    "entry2": {
       "label": "Daha akıcı sesli konuşmalar",
       "desc": "Daha akıcı ses oynatımı ve konuşma sırasını daha net gösteren işaretler için Lingu ile sohbetleri iyileştirdik."
     },
-    "entry2": {
+    "entry3": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

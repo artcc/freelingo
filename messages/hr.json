@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Razumijem",
     "entry1": {
+      "label": "Poboljšanja učenja",
+      "desc": "Nastavljamo poboljšavati sustave za učenje i jezične sadržaje kako bi tvoje vježbanje bilo jasnije, dosljednije i korisnije."
+    },
+    "entry2": {
       "label": "Tečniji glasovni razgovori",
       "desc": "Poboljšali smo razgovore s Linguom za tečniju reprodukciju glasa i jasnije oznake čiji je red za govor."
     },
-    "entry2": {
+    "entry3": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

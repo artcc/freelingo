@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.10.60**
+**Current version: 1.10.65**
 
 ## Project
 
@@ -82,7 +82,7 @@ Use the narrowest relevant spec first:
 - Ask before running tests, builds, linters, typechecks, formatters, or other validation. Do not launch full suites automatically.
 - If a test fails, stop, report the failure, and ask before changing code or tests.
 - Backend CI and images use Python 3.14.9 and pip 26.2.2. Keep `requirements.txt`, `constraints.txt`, Docker, CI, and cache inputs aligned.
-- Frontend CI and Dockerfiles use Node 26.12.1 and explicitly install npm 11.20.0, matching the local toolchain. Generate `package-lock.json` with that npm version and keep `@types/node` on major 26.
+- Frontend CI and Dockerfiles use Node 26.13.0 LTS and explicitly install npm 11.20.0, matching the local toolchain. Generate `package-lock.json` with that npm version and keep `@types/node` on major 26.
 - `develop` and `main` publish Linux `amd64` and `arm64` images from the same backend/frontend Dockerfile paths.
 
 ## Code conventions

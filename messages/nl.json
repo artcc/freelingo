@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Begrepen",
     "entry1": {
+      "label": "Verbeteringen voor het leren",
+      "desc": "We blijven onze leersystemen en taalinhoud verbeteren, zodat je met duidelijkere, beter op elkaar afgestemde en nuttigere oefeningen kunt leren."
+    },
+    "entry2": {
       "label": "Vloeiendere spraakgesprekken",
       "desc": "We hebben gesprekken met Lingu verbeterd voor vloeiendere spraakweergave en duidelijkere aanwijzingen over wie aan de beurt is."
     },
-    "entry2": {
+    "entry3": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }
