@@ -9,16 +9,16 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Congiuntivo",
         summary="Benché, sebbene, nonostante, malgrado + congiuntivo per esprimere concessione.",
-        explanation="Le congiunzioni concessive richiedono il congiuntivo.\n\n- **Benché** / **Sebbene** + congiuntivo: *Benché piovesse, uscimmo.*\n- **Nonostante** / **Malgrado** + congiuntivo: *Nonostante fosse tardi, continuarono.*\n- **Anche se** + indicativo (eccezione): *Anche se pioveva, uscimmo.*\n\nLa scelta del tempo del congiuntivo segue la concordanza.",
+        explanation="Benché e sebbene introducono concessive con il congiuntivo; anche se ammette modi diversi secondo il significato.\n\n- **Benché** / **Sebbene** + congiuntivo: *Benché piovesse, uscimmo.*\n- **Nonostante** / **Malgrado** + congiuntivo: *Nonostante fosse tardi, continuarono.*\n- **Anche se** + indicativo per un fatto: *Anche se pioveva, uscimmo.* Con il congiuntivo può presentare un'ipotesi: *Anche se piovesse, usciremmo.*\n\nLa scelta del tempo del congiuntivo segue la concordanza.",
         rules=[
             "Benché, sebbene, nonostante, malgrado + congiuntivo.",
-            "Anche se + indicativo (eccezione nelle concessive).",
+            "Anche se + indicativo per un fatto; congiuntivo per una concessione ipotetica.",
             "Concordanza: presente → cong. presente; passato → cong. imperfetto.",
-            "Registro formale richiede il congiuntivo.",
+            "La scelta del modo dipende dalla congiunzione e dal significato, non solo dal registro.",
         ],
         examples=[
             GrammarExample(
-                text="Benché fosse stanco, continuo a lavorare.",
+                text="Benché fosse stanco, continuò a lavorare.",
                 translation=None,
             ),
             GrammarExample(
@@ -26,20 +26,20 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Sebbene sia tardi, resto ancora un po.",
+                text="Sebbene sia tardi, resto ancora un po'.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Benché era stanco, continuo.",
-                correct="Benché fosse stanco, continuo.",
+                wrong="Benché era stanco, continuò.",
+                correct="Benché fosse stanco, continuò.",
                 note="Benché richiede sempre il congiuntivo.",
             ),
             GrammarMistake(
-                wrong="Anche se fosse tardi... (non necessario)",
-                correct="Anche se era tardi...",
-                note="Anche se regge l'indicativo, non il congiuntivo.",
+                wrong="Anche se noi fossi stanchi, continueremmo.",
+                correct="Anche se noi fossimo stanchi, continueremmo.",
+                note="Noi richiede fossimo. Il congiuntivo è corretto per una concessione ipotetica.",
             ),
         ],
         related=[
@@ -406,7 +406,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Metafora, metonimia, sineddoche, iperbole e altre figure retoriche.",
-        explanation="Principali figure retoriche italiane:\n- **Metafora:** sostituzione per analogia. *Quell'uomo è un leone.*\n- **Metonimia:** sostituzione per contiguità. *Bere un bicchiere.* (il contenuto per il contenitore).\n- **Sineddoche:** parte per il tutto. *Tetto* per casa.\n- **Iperbole:** esagerazione. *Te l'ho detto un milione di volte.*\n- **Litote:** negazione del contrario. *Non è male* = è buono.\n- **Eufemismo:** attenuazione. *È passato a miglior vita.*",
+        explanation="Principali figure retoriche italiane:\n- **Metafora:** sostituzione per analogia. *Quell'uomo è un leone.*\n- **Metonimia:** sostituzione per contiguità. *Bere un bicchiere.* (il contenitore per il contenuto).\n- **Sineddoche:** parte per il tutto. *Tetto* per casa.\n- **Iperbole:** esagerazione. *Te l'ho detto un milione di volte.*\n- **Litote:** negazione del contrario. *Non è male* = è buono.\n- **Eufemismo:** attenuazione. *È passato a miglior vita.*",
         rules=[
             "Metafora: confronto implicito senza come.",
             "Metonimia: relazione di contiguità logica.",
@@ -430,7 +430,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Confondere metonimia e metafora.",
                 correct="Metafora = somiglianza; metonimia = contiguità.",
-                note="Bere un bicchiere = metonimia (contenuto x contenitore).",
+                note="Bere un bicchiere = metonimia (contenitore per contenuto).",
             ),
         ],
         related=["figure-stilistiche", "doppio-senso", "descrizione-letteraria"],

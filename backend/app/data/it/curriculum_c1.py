@@ -37,7 +37,7 @@ C1_UNITS: list[CurriculumUnit] = [
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Trasforma sintagmi verbali in sintagmi nominali tramite nominalizzazione, tratto fondamentale dello stile accademico italiano: analizzare -> l'analisi, sviluppare -> lo sviluppo, crescere -> la crescita, approfondire -> l'approfondimento",
-            "Costruisce frasi accademiche impersonali usando: si ritiene che + congiuntivo, si è dimostrato che, è stato osservato che, risulta evidente che, apparè necessario, va sottolineato che",
+            "Costruisce frasi accademiche impersonali usando: si ritiene che + congiuntivo, si è dimostrato che, è stato osservato che, risulta evidente che, appare necessario, va sottolineato che",
             "Usa essere per la passiva anche nei tempi composti (è stato analizzato), venire nei tempi semplici per il processo (viene considerato) e andare nei tempi semplici per l'obbligo (va rispettata la norma)",
             "Mantiene un registro formale coerente in un testo accademico di oltre 400 parole, evitando lessico colloquiale, abuso di fare, appelli diretti al lettore e connettivi informali",
             "Produce un paragrafo accademico strutturato con soggetto nominalizzato, predicato impersonale e connettivi formali tipici della scrittura accademica italiana",

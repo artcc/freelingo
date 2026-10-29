@@ -132,7 +132,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 "요일을 말할 때",
                 "neutral",
                 "a1-unit-3",
-                romanization="oneureun woryoilieyo.",
+                romanization="oneureun woryoirieyo.",
             ),
         ],
     ),

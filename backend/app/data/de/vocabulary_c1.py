@@ -398,7 +398,7 @@ C1_SETS: list[VocabularySet] = [
                 frequency_rank=2500,
                 pos="noun",
                 definition="Ergebnis eines statistischen Tests, bei dem die Daten nach einem festgelegten Kriterium gegen die Nullhypothese sprechen",
-                example="Die statistische Signifikanz lag unter fünf Prozent.",
+                example="Der Test ergab statistische Signifikanz auf dem Fünf-Prozent-Niveau.",
                 ipa="/diː zɪɡnifiˈkants/",
             ),
             VocabularyEntry(

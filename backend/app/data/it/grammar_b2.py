@@ -52,12 +52,12 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Congiuntivo trapassato",
         level="B2",
         category="Congiuntivo",
-        summary="Il congiuntivo trapassato: periodo ipotetico del 3 tipo (irrealta).",
+        summary="Il congiuntivo trapassato: periodo ipotetico del 3 tipo (irrealtà).",
         explanation="**Congiuntivo trapassato** = congiuntivo imperfetto di avere/essere + participio passato.\n\n- avere: avessi, avessi, avesse, avessimo, aveste, avessero + participio.\n- essere: fossi... + participio (concordato).\n\nUsi:\n- Periodo ipotetico 3 tipo: *Se avessi studiato, avresti passato l'esame.*\n- Concordanza: *Pensavo che fosse già arrivato.*",
         structure="congiuntivo imperfetto di avere/essere + participio passato",
         rules=[
             "Congiuntivo imperfetto di avere/essere + participio passato.",
-            "Periodo ipotetico 3 tipo (irrealta nel passato).",
+            "Periodo ipotetico 3 tipo (irrealtà nel passato).",
             "Concordanza: anteriorità rispetto a un passato.",
             "Con essere il participio concorda col soggetto.",
         ],
@@ -475,11 +475,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avanzato",
         summary="Distinguere sinonimi con sfumature diverse e scegliere la parola giusta.",
-        explanation="Sinonimi con sfumature:\n- Vedere / Guardare / Osservare: generico / volontario / attento.\n- Dire / Affermare / Dichiarare: intensita crescente.\n- Contento / Felice / Euforico: intensita crescente.\n- Casa / Abitazione / Dimora: registro crescente.\n- Fare / Realizzare / Effettuare: da generico a formale.",
+        explanation="Sinonimi con sfumature:\n- Vedere / Guardare / Osservare: generico / volontario / attento.\n- Dire / Affermare / Dichiarare: intensità crescente.\n- Contento / Felice / Euforico: intensità crescente.\n- Casa / Abitazione / Dimora: registro crescente.\n- Fare / Realizzare / Effettuare: da generico a formale.",
         rules=[
             "Preferire il termine più preciso al generico.",
             "Adeguare il lessico al registro (formale/informale).",
-            "Considerare l'intensita della parola.",
+            "Considerare l'intensità della parola.",
             "Usare il dizionario dei sinonimi per esplorare opzioni.",
         ],
         examples=[
@@ -567,7 +567,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         category="Tempi verbali",
         summary="Il passato remoto: formazione e uso nella narrazione e nel Sud Italia.",
         explanation="Il **passato remoto** esprime azioni concluse in un passato lontano, senza legami col presente.\n\n**Formazione:**\n- parlare: parlai, parlasti, parlò, parlammo, parlaste, parlarono.\n- leggere: lessi, leggesti, lesse, leggemmo, leggeste, lessero.\n- dormire: dormii, dormisti, dormì, dormimmo, dormiste, dormirono.\n\nMolti verbi hanno il passato remoto irregolare (spesso nella 1a e 3a singolare e 3a plurale).\n\nNell'Italia settentrionale si usa poco, sostituito dal passato prossimo; al Sud e in letteratura è vivo.",
-        structure="-are → -ai/-asti/-o/-ammo/-aste/-arono\n-ere → -ei/-esti/-e/-emmo/-este/-erono\n-ire → -ii/-isti/-i/-immo/-iste/-irono",
+        structure="-are → -ai/-asti/-ò/-ammo/-aste/-arono\n-ere → -ei/-esti/-é/-emmo/-este/-erono\n-ire → -ii/-isti/-ì/-immo/-iste/-irono",
         rules=[
             "Passato remoto = azione conclusa in passato lontano.",
             "Molti verbi irregolari: essere (fui), avere (ebbi), fare (feci), dire (dissi), scrivere (scrissi).",
@@ -677,7 +677,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Discorso indiretto",
         summary="Come i media italiani riportano le dichiarazioni altrui.",
-        explanation="Il discorso riportato nei media:\n- **Condizionale di dissociazione:** il giornalista prende le distanze. *Il ministro avrebbe dichiarato...*\n- **Virgolettato:** citazione diretta.\n- **Discorso indiretto libero:** mescola diretto e indiretto.\n\nIl condizionale di dissociazione e tipico: segnala che la notizia non è confermata.",
+        explanation="Il discorso riportato nei media:\n- **Condizionale di dissociazione:** il giornalista prende le distanze. *Il ministro avrebbe dichiarato...*\n- **Virgolettato:** citazione diretta.\n- **Discorso indiretto libero:** mescola diretto e indiretto.\n\nIl condizionale di dissociazione è tipico: segnala che la notizia non è confermata.",
         rules=[
             "Condizionale di dissociazione per notizie non confermate.",
             "Virgolettato per citazioni testuali.",
@@ -697,9 +697,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Il ministro ha detto che si dimettera. (senza fonte certa)",
-                correct="Il ministro si dimetterebbe. (condizionale di dissociazione)",
-                note="Se la notizia non è confermata, si usa il condizionale.",
+                wrong="Il ministro ha detto che si dimetterà. (dichiarazione non confermata)",
+                correct="Il ministro avrebbe detto che si dimetterà. (dichiarazione non confermata)",
+                note="Il condizionale segnala che la dichiarazione non è confermata, senza trasformarla in una diversa notizia sulle dimissioni.",
             ),
         ],
         related=[

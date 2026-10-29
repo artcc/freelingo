@@ -30,6 +30,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Corrected Japanese grammar rules and false corrections across A1–C2, clarified A2 plain-negative formation, and corrected literary analysis, historical examples, and meaning-preserving reformulations.
 - Corrected Japanese phrasebook romanizations and their correspondence with the saved phrases.
 - Clarified ambiguous Japanese placement questions, replaced weak advanced items with contextual exercises, and balanced correct-answer positions within each level and skill.
+- Corrected Korean A1–C2 conjugation rules, false corrections, honorific and register guidance, historical explanations, and reformulations that changed the source meaning; clarified foundational A1 forms in existing references.
+- Corrected Korean vocabulary meanings, examples, and vocabulary and phrasebook romanizations.
+- Clarified ambiguous Korean placement questions, replaced weak advanced items with contextual exercises, and balanced correct-answer positions within each level and skill.
+- Corrected remaining Italian concessive examples, past-tense accents, metonymy guidance, and a reported-speech reformulation that changed the unconfirmed claim.
+- Aligned a French literary-register example with its definition, distinguishing literary effects from language formality.
+- Corrected a German statistical-significance example that confused significance with its threshold.
 
 ## [1.10.60] - 2026-10-24
 

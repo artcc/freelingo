@@ -46,7 +46,8 @@ and lazy generation.
 
 German reference content distinguishes grammatical correctness from register or regional preferences,
 including the use of Perfekt and Präteritum. Vocabulary definitions explain meanings in German rather
-than merely repeating the headword. Placement questions provide the context needed for one accepted
+than merely repeating the headword; statistical examples distinguish significance from its threshold.
+Placement questions provide the context needed for one accepted
 answer, do not require English knowledge, and vary the correct option's position in the static bank.
 
 ### Spanish curriculum and reference content
@@ -89,9 +90,11 @@ The foundational sequence includes:
   variety, with `estar a + infinitivo` in A1 and the future subjunctive in B1.
 
 Reference explanations distinguish contextual tense choices from errors, including reported speech,
-French pronominal-participle agreement, Italian conditional versus interrogative `se`, and Portuguese
-subjunctive selection. Portuguese grammar explanations use actual newline characters for rendering.
+French pronominal-participle agreement, Italian conditional versus interrogative `se` and factual versus
+hypothetical `anche se`, and Portuguese subjunctive selection. Italian reported-speech reformulations
+preserve which claim is unconfirmed. Portuguese grammar explanations use actual newline characters for rendering.
 Regional and sociolinguistic descriptions distinguish usage preferences from grammatical rules.
+French vocabulary distinguishes literary effects such as tragic or comic tone from language formality.
 
 Placement questions specify the context, tense, or person needed for the keyed answer. Correct-answer
 positions are balanced within each level/skill group in these three static banks; the frontend displays
@@ -118,6 +121,27 @@ Advanced questions exercise interpretation, register, scope, inference, and refo
 Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
 and grammar slugs remain stable, and the frontend displays the saved option order. Content review
 does not establish empirical CEFR calibration.
+
+### Korean curriculum and reference content
+
+Korean (`ko-KR`) units from A1 through C2 include listening in their existing lesson-type lists.
+Actual coverage follows the shared plan-capacity and rotation rules.
+
+Existing A1 reference topics introduce `이에요/예요`, `이/가 아니에요`, basic `안/못` and
+`-지 않아요` negation, and final `ㅡ` deletion. Conjugation explanations distinguish retained `ㄹ`
+from endings that trigger its deletion. B2 uses `터예요/테니까` for intention and supposition.
+
+Reference content distinguishes grammar errors from particle omission, valid alternative forms,
+honorific choices, and register preferences. Advanced exercises preserve the source's participants,
+information, certainty, obligations, and causal scope when reformulating it. Historical explanations
+distinguish changes in writing, pronunciation, region, and register. Vocabulary definitions distinguish
+statistical significance from effect size or the probability that a hypothesis is true. Vocabulary and
+phrasebook pronunciation aids use Revised Romanization, including assimilation and aspiration.
+
+Placement questions supply the context or requested form needed to distinguish valid alternatives.
+Advanced items exercise interpretation, inference, register, and meaning-preserving reformulation.
+Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
+and grammar slugs remain stable. Content review does not establish empirical CEFR calibration.
 
 ## Shared native-language help
 

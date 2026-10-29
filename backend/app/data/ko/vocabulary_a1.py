@@ -68,7 +68,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="안녕하세요",
                 pos="phrase",
-                definition="만나거나 헤어질 때 하는 가장 기본적인 인사.",
+                definition="사람을 만날 때 하는 기본적인 인사.",
                 example="안녕하세요, 처음 뵙겠습니다.",
                 ipa="annyeonghaseyo",
                 frequency_rank=92,
@@ -100,7 +100,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="안녕히 계세요",
                 pos="phrase",
-                definition="남는 사람이 떠나는 사람에게 하는 인사.",
+                definition="떠나는 사람이 그곳에 남는 사람에게 하는 인사.",
                 example="안녕히 계세요, 다음에 또 올게요.",
                 ipa="annyeonghi gyeseyo",
                 frequency_rank=94,

@@ -1118,7 +1118,7 @@ B2_SETS: list[VocabularySet] = [
                 frequency_rank=9,
                 pos="noun",
                 definition="Ensemble de procédés produisant un effet dominant, par exemple tragique ou comique",
-                example="Le registre littéraire de ce texte est soutenu.",
+                example="Le registre tragique de ce texte suscite la crainte et la pitié.",
                 ipa="/lə ʁəʒistʁ liteʁɛʁ/",
             ),
             VocabularyEntry(

@@ -31,7 +31,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 "의견을 말할 때",
                 "neutral",
                 "b1-unit-1",
-                romanization="jeoneun i bangbeobi jotago saenggakhaeyo.",
+                romanization="jeoneun i bangbeobi jotago saenggakaeyo.",
             ),
             _p(
                 "그 이유는 시간이 절약되기 때문이에요.",
@@ -60,14 +60,14 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 "경험의 변화를 말할 때",
                 "neutral",
                 "b1-unit-2",
-                romanization="cheoeumeneun eoryeowonneunde jeomjeom iksukhaejyeosseoyo.",
+                romanization="cheoeumeneun eoryeowonneunde jeomjeom iksukaejyeosseoyo.",
             ),
             _p(
                 "밥을 먹고 나서 산책했어요.",
                 "사건 순서를 설명할 때",
                 "neutral",
                 "b1-unit-2",
-                romanization="babeul meokgo naseo sanchaekhaesseoyo.",
+                romanization="babeul meokgo naseo sanchaekaesseoyo.",
             ),
             _p(
                 "음악을 들으면서 공부했어요.",
@@ -207,7 +207,7 @@ B1_CATEGORIES.append(
                 "변화된 경험을 말할 때",
                 "neutral",
                 "b1-unit-8",
-                romanization="cheoeumeneun eoryeowotjiman iksukhaejyeosseoyo.",
+                romanization="cheoeumeneun eoryeowotjiman iksukaejyeosseoyo.",
             ),
             _p(
                 "이 경험을 통해 많이 배웠어요.",
@@ -228,7 +228,7 @@ B1_CATEGORIES.append(
                 "반대 의견을 제시할 때",
                 "neutral",
                 "b1-unit-8",
-                romanization="hajiman dareun munjedo itdago saenggakhaeyo.",
+                romanization="hajiman dareun munjedo itdago saenggakaeyo.",
             ),
             _p(
                 "장점과 단점을 함께 봐야 해요.",
@@ -298,7 +298,7 @@ B1_CATEGORIES.append(
                 "해결책을 평가할 때",
                 "neutral",
                 "b1-unit-8",
-                romanization="i bangbeobeun hyeonsiljeogirago saenggakhaeyo.",
+                romanization="i bangbeobeun hyeonsiljeogirago saenggakaeyo.",
             ),
             _p(
                 "비용이 가장 큰 문제예요.",
@@ -319,7 +319,7 @@ B1_CATEGORIES.append(
                 "역할 분담을 제안할 때",
                 "neutral",
                 "b1-unit-8",
-                romanization="timeseo yeokhareul nanumyeon joayo.",
+                romanization="timeseo yeokareul nanumyeon joayo.",
             ),
             _p(
                 "자료를 먼저 확인해 주세요.",
@@ -445,14 +445,14 @@ B1_CATEGORIES.append(
                 "첫째 논점을 제시할 때",
                 "formal",
                 "b1-unit-8",
-                romanization="cheot beonjjaeneun sigan munjemnida.",
+                romanization="cheot beonjjaeneun sigan munjeimnida.",
             ),
             _p(
                 "두 번째는 비용 문제입니다.",
                 "둘째 논점을 제시할 때",
                 "formal",
                 "b1-unit-8",
-                romanization="du beonjjaeneun biyong munjemnida.",
+                romanization="du beonjjaeneun biyong munjeimnida.",
             ),
             _p(
                 "그래서 단계적으로 진행하는 것이 좋겠습니다.",
