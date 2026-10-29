@@ -22,6 +22,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - New Spanish study plans include listening throughout A1–C2, explicit A1 practice of `estar + gerundio`, and A2 perfect-compound and `por`/`para` coverage with consolidation.
 - Corrected ambiguous Spanish placement questions and varied correct-answer positions in the static bank.
 - Corrected Spanish grammar explanations and examples, regional and historical references, greeting registers, and a vocabulary example and phonetic transcription.
+- New French, Italian, and Portuguese study plans include listening in every A1–C2 unit's lesson cycle.
+- French A1 plans explicitly cover frequent present-tense verbs; Italian A2 plans introduce `stare + gerundio` with consolidation; Portuguese introductions include `ter` for age.
+- Corrected ambiguous or invalid French, Italian, and Portuguese placement questions, clarified advanced exercises, and balanced correct-answer positions in their static banks.
+- Corrected grammar rules, examples, spelling, and greeting registers in French, Italian, and Portuguese, including reported speech, subjunctive usage, and sociolinguistic descriptions.
+- Replaced circular French vocabulary definitions, corrected Italian phonetic transcriptions, and fixed literal newline escapes in Portuguese grammar explanations.
 
 ## [1.10.60] - 2026-10-24
 

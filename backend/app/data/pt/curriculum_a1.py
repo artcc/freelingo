@@ -10,7 +10,7 @@ A1_UNITS: list[CurriculumUnit] = [
         level="A1",
         unit_number=1,
         title="Saudações e apresentações",
-        grammar_points=["ser", "estar", "pronomes-sujeito", "artigos-definidos"],
+        grammar_points=["ser", "estar", "ter", "pronomes-sujeito", "artigos-definidos"],
         vocabulary_set_ids=[
             "alfabeto_a1",
             "números_a1",
@@ -18,9 +18,9 @@ A1_UNITS: list[CurriculumUnit] = [
             "saudações_a1",
             "apresentações_a1",
         ],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Apresenta-se usando ser e estar: Chamo-me Inês, sou portuguesa, tenho 28 anos, estou bem; e trata corretamente por tu/você no pt-PT (tu no informal, o senhor/a senhora no formal)",
+            "Apresenta-se com ser para identidade, ter para idade e estar para estado: Sou a Inês, sou portuguesa, tenho 28 anos, estou bem; usa tu em relações próximas e o senhor/a senhora em contextos formais, reconhecendo que você tem valores sociais variáveis em Portugal",
             "Cumprimenta e despede-se com o registo adequado: olá, bom dia, boa tarde, boa noite, adeus, até logo, tchau (informal)",
             "Usa corretamente os artigos definidos o/a/os/as com os nomes, aplicando concordância de género: o livro, a casa, os alunos, as aulas",
             "Distingue ser (identidade, origem, profissão, qualidade inerente) de estar (estado, localização, progressivo) desde o início: Sou de Lisboa vs Estou em Lisboa",
@@ -39,7 +39,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "artigos-indefinidos",
         ],
         vocabulary_set_ids=["nacionalidades_a1", "profissões_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Indica nacionalidade e profissão usando ser com forma correta no masculino/feminino: sou inglês/inglesa, sou médico/médica",
             "Aplica concordância de género: nomes em -o tendem a ser masculinos, em -a tendem a ser femininos, e em -e ou consoante podem ser de ambos os géneros, verificando com o artigo",
@@ -67,7 +67,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "corpo_a1",
             "roupa_a1",
         ],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Nomeia membros da família e usa ter para posse e idade: Tenho dois irmãos, A minha mãe tem 55 anos",
             "Usa adjetivos possessivos (meu/minha/meus/minhas, teu/tua, seu/sua, nosso/nossa) que em português concordam com o nome possuído, e não com o possuidor, usando artigo: o meu carro, a minha família",
@@ -89,7 +89,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "numeros-ordinais",
         ],
         vocabulary_set_ids=["rotina_a1", "horas_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Conjuga os verbos regulares em -ar (falar), -er (comer) e -ir (partir) no presente para as seis pessoas",
             "Usa verbos reflexos com o pronome correto, aplicando ênclise no PE (depois do verbo) como padrão nas frases afirmativas: levanto-me, lavo-me, deito-me",
@@ -106,7 +106,7 @@ A1_UNITS: list[CurriculumUnit] = [
         title="Gostos e preferências",
         grammar_points=["gostar-de", "tambem-tampouco", "muito-pouco"],
         vocabulary_set_ids=["comida_a1", "atividades_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa corretamente gostar de com estrutura regular sujeito-verbo: Eu gosto de pizza",
             "Usa gostar de + infinitivo para atividades (Gosto de ler, Não gosto de acordar cedo) e gostar de + nome com contração obrigatória de de + artigo: Gosto do café, Gosto da música",
@@ -128,7 +128,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "contracoes-preposicionais",
         ],
         vocabulary_set_ids=["lugares_a1", "direções_a1", "casa_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa as contrações preposicionais obrigatórias: de+o=do, de+a=da, de+os=dos, de+as=das; em+o=no, em+a=na; a+o=ao, a+a=à; por+o=pelo, por+a=pela",
             "Distingue há (haver impessoal) para existência de estar para localização: Há um banco aqui perto vs O banco está na esquina",
@@ -150,7 +150,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "estar-a-infinitivo",
         ],
         vocabulary_set_ids=["transporte_a1", "clima_a1", "datas_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma ir + infinitivo para ações planeadas (Vou estudar amanhã, O que vais fazer?) e reconhece este padrão como muito frequente no uso informal",
             "Usa querer + infinitivo para desejos e poder + infinitivo para capacidade/permissão: Quero ir ao cinema, Não posso vir hoje",
@@ -178,7 +178,7 @@ A1_UNITS: list[CurriculumUnit] = [
             "contracoes-preposicionais",
         ],
         vocabulary_set_ids=["revisão_a1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Mantém uma troca simples oral ou escrita sobre temas familiares usando ser, estar e presente sem falhas relevantes",
             "Usa corretamente contrações preposicionais obrigatórias e aplica a ênclise do PE em frases afirmativas",

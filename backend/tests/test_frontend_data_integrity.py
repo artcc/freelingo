@@ -14,6 +14,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+
 FRONTEND_DATA = Path(__file__).resolve().parent.parent.parent / "frontend" / "src" / "data"
 
 CURRICULUM_FILE = FRONTEND_DATA / "curriculum.ts"
@@ -53,6 +55,34 @@ def _extract_curriculum_grammar_refs(src: str) -> set[str]:
 def test_data_files_exist() -> None:
     """Sanity check: frontend data files that remain must be present."""
     assert CURRICULUM_FILE.exists(), "Missing data file: curriculum.ts"
+
+
+@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT"])
+def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
+    from app.data.grammar import get_grammar_topics
+
+    for topic in get_grammar_topics(language):
+        assert "\\n" not in topic.explanation, (language, topic.slug)
+
+
+@pytest.mark.parametrize(
+    ("language", "level", "unit_index", "slug"),
+    [
+        ("fr-FR", "A1", 3, "verbes-frequents-present"),
+        ("it-IT", "A2", 1, "stare-gerundio"),
+        ("pt-PT", "A1", 0, "ter"),
+    ],
+)
+def test_foundational_topics_are_available_when_introduced(language, level, unit_index, slug):
+    from app.data.curriculum import get_curriculum_units
+    from app.data.grammar import get_grammar_topics
+
+    units = get_curriculum_units(level, language)
+    assert slug in units[unit_index].grammar_points
+    assert slug in units[-1].grammar_points
+    topics = [topic for topic in get_grammar_topics(language) if topic.slug == slug]
+    assert len(topics) == 1
+    assert topics[0].level == level
 
 
 def test_curriculum_grammar_refs_all_defined() -> None:

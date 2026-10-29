@@ -4,6 +4,38 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic
 
 A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     GrammarTopic(
+        slug="stare-gerundio",
+        title="Stare + gerundio",
+        level="A2",
+        category="Tempi verbali",
+        summary="Esprimere azioni in corso con stare + gerundio.",
+        explanation="**Stare + gerundio** presenta un'azione in corso: Sto leggendo; Stavo dormendo quando hai chiamato.\n\nStare al presente: sto, stai, sta, stiamo, state, stanno. All'imperfetto: stavo, stavi, stava, stavamo, stavate, stavano.\n\nGerundio: -are → -ando, -ere/-ire → -endo. Forme frequenti irregolari: fare → facendo, dire → dicendo, bere → bevendo.\n\nPer un'abitudine usa normalmente il presente semplice: Leggo ogni sera. Distingui Sto mangiando (azione in corso) da Sto per mangiare (imminenza).",
+        structure="stare al presente o all'imperfetto + gerundio",
+        rules=[
+            "Coniuga stare secondo il soggetto; il gerundio è invariabile.",
+            "Distingui azioni in corso, abitudini e imminenza.",
+            "Andare e venire + gerundio esprimono sfumature progressive approfondite a B2.",
+        ],
+        examples=[
+            GrammarExample(text="Sto leggendo un libro interessante.", translation=None),
+            GrammarExample(text="Cosa stavi facendo quando ti ho chiamato?", translation=None),
+            GrammarExample(text="Stanno arrivando!", translation=None),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Sto per mangiando.",
+                correct="Sto per mangiare. / Sto mangiando.",
+                note="Stare per + infinito indica imminenza; stare + gerundio indica un'azione in corso.",
+            ),
+            GrammarMistake(
+                wrong="Sono mangiando.",
+                correct="Sto mangiando.",
+                note="La perifrasi progressiva usa stare, non essere.",
+            ),
+        ],
+        related=["andare-gerundio", "venire-gerundio", "stare-per", "imperfetto"],
+    ),
+    GrammarTopic(
         slug="passato-prossimo-avere",
         title="Passato prossimo con avere",
         level="A2",
@@ -779,7 +811,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Con verbo principale al presente, il tempo verbale non cambia.",
             "I pronomi personali e possessivi cambiano secondo il nuovo soggetto.",
             "Qui / qua → lì / là; questo / questa → quello / quella.",
-            "Le domande perdono l'inversione e usano se: Mi ha chiesto se volevo uscire.",
+            "Le domande totali usano se; quelle parziali conservano l'interrogativo: Mi chiede se esco / dove vado. L'italiano non richiede un'inversione nella domanda diretta.",
         ],
         examples=[
             GrammarExample(text="Dice che è stanco.", translation=None),
@@ -794,14 +826,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Marco ha detto che vado al cinema.",
-                correct="Marco ha detto che andava al cinema.",
-                note="Se il verbo principale è al passato, la subordinata cambia tempo.",
+                wrong="Marco dice che va io al cinema. (Marco parla di sé)",
+                correct="Marco dice che va al cinema.",
+                note="Adatta i pronomi al referente. Al passato, Ha detto che andava adotta una prospettiva passata; Ha detto che va può mantenere una situazione attuale.",
             ),
             GrammarMistake(
-                wrong="Lei dice che lei è stanca.",
+                wrong="Lei dice che sono stanca. (riferito a lei, non a chi riporta)",
                 correct="Lei dice che è stanca.",
-                note="Nel discorso indiretto il soggetto non si ripete.",
+                note="La persona verbale segue il referente. Ripetere lei è possibile per contrasto o chiarezza.",
             ),
         ],
         related=[

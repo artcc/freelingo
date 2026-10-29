@@ -203,15 +203,18 @@ def test_modality_coverage_zh_cn_b2_12x4() -> None:
     }
 
 
-def test_unit_whose_quota_covers_its_cycle_schedules_every_type() -> None:
-    """13×4 gives every German A2 unit at least a full 6-type cycle."""
-    units, slots = _slots("de-DE", "A2", 13, 4)
+@pytest.mark.parametrize("language", ["de-DE", "es-ES", "fr-FR", "it-IT", "pt-PT"])
+@pytest.mark.parametrize("level", CEFR_LEVELS)
+def test_unit_whose_quota_covers_its_cycle_schedules_every_type(language, level) -> None:
+    """A full cycle includes listening for every unit of the reviewed curricula."""
+    units, slots = _slots(language, level, 13, 4)
     counts = _unit_counts(slots)
     assert [counts[u.id] for u in units] == [7, 7, 7, 6, 6, 6, 6, 6]
 
     for unit in units:
         types = _types_for(slots, unit.id)
         cycle = unit.lesson_types or ["grammar"]
+        assert "listening" in cycle
         assert len(types) >= len(cycle)
         assert set(cycle) <= set(types), f"{unit.id} did not schedule part of its own cycle"
         assert _is_rotation(types, cycle)

@@ -5,24 +5,24 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic
 C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     GrammarTopic(
         slug="revisao-conjuntivo",
-        title="Revisao geral do conjuntivo",
+        title="Revisão geral do conjuntivo",
         level="C2",
         category="Conjuntivo",
-        summary="Dominio completo do conjuntivo.",
+        summary="Domínio completo do conjuntivo.",
         explanation="Presente (que, talvez), Imperfeito (se), Futuro (quando), MQP Composto (se + tivesse + part.).",
         rules=[
             "Presente, Imperfeito, Futuro, MQP Composto.",
         ],
         examples=[
             GrammarExample(
-                text="Qualquer que seja a decisao, estou de acordo.",
+                text="Qualquer que seja a decisão, estou de acordo.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Qualquer que e a decisao.",
-                correct="Qualquer que seja a decisao.",
+                wrong="Qualquer que é a decisão.",
+                correct="Qualquer que seja a decisão.",
                 note="Qualquer que + conjuntivo.",
             ),
         ],
@@ -34,10 +34,10 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="revisao-condicional",
-        title="Revisao geral dos condicionais",
+        title="Revisão geral dos condicionais",
         level="C2",
         category="Condicionais",
-        summary="Dominio de todas as estruturas condicionais.",
+        summary="Domínio de todas as estruturas condicionais.",
         explanation="Tipo 1: Se estudares, passas. Tipo 2: Se estudasses, passavas. Tipo 3: Se tivesses estudado, tinhas passado.",
         rules=[
             "Tipo 1, 2, 3.",
@@ -53,65 +53,65 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Se estudavas, passavas.",
+                wrong="Se tu estudasse, passavas.",
                 correct="Se estudasses, passavas.",
-                note="Hipotetica: imperfeito conjuntivo.",
+                note="Tu exige estudasses. Se estudavas, passavas também pode ser correto para uma relação habitual no passado.",
             ),
         ],
         related=["condicional", "se-imperfeito-subjuntivo", "condicional-composto"],
     ),
     GrammarTopic(
         slug="mesoclise",
-        title="Mesoclise",
+        title="Mesóclise",
         level="C2",
         category="Pronomes",
-        summary="Dominio da mesoclise no futuro e condicional.",
-        explanation="Dar-te-ei, Dar-te-ia. Formal. Na fala: ir + infinitivo.",
+        summary="Domínio da mesóclise no futuro e condicional.",
+        explanation="A mesóclise coloca o pronome dentro do futuro ou do condicional: Dar-te-ei; Dar-te-ia. É frequente em escrita formal. Com um elemento que exige próclise, o pronome vem antes: Não te darei; Quem te daria isso? Na conversa, são comuns alternativas como Vou dar-te o livro.",
         rules=[
             "Pronome no meio do verbo.",
             "Futuro e condicional.",
         ],
         examples=[
             GrammarExample(
-                text="Enviar-lhe-ei os documentos amanha.",
+                text="Enviar-lhe-ei os documentos amanhã.",
                 translation=None,
                 note="formal",
             ),
             GrammarExample(
                 text="Poder-se-ia argumentar que...",
                 translation=None,
-                note="academico",
+                note="académico",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Enviar-lhe-ei (conversa informal)",
-                correct="Vou enviar-lhe os documentos.",
-                note="Mesoclise e formal.",
+                wrong="Não enviar-lhe-ei os documentos.",
+                correct="Não lhe enviarei os documentos.",
+                note="A negação exige próclise. A mesóclise é gramatical, embora marcada em conversa informal.",
             ),
         ],
         related=["colocacao-pronominal", "futuro-do-presente", "condicional"],
     ),
     GrammarTopic(
         slug="estilo-literario",
-        title="Estilo literario",
+        title="Estilo literário",
         level="C2",
-        category="Avancado",
-        summary="Desenvolver uma voz literaria autentica.",
-        explanation="Variedade sintatica, lexico preciso, figuras de estilo com moderacao, mostrar em vez de dizer.",
+        category="Avançado",
+        summary="Desenvolver uma voz literária autêntica.",
+        explanation="Variedade sintática, léxico preciso, figuras de estilo com moderação, mostrar em vez de dizer.",
         rules=[
             "Variar estruturas.",
-            "Lexico preciso.",
-            "Mostrar, nao dizer.",
+            "Léxico preciso.",
+            "Mostrar, não dizer.",
         ],
         examples=[
             GrammarExample(
-                text="O sol morria no horizonte, tingindo o Tejo de ouro liquido.",
+                text="O sol morria no horizonte, tingindo o Tejo de ouro líquido.",
                 translation=None,
             ),
         ],
         common_mistakes=[
-            GrammarMistake(wrong="Abusar de adjetivos.", correct="Menos e mais.", note=""),
+            GrammarMistake(wrong="Abusar de adjetivos.", correct="Menos é mais.", note=""),
         ],
         related=["descricao-literaria", "recursos-estilisticos", "voz-narrativa"],
     ),
@@ -119,8 +119,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="voz-narrativa",
         title="Voz narrativa",
         level="C2",
-        category="Avancado",
-        summary="Tipos de narrador e construcao da voz narrativa.",
+        category="Avançado",
+        summary="Tipos de narrador e construção da voz narrativa.",
         explanation="1a pessoa, 3a omnisciente, 3a objetiva, discurso indireto livre.",
         rules=[
             "1a pessoa = personagem.",
@@ -136,7 +136,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Alternar voz sem necessidade.",
-                correct="Manter consistencia.",
+                correct="Manter consistência.",
                 note="",
             ),
         ],
@@ -144,38 +144,38 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="recursos-estilisticos",
-        title="Recursos estilisticos avancados",
+        title="Recursos estilísticos avançados",
         level="C2",
-        category="Avancado",
-        summary="Sinestesia, aliteracao, assonancia, quiasmo.",
-        explanation="Sinestesia (cheiro doce), aliteracao (vento varria vielas), quiasmo (Nao vivemos para comer, comemos para viver).",
+        category="Avançado",
+        summary="Sinestesia, aliteração, assonância, quiasmo.",
+        explanation="Sinestesia (cheiro doce), aliteração (vento varria vielas), quiasmo (Não vivemos para comer, comemos para viver).",
         rules=[
-            "Sinestesia, aliteracao, assonancia, quiasmo.",
+            "Sinestesia, aliteração, assonância, quiasmo.",
         ],
         examples=[
             GrammarExample(
-                text="O cheiro doce da manha. (sinestesia)",
+                text="O cheiro doce da manhã. (sinestesia)",
                 translation=None,
             ),
             GrammarExample(
-                text="O vento varria as velhas vielas. (aliteracao)",
+                text="O vento varria as velhas vielas. (aliteração)",
                 translation=None,
             ),
         ],
         common_mistakes=[
-            GrammarMistake(wrong="Aliteracao forcada.", correct="Usar com naturalidade.", note=""),
+            GrammarMistake(wrong="Aliteração forçada.", correct="Usar com naturalidade.", note=""),
         ],
         related=["figuras-literarias", "estilo-literario"],
     ),
     GrammarTopic(
         slug="equivalencia",
-        title="Equivalencia na traducao",
+        title="Equivalência na tradução",
         level="C2",
-        category="Avancado",
-        summary="Principios de equivalencia tradutoria.",
-        explanation="Equivalencia funcional: desenrascanco -> knack for improvising. Evitar calques. Expressoes: equivalentes culturais.",
+        category="Avançado",
+        summary="Princípios de equivalência tradutória.",
+        explanation="Equivalência funcional: desenrascanço -> knack for improvising. Evitar calques. Expressões: equivalentes culturais.",
         rules=[
-            "Equivalencia funcional.",
+            "Equivalência funcional.",
             "Evitar calques.",
         ],
         examples=[
@@ -186,24 +186,24 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Estar com a pulga atras da orelha. -> To be with the flea behind the ear.",
+                wrong="Estar com a pulga atrás da orelha. -> To be with the flea behind the ear.",
                 correct="To be suspicious.",
-                note="Expressoes NAO se traduzem literalmente.",
+                note="Expressões NÃO se traduzem literalmente.",
             ),
         ],
         related=["falsos-amigos", "matizes-traducao"],
     ),
     GrammarTopic(
         slug="matizes-traducao",
-        title="Matizes de traducao",
+        title="Matizes de tradução",
         level="C2",
-        category="Avancado",
-        summary="Nuances que distinguem uma boa traducao.",
-        explanation="Registo, tempos verbais, conotacoes culturais (saudade sem equivalente exato).",
+        category="Avançado",
+        summary="Nuances que distinguem uma boa tradução.",
+        explanation="Registo, tempos verbais, conotações culturais (saudade sem equivalente exato).",
         rules=[
             "Registo e formalidade.",
             "Tempos: composto PT != present perfect EN.",
-            "Conotacoes culturais.",
+            "Conotações culturais.",
         ],
         examples=[
             GrammarExample(
@@ -216,7 +216,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Tenho comido ontem. -> I have eaten yesterday.",
                 correct="Comi ontem. -> I ate yesterday.",
-                note="Acao unica: preterito simples.",
+                note="Ação única: pretérito simples.",
             ),
         ],
         related=["equivalencia", "falsos-amigos"],
@@ -225,12 +225,12 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="falsos-amigos",
         title="Falsos amigos",
         level="C2",
-        category="Avancado",
+        category="Avançado",
         summary="Palavras portuguesas que parecem inglesas.",
-        explanation="Atualmente = currently (nao actually). Compromisso = appointment (nao compromise). Pretender = to intend (nao to pretend).",
+        explanation="Atualmente indica o momento presente, não uma correção equivalente a na verdade. Pretender significa ter a intenção de fazer algo, não fingir. Compromisso pode designar uma obrigação ou encontro, mas também um acordo entre partes; a tradução depende do contexto e pode corresponder a compromise nesse último sentido.",
         rules=[
             "Atualmente = currently.",
-            "Compromisso = appointment.",
+            "Compromisso pode ser uma obrigação, um encontro marcado ou um acordo; o contexto decide a tradução.",
             "Pretender = to intend.",
         ],
         examples=[
@@ -239,7 +239,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Tenho um compromisso as tres. -> I have an appointment at three.",
+                text="Tenho um compromisso às três. -> I have an appointment at three.",
                 translation=None,
             ),
         ],
@@ -254,23 +254,23 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="evolucao-linguistica",
-        title="Evolucao linguistica",
+        title="Evolução linguística",
         level="C2",
-        category="Avancado",
-        summary="Como a lingua portuguesa evoluiu do latim.",
-        explanation="Latim vulgar -> Galego-portugues (XII-XIV) -> Portugues antigo -> Classico -> Moderno. Mudancas: populu > povo, plenu > cheio, manu > mao.",
+        category="Avançado",
+        summary="Como a língua portuguesa evoluiu do latim.",
+        explanation="Latim vulgar -> Galego-português (XII-XIV) -> Português antigo -> Clássico -> Moderno. Mudanças: populu > povo, plenu > cheio, manu > mão.",
         rules=[
-            "Latim vulgar > Galego-portugues > Moderno.",
-            "Queda de consoantes, palatalizacao, nasalizacao.",
+            "Latim vulgar > Galego-português > Moderno.",
+            "Queda de consoantes, palatalização, nasalização.",
         ],
         examples=[
-            GrammarExample(text="Latim: populu -> Portugues: povo", translation=None),
-            GrammarExample(text="Latim: plenu -> Portugues: cheio", translation=None),
+            GrammarExample(text="Latim: populu -> Português: povo", translation=None),
+            GrammarExample(text="Latim: plenu -> Português: cheio", translation=None),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Confundir evolucao com corrupcao.",
-                correct="Mudanca linguistica e natural.",
+                wrong="Confundir evolução com corrupção.",
+                correct="Mudança linguística é natural.",
                 note="",
             ),
         ],
@@ -280,28 +280,28 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="latinismos",
         title="Latinismos",
         level="C2",
-        category="Avancado",
-        summary="Expressoes e palavras latinas no portugues.",
+        category="Avançado",
+        summary="Expressões e palavras latinas no português.",
         explanation="a priori, ad hoc, ipso facto, per capita, sine qua non, grosso modo, curriculum vitae, lato sensu.",
         rules=[
             "Comuns no registo formal.",
-            "Usar com precisao.",
+            "Usar com precisão.",
         ],
         examples=[
             GrammarExample(
-                text="A seguranca e uma condicao sine qua non.",
+                text="A segurança é uma condição sine qua non.",
                 translation=None,
             ),
             GrammarExample(
-                text="Grosso modo, a proposta e aceitavel.",
+                text="Grosso modo, a proposta é aceitável.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="A posteriori. (com crase)",
-                correct="A posteriori. (sem crase).",
-                note="A e preposicao latina, nao leva crase.",
+                wrong="À posteriori.",
+                correct="A posteriori.",
+                note="A é preposição latina, não leva crase.",
             ),
         ],
         related=["evolucao-linguistica", "arabismos-portugueses", "registo-formal"],
@@ -310,23 +310,23 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="arabismos-portugueses",
         title="Arabismos portugueses",
         level="C2",
-        category="Avancado",
-        summary="A heranca arabe no lexico portugues.",
-        explanation="~1000 palavras: arroz, azeite, acucar, algebra, algoritmo, zero, aldeia. Muitas com al- (artigo arabe).",
+        category="Avançado",
+        summary="A herança árabe no léxico português.",
+        explanation="~1000 palavras: arroz, azeite, açúcar, álgebra, algoritmo, zero, aldeia. Muitas com al- (artigo árabe).",
         rules=[
             "~1000 palavras.",
-            "al- = artigo arabe.",
-            "Alimentos, ciencia, arquitetura.",
+            "al- = artigo árabe.",
+            "Alimentos, ciência, arquitetura.",
         ],
         examples=[
             GrammarExample(text="azeite (az-zayt)", translation=None),
             GrammarExample(text="arroz (ar-ruzz)", translation=None),
-            GrammarExample(text="algebra (al-jabr)", translation=None),
+            GrammarExample(text="álgebra (al-jabr)", translation=None),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ignorar a origem arabe.",
-                correct="O portugues e uma lingua de encontros culturais.",
+                wrong="Ignorar a origem árabe.",
+                correct="O português é uma língua de encontros culturais.",
                 note="",
             ),
         ],
@@ -334,25 +334,25 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="generos-textuais",
-        title="Generos textuais",
+        title="Géneros textuais",
         level="C2",
-        category="Avancado",
-        summary="Dominio de todos os generos textuais.",
-        explanation="Ensaio, academico, relatorio, editorial, carta formal, discurso. Cada um com convencoes especificas.",
+        category="Avançado",
+        summary="Domínio de todos os géneros textuais.",
+        explanation="Ensaio, académico, relatório, editorial, carta formal, discurso. Cada um com convenções específicas.",
         rules=[
-            "Cada genero tem convencoes.",
-            "Conhecer o genero orienta escolhas.",
+            "Cada género tem convenções.",
+            "Conhecer o género orienta escolhas.",
         ],
         examples=[
             GrammarExample(
-                text="O presente relatorio apresenta os resultados do inquerito.",
+                text="O presente relatório apresenta os resultados do inquérito.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Misturar convencoes de generos.",
-                correct="Cada genero tem registo e estrutura proprios.",
+                wrong="Misturar convenções de géneros.",
+                correct="Cada género tem registo e estrutura próprios.",
                 note="",
             ),
         ],
@@ -360,13 +360,13 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="criatividade-linguistica",
-        title="Criatividade linguistica",
+        title="Criatividade linguística",
         level="C2",
-        category="Avancado",
-        summary="Brincar com a lingua: neologismos, trocadilhos.",
-        explanation="Neologismos (googlar), amalgamas (portunhol), trocadilhos (Nao e so ver, e prever), estrangeirismos adaptados (futebol).",
+        category="Avançado",
+        summary="Brincar com a língua: neologismos, trocadilhos.",
+        explanation="Neologismos (googlar), amálgamas (portunhol), trocadilhos (Não é só ver, é prever), estrangeirismos adaptados (futebol).",
         rules=[
-            "Neologismos, amalgamas, trocadilhos.",
+            "Neologismos, amálgamas, trocadilhos.",
         ],
         examples=[
             GrammarExample(
@@ -374,13 +374,13 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Nao e so ver, e prever! (trocadilho)",
+                text="Não é só ver, é prever! (trocadilho)",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Neologismos incompreensiveis.",
+                wrong="Neologismos incompreensíveis.",
                 correct="Devem ser intuitivos.",
                 note="",
             ),
@@ -389,13 +389,13 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="edicao",
-        title="Edicao e revisao de textos",
+        title="Edição e revisão de textos",
         level="C2",
-        category="Avancado",
-        summary="Tecnicas de edicao para clareza e elegancia.",
-        explanation="Conteudo, estilo, gramatica, tipografia. Ler em voz alta. Distancia temporal.",
+        category="Avançado",
+        summary="Técnicas de edição para clareza e elegância.",
+        explanation="Conteúdo, estilo, gramática, tipografia. Ler em voz alta. Distância temporal.",
         rules=[
-            "Conteudo, estilo, gramatica, tipografia.",
+            "Conteúdo, estilo, gramática, tipografia.",
         ],
         examples=[
             GrammarExample(
@@ -405,8 +405,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Rever apenas gramatica.",
-                correct="Edicao eficaz reve tudo.",
+                wrong="Rever apenas gramática.",
+                correct="Edição eficaz revê tudo.",
                 note="",
             ),
         ],
@@ -414,28 +414,28 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="expressao-matizada",
-        title="Expressao matizada",
+        title="Expressão matizada",
         level="C2",
-        category="Avancado",
+        category="Avançado",
         summary="Arte de matizar o discurso.",
-        explanation="Certeza (e indubitavel), probabilidade (tudo indica), incerteza (diria que), cortesia (permita-me, gostaria de).",
+        explanation="Certeza (é indubitável), probabilidade (tudo indica), incerteza (diria que), cortesia (permita-me, gostaria de).",
         rules=[
             "Certeza, probabilidade, incerteza, cortesia.",
         ],
         examples=[
             GrammarExample(
-                text="E indubitavel que a medida trouxe beneficios.",
+                text="É indubitável que a medida trouxe benefícios.",
                 translation=None,
             ),
             GrammarExample(
-                text="Diria que a situacao e complexa.",
+                text="Diria que a situação é complexa.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Afirmacoes demasiado categoricas.",
-                correct="Matizar quando nao ha certeza.",
+                wrong="Afirmações demasiado categóricas.",
+                correct="Matizar quando não há certeza.",
                 note="",
             ),
         ],
@@ -443,28 +443,28 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="integracao-gramatical",
-        title="Integracao gramatical",
+        title="Integração gramatical",
         level="C2",
-        category="Avancado",
-        summary="Sintese de todos os conhecimentos gramaticais.",
-        explanation="Conjuntivo/indicativo natural. Enclise/proclise/mesoclise. Concordancia temporal. Escolha contextual de registo.",
+        category="Avançado",
+        summary="Síntese de todos os conhecimentos gramaticais.",
+        explanation="Conjuntivo/indicativo natural. Ênclise/próclise/mesóclise. Concordância temporal. Escolha contextual de registo.",
         rules=[
             "Conjuntivo/indicativo.",
-            "Enclise/proclise/mesoclise.",
-            "Concordancia.",
+            "Ênclise/próclise/mesóclise.",
+            "Concordância.",
             "Registo contextualizado.",
         ],
         examples=[
             GrammarExample(
-                text="Se eu tivesse sabido que seria tao dificil, ter-me-ia preparado melhor.",
+                text="Se eu tivesse sabido que seria tão difícil, ter-me-ia preparado melhor.",
                 translation=None,
-                note="integracao completa",
+                note="integração completa",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Hesitacao conjuntivo/indicativo.",
-                correct="Com pratica, torna-se intuitivo.",
+                wrong="Hesitação conjuntivo/indicativo.",
+                correct="Com prática, torna-se intuitivo.",
                 note="",
             ),
         ],
@@ -472,26 +472,26 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="fluencia-nativa",
-        title="Fluencia nativa",
+        title="Fluência e autonomia avançadas",
         level="C2",
-        category="Avancado",
-        summary="Alcancar proficiencia indistinguivel de nativo.",
-        explanation="Expressao espontanea, dominio cultural, entoacao natural PE, registos flexiveis, intuicao gramatical. C2: autonomia.",
+        category="Avançado",
+        summary="Comunicar com precisão, flexibilidade e autonomia em situações complexas.",
+        explanation="C2 implica compreender sentidos implícitos, reformular com precisão e adaptar o registo a contextos exigentes. Não exige perder o sotaque nem tornar-se indistinguível de um falante nativo. A inteligibilidade, a adequação e a autonomia são mais relevantes do que imitar uma identidade linguística.",
         rules=[
-            "Expressao espontanea.",
-            "Dominio cultural.",
-            "Entoacao PE.",
+            "Expressão espontânea.",
+            "Domínio cultural.",
+            "Entoação PE.",
             "Flexibilidade de registos.",
         ],
         examples=[
             GrammarExample(
-                text="A fluencia nao e so falar corretamente -- e pensar, sentir e sonhar em portugues.",
+                text="A fluência não é só falar corretamente -- é pensar, sentir e sonhar em português.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Achar que C2 e o fim.",
+                wrong="Achar que C2 é o fim.",
                 correct="A aprendizagem nunca termina.",
                 note="",
             ),
@@ -502,12 +502,12 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="tupinismos",
         title="Tupinismos — palavras de origem tupi-guarani",
         level="C2",
-        category="Avancado",
+        category="Avançado",
         summary="Reconhecer e compreender os tupinismos integrados no português brasileiro.",
-        explanation="Os **tupinismos** são palavras de origem tupi-guarani incorporadas ao português, principalmente através do contato colonial no Brasil.\\n\\nMuitas designam elementos da fauna e flora brasileiras, mas também alimentos, utensílios e topónimos:\\n\\n- **Fauna**: jaguar, tatu, piranha, capivara, arara, tucano, sucuri, jabuti\\n- **Flora**: abacaxi, mandioca, caju, capim, açaí, buriti, ipê, jacarandá\\n- **Alimentação**: pipoca, tapioca, paçoca, mingau, moqueca\\n- **Topónimos**: Ipanema, Copacabana, Tijuca, Curitiba, Paraná, Iguaçu\\n\\nEstas palavras são usadas quotidianamente no Brasil e enriquecem o léxico português com uma herança indígena viva.",
+        explanation="Os **tupinismos** são palavras de origem tupi incorporadas ao português através do contacto linguístico no Brasil. Muitas designam fauna, flora, alimentos e lugares.\n\nExemplos: tatu, piranha, capivara, arara, tucano; abacaxi, mandioca, caju; pipoca, tapioca; Ipanema, Paraná e Iguaçu. Nem todas as palavras indígenas nem todos os topónimos brasileiros têm origem tupi: cada etimologia deve ser verificada.",
         rules=[
             "Tupinismos designam maioritariamente fauna, flora e topónimos brasileiros.",
-            "Muitos tupinismos não têm equivalente em português europeu (ex: abacaxi vs ananás).",
+            "Alguns termos designam realidades locais; outros circulam também em Portugal, como abacaxi e mandioca.",
             "São parte integrante do vocabulário ativo brasileiro.",
             "Reconhecer a origem tupi demonstra conhecimento avançado da cultura e história da língua.",
         ],
@@ -527,9 +527,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Achar que abacaxi e ananás são sempre sinónimos.",
-                correct="Em Portugal usa-se ananás; no Brasil, abacaxi. Designam variedades diferentes.",
-                note="Distinção regional.",
+                wrong="Afirmar que abacaxi nunca se usa em Portugal.",
+                correct="Abacaxi e ananás usam-se em Portugal; as preferências e distinções comerciais variam.",
+                note="Não reduzir os usos a uma oposição absoluta entre países.",
             ),
             GrammarMistake(
                 wrong="Confundir mandioca com batata-doce.",
@@ -549,10 +549,10 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Expressão",
         summary="Instituições, diversidade e desafios da comunidade lusófona no século XXI.",
-        explanation="A **Lusofonia** é uma comunidade de mais de 280 milhões de falantes distribuídos por todos os continentes. Ultrapassa a simples partilha linguística: é um espaço político, económico e cultural organizado em torno da CPLP (Comunidade dos Países de Língua Portuguesa).\n\n**Instituições principais**:\n- **CPLP** (9 Estados-membros) : promoção da língua, cooperação política, educação.\n- **IILP** (Instituto Internacional da Língua Portuguesa) : gestão da política linguística comum.\n- **RTP-África** : difusão televisiva internacional em português.\n\n**Dinâmicas regionais**:\n- África concentra a maioria dos falantes (Angola, Moçambique, Cabo Verde, Guiné-Bissau, São Tomé e Príncipe).\n- O português avança demograficamente graças ao crescimento populacional africano.\n- O Brasil mantém uma política linguística própria, com norma distinta da europeia.\n\n**Debates**: norma europeia vs. norma brasileira vs. variedades africanas, insegurança linguística, o papel do inglês como língua de ciência nos países lusófonos.",
+        explanation="A **lusofonia** abrange comunidades ligadas pelo uso do português, com histórias, variedades e situações de multilinguismo distintas. Não se confunde com uma organização única.\n\nA **CPLP**, Comunidade dos Países de Língua Portuguesa, é uma organização intergovernamental de cooperação. O **IILP** promove a língua no âmbito dessa comunidade.\n\nO Brasil concentra a maior parte dos falantes de português. Países africanos como Angola e Moçambique têm um papel importante no seu crescimento demográfico. A presença oficial do português não implica que seja a língua materna ou maioritária de toda a população.\n\nOs debates incluem diversidade normativa, educação multilingue, circulação cultural e acesso à ciência.",
         rules=[
             "A Lusofonia não é um bloco monolítico — cada país tem a sua variedade e política linguística.",
-            "O centro de gravidade demográfico do português está a deslocar-se para África.",
+            "O Brasil concentra a maioria dos falantes; o crescimento africano não elimina as diferenças de uso entre países.",
             "A CPLP promove o plurilinguismo e a diversidade cultural, não o monolinguismo português.",
         ],
         examples=[
@@ -566,15 +566,15 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Segundo projeções da ONU, o português poderá ser falado por mais de 380 milhões de pessoas em 2050, sobretudo em África.",
+                text="Uma projeção sobre falantes deve indicar a fonte, a data e se conta língua materna, segunda língua ou ambas.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="A Lusofonia são só os países onde se fala português.",
-                correct="A Lusofonia é uma organização política e cultural — nem todos os países membros da CPLP têm o português como língua maioritária (ex.: Guiné Equatorial).",
-                note="Confusão frequente entre lusofonia (facto linguístico) e Lusofonia (instituição, CPLP).",
+                wrong="Lusofonia e CPLP são a mesma organização.",
+                correct="Lusofonia designa um espaço linguístico e cultural; a CPLP é uma organização intergovernamental.",
+                note="As comunidades lusófonas incluem também diásporas e não se limitam à pertença institucional à CPLP.",
             ),
         ],
         related=["politica-linguistica-pt", "evolucao-linguistica"],
@@ -585,7 +585,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Expressão",
         summary="Do Acordo Ortográfico à difusão do português: políticas e tensões linguísticas nos países de língua portuguesa.",
-        explanation="Os países lusófonos gerem as suas políticas linguísticas de forma descentralizada, mas com alguns instrumentos comuns:\n\n**Instituições de regulação**:\n- **Academia das Ciências de Lisboa** : regula a norma europeia (PE).\n- **Academia Brasileira de Letras** : gere a norma brasileira (PB).\n- **IILP** : coordena a política linguística comum entre os Estados-membros da CPLP.\n\n**Instrumentos principais**:\n- **Acordo Ortográfico de 1990** : visa unificar a ortografia entre as variedades. Ratificado por todos os países, mas aplicado de forma desigual e contestado sobretudo em Portugal.\n\n**Debates contemporâneos**:\n- **Diferenças PE-PB** : próclise generalizada no Brasil (me dá), gerúndio (estou falando vs. estou a falar), colocação pronominal (traga-me vs. me traga).\n- **Norma única vs. pluricentrismo** : deve haver uma norma comum ou deve reconhecer-se o português como língua pluricêntrica com múltiplas normas de igual dignidade?\n- **Ensino do português** : difusão do PE ou do PB como língua estrangeira — competição entre Portugal e Brasil.\n- **Línguas nacionais** : em África, o português coexiste com línguas bantu e crioulas, levantando questões de política educativa.",
+        explanation="As políticas linguísticas são definidas por instituições nacionais e por mecanismos de cooperação. As academias publicam obras lexicográficas e estudos; não controlam sozinhas todos os usos ou decisões educativas. O IILP promove a cooperação no âmbito da CPLP.\n\nO **Acordo Ortográfico de 1990** procura aproximar a escrita; a adoção e aplicação variam entre países. Não uniformiza pronúncia, gramática ou vocabulário.\n\nO português é pluricêntrico: as variedades europeia, brasileira e africanas têm usos próprios. As diferenças de colocação pronominal dependem também do registo: Me dá é comum na fala brasileira, mas não resume a norma escrita formal.\n\nA educação em contextos multilingues deve considerar o português e as outras línguas das comunidades.",
         rules=[
             "O Acordo Ortográfico é um tratado internacional, não uma imposição — cada país decide a sua aplicação.",
             "O português é uma língua pluricêntrica: PE e PB são normas de igual legitimidade.",

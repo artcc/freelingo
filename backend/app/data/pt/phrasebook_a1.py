@@ -16,18 +16,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 text="Bom dia.",
-                context="Sauda\u00e7\u00e3o formal antes do meio-dia",
-                register="formal",
+                context="Saudação durante a manhã, em situações formais e informais",
+                register="neutral",
             ),
             PhrasebookEntry(
                 text="Boa tarde.",
-                context="Sauda\u00e7\u00e3o entre o meio-dia e as 18h",
-                register="formal",
+                context="Saudação durante a tarde",
+                register="neutral",
             ),
             PhrasebookEntry(
                 text="Boa noite.",
-                context="Sauda\u00e7\u00e3o depois das 18h",
-                register="formal",
+                context="Saudação ou despedida à noite",
+                register="neutral",
             ),
             PhrasebookEntry(
                 text="Como est\u00e1s?",
@@ -42,7 +42,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 text="Estou bem, obrigado. E tu?",
                 context="Responder e retribuir (informal)",
-                register="neutral",
+                register="informal",
             ),
             PhrasebookEntry(
                 text="Estou bem, obrigado. E o senhor?",
@@ -52,7 +52,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 text="Muito prazer em conhecer-te.",
                 context="No primeiro encontro (informal)",
-                register="neutral",
+                register="informal",
             ),
             PhrasebookEntry(
                 text="Muito prazer em conhec\u00ea-lo.",
@@ -72,7 +72,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 context="Indicar a nacionalidade",
                 register="neutral",
             ),
-            PhrasebookEntry(text="Adeus!", context="Despedida formal", register="formal"),
+            PhrasebookEntry(text="Adeus!", context="Despedida comum", register="neutral"),
             PhrasebookEntry(
                 text="At\u00e9 logo!", context="Despedida informal", register="informal"
             ),

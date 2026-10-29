@@ -9,7 +9,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="Formação e uso do presente do conjuntivo.",
-        explanation="| | falar | comer | abrir |\\n|---|-------|-------|-------|\\n| eu | fale | coma | abra |\\n| tu | fales | comas | abras |\\n| ele | fale | coma | abra |\\n| nós | falemos | comamos | abramos |\\n| eles | falem | comam | abram |\\n\\nIrregulares: ser (seja), estar (esteja), ter (tenha), ir (vá), saber (saiba), querer (queira), fazer (faça), pôr (ponha).",
+        explanation="| | falar | comer | abrir |\n|---|-------|-------|-------|\n| eu | fale | coma | abra |\n| tu | fales | comas | abras |\n| ele | fale | coma | abra |\n| nós | falemos | comamos | abramos |\n| eles | falem | comam | abram |\n\nIrregulares: ser (seja), estar (esteja), ter (tenha), ir (vá), saber (saiba), querer (queira), fazer (faça), pôr (ponha).",
         rules=[
             "Forma-se a partir da 1.ª pessoa do presente.",
             "Substitui-se -o por -e (-ar) ou -a (-er/-ir).",
@@ -46,7 +46,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="Usar o conjuntivo após expressões de desejo como espero que, quero que, oxalá.",
-        explanation="O conjuntivo é obrigatório após desejo:\\n- *Espero que venhas. / Quero que sejas feliz. / Oxalá chova.*\\n- *Tomara que ela passe.* / *Deus queira que não chova.*",
+        explanation="O conjuntivo é obrigatório após desejo:\n- *Espero que venhas. / Quero que sejas feliz. / Oxalá chova.*\n- *Tomara que ela passe.* / *Deus queira que não chova.*",
         rules=[
             "Conjuntivo obrigatório após expressões de desejo.",
             "Querer que, esperar que, desejar que + conjuntivo.",
@@ -79,7 +79,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="Usar talvez com conjuntivo para expressar possibilidade.",
-        explanation="**Talvez** + conjuntivo (padrão): *Talvez ele venha amanhã.*\\nTalvez + indicativo (coloquial, mais certeza): *Talvez ele vem amanhã.*",
+        explanation="**Talvez** + conjuntivo (padrão): *Talvez ele venha amanhã.*\nTalvez + indicativo (coloquial, mais certeza): *Talvez ele vem amanhã.*",
         rules=[
             "Talvez + conjuntivo é a forma padrão.",
             "Talvez + indicativo é coloquial.",
@@ -106,7 +106,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="Conjuntivo após expressões impessoais de recomendação e necessidade.",
-        explanation="Usa-se conjuntivo após:\\n- *É preciso que... / É necessário que... / É importante que...*\\n- *Convém que... / É melhor que...*",
+        explanation="Usa-se conjuntivo após:\n- *É preciso que... / É necessário que... / É importante que...*\n- *Convém que... / É melhor que...*",
         rules=[
             "É preciso/necessário/importante que + conjuntivo.",
             "Convém que + conjuntivo.",
@@ -144,7 +144,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="Usar o conjuntivo para expressar dúvida, incerteza e probabilidade.",
-        explanation="Dúvida → conjuntivo:\\n- *Duvido que ele venha. / Não acho que seja boa ideia.*\\n- *É possível que chova. / Pode ser que ainda dê tempo.*",
+        explanation="Dúvida → conjuntivo:\n- *Duvido que ele venha. / Não acho que seja boa ideia.*\n- *É possível que chova. / Pode ser que ainda dê tempo.*",
         rules=[
             "Duvido que, não acho que + conjuntivo.",
             "É possível/provável que + conjuntivo.",
@@ -182,7 +182,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="Usar o conjuntivo após expressões de avaliação emocional.",
-        explanation="Avaliação → conjuntivo:\\n- *É bom que tenhas vindo. / É uma pena que vás embora.*\\n- *Que bom que estejas aqui! / Que pena que não possas vir.*",
+        explanation="Avaliação → conjuntivo:\n- *É bom que tenhas vindo. / É uma pena que vás embora.*\n- *Que bom que estejas aqui! / Que pena que não possas vir.*",
         rules=[
             "É bom/mau/triste/pena que + conjuntivo.",
             "Expressões emocionais ativam o conjuntivo.",
@@ -208,7 +208,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Tempos verbais",
         summary="Expressar ações repetidas ou contínuas que se prolongam até ao presente.",
-        explanation="Presente de **ter** + particípio passado.\\n\\n- *Tenho estudado muito.* (= I have been studying — ação repetida até agora)\\n- *Ela tem trabalhado bastante.*\\n\\n**Diferenciação EP:** NÃO equivale ao present perfect inglês para ações únicas. *Comi ontem* (única), *Tenho comido bem* (repetida).",
+        explanation="Presente de **ter** + particípio passado.\n\n- *Tenho estudado muito.* (= I have been studying — ação repetida até agora)\n- *Ela tem trabalhado bastante.*\n\n**Diferenciação EP:** NÃO equivale ao present perfect inglês para ações únicas. *Comi ontem* (única), *Tenho comido bem* (repetida).",
         rules=[
             "Ter (presente) + particípio.",
             "Ação repetida/contínua até ao presente.",
@@ -246,7 +246,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Tempos verbais",
         summary="Expressar uma ação passada anterior a outra ação passada.",
-        explanation="Forma-se da 3.ª pl. do pretérito perfeito (-ram):\\n\\n*Falaram → falara, falaras, falara, faláramos, falaram.*\\n\\nUso literário/formal. Na fala, prefere-se o composto: *tinha falado*.",
+        explanation="Forma-se da 3.ª pl. do pretérito perfeito (-ram):\n\n*Falaram → falara, falaras, falara, faláramos, falaram.*\n\nUso literário/formal. Na fala, prefere-se o composto: *tinha falado*.",
         rules=[
             "Forma-se a partir da 3.ª pl. do pretérito perfeito.",
             "Uso literário/formal.",
@@ -265,7 +265,11 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
         ],
         common_mistakes=[
-            GrammarMistake(wrong="A", correct="m", note="b"),
+            GrammarMistake(
+                wrong="Quando cheguei, ela já tinha saíra.",
+                correct="Quando cheguei, ela já tinha saído. / Quando cheguei, ela já saíra.",
+                note="Não combines a forma simples saíra com tinha; o composto usa o particípio saído.",
+            ),
         ],
         related=[
             "preterito-perfeito-composto",
@@ -277,9 +281,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="marcadores-composto",
         title="Marcadores do pretérito perfeito composto",
         level="B1",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Expressões que indicam ação contínua/repetida até ao presente.",
-        explanation="Marcadores típicos:\\n\\n- Ultimamente: *Ultimamente tenho dormido mal.*\\n- Nos últimos tempos/meses/anos: *Tenho andado ocupado.*\\n- Até agora: *Até agora tenho conseguido.*\\n- Desde + data: *Desde janeiro que tenho ido.*",
+        explanation="Marcadores típicos:\n\n- Ultimamente: *Ultimamente tenho dormido mal.*\n- Nos últimos tempos/meses/anos: *Tenho andado ocupado.*\n- Até agora: *Até agora tenho conseguido.*\n- Desde + data: *Desde janeiro que tenho ido.*",
         rules=[
             "Ultimamente, nos últimos tempos → composto.",
             "Até agora + composto = ação contínua.",
@@ -314,7 +318,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Voz passiva",
         summary="Formação e uso da voz passiva com ser + particípio passado.",
-        explanation="**Ser** + particípio passado (concordante com sujeito):\\n\\n- Ativa: *O chef preparou o jantar.*\\n- Passiva: *O jantar foi preparado pelo chef.*\\n\\nO agente é introduzido por *por*. O particípio concorda em género e número.",
+        explanation="**Ser** + particípio passado (concordante com sujeito):\n\n- Ativa: *O chef preparou o jantar.*\n- Passiva: *O jantar foi preparado pelo chef.*\n\nO agente é introduzido por *por*. O particípio concorda em género e número.",
         rules=[
             "Ser + particípio passado (concordante).",
             "Agente = por + substantivo.",
@@ -347,7 +351,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Voz passiva",
         summary="Usar a partícula se para expressar sujeito indeterminado.",
-        explanation="**Se** como índice de indeterminação do sujeito:\\n- Verbo sempre na 3.ª singular: *Vive-se bem em Portugal.*\\n- *Precisa-se de empregados.* (singular, mesmo com objeto plural)\\n\\nNÃO confundir com se passivo (verbo concorda com sujeito).",
+        explanation="**Se** como índice de indeterminação do sujeito:\n- Verbo sempre na 3.ª singular: *Vive-se bem em Portugal.*\n- *Precisa-se de empregados.* (singular, mesmo com objeto plural)\n\nNÃO confundir com se passivo (verbo concorda com sujeito).",
         rules=[
             "Se impessoal: verbo sempre na 3.ª singular.",
             "Usa-se com verbos intransitivos ou transitivos indiretos.",
@@ -376,7 +380,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Voz passiva",
         summary="Usar a partícula se para formar a voz passiva sintética.",
-        explanation="**Se passivo**: verbo concorda com o sujeito paciente.\\n- *Vende-se uma casa. / Vendem-se casas.*\\n\\nEquivale a: *Uma casa é vendida. / Casas são vendidas.*\\n\\nMuito comum em anúncios.",
+        explanation="**Se passivo**: verbo concorda com o sujeito paciente.\n- *Vende-se uma casa. / Vendem-se casas.*\n\nEquivale a: *Uma casa é vendida. / Casas são vendidas.*\n\nMuito comum em anúncios.",
         rules=[
             "Se passivo: verbo concorda com sujeito.",
             "Equivale à passiva com ser.",
@@ -400,9 +404,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="que-relativo",
         title="Pronome relativo que",
         level="B1",
-        category="Oracoes",
+        category="Orações",
         summary="Usar que como pronome relativo para orações subordinadas.",
-        explanation="**Que** refere-se a pessoas e coisas, pode ser sujeito ou objeto:\\n\\n- *O livro que li é interessante.*\\n- *A pessoa que chegou é o diretor.*\\n\\nCom preposição: *de que, a que, em que, por que* (formal).",
+        explanation="**Que** refere-se a pessoas e coisas, pode ser sujeito ou objeto:\n\n- *O livro que li é interessante.*\n- *A pessoa que chegou é o diretor.*\n\nCom preposição: *de que, a que, em que, por que* (formal).",
         rules=[
             "Que refere-se a pessoas e coisas.",
             "Pode ser sujeito ou objeto.",
@@ -436,9 +440,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="onde-quando-relativo",
         title="Pronomes relativos onde e quando",
         level="B1",
-        category="Oracoes",
+        category="Orações",
         summary="Usar onde (lugar) e quando (tempo) como pronomes relativos.",
-        explanation="**Onde** (= where): lugar físico. **Nota EP:** NÃO usar onde para situações abstratas; usar *em que* ou *no qual*.\\n**Quando** (= when): tempo.",
+        explanation="**Onde** (= where): lugar físico. **Nota EP:** NÃO usar onde para situações abstratas; usar *em que* ou *no qual*.\n**Quando** (= when): tempo.",
         rules=[
             "Onde = lugar físico. Não usar para situações abstratas.",
             "Quando = tempo.",
@@ -473,9 +477,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="cujo",
         title="Pronome relativo cujo",
         level="B1",
-        category="Oracoes",
+        category="Orações",
         summary="Usar cujo/a/os/as para expressar posse em orações relativas.",
-        explanation="**Cujo** (= whose) concorda em género e número com a **coisa possuída** (não com o possuidor).\\n\\n- *O homem cujo filho é médico.* (filho = masc. sing.)\\n- *A mulher cuja casa visitei.* (casa = fem. sing.)\\n\\nCujo NUNCA é seguido de artigo.",
+        explanation="**Cujo** (= whose) concorda em género e número com a **coisa possuída** (não com o possuidor).\n\n- *O homem cujo filho é médico.* (filho = masc. sing.)\n- *A mulher cuja casa visitei.* (casa = fem. sing.)\n\nCujo NUNCA é seguido de artigo.",
         rules=[
             "Cujo concorda com a coisa possuída.",
             "NUNCA se usa artigo depois de cujo.",
@@ -506,7 +510,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Condicionais",
         summary="Expressar condições não realizadas no passado.",
-        explanation="Ter (condicional) + particípio passado.\\n\\n- *Se tivesse estudado, teria passado.*\\n- *Ela teria vindo se soubesse.*",
+        explanation="Ter (condicional) + particípio passado.\n\n- *Se tivesse estudado, teria passado.*\n- *Ela teria vindo se soubesse.*",
         rules=[
             "Ter (condicional) + particípio.",
             "Condição não realizada no passado.",
@@ -541,7 +545,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Condicionais",
         summary="Construir orações condicionais com se + imperfeito do conjuntivo.",
-        explanation="**Estrutura:** *Se + imperfeito conjuntivo + condicional*\\n- *Se tivesse dinheiro, viajaria pelo mundo.*\\n- Coloquial EP: *Se tivesse dinheiro, viajava.* (imperfeito em vez de condicional)\\n\\nFormação: da 3.ª pl. do pretérito perfeito: falaram → falasse.",
+        explanation="**Estrutura:** *Se + imperfeito conjuntivo + condicional*\n- *Se tivesse dinheiro, viajaria pelo mundo.*\n- Coloquial EP: *Se tivesse dinheiro, viajava.* (imperfeito em vez de condicional)\n\nFormação: da 3.ª pl. do pretérito perfeito: falaram → falasse.",
         rules=[
             "Se + imperfeito conj. → condição hipotética.",
             "Principal usa condicional ou imperfeito (coloquial).",
@@ -573,7 +577,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Conjuntivo",
         summary="O futuro do conjuntivo — tempo exclusivo do português, essencial em EP.",
-        explanation="Forma-se a partir da 3.ª pl. do pretérito perfeito (sem -am):\\n*falaram → falar, falares, falar, falarmos, falarem*\\n\\nUsa-se com **quando, se, assim que, logo que, enquanto** para ações futuras hipotéticas.\\n\\nTempo quase exclusivo do português!",
+        explanation="Forma-se a partir da 3.ª pl. do pretérito perfeito (sem -am):\n*falaram → falar, falares, falar, falarmos, falarem*\n\nUsa-se com **quando, se, assim que, logo que, enquanto** para ações futuras hipotéticas.\n\nTempo quase exclusivo do português!",
         rules=[
             "Da 3.ª pl. do pretérito perfeito sem -am.",
             "Com quando, se, assim que, logo que, enquanto.",
@@ -608,9 +612,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Discurso indireto",
         summary="Relatar discurso quando o verbo introdutor está no passado.",
-        explanation="Quando o verbo introdutor está no passado, os tempos recuam:\\n\\n| Direto | Indireto |\\n|--------|----------|\\n| Presente | Imperfeito |\\n| Perfeito | Mais-que-perfeito |\\n| Futuro | Condicional |\\n| Imperativo | Imperfeito conj. |",
+        explanation="Ao adotar uma perspetiva passada, usa o imperfeito para simultaneidade (Disse que estava cansada), o mais-que-perfeito para anterioridade (Disse que tinha saído) e o condicional para posterioridade (Disse que viria). Um pedido pode passar a Pediu que eu fosse.\n\nMantém tempos atuais quando o contexto o justifica: Disse que está cansada, se ainda está; Disse que virá amanhã, se o evento continua futuro. Ajusta também pronomes e referências de lugar e tempo.",
         rules=[
-            "Verbo no passado → tempos recuam.",
+            "O recuo temporal depende da perspetiva adotada e da validade atual da informação.",
             "Presente→imperfeito; perfeito→MQP; futuro→condicional.",
             "Imperativo→imperfeito conjuntivo.",
         ],
@@ -626,9 +630,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ela disse que está cansada. (com disse)",
+                wrong="Ela disse que estar cansada.",
                 correct="Ela disse que estava cansada.",
-                note="Disse está no passado → tempo recua.",
+                note="A oração com que precisa de verbo conjugado; está cansada é válido se a situação continua atual.",
             ),
         ],
         related=["discurso-indireto", "mudancas-temporais", "discurso-reportado"],
@@ -637,7 +641,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="conectores-argumentativos",
         title="Conectores argumentativos",
         level="B1",
-        category="Oracoes",
+        category="Orações",
         summary="Conectores para estruturar argumentos: causa, consequência, oposição, concessão.",
         explanation="**Causa:** porque, visto que, já que. **Consequência:** por isso, portanto, assim. **Oposição:** mas, porém, contudo. **Concessão:** embora, mesmo que, ainda que. **Adição:** além disso, também, não só... como também.",
         rules=[

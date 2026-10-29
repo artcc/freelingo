@@ -72,6 +72,31 @@ descriptions distinguish phonetic variation from grammatical phenomena such as l
 questions specify the context, person, or tense needed for one accepted answer and vary the correct
 option's position in the static bank.
 
+### French, Italian, and Portuguese curriculum and reference content
+
+Every French (`fr-FR`), Italian (`it-IT`), and Portuguese (`pt-PT`) unit from A1 through C2
+declares grammar, vocabulary, listening, reading, writing, and review in that order. The existing
+capacity and rotation rules determine actual coverage; a short plan does not give every unit a full
+cycle. Persisted schedules are retained, so these declarations apply when creating new plans.
+
+The foundational sequence includes:
+
+- French A1 unit 4 and consolidation cover `finir`, `faire`, `prendre`, `venir`, and `boire` through
+  `verbes-frequents-present`, alongside regular `-er` and pronominal verbs.
+- Italian A2 unit 2 and consolidation include `stare-gerundio`. Its reference topic belongs to A2
+  and retains its stable slug; B2 reuses it when contrasting progressive periphrases.
+- Portuguese A1 introductions include `ter` for age. European Portuguese remains the teaching
+  variety, with `estar a + infinitivo` in A1 and the future subjunctive in B1.
+
+Reference explanations distinguish contextual tense choices from errors, including reported speech,
+French pronominal-participle agreement, Italian conditional versus interrogative `se`, and Portuguese
+subjunctive selection. Portuguese grammar explanations use actual newline characters for rendering.
+Regional and sociolinguistic descriptions distinguish usage preferences from grammatical rules.
+
+Placement questions specify the context, tense, or person needed for the keyed answer. Correct-answer
+positions are balanced within each level/skill group in these three static banks; the frontend displays
+the saved option order. Grammar references resolve within the selected target language.
+
 ## Shared native-language help
 
 Grammar, Vocabulary, and Phrasebook can generate additional help in the authenticated user's native

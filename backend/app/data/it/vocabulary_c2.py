@@ -30,7 +30,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Cura estrema dei dettagli, precisione maniacale.",
                 example="La meticolosità della sua prosa è impressionante.",
-                ipa="/metikolozitˈta/",
+                ipa="/metikoloziˈta/",
                 frequency_rank=890,
             ),
             VocabularyEntry(
@@ -38,7 +38,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Ricerca costante della perfezione.",
                 example="Il suo perfezionismo lo porta a revisionare tutto.",
-                ipa="/perfettisjoˈnizmo/",
+                ipa="/perfettsjoˈnizmo/",
                 frequency_rank=891,
             ),
             VocabularyEntry(

@@ -16,7 +16,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "concordance-avancee",
         ],
         vocabulary_set_ids=["excellence_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Maîtrise tous les temps du subjonctif et leur séquence sans erreurs systématiques : présent, passé, imparfait et plus-que-parfait dans tous les contextes d'activation",
             "Forme et interprète des conditionnelles mixtes qui combinent différents cadres temporels : Si j'avais étudié davantage, j'aurais maintenant un meilleur poste",
@@ -38,7 +38,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "ressources-stylistiques",
         ],
         vocabulary_set_ids=["litterature_fr_c2", "style_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Contrôle le point de vue narratif (première personne, troisième personne omnisciente, troisième personne limitée) dans une écriture créative originale, avec des choix conscients et cohérents",
             "Utilise l'asyndète, le polysyndète et d'autres ressources syntaxiques avec une intention stylistique : accumulation rythmique, pause abrupte, contraste emphatique",
@@ -56,7 +56,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Traduction et médiation linguistique",
         grammar_points=["equivalence", "nuances-traduction", "faux-amis"],
         vocabulary_set_ids=["traduction_fr_c2", "mediation_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifie et évite les faux amis fréquents entre le français et l'anglais : actuellement ≠ actually, librairie ≠ library, sensible ≠ sensible, passer un examen ≠ to pass an exam, décevoir ≠ to deceive",
             "Intervient comme médiateur entre interlocuteurs d'arrière-plans linguistiques différents en reformulant, résumant et clarifiant sans distordre le sens",
@@ -74,7 +74,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Culture et histoire du français",
         grammar_points=["lexique-historique", "etymologie", "evolution-francais"],
         vocabulary_set_ids=["histoire_fr_c2", "culture_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Reconnaît les mots d'origine francique intégrés au vocabulaire français (guerre, jardin, hache, blanc) et explique leur contexte historique",
             "Identifie les apports lexicaux de l'italien à la Renaissance, de l'espagnol, de l'arabe (sucre, zéro, alcool, chiffre, algèbre) et de l'anglais contemporain",
@@ -92,7 +92,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Création de contenu avancé",
         grammar_points=["genres-textuels", "creativite-linguistique", "edition"],
         vocabulary_set_ids=["creation_fr_c2", "publication_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produit des textes de 500 mots dans différents genres (chronique, essai personnel, nouvelle, rapport formel), en adaptant le lexique, le ton et la structure à chaque convention",
             "Édite des brouillons avec un niveau de correction professionnel : réorganise pour gagner en clarté, élimine les redondances, élève le registre et corrige des défauts subtils grammaticaux et stylistiques",
@@ -114,7 +114,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "fluidite-native",
         ],
         vocabulary_set_ids=["maitrise_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Exprime des nuances subtiles de sens (doute, ironie, prudence, emphase) par une sélection précise de structures grammaticales et lexicales, sans dépendre de circonlocutions explicites",
             "Reconstruit des arguments complexes depuis des perspectives idéologiques ou culturelles différentes, en montrant un contrôle flexible du point de vue et du registre",
@@ -137,7 +137,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evolution-numerique-fr",
         ],
         vocabulary_set_ids=["francophonie_fr_c2", "numerique_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Décrit les institutions de la Francophonie (OIF, AUF, TV5Monde) et analyse les dynamiques démographiques qui déplacent le centre de gravité du français vers l'Afrique",
             "Analyse de façon critique les politiques linguistiques françaises (loi Toubon, Académie, réforme de 1990, féminisation, écriture inclusive) en les situant dans leur contexte historique et politique",
@@ -166,7 +166,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evolution-numerique-fr",
         ],
         vocabulary_set_ids=["revision_fr_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produit un discours spontané de 5 minutes sur un sujet abstrait ou polémique avec une correction quasi native, une fluidité naturelle et une richesse lexicale comparable à celle d'un locuteur francophone cultivé",
             "Maîtrise l'intégralité des structures grammaticales du français sans erreur systématique — les seules erreurs sont des lapsus occasionnels immédiatement auto-corrigés",

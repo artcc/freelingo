@@ -16,7 +16,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "subjuntivo-relativo",
         ],
         vocabulary_set_ids=["nuances_c1", "formalidade_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa conjunções concessivas com conjuntivo em todos os tempos: embora, ainda que, mesmo que, por mais que, por muito que + conjuntivo",
             "Usa conjunções finais: para que + conjuntivo (mudança de sujeito) vs para + infinitivo pessoal (frequentemente preferido no PE formal), a fim de que, de modo a que, de forma a que + conjuntivo",
@@ -34,7 +34,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Registo formal e académico",
         grammar_points=["passiva-reflexa", "nominalizacao", "impessoalidade"],
         vocabulary_set_ids=["académico_c1", "investigação_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa com fluência a passiva reflexa (se + 3.ª pessoa) em português formal e académico: considera-se que, verifica-se que, observa-se que, comprova-se que",
             "Transforma sintagmas verbais em sintagmas nominais por nominalização, recurso central do estilo académico em português: desenvolver -> o desenvolvimento, analisar -> a análise, aumentar -> o aumento, recorrer -> o recurso, realizar -> a realização",
@@ -52,7 +52,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Léxico especializado",
         grammar_points=["campos-semanticos", "derivacao", "precisao-lexica"],
         vocabulary_set_ids=["profissional_c1", "técnico_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Deriva novas palavras de forma sistemática com sufixos produtivos do português: -ção/-são (produção, expansão), -dade/-tade/-idade (qualidade, liberdade, capacidade), -eza/-ura/-ice (beleza, leitura, tolice), -vel (realizável), -mente; e prefixos in-/im-, re-, sub-, inter-, ante-, pré-, pós-",
             "Identifica relações de campo semântico e colocações formais em português: cometer um erro, tomar uma decisão, formular uma hipótese, apresentar uma proposta, exercer uma função, distinguindo colocações formais e informais",
@@ -70,7 +70,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Ironia, humor e duplo sentido",
         grammar_points=["ironia", "humor-portugues", "duplo-sentido"],
         vocabulary_set_ids=["humor_c1", "cultura_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Reconhece ironia verbal e sarcasmo em português através de intonação, contexto e incongruência lexical: Que bela ideia! (quando algo corre mal); Muito bem! (com sentido sarcástico)",
             "Compreende o humor português, marcado por saudade, autoironia e contenção, e interpreta humor ligado a fenómenos culturais como desenrascanço, fado, futebol e burocracia",
@@ -88,7 +88,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Discurso persuasivo e retórica",
         grammar_points=["recursos-retoricos", "persuasao", "figuras-literarias"],
         vocabulary_set_ids=["oratória_c1", "apresentações_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa anáfora, epífora, quiasmo e perguntas retóricas (Não temos o direito de...? Será que...?) para reforçar a força persuasiva de um discurso ou ensaio em português",
             "Usa estruturas concessivas: por mais que + conjuntivo, ainda que + conjuntivo, mesmo admitindo que + conjuntivo, integrando-as naturalmente em argumentação extensa",
@@ -110,7 +110,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "diferencas-regionais",
         ],
         vocabulary_set_ids=["variedades_c1", "dialetos_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifica as principais diferenças fonológicas entre português europeu (PE) e português do Brasil (PB)",
             "Distingue diferenças gramaticais-chave: no PE usa-se estar a + infinitivo no progressivo e ênclise como padrão; no PB usa-se estar + gerúndio e maior tendência para próclise",
@@ -128,7 +128,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Análise crítica e síntese",
         grammar_points=["sintese-textual", "critica-construtiva", "reformulacao"],
         vocabulary_set_ids=["análise_c1", "síntese_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Sintetiza informação de duas ou três fontes num resumo coerente e atribuído: Segundo X..., Por seu turno, Y argumenta que..., No entanto, é necessário considerar que...",
             "Avalia coerência interna, fiabilidade e potencial viés de uma argumentação em texto português, usando vocabulário crítico: parte do pressuposto de que, baseia-se na hipótese de que, carece de evidências concretas, é destituído de fundamento, apresenta uma perspetiva parcial",
@@ -155,7 +155,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "sintese-textual",
         ],
         vocabulary_set_ids=["revisão_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produz um texto formal de cerca de 400 palavras integrando todas as estruturas gramaticais de C1 (conjuntivo em todos os contextos, nominalização, construções passivas) com controlo evidente e fluência natural",
             "Exprime espontaneamente ideias complexas e matizadas sem procura visível de estruturas ou vocabulário",
