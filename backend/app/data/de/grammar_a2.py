@@ -176,19 +176,19 @@ ich bin gegangen · du bist gegangen · er ist gegangen · wir sind gegangen · 
         level="A2",
         category="Zeitformen",
         summary="Das Präteritum von sein und haben – die Grundlage für das narrative Präteritum.",
-        explanation="""Im gesprochenen Deutsch wird meist das **Perfekt** verwendet, aber **sein** und **haben** werden fast immer im Präteritum benutzt.
+        explanation="""Im gesprochenen Deutsch wird häufig das **Perfekt** verwendet. Bei **sein** und **haben** ist auch das **Präteritum** sehr gebräuchlich. Die Wahl hängt unter anderem von Region und Kontext ab.
 
 Präteritum von **sein**: ich war, du warst, er/es/sie war, wir waren, ihr wart, sie/Sie waren
 Präteritum von **haben**: ich hatte, du hattest, er/es/sie hatte, wir hatten, ihr hattet, sie/Sie hatten
 
-*Gestern **war** ich im Kino.* (nicht: Gestern bin ich im Kino gewesen.)
-*Ich **hatte** keine Zeit.* (nicht: Ich habe keine Zeit gehabt.)
+*Gestern **war** ich im Kino.* Auch korrekt: *Gestern bin ich im Kino gewesen.*
+*Ich **hatte** keine Zeit.* Auch korrekt: *Ich habe keine Zeit gehabt.*
 
-Im schriftlichen Deutsch (Erzählungen, Berichte) wird das Präteritum für **alle** Verben verwendet. Im gesprochenen Deutsch nur für sein, haben, Modalverben und wenige andere Verben.""",
+In schriftlichen Erzählungen und Berichten ist das Präteritum häufig die Grundzeit. Im Gespräch sind besonders sein, haben und Modalverben im Präteritum üblich; andere Verben sind je nach Region und Kontext ebenfalls möglich.""",
         structure="ich war/hatte · du warst/hattest · er/es/sie war/hatte · wir waren/hatten · ihr wart/hattet · sie waren/hatten",
         rules=[
-            'Im gesprochenen Deutsch werden "sein" und "haben" fast immer im Präteritum verwendet (nicht Perfekt).',
-            "Für schriftliche Erzählungen verwendet man das Präteritum für alle Verben.",
+            'Im gesprochenen Deutsch sind "war" und "hatte" sehr gebräuchlich; die Perfektformen sind ebenfalls korrekt.',
+            "In schriftlichen Erzählungen ist das Präteritum häufig die Grundzeit.",
             'Die 1. und 3. Person Singular sind gleich: "war" und "hatte".',
             "Die Modalverben werden im gesprochenen Deutsch auch meist im Präteritum verwendet.",
             "Das Präteritum ist eine einteilige Vergangenheitsform (kein Hilfsverb nötig).",
@@ -206,9 +206,9 @@ Im schriftlichen Deutsch (Erzählungen, Berichte) wird das Präteritum für **al
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Gestern bin ich im Kino gewesen.",
+                wrong="Gestern ich war im Kino.",
                 correct="Gestern war ich im Kino.",
-                note='Das Perfekt von "sein" ist zwar grammatisch korrekt, klingt aber unnatürlich. Immer Präteritum verwenden.',
+                note='Nach dem vorangestellten Zeitadverb steht das konjugierte Verb an zweiter Position: "Gestern war ich ...".',
             ),
             GrammarMistake(
                 wrong="Ich war keine Zeit.",
@@ -229,7 +229,7 @@ Im schriftlichen Deutsch (Erzählungen, Berichte) wird das Präteritum für **al
         level="A2",
         category="Zeitformen",
         summary="Präteritum der Modalverben – wie man vergangene Fähigkeit, Verpflichtung und Erlaubnis ausdrückt.",
-        explanation="""Modalverben werden im gesprochenen Deutsch meist im **Präteritum** verwendet (nicht im Perfekt).
+        explanation="""Für vergangene Situationen stehen Modalverben im gesprochenen Deutsch häufig im **Präteritum**. Auch das Perfekt ist korrekt.
 
 können → konnte / müssen → musste / dürfen → durfte / wollen → wollte / sollen → sollte / mögen → mochte
 
@@ -239,13 +239,13 @@ können → konnte / müssen → musste / dürfen → durfte / wollen → wollte
 *Als Kind **durfte** ich nicht so lange fernsehen.*
 *Er **wollte** uns helfen, aber er hatte keine Zeit.*
 
-Das Perfekt der Modalverben (*Ich habe kommen können*) ist möglich, aber das Präteritum ist viel häufiger.""",
+Das Perfekt der Modalverben (*Ich habe kommen können*) ist ebenfalls möglich. Welche Form üblich ist, hängt auch von Region und Kontext ab.""",
         structure="Modalverb im Präteritum (Position 2) + ... + Infinitiv (Satzende)",
         rules=[
             "Modalverben werden im gesprochenen Deutsch meist im Präteritum verwendet.",
             "Im Präteritum verlieren Modalverben den Umlaut: können → konnte (nicht: könnte).",
             '"Mögen" im Präteritum: mochte (bedeutet "liked"). Möchten (would like) gibt es nur im Konjunktiv II.',
-            "Präteritum-Formen sind regelmäßig mit -te: konnte, musste, durfte, wollte, sollte, mochte.",
+            "Die Präteritum-Formen haben -te, teilweise mit verändertem Stamm: konnte, musste, durfte, wollte, sollte, mochte.",
             'Das Präteritum der Modalverben wird ohne "haben" verwendet (einteilig).',
         ],
         examples=[
@@ -266,9 +266,9 @@ Das Perfekt der Modalverben (*Ich habe kommen können*) ist möglich, aber das P
                 translation=None,
             ),
             GrammarExample(
-                text="Du solltest mehr schlafen.",
+                text="Als Kind sollte ich jeden Abend um acht im Bett sein.",
                 translation=None,
-                note="sollen im Präteritum = Ratschlag",
+                note="sollen im Präteritum: damalige Anweisung; ein heutiger Ratschlag mit sollte wäre Konjunktiv II",
             ),
             GrammarExample(
                 text="Ich mochte die Schule nicht.",
@@ -283,9 +283,9 @@ Das Perfekt der Modalverben (*Ich habe kommen können*) ist möglich, aber das P
                 note='Könnte ist Konjunktiv II. Das Präteritum von können ist "konnte" (ohne Umlaut).',
             ),
             GrammarMistake(
-                wrong="Ich habe nicht kommen können.",
-                correct="Ich konnte nicht kommen.",
-                note="Obwohl das Perfekt korrekt ist, ist das Präteritum bei Modalverben viel natürlicher.",
+                wrong="Wir mussten gestern gearbeitet.",
+                correct="Wir mussten gestern arbeiten.",
+                note="Nach dem Modalverb im Präteritum steht der Infinitiv, nicht das Partizip II.",
             ),
         ],
         related=["modalverben", "praeteritum-sein-haben", "perfekt-vs-praeteritum"],
@@ -300,19 +300,19 @@ Das Perfekt der Modalverben (*Ich habe kommen können*) ist möglich, aber das P
 
 **Perfekt** (habe gemacht / bin gegangen): Gesprochene Sprache, informelle Texte, E-Mails, WhatsApp. In Süddeutschland, Österreich und Schweiz sogar noch häufiger.
 
-**Präteritum** (machte / ging): Schriftliche Sprache (Erzählungen, Berichte, Nachrichten, Literatur). Im gesprochenen Deutsch nur bei sein, haben, Modalverben. In Norddeutschland etwas häufiger auch in der gesprochenen Sprache.
+**Präteritum** (machte / ging): Häufig in Erzählungen, Berichten und Literatur. Im gesprochenen Deutsch besonders bei sein, haben und Modalverben, regional und je nach Kontext auch bei anderen Verben.
 
 | Situation | Empfehlung |
 |-----------|------------|
-| Sprechen (Alltag) | Perfekt (außer: war, hatte, konnte...) |
-| Schreiben (formell) | Präteritum |
+| Sprechen (Alltag) | Häufig Perfekt; auch war, hatte, konnte usw. |
+| Schriftliche Erzählungen / Berichte | Häufig Präteritum |
 | E-Mails / WhatsApp | Meist Perfekt |
-| Geschichten erzählen | Präteritum |""",
-        structure="Mündlich: Perfekt (außer sein/haben/Modalverben) · Schriftlich: Präteritum",
+| Geschichten erzählen | Schriftlich häufig Präteritum, mündlich auch Perfekt |""",
+        structure="Alltagsgespräch: häufig Perfekt, auch Präteritum · Schriftliche Erzählung: häufig Präteritum",
         rules=[
-            "Im Alltag sprechen Deutsche meist im Perfekt (außer sein, haben, Modalverben).",
+            "Im Alltagsgespräch ist das Perfekt häufig; die Wahl hängt auch von Verb, Region und Kontext ab.",
             "In schriftlichen Erzählungen und Berichten dominiert das Präteritum.",
-            "Sein, haben und Modalverben sind im Präteritum auch in der gesprochenen Sprache die Norm.",
+            "Sein, haben und Modalverben sind im Präteritum auch im Gespräch gebräuchlich; ihre Perfektformen bleiben korrekt.",
             "Im Norden Deutschlands wird das Präteritum tendenziell etwas häufiger verwendet.",
             "Bei zweiteiligen Sätzen im Perfekt entsteht die Satzklammer: habe ... gesehen.",
         ],
@@ -330,7 +330,7 @@ Das Perfekt der Modalverben (*Ich habe kommen können*) ist möglich, aber das P
             GrammarExample(
                 text="Ich war müde.",
                 translation=None,
-                note="gesprochen: Präteritum von sein, immer!",
+                note="auch gesprochen häufig: Präteritum von sein",
             ),
             GrammarExample(
                 text="Sie hatte keine Zeit.",
@@ -357,7 +357,7 @@ Das Perfekt der Modalverben (*Ich habe kommen können*) ist möglich, aber das P
             GrammarMistake(
                 wrong="Er machte die Tür auf und geht rein.",
                 correct="Er machte die Tür auf und ging hinein.",
-                note="Im Präteritum-Text müssen alle Verben im Präteritum stehen (Konsistenz).",
+                note="Ohne beabsichtigten Perspektivwechsel bleiben diese aufeinanderfolgenden vergangenen Handlungen in derselben Erzählzeit.",
             ),
         ],
         related=[

@@ -23,7 +23,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="ottativo/desiderativo",
             ),
             GrammarExample(
-                text="Non sapevo che avesse gia pubblicato tre romanzi.",
+                text="Non sapevo che avesse già pubblicato tre romanzi.",
                 translation=None,
             ),
             GrammarExample(
@@ -55,7 +55,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Condizionale composto per azioni non realizzate nel passato.",
             "Condizionale di dissociazione solo in contesti formali/giornalistici.",
-            "Futuro nel passato sempre con condizionale passato.",
+            "Il condizionale passato presenta il futuro da una prospettiva passata; un futuro ancora attuale può restare al futuro semplice.",
             "Sfumature tra condizionale e congiuntivo nelle ipotetiche.",
         ],
         examples=[
@@ -77,13 +77,13 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ha detto che verra.",
+                wrong="Ha detto che sarebbe venire.",
                 correct="Ha detto che sarebbe venuto.",
-                note="Futuro nel passato = condizionale passato.",
+                note="Il condizionale passato richiede il participio. Ha detto che verrà è corretto se l'arrivo è ancora futuro.",
             ),
             GrammarMistake(
-                wrong="Sarei dovuto andare. (senza concordare)",
-                correct="Sarei dovuto/a andare.",
+                wrong="Maria sarebbe dovuto andare.",
+                correct="Maria sarebbe dovuta andare.",
                 note="Concordanza del participio con il soggetto.",
             ),
         ],
@@ -108,7 +108,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Le mura della citta sono antiche. (mura = mura difensive)",
+                text="Le mura della città sono antiche. (mura = mura difensive)",
                 translation=None,
                 note="mura vs muri",
             ),
@@ -125,8 +125,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="I muri della citta.",
-                correct="Le mura della citta.",
+                wrong="I muri della città.",
+                correct="Le mura della città.",
                 note="Mura = mura difensive/di cinta; muri = pareti.",
             ),
             GrammarMistake(
@@ -143,7 +143,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avanzato",
         summary="Analizzare e riprodurre lo stile letterario italiano classico e moderno.",
-        explanation="Lo stile letterario italiano si caratterizza per:\n- **Ipotassi:** frasi lunghe con molte subordinate.\n- **Lessico ricercato:** arcaismi, latinismi, termini rari.\n- **Figure retoriche:** metafore, similitudini, anafore.\n- **Ritmo e musicalita:** attenzione alla sonorita delle parole.\n\nAutori di riferimento: Dante, Boccaccio, Manzoni, Calvino, Eco.",
+        explanation="Lo stile letterario italiano si caratterizza per:\n- **Ipotassi:** frasi lunghe con molte subordinate.\n- **Lessico ricercato:** arcaismi, latinismi, termini rari.\n- **Figure retoriche:** metafore, similitudini, anafore.\n- **Ritmo e musicalità:** attenzione alla sonorita delle parole.\n\nAutori di riferimento: Dante, Boccaccio, Manzoni, Calvino, Eco.",
         rules=[
             "Ipotassi: uso esteso di subordinate implicite ed esplicite.",
             "Lessico elevato e preciso.",
@@ -159,8 +159,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Scrivere in modo artificiosamente complesso.",
-                correct="La complessita deve essere al servizio del significato, non fine a se stessa.",
-                note="Lo stile elevato non e accumulo di parole difficili.",
+                correct="La complessità deve essere al servizio del significato, non fine a se stessa.",
+                note="Lo stile elevato non è accumulo di parole difficili.",
             ),
         ],
         related=["voce-narrativa", "figure-stilistiche", "tempi-narrativi"],
@@ -180,7 +180,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Non so perche quel giorno decisi di prendere il treno invece dell'autobus. Forse fu il cielo grigio, forse la voglia di cambiare qualcosa, qualsiasi cosa.",
+                text="Non so perché quel giorno decisi di prendere il treno invece dell'autobus. Forse fu il cielo grigio, forse la voglia di cambiare qualcosa, qualsiasi cosa.",
                 translation=None,
                 note="prima persona, tono riflessivo",
             ),
@@ -267,7 +267,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Il congiuntivo italiano spesso non ha equivalente inglese.",
             "Diminutivi e accrescitivi richiedono perifrasi.",
             "Lei di cortesia: in inglese si perde la distinzione formale/informale.",
-            "Il passato remoto letterario puo essere reso con il simple past.",
+            "Il passato remoto letterario può essere reso con il simple past.",
         ],
         examples=[
             GrammarExample(
@@ -305,7 +305,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Actually, I disagree. ≠ Attualmente, non sono d'accordo. (SBAGLIATO: significa In realta, non sono d'accordo.)",
+                text="Actually, I disagree. ≠ Attualmente, non sono d'accordo. (SBAGLIATO: significa In realtà, non sono d'accordo.)",
                 translation=None,
                 note="actually ≠ attualmente",
             ),
@@ -318,8 +318,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Tradurre attualmente con actually.",
-                correct="Attualmente = currently; actually = in realta.",
-                note="Uno dei falsi amici piu comuni e pericolosi.",
+                correct="Attualmente = currently; actually = in realtà.",
+                note="Uno dei falsi amici più comuni e pericolosi.",
             ),
         ],
         related=["sfumature-traduzione", "equivalenza", "precisione-lessicale"],
@@ -454,7 +454,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Mescolare le convenzioni di generi diversi.",
                 correct="Rispettare le caratteristiche specifiche di ogni genere.",
-                note="Una relazione tecnica non e un saggio personale.",
+                note="Una relazione tecnica non è un saggio personale.",
             ),
         ],
         related=["struttura-argomentativa", "registro-formale", "sintesi-testuale"],
@@ -467,7 +467,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         summary="Giocare con la lingua: neologismi, metafore originali, invenzioni lessicali.",
         explanation="La creativita linguistica a livello C2:\n- **Neologismi:** creare parole nuove per concetti nuovi.\n- **Metafore originali:** non quelle cristallizzate, ma immagini nuove.\n- **Giochi di parole consapevoli:** calembour, doppi sensi.\n- **Scrittura creativa:** rompere le regole dopo averle padroneggiate.\n\nEsempi di creativita: *petaloso* (neologismo di un bambino, entrato nei dizionari); *buonista* (dispregiativo moderno).",
         rules=[
-            "La creativita funziona quando le regole sono gia padroneggiate.",
+            "La creativita funziona quando le regole sono già padroneggiate.",
             "I neologismi efficaci colgono un bisogno espressivo reale.",
             "Le metafore fresche sorprendono e illuminano.",
             "La lingua e plastica: le regole descrivono, non prescrivono.",
@@ -527,7 +527,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avanzato",
         summary="Esprimersi con sfumature e diplomazia nel discorso professionale e sociale.",
-        explanation="Tecniche di espressione sfumata:\n- **Attenuatori:** *forse, magari, un po', piuttosto, alquanto.*\n- **Condizionale di cortesia:** *Vorrei, potrei, mi piacerebbe.*\n- **Domande invece di affermazioni:** *Non crede che...?*\n- **Understatement:** *Non e il massimo* (invece di *e orribile*).\n- **Formule di cautela:** *A mio modesto parere, se non sbaglio, mi sembra che.*",
+        explanation="Tecniche di espressione sfumata:\n- **Attenuatori:** *forse, magari, un po', piuttosto, alquanto.*\n- **Condizionale di cortesia:** *Vorrei, potrei, mi piacerebbe.*\n- **Domande invece di affermazioni:** *Non crede che...?*\n- **Understatement:** *Non è il massimo* (invece di *e orribile*).\n- **Formule di cautela:** *A mio modesto parere, se non sbaglio, mi sembra che.*",
         rules=[
             "Attenuare affermazioni categoriche.",
             "Preferire domande a imposizioni.",
@@ -541,7 +541,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="attenuazione diplomatica",
             ),
             GrammarExample(
-                text="Non e esattamente quello che avevamo in mente. (invece di: E completamente sbagliato.)",
+                text="Non è esattamente quello che avevamo in mente. (invece di: E completamente sbagliato.)",
                 translation=None,
                 note="understatement",
             ),
@@ -560,8 +560,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Integrazione grammaticale completa",
         level="C2",
         category="Avanzato",
-        summary="Usare simultaneamente tutte le strutture grammaticali con fluidita e precisione.",
-        explanation="A livello C2 tutte le strutture grammaticali devono integrarsi naturalmente:\n- Congiuntivo + condizionale + periodo ipotetico.\n- Subordinate implicite ed esplicite alternate.\n- Pronomi combinati in contesti complessi.\n- Dislocazioni e frasi marcate con consapevolezza.\n- Passaggio fluido tra registri.\n\nL'obiettivo e la *fluidita nativa*, dove la grammatica non e piu un ostacolo ma uno strumento trasparente.",
+        summary="Usare simultaneamente tutte le strutture grammaticali con fluidità e precisione.",
+        explanation="A livello C2 tutte le strutture grammaticali devono integrarsi naturalmente:\n- Congiuntivo + condizionale + periodo ipotetico.\n- Subordinate implicite ed esplicite alternate.\n- Pronomi combinati in contesti complessi.\n- Dislocazioni e frasi marcate con consapevolezza.\n- Passaggio fluido tra registri.\n\nL'obiettivo è usare la grammatica con precisione e flessibilità per esprimere significati complessi, senza dover imitare l'identità linguistica di un madrelingua.",
         rules=[
             "Alternare strutture semplici e complesse per il ritmo.",
             "Usare il congiuntivo senza pensarci.",
@@ -570,12 +570,12 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Se avessi saputo che sarebbe stato cosi difficile, ci avrei pensato due volte prima di accettare, ma ormai quel che e fatto e fatto.",
+                text="Se avessi saputo che sarebbe stato così difficile, ci avrei pensato due volte prima di accettare, ma ormai quel che è fatto è fatto.",
                 translation=None,
                 note="periodo ipotetico 3 tipo + connettivo",
             ),
             GrammarExample(
-                text="Benche non condivida pienamente la sua posizione, devo ammettere che le sue argomentazioni, per quanto provocatorie, non sono prive di fondamento.",
+                text="Benché non condivida pienamente la sua posizione, devo ammettere che le sue argomentazioni, per quanto provocatorie, non sono prive di fondamento.",
                 translation=None,
             ),
         ],
@@ -583,18 +583,18 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Evitare strutture complesse per paura dell'errore.",
                 correct="Usare strutture complesse con sicurezza, accettando che l'errore occasionale e normale.",
-                note="La fluidita C2 non significa perfezione assoluta, ma naturalezza.",
+                note="La fluidità C2 non significa perfezione assoluta, ma naturalezza.",
             ),
         ],
         related=["fluidita-nativa", "ripasso-congiuntivo", "ripasso-condizionale"],
     ),
     GrammarTopic(
         slug="fluidita-nativa",
-        title="Fluidita nativa",
+        title="Fluidità e autonomia avanzate",
         level="C2",
         category="Avanzato",
-        summary="Raggiungere una fluidita indistinguibile da quella di un madrelingua.",
-        explanation="La fluidita nativa si caratterizza per:\n- **Automatismo:** strutture grammaticali usate senza sforzo cosciente.\n- **Intuito linguistico:** sapere cosa suona naturale senza sapere perche.\n- **Prosodia e intonazione:** ritmo, pause, accenti naturali.\n- **Competenza pragmatica:** capire impliciti, ironia, allusioni.\n- **Competenza culturale:** riferimenti condivisi da madrelingua.\n\nSi raggiunge con immersione prolungata, lettura estensiva e pratica costante.",
+        summary="Comunicare con precisione, flessibilità e autonomia in situazioni complesse.",
+        explanation="A livello C2 si comprendono significati impliciti, si riformula con precisione e si adatta il registro al contesto. Ritmo, pause e intonazione sostengono l'intelligibilità.\n\nNon è necessario perdere il proprio accento o diventare indistinguibili da un madrelingua. Lettura, ascolto e pratica costante sviluppano autonomia, competenza pragmatica e flessibilità espressiva.",
         rules=[
             "Immersione: vivere la lingua, non solo studiarla.",
             "Leggere di tutto: giornali, romanzi, saggistica.",
@@ -603,21 +603,21 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Mah, insomma, non e che mi entusiasmi l'idea, pero tutto sommato si potrebbe anche fare, dai.",
+                text="Mah, insomma, non è che mi entusiasmi l'idea, pero tutto sommato si potrebbe anche fare, dai.",
                 translation=None,
                 note="parlato naturale con segnali discorsivi",
             ),
             GrammarExample(
                 text="Certe volte basta uno sguardo per capirsi, senza bisogno di tante parole.",
                 translation=None,
-                note="fluidita espressiva",
+                note="fluidità espressiva",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
                 wrong="Cercare la perfezione assoluta.",
                 correct="Cercare la naturalezza: anche i madrelingua fanno errori nel parlato.",
-                note="La fluidita e comunicazione efficace, non perfezione grammaticale.",
+                note="La fluidità e comunicazione efficace, non perfezione grammaticale.",
             ),
         ],
         related=[

@@ -331,7 +331,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
                 "記入方法を確認する",
                 "formal",
                 "a2-unit-4",
-                romanization="kono yōsai ni kinyū sureba ii desu ka",
+                romanization="kono yōshi ni kinyū sureba ii desu ka",
             ),
             _p(
                 "身分証明書が必要ですか。",
@@ -345,7 +345,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
                 "順番待ちを確認する",
                 "formal",
                 "a2-unit-4",
-                romanization="bangōsatsu o totte matte ba ii desu ka",
+                romanization="bangōfuda o totte mateba ii desu ka",
             ),
             _p(
                 "手数料はいくらですか。",
@@ -359,7 +359,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
                 "受け取り時期を確認する",
                 "neutral",
                 "a2-unit-4",
-                romanization="kyōjū ni uketoru koto ga dekimasu ka",
+                romanization="kyōjū ni uketoremasu ka",
             ),
             _p(
                 "住所を変更したいです。",

@@ -17,7 +17,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "konjunktiv-ii-wunsch",
         ],
         vocabulary_set_ids=["wuensche_de_b1", "emotionen_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Konjunktiv II mit würde + Infinitiv für die meisten Verben: Ich würde gern reisen, Was würdest du machen?",
             "Beherrscht hätte (haben) und wäre (sein) im Konjunktiv II: Wenn ich Zeit hätte..., Ich wäre gern in Berlin",
@@ -40,7 +40,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "temporale-konnektoren",
         ],
         vocabulary_set_ids=["nachrichten_de_b1", "gesellschaft_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Vorgangspassiv mit werden + Partizip II: Das Haus wird gebaut, Die Tür wird geöffnet",
             "Wandelt Aktivsätze ins Passiv um und umgekehrt, erkennt das Agens eingeleitet mit von (+ Person) oder durch (+ Mittel/Ursache)",
@@ -63,7 +63,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "indirekte-rede",
         ],
         vocabulary_set_ids=["erfahrungen_de_b1", "erfolge_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Plusquamperfekt mit hatte/war + Partizip II, um Vorzeitigkeit auszudrücken: Er war schon gegangen, als ich ankam",
             "Verwendet temporale Nebensätze mit als (einmaliges Ereignis) und wenn (wiederholte Ereignisse): Als ich 18 war..., Wenn ich in Berlin war...",
@@ -86,7 +86,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "lassen",
         ],
         vocabulary_set_ids=["arbeit_de_b1", "studium_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet zu + Infinitiv nach bestimmten Verben: Ich versuche, pünktlich zu sein, Es ist wichtig, viel zu üben",
             "Bildet Finalsätze mit um...zu: Ich lerne Deutsch, um in Deutschland zu arbeiten",
@@ -109,11 +109,11 @@ B1_UNITS: list[CurriculumUnit] = [
             "reflexivverben",
         ],
         vocabulary_set_ids=["beschreibungen_de_b1", "personen_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet den Genitiv für Besitz: das Auto meines Vaters, die Farbe des Himmels",
             "Beherrscht Genitivpräpositionen: während, wegen, trotz, innerhalb/außerhalb, aufgrund",
-            "Erkennt die n-Deklination für schwache maskuline Nomen: der Name → der/die/des Namen, der Student → der/die/des Studenten",
+            "Erkennt die n-Deklination schwacher maskuliner Nomen (der Student, den Studenten, dem Studenten, des Studenten) und die Sonderform Name (der Name, den Namen, dem Namen, des Namens)",
             "Verwendet das Genitiv-Fragewort wessen?: Wessen Buch ist das?",
             "Versteht die umgangssprachliche Tendenz, Genitiv durch von + Dativ zu ersetzen, und verwendet Genitiv in formellen Kontexten",
         ],
@@ -132,7 +132,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "genitiv-praepositionen",
         ],
         vocabulary_set_ids=["nachrichten_de_b1", "meinungen_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bildet Konjunktiv I für die indirekte Rede: habe, sei, komme, gehe, könne, müsse, wolle",
             "Gibt Aussagen wieder: Er sagte, er sei krank, Sie meinte, sie habe keine Zeit",
@@ -155,7 +155,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "reflexivverben",
         ],
         vocabulary_set_ids=["debatten_de_b1", "meinungen_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Verwendet zweiteilige Konnektoren: sowohl...als auch, entweder...oder, weder...noch, zwar...aber",
             "Beherrscht konzessive Nebensätze: obwohl + Nebensatzstellung, trotzdem (Adverb, Position 1: Trotzdem gehe ich spazieren)",
@@ -186,7 +186,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "reflexivverben",
         ],
         vocabulary_set_ids=["wiederholung_de_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Bewältigt die meisten Alltagssituationen (Reisen, Arbeit, soziale Anlässe) mühelos, drückt Meinungen aus und reagiert auf andere",
             "Verwendet Konjunktiv II korrekt für Höflichkeit, Wünsche und hypothetische Situationen",

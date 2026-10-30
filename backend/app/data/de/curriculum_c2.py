@@ -17,7 +17,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "integration-grammatisch",
         ],
         vocabulary_set_ids=["exzellenz_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Kombiniert mehrfache Nebensätze mit korrekter Wortstellung und logischer Kohärenz in Sätzen von über 30 Wörtern",
             "Beherrscht alle drei Modi (Indikativ, Konjunktiv I, Konjunktiv II) einschließlich Vergangenheits- und Perfektformen, mit korrekter Zeitfolge in komplexem Diskurs",
@@ -40,7 +40,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "nuancen",
         ],
         vocabulary_set_ids=["literatur_de_c2", "stil_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Beherrscht Erzählperspektiven (Ich-Erzähler, personaler Erzähler, auktorialer Erzähler, erlebte Rede) im eigenen kreativen Schreiben mit bewussten und konsequenten Entscheidungen",
             "Verwendet literarische Syntaxmittel (Asyndeton, Polysyndeton, Inversion, Ellipse, Anakoluth) als bewusste Stilmittel",
@@ -62,7 +62,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "nuancen",
         ],
         vocabulary_set_ids=["uebersetzung_de_c2", "mediation_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifiziert und vermeidet falsche Freunde zwischen Deutsch und Englisch: bekommen ≠ become, eventuell ≠ eventually, Gift ≠ gift, sensibel ≠ sensible, brav ≠ brave, spenden ≠ spend",
             "Handelt als sprachlicher Vermittler zwischen Sprechern verschiedener sprachlicher Hintergründe durch Reformulierung, Zusammenfassung und Klärung ohne Bedeutungsverzerrung",
@@ -85,7 +85,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "stilistik",
         ],
         vocabulary_set_ids=["geschichte_de_c2", "kultur_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Beschreibt die wichtigsten Etappen der historischen Entwicklung des Deutschen: Althochdeutsch, Mittelhochdeutsch, Frühneuhochdeutsch, Neuhochdeutsch",
             "Identifiziert den Einfluss von Luthers Bibelübersetzung auf die Standardisierung des modernen Deutsch",
@@ -108,7 +108,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "stilistik",
         ],
         vocabulary_set_ids=["kreativ_de_c2", "publikation_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produziert 500 Wörter umfassende Texte in verschiedenen Textsorten (Essay, Bericht, kreative Erzählung, wissenschaftliche Arbeit, Kommentar) und passt Wortschatz, Ton und Struktur an jede Textsorte an",
             "Überarbeitet Entwürfe mit professioneller Korrektur: reorganisiert für Klarheit, beseitigt Redundanz, hebt das Register an und korrigiert subtile grammatische und stilistische Mängel",
@@ -139,7 +139,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "fluessigkeit",
         ],
         vocabulary_set_ids=["meisterschaft_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produziert eine 5-minütige spontane Rede zu einem abstrakten oder polemischen Thema mit muttersprachlicher Genauigkeit, natürlicher Flüssigkeit und lexikalischem Reichtum vergleichbar mit einem gebildeten Muttersprachler",
             "Beherrscht die Gesamtheit der deutschen grammatischen Strukturen ohne systematische Fehler — nur gelegentliche Ausrutscher werden sofort selbst korrigiert",
@@ -162,7 +162,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "digitales-deutsch",
         ],
         vocabulary_set_ids=["dach_de_c2", "digital_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Beschreibt die DACH-Länder und ihre sprachlichen Besonderheiten: Österreichisches Deutsch, Schweizer Hochdeutsch und regionale Varietäten innerhalb Deutschlands",
             "Analysiert kritisch die Sprachpolitik in Deutschland — Rechtschreibreform, Rat für deutsche Rechtschreibung, gendergerechte Sprache und die Rolle des Goethe-Instituts",
@@ -201,7 +201,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "digitales-deutsch",
         ],
         vocabulary_set_ids=["abschluss_de_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produziert eine spontane Rede von 5 Minuten zu einem abstrakten oder kontroversen Thema mit quasi-muttersprachlicher Korrektheit, natürlicher Flüssigkeit und lexikalischem Reichtum vergleichbar mit einem gebildeten Muttersprachler",
             "Beherrscht sämtliche grammatischen Strukturen des Deutschen ohne systematische Fehler — gelegentliche Ausrutscher werden sofort selbst korrigiert",

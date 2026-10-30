@@ -16,7 +16,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "subjonctif-volonte",
         ],
         vocabulary_set_ids=["emotions_fr_b1", "souhaits_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forme le subjonctif présent des verbes réguliers sur le radical de la 3e personne du pluriel du présent : ils parlent → que je parle, ils finissent → que je finisse",
             "Maîtrise les verbes irréguliers au subjonctif : être (que je sois), avoir (que j'aie), aller (que j'aille), faire (que je fasse), pouvoir (que je puisse), savoir (que je sache), vouloir (que je veuille)",
@@ -38,7 +38,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "subjonctif-opinion",
         ],
         vocabulary_set_ids=["travail_fr_b1", "etudes_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Utilise le subjonctif après les expressions d'émotion avec changement de sujet : je suis content(e) que, je regrette que, j'ai peur que",
             "Utilise le subjonctif après les expressions de doute et d'incertitude : je ne crois pas que, je doute que, je ne suis pas sûr(e) que",
@@ -60,7 +60,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "concordance-temps",
         ],
         vocabulary_set_ids=["experiences_fr_b1", "reussites_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Applique l'accord du participe passé avec avoir quand le COD est placé avant le verbe : les pommes que j'ai mangées, la lettre que j'ai écrite",
             "Forme le plus-que-parfait (être/avoir à l'imparfait + participe passé) pour exprimer une action antérieure à un point du passé",
@@ -78,7 +78,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="La voix passive et les constructions impersonnelles",
         grammar_points=["passif", "on-impersonnel", "forme-passive-pronominale"],
         vocabulary_set_ids=["actualites_fr_b1", "societe_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forme la voix passive avec être + participe passé en respectant l'accord en genre et en nombre : La loi a été votée par le Parlement",
             "Transforme une phrase active en passive et inversement, en identifiant le complément d'agent introduit par par ou de",
@@ -100,7 +100,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "dont",
         ],
         vocabulary_set_ids=["descriptions_fr_b1", "personnes_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Utilise les pronoms relatifs simples qui (sujet), que (objet direct), où (lieu/temps) avec aisance",
             "Maîtrise le pronom relatif dont pour remplacer un complément introduit par de : le livre dont je t'ai parlé, l'auteur dont j'admire l'œuvre",
@@ -118,7 +118,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Le conditionnel et les hypothèses",
         grammar_points=["si-imparfait-conditionnel", "conditionnel-passe"],
         vocabulary_set_ids=["voyages_fr_b1", "situations_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forme l'hypothèse sur le présent avec si + imparfait + conditionnel présent : Si j'avais de l'argent, je voyagerais",
             "Forme l'hypothèse sur le passé avec si + plus-que-parfait + conditionnel passé : Si j'avais su, je serais venu(e)",
@@ -140,7 +140,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "discours-indirect-passe",
         ],
         vocabulary_set_ids=["opinions_fr_b1", "debats_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Transforme un discours direct au présent en discours indirect au passé : Il a dit qu'il était fatigué (présent → imparfait), Il a dit qu'il partirait (futur → conditionnel)",
             "Rapporte des questions avec si pour les questions totales et le mot interrogatif pour les questions partielles, en maintenant l'ordre sujet-verbe",
@@ -168,7 +168,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "connecteurs-logiques",
         ],
         vocabulary_set_ids=["revision_fr_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Gère avec aisance la plupart des situations quotidiennes (voyages, travail, événements sociaux), en exprimant des opinions et en réagissant aux autres",
             "Utilise correctement le subjonctif présent dans ses contextes centraux du B1 : nécessité, volonté, émotion, doute, évaluation impersonnelle",

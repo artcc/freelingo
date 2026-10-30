@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Jag förstår",
     "entry1": {
+      "label": "Förbättringar för lärandet",
+      "desc": "Vi fortsätter att förbättra våra inlärningssystem och vårt språkinnehåll för att göra dina övningar tydligare, mer sammanhängande och mer användbara."
+    },
+    "entry2": {
       "label": "Smidigare röstsamtal",
       "desc": "Vi har förbättrat samtalen med Lingu för smidigare röstuppspelning och tydligare signaler om vems tur det är att prata."
     },
-    "entry2": {
+    "entry3": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

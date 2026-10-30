@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Ulepszenia w nauce",
+      "desc": "Nadal udoskonalamy systemy nauki i materiały językowe, aby Twoje ćwiczenia były bardziej przejrzyste, spójne i przydatne."
+    },
+    "entry2": {
       "label": "Płynniejsze rozmowy głosowe",
       "desc": "Usprawniliśmy rozmowy z Lingu, aby zapewnić płynniejsze odtwarzanie głosu i wyraźniejsze wskazówki, kiedy mówić."
     },
-    "entry2": {
+    "entry3": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

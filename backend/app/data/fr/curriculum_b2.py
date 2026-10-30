@@ -16,7 +16,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "subjonctif-conjonctions",
         ],
         vocabulary_set_ids=["sentiments_fr_b2", "hypotheses_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forme le subjonctif passé avec être/avoir au subjonctif présent + participe passé et l'utilise pour exprimer l'antériorité : Je suis content que tu sois venu",
             "Maîtrise le subjonctif après les conjonctions : bien que, quoique, pour que, afin que, avant que, jusqu'à ce que, à condition que, pourvu que, sans que",
@@ -34,7 +34,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Le gérondif et les participes",
         grammar_points=["gerondif", "participe-present", "participes-composes"],
         vocabulary_set_ids=["habitudes_fr_b2", "changements_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forme le gérondif avec en + participe présent (radical de la 1re personne du pluriel au présent + -ant) et l'utilise pour exprimer la simultanéité : Il travaille en écoutant de la musique",
             "Exprime la manière, la cause, la condition et la concession avec le gérondif : C'est en forgeant qu'on devient forgeron, En courant, tu arriveras à l'heure",
@@ -56,7 +56,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "registre-formel",
         ],
         vocabulary_set_ids=["essais_fr_b2", "academique_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Utilise bien que + subjonctif (concession) et alors que + indicatif (opposition temporelle) avec le registre correct",
             "Maîtrise les connecteurs de cause (car, puisque, étant donné que, grâce à, à cause de) et de conséquence (si bien que, c'est pourquoi, de sorte que + subjonctif)",
@@ -74,7 +74,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Les expressions idiomatiques",
         grammar_points=["expressions-idiomatiques"],
         vocabulary_set_ids=["modismes_fr_b2", "culture_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Comprend et utilise plus de 20 expressions idiomatiques françaises courantes en contexte : poser un lapin, avoir le cafard, donner sa langue au chat, mettre son grain de sel",
             "Interprète des expressions figurées dans des textes authentiques sans recourir à la traduction littérale : tomber dans les pommes, avoir un chat dans la gorge, ce n'est pas la mer à boire",
@@ -92,7 +92,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Argumentation et débat",
         grammar_points=["structure-argumentative", "concession", "nuance"],
         vocabulary_set_ids=["debats_fr_b2", "sujets-societe_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Présente une thèse claire et la développe avec des arguments étayés, des exemples et des preuves en utilisant des connecteurs comme tout d'abord, il convient de souligner que, à titre d'exemple",
             "Introduit des contre-arguments et les réfute : certes..., mais / il est vrai que..., cependant / bien que..., il n'en reste pas moins que",
@@ -110,7 +110,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Littérature et textes narratifs",
         grammar_points=["temps-narratifs", "description-litteraire"],
         vocabulary_set_ids=["litterature_fr_b2", "lecture_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifie et utilise les temps spécifiques du récit littéraire : passé simple (récit au passé), imparfait (description, habitude), plus-que-parfait (antériorité)",
             "Reconnaît le passé simple dans les textes littéraires et l'associe au registre écrit/soutenu du français",
@@ -128,7 +128,7 @@ B2_UNITS: list[CurriculumUnit] = [
         title="Médias et actualité",
         grammar_points=["langage-journalistique", "discours-rapporte"],
         vocabulary_set_ids=["actualites_fr_b2", "medias_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifie les traits du langage journalistique français : phrases nominales, voix passive, constructions impersonnelles et connecteurs formels",
             "Interprète la grammaire des titres : ellipse du verbe, infinitif à valeur narrative, omission des articles, présent à valeur de passé proche",
@@ -155,7 +155,7 @@ B2_UNITS: list[CurriculumUnit] = [
             "registre-formel",
         ],
         vocabulary_set_ids=["revision_fr_b2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Écrit un essai formel de 200 mots intégrant le subjonctif passé, les connecteurs avancés et une structure argumentative claire",
             "Produit un texte narratif de 150 mots avec un usage correct du passé composé, de l'imparfait et du plus-que-parfait, en incluant au moins un procédé littéraire",

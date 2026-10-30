@@ -8,38 +8,38 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Congiuntivo concessivo",
         level="C1",
         category="Congiuntivo",
-        summary="Benche, sebbene, nonostante, malgrado + congiuntivo per esprimere concessione.",
-        explanation="Le congiunzioni concessive richiedono il congiuntivo.\n\n- **Benche** / **Sebbene** + congiuntivo: *Benche piovesse, uscimmo.*\n- **Nonostante** / **Malgrado** + congiuntivo: *Nonostante fosse tardi, continuarono.*\n- **Anche se** + indicativo (eccezione): *Anche se pioveva, uscimmo.*\n\nLa scelta del tempo del congiuntivo segue la concordanza.",
+        summary="Benché, sebbene, nonostante, malgrado + congiuntivo per esprimere concessione.",
+        explanation="Benché e sebbene introducono concessive con il congiuntivo; anche se ammette modi diversi secondo il significato.\n\n- **Benché** / **Sebbene** + congiuntivo: *Benché piovesse, uscimmo.*\n- **Nonostante** / **Malgrado** + congiuntivo: *Nonostante fosse tardi, continuarono.*\n- **Anche se** + indicativo per un fatto: *Anche se pioveva, uscimmo.* Con il congiuntivo può presentare un'ipotesi: *Anche se piovesse, usciremmo.*\n\nLa scelta del tempo del congiuntivo segue la concordanza.",
         rules=[
-            "Benche, sebbene, nonostante, malgrado + congiuntivo.",
-            "Anche se + indicativo (eccezione nelle concessive).",
+            "Benché, sebbene, nonostante, malgrado + congiuntivo.",
+            "Anche se + indicativo per un fatto; congiuntivo per una concessione ipotetica.",
             "Concordanza: presente → cong. presente; passato → cong. imperfetto.",
-            "Registro formale richiede il congiuntivo.",
+            "La scelta del modo dipende dalla congiunzione e dal significato, non solo dal registro.",
         ],
         examples=[
             GrammarExample(
-                text="Benche fosse stanco, continuo a lavorare.",
+                text="Benché fosse stanco, continuò a lavorare.",
                 translation=None,
             ),
             GrammarExample(
-                text="Nonostante abbia studiato molto, non ha passato l esame.",
+                text="Nonostante abbia studiato molto, non ha passato l'esame.",
                 translation=None,
             ),
             GrammarExample(
-                text="Sebbene sia tardi, resto ancora un po.",
+                text="Sebbene sia tardi, resto ancora un po'.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Benche era stanco, continuo.",
-                correct="Benche fosse stanco, continuo.",
-                note="Benche richiede sempre il congiuntivo.",
+                wrong="Benché era stanco, continuò.",
+                correct="Benché fosse stanco, continuò.",
+                note="Benché richiede sempre il congiuntivo.",
             ),
             GrammarMistake(
-                wrong="Anche se fosse tardi... (non necessario)",
-                correct="Anche se era tardi...",
-                note="Anche se regge l'indicativo, non il congiuntivo.",
+                wrong="Anche se noi fossi stanchi, continueremmo.",
+                correct="Anche se noi fossimo stanchi, continueremmo.",
+                note="Noi richiede fossimo. Il congiuntivo è corretto per una concessione ipotetica.",
             ),
         ],
         related=[
@@ -53,21 +53,21 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Congiuntivo finale (scopo)",
         level="C1",
         category="Congiuntivo",
-        summary="Affinche, perche (scopo) + congiuntivo per esprimere lo scopo di un'azione.",
-        explanation="Le proposizioni finali esprimono lo scopo e richiedono il congiuntivo.\n\n- **Affinche** + congiuntivo: *Parlo lentamente affinche tu capisca.*\n- **Perche** + congiuntivo: *Te lo dico perche tu lo sappia.*\n- **Acciocche** (letterario) + congiuntivo.\n\nCon lo stesso soggetto si usa per + infinito: *Studio per imparare.*",
+        summary="Affinché, perché (scopo) + congiuntivo per esprimere lo scopo di un'azione.",
+        explanation="Le proposizioni finali esprimono lo scopo e richiedono il congiuntivo.\n\n- **Affinché** + congiuntivo: *Parlo lentamente affinché tu capisca.*\n- **Perché** + congiuntivo: *Te lo dico perché tu lo sappia.*\n- **Acciocché** (letterario) + congiuntivo.\n\nCon lo stesso soggetto si usa per + infinito: *Studio per imparare.*",
         rules=[
-            "Affinche, perche (scopo) + congiuntivo.",
+            "Affinché, perché (scopo) + congiuntivo.",
             "Stesso soggetto: per + infinito.",
             "Tempo del congiuntivo secondo concordanza.",
-            "Registro formale: affinche; colloquiale: perche.",
+            "Registro formale: affinché; colloquiale: perché.",
         ],
         examples=[
             GrammarExample(
-                text="Ti scrivo affinche tu sia informato.",
+                text="Ti scrivo affinché tu sia informato.",
                 translation=None,
             ),
             GrammarExample(
-                text="Parlo ad alta voce perche tutti sentano.",
+                text="Parlo ad alta voce perché tutti sentano.",
                 translation=None,
             ),
             GrammarExample(
@@ -77,13 +77,13 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ti scrivo affinche sei informato.",
-                correct="Ti scrivo affinche tu sia informato.",
-                note="Affinche richiede il congiuntivo.",
+                wrong="Ti scrivo affinché sei informato.",
+                correct="Ti scrivo affinché tu sia informato.",
+                note="Affinché richiede il congiuntivo.",
             ),
             GrammarMistake(
                 wrong="Studio per che imparo.",
-                correct="Studio per imparare. (o: Studio affinche io impari.)",
+                correct="Studio per imparare. (o: Studio affinché io impari.)",
                 note="Stesso soggetto → per + infinito.",
             ),
         ],
@@ -99,7 +99,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Congiuntivo",
         summary="Uso del congiuntivo nelle proposizioni relative per esprimere carattere restrittivo o eventuale.",
-        explanation="Il congiuntivo nelle relative esprime:\n- **Carattere eventuale/ipotetico:** *Cerco una persona che parli inglese.* (non so se esista)\n- **Con superlativo relativo:** *E il libro piu bello che io abbia mai letto.*\n- **Dopo negazione o restrizione:** *Non c'e nessuno che possa aiutarmi.*\n\nL'indicativo si usa per fatti certi: *Conosco una persona che parla inglese.*",
+        explanation="Il congiuntivo nelle relative esprime:\n- **Carattere eventuale/ipotetico:** *Cerco una persona che parli inglese.* (non so se esista)\n- **Con superlativo relativo:** *È il libro più bello che io abbia mai letto.*\n- **Dopo negazione o restrizione:** *Non c'è nessuno che possa aiutarmi.*\n\nL'indicativo si usa per fatti certi: *Conosco una persona che parla inglese.*",
         rules=[
             "Congiuntivo = ipotetico/non certo.",
             "Indicativo = fatto certo/reale.",
@@ -113,7 +113,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="ipotetico",
             ),
             GrammarExample(
-                text="E il film piu emozionante che io abbia mai visto.",
+                text="È il film più emozionante che io abbia mai visto.",
                 translation=None,
                 note="superlativo",
             ),
@@ -127,12 +127,12 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Cerco una persona che parla inglese. (ma non so se esista)",
                 correct="Cerco una persona che parli inglese.",
-                note="Se la persona non e certa, si usa il congiuntivo.",
+                note="Se la persona non è certa, si usa il congiuntivo.",
             ),
             GrammarMistake(
-                wrong="E il piu bello che ho mai visto.",
-                correct="E il piu bello che abbia mai visto.",
-                note="Dopo superlativo relativo serve il congiuntivo.",
+                wrong="È il più bello che io abbiano mai visto.",
+                correct="È il più bello che abbia mai visto.",
+                note="Con io si usa abbia, non abbiano. Dopo un superlativo il congiuntivo sottolinea la valutazione; l'indicativo è possibile in un'affermazione fattuale.",
             ),
         ],
         related=["che-relativo", "cui", "congiuntivo-presente", "superlativi"],
@@ -142,11 +142,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Nominalizzazione",
         level="C1",
         category="Avanzato",
-        summary="Trasformare verbi e aggettivi in nomi per uno stile piu formale e denso.",
-        explanation="La nominalizzazione trasforma verbi/aggettivi in sostantivi, tipica dello stile formale e accademico.\n\n- Verbo → nome: *costruire → la costruzione; analizzare → l'analisi.*\n- Aggettivo → nome: *rapido → la rapidita; bello → la bellezza.*\n\nVantaggi: concisione, oggettivita, formalita.\nSvantaggi: puo rendere il testo pesante e astratto.",
+        summary="Trasformare verbi e aggettivi in nomi per uno stile più formale e denso.",
+        explanation="La nominalizzazione trasforma verbi/aggettivi in sostantivi, tipica dello stile formale e accademico.\n\n- Verbo → nome: *costruire → la costruzione; analizzare → l'analisi.*\n- Aggettivo → nome: *rapido → la rapidità; bello → la bellezza.*\n\nVantaggi: concisione, oggettività, formalità.\nSvantaggi: può rendere il testo pesante e astratto.",
         rules=[
             "Verbi in -zione, -mento, -aggio: costruzione, cambiamento, atterraggio.",
-            "Aggettivi in -(e)zza, -ita: bellezza, rapidita.",
+            "Aggettivi in -(e)zza, -ita: bellezza, rapidità.",
             "Utile nello stile accademico, giuridico, tecnico.",
             "Evitare accumulo eccessivo di nominalizzazioni.",
         ],
@@ -171,11 +171,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="impersonalita",
-        title="Impersonalita e distacco",
+        title="Impersonalità e distacco",
         level="C1",
         category="Avanzato",
-        summary="Tecniche per esprimere impersonalita e distacco nel registro formale.",
-        explanation="Strategie per l'impersonalita:\n- **Si impersonale/passivante:** *Si ritiene che...*\n- **Forma passiva:** *E stato dimostrato che...*\n- **Costruzioni impersonali:** *Bisogna, occorre, e necessario.*\n- **Soggetto generico:** *Uno, taluni, certi.*\n- **Infinito sostantivato:** *Il fare, il dire.*",
+        summary="Tecniche per esprimere impersonalità e distacco nel registro formale.",
+        explanation="Strategie per l'impersonalità:\n- **Si impersonale/passivante:** *Si ritiene che...*\n- **Forma passiva:** *È stato dimostrato che...*\n- **Costruzioni impersonali:** *Bisogna, occorre, è necessario.*\n- **Soggetto generico:** *Uno, taluni, certi.*\n- **Infinito sostantivato:** *Il fare, il dire.*",
         rules=[
             "Si impersonale per affermazioni generali.",
             "Forma passiva per mettere in risalto l'azione.",
@@ -188,7 +188,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="E stato osservato un aumento dei prezzi.",
+                text="È stato osservato un aumento dei prezzi.",
                 translation=None,
             ),
             GrammarExample(
@@ -199,7 +199,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Io penso che... (in un testo accademico)",
-                correct="Si ritiene che... / E opinione diffusa che...",
+                correct="Si ritiene che... / È opinione diffusa che...",
                 note="In testi formali evitare la prima persona.",
             ),
         ],
@@ -211,7 +211,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Raggruppare e organizzare il lessico per campi semantici.",
-        explanation="Un campo semantico e un insieme di parole legate da significato comune.\n\nEsempi:\n- **Meteorologia:** pioggia, neve, grandine, vento, nuvola, temporale.\n- **Emozioni:** gioia, tristezza, rabbia, paura, sorpresa, disgusto.\n- **Politica:** governo, parlamento, elezioni, partito, riforma.\n\nL'organizzazione in campi semantici facilita l'apprendimento del lessico.",
+        explanation="Un campo semantico è un insieme di parole legate da significato comune.\n\nEsempi:\n- **Meteorologia:** pioggia, neve, grandine, vento, nuvola, temporale.\n- **Emozioni:** gioia, tristezza, rabbia, paura, sorpresa, disgusto.\n- **Politica:** governo, parlamento, elezioni, partito, riforma.\n\nL'organizzazione in campi semantici facilita l'apprendimento del lessico.",
         rules=[
             "Organizzare il lessico per aree tematiche.",
             "Riconoscere iponimi e iperonimi.",
@@ -239,7 +239,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Prefissi e suffissi per creare nuove parole italiane.",
-        explanation="La derivazione crea parole nuove con prefissi e suffissi.\n\n**Prefissi:**\n- ri- (ripetizione): *rifare, rileggere.*\n- s- (negazione/contrario): *scomodo, sfortunato.*\n- dis- (negazione): *disordinato, disonesto.*\n- pre- (prima): *prevedere, preistoria.*\n\n**Suffissi:**\n- -zione (azione): *costruzione, traduzione.*\n- -tore/-trice (agente): *lavoratore, scrittrice.*\n- -bile (possibilita): *leggibile, mangiabile.*\n- -ezza/-ita (qualita): *bellezza, rapidita.*",
+        explanation="La derivazione crea parole nuove con prefissi e suffissi.\n\n**Prefissi:**\n- ri- (ripetizione): *rifare, rileggere.*\n- s- (negazione/contrario): *scomodo, sfortunato.*\n- dis- (negazione): *disordinato, disonesto.*\n- pre- (prima): *prevedere, preistoria.*\n\n**Suffissi:**\n- -zione (azione): *costruzione, traduzione.*\n- -tore/-trice (agente): *lavoratore, scrittrice.*\n- -bile (possibilità): *leggibile, mangiabile.*\n- -ezza/-ita (qualità): *bellezza, rapidità.*",
         rules=[
             "Prefissi modificano il significato della radice.",
             "Suffissi cambiano la categoria grammaticale.",
@@ -253,9 +253,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="ri- = di nuovo",
             ),
             GrammarExample(
-                text="La situazione e migliorabile.",
+                text="La situazione è migliorabile.",
                 translation=None,
-                note="-bile = che puo essere",
+                note="-bile = che può essere",
             ),
         ],
         common_mistakes=[
@@ -294,7 +294,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Ho fatto una bella esperienza.",
                 correct="Ho vissuto un'esperienza entusiasmante/formativa/indimenticabile.",
-                note="Bello e generico; scegliere aggettivo piu preciso.",
+                note="Bello è generico; scegliere aggettivo più preciso.",
             ),
         ],
         related=["sfumature", "campi-semantici", "registro-formale"],
@@ -305,12 +305,12 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Capire e usare l'ironia italiana: sfumature culturali e linguistiche.",
-        explanation="L'ironia italiana si basa spesso su:\n- **Antifrasi:** dire il contrario di cio che si pensa. *Che bella giornata!* (quando piove).\n- **Iperbole:** esagerazione. *Ci metto un secondo!* (in realta 10 minuti).\n- **Understatement:** minimizzare. *Non e niente, solo un graffietto.* (ferita grave).\n- **Tono:** fondamentale per distinguere ironia da affermazione seria.",
+        explanation="L'ironia italiana si basa spesso su:\n- **Antifrasi:** dire il contrario di ciò che si pensa. *Che bella giornata!* (quando piove).\n- **Iperbole:** esagerazione. *Ci metto un secondo!* (in realtà 10 minuti).\n- **Understatement:** minimizzare. *Non è niente, solo un graffietto.* (ferita grave).\n- **Tono:** fondamentale per distinguere ironia da affermazione seria.",
         rules=[
             "L'ironia si basa sul contrasto tra detto e inteso.",
-            "Il tono di voce e cruciale per segnalare ironia.",
+            "Il tono di voce è cruciale per segnalare ironia.",
             "Nello scritto si usano punti esclamativi, virgolette.",
-            "Attenzione: l'ironia puo non essere capita da non nativi.",
+            "Attenzione: l'ironia può non essere capita da non nativi.",
         ],
         examples=[
             GrammarExample(
@@ -328,7 +328,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Prendere l'ironia alla lettera.",
                 correct="Riconoscere l'ironia dal contesto e dal tono.",
-                note="L'ironia italiana puo essere sottile e confondere.",
+                note="L'ironia italiana può essere sottile e confondere.",
             ),
         ],
         related=["umorismo", "doppio-senso", "modi-di-dire"],
@@ -339,16 +339,16 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="L'umorismo nella cultura italiana: tipologie e caratteristiche.",
-        explanation="L'umorismo italiano e variegato:\n- **Giochi di parole:** basati su doppi sensi (*La volpe e l'uva*).\n- **Barzellette:** brevi storie a sorpresa.\n- **Autoironia:** prendere in giro se stessi o la propria citta/regione.\n- **Satira:** critica sociale e politica mascherata da umorismo.\n- **Commedia dell'arte:** maschere e stereotipi regionali.",
+        explanation="L'umorismo italiano è variegato:\n- **Giochi di parole:** basati su doppi sensi (*La volpe e l'uva*).\n- **Barzellette:** brevi storie a sorpresa.\n- **Autoironia:** prendere in giro se stessi o la propria città/regione.\n- **Satira:** critica sociale e politica mascherata da umorismo.\n- **Commedia dell'arte:** maschere e stereotipi regionali.",
         rules=[
             "L'umorismo varia per regione e generazione.",
             "I giochi di parole sono molto apprezzati.",
-            "L'autoironia e segno di intelligenza e umilta.",
-            "La satira politica e molto diffusa (giornali, TV).",
+            "L'autoironia è segno di intelligenza e umiltà.",
+            "La satira politica è molto diffusa (giornali, TV).",
         ],
         examples=[
             GrammarExample(
-                text="Non capisco perche tutti dicano che gli italiani gesticolano... (mentre gesticola vistosamente)",
+                text="Non capisco perché tutti dicano che gli italiani gesticolano... (mentre gesticola vistosamente)",
                 translation=None,
                 note="autoironia",
             ),
@@ -371,11 +371,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Doppi sensi e giochi di parole",
         level="C1",
         category="Avanzato",
-        summary="Parole e frasi a doppio senso: capire l'ambiguita linguistica italiana.",
-        explanation="Il doppio senso si basa su parole con piu significati:\n- **Omonimia:** stessa forma, significato diverso. *Il riso* (cereale o azione di ridere).\n- **Polisemia:** stesso termine con accezioni diverse. *La chiave* (strumento o concetto).\n- **Ambiguita sintattica:** *Ho visto un uomo con il binocolo.* (chi aveva il binocolo?)\n\nMolto usato nella pubblicita, nei titoli e nell'umorismo.",
+        summary="Parole e frasi a doppio senso: capire l'ambiguità linguistica italiana.",
+        explanation="Il doppio senso si basa su parole con più significati:\n- **Omonimia:** stessa forma, significato diverso. *Il riso* (cereale o azione di ridere).\n- **Polisemia:** stesso termine con accezioni diverse. *La chiave* (strumento o concetto).\n- **Ambiguità sintattica:** *Ho visto un uomo con il binocolo.* (chi aveva il binocolo?)\n\nMolto usato nella pubblicità, nei titoli e nell'umorismo.",
         rules=[
             "Riconoscere parole polisemiche e omonimi.",
-            "L'ambiguita puo essere voluta (umorismo) o involontaria.",
+            "L'ambiguità può essere voluta (umorismo) o involontaria.",
             "Il contesto di solito chiarisce il significato.",
             "Attenzione ai double entendre involontari in traduzione.",
         ],
@@ -406,17 +406,17 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Metafora, metonimia, sineddoche, iperbole e altre figure retoriche.",
-        explanation="Principali figure retoriche italiane:\n- **Metafora:** sostituzione per analogia. *Quell'uomo e un leone.*\n- **Metonimia:** sostituzione per contiguita. *Bere un bicchiere.* (il contenuto per il contenitore).\n- **Sineddoche:** parte per il tutto. *Tetto* per casa.\n- **Iperbole:** esagerazione. *Te l'ho detto un milione di volte.*\n- **Litote:** negazione del contrario. *Non e male* = e buono.\n- **Eufemismo:** attenuazione. *E passato a miglior vita.*",
+        explanation="Principali figure retoriche italiane:\n- **Metafora:** sostituzione per analogia. *Quell'uomo è un leone.*\n- **Metonimia:** sostituzione per contiguità. *Bere un bicchiere.* (il contenitore per il contenuto).\n- **Sineddoche:** parte per il tutto. *Tetto* per casa.\n- **Iperbole:** esagerazione. *Te l'ho detto un milione di volte.*\n- **Litote:** negazione del contrario. *Non è male* = è buono.\n- **Eufemismo:** attenuazione. *È passato a miglior vita.*",
         rules=[
             "Metafora: confronto implicito senza come.",
-            "Metonimia: relazione di contiguita logica.",
+            "Metonimia: relazione di contiguità logica.",
             "Iperbole: esagerazione a effetto.",
             "Litote ed eufemismo attenuano o ammorbidiscono.",
         ],
         examples=[
             GrammarExample(text="Ha un cuore d'oro.", translation=None, note="metafora"),
             GrammarExample(
-                text="Non e affatto stupido. (litote per: e molto intelligente)",
+                text="Non è affatto stupido. (litote per: è molto intelligente)",
                 translation=None,
                 note="litote",
             ),
@@ -429,8 +429,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Confondere metonimia e metafora.",
-                correct="Metafora = somiglianza; metonimia = contiguita.",
-                note="Bere un bicchiere = metonimia (contenuto x contenitore).",
+                correct="Metafora = somiglianza; metonimia = contiguità.",
+                note="Bere un bicchiere = metonimia (contenitore per contenuto).",
             ),
         ],
         related=["figure-stilistiche", "doppio-senso", "descrizione-letteraria"],
@@ -441,9 +441,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Strategie linguistiche per persuadere: retorica classica e moderna.",
-        explanation="Tecniche persuasive in italiano:\n- **Ethos:** credibilita dell'oratore. *Da esperto del settore, posso affermare che...*\n- **Pathos:** appello alle emozioni. *Pensate ai vostri figli, al loro futuro.*\n- **Logos:** argomentazione logica. *I dati dimostrano che...*\n- **Domanda retorica:** *Vogliamo davvero continuare cosi?*\n- **Ripetizione (anafora):** *Noi crediamo... Noi vogliamo... Noi possiamo...*",
+        explanation="Tecniche persuasive in italiano:\n- **Ethos:** credibilità dell'oratore. *Da esperto del settore, posso affermare che...*\n- **Pathos:** appello alle emozioni. *Pensate ai vostri figli, al loro futuro.*\n- **Logos:** argomentazione logica. *I dati dimostrano che...*\n- **Domanda retorica:** *Vogliamo davvero continuare così?*\n- **Ripetizione (anafora):** *Noi crediamo... Noi vogliamo... Noi possiamo...*",
         rules=[
-            "Ethos: stabilire la propria autorita e credibilita.",
+            "Ethos: stabilire la propria autorità e credibilità.",
             "Pathos: coinvolgere emotivamente l'uditorio.",
             "Logos: usare dati, statistiche, ragionamenti logici.",
             "Domanda retorica e anafora rafforzano il messaggio.",
@@ -474,7 +474,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="L'arte del discorso pubblico in italiano: struttura, ritmo e figure.",
-        explanation="Tecniche per un discorso efficace:\n- **Exordium:** catturare l'attenzione. Aneddoto, citazione, domanda.\n- **Narratio/Argumentatio:** esporre fatti e argomenti.\n- **Peroratio:** conclusione appassionata.\n- **Pause strategiche:** dare peso alle parole.\n- **Variazione di ritmo:** accelerare per entusiasmo, rallentare per solennita.\n- **Tricolon:** tre elementi in parallelo (*Veni, vidi, vici*).",
+        explanation="Tecniche per un discorso efficace:\n- **Exordium:** catturare l'attenzione. Aneddoto, citazione, domanda.\n- **Narratio/Argumentatio:** esporre fatti e argomenti.\n- **Peroratio:** conclusione appassionata.\n- **Pause strategiche:** dare peso alle parole.\n- **Variazione di ritmo:** accelerare per entusiasmo, rallentare per solennità.\n- **Tricolon:** tre elementi in parallelo (*Veni, vidi, vici*).",
         rules=[
             "Apertura forte per catturare l'attenzione.",
             "Struttura chiara in tre parti.",
@@ -497,7 +497,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Leggere un discorso senza pause ne enfasi.",
                 correct="Provare il discorso ad alta voce, segnare le pause.",
-                note="L'oratoria e performance, non solo testo.",
+                note="L'oratoria è performance, non solo testo.",
             ),
         ],
         related=["persuasione", "struttura-argomentativa", "registro-formale"],
@@ -507,17 +507,17 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Italiano regionale",
         level="C1",
         category="Avanzato",
-        summary="Le varieta regionali dell'italiano: differenze lessicali e grammaticali.",
+        summary="Le varietà regionali dell'italiano: differenze lessicali e grammaticali.",
         explanation="L'italiano regionale varia in:\n- **Lessico:** *anguria* (Nord) vs *cocomero* (Centro) vs *melone d'acqua* (Sud).\n- **Fonetica:** apertura vocali, pronuncia di s e z.\n- **Sintassi:** uso di passato prossimo (Nord) vs passato remoto (Sud).\n- **Geosinonimi:** *papà* vs *babbo*, *ora* vs *adesso*.\n\nLe differenze sono accettate e contribuiscono alla ricchezza dell'italiano.",
         rules=[
-            "L'italiano standard e influenzato dalla regione di provenienza.",
+            "L'italiano standard è influenzato dalla regione di provenienza.",
             "Geosinonimi: termini diversi per lo stesso oggetto.",
             "Alcune costruzioni regionali sono considerate errori in contesti formali.",
-            "La scuola insegna l'italiano standard, ma le varieta regionali persistono.",
+            "La scuola insegna l'italiano standard, ma le varietà regionali persistono.",
         ],
         examples=[
             GrammarExample(
-                text="A Milano prendo un caffe, a Napoli prendo un caffe. (pronuncia e preparazione diversa)",
+                text="A Milano prendo un caffè, a Napoli prendo un caffè. (pronuncia e preparazione diversa)",
                 translation=None,
                 note="differenza culturale + linguistica",
             ),
@@ -530,7 +530,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Pensare che l'italiano sia uniforme in tutta Italia.",
-                correct="Riconoscere e apprezzare le varieta regionali.",
+                correct="Riconoscere e apprezzare le varietà regionali.",
                 note="L'Italia ha una straordinaria diversita linguistica interna.",
             ),
         ],
@@ -547,7 +547,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "I dialetti sono lingue autonome, non varianti degradate.",
             "L'italiano standard deriva dal fiorentino del Trecento.",
             "In contesti formali si usa l'italiano; in famiglia spesso il dialetto.",
-            "Il dialetto e patrimonio culturale protetto.",
+            "Il dialetto è patrimonio culturale protetto.",
         ],
         examples=[
             GrammarExample(
@@ -573,13 +573,13 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Italiano standard e neostandard",
         level="C1",
         category="Avanzato",
-        summary="L'evoluzione dell'italiano standard verso un neostandard piu flessibile.",
-        explanation="L'italiano standard tradizionale e quello normativo (grammatiche, Accademia della Crusca).\n\nL'italiano **neostandard** (o dell'uso medio) accetta:\n- **gli** per a loro (invece di loro).\n- **lui/lei** soggetto (invece di egli/ella).\n- **che** polivalente (temporale, causale).\n- **ci** con avere: *c'ho fame* (colloquiale).\n- **dislocazioni:** *Il caffe, lo prendo dopo.*\n\nQueste forme, un tempo considerate errori, sono ora accettate nell'uso comune.",
+        summary="L'evoluzione dell'italiano standard verso un neostandard più flessibile.",
+        explanation="L'italiano standard tradizionale è quello normativo (grammatiche, Accademia della Crusca).\n\nL'italiano **neostandard** (o dell'uso medio) accetta:\n- **gli** per a loro (invece di loro).\n- **lui/lei** soggetto (invece di egli/ella).\n- **che** polivalente (temporale, causale).\n- **ci** con avere: *c'ho fame* (colloquiale).\n- **dislocazioni:** *Il caffè, lo prendo dopo.*\n\nQueste forme, un tempo considerate errori, sono ora accettate nell'uso comune.",
         rules=[
-            "L'italiano standard e quello delle grammatiche.",
+            "L'italiano standard è quello delle grammatiche.",
             "Il neostandard accoglie fenomeni del parlato.",
             "Alcune forme neostandard sono ancora evitate nello scritto formale.",
-            "La lingua evolve: oggi e normale cio che ieri era errore.",
+            "La lingua evolve: oggi è normale ciò che ieri era errore.",
         ],
         examples=[
             GrammarExample(
@@ -595,7 +595,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Considerare sempre errore le forme neostandard.",
                 correct="Distinguere tra registri: accettabile nel parlato, evitare nello scritto formale.",
-                note="Il confine tra errore e innovazione linguistica e fluido.",
+                note="Il confine tra errore e innovazione linguistica è fluido.",
             ),
         ],
         related=["italiano-regionale", "registro-formale", "evoluzione-linguistica"],
@@ -615,7 +615,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Riassunto di 300 parole: il testo originale analizza le cause del declino economico italiano identificando tre fattori: demografia, produttivita e debito pubblico.",
+                text="Riassunto di 300 parole: il testo originale analizza le cause del declino economico italiano identificando tre fattori: demografia, produttività e debito pubblico.",
                 translation=None,
             ),
         ],
@@ -623,7 +623,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Copiare frasi intere dall'originale.",
                 correct="Riformulare con parole proprie, condensando.",
-                note="La sintesi non e un collage di citazioni.",
+                note="La sintesi non è un collage di citazioni.",
             ),
         ],
         related=["coesione-testuale", "riformulazione", "critica-costruttiva"],
@@ -634,7 +634,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Esprimere critiche in modo costruttivo e diplomatico in italiano.",
-        explanation="Per esprimere critiche costruttive:\n- **Ammorbidire:** *Forse si potrebbe...*\n- **Condizionale:** *Sarebbe meglio se...*\n- **Domanda invece di affermazione:** *Hai considerato la possibilita di...?*\n- **Sandwich feedback:** positivo - critica - positivo.\n- **Evitare assoluti:** mai dire *sempre* o *mai*.",
+        explanation="Per esprimere critiche costruttive:\n- **Ammorbidire:** *Forse si potrebbe...*\n- **Condizionale:** *Sarebbe meglio se...*\n- **Domanda invece di affermazione:** *Hai considerato la possibilità di...?*\n- **Sandwich feedback:** positivo - critica - positivo.\n- **Evitare assoluti:** mai dire *sempre* o *mai*.",
         rules=[
             "Usare il condizionale per attenuare.",
             "Evitare toni accusatori.",
@@ -643,18 +643,18 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Il tuo lavoro e molto interessante. Forse si potrebbe approfondire la parte sui dati. Nel complesso, ottimo lavoro!",
+                text="Il tuo lavoro è molto interessante. Forse si potrebbe approfondire la parte sui dati. Nel complesso, ottimo lavoro!",
                 translation=None,
                 note="sandwich feedback",
             ),
             GrammarExample(
-                text="Hai considerato di strutturare diversamente questa sezione? Renderebbe il tutto piu chiaro.",
+                text="Hai considerato di strutturare diversamente questa sezione? Renderebbe il tutto più chiaro.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Questo lavoro e sbagliato. Devi rifarlo.",
+                wrong="Questo lavoro è sbagliato. Devi rifarlo.",
                 correct="Questo lavoro ha alcuni punti da rivedere. Vediamoli insieme per migliorarlo.",
                 note="La critica costruttiva offre soluzioni, non solo giudizi.",
             ),
@@ -667,7 +667,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avanzato",
         summary="Tecniche per riformulare concetti in modo chiaro e preciso.",
-        explanation="Riformulare significa esprimere lo stesso concetto con parole diverse.\n\nTecniche:\n- **Sinonimi:** *l'edificio → la costruzione, lo stabile.*\n- **Cambio di categoria:** *Analizzare → fare un'analisi.*\n- **Da attivo a passivo:** *Il governo ha approvato → E stata approvata dal governo.*\n- **Da specifico a generale:** *Il gatto → l'animale domestico.*\n- **Definizione:** *Un cardiologo → un medico specializzato nel cuore.*",
+        explanation="Riformulare significa esprimere lo stesso concetto con parole diverse.\n\nTecniche:\n- **Sinonimi:** *l'edificio → la costruzione, lo stabile.*\n- **Cambio di categoria:** *Analizzare → fare un'analisi.*\n- **Da attivo a passivo:** *Il governo ha approvato → È stata approvata dal governo.*\n- **Da specifico a generale:** *Il gatto → l'animale domestico.*\n- **Definizione:** *Un cardiologo → un medico specializzato nel cuore.*",
         rules=[
             "Mantenere il significato originale.",
             "Variare lessico e struttura sintattica.",
@@ -698,7 +698,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation="Nel registro accademico e formale, la **forma passiva** è ampiamente utilizzata per conferire oggettività e impersonalità al discorso.\n\n- **Si passivante**: *Si analizzeranno i dati raccolti.* → equivalente a *I dati raccolti saranno analizzati.*\n- **Passivo con essere/venire**: *Il fenomeno è stato osservato / venne studiato.*\n- **Andare + participio** (obbligo): *I risultati vanno interpretati con cautela.*\n\n**Strategie di impersonalità accademica:**\n- Uso del *si* impersonale: *Si ritiene che...*\n- Costruzioni con *è/sembra/risulta + aggettivo + che*: *È evidente che..., Risulta chiaro che...*\n- Forme nominali: *L'analisi dei dati mostra...* piuttosto che *Abbiamo analizzato i dati...*\n\nIl passivo accademico permette di mettere in primo piano il contenuto della ricerca piuttosto che il ricercatore.",
         rules=[
             "Il passivo sposta il focus dall'agente all'azione o al risultato.",
-            "Alternare forme: si passivante, essere/venire + participio, andare + participio.",
+            "Essere ammette anche tempi composti; venire passivo e andare con valore di obbligo si usano nei tempi semplici.",
             "Costruzioni impersonali con si: si osserva, si nota, si evince.",
             "Evitare la prima persona (io/noi) nella scrittura accademica formale.",
             'Usare forme nominali per oggettività: "l\'analisi rivela" invece di "abbiamo analizzato".',

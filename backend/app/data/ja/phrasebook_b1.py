@@ -110,7 +110,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 "部分的に同意する",
                 "neutral",
                 "b1-unit-7",
-                romanization="sono ten ni wa sansei shimasu ga, betsu no mondai mo arimasu",
+                romanization="sono ten ni wa sansei desu ga, betsu no mondai mo arimasu",
             ),
             _p(
                 "理由をもう少し詳しく説明してもらえますか。",

@@ -48,7 +48,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Verbes",
         summary="Tous les usages du conditionnel : hypothèses, conditionnel journalistique, regret, politesse.",
-        explanation="Au niveau C2, le conditionnel doit être utilisé avec aisance dans tous ses emplois :\n\n**1. Conditionnel présent** :\n- Politesse : *Je voudrais...*\n- Hypothèse présente : *Si j'avais le temps, je lirais.*\n- Futur dans le passé : *Il a dit qu'il viendrait.*\n\n**2. Conditionnel passé** :\n- Regret : *J'aurais dû...*\n- Hypothèse passée : *Si j'avais su...*\n- Information non confirmée (journalistique) : *Le président aurait démissionné.*\n\n**3. Conditionnel + subjonctif** (concordance) : *Si j'avais su qu'il viendrait, je serais venu.*",
+        explanation="Le conditionnel présent exprime la politesse (Je voudrais), une hypothèse présente (Si j'avais le temps, je lirais) ou le futur dans le passé (Il a dit qu'il viendrait).\n\nLe conditionnel passé exprime un regret (J'aurais dû venir), une conséquence hypothétique passée (Si j'avais su, je serais venu) ou une information non confirmée (Le président aurait démissionné).\n\n**Conditionnel et subjonctif** : J'aurais aimé que tu sois là.\n**Conditionnel et indicatif** : Si j'avais su qu'il viendrait, je serais venu. Avais su est au plus-que-parfait de l'indicatif, pas au subjonctif.",
         structure="conditionnel présent/passé + toutes les nuances",
         rules=[
             "Maîtrise de toutes les valeurs modales.",

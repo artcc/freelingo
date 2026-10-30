@@ -302,7 +302,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "透明性の重要性を述べる",
                 "formal",
                 "c2-unit-7",
-                romanization="tōmeisei o kakuhō shinakereba shinrai wa eraremasen",
+                romanization="tōmeisei o kakuho shinakereba shinrai wa eraremasen",
             ),
             _p(
                 "公平性と効率性の間に緊張関係があります。",

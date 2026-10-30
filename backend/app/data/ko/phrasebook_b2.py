@@ -31,7 +31,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 "근거를 제시할 때",
                 "formal",
                 "b2-unit-1",
-                romanization="jaryoe ttaireumyeon iyongjaga neureotseumnida.",
+                romanization="jaryoe ttareumyeon iyongjaga neureotseumnida.",
             ),
             _p(
                 "효과가 있기는 하지만 비용도 고려해야 합니다.",
@@ -60,7 +60,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 "회의를 시작할 때",
                 "formal",
                 "b2-unit-2",
-                romanization="oneul aneoneul malsseumdeurigesseumnida.",
+                romanization="oneul angeoneul malsseumdeurigesseumnida.",
             ),
             _p(
                 "자료를 보내 드리겠습니다.",
@@ -147,7 +147,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 "뉴스 출처를 언급할 때",
                 "formal",
                 "b2-unit-7",
-                romanization="bodo-e ttaireumyeon sanghwangi dallajyeotseumnida.",
+                romanization="bodoe ttareumyeon sanghwangi dallajyeotseumnida.",
             ),
             _p(
                 "필자의 입장은 신중해 보입니다.",
@@ -214,7 +214,7 @@ B2_CATEGORIES.append(
                 "약점을 지적할 때",
                 "formal",
                 "b2-unit-8",
-                romanization="daman jeonjega jogeum yakhamnida.",
+                romanization="daman jeonjega jogeum yakamnida.",
             ),
             _p(
                 "구체적인 사례를 추가하면 좋겠습니다.",
@@ -347,14 +347,14 @@ B2_CATEGORIES.append(
                 "글 구조 조언을 할 때",
                 "formal",
                 "b2-unit-8",
-                romanization="haeksim mesijireul ape duneun geosi joseumnida.",
+                romanization="haeksim mesijireul ape duneun geosi jotseumnida.",
             ),
             _p(
                 "결론을 더 명확하게 써야 합니다.",
                 "글 명확성 조언을 할 때",
                 "formal",
                 "b2-unit-8",
-                romanization="gyeolloneul deo myeonghwakhage sseoya hamnida.",
+                romanization="gyeolloneul deo myeonghwakage sseoya hamnida.",
             ),
             _p(
                 "독자의 반응도 고려해야 합니다.",

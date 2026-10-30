@@ -16,9 +16,9 @@ C1_UNITS: list[CurriculumUnit] = [
             "subjuntivo-relativo",
         ],
         vocabulary_set_ids=["matices_c1", "formalidad_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Usa aunque + subjuntivo frente a aunque + indicativo con pleno control del matiz semántico: aunque llueva (hipótesis) frente a aunque llueve (hecho asumido)",
+            "Distingue aunque + indicativo para información afirmada de aunque + subjuntivo para hipótesis o hechos conocidos irrelevantes para la conclusión: Aunque esté lloviendo, saldré",
             "Usa correctamente las conjunciones finales: para que + subjuntivo con cambio de sujeto (Te lo explico para que lo entiendas) frente a para + infinitivo con mismo sujeto (Estudio para aprender)",
             "Aplica subjuntivo en relativas especificativas con antecedente indefinido o negado: No conozco a nadie que hable chino, Busco un apartamento que tenga terraza (frente a uno ya identificado -> indicativo)",
             "Usa conjunciones temporales con referencia futura + subjuntivo: cuando llegues, en cuanto lo sepa, después de que terminen, antes de que empiece",
@@ -43,7 +43,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "investigación_c1",
             "registro_lingüístico_c1",
         ],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa con fluidez la pasiva refleja (se + tercera persona) en escritura formal y técnica como alternativa natural en español a la pasiva con ser",
             "Convierte estructuras verbales y adjetivales en nominalizaciones (aumentar -> el aumento, desarrollar -> el desarrollo, eficaz -> la eficacia) para lograr el estilo académico impersonal",
@@ -62,7 +62,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Léxico especializado",
         grammar_points=["campos-semanticos", "derivacion", "precision-lexica"],
         vocabulary_set_ids=["profesional_c1", "técnico_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Deriva palabras de forma sistemática mediante sufijos productivos del español (-ción/-sión, -dad/-tad, -eza, -ura, -oso, -able, -mente) y prefijos (des-, re-, ante-, post-, sub-)",
             "Identifica relaciones de campos semánticos y colocaciones habituales en registros especializados: cometer un error (no *hacer), tomar una decisión (no *hacer), plantear un problema (no *decir)",
@@ -80,7 +80,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Ironía, humor y doble sentido",
         grammar_points=["ironia", "sarcasmo", "doble-sentido"],
         vocabulary_set_ids=["humor_c1", "cultura_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Reconoce ironía verbal y sarcasmo en español atendiendo a entonación, contexto e incongruencia léxica: ¡Qué lista eres! (dicho a alguien que ha cometido una torpeza)",
             "Comprende juegos de palabras, calambures y dobles sentidos frecuentes en publicidad, titulares y habla cotidiana",
@@ -98,7 +98,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Discurso persuasivo y retórica",
         grammar_points=["recursos-retoricos", "persuasion", "figuras-literarias"],
         vocabulary_set_ids=["oratoria_c1", "presentaciones_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa repeticiones retóricas (anáfora, epífora), tríadas y preguntas retóricas (¿Acaso no tenemos derecho a...?) para reforzar la persuasión en discursos y ensayos",
             "Usa patrones concesivos para argumentación compleja: por más que + subjuntivo (Por más que lo intentes, no lo conseguirás), a pesar de que + subjuntivo/indicativo, aun cuando + subjuntivo",
@@ -116,12 +116,13 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Variedades del español",
         grammar_points=["espanol-latinoamerica", "diferencias-regionales", "voseo"],
         vocabulary_set_ids=["variedades_c1", "dialectos_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Identifica diferencias fonológicas clave entre el español peninsular (distinción s/z, leísmo) y variedades mayoritarias de América (seseo, yeísmo), y reconoce ceceo y seseo en variedades del sur peninsular (Andalucía, Canarias)",
+            "Identifica la distinción /s/-/θ/ en buena parte de España, el seseo en América, Canarias y zonas de Andalucía, el ceceo en algunas zonas andaluzas y el yeísmo extendido a ambos lados del Atlántico",
+            "Reconoce el leísmo como fenómeno gramatical, no fonológico, y distingue el uso admitido de le para un referente masculino singular de persona de otros usos no admitidos en la norma general",
             "Comprende y responde al voseo (vos + formas verbales específicas: vos tenés, vos querés, vos sos) en los contextos donde se emplea",
             "Reconoce diferencias léxicas relevantes entre español peninsular y americano en ámbitos cotidianos: coche/carro, ordenador/computadora, móvil/celular, conducir/manejar",
-            "Usa correctamente la oposición vosotros/ustedes (peninsular) frente a ustedes en todos los contextos (América) según la variedad trabajada",
+            "Adapta vosotros/ustedes a la variedad: oposición informal/formal en buena parte de España y ustedes para ambos registros en América y Canarias",
             "Analiza el estatus sociolingüístico de las variedades del español sin jerarquías de valor, entendiendo que todas son válidas y sistemáticas",
         ],
         default_weeks=2,
@@ -134,7 +135,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Análisis crítico y síntesis",
         grammar_points=["sintesis-textual", "critica-constructiva", "reformulacion"],
         vocabulary_set_ids=["análisis_c1", "síntesis_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Sintetiza información de dos o tres fuentes en un resumen coherente con atribución explícita, sin distorsionar el significado original: Según X..., Por su parte, Y afirma que...",
             "Evalúa fiabilidad, consistencia interna y posibles sesgos de argumentos presentes en textos en español",
@@ -162,7 +163,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "ortotipografia-academica",
         ],
         vocabulary_set_ids=["repaso_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produce un texto formal de 400 palabras integrando las estructuras gramaticales de C1 con control evidente y fluidez natural",
             "Expresa ideas complejas y matizadas de forma espontánea sin búsqueda visible de palabras o estructuras",

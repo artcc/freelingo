@@ -12,15 +12,19 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(text="Ciao!", context="Saluto informale", register="informal"),
             PhrasebookEntry(
                 text="Buongiorno.",
-                context="Saluto formale prima di mezzogiorno",
-                register="formal",
+                context="Saluto durante la prima parte della giornata, anche in contesti informali",
+                register="neutral",
             ),
             PhrasebookEntry(
                 text="Buon pomeriggio.",
-                context="Saluto tra mezzogiorno e le 18",
-                register="formal",
+                context="Saluto nel pomeriggio",
+                register="neutral",
             ),
-            PhrasebookEntry(text="Buonasera.", context="Saluto dopo le 18", register="formal"),
+            PhrasebookEntry(
+                text="Buonasera.",
+                context="Saluto dal pomeriggio o dalla sera, secondo gli usi locali",
+                register="neutral",
+            ),
             PhrasebookEntry(
                 text="Come stai?",
                 context="Chiedere come sta qualcuno (informale)",
@@ -34,7 +38,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 text="Sto bene, grazie. E tu?",
                 context="Rispondere e ricambiare (informale)",
-                register="neutral",
+                register="informal",
             ),
             PhrasebookEntry(
                 text="Sto bene, grazie. E Lei?",
@@ -44,7 +48,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 text="Piacere di conoscerti.",
                 context="Al primo incontro (informale)",
-                register="neutral",
+                register="informal",
             ),
             PhrasebookEntry(
                 text="Piacere di conoscerLa.",
@@ -62,7 +66,11 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 context="Indicare la nazionalit\u00e0",
                 register="neutral",
             ),
-            PhrasebookEntry(text="Arrivederci!", context="Congedo formale", register="formal"),
+            PhrasebookEntry(
+                text="Arrivederci!",
+                context="Congedo comune, anche in situazioni formali",
+                register="neutral",
+            ),
             PhrasebookEntry(text="A presto!", context="Congedo informale", register="informal"),
         ],
     ),

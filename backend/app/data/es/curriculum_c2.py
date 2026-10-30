@@ -16,7 +16,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "concordancia-de-tiempos",
         ],
         vocabulary_set_ids=["excelencia_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Domina todos los tiempos del subjuntivo y su secuencia sin errores sistemáticos: presente, imperfecto, perfecto y pluscuamperfecto en todos los contextos de activación",
             "Forma e interpreta condicionales mixtas que combinan distintos marcos temporales: Si hubiera estudiado más, tendría ahora un mejor trabajo (hipótesis pasada -> consecuencia presente)",
@@ -35,12 +35,12 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Estilística y registro literario",
         grammar_points=["estilo-literario", "voz-narrativa", "recursos-estilisticos"],
         vocabulary_set_ids=["literatura_c2", "estilo_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Controla el punto de vista narrativo (primera persona, tercera omnisciente, tercera limitada) en escritura creativa original, con elecciones conscientes y coherentes",
             "Usa asíndeton, polisíndeton y otros recursos sintácticos con intención estilística: acumulación rítmica, pausa abrupta, contraste enfático",
             "Emplea anáfora, epífora, quiasmo y otras figuras retóricas como herramientas de estilo en ensayos, discursos y prosa literaria",
-            "Lee pasajes de literatura española contemporánea o clásica (Cervantes, Galdós, Borges, García Márquez) y analiza estilo, tono, técnica narrativa y lenguaje",
+            "Lee pasajes de literatura en español contemporánea o clásica (Cervantes, Galdós, Borges, García Márquez) y analiza estilo, tono, técnica narrativa y lenguaje",
             "Escribe una pieza de prosa literaria o ensayo de 300 palabras con control consciente del registro estilístico, la voz narrativa y los recursos literarios",
         ],
         default_weeks=2,
@@ -53,7 +53,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Traducción y mediación lingüística",
         grammar_points=["equivalencia", "matices-traduccion", "falsos-amigos"],
         vocabulary_set_ids=["traducción_c2", "mediación_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifica y evita falsos amigos frecuentes entre español e inglés que confunden al alumnado avanzado: actualmente no significa en realidad, embarazada no significa avergonzada, realizar no significa darse cuenta, sensible no significa sensato",
             "Media entre interlocutores con distinto trasfondo lingüístico reformulando, resumiendo y aclarando sin distorsionar el sentido",
@@ -71,12 +71,12 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Cultura e historia del español",
         grammar_points=["lexicon-historico", "arabismos", "indigenismos"],
         vocabulary_set_ids=["historia_c2", "cultura_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Reconoce arabismos integrados en el vocabulario cotidiano del español (ojalá, almohada, alcohol, azúcar, aceite, cifra, alcalde) y explica su origen y contexto histórico",
             "Identifica indigenismos procedentes del náhuatl, quechua y taíno incorporados al español durante la colonización: chocolate, tomate, patata, canoa, cacao, aguacate, maíz",
             "Describe las grandes etapas de la evolución histórica del español desde el latín vulgar hasta la norma moderna, identificando arcaísmos aún presentes",
-            "Lee textos españoles del siglo XVI (por ejemplo, fragmentos de El Quijote o Lazarillo de Tormes) e identifica arcaísmos, reconociendo la continuidad con el español actual",
+            "Lee textos de los siglos XVI y XVII (Lazarillo de Tormes, 1554; El Quijote, 1605 y 1615) e identifica arcaísmos, reconociendo la continuidad con el español actual",
             "Analiza el papel de instituciones lingüísticas (Real Academia Española, Instituto Cervantes) y debates sobre prescripción y estatus global del español",
         ],
         default_weeks=2,
@@ -98,7 +98,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "publicación_c2",
             "sociedad_contemporánea_c2",
         ],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produce textos de 500 palabras en distintos géneros (columna de opinión, ensayo personal, relato breve, informe formal), adaptando léxico, tono y estructura a cada convención",
             "Edita borradores con nivel de corrección profesional: reorganiza para ganar claridad, elimina redundancias, eleva el registro y corrige fallos sutiles gramaticales y estilísticos",
@@ -122,7 +122,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "norma-panhispanica",
         ],
         vocabulary_set_ids=["maestría_c2", "ciencia_investigación_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Expresa matices sutiles de significado (duda, ironía, cautela, énfasis) mediante selección precisa de estructuras gramaticales y léxico, sin depender de rodeos explícitos",
             "Reconstruye argumentos complejos desde perspectivas ideológicas o culturales distintas, mostrando control flexible del punto de vista y del registro",
@@ -145,7 +145,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evolucion-digital-es",
         ],
         vocabulary_set_ids=["hispanidad_es_c2", "digital_es_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Describe con precisión el concepto de Hispanidad, las instituciones clave (RAE, ASALE, Instituto Cervantes) y la dinámica demográfica que desplaza el centro de gravedad del español hacia América y Estados Unidos",
             "Analiza críticamente las políticas lingüísticas en el mundo hispanohablante —desde la planificación del español en España hasta el bilingüismo y la diglosia en países americanos— situándolas en su contexto histórico y político",
@@ -187,7 +187,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evolucion-digital-es",
         ],
         vocabulary_set_ids=["revision_es_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produce un discurso espontáneo de 5 minutos sobre un tema abstracto o polémico con una corrección casi nativa, fluidez natural y riqueza léxica equiparable a la de un hablante culto de español",
             "Domina la totalidad de las estructuras gramaticales del español sin error sistemático —los únicos fallos son lapsus ocasionales inmediatamente autocorregidos",

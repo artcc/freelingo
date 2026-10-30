@@ -16,12 +16,12 @@ C2_UNITS: list[CurriculumUnit] = [
             "concordanza-di-genere",
         ],
         vocabulary_set_ids=["eccellenza_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Padroneggia tutti i tempi del congiuntivo e la loro sequenza senza errori sistematici: presente, imperfetto, passato e trapassato, sia negli usi retti sia negli usi autonomi (indipendenti) come Che sia vero? Magari fosse così!",
             "Forma e interpreta strutture ipotetiche miste che combinano piani temporali diversi: Se avessi studiato di più, oggi saprei rispondere, distinguendole dal periodo ipotetico standard di tipo 3",
             "Applica correttamente la concordanza di genere e numero in casi tipicamente italiani: aggettivi con nomi invariabili, nomi composti (i capostazione), plurali irregolari (il braccio -> le braccia, il paio -> le paia) e nomi che cambiano genere al plurale (l'uovo -> le uova)",
-            "Individua e corregge errori sottili da apprendenti avanzati: congiuntivo improprio dopo che quando è richiesto l'indicativo (non so se ha capito, non *abbia), uso inadeguato di passato remoto e passato prossimo in base al contesto nord/sud",
+            "Distingue errori e alternative ammesse: Non so se ha capito e Non so se abbia capito sono possibili; interpreta passato remoto e passato prossimo secondo prospettiva temporale, registro e varietà regionale",
             "Dimostra un'ampiezza grammaticale comparabile a quella di un parlante nativo istruito nei registri scritti formali e semiformali",
         ],
         default_weeks=2,
@@ -34,7 +34,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Stilistica e registro letterario",
         grammar_points=["stile-letterario", "voce-narrativa", "figure-stilistiche"],
         vocabulary_set_ids=["letteratura_c2", "stile_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Controlla il punto di vista narrativo (prima persona, terza persona onnisciente, terza persona limitata) nella scrittura creativa originale in italiano, con scelte coerenti e intenzionali",
             "Usa asindeto e polisindeto con effetto ritmico e stilistico deliberato: accumulo rapido (asindeto) o rallentamento enfatico (polisindeto) nella prosa italiana",
@@ -52,7 +52,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Traduzione e mediazione linguistica",
         grammar_points=["equivalenza", "sfumature-traduzione", "falsi-amici"],
         vocabulary_set_ids=["traduzione_c2", "mediazione_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Individua ed evita i falsi amici tra italiano e inglese che confondono gli apprendenti avanzati: sensibile (sensitive, non sensible), romanzo (novel, non romance), manifesto (poster/programme, non manifest), eventuale (possible, non eventual), attuale (current, non actual), firma (signature, non firm)",
             "Media tra due interlocutori con retroterra linguistici diversi, parafrasando, sintetizzando e chiarendo senza distorcere il significato né alterare involontariamente il registro",
@@ -70,7 +70,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Cultura e storia della lingua italiana",
         grammar_points=["evoluzione-linguistica", "latinismi", "prestiti-linguistici"],
         vocabulary_set_ids=["storia_c2", "cultura_c2", "societa_contemporanea_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Riconosce latinismi e prestiti diretti dal latino ancora attivi nell'italiano contemporaneo: status quo, iter, ex aequo, de facto, modus operandi, ad hoc, in extremis, comprendendone la frequenza nei registri formali e accademici",
             "Individua prestiti moderni (prestiti linguistici) dall'inglese (anglicismi) come computer, weekend, management, software, marketing e dal francese (gallicismi) come chef, bureau, chic, riconoscendo il dibattito sulla loro integrazione e la posizione purista della Crusca",
@@ -93,7 +93,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "revisione",
         ],
         vocabulary_set_ids=["creazione_c2", "pubblicazione_c2", "scienza_ricerca_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produce un testo di circa 500 parole in diversi generi italiani (articolo di opinione, racconto, saggio breve, relazione formale), adattando lessico, tono e struttura alle convenzioni del genere",
             "Revisiona una bozza in italiano a livello di revisore redazionale esperto: ristruttura per chiarezza, elimina ridondanze, alza il registro e corregge imperfezioni grammaticali e stilistiche sottili, inclusi errori di congiuntivo, scelta dell'ausiliare e incoerenze di registro",
@@ -115,7 +115,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "fluidita-nativa",
         ],
         vocabulary_set_ids=["maestria_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Esprime sfumature sottili (ironia, cautela, enfasi, critica implicita) attraverso scelte grammaticali e lessicali precise in italiano",
             "Ricostruisce un'argomentazione complessa da una prospettiva ideologica o culturale differente, dimostrando controllo flessibile di punto di vista, registro e strategia retorica",
@@ -137,7 +137,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evoluzione-digitale-it",
         ],
         vocabulary_set_ids=["italofonia_it_c2", "digitale_it_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Descrive le istituzioni dell'italofonia (Accademia della Crusca, Società Dante Alighieri, Svizzera italiana) e analizza le dinamiche che definiscono la presenza dell'italiano nel mondo contemporaneo",
             "Analizza criticamente le politiche linguistiche italiane (ruolo della Crusca, tutela delle minoranze linguistiche, rapporto dialetti/standard) collocandole nel loro contesto storico e politico",
@@ -179,7 +179,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evoluzione-digitale-it",
         ],
         vocabulary_set_ids=["revisione_it_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produce un discorso spontaneo di 5 minuti in italiano su un tema astratto o polemico con una correttezza quasi nativa, una fluidità naturale e una ricchezza lessicale paragonabile a quella di un parlante italofono colto",
             "Padroneggia l'intero sistema grammaticale dell'italiano senza errori sistematici — gli unici errori sono lapsus occasionali immediatamente autocorretti",

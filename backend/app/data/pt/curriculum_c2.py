@@ -12,7 +12,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Domínio da gramática avançada",
         grammar_points=["revisao-conjuntivo", "revisao-condicional", "mesoclise"],
         vocabulary_set_ids=["excelência_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Controla todos os tempos do conjuntivo e a respetiva concordância sem erro sistemático: presente, imperfeito, perfeito e mais-que-perfeito do conjuntivo, incluindo usos autónomos (Que venha! Deus queira que..., Oxalá fosse assim!)",
             "Forma e interpreta estruturas condicionais mistas: Se tivesse estudado, teria passado (hipótese passada -> consequência passada) e Se tivesse estudado, seria melhor aluno agora (hipótese passada -> consequência presente)",
@@ -30,7 +30,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Estilística e registo literário",
         grammar_points=["estilo-literario", "voz-narrativa", "recursos-estilisticos"],
         vocabulary_set_ids=["literatura_c2", "estilo_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Controla o ponto de vista narrativo na escrita criativa original em português (primeira pessoa, terceira pessoa omnisciente, terceira pessoa limitada), com escolhas estilísticas coerentes e deliberadas",
             "Usa parataxe (justaposição sem conectores) e hipotaxe (subordinação) de forma intencional para criar ritmos e efeitos distintos na prosa em português",
@@ -48,7 +48,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Tradução e mediação linguística",
         grammar_points=["equivalencia", "matizes-traducao", "falsos-amigos"],
         vocabulary_set_ids=["tradução_c2", "mediação_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifica e evita falsos amigos entre português e inglês que induzem erro em aprendentes avançados: borracha, polvo, borboleta, apelido, exquisito, eventualmente, atualmente",
             "Media entre interlocutores com diferentes repertórios linguísticos, parafraseando, sintetizando e clarificando significados sem distorção nem mudança indevida de registo",
@@ -66,7 +66,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Cultura e história da língua portuguesa",
         grammar_points=["evolucao-linguistica", "arabismos-portugueses", "tupinismos"],
         vocabulary_set_ids=["história_c2", "cultura_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Reconhece arabismos incorporados no português durante o período de Al-Andalus: aldeia, almofada, açúcar, algodão, alface, álcool, armazém, alfaiate, azeite, oxalá, compreendendo o respetivo contexto histórico",
             "Identifica tupinismos que entraram no português via Brasil: abacaxi, mandioca, pipoca, caju, capim, jaguar, tatu, piranha, tapioca",
@@ -84,7 +84,7 @@ C2_UNITS: list[CurriculumUnit] = [
         title="Criação de conteúdo avançado",
         grammar_points=["generos-textuais", "criatividade-linguistica", "edicao"],
         vocabulary_set_ids=["criação_c2", "publicação_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produz um texto de cerca de 500 palavras em diferentes géneros em português (artigo de opinião, crónica, conto, relatório formal, carta formal), adaptando vocabulário, tom e estrutura às convenções de cada género",
             "Revê uma versão preliminar de texto em português ao nível de um revisor editorial experiente: reestrutura para maior clareza, elimina redundâncias, eleva o registo e corrige erros gramaticais subtis, incluindo uso indevido do conjuntivo, colocação pronominal incorreta (ênclise/próclise) e desvios ao Acordo Ortográfico",
@@ -106,7 +106,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "fluencia-nativa",
         ],
         vocabulary_set_ids=["maestria_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Exprime nuances subtis (ironia, cautela, ênfase, crítica implícita) por meio de escolhas gramaticais e lexicais precisas, incluindo o uso do conjuntivo como recurso de distanciamento em enunciados formais",
             "Reconstrói uma argumentação complexa a partir de perspetiva ideológica ou cultural distinta, demonstrando controlo flexível de ponto de vista, registo e estratégia retórica em português",
@@ -128,7 +128,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evolucao-digital-pt",
         ],
         vocabulary_set_ids=["lusofonia_pt_c2", "digital_pt_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Descreve as instituições da Lusofonia (CPLP, IILP, RTP-África) e analisa as dinâmicas demográficas que alargam o português em África e na Ásia",
             "Discute de forma crítica as políticas linguísticas dos países lusófonos (Acordo Ortográfico de 1990, o papel do IILP, políticas de difusão do português) situando-as no respetivo contexto histórico e político",
@@ -169,7 +169,7 @@ C2_UNITS: list[CurriculumUnit] = [
             "evolucao-digital-pt",
         ],
         vocabulary_set_ids=["revisao_pt_c2"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produz um discurso espontâneo de cinco minutos sobre um tema abstrato ou polémico com correção quase nativa, fluidez natural e riqueza lexical comparável à de um falante nativo instruído de português europeu",
             "Domina a totalidade das estruturas gramaticais do português sem erro sistemático — os únicos erros são lapsos ocasionais imediatamente autocorrigidos",

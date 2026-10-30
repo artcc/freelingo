@@ -9,7 +9,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Congiuntivo",
         summary="Il congiuntivo imperfetto: formazione e uso nel passato.",
-        explanation="Il **congiuntivo imperfetto** si usa:\n- Nel periodo ipotetico del 2 tipo: *Se potessi, verrei.*\n- Dopo verbi al passato + che: *Pensavo che fosse vero.*\n- Dopo vorrei che: *Vorrei che tu venissi.*\n\nEssere e irregolare: fossi, fossi, fosse, fossimo, foste, fossero.",
+        explanation="Il **congiuntivo imperfetto** si usa:\n- Nel periodo ipotetico del 2 tipo: *Se potessi, verrei.*\n- Dopo verbi al passato + che: *Pensavo che fosse vero.*\n- Dopo vorrei che: *Vorrei che tu venissi.*\n\nEssere è irregolare: fossi, fossi, fosse, fossimo, foste, fossero.",
         structure="-are: -assi/-assi/-asse/-assimo/-aste/-assero\n-ere: -essi/-essi/-esse/-essimo/-este/-essero\n-ire: -issi/-issi/-isse/-issimo/-iste/-issero",
         rules=[
             "Usato nella protasi del periodo ipotetico (2 tipo).",
@@ -23,7 +23,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Pensavo che tu fossi gia partito.",
+                text="Pensavo che tu fossi già partito.",
                 translation=None,
             ),
             GrammarExample(text="Vorrei che fosse sempre estate.", translation=None),
@@ -32,7 +32,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Se potrei, viaggerei.",
                 correct="Se potessi, viaggerei.",
-                note="Dopo se mai il condizionale; si usa congiuntivo imperfetto.",
+                note="Nella protasi ipotetica si usa il congiuntivo imperfetto; se interrogativo può ammettere il condizionale.",
             ),
             GrammarMistake(
                 wrong="Pensavo che tu eri partito.",
@@ -52,13 +52,13 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Congiuntivo trapassato",
         level="B2",
         category="Congiuntivo",
-        summary="Il congiuntivo trapassato: periodo ipotetico del 3 tipo (irrealta).",
-        explanation="**Congiuntivo trapassato** = congiuntivo imperfetto di avere/essere + participio passato.\n\n- avere: avessi, avessi, avesse, avessimo, aveste, avessero + participio.\n- essere: fossi... + participio (concordato).\n\nUsi:\n- Periodo ipotetico 3 tipo: *Se avessi studiato, avresti passato l esame.*\n- Concordanza: *Pensavo che fosse gia arrivato.*",
+        summary="Il congiuntivo trapassato: periodo ipotetico del 3 tipo (irrealtà).",
+        explanation="**Congiuntivo trapassato** = congiuntivo imperfetto di avere/essere + participio passato.\n\n- avere: avessi, avessi, avesse, avessimo, aveste, avessero + participio.\n- essere: fossi... + participio (concordato).\n\nUsi:\n- Periodo ipotetico 3 tipo: *Se avessi studiato, avresti passato l'esame.*\n- Concordanza: *Pensavo che fosse già arrivato.*",
         structure="congiuntivo imperfetto di avere/essere + participio passato",
         rules=[
             "Congiuntivo imperfetto di avere/essere + participio passato.",
-            "Periodo ipotetico 3 tipo (irrealta nel passato).",
-            "Concordanza: anteriorita rispetto a un passato.",
+            "Periodo ipotetico 3 tipo (irrealtà nel passato).",
+            "Concordanza: anteriorità rispetto a un passato.",
             "Con essere il participio concorda col soggetto.",
         ],
         examples=[
@@ -67,11 +67,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Credevo che fossero gia partiti.",
+                text="Credevo che fossero già partiti.",
                 translation=None,
             ),
             GrammarExample(
-                text="Se avessi studiato, avresti passato l esame.",
+                text="Se avessi studiato, avresti passato l'esame.",
                 translation=None,
             ),
         ],
@@ -79,12 +79,12 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Se avrei saputo, sarei venuto.",
                 correct="Se avessi saputo, sarei venuto.",
-                note="Dopo se mai il condizionale; congiuntivo trapassato.",
+                note="Per questa condizione passata non realizzata si usa il congiuntivo trapassato.",
             ),
             GrammarMistake(
                 wrong="Credevo che hanno finito.",
                 correct="Credevo che avessero finito.",
-                note="Verbo principale al passato + anteriorita = congiuntivo trapassato.",
+                note="Verbo principale al passato + anteriorità = congiuntivo trapassato.",
             ),
         ],
         related=[
@@ -100,38 +100,38 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Congiuntivo",
         summary="Coordinare correttamente i tempi del congiuntivo con la principale.",
-        explanation="**Principale al presente:**\n- Contemporaneita: congiuntivo presente. *Penso che sia vero.*\n- Anteriorita: congiuntivo passato. *Penso che sia stato vero.*\n\n**Principale al passato:**\n- Contemporaneita: congiuntivo imperfetto. *Pensavo che fosse vero.*\n- Anteriorita: congiuntivo trapassato. *Pensavo che fosse stato vero.*",
+        explanation="**Principale al presente:**\n- Contemporaneità: congiuntivo presente. *Penso che sia vero.*\n- Anteriorità: congiuntivo passato. *Penso che sia stato vero.*\n\n**Principale al passato:**\n- Contemporaneità: congiuntivo imperfetto. *Pensavo che fosse vero.*\n- Anteriorità: congiuntivo trapassato. *Pensavo che fosse stato vero.*",
         rules=[
-            "Princ. presente + contemporaneita = congiuntivo presente.",
-            "Princ. presente + anteriorita = congiuntivo passato.",
-            "Princ. passato + contemporaneita = congiuntivo imperfetto.",
-            "Princ. passato + anteriorita = congiuntivo trapassato.",
+            "Princ. presente + contemporaneità = congiuntivo presente.",
+            "Princ. presente + anteriorità = congiuntivo passato.",
+            "Princ. passato + contemporaneità = congiuntivo imperfetto.",
+            "Princ. passato + anteriorità = congiuntivo trapassato.",
         ],
         examples=[
-            GrammarExample(text="Penso che lui dica la verita.", translation=None),
+            GrammarExample(text="Penso che lui dica la verità.", translation=None),
             GrammarExample(
-                text="Penso che lui abbia detto la verita.",
+                text="Penso che lui abbia detto la verità.",
                 translation=None,
             ),
             GrammarExample(
-                text="Pensavo che lui dicesse la verita.",
+                text="Pensavo che lui dicesse la verità.",
                 translation=None,
             ),
             GrammarExample(
-                text="Pensavo che lui avesse detto la verita.",
+                text="Pensavo che lui avesse detto la verità.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Penso che lui dicesse la verita.",
-                correct="Penso che lui dica la verita.",
-                note="Presente + contemporaneita = presente.",
+                wrong="Penso che lui dicano la verità.",
+                correct="Penso che lui dica la verità.",
+                note="Lui richiede dica, non dicano. Dicesse è possibile per una situazione passata.",
             ),
             GrammarMistake(
-                wrong="Pensavo che lui dica la verita.",
-                correct="Pensavo che lui dicesse la verita.",
-                note="Passato + contemporaneita = imperfetto.",
+                wrong="Pensavo che lui dicessero la verità.",
+                correct="Pensavo che lui dicesse la verità.",
+                note="Lui richiede dicesse, non dicessero. Il tempo va scelto secondo la prospettiva temporale.",
             ),
         ],
         related=[
@@ -142,56 +142,17 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
     ),
     GrammarTopic(
-        slug="stare-gerundio",
-        title="Stare + gerundio",
-        level="B2",
-        category="Tempi verbali",
-        summary="Esprimere azioni in corso con la perifrasi progressiva stare + gerundio.",
-        explanation="**Stare + gerundio** = azione in corso.\n- Presente: *Sto mangiando.*\n- Imperfetto: *Stavo mangiando.*\n\nGerundio: -are → -ando, -ere/-ire → -endo.\n\nDiverso da stare per: *Sto per mangiare* (imminenza) vs *Sto mangiando* (in corso).",
-        structure="stare + gerundio",
-        rules=[
-            "Stare + gerundio = azione in corso.",
-            "Gerundio: -ando (-are), -endo (-ere, -ire).",
-            "Non confondere con stare per + infinito.",
-            "Si puo usare al presente e all imperfetto.",
-        ],
-        examples=[
-            GrammarExample(
-                text="Sto leggendo un libro interessante.",
-                translation=None,
-            ),
-            GrammarExample(
-                text="Cosa stavi facendo quando ti ho chiamato?",
-                translation=None,
-            ),
-            GrammarExample(text="Stanno arrivando!", translation=None),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="Sto per mangiando.",
-                correct="Sto per mangiare. (o: Sto mangiando.)",
-                note="Stare per + infinito vs stare + gerundio.",
-            ),
-            GrammarMistake(
-                wrong="Sono mangiando.",
-                correct="Sto mangiando.",
-                note="La perifrasi progressiva usa stare, non essere.",
-            ),
-        ],
-        related=["andare-gerundio", "venire-gerundio", "stare-per"],
-    ),
-    GrammarTopic(
         slug="andare-gerundio",
         title="Andare + gerundio",
         level="B2",
         category="Tempi verbali",
         summary="Esprimere azioni graduali e progressive con andare + gerundio.",
-        explanation="**Andare + gerundio** esprime:\n- Processo graduale: *La situazione va migliorando.*\n- Sviluppo lento: *Va facendo progressi.*\n- Azione continuativa: *Vado dicendo a tutti che...*\n\nDiverso da stare + gerundio (puntuale): sottolinea l evoluzione nel tempo.",
+        explanation="**Andare + gerundio** esprime:\n- Processo graduale: *La situazione va migliorando.*\n- Sviluppo lento: *Va facendo progressi.*\n- Azione continuativa: *Vado dicendo a tutti che...*\n\nDiverso da stare + gerundio (puntuale): sottolinea l'evoluzione nel tempo.",
         structure="andare + gerundio",
         rules=[
             "Andare + gerundio = processo graduale/progressivo.",
             "Sottolinea evoluzione nel tempo.",
-            "Diverso da stare + gerundio (piu puntuale).",
+            "Diverso da stare + gerundio (più puntuale).",
             "Spesso con verbi di cambiamento.",
         ],
         examples=[
@@ -213,13 +174,13 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Tempi verbali",
         summary="Esprimere azioni progressive con enfasi tramite venire + gerundio.",
-        explanation="**Venire + gerundio** e simile a stare + gerundio ma con enfasi sul processo.\n- *Ti vengo dicendo da tempo che...* (enfasi)\n- *Vengono arrivando notizie.* (ripetizione)\n\nMeno comune, piu formale/letterario.",
+        explanation="**Venire + gerundio** è simile a stare + gerundio ma con enfasi sul processo.\n- *Ti vengo dicendo da tempo che...* (enfasi)\n- *Vengono arrivando notizie.* (ripetizione)\n\nMeno comune, più formale/letterario.",
         structure="venire + gerundio",
         rules=[
             "Venire + gerundio = azione progressiva con enfasi.",
             "Simile a stare + gerundio ma meno comune.",
-            "Uso piu formale o letterario.",
-            "Sottolinea continuita o ripetizione.",
+            "Uso più formale o letterario.",
+            "Sottolinea continuità o ripetizione.",
         ],
         examples=[
             GrammarExample(
@@ -241,17 +202,17 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Connettivi avanzati",
         level="B2",
         category="Avanzato",
-        summary="Nondimeno, ciononostante, peraltro, bensi, eppure e altri connettivi complessi.",
-        explanation="Connettivi avanzati:\n- **Nondimeno / ciononostante**: tuttavia.\n- **Bensi**: ma piuttosto. *Non e cattivo, bensi timido.*\n- **Eppure**: e tuttavia. *Sembrava facile, eppure ho sbagliato.*\n- **Anzi**: al contrario. *Non e brutto, anzi e bellissimo.*\n- **Ovvero / ossia**: cioe.",
+        summary="Nondimeno, ciononostante, peraltro, bensì, eppure e altri connettivi complessi.",
+        explanation="Connettivi avanzati:\n- **Nondimeno / ciononostante**: tuttavia.\n- **Bensì**: ma piuttosto. *Non è cattivo, bensì timido.*\n- **Eppure**: e tuttavia. *Sembrava facile, eppure ho sbagliato.*\n- **Anzi**: al contrario. *Non è brutto, anzi è bellissimo.*\n- **Ovvero / ossia**: cioè.",
         rules=[
-            "Bensi dopo negazione per correggere: non X, bensi Y.",
+            "Bensì dopo negazione per correggere: non X, bensì Y.",
             "Anzi per rafforzare o correggere.",
             "Eppure per contrasto con aspettativa delusa.",
             "Ovvero/ossia per spiegare o ridefinire.",
         ],
         examples=[
             GrammarExample(
-                text="Non e pigro, bensi molto metodico.",
+                text="Non è pigro, bensì molto metodico.",
                 translation=None,
             ),
             GrammarExample(
@@ -265,9 +226,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Non e rosso ma bensi blu.",
-                correct="Non e rosso, bensi blu.",
-                note="Bensi sostituisce ma, non si usano insieme.",
+                wrong="È rosso, bensì blu. (si vuole negare che sia rosso)",
+                correct="Non è rosso, bensì blu.",
+                note="Bensì introduce l'alternativa dopo una negazione. Ma bensì è una combinazione ammessa, anche se spesso basta bensì.",
             ),
         ],
         related=[
@@ -282,11 +243,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avanzato",
         summary="Strategie per rendere un testo coeso: anafora, catafora, connettivi.",
-        explanation="Meccanismi di coesione:\n- **Anafora:** riprendere un elemento. *Marco e arrivato. Lui era stanco.*\n- **Catafora:** anticipare. *Lo vedo che sei triste.*\n- **Ellissi:** omettere elementi recuperabili.\n- **Coesione lessicale:** sinonimi, iperonimi.\n- **Connettivi:** relazioni logiche tra frasi.",
+        explanation="Meccanismi di coesione:\n- **Anafora:** riprendere un elemento. *Marco è arrivato. Lui era stanco.*\n- **Catafora:** anticipare. *Lo vedo che sei triste.*\n- **Ellissi:** omettere elementi recuperabili.\n- **Coesione lessicale:** sinonimi, iperonimi.\n- **Connettivi:** relazioni logiche tra frasi.",
         rules=[
             "Anafora: pronomi, sinonimi per riprendere elementi.",
             "Catafora: anticipare con pronomi o avverbi.",
-            "Ellissi: omettere cio che e recuperabile.",
+            "Ellissi: omettere ciò che è recuperabile.",
             "Coesione lessicale: ripetizione, sinonimia, iperonimia.",
         ],
         examples=[
@@ -346,9 +307,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation="Modi di dire comuni:\n- *In bocca al lupo!* = Buona fortuna!\n- *Acqua in bocca!* = Non dire niente.\n- *Essere al verde* = Non avere soldi.\n- *Non vedere l'ora* = Aspettare con impazienza.\n- *Piovere a catinelle* = Piovere forte.\n- *Avere un chiodo fisso* = Avere un'ossessione.",
         rules=[
             "I modi di dire sono espressioni fisse, non si modificano.",
-            "Il significato e metaforico, non letterale.",
+            "Il significato è metaforico, non letterale.",
             "Variano da regione a regione.",
-            "Usarli rende il discorso piu naturale.",
+            "Usarli rende il discorso più naturale.",
         ],
         examples=[
             GrammarExample(text="In bocca al lupo per l'esame!", translation=None),
@@ -374,11 +335,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avanzato",
         summary="Il linguaggio di tutti i giorni: dai, insomma, figurati, magari, boh.",
-        explanation="Espressioni tipiche del parlato informale:\n- **Dai!**: suvvia, forza (incoraggiamento o incredulita).\n- **Insomma**: in conclusione.\n- **Figurati!**: non preoccuparti, di niente.\n- **Magari!**: sarebbe bello, lo spero tanto.\n- **Boh!**: non lo so.\n- **Mica**: rafforza la negazione. *Mica male!*\n- **Ci sta**: e accettabile, ha senso.\n- **Va be'**: va bene (rassegnazione).",
+        explanation="Espressioni tipiche del parlato informale:\n- **Dai!**: suvvia, forza (incoraggiamento o incredulità).\n- **Insomma**: in conclusione.\n- **Figurati!**: non preoccuparti, di niente.\n- **Magari!**: sarebbe bello, lo spero tanto.\n- **Boh!**: non lo so.\n- **Mica**: rafforza la negazione. *Mica male!*\n- **Ci sta**: è accettabile, ha senso.\n- **Va be'**: va bene (rassegnazione).",
         rules=[
             "Usare solo in contesti informali.",
-            "Dai puo esprimere incoraggiamento o incredulita.",
-            "Magari esprime desiderio o possibilita remota.",
+            "Dai può esprimere incoraggiamento o incredulità.",
+            "Magari esprime desiderio o possibilità remota.",
             "Mica rafforza la negazione nel parlato.",
         ],
         examples=[
@@ -411,8 +372,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Proverbi italiani",
         level="B2",
         category="Avanzato",
-        summary="I proverbi italiani piu famosi e il loro significato culturale.",
-        explanation="Proverbi celebri:\n- *Chi dorme non piglia pesci.* = L'impegno porta risultati.\n- *Il mattino ha l'oro in bocca.* = Le prime ore sono produttive.\n- *Chi va piano va sano e va lontano.* = Costanza > fretta.\n- *Tra il dire e il fare c'e di mezzo il mare.* = Tra parole e azioni c'e molta differenza.\n- *Non tutto il male viene per nuocere.* = Aspetti positivi dalle avversita.\n- *Meglio tardi che mai.*\n- *Paese che vai, usanza che trovi.*",
+        summary="I proverbi italiani più famosi e il loro significato culturale.",
+        explanation="Proverbi celebri:\n- *Chi dorme non piglia pesci.* = L'impegno porta risultati.\n- *Il mattino ha l'oro in bocca.* = Le prime ore sono produttive.\n- *Chi va piano va sano e va lontano.* = Costanza > fretta.\n- *Tra il dire e il fare c'è di mezzo il mare.* = Tra parole e azioni c'è molta differenza.\n- *Non tutto il male viene per nuocere.* = Aspetti positivi dalle avversità.\n- *Meglio tardi che mai.*\n- *Paese che vai, usanza che trovi.*",
         rules=[
             "I proverbi sono espressioni fisse e immutabili.",
             "Spesso contengono rime o assonanze.",
@@ -437,12 +398,12 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Chi non dorme piglia pesci.",
                 correct="Chi dorme non piglia pesci.",
-                note="Il proverbio e fisso.",
+                note="Il proverbio è fisso.",
             ),
             GrammarMistake(
                 wrong="Meglio mai che tardi.",
                 correct="Meglio tardi che mai.",
-                note="L'ordine e importante nel proverbio.",
+                note="L'ordine è importante nel proverbio.",
             ),
         ],
         related=["modi-di-dire", "espressioni-colloquiali", "italiano-regionale"],
@@ -475,7 +436,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Saltare dalla tesi alla conclusione senza argomenti.",
                 correct="Sviluppare almeno 2-3 argomenti a favore.",
-                note="La parte argomentativa e il cuore del testo.",
+                note="La parte argomentativa è il cuore del testo.",
             ),
         ],
         related=["controargomentazione", "connettivi-avanzati", "coesione-testuale"],
@@ -486,16 +447,16 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avanzato",
         summary="Rispondere alle obiezioni in modo strutturato ed efficace.",
-        explanation="Tecniche di controargomentazione:\n- **Concessione limitata:** *E vero che... tuttavia...*\n- **Confutazione diretta:** *Si potrebbe obiettare che... ma in realta...*\n- **Ribaltamento:** *Alcuni dicono che... al contrario...*\n- **Riduzione all'assurdo:** *Se fosse vero che... allora...*\n\nConnettivi: *certamente, e vero che, si potrebbe pensare che, ciononostante.*",
+        explanation="Tecniche di controargomentazione:\n- **Concessione limitata:** *È vero che... tuttavia...*\n- **Confutazione diretta:** *Si potrebbe obiettare che... ma in realtà...*\n- **Ribaltamento:** *Alcuni dicono che... al contrario...*\n- **Riduzione all'assurdo:** *Se fosse vero che... allora...*\n\nConnettivi: *certamente, è vero che, si potrebbe pensare che, ciononostante.*",
         rules=[
             "Riconoscere il punto di vista avversario.",
-            "Usare connettivi concessivi: benche, sebbene, anche se.",
-            "Ribattere con argomenti piu forti.",
+            "Usare connettivi concessivi: benché, sebbene, anche se.",
+            "Ribattere con argomenti più forti.",
             "Mantenere un tono rispettoso anche nel dissenso.",
         ],
         examples=[
             GrammarExample(
-                text="E vero che l'intelligenza artificiale puo sostituire alcuni lavori, tuttavia ne creera di nuovi.",
+                text="È vero che l'intelligenza artificiale può sostituire alcuni lavori, tuttavia ne creerà di nuovi.",
                 translation=None,
             ),
         ],
@@ -514,11 +475,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avanzato",
         summary="Distinguere sinonimi con sfumature diverse e scegliere la parola giusta.",
-        explanation="Sinonimi con sfumature:\n- Vedere / Guardare / Osservare: generico / volontario / attento.\n- Dire / Affermare / Dichiarare: intensita crescente.\n- Contento / Felice / Euforico: intensita crescente.\n- Casa / Abitazione / Dimora: registro crescente.\n- Fare / Realizzare / Effettuare: da generico a formale.",
+        explanation="Sinonimi con sfumature:\n- Vedere / Guardare / Osservare: generico / volontario / attento.\n- Dire / Affermare / Dichiarare: intensità crescente.\n- Contento / Felice / Euforico: intensità crescente.\n- Casa / Abitazione / Dimora: registro crescente.\n- Fare / Realizzare / Effettuare: da generico a formale.",
         rules=[
-            "Preferire il termine piu preciso al generico.",
+            "Preferire il termine più preciso al generico.",
             "Adeguare il lessico al registro (formale/informale).",
-            "Considerare l'intensita della parola.",
+            "Considerare l'intensità della parola.",
             "Usare il dizionario dei sinonimi per esplorare opzioni.",
         ],
         examples=[
@@ -532,7 +493,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Ho visto il panorama con attenzione.",
                 correct="Ho osservato/ammirato il panorama con attenzione.",
-                note="Vedere e generico; per attenzione si usa osservare.",
+                note="Vedere è generico; per attenzione si usa osservare.",
             ),
         ],
         related=["precisione-lessicale", "registro-formale", "campi-semantici"],
@@ -543,16 +504,16 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Tempi verbali",
         summary="Usare imperfetto, passato remoto e trapassato per narrare eventi.",
-        explanation="Nella narrazione letteraria:\n- **Imperfetto:** sfondo, descrizioni. *Era una notte buia.*\n- **Passato remoto:** azioni che avanzano la trama. *Entro, si guardo intorno.*\n- **Trapassato prossimo:** flashback. *Aveva gia deciso di partire.*\n\nL'alternanza crea profondita narrativa.",
+        explanation="Nella narrazione letteraria:\n- **Imperfetto:** sfondo, descrizioni. *Era una notte buia.*\n- **Passato remoto:** azioni che avanzano la trama. *Entrò, si guardò intorno.*\n- **Trapassato prossimo:** flashback. *Aveva già deciso di partire.*\n\nL'alternanza crea profondità narrativa.",
         rules=[
             "Imperfetto = sfondo, descrizione, atmosfera.",
             "Passato remoto = azioni principali, avanzamento trama.",
-            "Trapassato prossimo = flashback, anteriorita.",
+            "Trapassato prossimo = flashback, anteriorità.",
             "Alternare i tempi per creare ritmo narrativo.",
         ],
         examples=[
             GrammarExample(
-                text="Era una notte buia e tempestosa. All'improvviso, un lampo illumino la stanza. Qualcuno era entrato.",
+                text="Era una notte buia e tempestosa. All'improvviso, un lampo illuminò la stanza. Qualcuno era entrato.",
                 translation=None,
                 note="imperfetto + pass. remoto + trapassato",
             ),
@@ -561,7 +522,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Usare solo passato prossimo per narrare.",
                 correct="Alternare imperfetto, passato remoto e trapassato.",
-                note="Il passato remoto e il tempo della narrazione per eccellenza.",
+                note="Il passato remoto è il tempo della narrazione per eccellenza.",
             ),
         ],
         related=[
@@ -594,7 +555,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Era bello. (descrizione generica)",
                 correct="Il panorama era mozzafiato: colline verdi si estendevano a perdita d'occhio.",
-                note="Mostrare con dettagli concreti invece di dire solo che e bello.",
+                note="Mostrare con dettagli concreti invece di dire solo che è bello.",
             ),
         ],
         related=["tempi-narrativi", "voce-narrativa", "figure-stilistiche"],
@@ -605,8 +566,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Tempi verbali",
         summary="Il passato remoto: formazione e uso nella narrazione e nel Sud Italia.",
-        explanation="Il **passato remoto** esprime azioni concluse in un passato lontano, senza legami col presente.\n\n**Formazione:**\n- parlare: parlai, parlasti, parlo, parlammo, parlaste, parlarono.\n- leggere: lessi, leggesti, lesse, leggemmo, leggeste, lessero.\n- dormire: dormii, dormisti, dormi, dormimmo, dormiste, dormirono.\n\nMolti verbi hanno il passato remoto irregolare (spesso nella 1a e 3a singolare e 3a plurale).\n\nNell'Italia settentrionale si usa poco, sostituito dal passato prossimo; al Sud e in letteratura e vivo.",
-        structure="-are → -ai/-asti/-o/-ammo/-aste/-arono\n-ere → -ei/-esti/-e/-emmo/-este/-erono\n-ire → -ii/-isti/-i/-immo/-iste/-irono",
+        explanation="Il **passato remoto** esprime azioni concluse in un passato lontano, senza legami col presente.\n\n**Formazione:**\n- parlare: parlai, parlasti, parlò, parlammo, parlaste, parlarono.\n- leggere: lessi, leggesti, lesse, leggemmo, leggeste, lessero.\n- dormire: dormii, dormisti, dormì, dormimmo, dormiste, dormirono.\n\nMolti verbi hanno il passato remoto irregolare (spesso nella 1a e 3a singolare e 3a plurale).\n\nNell'Italia settentrionale si usa poco, sostituito dal passato prossimo; al Sud e in letteratura è vivo.",
+        structure="-are → -ai/-asti/-ò/-ammo/-aste/-arono\n-ere → -ei/-esti/-é/-emmo/-este/-erono\n-ire → -ii/-isti/-ì/-immo/-iste/-irono",
         rules=[
             "Passato remoto = azione conclusa in passato lontano.",
             "Molti verbi irregolari: essere (fui), avere (ebbi), fare (feci), dire (dissi), scrivere (scrissi).",
@@ -656,7 +617,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Titoli stringati, spesso senza verbo o articolo.",
             "Stile nominale: sostantivi invece di verbi.",
-            "Participi assoluti per esprimere anteriorita.",
+            "Participi assoluti per esprimere anteriorità.",
             "Lessico specifico del settore trattato.",
         ],
         examples=[
@@ -673,7 +634,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Usare linguaggio colloquiale in un articolo formale.",
                 correct="Mantenere un registro formale e oggettivo.",
-                note="Il giornalismo richiede un registro piu elevato.",
+                note="Il giornalismo richiede un registro più elevato.",
             ),
         ],
         related=["titoli", "registro-formale", "discorso-riportato"],
@@ -716,11 +677,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Discorso indiretto",
         summary="Come i media italiani riportano le dichiarazioni altrui.",
-        explanation="Il discorso riportato nei media:\n- **Condizionale di dissociazione:** il giornalista prende le distanze. *Il ministro avrebbe dichiarato...*\n- **Virgolettato:** citazione diretta.\n- **Discorso indiretto libero:** mescola diretto e indiretto.\n\nIl condizionale di dissociazione e tipico: segnala che la notizia non e confermata.",
+        explanation="Il discorso riportato nei media:\n- **Condizionale di dissociazione:** il giornalista prende le distanze. *Il ministro avrebbe dichiarato...*\n- **Virgolettato:** citazione diretta.\n- **Discorso indiretto libero:** mescola diretto e indiretto.\n\nIl condizionale di dissociazione è tipico: segnala che la notizia non è confermata.",
         rules=[
             "Condizionale di dissociazione per notizie non confermate.",
             "Virgolettato per citazioni testuali.",
-            "Indiretto libero per fluidita narrativa.",
+            "Indiretto libero per fluidità narrativa.",
             "Verbi dichiarativi: affermare, dichiarare, sostenere, riferire.",
         ],
         examples=[
@@ -736,9 +697,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Il ministro ha detto che si dimettera. (senza fonte certa)",
-                correct="Il ministro si dimetterebbe. (condizionale di dissociazione)",
-                note="Se la notizia non e confermata, si usa il condizionale.",
+                wrong="Il ministro ha detto che si dimetterà. (dichiarazione non confermata)",
+                correct="Il ministro avrebbe detto che si dimetterà. (dichiarazione non confermata)",
+                note="Il condizionale segnala che la dichiarazione non è confermata, senza trasformarla in una diversa notizia sulle dimissioni.",
             ),
         ],
         related=[

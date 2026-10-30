@@ -16,7 +16,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "subjonctif-relatives",
         ],
         vocabulary_set_ids=["nuances_fr_c1", "formalite_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Utilise bien que + subjonctif et quoique + subjonctif pour la concession avec une maîtrise totale du registre",
             "Maîtrise les conjonctions de but avec changement de sujet : pour que, afin que + subjonctif (Je t'explique pour que tu comprennes) face à pour/afin de + infinitif avec le même sujet",
@@ -38,7 +38,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "orthotypographie",
         ],
         vocabulary_set_ids=["academique_fr_c1", "recherche_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Convertit des structures verbales et adjectivales en nominalisations (augmenter → l'augmentation, développer → le développement, efficace → l'efficacité) pour atteindre un style académique impersonnel",
             "Construit des énoncés académiques impersonnels avec des formules comme on considère que, il a été démontré que, il convient de souligner que, il est à noter que",
@@ -56,7 +56,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Lexique spécialisé et précision",
         grammar_points=["derivation", "champs-semantiques", "precision-lexicale"],
         vocabulary_set_ids=["professionnel_fr_c1", "technique_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Dérive des mots de façon systématique via les suffixes productifs du français (-tion, -ment, -té, -eur, -esse, -able, -eux) et les préfixes (dé-, ré-, anté-, post-, sub-, sur-, pré-)",
             "Identifie les relations de champs sémantiques et les collocations habituelles en registre spécialisé : commettre une erreur (pas *faire), prendre une décision (pas *faire), poser un problème (pas *dire)",
@@ -74,7 +74,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Ironie, humour et double sens",
         grammar_points=["ironie", "humour", "double-sens"],
         vocabulary_set_ids=["humour_fr_c1", "culture_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Reconnaît l'ironie verbale en français en s'appuyant sur l'intonation, le contexte et l'incongruité lexicale : Bravo, quel génie ! (dit à quelqu'un qui vient de faire une erreur)",
             "Comprend les jeux de mots, calembours et doubles sens fréquents dans la publicité, les titres de presse et la conversation quotidienne",
@@ -92,7 +92,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Discours persuasif et rhétorique",
         grammar_points=["figures-rhetoriques", "persuasion", "art-oratoire"],
         vocabulary_set_ids=["discours_fr_c1", "presentations_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Utilise des figures de rhétorique : anaphore, parallélisme, antithèse, question rhétorique, gradation, pour renforcer la persuasion dans des discours et essais",
             "Utilise des patrons concessifs pour l'argumentation complexe : quoi que + subjonctif, malgré le fait que, encore que, quand bien même + conditionnel",
@@ -110,7 +110,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Variétés du français",
         grammar_points=["francophonie", "varietes-francais", "differences-regionales"],
         vocabulary_set_ids=["varietes_fr_c1", "dialectes_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Identifie les différences phonologiques principales entre le français hexagonal standard et les variétés québécoise, belge et suisse romande",
             "Reconnaît des différences lexicales pertinentes entre les variétés du français : déjeuner/dîner/souper, septante/nonante, char/voiture, gosse (enfant en France, testicule au Québec)",
@@ -128,7 +128,7 @@ C1_UNITS: list[CurriculumUnit] = [
         title="Analyse critique et synthèse",
         grammar_points=["synthese-textuelle", "critique-constructive", "reformulation"],
         vocabulary_set_ids=["analyse_fr_c1", "synthese_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Synthétise des informations provenant de deux ou trois sources en un résumé cohérent avec attribution explicite sans distordre le sens original",
             "Évalue la fiabilité, la cohérence interne et les biais éventuels d'arguments présents dans des textes en français",
@@ -155,7 +155,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "orthotypographie",
         ],
         vocabulary_set_ids=["revision_fr_c1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Produit un texte formel de 400 mots intégrant les structures grammaticales du C1 avec un contrôle évident et une fluidité naturelle",
             "Exprime des idées complexes et nuancées de façon spontanée sans recherche visible de mots ou de structures",

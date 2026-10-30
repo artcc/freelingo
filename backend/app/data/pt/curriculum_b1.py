@@ -12,7 +12,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Presente do conjuntivo",
         grammar_points=["presente-conjuntivo", "expressoes-desejo", "talvez"],
         vocabulary_set_ids=["emoções_b1", "desejos_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma o presente do conjuntivo a partir da primeira pessoa do singular do presente do indicativo, trocando a vogal temática: falar -> falo -> fale, beber -> bebo -> beba, partir -> parto -> parta; e usa formas irregulares como ser (seja), estar (esteja), ter (tenha), haver (haja), ir (vá), poder (possa), querer (queira), saber (saiba), vir (venha), fazer (faça)",
             "Usa o conjuntivo depois de verbos de desejo com mudança de sujeito: quero que venhas, espero que chegues a tempo, prefiro que fiques; e usa infinitivo quando o sujeito é o mesmo (quero vir)",
@@ -34,7 +34,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "subjuntivo-avaliacao",
         ],
         vocabulary_set_ids=["trabalho_b1", "estudos_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Usa o conjuntivo depois de verbos de recomendação: recomendo que, aconselho que, sugiro que, proponho que + conjuntivo: Recomendo que reserves com antecedência",
             "Usa o conjuntivo depois de expressões de dúvida e negação: não acredito que, duvido que, não tenho a certeza de que, é improvável que: Não acredito que isso seja verdade",
@@ -56,7 +56,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "marcadores-composto",
         ],
         vocabulary_set_ids=["experiências_b1", "realizações_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma o pretérito perfeito composto (ter + particípio passado: tenho falado, tens comido, tem partido) e compreende o seu valor típico em português: ação repetida ou habitual iniciada no passado e com continuidade no presente",
             "Distingue pretérito perfeito composto de pretérito perfeito simples: fui vs tenho ido",
@@ -74,7 +74,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Voz passiva e construções impessoais",
         grammar_points=["voz-passiva", "se-impessoal", "se-passivo"],
         vocabulary_set_ids=["notícias_b1", "sociedade_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma a voz passiva com ser + particípio passado em todos os tempos, fazendo concordar o particípio com o sujeito: O livro foi escrito por Saramago, As cartas foram enviadas ontem",
             "Usa se passivo em processos e regras sem agente expresso: Alugam-se apartamentos, Fala-se português aqui, Vende-se casa",
@@ -92,7 +92,7 @@ B1_UNITS: list[CurriculumUnit] = [
         title="Orações relativas",
         grammar_points=["que-relativo", "onde-quando-relativo", "cujo"],
         vocabulary_set_ids=["descrições_b1", "pessoas_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma orações relativas restritivas com que tanto para sujeito como para objeto direto: o livro que comprei, a pessoa que veio ontem",
             "Usa onde para lugares e quando para tempos em orações relativas: o café onde nos conhecemos, o dia quando chegaste",
@@ -113,7 +113,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "futuro-do-conjuntivo",
         ],
         vocabulary_set_ids=["viagens_b1", "situações_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Forma e usa o condicional de tipo 2: se + imperfeito do conjuntivo + condicional para condições irreais no presente/futuro: Se tivesse dinheiro, viajaria pelo mundo",
             "Forma e usa o futuro do conjuntivo em orações temporais/condicionais: Quando chegares, liga-me; Se puderes, vem jantar; Logo que terminares, avisa-me",
@@ -134,9 +134,9 @@ B1_UNITS: list[CurriculumUnit] = [
             "por-para",
         ],
         vocabulary_set_ids=["opiniões_b1", "debates_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
-            "Reporta discurso com a mudança temporal exigida: disse que + imperfeito para presente original (Disse que estava cansado), disse que + mais-que-perfeito para passado original (Disse que tinha saído)",
+            "Relata discurso numa perspetiva passada (Disse que estava cansado, Disse que tinha saído) ou conserva uma referência vigente quando adequado (Disse que está cansado)",
             "Reporta perguntas usando se para perguntas sim/não (Perguntou-me se eu estava bem) e interrogativos com ordem não invertida para perguntas abertas (Perguntou-me onde eu morava)",
             "Aplica mudanças de expressões temporais no discurso reportado: hoje -> nesse dia, amanhã -> no dia seguinte, ontem -> no dia anterior, agora -> naquele momento, aqui -> ali/lá",
             "Usa conectores argumentativos: no entanto, contudo, todavia (contraste); além disso, ainda por cima (adição); portanto, por isso, logo (consequência); uma vez que, visto que, dado que, como (causa)",
@@ -159,7 +159,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "discurso-indireto-passado",
         ],
         vocabulary_set_ids=["revisão_b1"],
-        lesson_types=["grammar", "vocabulary", "reading", "writing", "review"],
+        lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Lida com a maioria das situações do quotidiano (viagem, trabalho, eventos sociais) com relativa facilidade, exprimindo opiniões e reagindo aos outros",
             "Usa corretamente o presente do conjuntivo nos contextos centrais de B1 e aplica o futuro do conjuntivo em orações temporais com referência futura",

@@ -42,7 +42,7 @@ backend and frontend Dockerfiles.
 ## Images and publication
 
 Backend images use Python 3.14.9 and pip 26.2.2 with `requirements.txt` plus `constraints.txt`.
-Frontend production/development images use Node 26.12.1, explicitly install npm 11.20.0, and use the
+Frontend production/development images use Node 26.13.0 LTS, explicitly install npm 11.20.0, and use the
 committed lockfile through `npm ci`. These exact runtime and package-manager versions match the local
 toolchain and PR CI. Production uses Next.js standalone output.
 

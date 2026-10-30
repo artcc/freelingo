@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Selvä",
     "entry1": {
+      "label": "Parannuksia oppimiseen",
+      "desc": "Kehitämme edelleen oppimisjärjestelmiämme ja kielisisältöjä, jotta harjoittelusi olisi selkeämpää, johdonmukaisempaa ja hyödyllisempää."
+    },
+    "entry2": {
       "label": "Sujuvammat puhekeskustelut",
       "desc": "Olemme parantaneet keskusteluja Lingun kanssa: puhe toistuu sujuvammin ja puheenvuorot ilmaistaan selkeämmin."
     },
-    "entry2": {
+    "entry3": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

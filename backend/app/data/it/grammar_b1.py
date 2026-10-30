@@ -663,7 +663,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Se avrei soldi, comprerei una casa.",
                 correct="Se avessi soldi, comprerei una casa.",
-                note="Dopo se mai il condizionale; si usa il congiuntivo imperfetto.",
+                note="In questa condizione ipotetica si usa il congiuntivo imperfetto; se interrogativo può invece precedere un condizionale.",
             ),
             GrammarMistake(
                 wrong="Se avessi soldi, compravo una casa.",
@@ -683,10 +683,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Se + congiuntivo: regole generali",
         level="B1",
         category="Congiuntivo",
-        summary='La regola fondamentale: dopo "se" non si usa mai il condizionale.',
-        explanation="La regola più importante del periodo ipotetico italiano:\n\n**Dopo \"se\" non si usa MAI il condizionale.**\n\n- 1º tipo (realtà): *Se piove, prendo l'ombrello.*\n- 2º tipo (possibilità): *Se piovesse, prenderei l'ombrello.*\n- 3º tipo (irrealtà): *Se avesse piovuto, avrei preso l'ombrello.*\n\nIl condizionale va solo nell'apodosi (conseguenza), mai nella protasi (se).",
+        summary="Distinguere se condizionale e se interrogativo indiretto.",
+        explanation="Nel periodo ipotetico, se introduce la condizione:\n- Se piove, prendo l'ombrello.\n- Se piovesse, prenderei l'ombrello.\n- Se avesse piovuto, avrei preso l'ombrello.\n\nIn queste costruzioni il condizionale esprime la conseguenza, non sostituisce il congiuntivo nella condizione.\n\nSe può anche introdurre una **domanda indiretta**: Non so se verrebbe con noi. Qui il condizionale è corretto, perché se non introduce una condizione.",
         rules=[
-            "Dopo se mai il condizionale.",
+            "Non sostituire il congiuntivo con il condizionale nella protasi ipotetica; distingui se interrogativo.",
             "1º tipo: se + indicativo.",
             "2º tipo: se + congiuntivo imperfetto → condizionale presente.",
             "3º tipo: se + congiuntivo trapassato → condizionale passato.",
@@ -703,7 +703,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Se potrei, lo farei.",
                 correct="Se potessi, lo farei.",
-                note="Errore classico: mai condizionale dopo se.",
+                note="Qui se introduce una condizione ipotetica, non una domanda indiretta.",
             ),
             GrammarMistake(
                 wrong="Se avrei saputo, sarei venuto.",
@@ -724,13 +724,13 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Discorso indiretto",
         summary="Riferire al passato: trasformazione dei tempi verbali e indicatori.",
-        explanation="Quando il verbo principale è al passato, i tempi della subordinata cambiano:\n\n- Presente → imperfetto: *Dice che è stanco → Disse che era stanco.*\n- Passato prossimo → trapassato: *Dice che ha mangiato → Disse che aveva mangiato.*\n- Futuro → condizionale passato: *Dice che verrà → Disse che sarebbe venuto.*\n- Imperfetto: resta uguale.\n\nAnche gli indicatori di tempo/luogo cambiano: qui → lì, oggi → quel giorno, domani → il giorno dopo.",
+        explanation="Per riportare parole da una prospettiva passata, usa l'imperfetto per la contemporaneità (Disse che era stanco), il trapassato per l'anteriorità (Disse che aveva mangiato) e il condizionale passato per la posteriorità (Disse che sarebbe venuto).\n\nIl cambiamento non è automatico: Ha detto che è stanco è corretto se lo è ancora; Ha detto che verrà domani mantiene un futuro rispetto a chi parla. Adatta qui/lì, oggi/quel giorno e domani/il giorno dopo solo se cambiano i riferimenti.",
         rules=[
             "Presente → imperfetto.",
             "Passato prossimo → trapassato prossimo.",
             "Futuro → condizionale passato.",
             "Imperfetto e trapassato restano invariati.",
-            "Indicatori temporali: oggi → quel giorno, qui → lì.",
+            "Conserva tempi e indicatori ancora validi dal punto di vista di chi riporta.",
         ],
         examples=[
             GrammarExample(text="Ha detto che era stanco.", translation=None),
@@ -745,14 +745,14 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ha detto che è stanco. (ieri)",
+                wrong="Ha detto che erano stanco. (riferito a Marco)",
                 correct="Ha detto che era stanco.",
-                note="Verbo principale al passato → subordinata al passato.",
+                note="Il verbo concorda con Marco; è stanco resta possibile se la situazione è ancora attuale.",
             ),
             GrammarMistake(
-                wrong="Ha detto che verrà domani.",
+                wrong="Ha detto che sarebbe venire il giorno dopo.",
                 correct="Ha detto che sarebbe venuto il giorno dopo.",
-                note="Futuro nel passato → condizionale passato.",
+                note="Il condizionale passato richiede il participio venuto. Verrà domani è possibile se l'evento è ancora futuro.",
             ),
         ],
         related=["discorso-indiretto", "concordanza-tempi", "trasformazioni-temporali"],

@@ -629,7 +629,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="A feeling of intense excitement and happiness.",
                 example="The team was filled with euphoria after winning.",
-                ipa="/juːˈfɔːiə/",
+                ipa="/juːˈfɔːriə/",
                 frequency_rank=440,
             ),
             VocabularyEntry(
@@ -685,7 +685,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="A possible situation or sequence of events.",
                 example="In the worst-case scenario, we lose the client.",
-                ipa="/sɪˈnɑːɪəʊ/",
+                ipa="/sɪˈnɑːriəʊ/",
                 frequency_rank=320,
             ),
             VocabularyEntry(

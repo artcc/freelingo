@@ -9,7 +9,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Conjuntivo",
         summary="Formação e uso do imperfeito do conjuntivo.",
-        explanation="Da 3a pl. do pretérito perfeito: falaram -> falasse, falasses... Usos: condicoes hipoteticas, desejos, apos embora/como se.",
+        explanation="Da 3a pl. do pretérito perfeito: falaram -> falasse, falasses... Usos: condições hipotéticas, desejos, após embora/como se.",
         rules=[
             "Da 3a pl. do pret. perfeito.",
             "Com se, embora, como se.",
@@ -20,15 +20,15 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
             ),
             GrammarExample(
-                text="Embora chovesse, fomos a praia.",
+                text="Embora chovesse, fomos à praia.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Se eu tinha tempo, ia.",
+                wrong="Se eu tivesses tempo, ia.",
                 correct="Se eu tivesse tempo, ia.",
-                note="Condicao hipotetica: imperfeito conjuntivo.",
+                note="Eu exige tivesse, não tivesses. Se eu tinha tempo, ia é possível para um hábito passado.",
             ),
         ],
         related=[
@@ -42,11 +42,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Mais-que-perfeito do conjuntivo",
         level="B2",
         category="Conjuntivo",
-        summary="Expressar condicoes passadas nao realizadas.",
-        explanation="Forma composta: tivesse + participio passado. Se tivesse estudado, teria passado.",
+        summary="Expressar condições passadas não realizadas.",
+        explanation="Forma composta: tivesse + particípio passado. Se tivesse estudado, teria passado.",
         rules=[
-            "Forma composta: tivesse + participio.",
-            "Condicao NAO realizada no passado.",
+            "Forma composta: tivesse + particípio.",
+            "Condição NÃO realizada no passado.",
         ],
         examples=[
             GrammarExample(
@@ -60,29 +60,29 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Se eu tinha estudado, passava.",
-                correct="Se eu tivesse estudado, passava.",
-                note="Condicao passada: tivesse + participio.",
+                wrong="Se eu tivesse estudar, teria passado.",
+                correct="Se eu tivesse estudado, teria passado.",
+                note="O mais-que-perfeito do conjuntivo usa tivesse + particípio, não infinitivo.",
             ),
         ],
         related=["imperfeito-conjuntivo", "condicional-composto"],
     ),
     GrammarTopic(
         slug="concordancia-temporal",
-        title="Concordancia temporal",
+        title="Concordância temporal",
         level="B2",
         category="Tempos verbais",
-        summary="Regras de correspondencia entre tempos verbais.",
-        explanation="Presente/futuro -> presente conjuntivo. Preterito/condicional -> imperfeito conjuntivo.",
+        summary="Regras de correspondência entre tempos verbais.",
+        explanation="A escolha do tempo depende da relação temporal e da perspetiva, não apenas do tempo da oração principal.\n\nEspero que venhas apresenta uma ação simultânea ou posterior; Espero que tenhas chegado apresenta anterioridade. Queria que viesses usa o imperfeito; Duvidava que tivesse chegado usa o mais-que-perfeito para anterioridade passada. Uma principal presente admite referência passada: Duvido que fosse verdade.",
         rules=[
-            "Presente/futuro -> presente conj.",
-            "Preterito/condicional -> imperfeito conj.",
+            "Distingue simultaneidade, anterioridade e posterioridade.",
+            "A perspetiva temporal determina a escolha entre formas simples e compostas.",
         ],
         examples=[
             GrammarExample(
                 text="Queria que viesses.",
                 translation=None,
-                note="preterito -> imperfeito conj.",
+                note="pretérito -> imperfeito conj.",
             ),
             GrammarExample(
                 text="Espero que chegues.",
@@ -92,9 +92,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Queria que venhas.",
+                wrong="Queria que tu viesse.",
                 correct="Queria que viesses.",
-                note="Preterito -> imperfeito conjuntivo.",
+                note="Com tu, a forma é viesses; o tempo depende da perspetiva temporal.",
             ),
         ],
         related=[
@@ -105,20 +105,20 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="perifrases-aspetuais",
-        title="Perifrases aspetuais",
+        title="Perífrases aspetuais",
         level="B2",
         category="Verbos",
-        summary="Construcoes verbais que expressam aspetos da acao.",
-        explanation="Comecar a + inf., estar a + inf., continuar a + inf., acabar de + inf., voltar a + inf.",
+        summary="Construções verbais que expressam aspetos da ação.",
+        explanation="Começar a + inf., estar a + inf., continuar a + inf., acabar de + inf., voltar a + inf.",
         rules=[
-            "Comecar a = inicio.",
+            "Começar a = início.",
             "Estar a = curso (EP).",
-            "Acabar de = recem-concluida.",
-            "Voltar a = repeticao.",
+            "Acabar de = recém-concluída.",
+            "Voltar a = repetição.",
         ],
         examples=[
             GrammarExample(
-                text="Comecei a aprender portugues ha um ano.",
+                text="Comecei a aprender português há um ano.",
                 translation=None,
             ),
             GrammarExample(text="Acabei de comer.", translation=None),
@@ -128,25 +128,25 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="perifrases-modais",
-        title="Perifrases modais",
+        title="Perífrases modais",
         level="B2",
         category="Verbos",
-        summary="Construcoes verbais para obrigacao, possibilidade e intencao.",
-        explanation="Ter de/que + inf. (obrigacao), precisar de + inf. (necessidade), poder + inf. (possibilidade), haver de + inf. (determinacao, tipico EP).",
+        summary="Construções verbais para obrigação, possibilidade e intenção.",
+        explanation="Ter de/que + inf. (obrigação), precisar de + inf. (necessidade), poder + inf. (possibilidade), haver de + inf. (determinação, típico EP).",
         rules=[
-            "Ter de/que = obrigacao.",
+            "Ter de/que = obrigação.",
             "Precisar de = necessidade.",
-            "Haver de = determinacao (EP).",
+            "Haver de = determinação (EP).",
         ],
         examples=[
             GrammarExample(
-                text="Tenho de terminar este relatorio.",
+                text="Tenho de terminar este relatório.",
                 translation=None,
             ),
             GrammarExample(
-                text="Hei de visitar os Acores um dia!",
+                text="Hei de visitar os Açores um dia!",
                 translation=None,
-                note="determinacao EP",
+                note="determinação EP",
             ),
         ],
         common_mistakes=[],
@@ -157,7 +157,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Andar a vs estar a",
         level="B2",
         category="Verbos",
-        summary="Diferenca entre andar a + infinitivo e estar a + infinitivo.",
+        summary="Diferença entre andar a + infinitivo e estar a + infinitivo.",
         explanation="Estar a = agora. Andar a = repetido/persistente ao longo do tempo.",
         rules=[
             "Estar a = agora.",
@@ -170,9 +170,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ando a comer agora.",
+                wrong="Estou a comendo agora.",
                 correct="Estou a comer agora.",
-                note="Acao no momento: estar a.",
+                note="Estar a exige infinitivo. Ando a comer pode apresentar um comportamento prolongado; não é errado por si só.",
             ),
         ],
         related=["estar-a-infinitivo", "perifrases-aspetuais"],
@@ -183,14 +183,14 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Verbos",
         summary="O infinitivo pessoal.",
-        explanation="Infinitivo conjugado: falar, falares, falar, falarmos, falarem. Sujeito diferente.",
+        explanation="O infinitivo pessoal pode explicitar o sujeito: falar, falares, falar, falarmos, falardes, falarem. É frequente quando o sujeito difere do da principal: Pedi silêncio para eles estudarem. Também ocorre com o mesmo sujeito para o salientar: Para chegarmos a tempo, temos de sair. Não se flexiona automaticamente qualquer infinitivo: Devemos estudar, não Devemos estudarmos.",
         rules=[
-            "Infinitivo com terminacoes.",
-            "Sujeito diferente da oracao principal.",
+            "Infinitivo com terminações.",
+            "Pode marcar um sujeito próprio, diferente ou não do da oração principal; depende da construção.",
         ],
         examples=[
             GrammarExample(
-                text="E importante estudares mais.",
+                text="É importante estudares mais.",
                 translation=None,
             ),
             GrammarExample(
@@ -200,8 +200,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="E importante tu estudar.",
-                correct="E importante tu estudares.",
+                wrong="É importante tu estudar.",
+                correct="É importante tu estudares.",
                 note="Sujeito diferente -> infinitivo pessoal.",
             ),
         ],
@@ -209,10 +209,10 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="conectores-avancados",
-        title="Conectores avancados",
+        title="Conectores avançados",
         level="B2",
-        category="Oracoes",
-        summary="Conectores sofisticados para argumentacao.",
+        category="Orações",
+        summary="Conectores sofisticados para argumentação.",
         explanation="Desde que/a menos que/caso + conj. Para que/a fim de que + conj. Ainda que/mesmo que + conj.",
         rules=[
             "Desde que, a menos que + conj.",
@@ -221,18 +221,18 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Vou a festa desde que tu tambem vas.",
+                text="Vou à festa desde que tu também vás.",
                 translation=None,
             ),
             GrammarExample(
-                text="Sairei mais cedo, a menos que haja reuniao.",
+                text="Sairei mais cedo, a menos que haja reunião.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Desde que tu tambem vais.",
-                correct="Desde que tu tambem vas.",
+                wrong="Desde que tu também vais.",
+                correct="Desde que tu também vás.",
                 note="Desde que condicional + conjuntivo.",
             ),
         ],
@@ -240,26 +240,26 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="coesao-textual",
-        title="Coesao textual",
+        title="Coesão textual",
         level="B2",
-        category="Avancado",
+        category="Avançado",
         summary="Mecanismos para textos coesos.",
-        explanation="Referencia, substituicao, elipse, conjuncao, coesao lexical.",
+        explanation="Referência, substituição, elipse, conjunção, coesão lexical.",
         rules=[
-            "Pronomes, sinonimos, conectores.",
-            "Elipse quando possivel.",
+            "Pronomes, sinónimos, conectores.",
+            "Elipse quando possível.",
         ],
         examples=[
             GrammarExample(
-                text="O Joao comprou um carro. Ele esta contente com o veiculo.",
+                text="O João comprou um carro. Ele está contente com o veículo.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="O Joao comprou um carro. O Joao esta contente.",
-                correct="O Joao comprou um carro. Ele esta contente.",
-                note="Evitar repeticao excessiva.",
+                wrong="O João comprou um carro. O João está contente.",
+                correct="O João comprou um carro. Ele está contente.",
+                note="Evitar repetição excessiva.",
             ),
         ],
         related=["conectores-avancados", "conectores-argumentativos"],
@@ -268,19 +268,19 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="registo-formal",
         title="Registo formal",
         level="B2",
-        category="Avancado",
-        summary="Caracteristicas do registo formal em EP.",
-        explanation="Vocabulario cuidado, passiva, mesoclise, condicional de cortesia, tratamento o senhor/a senhora.",
+        category="Avançado",
+        summary="Características do registo formal em EP.",
+        explanation="Vocabulário cuidado, passiva, mesóclise, condicional de cortesia, tratamento o senhor/a senhora.",
         rules=[
-            "Vocabulario cuidado.",
-            "Passiva, mesoclise.",
+            "Vocabulário cuidado.",
+            "Passiva, mesóclise.",
             "Tratamento formal.",
         ],
         examples=[
             GrammarExample(
-                text="Poder-me-ia informar sobre o horario?",
+                text="Poder-me-ia informar sobre o horário?",
                 translation=None,
-                note="cortesia + mesoclise",
+                note="cortesia + mesóclise",
             ),
             GrammarExample(
                 text="O senhor deseja mais alguma coisa?",
@@ -296,36 +296,36 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="expressoes-idiomaticas",
-        title="Expressoes idiomaticas",
+        title="Expressões idiomáticas",
         level="B2",
-        category="Avancado",
-        summary="Expressoes idiomaticas portuguesas.",
-        explanation="Andar com a pulga atras da orelha, dar o braco a torcer, estar com os azeites, custar os olhos da cara.",
+        category="Avançado",
+        summary="Expressões idiomáticas portuguesas.",
+        explanation="Andar com a pulga atrás da orelha, dar o braço a torcer, estar com os azeites, custar os olhos da cara.",
         rules=[
-            "Expressoes fixas.",
+            "Expressões fixas.",
             "Sentido literal diferente do figurado.",
         ],
         examples=[
-            GrammarExample(text="Ando com a pulga atras da orelha.", translation=None),
-            GrammarExample(text="Ela esta com os azeites hoje.", translation=None),
+            GrammarExample(text="Ando com a pulga atrás da orelha.", translation=None),
+            GrammarExample(text="Ela está com os azeites hoje.", translation=None),
         ],
         common_mistakes=[],
         related=["expressoes-coloquiais", "proverbios", "registo-formal"],
     ),
     GrammarTopic(
         slug="expressoes-coloquiais",
-        title="Expressoes coloquiais",
+        title="Expressões coloquiais",
         level="B2",
-        category="Avancado",
-        summary="Linguagem coloquial e giria do portugues europeu.",
-        explanation="Bue/altamente/fixe, ta-se bem, bora, ya, pa, giro/gira, desenrascar.",
+        category="Avançado",
+        summary="Linguagem coloquial e gíria do português europeu.",
+        explanation="Bué/altamente/fixe, tá-se bem, bora, ya, pá, giro/gira, desenrascar.",
         rules=[
             "Coloquialismos informais.",
-            "Variacao regional.",
+            "Variação regional.",
         ],
         examples=[
-            GrammarExample(text="Que filme tao fixe!", translation=None),
-            GrammarExample(text="Bora tomar um cafe?", translation=None),
+            GrammarExample(text="Que filme tão fixe!", translation=None),
+            GrammarExample(text="Bora tomar um café?", translation=None),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -338,22 +338,22 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="proverbios",
-        title="Proverbios portugueses",
+        title="Provérbios portugueses",
         level="B2",
-        category="Avancado",
-        summary="Proverbios tradicionais portugueses.",
-        explanation="Agua mole em pedra dura..., Quem ve caras nao ve coracoes, Mais vale um passaro na mao..., Depois da tempestade vem a bonanca.",
+        category="Avançado",
+        summary="Provérbios tradicionais portugueses.",
+        explanation="Água mole em pedra dura..., Quem vê caras não vê corações, Mais vale um pássaro na mão..., Depois da tempestade vem a bonança.",
         rules=[
-            "Proverbios fixos.",
+            "Provérbios fixos.",
             "Sabedoria popular.",
         ],
         examples=[
             GrammarExample(
-                text="Agua mole em pedra dura, tanto bate ate que fura.",
+                text="Água mole em pedra dura, tanto bate até que fura.",
                 translation=None,
             ),
             GrammarExample(
-                text="Mais vale um passaro na mao do que dois a voar.",
+                text="Mais vale um pássaro na mão do que dois a voar.",
                 translation=None,
             ),
         ],
@@ -364,55 +364,55 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="estrutura-argumentativa",
         title="Estrutura argumentativa",
         level="B2",
-        category="Avancado",
+        category="Avançado",
         summary="Construir textos argumentativos.",
-        explanation="Introducao (tese), desenvolvimento (argumentos), conclusao (retoma).",
+        explanation="Introdução (tese), desenvolvimento (argumentos), conclusão (retoma).",
         rules=[
-            "Introducao, desenvolvimento, conclusao.",
-            "Conectores especificos.",
+            "Introdução, desenvolvimento, conclusão.",
+            "Conectores específicos.",
         ],
         examples=[
             GrammarExample(
-                text="Em primeiro lugar, a educacao e fundamental.",
+                text="Em primeiro lugar, a educação é fundamental.",
                 translation=None,
             ),
             GrammarExample(
-                text="Concluindo, os beneficios superam os riscos.",
+                text="Concluindo, os benefícios superam os riscos.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Eu acho que... (texto formal)",
-                correct="Considera-se que...",
-                note="Evitar 1a pessoa em textos argumentativos.",
+                wrong="Os dados mostra que a medida funciona.",
+                correct="Os dados mostram que a medida funciona.",
+                note="O verbo concorda com dados. A primeira pessoa não é proibida num texto argumentativo; escolhe o registo conforme o género e as instruções.",
             ),
         ],
         related=["contra-argumentacao", "conectores-argumentativos", "coesao-textual"],
     ),
     GrammarTopic(
         slug="contra-argumentacao",
-        title="Contra-Argumentacao",
+        title="Contra-Argumentação",
         level="B2",
-        category="Avancado",
-        summary="Tecnicas para refutar argumentos.",
-        explanation="Concessao + refutacao, questionamento, evidencia contraria.",
+        category="Avançado",
+        summary="Técnicas para refutar argumentos.",
+        explanation="Concessão + refutação, questionamento, evidência contrária.",
         rules=[
-            "Concessao + refutacao.",
+            "Concessão + refutação.",
             "Questionamento.",
-            "Evidencia.",
+            "Evidência.",
         ],
         examples=[
             GrammarExample(
-                text="Embora alguns defendam o contrario, os estudos mostram que...",
+                text="Embora alguns defendam o contrário, os estudos mostram que...",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Isso e mentira. (agressivo)",
+                wrong="Isso é mentira. (agressivo)",
                 correct="Essa perspetiva parece ignorar alguns factos.",
-                note="Contra-argumentacao respeitosa.",
+                note="Contra-argumentação respeitosa.",
             ),
         ],
         related=["estrutura-argumentativa", "matizadores", "conectores-argumentativos"],
@@ -421,16 +421,16 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="matizadores",
         title="Matizadores",
         level="B2",
-        category="Avancado",
-        summary="Palavras que suavizam ou relativizam afirmacoes.",
-        explanation="Provavelmente, talvez, de certa forma, ate certo ponto, um pouco, apenas.",
+        category="Avançado",
+        summary="Palavras que suavizam ou relativizam afirmações.",
+        explanation="Provavelmente, talvez, de certa forma, até certo ponto, um pouco, apenas.",
         rules=[
-            "Suavizar afirmacoes.",
-            "Evitar categoricas.",
+            "Suavizar afirmações.",
+            "Evitar categóricas.",
         ],
         examples=[
             GrammarExample(
-                text="Provavelmente, esta e a melhor abordagem.",
+                text="Provavelmente, esta é a melhor abordagem.",
                 translation=None,
             ),
             GrammarExample(text="De certa forma, concordo.", translation=None),
@@ -438,7 +438,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Possivelmente talvez seja melhor.",
-                correct="Provavelmente e melhor.",
+                correct="Provavelmente é melhor.",
                 note="Evitar acumular matizadores.",
             ),
         ],
@@ -449,11 +449,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Tempos narrativos",
         level="B2",
         category="Tempos verbais",
-        summary="Articulacao dos tempos verbais na narrativa.",
-        explanation="Imperfeito (cenario), perfeito (acao principal), mais-que-perfeito (flashback).",
+        summary="Articulação dos tempos verbais na narrativa.",
+        explanation="Imperfeito (cenário), perfeito (ação principal), mais-que-perfeito (flashback).",
         rules=[
-            "Imperfeito = cenario.",
-            "Perfeito = acao.",
+            "Imperfeito = cenário.",
+            "Perfeito = ação.",
             "MQP = flashback.",
         ],
         examples=[
@@ -464,9 +464,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="De repente, estava a chover.",
-                correct="De repente, comecou a chover.",
-                note="De repente pede acao pontual (perfeito).",
+                wrong="De repente, começou chover.",
+                correct="De repente, começou a chover.",
+                note="Começar exige a antes do infinitivo. De repente não obriga, por si só, a usar um tempo verbal específico.",
             ),
         ],
         related=[
@@ -477,15 +477,15 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="descricao-literaria",
-        title="Descricao literaria",
+        title="Descrição literária",
         level="B2",
-        category="Avancado",
-        summary="Recursos para descricoes vividas.",
-        explanation="Adjetivacao rica, sensacoes, metaforas, personificacao, imperfeito descritivo.",
+        category="Avançado",
+        summary="Recursos para descrições vívidas.",
+        explanation="Adjetivação rica, sensações, metáforas, personificação, imperfeito descritivo.",
         rules=[
             "Adjetivos sensoriais.",
             "Imperfeito descritivo.",
-            "Metaforas, personificacao.",
+            "Metáforas, personificação.",
         ],
         examples=[
             GrammarExample(
@@ -496,34 +496,34 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="A casa era bonita. (pobre)",
-                correct="A casa exibia uma beleza melancolica.",
-                note="Vocabulario rico.",
+                correct="A casa exibia uma beleza melancólica.",
+                note="Vocabulário rico.",
             ),
         ],
         related=["tempos-narrativos", "recursos-estilisticos", "figuras-literarias"],
     ),
     GrammarTopic(
         slug="preterito-mais-que-perfeito",
-        title="Preterito mais-que-perfeito composto",
+        title="Pretérito mais-que-perfeito composto",
         level="B2",
         category="Tempos verbais",
-        summary="Revisao do MQP composto.",
-        explanation="Ter (imperfeito) + participio. Muito mais comum que a forma simples.",
+        summary="Revisão do MQP composto.",
+        explanation="Ter (imperfeito) + particípio. Muito mais comum que a forma simples.",
         rules=[
-            "Ter (imperfeito) + participio.",
+            "Ter (imperfeito) + particípio.",
             "Mais comum que a forma simples.",
         ],
         examples=[
             GrammarExample(
-                text="Quando cheguei, ela ja tinha saido.",
+                text="Quando cheguei, ela já tinha saído.",
                 translation=None,
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Quando cheguei, ela ja tinha saiu.",
-                correct="Quando cheguei, ela ja tinha saido.",
-                note="Ter + participio (saido).",
+                wrong="Quando cheguei, ela já tinha saiu.",
+                correct="Quando cheguei, ela já tinha saído.",
+                note="Ter + particípio (saído).",
             ),
         ],
         related=[
@@ -534,16 +534,16 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="linguagem-jornalistica",
-        title="Linguagem jornalistica",
+        title="Linguagem jornalística",
         level="B2",
-        category="Avancado",
-        summary="Caracteristicas da linguagem jornalistica em EP.",
-        explanation="Titulo conciso, lead 5W, objetividade (3a pessoa), passiva, nominalizacoes, presente historico.",
+        category="Avançado",
+        summary="Características da linguagem jornalística em EP.",
+        explanation="Título conciso, lead 5W, objetividade (3a pessoa), passiva, nominalizações, presente histórico.",
         rules=[
-            "Titulo conciso.",
+            "Título conciso.",
             "Lead 5W.",
             "3a pessoa, passiva.",
-            "Presente historico.",
+            "Presente histórico.",
         ],
         examples=[
             GrammarExample(
@@ -563,15 +563,15 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="titulos",
-        title="Titulos jornalisticos",
+        title="Títulos jornalísticos",
         level="B2",
-        category="Avancado",
-        summary="Estrutura e estilo dos titulos na imprensa portuguesa.",
-        explanation="Concisao, omissao de artigos, presente historico, virgula em vez de conjuncao.",
+        category="Avançado",
+        summary="Estrutura e estilo dos títulos na imprensa portuguesa.",
+        explanation="Concisão, omissão de artigos, presente histórico, vírgula em vez de conjunção.",
         rules=[
             "Omitir artigos.",
-            "Presente historico.",
-            "Virgula = e/mas.",
+            "Presente histórico.",
+            "Vírgula = e/mas.",
         ],
         examples=[
             GrammarExample(
@@ -588,15 +588,15 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Discurso reportado",
         level="B2",
         category="Discurso indireto",
-        summary="Tecnicas avancadas de citacao e reportagem.",
-        explanation="Citacao direta, indireta, mista. Verbos introdutores variados: afirmar, salientar, admitir, garantir, anunciar.",
+        summary="Técnicas avançadas de citação e reportagem.",
+        explanation="Citação direta, indireta, mista. Verbos introdutores variados: afirmar, salientar, admitir, garantir, anunciar.",
         rules=[
             "Variar verbos introdutores.",
             "Direta, indireta, mista.",
         ],
         examples=[
             GrammarExample(
-                text="O ministro salientou que os resultados sao animadores.",
+                text="O ministro salientou que os resultados são animadores.",
                 translation=None,
             ),
         ],
@@ -604,7 +604,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Ele disse que estou cansado.",
                 correct="Ele disse que estava cansado.",
-                note="Citacao indireta adapta tempos.",
+                note="Citação indireta adapta tempos.",
             ),
         ],
         related=[

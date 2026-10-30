@@ -1760,13 +1760,17 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.10.60",
+    "version": "v1.10.65",
     "cta": "Forstået",
     "entry1": {
+      "label": "Forbedringer af læringen",
+      "desc": "Vi fortsætter med at forbedre vores læringssystemer og sprogindhold, så dine øvelser bliver tydeligere, mere sammenhængende og mere nyttige."
+    },
+    "entry2": {
       "label": "Mere flydende stemmesamtaler",
       "desc": "Vi har forbedret samtalerne med Lingu med mere flydende stemmeafspilning og tydeligere signaler om, hvis tur det er til at tale."
     },
-    "entry2": {
+    "entry3": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

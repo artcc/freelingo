@@ -13,7 +13,7 @@ C1_SETS: list[VocabularySet] = [
                 word="sfumatura",
                 pos="noun",
                 definition="Differenza sottile di significato o colore.",
-                example="C è una leggera sfumatura tra i due termini.",
+                example="C'è una leggera sfumatura tra i due termini.",
                 ipa="/sfumaˈtuːra/",
                 frequency_rank=708,
             ),

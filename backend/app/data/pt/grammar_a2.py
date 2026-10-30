@@ -9,7 +9,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Conjugação do pretérito perfeito para verbos regulares em -ar, -er, -ir.",
-        explanation="| | fal**ar** | com**er** | abr**ir** |\\n|---|-----------|-----------|----------|\\n| eu | falei | comi | abri |\\n| tu | falaste | comeste | abriste |\\n| ele/você | falou | comeu | abriu |\\n| nós | falamos | comemos | abrimos |\\n| eles/vocês | falaram | comeram | abriram |",
+        explanation="| | fal**ar** | com**er** | abr**ir** |\n|---|-----------|-----------|----------|\n| eu | falei | comi | abri |\n| tu | falaste | comeste | abriste |\n| ele/você | falou | comeu | abriu |\n| nós | falamos | comemos | abrimos |\n| eles/vocês | falaram | comeram | abriram |",
         rules=[
             "-ar: -ei, -aste, -ou, -ámos, -aram.",
             "-er: -i, -este, -eu, -emos, -eram.",
@@ -48,9 +48,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="marcadores-temporais",
         title="Marcadores temporais",
         level="A2",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Palavras e expressões que situam ações no tempo.",
-        explanation="Marcadores por tempo:\\n\\n**Pretérito perfeito:** ontem, anteontem, a semana passada, há dois dias, já, ainda não, nunca.\\n**Imperfeito:** todos os dias (no passado), antigamente, quando era criança, sempre, frequentemente.\\n**Presente:** hoje, agora, atualmente, geralmente.\\n**Futuro:** amanhã, na próxima semana, daqui a dois dias.",
+        explanation="Marcadores por tempo:\n\n**Pretérito perfeito:** ontem, anteontem, a semana passada, há dois dias, já, ainda não, nunca.\n**Imperfeito:** todos os dias (no passado), antigamente, quando era criança, sempre, frequentemente.\n**Presente:** hoje, agora, atualmente, geralmente.\n**Futuro:** amanhã, na próxima semana, daqui a dois dias.",
         rules=[
             "Ontem, há + tempo → pretérito perfeito.",
             "Antigamente, quando era..., todos os dias (passado) → imperfeito.",
@@ -89,7 +89,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Verbos irregulares mais comuns no pretérito perfeito.",
-        explanation="**Ser/Ir** (idênticos): fui, foste, foi, fomos, foram\\n**Estar**: estive, estiveste, esteve, estivemos, estiveram\\n**Ter**: tive, tiveste, teve, tivemos, tiveram\\n**Fazer**: fiz, fizeste, fez, fizemos, fizeram\\n**Querer**: quis, quiseste, quis, quisemos, quiseram\\n**Poder**: pude, pudeste, pôde, pudemos, puderam\\n**Saber**: soube, soubeste, soube, soubemos, souberam\\n**Dar**: dei, deste, deu, demos, deram\\n**Ver**: vi, viste, viu, vimos, viram\\n**Vir**: vim, vieste, veio, viemos, vieram",
+        explanation="**Ser/Ir** (idênticos): fui, foste, foi, fomos, foram\n**Estar**: estive, estiveste, esteve, estivemos, estiveram\n**Ter**: tive, tiveste, teve, tivemos, tiveram\n**Fazer**: fiz, fizeste, fez, fizemos, fizeram\n**Querer**: quis, quiseste, quis, quisemos, quiseram\n**Poder**: pude, pudeste, pôde, pudemos, puderam\n**Saber**: soube, soubeste, soube, soubemos, souberam\n**Dar**: dei, deste, deu, demos, deram\n**Ver**: vi, viste, viu, vimos, viram\n**Vir**: vim, vieste, veio, viemos, vieram",
         rules=[
             "Ser e Ir são idênticos no pretérito perfeito.",
             "Muitos irregulares têm raiz diferente.",
@@ -126,7 +126,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Descrever ações habituais, contínuas ou descritivas no passado.",
-        explanation="| | fal**ar** | com**er** | abr**ir** |\\n|---|-----------|-----------|----------|\\n| eu | falava | comia | abria |\\n| tu | falavas | comias | abrias |\\n| ele | falava | comia | abria |\\n| nós | falávamos | comíamos | abríamos |\\n| eles | falavam | comiam | abriam |\\n\\nIrregulares (poucos!): ser (era), ter (tinha), vir (vinha), pôr (punha).",
+        explanation="| | fal**ar** | com**er** | abr**ir** |\n|---|-----------|-----------|----------|\n| eu | falava | comia | abria |\n| tu | falavas | comias | abrias |\n| ele | falava | comia | abria |\n| nós | falávamos | comíamos | abríamos |\n| eles | falavam | comiam | abriam |\n\nIrregulares (poucos!): ser (era), ter (tinha), vir (vinha), pôr (punha).",
         rules=[
             "-ar: -ava; -er/-ir: -ia.",
             "Usa-se para hábitos passados, descrições e ações de fundo.",
@@ -160,7 +160,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Quando usar o pretérito perfeito e quando usar o pretérito imperfeito.",
-        explanation="**Perfeito:** ação concluída, pontual. *Ontem fui ao cinema.*\\n**Imperfeito:** ação habitual, contínua, descritiva. *Quando era criança, ia ao cinema.*\\n\\nRegra prática: imperfeito = CCTV (filme); perfeito = fotografia (momento).",
+        explanation="**Perfeito:** ação concluída, pontual. *Ontem fui ao cinema.*\n**Imperfeito:** ação habitual, contínua, descritiva. *Quando era criança, ia ao cinema.*\n\nRegra prática: imperfeito = CCTV (filme); perfeito = fotografia (momento).",
         rules=[
             "Perfeito: ação concluída, contada como facto.",
             "Imperfeito: cenário, hábito, descrição.",
@@ -195,7 +195,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Expressar hábitos passados com costumar + infinitivo.",
-        explanation="**Costumar** no imperfeito + infinitivo = hábitos passados:\\n\\n- *Costumava ir à praia.* (= I used to go)\\n- *Ele costumava fumar, mas deixou.*\\n\\nConjugação: costumava, costumavas, costumava, costumávamos, costumavam.",
+        explanation="**Costumar** no imperfeito + infinitivo = hábitos passados:\n\n- *Costumava ir à praia.* (= I used to go)\n- *Ele costumava fumar, mas deixou.*\n\nConjugação: costumava, costumavas, costumava, costumávamos, costumavam.",
         rules=[
             "Costumar no imperfeito + infinitivo = hábitos passados.",
             "Enfatiza que o hábito já não é atual.",
@@ -229,7 +229,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Pronomes",
         summary="O, a, os, as — pronomes átonos que substituem o complemento direto.",
-        explanation="Pronomes de objeto direto:\\n\\n- o (masc. sing.): *Comprei o livro → Comprei-o.*\\n- a (fem. sing.): *Vi a Maria → Vi-a.*\\n- os (masc. pl.) / as (fem. pl.)\\n\\nAdaptações: verbo -r/-s/-z → -lo/-la; verbo -m/-ão/-õe → -no/-na.",
+        explanation="Pronomes de objeto direto:\n\n- o (masc. sing.): *Comprei o livro → Comprei-o.*\n- a (fem. sing.): *Vi a Maria → Vi-a.*\n- os (masc. pl.) / as (fem. pl.)\n\nAdaptações: verbo -r/-s/-z → -lo/-la; verbo -m/-ão/-õe → -no/-na.",
         rules=[
             "Pronomes o/a/os/as substituem o objeto direto.",
             "Após -r/-s/-z: lo, la, los, las.",
@@ -262,7 +262,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Pronomes",
         summary="Me, te, lhe, nos, lhes — pronomes que substituem o complemento indireto.",
-        explanation="| Pessoa | Pronome | Exemplo |\\n|--------|---------|---------|\\n| eu | me | *Deu-me o livro.* |\\n| tu | te | *Ofereci-te um presente.* |\\n| ele/você | lhe | *Disse-lhe a verdade.* |\\n| nós | nos | *Emprestaram-nos o carro.* |\\n| eles/vocês | lhes | *Expliquei-lhes a situação.* |",
+        explanation="| Pessoa | Pronome | Exemplo |\n|--------|---------|---------|\n| eu | me | *Deu-me o livro.* |\n| tu | te | *Ofereci-te um presente.* |\n| ele/você | lhe | *Disse-lhe a verdade.* |\n| nós | nos | *Emprestaram-nos o carro.* |\n| eles/vocês | lhes | *Expliquei-lhes a situação.* |",
         rules=[
             "Me, te, lhe, nos, lhes substituem complemento com a.",
             "Lhe/lhes são para a 3.ª pessoa.",
@@ -302,7 +302,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Pronomes",
         summary="Regras de colocação dos pronomes átonos em português europeu.",
-        explanation="**1. Ênclise (depois do verbo) — regra geral:** *Chamo-me João.*\\n**2. Próclise (antes) — com palavras atrativas:** negação, advérbios, pronomes relativos, interrogativos. *Não me digas. Já te disse.*\\n**3. Mesóclise (no meio) — futuro e condicional:** *Dar-te-ei o livro.* (formal)",
+        explanation="**1. Ênclise (depois do verbo) — regra geral:** *Chamo-me João.*\n**2. Próclise (antes) — com palavras atrativas:** negação, advérbios, pronomes relativos, interrogativos. *Não me digas. Já te disse.*\n**3. Mesóclise (no meio) — futuro e condicional:** *Dar-te-ei o livro.* (formal)",
         rules=[
             "Ênclise é a regra geral em EP.",
             "Próclise obrigatória com negação, advérbios, relativos, interrogativos.",
@@ -345,9 +345,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="comparativos",
         title="Comparativos",
         level="A2",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Mais... do que, menos... do que — expressar comparações.",
-        explanation="**Superioridade:** *mais + adj + do que*. **Inferioridade:** *menos + adj + do que*. **Igualdade:** *tão + adj + como*.\\n\\nIrregulares: bom→melhor, mau→pior, grande→maior, pequeno→menor.",
+        explanation="**Superioridade:** mais + adjetivo + que/do que. **Inferioridade:** menos + adjetivo + que/do que. Ambas as variantes são válidas: Lisboa é mais cara que o Porto / do que o Porto. **Igualdade:** tão + adjetivo + como/quanto.\n\nComparativos irregulares: bom → melhor, mau → pior, grande → maior, pequeno → menor.",
         rules=[
             "Mais [adj] do que = superioridade.",
             "Menos [adj] do que = inferioridade.",
@@ -386,9 +386,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="superlativos",
         title="Superlativos",
         level="A2",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Expressar o grau máximo de uma qualidade.",
-        explanation="**Relativo:** *o/a mais + adj + de*. **Absoluto sintético:** adj + -íssimo (*bonitíssimo*). **Absoluto analítico:** *muito + adj*.\\n\\nIrregulares: bom→ótimo, mau→péssimo, grande→máximo, pequeno→mínimo.",
+        explanation="**Relativo:** *o/a mais + adj + de*. **Absoluto sintético:** adj + -íssimo (*bonitíssimo*). **Absoluto analítico:** *muito + adj*.\n\nIrregulares: bom→ótimo, mau→péssimo, grande→máximo, pequeno→mínimo.",
         rules=[
             "Superlativo relativo: o mais + adj + de.",
             "Absoluto sintético: adj + -íssimo.",
@@ -425,9 +425,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="tao-como",
         title="Tão... como / tanto... como",
         level="A2",
-        category="Adjetivos e adverbios",
+        category="Adjetivos e advérbios",
         summary="Comparativos de igualdade com tão e tanto.",
-        explanation="**Tão... como** (qualidade): *É tão alto como o pai.*\\n**Tanto/a/os/as... como** (quantidade): *Tenho tanto dinheiro como ele.*\\n**Tanto como** (verbos): *Estudo tanto como tu.*\\n**Tão... que** (consequência): *É tão caro que ninguém compra.*",
+        explanation="**Tão... como** (qualidade): *É tão alto como o pai.*\n**Tanto/a/os/as... como** (quantidade): *Tenho tanto dinheiro como ele.*\n**Tanto como** (verbos): *Estudo tanto como tu.*\n**Tão... que** (consequência): *É tão caro que ninguém compra.*",
         rules=[
             "Tão + adj/adv + como = igualdade de qualidade.",
             "Tanto/a/os/as + subst + como = igualdade de quantidade.",
@@ -467,7 +467,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Verbos",
         summary="Dar ordens, instruções e conselhos de forma afirmativa.",
-        explanation="**Tu**: radical do presente sem -s: *fala!, come!, abre!*\\n**Você/Vocês**: presente do conjuntivo: *fale!, comam!*\\n**Nós**: presente do conjuntivo: *falemos!*\\n\\nCom pronomes (ênclise): *Diz-me!, Senta-te!, Levantem-se!*",
+        explanation="**Tu**: radical do presente sem -s: *fala!, come!, abre!*\n**Você/Vocês**: presente do conjuntivo: *fale!, comam!*\n**Nós**: presente do conjuntivo: *falemos!*\n\nCom pronomes (ênclise): *Diz-me!, Senta-te!, Levantem-se!*",
         rules=[
             "Tu: radical do presente sem -s.",
             "Você/vocês: presente do conjuntivo.",
@@ -503,7 +503,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Verbos",
         summary="Dar ordens negativas, proibições e conselhos negativos.",
-        explanation="O imperativo negativo usa o **presente do conjuntivo** para **todas** as pessoas:\\n- *Não fales alto!* (tu)\\n- *Não fale alto!* (você)\\n- *Não falemos alto!* (nós)\\n- *Não falem alto!* (vocês)\\n\\nCom pronomes (próclise): *Não te esqueças!*",
+        explanation="O imperativo negativo usa o **presente do conjuntivo** para **todas** as pessoas:\n- *Não fales alto!* (tu)\n- *Não fale alto!* (você)\n- *Não falemos alto!* (nós)\n- *Não falem alto!* (vocês)\n\nCom pronomes (próclise): *Não te esqueças!*",
         rules=[
             "Imperativo negativo usa sempre o presente do conjuntivo.",
             "Para tu, a forma negativa é diferente da afirmativa.",
@@ -544,7 +544,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Verbos",
         summary="Formas irregulares do imperativo dos verbos mais comuns.",
-        explanation="| Verbo | tu | você |\\n|-------|-----|------|\\n| dizer | diz | diga |\\n| fazer | faz | faça |\\n| ser | sê | seja |\\n| estar | está | esteja |\\n| ir | vai | vá |\\n| ter | tem | tenha |\\n| pôr | põe | ponha |\\n| vir | vem | venha |\\n| ver | vê | veja |\\n\\nNegativo: sempre conjuntivo (*não digas, não faças*).",
+        explanation="| Verbo | tu | você |\n|-------|-----|------|\n| dizer | diz | diga |\n| fazer | faz | faça |\n| ser | sê | seja |\n| estar | está | esteja |\n| ir | vai | vá |\n| ter | tem | tenha |\n| pôr | põe | ponha |\n| vir | vem | venha |\n| ver | vê | veja |\n\nNegativo: sempre conjuntivo (*não digas, não faças*).",
         rules=[
             "Cada verbo irregular deve ser memorizado.",
             "Tu: deriva do presente sem -s.",
@@ -581,7 +581,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Conjugação do futuro simples do indicativo.",
-        explanation="Infinitivo + terminações: -ei, -ás, -á, -emos, -ão.\\n\\nIrregulares: dizer→direi, fazer→farei, trazer→trarei.\\n\\nNa fala, prefere-se *ir + infinitivo*. Com pronomes: mesóclise (*dir-te-ei*).",
+        explanation="Infinitivo + terminações: -ei, -ás, -á, -emos, -ão.\n\nIrregulares: dizer→direi, fazer→farei, trazer→trarei.\n\nNa fala, prefere-se *ir + infinitivo*. Com pronomes: mesóclise (*dir-te-ei*).",
         rules=[
             "Forma-se com infinitivo + -ei, -ás, -á, -emos, -ão.",
             "Três irregulares: dizer, fazer, trazer.",
@@ -613,7 +613,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Condicionais",
         summary="Expressar hipóteses, desejos, pedidos cordiais e ações condicionadas.",
-        explanation="Infinitivo + -ia, -ias, -ia, -íamos, -iam. Irregulares: dizer→diria, fazer→faria, trazer→traria.\\n\\nUsos: hipóteses, desejos, pedidos cordiais, condicionais com se, futuro do pretérito.",
+        explanation="Infinitivo + -ia, -ias, -ia, -íamos, -iam. Irregulares: dizer→diria, fazer→faria, trazer→traria.\n\nUsos: hipóteses, desejos, pedidos cordiais, condicionais com se, futuro do pretérito.",
         rules=[
             "Infinitivo + -ia, -ias, -ia, -íamos, -iam.",
             "Mesmos irregulares do futuro.",
@@ -660,7 +660,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Tempos verbais",
         summary="Expressar ações que estarão concluídas num ponto futuro.",
-        explanation="Ter (futuro) + particípio passado.\\n\\nUsos: ação concluída antes de momento futuro, suposição sobre o passado (*Ele terá chegado atrasado?* = provavelmente).",
+        explanation="Ter (futuro) + particípio passado.\n\nUsos: ação concluída antes de momento futuro, suposição sobre o passado (*Ele terá chegado atrasado?* = provavelmente).",
         rules=[
             "Ter (futuro) + particípio passado.",
             "Ação concluída antes de momento futuro.",
@@ -684,9 +684,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Quando chegares, já vou ter jantado.",
+                wrong="Quando chegares, já terei jantar.",
                 correct="Quando chegares, já terei jantado.",
-                note="Não se usa ir+ter; usa-se ter no futuro.",
+                note="O composto usa o particípio jantado. Vou ter jantado é uma alternativa perifrástica válida.",
             ),
         ],
         related=["futuro-do-presente", "condicional", "preterito-perfeito-composto"],
@@ -695,7 +695,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="conectores-narrativos",
         title="Conectores narrativos",
         level="A2",
-        category="Oracoes",
+        category="Orações",
         summary="Palavras e expressões para organizar uma narrativa no tempo.",
         explanation="**Início:** primeiro, no início. **Continuação:** depois, em seguida, então. **Simultaneidade:** enquanto, entretanto. **Conclusão:** por fim, finalmente. **Rutura:** de repente, contudo.",
         rules=[
@@ -731,7 +731,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         slug="sequencia-temporal",
         title="Sequência temporal",
         level="A2",
-        category="Oracoes",
+        category="Orações",
         summary="Expressões que indicam a ordem cronológica de eventos.",
         explanation="**Anterioridade:** *Antes de + inf.* / *Antes que + conj.* **Posterioridade:** *Depois de + inf.* / *Mal + verbo.* **Simultaneidade:** *Ao + inf.* **Duração:** *Enquanto, Até que.*",
         rules=[
@@ -769,10 +769,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Discurso indireto",
         summary="Relatar o que alguém disse sem citar textualmente.",
-        explanation="O discurso indireto faz ajustes de pronomes, tempos e referências:\\n\\n- Direto: *Estou cansada*, disse ela.\\n- Indireto: *Ela disse que estava cansada.*\\n\\nTempos recuam: presente→imperfeito, perfeito→mais-que-perfeito, futuro→condicional.",
+        explanation="O discurso indireto ajusta pronomes e referências à perspetiva de quem relata. Numa perspetiva passada: Ela disse que estava cansada; Contou que tinha saído; Disse que viria.\n\nO recuo não é obrigatório se a referência continua válida: Ela disse que está cansada; Disse que virá amanhã. Ajusta os tempos ao sentido, não mecanicamente.",
         rules=[
-            "Verbo introdutor (dizer, afirmar, perguntar) + que.",
-            "Tempos recuam um grau.",
+            "Declarações usam que; perguntas totais usam se e perguntas parciais conservam o interrogativo.",
+            "Os tempos podem recuar numa perspetiva passada ou conservar uma referência ainda atual.",
             "Pronomes e referências ajustam-se.",
             "Perguntas indiretas não usam interrogação.",
         ],
@@ -795,9 +795,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ela disse que está cansada.",
+                wrong="Ela disse que estavam cansada. (referindo-se a ela própria)",
                 correct="Ela disse que estava cansada.",
-                note="Verbo no passado: tempo recua.",
+                note="O verbo concorda com ela. Está cansada também é possível se a situação ainda se mantém.",
             ),
             GrammarMistake(
                 wrong="Ele perguntou que eu queria café.",
@@ -817,11 +817,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Discurso indireto",
         summary="Transformações de tempo, lugar e pronomes ao relatar discurso.",
-        explanation="**Expressões temporais:** hoje→naquele dia, amanhã→no dia seguinte, ontem→no dia anterior, agora→naquele momento.\\n**Lugar:** aqui→ali/lá.\\n**Tempos:** presente→imperfeito, perfeito→mais-que-perfeito, futuro→condicional.",
+        explanation="Quando muda o ponto de referência, hoje pode passar a naquele dia, amanhã a no dia seguinte e aqui a ali/lá. Numa perspetiva passada, são frequentes o imperfeito para simultaneidade, o mais-que-perfeito para anterioridade e o condicional para posterioridade. Se o lugar, o dia ou a situação continuam válidos, podem manter-se as referências originais.",
         rules=[
             "Hoje→naquele dia; amanhã→no dia seguinte; ontem→no dia anterior.",
             "Aqui→ali/lá; aí→ali/lá.",
-            "Tempos verbais recuam um grau.",
+            "Os ajustes dependem do contexto; não há recuo automático de todos os tempos.",
             "Pronomes ajustam-se à perspetiva do narrador.",
         ],
         examples=[
@@ -840,9 +840,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ele disse que vem amanhã. (discurso indireto)",
-                correct="Ele disse que vinha no dia seguinte.",
-                note="Vem e amanhã devem ser adaptados.",
+                wrong="Na segunda disse: Vou amanhã. Na sexta relato: Ele disse que vinha amanhã.",
+                correct="Na sexta relato: Ele disse que vinha no dia seguinte, terça-feira.",
+                note="Amanhã contado a partir de sexta já não designa a terça-feira original; adapta a referência para preservar a data.",
             ),
         ],
         related=["discurso-indireto", "discurso-indireto-passado"],
