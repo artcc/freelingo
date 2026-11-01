@@ -11,7 +11,7 @@ B2_UNITS: list[CurriculumUnit] = [
         unit_number=1,
         title="Społeczeństwo i zmiany",
         grammar_points=["strona-bierna", "imieslowy"],
-        vocabulary_set_ids=["spoleczenstwo_b2"],
+        vocabulary_set_ids=["spoleczenstwo_b2", "polityka-publiczna_b2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje procesy społeczne z użyciem strony biernej.",
@@ -27,7 +27,7 @@ B2_UNITS: list[CurriculumUnit] = [
         unit_number=2,
         title="Media i kultura",
         grammar_points=["mowa-zalezna", "aspekt-czasownika"],
-        vocabulary_set_ids=["media_i_kultura_b2"],
+        vocabulary_set_ids=["media_i_kultura_b2", "analiza-mediow_b2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Relacjonuje wypowiedzi i zachowuje ich sens.",
@@ -59,7 +59,7 @@ B2_UNITS: list[CurriculumUnit] = [
         unit_number=4,
         title="Praca, gospodarka i organizacje",
         grammar_points=["styl-formalny", "strona-bierna"],
-        vocabulary_set_ids=["praca_b2"],
+        vocabulary_set_ids=["praca_b2", "rynek-pracy_b2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje procesy w organizacji i zmiany na rynku pracy.",
@@ -76,7 +76,7 @@ B2_UNITS: list[CurriculumUnit] = [
         unit_number=5,
         title="Media, debata i wiarygodność",
         grammar_points=["mowa-zalezna", "skladnia-zlozona"],
-        vocabulary_set_ids=["debata_b2"],
+        vocabulary_set_ids=["debata_b2", "ocena-dowodow_b2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Ocenia wiarygodność materiału, wskazując konkretne przesłanki.",
@@ -93,7 +93,7 @@ B2_UNITS: list[CurriculumUnit] = [
         unit_number=6,
         title="Środowisko i rozwój nauki",
         grammar_points=["imieslowy", "strona-bierna"],
-        vocabulary_set_ids=["srodowisko_b2"],
+        vocabulary_set_ids=["srodowisko_b2", "klimat-i-energia_b2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Wyjaśnia zależność między działaniem a jego skutkiem dla środowiska.",
@@ -110,7 +110,7 @@ B2_UNITS: list[CurriculumUnit] = [
         unit_number=7,
         title="Precyzyjny styl i argumentacja",
         grammar_points=["skladnia-zlozona", "styl-formalny"],
-        vocabulary_set_ids=["styl_b2"],
+        vocabulary_set_ids=["styl_b2", "redakcja-argumentacji_b2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Redaguje tekst, usuwając niejasność i zbędne powtórzenia.",

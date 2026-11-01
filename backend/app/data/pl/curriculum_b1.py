@@ -27,7 +27,7 @@ B1_UNITS: list[CurriculumUnit] = [
         unit_number=2,
         title="Opinie i argumenty",
         grammar_points=["zdania-wzgledne", "spojniki"],
-        vocabulary_set_ids=["opinie_b1"],
+        vocabulary_set_ids=["opinie_b1", "dyskusja-i-argumenty_b1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Wyraża opinię i uzasadnia ją przykładami.",
@@ -43,7 +43,7 @@ B1_UNITS: list[CurriculumUnit] = [
         unit_number=3,
         title="Praca i edukacja",
         grammar_points=["tryb-warunkowy", "rekcja-czasownikow"],
-        vocabulary_set_ids=["praca_i_nauka_b1"],
+        vocabulary_set_ids=["praca_i_nauka_b1", "obowiazki-zawodowe_b1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje doświadczenie zawodowe i plany edukacyjne.",
@@ -59,7 +59,7 @@ B1_UNITS: list[CurriculumUnit] = [
         unit_number=4,
         title="Podróże i doświadczenia",
         grammar_points=["aspekt-czasownika", "czas-przeszly"],
-        vocabulary_set_ids=["podroze_b1"],
+        vocabulary_set_ids=["podroze_b1", "podroze-i-zakwaterowanie_b1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opowiada spójną historię z podróży, zachowując kolejność zdarzeń.",
@@ -76,7 +76,7 @@ B1_UNITS: list[CurriculumUnit] = [
         unit_number=5,
         title="Relacje i komunikacja",
         grammar_points=["zdania-wzgledne", "spojniki"],
-        vocabulary_set_ids=["relacje_b1"],
+        vocabulary_set_ids=["relacje_b1", "zdrowie-i-nawyki_b1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje relacje i wyjaśnia nieporozumienie w rozmowie.",
@@ -93,7 +93,7 @@ B1_UNITS: list[CurriculumUnit] = [
         unit_number=6,
         title="Społeczność i życie publiczne",
         grammar_points=["tryb-warunkowy", "spojniki"],
-        vocabulary_set_ids=["spoleczenstwo_b1"],
+        vocabulary_set_ids=["spoleczenstwo_b1", "zycie-publiczne_b1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje lokalne wydarzenie i wyjaśnia jego znaczenie dla mieszkańców.",
@@ -110,7 +110,7 @@ B1_UNITS: list[CurriculumUnit] = [
         unit_number=7,
         title="Kultura, edukacja i media",
         grammar_points=["rekcja-czasownikow", "aspekt-czasownika"],
-        vocabulary_set_ids=["kultura_b1"],
+        vocabulary_set_ids=["kultura_b1", "media-i-informacja_b1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Streszcza fabułę lub treść materiału kulturowego.",

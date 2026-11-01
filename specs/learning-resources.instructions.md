@@ -22,9 +22,10 @@ active language or owned plans. Frontend resource pages normally send the active
 ### Polish curriculum and reference content
 
 Polish (`pl-PL`) provides eight linked curriculum units at each CEFR level from A1 through C2, with
-Polish-language competency checklists, grammar references, vocabulary sets, and practical phrasebook
-categories. Its placement bank covers grammar, vocabulary, and reading at every level. The package
-uses standard Polish from Poland, including its diacritics, case system, and verbal aspect.
+Polish-language competency checklists, at least 15 grammar topics and 14 curriculum-linked vocabulary
+sets per level, and practical phrasebook categories. Its placement bank provides 20 questions per
+level across grammar, vocabulary, and reading. The package uses standard Polish from Poland,
+including its diacritics, case system, and verbal aspect.
 
 ### English foundational curriculum
 

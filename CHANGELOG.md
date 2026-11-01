@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
-- Polish (`pl-PL`) is available to learn, with eight curriculum units per A1-C2 level, linked learning resources, and localized language selection.
+- Polish (`pl-PL`) is available to learn, with eight curriculum units per A1-C2 level, at least 15 grammar topics and 14 linked vocabulary sets per level, 20 placement questions per level, and localized language selection.
 
 ## [1.10.65] - 2026-10-30
 

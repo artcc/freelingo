@@ -27,7 +27,7 @@ A2_UNITS: list[CurriculumUnit] = [
         unit_number=2,
         title="Zakupy i usługi",
         grammar_points=["dopelniacz", "narzednik"],
-        vocabulary_set_ids=["zakupy_a2"],
+        vocabulary_set_ids=["zakupy_a2", "uslugi-miejskie_a2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Pyta o ceny, ilości i dostępność produktów.",
@@ -43,7 +43,7 @@ A2_UNITS: list[CurriculumUnit] = [
         unit_number=3,
         title="Podróżowanie",
         grammar_points=["miejscownik", "przyimki"],
-        vocabulary_set_ids=["podroze_a2"],
+        vocabulary_set_ids=["podroze_a2", "podroz-pociagiem_a2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Rezerwuje nocleg i uzyskuje informacje w podróży.",
@@ -59,7 +59,7 @@ A2_UNITS: list[CurriculumUnit] = [
         unit_number=4,
         title="Zdrowie i samopoczucie",
         grammar_points=["dopelniacz", "tryb-rozkazujacy"],
-        vocabulary_set_ids=["zdrowie_a2"],
+        vocabulary_set_ids=["zdrowie_a2", "samopoczucie_a2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje podstawowe objawy i mówi, jak się czuje.",
@@ -76,7 +76,7 @@ A2_UNITS: list[CurriculumUnit] = [
         unit_number=5,
         title="Mieszkanie i codzienne usługi",
         grammar_points=["miejscownik", "przyimki"],
-        vocabulary_set_ids=["mieszkanie_a2"],
+        vocabulary_set_ids=["mieszkanie_a2", "naprawy-domowe_a2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje mieszkanie i położenie podstawowych przedmiotów.",
@@ -93,7 +93,7 @@ A2_UNITS: list[CurriculumUnit] = [
         unit_number=6,
         title="Czas wolny i zainteresowania",
         grammar_points=["stopniowanie-przymiotnikow", "czas-przeszly"],
-        vocabulary_set_ids=["czas_wolny_a2"],
+        vocabulary_set_ids=["czas_wolny_a2", "spotkania-i-zaproszenia_a2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opowiada o zainteresowaniach i regularnych aktywnościach.",
@@ -110,7 +110,7 @@ A2_UNITS: list[CurriculumUnit] = [
         unit_number=7,
         title="Plany, pogoda i pory roku",
         grammar_points=["czas-przyszly", "stopniowanie-przymiotnikow"],
-        vocabulary_set_ids=["plany_a2"],
+        vocabulary_set_ids=["plany_a2", "srodowisko-codzienne_a2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje typową pogodę i zmiany pór roku.",

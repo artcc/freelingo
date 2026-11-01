@@ -32,7 +32,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Ty jest studentem.",
                 correct="Ty jesteś studentem.",
-                note="W drugiej osobie liczby pojedynczej czasownik mieć formę jesteś.",
+                note="W drugiej osobie liczby pojedynczej czasownik ma formę jesteś.",
             ),
         ],
     ),
@@ -127,8 +127,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Pytanie szczegółowe i przeczenie.",
             ),
         ],
-        common_mistakes=[
-        ],
+        common_mistakes=[],
     ),
     GrammarTopic(
         slug="mianownik",
@@ -155,8 +154,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Zgodność liczby i rodzaju.",
             ),
         ],
-        common_mistakes=[
-        ],
+        common_mistakes=[],
     ),
     GrammarTopic(
         slug="biernik",
@@ -183,8 +181,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Biernik rodzaju nijakiego.",
             ),
         ],
-        common_mistakes=[
-        ],
+        common_mistakes=[],
     ),
     GrammarTopic(
         slug="liczebniki-i-data",
@@ -211,8 +208,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Godzina po przyimku o.",
             ),
         ],
-        common_mistakes=[
-        ],
+        common_mistakes=[],
     ),
     GrammarTopic(
         slug="przymiotniki-i-zgodnosc",
@@ -272,7 +268,116 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Rzeczownik niemęskoosobowy.",
             ),
         ],
-        common_mistakes=[
+        common_mistakes=[],
+    ),
+    GrammarTopic(
+        slug="rodzaj-rzeczownikow",
+        title="Rodzaj rzeczowników",
+        level="A1",
+        category="Gramatyka",
+        summary="Rodzaj rzeczownika wpływa na formę przymiotników i innych określeń.",
+        explanation="Rzeczowniki mają rodzaj męski, żeński lub nijaki; w liczbie mnogiej rozróżnia się między innymi formy męskoosobowe i niemęskoosobowe. Końcówka często pomaga rozpoznać rodzaj, ale nie jest niezawodną wskazówką.",
+        structure="ten student; ta książka; to okno",
+        rules=[
+            "Zapamiętuj rodzaj razem z nowym rzeczownikiem.",
+            "Uzgadniaj zaimek i przymiotnik z rzeczownikiem.",
+            "Nie określaj rodzaju wyłącznie na podstawie ostatniej litery.",
+        ],
+        examples=[
+            GrammarExample(text="Ten nowy student mieszka blisko.", note="Rodzaj męski."),
+            GrammarExample(text="Ta nowa książka jest ciekawa.", note="Rodzaj żeński."),
+        ],
+    ),
+    GrammarTopic(
+        slug="narzednik-zawod",
+        title="Narzędnik w podstawowych zdaniach",
+        level="A1",
+        category="Gramatyka",
+        summary="Narzędnik występuje między innymi po być przy nazwach zawodów i określeniach ról.",
+        explanation="Po czasowniku być rzeczownik nazywający zawód lub rolę zwykle przyjmuje narzędnik. Przymiotnik określający ten rzeczownik również ma formę narzędnika.",
+        structure="być + rzeczownik w narzędniku",
+        rules=[
+            "Używaj narzędnika przy określaniu zawodu po być.",
+            "Uzgadniaj przymiotnik z rzeczownikiem w rodzaju i przypadku.",
+            "Pamiętaj o formie jestem nauczycielem/nauczycielką.",
+        ],
+        examples=[
+            GrammarExample(text="Marek jest dobrym lekarzem.", note="Rodzaj męski w narzędniku."),
+            GrammarExample(text="Anna jest nową studentką.", note="Rodzaj żeński w narzędniku."),
+        ],
+    ),
+    GrammarTopic(
+        slug="czasownik-miec",
+        title="Czasownik mieć",
+        level="A1",
+        category="Gramatyka",
+        summary="Mieć opisuje posiadanie, relacje i niektóre stany.",
+        explanation="Czasownik mieć odmienia się nieregularnie w czasie teraźniejszym. Rzeczownik po nim często występuje w bierniku; przy przeczeniu może przyjąć dopełniacz.",
+        structure="mam, masz, ma; mamy, macie, mają",
+        rules=[
+            "Dopasuj formę mieć do osoby.",
+            "Po mieć w zdaniu twierdzącym używaj odpowiedniego biernika.",
+            "W przeczeniu zwróć uwagę na dopełniacz: nie mam czasu.",
+        ],
+        examples=[
+            GrammarExample(text="Mam młodszą siostrę.", note="Biernik po mieć."),
+            GrammarExample(text="Nie mamy dzisiaj czasu.", note="Dopełniacz w przeczeniu."),
+        ],
+    ),
+    GrammarTopic(
+        slug="zaimki-dzierzawcze",
+        title="Zaimki dzierżawcze",
+        level="A1",
+        category="Gramatyka",
+        summary="Zaimki dzierżawcze wskazują, do kogo należy osoba lub rzecz.",
+        explanation="Mój, twój, jego, jej, nasz, wasz i ich określają przynależność. Formy mój, moja, moje oraz nasz, nasza, nasze uzgadniają się z rzeczownikiem, który opisują.",
+        structure="mój brat; moja siostra; moje mieszkanie",
+        rules=[
+            "Uzgadniaj formę zaimka z określanym rzeczownikiem.",
+            "Jego, jej i ich nie zmieniają formy zależnie od rzeczownika.",
+            "Wybieraj zaimek zgodny z właścicielem, nie z posiadaną rzeczą.",
+        ],
+        examples=[
+            GrammarExample(text="To jest moja nowa torba.", note="Rodzaj żeński."),
+            GrammarExample(
+                text="Ich dzieci mieszkają w Krakowie.", note="Forma ich pozostaje niezmienna."
+            ),
+        ],
+    ),
+    GrammarTopic(
+        slug="przymiotniki-w-mianowniku",
+        title="Przymiotniki w mianowniku",
+        level="A1",
+        category="Gramatyka",
+        summary="Przymiotnik w mianowniku uzgadnia się z opisywanym rzeczownikiem.",
+        explanation="Przymiotniki przyjmują różne końcówki zależnie od rodzaju i liczby rzeczownika. W mianowniku rodzaj męski zwykle ma końcówkę -y lub -i, żeński -a, a nijaki -e.",
+        structure="nowy dom; nowa ulica; nowe miasto",
+        rules=[
+            "Rozpoznaj rodzaj i liczbę rzeczownika.",
+            "Uzgadniaj końcówkę przymiotnika z rzeczownikiem.",
+            "Pamiętaj, że końcówka może zależeć od pisowni tematu.",
+        ],
+        examples=[
+            GrammarExample(text="To jest mały pokój.", note="Rodzaj męski."),
+            GrammarExample(text="To jest duże okno.", note="Rodzaj nijaki."),
+        ],
+    ),
+    GrammarTopic(
+        slug="przyimki-czasu-a1",
+        title="Podstawowe określenia czasu",
+        level="A1",
+        category="Gramatyka",
+        summary="Przyimki i wyrażenia czasu pomagają określić, kiedy odbywa się czynność.",
+        explanation="Polskie określenia czasu często łączą się z konkretnym przypadkiem. W poniedziałek i w maju odpowiadają na pytanie kiedy, a o ósmej wskazuje godzinę.",
+        structure="w + dzień/miesiąc; o + godzina",
+        rules=[
+            "Używaj w z nazwami dni i miesięcy w typowych określeniach czasu.",
+            "Używaj o, podając godzinę.",
+            "Odróżniaj określenie terminu od czasu trwania.",
+        ],
+        examples=[
+            GrammarExample(text="W sobotę odwiedzam rodzinę.", note="Dzień tygodnia."),
+            GrammarExample(text="Lekcja zaczyna się o dziewiątej.", note="Godzina."),
         ],
     ),
 ]

@@ -43,7 +43,7 @@ A1_UNITS: list[CurriculumUnit] = [
         unit_number=3,
         title="Dom i okolica",
         grammar_points=["mianownik", "biernik"],
-        vocabulary_set_ids=["dom_i_miasto_a1"],
+        vocabulary_set_ids=["dom_i_miasto_a1", "transport_a1", "miejsca-w-miescie_a1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Nazywa pomieszczenia, przedmioty i miejsca w mieście.",
@@ -76,7 +76,7 @@ A1_UNITS: list[CurriculumUnit] = [
         unit_number=5,
         title="Rodzina i opisy osób",
         grammar_points=["przymiotniki-i-zgodnosc", "mianownik"],
-        vocabulary_set_ids=["rodzina_a1"],
+        vocabulary_set_ids=["rodzina_a1", "ubrania_a1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Nazywa najbliższych członków rodziny i określa relacje.",
@@ -93,7 +93,7 @@ A1_UNITS: list[CurriculumUnit] = [
         unit_number=6,
         title="Jedzenie i zamawianie",
         grammar_points=["biernik", "pytania-i-przeczenia"],
-        vocabulary_set_ids=["jedzenie_a1"],
+        vocabulary_set_ids=["jedzenie_a1", "kawiarnia_a1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Nazywa podstawowe produkty spożywcze i proste posiłki.",
@@ -110,7 +110,7 @@ A1_UNITS: list[CurriculumUnit] = [
         unit_number=7,
         title="Szkoła i nauka języka",
         grammar_points=["liczba-mnoga", "czas-terazniejszy"],
-        vocabulary_set_ids=["szkola_a1"],
+        vocabulary_set_ids=["szkola_a1", "pogoda_a1", "przedmioty-szkolne_a1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Rozumie podstawowe polecenia i pytania używane podczas lekcji.",

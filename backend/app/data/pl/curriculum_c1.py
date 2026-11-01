@@ -27,7 +27,7 @@ C1_UNITS: list[CurriculumUnit] = [
         unit_number=2,
         title="Znaczenie i perspektywa",
         grammar_points=["modalnosc", "mowa-zalezna"],
-        vocabulary_set_ids=["interpretacja_c1"],
+        vocabulary_set_ids=["interpretacja_c1", "retoryka-i-perswazja_c1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Odróżnia fakt, wniosek, przypuszczenie i ocenę.",
@@ -43,7 +43,7 @@ C1_UNITS: list[CurriculumUnit] = [
         unit_number=3,
         title="Styl i redakcja",
         grammar_points=["styl-formalny", "imieslowy"],
-        vocabulary_set_ids=["redakcja_c1"],
+        vocabulary_set_ids=["redakcja_c1", "redakcja-tekstu_c1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Redaguje teksty formalne o zróżnicowanej składni.",
@@ -59,7 +59,7 @@ C1_UNITS: list[CurriculumUnit] = [
         unit_number=4,
         title="Badania i argumentacja akademicka",
         grammar_points=["nominalizacja", "skladnia-zlozona"],
-        vocabulary_set_ids=["badania_c1"],
+        vocabulary_set_ids=["badania_c1", "metodologia-badan_c1", "interpretacja-danych_c1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Opisuje metodologię, próbę badawczą i ograniczenia badania.",
@@ -76,7 +76,7 @@ C1_UNITS: list[CurriculumUnit] = [
         unit_number=5,
         title="Dyskurs publiczny i instytucje",
         grammar_points=["mowa-zalezna", "strona-bierna"],
-        vocabulary_set_ids=["dyskurs_c1"],
+        vocabulary_set_ids=["dyskurs_c1", "instytucje-publiczne_c1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Analizuje stanowiska w debacie o sprawach publicznych.",
@@ -110,7 +110,7 @@ C1_UNITS: list[CurriculumUnit] = [
         unit_number=7,
         title="Redakcja i komunikacja zawodowa",
         grammar_points=["styl-formalny", "konstrukcje-bezosobowe"],
-        vocabulary_set_ids=["komunikacja_zawodowa_c1"],
+        vocabulary_set_ids=["komunikacja_zawodowa_c1", "komunikacja-instytucjonalna_c1"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Redaguje dokument zawodowy dla określonego odbiorcy.",

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import Counter
+
 from app.data.assessment_bank import get_assessment_bank
 from app.data.curriculum import CEFR_LEVELS, get_curriculum
 from app.data.grammar import get_grammar_topics
@@ -69,6 +71,16 @@ def test_polish_learning_resources_are_linked_across_all_cefr_levels() -> None:
     assert all(vocabulary_set.unit_ref in unit_ids for vocabulary_set in vocabulary)
     assert len({question.id for question in assessment}) == len(assessment)
 
+    assert all(Counter(topic.level for topic in grammar)[level] >= 15 for level in CEFR_LEVELS)
+    assert all(
+        Counter(vocabulary_set.level for vocabulary_set in vocabulary)[level] >= 14
+        for level in CEFR_LEVELS
+    )
+    question_counts = Counter((question.difficulty, question.skill) for question in assessment)
+    assert all(question_counts[level, "grammar"] >= 7 for level in CEFR_LEVELS)
+    assert all(question_counts[level, "vocabulary"] >= 7 for level in CEFR_LEVELS)
+    assert all(question_counts[level, "reading"] >= 6 for level in CEFR_LEVELS)
+
     for level in CEFR_LEVELS:
         for unit_number, unit in enumerate(curriculum[level], start=1):
             assert unit.level == level
@@ -81,9 +93,16 @@ def test_polish_learning_resources_are_linked_across_all_cefr_levels() -> None:
             assert all(slug in grammar_by_slug for slug in unit.grammar_points)
             assert all(set_id in vocabulary_by_id for set_id in unit.vocabulary_set_ids)
             assert all(
-                vocabulary_by_id[set_id].unit_ref == unit.id
-                for set_id in unit.vocabulary_set_ids
+                vocabulary_by_id[set_id].unit_ref == unit.id for set_id in unit.vocabulary_set_ids
             )
+
+    curriculum_vocabulary_ids = {
+        set_id
+        for units in curriculum.values()
+        for unit in units
+        for set_id in unit.vocabulary_set_ids
+    }
+    assert all(vocabulary_set.id in curriculum_vocabulary_ids for vocabulary_set in vocabulary)
 
     assert all(topic.level in CEFR_LEVELS for topic in grammar)
     assert all(category.level in CEFR_LEVELS for category in phrasebook)

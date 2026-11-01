@@ -27,7 +27,7 @@ C2_UNITS: list[CurriculumUnit] = [
         unit_number=2,
         title="Argumentacja i perswazja",
         grammar_points=["retoryka", "modalnosc"],
-        vocabulary_set_ids=["retoryka_c2"],
+        vocabulary_set_ids=["retoryka_c2", "strategie-retoryczne_c2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Analizuje środki perswazji i ukryte założenia.",
@@ -43,7 +43,7 @@ C2_UNITS: list[CurriculumUnit] = [
         unit_number=3,
         title="Synteza i interpretacja",
         grammar_points=["skladnia-zlozona", "rejestry"],
-        vocabulary_set_ids=["synteza_c2"],
+        vocabulary_set_ids=["synteza_c2", "analiza-dyskursu_c2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Łączy informacje z kilku tekstów w spójną syntezę.",
@@ -59,7 +59,11 @@ C2_UNITS: list[CurriculumUnit] = [
         unit_number=4,
         title="Pragmatyka, ironia i aluzje",
         grammar_points=["ironia-i-pragmatyka", "retoryka"],
-        vocabulary_set_ids=["pragmatyka_c2"],
+        vocabulary_set_ids=[
+            "pragmatyka_c2",
+            "aluzje-i-intertekstualnosc_c2",
+            "pragmatyka-wypowiedzi_c2",
+        ],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Odróżnia sens dosłowny od treści implikowanej przez kontekst.",
@@ -76,7 +80,7 @@ C2_UNITS: list[CurriculumUnit] = [
         unit_number=5,
         title="Perswazja i krytyka argumentów",
         grammar_points=["retoryka", "modalnosc"],
-        vocabulary_set_ids=["perswazja_c2"],
+        vocabulary_set_ids=["perswazja_c2", "ocena-argumentow_c2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Analizuje siłę przesłanek niezależnie od perswazyjnej formy argumentu.",
@@ -93,7 +97,7 @@ C2_UNITS: list[CurriculumUnit] = [
         unit_number=6,
         title="Warianty języka i zmiana znaczeń",
         grammar_points=["warianty-i-norma", "rejestry"],
-        vocabulary_set_ids=["warianty_c2"],
+        vocabulary_set_ids=["warianty_c2", "zmiana-jezyka_c2"],
         lesson_types=["grammar", "vocabulary", "listening", "reading", "writing", "review"],
         competency_checklist=[
             "Rozpoznaje regionalizmy, archaizmy, neologizmy i zapożyczenia.",
