@@ -145,10 +145,10 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.ja.vocabulary as ja_vocabulary
     import app.data.ko.curriculum as ko_curriculum
     import app.data.ko.vocabulary as ko_vocabulary
-    import app.data.pt.curriculum as pt_curriculum
-    import app.data.pt.vocabulary as pt_vocabulary
     import app.data.pl.curriculum as pl_curriculum
     import app.data.pl.vocabulary as pl_vocabulary
+    import app.data.pt.curriculum as pt_curriculum
+    import app.data.pt.vocabulary as pt_vocabulary
     import app.data.zh.curriculum as zh_curriculum
     import app.data.zh.vocabulary as zh_vocabulary
 
@@ -197,8 +197,8 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
-    from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
+    from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
@@ -263,8 +263,8 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
-    from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
+    from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
