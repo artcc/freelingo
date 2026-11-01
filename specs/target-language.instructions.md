@@ -17,8 +17,8 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `pt-PT`, `ja-JP`,
-`ko-KR`, and `zh-CN`.
+The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `ja-JP`, `ko-KR`,
+`pl-PL`, `pt-PT`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -97,19 +97,19 @@ New code must not infer a plan-owned operation's language from the compatibility
 
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, European Portuguese, French from France, German from
-Germany, standard Italian, Japanese kanji/kana, South Korean Hangul, and Mainland Mandarin with
-simplified characters.
+Germany, standard Italian, standard Polish from Poland, Japanese kanji/kana, South Korean Hangul, and
+Mainland Mandarin with simplified characters.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
 
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages.
+other current languages, including Polish.
 
 ## Speech recognition
 
-Speech providers require ISO 639-1. `get_iso639()` maps canonical BCP-47 codes and falls back to the
-lowercase prefix for unknown codes.
+Speech providers require ISO 639-1. `get_iso639()` maps canonical BCP-47 codes, including `pl-PL` to
+`pl`, and falls back to the lowercase prefix for unknown codes.
 
 Generic `POST /api/stt` requires a user-owned `study_plan_id`, derives language from that plan, and
 always passes ISO explicitly. Voice conversation passes the resolved session language. There is no
@@ -118,8 +118,10 @@ implicit English default inside either STT adapter.
 TTS accepts a full BCP-47 language argument. OpenAI `gpt-4o-mini-tts` and its snapshots use it for
 native regional pronunciation instructions; without context, instructions request language inference
 without imposing a regional accent. Legacy/unknown OpenAI models and Kokoro ignore this argument.
-Model and voice selection remain configured independently of the target language. Provider and
-resource-owned language contracts are defined in `speech-services.instructions.md`.
+Kokoro's configured voices are English-only; Polish speech synthesis requires a configured non-Kokoro
+provider whose selected model supports Polish. Model and voice selection remain configured
+independently of the target language. Provider and resource-owned language contracts are defined in
+`speech-services.instructions.md`.
 
 ## Validation boundaries
 

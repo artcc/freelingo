@@ -396,6 +396,7 @@ class TestLanguageAPI:
         assert "ja-JP" in data["all_supported_languages"]
         assert "ko-KR" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
+        assert "pl-PL" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
     async def test_remove_language_cascades(self, client, db_session):
@@ -779,6 +780,16 @@ class TestCurriculumPerLanguage:
         assert "A1" in c
         assert len(c["A1"]) == 8
         assert c["A1"][0].title == "Sich vorstellen und begrüßen"
+
+    @pytest.mark.asyncio
+    async def test_curriculum_polish(self, client):
+        """get_curriculum('pl-PL') returns Polish curriculum at every CEFR level."""
+        from app.data.curriculum import get_curriculum
+
+        curriculum = get_curriculum("pl-PL")
+        assert list(curriculum) == ["A1", "A2", "B1", "B2", "C1", "C2"]
+        assert all(len(units) == 8 for units in curriculum.values())
+        assert curriculum["A1"][0].title == "Poznajmy się"
 
     @pytest.mark.asyncio
     async def test_curriculum_fallback(self, client):

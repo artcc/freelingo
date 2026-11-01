@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "¿Qué idiomas puedo aprender?",
-        "answer": "Inglés británico y americano, español, italiano, portugués, alemán, francés, japonés, coreano y chino continental. Puedes aprender varios a la vez, con planes y progreso independientes para cada idioma."
+        "answer": "Inglés británico y americano, español, italiano, portugués, alemán, francés, japonés, coreano, polaco y chino continental. Puedes aprender varios a la vez, con planes y progreso independientes para cada idioma."
       },
       "start": {
         "question": "¿Cómo empiezo a aprender?",
@@ -92,6 +92,7 @@
     "footerProduct": "Producto",
     "footerLegal": "Legal",
     "languageGreetings": {
+      "pl-PL": "Cześć!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1287,7 +1288,7 @@
     "workflowStep5": "Usa las Tarjetas para entrenar vocabulario en paralelo",
     "workflowStep6": "Practica conversación libre con Lingu",
     "q_language": "¿Qué idioma voy a aprender?",
-    "a_language": "Actualmente FreeLingo incluye varios idiomas (alemán, chino continental, coreano, español, francés, inglés americano, inglés británico, italiano, japonés, portugués) e iremos añadiendo más con el tiempo. Cuando un nuevo idioma esté disponible, lo encontrarás en Ajustes → Mis idiomas — añádelo y empieza a aprender al momento.",
+    "a_language": "Actualmente FreeLingo incluye varios idiomas (alemán, chino continental, coreano, español, francés, inglés americano, inglés británico, italiano, japonés, polaco, portugués) e iremos añadiendo más con el tiempo. Cuando un nuevo idioma esté disponible, lo encontrarás en Ajustes → Mis idiomas — añádelo y empieza a aprender al momento.",
     "q_assessment": "¿Qué es la Evaluación?",
     "a_assessment": "Una prueba adaptativa de hasta 15 preguntas de un banco específico del idioma que estás aprendiendo. Cubre gramática, vocabulario y comprensión lectora de A1 a C2. El resultado estima tu nivel MCER y señala fortalezas y aspectos a reforzar; puedes ajustar el nivel sugerido antes de crear el plan.",
     "q_studyPlan": "¿Qué es el Plan de Estudio y cómo lo genero?",
@@ -1474,6 +1475,7 @@
     "supportedLanguages": "Idiomas disponibles"
   },
   "targetLanguages": {
+    "pl-PL": "Polaco",
     "en-US": "Inglés (EEUU)",
     "en-GB": "Inglés (UK)",
     "es-ES": "Español",
@@ -1493,6 +1495,7 @@
     "ja": "japonés",
     "ko": "coreano",
     "zh": "chino",
+    "pl": "polaco",
     "es-ES-description": "Español hablado en España.",
     "it-IT-description": "Italiano hablado en Italia.",
     "pt-PT-description": "Portugués hablado en Portugal.",

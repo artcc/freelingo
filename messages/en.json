@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Which languages can I learn?",
-        "answer": "English (British and American), Spanish, Italian, Portuguese, German, French, Japanese, Korean and Mainland Chinese. You can learn several at once, with separate plans and progress for each language."
+        "answer": "English (British and American), Spanish, Italian, Portuguese, German, French, Japanese, Korean, Polish and Mainland Chinese. You can learn several at once, with separate plans and progress for each language."
       },
       "start": {
         "question": "How do I start learning?",
@@ -92,6 +92,7 @@
     "footerProduct": "Product",
     "footerLegal": "Legal",
     "languageGreetings": {
+      "pl-PL": "Cześć!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1287,7 +1288,7 @@
     "workflowStep5": "Use Flashcards to train vocabulary in parallel",
     "workflowStep6": "Practice free conversation with Lingu",
     "q_language": "What language will I learn?",
-    "a_language": "FreeLingo currently supports several languages (American English, British English, French, German, Italian, Japanese, Korean, Mainland Chinese, Portuguese, Spanish), and we will keep adding more over time. When a new language becomes available, you will find it in Settings → My Languages — add it and start learning right away.",
+    "a_language": "FreeLingo currently supports several languages (American English, British English, French, German, Italian, Japanese, Korean, Mainland Chinese, Polish, Portuguese, Spanish), and we will keep adding more over time. When a new language becomes available, you will find it in Settings → My Languages — add it and start learning right away.",
     "q_assessment": "What is the Assessment?",
     "a_assessment": "An adaptive quiz with up to 15 questions from a bank specific to your study language. It covers grammar, vocabulary and reading comprehension from A1 to C2. The result estimates your CEFR level and highlights strengths and areas to practise; you can adjust the suggested level before creating your plan.",
     "q_studyPlan": "What is the Study Plan and how do I generate one?",
@@ -1474,6 +1475,7 @@
     "supportedLanguages": "Available languages"
   },
   "targetLanguages": {
+    "pl-PL": "Polish",
     "en-US": "American English",
     "en-GB": "British English",
     "es-ES": "Spanish",
@@ -1493,6 +1495,7 @@
     "ja": "Japanese",
     "ko": "Korean",
     "zh": "Chinese",
+    "pl": "Polish",
     "es-ES-description": "Spanish as spoken in Spain.",
     "it-IT-description": "Italian as spoken in Italy.",
     "pt-PT-description": "Portuguese as spoken in Portugal.",

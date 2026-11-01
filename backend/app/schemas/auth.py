@@ -43,6 +43,7 @@ SUPPORTED_TARGET_LANGUAGES: set[str] = {
     "es-ES",
     "fr-FR",
     "it-IT",
+    "pl-PL",
     "ja-JP",
     "ko-KR",
     "pt-PT",

@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Jakich języków mogę się uczyć?",
-        "answer": "Angielskiego brytyjskiego i amerykańskiego, hiszpańskiego, włoskiego, portugalskiego, niemieckiego, francuskiego, japońskiego, koreańskiego i chińskiego kontynentalnego. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
+        "answer": "Angielskiego brytyjskiego i amerykańskiego, hiszpańskiego, włoskiego, portugalskiego, niemieckiego, francuskiego, japońskiego, koreańskiego, polskiego i chińskiego kontynentalnego. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
       },
       "start": {
         "question": "Jak zacząć naukę?",
@@ -92,6 +92,7 @@
     "footerProduct": "Produkt",
     "footerLegal": "Prawne",
     "languageGreetings": {
+      "pl-PL": "Cześć!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1287,7 +1288,7 @@
     "workflowStep5": "Używaj fiszek do trenowania słownictwa równolegle",
     "workflowStep6": "Ćwicz swobodną rozmowę z Lingu",
     "q_language": "Jakiego języka będę się uczyć?",
-    "a_language": "FreeLingo obsługuje obecnie kilka języków (amerykański angielski, brytyjski angielski, chiński kontynentalny, francuski, hiszpański, japoński, koreański, niemiecki, portugalski, włoski) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
+    "a_language": "FreeLingo obsługuje obecnie kilka języków (amerykański angielski, brytyjski angielski, chiński kontynentalny, francuski, hiszpański, japoński, koreański, niemiecki, polski, portugalski, włoski) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
     "q_assessment": "Czym jest ocena poziomu?",
     "a_assessment": "Adaptacyjny test z maksymalnie 15 pytaniami z banku pytań dla języka nauki. Obejmuje gramatykę, słownictwo i czytanie ze zrozumieniem od A1 do C2. Wynik szacuje poziom CEFR i wskazuje mocne strony oraz obszary do ćwiczeń; przed utworzeniem planu możesz zmienić sugerowany poziom.",
     "q_studyPlan": "Czym jest plan nauki i jak go wygenerować?",
@@ -1474,6 +1475,7 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "pl-PL": "Polski",
     "en-US": "Angielski amerykański",
     "en-GB": "Angielski brytyjski",
     "es-ES": "Hiszpański",
@@ -1493,6 +1495,7 @@
     "ja": "japoński",
     "ko": "koreański",
     "zh": "chiński",
+    "pl": "polski",
     "es-ES-description": "Hiszpański używany w Hiszpanii.",
     "it-IT-description": "Włoski używany we Włoszech.",
     "pt-PT-description": "Portugalski używany w Portugalii.",

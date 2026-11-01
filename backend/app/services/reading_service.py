@@ -88,6 +88,12 @@ _CULTURAL_TOPICS: dict[str, list[str]] = {
         "daily life and customs in Italian cities",
         "Italian history, landmarks, and UNESCO sites",
     ],
+    "pl": [
+        "Polish regional cuisine, food traditions, and seasonal customs",
+        "Polish literature, music, cinema, and contemporary culture",
+        "daily life, public transport, and customs in Polish cities",
+        "Polish history, landmarks, and cultural heritage",
+    ],
     "pt": [
         "Portuguese music, fado, and cultural traditions",
         "Portuguese cuisine, wines, and food customs",

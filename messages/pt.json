@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Quais idiomas posso aprender?",
-        "answer": "Inglês britânico e americano, espanhol, italiano, português, alemão, francês, japonês, coreano e chinês continental. Você pode aprender vários ao mesmo tempo, com planos e progresso separados para cada idioma."
+        "answer": "Inglês britânico e americano, espanhol, italiano, português, alemão, francês, japonês, coreano, polaco e chinês continental. Você pode aprender vários ao mesmo tempo, com planos e progresso separados para cada idioma."
       },
       "start": {
         "question": "Como começo a aprender?",
@@ -92,6 +92,7 @@
     "footerProduct": "Produto",
     "footerLegal": "Legal",
     "languageGreetings": {
+      "pl-PL": "Cześć!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1287,7 +1288,7 @@
     "workflowStep5": "Use os Cartões para treinar vocabulário em paralelo",
     "workflowStep6": "Pratique a conversação livre com Lingu",
     "q_language": "Que idioma vou aprender?",
-    "a_language": "O FreeLingo suporta atualmente vários idiomas (alemão, chinês continental, coreano, espanhol, francês, inglês americano, inglês britânico, italiano, japonês, português) e continuaremos a adicionar mais ao longo do tempo. Quando um novo idioma estiver disponível, encontrá-lo-á em Definições → Os meus idiomas — adicione-o e comece a aprender de imediato.",
+    "a_language": "O FreeLingo suporta atualmente vários idiomas (alemão, chinês continental, coreano, espanhol, francês, inglês americano, inglês britânico, italiano, japonês, polaco, português) e continuaremos a adicionar mais ao longo do tempo. Quando um novo idioma estiver disponível, encontrá-lo-á em Definições → Os meus idiomas — adicione-o e comece a aprender de imediato.",
     "q_assessment": "O que é a Avaliação?",
     "a_assessment": "Um teste adaptativo com até 15 perguntas de um banco específico do idioma de estudo. Abrange gramática, vocabulário e compreensão de leitura de A1 a C2. O resultado estima o seu nível QECR e identifica pontos fortes e aspetos a melhorar; pode ajustar o nível sugerido antes de criar o plano.",
     "q_studyPlan": "O que é o Plano de Estudo e como o gero?",
@@ -1474,6 +1475,7 @@
     "supportedLanguages": "Idiomas disponíveis"
   },
   "targetLanguages": {
+    "pl-PL": "Polaco",
     "en-US": "Inglês americano",
     "en-GB": "Inglês britânico",
     "es-ES": "Espanhol",
@@ -1493,6 +1495,7 @@
     "ja": "japonês",
     "ko": "coreano",
     "zh": "chinês",
+    "pl": "polonês",
     "es-ES-description": "Espanhol falado na Espanha.",
     "it-IT-description": "Italiano falado na Itália.",
     "pt-PT-description": "Português falado em Portugal.",

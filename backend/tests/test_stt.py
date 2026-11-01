@@ -17,6 +17,7 @@ LANGUAGE_CASES = [
     ("ja-JP", "ja"),
     ("ko-KR", "ko"),
     ("pt-PT", "pt"),
+    ("pl-PL", "pl"),
     ("zh-CN", "zh"),
 ]
 

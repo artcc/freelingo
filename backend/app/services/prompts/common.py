@@ -70,6 +70,14 @@ Language-specific guidance:
 - Use du or Sie consistently according to the context and learner level.
 - Avoid Austrian or Swiss variants unless explicitly comparing them.
 """.strip(),
+    "pl-PL": """
+Language-specific guidance:
+- Use standard contemporary Polish as used in Poland.
+- Use Polish diacritics and spelling accurately, including ą, ć, ę, ł, ń, ó, ś, ź, and ż.
+- Pay close attention to grammatical gender, case government, agreement, and verbal aspect.
+- Use natural Polish word order and distinguish formal Pan/Pani address from informal ty.
+- Avoid regionalisms unless explicitly teaching or comparing them.
+""".strip(),
     "ja-JP": """
 Language-specific guidance:
 - Use standard Japanese as used in Japan consistently.
@@ -98,6 +106,7 @@ _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
     "fr": "fr-FR",
     "es": "es-ES",
     "it": "it-IT",
+    "pl": "pl-PL",
     "pt": "pt-PT",
     "ja": "ja-JP",
     "ko": "ko-KR",

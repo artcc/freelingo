@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 10 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(10)
+  it('contains exactly 11 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(11)
   })
 
   const expectedCodes = [
@@ -22,6 +22,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'pt-PT',
     'fr-FR',
     'de-DE',
+    'pl-PL',
     'ja-JP',
     'ko-KR',
     'zh-CN',
@@ -56,6 +57,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
     expect(paths).toContain('/flags/germany.jpg')
+    expect(paths).toContain('/flags/poland.svg')
     expect(paths).toContain('/flags/japan.jpg')
     expect(paths).toContain('/flags/south_korea.jpg')
     expect(paths).toContain('/flags/china.jpg')
@@ -68,6 +70,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     const ptLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'pt')
     const frLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'fr')
     const deLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'de')
+    const plLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'pl')
     const jaLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'ja')
     const koLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'ko')
     const zhLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'zh')
@@ -77,6 +80,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(ptLangs).toHaveLength(1)
     expect(frLangs).toHaveLength(1)
     expect(deLangs).toHaveLength(1)
+    expect(plLangs).toHaveLength(1)
     expect(jaLangs).toHaveLength(1)
     expect(koLangs).toHaveLength(1)
     expect(zhLangs).toHaveLength(1)
@@ -84,8 +88,8 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 })
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
-  it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(10)
+  it('contains all supported languages, including Polish and CJK', () => {
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(11)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -94,6 +98,7 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'pt-PT',
       'fr-FR',
       'de-DE',
+      'pl-PL',
       'ja-JP',
       'ko-KR',
       'zh-CN',
@@ -108,6 +113,7 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       iso639: 'ja',
       fontClass: 'font-target-ja',
     })
+
     expect(getLanguageByCode('ko-KR')).toMatchObject({
       name: '한국어',
       nameEn: 'Korean',
@@ -121,6 +127,18 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       flagPath: '/flags/china.jpg',
       iso639: 'zh',
       fontClass: 'font-target-zh',
+    })
+  })
+
+  it('contains complete Polish display metadata', () => {
+    expect(getLanguageByCode('pl-PL')).toMatchObject({
+      name: 'Polski',
+      nameEn: 'Polish',
+      flagPath: '/flags/poland.svg',
+      iso639: 'pl',
+      script: 'latin',
+      fontClass: 'font-target-latin',
+      usesWordSpacing: true,
     })
   })
 })

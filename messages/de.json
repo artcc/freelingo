@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Welche Sprachen kann ich lernen?",
-        "answer": "Britisches und amerikanisches Englisch, Spanisch, Italienisch, Portugiesisch, Deutsch, Französisch, Japanisch, Koreanisch und Festlandchinesisch. Du kannst mehrere Sprachen gleichzeitig lernen, mit eigenen Lernplänen und Fortschritten für jede Sprache."
+        "answer": "Britisches und amerikanisches Englisch, Spanisch, Italienisch, Portugiesisch, Deutsch, Französisch, Japanisch, Koreanisch, Polnisch und Festlandchinesisch. Du kannst mehrere Sprachen gleichzeitig lernen, mit eigenen Lernplänen und Fortschritten für jede Sprache."
       },
       "start": {
         "question": "Wie fange ich an zu lernen?",
@@ -92,6 +92,7 @@
     "footerProduct": "Produkt",
     "footerLegal": "Rechtliches",
     "languageGreetings": {
+      "pl-PL": "Cześć!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1287,7 +1288,7 @@
     "workflowStep5": "Nutzen Sie Karteikarten, um parallel Vokabular zu üben",
     "workflowStep6": "Üben Sie freie Gespräche mit Lingu",
     "q_language": "Welche Sprache werde ich lernen?",
-    "a_language": "FreeLingo unterstützt derzeit mehrere Sprachen (Amerikanisches Englisch, Britisches Englisch, Chinesisch (Festland), Deutsch, Französisch, Italienisch, Japanisch, Koreanisch, Portugiesisch, Spanisch), und wir werden mit der Zeit weitere hinzufügen. Wenn eine neue Sprache verfügbar ist, findest du sie unter Einstellungen → Meine Sprachen — füge sie hinzu und beginne sofort zu lernen.",
+    "a_language": "FreeLingo unterstützt derzeit mehrere Sprachen (Amerikanisches Englisch, Britisches Englisch, Chinesisch (Festland), Deutsch, Französisch, Italienisch, Japanisch, Koreanisch, Polnisch, Portugiesisch, Spanisch), und wir werden mit der Zeit weitere hinzufügen. Wenn eine neue Sprache verfügbar ist, findest du sie unter Einstellungen → Meine Sprachen — füge sie hinzu und beginne sofort zu lernen.",
     "q_assessment": "Was ist die Einstufung?",
     "a_assessment": "Ein adaptiver Test mit bis zu 15 Fragen aus einem Fragenkatalog für Ihre Lernsprache. Er umfasst Grammatik, Wortschatz und Leseverständnis von A1 bis C2. Das Ergebnis schätzt Ihr GER-Niveau ein und zeigt Stärken und Übungsbedarf; vor der Planerstellung können Sie das vorgeschlagene Niveau anpassen.",
     "q_studyPlan": "Was ist der Lernplan und wie erstelle ich einen?",
@@ -1474,6 +1475,7 @@
     "supportedLanguages": "Verfügbare Sprachen"
   },
   "targetLanguages": {
+    "pl-PL": "Polnisch",
     "en-US": "Amerikanisches Englisch",
     "en-GB": "Britisches Englisch",
     "es-ES": "Spanisch",
@@ -1493,6 +1495,7 @@
     "ja": "Japanisch",
     "ko": "Koreanisch",
     "zh": "Chinesisch",
+    "pl": "Polnisch",
     "es-ES-description": "Spanisch, wie es in Spanien gesprochen wird.",
     "it-IT-description": "Italienisch, wie es in Italien gesprochen wird.",
     "pt-PT-description": "Portugiesisch, wie es in Portugal gesprochen wird.",

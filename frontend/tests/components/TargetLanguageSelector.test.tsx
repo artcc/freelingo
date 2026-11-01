@@ -35,6 +35,7 @@ describe('TargetLanguageSelector', () => {
     'pt-PT',
     'fr-FR',
     'de-DE',
+    'pl-PL',
   ]
   const catalogCodes = TARGET_LANGUAGE_CATALOG.map((lang) => lang.code)
 
@@ -61,7 +62,7 @@ describe('TargetLanguageSelector', () => {
     )
 
     const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(10)
+    expect(buttons).toHaveLength(11)
   })
 
   it('renders nothing when availableCodes is empty', () => {
@@ -177,6 +178,7 @@ describe('TargetLanguageSelector', () => {
     expect(srcs).toContain('/flags/portugal.jpg')
     expect(srcs).toContain('/flags/france.jpg')
     expect(srcs).toContain('/flags/germany.jpg')
+    expect(srcs).toContain('/flags/poland.svg')
     expect(srcs).toContain('/flags/japan.jpg')
     expect(srcs).toContain('/flags/south_korea.jpg')
     expect(srcs).toContain('/flags/china.jpg')
@@ -201,6 +203,7 @@ describe('TargetLanguageSelector', () => {
     expect(textContent).toContain('pt-PT')
     expect(textContent).toContain('fr-FR')
     expect(textContent).toContain('de-DE')
+    expect(textContent).toContain('pl-PL')
   })
 
   it('does not re-render filtered languages when onChange does not change', () => {

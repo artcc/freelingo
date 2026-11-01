@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Mitä kieliä voin opiskella?",
-        "answer": "Britti- ja amerikanenglantia, espanjaa, italiaa, portugalia, saksaa, ranskaa, japania, koreaa ja Manner-Kiinan kiinaa. Voit opiskella useita samanaikaisesti, ja jokaisella kielellä on oma suunnitelma ja edistyminen."
+        "answer": "Britti- ja amerikanenglantia, espanjaa, italiaa, portugalia, saksaa, ranskaa, japania, koreaa, puolaa ja Manner-Kiinan kiinaa. Voit opiskella useita samanaikaisesti, ja jokaisella kielellä on oma suunnitelma ja edistyminen."
       },
       "start": {
         "question": "Miten aloitan opiskelun?",
@@ -92,6 +92,7 @@
     "footerProduct": "Tuote",
     "footerLegal": "Oikeudelliset tiedot",
     "languageGreetings": {
+      "pl-PL": "Cześć!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1287,7 +1288,7 @@
     "workflowStep5": "Harjoittele sanastoa muistikorteilla samalla",
     "workflowStep6": "Harjoittele vapaata keskustelua Lingun kanssa",
     "q_language": "Mitä kieltä voin oppia?",
-    "a_language": "FreeLingo tukee tällä hetkellä useita kieliä (amerikanenglanti, brittienglanti, ranska, saksa, italia, japani, korea, Manner-Kiinan kiina, portugali ja espanja), ja lisäämme kieliä ajan mittaan. Kun uusi kieli tulee saataville, löydät sen kohdasta Asetukset → Omat kielet – lisää se ja aloita opiskelu heti.",
+    "a_language": "FreeLingo tukee tällä hetkellä useita kieliä (amerikanenglanti, brittienglanti, ranska, saksa, italia, japani, korea, Manner-Kiinan kiina, puola, portugali ja espanja), ja lisäämme kieliä ajan mittaan. Kun uusi kieli tulee saataville, löydät sen kohdasta Asetukset → Omat kielet – lisää se ja aloita opiskelu heti.",
     "q_assessment": "Mikä tasoarvio on?",
     "a_assessment": "Mukautuva testi, jossa on enintään 15 kysymystä opiskelukielen omasta kysymyspankista. Se kattaa kieliopin, sanaston ja luetun ymmärtämisen tasoilla A1–C2. Tulos arvioi CEFR-tasosi ja näyttää vahvuudet ja harjoittelukohteet; voit muuttaa ehdotettua tasoa ennen suunnitelman luomista.",
     "q_studyPlan": "Mikä opintosuunnitelma on ja miten luon sellaisen?",
@@ -1474,6 +1475,7 @@
     "supportedLanguages": "Saatavilla olevat kielet"
   },
   "targetLanguages": {
+    "pl-PL": "Puola",
     "en-US": "Amerikanenglanti",
     "en-GB": "Brittienglanti",
     "es-ES": "Espanja",
@@ -1493,6 +1495,7 @@
     "ja": "Japani",
     "ko": "Korea",
     "zh": "Kiina",
+    "pl": "puola",
     "es-ES-description": "Espanjassa puhuttu espanja.",
     "it-IT-description": "Italiassa puhuttu italia.",
     "pt-PT-description": "Portugalissa puhuttu portugali.",

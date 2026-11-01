@@ -11,13 +11,20 @@ Grammar, Vocabulary, Phrasebook, curriculum, and assessment-bank content is defi
 dataclasses grouped by target language and CEFR level. The frontend retrieves these resources through
 authenticated APIs; it does not contain the canonical datasets.
 
-All ten supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
+All eleven supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
 placement-bank data. Dispatchers select exact English variants and ISO-prefix packages for other
 languages. Unknown dispatcher input currently falls back to `en-GB` rather than returning an error.
 
 Static resource APIs accept an explicit language query and do not require it to match the user's
 active language or owned plans. Frontend resource pages normally send the active language, with
 `en-GB` fallback.
+
+### Polish curriculum and reference content
+
+Polish (`pl-PL`) provides eight linked curriculum units at each CEFR level from A1 through C2, with
+Polish-language competency checklists, grammar references, vocabulary sets, and practical phrasebook
+categories. Its placement bank covers grammar, vocabulary, and reading at every level. The package
+uses standard Polish from Poland, including its diacritics, case system, and verbal aspect.
 
 ### English foundational curriculum
 
