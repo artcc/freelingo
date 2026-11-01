@@ -49,6 +49,13 @@ Language-specific guidance:
 - Use tu or Lei consistently according to the context and learner level.
 - Avoid strong regionalisms unless explicitly teaching or comparing them.
 """.strip(),
+    "pl-PL": """
+Language-specific guidance:
+- Use standard Polish as used in Poland consistently.
+- Pay close attention to grammatical gender, case endings, verb aspect, and numeral agreement.
+- Distinguish perfective and imperfective forms whenever the meaning depends on completion, repetition, or result.
+- Avoid English word order and calques; use natural Polish phrasing and spelling with diacritics.
+""".strip(),
     "pt-PT": """
 Language-specific guidance:
 - Use European Portuguese from Portugal consistently.
@@ -98,6 +105,7 @@ _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
     "fr": "fr-FR",
     "es": "es-ES",
     "it": "it-IT",
+    "pl": "pl-PL",
     "pt": "pt-PT",
     "ja": "ja-JP",
     "ko": "ko-KR",

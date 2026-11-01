@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugisiska",
     "fr-FR": "Franska",
     "de-DE": "Tyska",
+    "pl-PL": "Polska",
     "ja-JP": "Japanska",
     "ko-KR": "Koreanska",
     "zh-CN": "Kinesiska (Fastlandskina)",
@@ -1490,6 +1492,7 @@
     "pt": "Portugisiska",
     "fr": "Franska",
     "de": "Tyska",
+    "pl": "Polska",
     "ja": "Japanska",
     "ko": "Koreanska",
     "zh": "Kinesiska",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Engelska som talas i Storbritannien.",
     "fr-FR-description": "Franska som talas i Frankrike.",
     "de-DE-description": "Tyska som talas i Tyskland.",
+    "pl-PL-description": "Polska som det talas i Polen.",
     "ja-JP-description": "Japanska som talas i Japan.",
     "ko-KR-description": "Koreanska som talas i Sydkorea.",
     "zh-CN-description": "Mandarinkinesiska som talas i Fastlandskina med förenklade tecken."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Jag förstår",
     "entry1": {
+      "label": "Nu kan du lära dig polska!",
+      "desc": "Polska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj det när du börjar eller lägg till det under Inställningar → Mina språk."
+    },
+    "entry2": {
       "label": "Förbättringar för lärandet",
       "desc": "Vi fortsätter att förbättra våra inlärningssystem och vårt språkinnehåll för att göra dina övningar tydligare, mer sammanhängande och mer användbara."
     },
-    "entry2": {
+    "entry3": {
       "label": "Smidigare röstsamtal",
       "desc": "Vi har förbättrat samtalen med Lingu för smidigare röstuppspelning och tydligare signaler om vems tur det är att prata."
     },
-    "entry3": {
+    "entry4": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

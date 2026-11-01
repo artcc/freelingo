@@ -94,6 +94,12 @@ _CULTURAL_TOPICS: dict[str, list[str]] = {
         "daily life and customs in Portuguese cities",
         "Portuguese history, the Age of Discoveries, and heritage",
     ],
+    "pl": [
+        "Polish traditions, festivals, and seasonal customs",
+        "Polish cuisine, regional food culture, and hospitality",
+        "daily life and customs in Polish cities",
+        "Polish history, literature, and cultural heritage",
+    ],
     "ja": [
         "daily life, etiquette, and seasonal customs in Japan",
         "Japanese food culture, festivals, and regional traditions",

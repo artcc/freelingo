@@ -30,6 +30,7 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
     },
     "fr-FR": {"name": "French", "self_name": "Français", "iso639": "fr", "flag": "🇫🇷"},
     "it-IT": {"name": "Italian", "self_name": "Italiano", "iso639": "it", "flag": "🇮🇹"},
+    "pl-PL": {"name": "Polish", "self_name": "Polski", "iso639": "pl", "flag": "🇵🇱"},
     "pt-PT": {
         "name": "European Portuguese",
         "self_name": "Português (Portugal)",
@@ -88,6 +89,12 @@ _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
         "uses_word_spacing": True,
         "reading_length_unit": "words",
     },
+    "pl-PL": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
     "pt-PT": {
         "script": "latin",
         "romanization": "",
@@ -119,6 +126,7 @@ _LANGUAGE_CAPABILITY_ALIASES: dict[str, str] = {
     "es": "es-ES",
     "fr": "fr-FR",
     "it": "it-IT",
+    "pl": "pl-PL",
     "pt": "pt-PT",
     "ja": "ja-JP",
     "ko": "ko-KR",

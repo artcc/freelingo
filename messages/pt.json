@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Português",
     "fr-FR": "Francês",
     "de-DE": "Alemão",
+    "pl-PL": "Polaco",
     "ja-JP": "Japonês",
     "ko-KR": "Coreano",
     "zh-CN": "Chinês continental",
@@ -1490,6 +1492,7 @@
     "pt": "português",
     "fr": "francês",
     "de": "alemão",
+    "pl": "Polaco",
     "ja": "japonês",
     "ko": "coreano",
     "zh": "chinês",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Inglês falado no Reino Unido.",
     "fr-FR-description": "Francês falado na França.",
     "de-DE-description": "Alemão falado na Alemanha.",
+    "pl-PL-description": "Polaco como se fala na Polónia.",
     "ja-JP-description": "Japonês falado no Japão.",
     "ko-KR-description": "Coreano falado na Coreia do Sul.",
     "zh-CN-description": "Chinês mandarim da China continental, com caracteres simplificados."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Entendido",
     "entry1": {
+      "label": "Já podes aprender polaco!",
+      "desc": "Adicionámos o polaco como idioma de aprendizagem, com conteúdos de A1 a C2. Escolhe-o ao começar ou adiciona-o em Definições → Meus idiomas."
+    },
+    "entry2": {
       "label": "Melhorias na aprendizagem",
       "desc": "Continuamos a aperfeiçoar os sistemas de aprendizagem e os conteúdos de idiomas para te oferecer uma prática mais clara, coerente e útil."
     },
-    "entry2": {
+    "entry3": {
       "label": "Conversas por voz mais fluidas",
       "desc": "Melhorámos as conversas com o Lingu para uma reprodução de voz mais fluida e indicações mais claras sobre a vez de falar."
     },
-    "entry3": {
+    "entry4": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

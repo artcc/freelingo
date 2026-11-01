@@ -25,6 +25,7 @@ The application supports these BCP-47 target-language codes:
 - `es-ES` — Spanish (Spain)
 - `fr-FR` — French
 - `it-IT` — Italian
+- `pl-PL` — Polish
 - `ja-JP` — Japanese
 - `ko-KR` — Korean (South Korea)
 - `pt-PT` — Portuguese (Portugal)

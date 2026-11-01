@@ -11,7 +11,7 @@ Grammar, Vocabulary, Phrasebook, curriculum, and assessment-bank content is defi
 dataclasses grouped by target language and CEFR level. The frontend retrieves these resources through
 authenticated APIs; it does not contain the canonical datasets.
 
-All ten supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
+All eleven supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
 placement-bank data. Dispatchers select exact English variants and ISO-prefix packages for other
 languages. Unknown dispatcher input currently falls back to `en-GB` rather than returning an error.
 
@@ -99,6 +99,35 @@ French vocabulary distinguishes literary effects such as tragic or comic tone fr
 Placement questions specify the context, tense, or person needed for the keyed answer. Correct-answer
 positions are balanced within each level/skill group in these three static banks; the frontend displays
 the saved option order. Grammar references resolve within the selected target language.
+
+### Polish curriculum and reference content
+
+Every Polish (`pl-PL`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
+writing, and review in that order. Allocation uses the existing plan-capacity and rotation rules; a
+short plan does not give every unit a complete cycle. Persisted schedules are retained, so these
+declarations apply when creating new plans.
+
+The curriculum contains eight units per level, 126 grammar topics, 105 vocabulary sets, 28 phrasebook
+categories, and 124 placement questions.
+
+The foundational sequence includes:
+
+- A1 covers `być`, nominative gender and plural, adjective and possessive agreement, present tense,
+  reflexives, accusative, locative, past and future forms, and genitive after negation.
+- A2 introduces verb aspect, the full genitive and dative, instrumental, the imperative, the
+  conditional with `by`, and comparative and superlative forms.
+- B1 extends aspect pairs, passive voice, participles, reported speech, impersonal constructions, and
+  purpose and time clauses.
+- B2 adds nominalization, advanced passive and impersonal forms, emphatic word order, concession, and
+  aspectual nuance.
+- C1 and C2 cover register, terminology, definition, phraseology, legal and scientific language,
+  rhetoric, translation, and regional variation.
+
+Learner-facing titles, explanations, definitions, examples, contexts, and placement questions are
+written in Polish. Vocabulary entries include IPA and per-level unique frequency ranks. Phrasebook
+registers are `formal`, `neutral`, or `informal`. Placement questions keep grammar slugs that resolve
+within the Polish package and balance the correct option's position within each level and skill.
+Polish uses Latin script with visible word spacing, and comprehension guidance uses words.
 
 ### Japanese curriculum and reference content
 

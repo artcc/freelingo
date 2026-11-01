@@ -103,6 +103,7 @@ class Settings(BaseSettings):
         "es-ES",
         "fr-FR",
         "it-IT",
+        "pl-PL",
         "ja-JP",
         "ko-KR",
         "pt-PT",

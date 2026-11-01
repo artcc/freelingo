@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portekizce",
     "fr-FR": "Fransızca",
     "de-DE": "Almanca",
+    "pl-PL": "Lehçe",
     "ja-JP": "Japonca",
     "ko-KR": "Korece",
     "zh-CN": "Çince (Çin anakarası)",
@@ -1490,6 +1492,7 @@
     "pt": "Portekizce",
     "fr": "Fransızca",
     "de": "Almanca",
+    "pl": "Lehçe",
     "ja": "Japonca",
     "ko": "Korece",
     "zh": "Çince",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Birleşik Krallık'ta konuşulan İngilizce.",
     "fr-FR-description": "Fransa'da konuşulan Fransızca.",
     "de-DE-description": "Almanya'da konuşulan Almanca.",
+    "pl-PL-description": "Polonya'da konuşulan Lehçe.",
     "ja-JP-description": "Japonya'da konuşulan Japonca.",
     "ko-KR-description": "Güney Kore'de konuşulan Korece.",
     "zh-CN-description": "Çin anakarasında konuşulan, basitleştirilmiş karakterlerle yazılan Mandarin Çincesi."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Anladım",
     "entry1": {
+      "label": "Artık Lehçe öğrenebilirsin!",
+      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
+    },
+    "entry2": {
       "label": "Öğrenimde iyileştirmeler",
       "desc": "Daha anlaşılır, tutarlı ve faydalı bir pratik deneyimi sunmak için öğrenme sistemlerimizi ve dil içeriklerimizi geliştirmeye devam ediyoruz."
     },
-    "entry2": {
+    "entry3": {
       "label": "Daha akıcı sesli konuşmalar",
       "desc": "Daha akıcı ses oynatımı ve konuşma sırasını daha net gösteren işaretler için Lingu ile sohbetleri iyileştirdik."
     },
-    "entry3": {
+    "entry4": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

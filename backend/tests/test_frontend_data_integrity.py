@@ -57,7 +57,7 @@ def test_data_files_exist() -> None:
     assert CURRICULUM_FILE.exists(), "Missing data file: curriculum.ts"
 
 
-@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "ja-JP"])
+@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "pl-PL", "ja-JP"])
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
 
@@ -97,6 +97,7 @@ def test_curriculum_grammar_refs_all_defined() -> None:
         "en-US",
         "es-ES",
         "it-IT",
+        "pl-PL",
         "pt-PT",
         "fr-FR",
         "de-DE",
@@ -144,6 +145,8 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.ja.vocabulary as ja_vocabulary
     import app.data.ko.curriculum as ko_curriculum
     import app.data.ko.vocabulary as ko_vocabulary
+    import app.data.pl.curriculum as pl_curriculum
+    import app.data.pl.vocabulary as pl_vocabulary
     import app.data.pt.curriculum as pt_curriculum
     import app.data.pt.vocabulary as pt_vocabulary
     import app.data.zh.curriculum as zh_curriculum
@@ -153,6 +156,7 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     _check_language_vocab_refs("Spanish", es_curriculum.CURRICULUM, es_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("French", fr_curriculum.CURRICULUM, fr_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Italian", it_curriculum.CURRICULUM, it_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Polish", pl_curriculum.CURRICULUM, pl_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Japanese", ja_curriculum.CURRICULUM, ja_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Korean", ko_curriculum.CURRICULUM, ko_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs(
@@ -168,6 +172,7 @@ def test_grammar_related_refs_all_defined() -> None:
         "en-US",
         "es-ES",
         "it-IT",
+        "pl-PL",
         "pt-PT",
         "fr-FR",
         "de-DE",
@@ -192,6 +197,7 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
+    from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
@@ -199,6 +205,7 @@ def test_vocabulary_export_completeness() -> None:
         ("en", en_sets),
         ("es", es_sets),
         ("it", it_sets),
+        ("pl", pl_sets),
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
@@ -226,6 +233,7 @@ def test_grammar_slug_uniqueness() -> None:
         "en-US",
         "es-ES",
         "it-IT",
+        "pl-PL",
         "pt-PT",
         "fr-FR",
         "de-DE",
@@ -255,6 +263,7 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
+    from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
@@ -262,6 +271,7 @@ def test_vocabulary_id_uniqueness() -> None:
         ("en", en_sets),
         ("es", es_sets),
         ("it", it_sets),
+        ("pl", pl_sets),
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
@@ -423,3 +433,113 @@ def test_pt_vocabulary_no_duplicates_per_level() -> None:
         assert not duplicates, f"pt {level}: duplicate vocabulary words found:\n" + "\n".join(
             f"  - {w}" for w in duplicates
         )
+
+
+def test_pl_vocabulary_frequency_rank_integrity() -> None:
+    """Polish vocabulary must have complete and unique frequency ranks per CEFR level."""
+    from collections import Counter
+
+    from app.data.pl.vocabulary import VOCABULARY_SETS
+
+    for level in ("A1", "A2", "B1", "B2", "C1", "C2"):
+        ranks: list[int] = []
+        for s in VOCABULARY_SETS:
+            if s.level != level:
+                continue
+            for w in s.words:
+                assert (
+                    w.frequency_rank is not None
+                ), f"pl {level}: missing frequency_rank for word '{w.word}' in set '{s.id}'"
+                ranks.append(w.frequency_rank)
+
+        duplicates = sorted(rank for rank, n in Counter(ranks).items() if n > 1)
+        assert not duplicates, f"pl {level}: duplicate frequency_rank values found:\n" + "\n".join(
+            f"  - {r}" for r in duplicates
+        )
+
+
+def test_pl_vocabulary_no_duplicates_per_level() -> None:
+    """Polish vocabulary should not repeat the same surface word inside a CEFR level."""
+    from collections import Counter
+
+    from app.data.pl.vocabulary import VOCABULARY_SETS
+
+    for level in ("A1", "A2", "B1", "B2", "C1", "C2"):
+        words: list[str] = []
+        for s in VOCABULARY_SETS:
+            if s.level != level:
+                continue
+            words.extend(w.word.strip().lower() for w in s.words)
+
+        duplicates = sorted(word for word, n in Counter(words).items() if n > 1)
+        assert not duplicates, f"pl {level}: duplicate vocabulary words found:\n" + "\n".join(
+            f"  - {w}" for w in duplicates
+        )
+
+
+def test_pl_curriculum_units_and_vocabulary_links_are_consistent() -> None:
+    from app.data.curriculum import CEFR_LEVELS, get_curriculum
+    from app.data.vocabulary import get_vocabulary_sets
+
+    curriculum = get_curriculum("pl-PL")
+    sets = get_vocabulary_sets("pl-PL")
+    units = [unit for level in CEFR_LEVELS for unit in curriculum[level]]
+    units_by_id = {unit.id: unit for unit in units}
+    sets_by_id = {vocabulary_set.id: vocabulary_set for vocabulary_set in sets}
+
+    assert len(units_by_id) == len(units) == 48
+    assert len(sets_by_id) == len(sets) == 105
+    assert sum(len(vocabulary_set.words) for vocabulary_set in sets) == 1072
+    for level in CEFR_LEVELS:
+        level_units = curriculum[level]
+        assert len(level_units) == 8
+        for index, unit in enumerate(level_units):
+            assert unit.level == level
+            assert unit.unit_number == index + 1
+            assert unit.prerequisite_unit == (level_units[index - 1].id if index else None)
+            for set_id in unit.vocabulary_set_ids:
+                assert sets_by_id[set_id].unit_ref == unit.id
+
+    for vocabulary_set in sets:
+        unit = units_by_id[vocabulary_set.unit_ref]
+        assert vocabulary_set.level == unit.level
+        assert vocabulary_set.id in unit.vocabulary_set_ids
+        for word in vocabulary_set.words:
+            assert word.ipa and re.fullmatch(r"/[^/]+/", word.ipa), word.word
+
+
+def test_pl_assessment_references_and_options_are_valid() -> None:
+    """Check structure and known English fragments; linguistic quality needs human review."""
+    from app.data.assessment_bank import get_assessment_bank
+    from app.data.grammar import get_grammar_topics
+
+    bank = get_assessment_bank("pl-PL")
+    grammar_levels = {topic.slug: topic.level for topic in get_grammar_topics("pl-PL")}
+    banned_fragments = ["thank you", "goodbye", "childhood"]
+
+    assert len(bank) == 124
+    for q in bank:
+        assert q.id.startswith("pl-")
+        assert len(q.options) == len(set(q.options)) == 4, q.id
+        assert q.correct in q.options, q.id
+        if q.grammar_slug:
+            assert grammar_levels[q.grammar_slug] == q.difficulty, q.id
+
+        haystack = " ".join([q.question, *q.options, q.correct]).lower()
+        found = [frag for frag in banned_fragments if frag in haystack]
+        assert not found, f"pl assessment {q.id}: contains non-Polish fragment(s): " + ", ".join(
+            found
+        )
+
+
+def test_pl_phrasebook_registers_and_levels_are_valid() -> None:
+    """Polish phrasebook categories keep valid registers, levels and non-empty phrases."""
+    from app.data.pl.phrasebook import PHRASEBOOK_CATEGORIES
+
+    for category in PHRASEBOOK_CATEGORIES:
+        assert category.level in ("A1", "A2", "B1", "B2", "C1", "C2"), category.id
+        assert category.phrases, category.id
+        for phrase in category.phrases:
+            assert phrase.register in ("formal", "neutral", "informal"), category.id
+            assert phrase.text.strip(), category.id
+            assert phrase.context.strip(), category.id

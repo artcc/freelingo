@@ -1,0 +1,286 @@
+"""Polish phrasebook — B1 categories."""
+
+from app.data._types import PhrasebookCategory, PhrasebookEntry
+
+B1_CATEGORIES: list[PhrasebookCategory] = [
+    PhrasebookCategory(
+        id="relacje",
+        level="B1",
+        situation="Relacje i emocje",
+        icon="\U0001f4ac",
+        phrases=[
+            PhrasebookEntry(
+                text="Cieszę się, że cię widzę.",
+                context="Powitanie bliskiej osoby po dłuższej przerwie.",
+                register="informal",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Jak się czujesz po tej rozmowie?",
+                context="Pytanie o samopoczucie po trudnym wydarzeniu.",
+                register="neutral",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Chciałbym przeprosić za swoje zachowanie.",
+                context="Formalne przeprosiny za błąd lub nieuprzejmość.",
+                register="formal",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Nie martw się, wszystko się ułoży.",
+                context="Pocieszanie kogoś w trudnej sytuacji.",
+                register="informal",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Czy mogę liczyć na twoje wsparcie?",
+                context="Prośba o pomoc skierowana do bliskiej osoby.",
+                register="neutral",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Gratuluję awansu, naprawdę na niego zasłużyłeś.",
+                context="Gratulacje z powodu sukcesu zawodowego znajomego.",
+                register="informal",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Musimy porozmawiać o tym, co się stało.",
+                context="Zapowiedź poważnej rozmowy o wspólnym problemie.",
+                register="neutral",
+                unit_ref="b1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Dziękuję za zaproszenie, było mi bardzo miło.",
+                context="Podziękowanie po spotkaniu towarzyskim.",
+                register="formal",
+                unit_ref="b1-unit-1",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="edukacja",
+        level="B1",
+        situation="Edukacja i kursy",
+        icon="\U0001f393",
+        phrases=[
+            PhrasebookEntry(
+                text="Chciałbym zapisać się na kurs języka polskiego.",
+                context="Zgłoszenie chęci udziału w kursie w sekretariacie szkoły.",
+                register="formal",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Kiedy zaczynają się zajęcia w tym semestrze?",
+                context="Pytanie o termin rozpoczęcia zajęć.",
+                register="neutral",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Czy mogę prosić o wyjaśnienie tego zagadnienia?",
+                context="Prośba o dodatkowe wyjaśnienie podczas wykładu.",
+                register="formal",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Mam pytanie do ostatniego wykładu.",
+                context="Zabranie głosu po zajęciach lub w ich trakcie.",
+                register="neutral",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Kiedy odbędzie się egzamin poprawkowy?",
+                context="Pytanie o termin egzaminu w sesji poprawkowej.",
+                register="neutral",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Czy są jeszcze wolne miejsca w tej grupie?",
+                context="Pytanie o dostępność miejsc na kursie.",
+                register="neutral",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Chciałbym przełożyć termin zaliczenia na przyszły tydzień.",
+                context="Prośba o zmianę terminu w dziekanacie.",
+                register="formal",
+                unit_ref="b1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Udało mi się zdać egzamin za pierwszym razem!",
+                context="Dzielenie się dobrą wiadomością ze znajomym.",
+                register="informal",
+                unit_ref="b1-unit-2",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="kultura",
+        level="B1",
+        situation="Wydarzenia kulturalne",
+        icon="\U0001f3ad",
+        phrases=[
+            PhrasebookEntry(
+                text="Czy są jeszcze bilety na sobotni spektakl?",
+                context="Pytanie w kasie teatru o dostępność biletów.",
+                register="neutral",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="Chciałbym zarezerwować dwa miejsca na wystawę.",
+                context="Rezerwacja miejsc na wydarzenie kulturalne.",
+                register="formal",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="O której zaczyna się koncert?",
+                context="Pytanie o godzinę rozpoczęcia wydarzenia.",
+                register="neutral",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="Ta wystawa zrobiła na mnie ogromne wrażenie.",
+                context="Wyrażenie opinii po obejrzeniu ekspozycji.",
+                register="neutral",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="Polecam tę książkę, czyta się ją jednym tchem.",
+                context="Rekomendacja książki znajomemu.",
+                register="informal",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="Czy w muzeum jest przewodnik w języku angielskim?",
+                context="Pytanie o materiały lub oprowadzanie w innym języku.",
+                register="neutral",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="Niestety, muszę odwołać rezerwację na piątek.",
+                context="Odwołanie rezerwacji w kasie lub przez telefon.",
+                register="formal",
+                unit_ref="b1-unit-4",
+            ),
+            PhrasebookEntry(
+                text="Spotkajmy się przed wejściem o osiemnastej.",
+                context="Ustalenie miejsca i godziny spotkania ze znajomym.",
+                register="informal",
+                unit_ref="b1-unit-4",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="srodowisko",
+        level="B1",
+        situation="Środowisko i miasto",
+        icon="\U0001f333",
+        phrases=[
+            PhrasebookEntry(
+                text="Gdzie mogę wyrzucić zużyte baterie?",
+                context="Pytanie o punkt zbiórki odpadów niebezpiecznych.",
+                register="neutral",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Czy w tej dzielnicy segreguje się odpady?",
+                context="Pytanie o zasady zbierania śmieci w okolicy.",
+                register="neutral",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Chciałbym zgłosić nielegalne wysypisko śmieci.",
+                context="Zgłoszenie problemu w urzędzie gminy.",
+                register="formal",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Warto wybierać rower zamiast samochodu.",
+                context="Argument w rozmowie o transporcie w mieście.",
+                register="neutral",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Czy w okolicy jest punkt zbiórki elektroodpadów?",
+                context="Pytanie o miejsce oddania starego sprzętu elektronicznego.",
+                register="neutral",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="W tym roku susza dotknęła cały region.",
+                context="Omawianie skutków pogody dla lokalnej gospodarki.",
+                register="neutral",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Proszę nie zostawiać śmieci po pikniku.",
+                context="Uprzejme zwrócenie uwagi w parku miejskim.",
+                register="formal",
+                unit_ref="b1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Zamiast plastikowych butelek używam bidonu.",
+                context="Opowiadanie o własnych nawykach ekologicznych.",
+                register="informal",
+                unit_ref="b1-unit-5",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="technologia",
+        level="B1",
+        situation="Technologia i internet",
+        icon="\U0001f4bb",
+        phrases=[
+            PhrasebookEntry(
+                text="Nie mogę zalogować się na swoje konto.",
+                context="Zgłoszenie problemu z logowaniem do serwisu.",
+                register="neutral",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Czy mógłby mi pan pomóc skonfigurować router?",
+                context="Prośba o pomoc techniczną w rozmowie z pracownikiem operatora.",
+                register="formal",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Aplikacja ciągle się zawiesza po aktualizacji.",
+                context="Opis błędu w zgłoszeniu technicznym.",
+                register="neutral",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Zapomniałem hasła do skrzynki mailowej.",
+                context="Zgłoszenie problemu przy odzyskiwaniu dostępu do konta.",
+                register="neutral",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Czy mogę prosić o nowy link do spotkania?",
+                context="Prośba o ponowne przesłanie zaproszenia online.",
+                register="formal",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Wyślij mi to w wiadomości, proszę.",
+                context="Prośba o przesłanie materiałów w komunikatorze.",
+                register="informal",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Muszę zrobić kopię zapasową plików.",
+                context="Mówienie o zabezpieczeniu danych przed pracą.",
+                register="neutral",
+                unit_ref="b1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Internet w tym budynku działa bardzo wolno.",
+                context="Zgłoszenie problemu z siecią w miejscu pracy.",
+                register="neutral",
+                unit_ref="b1-unit-6",
+            ),
+        ],
+    ),
+]
