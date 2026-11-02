@@ -753,6 +753,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "stanu rzeczy), **argumentatio** (dowody i odparcie), **peroratio** (puenta i apel).\n"
             "- **Figury** działają przez powtórzenie i kontrast: anafora, antyteza, triada, "
             "gradacja, pytanie retoryczne.\n"
+            "- **Apostrofa** to bezpośredni, często uroczysty zwrot do osoby, zbiorowości, "
+            "przedmiotu lub pojęcia, np. *Wolności, nie pozwól nam o sobie zapomnieć!*. "
+            "Adresat nie musi być obecny; taki zwrot może wzmacniać emocjonalny ton apelu.\n"
             "- **Decorum** nakazuje dobór środków do tematu, odbiorcy i okoliczności.\n"
             "*Skuteczność* nie jest tym samym co ozdobność: jedna dobrze umieszczona anafora "
             "waży więcej niż dziesięć figur w akapicie."
@@ -761,6 +764,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Każda część mowy ma inne zadanie i inny rytm.",
             "Figura musi wzmacniać argument, nie zastępować go.",
+            "Apostrofa ustanawia bezpośredniego adresata wypowiedzi, także gdy jest nim "
+            "osoba nieobecna lub pojęcie abstrakcyjne.",
             "Etos mówcy buduje się na początku, nie w puencie.",
             "Peroracja zamyka myśl, ale nie dodaje nowych argumentów.",
         ],

@@ -70,7 +70,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Przekonywanie odbiorcy do stanowiska środkami językowymi.",
                 example="Autor posługuje się perswazją, nie zaś rzeczowym dowodem.",
-                ipa="/pɛrˈsvazja/",
+                ipa="/pɛrˈsfazja/",
                 frequency_rank=8,
             ),
             VocabularyEntry(
@@ -502,7 +502,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Rozłożenie zjawiska na części w celu zrozumienia całości.",
                 example="Analiza danych objęła pięć lat.",
-                ipa="/aˈnaliza/",
+                ipa="/anaˈliza/",
                 frequency_rank=57,
             ),
             VocabularyEntry(

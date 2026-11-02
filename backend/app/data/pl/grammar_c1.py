@@ -210,6 +210,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Środki stylistyczne to świadome operacje na języku, które wzmacniają sens "
             "i oddziałują na odbiorcę.\n\n"
             "- **Metafora** przenosi znaczenie na podstawie podobieństwa: *morze światła*.\n"
+            "- **Personifikacja** nadaje rzeczom lub pojęciom cechy ludzkie: "
+            "*Sprawiedliwość zapukała do drzwi i zażądała wyjaśnień*. Może tworzyć "
+            "metaforyczny obraz, ale nazwa ta wskazuje konkretnie na uczłowieczenie.\n"
             "- **Metonimia** opiera się na styczności: *czytać Mickiewicza* (= jego twórczość).\n"
             "- **Hiperbola** przesadza, **litota** łagodzi przez zaprzeczenie przeciwieństwa: "
             "*nie można powiedzieć, żeby...*.\n"
@@ -220,6 +223,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         structure="figura retoryczna + funkcja w tekście",
         rules=[
             "Metafora przenosi znaczenie na podstawie podobieństwa: *morze światła*.",
+            "Personifikacja przedstawia rzecz lub pojęcie jako osobę, np. przypisuje mu "
+            "ludzkie zamiary i działania.",
             "Metonimia opiera się na styczności: *czytać Mickiewicza* (= jego twórczość).",
             "Hiperbola i litota służą wartościowaniu; anafora i paralelizm budują rytm.",
             "Środek stylistyczny musi służyć celowi komunikacyjnemu, nie ozdobie.",
@@ -274,16 +279,22 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "rządy odpowiedzialności*.\n"
             "- **Wyliczenie** gromadzi człony jednorodne składniowo, zwykle rosnące pod względem "
             "ciężaru.\n"
+            "- **Asyndeton** polega na celowym pominięciu spójników między współrzędnymi "
+            "członami: *Przyszedł, zobaczył, odszedł*. Może przyspieszać rytm lub "
+            "zagęszczać wyliczenie. W odróżnieniu od elipsy orzeczenia pomija właśnie "
+            "spójniki, a nie czasowniki.\n"
             "- **Pytanie retoryczne** sugeruje odpowiedź i angażuje odbiorcę.\n"
             "- **Inwersja** przenosi remat na początek lub koniec zdania.\n\n"
             "Składnia retoryczna zawodzi, gdy rytm zastępuje treść: wyliczenie musi być "
             "merytorycznie uzasadnione."
         ),
-        structure="paralelizm · wyliczenie · pytanie retoryczne · inwersja · elipsa",
+        structure="paralelizm · wyliczenie · asyndeton · pytanie retoryczne · inwersja · elipsa",
         rules=[
             "Paralelizm wymaga identycznej struktury gramatycznej członów: *rządy prawa, rządy "
             "przejrzystości, rządy odpowiedzialności*.",
             "Wyliczenie powinno być jednorodne składniowo i rosnące pod względem ciężaru.",
+            "Asyndeton pomija spójniki między współrzędnymi członami, co może "
+            "przyspieszać rytm wypowiedzi.",
             "Pytanie retoryczne zadajemy, gdy odpowiedź jest oczywista lub gdy chcemy ją "
             "zasugerować.",
             "Inwersja nie może zaciemniać relacji między podmiotem a orzeczeniem.",
@@ -582,8 +593,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "raport*, *co dzień pisał listy*.\n"
             "- **Dokonany** wskazuje skutek lub jednorazowe zamknięcie: *przeczytałem raport*, "
             "*napisał list*.\n"
-            "- W **negacji** powrót do niedokonanego zmienia presupozycję: *nie przeczytałem* "
-            "(nie doszedłem do końca) wobec *nie czytałem* (w ogóle nie było czynności).\n\n"
+            "- W **negacji** aspekt zmienia zakres zaprzeczenia: *nie przeczytałem raportu* "
+            "zaprzecza ukończeniu lektury, ale samo nie rozstrzyga, czy ją rozpocząłem. "
+            "*Nie czytałem raportu* zaprzecza czynności czytania w danym kontekście "
+            "czasowym. Niedokonany bez przeczenia (*czytałem raport*) sam nie wyklucza "
+            "ukończenia lektury.\n\n"
             "W rozkaźniku aspekt nie wyznacza samodzielnie grzeczności: *Siadaj* może być "
             "zaproszeniem, a *Pisz wreszcie!* — ponagleniem. Znaczenie zależy też od "
             "intonacji, kontekstu i wyrazów takich jak *proszę*."
@@ -592,7 +606,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Czas przyszły złożony z bezokolicznikiem niedokonanym: *będę czytać*; z dokonanym: "
             "*przeczytam*.",
-            "W negacji aspekt zmienia presupozycję: *nie przeczytałem* ≠ *nie czytałem*.",
+            "Nie przeczytałem zaprzecza ukończeniu, nie czytałem — czynności; "
+            "z samego nie przeczytałem nie wynika, że lektura się rozpoczęła.",
             "Nawyk zwykle wyraża niedokonany: co dzień pisał listy. Dokonany może "
             "opisywać powtarzane rezultaty: co dzień napisze list i wychodzi.",
             "Grzeczność rozkaźnika zależy od kontekstu i intonacji, nie tylko od aspektu.",

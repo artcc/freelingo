@@ -515,7 +515,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Element niepasujący do epoki, w której został umieszczony.",
                 example="Anachronizm psuje wrażenie autentyczności tekstu.",
-                ipa="/anaxrɔˈɲizm/",
+                ipa="/anaˈxrɔɲizm/",
                 frequency_rank=58,
             ),
             VocabularyEntry(
@@ -884,7 +884,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Przekonywanie prowadzące do zmiany przekonań lub działania.",
                 example="Perswazja odwołuje się do argumentów i emocji.",
-                ipa="/pɛrˈsvazja/",
+                ipa="/pɛrˈsfazja/",
                 frequency_rank=100,
             ),
         ],

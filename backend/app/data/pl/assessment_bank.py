@@ -1016,14 +1016,18 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         id="pl-g-c1-008",
         skill="grammar",
         difficulty="C1",
-        question="Które zdanie wyraża czynność trwającą lub powtarzaną w przeszłości?",
+        question=(
+            "Redaktor porównuje odpowiedzi „Nie przeczytałem raportu” i „Nie czytałem "
+            "raportu”, odnoszące się do tego samego okresu. Która interpretacja zachowuje "
+            "różnicę aspektu, nie dopisując informacji o przebiegu lektury?"
+        ),
         options=[
-            "Przez całe lato przeczytałem tę książkę.",
-            "Wczoraj przeczytałem całą książkę.",
-            "Jutro przeczytam tę książkę.",
-            "Przez całe lato czytałem tę książkę.",
+            "Pierwsza odpowiedź potwierdza rozpoczęcie lektury, druga temu zaprzecza.",
+            "Obie odpowiedzi zaprzeczają wyłącznie ukończeniu lektury.",
+            "Pierwsza odpowiedź zaprzecza zamiarowi lektury, druga jej ukończeniu.",
+            "Pierwsza zaprzecza ukończeniu lektury, druga samej czynności czytania.",
         ],
-        correct="Przez całe lato czytałem tę książkę.",
+        correct="Pierwsza zaprzecza ukończeniu lektury, druga samej czynności czytania.",
         grammar_slug="aspekt-niuanse",
     ),
     AssessmentQuestion(
@@ -1039,14 +1043,18 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         id="pl-g-c1-010",
         skill="grammar",
         difficulty="C1",
-        question="Które zdanie zawiera poprawną konstrukcję bierną typową dla stylu formalnego?",
+        question=(
+            "W komunikacie „Zarząd odrzucił wniosek po konsultacjach” redaktor zastąpił "
+            "zdanie wersją „Wniosek został odrzucony po konsultacjach”. Jak zmienia się "
+            "sposób przedstawienia tej samej decyzji?"
+        ),
         options=[
-            "Decyzja została podjęta przez komisję 12 maja.",
-            "Komisja podjęła decyzję 12 maja.",
-            "Decyzja podjęła komisję 12 maja.",
-            "Decyzja była podjąć przez komisję.",
+            "Wniosek staje się tematem zdania, a wykonawca decyzji nie zostaje nazwany.",
+            "Decyzja staje się mniej ostateczna, a konsultacje nadal mogą zmienić jej wynik.",
+            "Konsultacje zostają przedstawione jako przyczyna decyzji, a nie jej tło czasowe.",
+            "Odpowiedzialność za decyzję zostaje przypisana uczestnikom konsultacji.",
         ],
-        correct="Decyzja została podjęta przez komisję 12 maja.",
+        correct="Wniosek staje się tematem zdania, a wykonawca decyzji nie zostaje nazwany.",
         grammar_slug="strona-bierna-styl",
     ),
     # ============================================================
@@ -1093,7 +1101,10 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         id="pl-v-c1-005",
         skill="vocabulary",
         difficulty="C1",
-        question="Uzupełnij: Autor ___ czytelnika do refleksji.",
+        question=(
+            "Autor stawia otwarte pytania, by skłonić odbiorcę do samodzielnego namysłu. "
+            "Uzupełnij zgodnie z tą intencją: Autor ___ czytelnika do refleksji."
+        ),
         options=["odradza", "zniechęca", "zachęca", "zabrania"],
         correct="zachęca",
     ),
@@ -1113,70 +1124,84 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         skill="reading",
         difficulty="C1",
         question=(
-            "Tekst: Coraz więcej uczelni rezygnuje z egzaminów ustnych na rzecz testów "
-            "automatycznych. Zdaniem krytyków oszczędność czasu nie równoważy strat: testy "
-            "nie sprawdzają umiejętności argumentowania, a jedynie rozpoznawanie poprawnych "
-            "odpowiedzi. Jaki zarzut stawiają krytycy?"
+            "Tekst: Uczelnia zastąpiła egzaminy ustne testami automatycznymi. Władze "
+            "przedstawiają skrócenie czasu oceniania jako dowód powodzenia reformy. "
+            "Autor komentarza przyznaje, że wyniki są teraz dostępne szybciej, a wszyscy "
+            "zdający podlegają tym samym kryteriom. Zauważa jednak, że w programie kursu "
+            "nadal figuruje obrona własnego stanowiska, podczas gdy student wybiera tylko "
+            "gotowe odpowiedzi. Nie domaga się przywrócenia dawnej formy za wszelką cenę; "
+            "pyta, co właściwie ma potwierdzać ocena. Które założenie władz podważa?"
         ),
         options=[
-            "testy są zbyt drogie",
-            "testy nie sprawdzają argumentowania",
-            "testy są zbyt trudne",
-            "testy wymagają znajomości technologii",
+            "Jednakowe kryteria oceniania mogą ograniczać uznaniowość egzaminatorów.",
+            "Sprawniejsza organizacja egzaminu wystarcza, by uznać go za trafną ocenę umiejętności.",
+            "Obronę własnego stanowiska można oceniać inaczej niż podczas egzaminu ustnego.",
+            "Szybsze udostępnianie wyników jest korzyścią z punktu widzenia studentów.",
         ],
-        correct="testy nie sprawdzają argumentowania",
+        correct="Sprawniejsza organizacja egzaminu wystarcza, by uznać go za trafną ocenę umiejętności.",
     ),
     AssessmentQuestion(
         id="pl-r-c1-002",
         skill="reading",
         difficulty="C1",
         question=(
-            "Tekst: Autor eseju nie twierdzi, że media społecznościowe są z natury szkodliwe. "
-            "Zwraca uwagę, że problemem jest raczej sposób ich wykorzystania niż sama "
-            "technologia. Jakie stanowisko zajmuje autor?"
+            "Tekst: Łatwo powiedzieć, że o wpływie platform społecznościowych decyduje "
+            "wyłącznie rozsądek użytkownika. Owszem, można wyłączyć powiadomienia, lecz "
+            "ustawienia domyślne zachęcają do ciągłego powracania, a dotarcie do opcji "
+            "ograniczających ten mechanizm wymaga wysiłku. Nie wynika z tego, że odbiorca "
+            "jest bezwolny ani że każda platforma działa tak samo. Trudno jednak uznać "
+            "wybór za całkowicie niezależny od warunków, w których jest dokonywany. "
+            "Jaką funkcję pełni przyznanie, że można wyłączyć powiadomienia?"
         ),
         options=[
-            "problemem jest sposób użycia, nie technologia",
-            "media są zawsze szkodliwe",
-            "technologia jest neutralna i nieistotna",
-            "media powinny zostać zakazane",
+            "Uznaje część racji przeciwnego stanowiska przed ograniczeniem jego zasięgu.",
+            "Przenosi całą odpowiedzialność z projektantów platform na ich użytkowników.",
+            "Podważa znaczenie ustawień domyślnych dla sposobu korzystania z platform.",
+            "Uzasadnia podział użytkowników na rozsądnych i niezdolnych do samodzielnego wyboru.",
         ],
-        correct="problemem jest sposób użycia, nie technologia",
+        correct="Uznaje część racji przeciwnego stanowiska przed ograniczeniem jego zasięgu.",
     ),
     AssessmentQuestion(
         id="pl-r-c1-003",
         skill="reading",
         difficulty="C1",
         question=(
-            "Tekst: Reforma miała uprościć procedury, tymczasem liczba wymaganych dokumentów "
-            "wzrosła. Urzędnicy tłumaczą to koniecznością dostosowania przepisów do wymogów "
-            "unijnych, choć sami przyznają, że część załączników można by połączyć. "
-            "Jaki jest efekt reformy?"
+            "Tekst: Po cyfryzacji urzędu wnioski są rejestrowane szybciej, ale liczba "
+            "załączników wzrosła. Urzędnicy przedstawiają ten wzrost jako nieunikniony "
+            "skutek dostosowania procedur do wymogów unijnych, choć sami przyznają, że "
+            "kilka formularzy powiela te same dane i można je połączyć bez naruszenia "
+            "przepisów. Autor nie kwestionuje potrzeby dostosowania procedur; zauważa "
+            "jedynie, że przeniesienie dokumentów na ekran nie rozstrzyga, ile powinno "
+            "ich być. Jaką rolę odgrywa zdanie wprowadzone przez „choć”?"
         ),
         options=[
-            "zmniejszyła liczbę dokumentów",
-            "skróciła czas oczekiwania",
-            "zwiększyła liczbę wymaganych dokumentów",
-            "zniosła wymogi unijne",
+            "Podważa informację, że cyfryzacja przyspieszyła rejestrowanie wniosków.",
+            "Wskazuje, że ograniczenie liczby formularzy wymaga zmiany prawa unijnego.",
+            "Osłabia tezę, że wzrost liczby załączników był w całości nieunikniony.",
+            "Uzasadnia konieczność powielania danych w celu zachowania zgodności z prawem.",
         ],
-        correct="zwiększyła liczbę wymaganych dokumentów",
+        correct="Osłabia tezę, że wzrost liczby załączników był w całości nieunikniony.",
     ),
     AssessmentQuestion(
         id="pl-r-c1-004",
         skill="reading",
         difficulty="C1",
         question=(
-            "Tekst: W debacie publicznej często myli się sceptycyzm z negacją. Sceptyk żąda "
-            "dowodów i zadaje pytania, natomiast negacjonista odrzuca ustalenia niezależnie "
-            "od dostępnych danych. Czym różni się sceptyk od negacjonisty?"
+            "Tekst: Obaj uczestnicy debaty domagają się lepszych dowodów. Pierwszy "
+            "wskazuje, jakie wyniki skłoniłyby go do zmiany zdania. Drugi po każdej "
+            "odpowiedzi ustanawia nowy warunek, którego wcześniej nie wymieniał. "
+            "Autor nie twierdzi, że pierwsze dostępne badanie musi kończyć dyskusję: "
+            "nowe zastrzeżenie może być zasadne. Ostrzega jednak przed stanowiskiem, "
+            "którego żadna możliwa obserwacja nie mogłaby podważyć, choć jego zwolennik "
+            "nazywa je sceptycyzmem. Jakie kryterium rozróżnienia wynika z tekstu?"
         ),
         options=[
-            "sceptyk odrzuca wszystkie dane",
-            "negacjonista zawsze żąda dowodów",
-            "obaj prezentują takie samo stanowisko",
-            "sceptyk wymaga dowodów, negacjonista odrzuca ustalenia",
+            "Sceptycyzm wymaga zaakceptowania pierwszego badania spełniającego normy naukowe.",
+            "O zasadności stanowiska decyduje liczba zgłoszonych zastrzeżeń metodologicznych.",
+            "Każde nowe zastrzeżenie po otrzymaniu odpowiedzi świadczy o odrzucaniu dowodów.",
+            "Sceptycyzm dopuszcza zmianę stanowiska pod wpływem dowodów, a nie tylko ich żąda.",
         ],
-        correct="sceptyk wymaga dowodów, negacjonista odrzuca ustalenia",
+        correct="Sceptycyzm dopuszcza zmianę stanowiska pod wpływem dowodów, a nie tylko ich żąda.",
     ),
     # ============================================================
     # C2 GRAMMAR (10 questions)
@@ -1217,23 +1242,38 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         id="pl-g-c2-004",
         skill="grammar",
         difficulty="C2",
-        question="Które sformułowanie jest typowe dla stylu naukowego?",
+        question=(
+            "W pilotażu obejmującym ochotników z jednej placówki zaobserwowano poprawę "
+            "po wprowadzeniu programu, ale nie zastosowano grupy kontrolnej. Który wniosek "
+            "zachowuje wynik obserwacji i ogranicza siłę twierdzenia do zakresu danych?"
+        ),
         options=[
-            "Wyniki są super i wszystko widać.",
-            "Wyniki wskazują na istotną zależność między zmiennymi.",
-            "No i wyszło, że jest zależność.",
-            "Widać jak na dłoni, że to działa.",
+            "Wyniki potwierdzają skuteczność programu, choć wielkość efektu wymaga dalszych badań.",
+            "Odnotowano poprawę w badanej grupie, lecz nie można przypisać jej samemu programowi.",
+            "Brak grupy kontrolnej oznacza, że nie można stwierdzić nawet zaobserwowanej poprawy.",
+            "Poprawa pozwala uogólnić wynik na inne placówki, o ile ich uczestnicy są ochotnikami.",
         ],
-        correct="Wyniki wskazują na istotną zależność między zmiennymi.",
+        correct="Odnotowano poprawę w badanej grupie, lecz nie można przypisać jej samemu programowi.",
         grammar_slug="jezyk-naukowy",
     ),
     AssessmentQuestion(
         id="pl-g-c2-005",
         skill="grammar",
         difficulty="C2",
-        question=("Który tryb występuje w zdaniu „Gdyby to było możliwe, zrobiłbym to od razu”?"),
-        options=["oznajmujący", "rozkazujący", "warunkowy", "życzący"],
-        correct="warunkowy",
+        question=(
+            "Podczas posiedzenia przewodnicząca mówi: „Nie przesądzałabym jeszcze, że "
+            "projekt jest niewykonalny”. Która parafraza zachowuje funkcję trybu warunkowego "
+            "oraz zakres zastrzeżenia, nie wzmacniając stanowiska mówiącej?"
+        ),
+        options=[
+            "Przewodnicząca uznaje projekt za wykonalny, lecz odkłada ogłoszenie tej oceny.",
+            "Przewodnicząca uznaje projekt za niewykonalny, lecz łagodzi sposób przekazania oceny.",
+            "Przewodnicząca łagodzi sprzeciw wobec przedwczesnego uznania projektu za niewykonalny.",
+            "Przewodnicząca uzależnia sprzeciw wobec oceny projektu od spełnienia warunku.",
+        ],
+        correct=(
+            "Przewodnicząca łagodzi sprzeciw wobec przedwczesnego uznania projektu za niewykonalny."
+        ),
         grammar_slug="tryby-mowione",
     ),
     AssessmentQuestion(
@@ -1241,16 +1281,17 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         skill="grammar",
         difficulty="C2",
         question=(
-            "Uzupełnij, wyrażając teraźniejszy nawyk oraz brak zakończenia dzisiejszej lektury: "
-            "Codziennie ___ gazetę, ale dziś jeszcze jej nie ___."
+            "Porównaj „Nie zamykaj tych drzwi — czekamy na gości” z „Tylko nie zamknij "
+            "tych drzwi przez nieuwagę — klucz został w środku”. Które wyjaśnienie "
+            "najtrafniej wiąże aspekt z funkcją wypowiedzi w podanych kontekstach?"
         ),
         options=[
-            "czytam ... przeczytałem",
-            "przeczytam ... czytałem",
-            "czytam ... czytałem",
-            "przeczytałem ... czytam",
+            "Niedokonany służy zakazowi, a dokonany ostrzega przed niepożądanym rezultatem.",
+            "Niedokonany służy uprzejmej prośbie, a dokonany zawsze nadaje wypowiedzi ton rozkazu.",
+            "Niedokonany wskazuje na wielokrotne zamykanie, a dokonany na jednorazową czynność.",
+            "Niedokonany zaprzecza zamiarowi zamknięcia, a dokonany zaprzecza jego wykonaniu.",
         ],
-        correct="czytam ... przeczytałem",
+        correct="Niedokonany służy zakazowi, a dokonany ostrzega przed niepożądanym rezultatem.",
         grammar_slug="aspekt-mistrzostwo",
     ),
     AssessmentQuestion(
@@ -1292,14 +1333,20 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         id="pl-g-c2-010",
         skill="grammar",
         difficulty="C2",
-        question="Które zdanie jest typowo potoczne?",
+        question=(
+            "Po pytaniu kolegi „Nie zaczekasz na Martę?” rozmówca odpowiada: "
+            "„No przecież na nią czekam”. Co wnosi połączenie „no przecież” "
+            "w tej wymianie, poza samą informacją o czekaniu?"
+        ),
         options=[
-            "Czy zechce pan łaskawie odpowiedzieć?",
-            "Uprzejmie proszę o odpowiedź.",
-            "No i co, idziemy czy nie?",
-            "Zwracam się z uprzejmą prośbą o odpowiedź.",
+            "Przedstawia czekanie jako ustępstwo, na które rozmówca zgadza się dopiero teraz.",
+            "Sygnalizuje niepewność, czy oczekiwana osoba rzeczywiście ma na imię Marta.",
+            "Koryguje sugestię pytającego, przedstawiając czekanie jako fakt, który powinien znać.",
+            "Ogranicza deklarację czekania warunkiem, że Marta przyjdzie wkrótce.",
         ],
-        correct="No i co, idziemy czy nie?",
+        correct=(
+            "Koryguje sugestię pytającego, przedstawiając czekanie jako fakt, który powinien znać."
+        ),
         grammar_slug="jezyk-potoczny",
     ),
     # ============================================================
@@ -1371,62 +1418,90 @@ ASSESSMENT_BANK: list[AssessmentQuestion] = [
         skill="reading",
         difficulty="C2",
         question=(
-            "Tekst: Recenzent zarzuca autorowi, że zamiast analizować źródła, buduje narrację "
-            "na pojedynczych cytatach wyjętych z kontekstu. Nie odmawia mu erudycji, lecz "
-            "podważa metodę. Co recenzent kwestionuje?"
+            "Tekst: Trudno odmówić autorowi erudycji: przypisy prowadzą czytelnika przez "
+            "archiwa, do których mało kto zagląda. Kłopot zaczyna się nie tam, gdzie "
+            "materiału brakuje, lecz tam, gdzie przestaje on stawiać opór opowieści. "
+            "Świadectwa niezgodne z tezą trafiają do przypisów jako osobliwości epoki, "
+            "zgodne zaś przemawiają w imieniu całego pokolenia. Być może teza dałaby się "
+            "obronić; przedstawiona argumentacja nie pozwala jednak odróżnić jej "
+            "od założenia, według którego dobrano wagę świadectw. Jaką funkcję pełni "
+            "pochwała erudycji w toku tej recenzji?"
         ),
-        options=["erudycję autora", "temat książki", "metodę pracy autora", "wybór wydawcy"],
-        correct="metodę pracy autora",
+        options=[
+            "Uzasadnia zaufanie do tezy mimo wskazanych uchybień w sposobie cytowania.",
+            "Pozornie chwali autora, by ostatecznie zakwestionować autentyczność jego źródeł.",
+            "Oddziela rozległość wiedzy od sposobu argumentowania, którego dotyczy krytyka.",
+            "Przygotowuje odrzucenie tezy jako fałszywej na podstawie liczby pominiętych źródeł.",
+        ],
+        correct="Oddziela rozległość wiedzy od sposobu argumentowania, którego dotyczy krytyka.",
     ),
     AssessmentQuestion(
         id="pl-r-c2-002",
         skill="reading",
         difficulty="C2",
         question=(
-            "Tekst: Wnioski raportu są ostrożne: autorzy piszą o „prawdopodobnym związku”, "
-            "nie o przyczynie. Zastrzegają, że próba była niewielka i obejmowała tylko jedno "
-            "województwo. Czego autorzy unikają?"
+            "Tekst: Raport opisuje związek między dostępnością bibliotek a wynikami "
+            "szkolnymi w jednym województwie. Autorzy zastrzegają, że nie oddzielili "
+            "wpływu bibliotek od zamożności gmin. Komentator uznaje tę ostrożność za "
+            "dowód, że raport niczego nie wnosi. Tymczasem brak podstaw do rozstrzygnięcia "
+            "o przyczynie nie unieważnia zaobserwowanej współzmienności; wyznacza jedynie "
+            "granicę wniosku, jaki wolno z niej wyprowadzić. Kto z tej granicy czyni "
+            "zarzut wobec samych danych, żąda od opisu odpowiedzi na inne pytanie. "
+            "Na czym polega błąd komentatora wskazany w tekście?"
         ),
         options=[
-            "podania wyników",
-            "opisu metody",
-            "wskazania źródeł",
-            "twierdzenia o związku przyczynowym",
+            "Traktuje zamożność gmin jako wykluczoną przyczynę różnic w wynikach szkolnych.",
+            "Uogólnia zaobserwowaną zależność na województwa, których raport nie obejmuje.",
+            "Uznaje samą współzmienność za wystarczający dowód skuteczności bibliotek.",
+            "Utożsamia ograniczenie wnioskowania przyczynowego z brakiem wartości opisu zależności.",
         ],
-        correct="twierdzenia o związku przyczynowym",
+        correct=(
+            "Utożsamia ograniczenie wnioskowania przyczynowego z brakiem wartości opisu zależności."
+        ),
     ),
     AssessmentQuestion(
         id="pl-r-c2-003",
         skill="reading",
         difficulty="C2",
         question=(
-            "Tekst: Krytyk zauważa, że powieść zyskuje na drugim czytaniu: pierwsza lektura "
-            "uwodzi stylem, druga odsłania konsekwentnie budowaną ironię. "
-            "Jaki efekt ma druga lektura?"
+            "Tekst: W mieście burmistrza wszystko odbywało się z godną podziwu zgodą. "
+            "Mieszkańcom oszczędzano trudnych wyborów, ogłaszając wyniki konsultacji, "
+            "zanim zdążyli zgłosić uwagi. Ci, którzy mimo to pisali listy, otrzymywali "
+            "podziękowania za poparcie. Kronikarz skrupulatnie odnotowywał tę harmonię, "
+            "a puste miejsce po rubryce z głosami sprzeciwu uznawał za największe "
+            "osiągnięcie drukarni. Doprawdy, niewiele miast mogło się poszczycić tak "
+            "staranną troską o to, by nikt nie musiał kłopotać się własnym zdaniem. "
+            "Jak należy odczytać pochwalne słownictwo tego fragmentu?"
         ),
         options=[
-            "ujawnia brak spójności",
-            "odsłania ironię konstrukcji",
-            "zniechęca do stylu",
-            "potwierdza prostotę fabuły",
+            "Jako aprobatę sprawnego zarządzania, równoważoną zastrzeżeniem do pracy drukarni.",
+            "Jako ironię: pozorna pochwała harmonii ujawnia mechanizm wyciszania sprzeciwu.",
+            "Jako wyraz tęsknoty za wspólnotą, w której obywatele dobrowolnie rezygnują ze sporów.",
+            "Jako neutralne przytoczenie kroniki, bez sygnałów dystansu wobec jej ocen.",
         ],
-        correct="odsłania ironię konstrukcji",
+        correct="Jako ironię: pozorna pochwała harmonii ujawnia mechanizm wyciszania sprzeciwu.",
     ),
     AssessmentQuestion(
         id="pl-r-c2-004",
         skill="reading",
         difficulty="C2",
         question=(
-            "Tekst: Autor felietonu nie postuluje zniesienia podatku, lecz zmianę sposobu jego "
-            "naliczania. Przeciwnicy przypisują mu skrajne żądania, czemu w tekście "
-            "zaprzecza. Czego domaga się autor?"
+            "Tekst: Gdy proponuję uzależnić wysokość opłaty od faktycznego zużycia wody, "
+            "słyszę, że bez opłat sieć nie będzie miała z czego się utrzymać. Zgoda — "
+            "tyle że nie o istnieniu opłaty rozmawiamy. Można odrzucić mój pomysł, "
+            "wykazując, że nie pokryje kosztów stałych; nie można go obalić, przypisując "
+            "mi zamiar likwidacji finansowania. Obrona obecnego systemu zacznie się "
+            "dopiero wtedy, gdy ktoś wyjaśni, dlaczego jego sposób rozłożenia kosztów "
+            "jest lepszy od proponowanego. Jaki zakres ma słowo „Zgoda” w tym wywodzie?"
         ),
         options=[
-            "zmiany sposobu naliczania podatku",
-            "zniesienia podatku",
-            "podwyższenia podatku",
-            "likwidacji ulg",
+            "Akceptuje potrzebę finansowania sieci, ale nie uznaje jej za obronę obecnej metody opłat.",
+            "Akceptuje zarzut, że proponowana metoda nie pokryje kosztów stałych utrzymania sieci.",
+            "Przyznaje, że porównanie metod naliczania opłat jest zbędne wobec konieczności ich poboru.",
+            "Wycofuje postulat zmiany metody opłat, zachowując jedynie krytykę sposobu prowadzenia sporu.",
         ],
-        correct="zmiany sposobu naliczania podatku",
+        correct=(
+            "Akceptuje potrzebę finansowania sieci, ale nie uznaje jej za obronę obecnej metody opłat."
+        ),
     ),
 ]

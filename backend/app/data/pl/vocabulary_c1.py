@@ -560,7 +560,7 @@ C1_SETS: list[VocabularySet] = [
                 word="efektywność",
                 pos="noun",
                 definition="Stosunek uzyskanych wyników do poniesionych nakładów.",
-                example="Efektywność zespołu wzrosła po skróceniu liczby spotkań.",
+                example="Efektywność zespołu wzrosła po zmniejszeniu liczby spotkań.",
                 ipa="/ɛfɛkˈtɨvnɔɕtɕ/",
                 frequency_rank=59,
             ),

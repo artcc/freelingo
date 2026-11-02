@@ -155,26 +155,31 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Narzędnik odpowiada na pytania **kim? czym?** i pojawia się po czasowniku **być**, "
             "gdy mówimy o narodowości lub zawodzie: *Jestem Polakiem*, *Jestem lekarką*.\n\n"
             "Końcówki narzędnika:\n"
-            "- rodzaj męski i nijaki: **-em** — *Polak → Polakiem*, *nauczyciel → nauczycielem*, "
+            "- większość rzeczowników męskich oraz rzeczowniki nijakie: **-em** — "
+            "*Polak → Polakiem*, *nauczyciel → nauczycielem*, "
             "*dziecko → dzieckiem*\n"
-            "- rodzaj żeński: **-ą** — *Polka → Polką*, *studentka → studentką*\n\n"
-            "Przy dodawaniu końcówki zachodzą wymiany spółgłosek: **k → kiem** (*Polak → "
-            "Polakiem*), **g → giem** (*pedagog → pedagogiem*), **rz → rzem** (*lekarz → "
-            "lekarzem*).\n\n"
+            "- rodzaj żeński i rzeczowniki męskie zakończone na **-a**: **-ą** — "
+            "*Polka → Polką*, *studentka → studentką*, *kierowca → kierowcą*, "
+            "*kolega → kolegą*\n\n"
+            "Po k i g końcówkę -em zapisujemy jako **-iem**: *Polak → Polakiem*, "
+            "*pedagog → pedagogiem*. Po rz dodajemy -em: *lekarz → lekarzem*.\n\n"
             "Pochodzenie wyrażamy inaczej: przyimkiem **z** i dopełniaczem. Mówimy *Jestem z "
             "Polski*, *Jestem z Hiszpanii*, *Jestem z Niemiec*. Narzędnik opisuje, kim jesteśmy, "
             "a konstrukcja z przyimkiem — skąd pochodzimy."
         ),
-        structure="męski / nijaki: -em · żeński: -ą · pochodzenie: z + dopełniacz",
+        structure="zwykle męski / nijaki: -em · żeński i męski na -a: -ą · "
+        "pochodzenie: z + dopełniacz",
         rules=[
             "Narzędnik odpowiada na pytania kim? czym?",
-            "Rzeczowniki męskie i nijakie przyjmują końcówkę -em, żeńskie -ą.",
+            "Większość rzeczowników męskich i rzeczowniki nijakie przyjmują -em; "
+            "żeńskie i męskie na -a przyjmują -ą: kierowca → kierowcą.",
             "Nazwy narodowości i zawodów po być stoją w narzędniku.",
             "Pochodzenie wyrażamy przyimkiem z i dopełniaczem, nie narzędnikiem.",
         ],
         examples=[
             GrammarExample(text="Jestem Polakiem, a moja żona jest Hiszpanką.", translation=None),
             GrammarExample(text="Marek jest inżynierem w dużej firmie.", translation=None),
+            GrammarExample(text="Mój tata jest kierowcą.", translation=None),
             GrammarExample(text="Jestem z Polski, ale mieszkam w Niemczech.", translation=None),
         ],
         common_mistakes=[

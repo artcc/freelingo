@@ -106,22 +106,28 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Dopełniacz odpowiada na pytania **kogo? czego?** i jest przypadkiem najczęściej "
             "wymaganym przez przyimki.\n\n"
             "**Końcówki liczby pojedynczej:**\n"
-            "- rodzaj męski: **-a** przy osobach i zwierzętach (*studenta, psa*) oraz przy "
-            "narzędziach i częściach ciała (*noża, palca*); **-u** przy pojęciach abstrakcyjnych, "
-            "materiałach i miejscach (*czasu, cukru, sklepu*)\n"
-            "- rodzaj żeński: **-y** po spółgłoskach twardych (*pracy, wody*), **-i** po miękkich "
-            "oraz po k i g (*ziemi, ręki, drogi*)\n"
+            "- rzeczowniki męskie zakończone na spółgłoskę: **-a** przy osobach i zwierzętach "
+            "(*studenta, psa*); przy rzeczach wybór **-a / -u** zależy od wyrazu "
+            "(*noża, chleba*, ale *cukru, sklepu*). Pojęcia abstrakcyjne często mają **-u** "
+            "(*czasu*), lecz nie zawsze (*pecha*)\n"
+            "- rzeczowniki żeńskie oraz męskie zakończone na **-a**: **-y / -i** — "
+            "*wody, pracy, ziemi, ręki, drogi; kierowca → kierowcy, kolega → kolegi*. "
+            "Dobór końcówki zależy od tematu; po k i g piszemy **-i**, nie -y\n"
             "- rodzaj nijaki: **-a** (*okna, morza, imienia*)\n\n"
-            "**Liczba mnoga:** **-ów** w rodzaju męskim (*studentów, sklepów*), **-i** lub **-y** "
-            "w części rzeczowników żeńskich (*nocy, kości*), a najczęściej forma bez końcówki "
-            "(*kobiet, ulic, okien, jabłek*).\n\n"
+            "**Liczba mnoga:** w rodzaju męskim często **-ów** (*studentów, sklepów*), "
+            "ale też **-i / -y** (*nauczycieli, lekarzy*). Rzeczowniki żeńskie i nijakie "
+            "często mają formę bez końcówki (*kobiet, ulic, okien, jabłek*); "
+            "spotykamy też **-i / -y** (*kości, nocy*).\n\n"
             "Z dopełniaczem łączą się przyimki **do, z, od, bez, dla, u, obok, koło, podczas, "
             "oprócz**: *do sklepu, z pracy, bez cukru, dla dzieci*."
         ),
-        structure="kogo? czego? → -a / -u (m.) · -y / -i (ż.) · -a (n.) · -ów / -y / -i (lm.)",
+        structure="kogo? czego? → -a / -u (m. na spółgłoskę) · -y / -i (ż. i m. na -a) · "
+        "-a (n.) · -ów / -y / -i / brak końcówki (lm.)",
         rules=[
-            "Rzeczowniki męskie osobowe i zwierzęce przyjmują w dopełniaczu końcówkę -a.",
-            "Pojęcia abstrakcyjne i nazwy materiałów w rodzaju męskim przyjmują -u.",
+            "Męskie nazwy osób i zwierząt zakończone na spółgłoskę mają -a: studenta, psa. "
+            "Męskie na -a odmieniają się inaczej: kolegi, kierowcy.",
+            "Przy męskich nazwach rzeczy i pojęć wybór -a / -u trzeba poznawać z wyrazem: "
+            "chleba, cukru, czasu, pecha.",
             "Do, od, bez, dla, u oraz z w znaczeniu pochodzenia wymagają dopełniacza; "
             "z w znaczeniu towarzystwa łączy się z narzędnikiem.",
             "W liczbie mnogiej rodzaj męski ma zwykle końcówkę -ów.",
@@ -298,25 +304,32 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation=(
             "Celownik odpowiada na pytania **komu? czemu?** i wskazuje odbiorcę czynności.\n\n"
             "**Końcówki liczby pojedynczej:**\n"
-            "- rodzaj męski: **-owi** (*studentowi, sąsiadowi*) oraz **-u** w niewielkiej grupie "
+            "- rzeczowniki męskie zakończone na spółgłoskę: **-owi** (*studentowi, sąsiadowi*) "
+            "oraz **-u** w niewielkiej grupie "
             "wyrazów (*ojcu, bratu, psu*)\n"
-            "- rodzaj żeński: **-e** z wymianą spółgłoski (*siostra → siostrze, mama → mamie*)\n"
+            "- rzeczowniki żeńskie oraz męskie zakończone na **-a**: **-e**, często ze zmianą "
+            "spółgłoski (*siostra → siostrze, mama → mamie, kolega → koledze*), lub **-y / -i** "
+            "(*praca → pracy, noc → nocy, ziemia → ziemi, kierowca → kierowcy*). "
+            "Dobór końcówki zależy od tematu; formy te są takie jak w miejscowniku\n"
             "- rodzaj nijaki: **-u** (*dziecko → dziecku, okno → oknu*)\n\n"
             "**Liczba mnoga:** zawsze **-om** (*studentom, dzieciom, kobietom*).\n\n"
             "Celownika wymagają czasowniki **pomagać, dziękować, mówić, dawać, kupować, "
             "życzyć**: *Pomagam mamie. Dziękuję ci.* Występuje też w konstrukcjach z zaimkiem: "
             "*jest mi zimno, podoba mi się, trudno mu uwierzyć*."
         ),
-        structure="komu? czemu? → -owi / -u (m.) · -e (ż.) · -u (n.) · -om (lm.)",
+        structure="komu? czemu? → -owi / -u (m. na spółgłoskę) · "
+        "-e / -y / -i (ż. i m. na -a) · -u (n.) · -om (lm.)",
         rules=[
             "Czasowniki pomagać, dziękować, mówić i dawać wymagają celownika.",
             "Celownik liczby mnogiej ma zawsze końcówkę -om.",
             "W konstrukcjach typu jest mi zimno zaimek stoi w celowniku.",
-            "Rzeczowniki żeńskie zmieniają temat w celowniku: siostra → siostrze.",
+            "Rzeczowniki żeńskie i męskie na -a mają -e, -y lub -i; temat nie zawsze się "
+            "zmienia: siostra → siostrze, ale praca → pracy i ziemia → ziemi.",
         ],
         examples=[
             GrammarExample(text="Pomagam mamie w kuchni."),
             GrammarExample(text="Dziękuję ci za pomoc."),
+            GrammarExample(text="Kolega pomaga kierowcy, a ja przyglądam się jego pracy."),
             GrammarExample(text="Jest mi zimno, zamknij okno.", note="zaimek w celowniku"),
         ],
         common_mistakes=[
@@ -431,9 +444,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Narzędnik odpowiada na pytania **kim? czym?** i służy do wyrażania narzędzia, środka "
             "transportu, sposobu oraz przedmiotu zainteresowania.\n\n"
             "**Końcówki liczby pojedynczej:**\n"
-            "- rodzaj męski i nijaki: **-em** z wymianą w temacie (*kot → kotem, chłopiec → "
-            "chłopcem, okno → oknem*)\n"
-            "- rodzaj żeński: **-ą** (*praca → pracą, muzyka → muzyką, ziemia → ziemią*)\n\n"
+            "- większość rzeczowników męskich oraz rzeczowniki nijakie: **-em**, niekiedy "
+            "ze zmianą tematu (*kot → kotem, chłopiec → chłopcem, okno → oknem*); "
+            "po k i g piszemy **-iem** (*Polakiem, pedagogiem*)\n"
+            "- rzeczowniki żeńskie i męskie zakończone na **-a**: **-ą** "
+            "(*praca → pracą, ziemia → ziemią, kolega → kolegą, kierowca → kierowcą*)\n\n"
             "**Liczba mnoga:** zwykle **-ami** (*pociągami, kobietami*), a w nielicznej grupie "
             "**-mi** (*dziećmi, ludźmi, końmi, braćmi*).\n\n"
             "Narzędnika wymagają czasowniki **interesować się** i **zajmować się**. Środek "
@@ -441,9 +456,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "*Interesuję się historią. Jadę tramwajem.* Narzędnik występuje też po przyimkach "
             "*z, nad, pod, przed, za, między*."
         ),
-        structure="kim? czym? → -em (m./n.) · -ą (ż.) · -ami / -mi (lm.)",
+        structure="kim? czym? → zwykle -em (m./n.) · -ą (ż. i m. na -a) · -ami / -mi (lm.)",
         rules=[
-            "Rzeczowniki żeńskie w narzędniku liczby pojedynczej kończą się na -ą.",
+            "Rzeczowniki żeńskie i męskie na -a mają w narzędniku liczby pojedynczej -ą: "
+            "z kolegą, z kierowcą.",
             "Narzędnik liczby mnogiej ma zwykle końcówkę -ami, a nieliczne wyrazy -mi.",
             "Środek transportu wyrażamy narzędnikiem bez przyimka: jadę pociągiem.",
             "Po czasownikach interesować się i zajmować się używamy narzędnika.",
@@ -830,22 +846,28 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation=(
             "Miejscownik występuje **wyłącznie z przyimkami**: *w, na, przy, o, po*.\n\n"
             "**Końcówki liczby pojedynczej:**\n"
-            "- rodzaj męski i nijaki: **-e** z wymianą spółgłoski (*Kraków → Krakowie, stół → "
-            "stole, miasto → mieście*), a po k, g i ch — **-u** (*rok → roku, pociąg → "
-            "pociągu*)\n"
-            "- rodzaj żeński: **-e** z wymianą (*woda → wodzie, siostra → siostrze*), po "
-            "spółgłoskach twardych **-y** (*praca → pracy, ulica → ulicy*), a po miękkich **-i** "
-            "(*ziemia → ziemi*)\n\n"
+            "- rzeczowniki męskie zakończone na spółgłoskę i rzeczowniki nijakie: **-e** "
+            "ze zmianą tematu (*Kraków → Krakowie, stół → stole, miasto → mieście*) albo "
+            "**-u**. Końcówkę **-u** mają m.in. tematy na k, g, ch (*roku, pociągu, "
+            "dachu*) oraz miękkie i stwardniałe (*nauczycielu, mieszkaniu, morzu*). "
+            "Są też formy wymagające zapamiętania, np. *dom → domu*\n"
+            "- rzeczowniki żeńskie i męskie zakończone na **-a**: **-e**, często ze zmianą "
+            "spółgłoski (*woda → wodzie, siostra → siostrze, kolega → koledze*), "
+            "lub **-y / -i**, np. po spółgłoskach stwardniałych **-y** "
+            "(*praca → pracy, ulica → ulicy*), a po miękkich **-i** (*ziemia → ziemi*). "
+            "Formy te są takie jak w celowniku\n\n"
             "**Liczba mnoga:** **-ach** (*miastach, pracach, domach*).\n\n"
             "**Znaczenia przyimków:** *w* — wnętrze i większe obszary (*w Polsce, w kinie*), "
             "*na* — powierzchnie i otwarte przestrzenie (*na stole, na rynku*), *przy* — bliskość "
             "(*przy oknie*), *o* — temat rozmowy (*rozmawiamy o pracy*)."
         ),
-        structure="w / na / przy / o / po + miejscownik\n-e (z wymianą) · -u (po k, g, ch) · -y / "
-        "-i (ż.) · -ach (lm.)",
+        structure="w / na / przy / o / po + miejscownik\n-e / -u (m. na spółgłoskę i n.) · "
+        "-e / -y / -i (ż. i m. na -a) · -ach (lm.)",
         rules=[
             "Miejscownik nie występuje bez przyimka.",
             "Tematy męskie zakończone na k, g i ch przyjmują w miejscowniku końcówkę -u.",
+            "Końcówka -u występuje też w formach nauczycielu, mieszkaniu, morzu; "
+            "nie jest ograniczona do tematów na k, g i ch.",
             "Po przyimku w z nazwą miasta używamy miejscownika: w Warszawie.",
             "Temat rozmowy wyrażamy przyimkiem o i miejscownikiem: o filmie, o pracy.",
         ],

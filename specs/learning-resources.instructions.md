@@ -123,11 +123,24 @@ The foundational sequence includes:
 - C1 and C2 cover register, terminology, definition, phraseology, legal and scientific language,
   rhetoric, translation, and regional variation.
 
+Case guidance distinguishes masculine nouns ending in `-a` from consonant-ending masculine nouns:
+`kolegi`, `koledze`, `kolegą` and `kierowcy`, `kierowcą`. Feminine dative and locative guidance includes
+`-e`, `-y`, and `-i`; masculine and neuter locative `-u` is not restricted to stems ending in `k`, `g`,
+or `ch`. Masculine genitive `-a`/`-u` tendencies are not presented as absolute semantic rules.
+
 Learner-facing titles, explanations, definitions, examples, contexts, and placement questions are
 written in Polish. Vocabulary entries include IPA and per-level unique frequency ranks. Phrasebook
 registers are `formal`, `neutral`, or `informal`. Placement questions keep grammar slugs that resolve
 within the Polish package and balance the correct option's position within each level and skill.
 Polish uses Latin script with visible word spacing, and comprehension guidance uses words.
+
+Placement prompts supply context when opposite meanings would both fit the same construction.
+Advanced assessment includes aspect under negation, passive information structure, modal distance,
+scientific hedging, and colloquial particles in context. C1/C2 reading questions assess inference,
+concession, argumentative scope, and irony. Linked rhetoric references explain personification,
+asyndeton, and apostrophe. Aspect guidance distinguishes denying completion from denying the activity;
+`nie przeczytałem` alone does not imply that reading began. Question IDs and grammar slugs remain
+stable. Content review does not establish empirical CEFR calibration.
 
 Polish IPA preserves lexical stress, consonant identity, and voicing; structural checks detect
 orthographic Polish letters in IPA and missing stress marks in multisyllabic entries. These checks
