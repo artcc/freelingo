@@ -303,7 +303,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "- rodzaj żeński: **-e** z wymianą spółgłoski (*siostra → siostrze, mama → mamie*)\n"
             "- rodzaj nijaki: **-u** (*dziecko → dziecku, okno → oknu*)\n\n"
             "**Liczba mnoga:** zawsze **-om** (*studentom, dzieciom, kobietom*).\n\n"
-            "Celownik wymagają czasowniki **pomagać, dziękować, mówić, dawać, kupować, "
+            "Celownika wymagają czasowniki **pomagać, dziękować, mówić, dawać, kupować, "
             "życzyć**: *Pomagam mamie. Dziękuję ci.* Występuje też w konstrukcjach z zaimkiem: "
             "*jest mi zimno, podoba mi się, trudno mu uwierzyć*."
         ),

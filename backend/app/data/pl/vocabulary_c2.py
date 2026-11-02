@@ -110,7 +110,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="Zbyt swobodny wobec osoby, z którą nie łączą nas bliskie relacje.",
                 example="Poufały zwrot do klienta brzmi nieprofesjonalnie.",
-                ipa="/pɔwˈfalɨ/",
+                ipa="/pɔuˈfawɨ/",
                 frequency_rank=12,
             ),
             VocabularyEntry(
@@ -158,7 +158,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Wyraz lub zwrot typowy dla mowy potocznej.",
                 example="Kolokwializm w artykule naukowym wymaga komentarza.",
-                ipa="/kɔlɔkˈvjalizm/",
+                ipa="/kɔlɔˈkfjalizm/",
                 frequency_rank=18,
             ),
             VocabularyEntry(
@@ -199,7 +199,7 @@ C2_SETS: list[VocabularySet] = [
                 definition="Związek frazeologiczny, którego sensu nie da się wywieść "
                 "ze składników.",
                 example="Idiom „wyjść z siebie” nie znaczy „opuścić dom”.",
-                ipa="/iˈdjɔm/",
+                ipa="/ˈidjɔm/",
                 frequency_rank=22,
             ),
             VocabularyEntry(
@@ -238,7 +238,8 @@ C2_SETS: list[VocabularySet] = [
                 word="kontaminacja",
                 pos="noun",
                 definition="Niepoprawne zmieszanie dwóch związków lub form w jedną całość.",
-                example="Kontaminacja „wyciągnąć rękę” i „pomocna dłoń” daje błędną formę.",
+                example="Zwrot „odnieść porażkę” to kontaminacja wyrażeń „odnieść zwycięstwo” "
+                "i „ponieść porażkę”.",
                 ipa="/kɔntamiˈnat͡sja/",
                 frequency_rank=27,
             ),
@@ -328,7 +329,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="Powszechnie znany i powtarzany bez sprawdzania.",
                 example="Obiegowa mądrość nie zawsze wytrzymuje kontakt z danymi.",
-                ipa="/ɔˈbjɛɡɔvɨ/",
+                ipa="/ɔbjɛˈɡɔvɨ/",
                 frequency_rank=37,
             ),
             VocabularyEntry(
@@ -434,7 +435,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Kategoria wyrażająca możliwość, konieczność lub przypuszczenie.",
                 example="Modalność w tekstach prawnych sygnalizują czasowniki „może” i „musi”.",
-                ipa="/mɔdalˈnɔɕt͡ɕ/",
+                ipa="/mɔˈdalnɔɕt͡ɕ/",
                 frequency_rank=49,
             ),
             VocabularyEntry(
@@ -474,7 +475,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="Wychodzący z użycia, zastępowany nowszą formą.",
                 example="Forma „jeno” jest dziś przestarzała poza stylizacją.",
-                ipa="/pʂɛstaˈʐalɨ/",
+                ipa="/pʂɛstaˈʐawɨ/",
                 frequency_rank=53,
             ),
             VocabularyEntry(
@@ -610,7 +611,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="O wyrazach: bliskie znaczeniowo, ale nie tożsame.",
                 example="Kolejne wyrazy nie mogą być synonimiczne w tekście prawnym.",
-                ipa="/sɨnɔˈɲit͡ʂnɨ/",
+                ipa="/sɨnɔɲiˈmit͡ʂnɨ/",
                 frequency_rank=69,
             ),
             VocabularyEntry(
@@ -649,7 +650,7 @@ C2_SETS: list[VocabularySet] = [
                 word="obligatoryjny",
                 pos="adjective",
                 definition="Obowiązkowy, niewymagający odrębnej zgody stron.",
-                example="Konsultacje są obligatoryjne tylko w wskazanych przypadkach.",
+                example="Konsultacje są obligatoryjne tylko we wskazanych przypadkach.",
                 ipa="/ɔbliɡatɔˈrijnɨ/",
                 frequency_rank=73,
             ),
@@ -682,7 +683,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Akt organu kolegialnego wiążący jego członków.",
                 example="Uchwała wchodzi w życie z dniem podjęcia.",
-                ipa="/uˈxvała/",
+                ipa="/uˈxfawa/",
                 frequency_rank=77,
             ),
             VocabularyEntry(
@@ -955,7 +956,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Osoba lub źródło, którego zdanie traktuje się jako wiarygodne.",
                 example="Autorytet bez wskazania dziedziny traci moc.",
-                ipa="/awˈtɔrɨtɛt/",
+                ipa="/awtɔˈrɨtɛt/",
                 frequency_rank=108,
             ),
             VocabularyEntry(
@@ -1036,7 +1037,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Krótki wstęp zapowiadający treść artykułu.",
                 example="Zajawka zdradza puentę, której czytelnik jeszcze nie zna.",
-                ipa="/zaˈjavka/",
+                ipa="/zaˈjafka/",
                 frequency_rank=117,
             ),
             VocabularyEntry(
@@ -1060,7 +1061,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Osoba, do której kierowany jest komunikat.",
                 example="Odbiorca mediów społecznościowych czyta nagłówek, nie tekst.",
-                ipa="/ɔtˈbjɔrt͡sa/",
+                ipa="/ɔdˈbjɔrt͡sa/",
                 frequency_rank=120,
             ),
         ],
@@ -1398,7 +1399,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Dodany fragment przerywający tok zdania.",
                 example="Wtrącenie „jakby nie patrzeć” sygnalizuje dystans.",
-                ipa="/ftrɔnˈt͡ʂɛɲɛ/",
+                ipa="/ftrɔnˈt͡sɛɲɛ/",
                 frequency_rank=158,
             ),
             VocabularyEntry(
@@ -1470,7 +1471,7 @@ C2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Rozległa wiedza ujawniana w wypowiedzi.",
                 example="Erudycja bez jasności męczy odbiorcę.",
-                ipa="/ɛˈrudɨt͡sja/",
+                ipa="/ɛruˈdɨt͡sja/",
                 frequency_rank=166,
             ),
             VocabularyEntry(

@@ -147,6 +147,11 @@ Registration accepts a target language, with `en-GB` as the default. The authent
 flow establishes the learner's language context and sends the learner to Dashboard. Assessment is
 the separate next action used to create a plan.
 
+Assessment completion honors the explicit `target_language` captured by the client flow. A stale
+Redis quiz session cannot redirect that completion to another language or replace that language's
+active plan. Clients that omit the field retain the profile-scoped quiz session, legacy user session,
+and profile-language fallbacks, in that order.
+
 ### Adding a language
 
 `POST /api/languages`:

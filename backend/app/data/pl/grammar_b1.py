@@ -310,7 +310,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "- *Zapytała, **czy** mam czas.*\n"
             "- *Poprosił, **żebym** przyszedł wcześniej.*\n\n"
             "W polsku **nie ma obowiązku** cofania czasu: *„Jestem zmęczony”* → "
-            "*Powiedział, że **jest** zmęczony.* Cofamy czas tylko wtedy, gdy sytuacja się "
+            "*Powiedział, że **jest** zmęczony.* Cofamy czas tylko wtedy, gdy sytuacja "
             "jest ujmowana z innego punktu odniesienia: *Powiedział, że **był** zmęczony* "
             "(np. poprzedniego dnia).\n\n"
             "Zmieniają się natomiast zaimki oraz określenia miejsca i czasu: *jutro → "
@@ -702,7 +702,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation=(
             "Cel wyrażamy najczęściej przez **żeby** (neutralnie) lub **aby** (formalnie), a "
             "po nich stoi bezokolicznik albo forma osobowa.\n\n"
-            "- **Ten sam podmiot → bezokolicznik:** *Wychodzę, **żeby** odpocząć.*\n"
+            "- **Ten sam podmiot → najczęściej bezokolicznik:** *Wychodzę, **żeby** odpocząć.*\n"
             "- **Różne podmioty → forma osobowa z ‑by:** *Chcę, **żebyś** przyszedł.*\n"
             "- **Styl formalny:** *Aby uzyskać zgodę, należy złożyć wniosek.*\n\n"
             "Formy osobowe: *żebym, żebyś, żeby, żebyśmy, żebyście, żeby*. Po spójnikach "
@@ -713,7 +713,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "zdanie główne + żeby/aby + forma osobowa (różne podmioty)"
         ),
         rules=[
-            "Ten sam podmiot w obu zdaniach wymaga bezokolicznika po żeby.",
+            "Przy tym samym podmiocie zwykle używamy bezokolicznika; forma osobowa "
+            "również jest możliwa.",
             "Różne podmioty wymagają formy osobowej: żebyś, żebyśmy.",
             "Aby i by są bardziej formalne niż żeby.",
             "Po żeby nie stawiamy czasownika w czasie teraźniejszym: nie „żeby " "przychodzisz”.",
@@ -736,12 +737,13 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Chcę, żeby przyjdziesz.",
                 correct="Chcę, żebyś przyszedł.",
-                note="Po żeby potrzebna jest forma osobowa z ‑by, nie czas teraźniejszy.",
+                note="Po żeby używamy formy na -ł; przyjdziesz to forma czasu przyszłego.",
             ),
             GrammarMistake(
                 wrong="Wychodzę, żebym odpocząć.",
                 correct="Wychodzę, żeby odpocząć.",
-                note="Przy tym samym podmiocie używamy bezokolicznika, bez końcówki " "osobowej.",
+                note="Bezokolicznika nie łączymy z końcówką osobową spójnika: żeby odpocząć, "
+                "nie żebym odpocząć.",
             ),
         ],
         related=["mowa-zalezna", "zdania-czasowe", "zdania-okolicznikowe"],

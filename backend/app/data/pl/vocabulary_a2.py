@@ -126,7 +126,7 @@ A2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Placówka opiekująca się małymi dziećmi przed rozpoczęciem szkoły.",
                 example="Do przedszkola chodziłem od trzeciego roku życia.",
-                ipa="/pʃɛtˈskɔlɛ/",
+                ipa="/pʂɛtˈʂkɔlɛ/",
                 frequency_rank=14,
             ),
             VocabularyEntry(
@@ -206,7 +206,7 @@ A2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Osoba obsługująca klientów w sklepie.",
                 example="Sprzedawca polecił mi tańszy model.",
-                ipa="/sprzɛˈdaft͡sa/",
+                ipa="/spʂɛˈdaft͡sa/",
                 frequency_rank=23,
             ),
             VocabularyEntry(
@@ -894,7 +894,7 @@ A2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="To, co trzeba zrobić z powodu zasad lub umowy.",
                 example="Płacenie podatków to obowiązek każdego.",
-                ipa="/ɔbɔˈvʲɔnd͡zɛk/",
+                ipa="/ɔbɔˈvʲɔw̃zɛk/",
                 frequency_rank=101,
             ),
             VocabularyEntry(
@@ -1166,7 +1166,7 @@ A2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Grupa zawodników grająca razem.",
                 example="Nasza drużyna wygrała mecz.",
-                ipa="/ˈdruʐɨna/",
+                ipa="/druˈʐɨna/",
                 frequency_rank=132,
             ),
             VocabularyEntry(
@@ -1422,7 +1422,7 @@ A2_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="Doprowadzić coś do zamierzonego wyniku.",
                 example="W tym roku osiągnąłem swój cel.",
-                ipa="/ɔˈɕɔŋnɔɲt͡ɕ/",
+                ipa="/ɔˈɕɔŋɡnɔɲt͡ɕ/",
                 frequency_rank=161,
             ),
             VocabularyEntry(
@@ -1446,7 +1446,7 @@ A2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Ponowne przerobienie materiału, aby go utrwalić.",
                 example="W piątek mamy powtórkę z gramatyki.",
-                ipa="/pɔˈvturka/",
+                ipa="/pɔˈfturka/",
                 frequency_rank=164,
             ),
             VocabularyEntry(

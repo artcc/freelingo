@@ -697,7 +697,7 @@ A1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Osoba kierująca samochodem, autobusem lub innym pojazdem.",
                 example="Kierowca autobusu zatrzymał się na przystanku.",
-                ipa="/ˈcɛrɔft͡sa/",
+                ipa="/cɛˈrɔft͡sa/",
                 frequency_rank=79,
             ),
             _entry(
@@ -1329,7 +1329,7 @@ A1_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="Kosztujący mało pieniędzy.",
                 example="Ten bilet jest tani.",
-                ipa="/ˈtani/",
+                ipa="/ˈtaɲi/",
                 frequency_rank=151,
             ),
             _entry(

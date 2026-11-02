@@ -30,7 +30,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Argument skierowany przeciw tezie lub argumentowi przeciwnika.",
                 example="Na każdy kontrargument miał przygotowaną odpowiedź.",
-                ipa="/ˌkɔntrarɡuˈmɛnt/",
+                ipa="/ˌkɔntrarˈɡumɛnt/",
                 frequency_rank=3,
             ),
             VocabularyEntry(
@@ -118,7 +118,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Postawa powstrzymywania się od sądu bez dostatecznych dowodów.",
                 example="Z umiarkowanym sceptycyzmem przyjął te zapowiedzi.",
-                ipa="/st͡sɛptɨˈt͡sɨzm/",
+                ipa="/st͡sɛpˈtɨt͡sɨzm/",
                 frequency_rank=13,
             ),
             VocabularyEntry(
@@ -142,7 +142,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Uwaga zgłoszona wobec propozycji lub twierdzenia.",
                 example="Zgłosiła zastrzeżenie do treści umowy.",
-                ipa="/zastaˈʂɛʐɛɲɛ/",
+                ipa="/zastʂɛˈʐɛɲɛ/",
                 frequency_rank=16,
             ),
             VocabularyEntry(
@@ -302,7 +302,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Rywalizacja firm o klientów na tym samym rynku.",
                 example="Konkurencja wymusiła obniżkę cen.",
-                ipa="/kɔnkurenˈt͡sja/",
+                ipa="/kɔnkuˈrɛnt͡sja/",
                 frequency_rank=34,
             ),
             VocabularyEntry(
@@ -462,7 +462,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Twierdzenie przyjęte tymczasowo jako punkt wyjścia rozumowania.",
                 example="Założenie okazało się błędne po pierwszej serii testów.",
-                ipa="/zaˈwɔʐɛɲɛ/",
+                ipa="/zawɔˈʐɛɲɛ/",
                 frequency_rank=52,
             ),
             VocabularyEntry(
@@ -470,7 +470,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Kontrolowana próba sprawdzenia założenia w ustalonych warunkach.",
                 example="Eksperyment powtórzono w trzech laboratoriach.",
-                ipa="/ɛkspɛrɨˈmɛnt/",
+                ipa="/ɛkspɛˈrɨmɛnt/",
                 frequency_rank=53,
             ),
             VocabularyEntry(
@@ -478,7 +478,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Osoba udzielająca odpowiedzi w badaniu ankietowym.",
                 example="Respondenci odpowiadali na pytania przez kwadrans.",
-                ipa="/rɛspɔnˈdɛnt/",
+                ipa="/rɛsˈpɔndɛnt/",
                 frequency_rank=54,
             ),
             VocabularyEntry(
@@ -582,7 +582,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Warstwa pośrednicząca w komunikacji użytkownika z systemem.",
                 example="Nowy interfejs uprościł obsługę aplikacji.",
-                ipa="/intɛrˈfɛjs/",
+                ipa="/inˈtɛrfɛjs/",
                 frequency_rank=66,
             ),
             VocabularyEntry(
@@ -918,7 +918,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Grupa ludzi połączonych więzią i wspólnymi wartościami.",
                 example="Wspólnota lokalna odbudowała świetlicę.",
-                ipa="/ˈfspulnɔta/",
+                ipa="/fspulˈnɔta/",
                 frequency_rank=104,
             ),
             VocabularyEntry(
@@ -934,7 +934,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Przybycie dużej liczby osób na dany obszar.",
                 example="Napływ ludności zmienił strukturę dzielnicy.",
-                ipa="/ˈnapwuf/",
+                ipa="/ˈnapwɨf/",
                 frequency_rank=106,
             ),
             VocabularyEntry(
@@ -950,7 +950,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Gotowość do aktywnego udziału w jakiejś sprawie.",
                 example="Zaangażowanie mieszkańców zmieniło plan remontu.",
-                ipa="/zaaŋɡaˈʐɔvaɲɛ/",
+                ipa="/zaaŋɡaʐɔˈvaɲɛ/",
                 frequency_rank=108,
             ),
             VocabularyEntry(
@@ -998,7 +998,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Prywatne miejsce zakwaterowania wynajmowane turystom.",
                 example="Kwaterę znaleźliśmy tuż przy rynku.",
-                ipa="/ˈkfatɛra/",
+                ipa="/kfaˈtɛra/",
                 frequency_rank=113,
             ),
             VocabularyEntry(
@@ -1038,7 +1038,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Środek transportu lub ich zestaw umożliwiający podróż.",
                 example="Sprawdziłem połączenia do Berlina.",
-                ipa="/pɔˈvɔnt͡sɛɲɛ/",
+                ipa="/pɔwɔnˈt͡ʂɛɲɛ/",
                 frequency_rank=118,
             ),
             VocabularyEntry(
@@ -1054,7 +1054,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Szeroki widok rozciągający się z punktu widokowego.",
                 example="Z wieży roztacza się panorama całej doliny.",
-                ipa="/panaˈrama/",
+                ipa="/panɔˈrama/",
                 frequency_rank=120,
             ),
         ],
@@ -1198,7 +1198,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Stopniowy powrót do zdrowia i sił po chorobie.",
                 example="Rekonwalescencja po zabiegu wymagała cierpliwości.",
-                ipa="/rɛkɔnvwalɛsˈt͡sɛnt͡sja/",
+                ipa="/rɛkɔnvalɛsˈt͡sɛnt͡sja/",
                 frequency_rank=136,
             ),
             VocabularyEntry(
@@ -1206,7 +1206,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="Trwający długo i trudny do wyleczenia.",
                 example="To choroba przewlekła wymagająca stałej opieki.",
-                ipa="/pʂɛˈvrɛklɨ/",
+                ipa="/pʂɛˈvlɛkwɨ/",
                 frequency_rank=137,
             ),
             VocabularyEntry(
@@ -1486,7 +1486,7 @@ B2_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Przedstawienie cudzej myśli własnymi słowami.",
                 example="Parafraza wymaga podania źródła.",
-                ipa="/paˈrafraza/",
+                ipa="/paraˈfraza/",
                 frequency_rank=169,
             ),
             VocabularyEntry(

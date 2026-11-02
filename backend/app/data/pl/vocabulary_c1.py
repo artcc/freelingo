@@ -128,7 +128,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Ukryte oddziaływanie na odbiorcę, które ogranicza jego zdolność "
                 "samodzielnej oceny.",
-                example="Reportaż zarzucono redakcji manipulację cytatami.",
+                example="Po publikacji reportażu zarzucono redakcji manipulację cytatami.",
                 ipa="/manipuˈlatsja/",
                 frequency_rank=13,
             ),
@@ -544,7 +544,7 @@ C1_SETS: list[VocabularySet] = [
                 definition="Forma wsparcia, w której doświadczony pracownik rozwija umiejętności "
                 "mniej doświadczonego.",
                 example="Mentoring okazał się skuteczniejszy niż jednorazowe szkolenie.",
-                ipa="/mɛnˈtɔriŋɡ/",
+                ipa="/mɛnˈtɔriŋk/",
                 frequency_rank=57,
             ),
             VocabularyEntry(
@@ -635,7 +635,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Wyraz bliski znaczeniowo innemu, ale rzadko całkowicie z nim "
                 "wymienny.",
-                example="Synonim *pojazd* nie zastąpi w przepisach terminu *samochód*.",
+                example="Wyraz *auto* jest synonimem słowa *samochód*.",
                 ipa="/sɨˈnɔɲim/",
                 frequency_rank=67,
             ),
@@ -885,7 +885,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="bezstronność",
                 pos="noun",
-                definition="Brak uprzedzeń wobec stron, które wymaga się od osoby oceniającej.",
+                definition="Brak uprzedzeń wobec stron, wymagany od osoby oceniającej.",
                 example="Bezstronność sędziego wyklucza kontakty z jedną ze stron sporu.",
                 ipa="/bɛsˈstrɔnnɔɕtɕ/",
                 frequency_rank=94,
@@ -1015,7 +1015,7 @@ C1_SETS: list[VocabularySet] = [
                 definition="Sprzeczność interesów lub wartości, która prowadzi do otwartego "
                 "sporu.",
                 example="Konflikt wokół inwestycji ujawnił słabość konsultacji społecznych.",
-                ipa="/ˈkɔɲflikt/",
+                ipa="/ˈkɔnflikt/",
                 frequency_rank=108,
             ),
             VocabularyEntry(
@@ -1087,7 +1087,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Wyodrębniony warunek lub zastrzeżenie w umowie.",
                 example="Klauzula o poufności obowiązuje także po zakończeniu współpracy.",
-                ipa="/ˈklawzula/",
+                ipa="/klawˈzula/",
                 frequency_rank=116,
             ),
             VocabularyEntry(
@@ -1336,7 +1336,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Dobra kultury i wartości przekazane przez poprzednie pokolenia.",
                 example="Dziedzictwo regionu obejmuje zarówno zabytki, jak i miejscowe rzemiosło.",
-                ipa="/dʑɛˈdʑitsfɔ/",
+                ipa="/dʑɛˈdʑitstfɔ/",
                 frequency_rank=143,
             ),
             VocabularyEntry(
@@ -1361,7 +1361,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Uproszczony i sztywny obraz grupy, powtarzany bez weryfikacji.",
                 example="Stereotyp bywa wygodny, bo zwalnia z obowiązku poznania drugiej osoby.",
-                ipa="/stɛrɛˈtɨp/",
+                ipa="/stɛrɛˈɔtɨp/",
                 frequency_rank=146,
             ),
             VocabularyEntry(
@@ -1395,7 +1395,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="adjective",
                 definition="Taki, który jest głęboko związany z miejscem lub tradycją.",
                 example="Zwyczaj jest zakorzeniony w regionie od co najmniej dwóch wieków.",
-                ipa="/zakɔˈʐɛɲɔnɨ/",
+                ipa="/zakɔʐɛˈɲɔnɨ/",
                 frequency_rank=150,
             ),
         ],
@@ -1561,7 +1561,7 @@ C1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="Umiejętność płynnego i przekonującego formułowania myśli.",
                 example="Elokwencja bez rzetelnych danych szybko traci wiarygodność.",
-                ipa="/ɛˈlɔkfɛntsja/",
+                ipa="/ɛlɔˈkfɛntsja/",
                 frequency_rank=168,
             ),
             VocabularyEntry(

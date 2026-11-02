@@ -1073,7 +1073,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "- **wypada** odwołuje się do obyczaju: *wypada podziękować*.\n"
             "- **należałoby**, **wypadałoby** łagodzą postulat: *należałoby to sprawdzić*.\n"
             "- **jesteśmy zobowiązani** wskazuje źródło w umowie lub prawie.\n"
-            "- **wolno** dotyczy pozwolenia, **można** — możliwości.\n\n"
+            "- **wolno** dotyczy pozwolenia, **można** — możliwości lub pozwolenia, "
+            "zależnie od kontekstu.\n\n"
             "Skala siły: *można* < *warto* < *należy* < *musi*."
         ),
         structure="bezosobowe: należy/wypada/należałoby + bezokolicznik · osobowe: jestem "
@@ -1081,7 +1082,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "*Należy* wyraża normę, *wypada* — obyczaj, *należałoby* — postulat złagodzony.",
             "*Jesteśmy zobowiązani* wskazuje źródło zobowiązania w umowie lub prawie.",
-            "*Wolno* i *można* różnią się: *wolno* dotyczy pozwolenia, *można* — możliwości.",
+            "*Wolno* dotyczy pozwolenia; *można* może wyrażać możliwość lub pozwolenie.",
             "Stopniuj siłę: *można* < *warto* < *należy* < *musi*.",
         ],
         examples=[
@@ -1098,6 +1099,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Nie wolno nam ignorować sygnałów ostrzegawczych.",
                 translation=None,
                 note="brak pozwolenia",
+            ),
+            GrammarExample(
+                text="Czy można tu zaparkować?",
+                translation=None,
+                note="pytanie o pozwolenie",
             ),
         ],
         common_mistakes=[

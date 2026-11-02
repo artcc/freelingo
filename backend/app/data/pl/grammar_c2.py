@@ -224,7 +224,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Wyciągnął do nas pomocną dłoń w najgorszym momencie.",
                 translation=None,
-                note="związek łączliwy: pomocna dłoń",
+                note="Utrwalony wariant: wyciągnąć do kogoś pomocną rękę.",
             ),
         ],
         common_mistakes=[
@@ -234,9 +234,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Frazeologizm utrwalił przyimek „o”, nie „w”.",
             ),
             GrammarMistake(
-                wrong="Wyciągnął do niego rękę pomocną.",
-                correct="Wyciągnął do niego pomocną dłoń.",
-                note="Kontaminacja związków „wyciągnąć rękę” i „pomocna dłoń”.",
+                wrong="Drużyna odniosła porażkę w finale.",
+                correct="Drużyna poniosła porażkę w finale.",
+                note="Kontaminacja związków „odnieść zwycięstwo” i „ponieść porażkę”.",
             ),
         ],
         related=["zwroty-idiomatyczne", "kolokacje", "przyslowia"],
@@ -621,8 +621,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "- **Cytowanie i przypisy** lokują twierdzenie w dyskursie i oddzielają cudze "
             "wyniki od własnych.\n"
             "- **Struktura IMRaD** porządkuje artykuł: wstęp, metody, wyniki, dyskusja.\n"
-            "*Granica*: ostrożność nie może zastąpić wniosku. Tekst, który jedynie "
-            "„sugeruje”, niczego nie twierdzi i niczego nie wnosi."
+            "*Granica*: ostrożność nie może zastąpić uzasadnienia. Wniosek może być "
+            "ostrożny, ale trzeba wskazać dane, na których się opiera, oraz jego ograniczenia."
         ),
         structure="dane sugerują, że + zdanie; w literaturze przyjmuje się, że + zdanie",
         rules=[

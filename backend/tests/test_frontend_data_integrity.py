@@ -506,6 +506,9 @@ def test_pl_curriculum_units_and_vocabulary_links_are_consistent() -> None:
         assert vocabulary_set.id in unit.vocabulary_set_ids
         for word in vocabulary_set.words:
             assert word.ipa and re.fullmatch(r"/[^/]+/", word.ipa), word.word
+            assert not set(word.ipa) & set("ąćęłńóśźż"), word.word
+            if sum(char in "aeiouɨɛɔ" for char in word.ipa) > 1:
+                assert "ˈ" in word.ipa, word.word
 
 
 def test_pl_assessment_references_and_options_are_valid() -> None:

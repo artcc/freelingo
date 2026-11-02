@@ -129,6 +129,14 @@ registers are `formal`, `neutral`, or `informal`. Placement questions keep gramm
 within the Polish package and balance the correct option's position within each level and skill.
 Polish uses Latin script with visible word spacing, and comprehension guidance uses words.
 
+Polish IPA preserves lexical stress, consonant identity, and voicing; structural checks detect
+orthographic Polish letters in IPA and missing stress marks in multisyllabic entries. These checks
+do not establish pronunciation accuracy. Reference content distinguishes synonymy from broader/narrower
+meaning, includes both possibility and permission uses of `można`, and treats attested phraseological
+variants such as `wyciągnąć pomocną rękę` as valid. Purpose-clause guidance distinguishes the usual
+infinitive construction from an absolute restriction; scientific-writing guidance preserves justified
+uncertainty rather than equating it with an absence of findings.
+
 ### Japanese curriculum and reference content
 
 Japanese (`ja-JP`) units from A1 through C2 include listening in their existing lesson-type lists.

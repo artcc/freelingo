@@ -345,7 +345,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="proces wyboru nowych pracowników na wolne stanowiska",
                 example="Rekrutacja na to stanowisko trwa trzy tygodnie.",
-                ipa="/rɛkrutaˈt͡sja/",
+                ipa="/rɛkruˈtat͡sja/",
                 frequency_rank=37,
             ),
             _entry(
@@ -393,7 +393,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="wiedza i umiejętności zdobyte przez praktykę zawodową",
                 example="Mam pięć lat doświadczenia w sprzedaży.",
-                ipa="/dɔɕfjat͡ʂɛɲɛ/",
+                ipa="/dɔɕfjaˈt͡ʂɛɲɛ/",
                 frequency_rank=42,
             ),
             _entry(
@@ -681,7 +681,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="osoba odpowiedzialna za realizację filmu lub spektaklu",
                 example="Reżyser opowiedział o kulisach produkcji.",
-                ipa="/ˈrɛʐɨsɛr/",
+                ipa="/rɛˈʐɨsɛr/",
                 frequency_rank=75,
             ),
             _entry(
@@ -961,7 +961,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="osoba należąca do państwa i korzystająca z jego praw",
                 example="Każdy obywatel ma prawo do sądu.",
-                ipa="/ɔbɨˈvat͡sɛl/",
+                ipa="/ɔbɨˈvatɛl/",
                 frequency_rank=107,
             ),
             _entry(
@@ -1017,7 +1017,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="wprowadzenie nowej wersji programu lub danych",
                 example="Aktualizacja zajęła kilka minut.",
-                ipa="/aktualizaˈt͡sja/",
+                ipa="/aktualiˈzat͡sja/",
                 frequency_rank=113,
             ),
             _entry(
@@ -1273,7 +1273,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="verb",
                 definition="odwiedzać miejsca i poznawać ich zabytki",
                 example="Cały dzień zwiedzaliśmy stare miasto.",
-                ipa="/ˈzvjɛt͡sat͡ɕ/",
+                ipa="/ˈzvjɛd͡zat͡ɕ/",
                 frequency_rank=142,
             ),
             _entry(
@@ -1385,7 +1385,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="noun",
                 definition="obraz przeszłego zdarzenia zachowany w pamięci",
                 example="Najlepsze wspomnienia mam z dzieciństwa.",
-                ipa="/fspɔˈmnjɛɲɛ/",
+                ipa="/fspɔmˈɲɛɲɛ/",
                 frequency_rank=155,
             ),
             _entry(
@@ -1401,7 +1401,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="phrase",
                 definition="przyjąć inną opinię niż wcześniej",
                 example="Po rozmowie zmieniłem zdanie o tym pomyśle.",
-                ipa="/ˈzmʲɛɲit͡ɕ ˈzdanʲɛ/",
+                ipa="/ˈzmʲɛɲit͡ɕ ˈzdaɲɛ/",
                 frequency_rank=157,
             ),
             _entry(
@@ -1505,7 +1505,7 @@ B1_SETS: list[VocabularySet] = [
                 pos="conjunction",
                 definition="spójnik wprowadzający przeciwstawienie dwóch faktów",
                 example="Ja wolę rano, natomiast ona pracuje wieczorem.",
-                ipa="/ˈnatɔmast/",
+                ipa="/naˈtɔmjast/",
                 frequency_rank=169,
             ),
             _entry(

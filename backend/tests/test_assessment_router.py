@@ -1142,6 +1142,80 @@ async def test_complete_with_language_in_session(
     assert result["cefr_level"] == "A1"
 
 
+@pytest.mark.parametrize("target_language", ["pl-PL", "fr-FR"])
+@pytest.mark.parametrize("session_scope", ["profile", "legacy", "requested"])
+async def test_complete_explicit_language_ignores_stale_quiz_session(
+    client: AsyncClient,
+    test_user_with_plan,
+    mock_redis,
+    db_session,
+    target_language,
+    session_scope,
+):
+    """A stale quiz cannot replace another language's plan during completion."""
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+    from app.models.user_language import UserLanguage
+
+    user, headers = test_user_with_plan
+    old_plan = await db_session.scalar(select(StudyPlan).where(StudyPlan.user_id == user.id))
+    session_key = f"assessment:{user.id}"
+    if session_scope == "profile":
+        session_key += f":{user.target_language}"
+    elif session_scope == "requested":
+        session_key += f":{target_language}"
+    await mock_redis.setex(
+        session_key,
+        1800,
+        json.dumps({"target_language": user.target_language, "quiz": {"questions": []}}),
+    )
+
+    response = await client.post(
+        "/api/assessment/complete",
+        headers=headers,
+        json={
+            "cefr_level": "A1",
+            "duration_weeks": 4,
+            "days_per_week": 4,
+            "target_language": target_language,
+        },
+    )
+
+    assert response.status_code == 200
+    plan = await db_session.get(StudyPlan, response.json()["plan_id"])
+    language = await db_session.get(UserLanguage, plan.user_language_id)
+    assert plan.target_language == language.target_language == target_language
+    assert plan.user_id == language.user_id == user.id
+    assert plan.is_active is True
+    await db_session.refresh(old_plan)
+    assert old_plan.is_active is True
+    assert plan.user_language_id != old_plan.user_language_id
+
+
+@pytest.mark.parametrize("session_scope", ["profile", "legacy"])
+async def test_complete_without_explicit_language_preserves_quiz_fallback(
+    client: AsyncClient, test_user, mock_redis, db_session, session_scope
+):
+    from app.models.study_plan import StudyPlan
+
+    user, headers = test_user
+    session_key = f"assessment:{user.id}"
+    if session_scope == "profile":
+        session_key += f":{user.target_language}"
+    await mock_redis.setex(session_key, 1800, json.dumps({"target_language": "pl-PL"}))
+
+    response = await client.post(
+        "/api/assessment/complete",
+        headers=headers,
+        json={"cefr_level": "A1", "duration_weeks": 4, "days_per_week": 4},
+    )
+
+    assert response.status_code == 200
+    plan = await db_session.get(StudyPlan, response.json()["plan_id"])
+    assert plan.target_language == "pl-PL"
+
+
 async def test_complete_invalid_body_422(client: AsyncClient, test_user):
     """POST /complete returns 422 for malformed request body."""
     _user, headers = test_user
