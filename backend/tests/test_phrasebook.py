@@ -360,3 +360,17 @@ async def test_generate_phrasebook_native_help_not_found(client, test_user):
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Phrasebook category not found"
+
+
+@pytest.mark.asyncio
+async def test_polish_language_returns_polish_categories(client, test_user):
+    """pl-PL returns Polish phrasebook categories and does not fall back to English."""
+    _, headers = test_user
+
+    response = await client.get("/api/phrasebook?language=pl-PL", headers=headers)
+
+    assert response.status_code == 200
+    categories = response.json()["categories"]
+    assert len(categories) == 28
+    assert any(c["id"] == "powitania" for c in categories)
+    assert any(c["situation"] == "Powitania i pożegnania" for c in categories)

@@ -395,6 +395,7 @@ class TestLanguageAPI:
         assert "all_supported_languages" in data
         assert "ja-JP" in data["all_supported_languages"]
         assert "ko-KR" in data["all_supported_languages"]
+        assert "pl-PL" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -478,6 +479,18 @@ class TestLanguageAPI:
 
         assert res.status_code == 201
         assert res.json()["target_language"] == "ja-JP"
+
+    @pytest.mark.asyncio
+    async def test_polish_language_can_be_added(self, client, db_session):
+        """pl-PL is accepted by the backend language allow-list."""
+        user, headers = await _make_user(db_session)
+
+        res = await client.post(
+            "/api/languages", headers=headers, json={"target_language": "pl-PL"}
+        )
+
+        assert res.status_code == 201
+        assert res.json()["target_language"] == "pl-PL"
 
     @pytest.mark.asyncio
     async def test_korean_language_can_be_added(self, client, db_session):
@@ -811,6 +824,17 @@ class TestCurriculumPerLanguage:
         assert len(c["A1"]) == 8
         assert c["A1"][0].title == "한글과 기본 인사"
         assert c["C2"][-1].title == "C2 종합 복습"
+
+    @pytest.mark.asyncio
+    async def test_curriculum_polish(self, client):
+        """get_curriculum('pl-PL') returns Polish curriculum."""
+        from app.data.curriculum import get_curriculum
+
+        c = get_curriculum("pl-PL")
+        assert list(c.keys()) == ["A1", "A2", "B1", "B2", "C1", "C2"]
+        assert len(c["A1"]) == 8
+        assert c["A1"][0].title == "Powitania i przedstawianie się"
+        assert c["C2"][-1].title == "Powtórka C2"
 
     @pytest.mark.asyncio
     async def test_curriculum_chinese(self, client):

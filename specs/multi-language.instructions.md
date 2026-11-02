@@ -25,6 +25,7 @@ The application supports these BCP-47 target-language codes:
 - `es-ES` — Spanish (Spain)
 - `fr-FR` — French
 - `it-IT` — Italian
+- `pl-PL` — Polish
 - `ja-JP` — Japanese
 - `ko-KR` — Korean (South Korea)
 - `pt-PT` — Portuguese (Portugal)
@@ -145,6 +146,13 @@ catalog creation checks the active plan, and history is filtered by target langu
 Registration accepts a target language, with `en-GB` as the default. The authenticated onboarding
 flow establishes the learner's language context and sends the learner to Dashboard. Assessment is
 the separate next action used to create a plan.
+
+Assessment completion honors the explicit `target_language` captured by the client flow. A stale
+Redis quiz session cannot redirect that completion to another language or replace that language's
+active plan. Clients that omit the field or send null retain the profile-scoped quiz session, legacy
+user session, and profile-language fallbacks, in that order. The resolved language must be supported
+and operator-enabled even when it comes from a session or profile. Invalid or disabled codes return
+`422` before creating a language record or replacing a plan.
 
 ### Adding a language
 

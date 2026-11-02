@@ -51,6 +51,7 @@ async def test_other_models_keep_the_original_request(service, model):
         ("fr", "French from France"),
         ("de-DE", "Standard German from Germany"),
         ("it-IT", "Standard Italian from Italy"),
+        ("pl-PL", "Polish from Poland"),
         ("ja-JP", "Standard Japanese from Japan"),
         ("ko-KR", "Standard Korean from South Korea"),
         ("zh-CN", "Standard Mandarin Chinese from Mainland China"),

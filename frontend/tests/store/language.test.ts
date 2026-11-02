@@ -44,7 +44,7 @@ describe('useLanguageStore — initial state', () => {
     expect(useLanguageStore.getState().supportedLanguages).toEqual(
       SUPPORTED_TARGET_LANGUAGES
     )
-    expect(useLanguageStore.getState().supportedLanguages.length).toBe(10)
+    expect(useLanguageStore.getState().supportedLanguages.length).toBe(11)
   })
 
   it('starts with empty availableLanguageCodes', () => {

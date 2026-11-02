@@ -198,6 +198,7 @@ describe('ChatMarkdown', () => {
     ['ja-JP', 'font-target-ja'],
     ['ko-KR', 'font-target-ko'],
     ['zh-CN', 'font-target-zh'],
+    ['pl-PL', 'font-target-latin'],
   ])('inherits the learned-language presentation for %s', (language, font) => {
     const { container } = render(
       <TargetLanguageText as="div" languageCode={language}>

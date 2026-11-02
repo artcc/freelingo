@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugais",
     "fr-FR": "Français",
     "de-DE": "Allemand",
+    "pl-PL": "Polonais",
     "ja-JP": "Japonais",
     "ko-KR": "Coréen",
     "zh-CN": "Chinois continental",
@@ -1490,6 +1492,7 @@
     "pt": "portugais",
     "fr": "français",
     "de": "allemand",
+    "pl": "Polonais",
     "ja": "japonais",
     "ko": "coréen",
     "zh": "chinois",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Anglais parlé au Royaume-Uni.",
     "fr-FR-description": "Français parlé en France.",
     "de-DE-description": "Allemand parlé en Allemagne.",
+    "pl-PL-description": "Le polonais tel qu'il est parlé en Pologne.",
     "ja-JP-description": "Japonais parlé au Japon.",
     "ko-KR-description": "Coréen parlé en Corée du Sud.",
     "zh-CN-description": "Chinois mandarin de Chine continentale, avec caractères simplifiés."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Compris",
     "entry1": {
+      "label": "Tu peux maintenant apprendre le polonais !",
+      "desc": "Le polonais est désormais disponible comme langue d'apprentissage, avec des contenus de A1 à C2. Choisis-le au démarrage ou ajoute-le depuis Paramètres → Mes langues."
+    },
+    "entry2": {
       "label": "Des améliorations pour apprendre",
       "desc": "Nous continuons d'améliorer nos systèmes d'apprentissage et nos contenus linguistiques pour te proposer une pratique plus claire, cohérente et utile."
     },
-    "entry2": {
+    "entry3": {
       "label": "Des conversations vocales plus fluides",
       "desc": "Nous avons amélioré les conversations avec Lingu pour une lecture audio plus fluide et des indications plus claires sur les tours de parole."
     },
-    "entry3": {
+    "entry4": {
       "label": "Une expérience plus fluide",
       "desc": "Nous avons aussi corrigé de petits bugs et peaufiné quelques détails pour rendre ton apprentissage quotidien avec FreeLingo encore plus agréable."
     }

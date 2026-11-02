@@ -36,6 +36,7 @@ from app.schemas.assessment import (
     LevelTestResult,
     LevelTestSubmitRequest,
 )
+from app.schemas.auth import get_available_languages
 from app.schemas.study_plan import GenerateStudyPlanRequest
 from app.services.assessment import (
     END_OF_LEVEL_TEST_PROMPT,  # noqa: F401 (kept for potential reuse)
@@ -436,32 +437,32 @@ async def complete_assessment(
     Persist the assessment result and generate the initial study plan.
     Called after Step 3 (duration selector) is submitted.
     """
-    # Resolve target_language in priority order:
-    # 1. Explicit field in the request body (new frontend always sends this)
-    # 2. Scoped Redis session: assessment:{user_id}:{body_lang}
-    # 3. Scoped Redis session: assessment:{user_id}:{users.target_language}
-    # 4. Legacy Redis session: assessment:{user_id}
-    # 5. users.target_language (final fallback — always safe for the normal frontend flow)
-    target_language: str = data.target_language or current_user.target_language
+    # An explicit selection belongs to this completion, not to a stale Redis quiz.
+    # Clients without it retain the scoped/legacy session and profile fallbacks.
+    target_language: str = (
+        data.target_language if data.target_language is not None else current_user.target_language
+    )
     current_user_id = current_user.id
     current_user_subscription_status = current_user.subscription_status
     current_user_assessment_voice_trial_used = current_user.assessment_voice_trial_used
 
-    # Try to find a Redis session that confirms the language
-    session_raw: str | bytes | None = None
-    for candidate_key in [
-        f"assessment:{current_user_id}:{target_language}",
-        f"assessment:{current_user_id}:{current_user.target_language}",
-        f"assessment:{current_user_id}",  # legacy key
-    ]:
-        session_raw = await redis.get(candidate_key)
-        if session_raw:
-            break
+    if data.target_language is None:
+        for candidate_key in [
+            f"assessment:{current_user_id}:{current_user.target_language}",
+            f"assessment:{current_user_id}",  # legacy key
+        ]:
+            session_raw = await redis.get(candidate_key)
+            if session_raw:
+                session = json.loads(session_raw)
+                target_language = session.get("target_language", target_language)
+                break
 
-    if session_raw:
-        session = json.loads(session_raw)
-        # The session's target_language is the most authoritative source when present
-        target_language = session.get("target_language", target_language)
+    available_languages = get_available_languages()
+    if target_language not in available_languages:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"Language not available. Choose from: {available_languages}",
+        )
 
     # Reject undersized plans before any state changes: ensure_user_language
     # below creates and flushes a UserLanguage row, and the deactivation loop

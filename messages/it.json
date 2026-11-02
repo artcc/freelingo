@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portoghese",
     "fr-FR": "Francese",
     "de-DE": "Tedesco",
+    "pl-PL": "Polacco",
     "ja-JP": "Giapponese",
     "ko-KR": "Coreano",
     "zh-CN": "Cinese continentale",
@@ -1490,6 +1492,7 @@
     "pt": "portoghese",
     "fr": "francese",
     "de": "tedesco",
+    "pl": "Polacco",
     "ja": "giapponese",
     "ko": "coreano",
     "zh": "cinese",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Inglese parlato nel Regno Unito.",
     "fr-FR-description": "Francese parlato in Francia.",
     "de-DE-description": "Tedesco parlato in Germania.",
+    "pl-PL-description": "Il polacco come si parla in Polonia.",
     "ja-JP-description": "Giapponese parlato in Giappone.",
     "ko-KR-description": "Coreano parlato in Corea del Sud.",
     "zh-CN-description": "Cinese mandarino della Cina continentale, con caratteri semplificati."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Capito",
     "entry1": {
+      "label": "Ora puoi imparare il polacco!",
+      "desc": "Il polacco è ora disponibile come lingua da imparare, con contenuti da A1 a C2. Sceglilo quando inizi oppure aggiungilo da Impostazioni → Le mie lingue."
+    },
+    "entry2": {
       "label": "Miglioramenti nell'apprendimento",
       "desc": "Continuiamo a perfezionare i sistemi di apprendimento e i contenuti linguistici per offrirti una pratica più chiara, coerente e utile."
     },
-    "entry2": {
+    "entry3": {
       "label": "Conversazioni vocali più fluide",
       "desc": "Abbiamo migliorato le conversazioni con Lingu per una riproduzione vocale più fluida e indicazioni più chiare sui turni di parola."
     },
-    "entry3": {
+    "entry4": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

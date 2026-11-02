@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugués",
     "fr-FR": "Francés",
     "de-DE": "Alemán",
+    "pl-PL": "Polaco",
     "ja-JP": "Japonés",
     "ko-KR": "Coreano",
     "zh-CN": "Chino continental",
@@ -1490,6 +1492,7 @@
     "pt": "portugués",
     "fr": "francés",
     "de": "alemán",
+    "pl": "Polaco",
     "ja": "japonés",
     "ko": "coreano",
     "zh": "chino",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Inglés hablado en el Reino Unido.",
     "fr-FR-description": "Francés hablado en Francia.",
     "de-DE-description": "Alemán hablado en Alemania.",
+    "pl-PL-description": "Polaco tal como se habla en Polonia.",
     "ja-JP-description": "Japonés hablado en Japón.",
     "ko-KR-description": "Coreano hablado en Corea del Sur.",
     "zh-CN-description": "Chino mandarín de China continental, con caracteres simplificados."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Entendido",
     "entry1": {
+      "label": "¡Ya puedes aprender polaco!",
+      "desc": "Añadimos el polaco como idioma de aprendizaje, con contenidos de A1 a C2. Elígelo al empezar o añádelo desde Ajustes → Mis idiomas."
+    },
+    "entry2": {
       "label": "Mejoras en el aprendizaje",
       "desc": "Seguimos afinando los sistemas de aprendizaje y los contenidos de idiomas para ofrecerte una práctica más clara, coherente y útil."
     },
-    "entry2": {
+    "entry3": {
       "label": "Conversaciones de voz más fluidas",
       "desc": "Hemos afinado las conversaciones con Lingu para ofrecer una reproducción de voz más fluida e indicaciones de turno más claras."
     },
-    "entry3": {
+    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

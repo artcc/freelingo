@@ -36,6 +36,7 @@ LANGUAGES = (
     "es-ES",
     "fr-FR",
     "it-IT",
+    "pl-PL",
     "pt-PT",
     "ja-JP",
     "ko-KR",
@@ -157,6 +158,20 @@ def test_matrix_invariants(language: str, level: str, weeks: int, days: int) -> 
 
 
 # ── T2: the documented modality-coverage policy ───────────────────────────────
+
+
+@pytest.mark.parametrize("level", CEFR_LEVELS)
+def test_polish_schedule_uses_polish_titles_and_objectives(level: str) -> None:
+    _, slots = _slots("pl-PL", level, 8, 5)
+
+    for slot in slots[:-1]:
+        assert slot["title"].startswith(f"{slot['unit_title']} - Lekcja ")
+    assert slots[-1]["unit_title"] == f"Test poziomu {level}"
+    assert slots[-1]["title"] == f"Test poziomu {level}"
+    assert slots[-1]["objectives"] == [
+        "Powtórz wszystkie zagadnienia gramatyczne z tego poziomu",
+        "Ukończ test, aby odblokować kolejny poziom",
+    ]
 
 
 def test_modality_coverage_es_b1_4x5() -> None:

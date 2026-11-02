@@ -7,7 +7,7 @@ from collections import Counter, defaultdict
 import pytest
 
 
-@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "ja-JP", "ko-KR"])
+@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "pl-PL", "ja-JP", "ko-KR"])
 def test_reviewed_banks_have_valid_answers_references_and_balanced_positions(language):
     from app.data.assessment_bank import get_assessment_bank
     from app.data.grammar import get_grammar_topics
@@ -104,6 +104,14 @@ class TestGetAssessmentBank:
         assert isinstance(bank, list)
         assert len(bank) == 180
         assert any(q.id == "zh-g-a1-001" for q in bank)
+
+    def test_polish_returns_non_empty(self):
+        from app.data.assessment_bank import get_assessment_bank
+
+        bank = get_assessment_bank("pl-PL")
+        assert isinstance(bank, list)
+        assert len(bank) == 124
+        assert any(q.id == "pl-g-a1-001" for q in bank)
 
     def test_unknown_language_falls_back_to_en_gb(self):
         from app.data.assessment_bank import get_assessment_bank
