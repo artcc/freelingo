@@ -196,8 +196,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "- **Związki łączliwe**: *poważna choroba*, *ciężkie przestępstwo* — "
             "dopuszczają ograniczoną wymianę składników.\n"
             "- **Związki luźne** graniczą ze zwykłą kolokacją.\n"
-            "Frazeologizm ma **utrwaloną łączliwość** i często utrwaloną liczbę: *kruszyć "
-            "kopie*, nie *kruszyć kopię*; *rzucać grochem o ścianę*, nie *w ścianę*.\n"
+            "Frazeologizm ma **utrwaloną łączliwość**: *rzucać grochem o ścianę*, "
+            "nie *w ścianę*. Warianty sprawdzamy w słowniku: obok *kruszyć kopie* "
+            "notowane jest także *kruszyć kopię*.\n"
             "*Odtwarzalność* odróżnia idiom od metafory autorskiej: metaforę tworzymy, "
             "frazeologizm przywołujemy."
         ),
@@ -219,7 +220,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Kruszyć kopie o taką błahostkę to strata czasu.",
                 translation=None,
-                note="liczba mnoga utrwalona w idiomie",
+                note="utrwalona postać z liczbą mnogą; słowniki notują też kruszyć kopię",
             ),
             GrammarExample(
                 text="Wyciągnął do nas pomocną dłoń w najgorszym momencie.",
@@ -450,7 +451,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Rozkaźnik z „niech” łagodzi polecenie i wyraża namowę.",
             "Tryb warunkowy służy do dystansowania się od twierdzenia.",
             "Formy z -by są ruchome, ale niedublowane.",
-            "Po oby używamy formy na -ł, np. oby zdążyli, obym zdążył, a nie bezokolicznika.",
+            "Oby łączy się z formą na -ł, np. oby zdążyli, obym zdążył, "
+            "ale występuje też z bezokolicznikiem: Oby zdążyć na pociąg.",
         ],
         examples=[
             GrammarExample(
@@ -468,18 +470,17 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 translation=None,
                 note="tryb życzący z partykułą oby",
             ),
+            GrammarExample(
+                text="Oby zdążyć na pociąg.",
+                translation=None,
+                note="życzenie z bezokolicznikiem; forma osobowa: obym zdążył lub obym zdążyła",
+            ),
         ],
         common_mistakes=[
             GrammarMistake(
                 wrong="Gdybym bym miał czas, przyszedłbym na spotkanie.",
                 correct="Gdybym miał czas, przyszedłbym na spotkanie.",
                 note="Forma „gdybym” zawiera już partykułę -by.",
-            ),
-            GrammarMistake(
-                wrong="Oby zdążyć na pociąg.",
-                correct="Obym zdążył na pociąg.",
-                note="Życzenie dotyczące mnie wymaga obym z formą na -ł: obym zdążył "
-                "lub obym zdążyła, nie bezokolicznika.",
             ),
         ],
         related=["tryb-warunkowy", "tryb-rozka", "partykuly-modalne"],

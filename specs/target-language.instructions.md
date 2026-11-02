@@ -27,7 +27,9 @@ canonicalizer.
 `AVAILABLE_TARGET_LANGUAGES` is the operator-enabled subset. Language-management and onboarding
 surfaces expose the intersection of configured available codes and supported implementation.
 Registration schema validation uses the supported set, while authenticated add/switch operations use
-the available set.
+the available set. Assessment completion also validates its resolved language against the available
+set before curriculum dispatch or persistence, including session/profile fallbacks. Unknown,
+noncanonical, empty, and disabled codes return `422`.
 
 ## Default and fallback
 

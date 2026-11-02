@@ -1216,6 +1216,92 @@ async def test_complete_without_explicit_language_preserves_quiz_fallback(
     assert plan.target_language == "pl-PL"
 
 
+@pytest.mark.parametrize("target_language", ["xx-XX", "pl-PL", "en-US", "", "pl"])
+@pytest.mark.parametrize("language_source", ["explicit", "scoped", "legacy", "profile"])
+async def test_complete_rejects_unavailable_language_without_state_changes(
+    client: AsyncClient,
+    test_user_with_plan,
+    mock_redis,
+    db_session,
+    monkeypatch,
+    target_language,
+    language_source,
+):
+    """Every resolution path rejects invalid/disabled codes before curriculum dispatch."""
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+    from app.models.user_language import UserLanguage
+
+    user, headers = test_user_with_plan
+    monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", ["en-GB"])
+    body = {"cefr_level": "A1", "duration_weeks": 4, "days_per_week": 4}
+    if language_source == "explicit":
+        body["target_language"] = target_language
+        # Even an empty explicit code must not be rescued by a valid session.
+        await mock_redis.setex(
+            f"assessment:{user.id}:{user.target_language}",
+            1800,
+            json.dumps({"target_language": "en-GB"}),
+        )
+    elif language_source == "profile":
+        user.target_language = target_language
+        await db_session.commit()
+    else:
+        session_key = f"assessment:{user.id}"
+        if language_source == "scoped":
+            session_key += f":{user.target_language}"
+        await mock_redis.setex(session_key, 1800, json.dumps({"target_language": target_language}))
+
+    plans_query = select(
+        StudyPlan.id, StudyPlan.user_language_id, StudyPlan.target_language, StudyPlan.is_active
+    ).where(StudyPlan.user_id == user.id)
+    languages_query = select(
+        UserLanguage.id, UserLanguage.target_language, UserLanguage.is_active
+    ).where(UserLanguage.user_id == user.id)
+    plans_before = (await db_session.execute(plans_query)).all()
+    languages_before = (await db_session.execute(languages_query)).all()
+
+    with patch("app.routers.assessment.get_curriculum_units") as get_curriculum_units:
+        response = await client.post("/api/assessment/complete", headers=headers, json=body)
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Language not available. Choose from: ['en-GB']"
+    get_curriculum_units.assert_not_called()
+    assert (await db_session.execute(plans_query)).all() == plans_before
+    assert (await db_session.execute(languages_query)).all() == languages_before
+
+
+@pytest.mark.parametrize("explicit_null", [False, True])
+async def test_complete_without_session_uses_available_profile_language(
+    client: AsyncClient, test_user_with_plan, db_session, monkeypatch, explicit_null
+):
+    from sqlalchemy import select
+
+    from app.models.study_plan import StudyPlan
+    from app.models.user_language import UserLanguage
+
+    user, headers = test_user_with_plan
+    old_plan = await db_session.scalar(select(StudyPlan).where(StudyPlan.user_id == user.id))
+    user.target_language = "pl-PL"
+    await db_session.commit()
+    monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", ["pl-PL"])
+    body = {"cefr_level": "A1", "duration_weeks": 4, "days_per_week": 4}
+    if explicit_null:
+        body["target_language"] = None
+
+    response = await client.post("/api/assessment/complete", headers=headers, json=body)
+
+    assert response.status_code == 200
+    plan = await db_session.get(StudyPlan, response.json()["plan_id"])
+    language = await db_session.get(UserLanguage, plan.user_language_id)
+    assert plan.target_language == language.target_language == "pl-PL"
+    assert plan.user_id == language.user_id == user.id
+    assert plan.is_active is True
+    await db_session.refresh(old_plan)
+    assert old_plan.is_active is True
+
+
 async def test_complete_invalid_body_422(client: AsyncClient, test_user):
     """POST /complete returns 422 for malformed request body."""
     _user, headers = test_user

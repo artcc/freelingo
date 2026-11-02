@@ -36,6 +36,7 @@ from app.schemas.assessment import (
     LevelTestResult,
     LevelTestSubmitRequest,
 )
+from app.schemas.auth import get_available_languages
 from app.schemas.study_plan import GenerateStudyPlanRequest
 from app.services.assessment import (
     END_OF_LEVEL_TEST_PROMPT,  # noqa: F401 (kept for potential reuse)
@@ -438,12 +439,14 @@ async def complete_assessment(
     """
     # An explicit selection belongs to this completion, not to a stale Redis quiz.
     # Clients without it retain the scoped/legacy session and profile fallbacks.
-    target_language: str = data.target_language or current_user.target_language
+    target_language: str = (
+        data.target_language if data.target_language is not None else current_user.target_language
+    )
     current_user_id = current_user.id
     current_user_subscription_status = current_user.subscription_status
     current_user_assessment_voice_trial_used = current_user.assessment_voice_trial_used
 
-    if not data.target_language:
+    if data.target_language is None:
         for candidate_key in [
             f"assessment:{current_user_id}:{current_user.target_language}",
             f"assessment:{current_user_id}",  # legacy key
@@ -453,6 +456,13 @@ async def complete_assessment(
                 session = json.loads(session_raw)
                 target_language = session.get("target_language", target_language)
                 break
+
+    available_languages = get_available_languages()
+    if target_language not in available_languages:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"Language not available. Choose from: {available_languages}",
+        )
 
     # Reject undersized plans before any state changes: ensure_user_language
     # below creates and flushes a UserLanguage row, and the deactivation loop

@@ -158,9 +158,11 @@ Registered only when `STRIPE_ENABLED=true`.
 Placement assessment, plan creation, post-assessment voice trial, and end-of-level testing. Account onboarding is a separate platform flow.
 
 For `POST /complete`, an explicit body `target_language` determines the new plan's language and cannot
-be overridden by a stored quiz session. If omitted, resolution checks the Redis session scoped to
+be overridden by a stored quiz session. If omitted or null, resolution checks the Redis session scoped to
 `users.target_language`, then the legacy user session, and finally the profile language. Only active
-plans in the resolved language are replaced.
+plans in the resolved language are replaced. Regardless of its source, the resolved language must be
+a supported canonical code enabled in `AVAILABLE_TARGET_LANGUAGES`. Unknown, noncanonical, empty, or
+disabled codes return `422` before curriculum dispatch or any state change; they do not fall back to English.
 
 - **GET `/start`** — Rate limit: 10/min. Begins the LLM-generated adaptive quiz.
 - **GET `/bank`** — Rate limit: 60/min. Returns the full static assessment bank for the given language (query param `language`, default `en-GB`). Auth required. Response: `{questions: [{id, skill, difficulty, question, options, correct, grammar_slug}]}`. Each supported language returns its own static bank in the target language.

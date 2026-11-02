@@ -146,9 +146,11 @@ Polish IPA preserves lexical stress, consonant identity, and voicing; structural
 orthographic Polish letters in IPA and missing stress marks in multisyllabic entries. These checks
 do not establish pronunciation accuracy. Reference content distinguishes synonymy from broader/narrower
 meaning, includes both possibility and permission uses of `można`, and treats attested phraseological
-variants such as `wyciągnąć pomocną rękę` as valid. Purpose-clause guidance distinguishes the usual
-infinitive construction from an absolute restriction; scientific-writing guidance preserves justified
-uncertainty rather than equating it with an absence of findings.
+variants such as `wyciągnąć pomocną rękę` and `kruszyć kopię` as valid. Desiderative guidance allows
+both `oby` with an infinitive and personal constructions such as `obym zdążył/zdążyła`.
+Purpose-clause guidance distinguishes the usual infinitive construction from an absolute restriction;
+scientific-writing guidance preserves justified uncertainty rather than equating it with an absence
+of findings.
 
 ### Japanese curriculum and reference content
 
