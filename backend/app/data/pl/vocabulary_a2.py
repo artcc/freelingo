@@ -1261,7 +1261,7 @@ A2_SETS: list[VocabularySet] = [
                 word="wyłączyć",
                 pos="verb",
                 definition="Zatrzymać działanie urządzenia przyciskiem lub poleceniem.",
-                example="Przed snem wyłączam komputer.",
+                example="Przed snem chcę wyłączyć komputer.",
                 ipa="/vɨˈwɔnt͡ʂɨt͡ɕ/",
                 frequency_rank=185,
             ),
