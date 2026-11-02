@@ -364,3 +364,18 @@ async def test_generate_vocabulary_native_help_not_found(client, test_user):
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Vocabulary set not found"
+
+
+@pytest.mark.asyncio
+async def test_polish_language_returns_polish_sets(client, test_user):
+    """pl-PL returns Polish vocabulary sets and does not fall back to English."""
+    _, headers = test_user
+
+    response = await client.get("/api/vocabulary?language=pl-PL", headers=headers)
+
+    assert response.status_code == 200
+    sets = response.json()["sets"]
+    assert len(sets) == 105
+    assert any(s["id"] == "powitania_a1" for s in sets)
+    assert any(s["topic"] == "Powitania i pożegnania" for s in sets)
+    assert all(s["words"] for s in sets)

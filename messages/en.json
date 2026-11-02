@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portuguese",
     "fr-FR": "French",
     "de-DE": "German",
+    "pl-PL": "Polish",
     "ja-JP": "Japanese",
     "ko-KR": "Korean",
     "zh-CN": "Chinese (Mainland China)",
@@ -1490,6 +1492,7 @@
     "pt": "Portuguese",
     "fr": "French",
     "de": "German",
+    "pl": "Polish",
     "ja": "Japanese",
     "ko": "Korean",
     "zh": "Chinese",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "English as spoken in the United Kingdom.",
     "fr-FR-description": "French as spoken in France.",
     "de-DE-description": "German as spoken in Germany.",
+    "pl-PL-description": "Polish as spoken in Poland.",
     "ja-JP-description": "Japanese as spoken in Japan.",
     "ko-KR-description": "Korean as spoken in South Korea.",
     "zh-CN-description": "Mandarin Chinese as spoken in Mainland China, using simplified characters."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Got it",
     "entry1": {
+      "label": "You can now learn Polish!",
+      "desc": "Polish is now available as a learning language, with content from A1 to C2. Choose it when you get started or add it from Settings → My Languages."
+    },
+    "entry2": {
       "label": "Learning improvements",
       "desc": "We're continuing to refine our learning systems and language content to make your practice clearer, more consistent, and more useful."
     },
-    "entry2": {
+    "entry3": {
       "label": "Smoother voice conversations",
       "desc": "We've refined conversations with Lingu for smoother voice playback and clearer turn indicators."
     },
-    "entry3": {
+    "entry4": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

@@ -36,7 +36,23 @@ vi.mock('@/lib/api', () => ({ apiFetch }))
 
 import OnboardingPage from '@/app/(auth)/onboarding/page'
 
-const catalogs = { da, de, en, es, fi, fr, hr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
+const catalogs = {
+  da,
+  de,
+  en,
+  es,
+  fi,
+  fr,
+  hr,
+  it: itMessages,
+  nl,
+  pl,
+  pt,
+  ro,
+  ru,
+  sv,
+  tr,
+}
 type Locale = keyof typeof catalogs
 
 const spanishSubtitles: Record<Locale, string> = {
@@ -127,6 +143,7 @@ describe('onboarding goals subtitle', () => {
     ['de-DE', 'German'],
     ['fr-FR', 'French'],
     ['it-IT', 'Italian'],
+    ['pl-PL', 'Polish'],
     ['pt-PT', 'Portuguese'],
     ['ja-JP', 'Japanese'],
     ['ko-KR', 'Korean'],

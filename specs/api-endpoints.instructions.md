@@ -157,8 +157,15 @@ Registered only when `STRIPE_ENABLED=true`.
 
 Placement assessment, plan creation, post-assessment voice trial, and end-of-level testing. Account onboarding is a separate platform flow.
 
+For `POST /complete`, an explicit body `target_language` determines the new plan's language and cannot
+be overridden by a stored quiz session. If omitted or null, resolution checks the Redis session scoped to
+`users.target_language`, then the legacy user session, and finally the profile language. Only active
+plans in the resolved language are replaced. Regardless of its source, the resolved language must be
+a supported canonical code enabled in `AVAILABLE_TARGET_LANGUAGES`. Unknown, noncanonical, empty, or
+disabled codes return `422` before curriculum dispatch or any state change; they do not fall back to English.
+
 - **GET `/start`** — Rate limit: 10/min. Begins the LLM-generated adaptive quiz.
-- **GET `/bank`** — Rate limit: 60/min. Returns the full static assessment bank for the given language (query param `language`, default `en-GB`). Auth required. Response: `{questions: [{id, skill, difficulty, question, options, correct, grammar_slug}]}`. `ja-JP`, `ko-KR`, and `zh-CN` return static assessment banks in the target language.
+- **GET `/bank`** — Rate limit: 60/min. Returns the full static assessment bank for the given language (query param `language`, default `en-GB`). Auth required. Response: `{questions: [{id, skill, difficulty, question, options, correct, grammar_slug}]}`. Each supported language returns its own static bank in the target language.
 - **POST `/submit`** — Rate limit: 10/min. LLM-backed assessment submission endpoint retained alongside the deterministic bank/evaluate flow.
 - **POST `/evaluate`** — Rate limit: 60/min. Deterministic CEFR evaluation (no LLM — groups by difficulty). Body: `{answers: [{question_id, skill, difficulty, correct, dont_know?}]}`. `dont_know` defaults to `false` and marks a declared knowledge gap, which is never scored as correct.
 - **POST `/free-write`** — Rate limit: 10/min. Evaluates free-write text for CEFR placement through LLM JSON parsing.

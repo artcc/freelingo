@@ -293,3 +293,17 @@ async def test_generate_grammar_native_help_not_found(client, test_user):
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Grammar topic not found"
+
+
+@pytest.mark.asyncio
+async def test_polish_language_returns_polish_topics(client, test_user):
+    """pl-PL returns Polish grammar topics and does not fall back to English."""
+    _, headers = test_user
+
+    response = await client.get("/api/grammar?language=pl-PL", headers=headers)
+
+    assert response.status_code == 200
+    topics = response.json()["topics"]
+    assert len(topics) == 126
+    assert any(t["slug"] == "byc" for t in topics)
+    assert any(t["title"] == "Czasownik być" for t in topics)

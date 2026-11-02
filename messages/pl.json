@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugalski",
     "fr-FR": "Francuski",
     "de-DE": "Niemiecki",
+    "pl-PL": "Polski",
     "ja-JP": "Japoński",
     "ko-KR": "Koreański",
     "zh-CN": "Chiński kontynentalny",
@@ -1490,6 +1492,7 @@
     "pt": "portugalski",
     "fr": "francuski",
     "de": "niemiecki",
+    "pl": "Polski",
     "ja": "japoński",
     "ko": "koreański",
     "zh": "chiński",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Angielski używany w Wielkiej Brytanii.",
     "fr-FR-description": "Francuski używany we Francji.",
     "de-DE-description": "Niemiecki używany w Niemczech.",
+    "pl-PL-description": "Polski, tak jak mówi się w Polsce.",
     "ja-JP-description": "Japoński używany w Japonii.",
     "ko-KR-description": "Koreański używany w Korei Południowej.",
     "zh-CN-description": "Mandaryński chiński z Chin kontynentalnych, z uproszczonymi znakami."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Teraz możesz uczyć się polskiego!",
+      "desc": "Dodaliśmy polski jako język do nauki, z materiałami od A1 do C2. Wybierz go na początku lub dodaj w Ustawieniach → Moje języki."
+    },
+    "entry2": {
       "label": "Ulepszenia w nauce",
       "desc": "Nadal udoskonalamy systemy nauki i materiały językowe, aby Twoje ćwiczenia były bardziej przejrzyste, spójne i przydatne."
     },
-    "entry2": {
+    "entry3": {
       "label": "Płynniejsze rozmowy głosowe",
       "desc": "Usprawniliśmy rozmowy z Lingu, aby zapewnić płynniejsze odtwarzanie głosu i wyraźniejsze wskazówki, kiedy mówić."
     },
-    "entry3": {
+    "entry4": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

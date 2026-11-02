@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugali",
     "fr-FR": "Ranska",
     "de-DE": "Saksa",
+    "pl-PL": "Puola",
     "ja-JP": "Japani",
     "ko-KR": "Korea",
     "zh-CN": "Kiina (Manner-Kiina)",
@@ -1490,6 +1492,7 @@
     "pt": "Portugali",
     "fr": "Ranska",
     "de": "Saksa",
+    "pl": "Puola",
     "ja": "Japani",
     "ko": "Korea",
     "zh": "Kiina",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Yhdistyneessä kuningaskunnassa puhuttu englanti.",
     "fr-FR-description": "Ranskassa puhuttu ranska.",
     "de-DE-description": "Saksassa puhuttu saksa.",
+    "pl-PL-description": "Puolaa sellaisena kuin sitä puhutaan Puolassa.",
     "ja-JP-description": "Japanissa puhuttu japani.",
     "ko-KR-description": "Etelä-Koreassa puhuttu korea.",
     "zh-CN-description": "Manner-Kiinassa puhuttu mandariinikiina, jossa käytetään yksinkertaistettuja merkkejä."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Selvä",
     "entry1": {
+      "label": "Nyt voit oppia puolaa!",
+      "desc": "Puola on nyt saatavilla opiskeltavana kielenä, ja sisältöä on tasoilta A1–C2. Valitse se aloittaessasi tai lisää se kohdasta Asetukset → Omat kielet."
+    },
+    "entry2": {
       "label": "Parannuksia oppimiseen",
       "desc": "Kehitämme edelleen oppimisjärjestelmiämme ja kielisisältöjä, jotta harjoittelusi olisi selkeämpää, johdonmukaisempaa ja hyödyllisempää."
     },
-    "entry2": {
+    "entry3": {
       "label": "Sujuvammat puhekeskustelut",
       "desc": "Olemme parantaneet keskusteluja Lingun kanssa: puhe toistuu sujuvammin ja puheenvuorot ilmaistaan selkeämmin."
     },
-    "entry3": {
+    "entry4": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

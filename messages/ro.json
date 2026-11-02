@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugheză",
     "fr-FR": "Franceză",
     "de-DE": "Germană",
+    "pl-PL": "Poloneză",
     "ja-JP": "Japoneză",
     "ko-KR": "Coreeană",
     "zh-CN": "Chineză continentală",
@@ -1490,6 +1492,7 @@
     "pt": "portugheză",
     "fr": "franceză",
     "de": "germană",
+    "pl": "Poloneză",
     "ja": "japoneză",
     "ko": "coreeană",
     "zh": "chineză",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Engleza vorbită în Regatul Unit.",
     "fr-FR-description": "Franceza vorbită în Franța.",
     "de-DE-description": "Germana vorbită în Germania.",
+    "pl-PL-description": "Poloneza așa cum se vorbește în Polonia.",
     "ja-JP-description": "Japoneza vorbită în Japonia.",
     "ko-KR-description": "Coreeana vorbită în Coreea de Sud.",
     "zh-CN-description": "Chineză mandarină din China continentală, cu caractere simplificate."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Am înțeles",
     "entry1": {
+      "label": "Acum poți învăța poloneza!",
+      "desc": "Am adăugat poloneza ca limbă de studiu, cu conținut de la A1 la C2. Alege-o la început sau adaug-o din Setări → Limbile mele."
+    },
+    "entry2": {
       "label": "Îmbunătățiri pentru învățare",
       "desc": "Continuăm să perfecționăm sistemele de învățare și conținutul lingvistic pentru a-ți oferi exerciții mai clare, mai coerente și mai utile."
     },
-    "entry2": {
+    "entry3": {
       "label": "Conversații vocale mai fluide",
       "desc": "Am îmbunătățit conversațiile cu Lingu pentru o redare vocală mai fluidă și indicații mai clare despre când este rândul tău să vorbești."
     },
-    "entry3": {
+    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

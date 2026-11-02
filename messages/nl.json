@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugees",
     "fr-FR": "Frans",
     "de-DE": "Duits",
+    "pl-PL": "Pools",
     "ja-JP": "Japans",
     "ko-KR": "Koreaans",
     "zh-CN": "Chinees (vasteland China)",
@@ -1490,6 +1492,7 @@
     "pt": "Portugees",
     "fr": "Frans",
     "de": "Duits",
+    "pl": "Pools",
     "ja": "Japans",
     "ko": "Koreaans",
     "zh": "Chinees",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Engels zoals gesproken in het Verenigd Koninkrijk.",
     "fr-FR-description": "Frans zoals gesproken in Frankrijk.",
     "de-DE-description": "Duits zoals gesproken in Duitsland.",
+    "pl-PL-description": "Pools zoals gesproken in Polen.",
     "ja-JP-description": "Japans zoals gesproken in Japan.",
     "ko-KR-description": "Koreaans zoals gesproken in Zuid-Korea.",
     "zh-CN-description": "Mandarijn-Chinees van het Chinese vasteland, met vereenvoudigde karakters."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Begrepen",
     "entry1": {
+      "label": "Je kunt nu Pools leren!",
+      "desc": "Pools is nu beschikbaar als leertaal, met inhoud van A1 tot C2. Kies het wanneer je begint of voeg het toe via Instellingen → Mijn talen."
+    },
+    "entry2": {
       "label": "Verbeteringen voor het leren",
       "desc": "We blijven onze leersystemen en taalinhoud verbeteren, zodat je met duidelijkere, beter op elkaar afgestemde en nuttigere oefeningen kunt leren."
     },
-    "entry2": {
+    "entry3": {
       "label": "Vloeiendere spraakgesprekken",
       "desc": "We hebben gesprekken met Lingu verbeterd voor vloeiendere spraakweergave en duidelijkere aanwijzingen over wie aan de beurt is."
     },
-    "entry3": {
+    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

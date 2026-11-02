@@ -61,7 +61,7 @@ describe('TargetLanguageSelector', () => {
     )
 
     const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(10)
+    expect(buttons).toHaveLength(11)
   })
 
   it('renders nothing when availableCodes is empty', () => {
@@ -94,6 +94,23 @@ describe('TargetLanguageSelector', () => {
     )
     expect(buttons.map((button) => button.textContent).join(' ')).toContain(
       'ko-KR'
+    )
+  })
+
+  it('renders the Polish catalog entry when availableCodes includes it', () => {
+    render(
+      <TargetLanguageSelector
+        value="en-GB"
+        onChange={() => {}}
+        availableCodes={['pl-PL']}
+      />
+    )
+
+    const buttons = screen.getAllByRole('button')
+    expect(buttons).toHaveLength(1)
+    expect(buttons[0].textContent).toContain('pl-PL')
+    expect(screen.getByRole('img').getAttribute('src')).toBe(
+      '/flags/poland.jpg'
     )
   })
 

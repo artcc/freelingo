@@ -95,6 +95,7 @@
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
+      "pl-PL": "Cześć!",
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
@@ -1481,6 +1482,7 @@
     "pt-PT": "Portugalski",
     "fr-FR": "Francuski",
     "de-DE": "Njemački",
+    "pl-PL": "Poljski",
     "ja-JP": "Japanski",
     "ko-KR": "Korejski",
     "zh-CN": "Kineski (kontinentalna Kina)",
@@ -1490,6 +1492,7 @@
     "pt": "Portugalski",
     "fr": "Francuski",
     "de": "Njemački",
+    "pl": "Poljski",
     "ja": "Japanski",
     "ko": "Korejski",
     "zh": "Kineski",
@@ -1500,6 +1503,7 @@
     "en-GB-description": "Engleski kakav se govori u Ujedinjenoj Kraljevini.",
     "fr-FR-description": "Francuski kakav se govori u Francuskoj.",
     "de-DE-description": "Njemački kakav se govori u Njemačkoj.",
+    "pl-PL-description": "Poljski kako se govori u Poljskoj.",
     "ja-JP-description": "Japanski kakav se govori u Japanu.",
     "ko-KR-description": "Korejski kakav se govori u Južnoj Koreji.",
     "zh-CN-description": "Mandarinski kineski kakav se govori u kontinentalnoj Kini, s pojednostavljenim znakovima."
@@ -1760,17 +1764,21 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.10.65",
+    "version": "v1.11.0",
     "cta": "Razumijem",
     "entry1": {
+      "label": "Sada možeš učiti poljski!",
+      "desc": "Dodali smo poljski kao jezik za učenje, sa sadržajem od A1 do C2. Odaberi ga na početku ili ga dodaj putem Postavke → Moji jezici."
+    },
+    "entry2": {
       "label": "Poboljšanja učenja",
       "desc": "Nastavljamo poboljšavati sustave za učenje i jezične sadržaje kako bi tvoje vježbanje bilo jasnije, dosljednije i korisnije."
     },
-    "entry2": {
+    "entry3": {
       "label": "Tečniji glasovni razgovori",
       "desc": "Poboljšali smo razgovore s Linguom za tečniju reprodukciju glasa i jasnije oznake čiji je red za govor."
     },
-    "entry3": {
+    "entry4": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

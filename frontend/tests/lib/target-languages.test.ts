@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 10 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(10)
+  it('contains exactly 11 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(11)
   })
 
   const expectedCodes = [
@@ -19,6 +19,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'en-GB',
     'es-ES',
     'it-IT',
+    'pl-PL',
     'pt-PT',
     'fr-FR',
     'de-DE',
@@ -53,6 +54,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/uk.jpg')
     expect(paths).toContain('/flags/spain.jpg')
     expect(paths).toContain('/flags/italy.jpg')
+    expect(paths).toContain('/flags/poland.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
     expect(paths).toContain('/flags/germany.jpg')
@@ -65,6 +67,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     const enLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'en')
     const esLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'es')
     const itLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'it')
+    const plLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'pl')
     const ptLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'pt')
     const frLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'fr')
     const deLangs = SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'de')
@@ -74,6 +77,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(enLangs).toHaveLength(2)
     expect(esLangs).toHaveLength(1)
     expect(itLangs).toHaveLength(1)
+    expect(plLangs).toHaveLength(1)
     expect(ptLangs).toHaveLength(1)
     expect(frLangs).toHaveLength(1)
     expect(deLangs).toHaveLength(1)
@@ -85,7 +89,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(10)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(11)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -94,10 +98,23 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'pt-PT',
       'fr-FR',
       'de-DE',
+      'pl-PL',
       'ja-JP',
       'ko-KR',
       'zh-CN',
     ])
+  })
+
+  it('contains complete Polish display metadata', () => {
+    expect(getLanguageByCode('pl-PL')).toMatchObject({
+      name: 'Polski',
+      nameEn: 'Polish',
+      flagPath: '/flags/poland.jpg',
+      iso639: 'pl',
+      fontClass: 'font-target-latin',
+      script: 'latin',
+      usesWordSpacing: true,
+    })
   })
 
   it('contains complete CJK display metadata', () => {
@@ -151,6 +168,15 @@ describe('getLanguageByCode', () => {
     const lang = getLanguageByCode('it-IT')
     expect(lang).toBeDefined()
     expect(lang!.name).toBe('Italiano')
+  })
+
+  it('returns Polish for pl-PL', () => {
+    const lang = getLanguageByCode('pl-PL')
+    expect(lang).toBeDefined()
+    expect(lang!.code).toBe('pl-PL')
+    expect(lang!.name).toBe('Polski')
+    expect(lang!.nameEn).toBe('Polish')
+    expect(lang!.iso639).toBe('pl')
   })
 
   it('returns Portuguese for pt-PT', () => {
@@ -233,6 +259,11 @@ describe('target language capabilities', () => {
       usesWordSpacing: false,
       romanization: 'pinyin',
     })
+    expect(TARGET_LANGUAGE_CAPABILITIES['pl-PL']).toMatchObject({
+      script: 'latin',
+      fontClass: 'font-target-latin',
+      usesWordSpacing: true,
+    })
     expect(SUPPORTED_TARGET_LANGUAGES.map((l) => l.code)).toEqual(
       TARGET_LANGUAGE_CATALOG.map((l) => l.code)
     )
@@ -251,5 +282,7 @@ describe('target language capabilities', () => {
     expect(getTargetLanguageTextClass('zh-CN')).toContain('leading-loose')
     expect(getTargetLanguageTextClass('zh-CN')).not.toContain('font-mono')
     expect(getTargetLanguageTextClass('en-GB')).toContain('font-target-latin')
+    expect(getTargetLanguageTextClass('pl-PL')).toContain('font-target-latin')
+    expect(getTargetLanguageTextClass('pl-PL')).toContain('leading-relaxed')
   })
 })
