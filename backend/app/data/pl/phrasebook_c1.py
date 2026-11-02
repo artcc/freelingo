@@ -49,6 +49,30 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 context="Zakończenie wystąpienia i zaproszenie do pytań",
                 register="formal",
             ),
+            PhrasebookEntry(
+                text="Doprecyzuję to stwierdzenie, ponieważ w obecnej formie może być mylące.",
+                context="Korygowanie własnego sformułowania podczas wystąpienia",
+                register="formal",
+                unit_ref="c1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="To ważne pytanie, ale wykracza poza zakres danych, którymi dysponujemy.",
+                context="Odpowiedź na pytanie bez nieuzasadnionego rozszerzania wniosków",
+                register="formal",
+                unit_ref="c1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Pozwolę sobie dokończyć tę myśl, a następnie odniosę się do pani uwagi.",
+                context="Uprzejme odzyskanie głosu po przerwaniu wypowiedzi",
+                register="formal",
+                unit_ref="c1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Przywołuję ten przykład jako ilustrację problemu, nie jako dowód jego skali.",
+                context="Określenie roli przykładu w argumentacji publicznej",
+                register="formal",
+                unit_ref="c1-unit-1",
+            ),
         ],
     ),
     PhrasebookCategory(
@@ -96,6 +120,32 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 text="Jeśli nie dojdziemy do porozumienia, pozostaje nam mediacja.",
                 context="Wskazanie alternatywy wobec impasu",
                 register="neutral",
+            ),
+            PhrasebookEntry(
+                text="Możemy zaakceptować tę zmianę pod warunkiem zachowania pozostałych ustaleń.",
+                context="Wyrażenie ograniczonej zgody na zmianę warunków współpracy",
+                register="formal",
+                unit_ref="c1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Oddzielmy kwestie już uzgodnione od tych, które nadal wymagają "
+                "rozstrzygnięcia.",
+                context="Porządkowanie negocjacji w sytuacji impasu",
+                register="formal",
+                unit_ref="c1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Czy ten zapis ma charakter wiążący, czy wyraża jedynie intencję stron?",
+                context="Ustalanie znaczenia postanowienia przed podpisaniem porozumienia",
+                register="formal",
+                unit_ref="c1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Proponuję krótką przerwę, aby każda ze stron mogła ocenić skutki "
+                "tej propozycji.",
+                context="Ograniczanie presji podczas trudnych negocjacji",
+                register="formal",
+                unit_ref="c1-unit-6",
             ),
         ],
     ),
@@ -145,6 +195,31 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 context="Wskazanie napięcia między wartościami",
                 register="formal",
             ),
+            PhrasebookEntry(
+                text="Ze względu na możliwy konflikt interesów wyłączę się z oceny tego wniosku.",
+                context="Ujawnienie okoliczności mogącej podważyć bezstronność oceny",
+                register="formal",
+                unit_ref="c1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Zgoda udzielona pod presją nie rozwiązuje naszych wątpliwości etycznych.",
+                context="Kwestionowanie dobrowolności zgody w dyskusji o procedurze",
+                register="formal",
+                unit_ref="c1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Zanim ujawnimy te informacje, ustalmy, czy można osiągnąć cel "
+                "mniej inwazyjnie.",
+                context="Poszukiwanie rozwiązania lepiej chroniącego prywatność",
+                register="formal",
+                unit_ref="c1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Same przeprosiny nie wystarczą, jeśli nie towarzyszy im naprawienie szkody.",
+                context="Rozmowa o odpowiedzialności za skutki podjętej decyzji",
+                register="neutral",
+                unit_ref="c1-unit-5",
+            ),
         ],
     ),
     PhrasebookCategory(
@@ -192,6 +267,33 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 text="Wielokulturowość jest praktyką, nie tylko deklaracją.",
                 context="Krytyka deklaratywnej wielokulturowości",
                 register="formal",
+            ),
+            PhrasebookEntry(
+                text="Mogę opowiedzieć o własnym doświadczeniu, ale nie reprezentuję "
+                "całej społeczności.",
+                context="Zaznaczenie granic własnej perspektywy podczas rozmowy o kulturze",
+                register="neutral",
+                unit_ref="c1-unit-7",
+            ),
+            PhrasebookEntry(
+                text="Czy mogłaby pani wyjaśnić, jakie znaczenie ma ten zwyczaj "
+                "dla jego uczestników?",
+                context="Prośba o wyjaśnienie praktyki kulturowej bez pochopnej oceny",
+                register="formal",
+                unit_ref="c1-unit-7",
+            ),
+            PhrasebookEntry(
+                text="Wolałbym, żebyśmy nie sprowadzali tej różnicy wyłącznie do narodowości.",
+                context="Reakcja na nadmierne uogólnienie w rozmowie międzykulturowej",
+                register="neutral",
+                unit_ref="c1-unit-7",
+            ),
+            PhrasebookEntry(
+                text="Czuję się związana z obiema kulturami, choć w każdej funkcjonuję "
+                "trochę inaczej.",
+                context="Opis wielokulturowej tożsamości w rozmowie osobistej",
+                register="neutral",
+                unit_ref="c1-unit-7",
             ),
         ],
     ),

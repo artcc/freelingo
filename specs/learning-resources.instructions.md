@@ -19,7 +19,40 @@ Static resource APIs accept an explicit language query and do not require it to 
 active language or owned plans. Frontend resource pages normally send the active language, with
 `en-GB` fallback.
 
-### English foundational curriculum
+### Content authoring rules
+
+Reference explanations, vocabulary definitions and examples, phrase contexts, and placement questions
+use the target language. Native-language explanations belong to the shared help system below.
+Definitions explain meaning rather than repeat the headword. Content progresses from everyday
+communication to extended discourse, register control, and specialist usage across A1-C2.
+
+- Distinguish grammatical errors from valid contextual, regional, and register alternatives.
+- Preserve participants, meaning, scope, and degree of certainty in reformulations.
+- Give placement questions enough context for one accepted answer. Advanced items assess
+  interpretation and inference as well as recognition of forms.
+- Keep identifiers stable and resolve grammar, vocabulary, and unit references within the target
+  language. Append phrases when extending existing categories because audio requests use indices.
+- Use actual newlines in rendered explanations and keep pronunciation aids aligned with saved text.
+- Structural tests check references and data shape; they do not establish linguistic accuracy or
+  empirical CEFR calibration.
+
+Correct-answer positions are balanced within each level/skill group in the French, Italian,
+Portuguese, Polish, Japanese, and Korean static banks. German and Spanish banks also vary the keyed
+position. The frontend displays the saved option order.
+
+### Curriculum coverage and scheduling
+
+Both English variants at A1, and German, Spanish, French, Italian, Portuguese, and Polish at A1-C2,
+declare grammar, vocabulary, listening, reading, writing, and review in that order in every unit.
+Japanese and Korean A1-C2 units include listening in their existing lesson-type lists.
+
+Actual allocation follows plan capacity and rotation rules; a declaration does not guarantee a
+complete cycle in every unit. Persisted schedules are retained. See `study-plan.instructions.md`
+for scheduling and lazy-generation rules.
+
+### Language-specific progression
+
+#### English
 
 Both `en-GB` and `en-US` place foundational grammar in the guided curriculum as well as the Grammar
 reference:
@@ -31,33 +64,7 @@ reference:
 - A2 unit 1: past simple contrasted with past continuous, and past questions.
 - A1 and A2 consolidation units include the corresponding foundational grammar for mixed review.
 
-Every A1 unit in both English variants declares grammar, vocabulary, listening, reading, writing, and
-review in that order. Actual lesson allocation depends on plan capacity; declaring these types does
-not guarantee a complete cycle in every unit. See `study-plan.instructions.md` for scheduling and
-lazy-generation rules.
-
-### German curriculum and reference content
-
-Every German (`de-DE`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
-writing, and review in that order. Allocation uses the existing plan-capacity and rotation rules;
-individual units do not necessarily receive a complete cycle. Persisted schedules are retained, so
-the listening cycle applies to newly created plans. See `study-plan.instructions.md` for scheduling
-and lazy generation.
-
-German reference content distinguishes grammatical correctness from register or regional preferences,
-including the use of Perfekt and Präteritum. Vocabulary definitions explain meanings in German rather
-than merely repeating the headword; statistical examples distinguish significance from its threshold.
-Placement questions provide the context needed for one accepted
-answer, do not require English knowledge, and vary the correct option's position in the static bank.
-
-### Spanish curriculum and reference content
-
-Every Spanish (`es-ES`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
-writing, and review in that order. Scheduling follows the existing capacity and rotation rules;
-not every unit necessarily receives a complete cycle. Persisted schedules are retained, so this
-cycle applies to newly created plans. See `study-plan.instructions.md` for allocation rules.
-
-The foundational sequence includes:
+#### Spanish
 
 - A1 introductions distinguish `ser` for identity from `tener` for age.
 - A1 unit 6 and consolidation cover `estar + gerundio`, with formation and habitual-present contrast
@@ -67,20 +74,7 @@ The foundational sequence includes:
 - The `preterito-perfecto` and `por-para` reference topics belong to A2 and retain their stable slugs;
   B1 units reuse them for consolidation and broader contrasts.
 
-Spanish grammar distinguishes contextual tense choices and regional variation from grammatical
-errors, including reported speech, subjunctive concordance, and perfect/simple-past usage. Regional
-descriptions distinguish phonetic variation from grammatical phenomena such as leísmo. Placement
-questions specify the context, person, or tense needed for one accepted answer and vary the correct
-option's position in the static bank.
-
-### French, Italian, and Portuguese curriculum and reference content
-
-Every French (`fr-FR`), Italian (`it-IT`), and Portuguese (`pt-PT`) unit from A1 through C2
-declares grammar, vocabulary, listening, reading, writing, and review in that order. The existing
-capacity and rotation rules determine actual coverage; a short plan does not give every unit a full
-cycle. Persisted schedules are retained, so these declarations apply when creating new plans.
-
-The foundational sequence includes:
+#### French, Italian, and Portuguese
 
 - French A1 unit 4 and consolidation cover `finir`, `faire`, `prendre`, `venir`, and `boire` through
   `verbes-frequents-present`, alongside regular `-er` and pronominal verbs.
@@ -89,28 +83,9 @@ The foundational sequence includes:
 - Portuguese A1 introductions include `ter` for age. European Portuguese remains the teaching
   variety, with `estar a + infinitivo` in A1 and the future subjunctive in B1.
 
-Reference explanations distinguish contextual tense choices from errors, including reported speech,
-French pronominal-participle agreement, Italian conditional versus interrogative `se` and factual versus
-hypothetical `anche se`, and Portuguese subjunctive selection. Italian reported-speech reformulations
-preserve which claim is unconfirmed. Portuguese grammar explanations use actual newline characters for rendering.
-Regional and sociolinguistic descriptions distinguish usage preferences from grammatical rules.
-French vocabulary distinguishes literary effects such as tragic or comic tone from language formality.
+#### Polish
 
-Placement questions specify the context, tense, or person needed for the keyed answer. Correct-answer
-positions are balanced within each level/skill group in these three static banks; the frontend displays
-the saved option order. Grammar references resolve within the selected target language.
-
-### Polish curriculum and reference content
-
-Every Polish (`pl-PL`) unit from A1 through C2 declares grammar, vocabulary, listening, reading,
-writing, and review in that order. Allocation uses the existing plan-capacity and rotation rules; a
-short plan does not give every unit a complete cycle. Persisted schedules are retained, so these
-declarations apply when creating new plans.
-
-The curriculum contains eight units per level, 126 grammar topics, 105 vocabulary sets, 28 phrasebook
-categories, and 124 placement questions.
-
-The foundational sequence includes:
+Polish (`pl-PL`) has eight curriculum units per level:
 
 - A1 covers `być`, nominative gender and plural, adjective and possessive agreement, present tense,
   reflexives, accusative, locative, past and future forms, and genitive after negation.
@@ -123,77 +98,30 @@ The foundational sequence includes:
 - C1 and C2 cover register, terminology, definition, phraseology, legal and scientific language,
   rhetoric, translation, and regional variation.
 
-Case guidance distinguishes masculine nouns ending in `-a` from consonant-ending masculine nouns:
-`kolegi`, `koledze`, `kolegą` and `kierowcy`, `kierowcą`. Feminine dative and locative guidance includes
-`-e`, `-y`, and `-i`; masculine and neuter locative `-u` is not restricted to stems ending in `k`, `g`,
-or `ch`. Masculine genitive `-a`/`-u` tendencies are not presented as absolute semantic rules.
+Vocabulary covers everyday needs at A1-A2, independent social and administrative interactions at B1,
+and increasingly precise professional, academic, and idiomatic usage at B2-C2. Phrasebook categories
+provide contextualized expressions for these interactions, including requests, clarification,
+problem resolution, negotiation, and register choices.
 
-Learner-facing titles, explanations, definitions, examples, contexts, and placement questions are
-written in Polish. Vocabulary entries include IPA and per-level unique frequency ranks. Phrasebook
-registers are `formal`, `neutral`, or `informal`. Placement questions keep grammar slugs that resolve
-within the Polish package and balance the correct option's position within each level and skill.
-Polish uses Latin script with visible word spacing, and comprehension guidance uses words.
+Vocabulary entries include IPA and per-level unique frequency ranks, with no repeated headword
+within a level. IPA preserves lexical stress, consonant identity, and voicing. Structural checks
+detect orthographic Polish letters and missing stress marks in multisyllabic entries. Polish uses
+Latin script with visible word spacing; comprehension guidance uses words.
 
-Placement prompts supply context when opposite meanings would both fit the same construction.
-Advanced assessment includes aspect under negation, passive information structure, modal distance,
-scientific hedging, and colloquial particles in context. C1/C2 reading questions assess inference,
-concession, argumentative scope, and irony. Linked rhetoric references explain personification,
-asyndeton, and apostrophe. Aspect guidance distinguishes denying completion from denying the activity;
-`nie przeczytałem` alone does not imply that reading began. Question IDs and grammar slugs remain
-stable. Content review does not establish empirical CEFR calibration.
-
-Polish IPA preserves lexical stress, consonant identity, and voicing; structural checks detect
-orthographic Polish letters in IPA and missing stress marks in multisyllabic entries. These checks
-do not establish pronunciation accuracy. Reference content distinguishes synonymy from broader/narrower
-meaning, includes both possibility and permission uses of `można`, and treats attested phraseological
-variants such as `wyciągnąć pomocną rękę` and `kruszyć kopię` as valid. Desiderative guidance allows
-both `oby` with an infinitive and personal constructions such as `obym zdążył/zdążyła`.
-Purpose-clause guidance distinguishes the usual infinitive construction from an absolute restriction;
-scientific-writing guidance preserves justified uncertainty rather than equating it with an absence
-of findings.
-
-### Japanese curriculum and reference content
-
-Japanese (`ja-JP`) units from A1 through C2 include listening in their existing lesson-type lists.
-Actual coverage follows the shared plan-capacity and rotation rules.
+#### Japanese
 
 The A2 `plain-past` reference, used in unit 1 and consolidation, introduces the plain negative
 before deriving the negative past. Formation covers godan and ichidan verbs, `う → わない`,
 `ある → ない`, `する → しない`, and `来る → 来ない（こない）`.
 
-Reference content distinguishes grammatical errors from register and contextual choices, including
-negative forms, conditionals, quotation, indirect passives, and modality. Advanced reformulation
-preserves the source's information and degree of certainty; statistical significance does not imply
-a large effect. Literary analysis distinguishes noun-ending sentences from predicate endings, and
-constructed historical examples are identified as teaching examples rather than attributed quotations.
-Phrasebook romanizations correspond to the saved Japanese wording.
-
-Placement questions specify the perspective or context needed to distinguish valid alternatives.
-Advanced questions exercise interpretation, register, scope, inference, and reformulation in context.
-Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
-and grammar slugs remain stable, and the frontend displays the saved option order. Content review
-does not establish empirical CEFR calibration.
-
-### Korean curriculum and reference content
-
-Korean (`ko-KR`) units from A1 through C2 include listening in their existing lesson-type lists.
-Actual coverage follows the shared plan-capacity and rotation rules.
+#### Korean
 
 Existing A1 reference topics introduce `이에요/예요`, `이/가 아니에요`, basic `안/못` and
 `-지 않아요` negation, and final `ㅡ` deletion. Conjugation explanations distinguish retained `ㄹ`
 from endings that trigger its deletion. B2 uses `터예요/테니까` for intention and supposition.
 
-Reference content distinguishes grammar errors from particle omission, valid alternative forms,
-honorific choices, and register preferences. Advanced exercises preserve the source's participants,
-information, certainty, obligations, and causal scope when reformulating it. Historical explanations
-distinguish changes in writing, pronunciation, region, and register. Vocabulary definitions distinguish
-statistical significance from effect size or the probability that a hypothesis is true. Vocabulary and
-phrasebook pronunciation aids use Revised Romanization, including assimilation and aspiration.
-
-Placement questions supply the context or requested form needed to distinguish valid alternatives.
-Advanced items exercise interpretation, inference, register, and meaning-preserving reformulation.
-Correct-answer positions are balanced within each level/skill group in the static bank; question IDs
-and grammar slugs remain stable. Content review does not establish empirical CEFR calibration.
+Vocabulary and phrasebook pronunciation aids use Revised Romanization, including assimilation and
+aspiration.
 
 ## Shared native-language help
 

@@ -478,6 +478,9 @@ def test_pl_vocabulary_no_duplicates_per_level() -> None:
 
 
 def test_pl_curriculum_units_and_vocabulary_links_are_consistent() -> None:
+    from typing import get_args
+
+    from app.data._types import PartOfSpeech
     from app.data.curriculum import CEFR_LEVELS, get_curriculum
     from app.data.vocabulary import get_vocabulary_sets
 
@@ -489,7 +492,7 @@ def test_pl_curriculum_units_and_vocabulary_links_are_consistent() -> None:
 
     assert len(units_by_id) == len(units) == 48
     assert len(sets_by_id) == len(sets) == 105
-    assert sum(len(vocabulary_set.words) for vocabulary_set in sets) == 1072
+    assert sum(len(vocabulary_set.words) for vocabulary_set in sets) == 1252
     for level in CEFR_LEVELS:
         level_units = curriculum[level]
         assert len(level_units) == 8
@@ -505,6 +508,8 @@ def test_pl_curriculum_units_and_vocabulary_links_are_consistent() -> None:
         assert vocabulary_set.level == unit.level
         assert vocabulary_set.id in unit.vocabulary_set_ids
         for word in vocabulary_set.words:
+            assert word.pos in get_args(PartOfSpeech), word.word
+            assert word.definition.strip() and word.example.strip(), word.word
             assert word.ipa and re.fullmatch(r"/[^/]+/", word.ipa), word.word
             assert not set(word.ipa) & set("ąćęłńóśźż"), word.word
             if sum(char in "aeiouɨɛɔ" for char in word.ipa) > 1:
@@ -536,9 +541,12 @@ def test_pl_assessment_references_and_options_are_valid() -> None:
 
 
 def test_pl_phrasebook_registers_and_levels_are_valid() -> None:
-    """Polish phrasebook categories keep valid registers, levels and non-empty phrases."""
+    """Polish phrases remain unique and their optional references resolve at the same level."""
+    from app.data.pl.curriculum import CURRICULUM
     from app.data.pl.phrasebook import PHRASEBOOK_CATEGORIES
 
+    units_by_id = {unit.id: unit for units in CURRICULUM.values() for unit in units}
+    seen_phrases: set[str] = set()
     for category in PHRASEBOOK_CATEGORIES:
         assert category.level in ("A1", "A2", "B1", "B2", "C1", "C2"), category.id
         assert category.phrases, category.id
@@ -546,3 +554,9 @@ def test_pl_phrasebook_registers_and_levels_are_valid() -> None:
             assert phrase.register in ("formal", "neutral", "informal"), category.id
             assert phrase.text.strip(), category.id
             assert phrase.context.strip(), category.id
+            normalized = " ".join(phrase.text.casefold().split())
+            assert normalized not in seen_phrases, (category.id, phrase.text)
+            seen_phrases.add(normalized)
+            if phrase.unit_ref is not None:
+                assert phrase.unit_ref in units_by_id, (category.id, phrase.unit_ref)
+                assert units_by_id[phrase.unit_ref].level == category.level, category.id

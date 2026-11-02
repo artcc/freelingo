@@ -57,6 +57,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 register="neutral",
                 unit_ref="a1-unit-1",
             ),
+            PhrasebookEntry(
+                text="Dobrze, dziękuję. A ty?",
+                context="Odpowiedź znajomemu na pytanie o samopoczucie.",
+                register="informal",
+                unit_ref="a1-unit-1",
+            ),
+            PhrasebookEntry(
+                text="Do zobaczenia jutro!",
+                context="Pożegnanie, gdy następne spotkanie jest jutro.",
+                register="neutral",
+                unit_ref="a1-unit-1",
+            ),
         ],
     ),
     PhrasebookCategory(
@@ -113,6 +125,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 register="informal",
                 unit_ref="a1-unit-2",
             ),
+            PhrasebookEntry(
+                text="Uczę się polskiego. Proszę mówić wolniej.",
+                context="Prośba o wolniejsze tempo podczas pierwszej rozmowy.",
+                register="neutral",
+                unit_ref="a1-unit-2",
+            ),
+            PhrasebookEntry(
+                text="Proszę napisać swoje nazwisko.",
+                context="Prośba o zapisanie nazwiska, którego nie rozumiemy.",
+                register="neutral",
+                unit_ref="a1-unit-2",
+            ),
         ],
     ),
     PhrasebookCategory(
@@ -166,6 +190,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 text="Mieszkamy razem z teściami.",
                 context="Informowanie o wspólnym mieszkaniu z rodziną małżonka.",
+                register="neutral",
+                unit_ref="a1-unit-3",
+            ),
+            PhrasebookEntry(
+                text="Ile lat ma twój syn?",
+                context="Pytanie znajomego o wiek dziecka.",
+                register="informal",
+                unit_ref="a1-unit-3",
+            ),
+            PhrasebookEntry(
+                text="Nie mam rodzeństwa.",
+                context="Odpowiedź na pytanie o braci i siostry.",
                 register="neutral",
                 unit_ref="a1-unit-3",
             ),
@@ -225,6 +261,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 register="formal",
                 unit_ref="a1-unit-5",
             ),
+            PhrasebookEntry(
+                text="Poproszę wodę bez gazu.",
+                context="Zamawianie wody w restauracji.",
+                register="neutral",
+                unit_ref="a1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Na wynos, proszę.",
+                context="Informowanie, że chcemy zabrać zamówienie ze sobą.",
+                register="neutral",
+                unit_ref="a1-unit-5",
+            ),
         ],
     ),
     PhrasebookCategory(
@@ -281,6 +329,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 register="formal",
                 unit_ref="a1-unit-5",
             ),
+            PhrasebookEntry(
+                text="Gdzie jest przymierzalnia?",
+                context="Szukanie miejsca do przymierzenia ubrań.",
+                register="neutral",
+                unit_ref="a1-unit-5",
+            ),
+            PhrasebookEntry(
+                text="Poproszę torbę.",
+                context="Prośba o torbę przy kasie.",
+                register="neutral",
+                unit_ref="a1-unit-5",
+            ),
         ],
     ),
     PhrasebookCategory(
@@ -335,6 +395,18 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
                 text="Czy mogę dostać mapę miasta?",
                 context="Prośba o plan miasta w informacji turystycznej.",
                 register="formal",
+                unit_ref="a1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Czy to jest ulica Długa?",
+                context="Sprawdzanie nazwy ulicy podczas szukania adresu.",
+                register="neutral",
+                unit_ref="a1-unit-6",
+            ),
+            PhrasebookEntry(
+                text="Proszę pokazać to miejsce na mapie.",
+                context="Prośba o wskazanie celu, gdy opis drogi jest trudny.",
+                register="neutral",
                 unit_ref="a1-unit-6",
             ),
         ],
