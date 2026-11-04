@@ -272,7 +272,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
         icon="🌍",
         phrases=[
             PhrasebookEntry(
-                text="A Lusofonia institucional, encarnada pela CPLP, ultrapassa a simples compartilhamento de uma língua comum.",
+                text="A cooperação institucional na CPLP ultrapassa o simples compartilhamento de uma língua comum.",
                 context="Distinguir a Lusofonia institucional da mera comunidade linguística — discurso formal",
                 register="formal",
                 unit_ref="c2-unit-7",

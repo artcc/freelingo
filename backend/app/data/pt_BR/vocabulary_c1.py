@@ -111,7 +111,7 @@ C1_SETS: list[VocabularySet] = [
                 word="cumprimentos",
                 pos="noun",
                 definition="Frase de circunstância trocada por educação.",
-                example="Depois dos cumprimentos, entrámos no assunto.",
+                example="Depois dos cumprimentos, entramos no assunto.",
             ),
             VocabularyEntry(
                 word="elogio",
@@ -265,7 +265,7 @@ C1_SETS: list[VocabularySet] = [
                 word="variável",
                 pos="noun",
                 definition="Fator que pode variar numa experiência.",
-                example="Isolámos a variável principal.",
+                example="Isolamos a variável principal.",
             ),
             VocabularyEntry(
                 word="parâmetro",
@@ -288,13 +288,13 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="detectar",
                 pos="verb",
-                definition="Registar dados através de observação ou medição.",
-                example="Detetámos um aumento significativo.",
+                definition="Identificar a presença ou a ocorrência de algo por observação, análise ou medição.",
+                example="Detectamos um aumento significativo.",
             ),
             VocabularyEntry(
                 word="verificar",
                 pos="verb",
-                definition="Verificar a exatidão de dados ou hipóteses.",
+                definition="Examinar dados ou hipóteses para confirmar sua exatidão ou validade.",
                 example="Temos de verificar os resultados.",
             ),
             VocabularyEntry(
@@ -345,7 +345,7 @@ C1_SETS: list[VocabularySet] = [
                 word="consultor",
                 pos="noun",
                 definition="Especialista que dá pareceres profissionais.",
-                example="Contratámos um consultor financeiro.",
+                example="Contratamos um consultor financeiro.",
             ),
             VocabularyEntry(
                 word="mandato",
@@ -425,7 +425,7 @@ C1_SETS: list[VocabularySet] = [
                 word="banco de dados",
                 pos="phrase",
                 definition="Coleção estruturada de dados informáticos.",
-                example="Os dados estão guardados numa banco de dados segura.",
+                example="Os dados estão guardados num banco de dados seguro.",
             ),
             VocabularyEntry(
                 word="protótipo",
@@ -566,7 +566,7 @@ C1_SETS: list[VocabularySet] = [
     VocabularySet(
         id="cultura_c1",
         level="C1",
-        topic="Cultura portuguesa aprofundada",
+        topic="Cultura brasileira e contextos lusófonos",
         unit_ref="c1-unit-4",
         words=[
             VocabularyEntry(
@@ -695,7 +695,7 @@ C1_SETS: list[VocabularySet] = [
                 word="declamar",
                 pos="verb",
                 definition="Recitar de modo solene ou teatral.",
-                example="Declarou um poema de Fernando Pessoa.",
+                example="Declamou um poema de Cecília Meireles.",
             ),
             VocabularyEntry(
                 word="discursar",
@@ -713,7 +713,7 @@ C1_SETS: list[VocabularySet] = [
                 word="lacônico",
                 pos="adjective",
                 definition="Que se exprime de modo conciso, quase seco.",
-                example="A resposta dele foi lacónica: não.",
+                example="A resposta dele foi lacônica: não.",
             ),
             VocabularyEntry(
                 word="inflamado",
@@ -843,7 +843,7 @@ C1_SETS: list[VocabularySet] = [
                 word="neologismo",
                 pos="noun",
                 definition="Palavra ou expressão de introdução recente na língua.",
-                example="Aterrar é um neologismo que se tornou viral.",
+                example="O verbo sextar surgiu como neologismo associado à chegada da sexta-feira.",
             ),
             VocabularyEntry(
                 word="importar",
@@ -854,8 +854,8 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="contaminar",
                 pos="verb",
-                definition="Misturar elementos linguísticos diferentes.",
-                example="Os dialetos contaminam agradavelmente o português falado.",
+                definition="Introduzir um agente nocivo ou, em sentido figurado, uma influência que compromete algo.",
+                example="Os preconceitos podem contaminar a análise da variação linguística.",
             ),
             VocabularyEntry(
                 word="consolidar",

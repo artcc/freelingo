@@ -157,7 +157,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 text="Está chovendo.",
-                context="Dizer que está a chover",
+                context="Dizer que está chovendo",
                 register="neutral",
             ),
             PhrasebookEntry(

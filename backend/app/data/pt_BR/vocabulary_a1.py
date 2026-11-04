@@ -1306,13 +1306,13 @@ A1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 word="perto",
-                pos="adjective",
+                pos="adverb",
                 definition="A pouca distância.",
                 example="O café fica perto da minha casa.",
             ),
             VocabularyEntry(
                 word="longe",
-                pos="adjective",
+                pos="adverb",
                 definition="A grande distância.",
                 example="A estação fica muito longe.",
             ),
@@ -1866,7 +1866,7 @@ A1_SETS: list[VocabularySet] = [
                 word="março",
                 pos="noun",
                 definition="Terceiro mês do ano.",
-                example="Em março começa a primavera.",
+                example="Em março começa o outono no Brasil.",
             ),
             VocabularyEntry(
                 word="abril",
@@ -1999,13 +1999,13 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="pergunta",
                 pos="noun",
-                definition="Algo que se pergunta.",
+                definition="Frase usada para pedir uma informação.",
                 example="Tenho uma pergunta.",
             ),
             VocabularyEntry(
                 word="resposta",
                 pos="noun",
-                definition="Resposta a uma pergunta.",
+                definition="Informação dada a quem fez uma pergunta.",
                 example="Escreve a resposta aqui.",
             ),
             VocabularyEntry(
@@ -2091,7 +2091,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="repousar",
                 pos="verb",
-                definition="Repousar para recuperar energias.",
+                definition="Descansar para recuperar energias.",
                 example="Ao fim de semana gosto de repousar.",
             ),
             VocabularyEntry(

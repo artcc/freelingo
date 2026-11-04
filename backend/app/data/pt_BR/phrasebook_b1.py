@@ -6,7 +6,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
     PhrasebookCategory(
         id="phone_calls_b1",
         level="B1",
-        situation="Chamadas telefónicas",
+        situation="Chamadas telefônicas",
         icon="📞",
         phrases=[
             PhrasebookEntry(
@@ -61,7 +61,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 text="Quem fala?",
-                context="Perguntar quem está a ligar",
+                context="Perguntar quem está ligando",
                 register="neutral",
             ),
         ],

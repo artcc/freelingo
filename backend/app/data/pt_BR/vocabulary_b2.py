@@ -301,7 +301,7 @@ B2_SETS: list[VocabularySet] = [
                 word="alterar",
                 pos="verb",
                 definition="Fazer mudanças parciais.",
-                example="Alterámos o contrato.",
+                example="Alteramos o contrato.",
             ),
             VocabularyEntry(
                 word="revolucionar",
@@ -333,7 +333,7 @@ B2_SETS: list[VocabularySet] = [
                 word="ensaio",
                 pos="noun",
                 definition="Texto argumentativo sobre um tema específico.",
-                example="Escrevi um ensaio sobre literatura portuguesa.",
+                example="Escrevi um ensaio sobre literatura brasileira.",
             ),
             VocabularyEntry(
                 word="citação",
@@ -486,7 +486,7 @@ B2_SETS: list[VocabularySet] = [
     VocabularySet(
         id="idiomas_b2",
         level="B2",
-        topic="Expressões idiomáticas portuguesas",
+        topic="Expressões idiomáticas usadas no Brasil",
         unit_ref="b2-unit-4",
         words=[
             VocabularyEntry(
@@ -511,7 +511,7 @@ B2_SETS: list[VocabularySet] = [
                 word="estar sem grana",
                 pos="phrase",
                 definition="Não ter dinheiro, estar sem dinheiro.",
-                example="Não posso sair, estou teso.",
+                example="Não posso sair, estou sem grana.",
             ),
             VocabularyEntry(
                 word="custar os olhos da cara",
@@ -528,8 +528,8 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="ter mão em",
                 pos="phrase",
-                definition="Estar envolvido em muitos assuntos.",
-                example="Ele tem mão em vários projetos.",
+                definition="Ter controle ou capacidade de conter algo ou alguém.",
+                example="É preciso ter mão nos gastos para não ultrapassar o orçamento.",
             ),
             VocabularyEntry(
                 word="chorar sobre leite derramado",
@@ -546,14 +546,14 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="ter telhados de vidro",
                 pos="phrase",
-                definition="Ter algo a esconder, sentir-se culpado.",
-                example="Porque te ofendes? Tens telhados de vidro?",
+                definition="Ter falhas que tornam vulnerável quem critica as falhas dos outros.",
+                example="Antes de criticar os colegas, lembre que você também tem telhados de vidro.",
             ),
             VocabularyEntry(
                 word="fazer a ponte",
                 pos="phrase",
-                definition="Tirar um dia de férias entre dois feriados.",
-                example="No 25 de abril faço a ponte.",
+                definition="Estabelecer uma ligação ou facilitar o contato entre pessoas ou grupos.",
+                example="A associação faz a ponte entre os moradores e a prefeitura.",
             ),
             VocabularyEntry(
                 word="mais vale tarde do que nunca",
@@ -566,7 +566,7 @@ B2_SETS: list[VocabularySet] = [
     VocabularySet(
         id="cultura_b2",
         level="B2",
-        topic="Cultura e patrimônio português",
+        topic="Cultura e patrimônio brasileiro",
         unit_ref="b2-unit-4",
         words=[
             VocabularyEntry(
@@ -585,7 +585,7 @@ B2_SETS: list[VocabularySet] = [
                 word="obra-prima",
                 pos="noun",
                 definition="Obra de arte de valor excepcional.",
-                example="Os Jerónimos são uma obra-prima.",
+                example="O painel de Portinari é uma obra-prima.",
             ),
             VocabularyEntry(
                 word="renascimento",
@@ -596,26 +596,26 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="azulejo",
                 pos="noun",
-                definition="Ladrilho decorativo típico da arte portuguesa.",
-                example="Os azulejos portugueses são famosos no mundo.",
+                definition="Peça de cerâmica, geralmente esmaltada, usada para revestir e decorar superfícies.",
+                example="Os azulejos das fachadas de São Luís fazem parte do patrimônio da cidade.",
             ),
             VocabularyEntry(
                 word="artesanato",
                 pos="noun",
                 definition="Produção manual de objetos de qualidade.",
-                example="O artesanato português é famoso no mundo.",
+                example="A feira reúne artesanato de várias regiões brasileiras.",
             ),
             VocabularyEntry(
                 word="gastronomia",
                 pos="noun",
                 definition="A arte da boa cozinha.",
-                example="A gastronomia portuguesa é apreciada em todo o lado.",
+                example="A gastronomia paraense utiliza ingredientes como tucupi e jambu.",
             ),
             VocabularyEntry(
                 word="folclore",
                 pos="noun",
                 definition="Conjunto de tradições populares de um lugar.",
-                example="O folclore minhoto é rico e fascinante.",
+                example="O saci aparece em muitas narrativas do folclore brasileiro.",
             ),
             VocabularyEntry(
                 word="preservar",
@@ -633,7 +633,7 @@ B2_SETS: list[VocabularySet] = [
                 word="restaurar",
                 pos="verb",
                 definition="Reparar uma obra danificada devolvendo-a ao estado original.",
-                example="Estão a restaurar a igreja antiga.",
+                example="Estão restaurando a igreja antiga.",
             ),
             VocabularyEntry(
                 word="transmitir",
@@ -819,7 +819,7 @@ B2_SETS: list[VocabularySet] = [
                 word="poesia",
                 pos="noun",
                 definition="Composição em versos de valor artístico.",
-                example="A poesia portuguesa é rica em obras-primas.",
+                example="A poesia brasileira é rica em obras-primas.",
             ),
             VocabularyEntry(
                 word="autor",
@@ -843,7 +843,7 @@ B2_SETS: list[VocabularySet] = [
                 word="metáfora",
                 pos="noun",
                 definition="Figura de estilo que transfere o significado.",
-                example="A vida é como uma viagem: é uma metáfora.",
+                example="A vida é uma viagem: essa metáfora aproxima o viver de um percurso.",
             ),
             VocabularyEntry(
                 word="comparação",
@@ -929,7 +929,7 @@ B2_SETS: list[VocabularySet] = [
                 word="analisar",
                 pos="verb",
                 definition="Examinar em detalhe os elementos de um texto.",
-                example="Analisámos o soneto na aula.",
+                example="Analisamos o soneto na aula.",
             ),
             VocabularyEntry(
                 word="comentar",
@@ -1009,7 +1009,7 @@ B2_SETS: list[VocabularySet] = [
                 word="investigar",
                 pos="verb",
                 definition="Conduzir uma investigação aprofundada.",
-                example="O jornalista está a investigar o caso.",
+                example="O jornalista está investigando o caso.",
             ),
             VocabularyEntry(
                 word="difundir",

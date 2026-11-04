@@ -9,9 +9,10 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Subjuntivo",
         summary="Domínio completo do subjuntivo.",
-        explanation="Presente (que, talvez), Imperfeito (se), Futuro (quando), MQP Composto (se + tivesse + part.).",
+        explanation="O subjuntivo articula a perspectiva do falante e a relação temporal, sem corresponder sempre a dúvida. Compare Espero que venha (ação simultânea ou posterior), Espero que tenha chegado (anterioridade), Queria que viesse (perspectiva passada ou desejo atenuado) e Duvidava que tivesse chegado (anterioridade passada). O futuro ocorre em Quando chegar, avise; o futuro composto, em Quando tiver terminado, avise, destaca conclusão anterior a outra ação futura. A escolha depende também do conector: Caso venha amanhã usa presente apesar da referência futura; Embora tenha estudado pode conceder um fato.",
         rules=[
-            "Presente, Imperfeito, Futuro, MQP Composto.",
+            "Distinga presente, imperfeito e futuro, com suas formas compostas de anterioridade.",
+            "Considere conector, perspectiva temporal e estatuto da informação; subjuntivo não equivale sempre a irrealidade.",
         ],
         examples=[
             GrammarExample(
@@ -37,25 +38,26 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Condicionais",
         summary="Domínio de todas as estruturas condicionais.",
-        explanation="Tipo 1: Se estudares, passas. Tipo 2: Se estudasses, passavas. Tipo 3: Se tivesses estudado, tinhas passado.",
+        explanation="Uma condição aberta pode usar futuro do subjuntivo: Se você estudar, terá mais chances. Uma hipótese presente ou futura pode usar imperfeito do subjuntivo com futuro do pretérito: Se estudasse, saberia responder. Para uma condição passada não realizada: Se tivesse estudado, teria passado. Uma condicional mista relaciona tempos diferentes: Se tivesse estudado ontem, saberia a resposta agora. Na conversa brasileira, o imperfeito pode substituir o futuro do pretérito (Se tivesse tempo, ia), sem que isso torne os tempos equivalentes em todos os contextos. Se estudava, passava também pode descrever um hábito passado real.",
         rules=[
-            "Tipo 1, 2, 3.",
-            "Coloquial brasileiro: imperfeito em vez de condicional.",
+            "Diferencie condição aberta, hipótese e condição passada não realizada.",
+            "Em condições mistas, identifique separadamente o tempo da condição e o da consequência.",
+            "Interprete o imperfeito conforme contexto e registro, sem o classificar automaticamente como erro.",
         ],
         examples=[
             GrammarExample(
-                text="Se estudares, passas.",
+                text="Se você estudar, terá mais chances.",
             ),
             GrammarExample(
-                text="Se estudasses, passavas.",
+                text="Se eu tivesse tempo, ia com você.",
                 note="coloquial brasileiro",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Se tu estudasse, passavas.",
-                correct="Se estudasses, passavas.",
-                note="Tu exige estudasses. Se estudavas, passavas também pode ser correto para uma relação habitual no passado.",
+                wrong="Se eu tivesse estudar ontem, saberia a resposta agora.",
+                correct="Se eu tivesse estudado ontem, saberia a resposta agora.",
+                note="A forma composta exige particípio; a condição é passada e a consequência é presente.",
             ),
         ],
         related=[
@@ -106,22 +108,22 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Desenvolver uma voz literária autêntica.",
-        explanation="Variedade sintática, léxico preciso, figuras de estilo com moderação, mostrar em vez de dizer.",
+        explanation="O estilo resulta de escolhas de ritmo, sintaxe, léxico e ponto de vista. Frases curtas podem acelerar uma cena; períodos longos podem prolongar a percepção, sem que um formato seja sempre superior. Compare Ela estava apreensiva com Ela dobrou a carta três vezes antes de abrir a porta: a segunda versão sugere um estado por ações, mas acrescenta acontecimentos e não é uma paráfrase exata. Mostrar e contar são recursos complementares. Avalie cada escolha pelo efeito pretendido e pela coerência da voz narrativa.",
         rules=[
             "Variar estruturas.",
             "Léxico preciso.",
-            "Mostrar, não dizer.",
+            "Combine descrição explícita e sugestão por ações conforme o efeito pretendido.",
         ],
         examples=[
             GrammarExample(
-                text="O sol morria no horizonte, tingindo o Tejo de ouro líquido.",
+                text="O sol morria no horizonte, tingindo o São Francisco de ouro líquido.",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Abusar de adjetivos.",
-                correct="Menos é mais.",
-                note="",
+                wrong="Frases longas são sempre superiores às curtas em textos literários.",
+                correct="A extensão das frases deve servir ao ritmo, à perspectiva e ao efeito do texto.",
+                note="Uma preferência estilística não constitui uma regra universal de correção.",
             ),
         ],
         related=[
@@ -136,22 +138,22 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Tipos de narrador e construção da voz narrativa.",
-        explanation="1a pessoa, 3a omnisciente, 3a objetiva, discurso indireto livre.",
+        explanation="Distinga quem narra de quem percebe. Um narrador em primeira pessoa participa da história, mas pode desconhecer fatos ou interpretar mal outras personagens. Um narrador em terceira pessoa pode ter acesso amplo aos pensamentos (onisciência), limitar-se à perspectiva de uma personagem ou descrever apenas ações observáveis. No discurso indireto livre, a voz narrativa incorpora avaliações da personagem sem um verbo introdutor: Ana fechou a carta. Por que ele voltava justamente agora? A mudança de perspectiva pode ser intencional, desde que o texto a torne interpretável.",
         rules=[
-            "1a pessoa = personagem.",
-            "3a omnisciente = pensamentos.",
-            "Discurso indireto livre.",
+            "Separe pessoa gramatical, participação na história e alcance do conhecimento do narrador.",
+            "Terceira pessoa não implica onisciência.",
+            "No discurso indireto livre, identifique de quem são as avaliações e os marcadores de perspectiva.",
         ],
         examples=[
             GrammarExample(
-                text="Maria abriu a porta devagar, sem saber que o destino a esperava. (omnisciente)",
+                text="Maria abriu a porta, aliviada; do outro lado, João escondia o medo. (acesso aos estados de duas personagens)",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Alternar voz sem necessidade.",
-                correct="Manter consistência.",
-                note="",
+                wrong="O relato está na terceira pessoa, portanto o narrador conhece todos os pensamentos.",
+                correct="A terceira pessoa pode ter perspectiva limitada; é preciso observar a informação a que o narrador tem acesso.",
+                note="A pessoa gramatical não determina sozinha a focalização.",
             ),
         ],
         related=[
@@ -165,13 +167,13 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Sinestesia, aliteração, assonância, quiasmo.",
-        explanation="Sinestesia (cheiro doce), aliteração (vento varria vielas), quiasmo (Não vivemos para comer, comemos para viver).",
+        explanation="A sinestesia aproxima sensações de domínios diferentes: uma voz aveludada associa audição e tato. A aliteração repete sons consonantais (O vento varria as vielas); a assonância repete sons vocálicos, como os /a/ de A clara madrugada alagava a sala. O quiasmo inverte a ordem de elementos em estruturas paralelas: Não vivemos para comer; comemos para viver. A anáfora repete o início de segmentos; a epífora, o final: Pediram justiça, exigiram justiça. Analise como som, repetição e ordem contribuem para o sentido, sem exigir essas figuras em todo texto.",
         rules=[
             "Sinestesia, aliteração, assonância, quiasmo.",
         ],
         examples=[
             GrammarExample(
-                text="O cheiro doce da manhã. (sinestesia)",
+                text="Sua voz aveludada acalmou a sala. (sinestesia)",
             ),
             GrammarExample(
                 text="O vento varria as velhas vielas. (aliteração)",
@@ -179,9 +181,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Aliteração forçada.",
-                correct="Usar com naturalidade.",
-                note="",
+                wrong="Em O vento varria as vielas, a repetição de /v/ é assonância.",
+                correct="A repetição do som consonantal /v/ é aliteração; assonância envolve sons vocálicos.",
+                note="Identifique o som repetido, não apenas a letra ou a presença de repetição.",
             ),
         ],
         related=[
@@ -292,7 +294,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Como a língua portuguesa evoluiu do latim.",
-        explanation="Latim vulgar -> Galego-português (XII-XIV) -> Português antigo -> Clássico -> Moderno. Mudanças: populu > povo, plenu > cheio, manu > mão.",
+        explanation="O português se formou a partir de variedades do latim falado na Península Ibérica, passando por uma fase galego-portuguesa medieval e por processos posteriores de diferenciação. As divisões em períodos são convenções de estudo, não rupturas instantâneas. Populu -> povo ilustra mudanças consonantais; plenu -> cheio envolve palatalização e outras mudanças; manu -> mão envolve perda de consoante e nasalização. No Brasil, a história da língua inclui colonização, contato com línguas indígenas e africanas, migrações e escolarização. Mudança linguística não equivale a deterioração.",
         rules=[
             "Latim vulgar > Galego-português > Moderno.",
             "Queda de consoantes, palatalização, nasalização.",
@@ -323,7 +325,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Expressões e palavras latinas no português.",
-        explanation="a priori, ad hoc, ipso fato, per capita, sine qua non, grosso modo, curriculum vitae, lato sensu.",
+        explanation="Latinismos preservam formas e sentidos do latim em registros especializados. A priori indica uma consideração anterior à experiência; a posteriori, baseada na experiência. Ad hoc qualifica algo feito para um fim específico; ipso facto significa pelo próprio fato; per capita, por pessoa; sine qua non indica condição indispensável; grosso modo, aproximadamente; lato sensu, em sentido amplo. Use-os quando forem compreensíveis ao público e mantenha sua grafia, sem adaptar facto para fato dentro da expressão latina ipso facto.",
         rules=[
             "Comuns no registro formal.",
             "Usar com precisão.",
@@ -355,10 +357,10 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="A herança árabe no léxico português.",
-        explanation="~1000 palavras: arroz, azeite, açúcar, álgebra, algoritmo, zero, aldeia. Muitas com al- (artigo árabe).",
+        explanation="O português incorporou palavras de origem árabe em diferentes épocas e por diferentes caminhos. Azeite, arroz, açúcar e aldeia mostram a presença desse contato no cotidiano; álgebra e algoritmo, no vocabulário científico. Em muitos arabismos, o antigo artigo árabe al- foi incorporado à palavra, às vezes com assimilação sonora. Nem toda palavra iniciada por al- é árabe, e nem todo arabismo entrou diretamente durante a presença islâmica na Península Ibérica; confirme a etimologia de cada termo.",
         rules=[
-            "~1000 palavras.",
-            "al- = artigo árabe.",
+            "Diferencie origem etimológica e caminho de transmissão.",
+            "Al- pode refletir o artigo árabe, mas a sequência inicial não prova a origem.",
             "Alimentos, ciência, arquitetura.",
         ],
         examples=[
@@ -374,9 +376,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ignorar a origem árabe.",
-                correct="O português é uma língua de encontros culturais.",
-                note="",
+                wrong="Toda palavra portuguesa começada por al- tem origem árabe.",
+                correct="A origem árabe precisa ser confirmada por evidência etimológica, não apenas pelas letras iniciais.",
+                note="Semelhança de forma não basta para estabelecer a história de uma palavra.",
             ),
         ],
         related=[
@@ -390,7 +392,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Domínio de todos os gêneros textuais.",
-        explanation="Ensaio, acadêmico, relatório, editorial, carta formal, discurso. Cada um com convenções específicas.",
+        explanation="O gênero orienta a finalidade, a estrutura e a relação com o leitor. Um relatório apresenta procedimentos, resultados e limites; um artigo de opinião sustenta uma posição; um editorial expressa uma posição institucional; uma carta formal identifica destinatário e propósito. Um ensaio pode explorar uma questão sem seguir a estrutura de um relatório. As convenções variam por área e instituição. Ao reescrever o mesmo conteúdo para outro gênero, ajuste organização e registro sem transformar hipótese em resultado nem opinião em fato.",
         rules=[
             "Cada gênero tem convenções.",
             "Conhecer o gênero orienta escolhas.",
@@ -402,9 +404,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Misturar convenções de gêneros.",
-                correct="Cada gênero tem registro e estrutura próprios.",
-                note="",
+                wrong="Como o texto é um relatório, toda conclusão nele apresentada é um fato comprovado.",
+                correct="Um relatório também pode apresentar hipóteses e limitações, que devem ser identificadas como tais.",
+                note="O gênero não garante o estatuto factual de cada afirmação.",
             ),
         ],
         related=[
@@ -418,7 +420,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Brincar com a língua: neologismos, trocadilhos.",
-        explanation="Neologismos (googlar), amálgamas (portunhol), trocadilhos (Não é só ver, é prever), estrangeirismos adaptados (futebol).",
+        explanation="A criatividade pode combinar bases, explorar sentidos ou adaptar empréstimos. Portunhol funde partes de português e espanhol; googlar adapta um nome de marca à morfologia verbal; um trocadilho aproxima formas ou sentidos para criar efeito. Futebol é um empréstimo historicamente adaptado, não uma palavra nova no uso atual. A novidade depende da época, do grupo e do sentido empregado. Em textos formais, defina criações que o leitor não possa interpretar pelo contexto.",
         rules=[
             "Neologismos, amálgamas, trocadilhos.",
         ],
@@ -432,9 +434,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Neologismos incompreensíveis.",
-                correct="Devem ser intuitivos.",
-                note="",
+                wrong="Futebol é necessariamente um neologismo atual porque veio do inglês.",
+                correct="Futebol é um empréstimo consolidado; ser neologismo depende de novidade de forma ou sentido em um contexto histórico.",
+                note="Origem estrangeira e novidade são critérios diferentes.",
             ),
         ],
         related=[
@@ -449,20 +451,20 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Técnicas de edição para clareza e elegância.",
-        explanation="Conteúdo, estilo, gramática, tipografia. Ler em voz alta. Distância temporal.",
+        explanation="Revise em camadas: primeiro a coerência dos fatos e argumentos; depois a organização e o registro; por fim, concordância, ortografia e tipografia. Leia comparando o original com a versão editada: a retirada de apenas, talvez ou desde que pode mudar alcance, certeza ou condição. Elimine ambiguidades quando necessário, mas não atribua um referente sem evidência. A leitura em voz alta ajuda a perceber ritmo e construções difíceis; não substitui a conferência de dados e fontes.",
         rules=[
             "Conteúdo, estilo, gramática, tipografia.",
         ],
         examples=[
             GrammarExample(
-                text="Rever: Os aluno terminou -> Os alunos terminaram.",
+                text="Revisar: Apenas dois grupos talvez concluam o estudo -> É possível que somente dois grupos concluam o estudo.",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Rever apenas gramática.",
-                correct="Edição eficaz revê tudo.",
-                note="",
+                wrong="Original: A maioria dos participantes respondeu. Revisão: Todos os participantes responderam.",
+                correct="A maioria dos participantes respondeu.",
+                note="Trocar maioria por todos altera a informação; uma edição não pode ampliar a quantidade por conveniência estilística.",
             ),
         ],
         related=[
@@ -477,7 +479,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Arte de matizar o discurso.",
-        explanation="Certeza (é indubitável), probabilidade (tudo indica), incerteza (diria que), cortesia (permita-me, gostaria de).",
+        explanation="A expressão matizada diferencia certeza, probabilidade, alcance e atitude interpessoal. Tudo indica que sugere apoio forte sem equivaler a prova definitiva; não se pode excluir admite uma possibilidade sem a declarar provável; em parte limita o alcance de uma avaliação. Gostaria de e poderia podem atenuar pedidos, não apenas localizar fatos no passado. Escolha a formulação pelo compromisso que os dados permitem e preserve essas diferenças ao resumir ou traduzir.",
         rules=[
             "Certeza, probabilidade, incerteza, cortesia.",
         ],
@@ -491,9 +493,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Afirmações demasiado categóricas.",
-                correct="Matizar quando não há certeza.",
-                note="",
+                wrong="Não se pode excluir essa hipótese significa que ela é a mais provável.",
+                correct="Não se pode excluir essa hipótese mantém uma possibilidade em aberto, sem classificá-la como a mais provável.",
+                note="Possibilidade, probabilidade e certeza correspondem a compromissos diferentes.",
             ),
         ],
         related=[
@@ -508,7 +510,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Avançado",
         summary="Síntese de todos os conhecimentos gramaticais.",
-        explanation="Subjuntivo/indicativo natural. Ênclise/próclise/mesóclise. Concordância temporal. Escolha contextual de registro.",
+        explanation="Integrar recursos gramaticais exige coordenar tempo, referência, modo e registro. Em Se eu tivesse sabido que seria tão difícil, teria me preparado melhor, a condição não realizada é passada, seria projeta uma dificuldade a partir desse passado e a consequência é contrafactual. Ter-me-ia preparado é uma alternativa marcada da escrita formal, não uma melhoria obrigatória. Ao reformular, mantenha o sujeito, a anterioridade e o caráter hipotético; a correção de uma forma isolada não compensa uma mudança de sentido.",
         rules=[
             "Subjuntivo/indicativo.",
             "Ênclise/próclise/mesóclise.",
@@ -517,15 +519,15 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Se eu tivesse sabido que seria tão difícil, ter-me-ia preparado melhor.",
-                note="integração completa",
+                text="Se eu tivesse sabido que seria tão difícil, teria me preparado melhor.",
+                note="condição passada, posterioridade em relação ao passado e colocação pronominal corrente no Brasil",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Hesitação subjuntivo/indicativo.",
-                correct="Com prática, torna-se intuitivo.",
-                note="",
+                wrong="Se eu tivesse sabido que seria tão difícil, teria me preparar melhor.",
+                correct="Se eu tivesse sabido que seria tão difícil, teria me preparado melhor.",
+                note="A forma composta exige particípio; a revisão preserva as relações temporais e o participante.",
             ),
         ],
         related=[
@@ -549,14 +551,14 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="A fluência não é só falar corretamente -- é pensar, sentir e sonhar em português.",
+                text="Posso reformular a conclusão sem eliminar a ressalva feita pela autora.",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Achar que C2 é o fim.",
-                correct="A aprendizagem nunca termina.",
-                note="",
+                wrong="Uma pessoa só atinge C2 se não tiver sotaque estrangeiro.",
+                correct="C2 envolve precisão, flexibilidade e compreensão de sentidos implícitos; não exige eliminar o sotaque.",
+                note="Avalie a eficácia comunicativa em tarefas complexas, não a imitação de uma identidade nativa.",
             ),
         ],
         related=[
@@ -612,7 +614,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C2",
         category="Expressão",
         summary="Instituições, diversidade e desafios da comunidade lusófona no século XXI.",
-        explanation="A **lusofonia** abrange comunidades ligadas pelo uso do português, com histórias, variedades e situações de multilinguismo distintas. Não se confunde com uma organização única.\n\nA **CPLP**, Comunidade dos Países de Língua Portuguesa, é uma organização intergovernamental de cooperação. O **IILP** promove a língua no âmbito dessa comunidade.\n\nO Brasil concentra a maior parte dos falantes de português. Países africanos como Angola e Moçambique têm um papel importante no seu crescimento demográfico. A presença oficial do português não implica que seja a língua materna ou maioritária de toda a população.\n\nOs debates incluem diversidade normativa, educação multilingue, circulação cultural e acesso à ciência.",
+        explanation="A **lusofonia** abrange comunidades ligadas pelo uso do português, com histórias, variedades e situações de multilinguismo distintas. Não se confunde com uma organização única.\n\nA **CPLP**, Comunidade dos Países de Língua Portuguesa, é uma organização intergovernamental de cooperação. O **IILP** promove a língua no âmbito dessa comunidade.\n\nO Brasil concentra a maior parte dos falantes de português. Países africanos como Angola e Moçambique têm um papel importante no seu crescimento demográfico. A presença oficial do português não implica que seja a língua materna ou majoritária de toda a população.\n\nOs debates incluem diversidade normativa, educação multilíngue, circulação cultural e acesso à ciência.",
         rules=[
             "A Lusofonia não é um bloco monolítico — cada país tem a sua variedade e política linguística.",
             "O Brasil concentra a maioria dos falantes; o crescimento africano não elimina as diferenças de uso entre países.",
@@ -624,7 +626,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="português angolano",
             ),
             GrammarExample(
-                text="O Brasil criou o VOLP (Vocabulário Ortográfico da Língua Portuguesa) para gerir a norma brasileira no quadro do Acordo Ortográfico.",
+                text="O VOLP (Vocabulário Ortográfico da Língua Portuguesa), da Academia Brasileira de Letras, é uma referência para a grafia brasileira.",
             ),
             GrammarExample(
                 text="Uma projeção sobre falantes deve indicar a fonte, a data e se conta língua materna, segunda língua ou ambas.",
@@ -656,16 +658,16 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Portugal europeu: 'Dá-me o livro.' — Brasil: 'Me dá o livro.' — A colocação pronominal é uma das diferenças mais visíveis entre as normas.",
-                note="PE vs. PB — próclise",
+                text="Na conversa, 'Dá-me o livro' é frequente em Portugal e 'Me dá o livro' é frequente no Brasil; o registro e a região também influenciam a escolha.",
+                note="Tendências de colocação pronominal na fala, sem equiparar conversa e norma escrita formal.",
             ),
             GrammarExample(
                 text="O Acordo Ortográfico eliminou as consoantes mudas em Portugal: 'acção' passou a 'ação', 'óptimo' passou a 'ótimo'.",
                 note="AO90",
             ),
             GrammarExample(
-                text="Em Moçambique, palavras como 'machimbombo' (ônibus) e 'candongueiro' (minibus) mostram a criatividade lexical do português africano.",
-                note="português moçambicano",
+                text="Machimbombo pode designar ônibus em Moçambique; em Angola, candongueiro designa um transporte coletivo informal, geralmente em minibus.",
+                note="Vocabulário de países diferentes; não há uma única variedade africana.",
             ),
         ],
         common_mistakes=[
@@ -694,7 +696,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="obg pela msg, depois falamos cmg :) bjs!",
+                text="obg pela msg, depois falamos :) bjs!",
                 note="linguagem SMS no português brasileiro",
             ),
             GrammarExample(

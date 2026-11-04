@@ -437,7 +437,7 @@ B1_SETS: list[VocabularySet] = [
                 word="adiar",
                 pos="verb",
                 definition="Transferir para uma data posterior.",
-                example="Adiámos a reunião para segunda.",
+                example="Adiamos a reunião para segunda.",
             ),
             VocabularyEntry(
                 word="empenhar-se",
@@ -508,10 +508,10 @@ B1_SETS: list[VocabularySet] = [
                 example="Vejo o telejornal da noite.",
             ),
             VocabularyEntry(
-                word="crónica",
+                word="crônica",
                 pos="noun",
-                definition="Relato de fatos realmente ocorridos.",
-                example="A crónica relata um grave acidente.",
+                definition="Texto geralmente breve que narra ou comenta situações do cotidiano, com olhar pessoal.",
+                example="A crônica reflete com humor sobre uma cena do cotidiano.",
             ),
             VocabularyEntry(
                 word="entrevista",
@@ -744,7 +744,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="colega de casa",
                 pos="phrase",
-                definition="Pessoa que compartilhamento a mesma casa.",
+                definition="Pessoa que compartilha a mesma casa.",
                 example="O meu colega de casa é muito organizado.",
             ),
             VocabularyEntry(
@@ -825,7 +825,7 @@ B1_SETS: list[VocabularySet] = [
                 word="emergência",
                 pos="noun",
                 definition="Situação crítica que requer intervenção imediata.",
-                example="Em caso de emergência ligue 112.",
+                example="Em caso de emergência médica, ligue 192 para chamar o SAMU.",
             ),
             VocabularyEntry(
                 word="risco",

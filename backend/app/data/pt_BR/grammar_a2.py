@@ -11,7 +11,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         summary="Conjugação do pretérito perfeito para verbos regulares em -ar, -er, -ir.",
         explanation="| | fal**ar** | com**er** | abr**ir** |\n|---|-----------|-----------|----------|\n| eu | falei | comi | abri |\n| tu | falaste | comeste | abriste |\n| ele/você | falou | comeu | abriu |\n| nós | falamos | comemos | abrimos |\n| eles/vocês | falaram | comeram | abriram |",
         rules=[
-            "-ar: -ei, -aste, -ou, -ámos, -aram.",
+            "-ar: -ei, -aste, -ou, -amos, -aram.",
             "-er: -i, -este, -eu, -emos, -eram.",
             "-ir: -i, -iste, -iu, -imos, -iram.",
             "Ação concluída e pontual no passado.",
@@ -565,12 +565,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Verbos",
         summary="Dar ordens negativas, proibições e conselhos negativos.",
-        explanation="O imperativo negativo usa o **presente do subjuntivo** para **todas** as pessoas:\n- *Não fales alto!* (tu)\n- *Não fale alto!* (você)\n- *Não falemos alto!* (nós)\n- *Não falem alto!* (vocês)\n\nCom pronomes (próclise): *Não te esqueças!*",
+        explanation="Na norma-padrão, o imperativo negativo usa o **presente do subjuntivo**:\n- *Não fales alto!* (tu)\n- *Não fale alto!* (você)\n- *Não falemos alto!* (nós)\n- *Não falem alto!* (vocês)\n\nCom pronomes, use próclise: *Não se esqueça!* A conversa brasileira também apresenta formas como Não fala isso e Não faz isso, conforme região e situação; não confunda essa variação com as convenções de uma instrução formal.",
         rules=[
-            "Imperativo negativo usa sempre o presente do subjuntivo.",
-            "Para tu, a forma negativa é diferente da afirmativa.",
+            "Na norma-padrão, o imperativo negativo usa o presente do subjuntivo.",
+            "Para tu, a norma-padrão distingue fala/não fales, come/não comas e abre/não abras.",
             "Com negação, pronomes vão antes do verbo (próclise).",
-            "Você e vocês têm a mesma forma.",
+            "Para você e vocês, a forma verbal coincide com a do imperativo afirmativo, mas distingue singular e plural: fale/não fale; falem/não falem.",
         ],
         examples=[
             GrammarExample(
@@ -614,12 +614,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Verbos",
         summary="Formas irregulares do imperativo dos verbos mais comuns.",
-        explanation="| Verbo | tu | você |\n|-------|-----|------|\n| dizer | diz | diga |\n| fazer | faz | faça |\n| ser | sê | seja |\n| estar | está | esteja |\n| ir | vai | vá |\n| ter | tem | tenha |\n| pôr | põe | ponha |\n| vir | vem | venha |\n| ver | vê | veja |\n\nNegativo: sempre subjuntivo (*não digas, não faças*).",
+        explanation="Formas da norma-padrão:\n\n| Verbo | tu | você |\n|-------|-----|------|\n| dizer | diz | diga |\n| fazer | faz | faça |\n| ser | sê | seja |\n| estar | está | esteja |\n| ir | vai | vá |\n| ter | tem | tenha |\n| pôr | põe | ponha |\n| vir | vem | venha |\n| ver | vê | veja |\n\nNo negativo, a norma-padrão usa subjuntivo (*não digas, não faças*). A fala brasileira admite outras distribuições das formas conforme região e situação, inclusive com você.",
         rules=[
             "Cada verbo irregular deve ser memorizado.",
-            "Tu: deriva do presente sem -s.",
+            "Para tu, em geral retire -s do presente; ser tem a forma especial sê.",
             "Você/vocês: presente do subjuntivo.",
-            "Negativo: sempre subjuntivo.",
+            "No negativo, use subjuntivo quando o exercício pedir a norma-padrão.",
         ],
         examples=[
             GrammarExample(
@@ -828,10 +828,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Orações",
         summary="Expressões que indicam a ordem cronológica de eventos.",
-        explanation="**Anterioridade:** *Antes de + inf.* / *Antes que + conj.* **Posterioridade:** *Depois de + inf.* / *Mal + verbo.* **Simultaneidade:** *Ao + inf.* **Duração:** *Enquanto, Até que.*",
+        explanation="**Ordem dos acontecimentos:** Antes de sair, fechei a janela; Depois de comer, lavei a louça. Antes que usa subjuntivo: Saí antes que chovesse. Depois que pode apresentar um fato ocorrido no indicativo (Depois que chegou, telefonou) ou uma situação futura com futuro do subjuntivo (Depois que chegar, telefone).\n\n**Simultaneidade:** Ao sair, encontrei Ana. **Sucessão imediata:** Mal cheguei, o telefone tocou. Enquanto e até que relacionam ações no tempo; a escolha verbal depende de fatos, hipóteses e referência temporal.",
         rules=[
-            "Antes de/Depois de + inf. (sujeito igual).",
-            "Antes que/Depois que + conj. (sujeito diferente).",
+            "Antes de e depois de usam infinitivo; um sujeito próprio pode ser explicitado: Depois de eles chegarem, jantamos.",
+            "Antes que usa subjuntivo; depois que admite indicativo ou subjuntivo conforme o sentido e o tempo, não apenas conforme o sujeito.",
             "Ao + inf. = simultaneidade.",
             "Mal + verbo = assim que.",
         ],
@@ -840,7 +840,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Antes de sair, desliguei as luzes.",
             ),
             GrammarExample(
-                text="Depois de comer, lavámos a louça.",
+                text="Depois de comer, lavamos a louça.",
             ),
             GrammarExample(
                 text="Mal entrei em casa, o telefone tocou.",

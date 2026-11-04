@@ -13,7 +13,7 @@ C2_SETS: list[VocabularySet] = [
                 word="excelência",
                 pos="noun",
                 definition="Qualidade superior que ultrapassa os padrões normais.",
-                example="Escreve com uma excelência digna de um Prémio Camões.",
+                example="Escreve com uma excelência digna de um Prêmio Camões.",
             ),
             VocabularyEntry(
                 word="virtuosismo",
@@ -86,44 +86,44 @@ C2_SETS: list[VocabularySet] = [
     VocabularySet(
         id="literatura_c2",
         level="C2",
-        topic="Literatura portuguesa avançada",
+        topic="Literatura brasileira em diálogo com outras tradições",
         unit_ref="c2-unit-2",
         words=[
             VocabularyEntry(
                 word="cânone",
                 pos="noun",
                 definition="Conjunto de obras consideradas fundamentais numa tradição literária.",
-                example="Camões está no centro do cânone literário português.",
+                example="A inclusão de novas vozes amplia o debate sobre o cânone literário brasileiro.",
             ),
             VocabularyEntry(
                 word="modernismo",
                 pos="noun",
-                definition="Corrente literária portuguesa do início do século XX.",
-                example="O modernismo de Fernando Pessoa renova a poesia portuguesa.",
+                definition="Conjunto de movimentos artísticos e literários de renovação estética, com trajetórias próprias em diferentes países.",
+                example="O modernismo brasileiro questionou convenções estéticas e representações da identidade nacional.",
             ),
             VocabularyEntry(
                 word="realismo",
                 pos="noun",
-                definition="Corrente literária de finais do século XIX.",
-                example="Eça de Queirós é o máximo expoente do realismo.",
+                definition="Corrente artística e literária que busca representar criticamente relações sociais e comportamentos, consolidada no século XIX.",
+                example="Machado de Assis é uma referência do realismo na literatura brasileira.",
             ),
             VocabularyEntry(
                 word="neorrealismo",
                 pos="noun",
-                definition="Movimento literário português do pós-guerra.",
-                example="O neorrealismo retratou o Portugal do pós-guerra.",
+                definition="Corrente de renovação do realismo com atenção aos conflitos sociais; em Portugal, ganhou força no fim dos anos 1930.",
+                example="O estudo compara o neorrealismo português com o romance social brasileiro dos anos 1930.",
             ),
             VocabularyEntry(
                 word="vanguarda",
                 pos="noun",
                 definition="Movimento artístico que rompe com a tradição.",
-                example="O futurismo foi uma vanguarda que chegou a Portugal.",
+                example="A vanguarda modernista brasileira dialogou criticamente com movimentos europeus.",
             ),
             VocabularyEntry(
                 word="manuscrito",
                 pos="noun",
-                definition="Texto escrito à mão, frequentemente antigo.",
-                example="O manuscrito original dos Lusíadas está perdido.",
+                definition="Texto escrito à mão; no meio editorial, também pode designar o original de uma obra ainda não publicada.",
+                example="A pesquisadora comparou o manuscrito com a primeira edição do romance.",
             ),
             VocabularyEntry(
                 word="lapidar",
@@ -159,7 +159,7 @@ C2_SETS: list[VocabularySet] = [
                 word="cacofônico",
                 pos="adjective",
                 definition="Desagradável ao ouvido por sons dissonantes.",
-                example="Aquela combinação de palavras é cacofónica.",
+                example="Aquela combinação de palavras é cacofônica.",
             ),
         ],
     ),
@@ -301,7 +301,7 @@ C2_SETS: list[VocabularySet] = [
                 word="adaptar",
                 pos="verb",
                 definition="Modificar um texto para o adequar ao contexto de chegada.",
-                example="Adaptou os jogos de palavras à cultura portuguesa.",
+                example="Adaptou os jogos de palavras ao contexto cultural brasileiro.",
             ),
             VocabularyEntry(
                 word="idiomático",
@@ -455,13 +455,13 @@ C2_SETS: list[VocabularySet] = [
                 word="diacrônico",
                 pos="adjective",
                 definition="Que estuda a evolução de uma língua ao longo do tempo.",
-                example="A análise diacrónica mostra a mudança linguística.",
+                example="A análise diacrônica mostra a mudança linguística.",
             ),
             VocabularyEntry(
                 word="sincrônico",
                 pos="adjective",
                 definition="Que estuda uma língua num determinado momento histórico.",
-                example="A análise sincrónica retrata a língua de hoje.",
+                example="A análise sincrônica descreve a língua em um período determinado.",
             ),
             VocabularyEntry(
                 word="normativo",
@@ -480,7 +480,7 @@ C2_SETS: list[VocabularySet] = [
     VocabularySet(
         id="cultura_c2",
         level="C2",
-        topic="Cultura portuguesa: raízes e identidade",
+        topic="Cultura brasileira: línguas, raízes e identidades",
         unit_ref="c2-unit-4",
         words=[
             VocabularyEntry(
@@ -492,8 +492,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="purismo",
                 pos="noun",
-                definition="Doutrina que defende a língua das influências externas.",
-                example="O purismo linguístico tem raízes históricas em Portugal.",
+                definition="Atitude que procura excluir usos considerados estranhos a um ideal de pureza linguística.",
+                example="O ensaio critica o purismo que rejeita qualquer empréstimo linguístico.",
             ),
             VocabularyEntry(
                 word="acordo ortográfico",
@@ -511,13 +511,13 @@ C2_SETS: list[VocabularySet] = [
                 word="analfabetismo",
                 pos="noun",
                 definition="Incapacidade de ler e escrever.",
-                example="O analfabetismo em Portugal foi combatido no século XX.",
+                example="O combate ao analfabetismo continua relevante para as políticas educacionais brasileiras.",
             ),
             VocabularyEntry(
                 word="escolarização",
                 pos="noun",
                 definition="Difusão do ensino escolar entre a população.",
-                example="A escolarização favoreceu a unificação linguística.",
+                example="A escolarização deve ampliar o acesso à escrita sem desvalorizar as línguas das comunidades.",
             ),
             VocabularyEntry(
                 word="interculturalidade",
@@ -529,25 +529,25 @@ C2_SETS: list[VocabularySet] = [
                 word="identidade",
                 pos="noun",
                 definition="Consciência de pertença a uma comunidade cultural.",
-                example="A identidade portuguesa passa também pela língua.",
+                example="A identidade brasileira envolve múltiplas histórias, línguas e formas de pertencimento.",
             ),
             VocabularyEntry(
                 word="multifacetado",
                 pos="adjective",
                 definition="De múltiplas facetas.",
-                example="A cultura portuguesa é multifacetada e rica em contrastes.",
+                example="A cultura brasileira é multifacetada e não cabe em um único estereótipo.",
             ),
             VocabularyEntry(
                 word="milenar",
                 pos="adjective",
                 definition="Que dura há milhares de anos.",
-                example="Portugal tem um patrimônio cultural milenar.",
+                example="A ocupação humana do território brasileiro tem uma história milenar.",
             ),
             VocabularyEntry(
                 word="autóctone",
                 pos="adjective",
                 definition="Originário do lugar, indígena.",
-                example="As tradições autóctones fazem parte da identidade portuguesa.",
+                example="O estudo aborda línguas autóctones do Brasil e os direitos de seus falantes.",
             ),
             VocabularyEntry(
                 word="atlântico",
@@ -646,7 +646,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="redação",
                 pos="noun",
-                definition="Fase de revisão e correção de um texto para publicação.",
+                definition="Processo de compor e escrever um texto.",
                 example="O texto está em redação há duas semanas.",
             ),
             VocabularyEntry(
@@ -707,7 +707,7 @@ C2_SETS: list[VocabularySet] = [
                 word="editorial",
                 pos="adjective",
                 definition="Relativo à atividade de publicação.",
-                example="O mercado editorial português é muito dinâmico.",
+                example="O debate reuniu profissionais do mercado editorial brasileiro.",
             ),
             VocabularyEntry(
                 word="póstumo",
@@ -769,7 +769,7 @@ C2_SETS: list[VocabularySet] = [
                 word="sobrelevar-se",
                 pos="verb",
                 definition="Elevar-se acima dos demais.",
-                example="Sobrelva-se na arte da tradução literária.",
+                example="Sobreleva-se na arte da tradução literária.",
             ),
             VocabularyEntry(
                 word="primar",
@@ -818,7 +818,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="IILP",
                 pos="noun",
-                definition="Instituto Internacional da Língua Portuguesa — entidade de gestão da política linguística da CPLP.",
+                definition="Instituto Internacional da Língua Portuguesa — instituição da CPLP dedicada à promoção e à difusão da língua.",
                 example="O IILP coordena os esforços de difusão do português no mundo.",
             ),
             VocabularyEntry(
@@ -843,7 +843,7 @@ C2_SETS: list[VocabularySet] = [
                 word="diglossia",
                 pos="noun",
                 definition="Coexistência de duas línguas ou variedades com funções sociais distintas.",
-                example="A diglossia entre o português e as línguas locais é comum em África.",
+                example="O estudo investiga se a distribuição social das línguas caracteriza uma situação de diglossia.",
             ),
             VocabularyEntry(
                 word="difusão",
@@ -887,7 +887,7 @@ C2_SETS: list[VocabularySet] = [
                 word="neologismo",
                 pos="noun",
                 definition="Palavra nova que surge na língua, muitas vezes por influência tecnológica.",
-                example="'Googlar' é um neologismo já corrente entre os jovens portugueses.",
+                example="O texto usa 'googlar' como neologismo para pesquisar no Google.",
             ),
             VocabularyEntry(
                 word="estrangeirismo",
@@ -947,7 +947,7 @@ C2_SETS: list[VocabularySet] = [
                 word="inteligência artificial",
                 pos="phrase",
                 definition="Tecnologia que simula capacidades cognitivas humanas, incluindo o processamento de linguagem.",
-                example="A inteligência artificial está a transformar o modo como aprendemos português.",
+                example="A inteligência artificial está transformando o modo como aprendemos português.",
             ),
             VocabularyEntry(
                 word="enviar arquivo",
@@ -1040,7 +1040,7 @@ C2_SETS: list[VocabularySet] = [
     VocabularySet(
         id="cultura_contemporanea_pt_c2",
         level="C2",
-        topic="Cultura contemporânea portuguesa",
+        topic="Cultura contemporânea brasileira",
         unit_ref="c2-unit-7",
         words=[
             VocabularyEntry(

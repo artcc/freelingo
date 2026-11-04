@@ -103,7 +103,7 @@ B2_UNITS: list[CurriculumUnit] = [
         id="b2-unit-4",
         level="B2",
         unit_number=4,
-        title="Expressões idiomáticas portuguesas",
+        title="Expressões idiomáticas no Brasil",
         grammar_points=[
             "expressoes-idiomaticas",
             "expressoes-coloquiais",
@@ -122,9 +122,9 @@ B2_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Compreende e usa mais de 20 expressões idiomáticas portuguesas frequentes: estar com água pela barba, fazer das tripas coração, deitar água na fervura, ficar de pedra e cal, dar a volta por cima",
-            "Interpreta expressões coloquiais do português brasileiro sem tradução literal: está bem, com certeza, pois, não é?",
-            "Compreende e interpreta provérbios portugueses: Quem não arrisca, não petisca; Água mole em pedra dura tanto bate até que fura; Em casa de ferreiro, espeto de pau",
+            "Compreende e usa expressões idiomáticas frequentes no Brasil: estar com a pulga atrás da orelha, fazer das tripas coração, dar o braço a torcer, custar os olhos da cara, dar a volta por cima",
+            "Interpreta expressões coloquiais do português brasileiro sem tradução literal: legal, beleza, bora, valeu; considera contexto e registro",
+            "Compreende e interpreta provérbios usados no Brasil: Quem não arrisca, não petisca; Água mole em pedra dura tanto bate até que fura; Em casa de ferreiro, espeto de pau",
             "Compara expressões brasileiras com equivalentes de outras variedades sem presumir correspondência literal",
             "Evita usar idiomatismos de forma inadequada em registros escritos formais e identifica equivalentes neutros",
         ],
@@ -167,7 +167,7 @@ B2_UNITS: list[CurriculumUnit] = [
         id="b2-unit-6",
         level="B2",
         unit_number=6,
-        title="Literatura portuguesa e textos narrativos",
+        title="Literatura brasileira e textos narrativos",
         grammar_points=[
             "tempos-narrativos",
             "descricao-literaria",
@@ -187,8 +187,8 @@ B2_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Usa em conjunto pretérito perfeito simples, imperfeito e mais-que-perfeito composto em narrativa literária: perfeito simples para eventos concluídos em primeiro plano, imperfeito para descrições de fundo e mais-que-perfeito para eventos anteriores ao momento narrativo",
-            "Reconhece o mais-que-perfeito simples literário (falara, comera, fora, viera) em textos clássicos portugueses e compreende a sua equivalência funcional com tinha falado",
-            "Identifica recursos literários-chave em português: metáfora, símile, hipérbole, ironia, personificação, aliteração, reconhecendo-os em excertos de autores como Eça de Queirós, Fernando Pessoa, José Saramago e António Lobo Antunes",
+            "Reconhece o mais-que-perfeito simples literário (falara, comera, fora, viera) em textos literários brasileiros e compreende a sua equivalência funcional com tinha falado",
+            "Identifica recursos literários como metáfora, símile, hipérbole, ironia, personificação e aliteração em excertos de autores brasileiros como Machado de Assis, Clarice Lispector, Conceição Evaristo e Carlos Drummond de Andrade",
             "Lê um excerto literário curto e identifica ponto de vista narrativo, registro e tom, aplicando metalinguagem em português: narrador, protagonista, enredo, desfecho, ponto de vista",
             "Escreve um parágrafo narrativo descritivo (80-100 palavras) usando a gama de tempos narrativos e pelo menos um recurso literário",
         ],

@@ -184,7 +184,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="colega",
                 pos="noun",
-                definition="Pessoa que compartilhamento uma atividade, amigo de escola.",
+                definition="Pessoa que compartilha uma atividade, um local de estudo ou de trabalho.",
                 example="O meu colega de carteira chamava-se Rui.",
             ),
             VocabularyEntry(
@@ -357,7 +357,7 @@ A2_SETS: list[VocabularySet] = [
                 word="liquidação",
                 pos="noun",
                 definition="Período em que as lojas vendem a preços reduzidos.",
-                example="Comprei estes sapatos nos liquidação.",
+                example="Comprei estes sapatos na liquidação.",
             ),
             VocabularyEntry(
                 word="tamanho",
@@ -449,7 +449,7 @@ A2_SETS: list[VocabularySet] = [
                 word="celebrar",
                 pos="verb",
                 definition="Comemorar com alegria um acontecimento.",
-                example="Celebrámos até tarde.",
+                example="Celebramos até tarde.",
             ),
             VocabularyEntry(
                 word="convidar",
@@ -573,7 +573,7 @@ A2_SETS: list[VocabularySet] = [
                 word="tradição",
                 pos="noun",
                 definition="Costume transmitido ao longo do tempo numa comunidade.",
-                example="É uma tradição portuguesa comer bacalhau no Natal.",
+                example="Preparar comidas de milho é uma tradição das festas juninas.",
             ),
             VocabularyEntry(
                 word="costume",
@@ -584,7 +584,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="feira",
                 pos="noun",
-                definition="Festa popular com produtos típicos de um lugar.",
+                definition="Evento ou espaço onde se expõem e vendem produtos.",
                 example="No verão vou à feira do livro.",
             ),
             VocabularyEntry(
@@ -609,13 +609,13 @@ A2_SETS: list[VocabularySet] = [
                 word="artista",
                 pos="noun",
                 definition="Pessoa que cria obras de arte.",
-                example="Paula Rego é uma artista famosa.",
+                example="Tarsila do Amaral é uma artista famosa.",
             ),
             VocabularyEntry(
                 word="famoso",
                 pos="adjective",
                 definition="Conhecido por muitas pessoas.",
-                example="Os azulejos portugueses são famosos.",
+                example="Os desfiles de carnaval do Rio de Janeiro são famosos.",
             ),
             VocabularyEntry(
                 word="típico",
@@ -639,7 +639,7 @@ A2_SETS: list[VocabularySet] = [
                 word="espetáculo",
                 pos="noun",
                 definition="Representação pública de entretenimento.",
-                example="O espetáculo de fado foi muito bonito.",
+                example="O espetáculo de dança foi muito bonito.",
             ),
         ],
     ),
@@ -873,7 +873,7 @@ A2_SETS: list[VocabularySet] = [
                 word="promoção",
                 pos="noun",
                 definition="Avanço na carreira, passagem para um cargo superior.",
-                example="Recebi uma promoção a chefe de secção.",
+                example="Recebi uma promoção a chefe de seção.",
             ),
             VocabularyEntry(
                 word="desempregado",
@@ -1027,7 +1027,7 @@ A2_SETS: list[VocabularySet] = [
                 word="no final",
                 pos="phrase",
                 definition="Na conclusão de uma série de eventos.",
-                example="No final encontrámos o caminho certo.",
+                example="No final encontramos o caminho certo.",
             ),
             VocabularyEntry(
                 word="rir",
@@ -1089,7 +1089,7 @@ A2_SETS: list[VocabularySet] = [
                 word="compartilhar",
                 pos="verb",
                 definition="Contar ou dividir algo com outros.",
-                example="Partilhei a história com os meus amigos.",
+                example="Compartilhei a história com os meus amigos.",
             ),
             VocabularyEntry(
                 word="revelar",

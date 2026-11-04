@@ -259,7 +259,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
         id="cultura_brasileira_b2",
         level="B2",
         situation="Cultura e diversidade brasileira",
-        icon="🇵🇹",
+        icon="🇧🇷",
         phrases=[
             PhrasebookEntry(
                 text="O samba de roda do Recôncavo Baiano reúne música, dança e formas de convivência transmitidas entre gerações.",

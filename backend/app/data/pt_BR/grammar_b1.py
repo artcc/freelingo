@@ -491,7 +491,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="A pessoa que telefonou não deixou nome.",
             ),
             GrammarExample(
-                text="O filme de que te falei ganhou um prémio.",
+                text="O filme de que te falei ganhou um prêmio.",
                 note="formal",
             ),
         ],
@@ -559,7 +559,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="O escritor cujo livro ganhou o prémio.",
+                text="O escritor cujo livro ganhou o prêmio chegou.",
             ),
             GrammarExample(
                 text="A garota cuja mãe você conhece chegou.",

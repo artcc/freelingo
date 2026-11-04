@@ -9,7 +9,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Subjuntivo",
         summary="Formação e uso do imperfeito do subjuntivo.",
-        explanation="Da 3a pl. do pretérito perfeito: falaram -> falasse, falasses... Usos: condições hipotéticas, desejos, após embora/como se.",
+        explanation="Retire -ram da terceira pessoa do plural do pretérito perfeito e acrescente -sse, -sses, -sse, -ssemos, -sseis, -ssem: falaram -> falasse; tiveram -> tivesse; foram -> fosse. O imperfeito pode situar um desejo no passado (Queria que ela viesse) ou uma hipótese presente/futura (Se tivesse tempo, iria). Com embora, pode apresentar um fato concedido: Embora chovesse, saímos; com como se, uma comparação hipotética: Falava como se soubesse tudo.",
         rules=[
             "Da 3a pl. do pret. perfeito.",
             "Com se, embora, como se.",
@@ -41,10 +41,10 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Subjuntivo",
         summary="Expressar condições passadas não realizadas.",
-        explanation="Forma composta: tivesse + particípio passado. Se tivesse estudado, teria passado.",
+        explanation="Use ter ou haver no imperfeito do subjuntivo + particípio: tivesse estudado, houvesse concluído. A forma apresenta anterioridade em relação a uma referência passada ou hipotética: Duvidava que ela tivesse chegado. Em Se tivesse estudado, teria passado, a condição passada é apresentada como não realizada. O tempo também ocorre fora de condições contrafactuais: Embora tivesse estudado, ficou nervoso.",
         rules=[
             "Forma composta: tivesse + particípio.",
-            "Condição NÃO realizada no passado.",
+            "Pode expressar condição passada não realizada, mas também anterioridade em outros contextos.",
         ],
         examples=[
             GrammarExample(
@@ -249,7 +249,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="É importante tu estudar.",
                 correct="É importante tu estudares.",
-                note="Sujeito diferente -> infinitivo pessoal.",
+                note="Na norma-padrão, o infinitivo com sujeito explícito tu recebe -es; a oração principal impessoal não exige um sujeito diferente.",
             ),
         ],
         related=[
@@ -263,9 +263,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Orações",
         summary="Conectores sofisticados para argumentação.",
-        explanation="Desde que/a menos que/caso + conj. Para que/a fim de que + conj. Ainda que/mesmo que + conj.",
+        explanation="Desde que, a menos que e caso introduzem condições com subjuntivo: Vou desde que você vá; Irei, a menos que chova. Para que e a fim de que exprimem finalidade: Expliquei para que entendessem. Ainda que e mesmo que introduzem concessão: Mesmo que chova, iremos. Desde que também pode ser temporal e usar indicativo: Desde que chegou, trabalha aqui.",
         rules=[
-            "Desde que, a menos que + conj.",
+            "Desde que condicional e a menos que usam subjuntivo; desde que temporal pode usar indicativo.",
             "Para que, a fim de que + conj.",
             "Ainda que, mesmo que + conj.",
         ],
@@ -295,7 +295,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Mecanismos para textos coesos.",
-        explanation="Referência, substituição, elipse, conjunção, coesão lexical.",
+        explanation="A coesão liga partes de um texto. Pronomes retomam referentes (Ana chegou. Ela trouxe os dados); elipses evitam repetir elementos recuperáveis (Ana revisou o texto e enviou o arquivo); conectores explicitam relações (O prazo acabou, portanto encerraremos as inscrições). Sinônimos e termos relacionados mantêm o tema, mas não são sempre intercambiáveis. Repetir um termo técnico pode ser mais claro do que substituí-lo por um sinônimo impreciso.",
         rules=[
             "Pronomes, sinônimos, conectores.",
             "Elipse quando possível.",
@@ -307,9 +307,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="O João comprou um carro. O João está contente.",
-                correct="O João comprou um carro. Ele está contente.",
-                note="Evitar repetição excessiva.",
+                wrong="Ana enviou a versão a Carla. Ela será publicada amanhã.",
+                correct="Ana enviou a versão a Carla. Essa versão será publicada amanhã.",
+                note="A reformulação explicita que o referente é a versão; repetir um nome é útil quando o pronome permite leituras concorrentes.",
             ),
         ],
         related=[
@@ -362,7 +362,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Interpretar expressões idiomáticas usadas no Brasil.",
-        explanation="Andar com a pulga atrás da orelha, dar o braço a torcer, estar de mau humor, custar os olhos da cara.",
+        explanation="Andar com a pulga atrás da orelha significa desconfiar; dar o braço a torcer é reconhecer um erro ou ceder; custar os olhos da cara indica preço muito alto. Estar de mau humor descreve irritação ou indisposição. O contexto distingue sentidos figurados e literais: dar o braço a torcer numa discussão não descreve uma lesão física.",
         rules=[
             "Expressões fixas.",
             "Sentido literal diferente do figurado.",
@@ -450,7 +450,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Construir textos argumentativos.",
-        explanation="Introdução (tese), desenvolvimento (argumentos), conclusão (retoma).",
+        explanation="Uma argumentação apresenta uma tese, sustenta-a com razões e evidências e conclui dentro dos limites dessas evidências. Por exemplo: ampliar o horário da biblioteca favorece quem trabalha (tese); uma pesquisa local identifica demanda noturna (apoio); os custos de pessoal exigem um projeto-piloto (ressalva). A conclusão pode recomendar o teste da proposta, sem afirmar que seus benefícios já foram comprovados. Conectores como porque, porém e portanto tornam explícita a relação entre as ideias.",
         rules=[
             "Introdução, desenvolvimento, conclusão.",
             "Conectores específicos.",
@@ -482,7 +482,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Técnicas para refutar argumentos.",
-        explanation="Concessão + refutação, questionamento, evidência contrária.",
+        explanation="Contra-argumentar exige representar com fidelidade a posição discutida. Uma concessão reconhece um ponto válido antes de limitar sua conclusão: Embora a medida reduza custos imediatos, a manutenção pode encarecê-la. Também é possível questionar uma premissa ou apresentar evidência contrária. Diferencie discordar da conclusão, contestar os dados e atacar a pessoa; apenas os dois primeiros enfrentam o argumento.",
         rules=[
             "Concessão + refutação.",
             "Questionamento.",
@@ -495,9 +495,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Isso é mentira. (agressivo)",
-                correct="Essa perspectiva parece ignorar alguns fatos.",
-                note="Contra-argumentação respeitosa.",
+                wrong="A proposta de Ana é inviável porque ela é antipática.",
+                correct="A proposta de Ana é inviável porque seu custo supera o orçamento disponível.",
+                note="O exemplo troca um ataque pessoal por uma razão pertinente; a alegação sobre o custo precisa ser sustentada por dados.",
             ),
         ],
         related=[
@@ -512,7 +512,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Palavras que suavizam ou relativizam afirmações.",
-        explanation="Provavelmente, talvez, de certa forma, até certo ponto, um pouco, apenas.",
+        explanation="Matizadores ajustam o compromisso com uma afirmação ou limitam seu alcance. Provavelmente indica uma avaliação de probabilidade; talvez apresenta uma possibilidade e, antes do verbo, costuma usar subjuntivo: Talvez funcione. Até certo ponto limita a concordância, e apenas restringe o alcance: Apenas dois grupos participaram. Ao reformular, preserve a certeza, a intensidade e o alcance do original; tornar uma frase mais curta não autoriza torná-la mais categórica.",
         rules=[
             "Suavizar afirmações.",
             "Evitar categóricas.",
@@ -528,8 +528,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         common_mistakes=[
             GrammarMistake(
                 wrong="Possivelmente talvez seja melhor.",
-                correct="Provavelmente é melhor.",
-                note="Evitar acumular matizadores.",
+                correct="Talvez seja melhor.",
+                note="A versão concisa elimina a redundância sem trocar possibilidade por probabilidade; a original pode ser uma hesitação oral, não um erro de concordância.",
             ),
         ],
         related=[
@@ -543,7 +543,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Tempos verbais",
         summary="Articulação dos tempos verbais na narrativa.",
-        explanation="Imperfeito (cenário), perfeito (ação principal), mais-que-perfeito (flashback).",
+        explanation="O imperfeito apresenta situações em curso ou habituais no passado; o perfeito apresenta eventos como concluídos; o mais-que-perfeito situa um evento antes de outra referência passada. Compare: Chovia quando Ana chegou. Ela tinha esquecido o guarda-chuva. Essas funções orientam a narrativa, mas não são rótulos exclusivos: o perfeito também pode resumir um período (Morou ali por dez anos).",
         rules=[
             "Imperfeito = cenário.",
             "Perfeito = ação.",
@@ -586,9 +586,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="A casa era bonita. (pobre)",
-                correct="A casa exibia uma beleza melancólica.",
-                note="Vocabulário rico.",
+                wrong="As paredes da casa era azuladas.",
+                correct="As paredes da casa eram azuladas.",
+                note="O verbo concorda com paredes. Uma frase simples como A casa era bonita é válida; acrescentar melancolia mudaria o sentido, não apenas o estilo.",
             ),
         ],
         related=[
@@ -632,11 +632,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Organizar notícias e distinguir informação de opinião.",
-        explanation="Título conciso, lead 5W, objetividade (3a pessoa), passiva, nominalizações, presente histórico.",
+        explanation="Uma notícia organiza informações verificáveis e atribui declarações às fontes. O lide costuma responder ao que aconteceu, com quem, quando, onde e por quê ou como, conforme os dados disponíveis. A terceira pessoa, a passiva e as nominalizações são recursos possíveis, mas não garantem objetividade. Diferencie fatos confirmados, alegações e interpretações; não transforme suspeitas em certezas ao resumir.",
         rules=[
             "Título conciso.",
-            "Lead 5W.",
-            "3a pessoa, passiva.",
+            "Lide: o quê, quem, quando, onde, por quê e como, conforme a informação disponível.",
+            "Atribua alegações às fontes; a pessoa gramatical não garante objetividade.",
             "Presente histórico.",
         ],
         examples=[
@@ -664,11 +664,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Estrutura e estilo dos títulos na imprensa brasileira.",
-        explanation="Concisão, omissão de artigos, presente histórico, vírgula em vez de conjunção.",
+        explanation="Títulos sintetizam o fato principal. Podem usar presente para dar atualidade a fatos recentes e omitir artigos quando a leitura continuar clara. A vírgula pode separar orações em uma construção assindética, mas não substitui automaticamente qualquer conjunção: retirar mas ou porque pode apagar uma relação importante. Preserve autoria, condição e grau de certeza, mesmo sob um limite de espaço.",
         rules=[
-            "Omitir artigos.",
+            "Omita artigos apenas quando isso mantiver clareza e naturalidade.",
             "Presente histórico.",
-            "Vírgula = e/mas.",
+            "Não elimine conectores que sejam necessários para preservar a relação entre os fatos.",
         ],
         examples=[
             GrammarExample(
@@ -689,7 +689,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Discurso indireto",
         summary="Técnicas avançadas de citação e reportagem.",
-        explanation="Citação direta, indireta, mista. Verbos introdutores variados: afirmar, salientar, admitir, garantir, anunciar.",
+        explanation="A citação direta preserva as palavras entre aspas; a indireta integra o conteúdo à fala do narrador; a mista combina as duas. Ajuste pessoa, tempo e referências sem alterar quem fez ou disse algo. Paulo disse: Estou cansado pode ser relatado como Paulo disse que estava cansado ou que está cansado, conforme a perspectiva temporal. Ele disse que estou cansado também é gramatical: nesse caso, o cansaço é de quem relata. Afirmar, admitir e garantir não são sinônimos perfeitos; escolha o verbo conforme a atitude da fonte.",
         rules=[
             "Variar verbos introdutores.",
             "Direta, indireta, mista.",
@@ -701,9 +701,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ele disse que estou cansado.",
-                correct="Ele disse que estava cansado.",
-                note="Citação indireta adapta tempos.",
+                wrong="Paulo disse que ele próprio estavam cansado.",
+                correct="Paulo disse que ele próprio estava cansado.",
+                note="Corrija a concordância sem mudar o participante. A escolha entre está e estava depende da referência temporal.",
             ),
         ],
         related=[

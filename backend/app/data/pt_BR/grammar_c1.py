@@ -9,7 +9,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Subjuntivo",
         summary="Uso avançado do subjuntivo em orações concessivas.",
-        explanation="Por mais que, por muito que, ainda que, mesmo que, nem que + subjuntivo.",
+        explanation="Uma concessiva apresenta uma circunstância que não impede a conclusão. Embora e ainda que podem conceder um fato (Embora tenha estudado, não passou); mesmo que pode introduzir uma hipótese (Mesmo que chova, iremos). Por mais que destaca um esforço ou grau insuficiente para alterar o resultado: Por mais que explique, a dúvida permanece. Escolha o tempo pela relação temporal e pela perspectiva: Embora esteja cansada, continuará; Embora estivesse cansada, continuou.",
         rules=[
             "Por mais/muito que + subjuntivo.",
             "Ainda que/mesmo que + subjuntivo.",
@@ -41,10 +41,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Subjuntivo",
         summary="Subjuntivo após conectores finais.",
-        explanation="Para que/a fim de que/de modo a que + subjuntivo (sujeito diferente). Mesmo sujeito: para + infinitivo.",
+        explanation="Para que e a fim de que introduzem finalidade com subjuntivo: Enviei os dados para que a equipe possa decidir. O presente ou o imperfeito depende da perspectiva: Enviei os dados para que a equipe pudesse decidir situa a finalidade no passado. Com o mesmo sujeito, para + infinitivo costuma ser mais econômico (Estudo para aprender), mas para que eu aprenda também é possível. O infinitivo pessoal pode ter sujeito próprio: Preparei a sala para eles estudarem.",
         rules=[
-            "Para que + conj. (sujeito diferente).",
-            "Mesmo sujeito: para + inf.",
+            "Para que e a fim de que usam subjuntivo para exprimir finalidade.",
+            "Não reduza a escolha a sujeitos iguais ou diferentes; considere construção, ênfase e referência temporal.",
         ],
         examples=[
             GrammarExample(
@@ -70,10 +70,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Subjuntivo",
         summary="Subjuntivo com antecedente indeterminado.",
-        explanation="Subjuntivo para antecedente desconhecido. Indicativo para específico. Há quem / Não há quem + subjuntivo.",
+        explanation="O modo indica como o falante apresenta o referente, não apenas se ele é conhecido. Procuro uma revisora que conheça o tema descreve um perfil desejado, sem afirmar que alguém o satisfaça. Procuro a revisora que conhece o tema apresenta essa competência como um fato. Até um antecedente definido admite subjuntivo em contexto hipotético: Contrataremos o candidato que apresentar a melhor proposta. Há quem discorde e Não há quem resolva isso são construções frequentes com subjuntivo.",
         rules=[
-            "Subjuntivo: hipotético.",
-            "Indicativo: específico.",
+            "Subjuntivo: propriedade desejada, hipotética ou não afirmada como fato.",
+            "Indicativo: propriedade apresentada como factual; o contexto determina a interpretação.",
         ],
         examples=[
             GrammarExample(
@@ -103,10 +103,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Voz passiva",
         summary="Usos avançados da voz passiva com o pronome se.",
-        explanation="Aprecia-se, comenta-se, realizar-se-á (mesóclise), observa-se. Uso acadêmico e jornalístico.",
+        explanation="Na passiva sintética, se acompanha um verbo transitivo e o verbo concorda com o sujeito paciente: Publicam-se os resultados equivale a Os resultados são publicados. Uma oração inteira pode funcionar como sujeito: Comenta-se que haverá mudanças. Não confunda esse se com o de Precisa-se de revisores: com a preposição exigida por precisar, o sujeito é indeterminado e o verbo fica no singular na norma-padrão. A mesóclise em Realizar-se-á a reunião é uma opção marcada da escrita formal, não uma exigência de todo texto acadêmico.",
         rules=[
-            "Aprecia-se/comenta-se = passiva reflexa.",
-            "Realizar-se-á = será realizado.",
+            "Na passiva sintética, concorde o verbo com o sujeito paciente: Publica-se o texto; Publicam-se os textos.",
+            "Distinga passiva de indeterminação do sujeito pela construção e pela regência verbal.",
         ],
         examples=[
             GrammarExample(
@@ -128,7 +128,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Transformar verbos e adjetivos em substantivos.",
-        explanation="Implementar -> implementação. Melhorar -> melhoria. Construir -> construção. Evitar cadeias.",
+        explanation="A nominalização transforma uma ação ou propriedade em nome: implementar -> implementação; construir -> construção; claro -> clareza. Ela permite retomar processos, mas pode ocultar responsáveis e relações temporais. Compare A equipe revisou o texto antes de publicar com A revisão do texto pela equipe precedeu a publicação. A segunda versão preserva agente e ordem dos fatos; uma cadeia como realização da implementação da revisão pode obscurecê-los. Simplifique sem apagar etapas nem acrescentar participantes.",
         rules=[
             "Verbo -> substantivo.",
             "Evitar cadeias de nominalizações.",
@@ -140,9 +140,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="A realização da implementação da verificação.",
-                correct="A verificação dos dados.",
-                note="Evitar cadeias.",
+                wrong="A revisão dos dados pelos pesquisadores foram concluídas ontem.",
+                correct="A revisão dos dados pelos pesquisadores foi concluída ontem.",
+                note="O núcleo do sujeito é revisão, não pesquisadores. A nominalização mantém explícito quem revisou os dados.",
             ),
         ],
         related=[
@@ -187,7 +187,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Agrupamentos lexicais por domínios.",
-        explanation="Exemplo: justiça -> tribunal, juiz, advogado, réu, sentença, julgar, condenar, absolver.",
+        explanation="Um campo semântico reúne palavras relacionadas a um domínio, como justiça: tribunal, juiz, réu, sentença, julgar, condenar e absolver. Pertencer ao mesmo campo não torna as palavras sinônimas: o juiz profere a sentença, enquanto a defesa apresenta argumentos. Observe as combinações usuais e o papel de cada participante. Uma troca lexical inadequada pode mudar a ação ou atribuí-la à pessoa errada.",
         rules=[
             "Agrupar vocabulário por áreas.",
         ],
@@ -198,9 +198,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Usar léxico de campo errado.",
-                correct="Verificar o campo semântico adequado.",
-                note="",
+                wrong="O réu proferiu a sentença que o absolveu.",
+                correct="O juiz proferiu a sentença que absolveu o réu.",
+                note="No contexto de um julgamento, proferir a sentença cabe ao juiz; a correção distingue os papéis jurídicos.",
             ),
         ],
         related=[
@@ -214,7 +214,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Mecanismos de formação de palavras.",
-        explanation="Prefixos: re-, in-/im-, des-. Sufixos: -ção, -mento, -dade, -vel, -izar.",
+        explanation="Prefixos podem alterar o sentido de uma base: refazer indica repetição; infeliz nega uma propriedade; desfazer pode indicar reversão. Sufixos também mudam classe e sentido: organizar -> organização; feliz -> felicidade; lavar -> lavável. A formação não é totalmente livre: infelicidade é a forma estabelecida, não desfelicidade. Palavras derivadas da mesma base podem ter usos distintos: clareza de uma explicação e claridade da sala. Compare padrões produtivos com palavras já lexicalizadas antes de criar uma forma nova.",
         rules=[
             "Prefixos e sufixos formam palavras.",
         ],
@@ -281,7 +281,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample(
                 text="Pois sim, acredito muito nisso.",
-                note="irónico",
+                note="irônico, se o contexto indicar descrença",
             ),
         ],
         common_mistakes=[
@@ -336,7 +336,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Jogos de palavras e ambiguidade.",
-        explanation="Ambiguidade lexical e sintática. Usado em humor, publicidade e literatura.",
+        explanation="A ambiguidade lexical explora sentidos diferentes de uma palavra: banco pode designar assento ou instituição financeira. A sintática permite relações diferentes entre os mesmos termos: Vi o homem com os binóculos pode indicar o instrumento da observação ou uma característica do homem. Humor e publicidade podem explorar essas leituras; em instruções e documentos, explicite o referente quando a ambiguidade comprometer a ação esperada.",
         rules=[
             "Ambiguidade lexical e sintática.",
         ],
@@ -348,9 +348,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Duplo sentido não intencional em textos formais.",
-                correct="Rever para evitar ambiguidades.",
-                note="",
+                wrong="Ana informou a Carla que seu pedido foi aceito.",
+                correct="Ana informou a Carla que o pedido de Carla foi aceito.",
+                note="Se o pedido é de Carla, a reformulação elimina a ambiguidade de seu. A frase original é gramatical, mas pode ser insuficiente sem contexto.",
             ),
         ],
         related=[
@@ -365,10 +365,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Catálogo de figuras de retórica.",
-        explanation="Pergunta retórica, anáfora, gradação, paradoxo, antítese.",
+        explanation="A pergunta retórica orienta uma conclusão sem pedir informação: Quem nunca errou? A anáfora repete um início para dar ênfase: Queremos acesso, queremos respeito, queremos participação. A gradação organiza intensidade: Pediu, insistiu, implorou. A antítese aproxima ideias opostas: Uns acumulam, outros carecem. O paradoxo combina ideias aparentemente incompatíveis para provocar reflexão: Quanto mais aprende, mais percebe o que não sabe. Identifique o efeito no argumento, não apenas o nome da figura.",
         rules=[
-            "Pergunta retórica, anáfora.",
-            "Paradoxo, antítese.",
+            "Relacione a repetição, a oposição ou a pergunta à intenção e ao público.",
+            "Uma figura pode reforçar um argumento, mas não substitui a evidência.",
         ],
         examples=[
             GrammarExample(
@@ -380,9 +380,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Uso excessivo.",
-                correct="Dosear as figuras.",
-                note="",
+                wrong="Em Quem nunca errou?, o orador pede uma lista de pessoas infalíveis.",
+                correct="Em um discurso que defende tolerância, Quem nunca errou? sugere que todos cometem erros.",
+                note="A leitura retórica depende do contexto; aqui a pergunta favorece uma conclusão compartilhada.",
             ),
         ],
         related=[
@@ -396,7 +396,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Técnicas de persuasão no discurso.",
-        explanation="Ethos (credibilidade), Pathos (emoção), Logos (lógica). Adaptar ao público.",
+        explanation="Ethos constrói credibilidade, pathos mobiliza emoções e logos organiza razões e evidências. Uma médica pode mencionar sua experiência (ethos), descrever o impacto de uma doença nas famílias (pathos) e apresentar dados de prevenção (logos). Nenhum recurso garante por si só a verdade da conclusão. Avalie se a autoridade é pertinente, se a emoção é relevante e se os dados sustentam a inferência, adaptando a linguagem ao público.",
         rules=[
             "Ethos, Pathos, Logos.",
         ],
@@ -407,9 +407,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Apelos emocionais sem fundamentação.",
-                correct="Combinar pathos com logos.",
-                note="",
+                wrong="A campanha comoveu o público; portanto, sua proposta é eficaz.",
+                correct="A campanha comoveu o público; sua eficácia precisa ser avaliada por resultados.",
+                note="Uma reação emocional não demonstra a eficácia da proposta.",
             ),
         ],
         related=[
@@ -423,7 +423,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Metáfora, metonímia, sinédoque e outras figuras.",
-        explanation="Metáfora, comparação, metonímia, sinédoque, personificação, hipérbole.",
+        explanation="A metáfora transfere sentido por semelhança: A vida é uma viagem. A comparação explicita a aproximação: A vida é como uma viagem. A metonímia relaciona elementos associados: Li Machado de Assis significa li uma obra dele. A sinédoque, frequentemente tratada como tipo de metonímia, usa parte pelo todo: Precisamos de mais braços para o trabalho. A personificação atribui ações humanas a outros seres ou objetos (A cidade acordou); a hipérbole exagera para produzir efeito (Esperei uma eternidade). A interpretação depende do contexto.",
         rules=[
             "Metáfora, metonímia.",
             "Personificação, hipérbole.",
@@ -433,14 +433,14 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="O tempo é dinheiro. (metáfora)",
             ),
             GrammarExample(
-                text="Portugal venceu o jogo. (metonímia)",
+                text="O Brasil venceu o jogo. (metonímia: o país pela seleção)",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Confundir metáfora com comparação.",
-                correct="Metáfora = identificação. Comparação = como.",
-                note="",
+                wrong="A vida é como uma viagem é uma metáfora sem comparação explícita.",
+                correct="A vida é como uma viagem é uma comparação explícita; A vida é uma viagem exemplifica a metáfora.",
+                note="Neste par, como explicita a comparação. Nem toda ocorrência de como é uma figura literária.",
             ),
         ],
         related=[
@@ -571,9 +571,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Síntese demasiado longa.",
-                correct="Síntese concisa.",
-                note="",
+                wrong="Original: A medida pode reduzir custos se houver adesão. Síntese: A medida reduzirá custos.",
+                correct="A medida pode reduzir custos, dependendo da adesão.",
+                note="A síntese precisa preservar tanto a possibilidade quanto a condição.",
             ),
         ],
         related=[
@@ -588,9 +588,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Formular críticas de forma elegante.",
-        explanation="Começar pelo positivo, usar condicional, perguntar em vez de afirmar, focar na solução.",
+        explanation="Uma crítica construtiva identifica um problema específico, explica seu efeito e propõe uma ação viável. O condicional pode suavizar a sugestão (Seria útil indicar a fonte), mas não deve ocultar a informação necessária. Reconhecer um mérito pode ajudar; não é uma etapa obrigatória. Em uma emergência ou diante de erro factual claro, a formulação direta pode ser adequada. Evite transformar a crítica ao texto em julgamento sobre a pessoa.",
         rules=[
-            "Positivo primeiro.",
+            "Descreva o problema e uma ação possível, considerando a relação e a urgência.",
             "Condicional: seria, poderia.",
         ],
         examples=[
@@ -600,9 +600,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Isto está errado.",
-                correct="Esta secção poderia beneficiar de uma revisão.",
-                note="",
+                wrong="Você é incapaz de escrever um relatório.",
+                correct="Esta seção não identifica a fonte dos dados; inclua a referência para que possamos verificá-los.",
+                note="A reformulação substitui o ataque pessoal por uma observação específica e uma ação verificável.",
             ),
         ],
         related=[
@@ -617,7 +617,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Técnicas para reformular ideias.",
-        explanation="Isto é, ou seja, dito de outra forma. Parafrasear, mudar registro, alterar voz.",
+        explanation="Reformular é reapresentar uma ideia para esclarecer, resumir ou ajustar o registro. Isto é, ou seja e dito de outra forma sinalizam essa relação. Preserve participantes, negação, condições e grau de certeza: Talvez a equipe adie a entrega não equivale a A entrega será adiada. Ao mudar a voz, mantenha o agente quando ele for relevante: A comissão aprovou o texto -> O texto foi aprovado pela comissão.",
         rules=[
             "Isto é / ou seja.",
             "Adaptar registro.",
@@ -629,9 +629,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Ou seja, tipo, quer dizer...",
-                correct="Ou seja,...",
-                note="Um reformulador é suficiente.",
+                wrong="O projeto talvez seja viável; ou seja, sua viabilidade está comprovada.",
+                correct="O projeto talvez seja viável; ou seja, há uma possibilidade de que possa ser realizado.",
+                note="Uma reformulação não pode elevar uma possibilidade à condição de certeza.",
             ),
         ],
         related=[

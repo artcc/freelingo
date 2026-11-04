@@ -122,10 +122,10 @@ C1_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Reconhece ironia verbal e sarcasmo em português através de intonação, contexto e incongruência lexical: Que bela ideia! (quando algo corre mal); Muito bem! (com sentido sarcástico)",
-            "Compreende o humor português, marcado por saudade, autoironia e contenção, e interpreta humor ligado a fenômenos culturais como desenrascanço, fado, futebol e burocracia",
+            "Interpreta humor em crônicas, tirinhas e conversas brasileiras, identificando ironia, exagero, trocadilho e contraste de expectativas; considera contexto e relação entre interlocutores sem atribuir um humor único a toda a população",
             "Interpreta jogos de palavras, trocadilhos e duplos sentidos em publicidade, televisão e fala cotidiana em português",
-            "Compreende o conceito de saudade como tema cultural e elemento pragmático-linguístico em discurso irónico ou nostálgico",
-            "Produz um texto curto satírico ou irónico sobre tema social com recursos adequados, evitando ofensa involuntária",
+            "Compreende o conceito de saudade como tema cultural e elemento pragmático-linguístico em discurso irônico ou nostálgico",
+            "Produz um texto curto satírico ou irônico sobre tema social com recursos adequados, evitando ofensa involuntária",
         ],
         default_weeks=2,
         prerequisite_unit="c1-unit-3",
