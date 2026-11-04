@@ -57,7 +57,7 @@ C2_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Controla o ponto de vista narrativo na escrita criativa original em português (primeira pessoa, terceira pessoa onisciente, terceira pessoa limitada), com escolhas estilísticas coerentes e deliberadas",
-            "Usa parataxe (justaposição sem conectores) e hipotaxe (subordinação) de forma intencional para criar ritmos e efeitos distintos na prosa em português",
+            "Usa parataxe (articulação de orações no mesmo nível sintático, com ou sem conectores: Cheguei, sentei; Cheguei e sentei) e hipotaxe (subordinação) de forma intencional para criar ritmos e efeitos distintos na prosa em português",
             "Emprega anáfora, epífora, quiasmo, clímax, anticlímax e outras figuras retóricas como instrumentos estilísticos conscientes em ensaios, discursos e prosa literária",
             "Lê excertos da literatura brasileira, como Memórias Póstumas de Brás Cubas, Vidas Secas, A Hora da Estrela e Olhos d'Água, e analisa estilo, registro, sintaxe e técnica literária; situa comparações com outras tradições lusófonas",
             "Escreve um texto literário ou ensaio de cerca de 300 palavras em português, demonstrando controle consciente de registro estilístico, voz narrativa e recursos literários adequados ao gênero escolhido",

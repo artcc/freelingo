@@ -178,7 +178,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="ensino fundamental",
                 pos="noun",
-                definition="Etapa da educação básica brasileira que atende à formação escolar fundamental.",
+                definition="Etapa de nove anos da educação básica brasileira, entre a educação infantil e o ensino médio, normalmente iniciada aos seis anos.",
                 example="Minha filha está no ensino fundamental.",
             ),
             VocabularyEntry(
@@ -202,7 +202,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="história",
                 pos="noun",
-                definition="Conto fantástico para crianças.",
+                definition="Narrativa de acontecimentos reais ou imaginários, destinada a crianças ou adultos.",
                 example="A minha avó contava-me sempre uma história.",
             ),
             VocabularyEntry(
@@ -386,7 +386,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="recibo",
                 pos="noun",
-                definition="Comprovativo fiscal de uma compra.",
+                definition="Documento que comprova o recebimento de dinheiro ou de algo entregue; não se confunde com uma nota fiscal.",
                 example="Pode dar-me o recibo, por favor?",
             ),
             VocabularyEntry(
@@ -546,8 +546,8 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="passeio",
                 pos="noun",
-                definition="Parte da rua reservada aos peões.",
-                example="Caminha pelo passeio, não pela estrada.",
+                definition="Em linguagem urbanística, parte da via destinada aos pedestres; no cotidiano brasileiro, costuma-se dizer calçada.",
+                example="O passeio deve ficar livre de obstáculos para a passagem dos pedestres.",
             ),
             VocabularyEntry(
                 word="cruzamento",
@@ -695,7 +695,7 @@ A2_SETS: list[VocabularySet] = [
                 word="enfermeira",
                 pos="noun",
                 definition="Profissional que assiste o médico e os pacientes.",
-                example="A enfermeira mediu-me a tensão.",
+                example="A enfermeira mediu minha pressão arterial.",
             ),
             VocabularyEntry(
                 word="tratamento",
@@ -831,7 +831,7 @@ A2_SETS: list[VocabularySet] = [
                 word="contrato",
                 pos="noun",
                 definition="Acordo escrito que regula a relação de trabalho.",
-                example="Assinei um contrato sem termo.",
+                example="Assinei um contrato de trabalho por prazo indeterminado.",
             ),
             VocabularyEntry(
                 word="companheiro",

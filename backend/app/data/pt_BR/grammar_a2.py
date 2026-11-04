@@ -14,7 +14,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "-ar: -ei, -aste, -ou, -amos, -aram.",
             "-er: -i, -este, -eu, -emos, -eram.",
             "-ir: -i, -iste, -iu, -imos, -iram.",
-            "Ação concluída e pontual no passado.",
+            "Apresenta uma situação passada como um todo delimitado, breve ou duradouro: Falei com ela; Morei lá por dez anos.",
             "A forma nós é igual no presente e pretérito para -ar.",
         ],
         examples=[
@@ -146,7 +146,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "-ar: -ava; -er/-ir: -ia.",
             "Usa-se para hábitos passados, descrições e ações de fundo.",
             "Só quatro irregulares: ser, ter, vir, pôr.",
-            "Imperfeito = cenário; perfeito = ação pontual.",
+            "O imperfeito apresenta a situação sem destacar seus limites; o perfeito a apresenta como um todo delimitado, inclusive quando dura muito ou se repete.",
         ],
         examples=[
             GrammarExample(

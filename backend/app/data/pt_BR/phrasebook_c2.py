@@ -250,7 +250,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 text="O debate público foi contaminado por uma onda de desinformação sem precedentes.",
-                context="Crítica dos media",
+                context="Crítica aos meios de comunicação",
                 register="formal",
             ),
             PhrasebookEntry(

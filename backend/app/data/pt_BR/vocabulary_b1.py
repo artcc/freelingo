@@ -318,7 +318,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="inscrever-se",
                 pos="verb",
-                definition="Registar-se num curso ou instituição.",
+                definition="Registrar-se em um curso ou instituição.",
                 example="Inscrevi-me na universidade.",
             ),
         ],
@@ -528,7 +528,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="publicar",
                 pos="verb",
-                definition="Tornar conhecido através dos media.",
+                definition="Tornar conhecido por meio de uma publicação ou dos meios de comunicação.",
                 example="Publicaram a notícia no site.",
             ),
             VocabularyEntry(

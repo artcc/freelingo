@@ -362,7 +362,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="facilitar",
                 pos="verb",
-                definition="Tornar mais fluída a comunicação.",
+                definition="Tornar mais fluida a comunicação.",
                 example="O mediador facilita o diálogo entre as partes.",
             ),
             VocabularyEntry(
@@ -652,7 +652,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="revisão",
                 pos="noun",
-                definition="Controlo rigoroso de um texto antes da publicação.",
+                definition="Exame cuidadoso de um texto para corrigir erros e melhorar sua clareza antes da publicação.",
                 example="A revisão final cabe ao diretor editorial.",
             ),
             VocabularyEntry(
@@ -904,7 +904,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="rede social",
                 pos="noun",
-                definition="Plataforma digital de interação e compartilhamento de conteúdos entre utilizadores.",
+                definition="Plataforma digital de interação e compartilhamento de conteúdos entre usuários.",
                 example="As redes sociais aceleram a evolução lexical do português.",
             ),
             VocabularyEntry(
@@ -928,8 +928,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="vírus",
                 pos="noun",
-                definition="Programa malicioso que infeta computadores e dispositivos.",
-                example="O email vinha com um vírus e infetou o sistema.",
+                definition="Programa malicioso que infecta computadores e dispositivos.",
+                example="O anexo do e-mail continha um vírus que infectou o sistema ao ser executado.",
             ),
             VocabularyEntry(
                 word="cibersegurança",
@@ -1033,7 +1033,7 @@ C2_SETS: list[VocabularySet] = [
                 word="proficiente",
                 pos="adjective",
                 definition="Que demonstra um domínio avançado e completo da língua.",
-                example="É um utilizador proficiente, capaz de escrever ensaios acadêmicos em português.",
+                example="É um usuário proficiente da língua, capaz de escrever ensaios acadêmicos em português.",
             ),
         ],
     ),

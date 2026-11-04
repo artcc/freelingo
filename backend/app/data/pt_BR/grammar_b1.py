@@ -183,12 +183,12 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Subjuntivo",
         summary="Usar o subjuntivo para expressar dúvida, incerteza e probabilidade.",
-        explanation="Dúvida → subjuntivo:\n- *Duvido que ele venha. / Não acho que seja boa ideia.*\n- *É possível que chova. / Pode ser que ainda dê tempo.*",
+        explanation="Construções como Duvido que ele venha, Não acho que seja boa ideia, É possível que chova e Pode ser que ainda dê tempo usam subjuntivo para apresentar dúvida ou possibilidade.\n\nA negação sozinha não determina o modo. Compare Não acho que ele tenha razão, que não apresenta a opinião como um fato aceito, com Não sabia que você estava aqui, que mantém a informação como factual. Considere a construção e o sentido, não apenas a presença de não e que.",
         rules=[
             "Duvido que, não acho que + subjuntivo.",
             "É possível/provável que + subjuntivo.",
             "Pode ser que + subjuntivo.",
-            "Negação do verbo de opinião ativa o subjuntivo.",
+            "A escolha do modo depende da construção e da perspectiva: Não acho que tenha razão; Não sabia que estava aqui.",
         ],
         examples=[
             GrammarExample(
@@ -203,9 +203,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Não acho que ele tem razão.",
-                correct="Não acho que ele tenha razão.",
-                note="Negação + que → subjuntivo.",
+                wrong="Não acho que eles tenha razão.",
+                correct="Não acho que eles tenham razão.",
+                note="Com eles, o presente do subjuntivo é tenham. Não generalize a escolha do modo para toda oração com negação: Não sabia que você estava aqui usa indicativo.",
             ),
             GrammarMistake(
                 wrong="É possível que ela sabe.",
@@ -224,12 +224,12 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Subjuntivo com avaliações",
         level="B1",
         category="Subjuntivo",
-        summary="Usar o subjuntivo após expressões de avaliação emocional.",
-        explanation="Avaliação → subjuntivo:\n- *É bom que tenhas vindo. / É uma pena que vás embora.*\n- *Que bom que estejas aqui! / Que pena que não possas vir.*",
+        summary="Escolher o modo verbal em avaliações e reações emocionais.",
+        explanation="Construções como É bom que você esteja aqui e É uma pena que você não possa vir usam subjuntivo para avaliar uma situação. Isso não torna obrigatório o subjuntivo em toda expressão de emoção.\n\nNo português brasileiro, Que bom que e Que pena que aparecem normalmente com indicativo ao comentar fatos: Que bom que você veio!; Que pena que você não pode ficar! O subjuntivo também é possível, sobretudo em registro mais formal: Que bom que você tenha gostado! A emoção não determina o modo sozinha, e o subjuntivo também pode avaliar fatos ocorridos: É uma pena que ela tenha perdido o voo.",
         rules=[
-            "É bom/mau/triste/pena que + subjuntivo.",
-            "Expressões emocionais ativam o subjuntivo.",
-            "Que bom que/Que pena que + subjuntivo.",
+            "Pratique o subjuntivo em construções como É bom que você esteja aqui e É uma pena que ela tenha saído.",
+            "Uma avaliação emocional pode comentar um fato; subjuntivo não significa necessariamente dúvida.",
+            "Que bom que e Que pena que admitem indicativo ao comentar fatos: Que bom que você veio! Considere construção, sentido e registro.",
         ],
         examples=[
             GrammarExample(
@@ -239,14 +239,14 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="É uma pena que não possas vir.",
             ),
             GrammarExample(
-                text="Que bom que tenhas gostado!",
+                text="Que bom que você gostou!",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="É bom que estás aqui.",
-                correct="É bom que estejas aqui.",
-                note="É bom que exige subjuntivo.",
+                wrong="É bom que vocês esteja aqui.",
+                correct="É bom que vocês estejam aqui.",
+                note="Vocês exige estejam no subjuntivo. Em Que bom que vocês estão aqui!, o indicativo é válido para comentar um fato.",
             ),
         ],
         related=[
@@ -261,16 +261,16 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Tempos verbais",
         summary="Expressar ações repetidas ou contínuas que se prolongam até ao presente.",
-        explanation="Presente de **ter** + particípio passado.\n\n- *Tenho estudado muito.* (= ação repetida até agora)\n- *Ela tem trabalhado bastante.*\n\n**Valor aspectual:** NÃO equivale ao perfeito inglês para ações únicas. *Comi ontem* (única), *Tenho comido bem* (repetida).",
+        explanation="Presente de **ter** + particípio passado.\n\n- *Tenho estudado muito.* (= atividade repetida até agora)\n- *Ela tem trabalhado bastante.*\n\n**Valor aspectual:** apresenta repetição ou continuidade em um período que chega ao presente. Não corresponde automaticamente ao present perfect do inglês: para uma ocorrência concluída ontem, diga Comi ontem.\n\nO perfeito simples também pode apresentar repetição em um período delimitado: Fui à academia três vezes na semana passada. Compare com Tenho ido à academia, que apresenta uma prática recorrente até o presente.",
         rules=[
             "Ter (presente) + particípio.",
             "Ação repetida/contínua até ao presente.",
             "NÃO equivale ao present perfect para ações únicas.",
-            "Ação única: pretérito perfeito simples.",
+            "O perfeito simples apresenta situações delimitadas, únicas ou repetidas: Fui três vezes na semana passada.",
         ],
         examples=[
             GrammarExample(
-                text="Tenho ido ao ginásio todas as semanas.",
+                text="Tenho ido à academia todas as semanas.",
                 note="repetida",
             ),
             GrammarExample(
@@ -741,7 +741,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="causa",
             ),
             GrammarExample(
-                text="Estava a chover, por isso fiquei em casa.",
+                text="Estava chovendo, por isso fiquei em casa.",
                 note="consequência",
             ),
             GrammarExample(

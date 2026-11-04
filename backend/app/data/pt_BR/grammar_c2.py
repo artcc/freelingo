@@ -691,7 +691,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation="A comunicação digital cria abreviaturas como vc (você), tb (também), msg (mensagem), bjs (beijos) e obg (obrigado). Essas formas podem funcionar em mensagens informais, mas precisam ser expandidas quando o gênero exigir escrita formal.\n\nEmojis e sinais de pontuação ajudam a expressar atitude, sem garantir uma interpretação única. Hashtags organizam temas, como #Brasil e #LiteraturaBrasileira.\n\nNeologismos como postar e clicar convivem com empréstimos como streaming e podcast. A escolha entre baixar um arquivo e fazer um download depende do público e do contexto.\n\nAssistentes de inteligência artificial e tradução automática podem reproduzir vieses e deixar variedades regionais pouco representadas. Avalie seus resultados pelo sentido, pela variedade-alvo e pela adequação ao registro, sem tratar inovação linguística como degradação automática.",
         rules=[
             "O português digital não é uma versão 'degradada' da língua — é um registro adaptado ao meio e ao contexto.",
-            "Os anglicismos na tecnologia são frequentes, mas o português também cria alternativas (baixar, carregar, e-mail).",
+            "Anglicismos como download e e-mail convivem com alternativas como baixar um arquivo e correio eletrônico; escolha conforme o contexto e o público.",
             "A IA e a tradução automática levantam questões de soberania linguística e representatividade das variedades do português.",
         ],
         examples=[

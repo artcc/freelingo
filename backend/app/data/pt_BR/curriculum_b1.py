@@ -28,7 +28,7 @@ B1_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Forma o presente do subjuntivo a partir da primeira pessoa do singular do presente do indicativo, trocando a vogal temática: falar -> falo -> fale, beber -> bebo -> beba, partir -> parto -> parta; e usa formas irregulares como ser (seja), estar (esteja), ter (tenha), haver (haja), ir (vá), poder (possa), querer (queira), saber (saiba), vir (venha), fazer (faça)",
             "Usa o subjuntivo depois de verbos de desejo com mudança de sujeito: quero que venhas, espero que chegues a tempo, prefiro que fiques; e usa infinitivo quando o sujeito é o mesmo (quero vir)",
-            "Usa o subjuntivo depois de expressões emocionais: alegro-me de que estejas aqui, tenho medo de que não chegues a tempo, é uma pena que não possas vir, é bom que tenhas conseguido",
+            "Usa o subjuntivo em avaliações como É uma pena que você não possa vir e É bom que você tenha conseguido, distinguindo o indicativo factual comum em Que bom que você veio! e Que pena que você não pode ficar!",
             "Usa talvez + subjuntivo para possibilidades incertas no presente ou no futuro: Talvez venha amanhã, Talvez seja verdade",
             "Distingue quando + indicativo (fato habitual no presente: Quando estou em Recife, vou sempre à praia) de quando + futuro do subjuntivo (eventos futuros)",
         ],
@@ -58,7 +58,7 @@ B1_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Usa o subjuntivo depois de verbos de recomendação: recomendo que, aconselho que, sugiro que, proponho que + subjuntivo: Recomendo que reserves com antecedência",
-            "Usa o subjuntivo depois de expressões de dúvida e negação: não acredito que, duvido que, não tenho a certeza de que, é improvável que: Não acredito que isso seja verdade",
+            "Usa o subjuntivo em construções de dúvida como Não acredito que isso seja verdade, Duvido que venha e É improvável que aceite; reconhece que a negação não determina o modo sozinha: Não sabia que você estava aqui",
             "Usa o subjuntivo depois de juízos de valor impessoais: é importante que, é necessário que, é preciso que, é melhor que, é fundamental que, convém que + subjuntivo",
             "Contrasta acredito que tem razão (certeza, indicativo) com não acredito que tenha razão (dúvida, subjuntivo)",
             "Escreve um parágrafo dando conselhos e exprimindo opiniões com uso correto de indicativo e subjuntivo",
@@ -251,7 +251,7 @@ B1_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Lida com a maioria das situações do cotidiano (viagem, trabalho, eventos sociais) com relativa facilidade, exprimindo opiniões e reagindo aos outros",
             "Usa corretamente o presente do subjuntivo nos contextos centrais de B1 e aplica o futuro do subjuntivo em orações temporais com referência futura",
-            "Distingue pretérito perfeito simples (ação única concluída) de pretérito perfeito composto (repetição/relevância continuada) sem erro sistemático",
+            "Distingue pretérito perfeito simples (situação delimitada, única ou repetida: Fui à academia três vezes na semana passada) de pretérito perfeito composto (repetição ou continuidade até o presente: Tenho ido à academia) sem erro sistemático",
             "Produz um texto escrito coeso (100-150 palavras) integrando tempos do passado, subjuntivo, passiva e conectores argumentativos",
         ],
         default_weeks=1,

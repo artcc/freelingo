@@ -356,7 +356,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="parágrafo",
                 pos="noun",
-                definition="Secção de um texto composta por várias frases.",
+                definition="Unidade de um texto formada por uma ou mais frases relacionadas, geralmente iniciada em uma nova linha.",
                 example="O terceiro parágrafo é o mais importante.",
             ),
             VocabularyEntry(
@@ -860,7 +860,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="capítulo",
                 pos="noun",
-                definition="Secção em que se divide um livro.",
+                definition="Seção em que se divide um livro.",
                 example="Acabei o segundo capítulo.",
             ),
             VocabularyEntry(
@@ -996,7 +996,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="censura",
                 pos="noun",
-                definition="Controlo que limita a difusão de informações.",
+                definition="Controle que limita a difusão de informações.",
                 example="A censura ameaça a liberdade de imprensa.",
             ),
             VocabularyEntry(
@@ -1107,7 +1107,7 @@ B2_SETS: list[VocabularySet] = [
                 word="influenciar",
                 pos="verb",
                 definition="Exercer um efeito determinante sobre algo.",
-                example="Os media influenciam a opinião pública.",
+                example="Os meios de comunicação influenciam a opinião pública.",
             ),
             VocabularyEntry(
                 word="alarmante",

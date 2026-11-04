@@ -418,7 +418,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="interface",
                 pos="noun",
-                definition="Ponto de interação entre utilizador e sistema.",
+                definition="Ponto de interação entre usuário e sistema.",
                 example="A interface é intuitiva e fácil de usar.",
             ),
             VocabularyEntry(
@@ -437,7 +437,7 @@ C1_SETS: list[VocabularySet] = [
                 word="patente",
                 pos="noun",
                 definition="Direito exclusivo de exploração de uma invenção.",
-                example="Registaram a patente em toda a Europa.",
+                example="Registraram a patente em vários países europeus.",
             ),
             VocabularyEntry(
                 word="ensaio",
@@ -1132,7 +1132,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="domínio",
                 pos="noun",
-                definition="Controlo seguro e competência aprofundada.",
+                definition="Controle seguro e competência aprofundada.",
                 example="Tem um domínio impressionante da língua.",
             ),
             VocabularyEntry(

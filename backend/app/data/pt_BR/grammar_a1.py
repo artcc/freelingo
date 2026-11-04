@@ -325,10 +325,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Verbos",
         summary="O verbo ter exprime posse, idade, existência e obrigação.",
-        explanation="**Ter** é um verbo irregular e essencial. Usa-se para:\n\n- **Posse**: *Tenho um carro.*\n- **Idade**: *Tenho vinte e cinco anos.*\n- **Obrigação**: *Tenho de estudar.*\n- **Sensações**: *Tenho fome / sede / sono / medo.*\n\nConjugação: eu tenho / tu tens / ele-você tem / nós temos / eles-vocês têm",
+        explanation="**Ter** é um verbo irregular e essencial. Usa-se para:\n\n- **Posse**: *Tenho um carro.*\n- **Idade**: *Tenho vinte e cinco anos.*\n- **Obrigação**: *Tenho de estudar.*\n- **Sensações**: *Tenho fome / sede / sono / medo.* No Brasil, também é muito comum usar **estar com**: *Estou com fome / sede / sono / frio / calor / medo / pressa.*\n\nConjugação: eu tenho / tu tens / ele-você tem / nós temos / eles-vocês têm",
         rules=[
             "Idade expressa-se com ter (NUNCA ser).",
-            "Sensações usam ter: fome, sede, sono, frio, calor, medo, pressa.",
+            "Sensações admitem ter ou estar com: Tenho fome; Estou com fome. Estar exige com nessa construção.",
             "Ter de / ter que + infinitivo = obrigação.",
             "Na fala brasileira, ter substitui haver.",
         ],
@@ -358,7 +358,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="Estou fome.",
                 correct="Tenho fome.",
-                note="Sensações usam ter, não estar.",
+                note="Estou fome não funciona sem a preposição: Estou com fome e Tenho fome são formas válidas.",
             ),
         ],
         related=[
@@ -1111,13 +1111,13 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Adjetivos e advérbios",
         summary="Formação e uso dos números ordinais em português.",
-        explanation="Os **números ordinais** indicam a ordem ou posição numa sequência.\n\n- 1.º — primeiro/primeira\n- 2.º — segundo/segunda\n- 3.º — terceiro/terceira\n- 4.º — quarto/quarta\n- 5.º — quinto/quinta\n- 6.º — sexto/sexta\n- 7.º — sétimo/sétima\n- 8.º — oitavo/oitava\n- 9.º — nono/nona\n- 10.º — décimo/décima\n\nUsam-se **antes do nome**: *o primeiro dia, a segunda aula.*\n\n**Abreviam-se** com ponto abreviativo e indicador de gênero:\n- 1.º (primeiro), 1.ª (primeira)\n- 2.º, 2.ª, etc.\n\nPara perguntar a posição: *Em que lugar ficaste? — Fiquei em terceiro.*",
+        explanation="Os **números ordinais** indicam a ordem ou posição numa sequência.\n\n- 1.º — primeiro/primeira\n- 2.º — segundo/segunda\n- 3.º — terceiro/terceira\n- 4.º — quarto/quarta\n- 5.º — quinto/quinta\n- 6.º — sexto/sexta\n- 7.º — sétimo/sétima\n- 8.º — oitavo/oitava\n- 9.º — nono/nona\n- 10.º — décimo/décima\n\nFrequentemente vêm **antes do nome**: *o primeiro dia, a segunda aula, o terceiro andar*. Também podem vir depois: *capítulo primeiro*.\n\nApós nomes de reis e papas, a leitura convencional usa ordinais até dez e cardinais a partir de onze: *Dom Pedro II (segundo), Luís XIV (quatorze)*.\n\n**Abreviam-se** com ponto abreviativo e indicador de gênero:\n- 1.º (primeiro), 1.ª (primeira)\n- 2.º, 2.ª, etc.\n\nPara perguntar a posição: *Em que lugar você ficou? — Fiquei em terceiro.*",
         structure="primeiro · segundo · terceiro · quarto · quinto · sexto · sétimo · oitavo · nono · décimo",
         rules=[
             "Os ordinais concordam em gênero com o nome: primeiro/primeira, segundo/segunda.",
-            "Usam-se antes do nome: o terceiro andar, a quinta sinfonia.",
+            "A posição antes do nome é frequente, mas não obrigatória: o primeiro capítulo; capítulo primeiro.",
             "Abreviam-se com .º (masculino) e .ª (feminino).",
-            "No português brasileiro usam-se ordinais para andares e reis: D. João II (segundo).",
+            "Use o terceiro andar para indicar posição; após nomes de reis e papas, leia ordinais até dez e cardinais a partir de onze.",
         ],
         examples=[
             GrammarExample(
@@ -1139,9 +1139,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Moro no andar terceiro.",
-                correct="Moro no terceiro andar.",
-                note="Em português, o ordinal vem antes do nome.",
+                wrong="Dom Pedro II (dois).",
+                correct="Dom Pedro II (segundo).",
+                note="Na leitura convencional de nomes de reis, use ordinal até dez; a partir de onze, use cardinal: Luís XIV (quatorze).",
             ),
             GrammarMistake(
                 wrong="É a primeiro vez.",

@@ -464,13 +464,13 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="ser",
                 pos="verb",
-                definition="Verbo irregular que indica identidade ou característica permanente.",
+                definition="Verbo irregular usado para apresentar identidade, origem, profissão ou características, sem indicar necessariamente permanência.",
                 example="Eu sou estudante.",
             ),
             VocabularyEntry(
                 word="estar",
                 pos="verb",
-                definition="Verbo irregular que indica estado temporário ou localização.",
+                definition="Verbo irregular usado para apresentar estados, condições ou localização de pessoas e objetos; o estado pode ser duradouro.",
                 example="Estou em Recife.",
             ),
             VocabularyEntry(
@@ -1228,7 +1228,7 @@ A1_SETS: list[VocabularySet] = [
                 word="banco",
                 pos="noun",
                 definition="Instituição que oferece serviços como guardar dinheiro, fazer pagamentos e conceder empréstimos.",
-                example="Preciso de ir ao banco levantar dinheiro.",
+                example="Preciso ir ao banco sacar dinheiro.",
             ),
             VocabularyEntry(
                 word="estação",
@@ -1275,7 +1275,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="rua",
                 pos="noun",
-                definition="Via asfaltada percorrível por veículos e peões.",
+                definition="Via de circulação em uma cidade ou povoado, usada por veículos e pedestres, com ou sem pavimentação.",
                 example="A minha rua é tranquila.",
             ),
         ],
@@ -1332,7 +1332,7 @@ A1_SETS: list[VocabularySet] = [
                 word="atravessar",
                 pos="verb",
                 definition="Passar de um lado para o outro.",
-                example="Atravesse a rua na passadeira.",
+                example="Atravesse a rua na faixa de pedestres.",
             ),
             VocabularyEntry(
                 word="virar",
@@ -1382,7 +1382,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="trem",
                 pos="noun",
-                definition="Meio de transporte que viaja sobre carris.",
+                definition="Meio de transporte que se desloca sobre trilhos.",
                 example="O trem parte às dez.",
             ),
             VocabularyEntry(
