@@ -72,26 +72,26 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Tempos verbais",
         summary="Regras de correspondência entre tempos verbais.",
-        explanation="A escolha do tempo depende da relação temporal e da perspectiva, não apenas do tempo da oração principal.\n\nEspero que venhas apresenta uma ação simultânea ou posterior; Espero que tenhas chegado apresenta anterioridade. Queria que viesses usa o imperfeito; Duvidava que tivesse chegado usa o mais-que-perfeito para anterioridade passada. Uma principal presente admite referência passada: Duvido que fosse verdade.",
+        explanation="A escolha do tempo depende da relação temporal e da perspectiva, não apenas do tempo da oração principal.\n\nEspero que você venha apresenta uma ação simultânea ou posterior; Espero que você tenha chegado apresenta anterioridade. Queria que você viesse usa o imperfeito; Duvidava que tivesse chegado usa o mais-que-perfeito para anterioridade passada. Uma principal presente admite referência passada: Duvido que fosse verdade.",
         rules=[
             "Distingue simultaneidade, anterioridade e posterioridade.",
             "A perspectiva temporal determina a escolha entre formas simples e compostas.",
         ],
         examples=[
             GrammarExample(
-                text="Queria que viesses.",
-                note="pretérito -> imperfeito conj.",
+                text="Queria que você viesse.",
+                note="desejo numa perspectiva passada ou atenuada",
             ),
             GrammarExample(
-                text="Espero que chegues.",
-                note="presente -> presente conj.",
+                text="Espero que você chegue.",
+                note="expectativa atual sobre a chegada",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Queria que tu viesse.",
-                correct="Queria que viesses.",
-                note="Com tu, a forma é viesses; o tempo depende da perspectiva temporal.",
+                wrong="Queria que vocês viesse.",
+                correct="Queria que vocês viessem.",
+                note="Com vocês, a forma é viessem; o tempo depende da perspectiva temporal.",
             ),
         ],
         related=[
@@ -227,37 +227,6 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
     ),
     GrammarTopic(
-        slug="infinitivo-pessoal",
-        title="Infinitivo pessoal",
-        level="B2",
-        category="Verbos",
-        summary="O infinitivo pessoal.",
-        explanation="O infinitivo pessoal pode explicitar o sujeito: falar, falares, falar, falarmos, falardes, falarem. É frequente quando o sujeito difere do da principal: Pedi silêncio para eles estudarem. Também ocorre com o mesmo sujeito para o salientar: Para chegarmos a tempo, temos de sair. Não se flexiona automaticamente qualquer infinitivo: Devemos estudar, não Devemos estudarmos.",
-        rules=[
-            "Infinitivo com terminações.",
-            "Pode marcar um sujeito próprio, diferente ou não do da oração principal; depende da construção.",
-        ],
-        examples=[
-            GrammarExample(
-                text="É importante estudares mais.",
-            ),
-            GrammarExample(
-                text="Para chegarmos a tempo, temos de sair.",
-            ),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="É importante tu estudar.",
-                correct="É importante tu estudares.",
-                note="Na norma-padrão, o infinitivo com sujeito explícito tu recebe -es; a oração principal impessoal não exige um sujeito diferente.",
-            ),
-        ],
-        related=[
-            "presente-conjuntivo",
-            "colocacao-pronominal",
-        ],
-    ),
-    GrammarTopic(
         slug="conectores-avancados",
         title="Conectores avançados",
         level="B2",
@@ -271,7 +240,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Vou à festa desde que tu também vás.",
+                text="Vou à festa desde que você também vá.",
             ),
             GrammarExample(
                 text="Sairei mais cedo, a menos que haja reunião.",
@@ -279,8 +248,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Desde que tu também vais.",
-                correct="Desde que tu também vás.",
+                wrong="Vou à festa desde que você também vai. (condição)",
+                correct="Vou à festa desde que você também vá.",
                 note="Desde que condicional + subjuntivo.",
             ),
         ],
@@ -323,7 +292,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Comunicar-se com clareza, precisão e cortesia.",
-        explanation="O registro formal depende do gênero e do destinatário. Em e-mails profissionais brasileiros, Prezada Ana e Atenciosamente são opções usuais. Pedidos com poderia ou gostaria suavizam a solicitação. Evite gírias quando o contexto exigir neutralidade, mas não confunda formalidade com frases rebuscadas ou mesóclise obrigatória.",
+        explanation="O registro formal depende do gênero e do destinatário. Em e-mails profissionais brasileiros, Prezada Ana e Atenciosamente são opções usuais. Pedidos com poderia ou gostaria suavizam a solicitação. Evite gírias quando o contexto exigir neutralidade, mas não confunda formalidade com frases rebuscadas ou mesóclise obrigatória.\n\nNa leitura literária ou antiga, reconheça combinações raras como mo (me + o) e lho (lhe + o): Deu-mo equivale a Deu isso a mim; Entregou-lho pode ser reformulado como Entregou o documento a ele, quando os referentes são conhecidos. Na conversa brasileira, prefira Ela me deu o livro e Entreguei o documento para ele. Reconhecer essas formas não obriga a produzi-las; a reformulação deve preservar objeto e destinatário.",
         rules=[
             "Escolha tratamento adequado ao destinatário.",
             "Prefira clareza a rebuscamento.",
@@ -426,7 +395,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Interpretar provérbios usados no Brasil e em outros países lusófonos.",
-        explanation="Água mole em pedra dura..., Quem vê caras não vê corações, Mais vale um pássaro na mão..., Depois da tempestade vem a bonança.",
+        explanation="Provérbios condensam uma avaliação ou conselho em uma fórmula reconhecível. Água mole em pedra dura tanto bate até que fura valoriza persistência; Mais vale um pássaro na mão do que dois voando recomenda cautela diante de ganhos incertos; Quem vê caras não vê corações alerta contra julgar apenas pela aparência.\n\nO sentido depende da situação: um provérbio pode apoiar um conselho, ironizar uma decisão ou contestar uma expectativa. Ele não comprova uma conclusão: citar um dito sobre persistência não demonstra que qualquer insistência dará resultado. Há variantes regionais e outros provérbios podem defender a atitude oposta. Em escrita formal, explique o argumento em vez de usar a fórmula como única justificativa.",
         rules=[
             "Provérbios fixos.",
             "Sabedoria popular.",
@@ -573,7 +542,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Avançado",
         summary="Recursos para descrições vívidas.",
-        explanation="Adjetivação rica, sensações, metáforas, personificação, imperfeito descritivo.",
+        explanation="A descrição literária seleciona detalhes conforme o ponto de vista, não apenas acumula adjetivos. Em A casa esperava em silêncio, a personificação atribui expectativa à casa; em A casa tinha janelas fechadas, a descrição é mais literal. Um detalhe sensorial pode sugerir atmosfera: O cheiro de café atravessava o corredor.\n\nO imperfeito costuma sustentar o cenário (A chuva batia no telhado); o perfeito destaca uma mudança (A porta se abriu). A escolha não é obrigatória: o presente pode criar proximidade narrativa. Selecione léxico e ritmo coerentes com quem percebe a cena; um narrador limitado não conhece automaticamente o pensamento de todos.\n\nCompare O quarto era triste com A luz mal alcançava a cadeira vazia. A segunda formulação sugere um efeito por detalhes, mas não é sempre superior: explicitar um estado também pode servir à voz narrativa. Revise a descrição para eliminar clichês e preservar o efeito pretendido.",
         rules=[
             "Adjetivos sensoriais.",
             "Imperfeito descritivo.",
@@ -603,7 +572,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B2",
         category="Tempos verbais",
         summary="Revisão do MQP composto.",
-        explanation="Ter (imperfeito) + particípio. Muito mais comum que a forma simples.",
+        explanation="O mais-que-perfeito composto usa tinha + particípio e situa um evento antes de outra referência passada: Quando Ana abriu a carta, o prazo já tinha acabado. Compare O prazo acabou quando Ana abriu a carta, que sugere outra relação temporal.\n\nNa narrativa, a forma simples pode ter o mesmo valor: O prazo já acabara. É mais marcada na conversa brasileira, mas útil na leitura literária. Não confunda anterioridade com distância cronológica absoluta: uma ação de poucos minutos antes também pode exigir tinha acabado. Ao reordenar frases, preserve a relação entre os eventos e não acrescente uma causa apenas porque um aconteceu primeiro.",
         rules=[
             "Ter (imperfeito) + particípio.",
             "Mais comum que a forma simples.",
@@ -711,5 +680,69 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "discurso-indireto-passado",
             "linguagem-jornalistica",
         ],
+    ),
+    GrammarTopic(
+        slug="futuro-composto",
+        title="Futuro do presente composto",
+        level="B2",
+        category="Tempos verbais",
+        summary="Situar uma conclusão antes de um momento futuro e interpretar suposições.",
+        explanation="Use ter no futuro + particípio: eu terei terminado, você terá terminado, nós teremos terminado, vocês terão terminado. O particípio não concorda com o sujeito: Elas terão escrito, não terão escritas.\n\nA construção apresenta uma ação concluída antes de uma referência futura: Quando você chegar, já terei terminado. A oração com quando usa futuro do subjuntivo; a principal usa futuro composto. Na conversa brasileira, também se usa Vou ter terminado até amanhã.\n\nEm certos contextos, o futuro composto apresenta uma suposição sobre o passado: Ela terá esquecido o compromisso? Não confirma o esquecimento. Compare com a conclusão factual Ela esqueceu o compromisso. Distingua também o futuro composto do subjuntivo: Quando tiver terminado, avise coloca a conclusão dentro de uma oração temporal futura.",
+        rules=[
+            "Conjugue ter e mantenha o particípio invariável.",
+            "Identifique o momento futuro antes do qual a ação estará concluída.",
+            "Não transforme uma suposição com terá + particípio em fato comprovado.",
+        ],
+        examples=[
+            GrammarExample(text="Até sexta-feira, teremos enviado os documentos."),
+            GrammarExample(text="Quando você chegar, já terei feito o jantar."),
+            GrammarExample(
+                text="Amanhã a esta hora, vou ter terminado o relatório.",
+                note="alternativa perifrástica",
+            ),
+            GrammarExample(text="Ela terá perdido o ônibus?", note="suposição, não confirmação"),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Até amanhã, terei terminar o trabalho.",
+                correct="Até amanhã, terei terminado o trabalho.",
+                note="O composto exige particípio, não infinitivo.",
+            ),
+            GrammarMistake(
+                wrong="Elas terão escritas as cartas.",
+                correct="Elas terão escrito as cartas.",
+                note="Com ter, o particípio não concorda com o objeto nem com o sujeito.",
+            ),
+        ],
+        related=["futuro-do-presente", "futuro-do-conjuntivo", "participios"],
+    ),
+    GrammarTopic(
+        slug="condicional-composto",
+        title="Futuro do pretérito composto",
+        level="B2",
+        category="Condicionais",
+        summary="Expressar consequências hipotéticas no passado e preservar a incerteza.",
+        explanation="O futuro do pretérito composto, também chamado condicional composto, usa teria + particípio: teria falado, teríamos feito, teriam vindo. Em Se tivesse estudado, teria passado, a condição e a consequência pertencem a um passado não realizado.\n\nCompare Se tivesse estudado, saberia a resposta agora: a condição é passada, mas a consequência hipotética é presente. O tempo da consequência depende do sentido, não de uma troca mecânica.\n\nNa imprensa, teria pode marcar informação atribuída e ainda não confirmada: Segundo a testemunha, o motorista teria saído às oito. Essa frase não prova que ele saiu. Ao resumir, preserve a fonte e o grau de certeza.",
+        rules=[
+            "Conjugue ter no futuro do pretérito e mantenha o particípio invariável.",
+            "Distinga consequência passada (teria feito) de consequência presente (faria).",
+            "Preserve o caráter hipotético ou não confirmado quando esse for o valor no contexto.",
+        ],
+        examples=[
+            GrammarExample(text="Se tivesse estudado, teria passado na prova."),
+            GrammarExample(text="Sem sua ajuda, não teríamos conseguido."),
+            GrammarExample(
+                text="Se tivesse aceitado a proposta, hoje moraria em Recife.",
+                note="condicional mista",
+            ),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Se tivesse estudado, teria passou.",
+                correct="Se tivesse estudado, teria passado.",
+                note="Depois de teria, use o particípio passado.",
+            ),
+        ],
+        related=["condicional", "mais-que-perfeito-conjuntivo", "participios"],
     ),
 ]

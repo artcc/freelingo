@@ -31,22 +31,15 @@ CORS and security headers, and manages database/Redis startup and shutdown.
 
 ## Layers
 
-The Games domain uses `models/game.py`, `schemas/games.py`, `routers/games.py`, `services/games.py`
-and `services/prompts/games.py`. Sessions belong to persisted study plans. Global daily admission
-reservations live in PostgreSQL and are serialized with a user-row lock; generation state and its
-deadline fence late background results. Detective, Sentence Order and Vocabulary Pairs use game-specific schemas,
-prompts and deterministic answer evaluation through the same admission and reward service.
-Vocabulary Pairs uses canonical vocabulary sources in free mode and a bounded, sequential attempt
-log in the existing JSON answer state; failed attempts permanently mark both involved pairs as assisted.
-Answers and plan-owned XP commit atomically. See `database-models.instructions.md` for persistence
-contracts and `games.instructions.md` for domain behavior.
+Domains use these layers according to their transport, validation, persistence, and orchestration
+responsibilities. Their state machines, quotas, and scoring rules belong to their domain specs.
 
 ### Core
 
 `app/core/config.py` is the authoritative `Settings` schema. `.env.example` documents deployable
-values, while Docker determines which values are passed into containers.
-`OPENAI_MODEL` defaults to `gpt-6-luna`. Optional `OPENAI_REASONING_EFFORT` is forwarded by both
-Compose files; an empty value omits the reasoning option and preserves the model default.
+values, while Docker determines which values are passed into containers. Provider configuration
+contracts belong to `services.instructions.md` and `speech-services.instructions.md`;
+environment propagation belongs to `docker.instructions.md`.
 
 Database sessions come from the async SQLAlchemy engine. Redis is optional at process startup but
 features that require Redis expose their own degraded or unavailable behavior.
@@ -88,17 +81,6 @@ manual JSON parsing for free-write and level-test flows.
 
 ### Routers
 
-`routers/flashcards.py` exposes card creation and saved vocabulary alongside a
-paginated all-source library, owned-card content editing and suspension, and account-wide reverse-side
-preferences. `schemas/flashcards.py` separates editable content from scheduling and ownership fields.
-Review takes the plan progress lock before the card lock; review, suspension, editing and deletion
-serialize on the owned card. Review scheduling, progress credit and an immutable response receipt
-commit together. The receipt lookup occurs after the card lock, so repeated UUIDs on that card are
-replayed rather than applied twice; mismatched ratings conflict. Bulk import validates the expected
-plan and language against the server-resolved active plan before inserting content. Library filters
-and suspended-card rejection for new reviews are backend-enforced. See `api-endpoints.instructions.md` and
-`platform.instructions.md` for contracts and behavior.
-
 Routers own transport concerns: authentication dependencies, path/query/body parsing, rate-limit
 decorators, HTTP status mapping, SSE framing, WebSocket lifecycle, and ownership lookup. They should
 delegate reusable business and provider behavior to services.
@@ -115,51 +97,18 @@ Redis, and database operations exposed to the frontend.
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
 
-`services/chat_markdown.py` uses `markdown-it-py` to derive spoken text for conversation-owned HTTP
-TTS requests. The TTS router resolves authorization and persisted language before conversion; the
-helper owns parsing and spoken boundaries. Original chat content remains in storage and SSE, and
-provider adapters continue receiving ordinary text. Direct and transitive parser dependencies are
-pinned in `requirements.txt` and `constraints.txt`.
+Provider request/stream state belongs to the individual operation, not shared mutable adapter state.
+Comprehension background tasks own independent database/Redis resources. A Redis lease and a PostgreSQL
+commit are separate boundaries; a pre-save ownership check is not transactional fencing.
 
-The LLM adapter uses Responses for OpenAI, Chat Completions for Ollama/DeepSeek, and Anthropic's native
-API. OpenAI requests use `store=false`; each tool stream owns its native output and replays it only
-into its own continuation. Provider response IDs, reasoning items, and tool payloads are not shared
-through the singleton adapter or added to the persisted conversation transcript.
+Domain writes that must succeed together share a database transaction. Progress/reward serialization
+uses plan-row locks compatible with foreign-key inserts. Flashcard review acquires the plan progress
+lock before the card lock; receipt lookup follows card locking. Preserve this lock order when changing
+those flows. Detailed reward and idempotency contracts belong to `learning-resources.instructions.md`
+and `platform.instructions.md`.
 
-Listening and Reading retain FastAPI background tasks with independent database/Redis resources.
-`exercise_generation.py` owns their renewable Redis leases, total generation deadline, cancellation,
-and temporary status. Domain services verify lease ownership before persistence. Immediate `/next`
-responses expose status without holding a database session open while waiting for inference.
-`get_exercise_study_plan` compares optional expected context with the authenticated user's active plan
-and rejects mismatches with 409. It does not authorize arbitrary client-supplied plan IDs. Redis lease
-ownership and PostgreSQL commit are separate operations; the pre-save guard is not transactional fencing.
-
-`progress_rewards.py` owns additional XP awards, limits, and source-key deduplication through
-`ProgressReward`. PostgreSQL `FOR NO KEY UPDATE` plan-row locks serialize reward decisions and daily
-progress while remaining compatible with FK `KEY SHARE` locks. Rewards use persisted resource
-ownership, explicit response-to-learner associations, actual turn modality, and a fixed UTC activity
-date. They commit with their progress credit; voice transcript pairs share that transaction.
-Voice captures completion before scheduling background persistence. Daily progress records ordered
-per-skill scores so writes arriving out of date order can reconcile later skill snapshots and streaks
-inside the same locked transaction, preserving subsequent scores and per-step rounding. Historical
-null score histories remain opaque skill checkpoints; no historical score reconstruction is attempted.
-
-Schema changes include versioned Alembic files in `backend/alembic/versions/`, shipped in the backend
-image and automatically applied by deployment startup through `alembic upgrade head`.
-Transcript pairing/modality and daily skill-update history are nullable; missing values are not
-inferred or backfilled. Startup applies pending revisions; it does not generate missing files.
-
-`backend/tests/test_progress_migration.py` checks the revision chain and PostgreSQL upgrade/downgrade
-SQL offline, including model/DDL agreement and additive changes for existing tables. These checks do
-not connect to a database and do not replace an actual PostgreSQL upgrade test.
-
-PostgreSQL-specific reward regressions live in `backend/tests/test_progress_rewards_postgres.py`.
-They require an explicitly supplied `TEST_POSTGRES_URL` using the asyncpg dialect and a test database
-where the maintainer permits creating/deleting isolated random test schemas. With that environment
-configured, run `pytest tests/test_progress_rewards_postgres.py --no-cov -q -x` from `backend/`.
-The tests coordinate two independent sessions after FK inserts to exercise deadlock avoidance,
-first-day credit, shared caps, and interleaved replies. They skip without that URL; SQLite checks do
-not validate PostgreSQL locking. Local execution does not require or start PostgreSQL or Docker.
+`testing.instructions.md` owns validation commands and the limits of SQLite and PostgreSQL checks.
+Offline migration SQL checks do not execute a database upgrade.
 
 ### Static learning data
 
@@ -178,6 +127,9 @@ use configured filesystem paths mounted by Docker.
 Foreign-key `ondelete`, nullable provenance, and uniqueness constraints are part of the data contract.
 Deletion services must preserve global account state and remove only the language- or resource-owned
 state defined by those relationships.
+
+Schema changes include committed Alembic revisions in `backend/alembic/versions/`. Deployment startup
+applies them with `alembic upgrade head`; it does not generate missing revisions.
 
 ## Error boundaries
 

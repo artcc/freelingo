@@ -28,7 +28,7 @@ C1_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Usa conjunções concessivas com subjuntivo em todos os tempos: embora, ainda que, mesmo que, por mais que, por muito que + subjuntivo",
             "Usa para que e a fim de que com subjuntivo, e para com infinitivo pessoal, preservando a relação entre os sujeitos",
-            "Aplica subjuntivo em orações relativas restritivas com antecedentes negativos, indefinidos e superlativos: Não há ninguém que saiba responder, Procuro alguém que fale mandarim, É o melhor livro que já tenha lido",
+            "Escolhe o modo em relativas conforme o sentido: Procuro alguém que fale mandarim descreve um perfil desejado; Conheço alguém que fala mandarim apresenta um fato; não impõe subjuntivo apenas por haver indefinido ou superlativo",
             "Usa subjuntivo depois de como se: Fala como se soubesse tudo, Comportou-se como se não tivesse acontecido nada",
             "Controla a concordância de tempos do subjuntivo em frases com múltiplas orações e combinação de indicativo e subjuntivo na escrita formal",
         ],
@@ -89,9 +89,9 @@ C1_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Deriva novas palavras de forma sistemática com sufixos produtivos do português: -ção/-são (produção, expansão), -dade/-tade/-idade (qualidade, liberdade, capacidade), -eza/-ura/-ice (beleza, leitura, tolice), -vel (realizável), -mente; e prefixos in-/im-, re-, sub-, inter-, ante-, pré-, pós-",
+            "Reconhece padrões de derivação com sufixos como -ção, -idade, -eza, -vel e -mente e prefixos como in-/im-, re-, des-, pré- e pós-, verificando restrições de uso e formas lexicalizadas em vez de combinar qualquer base e afixo",
             "Identifica relações de campo semântico e colocações formais em português: cometer um erro, tomar uma decisão, formular uma hipótese, apresentar uma proposta, exercer uma função, distinguindo colocações formais e informais",
-            "Escolhe o sinônimo mais preciso na escrita profissional: indicar vs dizer, empregar vs usar, obter vs conseguir, efetuar vs fazer, proceder a vs fazer",
+            "Escolhe termos precisos na escrita profissional, distinguindo sugerir de comprovar, contestar de refutar e claro de preciso; conserva regência, colocações e grau de evidência sem trocar automaticamente palavras simples por termos rebuscados",
             "Reconhece alterações do Acordo Ortográfico de 1990 e aplica de forma consistente as convenções ortográficas atuais do português brasileiro",
             "Explica termos especializados em português claro, demonstrando compreensão e capacidade de mediação entre registros especializado e não especializado",
         ],
@@ -155,7 +155,7 @@ C1_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Usa anáfora, epífora, quiasmo e perguntas retóricas (Não temos o direito de...? Será que...?) para reforçar a força persuasiva de um discurso ou ensaio em português",
             "Usa estruturas concessivas: por mais que + subjuntivo, ainda que + subjuntivo, mesmo admitindo que + subjuntivo, integrando-as naturalmente em argumentação extensa",
-            "Abre e fecha discursos formais em português com convenções adequadas: Exmo./Exma. Senhor/a..., estimada audiência...; Em jeito de conclusão..., Para terminar..., Em suma...",
+            "Abre e fecha discursos conforme o público e o gênero no Brasil: Bom dia a todas e todos; Senhoras e senhores; Para concluir; Em síntese; reserva fórmulas cerimoniais a situações que as exigem",
             "Integra dados, citações e opinião especializada numa argumentação escrita com atribuição correta: segundo um estudo de..., como afirma X..., de acordo com dados fornecidos por...",
             "Apresenta uma argumentação oral de cerca de três minutos sobre tema social, ético ou político complexo com estrutura coerente, recursos retóricos e hesitação mínima",
         ],

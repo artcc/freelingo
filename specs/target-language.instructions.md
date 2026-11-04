@@ -108,8 +108,8 @@ their prompt builders require them. There is no legacy `american`/`british` conv
 `pt-BR` resolves before the `pt` prefix in every static dispatcher and speech instruction lookup.
 The short `pt` alias continues to identify Portugal where regional guidance is needed. Both Portuguese
 variants map to ISO `pt` for recognition, but retain distinct BCP-47 learning, pool, and audio-cache keys.
-Brazilian guidance covers `estar + gerúndio`, `você`/`vocês`, `a gente`, regional variation, conversational
-proclisis versus formal writing, and optional articles before possessives and personal names.
+Regional overlay content lives in the prompt builders; curriculum and reference content live in the
+language packages. Their common authoring requirements belong to `learning-resources.instructions.md`.
 
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
 other current languages, including Polish.

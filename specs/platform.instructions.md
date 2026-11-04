@@ -10,9 +10,11 @@ applyTo: "backend/app/core/**, backend/app/routers/{auth,assessment,chat,config,
 FreeLingo coordinates account creation, onboarding, CEFR placement, study-plan entry, learning
 activity, progress, flashcards, and tutoring through one authenticated application.
 
-This specification defines the cross-domain user journey and platform invariants. Detailed model,
-endpoint, plan, speech, billing, resource, memory, and multi-language behavior belongs to the linked
-domain specifications rather than being repeated here.
+This specification owns the cross-domain user journey, authentication/session contract, application
+shell, placement interaction, text tutor, and flashcard behavior. Detailed persistence, HTTP payloads,
+plan scheduling, speech, billing, resource/progress rules, memory, and language-context recovery belong
+to their linked specifications. Frontend component structure and shared presentation belong to
+`architecture-frontend.instructions.md`.
 
 ## User journey
 
@@ -93,11 +95,8 @@ session identity before applying a pending renewal's success/failure, so an obso
 replace the profile, clear the newer session, or redirect it. Completing an old refresh does not clear
 the pending-request reference of a newer session.
 
-The freemium cache observes this session version synchronously: logout and `startSession` clear both
-the exposed quota snapshot and its cache validity. The next consumer requests the current session's
-balance; pending or failed reads cannot retain the previous account's balance or paywall. Ordinary
-token rotation and active-language changes preserve the user's global quota cache. Delayed quota
-responses and chat consumption cannot update a replacement session.
+Account-scoped consumers must not publish state from an earlier authentication session. The freemium
+cache and quota reconciliation contract is defined in `subscriptions-freemium.instructions.md`.
 
 Avatar recovery, landing subscription checks, onboarding checkout, pricing checkout, and billing-return
 restoration use the same refresh HTTP coordination. `restoreAccessToken` fills a missing access token
@@ -145,25 +144,12 @@ The authenticated shell redirects users with null learning goals back to onboard
 
 Assessment is language-specific and separate from account onboarding.
 
-Before checking the existing plan or loading the question bank, Assessment reconciles missing or
-invalidated language context. Failures show an error with GET-only retry rather than treating the
-context as a beginner without a plan. Checks are cancellable and bounded to 20 seconds. The flow keeps
-its resolved language for completion and voice-trial requests. A provisional switch suspends interaction
-and defers pending responses while retaining questions, answers, results, and plan choices. A definite
-rejection resumes that flow; a changed language or external invalidation cancels obsolete work. A confirmed
-completion refreshes the summary without restarting assessment or repeating its POST. Its flow identity
-survives its own summary invalidation, but not replacement or unmount: returning to the same language
-does not authorize a previous completion to navigate or publish a voice-trial offer.
-Language invalidations carry a monotonically increasing version, including when the summary is already
-invalid. A completed flow records only its own invalidation version; a later external invalidation
-suspends its offer/continuation and recovers context through GET even when the cached language is unchanged.
-Voice-trial navigation requires a reconciled context. If completion's own summary refresh fails, its
-voice offer is retained behind a recoverable error; retry refreshes the summary without repeating completion.
-The completion POST remains observed after unmount or flow replacement. HTTP success invalidates and
-refreshes the global language summary for the originating authentication session before decoding the
-response body; neither visual cancellation nor a delayed/unreadable body can skip that recovery.
-Only the surviving flow may publish the offer or navigate. An unreadable successful completion body
-recovers the existing plan through GET instead of enabling another completion POST.
+Assessment resolves the language context before loading a plan or question bank and retains that
+context for completion and voice-trial requests. `multi-language.instructions.md` owns the shared
+switching, invalidation, and recovery lifecycle. Completion recovery must not repeat plan creation.
+Voice-trial navigation requires reconciled context; a failed summary refresh retains the offer behind
+a recoverable error. An unreadable successful completion body recovers the existing plan through GET
+instead of enabling another completion POST.
 
 - A complete beginner can choose A1 without the adaptive quiz.
 - The current adaptive frontend uses at most 15 static-bank questions, begins at A2, and moves after
@@ -233,19 +219,9 @@ display priority through their dedicated behavior.
 
 ### Progress detail
 
-The Progress page expands the dashboard summary for the current language and study plan. It shares
-the XP/streak overview, shows daily XP and an activity calendar for the last 28 UTC days, and provides
-a collapsible reward guide linking to learning activities. Days with recorded practice count even
-when they earned no XP. History is filtered to the displayed calendar window; it is not a complete
-reward ledger. Language changes reset the page and obsolete asynchronous results are ignored.
-Local switches and invalidated context suspend progress content; missing or invalidated language
-context must be reconciled before loading resources. Failed reconciliation offers retry rather than
-mixing cached language labels/content with server-active progress. This does not provide an atomic
-snapshot across concurrent server-side language changes from other tabs.
-A null current plan shows the assessment entry point; request failures, including unsuccessful
-curriculum HTTP responses, offer retry. Lesson-exercise
-accuracy is unset until exercises exist. Competency, vocabulary and recent-performance sections
-use readable interface typography, target-language text rendering and accessible progress values.
+The Progress page expands the dashboard summary for the current language and study plan.
+`learning-resources.instructions.md` owns progress, activity, rewards, competencies, and vocabulary
+coverage. `architecture-frontend.instructions.md` owns the shared overview and history components.
 
 ### Dashboard tour
 
@@ -323,14 +299,8 @@ Progress, competencies, flashcards, lessons, and attempts belong to a study plan
 summary uses that language's active plan; resource-owned updates use the plan persisted on the
 resource rather than mutable client selection.
 
-Current XP sources include 20 for lesson completion, 5 for a correct lesson exercise, 1 for an
-incorrect lesson exercise, and 2 for a flashcard review. Comprehension XP is defined by its domain
-specs.
-
-Skill and competency updates use a 70/30 exponential moving average. Competency mastery begins at
-0.80. Streak derives from consecutive UTC-dated activity rows within the plan and expires when the
-latest entry predates yesterday. Rewards for conversations, spaced comprehension replays, units, and
-level completion follow `learning-resources.instructions.md`; all awards remain plan-owned.
+`learning-resources.instructions.md` owns XP amounts, reward eligibility, skill/competency updates,
+and UTC streak rules. All awards remain plan-owned.
 
 SM-2 accepts quality 0-5. Quality below 3 resets repetition and interval; successful repetitions use
 1 day, 6 days, then prior interval times ease factor, with minimum ease 1.3. The standard UI offers

@@ -79,7 +79,7 @@ def test_curriculum_resources_are_unique_and_cross_referenced():
     sets = get_vocabulary_sets("pt-BR")
     sets_by_id = {s.id: s for s in sets}
     assert len(unit_by_id) == len(units) == 48
-    assert len(grammar_by_slug) == len(grammar) == 134
+    assert len(grammar_by_slug) == len(grammar) == 140
     assert len(sets_by_id) == len(sets) == 100
     assert sum(len(s.words) for s in sets) == 1233
     for level, level_units in curriculum.items():
@@ -88,6 +88,10 @@ def test_curriculum_resources_are_unique_and_cross_referenced():
             assert unit.unit_number == index + 1
             assert unit.prerequisite_unit == (level_units[index - 1].id if index else None)
             assert set(unit.grammar_points) <= grammar_by_slug.keys()
+            assert all(
+                CEFR_LEVELS.index(grammar_by_slug[slug].level) <= CEFR_LEVELS.index(level)
+                for slug in unit.grammar_points
+            ), f"{unit.id} requires grammar introduced at a later level"
             assert set(unit.vocabulary_set_ids) <= sets_by_id.keys()
             assert "listening" in unit.lesson_types
             assert all(sets_by_id[key].level == level for key in unit.vocabulary_set_ids)
@@ -119,7 +123,7 @@ def test_phrasebook_and_assessment_are_valid_at_every_level():
             if phrase.unit_ref:
                 assert units[phrase.unit_ref].level == c.level
     bank = get_assessment_bank("pt-BR")
-    assert len({q.id for q in bank}) == len(bank) == 124
+    assert len({q.id for q in bank}) == len(bank) == 144
     grammar = {t.slug: t for t in get_grammar_topics("pt-BR")}
     for q in bank:
         assert len(q.options) == len(set(q.options)) == 4
@@ -162,6 +166,39 @@ def test_generated_plan_titles_and_objectives_use_brazilian_portuguese():
     assert slots[-1]["objectives"][0].startswith("Revisar")
 
 
+@pytest.mark.parametrize(
+    ("level", "unit_index", "slugs"),
+    [
+        ("A1", 0, {"perguntas-basicas", "pronuncia-ortografia-basica"}),
+        ("A1", 1, {"plural-substantivos"}),
+        ("A1", 3, {"verbos-frequentes-presente", "negacao-basica"}),
+        ("A2", 5, {"por-para"}),
+        ("B1", 2, {"participios"}),
+        ("B1", 5, {"infinitivo-pessoal", "futuro-do-conjuntivo"}),
+        ("B2", 0, {"futuro-composto", "condicional-composto"}),
+    ],
+)
+def test_guided_foundations_have_reference_assessment_and_consolidation(level, unit_index, slugs):
+    units = get_curriculum("pt-BR")[level]
+    grammar = {topic.slug: topic for topic in get_grammar_topics("pt-BR")}
+    assessed = {q.grammar_slug for q in get_assessment_bank("pt-BR") if q.difficulty == level}
+    assert slugs <= set(units[unit_index].grammar_points)
+    assert slugs <= set(units[-1].grammar_points)
+    assert slugs <= assessed
+    assert all(grammar[slug].level == level for slug in slugs)
+
+
+def test_brazilian_resequencing_preserves_portugal_reference_levels():
+    for slug, brazil_level, portugal_level in (
+        ("por-para", "A2", "B1"),
+        ("infinitivo-pessoal", "B1", "B2"),
+        ("futuro-composto", "B2", "A2"),
+        ("condicional-composto", "B2", "B1"),
+    ):
+        assert get_grammar_topic(slug, "pt-BR").level == brazil_level
+        assert get_grammar_topic(slug, "pt-PT").level == portugal_level
+
+
 def test_reference_does_not_penalize_reviewed_valid_brazilian_forms():
     valid_forms = {
         "Sou um professor.",
@@ -171,6 +208,10 @@ def test_reference_does_not_penalize_reviewed_valid_brazilian_forms():
         "Ontem chovia muito.",
         "Ultimamente estudei muito.",
         "Se tivesse dinheiro, viajava pelo mundo.",
+        "Vou no supermercado.",
+        "O livro que eu gosto.",
+        "Talvez ele vai.",
+        "Vende-se carros.",
     }
     marked_wrong = {
         mistake.wrong for topic in get_grammar_topics("pt-BR") for mistake in topic.common_mistakes

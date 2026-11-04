@@ -27,7 +27,7 @@ B1_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Forma o presente do subjuntivo a partir da primeira pessoa do singular do presente do indicativo, trocando a vogal temática: falar -> falo -> fale, beber -> bebo -> beba, partir -> parto -> parta; e usa formas irregulares como ser (seja), estar (esteja), ter (tenha), haver (haja), ir (vá), poder (possa), querer (queira), saber (saiba), vir (venha), fazer (faça)",
-            "Usa o subjuntivo depois de verbos de desejo com mudança de sujeito: quero que venhas, espero que chegues a tempo, prefiro que fiques; e usa infinitivo quando o sujeito é o mesmo (quero vir)",
+            "Usa o subjuntivo em desejos dirigidos a outra pessoa: Quero que você venha, Espero que você chegue a tempo, Prefiro que você fique; usa infinitivo para um desejo próprio: Quero ir",
             "Usa o subjuntivo em avaliações como É uma pena que você não possa vir e É bom que você tenha conseguido, distinguindo o indicativo factual comum em Que bom que você veio! e Que pena que você não pode ficar!",
             "Usa talvez + subjuntivo para possibilidades incertas no presente ou no futuro: Talvez venha amanhã, Talvez seja verdade",
             "Distingue quando + indicativo (fato habitual no presente: Quando estou em Recife, vou sempre à praia) de quando + futuro do subjuntivo (eventos futuros)",
@@ -57,7 +57,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Usa o subjuntivo depois de verbos de recomendação: recomendo que, aconselho que, sugiro que, proponho que + subjuntivo: Recomendo que reserves com antecedência",
+            "Usa o subjuntivo depois de verbos de recomendação: recomendo que, aconselho que, sugiro que, proponho que + subjuntivo: Recomendo que você reserve com antecedência",
             "Usa o subjuntivo em construções de dúvida como Não acredito que isso seja verdade, Duvido que venha e É improvável que aceite; reconhece que a negação não determina o modo sozinha: Não sabia que você estava aqui",
             "Usa o subjuntivo depois de juízos de valor impessoais: é importante que, é necessário que, é preciso que, é melhor que, é fundamental que, convém que + subjuntivo",
             "Contrasta acredito que tem razão (certeza, indicativo) com não acredito que tenha razão (dúvida, subjuntivo)",
@@ -74,6 +74,7 @@ B1_UNITS: list[CurriculumUnit] = [
         grammar_points=[
             "preterito-perfeito-composto",
             "mais-que-perfeito",
+            "participios",
             "marcadores-composto",
         ],
         vocabulary_set_ids=[
@@ -89,7 +90,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Forma o pretérito perfeito composto (ter + particípio passado: tenho falado, tens comido, tem partido) e compreende o seu valor típico em português: ação repetida ou habitual iniciada no passado e com continuidade no presente",
+            "Forma particípios regulares (falado, comido, partido) e frequentes irregulares (feito, dito, visto, escrito, aberto); usa ter + particípio invariável para repetição ou continuidade até o presente: Tenho estudado; Você tem lido bastante",
             "Distingue pretérito perfeito composto de pretérito perfeito simples: fui vs tenho ido",
             "Usa o pretérito perfeito composto com marcadores como nos últimos dias/meses, ultimamente e recentemente",
             "Forma o mais-que-perfeito composto (tinha + particípio passado): tinha falado, tinha chegado, para uma ação anterior a outro momento passado: Quando ela chegou, eu já tinha saído",
@@ -121,7 +122,7 @@ B1_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Forma a voz passiva com ser + particípio passado em todos os tempos, fazendo concordar o particípio com o sujeito: O livro foi escrito por Saramago, As cartas foram enviadas ontem",
+            "Forma a voz passiva com ser + particípio nos tempos estudados, fazendo concordar o particípio com o sujeito: O livro foi escrito por Machado de Assis; As cartas foram enviadas ontem",
             "Usa se passivo em processos e regras sem agente expresso: Alugam-se apartamentos, Fala-se português aqui, Vende-se casa",
             "Usa se impessoal para ações com agente geral não especificado: Come-se bem neste restaurante, Trabalha-se muito no Brasil",
             "Distingue se passivo (verbo concorda com o nome: Vendem-se carros) de se impessoal (verbo no singular: Come-se bem)",
@@ -154,7 +155,7 @@ B1_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Forma orações relativas restritivas com que tanto para sujeito como para objeto direto: o livro que comprei, a pessoa que veio ontem",
-            "Usa onde para lugares e quando para tempos em orações relativas: o café onde nos conhecemos, o dia quando chegaste",
+            "Usa onde para lugares e em que para referências temporais: o café onde nos conhecemos, o dia em que você chegou; reconhece quando em construções como Foi em maio, quando nos conhecemos",
             "Usa cujo/cuja/cujos/cujas para posse em relativas, com concordância com o nome possuído: o autor cujo livro li, a empresa cujas regras são claras",
             "Distingue a posse com cujo (o autor cujo livro li) de relativas com preposição exigida pelo verbo (o autor de quem falei, a cidade na qual vivi); reformula a posse na conversa sem mudar o sentido: Li o livro desse autor",
         ],
@@ -165,11 +166,11 @@ B1_UNITS: list[CurriculumUnit] = [
         id="b1-unit-6",
         level="B1",
         unit_number=6,
-        title="Condicionais, futuro do subjuntivo e suposições",
+        title="Condições futuras, hipóteses e infinitivo pessoal",
         grammar_points=[
-            "condicional-composto",
             "se-imperfeito-subjuntivo",
             "futuro-do-conjuntivo",
+            "infinitivo-pessoal",
         ],
         vocabulary_set_ids=[
             "viagens_b1",
@@ -185,9 +186,10 @@ B1_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Forma e usa o condicional de tipo 2: se + imperfeito do subjuntivo + condicional para condições irreais no presente/futuro: Se tivesse dinheiro, viajaria pelo mundo",
-            "Forma e usa o futuro do subjuntivo em orações temporais/condicionais: Quando chegares, liga-me; Se puderes, vem jantar; Logo que terminares, avisa-me",
+            "Forma e usa o futuro do subjuntivo em orações temporais/condicionais: Quando você chegar, me ligue; Se puder, venha jantar; Assim que terminar, me avise; distingue Se eu vir de Quando eu vier",
             "Escolhe o subjuntivo conforme o conector e o sentido: Quando você chegar e Se você puder usam futuro; Talvez você venha amanhã e Caso você possa vir usam presente, mesmo com referência futura",
             "Usa o futuro do presente para probabilidade no presente: Onde estará o João? Estará em casa",
+            "Usa infinitivo pessoal em finalidades com sujeito explícito (para eu fazer, para nós fazermos, para eles fazerem) e distingue para eu fazer de para mim; contrasta Quando eu fizer com Para eu fazer",
         ],
         default_weeks=2,
         prerequisite_unit="b1-unit-5",
@@ -231,10 +233,13 @@ B1_UNITS: list[CurriculumUnit] = [
         grammar_points=[
             "presente-conjuntivo",
             "preterito-perfeito-composto",
+            "participios",
             "mais-que-perfeito",
             "voz-passiva",
             "futuro-do-conjuntivo",
             "se-imperfeito-subjuntivo",
+            "infinitivo-pessoal",
+            "por-para",
             "discurso-indireto-passado",
         ],
         vocabulary_set_ids=[

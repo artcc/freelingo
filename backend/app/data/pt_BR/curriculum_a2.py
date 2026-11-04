@@ -26,7 +26,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Conjuga verbos regulares em -ar (falei, falaste, falou, falamos, falaram), -er (comi, comeste, comeu, comemos, comeram) e -ir (parti, partiste, partiu, partimos, partiram) no pretérito perfeito simples",
+            "Conjuga verbos regulares no pretérito perfeito com eu, você, nós e vocês: falei/falou/falamos/falaram, comi/comeu/comemos/comeram, parti/partiu/partimos/partiram; reconhece as formas de tu nos usos regionais",
             "Usa as formas irregulares mais frequentes: ser e ir partilham as mesmas formas (fui, foste, foi, fomos, foram); ter (tive), estar (estive), fazer (fiz), poder (pude), vir (vim), ver (vi), dar (dei), saber (soube), trazer (trouxe)",
             "Situa ações passadas concluídas no tempo com: ontem, na semana passada, há três dias, em 2020, no ano passado, há pouco",
             "Narra uma sequência curta de acontecimentos passados concluídos, em ordem lógica, num parágrafo de 60-80 palavras",
@@ -91,8 +91,8 @@ A2_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Usa me, te e nos para retomar pessoas e reconhece o/a/os/as e lhe/lhes na escrita; distingue formas conversacionais como Entreguei para ela e usos formais como Entreguei-lhe o documento",
             "Usa próclise natural na conversa brasileira (Eu me lembro, Ela me deu o livro), próclise após negação (Não o vi) e reconhece a ênclise em escrita formal, sem tratar usos orais legítimos como erros universais",
-            "Forma comprar -> comprá-lo e fazer -> fazê-lo na escrita e reconhece alterações após -s ou nasal: compramos -> compramo-lo, compram -> compram-no, sem exigir essas construções na conversa",
-            "Reconhece combinações raras como mo (me + o) e lho (lhe + o) em leitura literária e usa construções transparentes na conversa: Ela me deu o livro; Entreguei o documento para ele",
+            "Retoma objetos sem ambiguidade na conversa e reconhece comprar -> comprá-lo e fazer -> fazê-lo na escrita, sem exigir ênclise na produção oral",
+            "Preserva objeto e destinatário em pedidos e relatos: Ela me deu o livro; Entreguei o documento para ele; Você pode me mostrar o preço?",
         ],
         default_weeks=2,
         prerequisite_unit="a2-unit-2",
@@ -122,7 +122,7 @@ A2_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Compara com mais/menos + adjetivo/advérbio + que ou do que, reconhecendo ambas as formas: Esta passagem é mais cara que a outra / do que a outra",
-            "Exprime igualdade com tão + adjetivo/advérbio + como e tanto/a/os/as + nome + como: É tão bom como eu, Come tanto como eu",
+            "Exprime igualdade com tão + adjetivo/advérbio + quanto/como e tanto/a/os/as + nome + quanto/como: É tão bom quanto o outro; Tenho tantas aulas quanto você",
             "Forma o superlativo relativo: o/a/os/as + mais/menos + adjetivo + de: É o restaurante mais caro da cidade",
             "Usa comparativos irregulares: bom -> melhor/o melhor, mau -> pior/o pior, grande -> maior/o maior, pequeno -> menor/o menor, sem acrescentar mais/menos",
         ],
@@ -152,8 +152,8 @@ A2_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Forma o imperativo afirmativo de tu a partir da terceira pessoa do singular do presente do indicativo (fala!, come!, parte!) e o imperativo afirmativo de você/o senhor a partir da terceira pessoa do presente do subjuntivo (fale!, coma!, parta!)",
-            "Forma o imperativo negativo de tu com não + presente do subjuntivo na segunda pessoa: não fales!, não comas!, não partas!; e de você com não + presente do subjuntivo na terceira pessoa: não fale!, não coma!",
+            "Usa pedidos e instruções com você/vocês: fale/falem, coma/comam, abra/abram; reconhece fala, come e abre como formas de tu na norma-padrão e frequentes também com você na fala de várias regiões",
+            "Usa não fale, não coma, não abra para instruções com você e reconhece não fales, não comas, não abras com tu na norma-padrão, distinguindo variação oral e convenções escritas",
             "Reconhece os pares de imperativos da norma-padrão para tu e você: vai/vá, sê/seja, tem/tenha, faz/faça, põe/ponha, diz/diga, traz/traga; distingue o uso corrente de você do tratamento respeitoso o senhor/a senhora e reconhece a variação oral brasileira",
             "Usa pedidos naturais na conversa brasileira (Me diga, Me dá isso), reconhece Diga-me na escrita formal e usa próclise após negação: Não me diga, Não faça isso",
         ],
@@ -164,11 +164,11 @@ A2_UNITS: list[CurriculumUnit] = [
         id="a2-unit-6",
         level="A2",
         unit_number=6,
-        title="Futuro do presente e condicional",
+        title="Planos, finalidade e pedidos de cortesia",
         grammar_points=[
             "futuro-do-presente",
             "condicional",
-            "futuro-composto",
+            "por-para",
         ],
         vocabulary_set_ids=[
             "trabalho_a2",
@@ -185,8 +185,8 @@ A2_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Conjuga o futuro com infinitivo + terminações (eu falarei, você poderá, nós saberemos, vocês virão) e reconhece os radicais irregulares de dizer, fazer e trazer: dir-, far-, trar-",
             "Usa o futuro do presente para previsões e para probabilidade no presente: Que horas serão? Serão três horas",
-            "Conjuga o condicional (falaria, falarias) e usa-o para pedidos de cortesia, situações hipotéticas e discurso reportado: Gostaria de reservar uma mesa, Poderia ajudar-me?",
-            "Forma o futuro composto com ter no futuro + particípio (terei terminado) e reconhece a alternativa perifrástica vou ter terminado para uma ação concluída antes de um momento futuro",
+            "Usa o futuro do pretérito (também chamado condicional) em pedidos de cortesia e desejos: Gostaria de reservar uma mesa; Você poderia me ajudar?",
+            "Distingue por para motivo, percurso e meio (viajo por trabalho, passo pelo centro, falo por telefone) de para para finalidade, destinatário e prazo (estudo para aprender, é para você, preciso disso para sexta-feira)",
         ],
         default_weeks=2,
         prerequisite_unit="a2-unit-5",
@@ -214,9 +214,9 @@ A2_UNITS: list[CurriculumUnit] = [
             "review",
         ],
         competency_checklist=[
-            "Liga acontecimentos em sequência com: primeiro, depois, a seguir, mais tarde, entretanto, por fim, finalmente, de repente, nesse momento",
+            "Liga acontecimentos em sequência com primeiro, depois, em seguida, mais tarde, por fim, finalmente, de repente e nesse momento; usa enquanto e nesse meio-tempo para simultaneidade",
             "Combina pretérito perfeito (ações concluídas em primeiro plano) e imperfeito (descrições de fundo) num parágrafo narrativo sustentado de 80-100 palavras",
-            "Relata palavras alheias ajustando tempos e referências ao contexto: Disse que estava cansado numa perspectiva passada; Disse que está cansado se a situação se mantém; reconhece tinha saído para anterioridade passada",
+            "Relata palavras alheias ajustando pessoa e referências ao contexto: Disse que estava cansado numa perspectiva passada; Disse que está cansado se a situação continua válida, sem exigir tempos compostos ainda não estudados",
             "Escreve uma anedota pessoal de 80-100 palavras usando conectores narrativos e ambos os tempos do passado corretamente",
         ],
         default_weeks=2,
@@ -236,6 +236,8 @@ A2_UNITS: list[CurriculumUnit] = [
             "comparativos",
             "futuro-do-presente",
             "condicional",
+            "por-para",
+            "imperativo-afirmativo",
         ],
         vocabulary_set_ids=[
             "revisão_a2",
@@ -251,7 +253,7 @@ A2_UNITS: list[CurriculumUnit] = [
         competency_checklist=[
             "Lida com situações sociais de rotina (compras, reservas, pedido de informações) usando corretamente tempos passados, futuro e formas de cortesia no condicional",
             "Usa próclise natural na conversa brasileira (Eu me lembro, Ela me deu o livro), próclise após negação (Não o vi) e reconhece a ênclise em escrita formal, sem tratar usos orais legítimos como erros universais",
-            "Produz um texto coeso de 80-100 palavras usando pretérito perfeito, imperfeito e futuro do presente",
+            "Produz um texto coeso de 80-100 palavras usando pretérito perfeito, imperfeito, planos com ir + infinitivo e usos básicos de por/para",
             "Lê e compreende um texto factual de 150-200 palavras sobre tema familiar e responde a perguntas de compreensão",
         ],
         default_weeks=1,

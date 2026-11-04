@@ -18,23 +18,23 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Espero que fales com ela.",
+                text="Espero que você fale com ela.",
             ),
             GrammarExample(
                 text="Duvido que ele venha.",
                 note="vir, irregular",
             ),
             GrammarExample(
-                text="É importante que tu estudes.",
+                text="É importante que você estude.",
             ),
             GrammarExample(
-                text="Queres que eu vá contigo?",
+                text="Você quer que eu vá com você?",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Espero que tu falas com ela.",
-                correct="Espero que tu fales com ela.",
+                wrong="Espero que você falam com ela.",
+                correct="Espero que você fale com ela.",
                 note="Espero que seleciona subjuntivo neste desejo; que sozinho não determina o modo: Sei que você fala é indicativo.",
             ),
             GrammarMistake(
@@ -55,22 +55,23 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Subjuntivo",
         summary="Usar o subjuntivo após expressões de desejo como espero que, quero que, oxalá.",
-        explanation="O subjuntivo é obrigatório após desejo:\n- *Espero que venhas. / Quero que sejas feliz. / Oxalá chova.*\n- *Tomara que ela passe.* / *Deus queira que não chova.*",
+        explanation="Para desejar uma ação de outra pessoa, use querer/esperar/desejar que + subjuntivo: Quero que você venha; Espero que ela consiga. Para um desejo do próprio sujeito, o infinitivo é usual: Quero viajar; Espero chegar cedo. Não é o sentido de desejo sozinho que obriga o subjuntivo, mas a construção escolhida.\n\nTomara que é frequente no Brasil: Tomara que dê certo! Oxalá também expressa desejo, mas costuma ter tom literário ou solene. O tempo verbal depende da situação e da perspectiva.",
         rules=[
-            "Subjuntivo obrigatório após expressões de desejo.",
+            "Nas construções de desejo com que, pratique o subjuntivo; com infinitivo, não há flexão de modo.",
             "Querer que, esperar que, desejar que + subjuntivo.",
             "Oxalá e tomara que + subjuntivo.",
-            "Mudança de sujeito ativa o subjuntivo.",
+            "Diferencie Quero viajar de Quero que você viaje; não transforme essa preferência em regra automática para toda oração.",
         ],
         examples=[
             GrammarExample(
-                text="Espero que tenhas uma boa viagem.",
+                text="Espero que você tenha uma boa viagem.",
             ),
             GrammarExample(
                 text="Quero que vocês sejam felizes.",
             ),
             GrammarExample(
                 text="Oxalá não chova amanhã.",
+                note="tom mais literário; na conversa, Tomara que não chova amanhã",
             ),
             GrammarExample(
                 text="Tomara que ela consiga o emprego.",
@@ -78,8 +79,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Espero que tens sucesso.",
-                correct="Espero que tenhas sucesso.",
+                wrong="Espero que você tem sucesso.",
+                correct="Espero que você tenha sucesso.",
                 note="Subjuntivo após espero que.",
             ),
             GrammarMistake(
@@ -100,7 +101,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Subjuntivo",
         summary="Usar talvez com subjuntivo para expressar possibilidade.",
-        explanation="**Talvez** + subjuntivo (padrão): *Talvez ele venha amanhã.*\nTalvez + indicativo (coloquial, mais certeza): *Talvez ele vem amanhã.*",
+        explanation="Talvez apresenta uma possibilidade, sem afirmar sua realização. Antes do verbo, a norma-padrão usa geralmente subjuntivo: Talvez ela venha amanhã. Depois de uma oração, pode ocorrer com indicativo: Ela vem amanhã, talvez.\n\nNa conversa brasileira, também se encontra Talvez ela vem amanhã. A distribuição depende de uso, posição e registro; não se pode deduzir automaticamente um grau maior de certeza apenas pelo indicativo. Para uma produção escrita formal com talvez antes do verbo, pratique o subjuntivo.",
         rules=[
             "Talvez + subjuntivo é a forma padrão.",
             "Talvez + indicativo é coloquial.",
@@ -122,9 +123,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Talvez ele vai.",
-                correct="Talvez ele vá.",
-                note="O padrão com talvez é o subjuntivo.",
+                wrong="Talvez eles venha amanhã.",
+                correct="Talvez eles venham amanhã.",
+                note="Com eles, a forma do subjuntivo é venham. A escolha entre modos também depende do registro e da posição de talvez.",
             ),
         ],
         related=[
@@ -147,22 +148,22 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="É preciso que acabes o trabalho.",
+                text="É preciso que você termine o trabalho.",
             ),
             GrammarExample(
                 text="É importante que todos participem.",
             ),
             GrammarExample(
-                text="Convém que tragas o passaporte.",
+                text="Convém que você traga o passaporte.",
             ),
             GrammarExample(
-                text="É melhor que vás ao médico.",
+                text="É melhor que você vá ao médico.",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="É preciso que tu acabas.",
-                correct="É preciso que tu acabes.",
+                wrong="É preciso que você termina.",
+                correct="É preciso que você termine.",
                 note="É preciso que exige subjuntivo.",
             ),
             GrammarMistake(
@@ -233,10 +234,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="É bom que estejas aqui.",
+                text="É bom que você esteja aqui.",
             ),
             GrammarExample(
-                text="É uma pena que não possas vir.",
+                text="É uma pena que você não possa vir.",
             ),
             GrammarExample(
                 text="Que bom que você gostou!",
@@ -277,7 +278,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Ela tem andado muito cansada.",
             ),
             GrammarExample(
-                text="Ultimamente tenho pensado em ti.",
+                text="Ultimamente tenho pensado em você.",
             ),
         ],
         common_mistakes=[
@@ -295,11 +296,11 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="mais-que-perfeito",
-        title="Pretérito mais-que-perfeito simples",
+        title="Mais-que-perfeito: anterioridade no passado",
         level="B1",
         category="Tempos verbais",
         summary="Expressar uma ação passada anterior a outra ação passada.",
-        explanation="Forma-se da 3.ª pl. do pretérito perfeito (-ram):\n\n*Falaram → falara, falaras, falara, faláramos, falaram.*\n\nUso literário/formal. Na fala, prefere-se o composto: *tinha falado*.",
+        explanation="Para uma ação anterior a outra referência passada, use tinha + particípio: Quando ela chegou, eu já tinha saído. O auxiliar concorda com o sujeito; o particípio permanece invariável: nós tínhamos saído, elas tinham escrito.\n\nA forma simples aparece sobretudo em literatura e registros formais: Quando ela chegou, eu já saíra. Para formar o paradigma, retire -ram da terceira pessoa do plural do perfeito e acrescente -ra, -ras, -ra, -ramos, -reis, -ram, ajustando a acentuação: falaram → falara, falaras, falara, faláramos, faláreis, falaram. Compare fizeram → fizera.\n\nO contexto distingue falaram no perfeito e no mais-que-perfeito simples; a forma composta costuma ser mais transparente na conversa brasileira. Pratique tinha falado e reconheça falara na leitura, sem tomar uma forma como mais correta que a outra.",
         rules=[
             "Forma-se a partir da 3.ª pl. do pretérito perfeito.",
             "Uso literário/formal.",
@@ -334,11 +335,11 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Adjetivos e advérbios",
         summary="Expressões que indicam ação contínua/repetida até ao presente.",
-        explanation="Marcadores típicos:\n\n- Ultimamente: *Ultimamente tenho dormido mal.*\n- Nos últimos tempos/meses/anos: *Tenho andado ocupado.*\n- Até agora: *Até agora tenho conseguido.*\n- Desde + data: *Desde janeiro que tenho ido.*",
+        explanation="Ultimamente, nos últimos meses e até agora podem acompanhar uma atividade repetida ou contínua: Ultimamente tenho dormido mal; Nos últimos meses tenho trabalhado bastante. Desde + data pode marcar o início: Desde janeiro, tenho ido à academia.\n\nEssas expressões não impõem o composto: Até agora terminei três relatórios apresenta resultados delimitados. O aspecto depende do verbo, do contexto e da perspectiva, não de uma palavra isolada.",
         rules=[
             "Ultimamente e nos últimos tempos combinam com o composto quando se destaca repetição ou continuidade.",
-            "Até agora + composto = ação contínua.",
-            "Desde + data + que + composto.",
+            "Até agora pode combinar com tempos diferentes conforme a perspectiva.",
+            "Desde + data pode localizar o início: Desde janeiro, tenho estudado português.",
         ],
         examples=[
             GrammarExample(
@@ -406,7 +407,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Voz passiva",
         summary="Usar a partícula se para expressar sujeito indeterminado.",
-        explanation="**Se** como índice de indeterminação do sujeito:\n- Verbo sempre na 3.ª singular: *Vive-se bem em Portugal.*\n- *Precisa-se de empregados.* (singular, mesmo com objeto plural)\n\nNÃO confundir com se passivo (verbo concorda com sujeito).",
+        explanation="Na norma-padrão, se pode indeterminar quem realiza a ação com verbo na terceira pessoa do singular: Vive-se bem nesta cidade; Precisa-se de funcionários. Em precisar de, funcionários não é sujeito do verbo.\n\nCompare com a passiva sintética: Publicam-se os resultados, em que os resultados é sujeito e exige plural. Na conversa brasileira, Aqui se vive bem é natural; a próclise não é um erro. Analise a função do se separadamente de sua posição antes ou depois do verbo.",
         rules=[
             "Se impessoal: verbo sempre na 3.ª singular.",
             "Usa-se com verbos intransitivos ou transitivos indiretos.",
@@ -420,7 +421,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="singular",
             ),
             GrammarExample(
-                text="Aqui come-se bem.",
+                text="Aqui se come bem.",
             ),
         ],
         common_mistakes=[
@@ -441,7 +442,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Voz passiva",
         summary="Usar a partícula se para formar a voz passiva sintética.",
-        explanation="**Se passivo**: verbo concorda com o sujeito paciente.\n- *Vende-se uma casa. / Vendem-se casas.*\n\nEquivale a: *Uma casa é vendida. / Casas são vendidas.*\n\nMuito comum em anúncios.",
+        explanation="Na norma-padrão, se passivo acompanha verbo transitivo e há concordância com o sujeito paciente: Vende-se uma casa; Vendem-se casas. A segunda frase equivale a Casas são vendidas.\n\nNo uso brasileiro, também se encontram construções invariáveis como Vende-se casas, frequentemente analisadas como impessoais. Ao revisar um anúncio segundo a norma-padrão escrita, pratique a concordância Vendem-se casas; não generalize esse critério como condenação de toda fala regional.",
         rules=[
             "Se passivo: verbo concorda com sujeito.",
             "Equivale à passiva com ser.",
@@ -460,9 +461,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Vende-se carros.",
+                wrong="Vende-se carros. (em anúncio que deve seguir a norma-padrão escrita)",
                 correct="Vendem-se carros.",
-                note="Se passivo: verbo concorda com carros (plural).",
+                note="Na norma-padrão escrita, se passivo exige concordância com carros. O singular também ocorre em usos brasileiros impessoais.",
             ),
         ],
         related=[
@@ -477,7 +478,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Orações",
         summary="Usar que como pronome relativo para orações subordinadas.",
-        explanation="**Que** refere-se a pessoas e coisas, pode ser sujeito ou objeto:\n\n- *O livro que li é interessante.*\n- *A pessoa que chegou é o diretor.*\n\nCom preposição: *de que, a que, em que, por que* (formal).",
+        explanation="Que pode retomar pessoas ou coisas: O livro que li; A pessoa que chegou. Na norma-padrão escrita, conserve a preposição exigida pelo verbo: gostar de → O livro de que gosto; falar de alguém → A pessoa de quem falei.\n\nA conversa brasileira também usa relativas sem essa preposição: O livro que eu gosto. Essa construção, chamada relativa cortadora, é frequente na oralidade. Ao adaptar um texto à norma-padrão escrita, use de que ou de quem; a revisão ajusta registro, não prova que a construção oral seja ilegítima.",
         rules=[
             "Que refere-se a pessoas e coisas.",
             "Pode ser sujeito ou objeto.",
@@ -497,9 +498,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="O livro que eu gosto.",
-                correct="O livro de que eu gosto.",
-                note="Gostar exige de: de que.",
+                wrong="A pessoa que chegou estão aqui.",
+                correct="A pessoa que chegou está aqui.",
+                note="O verbo principal concorda com a pessoa. A omissão de preposição em relativas orais deve ser discutida como diferença de registro, não como erro universal.",
             ),
         ],
         related=[
@@ -513,9 +514,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Orações",
         summary="Usar onde (lugar) e quando (tempo) como pronomes relativos.",
-        explanation="**Onde**: lugar físico. **Na escrita formal:** NÃO usar onde para situações abstratas; usar *em que* ou *no qual*.\n**Quando**: tempo.",
+        explanation="Onde retoma um lugar: A casa onde cresci; O bairro onde moro. Na escrita formal, prefira em que ou no qual para uma situação abstrata: Uma situação em que todos ganham. A extensão de onde a referentes abstratos ocorre no uso; a adequação depende do registro.\n\nPara um nome temporal, em que é uma opção natural: Lembro do dia em que nos conhecemos. Quando também pode retomar uma referência temporal: Foi em maio, quando nos conhecemos. Não traduza mecanicamente o inglês the day when como o dia quando em todo contexto.",
         rules=[
-            "Onde = lugar físico. Não usar para situações abstratas.",
+            "Na escrita formal, reserve onde para lugares e prefira em que para situações abstratas.",
             "Quando = tempo.",
             "Para situações abstratas: em que / no qual.",
         ],
@@ -527,7 +528,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="O país de onde venho é frio.",
             ),
             GrammarExample(
-                text="Lembro-me do dia quando nos conhecemos.",
+                text="Eu me lembro do dia em que nos conhecemos.",
             ),
             GrammarExample(
                 text="Esta é a razão pela qual não fui.",
@@ -536,9 +537,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Uma situação onde todos ganham.",
+                wrong="Uma situação onde todos ganham. (revisão para escrita formal)",
                 correct="Uma situação em que todos ganham.",
-                note="Onde é só para lugar físico.",
+                note="A revisão formal prefere em que para um referente abstrato; o uso ampliado de onde existe na língua.",
             ),
         ],
         related=[
@@ -581,41 +582,6 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
     ),
     GrammarTopic(
-        slug="condicional-composto",
-        title="Condicional composto",
-        level="B1",
-        category="Condicionais",
-        summary="Expressar condições não realizadas no passado.",
-        explanation="Ter (condicional) + particípio passado.\n\n- *Se tivesse estudado, teria passado.*\n- *Ela teria vindo se soubesse.*",
-        rules=[
-            "Ter (condicional) + particípio.",
-            "Condição não realizada no passado.",
-            "Usa-se com se + MQP subjuntivo.",
-        ],
-        examples=[
-            GrammarExample(
-                text="Se tivesse estudado, teria passado no exame.",
-            ),
-            GrammarExample(
-                text="Ela teria vindo se soubesse.",
-            ),
-            GrammarExample(
-                text="Sem a tua ajuda, não teríamos conseguido.",
-            ),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="Se tinha estudado, teria passado.",
-                correct="Se tivesse estudado, teria passado.",
-                note="Se + condição passada: MQP subjuntivo.",
-            ),
-        ],
-        related=[
-            "condicional",
-            "se-imperfeito-subjuntivo",
-        ],
-    ),
-    GrammarTopic(
         slug="se-imperfeito-subjuntivo",
         title="Se + imperfeito do subjuntivo",
         level="B1",
@@ -629,7 +595,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Se eu tivesse tempo, ia contigo.",
+                text="Se eu tivesse tempo, ia com você.",
                 note="coloquial",
             ),
             GrammarExample(
@@ -655,7 +621,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="B1",
         category="Subjuntivo",
         summary="Usar o futuro do subjuntivo em condições e referências futuras.",
-        explanation="Forma-se a partir da 3.ª pl. do pretérito perfeito (sem -am):\n*falaram → falar, falares, falar, falarmos, falarem*\n\nUsa-se com **quando, se, assim que, logo que, enquanto** para ações futuras hipotéticas.\n\nTempo quase exclusivo do português!",
+        explanation="Retire -am da terceira pessoa do plural do pretérito perfeito para obter a forma de eu/você: falaram → falar; fizeram → fizer; tiveram → tiver; puderam → puder; foram → for; viram (ver) → vir; vieram (vir) → vier. Com nós, acrescente -mos; com vocês, -em: fizermos, fizerem. Com tu, a norma-padrão usa -es: fizeres.\n\nUse em condições ou referências futuras introduzidas por se, quando, assim que, logo que e enquanto: Se você puder, venha; Quando você chegar, me avise. Compare Quando chego cedo, faço café (hábito) e Quando chegar amanhã, vou fazer café (evento futuro).\n\nNão use esse tempo com todo conector de sentido futuro: Caso você possa vir e Talvez você venha amanhã usam presente do subjuntivo. Distingua também Quando eu vir Ana (ver) de Quando eu vier aqui (vir).",
         rules=[
             "Da 3.ª pl. do pretérito perfeito sem -am.",
             "Com quando, se, assim que, logo que, enquanto.",
@@ -664,13 +630,13 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Quando chegares, avisa-me.",
+                text="Quando você chegar, me avise.",
             ),
             GrammarExample(
                 text="Se puderem, venham cedo.",
             ),
             GrammarExample(
-                text="Assim que souber, digo-te.",
+                text="Assim que souber, aviso você.",
             ),
             GrammarExample(
                 text="Enquanto houver esperança, continuaremos.",
@@ -678,9 +644,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Quando chegas, avisa-me.",
-                correct="Quando chegares, avisa-me.",
-                note="Ação futura: quando + futuro subjuntivo.",
+                wrong="Quando eu ver Ana amanhã, vou avisar.",
+                correct="Quando eu vir Ana amanhã, vou avisar.",
+                note="O futuro do subjuntivo de ver é vir; o de vir é vier. O infinitivo ver aparece em para eu ver.",
             ),
         ],
         related=[
@@ -706,7 +672,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Ela disse: Estou cansada. → Ela disse que estava cansada.",
             ),
             GrammarExample(
-                text="Ele perguntou: Já comeste? → Ele perguntou se eu já tinha comido.",
+                text="Ele perguntou: Você já comeu? → Ele perguntou se eu já tinha comido.",
             ),
         ],
         common_mistakes=[
@@ -762,59 +728,70 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
     ),
     GrammarTopic(
-        slug="por-para",
-        title="Por e para: usos e diferenças",
+        slug="infinitivo-pessoal",
+        title="Infinitivo pessoal: sujeito e finalidade",
         level="B1",
-        category="Preposicoes",
-        summary="Distinção entre as preposições por e para conforme expressem causa, finalidade, destinatário, meio, direção e outros contextos.",
-        explanation="Por pode indicar causa (por causa do trânsito), meio (por telefone), duração (por três horas), preço (por dez reais), agente da passiva (escrito por Machado de Assis) e frequência (duas vezes por semana).\n\nPara pode indicar finalidade (Estudo para aprender), destinatário (O presente é para você), direção (Vou para Recife), prazo (Preciso disso para segunda-feira), opinião (Para mim, é a melhor opção) e comparação (Para iniciante, fala muito bem).\n\nCompare Fiz isso por você, que pode indicar motivo ou substituição, com Fiz isso para você, que destaca o destinatário. Expressões usuais incluem por isso, por favor, por acaso, por enquanto, por exemplo e para sempre.",
-        structure="POR: causa/motivo · meio · duração · troca · agente da passiva · opinião\nPARA: finalidade · destinatário · direção · prazo · opinião · comparação",
+        category="Verbos",
+        summary="Explicitar quem realiza uma ação depois de preposições e expressões impessoais.",
+        explanation="O infinitivo pessoal pode ter um sujeito próprio. Com eu e você/ele/ela, mantém a forma do infinitivo; com nós, recebe -mos; com vocês/eles/elas, -em: para eu falar, para você falar, para nós falarmos, para eles falarem. Com tu, a norma-padrão usa falares.\n\nUse-o quando ajuda a identificar quem realiza a ação: Preparei a sala para eles estudarem. Também pode ocorrer com o mesmo sujeito da principal: Para chegarmos a tempo, precisamos sair agora. Não se flexiona automaticamente qualquer infinitivo: Devemos estudar, não Devemos estudarmos.\n\nEm para eu fazer, eu é sujeito de fazer. Em Este presente é para mim, mim é complemento da preposição, sem infinitivo do qual seja sujeito. Não conclua que qualquer mim perto de infinitivo esteja errado: Para mim, estudar é importante apresenta um ponto de vista.\n\nDistinga infinitivo pessoal de futuro do subjuntivo: para eu fazer / quando eu fizer; para eu ver / quando eu vir; para eu vir / quando eu vier. Nos verbos regulares, as formas podem coincidir, mas a construção e o sentido são diferentes.",
         rules=[
-            '"Por" exprime a causa ou motivo de uma ação.',
-            '"Para" exprime a finalidade ou o propósito.',
-            '"Por" indica o meio ou canal: por correio, por telefone.',
-            '"Para" indica o destinatário: para ti, para o João.',
-            'Na voz passiva, o agente é introduzido por "por".',
+            "Identifique o sujeito do infinitivo antes de escolher a forma.",
+            "Use para eu fazer quando eu realiza a ação; para mim indica destinatário ou ponto de vista.",
+            "Não flexione o infinitivo automaticamente depois de verbos modais: Podemos sair.",
         ],
         examples=[
+            GrammarExample(text="Ela trouxe o texto para nós lermos."),
+            GrammarExample(text="É importante vocês chegarem cedo."),
+            GrammarExample(text="Antes de sair, confira o endereço."),
             GrammarExample(
-                text="Estudo português para viajar por Portugal.",
-                note="para = finalidade; por = lugar aproximado",
-            ),
-            GrammarExample(
-                text="Obrigado por tudo. O presente é para ti.",
-                note="por = causa do agradecimento; para = destinatário",
-            ),
-            GrammarExample(
-                text="Passei por tua casa mas não estavas.",
-                note="lugar",
-            ),
-            GrammarExample(
-                text="Este relatório é para sexta-feira.",
-                note="prazo",
+                text="Quando eu fizer o jantar, aviso; preciso de tempo para fazer tudo."
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Obrigado para a ajuda.",
-                correct="Obrigado pela ajuda.",
-                note='Com "obrigado" usa-se "por".',
+                wrong="Nós devemos estudarmos hoje.",
+                correct="Nós devemos estudar hoje.",
+                note="Depois do modal devemos, o infinitivo permanece invariável.",
             ),
             GrammarMistake(
-                wrong="Quero me tornar médico no futuro. Para expressar esse objetivo, digo: Estudo por ser médico.",
-                correct="Quero me tornar médico no futuro. Para expressar esse objetivo, digo: Estudo para ser médico.",
-                note="Para indica a finalidade de tornar-se médico. Sem esse contexto, Estudo por ser médico pode ser válido: a pessoa já é médica e essa é a causa de estudar.",
+                wrong="Trouxe os textos para nós lerem.",
+                correct="Trouxe os textos para nós lermos.",
+                note="O sujeito nós corresponde a lermos, não lerem.",
+            ),
+        ],
+        related=["futuro-do-conjuntivo", "por-para", "presente-conjuntivo"],
+    ),
+    GrammarTopic(
+        slug="participios",
+        title="Particípios e tempos compostos",
+        level="B1",
+        category="Tempos verbais",
+        summary="Formar particípios regulares e frequentes irregulares, distinguindo tempo composto e passiva.",
+        explanation="Nos verbos regulares, troque -ar por -ado e -er/-ir por -ido: falar/falado, comer/comido, partir/partido. Memorize os irregulares frequentes: fazer/feito, dizer/dito, ver/visto, escrever/escrito, abrir/aberto, pôr/posto e vir/vindo.\n\nCom ter, o particípio permanece invariável: Ela tem escrito cartas; Eles tinham feito o trabalho. A flexão está no auxiliar: tenho/tem/temos/têm estudado; tinha/tínhamos/tinham estudado. Compare com a passiva, em que há concordância: A carta foi escrita; Os textos foram escritos.\n\nAlguns verbos têm particípios duplos. O padrão tradicional distingue tinha aceitado de foi aceito e tinha entregado de foi entregue, mas aceito e entregue também são usados com ter no Brasil. As preferências variam conforme verbo e registro; não imponha a regra de um par a todos os verbos. Aprenda primeiro as formas frequentes em contexto.",
+        rules=[
+            "Use -ado para -ar e -ido para -er/-ir nos particípios regulares.",
+            "Com ter, não faça concordância do particípio com sujeito ou objeto.",
+            "Na passiva com ser, faça concordância com o sujeito paciente.",
+            "Consulte o uso do verbo quando houver particípios duplos, sem generalizações automáticas.",
+        ],
+        examples=[
+            GrammarExample(text="Tenho trabalhado bastante ultimamente."),
+            GrammarExample(text="Quando cheguei, ela já tinha feito o almoço."),
+            GrammarExample(text="Elas tinham escrito as cartas."),
+            GrammarExample(text="As cartas foram escritas ontem."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Tenho fazido o almoço.",
+                correct="Tenho feito o almoço.",
+                note="O particípio de fazer é feito.",
             ),
             GrammarMistake(
-                wrong="A ponte foi construída por os romanos.",
-                correct="A ponte foi construída pelos romanos.",
-                note="Por + os se contrai em pelos. Para os romanos indica beneficiários, não construtores; não são reformulações equivalentes.",
+                wrong="Elas tinham escritas as cartas.",
+                correct="Elas tinham escrito as cartas.",
+                note="Com ter, o particípio é invariável; na passiva, As cartas foram escritas tem concordância.",
             ),
         ],
-        related=[
-            "preposicoes-lugar",
-            "voz-passiva",
-            "conectores-argumentativos",
-        ],
+        related=["preterito-perfeito-composto", "mais-que-perfeito", "voz-passiva"],
     ),
 ]

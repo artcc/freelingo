@@ -157,6 +157,7 @@ export default function VocabularySetPage({
   ])
 
   async function refreshContext() {
+    const previousContext = useLanguageStore.getState()
     setLoading(true)
     const ok = await useLanguageStore.getState().fetchLanguages()
     if (useAuthStore.getState().sessionVersion !== sessionVersion) return
@@ -165,7 +166,15 @@ export default function VocabularySetPage({
       setLoading(false)
       return
     }
-    setReload((value) => value + 1)
+    const context = useLanguageStore.getState()
+    // Changed store dependencies already reload the view; only force unchanged context.
+    if (
+      context.activeLanguage === previousContext.activeLanguage &&
+      context.isSwitching === previousContext.isSwitching &&
+      context.needsRefresh === previousContext.needsRefresh &&
+      context.invalidationVersion === previousContext.invalidationVersion
+    )
+      setReload((value) => value + 1)
   }
 
   useEffect(() => {

@@ -341,11 +341,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="idade = ter",
             ),
             GrammarExample(
-                text="Tens fome?",
+                text="Você está com fome?",
                 note="sensação",
             ),
             GrammarExample(
-                text="Tenho de ir ao médico.",
+                text="Tenho que ir ao médico.",
                 note="obrigação",
             ),
         ],
@@ -477,7 +477,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Eu falo português todos os dias.",
             ),
             GrammarExample(
-                text="Ela come fruta ao almoço.",
+                text="Ela come fruta no almoço.",
             ),
             GrammarExample(
                 text="Nós abrimos a loja às nove.",
@@ -778,7 +778,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Preposicoes",
         summary="Em, no, na, a, para, de — como indicar localização.",
-        explanation="Principais preposições:\n\n- em + artigo = no/na/nos/nas: *Estou na cozinha.*\n- a: direção: *Vou a Lisboa.*\n- para: destino final: *Vou para casa.*\n- de: origem: *Sou de Lisboa.*\n\nContrações: em+o=no, em+a=na, a+o=ao, de+o=do, por+a=pela.",
+        explanation="Em indica localização: Estou na cozinha. A e para podem indicar destino: Vou ao mercado; Vou para casa. De indica origem: Sou de Recife. Para localizar objetos, use também perto de, longe de, ao lado de, em frente a, atrás de e entre: O banco fica ao lado da farmácia.\n\nContrações frequentes: em + o = no; em + a = na; a + o = ao; de + o = do; por + a = pela. Ir no mercado é comum na conversa brasileira; em escrita formal tradicional, prefira ir ao mercado ou para o mercado.",
         rules=[
             "Em + artigo = no, na, nos, nas.",
             "Estar + em = localização estática.",
@@ -790,14 +790,14 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="O livro está na mesa.",
             ),
             GrammarExample(
-                text="Moro em Lisboa.",
+                text="Moro em Recife.",
             ),
             GrammarExample(
                 text="Vou ao cinema.",
                 note="a+o=ao",
             ),
             GrammarExample(
-                text="Ela veio do Porto.",
+                text="Ela veio do Rio de Janeiro.",
                 note="de+o=do",
             ),
         ],
@@ -808,9 +808,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="em + o = no (contração obrigatória).",
             ),
             GrammarMistake(
-                wrong="Vou no supermercado.",
-                correct="Vou ao supermercado.",
-                note="Na escrita formal tradicional, prefira ir ao supermercado ou para o supermercado. Ir no supermercado é comum na fala brasileira e não deve ser tratado como erro em qualquer contexto.",
+                wrong="O banco fica ao lado a farmácia.",
+                correct="O banco fica ao lado da farmácia.",
+                note="Ao lado de exige de; de + a = da. Ir no supermercado é uma variante conversacional e não um erro universal.",
             ),
         ],
         related=[
@@ -825,7 +825,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Preposicoes",
         summary="Combinações obrigatórias de preposições com artigos e pronomes.",
-        explanation="Contrações obrigatórias:\n\n**de:** de+o=do, de+a=da, de+os=dos, de+as=das\n**em:** em+o=no, em+a=na, em+os=nos, em+as=nas\n**a:** a+o=ao, a+os=aos\n**por:** por+o=pelo, por+a=pela, por+os=pelos, por+as=pelas",
+        explanation="Quando preposição e artigo estão presentes na mesma construção, use as contrações: de + o/a/os/as = do/da/dos/das; em + o/a/os/as = no/na/nos/nas; por + o/a/os/as = pelo/pela/pelos/pelas. Com a: a + o/os = ao/aos; a + a/as = à/às.\n\nO acento grave marca a crase em Vou à escola, assim como se diz Vou ao mercado. Aparece também em expressões frequentes: à direita, à tarde, às duas horas. Não se coloca antes de qualquer palavra feminina: Vi a professora não tem preposição a; Vou a pé não tem artigo feminino.\n\nAntes de possessivos e nomes pessoais, o artigo pode variar: Falei de Ana e Falei da Ana; gosto de meu bairro e gosto do meu bairro. A contração depende da presença do artigo, não torna esse artigo obrigatório.",
         rules=[
             "As contrações são obrigatórias na escrita padrão.",
             "de+artigo=do, da, dos, das.",
@@ -889,10 +889,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Ela vai começar um novo trabalho.",
             ),
             GrammarExample(
-                text="Vamos viajar para o Algarve.",
+                text="Vamos viajar para a Bahia.",
             ),
             GrammarExample(
-                text="O que é que vais fazer amanhã?",
+                text="O que você vai fazer amanhã?",
             ),
         ],
         common_mistakes=[
@@ -928,11 +928,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Quero uma passagem para Lisboa.",
+                text="Quero uma passagem para Salvador.",
             ),
             GrammarExample(
-                text="Podes ajudar-me?",
-                note="tu, informal",
+                text="Você pode me ajudar?",
+                note="pedido cotidiano com você",
             ),
             GrammarExample(
                 text="Não posso sair hoje.",
@@ -948,9 +948,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Poder→eu posso, não podo.",
             ),
             GrammarMistake(
-                wrong="Queres que eu vou?",
-                correct="Queres que eu vá?",
-                note="Querer que + presente do subjuntivo.",
+                wrong="Você pode ajuda?",
+                correct="Você pode ajudar?",
+                note="Depois de poder, use o infinitivo para indicar a ação.",
             ),
         ],
         related=[
@@ -970,7 +970,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Dias podem usar-se com ou sem artigo.",
             "Com artigo: na segunda-feira.",
-            "Sem artigo (mais formal): A reunião é segunda-feira.",
+            "A reunião é segunda-feira e A reunião é na segunda-feira são formas correntes, sem oposição obrigatória de formalidade.",
             "Na fala, omite-se -feira.",
             "Sábado e domingo usam artigo masculino.",
         ],
@@ -982,8 +982,8 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="No sábado vou à praia.",
             ),
             GrammarExample(
-                text="O restaurante fecha à segunda.",
-                note="omite -feira",
+                text="O restaurante fecha às segundas-feiras.",
+                note="hábito semanal; na segunda-feira pode indicar uma ocasião específica",
             ),
             GrammarExample(
                 text="Que dia é hoje? Hoje é quinta.",
@@ -1071,7 +1071,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="perto de quem fala",
             ),
             GrammarExample(
-                text="Essa mochila que tens aí é nova?",
+                text="Essa mochila que você tem aí é nova?",
                 note="perto de quem ouve",
             ),
             GrammarExample(
@@ -1125,7 +1125,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="ordinal antes do nome",
             ),
             GrammarExample(
-                text="É a primeira vez que visito Portugal.",
+                text="É a primeira vez que visito o Brasil.",
                 note="primeira (feminino)",
             ),
             GrammarExample(
@@ -1153,5 +1153,167 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "horas",
             "dias-semana",
         ],
+    ),
+    GrammarTopic(
+        slug="perguntas-basicas",
+        title="Perguntas do dia a dia",
+        level="A1",
+        category="Orações",
+        summary="Pedir informações com quem, o que, onde, quando, como, quanto e por que.",
+        explanation="Uma pergunta de sim ou não pode conservar a ordem da afirmação: Você mora aqui. → Você mora aqui? Na fala, a entoação ajuda a indicar a pergunta; na escrita, use ?. Não acrescente um auxiliar como do do inglês.\n\nQuem pergunta por pessoas; o que, por coisas ou ações; onde, por lugar; de onde, por origem; quando, por tempo; como, por modo ou estado; quanto, por quantidade ou preço. Quanto concorda quando acompanha um nome: Quantos livros? Quantas pessoas?\n\nUse por que para perguntar a razão e porque para responder: Por que você estuda português? Porque trabalho no Brasil. No fim da pergunta, escreva por quê: Você saiu por quê? O substantivo o porquê significa o motivo. As formas é que e cadê aparecem na conversa: Onde é que você mora? Cadê a chave?",
+        rules=[
+            "Mantenha a concordância do verbo: Onde você mora? Onde vocês moram?",
+            "Use de onde para origem e onde para localização.",
+            "Distinga a pergunta por que da resposta porque; use por quê no fim da pergunta.",
+            "Quanto/quantos/quantas acompanha o nome; Quanto custa? pergunta o preço.",
+        ],
+        examples=[
+            GrammarExample(text="Como você se chama?"),
+            GrammarExample(text="De onde vocês são?"),
+            GrammarExample(text="Quando começa a aula?"),
+            GrammarExample(text="Quantas pessoas moram aqui?"),
+            GrammarExample(text="Por que você está aqui? Porque tenho uma reunião."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Onde você moram?", correct="Onde você mora?", note="Você exige singular."
+            ),
+            GrammarMistake(
+                wrong="Quantos pessoas vieram?",
+                correct="Quantas pessoas vieram?",
+                note="Pessoas é feminino plural.",
+            ),
+        ],
+        related=["pronomes-sujeito", "negacao-basica", "preposicoes-lugar"],
+    ),
+    GrammarTopic(
+        slug="negacao-basica",
+        title="Não, nunca, nada e ninguém",
+        level="A1",
+        category="Orações",
+        summary="Negar ações e indicar ausência sem copiar a estrutura de outra língua.",
+        explanation="A negação básica usa não antes do verbo: Eu não moro aqui; Ela não gosta de café. Com mais de um verbo, não normalmente precede o primeiro: Não posso sair; Não estou trabalhando.\n\nNunca indica ausência de ocorrências; nada, ausência de coisas; ninguém, ausência de pessoas. Antes do verbo, essas palavras já podem negar a oração: Nunca viajo; Ninguém chegou; Nada mudou. Depois do verbo, combine com não ou outra expressão negativa: Não viajo nunca; Não vi ninguém; Não quero nada. Essa combinação é normal em português e não transforma a frase em afirmação.\n\nNa conversa brasileira, também se ouve Não quero, não e Sei não. Reconheça essas construções; pratique primeiro não antes do verbo. Não confunda nada com ninguém: Não comprei nada; Não conheço ninguém aqui.",
+        rules=[
+            "Coloque não antes do verbo na construção básica.",
+            "Nunca, nada e ninguém antes do verbo não exigem outro não.",
+            "Depois do verbo, use concordância negativa: Não vi ninguém.",
+            "Na negação com pronome, use Não me lembro, não Não lembro-me.",
+        ],
+        examples=[
+            GrammarExample(text="Eu não trabalho aos domingos."),
+            GrammarExample(text="Nunca tomo café à noite."),
+            GrammarExample(text="Não quero nada, obrigado."),
+            GrammarExample(text="Ninguém chegou ainda."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Eu não gosta de café.",
+                correct="Eu não gosto de café.",
+                note="A negação não muda a concordância com eu.",
+            ),
+            GrammarMistake(
+                wrong="Não conheço nada nesta cidade. (referindo-se a pessoas)",
+                correct="Não conheço ninguém nesta cidade.",
+                note="Ninguém retoma pessoas; nada retoma coisas ou situações.",
+            ),
+        ],
+        related=["perguntas-basicas", "tambem-tampouco", "verbos-reflexivos"],
+    ),
+    GrammarTopic(
+        slug="plural-substantivos",
+        title="Plural dos substantivos e concordância",
+        level="A1",
+        category="Substantivos",
+        summary="Formar plurais frequentes e concordar artigos e adjetivos.",
+        explanation="Em palavras terminadas em vogal, normalmente acrescente -s: casa/casas, livro/livros, café/cafés. Em -r e -z, acrescente -es: mulher/mulheres, luz/luzes. Em -m, troque por -ns: homem/homens, jardim/jardins.\n\nEm -al, -el, -ol e -ul, são frequentes -ais, -éis, -óis e -uis: animal/animais, papel/papéis, farol/faróis, azul/azuis. Há exceções, como mal/males. Em -il, compare a sílaba tônica: funil/funis, mas fácil/fáceis.\n\nPalavras em -ão têm plurais diferentes, que devem ser aprendidos com cada nome: coração/corações, pão/pães, mão/mãos. Não basta trocar todo -ão por -ões. Algumas admitem mais de uma forma. Em -s, observe o acento tônico: mês/meses, país/países, mas lápis/lápis e ônibus/ônibus.\n\nNa escrita padrão, marque também o plural nos determinantes e adjetivos: os meus livros novos, duas mulheres brasileiras. Há variação de concordância na fala; o modelo escrito ensinado mantém todas as marcas.",
+        rules=[
+            "Aprenda artigo, singular e plural juntos, sobretudo nas terminações -ão e -s.",
+            "Troque -m por -ns: um homem, dois homens.",
+            "Conserve os acentos necessários: papel/papéis, país/países.",
+            "Concorde artigo, nome e adjetivo na escrita padrão.",
+        ],
+        examples=[
+            GrammarExample(text="As casas são pequenas."),
+            GrammarExample(text="Comprei dois pães e três cafés."),
+            GrammarExample(text="Os homens trouxeram os papéis."),
+            GrammarExample(text="Os ônibus passam perto dos jardins."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Dois pãoes.", correct="Dois pães.", note="O plural de pão é pães."
+            ),
+            GrammarMistake(
+                wrong="Três homems.", correct="Três homens.", note="A terminação -m passa a -ns."
+            ),
+        ],
+        related=["genero-substantivos", "adjetivos-descritivos", "artigos-definidos"],
+    ),
+    GrammarTopic(
+        slug="verbos-frequentes-presente",
+        title="Verbos frequentes no presente",
+        level="A1",
+        category="Verbos",
+        summary="Usar fazer, vir, ver, saber e dizer em situações cotidianas.",
+        explanation="Alguns verbos frequentes não seguem apenas o modelo regular. Pratique com eu; você/ele/ela; nós; vocês/eles/elas:\n\n- fazer: faço, faz, fazemos, fazem;\n- vir: venho, vem, vimos, vêm;\n- ver: vejo, vê, vemos, veem;\n- saber: sei, sabe, sabemos, sabem;\n- dizer: digo, diz, dizemos, dizem.\n\nVocê usa a terceira pessoa; a gente também: A gente faz o almoço. Nas variedades que usam tu, a norma-padrão traz fazes, vens, vês, sabes e dizes; a concordância oral varia regionalmente.\n\nCompare Nós vimos de Recife (vir no presente) e Nós vemos o mar (ver no presente). Vocês vêm indica movimento para cá; vocês veem indica percepção visual. Saber + infinitivo indica uma habilidade: Sei nadar; conhecer indica familiaridade: Conheço esta cidade.",
+        rules=[
+            "Memorize a primeira pessoa com um exemplo: faço o almoço, venho de ônibus, vejo o mar, sei nadar, digo a verdade.",
+            "Diferencie vem/vêm (vir) de vê/veem (ver), inclusive na escrita.",
+            "Com você e a gente, use a terceira pessoa do singular.",
+        ],
+        examples=[
+            GrammarExample(text="O que você faz de manhã?"),
+            GrammarExample(text="Eu venho de ônibus e ela vem de bicicleta."),
+            GrammarExample(text="Nós vemos nossos amigos aos sábados."),
+            GrammarExample(text="Não sei o endereço, mas conheço o bairro."),
+            GrammarExample(text="Ela diz que mora aqui."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Eu faz o almoço.",
+                correct="Eu faço o almoço.",
+                note="Fazer tem a forma faço com eu.",
+            ),
+            GrammarMistake(
+                wrong="Eles vê o mar.",
+                correct="Eles veem o mar.",
+                note="O plural de vê é veem, sem acento; vêm pertence a vir.",
+            ),
+        ],
+        related=["presente-regular", "perguntas-basicas", "negacao-basica"],
+    ),
+    GrammarTopic(
+        slug="pronuncia-ortografia-basica",
+        title="Sons, sílaba tônica e escrita",
+        level="A1",
+        category="Pronúncia e ortografia",
+        summary="Relacionar sons e grafias frequentes sem impor um único sotaque brasileiro.",
+        explanation="Toda palavra tem uma organização sonora; nas palavras tônicas, uma sílaba se destaca. O acento gráfico nem sempre aparece: casa tem força em ca; café tem força em fé. Compare avó e avô: o acento ajuda a distinguir vogais abertas e fechadas nessas palavras.\n\nO til indica nasalidade em mãe, pão e põe; não é um acento de intensidade. M ou n no fim de sílaba também pode indicar nasalidade, como em campo e canto. Compare oralidade e nasalidade ouvindo pares como lá/lã.\n\nNh e lh representam sons diferentes de n e l: ninho, filho. Ç tem som de s e ocorre antes de a, o ou u: açúcar, almoço. C antes de e/i também pode ter som de s: cedo, cidade. Compare caro/carro e casa/caça; uma letra ou dígrafo pode distinguir palavras.\n\nNo Brasil, a realização de r e s e a pronúncia de t/d antes de som de i variam conforme a região. Dia pode começar com um som de d ou com uma realização africada; ambas pertencem a variedades brasileiras. Busque inteligibilidade, ritmo e contrastes de significado, sem tratar um sotaque regional como o único correto.",
+        rules=[
+            "Aprenda a sílaba tônica junto com a palavra, sem pressupor que toda sílaba tônica tenha acento gráfico.",
+            "Conserve til, cedilha e acentos na escrita: pão, açúcar, café.",
+            "Distinga caro/carro e casa/caça pelo som e pela grafia.",
+            "Reconheça variação regional de pronúncia sem confundi-la com erro.",
+        ],
+        examples=[
+            GrammarExample(
+                text="Minha avó e meu avô moram aqui.", note="avó tem ó aberto; avô tem ô fechado"
+            ),
+            GrammarExample(text="O pão está na mesa.", note="ão é um ditongo nasal"),
+            GrammarExample(text="Meu filho encontrou um ninho.", note="contraste entre lh e nh"),
+            GrammarExample(text="O carro é caro.", note="contraste entre rr e r entre vogais"),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Quero um cafe sem acucar.",
+                correct="Quero um café sem açúcar.",
+                note="Na escrita padrão, conserve os acentos e a cedilha.",
+            ),
+            GrammarMistake(
+                wrong="Todo brasileiro pronuncia o r do mesmo jeito.",
+                correct="A pronúncia do r varia entre regiões e contextos.",
+                note="A diversidade de sotaques faz parte do português brasileiro.",
+            ),
+        ],
+        related=["plural-substantivos", "pronomes-sujeito"],
     ),
 ]

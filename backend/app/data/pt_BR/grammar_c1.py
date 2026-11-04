@@ -16,7 +16,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Por mais que tentes, nem sempre vais conseguir.",
+                text="Por mais que você tente, nem sempre vai conseguir.",
             ),
             GrammarExample(
                 text="Mesmo que me pagassem, não faria esse trabalho.",
@@ -24,8 +24,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Por mais que tentas.",
-                correct="Por mais que tentes.",
+                wrong="Por mais que você tenta, a dúvida continua.",
+                correct="Por mais que você tente, a dúvida continua.",
                 note="Por mais que exige subjuntivo.",
             ),
         ],
@@ -157,16 +157,20 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Técnicas de impessoalidade no discurso formal.",
-        explanation="Voz passiva, se impessoal, nominalização, expressões impessoais (Convém salientar que...).",
+        explanation="A impessoalidade desloca o foco de quem escreve para processos, resultados ou argumentos. Compare Nós observamos um aumento com Foi observado um aumento: a segunda versão omite o observador, mas não torna a observação automaticamente objetiva. Quando a autoria importa, explicite-a: A equipe observou um aumento.\n\nUse construções impessoais como Convém destacar o limite da amostra e É necessário verificar os dados. Distinga se passivo (Analisaram-se os resultados, com concordância) de sujeito indeterminado (Precisa-se de dados adicionais, no singular na norma-padrão).\n\nA nominalização pode condensar um processo (a análise dos dados), mas sequências longas escondem agentes e ações. Primeira pessoa é aceita em vários gêneros acadêmicos; escolha conforme a área e mantenha coerência. Não apague responsabilidades, fontes ou limites de evidência para produzir um tom aparentemente neutro.",
         rules=[
-            "Voz passiva, se impessoal.",
-            "Nominalizações.",
-            "Convém/importa + infinitivo.",
+            "Escolha entre voz ativa, passiva e construção impessoal conforme o foco e a necessidade de identificar o agente.",
+            "Diferencie concordância da passiva sintética e singular de sujeito indeterminado.",
+            "Não confunda ausência de primeira pessoa com ausência de opinião ou viés.",
         ],
         examples=[
             GrammarExample(
                 text="Foi observado um aumento significativo.",
             ),
+            GrammarExample(
+                text="A equipe observou um aumento, mas os dados não permitem atribuí-lo à intervenção."
+            ),
+            GrammarExample(text="Convém explicitar os critérios antes da análise."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -244,14 +248,22 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Escolher a palavra exata.",
-        explanation="Dizer vs falar, Ver vs olhar, Ouvir vs escutar, Saber vs conhecer.",
+        explanation="Precisão lexical depende do sentido, da construção e da combinação entre palavras, não de trocar toda palavra simples por uma rara. Dizer tende a introduzir uma informação (Disse que voltaria); falar pode indicar interação ou língua (Falou com Ana; Fala português). Há sobreposição em certos contextos: Falou que voltaria é corrente no Brasil, não um erro automático.\n\nVer pode apresentar percepção ou resultado; olhar destaca a orientação da atenção: Olhei para o painel, mas não vi o aviso. Ouvir e escutar também se sobrepõem no uso; escutar pode destacar atenção deliberada, mas não existe uma separação absoluta em toda frase. Saber pode indicar conhecimento ou habilidade (Sei nadar); conhecer, familiaridade (Conheço a pesquisadora). Conheço a resposta e Sei a resposta são ambas possíveis.\n\nEm texto profissional, preserve o grau de evidência: sugerir uma relação não equivale a demonstrar uma relação; contestar uma hipótese não significa refutá-la. Confira colocações: formular uma hipótese, apresentar uma proposta, exercer uma função. Compare claro (compreensível) e preciso (bem delimitado): um texto pode ser claro sem ser tecnicamente preciso.\n\nAo substituir um termo, mantenha agente, regência, intensidade e campo de uso. Um sinônimo de dicionário pode alterar a conclusão ou o registro no contexto.",
         rules=[
-            "Dizer (informação) vs falar (comunicação).",
-            "Saber (fato) vs conhecer (familiaridade).",
+            "Escolha o verbo com seus complementos e colocações, reconhecendo sobreposições legítimas.",
+            "Não transforme indício em prova: sugerir, indicar, demonstrar e comprovar têm compromissos diferentes.",
+            "Prefira precisão contextual a palavras rebuscadas ou substituições automáticas por sinônimos.",
         ],
         examples=[
             GrammarExample(
                 text="Sei a resposta. / Conheço bem essa pessoa.",
+            ),
+            GrammarExample(text="Olhei para a tela, mas não vi a mensagem."),
+            GrammarExample(
+                text="Os dados sugerem uma associação; ainda não demonstram causalidade."
+            ),
+            GrammarExample(
+                text="A comissão contestou a hipótese, mas não apresentou evidência para refutá-la."
             ),
         ],
         common_mistakes=[
@@ -259,6 +271,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 wrong="Conheço nadar.",
                 correct="Sei nadar.",
                 note="Saber + infinitivo exprime uma capacidade. Conheço a resposta e Sei a resposta são ambas construções válidas.",
+            ),
+            GrammarMistake(
+                wrong="Original: Os dados sugerem uma relação. Revisão: Os dados comprovam uma relação.",
+                correct="Os dados sugerem uma relação.",
+                note="A substituição muda o grau de evidência; comprovar não preserva o sentido de sugerir.",
             ),
         ],
         related=[
@@ -365,7 +382,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="C1",
         category="Avançado",
         summary="Catálogo de figuras de retórica.",
-        explanation="A pergunta retórica orienta uma conclusão sem pedir informação: Quem nunca errou? A anáfora repete um início para dar ênfase: Queremos acesso, queremos respeito, queremos participação. A gradação organiza intensidade: Pediu, insistiu, implorou. A antítese aproxima ideias opostas: Uns acumulam, outros carecem. O paradoxo combina ideias aparentemente incompatíveis para provocar reflexão: Quanto mais aprende, mais percebe o que não sabe. Identifique o efeito no argumento, não apenas o nome da figura.",
+        explanation="A pergunta retórica orienta uma conclusão sem pedir informação: Quem nunca errou? A anáfora repete um início para dar ênfase: Queremos acesso, queremos respeito, queremos participação. A epífora repete o final: Estudamos por justiça, trabalhamos por justiça, lutamos por justiça. O quiasmo inverte elementos em uma estrutura cruzada: Não vivemos para trabalhar; trabalhamos para viver.\n\nA gradação organiza intensidade: Pediu, insistiu, implorou. A antítese aproxima ideias opostas: Uns acumulam, outros carecem. O paradoxo combina ideias aparentemente incompatíveis para provocar reflexão: Quanto mais aprende, mais percebe o que não sabe.\n\nIdentifique o efeito no argumento, não apenas o nome da figura. A repetição pode criar solidariedade ou soar mecânica; uma pergunta retórica pode convidar à reflexão ou constranger o público. Escolha o recurso conforme a situação e não o use como substituto de evidência.",
         rules=[
             "Relacione a repetição, a oposição ou a pergunta à intenção e ao público.",
             "Uma figura pode reforçar um argumento, mas não substitui a evidência.",

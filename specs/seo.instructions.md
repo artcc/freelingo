@@ -8,9 +8,12 @@ applyTo: "frontend/src/app/**, frontend/src/lib/seo.ts, frontend/src/middleware.
 ## Scope and ownership
 
 FreeLingo's public production origin is `https://freelingo.app`. Technical SEO uses the native
-Next.js 16 App Router Metadata API and metadata routes. It must preserve application behavior,
-authentication, the learning experience, the landing's visible copy and design, and privacy-focused
-Umami measurements.
+Next.js 16 App Router Metadata API and metadata routes. Metadata must remain consistent with visible
+content and preserve authentication and privacy boundaries. `public-site.instructions.md` owns
+public content and navigation; `umami.instructions.md` owns measurements.
+
+The technical contract below defines application behavior. The operational guidance at the end
+describes maintainer checks and Search Console procedures, not evidence of deployment or indexing.
 
 - `frontend/src/lib/seo.ts` owns `SITE_URL`, `INDEXABLE_PATHS`, and `createPublicMetadata`.
 - `frontend/src/app/layout.tsx` owns `metadataBase`, the title template, default robots directives,
@@ -175,7 +178,9 @@ Model compression, narrower client translation payloads, changes to server fetch
 and animation scheduling require separate measurement and approval. The current social artwork is
 shared across locales; replacing or translating it is a separately approved visual change.
 
-## Validation and release responsibilities
+## Operational guidance
+
+### Validation and release responsibilities
 
 Ask before running checks. Relevant local checks are TypeScript, ESLint, and focused
 `tests/seo.test.ts`, `tests/app/landing.test.tsx`, and `tests/middleware.test.ts`. They check metadata
@@ -203,7 +208,7 @@ The deployment maintainer must complete production build and deployed checks:
 7. Compare responsive light/dark landing presentation and existing registration, invitation,
    legal-return, pricing, FAQ, and Lingu flows. Retain existing behavior when optimizing SEO.
 
-## Google Search Console operating guide
+### Google Search Console
 
 1. **Verify the domain.** Add the Domain property `freelingo.app` in Search Console. Publish the exact
    DNS TXT record supplied by Google at the DNS provider, then verify. Keep the record after

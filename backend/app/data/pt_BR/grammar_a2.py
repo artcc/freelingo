@@ -67,7 +67,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Ontem fui ao cinema.",
             ),
             GrammarExample(
-                text="Já leste o livro?",
+                text="Você já leu o livro?",
             ),
             GrammarExample(
                 text="Ainda não terminei o trabalho.",
@@ -150,7 +150,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Quando era pequeno, morava no Porto.",
+                text="Quando era pequeno, morava em Fortaleza.",
             ),
             GrammarExample(
                 text="Ela cantava muito bem.",
@@ -195,7 +195,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="imperfeito + perfeito",
             ),
             GrammarExample(
-                text="Quando vivia em Lisboa, ia à praia todos os fins de semana.",
+                text="Quando morava em Salvador, ia à praia todos os fins de semana.",
             ),
             GrammarExample(
                 text="Ontem comi bacalhau.",
@@ -388,7 +388,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Adjetivos e advérbios",
         summary="Mais... do que, menos... do que — expressar comparações.",
-        explanation="**Superioridade:** mais + adjetivo + que/do que. **Inferioridade:** menos + adjetivo + que/do que. Ambas as variantes são válidas: Lisboa é mais cara que o Porto / do que o Porto. **Igualdade:** tão + adjetivo + como/quanto.\n\nComparativos irregulares: bom → melhor, mau → pior, grande → maior, pequeno → menor.",
+        explanation="Para superioridade e inferioridade, use mais/menos + adjetivo + que/do que. Ambas as variantes são válidas: Esta passagem é mais cara que a outra / do que a outra. Para igualdade, use tão + adjetivo + quanto/como: É tão caro quanto o outro.\n\nComparativos irregulares frequentes: bom → melhor, mau → pior, grande → maior, pequeno → menor. Não acrescente mais a maior ou melhor ao fazer essa comparação.",
         rules=[
             "Mais [adj] do que = superioridade.",
             "Menos [adj] do que = inferioridade.",
@@ -397,7 +397,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Lisboa é mais bonita do que Madrid.",
+                text="Esta praça é mais tranquila do que a outra.",
             ),
             GrammarExample(
                 text="Este livro é melhor do que o filme.",
@@ -471,20 +471,20 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="tao-como",
-        title="Tão... como / tanto... como",
+        title="Tão e tanto: igualdade com quanto ou como",
         level="A2",
         category="Adjetivos e advérbios",
         summary="Comparativos de igualdade com tão e tanto.",
-        explanation="**Tão... como** (qualidade): *É tão alto como o pai.*\n**Tanto/a/os/as... como** (quantidade): *Tenho tanto dinheiro como ele.*\n**Tanto como** (verbos): *Estudo tanto como tu.*\n**Tão... que** (consequência): *É tão caro que ninguém compra.*",
+        explanation="Use tão + adjetivo/advérbio + quanto ou como para igualdade: É tão alto quanto o pai; Ela fala tão bem como você. Com substantivo, tanto concorda: Tenho tantas aulas quanto você; Temos tanto trabalho como antes. Com verbo, tanto é invariável: Estudo tanto quanto você.\n\nQuanto e como são alternativas válidas nessas comparações. Não confunda com tão... que, que apresenta consequência: É tão caro que ninguém compra. Nesse caso, não se comparam dois elementos.",
         rules=[
-            "Tão + adj/adv + como = igualdade de qualidade.",
-            "Tanto/a/os/as + subst + como = igualdade de quantidade.",
-            "Verbo + tanto como = igualdade de ação.",
+            "Tão + adjetivo/advérbio + quanto/como compara qualidade ou modo.",
+            "Tanto/a/os/as + substantivo + quanto/como compara quantidade com concordância.",
+            "Verbo + tanto quanto/como compara a intensidade ou quantidade da ação.",
             "Tão... que = consequência.",
         ],
         examples=[
             GrammarExample(
-                text="É tão inteligente como tu.",
+                text="Ela é tão dedicada quanto você.",
             ),
             GrammarExample(
                 text="Tenho tanto trabalho como na semana passada.",
@@ -499,9 +499,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="É tão alto do que tu.",
-                correct="É tão alto como tu.",
-                note="Tão... como, não tão... do que.",
+                wrong="É tão alto do que você.",
+                correct="É tão alto quanto você.",
+                note="Use tão... quanto ou tão... como; do que acompanha mais/menos nessa comparação.",
             ),
             GrammarMistake(
                 wrong="Tenho tão dinheiro como ele.",
@@ -586,8 +586,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="vocês + próclise",
             ),
             GrammarExample(
-                text="Não me interrompas.",
-                note="tu, próclise",
+                text="Não me interrompa.",
+                note="você, próclise",
             ),
         ],
         common_mistakes=[
@@ -623,8 +623,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Sê simpático.",
-                note="ser, tu",
+                text="Seja gentil, por favor.",
+                note="ser, você",
             ),
             GrammarExample(
                 text="Faça o favor de entrar.",
@@ -635,8 +635,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="pôr, tu",
             ),
             GrammarExample(
-                text="Não ponhas os pés em cima da mesa.",
-                note="negativo, tu",
+                text="Não ponha os pés em cima da mesa.",
+                note="negativo, você",
             ),
         ],
         common_mistakes=[
@@ -704,16 +704,16 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         slug="condicional",
-        title="Condicional simples",
+        title="Futuro do pretérito: pedidos e desejos",
         level="A2",
         category="Condicionais",
         summary="Expressar hipóteses, desejos, pedidos cordiais e ações condicionadas.",
-        explanation="Infinitivo + -ia, -ias, -ia, -íamos, -iam. Irregulares: dizer→diria, fazer→faria, trazer→traria.\n\nUsos: hipóteses, desejos, pedidos cordiais, condicionais com se, futuro do pretérito.",
+        explanation="O futuro do pretérito, também chamado condicional, forma-se com infinitivo + -ia, -ia, -íamos, -iam para eu, você, nós e vocês: falaria, falaria, falaríamos, falariam. Com tu, a norma-padrão usa falarias. Dizer, fazer e trazer têm radicais irregulares: diria, faria, traria.\n\nNeste nível, pratique pedidos de cortesia e desejos: Você poderia me ajudar? Gostaria de reservar uma mesa. O contexto distingue pedido de relato passado: Poderia abrir a janela? é um pedido; Antes eu podia abrir essa janela descreve uma possibilidade passada.\n\nO tempo também expressa uma ação posterior a um momento passado: Ela disse que chegaria às três. Condições hipotéticas completas serão desenvolvidas com o subjuntivo em B1; não é necessário dominar mesóclise para fazer pedidos naturais.",
         rules=[
             "Infinitivo + -ia, -ias, -ia, -íamos, -iam.",
             "Mesmos irregulares do futuro.",
             "Pedidos cordiais e hipóteses.",
-            "Mesóclise (formal): dar-te-ia.",
+            "Em pedidos cotidianos, prefira Você poderia me ajudar?; a mesóclise pertence a registros muito marcados.",
         ],
         examples=[
             GrammarExample(
@@ -721,20 +721,20 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="pedido cordial",
             ),
             GrammarExample(
-                text="Se tivesse dinheiro, viajaria pelo mundo.",
+                text="Gostaríamos de conhecer a cidade.",
             ),
             GrammarExample(
                 text="Ele disse que chegaria às três.",
             ),
             GrammarExample(
-                text="Poderia ajudar-me?",
+                text="Você poderia me ajudar?",
             ),
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Se eu tivesse dinheiro, viajariam pelo mundo. (sujeito: eu)",
-                correct="Se tivesse dinheiro, viajaria pelo mundo.",
-                note="O futuro do pretérito concorda com eu. Viajava também pode expressar a consequência na conversa.",
+                wrong="Nós gostaria de uma mesa.",
+                correct="Nós gostaríamos de uma mesa.",
+                note="Com nós, use gostaríamos; a forma gostaria concorda com eu ou você.",
             ),
             GrammarMistake(
                 wrong="Eu gostariam de um café.",
@@ -749,55 +749,17 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
     ),
     GrammarTopic(
-        slug="futuro-composto",
-        title="Futuro composto",
-        level="A2",
-        category="Tempos verbais",
-        summary="Expressar ações que estarão concluídas num ponto futuro.",
-        explanation="Ter (futuro) + particípio passado.\n\nUsos: ação concluída antes de momento futuro, suposição sobre o passado (*Ele terá chegado atrasado?* = provavelmente).",
-        rules=[
-            "Ter (futuro) + particípio passado.",
-            "Ação concluída antes de momento futuro.",
-            "Suposição/probabilidade sobre o passado.",
-            "Particípio passado é invariável.",
-        ],
-        examples=[
-            GrammarExample(
-                text="Quando chegares, já terei terminado o trabalho.",
-            ),
-            GrammarExample(
-                text="Ele ainda não chegou; terá havido trânsito.",
-                note="suposição",
-            ),
-            GrammarExample(
-                text="Amanhã a esta hora já teremos partido.",
-            ),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                wrong="Quando chegares, já terei jantar.",
-                correct="Quando chegares, já terei jantado.",
-                note="O composto usa o particípio jantado. Vou ter jantado é uma alternativa perifrástica válida.",
-            ),
-        ],
-        related=[
-            "futuro-do-presente",
-            "condicional",
-            "preterito-perfeito-composto",
-        ],
-    ),
-    GrammarTopic(
         slug="conectores-narrativos",
         title="Conectores narrativos",
         level="A2",
         category="Orações",
         summary="Palavras e expressões para organizar uma narrativa no tempo.",
-        explanation="**Início:** primeiro, no início. **Continuação:** depois, em seguida, então. **Simultaneidade:** enquanto, entretanto. **Conclusão:** por fim, finalmente. **Rutura:** de repente, contudo.",
+        explanation="Organize acontecimentos com primeiro, depois, em seguida e por fim. Enquanto relaciona ações simultâneas: Enquanto esperava, li um livro. Nesse meio-tempo também situa algo durante um intervalo. No uso brasileiro atual, entretanto é sobretudo um conector de contraste, próximo de porém; não o use como modelo principal de simultaneidade. De repente introduz um acontecimento súbito; contudo introduz uma ressalva ou oposição.",
         rules=[
             "Primeiro/depois/em seguida/por fim para ordenar eventos.",
-            "Enquanto/entretanto para ações simultâneas.",
+            "Enquanto e nesse meio-tempo relacionam ações simultâneas; entretanto normalmente introduz contraste.",
             "De repente para eventos súbitos.",
-            "Vírgula após conector no início no PB.",
+            "Use a pontuação conforme a estrutura: Depois, saí; Enquanto esperava, li um livro. Não acrescente vírgula mecanicamente após toda palavra inicial.",
         ],
         examples=[
             GrammarExample(
@@ -828,10 +790,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Orações",
         summary="Expressões que indicam a ordem cronológica de eventos.",
-        explanation="**Ordem dos acontecimentos:** Antes de sair, fechei a janela; Depois de comer, lavei a louça. Antes que usa subjuntivo: Saí antes que chovesse. Depois que pode apresentar um fato ocorrido no indicativo (Depois que chegou, telefonou) ou uma situação futura com futuro do subjuntivo (Depois que chegar, telefone).\n\n**Simultaneidade:** Ao sair, encontrei Ana. **Sucessão imediata:** Mal cheguei, o telefone tocou. Enquanto e até que relacionam ações no tempo; a escolha verbal depende de fatos, hipóteses e referência temporal.",
+        explanation="Para ordenar ações com o mesmo sujeito, use antes de ou depois de + infinitivo: Antes de sair, fechei a janela; Depois de comer, lavei a louça. Para relatar fatos passados com sujeitos diferentes, use depois que + verbo conjugado: Depois que Ana chegou, nós jantamos.\n\nEnquanto relaciona ações em curso: Enquanto eu esperava, ela preparava o café. Ao + infinitivo pode situar ações próximas no tempo: Ao sair, encontrei Ana. Assim que indica sucessão imediata: Assim que cheguei, liguei para casa.\n\nNeste nível, pratique sequências factuais no passado. Antes que e referências futuras com depois que exigem escolhas do subjuntivo, desenvolvidas nos níveis seguintes; não são substituições automáticas de antes de e depois de.",
         rules=[
-            "Antes de e depois de usam infinitivo; um sujeito próprio pode ser explicitado: Depois de eles chegarem, jantamos.",
-            "Antes que usa subjuntivo; depois que admite indicativo ou subjuntivo conforme o sentido e o tempo, não apenas conforme o sujeito.",
+            "Use antes de/depois de + infinitivo para uma sequência simples com o mesmo sujeito.",
+            "Em relatos factuais, depois que pode introduzir outro sujeito: Depois que ela chegou, saímos.",
             "Ao + inf. = simultaneidade.",
             "Mal + verbo = assim que.",
         ],
@@ -848,9 +810,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Antes de que chegues.",
-                correct="Antes que chegues.",
-                note="Sem de com que + subjuntivo.",
+                wrong="Antes sair, fechei a porta.",
+                correct="Antes de sair, fechei a porta.",
+                note="Antes de exige de quando introduz o infinitivo.",
             ),
         ],
         related=[
@@ -864,12 +826,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Discurso indireto",
         summary="Relatar o que alguém disse sem citar textualmente.",
-        explanation="O discurso indireto ajusta pronomes e referências à perspectiva de quem relata. Numa perspectiva passada: Ela disse que estava cansada; Contou que tinha saído; Disse que viria.\n\nO recuo não é obrigatório se a referência continua válida: Ela disse que está cansada; Disse que virá amanhã. Ajusta os tempos ao sentido, não mecanicamente.",
+        explanation="O discurso indireto ajusta pronomes e referências à perspectiva de quem relata. Ana disse: Estou cansada pode passar a Ana disse que estava cansada, numa perspectiva passada, ou Ana disse que está cansada, se a situação continua válida.\n\nRelate uma pergunta de sim ou não com se: Você quer café? → Ela perguntou se eu queria café. Conserve o interrogativo nas outras perguntas: Onde você mora? → Ela perguntou onde eu morava. Ajuste os tempos ao sentido, não mecanicamente. A anterioridade com tinha + particípio será desenvolvida em B1.",
         rules=[
             "Declarações usam que; perguntas totais usam se e perguntas parciais conservam o interrogativo.",
             "Os tempos podem recuar numa perspectiva passada ou conservar uma referência ainda atual.",
             "Pronomes e referências ajustam-se.",
-            "Perguntas indiretas não usam interrogação.",
+            "Um relato declarativo termina com ponto: Ela perguntou onde moro. Uma pergunta principal conserva ?: Você sabe onde ela mora?",
         ],
         examples=[
             GrammarExample(
@@ -883,8 +845,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="O professor explicou que a prova seria na sexta.",
             ),
             GrammarExample(
-                text="A Maria contou que tinha ido a Lisboa.",
-                note="mais-que-perfeito",
+                text="Ana contou que morava em Belo Horizonte.",
+                note="perspectiva passada",
             ),
         ],
         common_mistakes=[
@@ -911,7 +873,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Discurso indireto",
         summary="Transformações de tempo, lugar e pronomes ao relatar discurso.",
-        explanation="Quando muda o ponto de referência, hoje pode passar a naquele dia, amanhã a no dia seguinte e aqui a ali/lá. Numa perspectiva passada, são frequentes o imperfeito para simultaneidade, o mais-que-perfeito para anterioridade e o condicional para posterioridade. Se o lugar, o dia ou a situação continuam válidos, podem manter-se as referências originais.",
+        explanation="Quando muda o ponto de referência, hoje pode passar a naquele dia, amanhã a no dia seguinte e aqui a ali/lá. Relate uma situação simultânea numa perspectiva passada com o imperfeito: Disse que estava ali. Se o lugar, o dia ou a situação continuam válidos, podem ser mantidas as referências originais. Identifique quem fala e de qual momento antes de mudar as palavras; a mudança não é automática.",
         rules=[
             "Hoje→naquele dia; amanhã→no dia seguinte; ontem→no dia anterior.",
             "Aqui→ali/lá; aí→ali/lá.",
@@ -926,7 +888,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Ela disse que estava ali. (direto: Estou aqui.)",
             ),
             GrammarExample(
-                text="Ela disse que tinha visto o filme no dia anterior. (direto: Vi o filme ontem.)",
+                text="Na terça, ela falou da viagem do dia anterior. (direto: Viajei ontem.)",
             ),
         ],
         common_mistakes=[
@@ -947,10 +909,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Pronomes",
         summary="Retomar dois complementos com clareza e reconhecer formas raras.",
-        explanation="No Brasil, prefira construções transparentes: Ela me deu o livro; Entreguei o documento para ele; Não me deu isso. As combinações mo, to e lho existem na tradição escrita, mas são raras na conversa brasileira. Em textos literários ou antigos, Deu-mo significa Deu isso a mim.\n\nNão é necessário produzir essas combinações para falar naturalmente. Com dois referentes, a prioridade é preservar quem entrega, o que é entregue e quem recebe.",
+        explanation="No Brasil, pratique construções transparentes: Ela me deu o livro; Entreguei o documento para ele; Não me deu isso. O objeto indica o que é entregue; me, para mim ou para ele identifica o destinatário. Compare Ela me entregou o relatório e Ela entregou o relatório para mim: ambas mantêm os mesmos participantes.\n\nNão troque os papéis ao reformular: Dei o livro para Ana não significa Dei Ana para o livro. Combine o verbo com pronomes e complementos que permitam recuperar claramente cada referente. Combinações contraídas raras da tradição escrita são material de leitura avançada, não um objetivo de produção em A2.",
         rules=[
             "Use um pronome e um objeto explícito quando isso facilitar a compreensão.",
-            "Reconheça mo = me + o e lho = lhe + o em leitura formal ou literária.",
+            "Preserve quem faz a ação, o objeto e o destinatário em cada reformulação.",
             "Não atribua à fala brasileira a obrigação de combinar dois clíticos.",
         ],
         examples=[
@@ -964,7 +926,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 text="Não me deu isso.",
             ),
             GrammarExample(
-                text="Deu-mo. equivale a Deu isso a mim em registro literário.",
+                text="Você pode me mostrar o preço?",
             ),
         ],
         common_mistakes=[
@@ -984,5 +946,39 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "pronomes-objeto-indireto",
             "colocacao-pronominal",
         ],
+    ),
+    GrammarTopic(
+        slug="por-para",
+        title="Por e para no dia a dia",
+        level="A2",
+        category="Preposicoes",
+        summary="Distinguir motivo, percurso e meio de finalidade, destino e destinatário.",
+        explanation="Por pode indicar motivo (Viajo por trabalho), percurso (Passei pelo centro), meio (Conversamos por telefone), duração delimitada (Esperei por duas horas), preço (Comprei por dez reais) e frequência (Duas vezes por semana).\n\nPara pode indicar finalidade (Estudo para aprender), destinatário (O presente é para você), destino (Vou para Recife), prazo (Preciso disso para sexta-feira) e ponto de vista (Para mim, é uma boa ideia).\n\nCompare Fiz isso por você, que pode indicar motivo ou substituição, com Fiz isso para você, que destaca o destinatário. Em Estudo para ser médico, ser médico é um objetivo; em Estudo por ser médico, a profissão já exercida pode ser a causa. Na conversa, pra é uma redução frequente de para; em escrita formal, use para. Em B1, por também retoma o agente da passiva: escrito por Machado de Assis.",
+        structure="POR: motivo · percurso · meio · duração · preço · frequência\nPARA: finalidade · destinatário · destino · prazo · ponto de vista",
+        rules=[
+            "Distinga a causa de uma ação do objetivo que ela busca alcançar.",
+            "Por + artigo forma pelo/pela/pelos/pelas; para o e para a permanecem separados na escrita formal.",
+            "Use para + infinitivo para finalidade: Trabalho para pagar o curso.",
+            "Não troque motivo e destinatário ao reformular.",
+        ],
+        examples=[
+            GrammarExample(text="Estudo português para viajar pelo Brasil."),
+            GrammarExample(text="Obrigado pela ajuda. Este presente é para você."),
+            GrammarExample(text="Passei pelo mercado e falei com Ana por telefone."),
+            GrammarExample(text="Preciso do relatório para sexta-feira."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                wrong="Obrigado para a ajuda.",
+                correct="Obrigado pela ajuda.",
+                note="Obrigado se combina com por; por + a = pela.",
+            ),
+            GrammarMistake(
+                wrong="Passei por o centro.",
+                correct="Passei pelo centro.",
+                note="Por + o se contrai em pelo.",
+            ),
+        ],
+        related=["preposicoes-lugar", "contracoes-preposicionais", "voz-passiva"],
     ),
 ]

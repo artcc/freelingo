@@ -12,6 +12,9 @@ Router-root endpoints use their full path to make trailing-slash behavior explic
 its HTTP method, rate limit, and relevant authentication or payload contract. Limit policy is defined
 in `rate-limiting.instructions.md`.
 
+This document owns the HTTP/WebSocket interface inventory. Domain specifications own business
+behavior; `umami.instructions.md` owns analytics event semantics, privacy, deduplication, and delivery.
+
 ---
 
 ## Health — `/health`
@@ -29,6 +32,17 @@ in `rate-limiting.instructions.md`.
 ## Freemium — `/api/freemium`
 
 - **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+
+## Analytics — `/api/analytics`
+
+- **POST `/ui`** — Rate limit: 60/min. Auth: get_current_user. Body: `{event, operation_id}`,
+  where `event` is a value from `BrowserEvent` in `schemas/learning_analytics.py` and `operation_id`
+  is a UUID. Extra fields and invalid values return 422. Returns 204.
+- **POST `/public`** — Rate limit: 30/min. Public. Same body shape, but accepts only
+  `event="faq_viewed"`. Extra fields and invalid values return 422. Returns 204.
+
+These endpoints accept bounded measurement signals, not arbitrary event properties or URLs.
+A successful response does not guarantee delivery to Umami.
 
 ## Games — `/api/games`
 
@@ -165,9 +179,14 @@ a supported canonical code enabled in `AVAILABLE_TARGET_LANGUAGES`. Unknown, non
 disabled codes return `422` before curriculum dispatch or any state change; they do not fall back to English.
 
 - **GET `/start`** — Rate limit: 10/min. Begins the LLM-generated adaptive quiz.
+- **POST `/started`** — Rate limit: 10/min. Auth: get_current_user. Requires the UUID-valued
+  `X-Assessment-Attempt` header; missing or invalid headers return 422. Returns 204 after accepting
+  the explicit quiz-start measurement signal. It does not create a quiz session or study plan.
 - **GET `/bank`** — Rate limit: 60/min. Returns the full static assessment bank for the given language (query param `language`, default `en-GB`). Auth required. Response: `{questions: [{id, skill, difficulty, question, options, correct, grammar_slug}]}`. Each supported language returns its own static bank in the target language.
 - **POST `/submit`** — Rate limit: 10/min. LLM-backed assessment submission endpoint retained alongside the deterministic bank/evaluate flow.
 - **POST `/evaluate`** — Rate limit: 60/min. Deterministic CEFR evaluation (no LLM — groups by difficulty). Body: `{answers: [{question_id, skill, difficulty, correct, dont_know?}]}`. `dont_know` defaults to `false` and marks a declared knowledge gap, which is never scored as correct.
+  Optional UUID header `X-Assessment-Attempt` correlates the measurement signal with `/started`;
+  omission preserves evaluation behavior. A supplied invalid UUID returns 422.
 - **POST `/free-write`** — Rate limit: 10/min. Evaluates free-write text for CEFR placement through LLM JSON parsing.
 - **POST `/complete`** — Rate limit: 10/min. Persists results and creates a StudyPlan. Rejects the same invalid dimensions and undersized grids as `POST /api/study-plan/generate` (422 and 400), before any state change. When `STRIPE_ENABLED=true`, the user is not subscribed, and `assessment_voice_trial_used=false`, the response includes `voice_trial: {available, token, duration_seconds, expires_in_seconds}` for a one-time voice demo. `duration_seconds` comes from `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS` (default `300`).
 - **POST `/voice-trial`** — Rate limit: 10/min. Body: `{target_language?}`. Regenerates a fresh post-assessment voice demo token for the user's active study plan in that language when `STRIPE_ENABLED=true`, the user is not subscribed, and `assessment_voice_trial_used=false`. Used when the student previously skipped the demo and returns to the assessment page.
@@ -264,8 +283,8 @@ path. `/generate` retains its `skipped_empty` behavior for empty normalized batc
 - **GET/PUT `/preferences`** — Rate limit: 60/min. Reads or replaces `{back_content: "definition"|"translation"}` for the authenticated account, globally across study languages. Defaults to `definition`; no active plan is required. The standard review uses definition when a translation is missing and retains complementary content. This preference applies only to standard-mode content.
 - **DELETE `/{card_id}`** — Rate limit: 60/min. Permanently deletes a flashcard owned by the user; 204 No Content
 
-Review receipt replays return the original successful response but do not enqueue new
-`flashcard_reviewed` or `saved_vocabulary_reviewed` analytics events.
+Review receipt replays return the original successful response. Measurement rules for replays are
+defined in `umami.instructions.md`.
 
 ---
 
@@ -403,8 +422,20 @@ earn 5 XP once per exercise/plan/UTC day when a prior-day attempt exists in that
 Missing context returns `422`. History responses include the active plan's `context` so
 replays retain the selection under which their history was loaded.
 
+Both domains also expose `POST /started` as described below. Its body is
+`{exercise_id: positive integer, context: {study_plan_id, target_language, level}, replay: boolean=false}`
+and its required `X-Exercise-Attempt` header is a UUID. Extra top-level body fields and missing/invalid input
+return 422. The server verifies the active owned plan/context and exercise language; normal starts
+also require the exercise level to match, while replays may use another level in the same language.
+Missing exercises return 404; context mismatches return 409 `study_context_changed`.
+It records no learning attempt, awards no XP, and consumes no feature quota. A 204 response does not
+guarantee analytics delivery. `/attempt` accepts the same header optionally for measurement correlation;
+an invalid supplied UUID returns 422, and omission preserves attempt, XP, and quota behavior.
+
 - **GET `/next`** — Rate limit: 60/min. Returns immediately with `{available, exercise, generation_status, generation_error, generation_deadline}`; transcript and correct answers are omitted. Status is `idle`, `generating`, or `failed`; error is null, `timeout`, `generation_failed`, or `interrupted`; deadline is nullable UTC. Available exercises take priority. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a renewable, owner-scoped language/level generation lease and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job. Returns `{"status":"available"}` without generating when the user's pool already has an exercise.
+- **POST `/started`** — Rate limit: 20/min. Auth: require_subscription_or_freemium_readonly,
+  with maintenance and active-plan checks. Accepts the shared start-signal body/header above and returns 204.
 - **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
 - **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
@@ -415,6 +446,8 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 
 - **GET `/next`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns immediately with the oldest uncompleted `ReadingExercise` for the current plan's CEFR level and language. Text and questions are included, correct answers are omitted. Response: `{available, exercise, generation_status, generation_error, generation_deadline}`, with the same status contract as Listening. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a renewable, owner-scoped per-(level, language) Redis lease and enqueues a bounded `BackgroundTask`. Returns HTTP 202 `{"status":"generating"}` for new or existing work, or `{"status":"available"}` when an exercise can already be used.
+- **POST `/started`** — Rate limit: 20/min. Auth: require_subscription_or_freemium_readonly,
+  with maintenance and active-plan checks. Accepts the shared start-signal body/header above and returns 204.
 - **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
