@@ -24,7 +24,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="sutileza",
                 pos="noun",
-                definition="Particularidade fina e quase impercetível.",
+                definition="Particularidade fina e quase imperceptível.",
                 example="Captou uma sutileza que me escapara.",
             ),
             VocabularyEntry(
@@ -173,7 +173,7 @@ C1_SETS: list[VocabularySet] = [
                 word="dissertação",
                 pos="noun",
                 definition="Tratado escrito aprofundado sobre um tema acadêmico.",
-                example="Apresentou a sua dissertação de doutoramento.",
+                example="Apresentou sua dissertação de mestrado sobre variação linguística.",
             ),
             VocabularyEntry(
                 word="tratado",

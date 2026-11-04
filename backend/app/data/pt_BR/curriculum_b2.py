@@ -199,7 +199,7 @@ B2_UNITS: list[CurriculumUnit] = [
         id="b2-unit-7",
         level="B2",
         unit_number=7,
-        title="Média e atualidade",
+        title="Mídia e atualidade",
         grammar_points=[
             "linguagem-jornalistica",
             "titulos",
@@ -219,8 +219,8 @@ B2_UNITS: list[CurriculumUnit] = [
         ],
         competency_checklist=[
             "Identifica características do estilo jornalístico do português brasileiro: construções nominalizadas, voz passiva, se passivo, se impessoal, conectores formais e frases mais longas e complexas típicas da imprensa",
-            "Interpreta a gramática dos títulos de jornal em português: formas verbais truncadas, presente para passado recente, infinitivo para referência futura e elipse de cópulas",
-            "Resume um artigo noticioso de 250 palavras usando discurso reportado com mudanças temporais completas e verbos de atribuição variados: afirmar, declarar, referir, salientar, sublinhar, acrescentar, desmentir",
+            "Interpreta a concisão dos títulos de jornal: presente para fatos recentes (Prefeitura inaugura biblioteca), futuro para previsões (Biblioteca abrirá aos domingos) e omissão de artigos quando não compromete a clareza; preserva condições, autoria e grau de certeza ao resumir",
+            "Resume um artigo noticioso de 250 palavras usando discurso reportado com ajustes de pessoa, tempo e referências conforme o contexto, sem recuo temporal automático; escolhe verbos de atribuição que preservem a atitude da fonte: afirmar, declarar, salientar, acrescentar, desmentir",
             "Exprime concordância e discordância: concordo inteiramente com..., não estou convencido/a de que + subjuntivo, parece-me, no entanto, que + indicativo",
             "Escreve um comentário estruturado de 150 palavras sobre tema social ou político atual usando vocabulário jornalístico e conectores adequados",
         ],

@@ -485,7 +485,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="O livro que estou a ler é fascinante.",
+                text="O livro que estou lendo é fascinante.",
             ),
             GrammarExample(
                 text="A pessoa que telefonou não deixou nome.",
@@ -638,9 +638,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Se eu tinha dinheiro, viajava.",
-                correct="Se eu tivesse dinheiro, viajava.",
-                note="Condição hipotética: se + subjuntivo.",
+                wrong="Se eu tivessem dinheiro, viajaria mais.",
+                correct="Se eu tivesse dinheiro, viajaria mais.",
+                note="Eu exige tivesse, não tivessem. Se eu tinha dinheiro, viajava é válido para um hábito passado e não equivale necessariamente a uma hipótese presente.",
             ),
         ],
         related=[
@@ -737,7 +737,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                text="Fiquei em casa porque estava a chover.",
+                text="Fiquei em casa porque estava chovendo.",
                 note="causa",
             ),
             GrammarExample(
@@ -745,7 +745,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="consequência",
             ),
             GrammarExample(
-                text="Embora estivesse a chover, fui passear.",
+                text="Embora estivesse chovendo, fui passear.",
                 note="concessão + subjuntivo",
             ),
         ],
@@ -801,9 +801,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note='Com "obrigado" usa-se "por".',
             ),
             GrammarMistake(
-                wrong="Estudo por ser médico.",
-                correct="Estudo para ser médico.",
-                note='"Para" + infinitivo indica o propósito.',
+                wrong="Quero me tornar médico no futuro. Para expressar esse objetivo, digo: Estudo por ser médico.",
+                correct="Quero me tornar médico no futuro. Para expressar esse objetivo, digo: Estudo para ser médico.",
+                note="Para indica a finalidade de tornar-se médico. Sem esse contexto, Estudo por ser médico pode ser válido: a pessoa já é médica e essa é a causa de estudar.",
             ),
             GrammarMistake(
                 wrong="A ponte foi construída por os romanos.",

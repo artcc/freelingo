@@ -190,7 +190,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="professora",
                 pos="noun",
-                definition="Docente da escola primária.",
+                definition="Mulher que ensina uma matéria ou atividade, na escola ou em outros contextos.",
                 example="A minha professora era muito paciente.",
             ),
             VocabularyEntry(
@@ -258,7 +258,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="personagem",
                 pos="noun",
-                definition="Figura principal de uma história.",
+                definition="Pessoa, ser ou figura que participa de uma história, como protagonista ou em um papel secundário.",
                 example="A personagem principal do conto é um rapaz.",
             ),
             VocabularyEntry(
@@ -479,7 +479,7 @@ A2_SETS: list[VocabularySet] = [
                 word="espanto",
                 pos="noun",
                 definition="Reação de admiração perante algo inesperado.",
-                example="Fiquei em espanto com a notícia.",
+                example="A notícia me causou espanto.",
             ),
         ],
     ),
@@ -558,7 +558,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="paisagem",
                 pos="noun",
-                definition="Vista ampla e sugestiva de uma paisagem.",
+                definition="Conjunto de elementos naturais e construídos que se veem em um lugar.",
                 example="Da colina há uma paisagem deslumbrante.",
             ),
         ],
@@ -893,7 +893,7 @@ A2_SETS: list[VocabularySet] = [
                 word="reserva",
                 pos="noun",
                 definition="Guardar antecipadamente um serviço.",
-                example="Tenho uma reserva em nome Silva.",
+                example="Tenho uma reserva em nome de Silva.",
             ),
             VocabularyEntry(
                 word="disponível",
@@ -1325,7 +1325,7 @@ A2_SETS: list[VocabularySet] = [
                 word="ouvir",
                 pos="verb",
                 definition="Prestar atenção a sons ou palavras.",
-                example="Oiço música enquanto trabalho.",
+                example="Ouço música enquanto trabalho.",
             ),
             VocabularyEntry(
                 word="comunicar",

@@ -71,7 +71,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 text="Passo agora à segunda parte.",
-                context="Transição entre secções",
+                context="Transição entre seções",
                 register="formal",
             ),
         ],

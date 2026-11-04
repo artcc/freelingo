@@ -221,7 +221,7 @@ A1_SETS: list[VocabularySet] = [
                 word="olá",
                 pos="phrase",
                 definition="Saudação informal, usada para cumprimentar.",
-                example="Oi, como você está?",
+                example="Olá, como você está?",
             ),
             VocabularyEntry(
                 word="bom dia",
@@ -999,7 +999,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="cedo",
                 pos="adverb",
-                definition="Com antecedência, de manhã bem.",
+                definition="Antes da hora habitual ou esperada, ou nas primeiras horas do dia.",
                 example="Amanhã acordo cedo.",
             ),
             VocabularyEntry(
@@ -1227,7 +1227,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="banco",
                 pos="noun",
-                definition="Instituição onde se depositam e levantam dinheiro.",
+                definition="Instituição que oferece serviços como guardar dinheiro, fazer pagamentos e conceder empréstimos.",
                 example="Preciso de ir ao banco levantar dinheiro.",
             ),
             VocabularyEntry(

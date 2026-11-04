@@ -61,7 +61,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "Transforma sintagmas verbais em sintagmas nominais por nominalização, recurso central do estilo acadêmico em português: desenvolver -> o desenvolvimento, analisar -> a análise, aumentar -> o aumento, recorrer -> o recurso, realizar -> a realização",
             "Constrói frases acadêmicas impessoais: considera-se que, importa referir que, cabe salientar que, torna-se necessário, é de notar que, constata-se que",
             "Mantém registro formal consistente num texto acadêmico com mais de 400 palavras, evitando vocabulário coloquial, uso excessivo de fazer, interpelação direta e conectores informais",
-            "Identifica e corrige quebras de registro em textos acadêmicos: vocabulário inadequado, perda de impessoalidade e conectores informais",
+            "Identifica e corrige quebras de registro em textos acadêmicos conforme o gênero e a área; distingue vocabulário ou conectores inadequados de escolhas legítimas entre primeira pessoa e construções impessoais",
         ],
         default_weeks=2,
         prerequisite_unit="c1-unit-1",

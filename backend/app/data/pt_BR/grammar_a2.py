@@ -55,12 +55,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A2",
         category="Adjetivos e advérbios",
         summary="Palavras e expressões que situam ações no tempo.",
-        explanation="Marcadores por tempo:\n\n**Pretérito perfeito:** ontem, anteontem, a semana passada, há dois dias, já, ainda não, nunca.\n**Imperfeito:** todos os dias (no passado), antigamente, quando era criança, sempre, frequentemente.\n**Presente:** hoje, agora, atualmente, geralmente.\n**Futuro:** amanhã, na próxima semana, daqui a dois dias.",
+        explanation="Os marcadores situam acontecimentos no tempo, mas não escolhem sozinhos o tempo verbal. Ontem, anteontem, na semana passada e há dois dias remetem ao passado: Ontem chovia quando saí combina imperfeito e perfeito. Há também pode indicar uma duração que continua no presente: Moro aqui há dois anos.\n\nAntigamente e quando era criança aparecem frequentemente em descrições e hábitos passados. Todos os dias, sempre e frequentemente indicam repetição em diferentes tempos: Estudo todos os dias; Estudava todos os dias.\n\nHoje pode acompanhar passado, presente ou futuro: Hoje trabalhei cedo; Hoje estou em casa; Hoje vou sair. Amanhã e daqui a dois dias situam eventos futuros, que também podem ser expressos pelo presente: Amanhã viajo. Já, ainda não e nunca relacionam a ação a uma expectativa ou experiência: Já sei; Ainda não terminei; Nunca tinha visto isso.",
         rules=[
-            "Ontem, há + tempo → pretérito perfeito.",
-            "Antigamente, quando era..., todos os dias (passado) → imperfeito.",
-            "Já = already; Ainda não = not yet (perfeito).",
-            "Nunca pode usar-se com perfeito ou presente.",
+            "Ontem situa a ação no passado; perfeito e imperfeito apresentam perspectivas diferentes sobre ela.",
+            "Há + tempo pode localizar um fato passado ou indicar duração até o presente: Cheguei há dois anos; Moro aqui há dois anos.",
+            "Marcadores de frequência não determinam o tempo verbal: Viajo sempre; Viajava sempre.",
+            "Já, ainda não e nunca combinam com diferentes tempos conforme a referência e o sentido.",
         ],
         examples=[
             GrammarExample(
@@ -931,9 +931,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                wrong="Na segunda disse: Vou amanhã. Na sexta relato: Ele disse que vinha amanhã.",
-                correct="Na sexta relato: Ele disse que vinha no dia seguinte, terça-feira.",
-                note="Amanhã contado a partir de sexta já não designa a terça-feira original; adapta a referência para preservar a data.",
+                wrong="Na segunda, Paulo disse: Vou ao médico amanhã. Na sexta, relato: Paulo disse que ia ao médico amanhã.",
+                correct="Na sexta, relato: Paulo disse que ia ao médico no dia seguinte à conversa, terça-feira.",
+                note="Amanhã contado a partir de sexta já não designa a terça-feira original. A reformulação preserva a data, o participante e o verbo ir.",
             ),
         ],
         related=[

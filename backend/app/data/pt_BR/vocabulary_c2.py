@@ -270,8 +270,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="intraduzível",
                 pos="adjective",
-                definition="Que não se pode traduzir sem perder significado.",
-                example="A palavra saudade é praticamente intraduzível.",
+                definition="Que não se consegue traduzir adequadamente em determinado contexto ou sob certas restrições.",
+                example="O trocadilho parecia intraduzível palavra por palavra, mas a tradutora recriou seu efeito com outra expressão.",
             ),
             VocabularyEntry(
                 word="transposição",
@@ -473,7 +473,7 @@ C2_SETS: list[VocabularySet] = [
                 word="descritivo",
                 pos="adjective",
                 definition="Que descreve o uso real da língua sem prescrições.",
-                example="A linguística descritiva regista a evolução da língua.",
+                example="A linguística descritiva registra os usos da língua.",
             ),
         ],
     ),
@@ -677,7 +677,7 @@ C2_SETS: list[VocabularySet] = [
                 word="posfácio",
                 pos="noun",
                 definition="Texto conclusivo acrescentado após o corpo principal.",
-                example="No posfácio o autor explica a génese do livro.",
+                example="No posfácio o autor explica a gênese do livro.",
             ),
             VocabularyEntry(
                 word="corrigir",
@@ -830,8 +830,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="norma-padrão",
                 pos="noun",
-                definition="Variedade linguística de referência, geralmente a das classes cultas urbanas.",
-                example="O debate entre a norma-padrão europeia e a brasileira é antigo.",
+                definition="Modelo de referência codificado em regras e convenções, distinto dos usos efetivos dos falantes, inclusive dos mais escolarizados.",
+                example="A norma-padrão orienta certos gêneros de escrita, mas não coincide integralmente com a norma culta efetivamente usada no Brasil.",
             ),
             VocabularyEntry(
                 word="insegurança linguística",
@@ -972,7 +972,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="balanço",
                 pos="noun",
-                definition="Avaliação global e retrospetiva das competências adquiridas.",
+                definition="Avaliação global e retrospectiva das competências adquiridas.",
                 example="É altura de fazer o balanço do que aprendemos.",
             ),
             VocabularyEntry(

@@ -236,7 +236,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Substantivos em -o são geralmente masculinos; em -a, femininos.",
             "As terminações -dade e -tude são habitualmente femininas; em -gem, lembra a exceção o/a personagem.",
-            "Substantivos de origem grega em -ma são masculinos.",
+            "Problema, sistema e tema são masculinos; a origem grega e a terminação -ma não garantem o gênero: asma é feminino.",
             "O artigo definido indica o gênero: memorize o artigo com o substantivo.",
         ],
         examples=[
@@ -261,7 +261,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarMistake(
                 wrong="A problema.",
                 correct="O problema.",
-                note="Palavras gregas em -ma são masculinas.",
+                note="Problema é masculino. Aprenda o artigo com a palavra, sem generalizar para todos os nomes em -ma.",
             ),
             GrammarMistake(
                 wrong="O viagem.",
@@ -417,10 +417,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         level="A1",
         category="Adjetivos e advérbios",
         summary="Adjetivos que descrevem qualidades e concordam em gênero e número.",
-        explanation="Os adjetivos em português concordam em gênero e número com o substantivo.\n\n**Adjetivos uniformes**: terminados em **-e** (*grande, inteligente*), **-l** (*ágil*), **-ista** (*egoísta*).\n\n**Posição:** Geralmente depois; antes pode mudar o sentido (*grande amigo* vs *amigo grande*).\n\n**Bom/mau** são irregulares: bom→boa, bons, boas; mau→má, maus, más.",
+        explanation="Os adjetivos em português concordam em gênero e número com o substantivo.\n\n**Adjetivos uniformes** têm a mesma forma nos dois gêneros: um homem inteligente / uma mulher inteligente; um rapaz ágil / uma moça ágil. Muitos terminam em -e, -l ou -ista, mas a terminação não basta: espanhol tem o feminino espanhola.\n\n**Posição:** Geralmente depois; antes pode mudar o sentido (*grande amigo* vs *amigo grande*).\n\n**Bom/mau** são irregulares: bom→boa, bons, boas; mau→má, maus, más.",
         rules=[
             "Adjetivos concordam em gênero e número com o substantivo.",
-            "Adjetivos em -e e -l são uniformes.",
+            "Grande, inteligente, ágil e egoísta são uniformes; espanhol/espanhola varia em gênero, apesar de terminar em -l.",
             "Posição normal: depois do substantivo.",
             "Bom/boa, mau/má são irregulares.",
         ],

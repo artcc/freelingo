@@ -15,7 +15,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
                 register="neutral",
             ),
             PhrasebookEntry(
-                text="Reservei em nome Silva.",
+                text="Reservei em nome de Silva.",
                 context="Dizer que se reservou",
                 register="neutral",
             ),

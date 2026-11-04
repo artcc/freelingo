@@ -380,7 +380,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="comprovar",
                 pos="verb",
-                definition="Declarar oficialmente, certificar.",
+                definition="Demonstrar a veracidade ou a validade de algo por meio de provas.",
                 example="Os documentos comprovam a sua identidade.",
             ),
             VocabularyEntry(
@@ -990,8 +990,8 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 word="cabeçalho",
                 pos="noun",
-                definition="Nome e título de um jornal.",
-                example="Escreve para um cabeçalho muito conhecido.",
+                definition="Parte superior de uma página ou publicação que apresenta o título e informações de identificação.",
+                example="O cabeçalho do jornal traz o nome da publicação e a data.",
             ),
             VocabularyEntry(
                 word="censura",
