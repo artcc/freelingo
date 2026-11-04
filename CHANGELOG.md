@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Changed
 
 - Portuguese language selectors explicitly distinguish Brazil from Portugal, using separate flags and localized labels.
-- What's New highlights Polish in the first entry and Brazilian Portuguese in the second, across all interface languages.
+- What's New highlights Polish and Brazilian Portuguese together in the first entry, across all interface languages.
 
 ## [1.11.0] - 2026-11-02
 

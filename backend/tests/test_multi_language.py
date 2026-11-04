@@ -27,7 +27,7 @@ from app.services.memory_service import get_user_memories
 # ═════════════════════════════════════════════════════════════════════════════
 
 
-async def _make_user(db, *, username="mluser", email="ml@example.com"):
+async def _make_user(db, *, username="mluser", email="ml@example.com", language="en-US"):
     user = User(
         username=username,
         email=email,
@@ -35,12 +35,12 @@ async def _make_user(db, *, username="mluser", email="ml@example.com"):
         hashed_password=hash_password("testpass"),
         role="user",
         native_language="es",
-        target_language="en-US",
+        target_language=language,
         is_active=True,
     )
     db.add(user)
     await db.flush()
-    db.add(UserLanguage(user_id=user.id, target_language="en-US", is_active=True))
+    db.add(UserLanguage(user_id=user.id, target_language=language, is_active=True))
     await db.commit()
     await db.refresh(user)
     token = create_access_token(user.id, user.role)
@@ -520,6 +520,89 @@ class TestLanguageAPI:
         assert "pt-PT" not in languages
         assert languages["pt-BR"]["is_active"] is True
         assert languages["pt-BR"]["plan"]["id"] == plans["pt-BR"].id
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("source", "target"),
+        [("pt-PT", "pt-BR"), ("pt-BR", "pt-PT"), ("en-US", "en-GB"), ("en-GB", "en-US")],
+    )
+    @pytest.mark.parametrize("target_exists", [False, True])
+    async def test_profile_variant_change_preserves_language_ownership(
+        self, client, db_session, source, target, target_exists
+    ):
+        user, headers = await _make_user(db_session, language=source)
+        source_plan = await _make_plan(db_session, user.id, language=source)
+        source_membership_id = source_plan.user_language_id
+        progress = Progress(
+            user_id=user.id,
+            study_plan_id=source_plan.id,
+            date=date.today(),
+            xp_earned=100,
+            streak_day=1,
+            lessons_completed=1,
+        )
+        db_session.add(progress)
+        await db_session.commit()
+        target_plan = None
+        if target_exists:
+            await _add_language(db_session, user.id, target)
+            target_plan = await _make_plan(db_session, user.id, language=target)
+
+        response = await client.patch(
+            "/api/auth/me", headers=headers, json={"target_language": target}
+        )
+        assert response.status_code == 200
+        assert response.json()["target_language"] == target
+
+        memberships = {
+            entry.target_language: entry
+            for entry in (
+                await db_session.scalars(
+                    select(UserLanguage).where(UserLanguage.user_id == user.id)
+                )
+            ).all()
+        }
+        assert set(memberships) == {source, target}
+        assert memberships[source].id == source_membership_id
+        assert memberships[target].id != source_membership_id
+        assert memberships[source].is_active is False
+        assert memberships[target].is_active is True
+        if target_plan:
+            assert memberships[target].id == target_plan.user_language_id
+
+        current = await client.get("/api/study-plan/current", headers=headers)
+        assert current.status_code == 200
+        if target_plan:
+            assert current.json()["id"] == target_plan.id
+            assert current.json()["target_language"] == target
+        else:
+            assert current.json() is None
+
+        listed = await client.get("/api/languages", headers=headers)
+        assert listed.status_code == 200
+        languages = {entry["target_language"]: entry for entry in listed.json()["languages"]}
+        assert languages[source]["plan"]["id"] == source_plan.id
+        assert languages[source]["progress"]["total_xp"] == 100
+        if target_exists:
+            assert languages[target]["progress"]["total_xp"] == 0
+        else:
+            assert languages[target]["progress"] is None
+
+        restored = await client.patch(
+            "/api/auth/me", headers=headers, json={"target_language": source}
+        )
+        assert restored.status_code == 200
+        current = await client.get("/api/study-plan/current", headers=headers)
+        assert current.status_code == 200
+        assert current.json()["id"] == source_plan.id
+        assert current.json()["target_language"] == source
+        await db_session.refresh(source_plan)
+        await db_session.refresh(progress)
+        assert source_plan.user_language_id == source_membership_id
+        assert source_plan.target_language == source
+        assert source_plan.is_active is True
+        assert progress.study_plan_id == source_plan.id
+        assert progress.xp_earned == 100
 
     @pytest.mark.asyncio
     async def test_korean_language_can_be_added(self, client, db_session):
