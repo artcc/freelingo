@@ -11,8 +11,8 @@ Grammar, Vocabulary, Phrasebook, curriculum, and assessment-bank content is defi
 dataclasses grouped by target language and CEFR level. The frontend retrieves these resources through
 authenticated APIs; it does not contain the canonical datasets.
 
-All eleven supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
-placement-bank data. Dispatchers select exact English variants and ISO-prefix packages for other
+All twelve supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
+placement-bank data. Dispatchers select exact English variants and `pt-BR` before ISO-prefix packages for other
 languages. Unknown dispatcher input currently falls back to `en-GB` rather than returning an error.
 
 Static resource APIs accept an explicit language query and do not require it to match the user's
@@ -80,8 +80,26 @@ reference:
   `verbes-frequents-present`, alongside regular `-er` and pronominal verbs.
 - Italian A2 unit 2 and consolidation include `stare-gerundio`. Its reference topic belongs to A2
   and retains its stable slug; B2 reuses it when contrasting progressive periphrases.
-- Portuguese A1 introductions include `ter` for age. European Portuguese remains the teaching
-  variety, with `estar a + infinitivo` in A1 and the future subjunctive in B1.
+- Portuguese A1 introductions include `ter` for age. European Portuguese (`pt-PT`) teaches
+  `estar a + infinitivo` in A1 and the future subjunctive in B1.
+
+#### Brazilian Portuguese
+
+`pt-BR` has an independent static package in `backend/app/data/pt_BR/`, with per-level datasets and
+assemblers. It shares the A1-C2 progression and resource depth of the Portugal package without importing
+or mutating its runtime objects. Resource identifiers are scoped by target language.
+
+- A1 introduces `você`/`vocês`, singular agreement with `a gente`, reflexive proclisis, optional articles
+  before possessives and personal names, and `estar + gerúndio` in the curriculum and consolidation.
+- A2 distinguishes conversational pronoun placement from traditional formal-writing conventions;
+  contracted double clitics are recognition material rather than the default conversational model.
+- B1-B2 extend the subjunctive, personal infinitive, aspectual periphrases with the gerund, and register.
+- C1-C2 include Brazilian regional diversity, Indigenous and Afro-Brazilian cultural contexts,
+  literary and professional usage, language policy, and comparison with other Portuguese varieties.
+- Placement includes explicit Brazilian agreement, progressive, and possessive-article questions.
+- Vocabulary uses Brazilian spelling and regional equivalents. IPA is optional and supplied only for
+  curated entries; European transcriptions are not reused as Brazilian pronunciation.
+- CEFR progression does not claim automatic equivalence with Portuguese certification exams.
 
 #### Polish
 

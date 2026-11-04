@@ -22,6 +22,7 @@ _LANG_MODULES: dict[str, str] = {
     "ja": "app.data.ja.phrasebook",
     "ko": "app.data.ko.phrasebook",
     "pt": "app.data.pt.phrasebook",
+    "pt-BR": "app.data.pt_BR.phrasebook",
     "zh": "app.data.zh.phrasebook",
 }
 

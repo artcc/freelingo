@@ -6,6 +6,7 @@ _SPEECH_LANGUAGES = {
     "es": "Spanish from Spain",
     "fr": "French from France",
     "pt": "European Portuguese from Portugal",
+    "pt-BR": "Brazilian Portuguese from Brazil",
     "de": "Standard German from Germany",
     "it": "Standard Italian from Italy",
     "ja": "Standard Japanese from Japan",
@@ -38,6 +39,11 @@ _PRONUNCIATION_GUIDANCE = {
     "pt": (
         "Use European Portuguese unstressed-vowel reduction, nasal vowels, and consonants. "
         "Preserve Portugal's natural rhythm and vowel quality rather than English or Brazilian patterns."
+    ),
+    "pt-BR": (
+        "Use natural Brazilian Portuguese vowels, nasalization, consonants, and conversational rhythm. "
+        "Keep a consistent Brazilian accent, with natural regional realizations of r, s, t, and d. "
+        "Avoid Portugal's strong unstressed-vowel reduction and English vowel patterns."
     ),
     "de": (
         "Preserve German vowel length, umlauts, ich and ach sounds, and final devoicing. "

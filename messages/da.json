@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Britisk engelsk",
     "es-ES": "Spansk",
     "it-IT": "Italiensk",
-    "pt-PT": "Portugisisk",
+    "pt-BR": "Portugisisk (Brasilien)",
+    "pt-PT": "Portugisisk (Portugal)",
     "fr-FR": "Fransk",
     "de-DE": "Tysk",
     "pl-PL": "Polsk",
@@ -1498,6 +1500,7 @@
     "zh": "Kinesisk",
     "es-ES-description": "Spansk, som det tales i Spanien.",
     "it-IT-description": "Italiensk, som det tales i Italien.",
+    "pt-BR-description": "Portugisisk, som det tales i Brasilien.",
     "pt-PT-description": "Portugisisk, som det tales i Portugal.",
     "en-US-description": "Engelsk, som det tales i USA.",
     "en-GB-description": "Engelsk, som det tales i Storbritannien.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Forstået",
     "entry1": {
-      "label": "Nu kan du lære polsk!",
-      "desc": "Polsk er nu tilgængeligt som læringssprog med indhold fra A1 til C2. Vælg det, når du starter, eller tilføj det under Indstillinger → Mine sprog."
+      "label": "Nye sprog: polsk og brasiliansk portugisisk",
+      "desc": "Polsk og brasiliansk portugisisk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
     "entry2": {
       "label": "Forbedringer af læringen",

@@ -61,7 +61,7 @@ describe('TargetLanguageSelector', () => {
     )
 
     const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(11)
+    expect(buttons).toHaveLength(12)
   })
 
   it('renders nothing when availableCodes is empty', () => {
@@ -112,6 +112,32 @@ describe('TargetLanguageSelector', () => {
     expect(screen.getByRole('img').getAttribute('src')).toBe(
       '/flags/poland.jpg'
     )
+  })
+
+  it('selects Brazil independently and excludes it when disabled', () => {
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <TargetLanguageSelector
+        value="pt-PT"
+        onChange={onChange}
+        availableCodes={['pt-BR', 'pt-PT']}
+      />
+    )
+    expect(screen.getAllByRole('img').map((img) => img.getAttribute('src'))).toEqual([
+      '/flags/brazil.jpg',
+      '/flags/portugal.jpg',
+    ])
+    fireEvent.click(screen.getByRole('button', { name: /pt-BR/ }))
+    expect(onChange).toHaveBeenCalledWith('pt-BR')
+    rerender(
+      <TargetLanguageSelector
+        value="pt-PT"
+        onChange={onChange}
+        availableCodes={['pt-PT']}
+      />
+    )
+    expect(screen.queryByRole('button', { name: /pt-BR/ })).toBeNull()
+    expect(screen.getAllByRole('button')).toHaveLength(1)
   })
 
   it('shows active state for the selected language', () => {

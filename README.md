@@ -5,7 +5,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.11.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.11.5-brightgreen?style=flat-square)
 
 <p align="left">
   <img src="assets/logo_large.png" alt="FreeLingo logo" />
@@ -163,7 +163,7 @@ disable this behavior.
 - `TTS_PROVIDER` and `STT_PROVIDER` are independent: `local` (Kokoro / faster-whisper) or `openai` (OpenAI API).
 - Conversation, token, freemium, and trial limits are configurable in `.env.example`. In general
   quota defaults, `0` means unlimited; in freemium feature quotas, `0` blocks that feature.
-- Supported study languages include English (`en-GB`, `en-US`), Spanish (`es-ES`), Italian (`it-IT`), Polish (`pl-PL`), Portuguese (`pt-PT`), German (`de-DE`), French (`fr-FR`), Japanese (`ja-JP`), Korean (`ko-KR`), and Mainland Chinese (`zh-CN`). The study language is chosen on `/onboarding` and can be expanded later from Settings → My Languages. The user's native language is asked during registration and is used for flashcard translations, tutor feedback, lesson native explanations, and cached native-language help in static grammar, phrasebook, and vocabulary resources.
+- Supported study languages include English (`en-GB`, `en-US`), French (`fr-FR`), German (`de-DE`), Italian (`it-IT`), Japanese (`ja-JP`), Korean (`ko-KR`), Mainland Chinese (`zh-CN`), Polish (`pl-PL`), Portuguese (`pt-BR`, `pt-PT`), and Spanish (`es-ES`). Brazilian and European Portuguese have separate learning packages and progress. The study language is chosen on `/onboarding` and can be expanded later from Settings → My Languages. The user's native language is asked during registration and is used for flashcard translations, tutor feedback, lesson native explanations, and cached native-language help in static grammar, phrasebook, and vocabulary resources.
 
 ## Linux host: Redis memory overcommit
 

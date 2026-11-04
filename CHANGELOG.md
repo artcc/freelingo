@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.5] - Unreleased
+
+### Added
+
+- Brazilian Portuguese (`pt-BR`) as a separate study language, with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, Brazilian cultural contexts, and regional speech instructions.
+
+### Changed
+
+- Portuguese language selectors explicitly distinguish Brazil from Portugal, using separate flags and localized labels.
+- What's New highlights Polish in the first entry and Brazilian Portuguese in the second, across all interface languages.
+
 ## [1.11.0] - 2026-11-02
 
 ### Added

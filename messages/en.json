@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "British English",
     "es-ES": "Spanish",
     "it-IT": "Italian",
-    "pt-PT": "Portuguese",
+    "pt-BR": "Portuguese (Brazil)",
+    "pt-PT": "Portuguese (Portugal)",
     "fr-FR": "French",
     "de-DE": "German",
     "pl-PL": "Polish",
@@ -1498,6 +1500,7 @@
     "zh": "Chinese",
     "es-ES-description": "Spanish as spoken in Spain.",
     "it-IT-description": "Italian as spoken in Italy.",
+    "pt-BR-description": "Portuguese as spoken in Brazil.",
     "pt-PT-description": "Portuguese as spoken in Portugal.",
     "en-US-description": "English as spoken in the United States.",
     "en-GB-description": "English as spoken in the United Kingdom.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Got it",
     "entry1": {
-      "label": "You can now learn Polish!",
-      "desc": "Polish is now available as a learning language, with content from A1 to C2. Choose it when you get started or add it from Settings → My Languages."
+      "label": "New languages: Polish and Brazilian Portuguese",
+      "desc": "Polish and Brazilian Portuguese are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
     "entry2": {
       "label": "Learning improvements",

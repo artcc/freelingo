@@ -38,6 +38,7 @@ _LANG_MODULES: dict[str, str] = {
     "ja": "app.data.ja.curriculum",
     "ko": "app.data.ko.curriculum",
     "pt": "app.data.pt.curriculum",
+    "pt-BR": "app.data.pt_BR.curriculum",
     "zh": "app.data.zh.curriculum",
 }
 
@@ -87,6 +88,15 @@ _I18N = {
         "test_objectives": [
             "Powtórz wszystkie zagadnienia gramatyczne z tego poziomu",
             "Ukończ test, aby odblokować kolejny poziom",
+        ],
+    },
+    "pt-BR": {
+        "lesson_title": "{title} - Lição {n}",
+        "test_unit_title": "Avaliação de nível {level}",
+        "test_title": "Avaliação de nível {level}",
+        "test_objectives": [
+            "Revisar todos os tópicos de gramática deste nível",
+            "Concluir a avaliação para desbloquear o próximo nível",
         ],
     },
     "pt-PT": {

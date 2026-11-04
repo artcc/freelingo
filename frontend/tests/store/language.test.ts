@@ -44,7 +44,7 @@ describe('useLanguageStore — initial state', () => {
     expect(useLanguageStore.getState().supportedLanguages).toEqual(
       SUPPORTED_TARGET_LANGUAGES
     )
-    expect(useLanguageStore.getState().supportedLanguages.length).toBe(11)
+    expect(useLanguageStore.getState().supportedLanguages.length).toBe(12)
   })
 
   it('starts with empty availableLanguageCodes', () => {
@@ -603,6 +603,38 @@ describe('useLanguageStore — addLanguage', () => {
       body: JSON.stringify({ target_language: 'es-ES' }),
     })
     expect(mockApiFetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps Portuguese variants separate through add, switch, and remove', async () => {
+    const response = (active: string, codes = ['pt-BR', 'pt-PT']) => ({
+      languages: codes.map((code) => ({
+        target_language: code,
+        is_active: code === active,
+        plan: null,
+        progress: null,
+      })),
+      all_supported_languages: ['pt-BR', 'pt-PT'],
+    })
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse(response('pt-BR')))
+    expect(await useLanguageStore.getState().addLanguage('pt-BR')).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('pt-BR')
+    expect(useLanguageStore.getState().availableLanguageCodes).toEqual(['pt-BR', 'pt-PT'])
+
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse(response('pt-PT')))
+    expect(await useLanguageStore.getState().switchLanguage('pt-PT')).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.flagPath).toBe('/flags/portugal.jpg')
+
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse(null, true, 204))
+      .mockResolvedValueOnce(mockResponse(response('pt-PT', ['pt-PT'])))
+    expect(await useLanguageStore.getState().removeLanguage('pt-BR')).toBe(true)
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/languages/pt-BR', { method: 'DELETE' })
+    expect(useLanguageStore.getState().userLanguages.map((lang) => lang.target_language)).toEqual(['pt-PT'])
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('pt-PT')
   })
 
   it('does not call fetchLanguages when POST fails', async () => {

@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 11 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(11)
+  it('contains exactly 12 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(12)
   })
 
   const expectedCodes = [
@@ -20,6 +20,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'es-ES',
     'it-IT',
     'pl-PL',
+    'pt-BR',
     'pt-PT',
     'fr-FR',
     'de-DE',
@@ -55,6 +56,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/spain.jpg')
     expect(paths).toContain('/flags/italy.jpg')
     expect(paths).toContain('/flags/poland.jpg')
+    expect(paths).toContain('/flags/brazil.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
     expect(paths).toContain('/flags/germany.jpg')
@@ -78,7 +80,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(esLangs).toHaveLength(1)
     expect(itLangs).toHaveLength(1)
     expect(plLangs).toHaveLength(1)
-    expect(ptLangs).toHaveLength(1)
+    expect(ptLangs).toHaveLength(2)
     expect(frLangs).toHaveLength(1)
     expect(deLangs).toHaveLength(1)
     expect(jaLangs).toHaveLength(1)
@@ -89,12 +91,13 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(11)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(12)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
       'es-ES',
       'it-IT',
+      'pt-BR',
       'pt-PT',
       'fr-FR',
       'de-DE',
@@ -103,6 +106,22 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'ko-KR',
       'zh-CN',
     ])
+  })
+
+  it('keeps canonical Brazilian metadata distinct from Portugal', () => {
+    expect(getLanguageByCode('PT-br')).toMatchObject({
+      code: 'pt-BR',
+      name: 'Português (Brasil)',
+      nameEn: 'Portuguese (Brazil)',
+      flagPath: '/flags/brazil.jpg',
+      iso639: 'pt',
+      fontClass: 'font-target-latin',
+      script: 'latin',
+      usesWordSpacing: true,
+    })
+    expect(getTargetLanguageTextClass('pt-BR')).toBe(
+      getTargetLanguageTextClass('pt-PT')
+    )
   })
 
   it('contains complete Polish display metadata', () => {
@@ -182,7 +201,7 @@ describe('getLanguageByCode', () => {
   it('returns Portuguese for pt-PT', () => {
     const lang = getLanguageByCode('pt-PT')
     expect(lang).toBeDefined()
-    expect(lang!.name).toBe('Português')
+    expect(lang!.name).toBe('Português (Portugal)')
   })
 
   it('returns French for fr-FR', () => {

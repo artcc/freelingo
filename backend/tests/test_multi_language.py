@@ -396,6 +396,7 @@ class TestLanguageAPI:
         assert "ja-JP" in data["all_supported_languages"]
         assert "ko-KR" in data["all_supported_languages"]
         assert "pl-PL" in data["all_supported_languages"]
+        assert "pt-BR" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -491,6 +492,34 @@ class TestLanguageAPI:
 
         assert res.status_code == 201
         assert res.json()["target_language"] == "pl-PL"
+
+    @pytest.mark.asyncio
+    async def test_portuguese_variants_have_independent_lifecycles(self, client, db_session):
+        user, headers = await _make_user(db_session)
+        plans = {}
+        for code in ("pt-BR", "pt-PT"):
+            added = await client.post(
+                "/api/languages", headers=headers, json={"target_language": code}
+            )
+            assert added.status_code == 201
+            assert added.json()["target_language"] == code
+            plans[code] = await _make_plan(db_session, user.id, language=code)
+
+        assert plans["pt-BR"].user_language_id != plans["pt-PT"].user_language_id
+        assert plans["pt-BR"].is_active and plans["pt-PT"].is_active
+        switched = await client.put(
+            "/api/languages/active", headers=headers, json={"target_language": "pt-BR"}
+        )
+        assert switched.status_code == 200
+        assert switched.json()["target_language"] == "pt-BR"
+
+        removed = await client.delete("/api/languages/pt-PT", headers=headers)
+        assert removed.status_code == 204
+        listed = await client.get("/api/languages", headers=headers)
+        languages = {entry["target_language"]: entry for entry in listed.json()["languages"]}
+        assert "pt-PT" not in languages
+        assert languages["pt-BR"]["is_active"] is True
+        assert languages["pt-BR"]["plan"]["id"] == plans["pt-BR"].id
 
     @pytest.mark.asyncio
     async def test_korean_language_can_be_added(self, client, db_session):

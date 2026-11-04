@@ -28,6 +28,7 @@ The application supports these BCP-47 target-language codes:
 - `pl-PL` — Polish
 - `ja-JP` — Japanese
 - `ko-KR` — Korean (South Korea)
+- `pt-BR` — Portuguese (Brazil)
 - `pt-PT` — Portuguese (Portugal)
 - `zh-CN` — Chinese (Mainland China)
 
@@ -42,6 +43,9 @@ frontend catalog.
 Every supported language has backend A1-C2 curriculum, grammar, vocabulary, phrasebook, and
 assessment-bank data. The backend is the canonical source for these resources; the frontend loads
 them through the corresponding APIs.
+
+Brazilian and European Portuguese are separate memberships and plans, just like the two English
+variants. Their shared ISO recognition code does not merge progress, resources, or active selection.
 
 ## Domain model
 

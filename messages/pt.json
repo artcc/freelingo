@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Inglês britânico",
     "es-ES": "Espanhol",
     "it-IT": "Italiano",
-    "pt-PT": "Português",
+    "pt-BR": "Português do Brasil",
+    "pt-PT": "Português de Portugal",
     "fr-FR": "Francês",
     "de-DE": "Alemão",
     "pl-PL": "Polaco",
@@ -1498,6 +1500,7 @@
     "zh": "chinês",
     "es-ES-description": "Espanhol falado na Espanha.",
     "it-IT-description": "Italiano falado na Itália.",
+    "pt-BR-description": "Português falado no Brasil.",
     "pt-PT-description": "Português falado em Portugal.",
     "en-US-description": "Inglês falado nos Estados Unidos.",
     "en-GB-description": "Inglês falado no Reino Unido.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Entendido",
     "entry1": {
-      "label": "Já podes aprender polaco!",
-      "desc": "Adicionámos o polaco como idioma de aprendizagem, com conteúdos de A1 a C2. Escolhe-o ao começar ou adiciona-o em Definições → Meus idiomas."
+      "label": "Novos idiomas: polaco e português do Brasil",
+      "desc": "Adicionámos o polaco e o português do Brasil como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
     "entry2": {
       "label": "Melhorias na aprendizagem",
