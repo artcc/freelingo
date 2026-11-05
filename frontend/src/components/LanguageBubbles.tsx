@@ -1,16 +1,17 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 import LinguAvatar from '@/components/lingu/LinguAvatar'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 
-function circlePosition(index: number, total: number, radius: number) {
+function orbitPosition(index: number, total: number) {
   const angle = (index / total) * 2 * Math.PI - Math.PI / 2
-  const x = Math.cos(angle) * radius
-  const y = Math.sin(angle) * radius
+  // Bound precision so server and browser math produce identical CSS values.
+  const x = Number((Math.cos(angle) * 215).toFixed(3))
+  const y = Number((Math.sin(angle) * 140).toFixed(3))
   return { x, y }
 }
 
@@ -22,7 +23,7 @@ export function LanguageBubbles() {
   const positions = useMemo(
     () =>
       SUPPORTED_TARGET_LANGUAGES.map((_, i) =>
-        circlePosition(i, SUPPORTED_TARGET_LANGUAGES.length, 135)
+        orbitPosition(i, SUPPORTED_TARGET_LANGUAGES.length)
       ),
     []
   )
@@ -30,10 +31,10 @@ export function LanguageBubbles() {
   return (
     <div
       aria-hidden={!ready}
-      className={`relative h-[360px] w-full transition-opacity duration-300 motion-reduce:transition-none sm:h-[380px] ${ready ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+      className={`relative flex w-full flex-wrap justify-center gap-x-3 gap-y-4 pt-3 pb-8 transition-opacity duration-300 motion-reduce:transition-none sm:block sm:h-[380px] sm:p-0 ${ready ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
     >
       <div
-        className="absolute top-1/2 left-1/2 z-[1] h-[140px] w-[140px] -translate-x-1/2 -translate-y-1/2"
+        className="relative z-[1] flex h-[140px] w-full justify-center sm:absolute sm:top-1/2 sm:left-1/2 sm:w-[140px] sm:-translate-x-1/2 sm:-translate-y-1/2"
         role="img"
         aria-label="FreeLingo"
       >
@@ -41,23 +42,24 @@ export function LanguageBubbles() {
           animation="saludo"
           loop
           onReady={onReady}
-          className="h-full w-full"
+          className="h-[140px] w-[140px]"
         />
       </div>
 
       {SUPPORTED_TARGET_LANGUAGES.map((lang, i) => {
         const { x, y } = positions[i]
         const greeting = t(`languageGreetings.${lang.code}`) ?? lang.name
-        const delay = i * 0.35
+        const delay = Number((i * 0.35).toFixed(2))
         return (
           <div
             key={lang.code}
-            className="absolute z-0 w-max"
-            style={{
-              left: `calc(50% + ${x}px)`,
-              top: `calc(50% + ${y}px)`,
-              transform: 'translate(-50%, -50%)',
-            }}
+            className="relative z-0 w-max sm:absolute sm:top-1/2 sm:left-1/2 sm:mt-[var(--bubble-y)] sm:ml-[var(--bubble-x)] sm:-translate-x-1/2 sm:-translate-y-1/2"
+            style={
+              {
+                '--bubble-x': `${x}px`,
+                '--bubble-y': `${y}px`,
+              } as CSSProperties
+            }
           >
             <div
               className="animate-float w-max motion-reduce:animate-none"

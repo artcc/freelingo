@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Mitä kieliä voin opiskella?",
-        "answer": "Britti- ja amerikanenglantia, espanjaa, italiaa, brasilian- ja portugalinportugalia, saksaa, ranskaa, puolaa, hollantia, venäjää, ruotsia, japania, koreaa ja Manner-Kiinan kiinaa. Voit opiskella useita samanaikaisesti, ja jokaisella kielellä on oma suunnitelma ja edistyminen."
+        "answer": "{languages}. Voit opiskella useita samanaikaisesti, ja jokaisella kielellä on oma suunnitelma ja edistyminen."
       },
       "start": {
         "question": "Miten aloitan opiskelun?",
@@ -1292,7 +1292,7 @@
     "workflowStep5": "Harjoittele sanastoa muistikorteilla samalla",
     "workflowStep6": "Harjoittele vapaata keskustelua Lingun kanssa",
     "q_language": "Mitä kieltä voin oppia?",
-    "a_language": "FreeLingo tukee tällä hetkellä useita kieliä (amerikanenglanti, brittienglanti, ranska, saksa, italia, japani, korea, Manner-Kiinan kiina, brasilian- ja portugalinportugali, puola, hollanti, venäjä, ruotsi ja espanja), ja lisäämme kieliä ajan mittaan. Kun uusi kieli tulee saataville, löydät sen kohdasta Asetukset → Omat kielet – lisää se ja aloita opiskelu heti.",
+    "a_language": "FreeLingo tukee tällä hetkellä useita kieliä ({languages}), ja lisäämme kieliä ajan mittaan. Kun uusi kieli tulee saataville, löydät sen kohdasta Asetukset → Omat kielet – lisää se ja aloita opiskelu heti.",
     "q_assessment": "Mikä tasoarvio on?",
     "a_assessment": "Mukautuva testi, jossa on enintään 15 kysymystä opiskelukielen omasta kysymyspankista. Se kattaa kieliopin, sanaston ja luetun ymmärtämisen tasoilla A1–C2. Tulos arvioi CEFR-tasosi ja näyttää vahvuudet ja harjoittelukohteet; voit muuttaa ehdotettua tasoa ennen suunnitelman luomista.",
     "q_studyPlan": "Mikä opintosuunnitelma on ja miten luon sellaisen?",

@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Koje jezike mogu učiti?",
-        "answer": "Britanski i američki engleski, španjolski, talijanski, portugalski iz Brazila i Portugala, njemački, francuski, poljski, nizozemski, ruski, švedski, japanski, korejski i kontinentalni kineski. Možeš učiti više jezika istodobno, uz zasebne planove i napredak za svaki jezik."
+        "answer": "{languages}. Možeš učiti više jezika istodobno, uz zasebne planove i napredak za svaki jezik."
       },
       "start": {
         "question": "Kako započeti učenje?",
@@ -1292,7 +1292,7 @@
     "workflowStep5": "Istodobno vježbaj rječnik karticama",
     "workflowStep6": "Vježbaj slobodan razgovor s Linguom",
     "q_language": "Koji ću jezik učiti?",
-    "a_language": "FreeLingo trenutačno podržava više jezika (američki engleski, britanski engleski, francuski, njemački, talijanski, japanski, korejski, kineski koji se govori u kontinentalnoj Kini, portugalski iz Brazila i Portugala, poljski, nizozemski, ruski, švedski i španjolski), a s vremenom ćemo dodati još jezika. Kad novi jezik postane dostupan, pronaći ćeš ga pod Postavke → Moji jezici – dodaj ga i odmah počni učiti.",
+    "a_language": "FreeLingo trenutačno podržava više jezika ({languages}), a s vremenom ćemo dodati još jezika. Kad novi jezik postane dostupan, pronaći ćeš ga pod Postavke → Moji jezici – dodaj ga i odmah počni učiti.",
     "q_assessment": "Što je procjena razine?",
     "a_assessment": "Prilagodljivi test s najviše 15 pitanja iz banke pitanja za jezik koji učiš. Obuhvaća gramatiku, rječnik i razumijevanje pročitanog od A1 do C2. Rezultat procjenjuje CEFR razinu i pokazuje prednosti i područja za vježbu; predloženu razinu možeš prilagoditi prije izrade plana.",
     "q_studyPlan": "Što je plan učenja i kako ga stvaram?",

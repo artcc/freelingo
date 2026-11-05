@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useAuthStore } from '@/store/auth'
 import { trackBrowserEvent } from '@/lib/analytics'
+import { useTargetLanguageList } from '@/hooks/useTargetLanguageList'
 
 interface FAQItem {
   q: string
@@ -13,6 +14,7 @@ interface FAQItem {
 
 export default function FAQPage() {
   const t = useTranslations('faq')
+  const languages = useTargetLanguageList()
   const [open, setOpen] = useState<number | null>(null)
   const isAdmin = useAuthStore((s) => s.user?.role === 'admin')
 
@@ -60,7 +62,7 @@ export default function FAQPage() {
   const faqs: FAQItem[] = (() => {
     const items: FAQItem[] = [
       { q: t('q_start'), a: t.rich('a_start', { strong }) },
-      { q: t('q_language'), a: t('a_language') },
+      { q: t('q_language'), a: t('a_language', { languages }) },
       {
         q: t('q_workflow'),
         a: (

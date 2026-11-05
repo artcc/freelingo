@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Jakich języków mogę się uczyć?",
-        "answer": "Angielskiego brytyjskiego i amerykańskiego, hiszpańskiego, włoskiego, portugalskiego z Brazylii i Portugalii, niemieckiego, francuskiego, polskiego, niderlandzkiego, rosyjskiego, szwedzkiego, japońskiego, koreańskiego i chińskiego kontynentalnego. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
+        "answer": "{languages}. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
       },
       "start": {
         "question": "Jak zacząć naukę?",
@@ -1292,7 +1292,7 @@
     "workflowStep5": "Używaj fiszek do trenowania słownictwa równolegle",
     "workflowStep6": "Ćwicz swobodną rozmowę z Lingu",
     "q_language": "Jakiego języka będę się uczyć?",
-    "a_language": "FreeLingo obsługuje obecnie kilka języków (amerykański angielski, brytyjski angielski, chiński kontynentalny, francuski, hiszpański, japoński, koreański, niemiecki, portugalski z Brazylii i Portugalii, włoski, polski, niderlandzki, rosyjski, szwedzki) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
+    "a_language": "FreeLingo obsługuje obecnie kilka języków ({languages}) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
     "q_assessment": "Czym jest ocena poziomu?",
     "a_assessment": "Adaptacyjny test z maksymalnie 15 pytaniami z banku pytań dla języka nauki. Obejmuje gramatykę, słownictwo i czytanie ze zrozumieniem od A1 do C2. Wynik szacuje poziom CEFR i wskazuje mocne strony oraz obszary do ćwiczeń; przed utworzeniem planu możesz zmienić sugerowany poziom.",
     "q_studyPlan": "Czym jest plan nauki i jak go wygenerować?",

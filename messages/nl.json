@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Welke talen kan ik leren?",
-        "answer": "Brits en Amerikaans Engels, Spaans, Italiaans, Portugees uit Brazilië en Portugal, Duits, Frans, Pools, Nederlands, Russisch, Zweeds, Japans, Koreaans en Chinees van het vasteland. Je kunt meerdere talen tegelijk leren, met aparte plannen en voortgang per taal."
+        "answer": "{languages}. Je kunt meerdere talen tegelijk leren, met aparte plannen en voortgang per taal."
       },
       "start": {
         "question": "Hoe begin ik met leren?",
@@ -1292,7 +1292,7 @@
     "workflowStep5": "Gebruik flashcards om woordenschat parallel te trainen",
     "workflowStep6": "Oefen vrije gesprekken met Lingu",
     "q_language": "Welke taal leer ik?",
-    "a_language": "FreeLingo ondersteunt momenteel meerdere talen (Amerikaans Engels, Brits Engels, Chinees (vasteland), Duits, Frans, Italiaans, Japans, Koreaans, Portugees uit Brazilië en Portugal, Spaans, Pools, Nederlands, Russisch, Zweeds) en we zullen er in de loop van de tijd meer toevoegen. Wanneer een nieuwe taal beschikbaar is, vind je deze in Instellingen → Mijn talen — voeg hem toe en begin meteen met leren.",
+    "a_language": "FreeLingo ondersteunt momenteel meerdere talen ({languages}) en we zullen er in de loop van de tijd meer toevoegen. Wanneer een nieuwe taal beschikbaar is, vind je deze in Instellingen → Mijn talen — voeg hem toe en begin meteen met leren.",
     "q_assessment": "Wat is de Beoordeling?",
     "a_assessment": "Een adaptieve quiz met maximaal 15 vragen uit een vragenbank voor je leertaal. De quiz behandelt grammatica, woordenschat en leesbegrip van A1 tot C2. Het resultaat schat je CEFR-niveau in en toont sterke punten en oefenpunten; je kunt het voorgestelde niveau aanpassen voordat je het plan maakt.",
     "q_studyPlan": "Wat is het Studieplan en hoe genereer ik er een?",
