@@ -28,7 +28,7 @@ export default function TargetLanguageSelector({
           key={lang.code}
           type="button"
           onClick={() => onChange(lang.code)}
-          className={`flex items-center gap-2 border px-3 py-3 font-mono text-xs tracking-widest uppercase transition-colors ${
+          className={`flex items-center gap-2 border px-3 py-3 text-left font-mono text-xs tracking-widest uppercase transition-colors ${
             value === lang.code
               ? 'border-fl-accent bg-fl-accent text-fl-accent-fg'
               : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg'
