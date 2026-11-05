@@ -398,6 +398,7 @@ class TestLanguageAPI:
         assert "pl-PL" in data["all_supported_languages"]
         assert "pt-BR" in data["all_supported_languages"]
         assert "nl-NL" in data["all_supported_languages"]
+        assert "ru-RU" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -459,14 +460,15 @@ class TestLanguageAPI:
         assert res.status_code == 400
 
     @pytest.mark.asyncio
-    async def test_supported_languages_validation(self, client, db_session):
-        """POST /api/languages with unsupported language returns 422."""
+    @pytest.mark.parametrize("language", ["xx-XX", "ru", "ru-ru"])
+    async def test_supported_languages_validation(self, client, db_session, language):
+        """POST /api/languages requires a supported canonical target code."""
         user, headers = await _make_user(db_session)
 
         res = await client.post(
             "/api/languages",
             headers=headers,
-            json={"target_language": "xx-XX"},
+            json={"target_language": language},
         )
         assert res.status_code == 422
 
@@ -495,45 +497,107 @@ class TestLanguageAPI:
         assert res.json()["target_language"] == "pl-PL"
 
     @pytest.mark.asyncio
-    async def test_dutch_add_plan_switch_and_remove_preserve_other_language(
-        self, client, db_session
+    @pytest.mark.parametrize("language", ["nl-NL", "ru-RU"])
+    async def test_add_plan_switch_and_remove_preserve_other_language(
+        self, client, db_session, language
     ):
         from app.data.curriculum import get_curriculum
 
         user, headers = await _make_user(db_session, language="en-GB")
         english = await _make_plan(db_session, user.id, language="en-GB")
         added = await client.post(
-            "/api/languages", headers=headers, json={"target_language": "nl-NL"}
+            "/api/languages", headers=headers, json={"target_language": language}
         )
         assert added.status_code == 201
-        assert added.json()["target_language"] == "nl-NL"
-        dutch = await _make_plan(db_session, user.id, language="nl-NL")
-        assert dutch.user_language_id != english.user_language_id
-        assert (
-            get_curriculum(dutch.target_language)["A1"][0].title
-            == "Kennismaken en elkaar begrijpen"
+        assert added.json()["target_language"] == language
+        generated = await client.post(
+            "/api/study-plan/generate",
+            headers=headers,
+            json={
+                "cefr_level": "A1",
+                "target_language": language,
+                "goals": ["grammar"],
+                "duration_weeks": 4,
+                "days_per_week": 4,
+            },
         )
+        assert generated.status_code == 200
+        assert generated.json()["target_language"] == language
+        target_plan = await db_session.scalar(
+            select(StudyPlan).where(
+                StudyPlan.user_id == user.id,
+                StudyPlan.target_language == language,
+                StudyPlan.is_active.is_(True),
+            )
+        )
+        assert target_plan is not None
+        assert target_plan.user_language_id != english.user_language_id
+        assert get_curriculum(target_plan.target_language) is not get_curriculum("en-GB")
+        first_unit = get_curriculum(language)["A1"][0]
+        first_day = target_plan.generated_plan["weekly_plan"][0]["days"][0]
+        assert first_day["unit_id"] == first_unit.id
+        assert first_day["title"].startswith(first_unit.title)
+        target_plan_id, english_plan_id = target_plan.id, english.id
+        db_session.add_all(
+            [
+                Progress(
+                    user_id=user.id,
+                    study_plan_id=plan.id,
+                    date=date.today(),
+                    xp_earned=xp,
+                    streak_day=1,
+                    lessons_completed=1,
+                )
+                for plan, xp in ((english, 100), (target_plan, 25))
+            ]
+        )
+        await db_session.commit()
         switched = await client.put(
             "/api/languages/active", headers=headers, json={"target_language": "en-GB"}
         )
         assert switched.status_code == 200
+        current = await client.get("/api/study-plan/current", headers=headers)
+        assert current.status_code == 200
+        assert current.json()["id"] == english_plan_id
+        assert current.json()["target_language"] == "en-GB"
         switched_back = await client.put(
-            "/api/languages/active", headers=headers, json={"target_language": "nl-NL"}
+            "/api/languages/active", headers=headers, json={"target_language": language}
         )
         assert switched_back.status_code == 200
+        current = await client.get("/api/study-plan/current", headers=headers)
+        assert current.status_code == 200
+        assert current.json()["id"] == target_plan_id
+        assert current.json()["target_language"] == language
         listed = await client.get("/api/languages", headers=headers)
+        assert listed.status_code == 200
         languages = {entry["target_language"]: entry for entry in listed.json()["languages"]}
-        assert languages["nl-NL"]["is_active"] is True
-        assert languages["nl-NL"]["plan"]["id"] == dutch.id
-        assert languages["en-GB"]["plan"]["id"] == english.id
-        await client.put(
+        assert languages[language]["is_active"] is True
+        assert languages[language]["plan"]["id"] == target_plan_id
+        assert languages[language]["progress"]["total_xp"] == 25
+        assert languages["en-GB"]["plan"]["id"] == english_plan_id
+        assert languages["en-GB"]["progress"]["total_xp"] == 100
+        switched = await client.put(
             "/api/languages/active", headers=headers, json={"target_language": "en-GB"}
         )
-        removed = await client.delete("/api/languages/nl-NL", headers=headers)
+        assert switched.status_code == 200
+        removed = await client.delete(f"/api/languages/{language}", headers=headers)
         assert removed.status_code == 204
         listed = await client.get("/api/languages", headers=headers)
+        assert listed.status_code == 200
         assert [entry["target_language"] for entry in listed.json()["languages"]] == ["en-GB"]
-        assert listed.json()["languages"][0]["plan"]["id"] == english.id
+        assert listed.json()["languages"][0]["plan"]["id"] == english_plan_id
+        assert listed.json()["languages"][0]["progress"]["total_xp"] == 100
+        remaining_plans = await db_session.scalar(
+            select(func.count()).select_from(StudyPlan).where(StudyPlan.id == target_plan_id)
+        )
+        remaining_progress = await db_session.scalar(
+            select(func.count())
+            .select_from(Progress)
+            .where(Progress.study_plan_id == target_plan_id)
+        )
+        assert remaining_plans == remaining_progress == 0
+        await db_session.refresh(english)
+        assert english.is_active is True
 
     @pytest.mark.asyncio
     async def test_portuguese_variants_have_independent_lifecycles(self, client, db_session):

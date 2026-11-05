@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Quelles langues puis-je apprendre ?",
-        "answer": "Anglais britannique et américain, espagnol, italien, portugais, allemand, français, japonais, coréen et chinois continental. Vous pouvez en apprendre plusieurs à la fois, avec des plans et une progression propres à chaque langue."
+        "answer": "Anglais britannique et américain, espagnol, italien, portugais du Brésil et du Portugal, allemand, français, polonais, néerlandais, russe, japonais, coréen et chinois continental. Vous pouvez en apprendre plusieurs à la fois, avec des plans et une progression propres à chaque langue."
       },
       "start": {
         "question": "Comment commencer à apprendre ?",
@@ -92,6 +92,7 @@
     "footerProduct": "Produit",
     "footerLegal": "Mentions légales",
     "languageGreetings": {
+      "ru-RU": "Привет!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1290,7 +1291,7 @@
     "workflowStep5": "Utilisez les Fiches pour entraîner le vocabulaire en parallèle",
     "workflowStep6": "Pratiquez la conversation libre avec Lingu",
     "q_language": "Quelle langue vais-je apprendre ?",
-    "a_language": "FreeLingo prend actuellement en charge plusieurs langues (allemand, anglais américain, anglais britannique, chinois continental, coréen, espagnol, français, italien, japonais, portugais), et nous en ajouterons d'autres au fil du temps. Lorsqu'une nouvelle langue sera disponible, vous la trouverez dans Paramètres → Mes langues — ajoutez-la et commencez à apprendre tout de suite.",
+    "a_language": "FreeLingo prend actuellement en charge plusieurs langues (allemand, anglais américain, anglais britannique, chinois continental, coréen, espagnol, français, italien, japonais, portugais du Brésil et du Portugal, polonais, néerlandais, russe), et nous en ajouterons d'autres au fil du temps. Lorsqu'une nouvelle langue sera disponible, vous la trouverez dans Paramètres → Mes langues — ajoutez-la et commencez à apprendre tout de suite.",
     "q_assessment": "Qu’est-ce que l’Évaluation ?",
     "a_assessment": "Un test adaptatif de 15 questions maximum issues d'une banque propre à votre langue d'étude. Il couvre grammaire, vocabulaire et compréhension écrite de A1 à C2. Le résultat estime votre niveau CECR et indique vos points forts et les aspects à travailler ; vous pouvez ajuster le niveau proposé avant de créer votre plan.",
     "q_studyPlan": "Qu’est-ce que le Plan d’Étude et comment en générer un ?",
@@ -1477,6 +1478,9 @@
     "supportedLanguages": "Langues disponibles"
   },
   "targetLanguages": {
+    "ru-RU": "Russe",
+    "ru": "Russe",
+    "ru-RU-description": "Russe parlé en Russie, avec l'alphabet cyrillique.",
     "nl-NL": "Néerlandais (Pays-Bas)",
     "nl": "Néerlandais",
     "nl-NL-description": "Néerlandais parlé aux Pays-Bas.",
@@ -1774,8 +1778,8 @@
     "version": "v1.11.5",
     "cta": "Compris",
     "entry1": {
-      "label": "Nouvelles langues : polonais, portugais du Brésil et néerlandais",
-      "desc": "Le polonais, le portugais du Brésil et le néerlandais sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
+      "label": "Nouvelles langues : polonais, portugais du Brésil, russe et néerlandais",
+      "desc": "Le polonais, le portugais du Brésil, le russe et le néerlandais sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
     },
     "entry2": {
       "label": "Des améliorations pour apprendre",

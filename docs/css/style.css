@@ -207,7 +207,7 @@ main {
 .language-orbit {
   position: relative;
   width: min(100%, 32rem);
-  height: 21rem;
+  height: 24rem;
   margin-bottom: 2rem;
 }
 
@@ -259,53 +259,78 @@ main {
 }
 
 .bubble-1 {
-  transform: translate(calc(-50% + 0rem), calc(-50% - 9.3rem));
+  transform: translate(-50%, calc(-50% - 10.5rem));
   animation-delay: 0s, 0s;
 }
 
 .bubble-2 {
-  transform: translate(calc(-50% + 5.7rem), calc(-50% - 7.65rem));
+  transform: translate(calc(-50% + 2.4rem), calc(-50% + 10.27rem));
   animation-delay: 0.08s, 0.25s;
 }
 
 .bubble-3 {
-  transform: translate(calc(-50% + 9.2rem), calc(-50% - 2.9rem));
+  transform: translate(calc(-50% + 6.76rem), calc(-50% + 8.49rem));
   animation-delay: 0.16s, 0.5s;
 }
 
 .bubble-4 {
-  transform: translate(calc(-50% + 8.65rem), calc(-50% + 3.55rem));
+  transform: translate(calc(-50% + 4.68rem), calc(-50% - 9.59rem));
   animation-delay: 0.24s, 0.75s;
 }
 
 .bubble-5 {
-  transform: translate(calc(-50% + 5.05rem), calc(-50% + 7.9rem));
+  transform: translate(calc(-50% - 6.76rem), calc(-50% + 8.49rem));
   animation-delay: 0.32s, 1s;
 }
 
 .bubble-6 {
-  transform: translate(calc(-50% - 5.05rem), calc(-50% + 7.9rem));
+  transform: translate(calc(-50% + 9.96rem), calc(-50% + 5.25rem));
   animation-delay: 0.4s, 1.25s;
 }
 
 .bubble-7 {
-  transform: translate(calc(-50% - 8.65rem), calc(-50% + 3.55rem));
+  transform: translate(calc(-50% - 9.96rem), calc(-50% + 5.25rem));
   animation-delay: 0.48s, 1.5s;
 }
 
 .bubble-8 {
-  transform: translate(calc(-50% - 9.2rem), calc(-50% - 2.9rem));
+  transform: translate(calc(-50% + 10.94rem), calc(-50% - 3.24rem));
   animation-delay: 0.56s, 1.75s;
 }
 
 .bubble-9 {
-  transform: translate(calc(-50% - 5.7rem), calc(-50% - 7.65rem));
+  transform: translate(calc(-50% - 10.94rem), calc(-50% - 3.24rem));
   animation-delay: 0.64s, 2s;
 }
 
 .bubble-10 {
-  transform: translate(calc(-50% + 0rem), calc(-50% + 10.05rem));
+  transform: translate(calc(-50% + 8.55rem), calc(-50% - 7.03rem));
   animation-delay: 0.72s, 2.25s;
+}
+
+.bubble-11 {
+  transform: translate(calc(-50% - 2.4rem), calc(-50% + 10.27rem));
+  animation-delay: 0.8s, 2.5s;
+}
+
+.bubble-12 {
+  transform: translate(calc(-50% - 11.44rem), calc(-50% + 1.1rem));
+  animation-delay: 0.88s, 2.75s;
+}
+
+.bubble-13 {
+  transform: translate(calc(-50% - 8.55rem), calc(-50% - 7.03rem));
+  animation-delay: 0.96s, 3s;
+}
+
+.bubble-14 {
+  transform: translate(calc(-50% + 11.44rem), calc(-50% + 1.1rem));
+  animation-delay: 1.04s, 3.25s;
+}
+
+.bubble-15 {
+  transform: translate(calc(-50% - 4.68rem), calc(-50% - 9.59rem));
+  animation-delay: 1.12s, 3.5s;
 }
 
 @keyframes bubble-in {
@@ -631,7 +656,7 @@ footer {
   }
 
   .language-orbit {
-    height: 18rem;
+    height: 22rem;
   }
 
   .orbit-logo {
@@ -649,43 +674,63 @@ footer {
   }
 
   .bubble-1 {
-    transform: translate(calc(-50% + 0rem), calc(-50% - 7.55rem));
+    transform: translate(-50%, calc(-50% - 9.3rem));
   }
 
   .bubble-2 {
-    transform: translate(calc(-50% + 4.65rem), calc(-50% - 6.2rem));
+    transform: translate(calc(-50% + 1.87rem), calc(-50% + 9.1rem));
   }
 
   .bubble-3 {
-    transform: translate(calc(-50% + 7.35rem), calc(-50% - 2.35rem));
+    transform: translate(calc(-50% + 5.29rem), calc(-50% + 7.52rem));
   }
 
   .bubble-4 {
-    transform: translate(calc(-50% + 6.85rem), calc(-50% + 2.9rem));
+    transform: translate(calc(-50% + 4.1rem), calc(-50% - 8.5rem));
   }
 
   .bubble-5 {
-    transform: translate(calc(-50% + 4.05rem), calc(-50% + 6.45rem));
+    transform: translate(calc(-50% - 5.29rem), calc(-50% + 7.52rem));
   }
 
   .bubble-6 {
-    transform: translate(calc(-50% - 4.05rem), calc(-50% + 6.45rem));
+    transform: translate(calc(-50% + 7.79rem), calc(-50% + 4.65rem));
   }
 
   .bubble-7 {
-    transform: translate(calc(-50% - 6.85rem), calc(-50% + 2.9rem));
+    transform: translate(calc(-50% - 7.79rem), calc(-50% + 4.65rem));
   }
 
   .bubble-8 {
-    transform: translate(calc(-50% - 7.35rem), calc(-50% - 2.35rem));
+    transform: translate(calc(-50% + 8.56rem), calc(-50% - 2.87rem));
   }
 
   .bubble-9 {
-    transform: translate(calc(-50% - 4.65rem), calc(-50% - 6.2rem));
+    transform: translate(calc(-50% - 8.56rem), calc(-50% - 2.87rem));
   }
 
   .bubble-10 {
-    transform: translate(calc(-50% + 0rem), calc(-50% + 8rem));
+    transform: translate(calc(-50% + 6.69rem), calc(-50% - 6.22rem));
+  }
+
+  .bubble-11 {
+    transform: translate(calc(-50% - 1.87rem), calc(-50% + 9.1rem));
+  }
+
+  .bubble-12 {
+    transform: translate(calc(-50% - 8.95rem), calc(-50% + 0.97rem));
+  }
+
+  .bubble-13 {
+    transform: translate(calc(-50% - 6.69rem), calc(-50% - 6.22rem));
+  }
+
+  .bubble-14 {
+    transform: translate(calc(-50% + 8.95rem), calc(-50% + 0.97rem));
+  }
+
+  .bubble-15 {
+    transform: translate(calc(-50% - 4.1rem), calc(-50% - 8.5rem));
   }
 
   .features-grid,
@@ -716,7 +761,7 @@ footer {
 
   .language-orbit {
     width: min(100%, 23rem);
-    height: 15.5rem;
+    height: 19.5rem;
   }
 
   .orbit-logo {
@@ -725,43 +770,63 @@ footer {
   }
 
   .bubble-1 {
-    transform: translate(calc(-50% + 0rem), calc(-50% - 6.4rem));
+    transform: translate(-50%, calc(-50% - 8rem));
   }
 
   .bubble-2 {
-    transform: translate(calc(-50% + 3.95rem), calc(-50% - 5.1rem));
+    transform: translate(calc(-50% + 2.3rem), calc(-50% + 7.5rem));
   }
 
   .bubble-3 {
-    transform: translate(calc(-50% + 6rem), calc(-50% - 1.8rem));
+    transform: translate(calc(-50% + 4.8rem), calc(-50% + 4.75rem));
   }
 
   .bubble-4 {
-    transform: translate(calc(-50% + 5.55rem), calc(-50% + 2.45rem));
+    transform: translate(calc(-50% + 4.4rem), calc(-50% - 8rem));
   }
 
   .bubble-5 {
-    transform: translate(calc(-50% + 3.25rem), calc(-50% + 5.3rem));
+    transform: translate(calc(-50% - 4.8rem), calc(-50% + 4.75rem));
   }
 
   .bubble-6 {
-    transform: translate(calc(-50% - 3.25rem), calc(-50% + 5.3rem));
+    transform: translate(calc(-50% + 5.5rem), calc(-50% + 2rem));
   }
 
   .bubble-7 {
-    transform: translate(calc(-50% - 5.55rem), calc(-50% + 2.45rem));
+    transform: translate(calc(-50% - 5.5rem), calc(-50% + 2rem));
   }
 
   .bubble-8 {
-    transform: translate(calc(-50% - 6rem), calc(-50% - 1.8rem));
+    transform: translate(calc(-50% + 5.5rem), calc(-50% - 3rem));
   }
 
   .bubble-9 {
-    transform: translate(calc(-50% - 3.95rem), calc(-50% - 5.1rem));
+    transform: translate(calc(-50% - 5.5rem), calc(-50% - 3rem));
   }
 
   .bubble-10 {
-    transform: translate(calc(-50% + 0rem), calc(-50% + 6.8rem));
+    transform: translate(calc(-50% + 5rem), calc(-50% - 5.5rem));
+  }
+
+  .bubble-11 {
+    transform: translate(calc(-50% - 2.3rem), calc(-50% + 7.5rem));
+  }
+
+  .bubble-12 {
+    transform: translate(calc(-50% - 5.5rem), calc(-50% - 0.5rem));
+  }
+
+  .bubble-13 {
+    transform: translate(calc(-50% - 5rem), calc(-50% - 5.5rem));
+  }
+
+  .bubble-14 {
+    transform: translate(calc(-50% + 5.5rem), calc(-50% - 0.5rem));
+  }
+
+  .bubble-15 {
+    transform: translate(calc(-50% - 4.4rem), calc(-50% - 8rem));
   }
 }
 

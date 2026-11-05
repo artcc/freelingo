@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 13 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(13)
+  it('contains exactly 14 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(14)
   })
 
   const expectedCodes = [
@@ -21,6 +21,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'it-IT',
     'pl-PL',
     'nl-NL',
+    'ru-RU',
     'pt-BR',
     'pt-PT',
     'fr-FR',
@@ -58,6 +59,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/italy.jpg')
     expect(paths).toContain('/flags/poland.jpg')
     expect(paths).toContain('/flags/netherlands.jpg')
+    expect(paths).toContain('/flags/russia.jpg')
     expect(paths).toContain('/flags/brazil.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
@@ -83,6 +85,9 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(itLangs).toHaveLength(1)
     expect(plLangs).toHaveLength(1)
     expect(SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'nl')).toHaveLength(1)
+    expect(
+      SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'ru')
+    ).toHaveLength(1)
     expect(ptLangs).toHaveLength(2)
     expect(frLangs).toHaveLength(1)
     expect(deLangs).toHaveLength(1)
@@ -94,7 +99,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(13)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(14)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -106,6 +111,7 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'de-DE',
       'pl-PL',
       'nl-NL',
+      'ru-RU',
       'ja-JP',
       'ko-KR',
       'zh-CN',
@@ -141,6 +147,20 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
     })
     expect(getTargetLanguageTextClass('nl-NL')).toContain('font-target-latin')
     expect(getTargetLanguageTextClass('nl-NL')).toContain('leading-relaxed')
+  })
+
+  it('resolves canonical Russian metadata without mandatory romanization', () => {
+    expect(getLanguageByCode('RU-ru')).toMatchObject({
+      code: 'ru-RU',
+      name: 'Русский',
+      nameEn: 'Russian',
+      flagPath: '/flags/russia.jpg',
+      iso639: 'ru',
+      fontClass: 'font-target-cyrillic',
+      script: 'cyrillic',
+      usesWordSpacing: true,
+    })
+    expect(getLanguageByCode('ru-RU')?.romanization).toBeUndefined()
   })
 
   it('contains complete Polish display metadata', () => {
@@ -278,6 +298,21 @@ describe('TargetLanguage interface compliance', () => {
 })
 
 describe('target language capabilities', () => {
+  it.each(['ru-RU', 'RU-ru', 'ru-ru'])(
+    'keeps Cyrillic typography and word spacing for %s',
+    (code) => {
+      expect(getTargetLanguageCapability(code)).toEqual({
+        script: 'cyrillic',
+        fontClass: 'font-target-cyrillic',
+        usesWordSpacing: true,
+      })
+      expect(getTargetLanguageTextClass(code)).toContain('font-target-cyrillic')
+      expect(getTargetLanguageTextClass(code)).toContain('text-base')
+      expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+      expect(getTargetLanguageTextClass(code)).toContain('tracking-normal')
+    }
+  )
+
   it('keeps CJK capabilities enabled in the supported catalog', () => {
     expect(TARGET_LANGUAGE_CAPABILITIES['ja-JP']).toMatchObject({
       script: 'hiragana-katakana-kanji',

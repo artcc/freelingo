@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 import LinguAvatar from '@/components/lingu/LinguAvatar'
+import { TargetLanguageText } from '@/components/TargetLanguageText'
 
 function circlePosition(index: number, total: number, radius: number) {
   const angle = (index / total) * 2 * Math.PI - Math.PI / 2
@@ -74,9 +75,12 @@ export function LanguageBubbles() {
                   height={10}
                   className="h-[10px] w-[14px] shrink-0 rounded-[2px] object-cover"
                 />
-                <span className="text-fl-fg font-sans text-[11px] font-medium whitespace-nowrap">
+                <TargetLanguageText
+                  languageCode={lang.code}
+                  className="text-fl-fg text-[11px] font-medium whitespace-nowrap"
+                >
                   {greeting}
-                </span>
+                </TargetLanguageText>
               </div>
             </div>
           </div>

@@ -234,15 +234,28 @@ and [.env.example](.env.example).
 
 ### Study languages
 
-- **English:** British (`en-GB`) and American (`en-US`).
-- **French** (`fr-FR`), **German** (`de-DE`), **Italian** (`it-IT`), and **Polish** (`pl-PL`).
-- **Portuguese:** Brazilian (`pt-BR`) and European (`pt-PT`); **Spanish:** Spain (`es-ES`).
-- **Japanese** (`ja-JP`), **Korean** (`ko-KR`), and **Mainland Chinese** (`zh-CN`).
+Learn one language or several side by side. Each has its own A1–C2 curriculum, placement test,
+grammar reference, vocabulary and phrasebook.
 
-Regional variants have separate learning packages and progress. Choose a study language during
-onboarding and add others from **Settings → My Languages**, within the operator-enabled selection.
-Your native language is selected during registration and supports flashcard translations, tutor
-feedback, lesson explanations, and native-language help in reference resources.
+- **Chinese:** Mainland Mandarin, in simplified characters (`zh-CN`).
+- **Dutch:** Netherlands (`nl-NL`).
+- **English:** British (`en-GB`) and American (`en-US`).
+- **French** (`fr-FR`).
+- **German** (`de-DE`).
+- **Italian** (`it-IT`).
+- **Japanese** (`ja-JP`).
+- **Korean:** South Korea (`ko-KR`).
+- **Polish** (`pl-PL`).
+- **Portuguese:** Brazilian (`pt-BR`) and European (`pt-PT`).
+- **Russian** (`ru-RU`).
+- **Spanish:** Spain (`es-ES`).
+
+Choose your first language during onboarding, then add more from **Settings → My Languages**.
+Your plans, progress and flashcards stay separate for each language, including regional variants.
+On self-hosted installations, `AVAILABLE_TARGET_LANGUAGES` controls which options are available.
+
+Your native language is a separate choice made during registration. It is used for translations,
+explanations and tutor feedback to support you while you learn.
 
 ## Linux host: Redis memory overcommit
 

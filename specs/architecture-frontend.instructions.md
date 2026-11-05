@@ -343,6 +343,9 @@ backend authorization.
   status colors, and monochrome controls.
 - Do not introduce dot grids or hero gradients.
 - Use Geist Sans through `font-sans` for interface and Latin learned-language text.
+- Russian learned-language text uses the explicit `cyrillic` capability and `font-target-cyrillic`,
+  backed by Geist Sans with its Cyrillic subset. It retains word spacing and relaxed line height;
+  Cyrillic does not require romanization or CJK typography.
 - Use Geist Mono through `font-code` for branding, version labels, and technical text.
 - Preserve CJK font configuration and readable learned-language sizing through
   `TargetLanguageText`.

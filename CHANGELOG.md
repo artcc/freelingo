@@ -9,13 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Added
 
 - Optional RevenueCat Premium entitlement synchronization with authenticated, idempotent webhooks, account reconciliation, and administrator-controlled Stripe receipt imports, while retaining Stripe web checkout and a Stripe Customer Portal fallback when RevenueCat is unavailable.
-- Brazilian Portuguese (`pt-BR`) and Dutch from the Netherlands (`nl-NL`) as separate study languages, each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, cultural contexts, and regional speech instructions.
+- Brazilian Portuguese (`pt-BR`), Dutch from the Netherlands (`nl-NL`), and Russian (`ru-RU`) as separate study languages, each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, cultural contexts, and regional speech instructions.
 
 ### Changed
 
 - Billing rejects a new checkout for an already-subscribed account; RevenueCat-managed access preserves the last confirmed state during delayed renewals or provider failures and applies entitlement expiry and grace periods through verified reconciliation.
 - Portuguese language selectors explicitly distinguish Brazil from Portugal, using separate flags and localized labels.
-- What's New highlights Polish, Brazilian Portuguese, and Dutch together in the first entry, across all interface languages.
+- What's New highlights Polish, Brazilian Portuguese, Dutch, and Russian together in the first entry, across all interface languages.
 
 ### Fixed
 
