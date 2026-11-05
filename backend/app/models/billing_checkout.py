@@ -12,4 +12,5 @@ class BillingCheckout(Base):
     )
     idempotency_key: Mapped[str] = mapped_column(String(36), nullable=False)
     parameters: Mapped[dict] = mapped_column(JSON, nullable=False)
+    customer_parameters: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     session_id: Mapped[str | None] = mapped_column(String(255), nullable=True)

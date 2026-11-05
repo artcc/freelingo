@@ -1,7 +1,7 @@
 """Serialize web purchases and recover uncertain Stripe writes with durable request keys."""
 
 from datetime import UTC, datetime
-from uuid import NAMESPACE_URL, uuid4, uuid5
+from uuid import uuid4
 
 import stripe
 from sqlalchemy import select
@@ -33,11 +33,15 @@ async def _subscription_destination(subscription: stripe.Subscription, user: Use
     raise CheckoutConflict("subscription_already_active")
 
 
-async def _existing_subscription_destination(user: User) -> str | None:
+async def _existing_subscription_destination(
+    user: User, *, resumable_subscription_id: str | None = None
+) -> str | None:
     subscriptions = await stripe.Subscription.list_async(
         customer=user.stripe_customer_id, status="all", limit=100
     )
     async for subscription in subscriptions.auto_paging_iter():
+        if subscription.status == "incomplete" and subscription.id == resumable_subscription_id:
+            continue  # Resume this session's payment, never another incomplete purchase.
         destination = await _subscription_destination(subscription, user)
         if destination:
             return destination
@@ -47,26 +51,70 @@ async def _existing_subscription_destination(user: User) -> str | None:
 async def _recover_session(attempt: BillingCheckout) -> stripe.checkout.Session | None:
     if attempt.session_id:
         return await stripe.checkout.Session.retrieve_async(attempt.session_id)
-    if attempt.parameters["expires_at"] > int(datetime.now(UTC).timestamp()):
-        session = await stripe.checkout.Session.create_async(
-            **attempt.parameters, idempotency_key=attempt.idempotency_key
-        )
-        attempt.session_id = session.id
-        # An idempotent POST can replay the original response even if the
-        # session has since completed. Always inspect its current lifecycle.
-        return await stripe.checkout.Session.retrieve_async(session.id)
-    # A key can be pruned after 24h. Never POST an old reservation again: find its
-    # result (including a completed purchase) before permitting a replacement.
+    # Discover uncertain results before POSTing: even a cached 500 can have
+    # created a session. Listing failure must not authorize a replacement.
     sessions = await stripe.checkout.Session.list_async(
         customer=attempt.parameters["customer"],
-        created={"gte": attempt.parameters["expires_at"] - 3600},
         limit=100,
     )
     async for session in sessions.auto_paging_iter():
         if session.to_dict()["metadata"].get("checkout_attempt_id") == attempt.idempotency_key:
             attempt.session_id = session.id
-            return session
-    return None
+            return await stripe.checkout.Session.retrieve_async(session.id)
+    # A key can be pruned after 24h. Never POST an expired reservation again.
+    if attempt.parameters["expires_at"] <= int(datetime.now(UTC).timestamp()):
+        return None
+    try:
+        session = await stripe.checkout.Session.create_async(
+            **attempt.parameters, idempotency_key=attempt.idempotency_key
+        )
+    except stripe.InvalidRequestError as exc:
+        if exc.param != "expires_at":
+            raise
+        # Stripe requires >=30 minutes until expiry for a new session. Only
+        # that definitive validation rejection permits renewing an unexpired
+        # reservation; timeouts, cached 500s and in-flight requests remain retryable.
+        return None
+    attempt.session_id = session.id
+    # An idempotent POST can replay the original response after payment.
+    return await stripe.checkout.Session.retrieve_async(session.id)
+
+
+async def _reserve_checkout(db: AsyncSession, user: User, price_id: str) -> None:
+    """Commit immutable provider inputs before either Customer or Session creation."""
+    key = str(uuid4())
+    subscription_data: dict = {"metadata": {"user_id": str(user.id)}}
+    if settings.STRIPE_TRIAL_DAYS > 0 and not user.trial_used:
+        subscription_data["trial_period_days"] = settings.STRIPE_TRIAL_DAYS
+    parameters = {
+        "line_items": [{"price": price_id, "quantity": 1}],
+        "mode": "subscription",
+        "locale": "auto",
+        "allow_promotion_codes": True,
+        "metadata": {"user_id": str(user.id), "checkout_attempt_id": key},
+        "subscription_data": subscription_data,
+        "success_url": f"{settings.STRIPE_BASE_URL}/billing/success",
+        "cancel_url": f"{settings.STRIPE_BASE_URL}/billing/canceled",
+        "expires_at": int(datetime.now(UTC).timestamp()) + 3600,
+    }
+    customer_parameters = None
+    if user.stripe_customer_id:
+        parameters["customer"] = user.stripe_customer_id
+    else:
+        customer_parameters = {
+            "email": user.email or "",
+            "name": user.display_name,
+            "metadata": {"user_id": str(user.id)},
+        }
+    db.add(
+        BillingCheckout(
+            user_id=user.id,
+            idempotency_key=key,
+            parameters=parameters,
+            customer_parameters=customer_parameters,
+        )
+    )
+    await db.commit()
 
 
 async def create_checkout(db: AsyncSession, user_id: int, price_id: str) -> str:
@@ -85,13 +133,27 @@ async def create_checkout(db: AsyncSession, user_id: int, price_id: str) -> str:
             raise CheckoutConflict("subscription_already_active")
         attempt = await db.get(BillingCheckout, user_id, populate_existing=True)
         if not user.stripe_customer_id:
+            if attempt is None:
+                await _reserve_checkout(db, user, price_id)
+                continue
+            if attempt.customer_parameters is None:
+                raise CheckoutConflict("checkout_customer_unavailable")
             customer = await stripe.Customer.create_async(
-                email=user.email or "",
-                name=user.display_name,
-                metadata={"user_id": str(user.id)},
-                idempotency_key=str(uuid5(NAMESPACE_URL, f"customer:{user.id}:{user.created_at}")),
+                **attempt.customer_parameters,
+                idempotency_key=f"customer:{attempt.idempotency_key}",
             )
             user.stripe_customer_id = customer.id
+            # Persist the identity before any later provider call can fail.
+            # A lost commit still leaves the original Customer inputs recoverable.
+            await db.delete(attempt)
+            await db.commit()
+            continue
+
+        if attempt is not None and "customer" not in attempt.parameters:
+            # A webhook may have linked the account while its reservation waited.
+            await db.delete(attempt)
+            await db.commit()
+            continue
 
         if attempt is not None:
             session = await _recover_session(attempt)
@@ -99,7 +161,9 @@ async def create_checkout(db: AsyncSession, user_id: int, price_id: str) -> str:
                 if session.status == "open":
                     same_price = attempt.parameters["line_items"][0]["price"] == price_id
                     if same_price:
-                        destination = await _existing_subscription_destination(user)
+                        destination = await _existing_subscription_destination(
+                            user, resumable_subscription_id=session.subscription
+                        )
                         await db.commit()
                         return destination or session.url
                     # If payment wins this race Stripe refuses expiration. Fail
@@ -131,27 +195,5 @@ async def create_checkout(db: AsyncSession, user_id: int, price_id: str) -> str:
             await db.commit()
             return destination
 
-        key = str(uuid4())
-        subscription_data: dict = {"metadata": {"user_id": str(user.id)}}
-        if settings.STRIPE_TRIAL_DAYS > 0 and not user.trial_used:
-            subscription_data["trial_period_days"] = settings.STRIPE_TRIAL_DAYS
-        db.add(
-            BillingCheckout(
-                user_id=user.id,
-                idempotency_key=key,
-                parameters={
-                    "customer": user.stripe_customer_id,
-                    "line_items": [{"price": price_id, "quantity": 1}],
-                    "mode": "subscription",
-                    "locale": "auto",
-                    "allow_promotion_codes": True,
-                    "metadata": {"user_id": str(user.id), "checkout_attempt_id": key},
-                    "subscription_data": subscription_data,
-                    "success_url": f"{settings.STRIPE_BASE_URL}/billing/success",
-                    "cancel_url": f"{settings.STRIPE_BASE_URL}/billing/canceled",
-                    "expires_at": int(datetime.now(UTC).timestamp()) + 3600,
-                },
-            )
-        )
-        await db.commit()
+        await _reserve_checkout(db, user, price_id)
     raise CheckoutConflict("checkout_changed_concurrently")

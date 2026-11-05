@@ -117,12 +117,18 @@ back the receipt, keeping delivery retryable. Receipts contain no raw payloads o
 - `idempotency_key` — required varchar(36), a server-generated UUID for the Stripe session request.
 - `parameters` — required JSON containing the frozen Checkout request, including Customer, Price,
   trial parameters, return URLs, identity metadata, reservation metadata, and fixed `expires_at`.
+- `customer_parameters` — nullable JSON containing frozen email, name, and identity metadata while
+  creating a Customer. In this preliminary reservation, `parameters` has no Customer ID and cannot
+  be sent to Checkout. The preliminary row is deleted atomically with persistence of the Customer ID;
+  subsequent session reservations have null `customer_parameters`.
 - `session_id` — nullable varchar(255), filled when the Stripe session ID is known.
 
 Reservations commit before session creation and survive uncertain provider outcomes. Creation and
 replacement serialize on the owning user row. No session URL, payment credentials, or raw provider
 response is persisted. Revision `0059_billing_idempotency` creates both Stripe billing tables without
-rewriting existing account state. Workflow rules live in `subscriptions-freemium.instructions.md`.
+rewriting existing account state; `0060_checkout_customer_request` adds the nullable Customer request
+column without changing existing session reservations. Workflow rules live in
+`subscriptions-freemium.instructions.md`.
 
 ## DashboardBanner (`dashboard_banners`)
 

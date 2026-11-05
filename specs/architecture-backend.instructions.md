@@ -114,6 +114,7 @@ updates shared paid-access state. Stripe webhook receipts commit with account ch
 handlers read current provider state under the user lock instead of applying event snapshots.
 `stripe_checkout_service.py` persists Checkout reservations before external creation, reacquires the
 user lock after committing, and uses frozen parameters and idempotency keys to recover uncertain writes.
+Customer creation has its own preliminary reservation; its ID commits before session preparation.
 The same lock serializes reservation replacement across workers. Configuration and reconciliation rules are owned by
 `subscriptions-freemium.instructions.md`.
 

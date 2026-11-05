@@ -248,8 +248,11 @@ activation workflow are owned by `subscriptions-freemium.instructions.md`.
 
 `stripe_checkout_service.py` owns serialized web purchase creation and recovery. It uses async Stripe
 SDK calls, user-row locks, and durable Checkout reservations containing frozen request parameters and
-idempotency keys. It reuses open sessions, expires a session before replacing its price, and recovers
-uncertain creation results. Live Stripe subscription checks choose Checkout versus payment recovery;
+idempotency keys. Preliminary Customer requests also freeze their inputs and persist the Customer ID
+before any later provider call. The service resumes an open session's own incomplete payment, expires
+a session before replacing its price, and discovers uncertain results before retrying creation.
+Definitive expiry validation failures can renew a reservation; ambiguous failures cannot.
+Live Stripe subscription checks choose Checkout versus payment recovery;
 they never overwrite RevenueCat's Premium snapshot. The router maps provider failures to `503` and
 subscription conflicts to `409`. Billing lifecycle rules belong to `subscriptions-freemium.instructions.md`.
 

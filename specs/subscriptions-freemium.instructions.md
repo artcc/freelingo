@@ -122,7 +122,7 @@ gated. Memory management is also not blocked by maintenance mode.
 - rejects an already-subscribed account with `409 subscription_already_active`;
 - rate limit: `60/minute`;
 - selects the configured server-side Price ID;
-- creates and persists a Stripe Customer when absent, with a stable customer-creation idempotency key;
+- creates and persists a Stripe Customer when absent, using a durable customer-creation request and key;
 - creates a subscription Checkout Session with promotion codes enabled and a one-hour expiry;
 - records `user_id` in session and subscription metadata;
 - includes a Stripe trial only when configured days are positive and `trial_used` is false;
@@ -133,20 +133,33 @@ gated. Memory management is also not blocked by maintenance mode.
 `stripe_checkout_service.py` serializes creation on the user row and persists one `billing_checkouts`
 reservation per user before contacting Checkout. The reservation freezes the complete session request
 and its UUID idempotency key. Workers reacquire the user lock and reload the reservation after a commit.
+When the account has no Stripe Customer, a preliminary reservation freezes the Customer's email, name,
+and identity metadata before the first provider call. Retries reuse those original parameters even if
+the profile changes. The Customer key is namespaced separately from session keys. The Customer ID and
+deletion of that preliminary reservation commit together before subsequent provider operations; the
+normal session reservation is then prepared using the persisted Customer. Existing session reservations
+remain compatible without Customer request data.
 The same price reuses the open session; changing prices expires it before creating a replacement.
 Completed sessions are checked against their current Stripe Subscription, including before webhooks
 arrive. Sessions opened before reservations existed are expired before a new reservation is created.
 If payment races expiration, the request fails without issuing another session.
 
-Uncertain creation results retry the persisted key and parameters, then retrieve the session's current
-state rather than trusting a replayed creation response. Once the reservation deadline passes, recovery
-lists the customer's sessions and matches the reservation metadata; it never resubmits an old key
-that Stripe may have pruned. Provider errors return `503` and preserve the committed reservation.
-An uncertain request is not replaced merely because a provider call timed out.
+When a session ID is unknown, recovery first paginates the customer's sessions and matches the
+reservation metadata. It does not filter by a locally inferred creation time because provider clocks
+can differ. A recovered session is retrieved for its current state. If no match exists and the
+reservation remains unexpired, creation retries the persisted key and parameters, then retrieves
+current state rather than trusting a replayed creation response. Stripe requires at least 30 minutes
+until expiry for a newly created session: its definitive `expires_at` validation rejection permits
+renewing a reservation with no discovered result. Other validation errors, in-flight requests, timeouts,
+and server errors do not authorize replacement. Once the reservation deadline passes, the old key is
+never resubmitted because Stripe may have pruned it. Provider errors return `503` and preserve the
+committed reservation; failed discovery also fails closed.
 
 Before returning an open Checkout or reserving a new one, the service checks the customer's Stripe
-subscriptions with pagination. `active`/`trialing` subscriptions block another purchase with `409`;
-`incomplete` returns `409 subscription_payment_pending`; `past_due`, `unpaid`, and `paused` route to
+subscriptions with pagination. `active`/`trialing` subscriptions block another purchase with `409`.
+An open session can resume its own `incomplete` subscription's initial payment; any other incomplete
+subscription, or a completed session with a still-incomplete payment, returns
+`409 subscription_payment_pending`. `past_due`, `unpaid`, and `paused` route to
 Customer Portal. Terminal `canceled`/`incomplete_expired` subscriptions permit a new purchase. These
 checks decide billing navigation, not Premium access: in RevenueCat mode only RevenueCat updates
 the entitlement snapshot. Verified historical Stripe trial usage suppresses a second card trial.
