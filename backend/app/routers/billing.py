@@ -21,7 +21,8 @@ from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.core.limiter import limiter
 from app.models.user import User
-from app.services.subscription_service import apply_subscription_quotas
+from app.services import revenuecat_service
+from app.services.subscription_service import apply_subscription_quotas, is_subscribed
 
 router = APIRouter(prefix="/api/billing", tags=["billing"])
 logger = get_logger(__name__)
@@ -87,6 +88,18 @@ async def create_checkout_session(
     Uses get_current_user (not require_subscription) so unsubscribed users
     can start a new subscription.
     """
+    if revenuecat_service.revenuecat_enabled():
+        try:
+            await revenuecat_service.sync_user(db, current_user.id)
+            await db.commit()
+        except revenuecat_service.RevenueCatError:
+            await db.rollback()
+            raise HTTPException(
+                status_code=503, detail="RevenueCat synchronization failed"
+            ) from None
+    if is_subscribed(current_user, settings.STRIPE_ENABLED):
+        raise HTTPException(status_code=409, detail="subscription_already_active")
+
     price_id = (
         settings.STRIPE_PRICE_MONTHLY if body.plan == "monthly" else settings.STRIPE_PRICE_YEARLY
     )
@@ -133,6 +146,18 @@ async def create_portal_session(
     current_user: User = Depends(get_current_user),
 ) -> dict:
     """Create a Stripe Customer Portal session for subscription management."""
+    if revenuecat_service.revenuecat_enabled():
+        try:
+            management_url = await revenuecat_service.get_management_url(current_user.id)
+        except revenuecat_service.RevenueCatError:
+            if not current_user.stripe_customer_id:
+                raise HTTPException(
+                    status_code=503, detail="Billing management unavailable"
+                ) from None
+            logger.warning("[billing] RevenueCat management unavailable; using Stripe portal")
+        else:
+            if management_url:
+                return {"url": management_url}
     if not current_user.stripe_customer_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -238,7 +263,12 @@ def _invoice_subscription_id(invoice: object) -> str | None:
 
 
 async def _get_user_by_customer_id(db: AsyncSession, customer_id: str) -> User | None:
-    result = await db.execute(select(User).where(User.stripe_customer_id == customer_id))
+    result = await db.execute(
+        select(User)
+        .where(User.stripe_customer_id == customer_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
     return result.scalar_one_or_none()
 
 
@@ -285,7 +315,12 @@ async def _handle_checkout_completed(db: AsyncSession, session: object) -> None:
         metadata = _sget(session, "metadata") or {}
         user_id_str: str | None = _sget(metadata, "user_id")
         if user_id_str:
-            user = await db.get(User, int(user_id_str))
+            user = await db.scalar(
+                select(User)
+                .where(User.id == int(user_id_str))
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
             if user:
                 user.stripe_customer_id = customer_id
 
@@ -317,11 +352,15 @@ async def _handle_checkout_completed(db: AsyncSession, session: object) -> None:
     status = _normalize_subscription_status(getattr(sub, "status", None), "none")
     ends_at = _subscription_period_end(sub)
 
+    if status == "trialing":
+        user.trial_used = True
+    if revenuecat_service.revenuecat_enabled():
+        await db.commit()
+        return
     user.subscription_status = status
     user.subscription_ends_at = ends_at
     user.cancel_at_period_end = False
-    if status == "trialing":
-        user.trial_used = True
+    user.revenuecat_synced_at = None
     await apply_subscription_quotas(user, db)
     logger.info("[billing] User %s subscription activated — status=%s", user.id, status)
 
@@ -344,6 +383,10 @@ async def _handle_subscription_updated(db: AsyncSession, subscription: object) -
     ):
         return
 
+    if revenuecat_service.revenuecat_enabled():
+        await db.commit()
+        return
+    user.revenuecat_synced_at = None
     user.subscription_status = _normalize_subscription_status(
         _sget(subscription, "status"), user.subscription_status
     )
@@ -380,6 +423,9 @@ async def _handle_subscription_deleted(db: AsyncSession, subscription: object) -
     ):
         return
 
+    if revenuecat_service.revenuecat_enabled():
+        return
+    user.revenuecat_synced_at = None
     user.subscription_status = "canceled"
     user.cancel_at_period_end = False
     await db.commit()
@@ -403,6 +449,9 @@ async def _handle_payment_failed(db: AsyncSession, invoice: object) -> None:
     ):
         return
 
+    if revenuecat_service.revenuecat_enabled():
+        return
+    user.revenuecat_synced_at = None
     user.subscription_status = "past_due"
     await db.commit()
     logger.info("[billing] User %s payment failed — marked past_due", user.id)

@@ -93,9 +93,11 @@ def test_regional_language_names_and_hints_are_prompt_ready() -> None:
     assert get_language_name("ja-JP") == "Japanese"
     assert get_language_name("ko-KR") == "Korean (South Korea)"
     assert get_language_name("pl-PL") == "Polish"
+    assert get_language_name("nl-NL") == "Dutch (Netherlands)"
     assert get_language_name("zh-CN") == "Chinese (Mainland China)"
     assert _get_lang_hint("es-ES") == get_language_prompt_overlay("es-ES")
     assert _get_lang_hint("pl-PL") == get_language_prompt_overlay("pl-PL")
+    assert _get_lang_hint("nl-NL") == get_language_prompt_overlay("nl-NL")
     assert _get_lang_hint("pt-PT") == get_language_prompt_overlay("pt-PT")
 
 
@@ -161,6 +163,7 @@ def test_language_prompt_overlays_cover_supported_learning_languages() -> None:
         "ja-JP": "standard Japanese",
         "ko-KR": "standard Korean",
         "pl-PL": "standard Polish",
+        "nl-NL": "standard Dutch",
         "zh-CN": "Mainland China Standard Mandarin",
     }
 

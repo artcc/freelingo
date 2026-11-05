@@ -57,7 +57,9 @@ def test_data_files_exist() -> None:
     assert CURRICULUM_FILE.exists(), "Missing data file: curriculum.ts"
 
 
-@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "ja-JP"])
+@pytest.mark.parametrize(
+    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP"]
+)
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
 
@@ -72,6 +74,7 @@ def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> 
         ("it-IT", "A2", 1, "stare-gerundio"),
         ("pt-PT", "A1", 0, "ter"),
         ("pt-BR", "A1", 0, "ter"),
+        ("nl-NL", "A1", 0, "tegenwoordige-tijd"),
         ("ja-JP", "A2", 0, "plain-past"),
     ],
 )
@@ -99,6 +102,7 @@ def test_curriculum_grammar_refs_all_defined() -> None:
         "es-ES",
         "it-IT",
         "pl-PL",
+        "nl-NL",
         "pt-BR",
         "pt-PT",
         "fr-FR",
@@ -175,6 +179,7 @@ def test_grammar_related_refs_all_defined() -> None:
         "es-ES",
         "it-IT",
         "pl-PL",
+        "nl-NL",
         "pt-BR",
         "pt-PT",
         "fr-FR",
@@ -237,6 +242,7 @@ def test_grammar_slug_uniqueness() -> None:
         "es-ES",
         "it-IT",
         "pl-PL",
+        "nl-NL",
         "pt-BR",
         "pt-PT",
         "fr-FR",

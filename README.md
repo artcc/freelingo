@@ -226,6 +226,12 @@ For session-count, minute, and token quotas, `0` means unlimited; for freemium f
 `0` blocks the feature. Conversation duration and inactivity settings have their own bounds.
 See [subscriptions and quotas](specs/subscriptions-freemium.instructions.md).
 
+Web subscriptions use Stripe Checkout. Optional `REVENUECAT_ENABLED=true` synchronizes a shared
+Premium entitlement through RevenueCat while retaining Stripe payments and the existing web interface.
+It requires `STRIPE_ENABLED=true`, provider credentials, webhook configuration, and importing existing
+subscriptions before activation. See the [RevenueCat setup and operating contract](specs/subscriptions-freemium.instructions.md#revenuecat-configuration-and-operation)
+and [.env.example](.env.example).
+
 ### Study languages
 
 - **English:** British (`en-GB`) and American (`en-US`).

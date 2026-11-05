@@ -35,6 +35,7 @@ _LANG_MODULES: dict[str, str] = {
     "fr": "app.data.fr.curriculum",
     "it": "app.data.it.curriculum",
     "pl": "app.data.pl.curriculum",
+    "nl": "app.data.nl.curriculum",
     "ja": "app.data.ja.curriculum",
     "ko": "app.data.ko.curriculum",
     "pt": "app.data.pt.curriculum",
@@ -45,6 +46,15 @@ _LANG_MODULES: dict[str, str] = {
 _CACHE: dict[str, object] = {}
 
 _I18N = {
+    "nl-NL": {
+        "lesson_title": "{title} - Les {n}",
+        "test_unit_title": "Eindtoets niveau {level}",
+        "test_title": "Eindtoets niveau {level}",
+        "test_objectives": [
+            "Herhaal de grammatica en woordenschat van dit niveau",
+            "Maak de eindtoets om je volgende leerstap te bepalen",
+        ],
+    },
     "en-GB": {
         "lesson_title": "{title} - Lesson {n}",
         "test_unit_title": "Level {level} Completion Test",

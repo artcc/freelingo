@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Available languages"
   },
   "targetLanguages": {
+    "nl-NL": "Dutch (Netherlands)",
+    "nl": "Dutch",
+    "nl-NL-description": "Dutch as spoken in the Netherlands.",
     "en-US": "American English",
     "en-GB": "British English",
     "es-ES": "Spanish",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Got it",
     "entry1": {
-      "label": "New languages: Polish and Brazilian Portuguese",
-      "desc": "Polish and Brazilian Portuguese are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
+      "label": "New languages: Polish, Brazilian Portuguese, and Dutch",
+      "desc": "Polish, Brazilian Portuguese, and Dutch are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
     "entry2": {
       "label": "Learning improvements",

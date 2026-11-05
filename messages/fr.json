@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Langues disponibles"
   },
   "targetLanguages": {
+    "nl-NL": "Néerlandais (Pays-Bas)",
+    "nl": "Néerlandais",
+    "nl-NL-description": "Néerlandais parlé aux Pays-Bas.",
     "en-US": "Anglais américain",
     "en-GB": "Anglais britannique",
     "es-ES": "Espagnol",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Compris",
     "entry1": {
-      "label": "Nouvelles langues : polonais et portugais du Brésil",
-      "desc": "Le polonais et le portugais du Brésil sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
+      "label": "Nouvelles langues : polonais, portugais du Brésil et néerlandais",
+      "desc": "Le polonais, le portugais du Brésil et le néerlandais sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
     },
     "entry2": {
       "label": "Des améliorations pour apprendre",

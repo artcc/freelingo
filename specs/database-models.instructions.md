@@ -74,9 +74,10 @@ Registration, authentication, and user preferences.
 - `monthly_tokens_limit` — integer max LLM tokens per billing period. Default comes from `DEFAULT_MONTHLY_TOKENS_LIMIT` (`1 000 000`; `0` means unlimited).
 - `stripe_customer_id` — nullable string Stripe customer ID, set when a subscription is created.
 - `stripe_subscription_id` — nullable string current Stripe subscription ID. Used to ignore stale webhook events from older subscriptions for the same customer.
-- `subscription_status` — string subscription state: `none` by default, plus Stripe states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`.
-- `subscription_ends_at` — nullable datetime for the current subscription period end.
+- `subscription_status` — string shared subscription snapshot: `none` by default, plus Stripe-compatible states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`. RevenueCat synchronization uses this same field rather than a per-store subscription model.
+- `subscription_ends_at` — nullable datetime for the current subscription period end or RevenueCat entitlement expiry, including its grace period. Verified lifetime entitlements have no expiry.
 - `cancel_at_period_end` — boolean subscription cancellation marker; default `false`.
+- `revenuecat_synced_at` — nullable naive-UTC datetime derived from RevenueCat's `request_date_ms`; null until first synchronization. Older provider snapshots cannot replace newer ones. Stripe-only state updates clear this marker.
 - `trial_used` — boolean; `true` once the user has started or completed a trial, preventing repeated free trials. Default: `false`.
 - `assessment_voice_trial_used` — boolean; `true` once the one-time post-assessment voice conversation demo has been consumed. Default: `false`.
 - `freemium_trial_ends_at` — nullable datetime; when the freemium 7-day trial expires. Set on registration when `STRIPE_ENABLED=true` and `FREEMIUM_TRIAL_ENABLED=true`.
@@ -90,6 +91,16 @@ Registration, authentication, and user preferences.
 
 Registration, session, billing, and Redis quota behavior is defined in `platform.instructions.md` and
 `subscriptions-freemium.instructions.md`; this document defines only their persisted fields.
+
+## RevenueCatWebhookReceipt (`revenuecat_webhook_receipts`)
+
+- `event_id` — varchar(255) primary key, supplied by RevenueCat and reused for retries.
+- `processed_at` — required naive-UTC processing timestamp.
+
+The receipt commits atomically with all account snapshots affected by the event. A rollback leaves
+the event retryable; a committed ID prevents duplicate processing. Receipts contain no customer IDs,
+foreign keys, or raw webhook payloads, and remain valid after account deletion. Revision
+`0058_revenuecat_sync` creates this table and the nullable synchronization marker on `users`.
 
 ## DashboardBanner (`dashboard_banners`)
 

@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "nl-NL": "Nederlands (Nederland)",
+    "nl": "Nederlands",
+    "nl-NL-description": "Nederlands zoals gesproken in Nederland.",
     "en-US": "Amerikaans Engels",
     "en-GB": "Brits Engels",
     "es-ES": "Spaans",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Nieuwe talen: Pools en Braziliaans Portugees",
-      "desc": "Pools en Braziliaans Portugees zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
+      "label": "Nieuwe talen: Pools, Braziliaans Portugees en Nederlands",
+      "desc": "Pools, Braziliaans Portugees en Nederlands zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
     "entry2": {
       "label": "Verbeteringen voor het leren",

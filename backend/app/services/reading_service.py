@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "nl": [
+        "daily life, cycling, public transport and local services in the Netherlands",
+        "Dutch water management, polders and contemporary environmental debates",
+        "Dutch literature, art, museums and regional cultural life in the Netherlands",
+        "cultural diversity, historical perspectives and changing traditions in the Netherlands",
+    ],
     "de": [
         "German festivals and holiday traditions",
         "German classical music and famous composers",

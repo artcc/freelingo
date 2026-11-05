@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Limbi disponibile"
   },
   "targetLanguages": {
+    "nl-NL": "Neerlandeză (Țările de Jos)",
+    "nl": "Neerlandeză",
+    "nl-NL-description": "Neerlandeza vorbită în Țările de Jos.",
     "en-US": "Engleză americană",
     "en-GB": "Engleză britanică",
     "es-ES": "Spaniolă",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Limbi noi: poloneză și portugheză braziliană",
-      "desc": "Am adăugat poloneza și portugheza braziliană ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
+      "label": "Limbi noi: poloneză, portugheză braziliană și neerlandeză",
+      "desc": "Am adăugat poloneza, portugheza braziliană și neerlandeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
     "entry2": {
       "label": "Îmbunătățiri pentru învățare",

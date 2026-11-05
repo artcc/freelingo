@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Tilgængelige sprog"
   },
   "targetLanguages": {
+    "nl-NL": "Nederlandsk (Nederlandene)",
+    "nl": "Nederlandsk",
+    "nl-NL-description": "Nederlandsk, som det tales i Nederlandene.",
     "en-US": "Amerikansk engelsk",
     "en-GB": "Britisk engelsk",
     "es-ES": "Spansk",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Forstået",
     "entry1": {
-      "label": "Nye sprog: polsk og brasiliansk portugisisk",
-      "desc": "Polsk og brasiliansk portugisisk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
+      "label": "Nye sprog: polsk, brasiliansk portugisisk og nederlandsk",
+      "desc": "Polsk, brasiliansk portugisisk og nederlandsk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
     "entry2": {
       "label": "Forbedringer af læringen",

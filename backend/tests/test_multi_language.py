@@ -397,6 +397,7 @@ class TestLanguageAPI:
         assert "ko-KR" in data["all_supported_languages"]
         assert "pl-PL" in data["all_supported_languages"]
         assert "pt-BR" in data["all_supported_languages"]
+        assert "nl-NL" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -492,6 +493,47 @@ class TestLanguageAPI:
 
         assert res.status_code == 201
         assert res.json()["target_language"] == "pl-PL"
+
+    @pytest.mark.asyncio
+    async def test_dutch_add_plan_switch_and_remove_preserve_other_language(
+        self, client, db_session
+    ):
+        from app.data.curriculum import get_curriculum
+
+        user, headers = await _make_user(db_session, language="en-GB")
+        english = await _make_plan(db_session, user.id, language="en-GB")
+        added = await client.post(
+            "/api/languages", headers=headers, json={"target_language": "nl-NL"}
+        )
+        assert added.status_code == 201
+        assert added.json()["target_language"] == "nl-NL"
+        dutch = await _make_plan(db_session, user.id, language="nl-NL")
+        assert dutch.user_language_id != english.user_language_id
+        assert (
+            get_curriculum(dutch.target_language)["A1"][0].title
+            == "Kennismaken en elkaar begrijpen"
+        )
+        switched = await client.put(
+            "/api/languages/active", headers=headers, json={"target_language": "en-GB"}
+        )
+        assert switched.status_code == 200
+        switched_back = await client.put(
+            "/api/languages/active", headers=headers, json={"target_language": "nl-NL"}
+        )
+        assert switched_back.status_code == 200
+        listed = await client.get("/api/languages", headers=headers)
+        languages = {entry["target_language"]: entry for entry in listed.json()["languages"]}
+        assert languages["nl-NL"]["is_active"] is True
+        assert languages["nl-NL"]["plan"]["id"] == dutch.id
+        assert languages["en-GB"]["plan"]["id"] == english.id
+        await client.put(
+            "/api/languages/active", headers=headers, json={"target_language": "en-GB"}
+        )
+        removed = await client.delete("/api/languages/nl-NL", headers=headers)
+        assert removed.status_code == 204
+        listed = await client.get("/api/languages", headers=headers)
+        assert [entry["target_language"] for entry in listed.json()["languages"]] == ["en-GB"]
+        assert listed.json()["languages"][0]["plan"]["id"] == english.id
 
     @pytest.mark.asyncio
     async def test_portuguese_variants_have_independent_lifecycles(self, client, db_session):

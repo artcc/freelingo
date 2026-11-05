@@ -4,6 +4,7 @@ import re
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-ci-32b"
 os.environ["RATE_LIMIT_ENABLED"] = "false"
+os.environ["REVENUECAT_ENABLED"] = "false"
 
 import pytest
 import pytest_asyncio

@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Kullanılabilir diller"
   },
   "targetLanguages": {
+    "nl-NL": "Felemenkçe (Hollanda)",
+    "nl": "Felemenkçe",
+    "nl-NL-description": "Hollanda'da konuşulan Felemenkçe.",
     "en-US": "Amerikan İngilizcesi",
     "en-GB": "İngiliz İngilizcesi",
     "es-ES": "İspanyolca",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Anladım",
     "entry1": {
-      "label": "Yeni diller: Lehçe ve Brezilya Portekizcesi",
-      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi ve Brezilya Portekizcesini öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
+      "label": "Yeni diller: Lehçe, Brezilya Portekizcesi ve Felemenkçe",
+      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi, Brezilya Portekizcesini ve Felemenkçeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
     },
     "entry2": {
       "label": "Öğrenimde iyileştirmeler",

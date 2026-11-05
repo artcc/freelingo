@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Verfügbare Sprachen"
   },
   "targetLanguages": {
+    "nl-NL": "Niederländisch (Niederlande)",
+    "nl": "Niederländisch",
+    "nl-NL-description": "Niederländisch, wie es in den Niederlanden gesprochen wird.",
     "en-US": "Amerikanisches Englisch",
     "en-GB": "Britisches Englisch",
     "es-ES": "Spanisch",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Neue Sprachen: Polnisch und brasilianisches Portugiesisch",
-      "desc": "Polnisch und brasilianisches Portugiesisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
+      "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch und Niederländisch",
+      "desc": "Polnisch, brasilianisches Portugiesisch und Niederländisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
     "entry2": {
       "label": "Verbesserungen beim Lernen",

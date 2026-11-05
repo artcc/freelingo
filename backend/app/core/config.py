@@ -70,6 +70,26 @@ class Settings(BaseSettings):
     STRIPE_TRIAL_DAYS: int = 7
     STRIPE_BASE_URL: str = "http://localhost:3000"
 
+    # Optional authority for Premium entitlements; Stripe still owns web checkout.
+    REVENUECAT_ENABLED: bool = False
+    REVENUECAT_API_KEY: str = ""
+    REVENUECAT_WEBHOOK_AUTHORIZATION: str = ""
+    REVENUECAT_ENTITLEMENT_ID: str = "premium"
+    REVENUECAT_ENVIRONMENT: Literal["PRODUCTION", "SANDBOX"] = "PRODUCTION"
+    REVENUECAT_STRIPE_PUBLIC_API_KEY: str = ""
+
+    def validate_revenuecat(self) -> None:
+        if not (self.STRIPE_ENABLED and self.REVENUECAT_ENABLED):
+            return
+        required = (
+            "REVENUECAT_API_KEY",
+            "REVENUECAT_WEBHOOK_AUTHORIZATION",
+            "REVENUECAT_ENTITLEMENT_ID",
+        )
+        missing = [name for name in required if not getattr(self, name).strip()]
+        if missing:
+            raise ValueError(f"RevenueCat requires: {', '.join(missing)}")
+
     # Display prices (shown on landing page and paywall banner)
     PRICE_MONTHLY: float = 0.0
     PRICE_YEARLY: float = 0.0
@@ -105,6 +125,7 @@ class Settings(BaseSettings):
         "it-IT",
         "ja-JP",
         "ko-KR",
+        "nl-NL",
         "pl-PL",
         "pt-BR",
         "pt-PT",

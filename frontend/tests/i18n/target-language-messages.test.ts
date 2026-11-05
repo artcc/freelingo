@@ -13,6 +13,8 @@ describe.each(SUPPORTED_LOCALES)('target language messages in %s', (locale) => {
     }
     expect(messages.targetLanguages['pt-BR']).not.toBe(messages.targetLanguages['pt-PT'])
     expect(messages.landing.languageGreetings['pt-BR']).toBe('Oi!')
+    expect(messages.landing.languageGreetings['nl-NL']).toBe('Hallo!')
+    expect(messages.targetLanguages.nl?.trim()).toBeTruthy()
     expect(messages.whatsNew.version).toBe(WHATS_NEW_VERSION)
     expect(Object.keys(messages.whatsNew).filter((key) => /^entry\d+$/.test(key))).toEqual([
       'entry1',

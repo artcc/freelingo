@@ -23,6 +23,14 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "nl-NL": """
+Language-specific guidance:
+- Use standard Dutch as used in the Netherlands, with natural vocabulary, spelling and pronunciation guidance.
+- Teach nouns with de/het and their plurals; attend to adjective endings, vowel spelling, verb-second main clauses, subordinate verb groups, separable verbs, er, and niet/geen.
+- Use je/jij or u consistently for the relationship and register. Both u hebt and u heeft are standard; recognize valid verb-cluster orders and regional standard variants rather than treating them as universal errors.
+- Build from everyday interaction to nuanced interpretation and register control. Give assessment questions enough context for exactly one answer; preserve participants, scope, certainty and source attribution in reformulations.
+- Prefer Netherlands contexts and usage such as fiets, pinpas, huisarts and gemeente. Label Belgian or Surinamese usage explicitly when comparing varieties; do not substitute German or English grammar or vocabulary.
+""".strip(),
     "en-US": """
 Language-specific guidance:
 - Use American English spelling, vocabulary, punctuation, and idiom consistently.
@@ -109,6 +117,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "nl": "nl-NL",
     "de": "de-DE",
     "fr": "fr-FR",
     "es": "es-ES",

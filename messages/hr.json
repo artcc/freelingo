@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Dostupni jezici"
   },
   "targetLanguages": {
+    "nl-NL": "Nizozemski (Nizozemska)",
+    "nl": "Nizozemski",
+    "nl-NL-description": "Nizozemski kakav se govori u Nizozemskoj.",
     "en-US": "Američki engleski",
     "en-GB": "Britanski engleski",
     "es-ES": "Španjolski",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Razumijem",
     "entry1": {
-      "label": "Novi jezici: poljski i brazilski portugalski",
-      "desc": "Dodali smo poljski i brazilski portugalski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
+      "label": "Novi jezici: poljski, brazilski portugalski i nizozemski",
+      "desc": "Dodali smo poljski, brazilski portugalski i nizozemski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
     "entry2": {
       "label": "Poboljšanja učenja",

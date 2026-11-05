@@ -1,3 +1,4 @@
+from app.models.billing_webhook import RevenueCatWebhookReceipt
 from app.models.chat_history import ChatHistory
 from app.models.competency import UserCompetency
 from app.models.conversation import Conversation
@@ -19,6 +20,7 @@ from app.models.user import User
 from app.models.user_language import UserLanguage
 
 __all__ = [
+    "RevenueCatWebhookReceipt",
     "ChatHistory",
     "UserCompetency",
     "Conversation",

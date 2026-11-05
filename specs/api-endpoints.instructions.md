@@ -161,9 +161,35 @@ Requires `role="admin"`. Translation previews and saves must contain exactly `en
 
 Registered only when `STRIPE_ENABLED=true`.
 
-- **POST `/checkout`** — Rate limit: 60/min. Auth: get_current_user. Creates a Stripe Checkout Session for `monthly` or `yearly`. Does not require an existing subscription because unsubscribed users must be able to subscribe.
-- **POST `/portal`** — Rate limit: 60/min. Auth: get_current_user. Creates a Stripe Customer Portal session for users with a `stripe_customer_id`.
+- **POST `/checkout`** — Rate limit: 60/min. Auth: get_current_user. Creates a Stripe Checkout Session for `monthly` or `yearly`. Returns `409 subscription_already_active` for an existing Premium account. When RevenueCat is enabled it reconciles the account before that check; provider failure returns `503`. No client-supplied subscription identity is accepted.
+- **POST `/portal`** — Rate limit: 60/min. Auth: get_current_user. Returns `{url}`. With RevenueCat enabled, uses the customer's verified HTTPS management URL when present; otherwise creates a Stripe Customer Portal session for users with a `stripe_customer_id`. RevenueCat failures, invalid data, or unsafe URLs fall back to the authenticated user's stored Stripe customer; without one they return `503`. A successful read with no management URL and no Stripe customer returns `400`.
 - **POST `/webhook`** — Rate limit: 200/min. Public network access but requires a valid Stripe signature before processing. Handles checkout/session and subscription lifecycle events. Checkout completion verifies the Stripe Subscription before granting access and persists the current `stripe_subscription_id`; subscription update/delete and invoice payment-failed events are ignored as stale when their subscription ID differs from the user's current `stripe_subscription_id`. Invoice payment-failed handling supports both legacy `invoice.subscription` and current `invoice.parent.subscription_details.subscription` shapes. Subscription updates accept real Stripe statuses (`trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, `paused`) and keep the existing status for unknown values. Valid payload/signature errors return 400; internal processing failures return 500 so Stripe retries the event.
+
+With `REVENUECAT_ENABLED=true`, Stripe webhooks retain identifiers and verified trial usage but do
+not modify shared access state or quotas. The following routes are registered only when both billing
+flags are enabled:
+
+- **POST `/revenuecat/webhook`** — Rate limit: 200/min. Public network access, authenticated by the exact
+  configured Authorization header. Accepts RevenueCat's API v1 `{api_version, event}` envelope and
+  verifies current customer entitlements with RevenueCat rather than applying transaction fields.
+  Returns `200 {received: true}` for processed/duplicate events, dashboard tests, ignored environments,
+  and unknown accounts. Bad authorization returns `401`; malformed envelopes or unsupported API versions
+  return `400`; unavailable configuration or reconciliation failure returns `503`. Event receipt and
+  account changes are atomic, including both sides of transfers. The entitlement and identity contract
+  belongs to `subscriptions-freemium.instructions.md`.
+- **POST `/sync`** — Rate limit: 10/min. Auth: get_current_user. No body is required; the authenticated
+  account is the only synchronization target. Returns `{subscription_status, subscription_ends_at,
+  cancel_at_period_end}` with the persisted status and UTC ISO expiration or null. Provider failure
+  returns `503` without replacing the cached snapshot.
+- **POST `/revenuecat/sync/{user_id}`** — Rate limit: 10/min. Auth: require_admin. Required JSON body:
+  `{import_stripe?: boolean}`, default false. Reconciles the specified account; true first imports its
+  persisted Stripe Subscription ID using the configured RevenueCat Stripe-app public key. Returns the
+  same status object as `/sync`, `404` for an unknown account, or `503` for failed provider operations
+  or missing import configuration. Importing a caller-supplied receipt is not supported.
+
+Public profile responses retain their existing fields. `subscription_status` exposes the last
+confirmed persisted state, consistently with access checks and admin reporting. A cached expiration
+date passing does not change that status; RevenueCat revocation requires successful reconciliation.
 
 ---
 
