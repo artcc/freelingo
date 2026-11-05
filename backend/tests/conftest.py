@@ -1,5 +1,8 @@
 import os
 import re
+from copy import deepcopy
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-ci-32b"
@@ -8,6 +11,7 @@ os.environ["REVENUECAT_ENABLED"] = "false"
 
 import pytest
 import pytest_asyncio
+import stripe
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import event, select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -15,6 +19,104 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from app.core.database import Base, get_db
 from app.core.security import create_access_token
 from app.main import app
+
+
+@pytest.fixture
+def stripe_provider(monkeypatch):
+    """Stateful Stripe boundary with SDK objects and independently controlled snapshots."""
+    state = SimpleNamespace(subscriptions={}, sessions={}, requests={})
+
+    def add_subscription(subscription_id, status="active", **fields):
+        subscription = stripe.Subscription.construct_from(
+            {
+                "id": subscription_id,
+                "object": "subscription",
+                "status": status,
+                "trial_start": None,
+                "cancel_at": None,
+                "cancel_at_period_end": False,
+                "current_period_end": 1_900_000_000,
+                **fields,
+            },
+            None,
+        )
+        state.subscriptions[subscription_id] = subscription
+        return subscription
+
+    def page(items):
+        return stripe.ListObject.construct_from(
+            {"object": "list", "data": items, "has_more": False, "url": "/test"}, None
+        )
+
+    def create_session(**kwargs):
+        params = deepcopy(kwargs)
+        key = params.pop("idempotency_key")
+        if key in state.requests:
+            original_params, session_id = state.requests[key]
+            assert params == original_params
+            return state.sessions[session_id]
+        session_id = f"cs_{len(state.sessions) + 1}"
+        session = stripe.checkout.Session.construct_from(
+            {
+                **params,
+                "id": session_id,
+                "object": "checkout.session",
+                "status": "open",
+                "subscription": None,
+                "url": f"https://checkout.stripe.com/{session_id}",
+            },
+            None,
+        )
+        state.sessions[session_id] = session
+        state.requests[key] = (params, session_id)
+        return session
+
+    def list_sessions(**kwargs):
+        return page(
+            [
+                session
+                for session in state.sessions.values()
+                if session.customer == kwargs["customer"]
+                and ("status" not in kwargs or session.status == kwargs["status"])
+            ]
+        )
+
+    def expire_session(session_id):
+        session = state.sessions[session_id]
+        if session.status != "open":
+            raise stripe.InvalidRequestError("Session is not open", "id")
+        session.status = "expired"
+        session.url = None
+        return session
+
+    state.add_subscription = add_subscription
+    state.create_customer = AsyncMock(return_value=SimpleNamespace(id="cus_new"))
+    state.create_session = AsyncMock(side_effect=create_session)
+    state.retrieve_session = AsyncMock(side_effect=lambda session_id: state.sessions[session_id])
+    state.list_sessions = AsyncMock(side_effect=list_sessions)
+    state.expire_session = AsyncMock(side_effect=expire_session)
+    state.retrieve_subscription = AsyncMock(side_effect=lambda sub_id: state.subscriptions[sub_id])
+    state.list_subscriptions = AsyncMock(
+        side_effect=lambda **kwargs: page(
+            [
+                sub
+                for sub in state.subscriptions.values()
+                if getattr(sub, "customer", None) == kwargs["customer"]
+            ]
+        )
+    )
+    state.create_portal = AsyncMock(
+        return_value=SimpleNamespace(url="https://billing.stripe.com/recover")
+    )
+    monkeypatch.setattr(stripe.Customer, "create_async", state.create_customer)
+    monkeypatch.setattr(stripe.checkout.Session, "create_async", state.create_session)
+    monkeypatch.setattr(stripe.checkout.Session, "retrieve_async", state.retrieve_session)
+    monkeypatch.setattr(stripe.checkout.Session, "list_async", state.list_sessions)
+    monkeypatch.setattr(stripe.checkout.Session, "expire_async", state.expire_session)
+    monkeypatch.setattr(stripe.Subscription, "retrieve_async", state.retrieve_subscription)
+    monkeypatch.setattr(stripe.Subscription, "list_async", state.list_subscriptions)
+    monkeypatch.setattr(stripe.billing_portal.Session, "create_async", state.create_portal)
+    return state
 
 
 @pytest.fixture(autouse=True)

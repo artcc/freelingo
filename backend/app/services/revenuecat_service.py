@@ -109,12 +109,9 @@ def _access_state(info: RevenueCatCustomerInfo) -> tuple[str, datetime | None, b
 
     active = ends_at is None or ends_at > datetime.now(UTC).replace(tzinfo=None)
     if not active:
-        status = (
-            "past_due"
-            if subscription and subscription.billing_issues_detected_at is not None
-            else "canceled"
-        )
-        return status, ends_at, False
+        # A historic billing issue does not prove that the store can still
+        # recover this subscription. Checkout verifies billing recovery live.
+        return "canceled", ends_at, False
 
     status = "trialing" if subscription and subscription.period_type == "trial" else "active"
     canceling = bool(subscription and subscription.unsubscribe_detected_at is not None)

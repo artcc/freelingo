@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for Stripe billing, optional RevenueCat entitlement synchronization, freemium access, paywalls, maintenance, and subscription administration."
-applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook}.py, backend/app/services/{subscription_service,revenuecat_service,freemium_service,assessment_voice_trial}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
+applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook,billing_checkout}.py, backend/app/services/{subscription_service,revenuecat_service,stripe_checkout_service,freemium_service,assessment_voice_trial}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
 ---
 
 # Subscriptions and Freemium
@@ -122,15 +122,34 @@ gated. Memory management is also not blocked by maintenance mode.
 - rejects an already-subscribed account with `409 subscription_already_active`;
 - rate limit: `60/minute`;
 - selects the configured server-side Price ID;
-- creates and persists a Stripe Customer when absent;
-- creates a subscription Checkout Session with promotion codes enabled;
+- creates and persists a Stripe Customer when absent, with a stable customer-creation idempotency key;
+- creates a subscription Checkout Session with promotion codes enabled and a one-hour expiry;
 - records `user_id` in session and subscription metadata;
 - includes a Stripe trial only when configured days are positive and `trial_used` is false;
 - returns checkout success and cancellation to `STRIPE_BASE_URL`;
-- returns the Stripe-hosted URL.
+- returns the Stripe-hosted URL; an existing recoverable Stripe subscription returns a Customer Portal
+  URL instead of opening another purchase.
 
-The endpoint does not send an idempotency key or reserve an in-flight Checkout Session. The active
-subscription check does not prevent concurrent checkout attempts before either purchase completes.
+`stripe_checkout_service.py` serializes creation on the user row and persists one `billing_checkouts`
+reservation per user before contacting Checkout. The reservation freezes the complete session request
+and its UUID idempotency key. Workers reacquire the user lock and reload the reservation after a commit.
+The same price reuses the open session; changing prices expires it before creating a replacement.
+Completed sessions are checked against their current Stripe Subscription, including before webhooks
+arrive. Sessions opened before reservations existed are expired before a new reservation is created.
+If payment races expiration, the request fails without issuing another session.
+
+Uncertain creation results retry the persisted key and parameters, then retrieve the session's current
+state rather than trusting a replayed creation response. Once the reservation deadline passes, recovery
+lists the customer's sessions and matches the reservation metadata; it never resubmits an old key
+that Stripe may have pruned. Provider errors return `503` and preserve the committed reservation.
+An uncertain request is not replaced merely because a provider call timed out.
+
+Before returning an open Checkout or reserving a new one, the service checks the customer's Stripe
+subscriptions with pagination. `active`/`trialing` subscriptions block another purchase with `409`;
+`incomplete` returns `409 subscription_payment_pending`; `past_due`, `unpaid`, and `paused` route to
+Customer Portal. Terminal `canceled`/`incomplete_expired` subscriptions permit a new purchase. These
+checks decide billing navigation, not Premium access: in RevenueCat mode only RevenueCat updates
+the entitlement snapshot. Verified historical Stripe trial usage suppresses a second card trial.
 
 `POST /api/billing/portal` requires authentication and has a `60/minute` limit. In RevenueCat mode it
 first reads the customer's HTTPS `management_url`, allowing the existing web button to manage the
@@ -153,19 +172,24 @@ only retain billing identifiers and the verified Stripe trial-used flag; they ne
 subscription status, expiration, cancellation state, or activation quotas. Both synchronization paths
 lock the user row before modifying billing data.
 
-- `checkout.session.completed`: finds the user by Customer or metadata, requires and retrieves the
-  Stripe Subscription before granting access, stores identifiers/status/period, clears scheduled
-  cancellation, marks a real trial as used, and applies default general quotas.
+- `checkout.session.completed`: finds the user by Customer or metadata and retrieves the current
+  Stripe Subscription before applying identifiers/status/period/scheduled cancellation. Late sessions
+  cannot rebind an account from a different persisted Customer or replace a current non-terminal
+  subscription. Verified current or historical trial usage marks the card trial as used.
 - `customer.subscription.updated`: binds a missing current subscription ID, ignores a different
-  known subscription as stale, preserves the prior status when Stripe sends an unknown value, and
-  synchronizes period and scheduled cancellation.
-- `customer.subscription.deleted`: ignores stale subscriptions, marks current status canceled, and
-  clears scheduled cancellation.
+  known subscription as stale, and retrieves the current Subscription rather than applying the event
+  snapshot. Unknown provider statuses preserve the prior status.
+- `customer.subscription.deleted`: ignores stale subscriptions and reconciles the current Subscription;
+  a confirmed canceled status clears scheduled cancellation.
 - `invoice.payment_failed`: accepts both historical and current Stripe invoice subscription shapes,
-  ignores stale subscription IDs, and marks the current subscription past due.
+  ignores stale subscription IDs and one-off invoices, and reconciles the current Subscription. An old
+  invoice failure cannot overwrite a subsequent payment recovery.
 
-Webhook event IDs are not persisted for idempotency. Activation quotas are applied by checkout
-completion, not by a later transition received only through `subscription.updated`.
+Stripe event IDs are persisted in `stripe_webhook_receipts` and commit atomically with account changes.
+Duplicates do not repeat provider reads or reset quotas; failed processing rolls back the receipt so
+delivery remains retryable. Provider reads happen under the user lock, avoiding stale event snapshots
+and concurrent overwrites. Default activation quotas apply only on a non-Premium to Premium transition,
+including a subscription update received before Checkout completion.
 
 ## RevenueCat synchronization
 
@@ -188,12 +212,16 @@ The configured entitlement determines the shared snapshot:
 
 - absent entitlement: `none`;
 - unexpired entitlement: `active`, or `trialing` for a trial period;
-- expired entitlement: `canceled`, or `past_due` when the associated subscription reports billing issues;
+- expired entitlement: `canceled`, including expirations with a historical billing issue;
 - cancellation detection sets `cancel_at_period_end` without revoking unexpired access;
 - grace-period expiry extends the access deadline; a billing issue alone does not revoke access;
 - a matched purchase must belong to the configured environment; mismatched or malformed snapshots fail
   without overwriting local access;
 - a snapshot older than `revenuecat_synced_at` cannot overwrite a newer one.
+
+An expired entitlement with `billing_issues_detected_at` does not establish that the store subscription
+is recoverable. The UI offers subscription plans for the canceled state; Checkout verifies live Stripe
+billing state and routes recoverable subscriptions to the portal instead of creating duplicate charges.
 
 The event receipt, account snapshot, and activation quotas commit in one database transaction.
 Duplicate event IDs are acknowledged without repeating provider reads or resetting quotas. Failed
@@ -254,8 +282,9 @@ Provider references:
 ## Stripe card trial
 
 Checkout includes `STRIPE_TRIAL_DAYS` only when the configured value is positive and `trial_used` is
-false. Abandoning checkout does not consume the right. The flag is committed when verified checkout
-completion reports `trialing`; direct `active` activation and administrative overrides do not mark it.
+false. Abandoning checkout does not consume the right. Verified Stripe snapshots with `trialing` status
+or a non-null `trial_start` mark the trial as used, including when notification arrives after conversion
+to a paid subscription. Administrative access overrides do not mark it.
 
 The landing pricing subtitle, monthly badge, and all paid-plan CTAs advertise a Stripe trial only
 when configured trial days are positive and the user has not already used it. Otherwise, the subtitle

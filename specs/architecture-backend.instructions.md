@@ -110,7 +110,11 @@ and `platform.instructions.md`.
 RevenueCat synchronization uses the existing global account subscription fields. It locks affected
 user rows in ascending order and commits webhook receipts, snapshots, and activation quotas together.
 Stripe remains the web payment integration; when RevenueCat is enabled only RevenueCat reconciliation
-updates shared paid-access state. Configuration and reconciliation rules are owned by
+updates shared paid-access state. Stripe webhook receipts commit with account changes; Stripe-only
+handlers read current provider state under the user lock instead of applying event snapshots.
+`stripe_checkout_service.py` persists Checkout reservations before external creation, reacquires the
+user lock after committing, and uses frozen parameters and idempotency keys to recover uncertain writes.
+The same lock serializes reservation replacement across workers. Configuration and reconciliation rules are owned by
 `subscriptions-freemium.instructions.md`.
 
 `testing.instructions.md` owns validation commands and the limits of SQLite and PostgreSQL checks.

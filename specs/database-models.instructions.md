@@ -102,6 +102,28 @@ the event retryable; a committed ID prevents duplicate processing. Receipts cont
 foreign keys, or raw webhook payloads, and remain valid after account deletion. Revision
 `0058_revenuecat_sync` creates this table and the nullable synchronization marker on `users`.
 
+## StripeWebhookReceipt (`stripe_webhook_receipts`)
+
+- `event_id` — varchar(255) primary key, supplied by Stripe and reused for retries.
+- `processed_at` — required naive-UTC processing timestamp.
+
+The receipt commits atomically with account updates and activation quotas. Failed processing rolls
+back the receipt, keeping delivery retryable. Receipts contain no raw payloads or account foreign keys.
+
+## BillingCheckout (`billing_checkouts`)
+
+- `user_id` — primary key and foreign key to `users.id` with `ON DELETE CASCADE`; one current reservation
+  per account, independent of study languages.
+- `idempotency_key` — required varchar(36), a server-generated UUID for the Stripe session request.
+- `parameters` — required JSON containing the frozen Checkout request, including Customer, Price,
+  trial parameters, return URLs, identity metadata, reservation metadata, and fixed `expires_at`.
+- `session_id` — nullable varchar(255), filled when the Stripe session ID is known.
+
+Reservations commit before session creation and survive uncertain provider outcomes. Creation and
+replacement serialize on the owning user row. No session URL, payment credentials, or raw provider
+response is persisted. Revision `0059_billing_idempotency` creates both Stripe billing tables without
+rewriting existing account state. Workflow rules live in `subscriptions-freemium.instructions.md`.
+
 ## DashboardBanner (`dashboard_banners`)
 
 Singleton global announcement managed by administrators and displayed on authenticated dashboards.

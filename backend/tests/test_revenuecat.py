@@ -16,6 +16,8 @@ from app.routers.conversation import _check_voice_access
 from app.services import revenuecat_service
 from app.services.subscription_service import is_subscribed
 
+pytestmark = pytest.mark.usefixtures("stripe_provider")
+
 _ROUTES = {getattr(route, "path", None) for route in app.routes}
 if "/api/billing/revenuecat/webhook" not in _ROUTES:
     app.include_router(revenuecat.router)
@@ -251,14 +253,16 @@ async def test_billing_issue_honors_grace_period(client, test_user, provider):
     assert user.subscription_ends_at == expires.replace(tzinfo=None)
 
 
-async def test_expired_billing_issue_allows_payment_recovery(client, test_user, provider):
+async def test_expired_billing_issue_does_not_claim_subscription_is_recoverable(
+    client, test_user, provider
+):
     user, _ = test_user
     provider.payload = customer_info(active=False)
     provider.payload["subscriber"]["subscriptions"]["monthly"]["billing_issues_detected_at"] = (
         datetime.now(UTC).isoformat()
     )
     assert (await deliver(client, webhook(user.id, "EXPIRATION"))).status_code == 200
-    assert user.subscription_status == "past_due"
+    assert user.subscription_status == "canceled"
 
 
 async def test_lifetime_entitlement(client, test_user, provider):
@@ -523,7 +527,11 @@ async def test_stripe_events_cannot_overwrite_revenuecat_access(
     user.stripe_subscription_id = "sub_current"
     user.subscription_status = "active"
     await db_session.commit()
-    event = {"type": event_type, "data": {"object": {"customer": "cus_test", **data}}}
+    event = {
+        "id": "evt_test",
+        "type": event_type,
+        "data": {"object": {"customer": "cus_test", **data}},
+    }
     with patch("stripe.Webhook.construct_event", return_value=event):
         response = await client.post("/api/billing/webhook", content=b"{}")
     assert response.status_code == 200
@@ -539,6 +547,7 @@ async def test_stripe_checkout_keeps_identifiers_and_trial_without_overwriting_a
     user.monthly_tokens_limit = 321
     await db_session.commit()
     event = {
+        "id": "evt_test",
         "type": "checkout.session.completed",
         "data": {"object": {"customer": "cus_test", "subscription": "sub_trial"}},
     }
@@ -557,7 +566,7 @@ async def test_stripe_checkout_keeps_identifiers_and_trial_without_overwriting_a
 
 async def test_checkout_checks_revenuecat_before_creating_subscription(client, test_user):
     _, headers = test_user
-    with patch("stripe.checkout.Session.create") as create_session:
+    with patch("stripe.checkout.Session.create_async") as create_session:
         response = await client.post(
             "/api/billing/checkout", headers=headers, json={"plan": "monthly"}
         )
@@ -566,26 +575,62 @@ async def test_checkout_checks_revenuecat_before_creating_subscription(client, t
 
 
 async def test_checkout_still_uses_stripe_and_identity_metadata(
-    client, test_user, provider, monkeypatch
+    client, test_user, provider, monkeypatch, stripe_provider
 ):
     user, headers = test_user
     provider.payload["subscriber"]["entitlements"] = {}
     monkeypatch.setattr(settings, "STRIPE_PRICE_MONTHLY", "price_monthly")
-    with (
-        patch("stripe.Customer.create", return_value=SimpleNamespace(id="cus_new")),
-        patch(
-            "stripe.checkout.Session.create",
-            return_value=SimpleNamespace(url="https://checkout.stripe.com/test"),
-        ) as create_session,
-    ):
-        response = await client.post(
-            "/api/billing/checkout", headers=headers, json={"plan": "monthly"}
-        )
+    response = await client.post("/api/billing/checkout", headers=headers, json={"plan": "monthly"})
     assert response.status_code == 200
+    create_session = stripe_provider.create_session
     assert create_session.call_args.kwargs["metadata"]["user_id"] == str(user.id)
     assert create_session.call_args.kwargs["subscription_data"]["metadata"]["user_id"] == str(
         user.id
     )
+
+
+@pytest.mark.parametrize("stripe_status", ["canceled", "past_due", "unpaid", "paused"])
+async def test_expired_billing_issue_checks_live_stripe_recovery_without_changing_access(
+    client, db_session, test_user, provider, monkeypatch, stripe_provider, stripe_status
+):
+    user, headers = test_user
+    user.stripe_customer_id = "cus_existing"
+    user.stripe_subscription_id = "sub_existing"
+    user.monthly_tokens_limit = 123
+    await db_session.commit()
+    provider.payload = customer_info(active=False)
+    provider.payload["subscriber"]["subscriptions"]["monthly"]["billing_issues_detected_at"] = (
+        datetime.now(UTC).isoformat()
+    )
+    monkeypatch.setattr(settings, "STRIPE_PRICE_MONTHLY", "price_monthly")
+    stripe_provider.add_subscription("sub_existing", stripe_status, customer="cus_existing")
+    response = await client.post("/api/billing/checkout", headers=headers, json={"plan": "monthly"})
+    assert response.status_code == 200
+    assert user.subscription_status == "canceled"
+    assert user.monthly_tokens_limit == 123
+    if stripe_status == "canceled":
+        assert response.json()["url"].startswith("https://checkout.stripe.com/")
+        stripe_provider.create_session.assert_awaited_once()
+    else:
+        assert response.json()["url"] == "https://billing.stripe.com/recover"
+        stripe_provider.create_session.assert_not_called()
+
+
+async def test_stripe_checkout_lookup_failure_preserves_confirmed_revenuecat_state(
+    client, db_session, test_user, provider, stripe_provider, monkeypatch
+):
+    import stripe
+
+    user, headers = test_user
+    provider.payload = customer_info(active=False)
+    monkeypatch.setattr(settings, "STRIPE_PRICE_MONTHLY", "price_monthly")
+    stripe_provider.list_subscriptions.side_effect = stripe.APIConnectionError("offline")
+    response = await client.post("/api/billing/checkout", headers=headers, json={"plan": "monthly"})
+    assert response.status_code == 503
+    await db_session.refresh(user)
+    assert user.subscription_status == "canceled"
+    assert user.revenuecat_synced_at is not None
+    stripe_provider.create_session.assert_not_called()
 
 
 @pytest.mark.parametrize("stripe_customer_id", [None, "cus_existing"])

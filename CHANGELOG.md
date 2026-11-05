@@ -17,6 +17,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Portuguese language selectors explicitly distinguish Brazil from Portugal, using separate flags and localized labels.
 - What's New highlights Polish, Brazilian Portuguese, and Dutch together in the first entry, across all interface languages.
 
+### Fixed
+
+- Stripe-only access reconciles current subscription state and deduplicates webhooks, preventing delayed events from undoing cancellations or payment recovery and duplicate deliveries from resetting quotas.
+- Checkout reuses a single pending session per account, recovers interrupted creation idempotently, and expires the previous session before changing plans to prevent duplicate subscriptions.
+- RevenueCat expirations caused by billing issues allow resubscription after definitive cancellation; subscriptions that remain recoverable in Stripe route to Customer Portal instead of creating another purchase.
+
 ## [1.11.0] - 2026-11-02
 
 ### Added
