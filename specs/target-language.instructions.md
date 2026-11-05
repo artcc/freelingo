@@ -17,8 +17,7 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`,
-`ja-JP`, `ko-KR`, `ru-RU`, and `zh-CN`.
+The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -101,7 +100,7 @@ New code must not infer a plan-owned operation's language from the compatibility
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
-Mandarin with simplified characters.
+Mandarin with simplified characters, and standard Swedish from Sweden.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -129,8 +128,18 @@ aspect, motion verbs and advanced discourse. Generated content uses contemporary
 preserves appropriate ё spelling and distinguishes contextual alternatives from grammatical errors.
 Shared speech guidance requests Russian lexical stress, vowel reduction and hard/soft consonants.
 
+`sv-SE` resolves to the independent `backend/app/data/sv/` package; `sv` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Swedish uses Latin text with å, ä
+and ö, visible word spacing, word-based comprehension lengths, ISO `sv` recognition and the Sweden
+flag. Its curriculum introduces pronunciation and vowel-consonant length, en/ett gender and
+definiteness before subordinate word order, tense perspective and advanced discourse. Generated
+content preserves V2, negation scope, reflexive reference and register without rejecting valid regional
+or conversational alternatives. Shared speech guidance requests Swedish vowel quality, length
+contrasts, pitch accents and natural phrasing. OpenAI speech and Whisper support Swedish; the
+English-only Kokoro voice configuration is not suitable for this target language.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Polish and Russian.
+other current languages, including Polish, Russian and Swedish.
 
 ## Speech recognition
 

@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Welche Sprachen kann ich lernen?",
-        "answer": "Britisches und amerikanisches Englisch, Spanisch, Italienisch, Portugiesisch aus Brasilien und Portugal, Deutsch, Französisch, Polnisch, Niederländisch, Russisch, Japanisch, Koreanisch und Festlandchinesisch. Du kannst mehrere Sprachen gleichzeitig lernen, mit eigenen Lernplänen und Fortschritten für jede Sprache."
+        "answer": "{languages}. Du kannst mehrere Sprachen gleichzeitig lernen, mit eigenen Lernplänen und Fortschritten für jede Sprache."
       },
       "start": {
         "question": "Wie fange ich an zu lernen?",
@@ -93,6 +93,7 @@
     "footerLegal": "Rechtliches",
     "languageGreetings": {
       "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1291,7 +1292,7 @@
     "workflowStep5": "Nutzen Sie Karteikarten, um parallel Vokabular zu üben",
     "workflowStep6": "Üben Sie freie Gespräche mit Lingu",
     "q_language": "Welche Sprache werde ich lernen?",
-    "a_language": "FreeLingo unterstützt derzeit mehrere Sprachen (Amerikanisches Englisch, Britisches Englisch, Chinesisch (Festland), Deutsch, Französisch, Italienisch, Japanisch, Koreanisch, Portugiesisch aus Brasilien und Portugal, Spanisch, Polnisch, Niederländisch, Russisch), und wir werden mit der Zeit weitere hinzufügen. Wenn eine neue Sprache verfügbar ist, findest du sie unter Einstellungen → Meine Sprachen — füge sie hinzu und beginne sofort zu lernen.",
+    "a_language": "FreeLingo unterstützt derzeit mehrere Sprachen ({languages}), und wir werden mit der Zeit weitere hinzufügen. Wenn eine neue Sprache verfügbar ist, findest du sie unter Einstellungen → Meine Sprachen — füge sie hinzu und beginne sofort zu lernen.",
     "q_assessment": "Was ist die Einstufung?",
     "a_assessment": "Ein adaptiver Test mit bis zu 15 Fragen aus einem Fragenkatalog für Ihre Lernsprache. Er umfasst Grammatik, Wortschatz und Leseverständnis von A1 bis C2. Das Ergebnis schätzt Ihr GER-Niveau ein und zeigt Stärken und Übungsbedarf; vor der Planerstellung können Sie das vorgeschlagene Niveau anpassen.",
     "q_studyPlan": "Was ist der Lernplan und wie erstelle ich einen?",
@@ -1478,6 +1479,9 @@
     "supportedLanguages": "Verfügbare Sprachen"
   },
   "targetLanguages": {
+    "sv-SE": "Schwedisch",
+    "sv": "Schwedisch",
+    "sv-SE-description": "Schwedisch, wie es in Schweden gesprochen wird.",
     "ru-RU": "Russisch",
     "ru": "Russisch",
     "ru-RU-description": "Russisch, wie es in Russland gesprochen wird, mit kyrillischem Alphabet.",
@@ -1778,8 +1782,8 @@
     "version": "v1.11.5",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch und Niederländisch",
-      "desc": "Polnisch, brasilianisches Portugiesisch, Russisch und Niederländisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
+      "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
+      "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
     "entry2": {
       "label": "Verbesserungen beim Lernen",

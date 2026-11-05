@@ -168,8 +168,8 @@ export default async function Home() {
       <main className="contents">
         {/* Hero */}
         <section className="flex flex-1 flex-col items-center justify-center px-6 pt-[10px] pb-12 text-center">
-          <div className="mb-1 flex flex-col items-center">
-            <div className="mb-0">
+          <div className="mb-1 flex w-full flex-col items-center">
+            <div className="mb-0 w-full max-w-[560px]">
               <LanguageBubbles />
             </div>
             <span className="text-fl-label text-fl-muted-2 mb-4 font-mono tracking-widest uppercase">

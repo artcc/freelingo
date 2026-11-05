@@ -61,7 +61,7 @@ describe('TargetLanguageSelector', () => {
     )
 
     const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(14)
+    expect(buttons).toHaveLength(15)
   })
 
   it('renders nothing when availableCodes is empty', () => {
@@ -161,22 +161,22 @@ describe('TargetLanguageSelector', () => {
     expect(screen.queryByRole('button', { name: /nl-NL/ })).toBeNull()
   })
 
-  it('selects Russian with its flag only while enabled by the backend', () => {
+  it.each([
+    ['ru-RU', '/flags/russia.jpg'],
+    ['sv-SE', '/flags/sweden.jpg'],
+  ])('selects %s with its flag only while enabled by the backend', (code, flag) => {
     const onChange = vi.fn()
     const { rerender } = render(
       <TargetLanguageSelector
         value="en-GB"
         onChange={onChange}
-        availableCodes={['en-GB', 'ru-RU', 'xx-XX']}
+        availableCodes={['en-GB', code, 'xx-XX']}
       />
     )
     expect(screen.getAllByRole('button')).toHaveLength(2)
-    expect(screen.getByAltText('ru-RU')).toHaveAttribute(
-      'src',
-      '/flags/russia.jpg'
-    )
-    fireEvent.click(screen.getByRole('button', { name: /ru-RU/ }))
-    expect(onChange).toHaveBeenCalledWith('ru-RU')
+    expect(screen.getByAltText(code)).toHaveAttribute('src', flag)
+    fireEvent.click(screen.getByRole('button', { name: new RegExp(code) }))
+    expect(onChange).toHaveBeenCalledWith(code)
     rerender(
       <TargetLanguageSelector
         value="en-GB"
@@ -184,7 +184,7 @@ describe('TargetLanguageSelector', () => {
         availableCodes={['en-GB']}
       />
     )
-    expect(screen.queryByRole('button', { name: /ru-RU/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: new RegExp(code) })).toBeNull()
     expect(screen.getAllByRole('button')).toHaveLength(1)
   })
 

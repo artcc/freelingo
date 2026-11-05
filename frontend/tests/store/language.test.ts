@@ -44,7 +44,7 @@ describe('useLanguageStore — initial state', () => {
     expect(useLanguageStore.getState().supportedLanguages).toEqual(
       SUPPORTED_TARGET_LANGUAGES
     )
-    expect(useLanguageStore.getState().supportedLanguages.length).toBe(14)
+    expect(useLanguageStore.getState().supportedLanguages.length).toBe(15)
   })
 
   it('starts with empty availableLanguageCodes', () => {
@@ -640,6 +640,7 @@ describe('useLanguageStore — addLanguage', () => {
   it.each([
     ['nl-NL', '/flags/netherlands.jpg'],
     ['ru-RU', '/flags/russia.jpg'],
+    ['sv-SE', '/flags/sweden.jpg'],
   ])(
     'adds, switches, and removes %s while retaining English',
     async (code, flagPath) => {

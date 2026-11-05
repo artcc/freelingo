@@ -47,6 +47,7 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'de-DE': LATIN_LANGUAGE_CAPABILITY,
   'pl-PL': LATIN_LANGUAGE_CAPABILITY,
   'nl-NL': LATIN_LANGUAGE_CAPABILITY,
+  'sv-SE': LATIN_LANGUAGE_CAPABILITY,
   'ru-RU': {
     script: 'cyrillic',
     fontClass: 'font-target-cyrillic',
@@ -159,6 +160,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     nameEn: 'Russian',
     flagPath: '/flags/russia.jpg',
     iso639: 'ru',
+  }),
+  withCapabilities({
+    code: 'sv-SE',
+    name: 'Svenska',
+    nameEn: 'Swedish',
+    flagPath: '/flags/sweden.jpg',
+    iso639: 'sv',
   }),
   withCapabilities({
     code: 'ja-JP',

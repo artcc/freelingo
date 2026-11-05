@@ -9,16 +9,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Added
 
 - Optional RevenueCat Premium entitlement synchronization with authenticated, idempotent webhooks, account reconciliation, and administrator-controlled Stripe receipt imports, while retaining Stripe web checkout and a Stripe Customer Portal fallback when RevenueCat is unavailable.
-- Brazilian Portuguese (`pt-BR`), Dutch from the Netherlands (`nl-NL`), and Russian (`ru-RU`) as separate study languages, each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, cultural contexts, and regional speech instructions.
+- Brazilian Portuguese (`pt-BR`), Dutch from the Netherlands (`nl-NL`), Russian (`ru-RU`), and Swedish from Sweden (`sv-SE`) as separate study languages, each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, cultural contexts, and regional speech instructions.
 
 ### Changed
 
 - Billing rejects a new checkout for an already-subscribed account; RevenueCat-managed access preserves the last confirmed state during delayed renewals or provider failures and applies entitlement expiry and grace periods through verified reconciliation.
 - Portuguese language selectors explicitly distinguish Brazil from Portugal, using separate flags and localized labels.
-- What's New highlights Polish, Brazilian Portuguese, Dutch, and Russian together in the first entry, across all interface languages.
+- What's New highlights Polish, Brazilian Portuguese, Dutch, Russian, and Swedish together in the first entry, across all interface languages.
+- Public and authenticated FAQs list study languages alphabetically by their translated names in the active interface language.
 
 ### Fixed
 
+- Landing language bubbles use stable server/client positioning and a wider desktop orbit, with wrapping mobile rows to prevent crowding as the language catalog grows.
 - Study-plan generation rejects invalid or disabled target languages before changing data, and free voice conversations no longer inherit another language's study plan or level.
 - Stripe-only access reconciles current subscription state and deduplicates webhooks, preventing delayed events from undoing cancellations or payment recovery and duplicate deliveries from resetting quotas.
 - Checkout reuses a single pending session per account, recovers interrupted creation idempotently, and expires the previous session before changing plans to prevent duplicate subscriptions.

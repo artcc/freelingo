@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Welke talen kan ik leren?",
-        "answer": "Brits en Amerikaans Engels, Spaans, Italiaans, Portugees uit Brazilië en Portugal, Duits, Frans, Pools, Nederlands, Russisch, Japans, Koreaans en Chinees van het vasteland. Je kunt meerdere talen tegelijk leren, met aparte plannen en voortgang per taal."
+        "answer": "{languages}. Je kunt meerdere talen tegelijk leren, met aparte plannen en voortgang per taal."
       },
       "start": {
         "question": "Hoe begin ik met leren?",
@@ -93,6 +93,7 @@
     "footerLegal": "Juridisch",
     "languageGreetings": {
       "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1291,7 +1292,7 @@
     "workflowStep5": "Gebruik flashcards om woordenschat parallel te trainen",
     "workflowStep6": "Oefen vrije gesprekken met Lingu",
     "q_language": "Welke taal leer ik?",
-    "a_language": "FreeLingo ondersteunt momenteel meerdere talen (Amerikaans Engels, Brits Engels, Chinees (vasteland), Duits, Frans, Italiaans, Japans, Koreaans, Portugees uit Brazilië en Portugal, Spaans, Pools, Nederlands, Russisch) en we zullen er in de loop van de tijd meer toevoegen. Wanneer een nieuwe taal beschikbaar is, vind je deze in Instellingen → Mijn talen — voeg hem toe en begin meteen met leren.",
+    "a_language": "FreeLingo ondersteunt momenteel meerdere talen ({languages}) en we zullen er in de loop van de tijd meer toevoegen. Wanneer een nieuwe taal beschikbaar is, vind je deze in Instellingen → Mijn talen — voeg hem toe en begin meteen met leren.",
     "q_assessment": "Wat is de Beoordeling?",
     "a_assessment": "Een adaptieve quiz met maximaal 15 vragen uit een vragenbank voor je leertaal. De quiz behandelt grammatica, woordenschat en leesbegrip van A1 tot C2. Het resultaat schat je CEFR-niveau in en toont sterke punten en oefenpunten; je kunt het voorgestelde niveau aanpassen voordat je het plan maakt.",
     "q_studyPlan": "Wat is het Studieplan en hoe genereer ik er een?",
@@ -1478,6 +1479,9 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "sv-SE": "Zweeds",
+    "sv": "Zweeds",
+    "sv-SE-description": "Zweeds zoals gesproken in Zweden.",
     "ru-RU": "Russisch",
     "ru": "Russisch",
     "ru-RU-description": "Russisch zoals gesproken in Rusland, met het cyrillische alfabet.",
@@ -1778,8 +1782,8 @@
     "version": "v1.11.5",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch en Nederlands",
-      "desc": "Pools, Braziliaans Portugees, Russisch en Nederlands zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
+      "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
+      "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
     "entry2": {
       "label": "Verbeteringen voor het leren",

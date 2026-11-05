@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "sv": [
+        "daily life, public transport, libraries, housing and local services in Sweden",
+        "Swedish literature, music, cinema, design and regional cultural life",
+        "Swedish outdoor life, allemansrätten with responsibilities and local restrictions",
+        "associations, seasonal traditions, linguistic diversity and Sámi perspectives in Sweden",
+    ],
     "ru": [
         "daily life, public transport, local services and leisure in Russian cities and regions",
         "Russian literature, theatre, cinema, music and contemporary cultural life",
