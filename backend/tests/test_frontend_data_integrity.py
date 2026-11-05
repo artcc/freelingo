@@ -97,7 +97,7 @@ def test_language_package_meets_per_level_coverage_minimums(language, level, min
 
 
 @pytest.mark.parametrize(
-    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP"]
+    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ru-RU"]
 )
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
@@ -135,21 +135,7 @@ def test_curriculum_grammar_refs_all_defined() -> None:
 
     # Collect all grammar slugs across all supported languages
     defined: set[str] = set()
-    for lang in (
-        "en-GB",
-        "en-US",
-        "es-ES",
-        "it-IT",
-        "pl-PL",
-        "nl-NL",
-        "pt-BR",
-        "pt-PT",
-        "fr-FR",
-        "de-DE",
-        "ja-JP",
-        "ko-KR",
-        "zh-CN",
-    ):
+    for lang in sorted(SUPPORTED_TARGET_LANGUAGES):
         defined.update(_get_grammar_slugs(lang))
 
     missing = referenced - defined
@@ -194,6 +180,8 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.pl.vocabulary as pl_vocabulary
     import app.data.pt.curriculum as pt_curriculum
     import app.data.pt.vocabulary as pt_vocabulary
+    import app.data.ru.curriculum as ru_curriculum
+    import app.data.ru.vocabulary as ru_vocabulary
     import app.data.zh.curriculum as zh_curriculum
     import app.data.zh.vocabulary as zh_vocabulary
 
@@ -208,25 +196,12 @@ def test_curriculum_vocab_refs_all_defined() -> None:
         "Portuguese", pt_curriculum.CURRICULUM, pt_vocabulary.VOCABULARY_SETS
     )
     _check_language_vocab_refs("Chinese", zh_curriculum.CURRICULUM, zh_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Russian", ru_curriculum.CURRICULUM, ru_vocabulary.VOCABULARY_SETS)
 
 
 def test_grammar_related_refs_all_defined() -> None:
     """Every slug in a grammar topic's related[] array must exist in that language's grammar data."""
-    for lang_code in (
-        "en-GB",
-        "en-US",
-        "es-ES",
-        "it-IT",
-        "pl-PL",
-        "nl-NL",
-        "pt-BR",
-        "pt-PT",
-        "fr-FR",
-        "de-DE",
-        "ja-JP",
-        "ko-KR",
-        "zh-CN",
-    ):
+    for lang_code in sorted(SUPPORTED_TARGET_LANGUAGES):
         defined = _get_grammar_slugs(lang_code)
         related = _get_grammar_related_refs(lang_code)
 
@@ -246,6 +221,7 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
@@ -256,6 +232,7 @@ def test_vocabulary_export_completeness() -> None:
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ru", ru_sets),
         ("zh", zh_sets),
     ]:
         for s in sets:
@@ -275,21 +252,7 @@ def test_vocabulary_export_completeness() -> None:
 
 def test_grammar_slug_uniqueness() -> None:
     """No two grammar topics should share the same slug within a language."""
-    for lang_code in (
-        "en-GB",
-        "en-US",
-        "es-ES",
-        "it-IT",
-        "pl-PL",
-        "nl-NL",
-        "pt-BR",
-        "pt-PT",
-        "fr-FR",
-        "de-DE",
-        "ja-JP",
-        "ko-KR",
-        "zh-CN",
-    ):
+    for lang_code in sorted(SUPPORTED_TARGET_LANGUAGES):
         from app.data.grammar import get_grammar_topics
 
         topics = get_grammar_topics(lang_code)
@@ -314,6 +277,7 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
@@ -324,6 +288,7 @@ def test_vocabulary_id_uniqueness() -> None:
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ru", ru_sets),
         ("zh", zh_sets),
     ]:
         seen: set[str] = set()

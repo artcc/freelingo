@@ -6,7 +6,11 @@ import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => (key: string) =>
-    namespace === 'targetLanguages' ? `Localized ${key}` : key,
+    namespace === 'targetLanguages'
+      ? `Localized ${key}`
+      : key === 'languageGreetings.ru-RU'
+        ? 'Привет!'
+        : key,
 }))
 
 vi.mock('@/components/lingu/LinguAvatar', () => ({
@@ -65,6 +69,12 @@ describe('LanguageBubbles', () => {
       'src',
       '/flags/brazil.jpg'
     )
+    expect(screen.getByAltText('Localized ru-RU')).toHaveAttribute(
+      'src',
+      '/flags/russia.jpg'
+    )
+    expect(screen.getByText('Привет!')).toHaveAttribute('lang', 'ru-RU')
+    expect(screen.getByText('Привет!')).toHaveClass('font-target-cyrillic')
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
   })
 

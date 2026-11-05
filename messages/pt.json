@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Quais idiomas posso aprender?",
-        "answer": "Inglês britânico e americano, espanhol, italiano, português, alemão, francês, japonês, coreano e chinês continental. Você pode aprender vários ao mesmo tempo, com planos e progresso separados para cada idioma."
+        "answer": "Inglês britânico e americano, espanhol, italiano, português do Brasil e de Portugal, alemão, francês, polaco, neerlandês, russo, japonês, coreano e chinês continental. Você pode aprender vários ao mesmo tempo, com planos e progresso separados para cada idioma."
       },
       "start": {
         "question": "Como começo a aprender?",
@@ -92,6 +92,7 @@
     "footerProduct": "Produto",
     "footerLegal": "Legal",
     "languageGreetings": {
+      "ru-RU": "Привет!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1290,7 +1291,7 @@
     "workflowStep5": "Use os Cartões para treinar vocabulário em paralelo",
     "workflowStep6": "Pratique a conversação livre com Lingu",
     "q_language": "Que idioma vou aprender?",
-    "a_language": "O FreeLingo suporta atualmente vários idiomas (alemão, chinês continental, coreano, espanhol, francês, inglês americano, inglês britânico, italiano, japonês, português) e continuaremos a adicionar mais ao longo do tempo. Quando um novo idioma estiver disponível, encontrá-lo-á em Definições → Os meus idiomas — adicione-o e comece a aprender de imediato.",
+    "a_language": "O FreeLingo suporta atualmente vários idiomas (alemão, chinês continental, coreano, espanhol, francês, inglês americano, inglês britânico, italiano, japonês, português do Brasil e de Portugal, polaco, neerlandês, russo) e continuaremos a adicionar mais ao longo do tempo. Quando um novo idioma estiver disponível, encontrá-lo-á em Definições → Os meus idiomas — adicione-o e comece a aprender de imediato.",
     "q_assessment": "O que é a Avaliação?",
     "a_assessment": "Um teste adaptativo com até 15 perguntas de um banco específico do idioma de estudo. Abrange gramática, vocabulário e compreensão de leitura de A1 a C2. O resultado estima o seu nível QECR e identifica pontos fortes e aspetos a melhorar; pode ajustar o nível sugerido antes de criar o plano.",
     "q_studyPlan": "O que é o Plano de Estudo e como o gero?",
@@ -1477,6 +1478,9 @@
     "supportedLanguages": "Idiomas disponíveis"
   },
   "targetLanguages": {
+    "ru-RU": "Russo",
+    "ru": "Russo",
+    "ru-RU-description": "Russo falado na Rússia, com o alfabeto cirílico.",
     "nl-NL": "Neerlandês (Países Baixos)",
     "nl": "Neerlandês",
     "nl-NL-description": "Neerlandês falado nos Países Baixos.",
@@ -1774,8 +1778,8 @@
     "version": "v1.11.5",
     "cta": "Entendido",
     "entry1": {
-      "label": "Novos idiomas: polaco, português do Brasil e neerlandês",
-      "desc": "Adicionámos o polaco, o português do Brasil e o neerlandês como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
+      "label": "Novos idiomas: polaco, português do Brasil, russo e neerlandês",
+      "desc": "Adicionámos o polaco, o português do Brasil, o russo e o neerlandês como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
     "entry2": {
       "label": "Melhorias na aprendizagem",

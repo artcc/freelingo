@@ -129,6 +129,7 @@ class Settings(BaseSettings):
         "pl-PL",
         "pt-BR",
         "pt-PT",
+        "ru-RU",
         "zh-CN",
     ]
 

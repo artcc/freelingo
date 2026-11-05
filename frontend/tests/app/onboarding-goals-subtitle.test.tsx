@@ -145,6 +145,7 @@ describe('onboarding goals subtitle', () => {
     ['it-IT', 'Italian'],
     ['pl-PL', 'Polish'],
     ['nl-NL', 'Dutch'],
+    ['ru-RU', 'Russian'],
     ['pt-BR', 'Portuguese'],
     ['pt-PT', 'Portuguese'],
     ['ja-JP', 'Japanese'],

@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "ru-RU": """
+Language-specific guidance:
+- Use standard contemporary Russian as used in Russia, written in Cyrillic. Preserve ё where appropriate; do not replace Russian text with transliteration. Use stress marks selectively for pronunciation teaching, not as a substitute for ordinary spelling.
+- Build from Cyrillic letters, lexical stress, vowel reduction and hard/soft consonants to gender, agreement, the six cases and verb government. Introduce case forms through communicative uses and level-appropriate examples rather than unexplained full paradigms.
+- Teach imperfective/perfective aspect through context, including process, repetition, general fact and bounded result. Do not equate aspect mechanically with tense or imply that every imperfective past action was unfinished. Distinguish unidirectional and multidirectional motion verbs and the effects of prefixes.
+- Use ты and вы consistently for the relationship and situation; explain names and patronymics without assuming that every formal exchange requires one. Respect natural Russian word order, information focus, negation and numeral agreement instead of calquing English.
+- Progress towards contextual interpretation, register control, negotiation, mediation and precise reformulation. Preserve participants, scope, source attribution and degree of certainty; distinguish valid alternatives from errors. Assessment items need enough context for exactly one accepted answer.
+- Use varied everyday and cultural contexts without assuming that all Russian speakers share one nationality, lifestyle or opinion. Explain colloquial, literary and regional usage when relevant instead of presenting it as universally interchangeable.
+""".strip(),
     "nl-NL": """
 Language-specific guidance:
 - Use standard Dutch as used in the Netherlands, with natural vocabulary, spelling and pronunciation guidance.
@@ -117,6 +126,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "ru": "ru-RU",
     "nl": "nl-NL",
     "de": "de-DE",
     "fr": "fr-FR",

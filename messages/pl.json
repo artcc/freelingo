@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Jakich języków mogę się uczyć?",
-        "answer": "Angielskiego brytyjskiego i amerykańskiego, hiszpańskiego, włoskiego, portugalskiego, niemieckiego, francuskiego, japońskiego, koreańskiego i chińskiego kontynentalnego. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
+        "answer": "Angielskiego brytyjskiego i amerykańskiego, hiszpańskiego, włoskiego, portugalskiego z Brazylii i Portugalii, niemieckiego, francuskiego, polskiego, niderlandzkiego, rosyjskiego, japońskiego, koreańskiego i chińskiego kontynentalnego. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
       },
       "start": {
         "question": "Jak zacząć naukę?",
@@ -92,6 +92,7 @@
     "footerProduct": "Produkt",
     "footerLegal": "Prawne",
     "languageGreetings": {
+      "ru-RU": "Привет!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1290,7 +1291,7 @@
     "workflowStep5": "Używaj fiszek do trenowania słownictwa równolegle",
     "workflowStep6": "Ćwicz swobodną rozmowę z Lingu",
     "q_language": "Jakiego języka będę się uczyć?",
-    "a_language": "FreeLingo obsługuje obecnie kilka języków (amerykański angielski, brytyjski angielski, chiński kontynentalny, francuski, hiszpański, japoński, koreański, niemiecki, portugalski, włoski) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
+    "a_language": "FreeLingo obsługuje obecnie kilka języków (amerykański angielski, brytyjski angielski, chiński kontynentalny, francuski, hiszpański, japoński, koreański, niemiecki, portugalski z Brazylii i Portugalii, włoski, polski, niderlandzki, rosyjski) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
     "q_assessment": "Czym jest ocena poziomu?",
     "a_assessment": "Adaptacyjny test z maksymalnie 15 pytaniami z banku pytań dla języka nauki. Obejmuje gramatykę, słownictwo i czytanie ze zrozumieniem od A1 do C2. Wynik szacuje poziom CEFR i wskazuje mocne strony oraz obszary do ćwiczeń; przed utworzeniem planu możesz zmienić sugerowany poziom.",
     "q_studyPlan": "Czym jest plan nauki i jak go wygenerować?",
@@ -1477,6 +1478,9 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "ru-RU": "Rosyjski",
+    "ru": "Rosyjski",
+    "ru-RU-description": "Rosyjski używany w Rosji, zapisywany cyrylicą.",
     "nl-NL": "Niderlandzki (Holandia)",
     "nl": "Niderlandzki",
     "nl-NL-description": "Niderlandzki używany w Holandii.",
@@ -1774,8 +1778,8 @@
     "version": "v1.11.5",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Nowe języki: polski, portugalski brazylijski i niderlandzki",
-      "desc": "Dodaliśmy polski, portugalski brazylijski i niderlandzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
+      "label": "Nowe języki: polski, portugalski brazylijski, rosyjski i niderlandzki",
+      "desc": "Dodaliśmy polski, portugalski brazylijski, rosyjski i niderlandzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
     "entry2": {
       "label": "Ulepszenia w nauce",

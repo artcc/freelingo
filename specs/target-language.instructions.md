@@ -18,7 +18,7 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 ## Supported codes
 
 The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`,
-`ja-JP`, `ko-KR`, and `zh-CN`.
+`ja-JP`, `ko-KR`, `ru-RU`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -27,8 +27,9 @@ canonicalizer.
 `AVAILABLE_TARGET_LANGUAGES` is the operator-enabled subset. Language-management and onboarding
 surfaces expose the intersection of configured available codes and supported implementation.
 Registration schema validation uses the supported set, while authenticated add/switch operations use
-the available set. Assessment completion also validates its resolved language against the available
-set before curriculum dispatch or persistence, including session/profile fallbacks. Unknown,
+the available set. Assessment completion and explicit study-plan generation also validate their
+resolved language against the available set before curriculum dispatch or persistence, including
+session, active-language and profile fallbacks. Unknown,
 noncanonical, empty, and disabled codes return `422`.
 
 ## Default and fallback
@@ -99,7 +100,7 @@ New code must not infer a plan-owned operation's language from the compatibility
 
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
-Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, Japanese kanji/kana, South Korean Hangul, and Mainland
+Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
 Mandarin with simplified characters.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
@@ -120,8 +121,16 @@ prompt alias, not an accepted account target code. Dutch content uses Netherland
 recognizing valid standard variants. It uses Latin text, word-based comprehension lengths, ISO `nl`
 recognition, and the Netherlands flag. Shared speech guidance requests Netherlands pronunciation.
 
+`ru-RU` resolves to the independent `backend/app/data/ru/` package; `ru` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Russian uses Cyrillic, visible word
+spacing, word-based comprehension lengths, ISO `ru` recognition and the Russian flag. Romanization is
+not required. Its curriculum introduces Cyrillic and pronunciation before progressing through cases,
+aspect, motion verbs and advanced discourse. Generated content uses contemporary standard Russian,
+preserves appropriate ё spelling and distinguishes contextual alternatives from grammatical errors.
+Shared speech guidance requests Russian lexical stress, vowel reduction and hard/soft consonants.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Polish.
+other current languages, including Polish and Russian.
 
 ## Speech recognition
 
@@ -142,8 +151,12 @@ resource-owned language contracts are defined in `speech-services.instructions.m
 
 - Registration and profile update validate supported target languages.
 - Add and switch validate operator-enabled target languages.
+- Both plan-creation endpoints validate the resolved operator-enabled code before any curriculum
+  lookup or mutation. An explicit empty code is invalid, not an omitted selection.
 - Several static-resource language queries rely on dispatcher fallback instead of allow-list rejection.
-- Voice WebSocket language input is not uniformly validated and can use fallback plan resolution.
+- Free voice sessions validate the resolved language against the canonical supported set. They only
+  associate an owned active plan in that language; resolution and no-plan behavior are defined in
+  `voice-conversation.instructions.md`.
 - Exact regional variants remain distinct pool/cache keys where features scope by BCP-47 code.
 
 ## Related specifications

@@ -38,6 +38,7 @@ LANGUAGES = (
     "it-IT",
     "pl-PL",
     "nl-NL",
+    "ru-RU",
     "pt-BR",
     "pt-PT",
     "ja-JP",

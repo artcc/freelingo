@@ -11,7 +11,11 @@ export interface TargetLanguage {
 }
 
 export type TargetLanguageScript =
-  'latin' | 'hiragana-katakana-kanji' | 'hangul' | 'simplified-hanzi'
+  | 'latin'
+  | 'cyrillic'
+  | 'hiragana-katakana-kanji'
+  | 'hangul'
+  | 'simplified-hanzi'
 
 export type TargetLanguageRomanization =
   'romaji' | 'revised-romanization' | 'pinyin'
@@ -43,6 +47,11 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'de-DE': LATIN_LANGUAGE_CAPABILITY,
   'pl-PL': LATIN_LANGUAGE_CAPABILITY,
   'nl-NL': LATIN_LANGUAGE_CAPABILITY,
+  'ru-RU': {
+    script: 'cyrillic',
+    fontClass: 'font-target-cyrillic',
+    usesWordSpacing: true,
+  },
   'ja-JP': {
     script: 'hiragana-katakana-kanji',
     fontClass: 'font-target-ja',
@@ -145,6 +154,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     iso639: 'nl',
   }),
   withCapabilities({
+    code: 'ru-RU',
+    name: 'Русский',
+    nameEn: 'Russian',
+    flagPath: '/flags/russia.jpg',
+    iso639: 'ru',
+  }),
+  withCapabilities({
     code: 'ja-JP',
     name: '日本語',
     nameEn: 'Japanese',
@@ -178,12 +194,15 @@ export function getLanguageByCode(code: string): TargetLanguage | undefined {
 export function getTargetLanguageCapability(
   code: string
 ): TargetLanguageCapability {
-  return TARGET_LANGUAGE_CAPABILITIES[code] ?? LATIN_LANGUAGE_CAPABILITY
+  const canonicalCode = getLanguageByCode(code)?.code ?? code
+  return (
+    TARGET_LANGUAGE_CAPABILITIES[canonicalCode] ?? LATIN_LANGUAGE_CAPABILITY
+  )
 }
 
 export function getTargetLanguageTextClass(code: string): string {
   const capability = getTargetLanguageCapability(code)
-  if (capability.script === 'latin') {
+  if (capability.script === 'latin' || capability.script === 'cyrillic') {
     return `${capability.fontClass} text-base leading-relaxed tracking-normal normal-case`
   }
   return `${capability.fontClass} text-base leading-loose tracking-normal normal-case`
