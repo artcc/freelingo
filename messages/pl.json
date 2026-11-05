@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "nl-NL": "Niderlandzki (Holandia)",
+    "nl": "Niderlandzki",
+    "nl-NL-description": "Niderlandzki używany w Holandii.",
     "en-US": "Angielski amerykański",
     "en-GB": "Angielski brytyjski",
     "es-ES": "Hiszpański",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Nowe języki: polski i portugalski brazylijski",
-      "desc": "Dodaliśmy polski i portugalski brazylijski jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
+      "label": "Nowe języki: polski, portugalski brazylijski i niderlandzki",
+      "desc": "Dodaliśmy polski, portugalski brazylijski i niderlandzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
     "entry2": {
       "label": "Ulepszenia w nauce",

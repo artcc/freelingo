@@ -92,7 +92,7 @@ replace that requirement under the current application integration.
 
 Services own reusable domain and provider behavior. The deterministic Study Plan Generator is separate
 from the LLM-backed Lesson Generator. The backend is the only gateway to LLM, TTS, STT, email, Stripe,
-Redis, and database operations exposed to the frontend.
+RevenueCat, Redis, and database operations exposed to the frontend.
 
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
@@ -106,6 +106,17 @@ uses plan-row locks compatible with foreign-key inserts. Flashcard review acquir
 lock before the card lock; receipt lookup follows card locking. Preserve this lock order when changing
 those flows. Detailed reward and idempotency contracts belong to `learning-resources.instructions.md`
 and `platform.instructions.md`.
+
+RevenueCat synchronization uses the existing global account subscription fields. It locks affected
+user rows in ascending order and commits webhook receipts, snapshots, and activation quotas together.
+Stripe remains the web payment integration; when RevenueCat is enabled only RevenueCat reconciliation
+updates shared paid-access state. Stripe webhook receipts commit with account changes; Stripe-only
+handlers read current provider state under the user lock instead of applying event snapshots.
+`stripe_checkout_service.py` persists Checkout reservations before external creation, reacquires the
+user lock after committing, and uses frozen parameters and idempotency keys to recover uncertain writes.
+Customer creation has its own preliminary reservation; its ID commits before session preparation.
+The same lock serializes reservation replacement across workers. Configuration and reconciliation rules are owned by
+`subscriptions-freemium.instructions.md`.
 
 `testing.instructions.md` owns validation commands and the limits of SQLite and PostgreSQL checks.
 Offline migration SQL checks do not execute a database upgrade.

@@ -45,6 +45,37 @@ communication to extended discourse, register control, and specialist usage acro
 - Structural tests check references and data shape; they do not establish linguistic accuracy or
   empirical CEFR calibration.
 
+### Per-level coverage bounds
+
+Every target-language package must meet these minimums independently at each CEFR level. The upper
+values are editorial review thresholds: exceeding one requires reviewing scope and progression, not
+automatically deleting useful content. These are internal product coverage criteria, not CEFR word
+lists or evidence of pedagogical equivalence between languages. They use the observed per-level
+minimums and maximums of the twelve established packages other than Dutch, including each regional
+package separately; adding a language does not automatically recalculate or lower the bounds.
+
+Count distinct curriculum units, distinct grammar topics assigned to the level, vocabulary entries
+across its sets, phrase entries across its categories, and placement questions assigned to the level.
+Vocabulary counts include multiword expressions; they are not counts of unique lemmas across A1-C2.
+Repeated curriculum references do not count as additional topics or vocabulary entries. Categories,
+sets, examples, translations, generated lessons and level-completion questions do not add to these
+five counts. Do not duplicate entries merely to meet a minimum.
+
+Ranges below follow the order **units / grammar topics / vocabulary entries / phrases / placement
+questions**:
+
+- A1: **8–8 / 14–30 / 190–383 / 47–88 / 20–35**.
+- A2: **8–8 / 19–27 / 180–222 / 39–85 / 20–30**.
+- B1: **8–8 / 19–31 / 102–239 / 36–77 / 20–30**.
+- B2: **8–8 / 20–28 / 95–190 / 30–76 / 16–30**.
+- C1: **8–8 / 21–26 / 75–203 / 30–68 / 14–30**.
+- C2: **8–8 / 16–25 / 75–216 / 30–67 / 14–30**.
+
+Audit all five counts per level when adding or materially expanding a package. Integrity tests enforce
+the minimums; upper-threshold review remains editorial. Totals across levels cannot compensate for a
+deficit at one level. Quantity supplements the authoring, progression and assessment requirements
+below; it does not replace them or prescribe an identical syllabus for every language.
+
 ### Curriculum structure and progression
 
 Each curriculum unit declares a stable ID, CEFR level, unit number, title, grammar and vocabulary
@@ -54,6 +85,8 @@ Languages share the data contract and quality requirements, not an identical gra
 
 - Introduce prerequisites before requiring them in explanations, examples, or assessed production.
   Fundamental skills must appear in the guided curriculum, not only in the reference catalog.
+- A final consolidation unit revisits grammar already introduced in earlier units; it must not be
+  the first guided occurrence of a topic required by its review activities.
 - Align a topic's reference level, first guided use, and placement questions. Later units can revisit
   earlier material for consolidation and broader contrasts.
 - Describe competencies as observable learner abilities. Connect grammar and vocabulary to practical
@@ -63,6 +96,10 @@ Languages share the data contract and quality requirements, not an identical gra
   introduce rare forms or longer terminology.
 - Distinguish recognition from required production, particularly for literary, historical, or narrowly
   formal constructions. CEFR labels do not imply equivalence with a language-specific certification.
+- Balance advanced textual analysis with practical interaction and production: negotiate conditions,
+  repair misunderstandings, respond to humour, narrate experiences, mediate conflicting wishes, and
+  adapt register to the interlocutor. Carry those tasks through competencies, reference examples and
+  phrase contexts; naming a linguistic device is not a substitute for using or understanding it.
 
 Units declare their lesson types and order in data. Actual allocation follows plan capacity and
 rotation rules; a declaration does not guarantee a complete cycle in every unit. Persisted schedules
@@ -92,6 +129,15 @@ stored answer. Any grammar reference must resolve within the same target languag
 cover the curriculum's levels and assessed skills, with enough context to disambiguate meaning and
 register. Valid regional or conversational alternatives must not become distractors presented as
 universally incorrect.
+
+- Avoid giving away the answer through an explicit interpretation in the prompt or a near-verbatim
+  match with one option. Supply the situation needed to infer the intended meaning instead.
+- Use plausible distractors of comparable register and detail. Advanced alternatives should differ
+  in a relevant condition, participant, implication, commitment, or degree of certainty, rather than
+  rely predominantly on absurd claims or easily dismissed absolutes. Review answer-length clues too.
+- Include contextual choices of replies, idioms and reformulations alongside textual interpretation.
+  State the communicative goal clearly when several replies would otherwise be acceptable. Multiple
+  choice measures recognition of an appropriate response, not demonstrated spontaneous production.
 
 When authoring a bank, distribute correct-answer positions across each level/skill group to avoid
 predictable keys. The frontend displays the saved option order. Content review must assess linguistic

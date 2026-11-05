@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Idiomas disponíveis"
   },
   "targetLanguages": {
+    "nl-NL": "Neerlandês (Países Baixos)",
+    "nl": "Neerlandês",
+    "nl-NL-description": "Neerlandês falado nos Países Baixos.",
     "en-US": "Inglês americano",
     "en-GB": "Inglês britânico",
     "es-ES": "Espanhol",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Entendido",
     "entry1": {
-      "label": "Novos idiomas: polaco e português do Brasil",
-      "desc": "Adicionámos o polaco e o português do Brasil como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
+      "label": "Novos idiomas: polaco, português do Brasil e neerlandês",
+      "desc": "Adicionámos o polaco, o português do Brasil e o neerlandês como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
     "entry2": {
       "label": "Melhorias na aprendizagem",

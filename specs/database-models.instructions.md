@@ -74,9 +74,10 @@ Registration, authentication, and user preferences.
 - `monthly_tokens_limit` — integer max LLM tokens per billing period. Default comes from `DEFAULT_MONTHLY_TOKENS_LIMIT` (`1 000 000`; `0` means unlimited).
 - `stripe_customer_id` — nullable string Stripe customer ID, set when a subscription is created.
 - `stripe_subscription_id` — nullable string current Stripe subscription ID. Used to ignore stale webhook events from older subscriptions for the same customer.
-- `subscription_status` — string subscription state: `none` by default, plus Stripe states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`.
-- `subscription_ends_at` — nullable datetime for the current subscription period end.
+- `subscription_status` — string shared subscription snapshot: `none` by default, plus Stripe-compatible states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`. RevenueCat synchronization uses this same field rather than a per-store subscription model.
+- `subscription_ends_at` — nullable datetime for the current subscription period end or RevenueCat entitlement expiry, including its grace period. Verified lifetime entitlements have no expiry.
 - `cancel_at_period_end` — boolean subscription cancellation marker; default `false`.
+- `revenuecat_synced_at` — nullable naive-UTC datetime derived from RevenueCat's `request_date_ms`; null until first synchronization. Older provider snapshots cannot replace newer ones. Stripe-only state updates clear this marker.
 - `trial_used` — boolean; `true` once the user has started or completed a trial, preventing repeated free trials. Default: `false`.
 - `assessment_voice_trial_used` — boolean; `true` once the one-time post-assessment voice conversation demo has been consumed. Default: `false`.
 - `freemium_trial_ends_at` — nullable datetime; when the freemium 7-day trial expires. Set on registration when `STRIPE_ENABLED=true` and `FREEMIUM_TRIAL_ENABLED=true`.
@@ -90,6 +91,44 @@ Registration, authentication, and user preferences.
 
 Registration, session, billing, and Redis quota behavior is defined in `platform.instructions.md` and
 `subscriptions-freemium.instructions.md`; this document defines only their persisted fields.
+
+## RevenueCatWebhookReceipt (`revenuecat_webhook_receipts`)
+
+- `event_id` — varchar(255) primary key, supplied by RevenueCat and reused for retries.
+- `processed_at` — required naive-UTC processing timestamp.
+
+The receipt commits atomically with all account snapshots affected by the event. A rollback leaves
+the event retryable; a committed ID prevents duplicate processing. Receipts contain no customer IDs,
+foreign keys, or raw webhook payloads, and remain valid after account deletion. Revision
+`0058_revenuecat_sync` creates this table and the nullable synchronization marker on `users`.
+
+## StripeWebhookReceipt (`stripe_webhook_receipts`)
+
+- `event_id` — varchar(255) primary key, supplied by Stripe and reused for retries.
+- `processed_at` — required naive-UTC processing timestamp.
+
+The receipt commits atomically with account updates and activation quotas. Failed processing rolls
+back the receipt, keeping delivery retryable. Receipts contain no raw payloads or account foreign keys.
+
+## BillingCheckout (`billing_checkouts`)
+
+- `user_id` — primary key and foreign key to `users.id` with `ON DELETE CASCADE`; one current reservation
+  per account, independent of study languages.
+- `idempotency_key` — required varchar(36), a server-generated UUID for the Stripe session request.
+- `parameters` — required JSON containing the frozen Checkout request, including Customer, Price,
+  trial parameters, return URLs, identity metadata, reservation metadata, and fixed `expires_at`.
+- `customer_parameters` — nullable JSON containing frozen email, name, and identity metadata while
+  creating a Customer. In this preliminary reservation, `parameters` has no Customer ID and cannot
+  be sent to Checkout. The preliminary row is deleted atomically with persistence of the Customer ID;
+  subsequent session reservations have null `customer_parameters`.
+- `session_id` — nullable varchar(255), filled when the Stripe session ID is known.
+
+Reservations commit before session creation and survive uncertain provider outcomes. Creation and
+replacement serialize on the owning user row. No session URL, payment credentials, or raw provider
+response is persisted. Revision `0059_billing_idempotency` creates both Stripe billing tables without
+rewriting existing account state; `0060_checkout_customer_request` adds the nullable Customer request
+column without changing existing session reservations. Workflow rules live in
+`subscriptions-freemium.instructions.md`.
 
 ## DashboardBanner (`dashboard_banners`)
 

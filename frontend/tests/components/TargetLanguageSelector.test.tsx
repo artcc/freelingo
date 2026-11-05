@@ -61,7 +61,7 @@ describe('TargetLanguageSelector', () => {
     )
 
     const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(12)
+    expect(buttons).toHaveLength(13)
   })
 
   it('renders nothing when availableCodes is empty', () => {
@@ -138,6 +138,27 @@ describe('TargetLanguageSelector', () => {
     )
     expect(screen.queryByRole('button', { name: /pt-BR/ })).toBeNull()
     expect(screen.getAllByRole('button')).toHaveLength(1)
+  })
+
+  it('selects Dutch only when enabled by the backend', () => {
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <TargetLanguageSelector
+        value="en-GB"
+        onChange={onChange}
+        availableCodes={['en-GB', 'nl-NL']}
+      />
+    )
+    fireEvent.click(screen.getByRole('button', { name: /nl-NL/ }))
+    expect(onChange).toHaveBeenCalledWith('nl-NL')
+    rerender(
+      <TargetLanguageSelector
+        value="en-GB"
+        onChange={onChange}
+        availableCodes={['en-GB']}
+      />
+    )
+    expect(screen.queryByRole('button', { name: /nl-NL/ })).toBeNull()
   })
 
   it('shows active state for the selected language', () => {
@@ -220,6 +241,7 @@ describe('TargetLanguageSelector', () => {
     expect(srcs).toContain('/flags/portugal.jpg')
     expect(srcs).toContain('/flags/france.jpg')
     expect(srcs).toContain('/flags/germany.jpg')
+    expect(srcs).toContain('/flags/netherlands.jpg')
     expect(srcs).toContain('/flags/japan.jpg')
     expect(srcs).toContain('/flags/south_korea.jpg')
     expect(srcs).toContain('/flags/china.jpg')

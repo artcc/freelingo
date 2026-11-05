@@ -231,9 +231,30 @@ is performed by the router.
 
 ## Access and quotas
 
-`subscription_service.py` is the source of paid-access state. When Stripe is disabled it grants
-self-hosted access; otherwise only `trialing` and `active` grant subscription access. Subscription
-activation reapplies configured account quotas.
+`subscription_service.py` is the source of paid-access decisions. When Stripe is disabled it grants
+self-hosted access; otherwise only persisted `trialing` and `active` states grant subscription access.
+Access uses the last confirmed snapshot, not a locally computed expiration; RevenueCat reconciliation
+evaluates entitlement expiry and grace periods before updating that snapshot. Subscription activation
+reapplies configured account quotas; callers can stage quota changes without committing
+when they belong to a larger billing transaction.
+
+`revenuecat_service.py` reads API v1 customer information through the existing async HTTP client and
+normalizes the configured Premium entitlement into the shared subscription fields. The canonical
+App User ID is the string form of the FreeLingo account ID. User-row locks serialize snapshot writes;
+provider request timestamps reject older snapshots. Explicit Stripe imports use only the persisted
+Subscription ID. The service also resolves the provider's HTTPS subscription-management URL without
+persisting a per-store authorization model. Credentials, environment isolation, retries, and the
+activation workflow are owned by `subscriptions-freemium.instructions.md`.
+
+`stripe_checkout_service.py` owns serialized web purchase creation and recovery. It uses async Stripe
+SDK calls, user-row locks, and durable Checkout reservations containing frozen request parameters and
+idempotency keys. Preliminary Customer requests also freeze their inputs and persist the Customer ID
+before any later provider call. The service resumes an open session's own incomplete payment, expires
+a session before replacing its price, and discovers uncertain results before retrying creation.
+Definitive expiry validation failures can renew a reservation; ambiguous failures cannot.
+Live Stripe subscription checks choose Checkout versus payment recovery;
+they never overwrite RevenueCat's Premium snapshot. The router maps provider failures to `503` and
+subscription conflicts to `409`. Billing lifecycle rules belong to `subscriptions-freemium.instructions.md`.
 
 `quota_service.py` evaluates global per-user voice session/minute and monthly token limits. A global
 quota value of zero means unlimited.

@@ -1,0 +1,416 @@
+"""Dutch A2 requests, arrangements and everyday problems."""
+
+from app.data._types import PhrasebookCategory, PhrasebookEntry
+
+A2_CATEGORIES: list[PhrasebookCategory] = [
+    PhrasebookCategory(
+        id="reis_hulp_a2",
+        level="A2",
+        situation="Een reis regelen",
+        icon="🧳",
+        phrases=[
+            PhrasebookEntry(
+                "Moet ik onderweg overstappen?",
+                "Een reisroute controleren.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "Ik heb een kamer voor twee nachten gereserveerd.",
+                "Je bij een accommodatie melden.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "Onze trein is niet aangekomen. Wat kunnen we doen?",
+                "Hulp vragen bij een onderbroken reis.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "Hoe was je vakantie?", "Naar een ervaring vragen.", "informal", "a2-unit-2"
+            ),
+            PhrasebookEntry(
+                "Vroeger gingen we vaak kamperen.",
+                "Een vroegere gewoonte beschrijven.",
+                "neutral",
+                "a2-unit-2",
+            ),
+            PhrasebookEntry(
+                "Ik ben mijn tas kwijt.",
+                "Melden dat je een voorwerp niet kunt vinden.",
+                "neutral",
+                "a2-unit-1",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="woning_afspraak_a2",
+        level="A2",
+        situation="Afspraken en wonen",
+        icon="🏠",
+        phrases=[
+            PhrasebookEntry(
+                "Kunnen we de afspraak naar vrijdag verplaatsen?",
+                "Een andere dag voorstellen.",
+                "neutral",
+                "a2-unit-3",
+            ),
+            PhrasebookEntry(
+                "Ik kom later omdat mijn trein vertraging heeft.",
+                "Een vertraging uitleggen.",
+                "neutral",
+                "a2-unit-3",
+            ),
+            PhrasebookEntry(
+                "Is de huur inclusief verwarming?",
+                "Vragen welke kosten inbegrepen zijn.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Wanneer kan ik de woning bekijken?",
+                "Een bezichtiging aanvragen.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Deze kamer is groter dan de andere.",
+                "Twee opties vergelijken.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Hoeveel sleutels krijg ik? Ik heb er twee nodig.",
+                "Een praktische behoefte aangeven.",
+                "neutral",
+                "a2-unit-4",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="zorg_werk_a2",
+        level="A2",
+        situation="Zorg en werk regelen",
+        icon="📋",
+        phrases=[
+            PhrasebookEntry(
+                "Ik wil graag een afspraak bij de huisarts maken.",
+                "Een consult aanvragen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Ik heb sinds gisteren pijn in mijn rug.",
+                "Een klacht en het begin ervan noemen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Hoe moet ik dit medicijn gebruiken?",
+                "Een behandelaar of apotheker om uitleg vragen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Ik voel me niet goed en kan vandaag niet werken.",
+                "Je ziek melden.",
+                "neutral",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Ik wil me aanmelden voor de cursus.",
+                "Deelnemen aan een opleiding aanvragen.",
+                "neutral",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Zou u mijn aanmelding willen bevestigen?",
+                "Beleefd om een bevestiging vragen.",
+                "formal",
+                "a2-unit-6",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="oplossing_a2",
+        level="A2",
+        situation="Problemen oplossen en organiseren",
+        icon="🤝",
+        phrases=[
+            PhrasebookEntry(
+                "De jas die ik heb besteld is te klein.",
+                "Een probleem met een bestelling beschrijven.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Kan ik het product ruilen of mijn geld terugkrijgen?",
+                "Naar beschikbare oplossingen vragen.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Ik heb de bon bij me.", "Een aankoopbewijs aanbieden.", "neutral", "a2-unit-7"
+            ),
+            PhrasebookEntry(
+                "Wat zal ik meenemen?",
+                "Bij een uitnodiging hulp aanbieden.",
+                "informal",
+                "a2-unit-8",
+            ),
+            PhrasebookEntry(
+                "Gaat de activiteit door als het regent?",
+                "Een praktische voorwaarde navragen.",
+                "neutral",
+                "a2-unit-8",
+            ),
+            PhrasebookEntry(
+                "Bedankt voor de gezellige avond.",
+                "Na een bijeenkomst bedanken.",
+                "neutral",
+                "a2-unit-8",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="verblijf_huishouden_a2",
+        level="A2",
+        situation="Logeren en het huishouden regelen",
+        icon="🛏️",
+        phrases=[
+            PhrasebookEntry(
+                "Tot hoe laat kunnen we uitchecken?",
+                "De vertrektijd bij een hotel navragen.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "Is het ontbijt bij de prijs inbegrepen?",
+                "Controleren wat je boeking omvat.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "We zijn gisteren met de bus aangekomen.",
+                "Over je aankomst vertellen.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "Ik heb mijn sleutel bij de receptie afgegeven.",
+                "Vertellen waar je een sleutel hebt achtergelaten.",
+                "neutral",
+                "a2-unit-1",
+            ),
+            PhrasebookEntry(
+                "Toen ik klein was, woonde ik op het platteland.",
+                "Een vroegere woonsituatie beschrijven.",
+                "neutral",
+                "a2-unit-2",
+            ),
+            PhrasebookEntry(
+                "Eerst woonden we in Delft, daarna verhuisden we naar Leiden.",
+                "Twee gebeurtenissen op volgorde vertellen.",
+                "neutral",
+                "a2-unit-2",
+            ),
+            PhrasebookEntry(
+                "Vanaf maandag ben ik iedere ochtend thuis.",
+                "Je beschikbaarheid vanaf een datum noemen.",
+                "neutral",
+                "a2-unit-3",
+            ),
+            PhrasebookEntry(
+                "De kraan in de keuken lekt.",
+                "Een gebrek in de woning melden.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Er zijn niet genoeg stoelen voor iedereen.",
+                "Een tekort aan zitplaatsen aangeven.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Deze koelkast gebruikt minder stroom dan de oude.",
+                "Apparaten vergelijken.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Waar zetten we de vuilniszakken neer?",
+                "Naar een huishoudelijke afspraak vragen.",
+                "neutral",
+                "a2-unit-4",
+            ),
+            PhrasebookEntry(
+                "Ik was af en jij ruimt de tafel op.",
+                "Taken thuis verdelen.",
+                "informal",
+                "a2-unit-4",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="gezondheid_opleiding_a2",
+        level="A2",
+        situation="Klachten, werk en opleiding bespreken",
+        icon="🩺",
+        phrases=[
+            PhrasebookEntry(
+                "Ik ben allergisch voor dit medicijn.",
+                "Een zorgverlener over een bekende allergie informeren.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Ik voel me duizelig als ik opsta.",
+                "Uitleggen wanneer een klacht optreedt.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Mijn knie doet pijn tijdens het lopen.",
+                "Een pijnlijke plek en activiteit noemen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Moet ik voor deze afspraak iets meenemen?",
+                "Naar de voorbereiding op een consult vragen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Kunt u de instructies voor mij opschrijven?",
+                "Om schriftelijke uitleg vragen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Ik wil graag weten welke bijwerkingen er zijn.",
+                "Een zorgverlener om informatie vragen.",
+                "neutral",
+                "a2-unit-5",
+            ),
+            PhrasebookEntry(
+                "Hoeveel uur per week is deze baan?",
+                "De omvang van een vacature navragen.",
+                "neutral",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Ik heb ervaring in een restaurant.",
+                "Relevante werkervaring noemen.",
+                "neutral",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Hierbij stuur ik u mijn cv.",
+                "Een bijlage in een sollicitatiebericht aankondigen.",
+                "formal",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Kunnen we elkaar helpen met het huiswerk?",
+                "Samen oefenen voorstellen.",
+                "informal",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Ik probeer iedere dag nieuwe woorden te oefenen.",
+                "Een leergewoonte beschrijven.",
+                "neutral",
+                "a2-unit-6",
+            ),
+            PhrasebookEntry(
+                "Wanneer krijgen we het resultaat van het examen?",
+                "Naar de uitslagdatum vragen.",
+                "neutral",
+                "a2-unit-6",
+            ),
+        ],
+    ),
+    PhrasebookCategory(
+        id="digitaal_vrije_tijd_a2",
+        level="A2",
+        situation="Online hulp en vrije tijd",
+        icon="📱",
+        phrases=[
+            PhrasebookEntry(
+                "Ik kan niet inloggen met mijn wachtwoord.",
+                "Een toegangsprobleem melden.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "De bijlage die u stuurde is leeg.",
+                "Een probleem met een ontvangen bestand aangeven.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Kunt u het formulier nog een keer sturen?",
+                "Om een nieuwe verzending vragen.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Mijn telefoon laadt niet meer op.",
+                "Een defect beschrijven.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "De verbinding valt steeds weg.",
+                "Een terugkerend technisch probleem melden.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Waar kan ik het kaartje downloaden?",
+                "Een digitaal toegangsbewijs zoeken.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Zijn er nog twee plaatsen naast elkaar?",
+                "Om aangrenzende zitplaatsen vragen.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Is dit kaartje ook morgen geldig?",
+                "De geldigheidsduur controleren.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Ik wil mijn reservering annuleren omdat ik ziek ben.",
+                "Een annulering uitleggen.",
+                "neutral",
+                "a2-unit-7",
+            ),
+            PhrasebookEntry(
+                "Zullen we na de voorstelling iets drinken?",
+                "Een gezamenlijke activiteit voorstellen.",
+                "informal",
+                "a2-unit-8",
+            ),
+            PhrasebookEntry(
+                "Ik kan tot tien uur blijven, maar daarna moet ik weg.",
+                "Een tijdsgrens bij een afspraak aangeven.",
+                "informal",
+                "a2-unit-8",
+            ),
+            PhrasebookEntry(
+                "Laat maar weten wanneer je tijd hebt.",
+                "Een vriend ruimte geven om een moment te kiezen.",
+                "informal",
+                "a2-unit-8",
+            ),
+        ],
+    ),
+]

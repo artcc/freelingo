@@ -11,8 +11,11 @@ A target language is selectable only after its learning package, dispatchers, me
 catalog, assets, UI translations, provider assumptions, and integrity tests are complete. Do not add a
 code to `SUPPORTED_TARGET_LANGUAGES` as a placeholder.
 
-Use `backend/app/data/en_GB/` as a structural baseline, not a pedagogical template. Depth should be
-comparable to mature packages, but exact topic/unit counts are not a contract.
+Use `backend/app/data/en_GB/` as a structural baseline, not a pedagogical template. Meet the canonical
+[per-level coverage bounds](learning-resources.instructions.md#per-level-coverage-bounds) for units,
+grammar topics, vocabulary entries, phrases and placement questions. Audit each level separately;
+review any upper-threshold excess editorially rather than trimming useful material automatically.
+Languages share these coverage criteria without sharing an identical grammatical syllabus.
 
 ## Learner-facing language
 
@@ -132,6 +135,7 @@ Backend coverage must include:
 - allow-list, add/switch/remove, and curriculum resolution;
 - grammar, vocabulary, phrasebook, and assessment dispatch without English fallback;
 - curriculum/resource cross-reference integrity and uniqueness;
+- per-level coverage minimums and prerequisite-first grammar before final consolidation;
 - language metadata and prompt overlay/aliases;
 - Reading cultural/length behavior where applicable;
 - owned-plan STT mapping to the expected ISO code.

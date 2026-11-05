@@ -121,6 +121,8 @@ Measurement semantics and delivery rules belong to `umami.instructions.md`.
 - `DELETE /api/reviews/me`: `10/hour`.
 - `POST /api/admin/dashboard-banner/translate`: `10/minute`.
 - `POST /api/billing/webhook`: `200/minute`.
+- `POST /api/billing/revenuecat/webhook`: `200/minute`.
+- `POST /api/billing/sync` and `POST /api/billing/revenuecat/sync/{user_id}`: `10/minute` each.
 
 ## WebSocket
 

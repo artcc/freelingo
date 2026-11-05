@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 12 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(12)
+  it('contains exactly 13 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(13)
   })
 
   const expectedCodes = [
@@ -20,6 +20,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'es-ES',
     'it-IT',
     'pl-PL',
+    'nl-NL',
     'pt-BR',
     'pt-PT',
     'fr-FR',
@@ -56,6 +57,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/spain.jpg')
     expect(paths).toContain('/flags/italy.jpg')
     expect(paths).toContain('/flags/poland.jpg')
+    expect(paths).toContain('/flags/netherlands.jpg')
     expect(paths).toContain('/flags/brazil.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
@@ -80,6 +82,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(esLangs).toHaveLength(1)
     expect(itLangs).toHaveLength(1)
     expect(plLangs).toHaveLength(1)
+    expect(SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'nl')).toHaveLength(1)
     expect(ptLangs).toHaveLength(2)
     expect(frLangs).toHaveLength(1)
     expect(deLangs).toHaveLength(1)
@@ -91,7 +94,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(12)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(13)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -102,6 +105,7 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'fr-FR',
       'de-DE',
       'pl-PL',
+      'nl-NL',
       'ja-JP',
       'ko-KR',
       'zh-CN',
@@ -122,6 +126,21 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
     expect(getTargetLanguageTextClass('pt-BR')).toBe(
       getTargetLanguageTextClass('pt-PT')
     )
+  })
+
+  it('resolves canonical Dutch metadata and Latin typography', () => {
+    expect(getLanguageByCode('NL-nl')).toMatchObject({
+      code: 'nl-NL',
+      name: 'Nederlands',
+      nameEn: 'Dutch (Netherlands)',
+      flagPath: '/flags/netherlands.jpg',
+      iso639: 'nl',
+      fontClass: 'font-target-latin',
+      script: 'latin',
+      usesWordSpacing: true,
+    })
+    expect(getTargetLanguageTextClass('nl-NL')).toContain('font-target-latin')
+    expect(getTargetLanguageTextClass('nl-NL')).toContain('leading-relaxed')
   })
 
   it('contains complete Polish display metadata', () => {

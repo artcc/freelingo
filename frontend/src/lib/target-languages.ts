@@ -42,6 +42,7 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'fr-FR': LATIN_LANGUAGE_CAPABILITY,
   'de-DE': LATIN_LANGUAGE_CAPABILITY,
   'pl-PL': LATIN_LANGUAGE_CAPABILITY,
+  'nl-NL': LATIN_LANGUAGE_CAPABILITY,
   'ja-JP': {
     script: 'hiragana-katakana-kanji',
     fontClass: 'font-target-ja',
@@ -135,6 +136,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     nameEn: 'Polish',
     flagPath: '/flags/poland.jpg',
     iso639: 'pl',
+  }),
+  withCapabilities({
+    code: 'nl-NL',
+    name: 'Nederlands',
+    nameEn: 'Dutch (Netherlands)',
+    flagPath: '/flags/netherlands.jpg',
+    iso639: 'nl',
   }),
   withCapabilities({
     code: 'ja-JP',

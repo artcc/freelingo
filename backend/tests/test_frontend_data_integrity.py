@@ -16,6 +16,8 @@ from pathlib import Path
 
 import pytest
 
+from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
+
 FRONTEND_DATA = Path(__file__).resolve().parent.parent.parent / "frontend" / "src" / "data"
 
 CURRICULUM_FILE = FRONTEND_DATA / "curriculum.ts"
@@ -57,7 +59,46 @@ def test_data_files_exist() -> None:
     assert CURRICULUM_FILE.exists(), "Missing data file: curriculum.ts"
 
 
-@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "ja-JP"])
+@pytest.mark.parametrize("language", sorted(SUPPORTED_TARGET_LANGUAGES))
+@pytest.mark.parametrize(
+    ("level", "minimums"),
+    [
+        ("A1", (8, 14, 190, 47, 20)),
+        ("A2", (8, 19, 180, 39, 20)),
+        ("B1", (8, 19, 102, 36, 20)),
+        ("B2", (8, 20, 95, 30, 16)),
+        ("C1", (8, 21, 75, 30, 14)),
+        ("C2", (8, 16, 75, 30, 14)),
+    ],
+)
+def test_language_package_meets_per_level_coverage_minimums(language, level, minimums):
+    """Learning Resources owns the bounds; upper thresholds require editorial review."""
+    from app.data.assessment_bank import get_assessment_bank
+    from app.data.curriculum import get_curriculum
+    from app.data.grammar import get_grammar_topics
+    from app.data.phrasebook import get_phrasebook_categories
+    from app.data.vocabulary import get_vocabulary_sets
+
+    counts = (
+        len({unit.id for unit in get_curriculum(language)[level]}),
+        len({topic.slug for topic in get_grammar_topics(language) if topic.level == level}),
+        sum(len(item.words) for item in get_vocabulary_sets(language) if item.level == level),
+        sum(
+            len(item.phrases) for item in get_phrasebook_categories(language) if item.level == level
+        ),
+        len(
+            [question for question in get_assessment_bank(language) if question.difficulty == level]
+        ),
+    )
+    for resource, count, minimum in zip(
+        ("units", "grammar", "vocabulary", "phrases", "assessment"), counts, minimums, strict=True
+    ):
+        assert count >= minimum, (language, level, resource, count, minimum)
+
+
+@pytest.mark.parametrize(
+    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP"]
+)
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
 
@@ -72,6 +113,7 @@ def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> 
         ("it-IT", "A2", 1, "stare-gerundio"),
         ("pt-PT", "A1", 0, "ter"),
         ("pt-BR", "A1", 0, "ter"),
+        ("nl-NL", "A1", 0, "tegenwoordige-tijd"),
         ("ja-JP", "A2", 0, "plain-past"),
     ],
 )
@@ -99,6 +141,7 @@ def test_curriculum_grammar_refs_all_defined() -> None:
         "es-ES",
         "it-IT",
         "pl-PL",
+        "nl-NL",
         "pt-BR",
         "pt-PT",
         "fr-FR",
@@ -175,6 +218,7 @@ def test_grammar_related_refs_all_defined() -> None:
         "es-ES",
         "it-IT",
         "pl-PL",
+        "nl-NL",
         "pt-BR",
         "pt-PT",
         "fr-FR",
@@ -237,6 +281,7 @@ def test_grammar_slug_uniqueness() -> None:
         "es-ES",
         "it-IT",
         "pl-PL",
+        "nl-NL",
         "pt-BR",
         "pt-PT",
         "fr-FR",

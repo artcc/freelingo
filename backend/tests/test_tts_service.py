@@ -58,6 +58,7 @@ async def test_other_models_keep_the_original_request(service, model):
         ("zh-CN", "Standard Mandarin Chinese from Mainland China"),
         ("pl", "Polish from Poland"),
         ("nl", "Dutch from the Netherlands"),
+        ("nl-NL", "Dutch from the Netherlands"),
         ("ro", "Romanian from Romania"),
         ("ru", "Russian from Russia"),
         ("tr", "Turkish from Turkey"),

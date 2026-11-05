@@ -17,7 +17,7 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `pl-PL`, `pt-BR`, `pt-PT`,
+The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`,
 `ja-JP`, `ko-KR`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
@@ -99,7 +99,7 @@ New code must not infer a plan-owned operation's language from the compatibility
 
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
-Germany, standard Italian, standard Polish, Japanese kanji/kana, South Korean Hangul, and Mainland
+Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, Japanese kanji/kana, South Korean Hangul, and Mainland
 Mandarin with simplified characters.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
@@ -110,6 +110,15 @@ The short `pt` alias continues to identify Portugal where regional guidance is n
 variants map to ISO `pt` for recognition, but retain distinct BCP-47 learning, pool, and audio-cache keys.
 Regional overlay content lives in the prompt builders; curriculum and reference content live in the
 language packages. Their common authoring requirements belong to `learning-resources.instructions.md`.
+Every package follows the canonical [per-level coverage bounds](learning-resources.instructions.md#per-level-coverage-bounds)
+for curriculum units, grammar topics, vocabulary entries, phrases and placement questions. Minimums
+apply independently to A1-C2; upper values trigger editorial review rather than automatic truncation.
+Regional packages are counted separately and retain their own syllabus and progression.
+
+`nl-NL` resolves to the independent `backend/app/data/nl/` package; `nl` is its internal dispatcher and
+prompt alias, not an accepted account target code. Dutch content uses Netherlands usage while
+recognizing valid standard variants. It uses Latin text, word-based comprehension lengths, ISO `nl`
+recognition, and the Netherlands flag. Shared speech guidance requests Netherlands pronunciation.
 
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
 other current languages, including Polish.

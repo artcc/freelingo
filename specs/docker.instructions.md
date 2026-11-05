@@ -100,6 +100,14 @@ PostgreSQL. Games needs no extra service or volume.
 Operators must review database/data path, Redis password, JWT secret, CORS/cookie security,
 registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, and logging.
 
+Both Compose files forward the optional RevenueCat settings exclusively to the backend:
+`REVENUECAT_ENABLED` (default false), `REVENUECAT_API_KEY`, `REVENUECAT_WEBHOOK_AUTHORIZATION`,
+`REVENUECAT_ENTITLEMENT_ID` (default `premium`), `REVENUECAT_ENVIRONMENT` (default `PRODUCTION`), and
+`REVENUECAT_STRIPE_PUBLIC_API_KEY`. The integration only applies with `STRIPE_ENABLED=true`; it requires
+no additional container or frontend build configuration. The backend checks required credentials at
+startup. Provider connections, environment isolation, receipt imports, and the authority switch are
+specified in `subscriptions-freemium.instructions.md`.
+
 `BACKEND_URL` is the frontend's private backend-connectivity variable.
 
 The production and development Compose files currently inject an `AVAILABLE_TARGET_LANGUAGES`

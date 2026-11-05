@@ -24,6 +24,8 @@ from app.main import app
 from app.routers import billing as _billing_module
 from app.services.subscription_service import is_subscribed
 
+pytestmark = pytest.mark.usefixtures("stripe_provider")
+
 _BILLING_ROUTES = {getattr(r, "path", None) for r in app.routes}
 if "/api/billing/checkout" not in _BILLING_ROUTES:
     app.include_router(_billing_module.router)
@@ -139,21 +141,14 @@ async def test_require_subscription_passes_for_active_user(client, db_session, t
 
 
 @pytest.mark.asyncio
-async def test_checkout_monthly(client, test_user):
+async def test_checkout_monthly(client, test_user, stripe_provider):
     """Creates a Checkout session for the monthly plan."""
     _, headers = test_user
-
-    mock_customer = MagicMock()
-    mock_customer.id = "cus_test123"
-    mock_session = MagicMock()
-    mock_session.url = "https://checkout.stripe.com/pay/test"
 
     with (
         patch.object(settings, "STRIPE_ENABLED", True),
         patch.object(settings, "STRIPE_PRICE_MONTHLY", "price_monthly_test"),
         patch.object(settings, "STRIPE_PRICE_YEARLY", "price_yearly_test"),
-        patch("stripe.Customer.create", return_value=mock_customer),
-        patch("stripe.checkout.Session.create", return_value=mock_session),
     ):
         res = await client.post(
             "/api/billing/checkout",
@@ -162,25 +157,21 @@ async def test_checkout_monthly(client, test_user):
         )
 
     assert res.status_code == 200
-    assert res.json()["url"] == "https://checkout.stripe.com/pay/test"
+    assert res.json()["url"] == "https://checkout.stripe.com/cs_1"
+    assert stripe_provider.create_session.call_args.kwargs["line_items"] == [
+        {"price": "price_monthly_test", "quantity": 1}
+    ]
 
 
 @pytest.mark.asyncio
-async def test_checkout_yearly(client, test_user):
+async def test_checkout_yearly(client, test_user, stripe_provider):
     """Creates a Checkout session for the yearly plan."""
     _, headers = test_user
-
-    mock_customer = MagicMock()
-    mock_customer.id = "cus_test456"
-    mock_session = MagicMock()
-    mock_session.url = "https://checkout.stripe.com/pay/yearly_test"
 
     with (
         patch.object(settings, "STRIPE_ENABLED", True),
         patch.object(settings, "STRIPE_PRICE_MONTHLY", "price_monthly_test"),
         patch.object(settings, "STRIPE_PRICE_YEARLY", "price_yearly_test"),
-        patch("stripe.Customer.create", return_value=mock_customer),
-        patch("stripe.checkout.Session.create", return_value=mock_session),
     ):
         res = await client.post(
             "/api/billing/checkout",
@@ -189,7 +180,10 @@ async def test_checkout_yearly(client, test_user):
         )
 
     assert res.status_code == 200
-    assert res.json()["url"] == "https://checkout.stripe.com/pay/yearly_test"
+    assert res.json()["url"] == "https://checkout.stripe.com/cs_1"
+    assert stripe_provider.create_session.call_args.kwargs["line_items"] == [
+        {"price": "price_yearly_test", "quantity": 1}
+    ]
 
 
 @pytest.mark.asyncio
@@ -216,21 +210,16 @@ async def test_checkout_missing_price_config(client, test_user):
 
 
 @pytest.mark.asyncio
-async def test_checkout_reuses_existing_customer(client, db_session, test_user):
+async def test_checkout_reuses_existing_customer(client, db_session, test_user, stripe_provider):
     """Existing Stripe customers are reused instead of creating duplicates."""
     user, headers = test_user
     user.stripe_customer_id = "cus_existing"
     await db_session.commit()
 
-    mock_session = MagicMock()
-    mock_session.url = "https://checkout.stripe.com/pay/existing"
-
     with (
         patch.object(settings, "STRIPE_ENABLED", True),
         patch.object(settings, "STRIPE_PRICE_MONTHLY", "price_monthly_test"),
         patch.object(settings, "STRIPE_PRICE_YEARLY", "price_yearly_test"),
-        patch("stripe.Customer.create") as mock_create_customer,
-        patch("stripe.checkout.Session.create", return_value=mock_session) as mock_create_session,
     ):
         res = await client.post(
             "/api/billing/checkout",
@@ -239,9 +228,9 @@ async def test_checkout_reuses_existing_customer(client, db_session, test_user):
         )
 
     assert res.status_code == 200
-    assert res.json()["url"] == "https://checkout.stripe.com/pay/existing"
-    mock_create_customer.assert_not_called()
-    assert mock_create_session.call_args.kwargs["customer"] == "cus_existing"
+    assert res.json()["url"] == "https://checkout.stripe.com/cs_1"
+    stripe_provider.create_customer.assert_not_called()
+    assert stripe_provider.create_session.call_args.kwargs["customer"] == "cus_existing"
 
 
 # ── POST /api/billing/portal ──────────────────────────────────────────────────
@@ -286,7 +275,7 @@ async def test_portal_requires_existing_customer(client, test_user):
 
 def _make_stripe_event(event_type: str, data: dict) -> dict:
     """Build a minimal Stripe event envelope for webhook tests."""
-    return {"type": event_type, "data": {"object": data}}
+    return {"id": "evt_test", "type": event_type, "data": {"object": data}}
 
 
 def _make_webhook_body(event: dict) -> bytes:
@@ -374,13 +363,14 @@ async def test_webhook_checkout_completed_retries_when_subscription_lookup_fails
 
 
 @pytest.mark.asyncio
-async def test_webhook_subscription_updated(client, db_session, test_user):
+async def test_webhook_subscription_updated(client, db_session, test_user, stripe_provider):
     """customer.subscription.updated → subscription_status updated."""
     user, _ = test_user
     user.stripe_customer_id = "cus_webhook2"
     user.stripe_subscription_id = "sub_current"
     user.subscription_status = "trialing"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_current", "active")
 
     event = _make_stripe_event(
         "customer.subscription.updated",
@@ -446,7 +436,7 @@ async def test_webhook_subscription_updated_ignores_stale_subscription(
 
 @pytest.mark.asyncio
 async def test_webhook_subscription_updated_binds_missing_subscription_id(
-    client, db_session, test_user
+    client, db_session, test_user, stripe_provider
 ):
     """Existing users without stripe_subscription_id are backfilled from updates."""
     user, _ = test_user
@@ -454,6 +444,7 @@ async def test_webhook_subscription_updated_binds_missing_subscription_id(
     user.stripe_subscription_id = None
     user.subscription_status = "trialing"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_bound", "active")
 
     event = _make_stripe_event(
         "customer.subscription.updated",
@@ -484,17 +475,19 @@ async def test_webhook_subscription_updated_binds_missing_subscription_id(
 @pytest.mark.asyncio
 @pytest.mark.parametrize("stripe_status", ["incomplete", "incomplete_expired", "unpaid", "paused"])
 async def test_webhook_subscription_updated_accepts_real_stripe_statuses(
-    client, db_session, test_user, stripe_status
+    client, db_session, test_user, stripe_status, stripe_provider
 ):
     """customer.subscription.updated persists real Stripe statuses used for UI labels."""
     user, _ = test_user
     user.stripe_customer_id = f"cus_{stripe_status}"
     user.subscription_status = "active"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_status", stripe_status)
 
     event = _make_stripe_event(
         "customer.subscription.updated",
         {
+            "id": "sub_status",
             "customer": f"cus_{stripe_status}",
             "status": stripe_status,
             "current_period_end": int(datetime(2027, 1, 31).timestamp()),
@@ -518,17 +511,18 @@ async def test_webhook_subscription_updated_accepts_real_stripe_statuses(
 
 @pytest.mark.asyncio
 async def test_webhook_subscription_updated_unknown_status_keeps_existing_status(
-    client, db_session, test_user
+    client, db_session, test_user, stripe_provider
 ):
     """Unknown Stripe statuses are not persisted into the closed UI model."""
     user, _ = test_user
     user.stripe_customer_id = "cus_unknown_status"
     user.subscription_status = "past_due"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_unknown", "unexpected_status")
 
     event = _make_stripe_event(
         "customer.subscription.updated",
-        {"customer": "cus_unknown_status", "status": "unexpected_status"},
+        {"id": "sub_unknown", "customer": "cus_unknown_status", "status": "unexpected_status"},
     )
 
     with (
@@ -547,13 +541,14 @@ async def test_webhook_subscription_updated_unknown_status_keeps_existing_status
 
 
 @pytest.mark.asyncio
-async def test_webhook_subscription_deleted(client, db_session, test_user):
+async def test_webhook_subscription_deleted(client, db_session, test_user, stripe_provider):
     """customer.subscription.deleted → subscription_status set to 'canceled'."""
     user, _ = test_user
     user.stripe_customer_id = "cus_webhook3"
     user.stripe_subscription_id = "sub_deleted"
     user.subscription_status = "active"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_deleted", "canceled")
 
     event = _make_stripe_event(
         "customer.subscription.deleted",
@@ -607,13 +602,14 @@ async def test_webhook_subscription_deleted_ignores_stale_subscription(
 
 
 @pytest.mark.asyncio
-async def test_webhook_invoice_payment_failed(client, db_session, test_user):
+async def test_webhook_invoice_payment_failed(client, db_session, test_user, stripe_provider):
     """invoice.payment_failed → subscription_status set to 'past_due'."""
     user, _ = test_user
     user.stripe_customer_id = "cus_webhook4"
     user.stripe_subscription_id = "sub_failed"
     user.subscription_status = "active"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_failed", "past_due")
 
     event = _make_stripe_event(
         "invoice.payment_failed",
@@ -637,7 +633,7 @@ async def test_webhook_invoice_payment_failed(client, db_session, test_user):
 
 @pytest.mark.asyncio
 async def test_webhook_invoice_payment_failed_uses_current_invoice_parent_shape(
-    client, db_session, test_user
+    client, db_session, test_user, stripe_provider
 ):
     """invoice.payment_failed reads subscription from parent.subscription_details."""
     user, _ = test_user
@@ -645,6 +641,7 @@ async def test_webhook_invoice_payment_failed_uses_current_invoice_parent_shape(
     user.stripe_subscription_id = "sub_parent"
     user.subscription_status = "active"
     await db_session.commit()
+    stripe_provider.add_subscription("sub_parent", "past_due")
 
     event = _make_stripe_event(
         "invoice.payment_failed",

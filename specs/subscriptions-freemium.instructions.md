@@ -1,6 +1,6 @@
 ---
-description: "Current-state specification for optional Stripe billing, subscription status, freemium trial and quotas, paywalls, maintenance mode, administrative visibility, and post-assessment voice access."
-applyTo: "backend/app/core/{config,deps}.py, backend/app/models/user.py, backend/app/services/{subscription_service,freemium_service,assessment_voice_trial}.py, backend/app/routers/{billing,freemium,config,admin,conversation}.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
+description: "Current-state specification for Stripe billing, optional RevenueCat entitlement synchronization, freemium access, paywalls, maintenance, and subscription administration."
+applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook,billing_checkout}.py, backend/app/services/{subscription_service,revenuecat_service,stripe_checkout_service,freemium_service,assessment_voice_trial}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
 ---
 
 # Subscriptions and Freemium
@@ -9,6 +9,11 @@ applyTo: "backend/app/core/{config,deps}.py, backend/app/models/user.py, backend
 
 FreeLingo optionally combines Stripe subscriptions with limited freemium access. `STRIPE_ENABLED`
 defaults to `false` and is the principal runtime switch.
+
+`REVENUECAT_ENABLED` defaults to `false` and only applies when Stripe is enabled. When enabled,
+RevenueCat is the authority for the shared Premium entitlement; Stripe still handles web Checkout,
+Customer identities, and its Customer Portal. No store-specific subscription model is required for
+access authorization. Both providers use the same global FreeLingo account identity.
 
 With Stripe disabled:
 
@@ -29,6 +34,7 @@ Subscription fields are global user settings:
 - `subscription_status`;
 - `subscription_ends_at`;
 - `cancel_at_period_end`;
+- `revenuecat_synced_at`, nullable until the first verified RevenueCat synchronization;
 - `trial_used` for the Stripe card trial;
 - `freemium_trial_ends_at` and `freemium_trial_used`;
 - `assessment_voice_trial_used`.
@@ -37,7 +43,13 @@ Recognized Stripe states are `none`, `trialing`, `active`, `past_due`, `canceled
 `incomplete_expired`, `unpaid`, and `paused`. Database constraints do not enforce this set.
 
 `subscription_ends_at` and `cancel_at_period_end` are presentation and lifecycle data; access remains
-active while status is `active` or `trialing`. Revocation depends on synchronized Stripe status.
+active while the persisted status is `active` or `trialing`. In Stripe-only mode, revocation depends on
+synchronized Stripe status. In RevenueCat mode, the last confirmed snapshot remains authoritative
+until a successful reconciliation changes it. A cached period end passing does not revoke access:
+Stripe renewal notifications can arrive after RevenueCat has extended the entitlement. Provider
+failures neither revoke confirmed Premium nor grant it to an unsubscribed account. Access checks,
+public profiles, and admin reporting use the same persisted status. A null expiration in a verified
+RevenueCat entitlement represents lifetime access.
 Administrators do not bypass subscription policy, although they do bypass maintenance mode.
 
 ## Configuration
@@ -55,6 +67,18 @@ metadata, and maintenance state. It never exposes Stripe secrets or Price IDs.
 
 The application does not perform a complete startup validation of Stripe configuration. Checkout
 returns `503` when the selected Price ID is absent.
+
+RevenueCat configuration, required only when both billing flags are enabled:
+
+- `REVENUECAT_API_KEY`: backend-only secret key for API v1 customer reads;
+- `REVENUECAT_WEBHOOK_AUTHORIZATION`: exact, high-entropy Authorization header configured at RevenueCat;
+- `REVENUECAT_ENTITLEMENT_ID`: entitlement identifier, default `premium`;
+- `REVENUECAT_ENVIRONMENT`: `PRODUCTION` (default) or `SANDBOX`;
+- `REVENUECAT_STRIPE_PUBLIC_API_KEY`: optional RevenueCat Stripe-app public key for explicit receipt imports.
+
+Startup rejects missing required RevenueCat values. Keys and webhook credentials are never returned
+by public configuration. Production and sandbox deployments use separate RevenueCat projects to keep
+API v1's aggregated customer entitlements isolated.
 
 ## Access policies
 
@@ -94,21 +118,59 @@ gated. Memory management is also not blocked by maintenance mode.
 `POST /api/billing/checkout`:
 
 - requires authentication and accepts `monthly` or `yearly`;
+- reconciles the account with RevenueCat first when enabled; provider failure returns `503`;
+- rejects an already-subscribed account with `409 subscription_already_active`;
 - rate limit: `60/minute`;
 - selects the configured server-side Price ID;
-- creates and persists a Stripe Customer when absent;
-- creates a subscription Checkout Session with promotion codes enabled;
+- creates and persists a Stripe Customer when absent, using a durable customer-creation request and key;
+- creates a subscription Checkout Session with promotion codes enabled and a one-hour expiry;
 - records `user_id` in session and subscription metadata;
 - includes a Stripe trial only when configured days are positive and `trial_used` is false;
 - returns checkout success and cancellation to `STRIPE_BASE_URL`;
-- returns the Stripe-hosted URL.
+- returns the Stripe-hosted URL; an existing recoverable Stripe subscription returns a Customer Portal
+  URL instead of opening another purchase.
 
-The endpoint does not currently prevent an already subscribed user from opening another checkout and
-does not send an idempotency key.
+`stripe_checkout_service.py` serializes creation on the user row and persists one `billing_checkouts`
+reservation per user before contacting Checkout. The reservation freezes the complete session request
+and its UUID idempotency key. Workers reacquire the user lock and reload the reservation after a commit.
+When the account has no Stripe Customer, a preliminary reservation freezes the Customer's email, name,
+and identity metadata before the first provider call. Retries reuse those original parameters even if
+the profile changes. The Customer key is namespaced separately from session keys. The Customer ID and
+deletion of that preliminary reservation commit together before subsequent provider operations; the
+normal session reservation is then prepared using the persisted Customer. Existing session reservations
+remain compatible without Customer request data.
+The same price reuses the open session; changing prices expires it before creating a replacement.
+Completed sessions are checked against their current Stripe Subscription, including before webhooks
+arrive. Sessions opened before reservations existed are expired before a new reservation is created.
+If payment races expiration, the request fails without issuing another session.
 
-`POST /api/billing/portal` requires authentication, has a `60/minute` limit, requires a stored
-Customer ID, and returns a Stripe Customer Portal URL with Settings as the return target. It does not
-require a currently active subscription.
+When a session ID is unknown, recovery first paginates the customer's sessions and matches the
+reservation metadata. It does not filter by a locally inferred creation time because provider clocks
+can differ. A recovered session is retrieved for its current state. If no match exists and the
+reservation remains unexpired, creation retries the persisted key and parameters, then retrieves
+current state rather than trusting a replayed creation response. Stripe requires at least 30 minutes
+until expiry for a newly created session: its definitive `expires_at` validation rejection permits
+renewing a reservation with no discovered result. Other validation errors, in-flight requests, timeouts,
+and server errors do not authorize replacement. Once the reservation deadline passes, the old key is
+never resubmitted because Stripe may have pruned it. Provider errors return `503` and preserve the
+committed reservation; failed discovery also fails closed.
+
+Before returning an open Checkout or reserving a new one, the service checks the customer's Stripe
+subscriptions with pagination. `active`/`trialing` subscriptions block another purchase with `409`.
+An open session can resume its own `incomplete` subscription's initial payment; any other incomplete
+subscription, or a completed session with a still-incomplete payment, returns
+`409 subscription_payment_pending`. `past_due`, `unpaid`, and `paused` route to
+Customer Portal. Terminal `canceled`/`incomplete_expired` subscriptions permit a new purchase. These
+checks decide billing navigation, not Premium access: in RevenueCat mode only RevenueCat updates
+the entitlement snapshot. Verified historical Stripe trial usage suppresses a second card trial.
+
+`POST /api/billing/portal` requires authentication and has a `60/minute` limit. In RevenueCat mode it
+first reads the customer's HTTPS `management_url`, allowing the existing web button to manage the
+subscription where it was purchased. Without a provider management URL, it requires a stored Stripe
+Customer ID and returns a Stripe Customer Portal URL with Settings as the return target. It does not
+require a currently active subscription. If RevenueCat fails or returns invalid data or an unsafe URL,
+the endpoint falls back to the authenticated user's stored Stripe Customer ID; without one it returns
+`503`. A successful RevenueCat read with no management URL and no Stripe Customer ID returns `400`.
 
 ## Stripe webhook
 
@@ -118,25 +180,124 @@ Processing failure rolls back and returns `500` so Stripe can retry. Unsupported
 
 Handled events:
 
-- `checkout.session.completed`: finds the user by Customer or metadata, requires and retrieves the
-  Stripe Subscription before granting access, stores identifiers/status/period, clears scheduled
-  cancellation, marks a real trial as used, and applies default general quotas.
-- `customer.subscription.updated`: binds a missing current subscription ID, ignores a different
-  known subscription as stale, preserves the prior status when Stripe sends an unknown value, and
-  synchronizes period and scheduled cancellation.
-- `customer.subscription.deleted`: ignores stale subscriptions, marks current status canceled, and
-  clears scheduled cancellation.
-- `invoice.payment_failed`: accepts both historical and current Stripe invoice subscription shapes,
-  ignores stale subscription IDs, and marks the current subscription past due.
+The state mutations below apply in Stripe-only mode. With RevenueCat enabled, Stripe notifications
+only retain billing identifiers and the verified Stripe trial-used flag; they never overwrite shared
+subscription status, expiration, cancellation state, or activation quotas. Both synchronization paths
+lock the user row before modifying billing data.
 
-Webhook event IDs are not persisted for idempotency. Activation quotas are applied by checkout
-completion, not by a later transition received only through `subscription.updated`.
+- `checkout.session.completed`: finds the user by Customer or metadata and retrieves the current
+  Stripe Subscription before applying identifiers/status/period/scheduled cancellation. Late sessions
+  cannot rebind an account from a different persisted Customer or replace a current non-terminal
+  subscription. Verified current or historical trial usage marks the card trial as used.
+- `customer.subscription.updated`: binds a missing current subscription ID, ignores a different
+  known subscription as stale, and retrieves the current Subscription rather than applying the event
+  snapshot. Unknown provider statuses preserve the prior status.
+- `customer.subscription.deleted`: ignores stale subscriptions and reconciles the current Subscription;
+  a confirmed canceled status clears scheduled cancellation.
+- `invoice.payment_failed`: accepts both historical and current Stripe invoice subscription shapes,
+  ignores stale subscription IDs and one-off invoices, and reconciles the current Subscription. An old
+  invoice failure cannot overwrite a subsequent payment recovery.
+
+Stripe event IDs are persisted in `stripe_webhook_receipts` and commit atomically with account changes.
+Duplicates do not repeat provider reads or reset quotas; failed processing rolls back the receipt so
+delivery remains retryable. Provider reads happen under the user lock, avoiding stale event snapshots
+and concurrent overwrites. Default activation quotas apply only on a non-Premium to Premium transition,
+including a subscription update received before Checkout completion.
+
+## RevenueCat synchronization
+
+The canonical App User ID is `str(users.id)`. Stripe Checkout Session and Subscription metadata both
+contain it as `user_id`; RevenueCat's Stripe integration reads that metadata field. Clients must use
+the same authenticated account identity, not an email address or Stripe Customer ID. Anonymous aliases
+are only useful when RevenueCat associates them with a known canonical ID.
+
+`POST /api/billing/revenuecat/webhook` verifies the configured Authorization header using a constant-time
+comparison before parsing API v1 events. Dashboard `TEST` events and events explicitly belonging to
+the other environment are acknowledged without changing access. Unknown/deleted account identities
+are also acknowledged. Additional fields and new event types are accepted.
+
+For identified accounts, the handler retrieves `GET /v1/subscribers/{app_user_id}` from RevenueCat;
+webhook transaction fields are not themselves access grants or revocations. It resolves canonical IDs
+from the current ID, original ID, aliases, both sides of transfers, and redemption identities. Transfers
+reconcile all known affected accounts atomically, acquiring user-row locks in ascending ID order.
+
+The configured entitlement determines the shared snapshot:
+
+- absent entitlement: `none`;
+- unexpired entitlement: `active`, or `trialing` for a trial period;
+- expired entitlement: `canceled`, including expirations with a historical billing issue;
+- cancellation detection sets `cancel_at_period_end` without revoking unexpired access;
+- grace-period expiry extends the access deadline; a billing issue alone does not revoke access;
+- a matched purchase must belong to the configured environment; mismatched or malformed snapshots fail
+  without overwriting local access;
+- a snapshot older than `revenuecat_synced_at` cannot overwrite a newer one.
+
+An expired entitlement with `billing_issues_detected_at` does not establish that the store subscription
+is recoverable. The UI offers subscription plans for the canceled state; Checkout verifies live Stripe
+billing state and routes recoverable subscriptions to the portal instead of creating duplicate charges.
+
+The event receipt, account snapshot, and activation quotas commit in one database transaction.
+Duplicate event IDs are acknowledged without repeating provider reads or resetting quotas. Failed
+requests roll back the receipt and account changes and return `503`, permitting delivery retries.
+Quota defaults are applied only when the persisted state transitions from non-Premium to Premium.
+Requests to RevenueCat have a ten-second overall deadline; webhook reconciliation has a 45-second
+processing deadline. Raw provider payloads and credentials are not logged or persisted.
+
+`POST /api/billing/sync` reconciles only the authenticated account, deriving its ID from the session.
+`POST /api/billing/revenuecat/sync/{user_id}` is administrator-only and accepts `{import_stripe: false}`
+for reconciliation or `{import_stripe: true}` to first submit the user's persisted Stripe Subscription
+ID to RevenueCat's receipt-import API. It cannot import a caller-supplied subscription ID. An import
+requires the RevenueCat Stripe-app public key. Provider-side imports cannot be undone by a local
+database rollback; retrying the same receipt is safe. Both endpoints return the persisted status,
+expiration, and scheduled-cancellation flag and are limited to `10/minute`.
+
+These endpoints recover missed notifications and support explicit post-purchase reconciliation. There
+is no periodic reconciliation job or RevenueCat SDK in the web frontend. Ordinary protected requests
+use local state and do not depend on a live RevenueCat read. Revocation requires a successful webhook
+reconciliation or explicit sync confirming an absent or expired entitlement, including any grace
+period. If notifications are lost, the last confirmed state remains in effect until reconciliation;
+operators must recover failed deliveries or use the sync endpoints. Existing Stripe state is preserved
+until the first successful synchronization, so enabling the flag is not a substitute for importing and
+reconciling existing subscribers.
+
+## RevenueCat configuration and operation
+
+1. Keep `REVENUECAT_ENABLED=false` while configuring the provider project. Connect the existing Stripe
+   account to RevenueCat and attach the monthly/yearly Stripe products to the configured entitlement.
+2. Add Stripe's RevenueCat webhook destination alongside FreeLingo's existing Stripe webhook. Enable
+   tracking new purchases from server-to-server notifications and select the metadata detection method
+   with field key `user_id`. Select only RevenueCat's documented Stripe events: `customer.subscription.created`,
+   `customer.subscription.updated`, `customer.subscription.deleted`, `checkout.session.completed`,
+   `charge.refunded`, and `invoice.updated`.
+3. Import existing Stripe subscriptions using RevenueCat's receipt-import API with the same App User ID
+   and each persisted `stripe_subscription_id`. Verify product-to-entitlement mappings and account IDs
+   before switching access authority. Connecting Stripe alone does not backfill every subscription.
+4. Configure the backend values from `.env.example`. Set up a RevenueCat webhook for all relevant apps
+   in the project at `https://<public-host>/api/billing/revenuecat/webhook`, using the exact configured
+   Authorization header and the matching environment. Coordinate delivery with enabling the backend
+   flag; the route exists only when both billing flags are enabled.
+5. Enable `REVENUECAT_ENABLED` and reconcile existing users through the administrator sync endpoint.
+   The optional `import_stripe` mode supports explicit import repairs after activation. Check delivery
+   results in RevenueCat and retry failed events or use reconciliation when its delivery retries are
+   exhausted. Live purchase, renewal, cancellation, refund, and expiration checks belong to the deployment.
+
+Disabling RevenueCat stops its synchronization and restores Stripe-only event handling. It does not
+reconstruct Stripe access from a potentially cross-platform snapshot: reconcile existing accounts with
+Stripe before relying on that rollback. `STRIPE_ENABLED=false` retains its independent bypass behavior.
+
+Provider references:
+
+- [Stripe renewal webhooks and backend access](https://www.revenuecat.com/docs/web/integrations/stripe#renewal-webhooks-and-access-on-your-backend).
+- [External Stripe purchases](https://www.revenuecat.com/docs/web/integrations/stripe/track-external-purchases).
+- [Stripe server notifications and metadata identity](https://www.revenuecat.com/docs/platform-resources/server-notifications/stripe-server-notifications).
+- [Webhooks and customer reconciliation](https://www.revenuecat.com/docs/integrations/webhooks).
 
 ## Stripe card trial
 
 Checkout includes `STRIPE_TRIAL_DAYS` only when the configured value is positive and `trial_used` is
-false. Abandoning checkout does not consume the right. The flag is committed when verified checkout
-completion reports `trialing`; direct `active` activation and administrative overrides do not mark it.
+false. Abandoning checkout does not consume the right. Verified Stripe snapshots with `trialing` status
+or a non-null `trial_start` mark the trial as used, including when notification arrives after conversion
+to a paid subscription. Administrative access overrides do not mark it.
 
 The landing pricing subtitle, monthly badge, and all paid-plan CTAs advertise a Stripe trial only
 when configured trial days are positive and the user has not already used it. Otherwise, the subtitle
@@ -250,6 +411,9 @@ replace the affected pages, but open clients do not receive push updates when th
 Administrative APIs expose subscription fields and accept subscription filtering and recognized
 status overrides. Moving a user from non-premium to `active` or `trialing` applies default quotas;
 setting `none` clears the end date. Overrides update local access only and do not modify Stripe.
+In RevenueCat mode they do not modify RevenueCat either and can be replaced by the next reconciliation;
+durable provider-managed grants must be configured in RevenueCat. Quota overrides are retained across
+ordinary renewals and duplicate notifications.
 
 With Stripe disabled, frontend administration:
 

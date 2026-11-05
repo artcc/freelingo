@@ -44,7 +44,7 @@ describe('useLanguageStore — initial state', () => {
     expect(useLanguageStore.getState().supportedLanguages).toEqual(
       SUPPORTED_TARGET_LANGUAGES
     )
-    expect(useLanguageStore.getState().supportedLanguages.length).toBe(12)
+    expect(useLanguageStore.getState().supportedLanguages.length).toBe(13)
   })
 
   it('starts with empty availableLanguageCodes', () => {
@@ -635,6 +635,43 @@ describe('useLanguageStore — addLanguage', () => {
     expect(mockApiFetch).toHaveBeenCalledWith('/api/languages/pt-BR', { method: 'DELETE' })
     expect(useLanguageStore.getState().userLanguages.map((lang) => lang.target_language)).toEqual(['pt-PT'])
     expect(useLanguageStore.getState().activeLanguage?.code).toBe('pt-PT')
+  })
+
+  it('adds, switches, and removes Dutch while retaining English', async () => {
+    const response = (active: string, codes = ['en-GB', 'nl-NL']) => ({
+      languages: codes.map((code) => ({
+        target_language: code,
+        is_active: code === active,
+        plan: null,
+        progress: null,
+      })),
+      all_supported_languages: ['en-GB', 'nl-NL'],
+    })
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse(response('nl-NL')))
+    expect(await useLanguageStore.getState().addLanguage('nl-NL')).toBe(true)
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/languages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ target_language: 'nl-NL' }),
+    })
+    expect(useLanguageStore.getState().activeLanguage?.flagPath).toBe('/flags/netherlands.jpg')
+    expect(useLanguageStore.getState().availableLanguageCodes).toContain('nl-NL')
+
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse(response('en-GB')))
+    expect(await useLanguageStore.getState().switchLanguage('en-GB')).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse(null, true, 204))
+      .mockResolvedValueOnce(mockResponse(response('en-GB', ['en-GB'])))
+    expect(await useLanguageStore.getState().removeLanguage('nl-NL')).toBe(true)
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/languages/nl-NL', { method: 'DELETE' })
+    expect(useLanguageStore.getState().userLanguages.map((lang) => lang.target_language)).toEqual(['en-GB'])
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
   })
 
   it('does not call fetchLanguages when POST fails', async () => {

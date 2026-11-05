@@ -57,6 +57,10 @@ describe('LanguageBubbles', () => {
       SUPPORTED_TARGET_LANGUAGES.length
     )
     expect(screen.getByAltText('Localized de-DE')).toBeInTheDocument()
+    expect(screen.getByAltText('Localized nl-NL')).toHaveAttribute(
+      'src',
+      '/flags/netherlands.jpg'
+    )
     expect(screen.getByAltText('Localized pt-BR')).toHaveAttribute(
       'src',
       '/flags/brazil.jpg'

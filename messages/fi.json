@@ -100,6 +100,7 @@
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
       "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1476,6 +1477,9 @@
     "supportedLanguages": "Saatavilla olevat kielet"
   },
   "targetLanguages": {
+    "nl-NL": "Hollanti (Alankomaat)",
+    "nl": "Hollanti",
+    "nl-NL-description": "Alankomaissa puhuttu hollanti.",
     "en-US": "Amerikanenglanti",
     "en-GB": "Brittienglanti",
     "es-ES": "Espanja",
@@ -1770,8 +1774,8 @@
     "version": "v1.11.5",
     "cta": "Selvä",
     "entry1": {
-      "label": "Uudet kielet: puola ja brasilianportugali",
-      "desc": "Puola ja brasilianportugali ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
+      "label": "Uudet kielet: puola, brasilianportugali ja hollanti",
+      "desc": "Puola, brasilianportugali ja hollanti ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
     "entry2": {
       "label": "Parannuksia oppimiseen",
