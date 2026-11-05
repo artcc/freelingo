@@ -21,6 +21,7 @@ _LANG_MODULES: dict[str, str] = {
     "pl": "app.data.pl.vocabulary",
     "nl": "app.data.nl.vocabulary",
     "ru": "app.data.ru.vocabulary",
+    "sv": "app.data.sv.vocabulary",
     "ja": "app.data.ja.vocabulary",
     "ko": "app.data.ko.vocabulary",
     "pt": "app.data.pt.vocabulary",

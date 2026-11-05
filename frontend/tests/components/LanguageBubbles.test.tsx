@@ -10,7 +10,9 @@ vi.mock('next-intl', () => ({
       ? `Localized ${key}`
       : key === 'languageGreetings.ru-RU'
         ? 'Привет!'
-        : key,
+        : key === 'languageGreetings.sv-SE'
+          ? 'Hej!'
+          : key,
 }))
 
 vi.mock('@/components/lingu/LinguAvatar', () => ({
@@ -75,6 +77,9 @@ describe('LanguageBubbles', () => {
     )
     expect(screen.getByText('Привет!')).toHaveAttribute('lang', 'ru-RU')
     expect(screen.getByText('Привет!')).toHaveClass('font-target-cyrillic')
+    expect(screen.getByAltText('Localized sv-SE')).toHaveAttribute('src', '/flags/sweden.jpg')
+    expect(screen.getByText('Hej!')).toHaveAttribute('lang', 'sv-SE')
+    expect(screen.getByText('Hej!')).toHaveClass('font-target-latin')
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
   })
 

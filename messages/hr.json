@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Koje jezike mogu učiti?",
-        "answer": "Britanski i američki engleski, španjolski, talijanski, portugalski iz Brazila i Portugala, njemački, francuski, poljski, nizozemski, ruski, japanski, korejski i kontinentalni kineski. Možeš učiti više jezika istodobno, uz zasebne planove i napredak za svaki jezik."
+        "answer": "Britanski i američki engleski, španjolski, talijanski, portugalski iz Brazila i Portugala, njemački, francuski, poljski, nizozemski, ruski, švedski, japanski, korejski i kontinentalni kineski. Možeš učiti više jezika istodobno, uz zasebne planove i napredak za svaki jezik."
       },
       "start": {
         "question": "Kako započeti učenje?",
@@ -93,6 +93,7 @@
     "footerLegal": "Pravne informacije",
     "languageGreetings": {
       "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1291,7 +1292,7 @@
     "workflowStep5": "Istodobno vježbaj rječnik karticama",
     "workflowStep6": "Vježbaj slobodan razgovor s Linguom",
     "q_language": "Koji ću jezik učiti?",
-    "a_language": "FreeLingo trenutačno podržava više jezika (američki engleski, britanski engleski, francuski, njemački, talijanski, japanski, korejski, kineski koji se govori u kontinentalnoj Kini, portugalski iz Brazila i Portugala, poljski, nizozemski, ruski i španjolski), a s vremenom ćemo dodati još jezika. Kad novi jezik postane dostupan, pronaći ćeš ga pod Postavke → Moji jezici – dodaj ga i odmah počni učiti.",
+    "a_language": "FreeLingo trenutačno podržava više jezika (američki engleski, britanski engleski, francuski, njemački, talijanski, japanski, korejski, kineski koji se govori u kontinentalnoj Kini, portugalski iz Brazila i Portugala, poljski, nizozemski, ruski, švedski i španjolski), a s vremenom ćemo dodati još jezika. Kad novi jezik postane dostupan, pronaći ćeš ga pod Postavke → Moji jezici – dodaj ga i odmah počni učiti.",
     "q_assessment": "Što je procjena razine?",
     "a_assessment": "Prilagodljivi test s najviše 15 pitanja iz banke pitanja za jezik koji učiš. Obuhvaća gramatiku, rječnik i razumijevanje pročitanog od A1 do C2. Rezultat procjenjuje CEFR razinu i pokazuje prednosti i područja za vježbu; predloženu razinu možeš prilagoditi prije izrade plana.",
     "q_studyPlan": "Što je plan učenja i kako ga stvaram?",
@@ -1478,6 +1479,9 @@
     "supportedLanguages": "Dostupni jezici"
   },
   "targetLanguages": {
+    "sv-SE": "Švedski",
+    "sv": "Švedski",
+    "sv-SE-description": "Švedski kakav se govori u Švedskoj.",
     "ru-RU": "Ruski",
     "ru": "Ruski",
     "ru-RU-description": "Ruski kakav se govori u Rusiji, pisan ćirilicom.",
@@ -1778,8 +1782,8 @@
     "version": "v1.11.5",
     "cta": "Razumijem",
     "entry1": {
-      "label": "Novi jezici: poljski, brazilski portugalski, ruski i nizozemski",
-      "desc": "Dodali smo poljski, brazilski portugalski, ruski i nizozemski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
+      "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",
+      "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
     "entry2": {
       "label": "Poboljšanja učenja",

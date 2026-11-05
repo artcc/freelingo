@@ -399,6 +399,7 @@ class TestLanguageAPI:
         assert "pt-BR" in data["all_supported_languages"]
         assert "nl-NL" in data["all_supported_languages"]
         assert "ru-RU" in data["all_supported_languages"]
+        assert "sv-SE" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -497,7 +498,7 @@ class TestLanguageAPI:
         assert res.json()["target_language"] == "pl-PL"
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("language", ["nl-NL", "ru-RU"])
+    @pytest.mark.parametrize("language", ["nl-NL", "ru-RU", "sv-SE"])
     async def test_add_plan_switch_and_remove_preserve_other_language(
         self, client, db_session, language
     ):

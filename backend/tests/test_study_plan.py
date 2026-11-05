@@ -61,7 +61,9 @@ async def test_get_current_plan_after_generate(client, test_user):
     assert data["goals"] == ["vocabulary"]
 
 
-@pytest.mark.parametrize("target_language", ["xx-XX", "ru", "ru-ru", "", "ru-RU"])
+@pytest.mark.parametrize(
+    "target_language", ["xx-XX", "ru", "ru-ru", "", "ru-RU", "sv", "sv-se", "sv-SE"]
+)
 @pytest.mark.parametrize("language_source", ["explicit", "active", "profile"])
 async def test_generate_rejects_unavailable_language_without_state_changes(
     client, test_user, db_session, monkeypatch, target_language, language_source
@@ -114,34 +116,37 @@ async def test_generate_rejects_unavailable_language_without_state_changes(
         ("profile", True),
     ],
 )
+@pytest.mark.parametrize("target_language", ["ru-RU", "sv-SE"])
 async def test_generate_uses_available_language_from_each_source(
-    client, test_user, db_session, monkeypatch, language_source, explicit_null
+    client, test_user, db_session, monkeypatch, language_source, explicit_null, target_language
 ):
     user, headers = test_user
     english_plan = await make_study_plan(db_session, user_id=user.id, cefr_level="B2")
-    monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", ["en-US", "ru-RU"])
+    monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", ["en-US", target_language])
     body = {"cefr_level": "A1"}
     if explicit_null:
         body["target_language"] = None
     if language_source == "explicit":
-        body["target_language"] = "ru-RU"
+        body["target_language"] = target_language
     else:
         await db_session.execute(
             update(UserLanguage).where(UserLanguage.user_id == user.id).values(is_active=False)
         )
         if language_source == "active":
-            db_session.add(UserLanguage(user_id=user.id, target_language="ru-RU", is_active=True))
+            db_session.add(
+                UserLanguage(user_id=user.id, target_language=target_language, is_active=True)
+            )
         else:
-            user.target_language = "ru-RU"
+            user.target_language = target_language
     await db_session.commit()
 
     response = await client.post("/api/study-plan/generate", headers=headers, json=body)
 
     assert response.status_code == 200
     plan = await db_session.get(StudyPlan, response.json()["id"])
-    assert plan.target_language == response.json()["target_language"] == "ru-RU"
+    assert plan.target_language == response.json()["target_language"] == target_language
     language = await db_session.get(UserLanguage, plan.user_language_id)
-    assert language.target_language == "ru-RU"
+    assert language.target_language == target_language
     await db_session.refresh(english_plan)
     assert english_plan.is_active
 

@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Quali lingue posso imparare?",
-        "answer": "Inglese britannico e americano, spagnolo, italiano, portoghese del Brasile e del Portogallo, tedesco, francese, polacco, neerlandese, russo, giapponese, coreano e cinese continentale. Puoi studiarne diverse insieme, con piani e progressi separati per ogni lingua."
+        "answer": "Inglese britannico e americano, spagnolo, italiano, portoghese del Brasile e del Portogallo, tedesco, francese, polacco, neerlandese, russo, svedese, giapponese, coreano e cinese continentale. Puoi studiarne diverse insieme, con piani e progressi separati per ogni lingua."
       },
       "start": {
         "question": "Come inizio a imparare?",
@@ -93,6 +93,7 @@
     "footerLegal": "Legale",
     "languageGreetings": {
       "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1291,7 +1292,7 @@
     "workflowStep5": "Usa le Flashcard per allenare il vocabolario in parallelo",
     "workflowStep6": "Pratica la conversazione libera con Lingu",
     "q_language": "Che lingua imparerò?",
-    "a_language": "FreeLingo include attualmente diverse lingue (cinese continentale, coreano, francese, giapponese, inglese americano, inglese britannico, italiano, portoghese del Brasile e del Portogallo, spagnolo, tedesco, polacco, neerlandese, russo) e ne aggiungeremo altre nel tempo. Quando una nuova lingua sarà disponibile, la troverai in Impostazioni → Le mie lingue — aggiungila e inizia subito a imparare.",
+    "a_language": "FreeLingo include attualmente diverse lingue (cinese continentale, coreano, francese, giapponese, inglese americano, inglese britannico, italiano, portoghese del Brasile e del Portogallo, spagnolo, tedesco, polacco, neerlandese, russo, svedese) e ne aggiungeremo altre nel tempo. Quando una nuova lingua sarà disponibile, la troverai in Impostazioni → Le mie lingue — aggiungila e inizia subito a imparare.",
     "q_assessment": "Cos'è la Valutazione?",
     "a_assessment": "Un test adattivo con un massimo di 15 domande da una banca specifica della lingua studiata. Copre grammatica, vocabolario e comprensione scritta da A1 a C2. Il risultato stima il tuo livello QCER e indica punti di forza e aspetti da migliorare; puoi modificare il livello suggerito prima di creare il piano.",
     "q_studyPlan": "Cos'è il Piano di Studio e come ne genero uno?",
@@ -1478,6 +1479,9 @@
     "supportedLanguages": "Lingue disponibili"
   },
   "targetLanguages": {
+    "sv-SE": "Svedese",
+    "sv": "Svedese",
+    "sv-SE-description": "Svedese parlato in Svezia.",
     "ru-RU": "Russo",
     "ru": "Russo",
     "ru-RU-description": "Russo parlato in Russia, con l'alfabeto cirillico.",
@@ -1778,8 +1782,8 @@
     "version": "v1.11.5",
     "cta": "Capito",
     "entry1": {
-      "label": "Nuove lingue: polacco, portoghese del Brasile, russo e neerlandese",
-      "desc": "Il polacco, il portoghese del Brasile, il russo e il neerlandese sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
+      "label": "Nuove lingue: polacco, portoghese del Brasile, russo, neerlandese e svedese",
+      "desc": "Il polacco, il portoghese del Brasile, il russo, il neerlandese e lo svedese sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
     "entry2": {
       "label": "Miglioramenti nell'apprendimento",

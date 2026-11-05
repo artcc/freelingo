@@ -16,6 +16,14 @@ describe.each(SUPPORTED_LOCALES)('target language messages in %s', (locale) => {
     expect(messages.landing.languageGreetings['pt-BR']).toBe('Oi!')
     expect(messages.landing.languageGreetings['nl-NL']).toBe('Hallo!')
     expect(messages.landing.languageGreetings['ru-RU']).toBe('Привет!')
+    expect(messages.landing.languageGreetings['sv-SE']).toBe('Hej!')
+    const swedishLabel = messages.targetLanguages.sv.toLocaleLowerCase(locale)
+    for (const text of [messages.whatsNew.entry1.label, messages.faq.a_language]) {
+      expect(text.toLocaleLowerCase(locale)).toContain(swedishLabel)
+    }
+    expect(messages.whatsNew.entry1.desc.toLocaleLowerCase(locale)).toContain(
+      locale === 'ro' ? 'suedeza' : swedishLabel
+    )
     expect(messages.whatsNew.entry1.label.toLocaleLowerCase(locale)).toContain(
       messages.targetLanguages.ru.toLocaleLowerCase(locale)
     )

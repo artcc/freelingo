@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 14 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(14)
+  it('contains exactly 15 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(15)
   })
 
   const expectedCodes = [
@@ -22,6 +22,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'pl-PL',
     'nl-NL',
     'ru-RU',
+    'sv-SE',
     'pt-BR',
     'pt-PT',
     'fr-FR',
@@ -60,6 +61,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/poland.jpg')
     expect(paths).toContain('/flags/netherlands.jpg')
     expect(paths).toContain('/flags/russia.jpg')
+    expect(paths).toContain('/flags/sweden.jpg')
     expect(paths).toContain('/flags/brazil.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
@@ -99,7 +101,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(14)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(15)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -112,6 +114,7 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'pl-PL',
       'nl-NL',
       'ru-RU',
+      'sv-SE',
       'ja-JP',
       'ko-KR',
       'zh-CN',
@@ -161,6 +164,22 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       usesWordSpacing: true,
     })
     expect(getLanguageByCode('ru-RU')?.romanization).toBeUndefined()
+  })
+
+  it.each(['sv-SE', 'SV-se', 'sv-se'])('resolves Swedish metadata for %s', (code) => {
+    expect(getLanguageByCode(code)).toEqual({
+      code: 'sv-SE',
+      name: 'Svenska',
+      nameEn: 'Swedish',
+      flagPath: '/flags/sweden.jpg',
+      iso639: 'sv',
+      script: 'latin',
+      fontClass: 'font-target-latin',
+      usesWordSpacing: true,
+    })
+    expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
+    expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+    expect(getLanguageByCode('sv')).toBeUndefined()
   })
 
   it('contains complete Polish display metadata', () => {

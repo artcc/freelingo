@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "sv-SE": """
+Language-specific guidance:
+- Use contemporary standard Swedish as used in Sweden. Preserve å, ä and ö as distinct letters, natural compound spelling and Swedish capitalization. Recognize regional Swedish and Finland-Swedish as valid varieties when comparing them, without replacing the selected Sweden usage.
+- Build from vowel-consonant length contrasts, vowel quality and intelligible phrase stress to en/ett gender, plurals, definiteness, adjective agreement and possessives. Introduce pitch accents through listening without imposing one regional melody as universally correct.
+- Teach verb-second main clauses by sentence constituents, not word counts; contrast subordinate-clause word order and the placement of inte. Distinguish supine after har/hade from agreeing participles, tense perspective, particle verbs and reflexive sin/sitt/sina with explicit referents. Do not calque English progressive forms or obligatory tense backshift.
+- Use du as ordinary singular address; ni is plural and is not automatically a more polite singular choice. Distinguish de/dem in neutral edited writing while recognizing dom in speech and informal contexts. Teach requests, refusals, repair and mediation through realistic interaction.
+- Progress from everyday tasks to nuanced interpretation, register, source attribution and negotiation. Preserve participants, negation scope, conditions, time and degree of commitment in reformulations. Do not mark valid contextual or regional alternatives as errors; placement questions require enough context for exactly one accepted answer.
+- Use varied Swedish everyday and cultural settings, including regional diversity, public services, associations and nature. Avoid stereotypes or treating cultural tendencies as universal rules. Explain allemansrätten with responsibilities and local restrictions rather than unlimited access claims.
+""".strip(),
     "ru-RU": """
 Language-specific guidance:
 - Use standard contemporary Russian as used in Russia, written in Cyrillic. Preserve ё where appropriate; do not replace Russian text with transliteration. Use stress marks selectively for pronunciation teaching, not as a substitute for ordinary spelling.
@@ -126,6 +135,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "sv": "sv-SE",
     "ru": "ru-RU",
     "nl": "nl-NL",
     "de": "de-DE",

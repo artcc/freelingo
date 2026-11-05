@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Vilka språk kan jag lära mig?",
-        "answer": "Brittisk och amerikansk engelska, spanska, italienska, portugisiska från Brasilien och Portugal, tyska, franska, polska, nederländska, ryska, japanska, koreanska och fastlandskinesiska. Du kan lära dig flera samtidigt med separata planer och framsteg för varje språk."
+        "answer": "Brittisk och amerikansk engelska, spanska, italienska, portugisiska från Brasilien och Portugal, tyska, franska, polska, nederländska, ryska, svenska, japanska, koreanska och fastlandskinesiska. Du kan lära dig flera samtidigt med separata planer och framsteg för varje språk."
       },
       "start": {
         "question": "Hur börjar jag lära mig?",
@@ -93,6 +93,7 @@
     "footerLegal": "Juridiskt",
     "languageGreetings": {
       "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1291,7 +1292,7 @@
     "workflowStep5": "Använd gloskort för att öva ordförråd parallellt",
     "workflowStep6": "Öva fria samtal med Lingu",
     "q_language": "Vilket språk kommer jag att lära mig?",
-    "a_language": "FreeLingo stöder för närvarande flera språk (amerikansk engelska, brittisk engelska, franska, tyska, italienska, japanska, koreanska, kinesiska från Fastlandskina, portugisiska från Brasilien och Portugal, polska, nederländska, ryska och spanska), och vi kommer att lägga till fler med tiden. När ett nytt språk blir tillgängligt hittar du det under Inställningar → Mina språk – lägg till det och börja lära dig direkt.",
+    "a_language": "FreeLingo stöder för närvarande flera språk (amerikansk engelska, brittisk engelska, franska, tyska, italienska, japanska, koreanska, kinesiska från Fastlandskina, portugisiska från Brasilien och Portugal, polska, nederländska, ryska, svenska och spanska), och vi kommer att lägga till fler med tiden. När ett nytt språk blir tillgängligt hittar du det under Inställningar → Mina språk – lägg till det och börja lära dig direkt.",
     "q_assessment": "Vad är nivåbedömningen?",
     "a_assessment": "Ett adaptivt test med högst 15 frågor från en frågebank för ditt studiespråk. Det omfattar grammatik, ordförråd och läsförståelse från A1 till C2. Resultatet uppskattar din GERS-nivå och visar styrkor och övningsområden; du kan ändra den föreslagna nivån innan du skapar planen.",
     "q_studyPlan": "Vad är studieplanen och hur skapar jag en?",
@@ -1478,6 +1479,9 @@
     "supportedLanguages": "Tillgängliga språk"
   },
   "targetLanguages": {
+    "sv-SE": "Svenska",
+    "sv": "Svenska",
+    "sv-SE-description": "Svenska som talas i Sverige.",
     "ru-RU": "Ryska",
     "ru": "Ryska",
     "ru-RU-description": "Ryska som talas i Ryssland, med det kyrilliska alfabetet.",
@@ -1778,8 +1782,8 @@
     "version": "v1.11.5",
     "cta": "Jag förstår",
     "entry1": {
-      "label": "Nya språk: polska, brasiliansk portugisiska, ryska och nederländska",
-      "desc": "Polska, brasiliansk portugisiska, ryska och nederländska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
+      "label": "Nya språk: polska, brasiliansk portugisiska, ryska, nederländska och svenska",
+      "desc": "Polska, brasiliansk portugisiska, ryska, nederländska och svenska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
     },
     "entry2": {
       "label": "Förbättringar för lärandet",

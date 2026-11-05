@@ -97,7 +97,7 @@ def test_language_package_meets_per_level_coverage_minimums(language, level, min
 
 
 @pytest.mark.parametrize(
-    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ru-RU"]
+    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ru-RU", "sv-SE"]
 )
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics

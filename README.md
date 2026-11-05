@@ -249,6 +249,7 @@ grammar reference, vocabulary and phrasebook.
 - **Portuguese:** Brazilian (`pt-BR`) and European (`pt-PT`).
 - **Russian** (`ru-RU`).
 - **Spanish:** Spain (`es-ES`).
+- **Swedish:** Sweden (`sv-SE`).
 
 Choose your first language during onboarding, then add more from **Settings → My Languages**.
 Your plans, progress and flashcards stay separate for each language, including regional variants.
