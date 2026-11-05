@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Engleză britanică",
     "es-ES": "Spaniolă",
     "it-IT": "Italiană",
-    "pt-PT": "Portugheză",
+    "pt-BR": "Portugheză (Brazilia)",
+    "pt-PT": "Portugheză (Portugalia)",
     "fr-FR": "Franceză",
     "de-DE": "Germană",
     "pl-PL": "Poloneză",
@@ -1498,6 +1500,7 @@
     "zh": "chineză",
     "es-ES-description": "Spaniola vorbită în Spania.",
     "it-IT-description": "Italiana vorbită în Italia.",
+    "pt-BR-description": "Portugheza vorbită în Brazilia.",
     "pt-PT-description": "Portugheza vorbită în Portugalia.",
     "en-US-description": "Engleza vorbită în Statele Unite.",
     "en-GB-description": "Engleza vorbită în Regatul Unit.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Acum poți învăța poloneza!",
-      "desc": "Am adăugat poloneza ca limbă de studiu, cu conținut de la A1 la C2. Alege-o la început sau adaug-o din Setări → Limbile mele."
+      "label": "Limbi noi: poloneză și portugheză braziliană",
+      "desc": "Am adăugat poloneza și portugheza braziliană ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
     "entry2": {
       "label": "Îmbunătățiri pentru învățare",

@@ -11,6 +11,9 @@ Services implement reusable domain behavior and external-provider adapters. Rout
 for authentication, ownership resolution, rate limits, transport framing, and HTTP status mapping.
 The frontend never calls an external provider directly.
 
+This specification owns shared service interfaces and orchestration. Domain summaries below identify
+their service boundary; detailed workflows and eligibility rules belong to the linked domain specs.
+
 ## LLM adapter
 
 `llm_adapter.py` provides provider-neutral access to Ollama, OpenAI, Anthropic, and DeepSeek.
@@ -102,16 +105,11 @@ translation context. Generated cards receive target language from the persisted 
 `progress_service.py` updates daily XP, streak, exercise skill EMA, and unit competency EMA. It can
 flush without committing so lesson completion can include progress in one transaction. Progress is
 always credited to the resource-owning plan.
-New daily rows store ordered per-skill scores in `Progress.skill_updates`. A write to an earlier date
-reconciles subsequent streaks and replays subsequent days' own skill updates in date order, under the
-same plan lock and transaction. Every EMA step retains its three-decimal rounding; gaps reset only
-streaks. Legacy null score histories preserve their skill snapshots as opaque checkpoints rather than
-pretending they contain no scored activity. Daily counters and XP are not moved between dates.
 
 `progress_rewards.py` grants additional conversation, spaced-replay, unit, and level XP with durable
 source keys and plan-row serialization. Reward inserts and daily credit share a transaction. Activity
-uses UTC and can have zero XP; new days retain prior skill snapshots. Streak reads expire when the
-latest date is older than yesterday. Exact award thresholds live in `learning-resources.instructions.md`.
+uses UTC and can have zero XP. `learning-resources.instructions.md` owns award thresholds, daily
+reconciliation, skill-history compatibility, and streak expiry.
 
 Serialization uses PostgreSQL `FOR NO KEY UPDATE`, compatible with FK `KEY SHARE` locks from transcript
 and attempt inserts. `reward_conversation` receives a persisted response ID, validates its explicit
@@ -191,19 +189,39 @@ together; even a zero-score or zero-XP attempt records activity.
 The service captures the attempt timestamp once before database awaits and reuses its UTC date for
 replay eligibility, source keys, reward limits, ledger dates, and progress dates.
 
-`exercise_generation.py` coordinates both domains' background tasks through unique-owner Redis
-leases, 60-second expiry, 20-second renewal, atomic owner-checked completion, and expiring status.
-`EXERCISE_GENERATION_TIMEOUT_SECONDS` (default 600, positive integer) bounds the entire task from
-acquisition. The domain services accept a monotonic `deadline` and async `before_save` ownership
-guard. The coordinator cancels work on timeout or renewal failure, stops its heartbeat in all cases,
-and exposes controlled failure codes through immediate `/next` responses. Database content remains
-the authority when an exercise is available; Redis stores no learner answers or generated content.
-Status reads calculate remaining generation seconds on the server. Redis ownership checks do not
-form an atomic transaction with PostgreSQL commits. Listening compensates audio writes on failure or
-cancellation before commit is attempted, while preserving audio after an uncertain commit or failed
-post-commit refresh. The coordinator recognizes OpenAI TTS `APITimeoutError` as `timeout`.
+Pool selection, content/audio persistence, attempts, and history belong to
+`listening.instructions.md` and `reading.instructions.md`.
 
-Pool, generation-lock, attempt, and history behavior belongs to the Listening and Reading specs.
+### Shared generation coordinator
+
+`exercise_generation.py` owns the common backend lifecycle. Each domain uses
+`{domain}:generating:{level}:{target_language}` as its Redis lease key:
+
+- Acquisition creates a unique owner and running state atomically. The lease expires after 60 seconds
+  and renews every 20 seconds. Lua operations compare owners before renewal or completion; an older
+  task cannot release a replacement lease or overwrite its status.
+- FastAPI background tasks open independent database and Redis resources. Closing a browser page or
+  losing the generation response does not cancel accepted work. This is not a durable job queue.
+- `EXERCISE_GENERATION_TIMEOUT_SECONDS` (default 600, positive integer) sets the deadline at acquisition.
+  The job budget includes structured generation, one possible JSON correction, persistence, and TTS
+  for Listening. Provider-specific TTS timeouts also apply.
+- Domain services receive a monotonic `deadline` and an async `before_save` ownership guard. The LLM
+  uses remaining time with SDK/adapter transport retries disabled. Timeout, detected lease loss,
+  renewal failure, or cancellation stops local work; cleanup stops the heartbeat too.
+- Redis `{lock_key}:state` expires after the configured budget plus 900 seconds for running state,
+  and after 900 seconds for terminal state. A running state without its lease is reported as
+  `failed` with `interrupted`. Status reads calculate remaining seconds on the server.
+- Controlled errors are `timeout`, `generation_failed`, and `interrupted`; raw exceptions stay in
+  logs. Recognized timeout exceptions include OpenAI TTS `APITimeoutError`.
+- Routers check exercise availability before and after acquiring a lease. `/next` prioritizes saved
+  exercises over Redis status and responds without waiting for generation; a `wait` query parameter
+  does not enable long-polling. Redis stores no generated content or learner answers.
+
+Redis ownership checks and PostgreSQL commits are separate operations. The pre-save guard prevents
+ordinary duplicate work but does not provide transactional fencing if ownership disappears before
+commit. Listening's audio compensation rules remain in its domain specification.
+`architecture-frontend.instructions.md` owns the shared polling and client recovery contract;
+`api-endpoints.instructions.md` owns the HTTP status/context fields.
 
 ## Reviews
 

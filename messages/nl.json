@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Brits Engels",
     "es-ES": "Spaans",
     "it-IT": "Italiaans",
-    "pt-PT": "Portugees",
+    "pt-BR": "Portugees (Brazilië)",
+    "pt-PT": "Portugees (Portugal)",
     "fr-FR": "Frans",
     "de-DE": "Duits",
     "pl-PL": "Pools",
@@ -1498,6 +1500,7 @@
     "zh": "Chinees",
     "es-ES-description": "Spaans zoals gesproken in Spanje.",
     "it-IT-description": "Italiaans zoals gesproken in Italië.",
+    "pt-BR-description": "Portugees zoals gesproken in Brazilië.",
     "pt-PT-description": "Portugees zoals gesproken in Portugal.",
     "en-US-description": "Engels zoals gesproken in de Verenigde Staten.",
     "en-GB-description": "Engels zoals gesproken in het Verenigd Koninkrijk.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Je kunt nu Pools leren!",
-      "desc": "Pools is nu beschikbaar als leertaal, met inhoud van A1 tot C2. Kies het wanneer je begint of voeg het toe via Instellingen → Mijn talen."
+      "label": "Nieuwe talen: Pools en Braziliaans Portugees",
+      "desc": "Pools en Braziliaans Portugees zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
     "entry2": {
       "label": "Verbeteringen voor het leren",

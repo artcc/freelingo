@@ -56,6 +56,14 @@ Language-specific guidance:
 - Distinguish perfective and imperfective forms whenever the meaning depends on completion, repetition, or result.
 - Avoid English word order and calques; use natural Polish phrasing and spelling with diacritics.
 """.strip(),
+    "pt-BR": """
+Language-specific guidance:
+- Use Brazilian Portuguese spelling, vocabulary, syntax, and register consistently.
+- Prefer Brazilian forms such as celular, ônibus, café da manhã, trem, banheiro, and suco.
+- Use estar + gerund for ongoing actions. Teach você/vocês with third-person agreement and a gente with singular agreement; explain regional tu usage without treating it as universally wrong.
+- Prefer natural Brazilian pronoun placement; distinguish conversational proclisis from formal written conventions. Do not mark valid optional articles before possessives or personal names as errors.
+- Use subjuntivo terminology and Brazilian cultural contexts. Avoid Portugal-only usage unless explicitly comparing varieties.
+""".strip(),
     "pt-PT": """
 Language-specific guidance:
 - Use European Portuguese from Portugal consistently.

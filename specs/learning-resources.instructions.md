@@ -1,5 +1,5 @@
 ---
-description: "Current-state specification for Grammar, Vocabulary, Phrasebook, progress and competencies, placement-bank resources, and level-completion tests."
+description: "Language-independent contracts and authoring rules for learning resources, curriculum, progress and competencies, placement banks, and level-completion tests."
 applyTo: "backend/app/data/**, backend/app/models/{resource_native_help,progress,competency}.py, backend/app/routers/{grammar,vocabulary,phrasebook,progress,assessment,curriculum}.py, backend/app/services/{resource_native_help,progress_service,assessment}.py, frontend/src/app/(app)/{grammar,vocabulary,phrasebook,progress,assessment,plan}/**, frontend/src/data/curriculum.ts"
 ---
 
@@ -11,13 +11,22 @@ Grammar, Vocabulary, Phrasebook, curriculum, and assessment-bank content is defi
 dataclasses grouped by target language and CEFR level. The frontend retrieves these resources through
 authenticated APIs; it does not contain the canonical datasets.
 
-All eleven supported target languages provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and
-placement-bank data. Dispatchers select exact English variants and ISO-prefix packages for other
-languages. Unknown dispatcher input currently falls back to `en-GB` rather than returning an error.
+These contracts apply to every supported target language and any language added in the future.
+Each language must provide A1-C2 curriculum, grammar, vocabulary, phrasebook, and placement-bank data.
+The supported-code catalog and regional dispatch rules belong to `target-language.instructions.md`;
+package registration and completeness requirements belong to `add-target-language.instructions.md`.
+Unknown dispatcher input currently falls back to `en-GB` rather than returning an error; that fallback
+must not substitute for a supported language's own resources.
 
 Static resource APIs accept an explicit language query and do not require it to match the user's
 active language or owned plans. Frontend resource pages normally send the active language, with
 `en-GB` fallback.
+
+This specification owns resource data and authoring, shared native help, progress/reward calculations,
+and assessment content/evaluation boundaries. `study-plan.instructions.md` owns scheduling and plan
+eligibility; `platform.instructions.md` owns the placement interaction; `multi-language.instructions.md`
+owns client language recovery. Authoring rules describe content-review requirements, not guarantees
+that runtime validation establishes linguistic quality.
 
 ### Content authoring rules
 
@@ -36,92 +45,57 @@ communication to extended discourse, register control, and specialist usage acro
 - Structural tests check references and data shape; they do not establish linguistic accuracy or
   empirical CEFR calibration.
 
-Correct-answer positions are balanced within each level/skill group in the French, Italian,
-Portuguese, Polish, Japanese, and Korean static banks. German and Spanish banks also vary the keyed
-position. The frontend displays the saved option order.
+### Curriculum structure and progression
 
-### Curriculum coverage and scheduling
+Each curriculum unit declares a stable ID, CEFR level, unit number, title, grammar and vocabulary
+references, lesson types, competency checklist, default duration, and optional prerequisite unit.
+The language package is the source of truth for topic placement, unit order, and resource counts.
+Languages share the data contract and quality requirements, not an identical grammatical syllabus.
 
-Both English variants at A1, and German, Spanish, French, Italian, Portuguese, and Polish at A1-C2,
-declare grammar, vocabulary, listening, reading, writing, and review in that order in every unit.
-Japanese and Korean A1-C2 units include listening in their existing lesson-type lists.
+- Introduce prerequisites before requiring them in explanations, examples, or assessed production.
+  Fundamental skills must appear in the guided curriculum, not only in the reference catalog.
+- Align a topic's reference level, first guided use, and placement questions. Later units can revisit
+  earlier material for consolidation and broader contrasts.
+- Describe competencies as observable learner abilities. Connect grammar and vocabulary to practical
+  comprehension and production, with review of previously introduced material.
+- Progress from everyday communication to independent interaction and then precise, extended discourse.
+  Advanced content must develop interpretation, register, and control of meaning rather than merely
+  introduce rare forms or longer terminology.
+- Distinguish recognition from required production, particularly for literary, historical, or narrowly
+  formal constructions. CEFR labels do not imply equivalence with a language-specific certification.
 
-Actual allocation follows plan capacity and rotation rules; a declaration does not guarantee a
-complete cycle in every unit. Persisted schedules are retained. See `study-plan.instructions.md`
-for scheduling and lazy-generation rules.
+Units declare their lesson types and order in data. Actual allocation follows plan capacity and
+rotation rules; a declaration does not guarantee a complete cycle in every unit. Persisted schedules
+are retained. See `study-plan.instructions.md` for scheduling and lazy-generation rules.
 
-### Language-specific progression
+### Regional varieties and writing systems
 
-#### English
+Resource lookup and references must preserve the selected target-language variety. A shared language
+prefix does not make regional packages interchangeable, and editing one package must not mutate
+another package's runtime content. Topic placement may differ between varieties.
 
-Both `en-GB` and `en-US` place foundational grammar in the guided curriculum as well as the Grammar
-reference:
+- Use spelling, vocabulary, grammar, examples, and cultural contexts appropriate to the selected
+  variety. Explain regional alternatives and register boundaries where they affect use.
+- Treat script, spacing, fonts, and pronunciation aids as language capabilities supplied by metadata,
+  not assumptions derived from one language. Learned-language frontend text uses `TargetLanguageText`.
+- IPA and romanization are optional resource fields. When supplied, they must match the saved text and
+  target variety, preserve relevant sound contrasts, and follow a consistent transcription convention.
+  Do not copy another variety's pronunciation or use romanization as a replacement for target script.
 
-- A1 unit 2, My World: articles, possessive adjectives, and regular/common irregular plurals.
-- A1 unit 3, Daily Life: present simple, question words, and adverbs of frequency.
-- A1 unit 4, Places & Location: there is/are, place prepositions, and demonstratives.
-- A1 unit 5, Actions Right Now: present continuous contrasted with present simple, and object pronouns.
-- A2 unit 1: past simple contrasted with past continuous, and past questions.
-- A1 and A2 consolidation units include the corresponding foundational grammar for mixed review.
+See `target-language.instructions.md` for metadata and rendering conventions and
+`add-target-language.instructions.md` for package integration requirements.
 
-#### Spanish
+### Assessment content quality
 
-- A1 introductions distinguish `ser` for identity from `tener` for age.
-- A1 unit 6 and consolidation cover `estar + gerundio`, with formation and habitual-present contrast
-  in the existing `estar` reference topic.
-- A2 unit 1 and consolidation include the perfect compound alongside the simple past.
-- A2 unit 6 and consolidation cover basic `por`/`para` meanings.
-- The `preterito-perfecto` and `por-para` reference topics belong to A2 and retain their stable slugs;
-  B1 units reuse them for consolidation and broader contrasts.
+Placement questions must have four distinct options and exactly one accepted option matching the
+stored answer. Any grammar reference must resolve within the same target language. Questions should
+cover the curriculum's levels and assessed skills, with enough context to disambiguate meaning and
+register. Valid regional or conversational alternatives must not become distractors presented as
+universally incorrect.
 
-#### French, Italian, and Portuguese
-
-- French A1 unit 4 and consolidation cover `finir`, `faire`, `prendre`, `venir`, and `boire` through
-  `verbes-frequents-present`, alongside regular `-er` and pronominal verbs.
-- Italian A2 unit 2 and consolidation include `stare-gerundio`. Its reference topic belongs to A2
-  and retains its stable slug; B2 reuses it when contrasting progressive periphrases.
-- Portuguese A1 introductions include `ter` for age. European Portuguese remains the teaching
-  variety, with `estar a + infinitivo` in A1 and the future subjunctive in B1.
-
-#### Polish
-
-Polish (`pl-PL`) has eight curriculum units per level:
-
-- A1 covers `być`, nominative gender and plural, adjective and possessive agreement, present tense,
-  reflexives, accusative, locative, past and future forms, and genitive after negation.
-- A2 introduces verb aspect, the full genitive and dative, instrumental, the imperative, the
-  conditional with `by`, and comparative and superlative forms.
-- B1 extends aspect pairs, passive voice, participles, reported speech, impersonal constructions, and
-  purpose and time clauses.
-- B2 adds nominalization, advanced passive and impersonal forms, emphatic word order, concession, and
-  aspectual nuance.
-- C1 and C2 cover register, terminology, definition, phraseology, legal and scientific language,
-  rhetoric, translation, and regional variation.
-
-Vocabulary covers everyday needs at A1-A2, independent social and administrative interactions at B1,
-and increasingly precise professional, academic, and idiomatic usage at B2-C2. Phrasebook categories
-provide contextualized expressions for these interactions, including requests, clarification,
-problem resolution, negotiation, and register choices.
-
-Vocabulary entries include IPA and per-level unique frequency ranks, with no repeated headword
-within a level. IPA preserves lexical stress, consonant identity, and voicing. Structural checks
-detect orthographic Polish letters and missing stress marks in multisyllabic entries. Polish uses
-Latin script with visible word spacing; comprehension guidance uses words.
-
-#### Japanese
-
-The A2 `plain-past` reference, used in unit 1 and consolidation, introduces the plain negative
-before deriving the negative past. Formation covers godan and ichidan verbs, `う → わない`,
-`ある → ない`, `する → しない`, and `来る → 来ない（こない）`.
-
-#### Korean
-
-Existing A1 reference topics introduce `이에요/예요`, `이/가 아니에요`, basic `안/못` and
-`-지 않아요` negation, and final `ㅡ` deletion. Conjugation explanations distinguish retained `ㄹ`
-from endings that trigger its deletion. B2 uses `터예요/테니까` for intention and supposition.
-
-Vocabulary and phrasebook pronunciation aids use Revised Romanization, including assimilation and
-aspiration.
+When authoring a bank, distribute correct-answer positions across each level/skill group to avoid
+predictable keys. The frontend displays the saved option order. Content review must assess linguistic
+accuracy and progression separately from structural integrity checks.
 
 ## Shared native-language help
 
@@ -202,7 +176,7 @@ an obsolete error or clear the new request's loading state. Current-context fail
 
 Each category contains ID, CEFR level, situation, icon, and phrases. Phrases contain target-language
 text, context, register (`formal`, `neutral`, or `informal`), optional unit reference, and optional
-romanization. CJK resources provide romanization data, though the current page does not display it.
+romanization. The current page does not display romanization when supplied.
 
 - `GET /api/phrasebook`: authenticated, `60/minute`; returns all categories.
 - `GET /api/phrasebook/level/{level}`: authenticated, `60/minute`; invalid level returns `400`.
@@ -336,10 +310,9 @@ grammar slug.
 - `POST /api/assessment/evaluate`: authenticated, `60/minute`; evaluates submitted answer records.
 - `POST /api/assessment/complete`: authenticated, `10/minute`; creates the selected-language plan.
 
-After successful completion, the frontend invalidates and refreshes the shared language/plan summary
-before navigating to Plan or showing the voice-trial offer. If this bounded refresh fails, completion
-still proceeds, and the summary remains marked for refresh. Listening and Reading recover that
-context before using it; a summary failure must not cause the plan-creation request to be repeated.
+After successful completion, the frontend invalidates and refreshes the shared language/plan summary.
+A failed refresh does not undo plan creation or justify repeating its POST. Recovery and voice-offer
+presentation follow `multi-language.instructions.md` and `platform.instructions.md`.
 
 The client calculates each `correct` boolean. Evaluation trusts submitted question metadata and does
 not retrieve the bank to verify selected options. The deterministic algorithm is described in

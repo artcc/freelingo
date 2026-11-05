@@ -19,7 +19,9 @@ applyTo: "docker-compose*.yml, .env.example, .env.dev, backend/Dockerfile, front
 - `whisper`: local STT GPU image, required only when `STT_PROVIDER=local`.
 
 Ollama is not a Compose service. The default configuration expects it on the host through
-`host.docker.internal:11434`. The backend service declares the Linux host-gateway mapping.
+`host.docker.internal:11434`. Production Compose does not declare an `extra_hosts` mapping. Linux
+deployments using host-based Ollama must provide resolution for that hostname, for example through
+`host.docker.internal:host-gateway` in the backend service's `extra_hosts`.
 
 ## Development topology
 

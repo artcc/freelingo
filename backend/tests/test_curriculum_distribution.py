@@ -37,6 +37,7 @@ LANGUAGES = (
     "fr-FR",
     "it-IT",
     "pl-PL",
+    "pt-BR",
     "pt-PT",
     "ja-JP",
     "ko-KR",
@@ -218,7 +219,7 @@ def test_modality_coverage_zh_cn_b2_12x4() -> None:
     }
 
 
-@pytest.mark.parametrize("language", ["de-DE", "es-ES", "fr-FR", "it-IT", "pt-PT"])
+@pytest.mark.parametrize("language", ["de-DE", "es-ES", "fr-FR", "it-IT", "pt-BR", "pt-PT"])
 @pytest.mark.parametrize("level", CEFR_LEVELS)
 def test_unit_whose_quota_covers_its_cycle_schedules_every_type(language, level) -> None:
     """A full cycle includes listening for every unit of the reviewed curricula."""

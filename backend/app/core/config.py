@@ -103,9 +103,10 @@ class Settings(BaseSettings):
         "es-ES",
         "fr-FR",
         "it-IT",
-        "pl-PL",
         "ja-JP",
         "ko-KR",
+        "pl-PL",
+        "pt-BR",
         "pt-PT",
         "zh-CN",
     ]

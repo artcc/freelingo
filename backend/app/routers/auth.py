@@ -18,7 +18,7 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse
 from redis.asyncio import Redis
-from sqlalchemy import func, select, update
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.app_logger import get_logger
@@ -34,7 +34,6 @@ from app.core.security import (
     verify_password,
 )
 from app.models.user import User
-from app.models.user_language import UserLanguage
 from app.schemas.auth import (
     ForgotPasswordRequest,
     LoginRequest,
@@ -353,31 +352,11 @@ async def update_me(
 
             await switch_language(db, current_user.id, data.target_language)
         else:
-            # If switching variant of the same language (e.g. en-US → en-GB),
-            # update the existing row instead of creating a duplicate.
-            new_prefix = data.target_language.split("-")[0]
-            same_base = next(
-                (ul for ul in user_langs if ul.target_language.split("-")[0] == new_prefix),
-                None,
-            )
-            if same_base:
-                # Deactivate all currently active languages
-                await db.execute(
-                    update(UserLanguage)
-                    .where(
-                        UserLanguage.user_id == current_user.id,
-                        UserLanguage.is_active.is_(True),
-                    )
-                    .values(is_active=False)
-                )
-                same_base.target_language = data.target_language
-                same_base.is_active = True
-            else:
-                from app.services.user_language_service import (
-                    add_language,
-                )  # noqa: PLC0415
+            from app.services.user_language_service import (
+                add_language,
+            )  # noqa: PLC0415
 
-                await add_language(db, current_user.id, data.target_language)
+            await add_language(db, current_user.id, data.target_language)
     if data.ui_locale is not None:
         current_user.ui_locale = data.ui_locale if data.ui_locale.strip() else None
     if data.conversation_max_duration is not None:

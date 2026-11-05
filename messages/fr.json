@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Anglais britannique",
     "es-ES": "Espagnol",
     "it-IT": "Italien",
-    "pt-PT": "Portugais",
+    "pt-BR": "Portugais du Brésil",
+    "pt-PT": "Portugais du Portugal",
     "fr-FR": "Français",
     "de-DE": "Allemand",
     "pl-PL": "Polonais",
@@ -1498,6 +1500,7 @@
     "zh": "chinois",
     "es-ES-description": "Espagnol parlé en Espagne.",
     "it-IT-description": "Italien parlé en Italie.",
+    "pt-BR-description": "Portugais parlé au Brésil.",
     "pt-PT-description": "Portugais parlé au Portugal.",
     "en-US-description": "Anglais parlé aux États-Unis.",
     "en-GB-description": "Anglais parlé au Royaume-Uni.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Compris",
     "entry1": {
-      "label": "Tu peux maintenant apprendre le polonais !",
-      "desc": "Le polonais est désormais disponible comme langue d'apprentissage, avec des contenus de A1 à C2. Choisis-le au démarrage ou ajoute-le depuis Paramètres → Mes langues."
+      "label": "Nouvelles langues : polonais et portugais du Brésil",
+      "desc": "Le polonais et le portugais du Brésil sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
     },
     "entry2": {
       "label": "Des améliorations pour apprendre",

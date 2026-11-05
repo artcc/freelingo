@@ -47,6 +47,7 @@ async def test_other_models_keep_the_original_request(service, model):
         ("en-US", "American English"),
         ("es", "Spanish from Spain"),
         ("es-ES", "Spanish from Spain"),
+        ("pt-BR", "Brazilian Portuguese from Brazil"),
         ("pt-PT", "European Portuguese from Portugal"),
         ("fr", "French from France"),
         ("de-DE", "Standard German from Germany"),

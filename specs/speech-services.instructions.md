@@ -75,6 +75,8 @@ a language or regional variety.
 
 Known language arguments add explicit regional guidance for supported learned languages and UI
 locales: `es`/`es-ES` requests Spain pronunciation, `pt`/`pt-PT` requests Portugal pronunciation,
+and exact `pt-BR` requests Brazilian pronunciation before prefix lookup. Both Portuguese variants
+use ISO `pt` for STT; their full locale remains distinct for TTS instructions and cache identity.
 `en`/`en-GB` requests British pronunciation, and `en-US` requests American pronunciation. Without a
 language argument, instructions do not impose a regional accent. Conversation, Listening, and
 Phrasebook supply their full target-language code; the tour supplies its UI locale. Legacy models

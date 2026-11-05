@@ -7,6 +7,10 @@ applyTo: "backend/app/models/**, backend/alembic/**"
 
 All models use SQLAlchemy 2.0 declarative style with `Mapped[T]` type annotations and async engine (`asyncpg` driver). PostgreSQL JSON columns store structured content for lessons, plans, exercises, and skill scores.
 
+This document owns persisted fields, relationships, constraints, and compatibility requirements.
+Domain specifications own workflows and presentation; API schemas define request validation beyond
+database constraints. Alembic revisions define the deployed schema and its upgrade/downgrade behavior.
+
 ## Games (`game_sessions`, `game_admissions`, `game_requests`)
 
 `GameSession` uses a UUID string primary key as creation idempotency key. Required user and plan
@@ -142,16 +146,8 @@ One active plan per user per language, generated after CEFR assessment.
 
 - Partial unique index `uq_active_plan_per_lang` on `(user_language_id)` WHERE `is_active = true` — enforces one active plan per user per language.
 
-**UI intensity / duration presets:**
-
-- Intensive: 4 weeks × 5 days = 20 slots.
-- Standard: 8 weeks × 5 days = 40 slots.
-- Relaxed (default): 12 weeks × 4 days = 48 slots.
-- Very relaxed: 16 weeks × 3 days = 48 slots.
-
-The final slot is reserved for the level-completion test; the remaining slots schedule teaching
-lessons. These presets are not database constraints. Plan creation validates curriculum capacity as
-defined in `study-plan.instructions.md`.
+Duration presets, curriculum capacity, and the reserved completion-test slot are application rules
+defined in `study-plan.instructions.md`, not additional database constraints.
 
 ## Lesson (`lessons`)
 
@@ -213,8 +209,8 @@ SM-2 spaced repetition cards, per user per language.
 
 Content edits preserve ownership, source and scheduling fields. Suspension retains `next_review`, so
 reactivation immediately restores overdue cards to the review queue. The account's reverse-side
-preference is independent of card ownership and study language. The versioned schema is defined by
-`0056_flashcard_management`, following `0055_sentence_order`; defaults apply to existing rows.
+preference is independent of card ownership and study language. Schema defaults initialize existing
+cards as unsuspended and existing accounts with the `definition` preference when adding these fields.
 
 ## FlashcardReviewReceipt (`flashcard_review_receipts`)
 
@@ -227,8 +223,7 @@ Durable idempotency results for accepted flashcard review attempts.
 
 The owning card controls authorization and plan/user cascade deletion. Receipts commit atomically
 with scheduling and progress, are immutable after acceptance, and remain available after later
-reviews or edits. They support response recovery rather than a session-history interface. The table
-is defined by revision `0057_flashcard_review_receipts`, following `0056_flashcard_management`.
+reviews or edits. They support response recovery rather than a session-history interface.
 
 ## Progress (`progress`)
 
@@ -336,7 +331,7 @@ AI-generated listening comprehension exercises shared across users at the same C
 - audio_path — Type: string; Notes: Absolute path to MP3 on disk, e.g. `/data/audio/listening/42.mp3`
 - duration_seconds — Type: integer; Notes: Persisted duration field; current generation normally leaves its default `0`
 - questions — Type: JSON; Notes: List of `{index, question, options: {A,B,C,D}, correct}` objects
-- play_count — Type: integer; Notes: How many times this exercise has been served (server default 0)
+- play_count — Type: integer; Notes: Incremented on submitted attempts, including replays (server default 0); not a count of audio playback or exercise delivery
 - created_at — Type: datetime; Notes: Auto-set on creation
 
 Composite index: `ix_listening_exercises_level_lang` on `(level, target_language)`.
@@ -368,8 +363,8 @@ AI-generated reading comprehension exercises shared across users at the same CEF
 - exercise_type — Type: string; Notes: `notice`, `email`, `article`, `news`, `blog_post`, `review`, `essay`
 - topic — Type: string; Notes: Short topic description
 - text — Type: text; Notes: Full passage text — **included in exercise response** (unlike listening)
-- questions — Type: JSON; Notes: List of `{index, question, options: {A,B,C,D}, correct}` objects (5 per exercise)
-- view_count — Type: integer; Notes: How many times this exercise has been served (server default 0)
+- questions — Type: JSON; Notes: Generated question objects with `index`, `question`, `options`, and `correct`; five A-D questions are a prompt requirement, not a database constraint
+- view_count — Type: integer; Notes: Incremented on submitted attempts, including replays (server default 0); not a count of passage views or exercise delivery
 - created_at — Type: datetime; Notes: Auto-set on creation
 
 Composite index: `ix_reading_exercises_level_lang` on `(level, target_language)`.
@@ -461,7 +456,9 @@ One moderated product review per user.
 **Business rules:**
 
 - New reviews start as unapproved and must be approved by an admin before public display.
-- Landing/public queries must show only approved reviews with `rating >= 4`.
+- Public visibility requires approval. The carousel additionally requires `rating >= 4` and a
+  nonempty comment; the public aggregate includes all approved ratings, with or without comments.
+  `reviews.instructions.md` owns publication and moderation behavior.
 - Rating-only reviews are valid; `comment` may be null.
 - Deleting a user cascades and deletes their review.
 

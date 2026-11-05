@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "İngiliz İngilizcesi",
     "es-ES": "İspanyolca",
     "it-IT": "İtalyanca",
-    "pt-PT": "Portekizce",
+    "pt-BR": "Portekizce (Brezilya)",
+    "pt-PT": "Portekizce (Portekiz)",
     "fr-FR": "Fransızca",
     "de-DE": "Almanca",
     "pl-PL": "Lehçe",
@@ -1498,6 +1500,7 @@
     "zh": "Çince",
     "es-ES-description": "İspanya'da konuşulan İspanyolca.",
     "it-IT-description": "İtalya'da konuşulan İtalyanca.",
+    "pt-BR-description": "Brezilya'da konuşulan Portekizce.",
     "pt-PT-description": "Portekiz'de konuşulan Portekizce.",
     "en-US-description": "Amerika Birleşik Devletleri'nde konuşulan İngilizce.",
     "en-GB-description": "Birleşik Krallık'ta konuşulan İngilizce.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Anladım",
     "entry1": {
-      "label": "Artık Lehçe öğrenebilirsin!",
-      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
+      "label": "Yeni diller: Lehçe ve Brezilya Portekizcesi",
+      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi ve Brezilya Portekizcesini öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
     },
     "entry2": {
       "label": "Öğrenimde iyileştirmeler",

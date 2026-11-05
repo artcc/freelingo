@@ -191,8 +191,8 @@ can replace newer list state. Some mutations are optimistically reflected withou
 checking non-success responses.
 
 Feedback UI, status/read labels, and administrator author badges use the active interface locale.
-Croatian comment counts use ICU plural categories, including the singular form for counts such as
-21 and 31 and the appropriate forms for `few` and `other`.
+Comment counts use the localized `comment` label for one and `comments` with a `count` parameter
+otherwise. Locale catalogs can express the required plural categories through ICU messages.
 The vote HTML tooltip remains a fixed label.
 
 ## Related specifications

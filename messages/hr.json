@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Britanski engleski",
     "es-ES": "Španjolski",
     "it-IT": "Talijanski",
-    "pt-PT": "Portugalski",
+    "pt-BR": "Portugalski (Brazil)",
+    "pt-PT": "Portugalski (Portugal)",
     "fr-FR": "Francuski",
     "de-DE": "Njemački",
     "pl-PL": "Poljski",
@@ -1498,6 +1500,7 @@
     "zh": "Kineski",
     "es-ES-description": "Španjolski kakav se govori u Španjolskoj.",
     "it-IT-description": "Talijanski kakav se govori u Italiji.",
+    "pt-BR-description": "Portugalski kakav se govori u Brazilu.",
     "pt-PT-description": "Portugalski kakav se govori u Portugalu.",
     "en-US-description": "Engleski kakav se govori u SAD-u.",
     "en-GB-description": "Engleski kakav se govori u Ujedinjenoj Kraljevini.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Razumijem",
     "entry1": {
-      "label": "Sada možeš učiti poljski!",
-      "desc": "Dodali smo poljski kao jezik za učenje, sa sadržajem od A1 do C2. Odaberi ga na početku ili ga dodaj putem Postavke → Moji jezici."
+      "label": "Novi jezici: poljski i brazilski portugalski",
+      "desc": "Dodali smo poljski i brazilski portugalski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
     "entry2": {
       "label": "Poboljšanja učenja",

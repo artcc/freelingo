@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Britisches Englisch",
     "es-ES": "Spanisch",
     "it-IT": "Italienisch",
-    "pt-PT": "Portugiesisch",
+    "pt-BR": "Portugiesisch (Brasilien)",
+    "pt-PT": "Portugiesisch (Portugal)",
     "fr-FR": "Französisch",
     "de-DE": "Deutsch",
     "pl-PL": "Polnisch",
@@ -1498,6 +1500,7 @@
     "zh": "Chinesisch",
     "es-ES-description": "Spanisch, wie es in Spanien gesprochen wird.",
     "it-IT-description": "Italienisch, wie es in Italien gesprochen wird.",
+    "pt-BR-description": "Portugiesisch, wie es in Brasilien gesprochen wird.",
     "pt-PT-description": "Portugiesisch, wie es in Portugal gesprochen wird.",
     "en-US-description": "Englisch, wie es in den USA gesprochen wird.",
     "en-GB-description": "Englisch, wie es im Vereinigten Königreich gesprochen wird.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Jetzt kannst du Polnisch lernen!",
-      "desc": "Polnisch ist jetzt als Lernsprache verfügbar, mit Inhalten von A1 bis C2. Wähle es beim Einstieg aus oder füge es unter Einstellungen → Meine Sprachen hinzu."
+      "label": "Neue Sprachen: Polnisch und brasilianisches Portugiesisch",
+      "desc": "Polnisch und brasilianisches Portugiesisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
     "entry2": {
       "label": "Verbesserungen beim Lernen",

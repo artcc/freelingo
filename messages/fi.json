@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Brittienglanti",
     "es-ES": "Espanja",
     "it-IT": "Italia",
-    "pt-PT": "Portugali",
+    "pt-BR": "Portugali (Brasilia)",
+    "pt-PT": "Portugali (Portugali)",
     "fr-FR": "Ranska",
     "de-DE": "Saksa",
     "pl-PL": "Puola",
@@ -1498,6 +1500,7 @@
     "zh": "Kiina",
     "es-ES-description": "Espanjassa puhuttu espanja.",
     "it-IT-description": "Italiassa puhuttu italia.",
+    "pt-BR-description": "Brasiliassa puhuttu portugali.",
     "pt-PT-description": "Portugalissa puhuttu portugali.",
     "en-US-description": "Yhdysvalloissa puhuttu englanti.",
     "en-GB-description": "Yhdistyneessä kuningaskunnassa puhuttu englanti.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Selvä",
     "entry1": {
-      "label": "Nyt voit oppia puolaa!",
-      "desc": "Puola on nyt saatavilla opiskeltavana kielenä, ja sisältöä on tasoilta A1–C2. Valitse se aloittaessasi tai lisää se kohdasta Asetukset → Omat kielet."
+      "label": "Uudet kielet: puola ja brasilianportugali",
+      "desc": "Puola ja brasilianportugali ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
     "entry2": {
       "label": "Parannuksia oppimiseen",

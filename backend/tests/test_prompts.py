@@ -154,6 +154,7 @@ def test_language_prompt_overlays_cover_supported_learning_languages() -> None:
         "en-GB": "British English",
         "es-ES": "Peninsular Spanish",
         "it-IT": "standard Italian",
+        "pt-BR": "Brazilian Portuguese",
         "pt-PT": "European Portuguese",
         "fr-FR": "standard French",
         "de-DE": "standard German",

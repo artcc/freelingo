@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Angielski brytyjski",
     "es-ES": "Hiszpański",
     "it-IT": "Włoski",
-    "pt-PT": "Portugalski",
+    "pt-BR": "Portugalski (Brazylia)",
+    "pt-PT": "Portugalski (Portugalia)",
     "fr-FR": "Francuski",
     "de-DE": "Niemiecki",
     "pl-PL": "Polski",
@@ -1498,6 +1500,7 @@
     "zh": "chiński",
     "es-ES-description": "Hiszpański używany w Hiszpanii.",
     "it-IT-description": "Włoski używany we Włoszech.",
+    "pt-BR-description": "Portugalski używany w Brazylii.",
     "pt-PT-description": "Portugalski używany w Portugalii.",
     "en-US-description": "Angielski używany w Stanach Zjednoczonych.",
     "en-GB-description": "Angielski używany w Wielkiej Brytanii.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Teraz możesz uczyć się polskiego!",
-      "desc": "Dodaliśmy polski jako język do nauki, z materiałami od A1 do C2. Wybierz go na początku lub dodaj w Ustawieniach → Moje języki."
+      "label": "Nowe języki: polski i portugalski brazylijski",
+      "desc": "Dodaliśmy polski i portugalski brazylijski jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
     "entry2": {
       "label": "Ulepszenia w nauce",

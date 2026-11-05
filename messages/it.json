@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Inglese britannico",
     "es-ES": "Spagnolo",
     "it-IT": "Italiano",
-    "pt-PT": "Portoghese",
+    "pt-BR": "Portoghese del Brasile",
+    "pt-PT": "Portoghese del Portogallo",
     "fr-FR": "Francese",
     "de-DE": "Tedesco",
     "pl-PL": "Polacco",
@@ -1498,6 +1500,7 @@
     "zh": "cinese",
     "es-ES-description": "Spagnolo parlato in Spagna.",
     "it-IT-description": "Italiano parlato in Italia.",
+    "pt-BR-description": "Portoghese parlato in Brasile.",
     "pt-PT-description": "Portoghese parlato in Portogallo.",
     "en-US-description": "Inglese parlato negli Stati Uniti.",
     "en-GB-description": "Inglese parlato nel Regno Unito.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Capito",
     "entry1": {
-      "label": "Ora puoi imparare il polacco!",
-      "desc": "Il polacco è ora disponibile come lingua da imparare, con contenuti da A1 a C2. Sceglilo quando inizi oppure aggiungilo da Impostazioni → Le mie lingue."
+      "label": "Nuove lingue: polacco e portoghese del Brasile",
+      "desc": "Il polacco e il portoghese del Brasile sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
     "entry2": {
       "label": "Miglioramenti nell'apprendimento",

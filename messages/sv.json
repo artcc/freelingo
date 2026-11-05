@@ -99,6 +99,7 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1479,7 +1480,8 @@
     "en-GB": "Brittisk engelska",
     "es-ES": "Spanska",
     "it-IT": "Italienska",
-    "pt-PT": "Portugisiska",
+    "pt-BR": "Portugisiska (Brasilien)",
+    "pt-PT": "Portugisiska (Portugal)",
     "fr-FR": "Franska",
     "de-DE": "Tyska",
     "pl-PL": "Polska",
@@ -1498,6 +1500,7 @@
     "zh": "Kinesiska",
     "es-ES-description": "Spanska som talas i Spanien.",
     "it-IT-description": "Italienska som talas i Italien.",
+    "pt-BR-description": "Portugisiska som talas i Brasilien.",
     "pt-PT-description": "Portugisiska som talas i Portugal.",
     "en-US-description": "Engelska som talas i USA.",
     "en-GB-description": "Engelska som talas i Storbritannien.",
@@ -1764,11 +1767,11 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.11.0",
+    "version": "v1.11.5",
     "cta": "Jag förstår",
     "entry1": {
-      "label": "Nu kan du lära dig polska!",
-      "desc": "Polska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj det när du börjar eller lägg till det under Inställningar → Mina språk."
+      "label": "Nya språk: polska och brasiliansk portugisiska",
+      "desc": "Polska och brasiliansk portugisiska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
     },
     "entry2": {
       "label": "Förbättringar för lärandet",
