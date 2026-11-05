@@ -96,6 +96,10 @@ Languages share the data contract and quality requirements, not an identical gra
   introduce rare forms or longer terminology.
 - Distinguish recognition from required production, particularly for literary, historical, or narrowly
   formal constructions. CEFR labels do not imply equivalence with a language-specific certification.
+- Balance advanced textual analysis with practical interaction and production: negotiate conditions,
+  repair misunderstandings, respond to humour, narrate experiences, mediate conflicting wishes, and
+  adapt register to the interlocutor. Carry those tasks through competencies, reference examples and
+  phrase contexts; naming a linguistic device is not a substitute for using or understanding it.
 
 Units declare their lesson types and order in data. Actual allocation follows plan capacity and
 rotation rules; a declaration does not guarantee a complete cycle in every unit. Persisted schedules
@@ -125,6 +129,15 @@ stored answer. Any grammar reference must resolve within the same target languag
 cover the curriculum's levels and assessed skills, with enough context to disambiguate meaning and
 register. Valid regional or conversational alternatives must not become distractors presented as
 universally incorrect.
+
+- Avoid giving away the answer through an explicit interpretation in the prompt or a near-verbatim
+  match with one option. Supply the situation needed to infer the intended meaning instead.
+- Use plausible distractors of comparable register and detail. Advanced alternatives should differ
+  in a relevant condition, participant, implication, commitment, or degree of certainty, rather than
+  rely predominantly on absurd claims or easily dismissed absolutes. Review answer-length clues too.
+- Include contextual choices of replies, idioms and reformulations alongside textual interpretation.
+  State the communicative goal clearly when several replies would otherwise be acceptable. Multiple
+  choice measures recognition of an appropriate response, not demonstrated spontaneous production.
 
 When authoring a bank, distribute correct-answer positions across each level/skill group to avoid
 predictable keys. The frontend displays the saved option order. Content review must assess linguistic
