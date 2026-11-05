@@ -254,4 +254,256 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         related=["betrekkelijk-die-dat", "betrekkelijk-voorzetsel"],
     ),
+    GrammarTopic(
+        slug="causatief-laten",
+        title="Heb laten doen en laten gebeuren",
+        level="B2",
+        category="Werkwoorden",
+        summary="Beschrijf uitbestede handelingen en onderscheid opdracht van toestemming.",
+        explanation="In het perfectum met laten en een volgende infinitief staat gewoonlijk laten als vervangende infinitief: Ik heb de monteur laten komen. De vorm beschrijft niet op zichzelf of de monteur een bevel, verzoek of gelegenheid kreeg. Context bepaalt die verhouding.\n\nVergelijk Ik heb de kinderen buiten laten spelen met Ik heb het dak laten repareren. De eerste zin geeft vaak toestemming; de tweede beschrijft een georganiseerde dienst. Noem de uitvoerder als die relevant is, maar voeg niemand toe die niet in de bron staat. Het onderwerp van laten is niet automatisch de uitvoerder van de tweede handeling.",
+        rules=[
+            "Heb laten repareren, niet heb gelaten repareren.",
+            "Laten kan organiseren, toestaan of niet verhinderen betekenen.",
+            "Houd opdrachtgever, uitvoerder en object uit elkaar.",
+        ],
+        examples=[
+            GrammarExample("We hebben de installatie door een specialist laten controleren."),
+            GrammarExample("Zij heeft haar collega laten uitspreken."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Ik heb de fiets gelaten repareren.",
+                "Ik heb de fiets laten repareren.",
+                "Laten krijgt hier de vervangende infinitief.",
+            )
+        ],
+        related=["laten-infinitief", "werkwoordclusters"],
+    ),
+    GrammarTopic(
+        slug="scheidbaar-onscheidbaar",
+        title="Voorkómen en vóórkomen",
+        level="B2",
+        category="Werkwoorden",
+        summary="Verbind klemtoon, betekenis en scheidbaarheid bij meerduidige werkwoorden.",
+        explanation="Sommige geschreven werkwoorden hebben twee betekenissen met een andere klemtoon. Vóórkomen, met nadruk op voor, kan betekenen dat iets gebeurt: Die fout komt vaak voor. Voorkómen betekent verhinderen: We voorkomen die fout. In het perfectum: de fout is voorgekomen tegenover we hebben de fout voorkomen.\n\nKlemtoon, scheidbaarheid en hulpwerkwoord horen bij de gekozen betekenis. De accenten hierboven zijn uitspraaksteun; in gewone teksten zijn ze meestal niet nodig. Leid de vervoeging niet alleen af uit de geschreven infinitief. Controleer bij andere werkwoorden met twee lezingen de betekenis en een betrouwbare uitspraakbron.",
+        rules=[
+            "Vóórkomen: komt voor, is voorgekomen.",
+            "Voorkómen: voorkomt, heeft voorkomen.",
+            "Gebruik de context om de bedoelde betekenis te bepalen.",
+        ],
+        examples=[
+            GrammarExample("We willen voorkomen dat dit probleem opnieuw voorkomt."),
+            GrammarExample("Zo'n misverstand is hier eerder voorgekomen."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Die fout komt vaak voorkomen.",
+                "Die fout komt vaak voor.",
+                "Bij de betekenis gebeuren wordt vóórkomen hier gescheiden.",
+            )
+        ],
+        related=["scheidbare-werkwoorden", "voltooid-deelwoord"],
+    ),
+    GrammarTopic(
+        slug="modale-gevolgtrekking",
+        title="Moet zijn, zal wel en kan hebben",
+        level="B2",
+        category="Modaliteit",
+        summary="Druk een gevolgtrekking uit zonder die met een verplichting te verwarren.",
+        explanation="Een modaal werkwoord kan een oordeel over waarschijnlijkheid geven. Zij moet thuis zijn kan op een sterke gevolgtrekking wijzen, bijvoorbeeld omdat haar fiets voor de deur staat. Dezelfde vorm kan in een andere context een verplichting uitdrukken. Zij zal wel thuis zijn klinkt vaak als een verwachting, niet als een belofte.\n\nVoor een eerder moment gebruik je een voltooide infinitief: Hij kan de afspraak vergeten zijn. Dat noemt een mogelijkheid en bewijst niet dat hij werkelijk is vergeten te komen. Behoud de bewijskracht bij het navertellen en maak de bron van je vermoeden zichtbaar.",
+        rules=[
+            "Lees modale werkwoorden binnen hun context.",
+            "Kan gebeurd zijn drukt mogelijkheid over een eerder moment uit.",
+            "Maak van een gevolgtrekking geen directe waarneming.",
+        ],
+        examples=[
+            GrammarExample("Het licht brandt nog; er moet iemand binnen zijn."),
+            GrammarExample("Zij kan het bericht verkeerd begrepen hebben."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Zij kan het bericht verkeerd begrijpen hebben.",
+                "Zij kan het bericht verkeerd begrepen hebben.",
+                "De voltooide infinitief bevat hier een deelwoord.",
+            )
+        ],
+        related=["modale-werkwoorden", "perfectum"],
+    ),
+    GrammarTopic(
+        slug="toekomst-in-verleden",
+        title="Zou komen en zou zijn afgerond",
+        level="B2",
+        category="Tijd",
+        summary="Beschrijf een verwachting vanuit een vroeger moment.",
+        explanation="Zou kan een toekomstig gebeuren vanuit een verleden perspectief aangeven: Maandag zei zij dat zij vrijdag zou komen. De zin vertelt wat op maandag verwacht of aangekondigd werd. Hij bevestigt niet automatisch dat zij vrijdag werkelijk kwam. Voeg de afloop afzonderlijk toe als die bekend is.\n\nZou zijn afgerond kan een verwachte voltooiing vóór een later referentiepunt uitdrukken. Dezelfde vormen kunnen ook een onwerkelijke situatie of een onbevestigd bericht markeren. Gebruik daarom tijdsbepalingen en bronverwijzingen. Vervang zou niet mechanisch door een verleden tijd die het verwachte gebeuren als feit presenteert.",
+        rules=[
+            "Bepaal vanuit welk moment de spreker vooruitkijkt.",
+            "Een aangekondigd plan is nog geen gerealiseerde gebeurtenis.",
+            "Zou heeft ook andere functies; context maakt de lezing duidelijk.",
+        ],
+        examples=[
+            GrammarExample("In maart verwachtte men dat de brug in juni open zou gaan."),
+            GrammarExample("De verbouwing zou vrijdag zijn afgerond, maar liep vertraging op."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Ze zei dat ze vrijdag zou kwam.",
+                "Ze zei dat ze vrijdag zou komen.",
+                "Na zou staat hier de infinitief komen.",
+            )
+        ],
+        related=["indirecte-rede", "onwerkelijk-verleden"],
+    ),
+    GrammarTopic(
+        slug="correlatieve-voegwoorden",
+        title="Zowel ... als en niet alleen ... maar ook",
+        level="B2",
+        category="Verbindingen",
+        summary="Verbind gelijkwaardige delen met een consequent grammaticaal patroon.",
+        explanation="Zowel ... als, niet alleen ... maar ook en noch ... noch verbinden twee delen. Zorg dat die delen dezelfde grammaticale rol kunnen vervullen: zowel de kosten als de planning; niet alleen lezen maar ook schrijven. Plaats de eerste markering direct vóór wat je werkelijk contrasteert.\n\nNoch ... noch sluit beide genoemde mogelijkheden uit. Niet alleen ... maar ook neemt beide op en geeft de tweede extra nadruk. De plaats van niet alleen kan de betekenis veranderen: niet alleen Noor tegenover Noor leest niet alleen. Herformuleer volledig als het bereik niet duidelijk is. Congruentie vraagt soms een afzonderlijke beoordeling van het samengestelde onderwerp.",
+        rules=[
+            "Verbind gelijkwaardige woordgroepen of zinnen.",
+            "Niet alleen sluit het eerste element niet uit.",
+            "Noch ... noch ontkent beide genoemde mogelijkheden.",
+        ],
+        examples=[
+            GrammarExample("We bespreken zowel de kosten als de planning."),
+            GrammarExample(
+                "Zij wil niet alleen kritiek geven, maar ook een oplossing voorstellen."
+            ),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "We bespreken zowel de kosten of de planning.",
+                "We bespreken zowel de kosten als de planning.",
+                "Het vaste paar is zowel ... als.",
+            )
+        ],
+        related=["en-maar-want", "focus-woordvolgorde"],
+    ),
+    GrammarTopic(
+        slug="passief-modalen",
+        title="Moet worden onderzocht en kan zijn afgerond",
+        level="B2",
+        category="Werkwoorden",
+        summary="Combineer de lijdende vorm met noodzaak, mogelijkheid en voltooiing.",
+        explanation="Een modaal passief gebruikt een modaal werkwoord, een deelwoord en worden: De aanvraag moet worden gecontroleerd. Ook moet gecontroleerd worden is in deze hoofdzin mogelijk. De modale betekenis blijft belangrijk: moet noemt een verplichting, kan een mogelijkheid.\n\nEen voltooide passieve infinitief met zijn kan naar een afgeronde handeling verwijzen: De controle kan al zijn uitgevoerd. Dat is iets anders dan De controle kan worden uitgevoerd, dat uitvoerbaarheid aangeeft. Verander bij een actieve parafrase niet het moment, de zekerheid of de handelende partij. De zin noemt niet altijd wie het werk moet doen.",
+        rules=[
+            "Modaal + worden + deelwoord voor een mogelijke of vereiste handeling.",
+            "Modaal + zijn + deelwoord kan een voltooide handeling beschrijven.",
+            "Meerdere werkwoordvolgordes kunnen standaardtaal zijn.",
+        ],
+        examples=[
+            GrammarExample("De aanvraag moet vóór vrijdag worden beoordeeld."),
+            GrammarExample("Het pakket kan al zijn bezorgd."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "De aanvragen moet worden beoordeeld.",
+                "De aanvragen moeten worden beoordeeld.",
+                "De persoonsvorm volgt het meervoudige onderwerp.",
+            )
+        ],
+        related=["passief-basis", "werkwoordclusters", "modale-gevolgtrekking"],
+    ),
+    GrammarTopic(
+        slug="er-combinaties",
+        title="Er twee van en er niet op rekenen",
+        level="B2",
+        category="Voornaamwoorden",
+        summary="Herken meerdere functies van er zonder de verwijzing te verliezen.",
+        explanation="Er kan een plaats aanduiden, een nieuwe zaak introduceren, een aantal ondersteunen of deel zijn van een voorzetselverbinding. In Van deze boeken heb ik er twee verwijst er naar het genoemde soort. In Ik reken er niet op vormt er samen met op een verwijzing naar een verwachting.\n\nWanneer functies samenkomen, hoef je niet automatisch voor iedere functie een afzonderlijk er te schrijven. In Er staan er twee op tafel heeft het eerste er een presenterende functie en het tweede een kwantitatieve. Andere constructies werken anders. Controleer per zin waarnaar ieder element verwijst en kies bij een ondoorzichtige stapeling een volledig naamwoord.",
+        rules=[
+            "Bepaal afzonderlijk plaats, presentatie, aantal en voorzetselverwijzing.",
+            "Er twee verwijst naar een eerder genoemde soort.",
+            "Maak de verwijzing expliciet als meerdere mogelijkheden concurreren.",
+        ],
+        examples=[
+            GrammarExample("Van de vijf voorstellen zijn er twee afgewezen."),
+            GrammarExample("Er staan er nog drie op de lijst."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Van die voorstellen zijn het twee afgewezen.",
+                "Van die voorstellen zijn er twee afgewezen.",
+                "Bij deze terugverwijzende hoeveelheid gebruik je er, niet het.",
+            )
+        ],
+        related=["er-plaats", "er-voorzetsel", "verkleinwoorden-er-aantal"],
+    ),
+    GrammarTopic(
+        slug="voorzetselbijzinnen",
+        title="Zonder dat, zonder te en in plaats van",
+        level="B2",
+        category="Zinsbouw",
+        summary="Beschrijf een ontbrekende of vervangende handeling met duidelijke deelnemers.",
+        explanation="Zonder dat leidt een bijzin met een eigen onderwerp in: Zij vertrok zonder dat iemand het merkte. Zonder te gebruikt een verzwegen onderwerp: Zij vertrok zonder te groeten. In dat voorbeeld is degene die vertrekt ook degene die niet groet. Verander de constructie niet als daarmee de uitvoerder verschuift.\n\nIn plaats van beschrijft een alternatief: In plaats van te bellen, stuurde ik een bericht. Met een naamwoord is geen te nodig: in plaats van een brief. Ondanks wordt bij een naamwoord gebruikt; hoewel leidt een bijzin in. Leer de volledige constructie en niet alleen de globale vertaling van de verbinding.",
+        rules=[
+            "Zonder dat heeft een eigen onderwerp en persoonsvorm.",
+            "Zonder te vraagt een duidelijk verzwegen onderwerp.",
+            "In plaats van een brief en in plaats van te schrijven hebben een verschillende aanvulling.",
+        ],
+        examples=[
+            GrammarExample("Hij sloot het dossier zonder de bijlagen te lezen."),
+            GrammarExample("De gegevens veranderden zonder dat de gebruiker iets merkte."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Hij vertrok zonder dat iemand merkte het.",
+                "Hij vertrok zonder dat iemand het merkte.",
+                "De bijzin na zonder dat heeft bijzinvolgorde.",
+            )
+        ],
+        related=["te-infinitief", "omdat-dat"],
+    ),
+    GrammarTopic(
+        slug="zelfstandig-adjectief",
+        title="Betrokkenen, aanwezigen en het bijzondere",
+        level="B2",
+        category="Naamwoorden",
+        summary="Gebruik bijvoeglijke woorden zelfstandig en herken de betekenis van de uitgang.",
+        explanation="Sommige bijvoeglijke woorden kunnen zelfstandig naar personen verwijzen: de aanwezigen, de betrokkenen. Bij zulke meervoudige persoonsaanduidingen staat vaak -n. Wanneer het woord bij een genoemd of duidelijk aangevuld naamwoord hoort, kan een andere spelling nodig zijn: de aanwezige bezoekers.\n\nHet + bijvoeglijk naamwoord kan een abstract kenmerk benoemen: het bijzondere van de tentoonstelling. Na iets of niets verschijnt vaak -s: iets bijzonders. Beoordeel dus eerst of je personen, een eigenschap of een naamwoordgroep aanduidt. De spelling volgt de constructie; een woord dat op -e eindigt wordt niet automatisch een persoonsnaam.",
+        rules=[
+            "De betrokkenen kan zelfstandig meerdere personen aanduiden.",
+            "De betrokken bewoners houdt bewoners als kern.",
+            "Het bijzondere en iets bijzonders zijn verschillende patronen.",
+        ],
+        examples=[
+            GrammarExample("Alle aanwezigen kregen gelegenheid om te reageren."),
+            GrammarExample("Het bijzondere van dit werk is de combinatie van stemmen."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "De aanwezigen bezoekers kregen een folder.",
+                "De aanwezige bezoekers kregen een folder.",
+                "Aanwezige bepaalt hier het uitgesproken naamwoord bezoekers.",
+            )
+        ],
+        related=["bijvoeglijke-naamwoorden", "onbepaalde-woorden"],
+    ),
+    GrammarTopic(
+        slug="bijstelling",
+        title="Een naamwoord nader toelichten",
+        level="B2",
+        category="Tekst",
+        summary="Voeg achtergrondinformatie toe zonder de hoofdzin onduidelijk te maken.",
+        explanation="Een bijstelling geeft met een naamwoordgroep extra informatie over een andere naamwoordgroep: Noor, de nieuwe voorzitter, opent de bijeenkomst. Beide groepen verwijzen hier naar dezelfde persoon. De bijstelling is geen tweede handelende partij en maakt het onderwerp niet meervoudig.\n\nEen toelichtende bijstelling wordt vaak met komma's afgezonderd. Een identificerende combinatie zoals mijn collega Noor werkt anders: de naam helpt bepalen welke collega bedoeld is. De interpunctie hangt dus samen met de informatie en context. Maak onderscheid tussen een extra toelichting en een beperkende beschrijving, vooral bij meerdere mogelijke personen.",
+        rules=[
+            "De bijstelling en de kern verwijzen naar dezelfde zaak of persoon.",
+            "Een toelichtende bijstelling kan tussen twee komma's staan.",
+            "Een bijstelling verandert niet vanzelf het getal van het onderwerp.",
+        ],
+        examples=[
+            GrammarExample("Het museum, een voormalig station, wordt gerenoveerd."),
+            GrammarExample("Mijn collega Noor organiseert de rondleiding."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Noor, de nieuwe voorzitter, openen de vergadering.",
+                "Noor, de nieuwe voorzitter, opent de vergadering.",
+                "De bijstelling noemt geen tweede persoon; het onderwerp blijft enkelvoud.",
+            )
+        ],
+        related=["samengestelde-zinnen", "betrekkelijk-die-dat"],
+    ),
 ]

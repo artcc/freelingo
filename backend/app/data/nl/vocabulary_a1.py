@@ -753,4 +753,790 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry("koud", "adjective", "Met een lage temperatuur.", "Het water is koud."),
         ],
     ),
+    VocabularySet(
+        id="beroepen_a1",
+        level="A1",
+        topic="Werk en mensen",
+        unit_ref="a1-unit-1",
+        words=[
+            VocabularyEntry(
+                "de docent",
+                "noun",
+                "Iemand die lesgeeft; meervoud: docenten.",
+                "Mijn broer is docent.",
+            ),
+            VocabularyEntry(
+                "de student",
+                "noun",
+                "Iemand die aan een opleiding studeert; meervoud: studenten.",
+                "Ik ben student in Leiden.",
+            ),
+            VocabularyEntry(
+                "de arts",
+                "noun",
+                "Iemand die zieke mensen onderzoekt en behandelt; meervoud: artsen.",
+                "Mijn zus is arts.",
+            ),
+            VocabularyEntry(
+                "de kok",
+                "noun",
+                "Iemand die als beroep eten maakt; meervoud: koks.",
+                "De kok werkt in een restaurant.",
+            ),
+            VocabularyEntry(
+                "de bakker",
+                "noun",
+                "Iemand die brood maakt of verkoopt; meervoud: bakkers.",
+                "De bakker begint vroeg.",
+            ),
+            VocabularyEntry(
+                "de chauffeur",
+                "noun",
+                "Iemand die voor zijn werk een voertuig bestuurt; meervoud: chauffeurs.",
+                "De chauffeur rijdt de bus.",
+            ),
+            VocabularyEntry(
+                "het beroep",
+                "noun",
+                "Het soort werk dat iemand doet; meervoud: beroepen.",
+                "Wat is uw beroep?",
+            ),
+            VocabularyEntry(
+                "het kantoor",
+                "noun",
+                "Een plek waar mensen administratief werk doen; meervoud: kantoren.",
+                "Ik werk op kantoor.",
+            ),
+            VocabularyEntry(
+                "de school",
+                "noun",
+                "Een plaats waar je les krijgt; meervoud: scholen.",
+                "De school is dichtbij.",
+            ),
+            VocabularyEntry(
+                "studeren",
+                "verb",
+                "Leren voor een opleiding of examen.",
+                "Ik studeer in Amsterdam.",
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="herkomst_a1",
+        level="A1",
+        topic="Waar kom je vandaan?",
+        unit_ref="a1-unit-1",
+        words=[
+            VocabularyEntry(
+                "de stad",
+                "noun",
+                "Een grote woonplaats met veel gebouwen; meervoud: steden.",
+                "Utrecht is een mooie stad.",
+            ),
+            VocabularyEntry(
+                "het dorp",
+                "noun",
+                "Een kleine woonplaats; meervoud: dorpen.",
+                "Ik woon in een dorp.",
+            ),
+            VocabularyEntry(
+                "wonen", "verb", "Een vaste plek hebben waar je leeft.", "Waar woon je?"
+            ),
+            VocabularyEntry(
+                "komen",
+                "verb",
+                "Naar een plaats bewegen; ook gebruikt voor herkomst.",
+                "Ik kom uit Spanje.",
+            ),
+            VocabularyEntry(
+                "uit",
+                "preposition",
+                "Geeft onder meer de plaats van herkomst aan.",
+                "Zij komt uit Nederland.",
+            ),
+            VocabularyEntry(
+                "in", "preposition", "Binnen een ruimte of gebied.", "Wij wonen in Rotterdam."
+            ),
+            VocabularyEntry("hier", "adverb", "Op deze plaats.", "Ik woon hier."),
+            VocabularyEntry("daar", "adverb", "Op die andere plaats.", "Mijn school is daar."),
+            VocabularyEntry(
+                "Nederlands",
+                "noun",
+                "De taal die onder meer in Nederland wordt gesproken.",
+                "Ik leer Nederlands.",
+            ),
+            VocabularyEntry(
+                "Engels",
+                "noun",
+                "De taal die onder meer in Engeland wordt gesproken.",
+                "Spreekt u Engels?",
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="uiterlijk_a1",
+        level="A1",
+        topic="Een persoon beschrijven",
+        unit_ref="a1-unit-2",
+        words=[
+            VocabularyEntry(
+                "het haar",
+                "noun",
+                "De haren op iemands hoofd, als geheel.",
+                "Mijn zus heeft lang haar.",
+            ),
+            VocabularyEntry(
+                "het oog",
+                "noun",
+                "Een lichaamsdeel waarmee je kijkt; meervoud: ogen.",
+                "Mijn vader heeft blauwe ogen.",
+            ),
+            VocabularyEntry(
+                "de bril",
+                "noun",
+                "Glazen voor je ogen om beter te zien; meervoud: brillen.",
+                "Mijn moeder draagt een bril.",
+            ),
+            VocabularyEntry("lang", "adjective", "Met een grote lengte.", "Mijn broer is lang."),
+            VocabularyEntry(
+                "kort", "adjective", "Met een kleine lengte of duur.", "Hij heeft kort haar."
+            ),
+            VocabularyEntry(
+                "blond",
+                "adjective",
+                "Met een lichte, geelachtige haarkleur.",
+                "Zij heeft blond haar.",
+            ),
+            VocabularyEntry(
+                "donker",
+                "adjective",
+                "Met weinig licht of een diepe kleur.",
+                "Hij heeft donkere ogen.",
+            ),
+            VocabularyEntry(
+                "de man",
+                "noun",
+                "Een volwassen mannelijk persoon; meervoud: mannen.",
+                "Die man is mijn vader.",
+            ),
+            VocabularyEntry(
+                "de vrouw",
+                "noun",
+                "Een volwassen vrouwelijk persoon; meervoud: vrouwen.",
+                "Deze vrouw is mijn zus.",
+            ),
+            VocabularyEntry(
+                "dragen", "verb", "Kleding aanhebben of iets bij je houden.", "Ik draag een bril."
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="dieren_a1",
+        level="A1",
+        topic="Dieren om ons heen",
+        unit_ref="a1-unit-2",
+        words=[
+            VocabularyEntry(
+                "de hond",
+                "noun",
+                "Een huisdier dat blaft; meervoud: honden.",
+                "Onze hond is klein.",
+            ),
+            VocabularyEntry(
+                "de kat",
+                "noun",
+                "Een huisdier dat miauwt; meervoud: katten.",
+                "De kat slaapt op de stoel.",
+            ),
+            VocabularyEntry(
+                "de vogel",
+                "noun",
+                "Een dier met veren en vleugels; meervoud: vogels.",
+                "Er zit een vogel in de tuin.",
+            ),
+            VocabularyEntry(
+                "de vis",
+                "noun",
+                "Een dier dat in water leeft en kieuwen heeft; meervoud: vissen.",
+                "We hebben twee vissen.",
+            ),
+            VocabularyEntry(
+                "het paard",
+                "noun",
+                "Een groot dier waarop mensen kunnen rijden; meervoud: paarden.",
+                "Dat paard is bruin.",
+            ),
+            VocabularyEntry(
+                "de koe",
+                "noun",
+                "Een groot boerderijdier dat melk geeft; meervoud: koeien.",
+                "De koe staat buiten.",
+            ),
+            VocabularyEntry(
+                "het dier",
+                "noun",
+                "Een levend wezen zoals een hond of vogel; meervoud: dieren.",
+                "Welk dier is dat?",
+            ),
+            VocabularyEntry(
+                "het huisdier",
+                "noun",
+                "Een dier dat mensen thuis verzorgen; meervoud: huisdieren.",
+                "Heeft u een huisdier?",
+            ),
+            VocabularyEntry(
+                "de tuin",
+                "noun",
+                "Een stuk grond bij een huis met planten; meervoud: tuinen.",
+                "De hond is in de tuin.",
+            ),
+            VocabularyEntry(
+                "lief", "adjective", "Aardig en zacht in het contact.", "Onze kat is lief."
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="maanden_a1",
+        level="A1",
+        topic="Maanden en seizoenen",
+        unit_ref="a1-unit-3",
+        words=[
+            VocabularyEntry(
+                "januari", "noun", "De eerste maand van het jaar.", "In januari is het vaak koud."
+            ),
+            VocabularyEntry(
+                "februari",
+                "noun",
+                "De tweede maand van het jaar.",
+                "Mijn broer is in februari jarig.",
+            ),
+            VocabularyEntry(
+                "maart", "noun", "De derde maand van het jaar.", "De cursus begint in maart."
+            ),
+            VocabularyEntry(
+                "april", "noun", "De vierde maand van het jaar.", "In april heb ik vakantie."
+            ),
+            VocabularyEntry(
+                "mei", "noun", "De vijfde maand van het jaar.", "Mijn zus komt in mei."
+            ),
+            VocabularyEntry(
+                "juni", "noun", "De zesde maand van het jaar.", "In juni gaan we naar zee."
+            ),
+            VocabularyEntry(
+                "juli", "noun", "De zevende maand van het jaar.", "De school is in juli dicht."
+            ),
+            VocabularyEntry(
+                "augustus", "noun", "De achtste maand van het jaar.", "In augustus werk ik niet."
+            ),
+            VocabularyEntry(
+                "september",
+                "noun",
+                "De negende maand van het jaar.",
+                "De lessen beginnen in september.",
+            ),
+            VocabularyEntry(
+                "oktober", "noun", "De tiende maand van het jaar.", "De afspraak is in oktober."
+            ),
+            VocabularyEntry(
+                "november", "noun", "De elfde maand van het jaar.", "Ik ben in november jarig."
+            ),
+            VocabularyEntry(
+                "december",
+                "noun",
+                "De twaalfde maand van het jaar.",
+                "Mijn familie komt in december.",
+            ),
+            VocabularyEntry(
+                "de lente",
+                "noun",
+                "Het seizoen tussen winter en zomer.",
+                "In de lente wandelen we veel.",
+            ),
+            VocabularyEntry(
+                "de zomer",
+                "noun",
+                "Het seizoen tussen lente en herfst.",
+                "In de zomer zwem ik graag.",
+            ),
+            VocabularyEntry(
+                "de herfst",
+                "noun",
+                "Het seizoen tussen zomer en winter.",
+                "In de herfst regent het vaak.",
+            ),
+            VocabularyEntry(
+                "de winter",
+                "noun",
+                "Het seizoen tussen herfst en lente.",
+                "In de winter draag ik een warme jas.",
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="dagelijks_a1",
+        level="A1",
+        topic="Wat doe je iedere dag?",
+        unit_ref="a1-unit-3",
+        words=[
+            VocabularyEntry(
+                "ontbijten",
+                "verb",
+                "De eerste maaltijd van de dag eten.",
+                "Ik ontbijt om acht uur.",
+            ),
+            VocabularyEntry(
+                "douchen",
+                "verb",
+                "Je lichaam onder stromend water wassen.",
+                "Ik douche iedere ochtend.",
+            ),
+            VocabularyEntry(
+                "beginnen",
+                "verb",
+                "Een eerste stap zetten of van start gaan.",
+                "De les begint om negen uur.",
+            ),
+            VocabularyEntry(
+                "stoppen", "verb", "Niet verdergaan met iets.", "Ik stop om vijf uur met werken."
+            ),
+            VocabularyEntry("thuiskomen", "verb", "Thuis aankomen.", "Ik kom om zes uur thuis."),
+            VocabularyEntry(
+                "koken", "verb", "Eten klaarmaken met warmte.", "Mijn partner kookt vandaag."
+            ),
+            VocabularyEntry(
+                "altijd", "adverb", "Op ieder moment of iedere keer.", "Ik ontbijt altijd thuis."
+            ),
+            VocabularyEntry("vaak", "adverb", "Op veel momenten.", "We eten vaak samen."),
+            VocabularyEntry(
+                "soms", "adverb", "Af en toe, niet iedere keer.", "Soms werk ik op zaterdag."
+            ),
+            VocabularyEntry("nooit", "adverb", "Op geen enkel moment.", "Ik werk nooit op zondag."),
+        ],
+    ),
+    VocabularySet(
+        id="voedsel_a1",
+        level="A1",
+        topic="Eten kiezen",
+        unit_ref="a1-unit-4",
+        words=[
+            VocabularyEntry(
+                "het ei",
+                "noun",
+                "Voedsel uit de schaal die een kip legt; meervoud: eieren.",
+                "Ik eet een ei bij het ontbijt.",
+            ),
+            VocabularyEntry(
+                "de rijst",
+                "noun",
+                "Kleine witte of bruine korrels die je gekookt eet.",
+                "We eten rijst met groenten.",
+            ),
+            VocabularyEntry(
+                "de aardappel",
+                "noun",
+                "Een eetbare knol; meervoud: aardappelen of aardappels.",
+                "Ik koop een kilo aardappelen.",
+            ),
+            VocabularyEntry(
+                "de groente",
+                "noun",
+                "Een eetbaar deel van een plant; meervoud: groenten of groentes.",
+                "Ik eet iedere dag groente.",
+            ),
+            VocabularyEntry(
+                "het fruit",
+                "noun",
+                "Eetbare vruchten, zoals appels en peren.",
+                "Er ligt fruit op tafel.",
+            ),
+            VocabularyEntry(
+                "het vlees",
+                "noun",
+                "Delen van dieren die als voedsel worden gebruikt.",
+                "Ik eet geen vlees.",
+            ),
+            VocabularyEntry(
+                "de soep",
+                "noun",
+                "Een vloeibaar gerecht met bijvoorbeeld groenten.",
+                "De soep is warm.",
+            ),
+            VocabularyEntry(
+                "het zout",
+                "noun",
+                "Een witte stof waarmee je eten hartiger maakt.",
+                "Er zit veel zout in de soep.",
+            ),
+            VocabularyEntry(
+                "de suiker",
+                "noun",
+                "Een zoete stof die je aan eten of drinken toevoegt.",
+                "Wilt u suiker in de thee?",
+            ),
+            VocabularyEntry(
+                "vegetarisch",
+                "adjective",
+                "Zonder vlees of vis als voedingsmiddel.",
+                "Heeft u een vegetarisch gerecht?",
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="hoeveelheden_a1",
+        level="A1",
+        topic="Porties en servies",
+        unit_ref="a1-unit-4",
+        words=[
+            VocabularyEntry(
+                "het glas",
+                "noun",
+                "Een voorwerp waaruit je drinkt; meervoud: glazen.",
+                "Mag ik een glas water?",
+            ),
+            VocabularyEntry(
+                "het kopje",
+                "noun",
+                "Een klein drinkbakje met een oor; meervoud: kopjes.",
+                "Ik wil een kopje koffie.",
+            ),
+            VocabularyEntry(
+                "het bord",
+                "noun",
+                "Een plat voorwerp waarop je eten legt; meervoud: borden.",
+                "Het brood ligt op het bord.",
+            ),
+            VocabularyEntry(
+                "de lepel",
+                "noun",
+                "Een voorwerp waarmee je bijvoorbeeld soep eet; meervoud: lepels.",
+                "Ik heb een lepel nodig.",
+            ),
+            VocabularyEntry(
+                "de fles",
+                "noun",
+                "Een verpakking voor vloeistof met een smalle opening; meervoud: flessen.",
+                "Er staat een fles water op tafel.",
+            ),
+            VocabularyEntry(
+                "de kilo", "noun", "Duizend gram; meervoud: kilo's.", "Ik koop een kilo appels."
+            ),
+            VocabularyEntry(
+                "de liter",
+                "noun",
+                "Een maat voor hoeveel vloeistof iets bevat; meervoud: liters.",
+                "Deze fles bevat een liter water.",
+            ),
+            VocabularyEntry(
+                "het stuk", "noun", "Een deel van iets; meervoud: stukken.", "Wil je een stuk kaas?"
+            ),
+            VocabularyEntry("veel", "numeral", "Een grote hoeveelheid.", "Ik drink veel water."),
+            VocabularyEntry("weinig", "numeral", "Een kleine hoeveelheid.", "Er is weinig melk."),
+        ],
+    ),
+    VocabularySet(
+        id="vervoer_a1",
+        level="A1",
+        topic="Een korte reis",
+        unit_ref="a1-unit-5",
+        words=[
+            VocabularyEntry(
+                "de bus",
+                "noun",
+                "Een groot voertuig voor meerdere reizigers; meervoud: bussen.",
+                "De bus stopt hier.",
+            ),
+            VocabularyEntry(
+                "de tram",
+                "noun",
+                "Een voertuig op rails door de stad; meervoud: trams.",
+                "Ik neem de tram naar het centrum.",
+            ),
+            VocabularyEntry(
+                "de auto",
+                "noun",
+                "Een motorvoertuig voor enkele personen; meervoud: auto's.",
+                "Mijn auto staat buiten.",
+            ),
+            VocabularyEntry(
+                "de halte",
+                "noun",
+                "Een plaats waar een bus of tram stopt; meervoud: haltes.",
+                "Waar is de halte?",
+            ),
+            VocabularyEntry(
+                "het centrum",
+                "noun",
+                "Het centrale deel van een stad of dorp; meervoud: centra.",
+                "De winkel is in het centrum.",
+            ),
+            VocabularyEntry(
+                "lopen", "verb", "Je verplaatsen op je voeten.", "Ik loop naar school."
+            ),
+            VocabularyEntry(
+                "fietsen", "verb", "Je met een fiets verplaatsen.", "We fietsen naar het station."
+            ),
+            VocabularyEntry(
+                "rijden",
+                "verb",
+                "Je verplaatsen met een voertuig op wielen.",
+                "Deze bus rijdt naar Delft.",
+            ),
+            VocabularyEntry(
+                "dichtbij", "adverb", "Op een kleine afstand.", "Het station is dichtbij."
+            ),
+            VocabularyEntry("ver", "adjective", "Op een grote afstand.", "Is het nog ver?"),
+        ],
+    ),
+    VocabularySet(
+        id="weer_a1",
+        level="A1",
+        topic="Het weer buiten",
+        unit_ref="a1-unit-5",
+        words=[
+            VocabularyEntry(
+                "de zon", "noun", "De ster die overdag licht en warmte geeft.", "De zon schijnt."
+            ),
+            VocabularyEntry(
+                "de regen",
+                "noun",
+                "Waterdruppels die uit de wolken vallen.",
+                "Ik fiets niet graag in de regen.",
+            ),
+            VocabularyEntry("de wind", "noun", "Lucht die buiten beweegt.", "Er staat veel wind."),
+            VocabularyEntry(
+                "de sneeuw",
+                "noun",
+                "Witte, bevroren vlokken die uit de lucht vallen.",
+                "Er ligt sneeuw in de tuin.",
+            ),
+            VocabularyEntry(
+                "de wolk",
+                "noun",
+                "Kleine waterdruppels of ijskristallen samen in de lucht; meervoud: wolken.",
+                "Ik zie een donkere wolk.",
+            ),
+            VocabularyEntry(
+                "regenen",
+                "verb",
+                "Waterdruppels uit de lucht laten vallen, gezegd van het weer.",
+                "Het regent vandaag.",
+            ),
+            VocabularyEntry("schijnen", "verb", "Licht geven.", "De zon schijnt door het raam."),
+            VocabularyEntry("nat", "adjective", "Met water erop of erin.", "Mijn jas is nat."),
+            VocabularyEntry(
+                "droog", "adjective", "Zonder water of regen.", "Mijn schoenen zijn droog."
+            ),
+            VocabularyEntry(
+                "het weer",
+                "noun",
+                "De toestand van de lucht buiten, zoals regen of zon.",
+                "Het weer is mooi vandaag.",
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="sport_a1",
+        level="A1",
+        topic="Bewegen en ontspannen",
+        unit_ref="a1-unit-6",
+        words=[
+            VocabularyEntry(
+                "de sport",
+                "noun",
+                "Een lichamelijke activiteit met oefening of spelregels; meervoud: sporten.",
+                "Welke sport doe je?",
+            ),
+            VocabularyEntry(
+                "voetballen",
+                "verb",
+                "Met een bal een spel spelen waarbij je vooral je voeten gebruikt.",
+                "Mijn broer voetbalt op zaterdag.",
+            ),
+            VocabularyEntry("hardlopen", "verb", "Snel lopen als sport.", "Ik loop graag hard."),
+            VocabularyEntry("dansen", "verb", "Je lichaam op muziek bewegen.", "We dansen samen."),
+            VocabularyEntry("zingen", "verb", "Met je stem muziek maken.", "Zij zingt graag."),
+            VocabularyEntry(
+                "tekenen", "verb", "Een afbeelding maken met lijnen.", "Ik teken een huis."
+            ),
+            VocabularyEntry(
+                "spelen",
+                "verb",
+                "Voor je plezier een activiteit of spel doen.",
+                "De kinderen spelen buiten.",
+            ),
+            VocabularyEntry(
+                "luisteren", "verb", "Aandacht geven aan wat je hoort.", "Ik luister naar muziek."
+            ),
+            VocabularyEntry(
+                "het park",
+                "noun",
+                "Een groene openbare plek om te wandelen of te spelen; meervoud: parken.",
+                "Het park is dichtbij.",
+            ),
+            VocabularyEntry(
+                "het zwembad",
+                "noun",
+                "Een plek met water om te zwemmen; meervoud: zwembaden.",
+                "Het zwembad is open.",
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="gevoelens_a1",
+        level="A1",
+        topic="Hoe gaat het?",
+        unit_ref="a1-unit-6",
+        words=[
+            VocabularyEntry(
+                "blij",
+                "adjective",
+                "Met een prettig, vrolijk gevoel.",
+                "Ik ben blij met je bericht.",
+            ),
+            VocabularyEntry(
+                "verdrietig",
+                "adjective",
+                "Met een gevoel van pijn of gemis.",
+                "Zij is vandaag verdrietig.",
+            ),
+            VocabularyEntry(
+                "moe",
+                "adjective",
+                "Met weinig energie en behoefte aan rust.",
+                "Na mijn werk ben ik moe.",
+            ),
+            VocabularyEntry("ziek", "adjective", "Niet gezond.", "Mijn vriend is ziek."),
+            VocabularyEntry(
+                "boos",
+                "adjective",
+                "Met een sterk gevoel dat iets niet goed of eerlijk is.",
+                "Ben je boos op mij?",
+            ),
+            VocabularyEntry(
+                "bang",
+                "adjective",
+                "Met angst voor iets of iemand.",
+                "Ik ben bang voor grote honden.",
+            ),
+            VocabularyEntry("honger", "noun", "Het gevoel dat je wilt eten.", "Ik heb honger."),
+            VocabularyEntry("dorst", "noun", "Het gevoel dat je wilt drinken.", "Heb je dorst?"),
+            VocabularyEntry("leuk", "adjective", "Prettig of plezierig.", "Dat is een leuke film."),
+            VocabularyEntry(
+                "saai", "adjective", "Met weinig afwisseling of plezier.", "Ik vind die film saai."
+            ),
+        ],
+    ),
+    VocabularySet(
+        id="boodschappen_a1",
+        level="A1",
+        topic="In de winkel",
+        unit_ref="a1-unit-7",
+        words=[
+            VocabularyEntry(
+                "de tas",
+                "noun",
+                "Een voorwerp waarin je spullen draagt; meervoud: tassen.",
+                "Heeft u een tas?",
+            ),
+            VocabularyEntry(
+                "de kassa",
+                "noun",
+                "De plaats in een winkel waar je betaalt; meervoud: kassa's.",
+                "Ik betaal bij de kassa.",
+            ),
+            VocabularyEntry(
+                "de pinpas",
+                "noun",
+                "Een kaart waarmee je via je bank betaalt; meervoud: pinpassen.",
+                "Kan ik met mijn pinpas betalen?",
+            ),
+            VocabularyEntry(
+                "het geld",
+                "noun",
+                "Munten, biljetten of een bedrag op een rekening.",
+                "Ik heb geen geld bij me.",
+            ),
+            VocabularyEntry(
+                "kopen", "verb", "Iets tegen betaling krijgen.", "Ik koop een nieuwe jas."
+            ),
+            VocabularyEntry(
+                "kosten", "verb", "Een bepaalde prijs hebben.", "Hoeveel kosten deze appels?"
+            ),
+            VocabularyEntry(
+                "zoeken", "verb", "Proberen iets te vinden.", "Ik zoek een kleine tas."
+            ),
+            VocabularyEntry(
+                "open", "adjective", "Toegankelijk; niet gesloten.", "De supermarkt is open."
+            ),
+            VocabularyEntry(
+                "dicht",
+                "adjective",
+                "Gesloten; niet toegankelijk.",
+                "De winkel is op zondag dicht.",
+            ),
+            VocabularyEntry("contant", "adverb", "Met munten of biljetten.", "Ik betaal contant."),
+        ],
+    ),
+    VocabularySet(
+        id="persoonlijk_a1",
+        level="A1",
+        topic="Kleding en persoonlijke spullen",
+        unit_ref="a1-unit-7",
+        words=[
+            VocabularyEntry(
+                "het shirt",
+                "noun",
+                "Een dun kledingstuk voor het bovenlichaam; meervoud: shirts.",
+                "Dit shirt is te klein.",
+            ),
+            VocabularyEntry(
+                "de trui",
+                "noun",
+                "Een warm kledingstuk voor het bovenlichaam; meervoud: truien.",
+                "Ik draag een warme trui.",
+            ),
+            VocabularyEntry(
+                "de rok",
+                "noun",
+                "Een kledingstuk vanaf de taille zonder broekspijpen; meervoud: rokken.",
+                "Die rok is rood.",
+            ),
+            VocabularyEntry(
+                "de sok",
+                "noun",
+                "Een kledingstuk voor de voet; meervoud: sokken.",
+                "Waar zijn mijn sokken?",
+            ),
+            VocabularyEntry(
+                "de paraplu",
+                "noun",
+                "Een scherm dat je boven je hoofd tegen de regen houdt; meervoud: paraplu's.",
+                "Ik neem een paraplu mee.",
+            ),
+            VocabularyEntry(
+                "het horloge",
+                "noun",
+                "Een kleine klok die je bij je draagt; meervoud: horloges.",
+                "Mijn horloge ligt op tafel.",
+            ),
+            VocabularyEntry(
+                "de portemonnee",
+                "noun",
+                "Een klein hoesje voor geld en pasjes; meervoud: portemonnees.",
+                "Mijn portemonnee zit in mijn tas.",
+            ),
+            VocabularyEntry(
+                "bruin",
+                "adjective",
+                "Met de kleur van bijvoorbeeld chocolade.",
+                "Ik zoek bruine schoenen.",
+            ),
+            VocabularyEntry(
+                "grijs", "adjective", "Met een kleur tussen wit en zwart.", "Mijn jas is grijs."
+            ),
+            VocabularyEntry(
+                "mooi", "adjective", "Prettig om naar te kijken.", "Dat is een mooie trui."
+            ),
+        ],
+    ),
 ]

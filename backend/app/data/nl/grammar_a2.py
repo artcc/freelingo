@@ -299,4 +299,179 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         related=["er-plaats", "lidwoorden-meervoud"],
     ),
+    GrammarTopic(
+        slug="frequente-onregelmatige-werkwoorden",
+        title="Weten, kennen, denken en brengen",
+        level="A2",
+        category="Werkwoorden",
+        summary="Gebruik frequente onregelmatige werkwoorden en onderscheid weten van kennen.",
+        explanation="Weten gaat over informatie: Ik weet het adres; Ik weet het antwoord. Kennen gaat over vertrouwdheid met een persoon, plaats of zaak: Ik ken de chauffeur; Ik ken deze stad. De keuze hangt af van de betekenis, niet van het woord in je moedertaal.\n\nLeer bij frequente werkwoorden de infinitief en het deelwoord samen: weten/geweten, kennen/gekend, denken/gedacht en brengen/gebracht. Niet ieder vaak gebruikt werkwoord is sterk. In het perfectum krijgen deze vier werkwoorden hebben. Oefen de vormen in korte reisverhalen. In de volgende unit komen ook wist, kende, dacht en bracht aan bod bij de verleden tijd.",
+        rules=[
+            "Weten voor informatie; kennen voor vertrouwdheid.",
+            "Ik heb het geweten; ik heb aan je gedacht.",
+            "Brengen wordt heeft gebracht, niet gebrengd.",
+        ],
+        examples=[
+            GrammarExample("Ik weet het adres en ik ken de route."),
+            GrammarExample("De chauffeur heeft ons naar het hotel gebracht."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Ik heb aan je gedenkt.",
+                "Ik heb aan je gedacht.",
+                "Het deelwoord van denken is gedacht.",
+            )
+        ],
+        related=["perfectum", "voltooid-deelwoord"],
+    ),
+    GrammarTopic(
+        slug="voorzetsels-vervoer",
+        title="Met de trein, op de fiets en te voet",
+        level="A2",
+        category="Voorzetsels",
+        summary="Maak onderscheid tussen vervoermiddel, positie en bestemming.",
+        explanation="Met noemt een vervoermiddel: met de trein, met de bus, met de fiets. Ook op de fiets is gebruikelijk. Te voet betekent lopend. Naar noemt een bestemming; van noemt vaak het vertrekpunt: van Utrecht naar Zwolle. Deze delen kunnen samen in één zin staan.\n\nEen positie is iets anders dan een reiswijze: Ik zit in de trein; Ik sta op het perron. Naar het station zegt waarheen je gaat, niet hoe. Leer zulke combinaties met hun lidwoord en verander ze niet mechanisch op basis van één voorzetselregel.",
+        rules=[
+            "Met de trein en met de bus beschrijven vervoer.",
+            "Op de fiets en met de fiets zijn beide gebruikelijk.",
+            "Naar geeft de bestemming; in of op kan een positie aangeven.",
+        ],
+        examples=[
+            GrammarExample("We zijn met de trein van Leiden naar Haarlem gereisd."),
+            GrammarExample("Ik ga te voet naar de halte."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Ik ga met voet naar school.",
+                "Ik ga te voet naar school.",
+                "De vaste uitdrukking is te voet.",
+            )
+        ],
+        related=["plaats-richting", "perfectum"],
+    ),
+    GrammarTopic(
+        slug="tijdvolgorde",
+        title="Eerst, daarna en ten slotte",
+        level="A2",
+        category="Tekst",
+        summary="Vertel een gebeurtenis in een begrijpelijke volgorde.",
+        explanation="Eerst, daarna, vervolgens en ten slotte maken de volgorde van gebeurtenissen zichtbaar. Als zo'n woord vooraan in een hoofdzin staat, volgt de persoonsvorm: Eerst aten we; daarna namen we de bus. Je hoeft niet iedere zin met toen te beginnen.\n\nGebruik vóór en na met een naamwoord voor een tijdsrelatie: na het ontbijt, vóór het vertrek. Tijdens geeft aan dat iets binnen dezelfde periode gebeurt. Voor een eerste verhaal zijn deze verbindingen met eenvoudige verleden tijden voldoende. Maak duidelijk welke gebeurtenis eerder plaatsvond zonder alle zinnen met nieuwe vormen te belasten.",
+        rules=[
+            "Eerst en daarna vooraan krijgen inversie.",
+            "Na het eten is een tijdsbepaling, geen volledige bijzin.",
+            "Tijdens geeft een periode aan, niet automatisch een oorzaak.",
+        ],
+        examples=[
+            GrammarExample("Eerst kochten we kaartjes. Daarna gingen we naar het perron."),
+            GrammarExample("Tijdens de reis las ik; na aankomst belde ik mijn zus."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Daarna we namen de bus.",
+                "Daarna namen we de bus.",
+                "Daarna vult de eerste zinsdeelplaats.",
+            )
+        ],
+        related=["verleden-tijd", "tegenwoordige-tijd"],
+    ),
+    GrammarTopic(
+        slug="tijdsvoorzetsels",
+        title="Van, tot, vanaf en binnen",
+        level="A2",
+        category="Tijd",
+        summary="Begrijp begin, einde en termijn van een afspraak.",
+        explanation="Van ... tot beschrijft een periode: van negen tot twaalf. Vanaf geeft een beginpunt zonder zelf een eindpunt te noemen. Tot en met maakt duidelijk dat de genoemde dag meetelt: tot en met vrijdag. Bij alleen tot kan de grens afhankelijk zijn van de context; vraag door als die praktisch belangrijk is.\n\nOver twee dagen betekent twee dagen na nu. Binnen twee dagen betekent vóór het einde van die periode. Gedurende twee dagen beschrijft de duur. In twee dagen kan aangeven hoeveel tijd nodig was om iets af te maken. Deze vormen zijn geen onderlinge vertalingen van één tijdwoord.",
+        rules=[
+            "Vanaf noemt een beginpunt.",
+            "Tot en met neemt de genoemde dag mee.",
+            "Binnen twee dagen is een termijn; over twee dagen een toekomstig moment.",
+        ],
+        examples=[
+            GrammarExample("U kunt zich tot en met vrijdag aanmelden."),
+            GrammarExample("U ontvangt binnen drie dagen antwoord."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "De winkel is tussen negen tot twaalf open.",
+                "De winkel is tussen negen en twaalf open.",
+                "Gebruik tussen ... en of van ... tot; meng de twee patronen niet.",
+            )
+        ],
+        related=["tijd-getallen", "toekomst-plannen"],
+    ),
+    GrammarTopic(
+        slug="bijwoorden-plaatsing",
+        title="Vaak, meestal, al en nog",
+        level="A2",
+        category="Woordvolgorde",
+        summary="Vertel hoe vaak iets gebeurt en of een situatie voortduurt.",
+        explanation="Frequentiewoorden zoals vaak, meestal en soms staan vaak na de persoonsvorm: Ik werk meestal thuis. Ze kunnen ook vooraan staan: Meestal werk ik thuis. In een bijzin blijft de persoonsvorm achteraan: omdat ik meestal thuis werk. De plaats kan met nadruk en context veranderen.\n\nAl laat zien dat iets eerder is begonnen of bereikt dan je misschien verwacht: De winkel is al open. Nog geeft voortduring: De winkel is nog open. Nog niet betekent dat iets tot nu toe niet zo is; niet meer betekent dat een eerdere situatie is gestopt. Let op het verschil bij praktische afspraken.",
+        rules=[
+            "Soms vooraan: Soms kom ik later.",
+            "Nog niet is niet hetzelfde als niet meer.",
+            "Gebruik frequentiewoorden met een volledige voorbeeldzin.",
+        ],
+        examples=[
+            GrammarExample("Ik ben nog niet klaar; ik werk nog aan het formulier."),
+            GrammarExample("De bus rijdt niet meer, maar de tram rijdt nog."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "Meestal ik kom op tijd.",
+                "Meestal kom ik op tijd.",
+                "Een bijwoord vooraan krijgt in deze hoofdzin inversie.",
+            )
+        ],
+        related=["tegenwoordige-tijd", "omdat-dat", "niet-geen"],
+    ),
+    GrammarTopic(
+        slug="hoeveelheidswoorden",
+        title="Genoeg, te veel en een paar",
+        level="A2",
+        category="Hoeveelheid",
+        summary="Beschrijf aantallen en geef aan of iets voldoende is.",
+        explanation="Veel en weinig kunnen zowel bij telbare als bij niet-telbare zaken staan: veel kamers, weinig ruimte. Een paar betekent enkele en krijgt meestal een meervoud: een paar stoelen. Genoeg kan vóór een naamwoord staan: genoeg ruimte. Bij een bijvoeglijk naamwoord staat het erna: groot genoeg.\n\nTe maakt een eigenschap of hoeveelheid groter dan wenselijk: te duur, te veel lawaai. Heel betekent een hoge mate zonder dat die noodzakelijk onwenselijk is: heel groot. Bij aantallen zonder herhaald naamwoord kan er nodig zijn: Ik heb er genoeg. Beoordeel hoeveelheid vanuit het genoemde doel.",
+        rules=[
+            "Genoeg geld, maar goedkoop genoeg.",
+            "Te veel noemt een overmaat; heel veel niet noodzakelijk.",
+            "Een paar kamers krijgt een meervoudig naamwoord.",
+        ],
+        examples=[
+            GrammarExample("De kamer is groot genoeg, maar er zijn te weinig stoelen."),
+            GrammarExample("Heb je genoeg kopjes? Ja, ik heb er genoeg."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "De kamer is genoeg groot.",
+                "De kamer is groot genoeg.",
+                "Genoeg volgt hier op het bijvoeglijk naamwoord.",
+            )
+        ],
+        related=["verkleinwoorden-er-aantal", "vergelijken"],
+    ),
+    GrammarTopic(
+        slug="elkaar",
+        title="Elkaar en zichzelf",
+        level="A2",
+        category="Voornaamwoorden",
+        summary="Onderscheid wederzijdse handelingen van handelingen bij jezelf.",
+        explanation="Elkaar geeft een wederzijdse relatie aan: Wij helpen elkaar betekent dat we de ander helpen. Wij helpen onszelf richt de handeling op de eigen persoon of groep. Het verschil hangt dus af van de deelnemers en hun rollen. Elkaar kan ook na een voorzetsel staan: met elkaar, voor elkaar.\n\nVoor bezit gebruik je elkaars: We lezen elkaars werk. Elkaar wordt meestal verbonden met een meervoudige groep, ook wanneer die groep anders wordt omschreven: het team helpt elkaar. Maak bij twijfel de personen expliciet zodat duidelijk wordt wie wat voor wie doet.",
+        rules=[
+            "Elkaar voor een wederzijdse handeling.",
+            "Elkaars voor wederzijds bezit: elkaars namen.",
+            "Gebruik hetzelfde voorzetsel als bij de gewone werkwoordcombinatie.",
+        ],
+        examples=[
+            GrammarExample("De cursisten stellen zich voor en helpen elkaar."),
+            GrammarExample("We praten met elkaar over elkaars plannen."),
+        ],
+        common_mistakes=[
+            GrammarMistake(
+                "We kennen elkaar namen.",
+                "We kennen elkaars namen.",
+                "Vóór namen is de bezitsvorm elkaars nodig.",
+            )
+        ],
+        related=["wederkerende-werkwoorden", "bezit-aanwijzen"],
+    ),
 ]

@@ -16,6 +16,8 @@ from pathlib import Path
 
 import pytest
 
+from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
+
 FRONTEND_DATA = Path(__file__).resolve().parent.parent.parent / "frontend" / "src" / "data"
 
 CURRICULUM_FILE = FRONTEND_DATA / "curriculum.ts"
@@ -55,6 +57,43 @@ def _extract_curriculum_grammar_refs(src: str) -> set[str]:
 def test_data_files_exist() -> None:
     """Sanity check: frontend data files that remain must be present."""
     assert CURRICULUM_FILE.exists(), "Missing data file: curriculum.ts"
+
+
+@pytest.mark.parametrize("language", sorted(SUPPORTED_TARGET_LANGUAGES))
+@pytest.mark.parametrize(
+    ("level", "minimums"),
+    [
+        ("A1", (8, 14, 190, 47, 20)),
+        ("A2", (8, 19, 180, 39, 20)),
+        ("B1", (8, 19, 102, 36, 20)),
+        ("B2", (8, 20, 95, 30, 16)),
+        ("C1", (8, 21, 75, 30, 14)),
+        ("C2", (8, 16, 75, 30, 14)),
+    ],
+)
+def test_language_package_meets_per_level_coverage_minimums(language, level, minimums):
+    """Learning Resources owns the bounds; upper thresholds require editorial review."""
+    from app.data.assessment_bank import get_assessment_bank
+    from app.data.curriculum import get_curriculum
+    from app.data.grammar import get_grammar_topics
+    from app.data.phrasebook import get_phrasebook_categories
+    from app.data.vocabulary import get_vocabulary_sets
+
+    counts = (
+        len({unit.id for unit in get_curriculum(language)[level]}),
+        len({topic.slug for topic in get_grammar_topics(language) if topic.level == level}),
+        sum(len(item.words) for item in get_vocabulary_sets(language) if item.level == level),
+        sum(
+            len(item.phrases) for item in get_phrasebook_categories(language) if item.level == level
+        ),
+        len(
+            [question for question in get_assessment_bank(language) if question.difficulty == level]
+        ),
+    )
+    for resource, count, minimum in zip(
+        ("units", "grammar", "vocabulary", "phrases", "assessment"), counts, minimums, strict=True
+    ):
+        assert count >= minimum, (language, level, resource, count, minimum)
 
 
 @pytest.mark.parametrize(

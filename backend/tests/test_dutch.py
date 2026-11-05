@@ -89,6 +89,10 @@ def test_curriculum_references_progression_and_resource_completeness():
             assert all(vocabulary[key].level == level for key in unit.vocabulary_set_ids)
         introduced = {topic.slug for topic in topics if topic.level == level}
         assert introduced <= set(level_units[-1].grammar_points)
+        taught_before_consolidation = {
+            slug for unit in level_units[:-1] for slug in unit.grammar_points
+        }
+        assert set(level_units[-1].grammar_points) <= taught_before_consolidation
 
     for topic in topics:
         assert topic.title and topic.summary and topic.explanation
@@ -113,6 +117,9 @@ def test_phrasebook_and_assessment_cover_every_level_and_skill(level):
     categories = [c for c in get_phrasebook_categories("nl-NL") if c.level == level]
     assert len({c.id for c in categories}) == len(categories)
     assert sum(len(c.phrases) for c in categories) >= 24
+    phrases = [phrase for category in categories for phrase in category.phrases]
+    assert len({phrase.text.strip().casefold() for phrase in phrases}) == len(phrases)
+    assert {phrase.unit_ref for phrase in phrases} == units.keys()
     for category in categories:
         for phrase in category.phrases:
             assert phrase.text and phrase.context
@@ -209,3 +216,12 @@ def test_present_and_numbers_are_available_for_first_personal_exchanges():
     assert numbers.unit_ref == first_unit.id
     assert numbers.id in first_unit.vocabulary_set_ids
     assert {"twaalf", "twintig", "dertig", "eenentwintig"} <= {word.word for word in numbers.words}
+
+
+def test_prepositional_er_is_introduced_before_clausal_complements():
+    taught = set()
+    for unit in get_curriculum("nl-NL")["B1"]:
+        for slug in unit.grammar_points:
+            if slug == "er-bijzin":
+                assert "er-voorzetsel" in taught
+            taught.add(slug)
