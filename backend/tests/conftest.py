@@ -1,9 +1,10 @@
 import os
 import re
+from contextlib import asynccontextmanager
 from copy import deepcopy
 from datetime import UTC, datetime
 from types import SimpleNamespace
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-ci-32b"
@@ -16,6 +17,7 @@ import stripe
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import event, select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from starlette.datastructures import Headers
 
 from app.core.database import Base, get_db
 from app.core.security import create_access_token
@@ -311,6 +313,49 @@ async def admin_user(db_session):
 
     token = create_access_token(user.id, user.role)
     return user, {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+def voice_runtime(monkeypatch, db_session, mock_redis, test_user):
+    from app.core.config import settings
+    from app.routers import conversation as router
+
+    user, headers = test_user
+
+    @asynccontextmanager
+    async def db_context():
+        yield db_session
+
+    @asynccontextmanager
+    async def redis_context():
+        yield mock_redis
+
+    pipeline = MagicMock(run=AsyncMock(), cleanup=AsyncMock())
+    factory = MagicMock(return_value=pipeline)
+    quotas = AsyncMock(side_effect=lambda *args: (args[-1], None, None, 1000))
+    monkeypatch.setattr(router, "db_session", db_context)
+    monkeypatch.setattr(router, "_redis_client", redis_context)
+    monkeypatch.setattr(router, "ConversationPipeline", factory)
+    monkeypatch.setattr(router, "check_all_quotas", quotas)
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", False)
+
+    async def start(**payload):
+        ws = SimpleNamespace(
+            headers=Headers({"User-Agent": "Browser test agent"}),
+            accept=AsyncMock(),
+            receive_json=AsyncMock(
+                return_value={"token": headers["Authorization"].removeprefix("Bearer "), **payload}
+            ),
+            send_json=AsyncMock(),
+            close=AsyncMock(),
+            app=SimpleNamespace(state=SimpleNamespace(tts_service=object(), stt_service=object())),
+        )
+        await router.conversation_ws(ws)
+        return ws
+
+    return SimpleNamespace(
+        start=start, factory=factory, pipeline=pipeline, quotas=quotas, user=user
+    )
 
 
 async def make_study_plan(db_session, *, user_id: int, target_language: str = "en-US", **kwargs):

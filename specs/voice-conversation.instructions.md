@@ -59,17 +59,22 @@ request English when a different target language is selected.
 
 ## Language and plan resolution
 
-The router first tries the client-requested owned language and its active plan, then the user's active
-language and plan. Without a plan, the session uses CEFR A2, a null plan reference, and the requested,
-active, or default `en-GB` language.
+For free conversation, the router resolves the client-requested language first. Only omission or null
+selects the user's active language, or `en-GB` if no active language exists. The resolved value must be
+an exact canonical supported code; empty, unknown, noncanonical or non-string values emit
+`invalid_target_language` and close 1008 before general session quota consumption or conversation
+creation. This uses the supported set, not the operator-enabled subset used for adding languages and
+creating plans.
+
+The router looks up an active plan belonging to the authenticated user and the resolved language,
+checking both the owning track and the persisted plan. A matching plan supplies the session language,
+CEFR level and provenance. Without one, the session retains that language with CEFR A2 and a null plan
+reference, even when another language has an active plan. It does not create a language track or plan.
 
 The pipeline converts the resolved target language to ISO 639-1 and declares it in every STT call.
 TTS receives the full resolved BCP-47 target language so regional distinctions such as `en-GB` and
 `en-US` remain available. OpenAI uses it in pronunciation instructions for `gpt-4o-mini-tts` and its
 snapshots; legacy/unknown OpenAI models and Kokoro ignore it.
-
-The current fallback path can combine a fallback active plan with a different target language sent
-by the client. This association is not enforced by the WebSocket contract.
 
 ### Lesson practice context
 

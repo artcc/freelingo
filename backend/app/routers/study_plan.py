@@ -16,6 +16,7 @@ from app.models.lesson import Exercise, Lesson
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.models.user_language import UserLanguage
+from app.schemas.auth import get_available_languages
 from app.schemas.study_plan import (
     GenerateStudyPlanRequest,
     PendingLessonResponse,
@@ -86,11 +87,18 @@ async def create_study_plan(
     db: AsyncSession = Depends(get_db),
 ):
     resolved_language = data.target_language
-    if not resolved_language:
+    if resolved_language is None:
         # Fall back to active language
         active_lang = await get_active_language(db, current_user.id)
         resolved_language = (
             active_lang.target_language if active_lang else current_user.target_language
+        )
+
+    available_languages = get_available_languages()
+    if resolved_language not in available_languages:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"Language not available. Choose from: {available_languages}",
         )
 
     # Reject undersized plans before any state changes: ensure_user_language

@@ -27,8 +27,9 @@ canonicalizer.
 `AVAILABLE_TARGET_LANGUAGES` is the operator-enabled subset. Language-management and onboarding
 surfaces expose the intersection of configured available codes and supported implementation.
 Registration schema validation uses the supported set, while authenticated add/switch operations use
-the available set. Assessment completion also validates its resolved language against the available
-set before curriculum dispatch or persistence, including session/profile fallbacks. Unknown,
+the available set. Assessment completion and explicit study-plan generation also validate their
+resolved language against the available set before curriculum dispatch or persistence, including
+session, active-language and profile fallbacks. Unknown,
 noncanonical, empty, and disabled codes return `422`.
 
 ## Default and fallback
@@ -150,8 +151,12 @@ resource-owned language contracts are defined in `speech-services.instructions.m
 
 - Registration and profile update validate supported target languages.
 - Add and switch validate operator-enabled target languages.
+- Both plan-creation endpoints validate the resolved operator-enabled code before any curriculum
+  lookup or mutation. An explicit empty code is invalid, not an omitted selection.
 - Several static-resource language queries rely on dispatcher fallback instead of allow-list rejection.
-- Voice WebSocket language input is not uniformly validated and can use fallback plan resolution.
+- Free voice sessions validate the resolved language against the canonical supported set. They only
+  associate an owned active plan in that language; resolution and no-plan behavior are defined in
+  `voice-conversation.instructions.md`.
 - Exact regional variants remain distinct pool/cache keys where features scope by BCP-47 code.
 
 ## Related specifications
