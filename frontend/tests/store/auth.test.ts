@@ -1,5 +1,11 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { isSubscribed, useAuthStore, type User } from '@/store/auth'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import {
+  isSubscribed,
+  isFreemiumTrialActive,
+  useAuthStore,
+  type User,
+} from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 
 describe('isSubscribed', () => {
   const baseUser: User = {
@@ -48,6 +54,34 @@ describe('isSubscribed', () => {
   it('returns false when subscription_status is undefined', () => {
     expect(isSubscribed(baseUser, true)).toBe(false)
   })
+})
+
+describe('freemium trial expiration', () => {
+  afterEach(() => vi.useRealTimers())
+
+  it.each(['2030-01-01T12:00:00+00:00', '2030-07-01T12:00:00+00:00'])(
+    'uses the exact UTC instant for %s',
+    (expiration) => {
+      useConfigStore.setState({ freemiumTrialEnabled: true })
+      vi.useFakeTimers()
+      const user: User = {
+        id: 1,
+        username: 'learner',
+        displayName: 'Learner',
+        role: 'user',
+        conversation_max_duration: 1800,
+        conversation_inactivity_timeout: 180,
+        freemium_trial_ends_at: expiration,
+      }
+      const expiresAt = Date.parse(expiration.replace('+00:00', 'Z'))
+      vi.setSystemTime(expiresAt - 3600_000)
+      expect(isFreemiumTrialActive(user, true)).toBe(true)
+      vi.setSystemTime(expiresAt)
+      expect(isFreemiumTrialActive(user, true)).toBe(false)
+      vi.setSystemTime(expiresAt + 3600_000)
+      expect(isFreemiumTrialActive(user, true)).toBe(false)
+    }
+  )
 })
 
 describe('useAuthStore', () => {

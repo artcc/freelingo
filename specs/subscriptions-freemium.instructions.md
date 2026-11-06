@@ -356,6 +356,9 @@ failures that also prevent reloading the user still fail the request.
 Trial activity depends on the runtime toggle and a future UTC expiration. `freemium_trial_used`
 prevents regranting but is not the active-state check. Disabling the toggle suspends an existing
 trial; re-enabling it restores access only if its stored expiry remains in the future.
+The database stores this expiration as naive UTC. Profile responses (`freemium_trial_ends_at`) and
+freemium status (`trial_ends_at`) serialize it with an explicit UTC offset so browsers evaluate the
+same instant regardless of their local time zone. An absent expiration remains `null`.
 
 Freemium trial access bypasses feature counters but not global token or voice conversation limits.
 

@@ -1,3 +1,4 @@
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
 import pytest
@@ -745,6 +746,38 @@ async def test_register_sets_freemium_trial(client):
     body = me.json()
     assert body["freemium_trial_used"] is True
     assert body["freemium_trial_ends_at"] is not None
+
+
+@pytest.mark.parametrize("days_until_expiration", [None, -1, 1])
+async def test_trial_expiration_is_explicit_utc_in_profile_and_quota(
+    client, test_user, db_session, monkeypatch, days_until_expiration
+):
+    from app.core.config import settings
+
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", True)
+    user, headers = test_user
+    expiration = (
+        datetime.now(UTC).replace(tzinfo=None) + timedelta(days=days_until_expiration)
+        if days_until_expiration is not None
+        else None
+    )
+    user.freemium_trial_used = True
+    user.freemium_trial_ends_at = expiration
+    await db_session.commit()
+
+    profile = await client.get("/api/auth/me", headers=headers)
+    updated_profile = await client.patch("/api/auth/me", headers=headers, json={"bio": "Learner"})
+    quota = await client.get("/api/freemium/status", headers=headers)
+
+    assert profile.status_code == updated_profile.status_code == quota.status_code == 200
+    expected = expiration.replace(tzinfo=UTC).isoformat() if expiration else None
+    assert profile.json()["freemium_trial_ends_at"] == expected
+    assert updated_profile.json()["freemium_trial_ends_at"] == expected
+    assert quota.json()["trial_ends_at"] == expected
+    assert quota.json()["trial_active"] is (days_until_expiration == 1)
+    await db_session.refresh(user)
+    assert user.freemium_trial_ends_at == expiration
 
 
 @pytest.mark.parametrize("revenuecat_enabled", [False, True])

@@ -270,7 +270,7 @@ async def get_freemium_status(
 
     trial_ends_str = None
     if freemium_trial_ends_at:
-        trial_ends_str = freemium_trial_ends_at.isoformat()
+        trial_ends_str = freemium_trial_ends_at.replace(tzinfo=UTC).isoformat()
 
     return FreemiumStatus(
         trial_active=trial_active,
