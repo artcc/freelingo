@@ -93,6 +93,7 @@ async def create_checkout_session(
     if revenuecat_service.revenuecat_enabled():
         try:
             await revenuecat_service.sync_user(db, current_user.id)
+            await revenuecat_service.sync_customer_attributes(db, current_user.id)
             await db.commit()
         except revenuecat_service.RevenueCatError:
             await db.rollback()

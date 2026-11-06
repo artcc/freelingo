@@ -32,7 +32,7 @@ from app.schemas.admin import (
     MaintenanceModeUpdate,
     PaginatedAdminUsersResponse,
 )
-from app.services import email_service
+from app.services import email_service, revenuecat_service
 from app.services.subscription_service import apply_subscription_quotas
 from app.utils.pagination import paginate
 
@@ -398,6 +398,9 @@ async def update_user(
 
     await db.commit()
     await db.refresh(user)
+    if data.display_name is not None and revenuecat_service.revenuecat_enabled():
+        await revenuecat_service.sync_customer_attributes(db, user.id)
+        await db.commit()
     return user
 
 

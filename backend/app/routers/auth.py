@@ -44,7 +44,7 @@ from app.schemas.auth import (
     UserResponse,
     UserUpdateRequest,
 )
-from app.services import email_service
+from app.services import email_service, revenuecat_service
 
 logger = get_logger(__name__)
 
@@ -372,6 +372,12 @@ async def update_me(
 
     await db.commit()
     await db.refresh(current_user)
+    if (
+        revenuecat_service.revenuecat_enabled()
+        and {"display_name", "email", "native_language"} & data.model_fields_set
+    ):
+        await revenuecat_service.sync_customer_attributes(db, current_user.id)
+        await db.commit()
     request.state.preferences_saved = bool(data.model_fields_set)
     return current_user
 

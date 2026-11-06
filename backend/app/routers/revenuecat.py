@@ -94,6 +94,7 @@ async def _sync(db: AsyncSession, user_id: int, *, import_stripe: bool = False) 
         user = await revenuecat_service.sync_user(db, user_id, import_stripe=import_stripe)
         if user is None:
             raise HTTPException(status_code=404, detail="User not found")
+        await revenuecat_service.sync_customer_attributes(db, user_id)
         await db.commit()
         return user
     except revenuecat_service.RevenueCatError:

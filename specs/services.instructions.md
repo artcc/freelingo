@@ -245,6 +245,10 @@ provider request timestamps reject older snapshots. Explicit Stripe imports use 
 Subscription ID. The service also resolves the provider's HTTPS subscription-management URL without
 persisting a per-store authorization model. Credentials, environment isolation, retries, and the
 activation workflow are owned by `subscriptions-freemium.instructions.md`.
+The same service publishes current customer profile attributes under a user-row lock for explicit
+billing/profile actions. Attribute writes have a separate short timeout and best-effort failure policy;
+they do not apply provider response data to subscription access. The attribute and country-estimate
+contract is owned by `subscriptions-freemium.instructions.md`.
 
 `stripe_checkout_service.py` owns serialized web purchase creation and recovery. It uses async Stripe
 SDK calls, user-row locks, and durable Checkout reservations containing frozen request parameters and

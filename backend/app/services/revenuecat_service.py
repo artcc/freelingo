@@ -10,12 +10,33 @@ import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.app_logger import get_logger
 from app.core.config import settings
 from app.models.user import User
 from app.schemas.revenuecat import RevenueCatCustomerInfo, RevenueCatEvent
 from app.services.subscription_service import apply_subscription_quotas
 
 _API_URL = "https://api.revenuecat.com/v1"
+logger = get_logger(__name__)
+
+# A language-based reporting convention, not a customer's verified country.
+_COUNTRY_ESTIMATES = {
+    "en": "GB",
+    "es": "ES",
+    "fr": "FR",
+    "pt": "PT",
+    "de": "DE",
+    "it": "IT",
+    "ru": "RU",
+    "nl": "NL",
+    "pl": "PL",
+    "ro": "RO",
+    "tr": "TR",
+    "sv": "SE",
+    "da": "DK",
+    "fi": "FI",
+    "hr": "HR",
+}
 
 
 class RevenueCatError(Exception):
@@ -24,6 +45,46 @@ class RevenueCatError(Exception):
 
 def revenuecat_enabled() -> bool:
     return settings.STRIPE_ENABLED and settings.REVENUECAT_ENABLED
+
+
+async def sync_customer_attributes(db: AsyncSession, user_id: int) -> None:
+    """Send current profile metadata best-effort; the caller releases the user lock."""
+    if not revenuecat_enabled():
+        return
+    user = await db.scalar(
+        select(User)
+        .where(User.id == user_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    if user is None:
+        return
+    country = _COUNTRY_ESTIMATES.get(user.native_language, "")
+    updated_at_ms = int(datetime.now(UTC).timestamp() * 1000)
+    values = {
+        "$displayName": user.display_name,
+        "$email": user.email or "",
+        "native_language": user.native_language,
+        "country_estimate": country,
+        "country_estimate_source": "native_language" if country else "",
+    }
+    body = {
+        "attributes": {
+            key: {"value": value, "updated_at_ms": updated_at_ms} for key, value in values.items()
+        }
+    }
+    try:
+        settings.validate_revenuecat()
+        async with asyncio.timeout(3), httpx.AsyncClient(timeout=2) as client:
+            response = await client.post(
+                f"{_API_URL}/subscribers/{user.id}/attributes",
+                headers={"Authorization": f"Bearer {settings.REVENUECAT_API_KEY}"},
+                json=body,
+            )
+            response.raise_for_status()
+    except (httpx.HTTPError, TimeoutError, ValueError) as exc:
+        # Exceptions and provider bodies can contain profile data and credentials.
+        logger.warning("[revenuecat] Customer attributes sync failed (%s)", type(exc).__name__)
 
 
 async def _request(

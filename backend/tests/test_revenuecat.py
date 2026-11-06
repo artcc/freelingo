@@ -1,5 +1,6 @@
 """RevenueCat's documented v1 customer-info and webhook contracts, with HTTP mocked."""
 
+import json
 from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
@@ -84,9 +85,22 @@ def enable_revenuecat(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def provider(monkeypatch):
-    state = SimpleNamespace(payload=customer_info(), status=200, requests=[], responses=[])
+    state = SimpleNamespace(
+        payload=customer_info(),
+        status=200,
+        requests=[],
+        responses=[],
+        attribute_requests=[],
+        attribute_status=200,
+        attribute_error=None,
+    )
 
     def respond(request):
+        if request.url.path.endswith("/attributes"):
+            state.attribute_requests.append(request)
+            if state.attribute_error is not None:
+                raise state.attribute_error
+            return httpx.Response(state.attribute_status, json={})
         state.requests.append(request)
         if state.responses:
             response = state.responses.pop(0)
@@ -483,8 +497,6 @@ async def test_sync_is_authenticated_and_uses_only_current_user(client, test_use
 async def test_admin_import_uses_persisted_stripe_subscription(
     client, test_user, admin_user, db_session, provider
 ):
-    import json
-
     user, headers = test_user
     _, admin_headers = admin_user
     user.stripe_subscription_id = "sub_existing"
@@ -725,3 +737,163 @@ def test_existing_stripe_access_is_preserved_until_first_sync():
     user = User(subscription_status="active", subscription_ends_at=datetime(2020, 1, 1))
     assert is_subscribed(user, True)
     assert is_subscribed(user, False)
+
+
+async def test_checkout_sends_profile_attributes_without_changing_identity(
+    client, test_user, provider, monkeypatch
+):
+    user, headers = test_user
+    provider.payload["subscriber"]["entitlements"] = {}
+    monkeypatch.setattr(settings, "STRIPE_PRICE_MONTHLY", "price_monthly")
+    before = int(datetime.now(UTC).timestamp() * 1000)
+    response = await client.post("/api/billing/checkout", headers=headers, json={"plan": "monthly"})
+    assert response.status_code == 200
+    assert len(provider.attribute_requests) == 1
+    request = provider.attribute_requests[0]
+    assert request.method == "POST"
+    assert str(request.url) == f"https://api.revenuecat.com/v1/subscribers/{user.id}/attributes"
+    assert request.headers["Authorization"] == "Bearer test-api-key"
+    attributes = json.loads(request.content)["attributes"]
+    assert {key: value["value"] for key, value in attributes.items()} == {
+        "$displayName": "Test User",
+        "$email": "test@example.com",
+        "native_language": "es",
+        "country_estimate": "ES",
+        "country_estimate_source": "native_language",
+    }
+    assert all(
+        before <= attribute["updated_at_ms"] <= int(datetime.now(UTC).timestamp() * 1000)
+        for attribute in attributes.values()
+    )
+    assert user.subscription_status == "none"
+
+
+@pytest.mark.parametrize("failure", [400, 401, 429, 500, "timeout"])
+async def test_attributes_failure_does_not_block_checkout_or_leak_profile(
+    client, test_user, provider, monkeypatch, failure, caplog
+):
+    provider.payload["subscriber"]["entitlements"] = {}
+    monkeypatch.setattr(settings, "STRIPE_PRICE_MONTHLY", "price_monthly")
+    if failure == "timeout":
+        provider.attribute_error = httpx.ReadTimeout("test@example.com test-api-key")
+    else:
+        provider.attribute_status = failure
+    user, headers = test_user
+    response = await client.post("/api/billing/checkout", headers=headers, json={"plan": "monthly"})
+    assert response.status_code == 200
+    assert user.subscription_status == "none"
+    assert "Customer attributes sync failed" in caplog.text
+    assert "test@example.com" not in caplog.text
+    assert "test-api-key" not in caplog.text
+
+
+@pytest.mark.parametrize("failure", [False, True])
+async def test_profile_attributes_follow_saved_profile_even_if_provider_fails(
+    client, db_session, test_user, provider, failure
+):
+    user, headers = test_user
+    provider.attribute_status = 500 if failure else 200
+    response = await client.patch(
+        "/api/auth/me",
+        headers=headers,
+        json={
+            "display_name": "Updated name",
+            "email": "updated@example.com",
+            "native_language": "pt",
+        },
+    )
+    assert response.status_code == 200
+    await db_session.refresh(user)
+    assert user.display_name == "Updated name"
+    assert user.email == "updated@example.com"
+    assert user.native_language == "pt"
+    assert user.subscription_status == "none"
+    attributes = json.loads(provider.attribute_requests[0].content)["attributes"]
+    assert attributes["$displayName"]["value"] == "Updated name"
+    assert attributes["$email"]["value"] == "updated@example.com"
+    assert attributes["native_language"]["value"] == "pt"
+    assert attributes["country_estimate"]["value"] == "PT"
+    assert not provider.requests  # Metadata writes never reconcile subscription access.
+
+
+async def test_unrelated_profile_changes_and_profile_reads_do_not_send_attributes(
+    client, test_user, provider
+):
+    _, headers = test_user
+    assert (
+        await client.patch("/api/auth/me", headers=headers, json={"bio": "Learning"})
+    ).status_code == 200
+    assert (await client.get("/api/auth/me", headers=headers)).status_code == 200
+    assert not provider.attribute_requests
+
+
+async def test_rejected_profile_change_does_not_send_attributes(
+    client, test_user, admin_user, provider
+):
+    _, headers = test_user
+    other, _ = admin_user
+    response = await client.patch("/api/auth/me", headers=headers, json={"email": other.email})
+    assert response.status_code == 409
+    assert not provider.attribute_requests
+
+
+async def test_admin_profile_update_sends_target_users_attributes(
+    client, test_user, admin_user, provider
+):
+    user, _ = test_user
+    _, headers = admin_user
+    response = await client.patch(
+        f"/api/admin/users/{user.id}", headers=headers, json={"display_name": "Support edit"}
+    )
+    assert response.status_code == 200
+    request = provider.attribute_requests[0]
+    assert str(request.url).endswith(f"/{user.id}/attributes")
+    assert json.loads(request.content)["attributes"]["$displayName"]["value"] == "Support edit"
+
+
+async def test_explicit_sync_backfills_attributes_without_metadata_affecting_access(
+    client, test_user, provider
+):
+    user, headers = test_user
+    provider.attribute_status = 500
+    response = await client.post("/api/billing/sync", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["subscription_status"] == "active"
+    assert user.subscription_status == "active"
+    assert len(provider.attribute_requests) == 1
+
+
+async def test_webhooks_do_not_write_profile_attributes(client, test_user, provider):
+    user, _ = test_user
+    assert (await deliver(client, webhook(user.id))).status_code == 200
+    assert not provider.attribute_requests
+
+
+async def test_missing_email_and_unknown_language_clear_old_attributes(
+    db_session, test_user, provider
+):
+    user, _ = test_user
+    user.email = None
+    user.native_language = "unknown"
+    await db_session.commit()
+    await revenuecat_service.sync_customer_attributes(db_session, user.id)
+    attributes = json.loads(provider.attribute_requests[0].content)["attributes"]
+    assert attributes["$email"]["value"] == ""
+    assert attributes["country_estimate"]["value"] == ""
+    assert attributes["country_estimate_source"]["value"] == ""
+
+
+@pytest.mark.parametrize("setting", ["STRIPE_ENABLED", "REVENUECAT_ENABLED"])
+async def test_disabled_billing_does_not_send_customer_attributes(
+    client, test_user, provider, monkeypatch, setting
+):
+    _, headers = test_user
+    monkeypatch.setattr(settings, setting, False)
+    response = await client.patch("/api/auth/me", headers=headers, json={"display_name": "Updated"})
+    assert response.status_code == 200
+    assert not provider.attribute_requests
+
+
+async def test_missing_user_does_not_create_revenuecat_profile(db_session, provider):
+    await revenuecat_service.sync_customer_attributes(db_session, 999)
+    assert not provider.attribute_requests

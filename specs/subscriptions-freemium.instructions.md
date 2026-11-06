@@ -211,6 +211,37 @@ contain it as `user_id`; RevenueCat's Stripe integration reads that metadata fie
 the same authenticated account identity, not an email address or Stripe Customer ID. Anonymous aliases
 are only useful when RevenueCat associates them with a known canonical ID.
 
+### Customer profile attributes
+
+When both billing flags are enabled, the backend publishes profile attributes using
+`POST /v1/subscribers/{app_user_id}/attributes` and the backend-only `REVENUECAT_API_KEY`:
+
+- `$displayName`: the persisted FreeLingo display name;
+- `$email`: the persisted email, or an empty string to clear a previously stored email;
+- `native_language`: the persisted native-language code;
+- `country_estimate`: an ISO country code inferred by a fixed language-to-country convention;
+- `country_estimate_source`: `native_language` when a mapping exists, otherwise empty.
+
+The country estimate is reporting metadata, not verified residence, billing country, or RevenueCat's
+built-in Country field. The convention is `en → GB`, `es → ES`, `fr → FR`, `pt → PT`, `de → DE`,
+`it → IT`, `ru → RU`, `nl → NL`, `pl → PL`, `ro → RO`, `tr → TR`, `sv → SE`, `da → DK`, `fi → FI`,
+and `hr → HR`. Unknown languages clear the estimate and its source instead of inventing a fallback.
+RevenueCat's built-in Country is determined separately from transaction data or last-seen IP country.
+
+Attributes are sent during Checkout's RevenueCat reconciliation, explicit self/admin synchronization,
+and after successfully saving name, email, or native language through the profile endpoint. An admin
+display-name update also sends the target user's current attributes. Existing users can be populated
+through explicit synchronization. Profile reads, ordinary learning requests, and webhooks do not send
+attributes. The helper reloads the persisted profile under the user-row lock and sends `updated_at_ms`
+with each value so older provider writes cannot overwrite newer timestamped attributes.
+
+Attribute requests have a three-second total deadline. Provider/configuration failures emit a sanitized
+warning and do not roll back a saved profile, block Checkout, or change subscription access. A later
+eligible action retries the current values; there is no background attribute retry job. Attribute
+response bodies are not used as entitlement snapshots. These metadata fields never authorize access.
+
+### Entitlement reconciliation
+
 `POST /api/billing/revenuecat/webhook` verifies the configured Authorization header using a constant-time
 comparison before parsing API v1 events. Dashboard `TEST` events and events explicitly belonging to
 the other environment are acknowledged without changing access. Unknown/deleted account identities
