@@ -576,7 +576,9 @@ async def test_stripe_checkout_keeps_identifiers_and_trial_without_overwriting_a
     assert user.monthly_tokens_limit == 321
 
 
-async def test_checkout_checks_revenuecat_before_creating_subscription(client, test_user, db_session):
+async def test_checkout_checks_revenuecat_before_creating_subscription(
+    client, test_user, db_session
+):
     user, headers = test_user
     assert user.subscription_status == "none"
     with patch("stripe.checkout.Session.create_async") as create_session:

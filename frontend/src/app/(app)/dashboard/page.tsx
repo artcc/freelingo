@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
+import { useBillingPortal } from '@/hooks/useBillingPortal'
 import { trackDashboardLink } from '@/lib/analytics'
 import {
   isSubscribed,
@@ -53,7 +54,8 @@ export default function DashboardPage() {
   const tError = useTranslations('error')
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
-  const trialEligible = !user?.trial_used
+  const stripeTrialDays = useConfigStore((s) => s.stripeTrialDays)
+  const trialEligible = stripeTrialDays > 0 && !user?.trial_used
   const freemiumTrialActive = isFreemiumTrialActive(user, stripeEnabled)
   const [freemiumTrialDaysLeft, setFreemiumTrialDaysLeft] = useState(0)
 
@@ -101,8 +103,11 @@ export default function DashboardPage() {
   const [vocabularyProgress, setVocabularyProgress] = useState(0)
   const [skipping, setSkipping] = useState(false)
   const [skipError, setSkipError] = useState(false)
-  const [portalLoading, setPortalLoading] = useState(false)
-  const [portalError, setPortalError] = useState<string | null>(null)
+  const {
+    openPortal,
+    loading: portalLoading,
+    error: portalError,
+  } = useBillingPortal()
 
   const loadData = useCallback(async () => {
     const sequence = ++loadSequence.current
@@ -199,20 +204,6 @@ export default function DashboardPage() {
       setSkipError(true)
     } finally {
       setSkipping(false)
-    }
-  }
-
-  async function handleManageSubscription() {
-    setPortalLoading(true)
-    setPortalError(null)
-    try {
-      const res = await apiFetch('/api/billing/portal', { method: 'POST' })
-      if (!res.ok) throw new Error(tBilling('portalError'))
-      const { url } = await res.json()
-      window.location.assign(url)
-    } catch {
-      setPortalError(tBilling('portalError'))
-      setPortalLoading(false)
     }
   }
 
@@ -753,7 +744,7 @@ export default function DashboardPage() {
               (paymentRecovery ? (
                 <div className="border-fl-border mt-4 border-t pt-4">
                   <button
-                    onClick={handleManageSubscription}
+                    onClick={openPortal}
                     disabled={portalLoading}
                     className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-2.5 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50 sm:w-auto"
                   >

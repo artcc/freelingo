@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
 import { apiFetch } from '@/lib/api'
+import { createCheckout } from '@/lib/billing'
 import { float32ToWav, createAudioQueue, type AudioQueue } from '@/lib/audio'
 import { getLogger, silentLogger } from '@/lib/logger'
 import { mapUser } from '@/lib/mappers'
@@ -171,6 +172,8 @@ function TrialPremiumCta() {
   const priceYearly = useConfigStore((s) => s.priceYearly)
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const checkoutRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => checkoutRequest.current?.abort(), [])
   const yearlyCta = splitYearlyCta(
     t('planYearly', {
       price: new Intl.NumberFormat(locale).format(priceYearly),
@@ -178,22 +181,25 @@ function TrialPremiumCta() {
   )
 
   async function handleCheckout(interval: BillingInterval) {
+    if (loading) return
+    const controller = new AbortController()
+    checkoutRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
     setLoading(interval)
     setError(null)
     try {
-      const res = await apiFetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: interval }),
-      })
-      if (!res.ok) {
-        throw new Error(t('checkoutError'))
-      }
-      const { url } = await res.json()
-      window.location.assign(url)
+      const url = await createCheckout(interval, controller.signal)
+      if (obsolete()) return
+      if (url) window.location.assign(url)
+      else router.push('/dashboard')
     } catch {
+      if (obsolete()) return
       setError(t('checkoutError'))
-      setLoading(null)
+    } finally {
+      if (!obsolete()) setLoading(null)
     }
   }
 

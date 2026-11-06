@@ -10,7 +10,7 @@ import {
   MessageSquare,
   Mic,
 } from 'lucide-react'
-import { apiFetch } from '@/lib/api'
+import { useBillingPortal } from '@/hooks/useBillingPortal'
 import { createCheckout } from '@/lib/billing'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import { useConfigStore } from '@/store/config'
@@ -69,7 +69,11 @@ export function PaywallBanner({
   const priceMonthly = useConfigStore((s) => s.priceMonthly)
   const priceYearly = useConfigStore((s) => s.priceYearly)
   const [loading, setLoading] = useState<BillingInterval | null>(null)
-  const [portalLoading, setPortalLoading] = useState(false)
+  const {
+    openPortal,
+    loading: portalLoading,
+    error: portalError,
+  } = useBillingPortal()
   const [error, setError] = useState<string | null>(null)
   const checkoutRequest = useRef<AbortController | null>(null)
   useEffect(() => () => checkoutRequest.current?.abort(), [])
@@ -105,20 +109,6 @@ export function PaywallBanner({
       setError(t('checkoutError'))
     } finally {
       if (!obsolete()) setLoading(null)
-    }
-  }
-
-  async function handleManageBilling() {
-    setPortalLoading(true)
-    setError(null)
-    try {
-      const res = await apiFetch('/api/billing/portal', { method: 'POST' })
-      if (!res.ok) throw new Error(t('portalError'))
-      const { url } = await res.json()
-      window.location.assign(url)
-    } catch {
-      setError(t('portalError'))
-      setPortalLoading(false)
     }
   }
 
@@ -166,7 +156,7 @@ export function PaywallBanner({
 
         {paymentRecovery ? (
           <button
-            onClick={handleManageBilling}
+            onClick={openPortal}
             disabled={portalLoading}
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
           >
@@ -206,8 +196,10 @@ export function PaywallBanner({
           </div>
         )}
 
-        {error && (
-          <p className="text-fl-hint mt-4 font-mono text-red-500">{error}</p>
+        {(paymentRecovery ? portalError : error) && (
+          <p className="text-fl-hint mt-4 font-mono text-red-500">
+            {paymentRecovery ? portalError : error}
+          </p>
         )}
 
         {!paymentRecovery && (

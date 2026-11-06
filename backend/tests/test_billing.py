@@ -249,7 +249,9 @@ async def test_portal_opens_for_past_due_user(client, db_session, test_user):
 
     with (
         patch.object(settings, "STRIPE_ENABLED", True),
-        patch("stripe.billing_portal.Session.create_async", return_value=mock_session) as mock_portal,
+        patch(
+            "stripe.billing_portal.Session.create_async", return_value=mock_session
+        ) as mock_portal,
     ):
         res = await client.post("/api/billing/portal", headers=headers)
 

@@ -210,6 +210,7 @@ describe('billing paywall UI', () => {
     await waitFor(() =>
       expect(mockApiFetch).toHaveBeenCalledWith('/api/billing/portal', {
         method: 'POST',
+        signal: expect.any(AbortSignal),
       })
     )
     expect(window.location.assign).toHaveBeenCalledWith(
@@ -237,6 +238,7 @@ describe('billing paywall UI', () => {
     await waitFor(() =>
       expect(mockApiFetch).toHaveBeenCalledWith('/api/billing/portal', {
         method: 'POST',
+        signal: expect.any(AbortSignal),
       })
     )
     expect(window.location.assign).toHaveBeenCalledWith(
@@ -264,6 +266,7 @@ describe('billing paywall UI', () => {
     await waitFor(() =>
       expect(mockApiFetch).toHaveBeenCalledWith('/api/billing/portal', {
         method: 'POST',
+        signal: expect.any(AbortSignal),
       })
     )
     expect(window.location.assign).toHaveBeenCalledWith(
@@ -363,6 +366,7 @@ describe('billing paywall UI', () => {
     await waitFor(() =>
       expect(mockApiFetch).toHaveBeenLastCalledWith('/api/billing/portal', {
         method: 'POST',
+        signal: expect.any(AbortSignal),
       })
     )
     expect(window.location.assign).toHaveBeenCalledWith(
@@ -416,6 +420,7 @@ describe('billing paywall UI', () => {
     await waitFor(() =>
       expect(mockApiFetch).toHaveBeenLastCalledWith('/api/billing/portal', {
         method: 'POST',
+        signal: expect.any(AbortSignal),
       })
     )
     expect(window.location.assign).toHaveBeenCalledWith(
@@ -446,6 +451,7 @@ describe('billing paywall UI', () => {
     await waitFor(() =>
       expect(mockApiFetch).toHaveBeenCalledWith('/api/billing/portal', {
         method: 'POST',
+        signal: expect.any(AbortSignal),
       })
     )
     expect(window.location.assign).toHaveBeenCalledWith(
