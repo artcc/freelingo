@@ -171,6 +171,8 @@ Customer ID and returns a Stripe Customer Portal URL with Settings as the return
 require a currently active subscription. If RevenueCat fails or returns invalid data or an unsafe URL,
 the endpoint falls back to the authenticated user's stored Stripe Customer ID; without one it returns
 `503`. A successful RevenueCat read with no management URL and no Stripe Customer ID returns `400`.
+Stripe portal creation uses the asynchronous SDK; Stripe failures return a sanitized `503` without
+changing the stored billing identity or access snapshot.
 
 ## Stripe webhook
 
@@ -347,6 +349,9 @@ subscription precedence and does not consume freemium counters.
 When Stripe and `FREEMIUM_TRIAL_ENABLED` are active, eligible registration creates a no-card trial
 ending after `FREEMIUM_TRIAL_DAYS` and marks it granted. Eligible older or admin-created users can
 receive it best-effort when their profile is first loaded.
+If that optional write fails, the profile endpoint rolls back the transaction and reloads the
+persisted user before responding. A later profile read can retry the ungranted trial. Database
+failures that also prevent reloading the user still fail the request.
 
 Trial activity depends on the runtime toggle and a future UTC expiration. `freemium_trial_used`
 prevents regranting but is not the active-state check. Disabling the toggle suspends an existing
@@ -476,6 +481,13 @@ responses, including delayed body decoding; reads overlapping confirmed consumpt
 limits, and low-balance emphasis. `PaywallBanner` renders inline upgrade or payment-recovery actions.
 There is no `PaywallGate`; each feature page adapts only the consuming controls while preserving
 readable history where backend policy permits.
+
+Paywall and Settings plan actions share `lib/billing.ts`. On `409 subscription_already_active`, they
+reload `/api/auth/me` and update the authenticated profile; only a refreshed `active` or `trialing`
+status resolves the conflict successfully. Other conflicts, failed reads, or a non-Premium profile
+retain the checkout error and permit retry. Unmounted or replaced-session requests cannot publish
+profiles or redirect the browser. This recovery reads the locally persisted profile rather than
+starting another provider synchronization.
 
 `past_due`, `unpaid`, and `paused` use Customer Portal recovery. `none`, `incomplete`,
 `incomplete_expired`, and `canceled` offer monthly/yearly checkout.

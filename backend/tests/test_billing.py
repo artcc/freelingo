@@ -249,12 +249,13 @@ async def test_portal_opens_for_past_due_user(client, db_session, test_user):
 
     with (
         patch.object(settings, "STRIPE_ENABLED", True),
-        patch("stripe.billing_portal.Session.create", return_value=mock_session) as mock_portal,
+        patch("stripe.billing_portal.Session.create_async", return_value=mock_session) as mock_portal,
     ):
         res = await client.post("/api/billing/portal", headers=headers)
 
     assert res.status_code == 200
     assert res.json()["url"] == "https://billing.stripe.com/session/test"
+    mock_portal.assert_awaited_once()
     assert mock_portal.call_args.kwargs["customer"] == "cus_past_due"
 
 

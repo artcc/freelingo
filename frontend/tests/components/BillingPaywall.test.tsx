@@ -129,6 +129,53 @@ beforeEach(() => {
 })
 
 describe('billing paywall UI', () => {
+  it.each(['paywall', 'settings'])(
+    'refreshes the profile and removes purchase actions after an already-active conflict in %s',
+    async (component) => {
+      mockApiFetch
+        .mockResolvedValueOnce(
+          jsonResponse({ detail: 'subscription_already_active' }, 409)
+        )
+        .mockResolvedValueOnce(
+          jsonResponse({
+            ...user(),
+            display_name: 'Learner',
+            subscription_status: 'active',
+          })
+        )
+      render(component === 'paywall' ? <PaywallBanner /> : <BillingSection />)
+      fireEvent.click(screen.getByText('planMonthly'))
+      await waitFor(() =>
+        expect(useAuthStore.getState().user?.subscription_status).toBe('active')
+      )
+      expect(screen.queryByText('planMonthly')).toBeNull()
+      expect(screen.queryByText('checkoutError')).toBeNull()
+      expect(window.location.assign).not.toHaveBeenCalled()
+      if (component === 'settings') {
+        expect(screen.getByText('manage')).toBeInTheDocument()
+      }
+    }
+  )
+
+  it.each(['paywall', 'settings'])(
+    'keeps purchase recovery available after a failed profile read in %s',
+    async (component) => {
+      mockApiFetch
+        .mockResolvedValueOnce(
+          jsonResponse({ detail: 'subscription_already_active' }, 409)
+        )
+        .mockResolvedValueOnce(jsonResponse({}, 503))
+      render(component === 'paywall' ? <PaywallBanner /> : <BillingSection />)
+      fireEvent.click(screen.getByText('planMonthly'))
+      await waitFor(() =>
+        expect(screen.getByText('checkoutError')).toBeInTheDocument()
+      )
+      expect(useAuthStore.getState().user?.subscription_status).toBe('none')
+      expect(screen.getByText('planMonthly').closest('button')).not.toBeDisabled()
+      expect(window.location.assign).not.toHaveBeenCalled()
+    }
+  )
+
   it('formats the subscription end date with the selected interface locale', () => {
     localeState.value = 'fi'
     useAuthStore.setState({

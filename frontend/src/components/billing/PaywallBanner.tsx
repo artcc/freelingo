@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import {
@@ -11,6 +11,7 @@ import {
   Mic,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
+import { createCheckout } from '@/lib/billing'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import { useConfigStore } from '@/store/config'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
@@ -70,6 +71,8 @@ export function PaywallBanner({
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [portalLoading, setPortalLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const checkoutRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => checkoutRequest.current?.abort(), [])
   const paymentRecovery = needsPaymentRecovery(user)
   const yearlyCta = splitYearlyCta(
     t('planYearly', {
@@ -81,25 +84,27 @@ export function PaywallBanner({
 
   const context = PAYWALL_CONTEXT[feature] ?? PAYWALL_CONTEXT.chat
   const Icon = context.icon
-  const trialEligible = !user?.trial_used
+  const trialEligible = trialDays > 0 && !user?.trial_used
 
   async function handleCheckout(interval: BillingInterval) {
+    if (loading) return
+    const controller = new AbortController()
+    checkoutRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
     setLoading(interval)
     setError(null)
     try {
-      const res = await apiFetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: interval }),
-      })
-      if (!res.ok) {
-        throw new Error(t('checkoutError'))
-      }
-      const { url } = await res.json()
-      window.location.assign(url)
+      const url = await createCheckout(interval, controller.signal)
+      if (obsolete()) return
+      if (url) window.location.assign(url)
     } catch {
+      if (obsolete()) return
       setError(t('checkoutError'))
-      setLoading(null)
+    } finally {
+      if (!obsolete()) setLoading(null)
     }
   }
 

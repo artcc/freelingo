@@ -147,10 +147,13 @@ async def create_portal_session(
             detail="No active subscription found",
         )
 
-    session = stripe.billing_portal.Session.create(
-        customer=current_user.stripe_customer_id,
-        return_url=f"{settings.STRIPE_BASE_URL}/settings",
-    )
+    try:
+        session = await stripe.billing_portal.Session.create_async(
+            customer=current_user.stripe_customer_id,
+            return_url=f"{settings.STRIPE_BASE_URL}/settings",
+        )
+    except stripe.StripeError:
+        raise HTTPException(status_code=503, detail="Stripe billing unavailable") from None
     return {"url": session.url}
 
 

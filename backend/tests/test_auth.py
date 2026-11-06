@@ -1,6 +1,8 @@
 from unittest.mock import patch
 
 import pytest
+from sqlalchemy import event
+from sqlalchemy.exc import OperationalError
 
 
 @pytest.mark.asyncio
@@ -743,6 +745,57 @@ async def test_register_sets_freemium_trial(client):
     body = me.json()
     assert body["freemium_trial_used"] is True
     assert body["freemium_trial_ends_at"] is not None
+
+
+@pytest.mark.parametrize("revenuecat_enabled", [False, True])
+async def test_profile_survives_failed_trial_write_and_retries_later(
+    client, test_user, db_session, monkeypatch, caplog, revenuecat_enabled
+):
+    from app.core.config import settings
+
+    user, headers = test_user
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "REVENUECAT_ENABLED", revenuecat_enabled)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", True)
+    user.subscription_status = "none"
+    user.freemium_trial_ends_at = None
+    user.freemium_trial_used = False
+    await db_session.commit()
+    user_id = user.id
+    engine = db_session.bind.sync_engine
+    rejected = []
+
+    def reject_trial_write(conn, cursor, statement, parameters, context, executemany):
+        if statement.startswith("UPDATE users"):
+            rejected.append(True)
+            raise OperationalError(statement, None, RuntimeError("private database error"))
+
+    event.listen(engine, "before_cursor_execute", reject_trial_write)
+    try:
+        response = await client.get("/api/auth/me", headers=headers)
+    finally:
+        event.remove(engine, "before_cursor_execute", reject_trial_write)
+
+    assert rejected == [True]
+    assert response.status_code == 200
+    assert response.json()["id"] == user_id
+    assert response.json()["freemium_trial_used"] is False
+    assert response.json()["freemium_trial_ends_at"] is None
+    assert db_session.is_active
+    assert "private database error" not in caplog.text
+    assert "Freemium trial activation failed (OperationalError)" in caplog.text
+
+    response = await client.get("/api/auth/me", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["freemium_trial_used"] is True
+    granted_until = response.json()["freemium_trial_ends_at"]
+    assert granted_until is not None
+    await db_session.refresh(user)
+    assert user.freemium_trial_used is True
+    assert user.subscription_status == "none"
+    assert (await client.get("/api/auth/me", headers=headers)).json()[
+        "freemium_trial_ends_at"
+    ] == granted_until
 
 
 @pytest.mark.asyncio

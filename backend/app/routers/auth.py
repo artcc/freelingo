@@ -308,8 +308,10 @@ async def get_me(
             ) + timedelta(days=settings.FREEMIUM_TRIAL_DAYS)
             current_user.freemium_trial_used = True
             await db.commit()
-    except Exception:
-        pass  # best-effort, user still gets in
+    except Exception as exc:
+        await db.rollback()
+        await db.refresh(current_user)
+        logger.warning("[auth] Freemium trial activation failed (%s)", type(exc).__name__)
 
     return current_user
 

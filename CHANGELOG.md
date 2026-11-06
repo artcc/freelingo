@@ -20,6 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Fixed
 
+- Paywalls show no-charge-today terms only when a Stripe trial is configured and the user has not already used it.
+- Paywall and Settings checkout actions refresh the profile when billing confirms an existing Premium subscription, removing stale purchase prompts without opening another checkout.
+- Stripe Customer Portal creation is asynchronous and returns a controlled unavailable response on provider failure, including the RevenueCat fallback.
+- Profile reads recover from failed retroactive freemium-trial writes and allow a later request to retry the grant.
 - Landing language bubbles use stable server/client positioning and a wider desktop orbit, with wrapping mobile rows to prevent crowding as the language catalog grows.
 - Study-plan generation rejects invalid or disabled target languages before changing data, and free voice conversations no longer inherit another language's study plan or level.
 - Stripe-only access reconciles current subscription state and deduplicates webhooks, preventing delayed events from undoing cancellations or payment recovery and duplicate deliveries from resetting quotas.

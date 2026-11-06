@@ -576,13 +576,20 @@ async def test_stripe_checkout_keeps_identifiers_and_trial_without_overwriting_a
     assert user.monthly_tokens_limit == 321
 
 
-async def test_checkout_checks_revenuecat_before_creating_subscription(client, test_user):
-    _, headers = test_user
+async def test_checkout_checks_revenuecat_before_creating_subscription(client, test_user, db_session):
+    user, headers = test_user
+    assert user.subscription_status == "none"
     with patch("stripe.checkout.Session.create_async") as create_session:
         response = await client.post(
             "/api/billing/checkout", headers=headers, json={"plan": "monthly"}
         )
     assert response.status_code == 409
+    assert response.json()["detail"] == "subscription_already_active"
+    await db_session.refresh(user)
+    assert user.subscription_status == "active"
+    assert (await client.get("/api/auth/me", headers=headers)).json()[
+        "subscription_status"
+    ] == "active"
     create_session.assert_not_called()
 
 
@@ -655,7 +662,7 @@ async def test_portal_uses_revenuecat_management_link(
     provider.payload["subscriber"][
         "management_url"
     ] = "https://apps.apple.com/account/subscriptions"
-    with patch("stripe.billing_portal.Session.create") as portal:
+    with patch("stripe.billing_portal.Session.create_async") as portal:
         response = await client.post("/api/billing/portal", headers=headers)
     assert response.status_code == 200
     assert response.json()["url"] == provider.payload["subscriber"]["management_url"]
@@ -667,11 +674,12 @@ async def test_portal_preserves_stripe_customer_portal(client, db_session, test_
     user.stripe_customer_id = "cus_existing"
     await db_session.commit()
     with patch(
-        "stripe.billing_portal.Session.create",
+        "stripe.billing_portal.Session.create_async",
         return_value=SimpleNamespace(url="https://billing.stripe.com/session/test"),
     ) as portal:
         response = await client.post("/api/billing/portal", headers=headers)
     assert response.status_code == 200
+    portal.assert_awaited_once()
     assert portal.call_args.kwargs["customer"] == "cus_existing"
 
 
@@ -692,14 +700,14 @@ async def test_portal_provider_failure_uses_only_linked_stripe_customer(
     else:
         provider.status = failure
     with patch(
-        "stripe.billing_portal.Session.create",
+        "stripe.billing_portal.Session.create_async",
         return_value=SimpleNamespace(url="https://billing.stripe.com/session/test"),
     ) as portal:
         response = await client.post("/api/billing/portal", headers=headers)
     if stripe_customer_id:
         assert response.status_code == 200
         assert response.json() == {"url": "https://billing.stripe.com/session/test"}
-        portal.assert_called_once_with(
+        portal.assert_awaited_once_with(
             customer=stripe_customer_id,
             return_url=f"{settings.STRIPE_BASE_URL}/settings",
         )
@@ -710,7 +718,7 @@ async def test_portal_provider_failure_uses_only_linked_stripe_customer(
 
 async def test_portal_without_management_url_or_stripe_customer_returns_400(client, test_user):
     _, headers = test_user
-    with patch("stripe.billing_portal.Session.create") as portal:
+    with patch("stripe.billing_portal.Session.create_async") as portal:
         response = await client.post("/api/billing/portal", headers=headers)
     assert response.status_code == 400
     portal.assert_not_called()

@@ -12,7 +12,7 @@ from app.main import app
 from app.models.billing_checkout import BillingCheckout
 from app.models.billing_webhook import StripeWebhookReceipt
 from app.routers import billing
-from app.services import stripe_checkout_service
+from app.services import revenuecat_service, stripe_checkout_service
 
 if "/api/billing/checkout" not in {getattr(route, "path", None) for route in app.routes}:
     app.include_router(billing.router)
@@ -591,3 +591,35 @@ async def test_later_provider_failure_does_not_rollback_persisted_customer(
     assert (await checkout(client, headers)).status_code == 200
     stripe_provider.create_customer.assert_awaited_once()
     assert len(stripe_provider.customers) == 1
+
+
+@pytest.mark.parametrize("revenuecat_mode", ["disabled", "no_link", "unavailable"])
+@pytest.mark.parametrize("failure", ["connection", "missing_customer"])
+async def test_portal_failure_is_async_sanitized_and_preserves_access(
+    client, db_session, test_user, stripe_provider, monkeypatch, revenuecat_mode, failure
+):
+    user, headers = test_user
+    user.stripe_customer_id = "cus_existing"
+    user.subscription_status = "active"
+    await db_session.commit()
+    monkeypatch.setattr(settings, "REVENUECAT_ENABLED", revenuecat_mode != "disabled")
+    management = AsyncMock(return_value=None)
+    if revenuecat_mode == "unavailable":
+        management.side_effect = revenuecat_service.RevenueCatError("unavailable")
+    monkeypatch.setattr(revenuecat_service, "get_management_url", management)
+    stripe_provider.create_portal.side_effect = (
+        stripe.APIConnectionError("private provider error")
+        if failure == "connection"
+        else stripe.InvalidRequestError("private provider error", "customer")
+    )
+    with patch("stripe.billing_portal.Session.create") as synchronous_portal:
+        response = await client.post("/api/billing/portal", headers=headers)
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Stripe billing unavailable"}
+    synchronous_portal.assert_not_called()
+    stripe_provider.create_portal.assert_awaited_once_with(
+        customer="cus_existing", return_url=f"{settings.STRIPE_BASE_URL}/settings"
+    )
+    await db_session.refresh(user)
+    assert user.subscription_status == "active"
+    assert user.stripe_customer_id == "cus_existing"
