@@ -26,6 +26,7 @@ const mocks = vi.hoisted(() => ({
   closeAudio: vi.fn(),
   onAudioIdle: null as (() => void) | null,
   starters: [] as string[],
+  push: vi.fn(),
 }))
 
 vi.mock('@ricky0123/vad-react', () => ({
@@ -63,7 +64,7 @@ vi.mock('next-intl', async (importOriginal) => {
       ),
   }
 })
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }))
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push: mocks.push }) }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
 vi.mock('@/lib/audio', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/audio')>()),
@@ -210,6 +211,59 @@ afterEach(() => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it.each(['current', 'replace-session', 'unmount'])(
+    'handles a completed demo checkout conflict for %s',
+    async (action) => {
+      const profile = {
+        id: 1,
+        username: 'learner',
+        display_name: 'Learner',
+        role: 'user',
+        subscription_status: 'none',
+      }
+      mocks.apiFetch.mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () => (url === '/api/auth/me' ? profile : null),
+      }))
+      const view = render(<ConversationMode trialMode />)
+      await start()
+      fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+      await waitFor(() =>
+        expect(useAuthStore.getState().user?.username).toBe('learner')
+      )
+      let finish!: (body: unknown) => void
+      const body = new Promise((resolve) => {
+        finish = resolve
+      })
+      const decode = vi.fn(() => body)
+      mocks.apiFetch
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 409,
+          json: async () => ({ detail: 'subscription_already_active' }),
+        })
+        .mockResolvedValueOnce({ ok: true, json: decode })
+      fireEvent.click(screen.getByText('planMonthly'))
+      await waitFor(() => expect(decode).toHaveBeenCalledOnce())
+      if (action === 'unmount') view.unmount()
+      else if (action === 'replace-session')
+        act(() => useAuthStore.getState().startSession('new-account'))
+      await act(async () =>
+        finish({ ...profile, subscription_status: 'active' })
+      )
+      if (action === 'current') {
+        expect(useAuthStore.getState().user?.subscription_status).toBe('active')
+        expect(mocks.push).toHaveBeenCalledWith('/dashboard')
+      } else {
+        expect(useAuthStore.getState().user?.subscription_status).not.toBe(
+          'active'
+        )
+        expect(mocks.push).not.toHaveBeenCalled()
+      }
+      expect(screen.queryByText('checkoutError')).toBeNull()
+    }
+  )
+
   it.each([
     'automatic-start',
     'manual-start',

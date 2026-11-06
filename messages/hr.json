@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Koje jezike mogu učiti?",
-        "answer": "Britanski i američki engleski, španjolski, talijanski, portugalski, njemački, francuski, japanski, korejski i kontinentalni kineski. Možeš učiti više jezika istodobno, uz zasebne planove i napredak za svaki jezik."
+        "answer": "{languages}. Možeš učiti više jezika istodobno, uz zasebne planove i napredak za svaki jezik."
       },
       "start": {
         "question": "Kako započeti učenje?",
@@ -92,6 +92,8 @@
     "footerProduct": "Proizvod",
     "footerLegal": "Pravne informacije",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Istodobno vježbaj rječnik karticama",
     "workflowStep6": "Vježbaj slobodan razgovor s Linguom",
     "q_language": "Koji ću jezik učiti?",
-    "a_language": "FreeLingo trenutačno podržava više jezika (američki engleski, britanski engleski, francuski, njemački, talijanski, japanski, korejski, kineski koji se govori u kontinentalnoj Kini, portugalski i španjolski), a s vremenom ćemo dodati još jezika. Kad novi jezik postane dostupan, pronaći ćeš ga pod Postavke → Moji jezici – dodaj ga i odmah počni učiti.",
+    "a_language": "FreeLingo trenutačno podržava više jezika ({languages}), a s vremenom ćemo dodati još jezika. Kad novi jezik postane dostupan, pronaći ćeš ga pod Postavke → Moji jezici – dodaj ga i odmah počni učiti.",
     "q_assessment": "Što je procjena razine?",
     "a_assessment": "Prilagodljivi test s najviše 15 pitanja iz banke pitanja za jezik koji učiš. Obuhvaća gramatiku, rječnik i razumijevanje pročitanog od A1 do C2. Rezultat procjenjuje CEFR razinu i pokazuje prednosti i područja za vježbu; predloženu razinu možeš prilagoditi prije izrade plana.",
     "q_studyPlan": "Što je plan učenja i kako ga stvaram?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Dostupni jezici"
   },
   "targetLanguages": {
+    "sv-SE": "Švedski",
+    "sv": "Švedski",
+    "sv-SE-description": "Švedski kakav se govori u Švedskoj.",
+    "ru-RU": "Ruski",
+    "ru": "Ruski",
+    "ru-RU-description": "Ruski kakav se govori u Rusiji, pisan ćirilicom.",
+    "nl-NL": "Nizozemski (Nizozemska)",
+    "nl": "Nizozemski",
+    "nl-NL-description": "Nizozemski kakav se govori u Nizozemskoj.",
     "en-US": "Američki engleski",
     "en-GB": "Britanski engleski",
     "es-ES": "Španjolski",
     "it-IT": "Talijanski",
-    "pt-PT": "Portugalski",
+    "pt-BR": "Portugalski (Brazil)",
+    "pt-PT": "Portugalski (Portugal)",
     "fr-FR": "Francuski",
     "de-DE": "Njemački",
     "pl-PL": "Poljski",
@@ -1498,6 +1512,7 @@
     "zh": "Kineski",
     "es-ES-description": "Španjolski kakav se govori u Španjolskoj.",
     "it-IT-description": "Talijanski kakav se govori u Italiji.",
+    "pt-BR-description": "Portugalski kakav se govori u Brazilu.",
     "pt-PT-description": "Portugalski kakav se govori u Portugalu.",
     "en-US-description": "Engleski kakav se govori u SAD-u.",
     "en-GB-description": "Engleski kakav se govori u Ujedinjenoj Kraljevini.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Razumijem",
     "entry1": {
-      "label": "Sada možeš učiti poljski!",
-      "desc": "Dodali smo poljski kao jezik za učenje, sa sadržajem od A1 do C2. Odaberi ga na početku ili ga dodaj putem Postavke → Moji jezici."
+      "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",
+      "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
     "entry2": {
       "label": "Poboljšanja učenja",

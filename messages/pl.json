@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Jakich języków mogę się uczyć?",
-        "answer": "Angielskiego brytyjskiego i amerykańskiego, hiszpańskiego, włoskiego, portugalskiego, niemieckiego, francuskiego, japońskiego, koreańskiego i chińskiego kontynentalnego. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
+        "answer": "{languages}. Możesz uczyć się kilku jednocześnie, z osobnymi planami i postępami dla każdego języka."
       },
       "start": {
         "question": "Jak zacząć naukę?",
@@ -92,6 +92,8 @@
     "footerProduct": "Produkt",
     "footerLegal": "Prawne",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Używaj fiszek do trenowania słownictwa równolegle",
     "workflowStep6": "Ćwicz swobodną rozmowę z Lingu",
     "q_language": "Jakiego języka będę się uczyć?",
-    "a_language": "FreeLingo obsługuje obecnie kilka języków (amerykański angielski, brytyjski angielski, chiński kontynentalny, francuski, hiszpański, japoński, koreański, niemiecki, portugalski, włoski) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
+    "a_language": "FreeLingo obsługuje obecnie kilka języków ({languages}) i z czasem będziemy dodawać kolejne. Gdy nowy język będzie dostępny, znajdziesz go w Ustawieniach → Moje języki — dodaj go i zacznij się uczyć od razu.",
     "q_assessment": "Czym jest ocena poziomu?",
     "a_assessment": "Adaptacyjny test z maksymalnie 15 pytaniami z banku pytań dla języka nauki. Obejmuje gramatykę, słownictwo i czytanie ze zrozumieniem od A1 do C2. Wynik szacuje poziom CEFR i wskazuje mocne strony oraz obszary do ćwiczeń; przed utworzeniem planu możesz zmienić sugerowany poziom.",
     "q_studyPlan": "Czym jest plan nauki i jak go wygenerować?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "sv-SE": "Szwedzki",
+    "sv": "Szwedzki",
+    "sv-SE-description": "Szwedzki używany w Szwecji.",
+    "ru-RU": "Rosyjski",
+    "ru": "Rosyjski",
+    "ru-RU-description": "Rosyjski używany w Rosji, zapisywany cyrylicą.",
+    "nl-NL": "Niderlandzki (Holandia)",
+    "nl": "Niderlandzki",
+    "nl-NL-description": "Niderlandzki używany w Holandii.",
     "en-US": "Angielski amerykański",
     "en-GB": "Angielski brytyjski",
     "es-ES": "Hiszpański",
     "it-IT": "Włoski",
-    "pt-PT": "Portugalski",
+    "pt-BR": "Portugalski (Brazylia)",
+    "pt-PT": "Portugalski (Portugalia)",
     "fr-FR": "Francuski",
     "de-DE": "Niemiecki",
     "pl-PL": "Polski",
@@ -1498,6 +1512,7 @@
     "zh": "chiński",
     "es-ES-description": "Hiszpański używany w Hiszpanii.",
     "it-IT-description": "Włoski używany we Włoszech.",
+    "pt-BR-description": "Portugalski używany w Brazylii.",
     "pt-PT-description": "Portugalski używany w Portugalii.",
     "en-US-description": "Angielski używany w Stanach Zjednoczonych.",
     "en-GB-description": "Angielski używany w Wielkiej Brytanii.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Teraz możesz uczyć się polskiego!",
-      "desc": "Dodaliśmy polski jako język do nauki, z materiałami od A1 do C2. Wybierz go na początku lub dodaj w Ustawieniach → Moje języki."
+      "label": "Nowe języki: polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki",
+      "desc": "Dodaliśmy polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
     "entry2": {
       "label": "Ulepszenia w nauce",

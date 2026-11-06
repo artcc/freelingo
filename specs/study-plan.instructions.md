@@ -14,6 +14,11 @@ existing resources.
 Assessment completion normally creates the plan. `POST /api/study-plan/generate` remains available as
 an explicit plan-generation endpoint.
 
+Explicit generation uses the supplied `target_language`; omission or null selects the user's active
+language, or the profile language when no active track exists. The resolved code must be canonical and
+operator-enabled, following `target-language.instructions.md`. Invalid or disabled values, including
+an explicit empty string, return `422` before curriculum lookup, language creation or plan replacement.
+
 The plan stores a deterministic week/day grid in `generated_plan`; lesson content is generated lazily
 and persisted when the current day is requested.
 

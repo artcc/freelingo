@@ -44,7 +44,7 @@ describe('useLanguageStore — initial state', () => {
     expect(useLanguageStore.getState().supportedLanguages).toEqual(
       SUPPORTED_TARGET_LANGUAGES
     )
-    expect(useLanguageStore.getState().supportedLanguages.length).toBe(11)
+    expect(useLanguageStore.getState().supportedLanguages.length).toBe(15)
   })
 
   it('starts with empty availableLanguageCodes', () => {
@@ -604,6 +604,104 @@ describe('useLanguageStore — addLanguage', () => {
     })
     expect(mockApiFetch).toHaveBeenCalledTimes(2)
   })
+
+  it('keeps Portuguese variants separate through add, switch, and remove', async () => {
+    const response = (active: string, codes = ['pt-BR', 'pt-PT']) => ({
+      languages: codes.map((code) => ({
+        target_language: code,
+        is_active: code === active,
+        plan: null,
+        progress: null,
+      })),
+      all_supported_languages: ['pt-BR', 'pt-PT'],
+    })
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse(response('pt-BR')))
+    expect(await useLanguageStore.getState().addLanguage('pt-BR')).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('pt-BR')
+    expect(useLanguageStore.getState().availableLanguageCodes).toEqual(['pt-BR', 'pt-PT'])
+
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse({}))
+      .mockResolvedValueOnce(mockResponse(response('pt-PT')))
+    expect(await useLanguageStore.getState().switchLanguage('pt-PT')).toBe(true)
+    expect(useLanguageStore.getState().activeLanguage?.flagPath).toBe('/flags/portugal.jpg')
+
+    mockApiFetch
+      .mockResolvedValueOnce(mockResponse(null, true, 204))
+      .mockResolvedValueOnce(mockResponse(response('pt-PT', ['pt-PT'])))
+    expect(await useLanguageStore.getState().removeLanguage('pt-BR')).toBe(true)
+    expect(mockApiFetch).toHaveBeenCalledWith('/api/languages/pt-BR', { method: 'DELETE' })
+    expect(useLanguageStore.getState().userLanguages.map((lang) => lang.target_language)).toEqual(['pt-PT'])
+    expect(useLanguageStore.getState().activeLanguage?.code).toBe('pt-PT')
+  })
+
+  it.each([
+    ['nl-NL', '/flags/netherlands.jpg'],
+    ['ru-RU', '/flags/russia.jpg'],
+    ['sv-SE', '/flags/sweden.jpg'],
+  ])(
+    'adds, switches, and removes %s while retaining English',
+    async (code, flagPath) => {
+      const response = (active: string, codes = ['en-GB', code]) => ({
+        languages: codes.map((code) => ({
+          target_language: code,
+          is_active: code === active,
+          plan: null,
+          progress: null,
+        })),
+        all_supported_languages: ['en-GB', code],
+      })
+      mockApiFetch
+        .mockResolvedValueOnce(mockResponse({}))
+        .mockResolvedValueOnce(mockResponse(response(code)))
+      expect(await useLanguageStore.getState().addLanguage(code)).toBe(true)
+      expect(mockApiFetch).toHaveBeenCalledWith('/api/languages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target_language: code }),
+      })
+      expect(useLanguageStore.getState().activeLanguage?.flagPath).toBe(flagPath)
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe(code)
+      expect(useLanguageStore.getState().availableLanguageCodes).toContain(code)
+
+      mockApiFetch
+        .mockResolvedValueOnce(mockResponse({}))
+        .mockResolvedValueOnce(mockResponse(response('en-GB')))
+      expect(await useLanguageStore.getState().switchLanguage('en-GB')).toBe(true)
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+
+      mockApiFetch
+        .mockResolvedValueOnce(mockResponse({}))
+        .mockResolvedValueOnce(mockResponse(response(code)))
+      expect(await useLanguageStore.getState().switchLanguage(code)).toBe(true)
+      expect(mockApiFetch).toHaveBeenCalledWith('/api/languages/active', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target_language: code }),
+        signal: expect.any(AbortSignal),
+      })
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe(code)
+
+      mockApiFetch
+        .mockResolvedValueOnce(mockResponse({}))
+        .mockResolvedValueOnce(mockResponse(response('en-GB')))
+      expect(await useLanguageStore.getState().switchLanguage('en-GB')).toBe(true)
+
+      mockApiFetch
+        .mockResolvedValueOnce(mockResponse(null, true, 204))
+        .mockResolvedValueOnce(mockResponse(response('en-GB', ['en-GB'])))
+      expect(await useLanguageStore.getState().removeLanguage(code)).toBe(true)
+      expect(mockApiFetch).toHaveBeenCalledWith(`/api/languages/${code}`, {
+        method: 'DELETE',
+      })
+      expect(
+        useLanguageStore.getState().userLanguages.map((lang) => lang.target_language)
+      ).toEqual(['en-GB'])
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('en-GB')
+    }
+  )
 
   it('does not call fetchLanguages when POST fails', async () => {
     mockApiFetch.mockResolvedValueOnce(mockResponse(null, false, 409))

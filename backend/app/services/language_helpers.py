@@ -31,6 +31,20 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
     "fr-FR": {"name": "French", "self_name": "Français", "iso639": "fr", "flag": "🇫🇷"},
     "it-IT": {"name": "Italian", "self_name": "Italiano", "iso639": "it", "flag": "🇮🇹"},
     "pl-PL": {"name": "Polish", "self_name": "Polski", "iso639": "pl", "flag": "🇵🇱"},
+    "ru-RU": {"name": "Russian", "self_name": "Русский", "iso639": "ru", "flag": "🇷🇺"},
+    "sv-SE": {"name": "Swedish", "self_name": "Svenska", "iso639": "sv", "flag": "🇸🇪"},
+    "nl-NL": {
+        "name": "Dutch (Netherlands)",
+        "self_name": "Nederlands",
+        "iso639": "nl",
+        "flag": "🇳🇱",
+    },
+    "pt-BR": {
+        "name": "Brazilian Portuguese",
+        "self_name": "Português (Brasil)",
+        "iso639": "pt",
+        "flag": "🇧🇷",
+    },
     "pt-PT": {
         "name": "European Portuguese",
         "self_name": "Português (Portugal)",
@@ -53,6 +67,24 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
 }
 
 _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
+    "sv-SE": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
+    "ru-RU": {
+        "script": "cyrillic",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
+    "nl-NL": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
     "en-US": {
         "script": "latin",
         "romanization": "",
@@ -95,6 +127,12 @@ _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
         "uses_word_spacing": True,
         "reading_length_unit": "words",
     },
+    "pt-BR": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
     "pt-PT": {
         "script": "latin",
         "romanization": "",
@@ -122,6 +160,9 @@ _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
 }
 
 _LANGUAGE_CAPABILITY_ALIASES: dict[str, str] = {
+    "sv": "sv-SE",
+    "ru": "ru-RU",
+    "nl": "nl-NL",
     "de": "de-DE",
     "es": "es-ES",
     "fr": "fr-FR",

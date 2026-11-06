@@ -177,6 +177,85 @@ it('handles a different server-side language by reloading without automatically 
   })
 })
 
+it('preserves a new import when the language refresh finishes after publishing the new context', async () => {
+  let finishRefresh!: (ok: boolean) => void
+  const refresh = new Promise<boolean>((resolve) => {
+    finishRefresh = resolve
+  })
+  useLanguageStore.setState({
+    fetchLanguages: vi.fn(() => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode(serverLanguage)!,
+        needsRefresh: false,
+      })
+      return refresh
+    }),
+  })
+  await show()
+  await screen.findByText('hello')
+  serverLanguage = 'it-IT'
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Add All 1 to Flashcards' })
+  )
+  await screen.findByText('ciao')
+  expect(
+    api.mock.calls.filter(([url]) => url === '/api/flashcards/bulk')
+  ).toHaveLength(1)
+
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Add All 1 to Flashcards' })
+  )
+  await screen.findByText(/1 cards added/)
+  await act(async () => finishRefresh(true))
+  expect(screen.getByText(/1 cards added/)).toBeInTheDocument()
+  const imports = api.mock.calls.filter(
+    ([url]) => url === '/api/flashcards/bulk'
+  )
+  expect(imports).toHaveLength(2)
+  expect(JSON.parse(imports[1][1].body)).toMatchObject({
+    study_plan_id: 43,
+    target_language: 'it-IT',
+    flashcards: [{ word: 'ciao' }],
+  })
+})
+
+it('reloads a replaced plan even when the language snapshot stays unchanged', async () => {
+  await show()
+  await screen.findByText('hello')
+  const original = api.getMockImplementation()!
+  api.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url === '/api/study-plan/current')
+      return json({ id: 44, target_language: 'en-GB' })
+    if (url === '/api/flashcards/bulk') {
+      const body = JSON.parse(String(options?.body))
+      return body.study_plan_id === 44
+        ? json({ created: 1 })
+        : json({ detail: 'flashcard_context_changed' }, 409)
+    }
+    return original(url, options)
+  })
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Add All 1 to Flashcards' })
+  )
+  await screen.findByText(messages.flashcards.contextChanged)
+  expect(
+    api.mock.calls.filter(([url]) => url === '/api/flashcards/bulk')
+  ).toHaveLength(1)
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Add All 1 to Flashcards' })
+  )
+  await screen.findByText(/1 cards added/)
+  const imports = api.mock.calls.filter(
+    ([url]) => url === '/api/flashcards/bulk'
+  )
+  expect(imports).toHaveLength(2)
+  expect(JSON.parse(imports[1][1].body)).toMatchObject({
+    study_plan_id: 44,
+    target_language: 'en-GB',
+    flashcards: [{ word: 'hello' }],
+  })
+})
+
 it('ignores late set content from the previous language', async () => {
   let resolveOld!: (body: unknown) => void
   const old = new Promise((resolve) => {

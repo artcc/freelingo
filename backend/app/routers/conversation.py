@@ -23,6 +23,7 @@ from app.models.conversation import Conversation as ConversationModel
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.models.user_language import UserLanguage
+from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
 from app.services.assessment_voice_trial import (
     AssessmentVoiceTrial,
     consume_assessment_voice_trial_token,
@@ -332,59 +333,41 @@ async def conversation_ws(
         plan: StudyPlan | None = None
         if lesson_practice:
             plan = lesson_practice.plan
-        elif target_language_from_client:
-            ul_result = await db.execute(
-                select(UserLanguage).where(
-                    UserLanguage.user_id == user_id,
-                    UserLanguage.target_language == target_language_from_client,
-                )
-            )
-            ul = ul_result.scalar_one_or_none()
-            if ul:
-                plan_result = await db.execute(
-                    select(StudyPlan)
-                    .where(
-                        StudyPlan.user_language_id == ul.id,
-                        StudyPlan.is_active == True,  # noqa: E712
-                    )
-                    .limit(1)
-                )
-                plan = plan_result.scalar_one_or_none()
-        if not plan:
-            active_lang = await get_active_language(db, user_id)
-            if active_lang:
-                result = await db.execute(
-                    select(StudyPlan)
-                    .where(
-                        StudyPlan.user_language_id == active_lang.id,
-                        StudyPlan.is_active == True,  # noqa: E712
-                    )
-                    .limit(1)
-                )
-                plan = result.scalar_one_or_none()
-        if not plan:
-            # No plan for the selected language — use A2 + the selected language
-            cefr_level = "A2"
-            study_plan_id_for_conv = None
-            if target_language_from_client:
-                target_language = target_language_from_client
-            elif active_lang:
-                target_language = active_lang.target_language
-            else:
-                target_language = "en-GB"
         else:
-            cefr_level = plan.cefr_level
-            if lesson_practice:
-                target_language = plan.target_language
-            elif target_language_from_client:
+            if target_language_from_client is not None:
                 target_language = target_language_from_client
             else:
-                ul_row = await db.execute(
-                    select(UserLanguage).where(UserLanguage.id == plan.user_language_id)
+                active_lang = await get_active_language(db, user_id)
+                target_language = active_lang.target_language if active_lang else "en-GB"
+
+            if (
+                not isinstance(target_language, str)
+                or target_language not in SUPPORTED_TARGET_LANGUAGES
+            ):
+                await websocket.send_json({"type": "error", "code": "invalid_target_language"})
+                await websocket.close(code=1008)
+                return
+
+            # Resolve only this language; another active track must not supply its plan or level.
+            plan_result = await db.execute(
+                select(StudyPlan)
+                .join(UserLanguage, StudyPlan.user_language_id == UserLanguage.id)
+                .where(
+                    UserLanguage.user_id == user_id,
+                    UserLanguage.target_language == target_language,
+                    StudyPlan.user_id == user_id,
+                    StudyPlan.target_language == target_language,
+                    StudyPlan.is_active.is_(True),
                 )
-                ul = ul_row.scalar_one_or_none()
-                target_language = ul.target_language if ul else plan.target_language
-            study_plan_id_for_conv = plan.id
+                .order_by(StudyPlan.created_at.desc())
+                .limit(1)
+            )
+            plan = plan_result.scalar_one_or_none()
+
+        if plan:
+            target_language = plan.target_language
+        cefr_level = plan.cefr_level if plan else "A2"
+        study_plan_id_for_conv = plan.id if plan else None
 
         # Read user settings before session closes to avoid DetachedInstanceError
         max_duration = (

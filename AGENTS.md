@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.11.0**
+**Current version: 1.12.0**
 
 ## Project
 
@@ -37,6 +37,7 @@ Any code change affecting behavior, models, endpoints, configuration, or depende
 4. Record user-visible changes in `CHANGELOG.md`. For changes not yet in production, explicitly ask the user whether a changelog entry is warranted before adding one; documenting intermediate changes may not make sense.
 5. Follow `specs/version.md` when a version bump is warranted.
 6. Do not use Markdown tables in long-form project docs or specs; use concise lists.
+7. Keep one canonical specification for each contract and reference it from other specs. Before removing a duplicate, confirm that its relevant rules remain in the owning spec. When adding or reorganizing specs, update this index and affected cross-references.
 
 Common documentation targets:
 
@@ -45,7 +46,9 @@ Common documentation targets:
 - Service, provider, or environment changes: `services.instructions.md`, `architecture-backend.instructions.md`, `docker.instructions.md`, and possibly `README.md`.
 - Auth or cross-system flow changes: `platform.instructions.md`, `architecture.instructions.md`.
 - Frontend structure changes: `architecture-frontend.instructions.md` and the affected domain spec.
+- Public landing or static project-site content, navigation, and presentation: `public-site.instructions.md`.
 - Public indexing, metadata, canonical URLs, sitemap, robots, and structured data: `seo.instructions.md`.
+- Shared Listening/Reading generation: `services.instructions.md` owns the backend coordinator; `architecture-frontend.instructions.md` owns the shared client. Keep domain-specific content, audio, scoring, and history in `listening.instructions.md` and `reading.instructions.md`.
 - Study plan, lesson, or progress changes: `study-plan.instructions.md`, `learning-resources.instructions.md`, `api-endpoints.instructions.md`.
 - New major domain: add a domain-oriented spec, then update `README.md`, this file, and `CHANGELOG.md` as applicable.
 
@@ -54,6 +57,7 @@ Common documentation targets:
 Use the narrowest relevant spec first:
 
 - Architecture: `architecture.instructions.md`, `architecture-backend.instructions.md`, `architecture-frontend.instructions.md`.
+- Public landing and static project site: `public-site.instructions.md`.
 - Technical SEO and Search Console: `seo.instructions.md`.
 - Platform and languages: `platform.instructions.md`, `target-language.instructions.md`, `multi-language.instructions.md`, `add-target-language.instructions.md`.
 - Learning: `study-plan.instructions.md`, `learning-resources.instructions.md`, `listening.instructions.md`, `reading.instructions.md`, `games.instructions.md`.

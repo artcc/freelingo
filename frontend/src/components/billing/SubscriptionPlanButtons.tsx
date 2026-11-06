@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api'
+import { createCheckout } from '@/lib/billing'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import { useConfigStore } from '@/store/config'
+import { useAuthStore } from '@/store/auth'
 
 interface SubscriptionPlanButtonsProps {
   className?: string
@@ -19,6 +20,8 @@ export function SubscriptionPlanButtons({
   const priceYearly = useConfigStore((s) => s.priceYearly)
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const checkoutRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => checkoutRequest.current?.abort(), [])
   const yearlyCta = splitYearlyCta(
     tBilling('planYearly', {
       price: new Intl.NumberFormat(locale).format(priceYearly),
@@ -27,22 +30,23 @@ export function SubscriptionPlanButtons({
 
   async function startCheckout(plan: BillingInterval) {
     if (loading) return
+    const controller = new AbortController()
+    checkoutRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
     setLoading(plan)
     setError(null)
     try {
-      const res = await apiFetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan }),
-      })
-      if (!res.ok) {
-        throw new Error(tBilling('checkoutError'))
-      }
-      const { url } = await res.json()
-      window.location.assign(url)
+      const url = await createCheckout(plan, controller.signal)
+      if (obsolete()) return
+      if (url) window.location.assign(url)
     } catch {
+      if (obsolete()) return
       setError(tBilling('checkoutError'))
-      setLoading(null)
+    } finally {
+      if (!obsolete()) setLoading(null)
     }
   }
 

@@ -35,15 +35,46 @@ _LANG_MODULES: dict[str, str] = {
     "fr": "app.data.fr.curriculum",
     "it": "app.data.it.curriculum",
     "pl": "app.data.pl.curriculum",
+    "nl": "app.data.nl.curriculum",
+    "ru": "app.data.ru.curriculum",
+    "sv": "app.data.sv.curriculum",
     "ja": "app.data.ja.curriculum",
     "ko": "app.data.ko.curriculum",
     "pt": "app.data.pt.curriculum",
+    "pt-BR": "app.data.pt_BR.curriculum",
     "zh": "app.data.zh.curriculum",
 }
 
 _CACHE: dict[str, object] = {}
 
 _I18N = {
+    "sv-SE": {
+        "lesson_title": "{title} – Lektion {n}",
+        "test_unit_title": "Avslutande prov för nivå {level}",
+        "test_title": "Avslutande prov för nivå {level}",
+        "test_objectives": [
+            "Repetera nivåns grammatik och ordförråd",
+            "Gör nivåprovet för att bedöma nästa steg i ditt lärande",
+        ],
+    },
+    "ru-RU": {
+        "lesson_title": "{title} — Урок {n}",
+        "test_unit_title": "Итоговый тест уровня {level}",
+        "test_title": "Итоговый тест уровня {level}",
+        "test_objectives": [
+            "Повторить грамматику и лексику этого уровня",
+            "Пройти итоговый тест для перехода на следующий уровень",
+        ],
+    },
+    "nl-NL": {
+        "lesson_title": "{title} - Les {n}",
+        "test_unit_title": "Eindtoets niveau {level}",
+        "test_title": "Eindtoets niveau {level}",
+        "test_objectives": [
+            "Herhaal de grammatica en woordenschat van dit niveau",
+            "Maak de eindtoets om je volgende leerstap te bepalen",
+        ],
+    },
     "en-GB": {
         "lesson_title": "{title} - Lesson {n}",
         "test_unit_title": "Level {level} Completion Test",
@@ -87,6 +118,15 @@ _I18N = {
         "test_objectives": [
             "Powtórz wszystkie zagadnienia gramatyczne z tego poziomu",
             "Ukończ test, aby odblokować kolejny poziom",
+        ],
+    },
+    "pt-BR": {
+        "lesson_title": "{title} - Lição {n}",
+        "test_unit_title": "Avaliação de nível {level}",
+        "test_title": "Avaliação de nível {level}",
+        "test_objectives": [
+            "Revisar todos os tópicos de gramática deste nível",
+            "Concluir a avaliação para desbloquear o próximo nível",
         ],
     },
     "pt-PT": {

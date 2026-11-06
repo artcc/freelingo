@@ -7,6 +7,10 @@ applyTo: "backend/app/models/**, backend/alembic/**"
 
 All models use SQLAlchemy 2.0 declarative style with `Mapped[T]` type annotations and async engine (`asyncpg` driver). PostgreSQL JSON columns store structured content for lessons, plans, exercises, and skill scores.
 
+This document owns persisted fields, relationships, constraints, and compatibility requirements.
+Domain specifications own workflows and presentation; API schemas define request validation beyond
+database constraints. Alembic revisions define the deployed schema and its upgrade/downgrade behavior.
+
 ## Games (`game_sessions`, `game_admissions`, `game_requests`)
 
 `GameSession` uses a UUID string primary key as creation idempotency key. Required user and plan
@@ -70,9 +74,10 @@ Registration, authentication, and user preferences.
 - `monthly_tokens_limit` — integer max LLM tokens per billing period. Default comes from `DEFAULT_MONTHLY_TOKENS_LIMIT` (`1 000 000`; `0` means unlimited).
 - `stripe_customer_id` — nullable string Stripe customer ID, set when a subscription is created.
 - `stripe_subscription_id` — nullable string current Stripe subscription ID. Used to ignore stale webhook events from older subscriptions for the same customer.
-- `subscription_status` — string subscription state: `none` by default, plus Stripe states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`.
-- `subscription_ends_at` — nullable datetime for the current subscription period end.
+- `subscription_status` — string shared subscription snapshot: `none` by default, plus Stripe-compatible states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`. RevenueCat synchronization uses this same field rather than a per-store subscription model.
+- `subscription_ends_at` — nullable datetime for the current subscription period end or RevenueCat entitlement expiry, including its grace period. Verified lifetime entitlements have no expiry.
 - `cancel_at_period_end` — boolean subscription cancellation marker; default `false`.
+- `revenuecat_synced_at` — nullable naive-UTC datetime derived from RevenueCat's `request_date_ms`; null until first synchronization. Older provider snapshots cannot replace newer ones. Stripe-only state updates clear this marker.
 - `trial_used` — boolean; `true` once the user has started or completed a trial, preventing repeated free trials. Default: `false`.
 - `assessment_voice_trial_used` — boolean; `true` once the one-time post-assessment voice conversation demo has been consumed. Default: `false`.
 - `freemium_trial_ends_at` — nullable datetime; when the freemium 7-day trial expires. Set on registration when `STRIPE_ENABLED=true` and `FREEMIUM_TRIAL_ENABLED=true`.
@@ -86,6 +91,44 @@ Registration, authentication, and user preferences.
 
 Registration, session, billing, and Redis quota behavior is defined in `platform.instructions.md` and
 `subscriptions-freemium.instructions.md`; this document defines only their persisted fields.
+
+## RevenueCatWebhookReceipt (`revenuecat_webhook_receipts`)
+
+- `event_id` — varchar(255) primary key, supplied by RevenueCat and reused for retries.
+- `processed_at` — required naive-UTC processing timestamp.
+
+The receipt commits atomically with all account snapshots affected by the event. A rollback leaves
+the event retryable; a committed ID prevents duplicate processing. Receipts contain no customer IDs,
+foreign keys, or raw webhook payloads, and remain valid after account deletion. Revision
+`0058_revenuecat_sync` creates this table and the nullable synchronization marker on `users`.
+
+## StripeWebhookReceipt (`stripe_webhook_receipts`)
+
+- `event_id` — varchar(255) primary key, supplied by Stripe and reused for retries.
+- `processed_at` — required naive-UTC processing timestamp.
+
+The receipt commits atomically with account updates and activation quotas. Failed processing rolls
+back the receipt, keeping delivery retryable. Receipts contain no raw payloads or account foreign keys.
+
+## BillingCheckout (`billing_checkouts`)
+
+- `user_id` — primary key and foreign key to `users.id` with `ON DELETE CASCADE`; one current reservation
+  per account, independent of study languages.
+- `idempotency_key` — required varchar(36), a server-generated UUID for the Stripe session request.
+- `parameters` — required JSON containing the frozen Checkout request, including Customer, Price,
+  trial parameters, return URLs, identity metadata, reservation metadata, and fixed `expires_at`.
+- `customer_parameters` — nullable JSON containing frozen email, name, and identity metadata while
+  creating a Customer. In this preliminary reservation, `parameters` has no Customer ID and cannot
+  be sent to Checkout. The preliminary row is deleted atomically with persistence of the Customer ID;
+  subsequent session reservations have null `customer_parameters`.
+- `session_id` — nullable varchar(255), filled when the Stripe session ID is known.
+
+Reservations commit before session creation and survive uncertain provider outcomes. Creation and
+replacement serialize on the owning user row. No session URL, payment credentials, or raw provider
+response is persisted. Revision `0059_billing_idempotency` creates both Stripe billing tables without
+rewriting existing account state; `0060_checkout_customer_request` adds the nullable Customer request
+column without changing existing session reservations. Workflow rules live in
+`subscriptions-freemium.instructions.md`.
 
 ## DashboardBanner (`dashboard_banners`)
 
@@ -142,16 +185,8 @@ One active plan per user per language, generated after CEFR assessment.
 
 - Partial unique index `uq_active_plan_per_lang` on `(user_language_id)` WHERE `is_active = true` — enforces one active plan per user per language.
 
-**UI intensity / duration presets:**
-
-- Intensive: 4 weeks × 5 days = 20 slots.
-- Standard: 8 weeks × 5 days = 40 slots.
-- Relaxed (default): 12 weeks × 4 days = 48 slots.
-- Very relaxed: 16 weeks × 3 days = 48 slots.
-
-The final slot is reserved for the level-completion test; the remaining slots schedule teaching
-lessons. These presets are not database constraints. Plan creation validates curriculum capacity as
-defined in `study-plan.instructions.md`.
+Duration presets, curriculum capacity, and the reserved completion-test slot are application rules
+defined in `study-plan.instructions.md`, not additional database constraints.
 
 ## Lesson (`lessons`)
 
@@ -213,8 +248,8 @@ SM-2 spaced repetition cards, per user per language.
 
 Content edits preserve ownership, source and scheduling fields. Suspension retains `next_review`, so
 reactivation immediately restores overdue cards to the review queue. The account's reverse-side
-preference is independent of card ownership and study language. The versioned schema is defined by
-`0056_flashcard_management`, following `0055_sentence_order`; defaults apply to existing rows.
+preference is independent of card ownership and study language. Schema defaults initialize existing
+cards as unsuspended and existing accounts with the `definition` preference when adding these fields.
 
 ## FlashcardReviewReceipt (`flashcard_review_receipts`)
 
@@ -227,8 +262,7 @@ Durable idempotency results for accepted flashcard review attempts.
 
 The owning card controls authorization and plan/user cascade deletion. Receipts commit atomically
 with scheduling and progress, are immutable after acceptance, and remain available after later
-reviews or edits. They support response recovery rather than a session-history interface. The table
-is defined by revision `0057_flashcard_review_receipts`, following `0056_flashcard_management`.
+reviews or edits. They support response recovery rather than a session-history interface.
 
 ## Progress (`progress`)
 
@@ -336,7 +370,7 @@ AI-generated listening comprehension exercises shared across users at the same C
 - audio_path — Type: string; Notes: Absolute path to MP3 on disk, e.g. `/data/audio/listening/42.mp3`
 - duration_seconds — Type: integer; Notes: Persisted duration field; current generation normally leaves its default `0`
 - questions — Type: JSON; Notes: List of `{index, question, options: {A,B,C,D}, correct}` objects
-- play_count — Type: integer; Notes: How many times this exercise has been served (server default 0)
+- play_count — Type: integer; Notes: Incremented on submitted attempts, including replays (server default 0); not a count of audio playback or exercise delivery
 - created_at — Type: datetime; Notes: Auto-set on creation
 
 Composite index: `ix_listening_exercises_level_lang` on `(level, target_language)`.
@@ -368,8 +402,8 @@ AI-generated reading comprehension exercises shared across users at the same CEF
 - exercise_type — Type: string; Notes: `notice`, `email`, `article`, `news`, `blog_post`, `review`, `essay`
 - topic — Type: string; Notes: Short topic description
 - text — Type: text; Notes: Full passage text — **included in exercise response** (unlike listening)
-- questions — Type: JSON; Notes: List of `{index, question, options: {A,B,C,D}, correct}` objects (5 per exercise)
-- view_count — Type: integer; Notes: How many times this exercise has been served (server default 0)
+- questions — Type: JSON; Notes: Generated question objects with `index`, `question`, `options`, and `correct`; five A-D questions are a prompt requirement, not a database constraint
+- view_count — Type: integer; Notes: Incremented on submitted attempts, including replays (server default 0); not a count of passage views or exercise delivery
 - created_at — Type: datetime; Notes: Auto-set on creation
 
 Composite index: `ix_reading_exercises_level_lang` on `(level, target_language)`.
@@ -461,7 +495,9 @@ One moderated product review per user.
 **Business rules:**
 
 - New reviews start as unapproved and must be approved by an admin before public display.
-- Landing/public queries must show only approved reviews with `rating >= 4`.
+- Public visibility requires approval. The carousel additionally requires `rating >= 4` and a
+  nonempty comment; the public aggregate includes all approved ratings, with or without comments.
+  `reviews.instructions.md` owns publication and moderation behavior.
 - Rating-only reviews are valid; `comment` may be null.
 - Deleting a user cascades and deletes their review.
 

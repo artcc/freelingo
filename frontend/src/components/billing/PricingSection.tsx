@@ -6,7 +6,8 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Circle, CircleDot, Diamond, Check, Minus } from 'lucide-react'
 import { PageLoading } from '@/components/ui/page-loading'
 import { getLandingSubscriptionState } from '@/lib/landing-subscription'
-import { apiFetch, restoreAccessToken } from '@/lib/api'
+import { restoreAccessToken } from '@/lib/api'
+import { createCheckout } from '@/lib/billing'
 import { useAuthStore } from '@/store/auth'
 
 type BillingInterval = 'monthly' | 'yearly'
@@ -87,22 +88,15 @@ export default function PricingSection({
       }
       if (obsolete()) return
 
-      const res = await apiFetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan }),
-        signal: controller.signal,
-      })
-      if (!res.ok) {
-        throw new Error(tBilling('checkoutError'))
-      }
-      const { url } = await res.json()
+      const url = await createCheckout(plan, controller.signal)
       if (obsolete()) return
-      window.location.assign(url)
+      if (url) window.location.assign(url)
+      else setSubscribed(true)
     } catch {
       if (obsolete()) return
       setCheckoutError(tBilling('checkoutError'))
-      setCheckoutLoading(null)
+    } finally {
+      if (!obsolete()) setCheckoutLoading(null)
     }
   }
 

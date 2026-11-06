@@ -12,6 +12,37 @@ Router-root endpoints use their full path to make trailing-slash behavior explic
 its HTTP method, rate limit, and relevant authentication or payload contract. Limit policy is defined
 in `rate-limiting.instructions.md`.
 
+This document owns the HTTP/WebSocket interface inventory. Domain specifications own business
+behavior; `umami.instructions.md` owns analytics event semantics, privacy, deduplication, and delivery.
+
+## Postman templates and maintenance
+
+The project owner's private **Proyectos** Postman workspace contains the **FreeLingo** collection and
+the **FreeLingo — Development** environment for backend exploration, manual testing, and native
+iOS/Android integration. These resources belong to the project owner and are not publicly accessible
+or included with the open-source repository. The identifiers below are maintainer references, not
+public access links. External contributors can use the backend contract and this specification
+without access to the owner's Postman account.
+
+Maintainers with authorized account access maintain these templates through the Postman MCP
+integration; the backend routes, request/response models, and this specification remain the source
+of truth.
+
+- Workspace ID: `1e73c0a3-eee6-4d10-822d-ae3ebf0746f6`.
+- Collection UID: `22384073-1725e760-7c64-44e1-9e35-78beb24f88e7`.
+- For every backend change affecting the API contract, assess the collection impact: paths, methods,
+  authentication, headers, query parameters, bodies, response examples, scripts, variables, and
+  HTTP/SSE/WebSocket behavior.
+- Before changing Postman, tell the maintainer exactly which folders, requests, examples, scripts,
+  or environment definitions need updating and why.
+- Fetch the current Postman resources through MCP, preserve unrelated requests and local conventions,
+  and update the affected templates rather than creating duplicates. Read back the saved resources
+  and report what changed and any remaining limitations.
+- Keep credential values out of shared templates. Preparing or synchronizing requests does not
+  authorize executing them against a running service; request execution requires explicit approval.
+- Keep these templates in Postman. Do not add collection/environment exports or temporary generation
+  artifacts to the repository unless the maintainer explicitly requests them.
+
 ---
 
 ## Health — `/health`
@@ -29,6 +60,17 @@ in `rate-limiting.instructions.md`.
 ## Freemium — `/api/freemium`
 
 - **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+
+## Analytics — `/api/analytics`
+
+- **POST `/ui`** — Rate limit: 60/min. Auth: get_current_user. Body: `{event, operation_id}`,
+  where `event` is a value from `BrowserEvent` in `schemas/learning_analytics.py` and `operation_id`
+  is a UUID. Extra fields and invalid values return 422. Returns 204.
+- **POST `/public`** — Rate limit: 30/min. Public. Same body shape, but accepts only
+  `event="faq_viewed"`. Extra fields and invalid values return 422. Returns 204.
+
+These endpoints accept bounded measurement signals, not arbitrary event properties or URLs.
+A successful response does not guarantee delivery to Umami.
 
 ## Games — `/api/games`
 
@@ -90,7 +132,7 @@ source IDs remain private; failed attempts never reveal the solution.
 - **POST `/login`** — Rate limit: 10/min. Returns access_token (JWT, 15 min) + refresh_token in httpOnly cookie (30 days)
 - **POST `/refresh`** — Rate limit: 60/min. Requires a valid refresh cookie, rotates it and returns a new `access_token`. Optional `Authorization: Bearer ...` and `X-Expected-User-ID` (positive PostgreSQL-range integer; invalid values return 422) restrict renewal to the client's known account. The bearer must have a valid HS256 signature and `sub`/`exp` claims; expiry is ignored only for this context comparison. Invalid bearer context returns 401. Each supplied expectation must match the account in Redis; a mismatch returns 409 `auth_context_changed` before consuming the refresh token or setting a replacement cookie. Expectations never authorize renewal without a valid cookie. Omitting both supports initial restoration with no known client identity.
 - **POST `/logout`** — Rate limit: 60/min. Deletes refresh token from Redis, clears cookie
-- **GET `/me`** — Rate limit: 60/min. Returns authenticated user profile, including subscription fields (`subscription_status`, `subscription_ends_at`, `cancel_at_period_end`, `trial_used`, `assessment_voice_trial_used`), freemium fields (`freemium_trial_ends_at`, `freemium_trial_used`), and nullable `dismissed_dashboard_banner_revision`.
+- **GET `/me`** — Rate limit: 60/min. Returns authenticated user profile, including subscription fields (`subscription_status`, `subscription_ends_at`, `cancel_at_period_end`, `trial_used`, `assessment_voice_trial_used`), freemium fields (`freemium_trial_ends_at`, `freemium_trial_used`), and nullable `dismissed_dashboard_banner_revision`. An optional retroactive freemium-trial write failure rolls back and reloads the persisted profile before responding; eligibility and retry behavior are defined in `subscriptions-freemium.instructions.md`.
 - **PATCH `/me`** — Rate limit: 60/min. Updates display name, email, password, native language, target language, UI locale, bio, learning goals, and conversation settings (`conversation_max_duration` ∈ {900, 1800}, `conversation_inactivity_timeout` ∈ {60, 180, 300}, `conversation_speech_pause` ∈ {0, 1000, 2000, 3000} milliseconds, where `0` means automatic). `native_language` is validated against the same supported UI-language codes used at registration (`en`, `es`, `fr`, `pt`, `de`, `it`, `ru`, `nl`, `pl`, `ro`, `tr`, `sv`, `da`, `fi`, `hr`); unsupported codes return HTTP 422 even when the API is called outside the selector-based frontend.
 - **POST `/me/avatar`** — Rate limit: 60/min. Uploads the authenticated user's profile avatar (JPEG/PNG, max 2 MB). Validates the declared content type, image signature, and minimal image structure, stores the image on disk under `/app/avatars` using a non-predictable UUID filename, and returns the user profile with `avatar` set to a cache-busted internal reference (`/api/avatars/{uuid}.{ext}?v={ms}`). The file reference is not publicly served.
 - **GET `/me/avatar-file`** — Rate limit: 60/min. Authenticated current-user avatar retrieval endpoint. Returns only the authenticated user's own avatar file; this is the supported image retrieval path used by the frontend. Responses are marked `Cache-Control: private, no-store`; client-side avatar reuse is handled by the frontend blob cache keyed by the stored avatar reference.
@@ -147,9 +189,41 @@ Requires `role="admin"`. Translation previews and saves must contain exactly `en
 
 Registered only when `STRIPE_ENABLED=true`.
 
-- **POST `/checkout`** — Rate limit: 60/min. Auth: get_current_user. Creates a Stripe Checkout Session for `monthly` or `yearly`. Does not require an existing subscription because unsubscribed users must be able to subscribe.
-- **POST `/portal`** — Rate limit: 60/min. Auth: get_current_user. Creates a Stripe Customer Portal session for users with a `stripe_customer_id`.
-- **POST `/webhook`** — Rate limit: 200/min. Public network access but requires a valid Stripe signature before processing. Handles checkout/session and subscription lifecycle events. Checkout completion verifies the Stripe Subscription before granting access and persists the current `stripe_subscription_id`; subscription update/delete and invoice payment-failed events are ignored as stale when their subscription ID differs from the user's current `stripe_subscription_id`. Invoice payment-failed handling supports both legacy `invoice.subscription` and current `invoice.parent.subscription_details.subscription` shapes. Subscription updates accept real Stripe statuses (`trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, `paused`) and keep the existing status for unknown values. Valid payload/signature errors return 400; internal processing failures return 500 so Stripe retries the event.
+With RevenueCat enabled, Checkout and explicit self/admin synchronization also publish customer
+profile attributes best-effort. Name, email, or native-language changes through `PATCH /api/auth/me`,
+and display-name changes through `PATCH /api/admin/users/{id}`, publish the saved profile as well.
+Attribute-write failures do not fail these operations or change their response schemas. The attribute
+list, timeout, and country-estimate semantics are owned by `subscriptions-freemium.instructions.md`.
+
+- **POST `/checkout`** — Rate limit: 60/min. Auth: get_current_user. Creates or reuses a Stripe Checkout Session for `monthly` or `yearly`, returning `{url}`. Durable per-user reservations and idempotency keys protect Customer and Session creation retries; changing prices expires the previous open session before replacement. The same open session can resume its own incomplete initial payment. Returns `409 subscription_already_active` for an existing Premium account or live active/trialing Stripe subscription, and `409 subscription_payment_pending` for other incomplete purchases or a completed session whose payment remains incomplete. Live Stripe subscriptions in `past_due`, `unpaid`, or `paused` return a Customer Portal URL instead of creating another purchase. When RevenueCat is enabled it reconciles access first; Stripe checks only control billing navigation. Provider failures return `503`; a definitive expiry validation rejection can renew an undiscovered reservation instead of blocking retries until expiry. No client-supplied customer, session, or subscription identity is accepted.
+- **POST `/portal`** — Rate limit: 60/min. Auth: get_current_user. Returns `{url}`. With RevenueCat enabled, uses the customer's verified HTTPS management URL when present; otherwise creates a Stripe Customer Portal session asynchronously for users with a `stripe_customer_id`. RevenueCat failures, invalid data, or unsafe URLs fall back to the authenticated user's stored Stripe customer; without one they return `503`. Stripe failures return `503 Stripe billing unavailable` without modifying billing identity or access. A successful read with no management URL and no Stripe customer returns `400`.
+- **POST `/webhook`** — Rate limit: 200/min. Public network access but requires a valid Stripe signature before processing. Handles checkout/session and subscription lifecycle events. Recognized events require an event ID; receipts commit with account changes and deduplicate retries. Stripe-only handlers retrieve current Subscription state under a user-row lock rather than applying potentially old event snapshots. Subscription update/delete and invoice payment-failed events ignore IDs differing from the current `stripe_subscription_id`; late Checkout completions cannot replace a current non-terminal subscription or a different persisted Customer. Invoice handling supports both legacy `invoice.subscription` and current `invoice.parent.subscription_details.subscription` shapes and ignores one-off invoices. Unknown provider statuses preserve the existing status. Quotas apply on activation transitions only. Invalid payload/signature/event ID returns 400; processing failures roll back and return 500 so Stripe retries.
+
+With `REVENUECAT_ENABLED=true`, Stripe webhooks retain identifiers and verified trial usage but do
+not modify shared access state or quotas. The following routes are registered only when both billing
+flags are enabled:
+
+- **POST `/revenuecat/webhook`** — Rate limit: 200/min. Public network access, authenticated by the exact
+  configured Authorization header. Accepts RevenueCat's API v1 `{api_version, event}` envelope and
+  verifies current customer entitlements with RevenueCat rather than applying transaction fields.
+  Returns `200 {received: true}` for processed/duplicate events, dashboard tests, ignored environments,
+  and unknown accounts. Bad authorization returns `401`; malformed envelopes or unsupported API versions
+  return `400`; unavailable configuration or reconciliation failure returns `503`. Event receipt and
+  account changes are atomic, including both sides of transfers. The entitlement and identity contract
+  belongs to `subscriptions-freemium.instructions.md`.
+- **POST `/sync`** — Rate limit: 10/min. Auth: get_current_user. No body is required; the authenticated
+  account is the only synchronization target. Returns `{subscription_status, subscription_ends_at,
+  cancel_at_period_end}` with the persisted status and UTC ISO expiration or null. Provider failure
+  returns `503` without replacing the cached snapshot.
+- **POST `/revenuecat/sync/{user_id}`** — Rate limit: 10/min. Auth: require_admin. Required JSON body:
+  `{import_stripe?: boolean}`, default false. Reconciles the specified account; true first imports its
+  persisted Stripe Subscription ID using the configured RevenueCat Stripe-app public key. Returns the
+  same status object as `/sync`, `404` for an unknown account, or `503` for failed provider operations
+  or missing import configuration. Importing a caller-supplied receipt is not supported.
+
+Public profile responses retain their existing fields. `subscription_status` exposes the last
+confirmed persisted state, consistently with access checks and admin reporting. A cached expiration
+date passing does not change that status; RevenueCat revocation requires successful reconciliation.
 
 ---
 
@@ -165,9 +239,14 @@ a supported canonical code enabled in `AVAILABLE_TARGET_LANGUAGES`. Unknown, non
 disabled codes return `422` before curriculum dispatch or any state change; they do not fall back to English.
 
 - **GET `/start`** — Rate limit: 10/min. Begins the LLM-generated adaptive quiz.
+- **POST `/started`** — Rate limit: 10/min. Auth: get_current_user. Requires the UUID-valued
+  `X-Assessment-Attempt` header; missing or invalid headers return 422. Returns 204 after accepting
+  the explicit quiz-start measurement signal. It does not create a quiz session or study plan.
 - **GET `/bank`** — Rate limit: 60/min. Returns the full static assessment bank for the given language (query param `language`, default `en-GB`). Auth required. Response: `{questions: [{id, skill, difficulty, question, options, correct, grammar_slug}]}`. Each supported language returns its own static bank in the target language.
 - **POST `/submit`** — Rate limit: 10/min. LLM-backed assessment submission endpoint retained alongside the deterministic bank/evaluate flow.
 - **POST `/evaluate`** — Rate limit: 60/min. Deterministic CEFR evaluation (no LLM — groups by difficulty). Body: `{answers: [{question_id, skill, difficulty, correct, dont_know?}]}`. `dont_know` defaults to `false` and marks a declared knowledge gap, which is never scored as correct.
+  Optional UUID header `X-Assessment-Attempt` correlates the measurement signal with `/started`;
+  omission preserves evaluation behavior. A supplied invalid UUID returns 422.
 - **POST `/free-write`** — Rate limit: 10/min. Evaluates free-write text for CEFR placement through LLM JSON parsing.
 - **POST `/complete`** — Rate limit: 10/min. Persists results and creates a StudyPlan. Rejects the same invalid dimensions and undersized grids as `POST /api/study-plan/generate` (422 and 400), before any state change. When `STRIPE_ENABLED=true`, the user is not subscribed, and `assessment_voice_trial_used=false`, the response includes `voice_trial: {available, token, duration_seconds, expires_in_seconds}` for a one-time voice demo. `duration_seconds` comes from `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS` (default `300`).
 - **POST `/voice-trial`** — Rate limit: 10/min. Body: `{target_language?}`. Regenerates a fresh post-assessment voice demo token for the user's active study plan in that language when `STRIPE_ENABLED=true`, the user is not subscribed, and `assessment_voice_trial_used=false`. Used when the student previously skipped the demo and returns to the assessment page.
@@ -212,7 +291,7 @@ Auth required (`get_current_user`). Serves canonical backend vocabulary data org
 ## Study Plan — `/api/study-plan`
 
 - **GET `/current`** — Rate limit: 60/min. User's active plan with curriculum progress, including `id` and the persisted `target_language` used to bind vocabulary imports to their plan. Optional `language` selects an owned language's active plan; without it, uses the active language. Returns `null` when no matching plan exists.
-- **POST `/generate`** — Rate limit: 10/min. Creates new plan from CEFR level, goals, and duration. Returns 422 when `duration_weeks` or `days_per_week` is below 1 or `cefr_level` is not a level the curriculum covers, and 400 when `duration_weeks × days_per_week − 1` is smaller than the level's curriculum unit count (the detail names the minimum). A rejected request creates no plan, no language row, and does not deactivate the current plan.
+- **POST `/generate`** — Rate limit: 10/min. Creates new plan from CEFR level, goals, and duration. Optional `target_language` selects the language; omission or null uses the active language, then the profile language. Returns 422 when the resolved language is not canonical and operator-enabled (including an explicit empty string), `duration_weeks` or `days_per_week` is below 1, or `cefr_level` is not a level the curriculum covers, and 400 when `duration_weeks × days_per_week − 1` is smaller than the level's curriculum unit count (the detail names the minimum). Language validation precedes curriculum lookup. A rejected request creates no plan, no language row, and does not deactivate the current plan.
 - **GET `/today`** — Rate limit: 20/min. Today's lessons; auto-generates missing content via LLM on first access; auto-advances `progress_day` when all lessons for the current day are complete. The reserved final slot (`completion-test`, or the legacy `level-test` id) is never materialized through the lesson generator: it returns the derived `completion` state (`in_progress`, `ready`, or `taken`) with the persisted result when taken. Legacy final-slot lessons are returned until a result exists; once it does, `pending_count` excludes them. Returns `plan_id`, `cefr_level`, `lessons`, `progress_day`, `total_days`, `pending_count`, `completion`.
 - **POST `/skip-day`** — Rate limit: 60/min. Increments `progress_day` by 1 (capped at `total_days`). Returns `{progress_day, total_days}`.
 - **GET `/pending-lessons`** — Rate limit: 60/min. Returns incomplete lessons from days before `progress_day` (generated but not completed). Once the level-test result is persisted, a legacy final-slot lesson (`completion-test` or `level-test`) is excluded: the final slot presents only the result.
@@ -264,8 +343,8 @@ path. `/generate` retains its `skipped_empty` behavior for empty normalized batc
 - **GET/PUT `/preferences`** — Rate limit: 60/min. Reads or replaces `{back_content: "definition"|"translation"}` for the authenticated account, globally across study languages. Defaults to `definition`; no active plan is required. The standard review uses definition when a translation is missing and retains complementary content. This preference applies only to standard-mode content.
 - **DELETE `/{card_id}`** — Rate limit: 60/min. Permanently deletes a flashcard owned by the user; 204 No Content
 
-Review receipt replays return the original successful response but do not enqueue new
-`flashcard_reviewed` or `saved_vocabulary_reviewed` analytics events.
+Review receipt replays return the original successful response. Measurement rules for replays are
+defined in `umami.instructions.md`.
 
 ---
 
@@ -352,6 +431,7 @@ Both `POST /api/conversation/warmup` and `/ws/conversation` require an authentic
 **Client → Server message types:**
 
 - **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id`. It authenticates and can reuse an owned conversation outside lesson practice. Trial sessions are consumed when the WebSocket starts.
+- **Free-conversation language** — An explicit `target_language` must be an exact supported code. Omission or null resolves the active language, then `en-GB`; the resolved value is also validated. Invalid values emit `error` with `code=invalid_target_language` and close 1008 before general session quota consumption or conversation creation. Only an owned active plan in the resolved language supplies the level and plan reference; without one, the session uses A2 and a null plan reference. Full resolution policy is defined in `voice-conversation.instructions.md`.
 - **Lesson practice** — When `lesson_id` is present, the server requires a completed lesson belonging to the authenticated user. Its persisted plan determines language, level, and provenance; client `context`, `target_language`, and `conversation_id` do not override them. Invalid IDs (including null, booleans, strings, and fractional numbers), missing, foreign, or incomplete lessons emit `error` with `code=lesson_practice_unavailable` and close 1008 before consuming general session quota. Each start creates a voice conversation titled with a localized `Practice: {lesson title}`. Lesson context remains in the voice system prompt throughout the session. Existing access, maintenance, quota, timeout, and transcript rules apply; a verbal completion suggestion never emits a new control event.
   IDs must be in `1..2147483647`, matching the lesson's database column. The WebSocket rejects out-of-range IDs before lesson SQL lookup, and the frontend applies the same range before loading lesson metadata.
 - **binary frame** — Payload: raw audio bytes. Description: WAV audio chunk from VAD
@@ -403,8 +483,20 @@ earn 5 XP once per exercise/plan/UTC day when a prior-day attempt exists in that
 Missing context returns `422`. History responses include the active plan's `context` so
 replays retain the selection under which their history was loaded.
 
+Both domains also expose `POST /started` as described below. Its body is
+`{exercise_id: positive integer, context: {study_plan_id, target_language, level}, replay: boolean=false}`
+and its required `X-Exercise-Attempt` header is a UUID. Extra top-level body fields and missing/invalid input
+return 422. The server verifies the active owned plan/context and exercise language; normal starts
+also require the exercise level to match, while replays may use another level in the same language.
+Missing exercises return 404; context mismatches return 409 `study_context_changed`.
+It records no learning attempt, awards no XP, and consumes no feature quota. A 204 response does not
+guarantee analytics delivery. `/attempt` accepts the same header optionally for measurement correlation;
+an invalid supplied UUID returns 422, and omission preserves attempt, XP, and quota behavior.
+
 - **GET `/next`** — Rate limit: 60/min. Returns immediately with `{available, exercise, generation_status, generation_error, generation_deadline}`; transcript and correct answers are omitted. Status is `idle`, `generating`, or `failed`; error is null, `timeout`, `generation_failed`, or `interrupted`; deadline is nullable UTC. Available exercises take priority. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Optional `voice` query parameter. Acquires a renewable, owner-scoped language/level generation lease and returns HTTP 202 `{"status":"generating"}` whether it starts work or finds an existing job. Returns `{"status":"available"}` without generating when the user's pool already has an exercise.
+- **POST `/started`** — Rate limit: 20/min. Auth: require_subscription_or_freemium_readonly,
+  with maintenance and active-plan checks. Accepts the shared start-signal body/header above and returns 204.
 - **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
 - **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
@@ -415,6 +507,8 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 
 - **GET `/next`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns immediately with the oldest uncompleted `ReadingExercise` for the current plan's CEFR level and language. Text and questions are included, correct answers are omitted. Response: `{available, exercise, generation_status, generation_error, generation_deadline}`, with the same status contract as Listening. A supplied `wait` parameter does not enable long-polling.
 - **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a renewable, owner-scoped per-(level, language) Redis lease and enqueues a bounded `BackgroundTask`. Returns HTTP 202 `{"status":"generating"}` for new or existing work, or `{"status":"available"}` when an exercise can already be used.
+- **POST `/started`** — Rate limit: 20/min. Auth: require_subscription_or_freemium_readonly,
+  with maintenance and active-plan checks. Accepts the shared start-signal body/header above and returns 204.
 - **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
 

@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api'
+import { useBillingPortal } from '@/hooks/useBillingPortal'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
@@ -12,26 +11,15 @@ export function BillingSection() {
   const locale = useLocale()
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
-  const [portalLoading, setPortalLoading] = useState(false)
-  const [portalError, setPortalError] = useState<string | null>(null)
+  const {
+    openPortal,
+    loading: portalLoading,
+    error: portalError,
+  } = useBillingPortal()
   const paymentRecovery = needsPaymentRecovery(user)
   const canManageBilling = isSubscribed(user, stripeEnabled) || paymentRecovery
 
   if (!stripeEnabled) return null
-
-  async function handleManageSubscription() {
-    setPortalLoading(true)
-    setPortalError(null)
-    try {
-      const res = await apiFetch('/api/billing/portal', { method: 'POST' })
-      if (!res.ok) throw new Error(tBilling('portalError'))
-      const { url } = await res.json()
-      window.location.assign(url)
-    } catch {
-      setPortalError(tBilling('portalError'))
-      setPortalLoading(false)
-    }
-  }
 
   return (
     <div className="border-fl-border bg-fl-surface border p-6">
@@ -123,7 +111,7 @@ export function BillingSection() {
         {/* Manage or subscribe button */}
         {canManageBilling ? (
           <button
-            onClick={handleManageSubscription}
+            onClick={openPortal}
             disabled={portalLoading}
             className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border py-2.5 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
           >

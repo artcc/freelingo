@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 import { apiFetch, restoreAccessToken } from '@/lib/api'
+import { createCheckout } from '@/lib/billing'
 import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import { mapUser } from '@/lib/mappers'
 import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
@@ -158,28 +159,21 @@ export default function OnboardingPage() {
       }
       if (obsolete()) return
 
-      const res = await apiFetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: interval }),
-        signal: controller.signal,
-      })
-      if (!res.ok) {
-        throw new Error(t('trialError'))
-      }
-      const { url } = await res.json()
+      const url = await createCheckout(interval, controller.signal)
       if (obsolete()) return
-      window.location.assign(url)
+      if (url) window.location.assign(url)
+      else router.push('/dashboard')
     } catch {
       if (obsolete()) return
       setCheckoutError(t('trialError'))
-      setCheckoutLoading(null)
+    } finally {
+      if (!obsolete()) setCheckoutLoading(null)
     }
   }
 
   const checkoutPlans: BillingInterval[] =
     selectedPlan === 'monthly' ? ['monthly', 'yearly'] : ['yearly', 'monthly']
-  const trialEligible = !user?.trial_used
+  const trialEligible = stripeTrialDays > 0 && !user?.trial_used
   const yearlyCta = splitYearlyCta(
     t(trialEligible ? 'trialCtaYearly' : 'trialCtaYearlyTrialUsed', {
       price: new Intl.NumberFormat(locale).format(priceYearly),

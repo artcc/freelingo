@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 
 PASSWORD_PATTERN = re.compile(r"^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{10,25}$")
 
@@ -44,8 +44,12 @@ SUPPORTED_TARGET_LANGUAGES: set[str] = {
     "fr-FR",
     "it-IT",
     "pl-PL",
+    "nl-NL",
+    "ru-RU",
+    "sv-SE",
     "ja-JP",
     "ko-KR",
+    "pt-BR",
     "pt-PT",
     "zh-CN",
 }
@@ -186,6 +190,10 @@ class UserResponse(BaseModel):
     @field_serializer("created_at", "subscription_ends_at")
     def serialize_datetime(self, v: datetime | None, _info):
         return v.isoformat() if v else None
+
+    @field_serializer("freemium_trial_ends_at")
+    def serialize_trial_expiration(self, v: datetime | None, _info: object) -> str | None:
+        return v.replace(tzinfo=UTC).isoformat() if v else None
 
 
 class UserUpdateRequest(BaseModel):

@@ -51,6 +51,7 @@ memories, feedback reads/mutations, and review reads/deletes.
 ## Generated and evaluated learning operations
 
 - `GET /api/assessment/start`: `10/minute`.
+- `POST /api/assessment/started`: `10/minute`.
 - `POST /api/assessment/submit`: `10/minute`.
 - `POST /api/assessment/free-write`: `10/minute`.
 - `POST /api/assessment/complete`: `10/minute`.
@@ -90,12 +91,21 @@ Both domains use:
 
 - `GET /api/{domain}/next`: `60/minute`.
 - `POST /api/{domain}/generate`: `5/minute`.
+- `POST /api/{domain}/started`: `20/minute`.
 - `POST /api/{domain}/attempt`: `20/minute`.
 - history and Listening audio retrieval: `60/minute`.
 
 Generation status uses immediate `/next` responses and non-overlapping client queries every ten
 seconds. The read budget allows this cadence with headroom for shared IPs. Clients back off on 429
 and honor `Retry-After` when present; generation itself remains limited to `5/minute`.
+
+## Analytics
+
+- `POST /api/analytics/ui`: `60/minute`.
+- `POST /api/analytics/public`: `30/minute`.
+
+Assessment and comprehension start-signal limits are listed with their respective domains above.
+Measurement semantics and delivery rules belong to `umami.instructions.md`.
 
 ## Memories, community, contact, and billing
 
@@ -111,6 +121,8 @@ and honor `Retry-After` when present; generation itself remains limited to `5/mi
 - `DELETE /api/reviews/me`: `10/hour`.
 - `POST /api/admin/dashboard-banner/translate`: `10/minute`.
 - `POST /api/billing/webhook`: `200/minute`.
+- `POST /api/billing/revenuecat/webhook`: `200/minute`.
+- `POST /api/billing/sync` and `POST /api/billing/revenuecat/sync/{user_id}`: `10/minute` each.
 
 ## WebSocket
 

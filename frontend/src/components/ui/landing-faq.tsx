@@ -4,11 +4,13 @@ import { useEffect, useId, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { trackBrowserEvent } from '@/lib/analytics'
 import { useConfigStore } from '@/store/config'
+import { useTargetLanguageList } from '@/hooks/useTargetLanguageList'
 
 const FAQ_KEYS = ['modes', 'free', 'hosting', 'data', 'languages', 'start']
 
 export function LandingFAQ() {
   const t = useTranslations('landing.faq')
+  const languages = useTargetLanguageList()
   const id = useId()
   const [open, setOpen] = useState<number | null>(null)
 
@@ -51,7 +53,11 @@ export function LandingFAQ() {
             hidden={open !== i}
             className="text-fl-muted-1 border-fl-border bg-fl-bg-alt border-t px-5 pt-4 pb-5 font-sans text-sm leading-relaxed"
           >
-            <p className="max-w-[70ch]">{t(`${key}.answer`)}</p>
+            <p className="max-w-[70ch]">
+              {key === 'languages'
+                ? t('languages.answer', { languages })
+                : t(`${key}.answer`)}
+            </p>
           </div>
         </div>
       ))}

@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Ce limbi pot învăța?",
-        "answer": "Engleză britanică și americană, spaniolă, italiană, portugheză, germană, franceză, japoneză, coreeană și chineză continentală. Poți învăța mai multe simultan, cu planuri și progres separat pentru fiecare limbă."
+        "answer": "{languages}. Poți învăța mai multe simultan, cu planuri și progres separat pentru fiecare limbă."
       },
       "start": {
         "question": "Cum încep să învăț?",
@@ -92,6 +92,8 @@
     "footerProduct": "Produs",
     "footerLegal": "Juridic",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Folosește carduri flash pentru a antrena vocabularul în paralel",
     "workflowStep6": "Exersează conversația liberă cu Lingu",
     "q_language": "Ce limbă voi învăța?",
-    "a_language": "FreeLingo suportă în prezent mai multe limbi (chineză continentală, coreeană, engleză americană, engleză britanică, franceză, germană, italiană, japoneză, portugheză, spaniolă) și vom adăuga mai multe în timp. Când o nouă limbă devine disponibilă, o vei găsi în Setări → Limbile mele — adaug-o și începe să înveți imediat.",
+    "a_language": "FreeLingo suportă în prezent mai multe limbi ({languages}) și vom adăuga mai multe în timp. Când o nouă limbă devine disponibilă, o vei găsi în Setări → Limbile mele — adaug-o și începe să înveți imediat.",
     "q_assessment": "Ce este Evaluarea?",
     "a_assessment": "Un test adaptiv cu cel mult 15 întrebări dintr-o bancă specifică limbii de studiu. Acoperă gramatica, vocabularul și înțelegerea lecturii de la A1 la C2. Rezultatul estimează nivelul CEFR și indică punctele forte și aspectele de exersat; poți ajusta nivelul sugerat înainte de a crea planul.",
     "q_studyPlan": "Ce este Planul de studiu și cum îl generez?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Limbi disponibile"
   },
   "targetLanguages": {
+    "sv-SE": "Suedeză",
+    "sv": "Suedeză",
+    "sv-SE-description": "Suedeza vorbită în Suedia.",
+    "ru-RU": "Rusă",
+    "ru": "Rusă",
+    "ru-RU-description": "Rusa vorbită în Rusia, scrisă cu alfabetul chirilic.",
+    "nl-NL": "Neerlandeză (Țările de Jos)",
+    "nl": "Neerlandeză",
+    "nl-NL-description": "Neerlandeza vorbită în Țările de Jos.",
     "en-US": "Engleză americană",
     "en-GB": "Engleză britanică",
     "es-ES": "Spaniolă",
     "it-IT": "Italiană",
-    "pt-PT": "Portugheză",
+    "pt-BR": "Portugheză (Brazilia)",
+    "pt-PT": "Portugheză (Portugalia)",
     "fr-FR": "Franceză",
     "de-DE": "Germană",
     "pl-PL": "Poloneză",
@@ -1498,6 +1512,7 @@
     "zh": "chineză",
     "es-ES-description": "Spaniola vorbită în Spania.",
     "it-IT-description": "Italiana vorbită în Italia.",
+    "pt-BR-description": "Portugheza vorbită în Brazilia.",
     "pt-PT-description": "Portugheza vorbită în Portugalia.",
     "en-US-description": "Engleza vorbită în Statele Unite.",
     "en-GB-description": "Engleza vorbită în Regatul Unit.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Acum poți învăța poloneza!",
-      "desc": "Am adăugat poloneza ca limbă de studiu, cu conținut de la A1 la C2. Alege-o la început sau adaug-o din Setări → Limbile mele."
+      "label": "Limbi noi: poloneză, portugheză braziliană, rusă, neerlandeză și suedeză",
+      "desc": "Am adăugat poloneza, portugheza braziliană, rusa, neerlandeza și suedeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
     "entry2": {
       "label": "Îmbunătățiri pentru învățare",

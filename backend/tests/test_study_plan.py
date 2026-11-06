@@ -1,7 +1,11 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from sqlalchemy import select, update
 
+from app.core.config import settings
+from app.models.study_plan import StudyPlan
+from app.models.user_language import UserLanguage
 from app.schemas.lessons import ExerciseContent, LessonContent
 from tests.conftest import deactivate_active_plans, make_study_plan
 
@@ -55,6 +59,96 @@ async def test_get_current_plan_after_generate(client, test_user):
     assert data["cefr_level"] == "A1"
     assert data["target_language"] == user.target_language
     assert data["goals"] == ["vocabulary"]
+
+
+@pytest.mark.parametrize(
+    "target_language", ["xx-XX", "ru", "ru-ru", "", "ru-RU", "sv", "sv-se", "sv-SE"]
+)
+@pytest.mark.parametrize("language_source", ["explicit", "active", "profile"])
+async def test_generate_rejects_unavailable_language_without_state_changes(
+    client, test_user, db_session, monkeypatch, target_language, language_source
+):
+    user, headers = test_user
+    await make_study_plan(db_session, user_id=user.id, cefr_level="B2")
+    monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", ["en-US"])
+    body = {"cefr_level": "A1"}
+    if language_source == "explicit":
+        body["target_language"] = target_language
+    elif language_source == "active":
+        await db_session.execute(
+            update(UserLanguage)
+            .where(UserLanguage.user_id == user.id)
+            .values(target_language=target_language)
+        )
+    else:
+        await db_session.execute(
+            update(UserLanguage).where(UserLanguage.user_id == user.id).values(is_active=False)
+        )
+        user.target_language = target_language
+    await db_session.commit()
+
+    plans_query = select(
+        StudyPlan.id, StudyPlan.user_language_id, StudyPlan.target_language, StudyPlan.is_active
+    ).where(StudyPlan.user_id == user.id)
+    languages_query = select(
+        UserLanguage.id, UserLanguage.target_language, UserLanguage.is_active
+    ).where(UserLanguage.user_id == user.id)
+    plans_before = (await db_session.execute(plans_query)).all()
+    languages_before = (await db_session.execute(languages_query)).all()
+
+    with patch("app.routers.study_plan.get_curriculum_units") as curriculum:
+        response = await client.post("/api/study-plan/generate", headers=headers, json=body)
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Language not available. Choose from: ['en-US']"
+    curriculum.assert_not_called()
+    assert (await db_session.execute(plans_query)).all() == plans_before
+    assert (await db_session.execute(languages_query)).all() == languages_before
+
+
+@pytest.mark.parametrize(
+    ("language_source", "explicit_null"),
+    [
+        ("explicit", False),
+        ("active", False),
+        ("active", True),
+        ("profile", False),
+        ("profile", True),
+    ],
+)
+@pytest.mark.parametrize("target_language", ["ru-RU", "sv-SE"])
+async def test_generate_uses_available_language_from_each_source(
+    client, test_user, db_session, monkeypatch, language_source, explicit_null, target_language
+):
+    user, headers = test_user
+    english_plan = await make_study_plan(db_session, user_id=user.id, cefr_level="B2")
+    monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", ["en-US", target_language])
+    body = {"cefr_level": "A1"}
+    if explicit_null:
+        body["target_language"] = None
+    if language_source == "explicit":
+        body["target_language"] = target_language
+    else:
+        await db_session.execute(
+            update(UserLanguage).where(UserLanguage.user_id == user.id).values(is_active=False)
+        )
+        if language_source == "active":
+            db_session.add(
+                UserLanguage(user_id=user.id, target_language=target_language, is_active=True)
+            )
+        else:
+            user.target_language = target_language
+    await db_session.commit()
+
+    response = await client.post("/api/study-plan/generate", headers=headers, json=body)
+
+    assert response.status_code == 200
+    plan = await db_session.get(StudyPlan, response.json()["id"])
+    assert plan.target_language == response.json()["target_language"] == target_language
+    language = await db_session.get(UserLanguage, plan.user_language_id)
+    assert language.target_language == target_language
+    await db_session.refresh(english_plan)
+    assert english_plan.is_active
 
 
 @pytest.mark.asyncio

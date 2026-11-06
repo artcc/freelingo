@@ -10,6 +10,9 @@ import {
 import { renderToStaticMarkup } from 'react-dom/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { LandingFAQ } from '@/components/ui/landing-faq'
+import FAQPage from '@/app/(app)/faq/page'
+import { SUPPORTED_LOCALES } from '@/lib/locales'
+import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import messages from '../../../messages/en.json'
@@ -46,6 +49,55 @@ afterEach(() => {
 })
 
 describe('Landing FAQ', () => {
+  it.each(SUPPORTED_LOCALES)(
+    'lists every language in localized alphabetical order in both FAQs (%s)',
+    async (locale) => {
+      const catalog = (await import(`../../../messages/${locale}.json`)).default
+      const names = SUPPORTED_TARGET_LANGUAGES.map(
+        ({ code }) => catalog.targetLanguages[code] as string
+      ).sort(new Intl.Collator(locale).compare)
+      const list = new Intl.ListFormat(locale, { type: 'conjunction' }).format(names)
+      const { container } = render(
+        <NextIntlClientProvider locale={locale} messages={catalog}>
+          <LandingFAQ />
+          <FAQPage />
+        </NextIntlClientProvider>
+      )
+
+      const publicAnswer = container.querySelector('[id$="-languages-answer"]')
+      expect(publicAnswer).toHaveTextContent(
+        catalog.landing.faq.languages.answer.replace('{languages}', list)
+      )
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: (name) =>
+            name.replace(/\s*\+$/, '').replace(/\s+/g, ' ') ===
+            catalog.faq.q_language.replace(/\s+/g, ' '),
+        })
+      )
+      expect(container.lastElementChild).toHaveTextContent(
+        catalog.faq.a_language.replace('{languages}', list).replace(/\s+/g, ' ')
+      )
+      expect(container.textContent).not.toContain('{languages}')
+      await waitFor(() => expect(useConfigStore.getState().loaded).toBe(true))
+    }
+  )
+
+  it('changes the list order when the page language changes', async () => {
+    const spanish = (await import('../../../messages/es.json')).default
+    const { container, rerender } = render(<FAQ />)
+    const answer = () => container.querySelector('[id$="-languages-answer"]')
+
+    expect(answer()?.textContent).toMatch(/^American English, British English, Chinese/)
+    rerender(
+      <NextIntlClientProvider locale="es" messages={spanish}>
+        <LandingFAQ />
+      </NextIntlClientProvider>
+    )
+    expect(answer()?.textContent).toMatch(/^Alemán/)
+    await waitFor(() => expect(useConfigStore.getState().loaded).toBe(true))
+  })
+
   it('includes answers in the initial HTML without requiring interaction', () => {
     const html = renderToStaticMarkup(<FAQ />)
     const document = new DOMParser().parseFromString(html, 'text/html')

@@ -11,28 +11,15 @@ FreeLingo lets one user learn several target languages simultaneously. Each lang
 independent study plan and learning state, while account settings and memories remain global.
 The active language selects the context used by the authenticated application.
 
-This document specifies the current multi-language behavior. Detailed schemas, endpoint payloads,
-study-plan mechanics, and language-addition procedures remain authoritative in their dedicated
-specifications.
+This document owns language membership, active selection, isolation, and client context recovery.
+`platform.instructions.md` owns authentication-session identity. Detailed schemas, endpoint payloads,
+study-plan mechanics, and language-addition procedures remain authoritative in their dedicated specs.
 
 ## Supported and available languages
 
-The application supports these BCP-47 target-language codes:
-
-- `en-GB` — British English
-- `en-US` — American English
-- `de-DE` — German
-- `es-ES` — Spanish (Spain)
-- `fr-FR` — French
-- `it-IT` — Italian
-- `pl-PL` — Polish
-- `ja-JP` — Japanese
-- `ko-KR` — Korean (South Korea)
-- `pt-PT` — Portuguese (Portugal)
-- `zh-CN` — Chinese (Mainland China)
-
-`en-GB` is the default target language and the general fallback in backend and frontend code.
-`en-US` remains supported but is not a fallback default.
+`target-language.instructions.md` owns the canonical BCP-47 catalog, defaults, aliases, and metadata.
+The lifecycle and isolation rules here apply equally to every supported code, including regional
+variants and future languages. `en-GB` remains the canonical default.
 
 `SUPPORTED_TARGET_LANGUAGES` defines the codes understood by the application.
 `AVAILABLE_TARGET_LANGUAGES` defines the operator-enabled subset exposed by the language-management
@@ -42,6 +29,9 @@ frontend catalog.
 Every supported language has backend A1-C2 curriculum, grammar, vocabulary, phrasebook, and
 assessment-bank data. The backend is the canonical source for these resources; the frontend loads
 them through the corresponding APIs.
+
+Regional variants are separate memberships and plans. A shared ISO recognition code does not merge
+progress, resources, or active selection.
 
 ## Domain model
 
@@ -349,10 +339,9 @@ Prompts for Lingu, lessons, flashcards, assessment, level tests, Listening, Read
 conversation receive the target language explicitly. They must not assume English merely because
 both English variants are supported.
 
-Language metadata and prompt overlays preserve regional and writing-system requirements, including
-British/American English, Spanish from Spain, European Portuguese, and CJK scripts. Comprehension
-length guidance uses characters for Japanese and Mainland Chinese and words for word-spaced
-languages.
+Language metadata and prompt overlays preserve regional and writing-system requirements. Language
+capabilities determine comprehension length guidance and text presentation; their mapping belongs to
+`target-language.instructions.md` and prompt composition to `prompts.instructions.md`.
 
 Learning examples and answer content remain in the target language. Translations, explanations,
 hints, and memory-writing instructions that support the learner use the native language where the

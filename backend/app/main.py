@@ -75,6 +75,7 @@ async def lifespan(app: FastAPI):  # noqa: ANN201
             "Set a random value of at least 32 characters in your .env file."
         )
 
+    settings.validate_revenuecat()
     await asyncio.to_thread(_run_migrations)
 
     # Ensure the avatars directory exists on startup (persisted via Docker volume)
@@ -173,3 +174,8 @@ if settings.STRIPE_ENABLED:
 
     _stripe.api_key = settings.STRIPE_SECRET_KEY
     app.include_router(billing_router.router)
+
+    if settings.REVENUECAT_ENABLED:
+        from app.routers import revenuecat as revenuecat_router
+
+        app.include_router(revenuecat_router.router)

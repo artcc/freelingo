@@ -1,3 +1,5 @@
+from app.models.billing_checkout import BillingCheckout
+from app.models.billing_webhook import RevenueCatWebhookReceipt, StripeWebhookReceipt
 from app.models.chat_history import ChatHistory
 from app.models.competency import UserCompetency
 from app.models.conversation import Conversation
@@ -19,6 +21,9 @@ from app.models.user import User
 from app.models.user_language import UserLanguage
 
 __all__ = [
+    "BillingCheckout",
+    "StripeWebhookReceipt",
+    "RevenueCatWebhookReceipt",
     "ChatHistory",
     "UserCompetency",
     "Conversation",

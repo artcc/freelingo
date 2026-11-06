@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Mitä kieliä voin opiskella?",
-        "answer": "Britti- ja amerikanenglantia, espanjaa, italiaa, portugalia, saksaa, ranskaa, japania, koreaa ja Manner-Kiinan kiinaa. Voit opiskella useita samanaikaisesti, ja jokaisella kielellä on oma suunnitelma ja edistyminen."
+        "answer": "{languages}. Voit opiskella useita samanaikaisesti, ja jokaisella kielellä on oma suunnitelma ja edistyminen."
       },
       "start": {
         "question": "Miten aloitan opiskelun?",
@@ -92,6 +92,8 @@
     "footerProduct": "Tuote",
     "footerLegal": "Oikeudelliset tiedot",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Harjoittele sanastoa muistikorteilla samalla",
     "workflowStep6": "Harjoittele vapaata keskustelua Lingun kanssa",
     "q_language": "Mitä kieltä voin oppia?",
-    "a_language": "FreeLingo tukee tällä hetkellä useita kieliä (amerikanenglanti, brittienglanti, ranska, saksa, italia, japani, korea, Manner-Kiinan kiina, portugali ja espanja), ja lisäämme kieliä ajan mittaan. Kun uusi kieli tulee saataville, löydät sen kohdasta Asetukset → Omat kielet – lisää se ja aloita opiskelu heti.",
+    "a_language": "FreeLingo tukee tällä hetkellä useita kieliä ({languages}), ja lisäämme kieliä ajan mittaan. Kun uusi kieli tulee saataville, löydät sen kohdasta Asetukset → Omat kielet – lisää se ja aloita opiskelu heti.",
     "q_assessment": "Mikä tasoarvio on?",
     "a_assessment": "Mukautuva testi, jossa on enintään 15 kysymystä opiskelukielen omasta kysymyspankista. Se kattaa kieliopin, sanaston ja luetun ymmärtämisen tasoilla A1–C2. Tulos arvioi CEFR-tasosi ja näyttää vahvuudet ja harjoittelukohteet; voit muuttaa ehdotettua tasoa ennen suunnitelman luomista.",
     "q_studyPlan": "Mikä opintosuunnitelma on ja miten luon sellaisen?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Saatavilla olevat kielet"
   },
   "targetLanguages": {
+    "sv-SE": "Ruotsi",
+    "sv": "Ruotsi",
+    "sv-SE-description": "Ruotsissa puhuttu ruotsi.",
+    "ru-RU": "Venäjä",
+    "ru": "Venäjä",
+    "ru-RU-description": "Venäjällä puhuttu venäjä, joka kirjoitetaan kyrillisillä aakkosilla.",
+    "nl-NL": "Hollanti (Alankomaat)",
+    "nl": "Hollanti",
+    "nl-NL-description": "Alankomaissa puhuttu hollanti.",
     "en-US": "Amerikanenglanti",
     "en-GB": "Brittienglanti",
     "es-ES": "Espanja",
     "it-IT": "Italia",
-    "pt-PT": "Portugali",
+    "pt-BR": "Portugali (Brasilia)",
+    "pt-PT": "Portugali (Portugali)",
     "fr-FR": "Ranska",
     "de-DE": "Saksa",
     "pl-PL": "Puola",
@@ -1498,6 +1512,7 @@
     "zh": "Kiina",
     "es-ES-description": "Espanjassa puhuttu espanja.",
     "it-IT-description": "Italiassa puhuttu italia.",
+    "pt-BR-description": "Brasiliassa puhuttu portugali.",
     "pt-PT-description": "Portugalissa puhuttu portugali.",
     "en-US-description": "Yhdysvalloissa puhuttu englanti.",
     "en-GB-description": "Yhdistyneessä kuningaskunnassa puhuttu englanti.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Selvä",
     "entry1": {
-      "label": "Nyt voit oppia puolaa!",
-      "desc": "Puola on nyt saatavilla opiskeltavana kielenä, ja sisältöä on tasoilta A1–C2. Valitse se aloittaessasi tai lisää se kohdasta Asetukset → Omat kielet."
+      "label": "Uudet kielet: puola, brasilianportugali, venäjä, hollanti ja ruotsi",
+      "desc": "Puola, brasilianportugali, venäjä, hollanti ja ruotsi ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
     "entry2": {
       "label": "Parannuksia oppimiseen",

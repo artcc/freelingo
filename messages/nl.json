@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Welke talen kan ik leren?",
-        "answer": "Brits en Amerikaans Engels, Spaans, Italiaans, Portugees, Duits, Frans, Japans, Koreaans en Chinees van het vasteland. Je kunt meerdere talen tegelijk leren, met aparte plannen en voortgang per taal."
+        "answer": "{languages}. Je kunt meerdere talen tegelijk leren, met aparte plannen en voortgang per taal."
       },
       "start": {
         "question": "Hoe begin ik met leren?",
@@ -92,6 +92,8 @@
     "footerProduct": "Product",
     "footerLegal": "Juridisch",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Gebruik flashcards om woordenschat parallel te trainen",
     "workflowStep6": "Oefen vrije gesprekken met Lingu",
     "q_language": "Welke taal leer ik?",
-    "a_language": "FreeLingo ondersteunt momenteel meerdere talen (Amerikaans Engels, Brits Engels, Chinees (vasteland), Duits, Frans, Italiaans, Japans, Koreaans, Portugees, Spaans) en we zullen er in de loop van de tijd meer toevoegen. Wanneer een nieuwe taal beschikbaar is, vind je deze in Instellingen → Mijn talen — voeg hem toe en begin meteen met leren.",
+    "a_language": "FreeLingo ondersteunt momenteel meerdere talen ({languages}) en we zullen er in de loop van de tijd meer toevoegen. Wanneer een nieuwe taal beschikbaar is, vind je deze in Instellingen → Mijn talen — voeg hem toe en begin meteen met leren.",
     "q_assessment": "Wat is de Beoordeling?",
     "a_assessment": "Een adaptieve quiz met maximaal 15 vragen uit een vragenbank voor je leertaal. De quiz behandelt grammatica, woordenschat en leesbegrip van A1 tot C2. Het resultaat schat je CEFR-niveau in en toont sterke punten en oefenpunten; je kunt het voorgestelde niveau aanpassen voordat je het plan maakt.",
     "q_studyPlan": "Wat is het Studieplan en hoe genereer ik er een?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "sv-SE": "Zweeds",
+    "sv": "Zweeds",
+    "sv-SE-description": "Zweeds zoals gesproken in Zweden.",
+    "ru-RU": "Russisch",
+    "ru": "Russisch",
+    "ru-RU-description": "Russisch zoals gesproken in Rusland, met het cyrillische alfabet.",
+    "nl-NL": "Nederlands (Nederland)",
+    "nl": "Nederlands",
+    "nl-NL-description": "Nederlands zoals gesproken in Nederland.",
     "en-US": "Amerikaans Engels",
     "en-GB": "Brits Engels",
     "es-ES": "Spaans",
     "it-IT": "Italiaans",
-    "pt-PT": "Portugees",
+    "pt-BR": "Portugees (Brazilië)",
+    "pt-PT": "Portugees (Portugal)",
     "fr-FR": "Frans",
     "de-DE": "Duits",
     "pl-PL": "Pools",
@@ -1498,6 +1512,7 @@
     "zh": "Chinees",
     "es-ES-description": "Spaans zoals gesproken in Spanje.",
     "it-IT-description": "Italiaans zoals gesproken in Italië.",
+    "pt-BR-description": "Portugees zoals gesproken in Brazilië.",
     "pt-PT-description": "Portugees zoals gesproken in Portugal.",
     "en-US-description": "Engels zoals gesproken in de Verenigde Staten.",
     "en-GB-description": "Engels zoals gesproken in het Verenigd Koninkrijk.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Je kunt nu Pools leren!",
-      "desc": "Pools is nu beschikbaar als leertaal, met inhoud van A1 tot C2. Kies het wanneer je begint of voeg het toe via Instellingen → Mijn talen."
+      "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
+      "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
     "entry2": {
       "label": "Verbeteringen voor het leren",

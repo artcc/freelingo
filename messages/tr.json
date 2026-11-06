@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Hangi dilleri öğrenebilirim?",
-        "answer": "İngiliz ve Amerikan İngilizcesi, İspanyolca, İtalyanca, Portekizce, Almanca, Fransızca, Japonca, Korece ve Çin anakarasında kullanılan Çince. Her dil için ayrı planlar ve ilerlemeyle aynı anda birden fazla dil öğrenebilirsiniz."
+        "answer": "{languages}. Her dil için ayrı planlar ve ilerlemeyle aynı anda birden fazla dil öğrenebilirsiniz."
       },
       "start": {
         "question": "Öğrenmeye nasıl başlarım?",
@@ -92,6 +92,8 @@
     "footerProduct": "Ürün",
     "footerLegal": "Yasal",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Kelime bilginizi geliştirmek için paralel olarak Bilgi Kartlarını kullanın",
     "workflowStep6": "Lingu ile serbest konuşma pratiği yapın",
     "q_language": "Hangi dili öğreneceğim?",
-    "a_language": "FreeLingo şu anda birçok dili destekliyor (Amerikan İngilizcesi, İngiliz İngilizcesi, Fransızca, Almanca, İtalyanca, Japonca, Korece, Çince (Çin anakarası), Portekizce, İspanyolca) ve zamanla yenilerini eklemeye devam edeceğiz. Yeni bir dil kullanıma sunulduğunda onu Ayarlar → Dillerim bölümünde bulacaksınız — ekleyin ve hemen öğrenmeye başlayın.",
+    "a_language": "FreeLingo şu anda birçok dili destekliyor ({languages}) ve zamanla yenilerini eklemeye devam edeceğiz. Yeni bir dil kullanıma sunulduğunda onu Ayarlar → Dillerim bölümünde bulacaksınız — ekleyin ve hemen öğrenmeye başlayın.",
     "q_assessment": "Seviye Tespiti nedir?",
     "a_assessment": "Öğrendiğiniz dile özel soru bankasından en fazla 15 soruluk uyarlanabilir bir testtir. A1–C2 düzeylerinde dil bilgisi, kelime bilgisi ve okuduğunu anlamayı kapsar. Sonuç CEFR seviyenizi tahmin eder, güçlü yönleri ve pratik gerektiren alanları gösterir; planı oluşturmadan önce önerilen seviyeyi değiştirebilirsiniz.",
     "q_studyPlan": "Çalışma Planı nedir ve nasıl oluşturulur?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Kullanılabilir diller"
   },
   "targetLanguages": {
+    "sv-SE": "İsveççe",
+    "sv": "İsveççe",
+    "sv-SE-description": "İsveç'te konuşulan İsveççe.",
+    "ru-RU": "Rusça",
+    "ru": "Rusça",
+    "ru-RU-description": "Rusya'da konuşulan, Kiril alfabesiyle yazılan Rusça.",
+    "nl-NL": "Felemenkçe (Hollanda)",
+    "nl": "Felemenkçe",
+    "nl-NL-description": "Hollanda'da konuşulan Felemenkçe.",
     "en-US": "Amerikan İngilizcesi",
     "en-GB": "İngiliz İngilizcesi",
     "es-ES": "İspanyolca",
     "it-IT": "İtalyanca",
-    "pt-PT": "Portekizce",
+    "pt-BR": "Portekizce (Brezilya)",
+    "pt-PT": "Portekizce (Portekiz)",
     "fr-FR": "Fransızca",
     "de-DE": "Almanca",
     "pl-PL": "Lehçe",
@@ -1498,6 +1512,7 @@
     "zh": "Çince",
     "es-ES-description": "İspanya'da konuşulan İspanyolca.",
     "it-IT-description": "İtalya'da konuşulan İtalyanca.",
+    "pt-BR-description": "Brezilya'da konuşulan Portekizce.",
     "pt-PT-description": "Portekiz'de konuşulan Portekizce.",
     "en-US-description": "Amerika Birleşik Devletleri'nde konuşulan İngilizce.",
     "en-GB-description": "Birleşik Krallık'ta konuşulan İngilizce.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Anladım",
     "entry1": {
-      "label": "Artık Lehçe öğrenebilirsin!",
-      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
+      "label": "Yeni diller: Lehçe, Brezilya Portekizcesi, Rusça, Felemenkçe ve İsveççe",
+      "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi, Brezilya Portekizcesini, Rusçayı, Felemenkçeyi ve İsveççeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
     },
     "entry2": {
       "label": "Öğrenimde iyileştirmeler",

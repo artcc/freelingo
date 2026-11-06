@@ -69,6 +69,14 @@ canonical BCP-47 codes and supported short aliases. It is composed into tutor, v
 evaluation, flashcard, comprehension, and assessment prompts. Target-language metadata comes from
 language helpers rather than client labels.
 
+Russian (`ru-RU`, internal alias `ru`) has explicit Cyrillic, pronunciation, case, aspect, motion-verb
+and register guidance. The canonical language and writing-system rules, including ё and optional
+pronunciation stress marks, are defined in `target-language.instructions.md`.
+
+Swedish (`sv-SE`, internal alias `sv`) has explicit pronunciation, en/ett gender, definiteness,
+V2/subordinate word order, reflexive reference, tense and register guidance. The canonical variety,
+writing-system and speech rules are defined in `target-language.instructions.md`.
+
 `MEMORY_SYSTEM_INSTRUCTION_BASE` and `get_memory_system_instruction()` advertise the native
 `save_user_memory` tool only when the request actually offers that tool. No-tools fallbacks may retain
 escaped memory context but must not instruct the model to call an unavailable tool.

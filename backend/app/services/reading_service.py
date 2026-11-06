@@ -64,6 +64,24 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "sv": [
+        "daily life, public transport, libraries, housing and local services in Sweden",
+        "Swedish literature, music, cinema, design and regional cultural life",
+        "Swedish outdoor life, allemansrätten with responsibilities and local restrictions",
+        "associations, seasonal traditions, linguistic diversity and Sámi perspectives in Sweden",
+    ],
+    "ru": [
+        "daily life, public transport, local services and leisure in Russian cities and regions",
+        "Russian literature, theatre, cinema, music and contemporary cultural life",
+        "regional food, seasonal traditions and cultural diversity in Russia",
+        "Russian-language communication, science, museums and differing historical perspectives",
+    ],
+    "nl": [
+        "daily life, cycling, public transport and local services in the Netherlands",
+        "Dutch water management, polders and contemporary environmental debates",
+        "Dutch literature, art, museums and regional cultural life in the Netherlands",
+        "cultural diversity, historical perspectives and changing traditions in the Netherlands",
+    ],
     "de": [
         "German festivals and holiday traditions",
         "German classical music and famous composers",
@@ -87,6 +105,12 @@ _CULTURAL_TOPICS: dict[str, list[str]] = {
         "Italian Renaissance art and cultural heritage",
         "daily life and customs in Italian cities",
         "Italian history, landmarks, and UNESCO sites",
+    ],
+    "pt-BR": [
+        "Brazilian regional food, festivals, and everyday traditions",
+        "Brazilian literature, music, cinema, and cultural diversity",
+        "daily life, education, work, and public transport in Brazilian cities",
+        "Brazilian history, Indigenous and Afro-Brazilian heritage, and biodiversity",
     ],
     "pt": [
         "Portuguese music, fado, and cultural traditions",

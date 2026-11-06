@@ -90,38 +90,19 @@ membership. Those prompt requirements are not database invariants.
 
 ## Generation lease and status
 
-Redis prevents ordinary duplicate generation with the key:
-
-```text
-listening:generating:{level}:{target_language}
-```
-
-- `exercise_generation.py` acquires a unique-owner lease with a 60-second TTL and renews it every
-  20 seconds. Lua operations atomically acquire the lease and state, compare-and-renew, and
-  compare-and-finish. An older task cannot release a replacement lease or overwrite its state.
-- The background task opens its own database and Redis resources. Detected lease loss, renewal
-  failure, or cancellation stops local work; persistence checks ownership before saving. Redis and
-  PostgreSQL do not share a transaction: the lease prevents ordinary duplicate work but is not a
-  database fencing guarantee if ownership disappears between the final guard and commit.
-- `EXERCISE_GENERATION_TIMEOUT_SECONDS` defaults to 600 and bounds the complete job from acquisition,
-  including structured generation, JSON correction, TTS, and persistence. Provider-specific TTS
-  timeouts still apply. The LLM receives the remaining budget with SDK and adapter transport retries
-  disabled for this flow; one JSON correction remains possible within that budget.
-- Redis `{lock_key}:state` stores the generation status. Running state lives for the configured
-  budget plus 15 minutes; terminal state lives for 15 minutes. A running state without a lease is
-  reported as interrupted. Redis state is operational, not a durable job queue.
-- Available exercises take priority over generation status. Generation checks availability before
-  and after acquiring a lease and returns `status: "available"` without starting redundant work.
-- Failures are logged and exposed through `/next` as controlled error codes, not raw exceptions.
-
-`GET /api/listening/next` responds immediately. A supplied `wait` query parameter does not enable a
-long-poll. The frontend periodically queries the existing endpoint; closing the page or losing one
-HTTP response does not cancel the accepted background job.
+Listening uses `listening:generating:{level}:{target_language}` and the shared generation coordinator
+in `services.instructions.md` (Shared generation coordinator). Its total budget includes TTS and audio
+persistence; provider-specific speech timeouts also apply. Audio compensation follows the Generation
+section above. The shared contract defines leases, status expiry, cancellation, and the
+Redis/PostgreSQL transaction boundary.
 
 ## API
 
 All endpoints require authentication, an active language, an active study plan, and normal
 maintenance access. They derive level, language, and plan from persisted server state.
+
+The `/started` measurement signal and optional attempt-correlation header are defined in
+`api-endpoints.instructions.md`; their measurement semantics belong to `umami.instructions.md`.
 
 `/next` and `/generate` accept optional `expected_study_plan_id`, `expected_target_language`, and
 `expected_level` query parameters. These are consistency checks against the authenticated user's
@@ -203,7 +184,7 @@ answer awards 10 XP, so a valid five-question exercise produces 0-50 XP.
 
 A normal submission:
 
-1. Rejects an existing non-replay attempt for the same user and exercise.
+1. Checks previous attempts for the same user and exercise, without filtering by replay or plan.
 2. Calculates score and XP.
 3. Stores the attempt against the active plan.
 4. Increments `play_count`.
@@ -244,47 +225,13 @@ Maintenance mode blocks Listening for non-admin users with HTTP `503`.
 The Listening page keeps transient state locally. Its states are `loading`, `idle`, `generating`,
 `exercise`, `results`, and `history`.
 
-- Initial load and active-language changes request the next exercise.
-- A pending language switch pauses an in-flight lookup without replacing an already displayed
-  exercise. A definite rejection with unchanged context preserves answers and replay mode; only
-  interrupted lookups need resuming. The switch PUT has a 20-second timeout including authentication
-  refresh. An uncertain outcome invalidates context for GET-only reconciliation and bounded recovery.
-- Missing or invalidated language context is loaded first through the shared language store, with
-  cancellation and a 20-second timeout. Failure exits `loading`, shows the localized unavailable
-  message, and offers Retry. Retry reloads context and checks for existing exercises before any
-  generation can be requested. A successful language lookup with no active language is also an error;
-  a valid active language without a study plan is handled by the backend's no-active-plan response.
+- Exercise lookup, generation, and answer submission use the shared client contracts in
+  `architecture-frontend.instructions.md` (Shared comprehension client). Language-switch recovery
+  belongs to `multi-language.instructions.md`.
 - Idle state offers generation, history, quota information, or an inline paywall.
-- `useExerciseGeneration` and `resolveExercise` share the generation lifecycle with Reading.
-- Generating state queries `/next` every 10 seconds, with no overlapping requests, and adds a delay
-  warning after 15 seconds. Each request uses at most 20 seconds or the remaining operation budget,
-  including the consumer's wait for shared authentication refresh.
-- The first server-calculated remaining time is anchored to the browser's monotonic clock. A final
-  result lookup at expiry has up to 10 seconds of grace. Missing remaining time uses a 60-second
-  observation window. Client wall-clock offsets do not change this budget.
-- Network errors, 5xx, and 429 use progressive backoff; recovery stops after four consecutive failures.
-  `Retry-After` is respected up to 120 seconds; longer delays are surfaced as unavailable status.
-  Recovery pauses are capped by the remaining budget; when Retry-After cannot fit, the operation
-  expires without sending a request earlier than permitted or outside its budget.
-- An uncertain POST response is recovered using GET only. Checking status never resubmits generation.
-- Page entry resumes active generation or retrieves a saved result. Localized errors distinguish
-  generation failure, timeout, and unavailable status. A manual retry checks for existing work first.
-- Repeated clicks are blocked before POST completes. Unmount and local language, plan, or level
-  changes abort the current lookup and its timers. Responses must match the operation's context;
-  late responses cannot update a replacement operation.
+- Generating state adds a delay warning after 15 seconds.
 - Exercise state shows topic, type, level, authenticated audio playback, and all questions.
 - Submission becomes available when every received question index has an answer.
-- Local submission results are discarded after unmount, session replacement, a confirmed language change,
-  context invalidation, or exercise/plan/level replacement. Results, errors, review prompts, and the
-  submitting indicator belong to that attempt only. Cancelling the client wait does not undo a saved
-  attempt; a newer exercise cannot display its result or have its own submission unlocked by it.
-- A provisional language switch keeps the pending submission and its lock. Responses received during
-  the switch wait for its outcome. If rejected with unchanged context, the original result is shown
-  without resubmitting the attempt, including replay.
-- The POST remains observed after local cancellation. A successful HTTP response updates global quota
-  once for the originating session even if the exercise is no longer visible or body decoding fails.
-  Transport failures and HTTP 408/5xx reconcile quota through a forced GET; old-session responses cannot
-  change the current user's balance.
 - Results reveal transcript, correct answers, score, and XP.
 - A successful first attempt may open the shared review prompt; replay never does.
 - History displays ten attempts per page through the shared pagination component.

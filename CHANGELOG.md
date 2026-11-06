@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-11-06
+
+### Added
+
+- Optional RevenueCat Premium entitlement synchronization with authenticated, idempotent webhooks, account reconciliation, and administrator-controlled Stripe receipt imports, while retaining Stripe web checkout and a Stripe Customer Portal fallback when RevenueCat is unavailable.
+- Brazilian Portuguese (`pt-BR`), Dutch from the Netherlands (`nl-NL`), Russian (`ru-RU`), and Swedish from Sweden (`sv-SE`) as separate study languages, each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, cultural contexts, and regional speech instructions.
+
+### Changed
+
+- Billing rejects a new checkout for an already-subscribed account; RevenueCat-managed access preserves the last confirmed state during delayed renewals or provider failures and applies entitlement expiry and grace periods through verified reconciliation.
+- Portuguese language selectors explicitly distinguish Brazil from Portugal, using separate flags and localized labels.
+- What's New highlights Polish, Brazilian Portuguese, Dutch, Russian, and Swedish together in the first entry, across all interface languages.
+- Public and authenticated FAQs list study languages alphabetically by their translated names in the active interface language.
+
+### Fixed
+
+- Paywalls show no-charge-today terms only when a Stripe trial is configured and the user has not already used it.
+- Paywall and Settings checkout actions refresh the profile when billing confirms an existing Premium subscription, removing stale purchase prompts without opening another checkout.
+- Stripe Customer Portal creation is asynchronous and returns a controlled unavailable response on provider failure, including the RevenueCat fallback.
+- Profile reads recover from failed retroactive freemium-trial writes and allow a later request to retry the grant.
+- Landing language bubbles use stable server/client positioning and a wider desktop orbit, with wrapping mobile rows to prevent crowding as the language catalog grows.
+- Study-plan generation rejects invalid or disabled target languages before changing data, and free voice conversations no longer inherit another language's study plan or level.
+- Stripe-only access reconciles current subscription state and deduplicates webhooks, preventing delayed events from undoing cancellations or payment recovery and duplicate deliveries from resetting quotas.
+- Checkout reuses a single pending session per account, recovers interrupted creation idempotently, and expires the previous session before changing plans to prevent duplicate subscriptions.
+- Checkout resumes incomplete payments in the same open session and recovers old reservations that no longer meet Stripe's minimum expiry window; interrupted Customer creation retains its original request parameters across profile changes.
+- RevenueCat expirations caused by billing issues allow resubscription after definitive cancellation; subscriptions that remain recoverable in Stripe route to Customer Portal instead of creating another purchase.
+
 ## [1.11.0] - 2026-11-02
 
 ### Added

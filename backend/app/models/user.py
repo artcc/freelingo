@@ -63,7 +63,7 @@ class User(Base):
         nullable=False,
         default=settings.DEFAULT_MONTHLY_TOKENS_LIMIT,
     )
-    # Stripe subscription
+    # Billing identifiers and shared subscription access snapshot.
     stripe_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     stripe_subscription_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     subscription_status: Mapped[str] = mapped_column(
@@ -74,12 +74,14 @@ class User(Base):
     )
     subscription_ends_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     cancel_at_period_end: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    revenuecat_synced_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     trial_used: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     assessment_voice_trial_used: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False
     )
     freemium_trial_ends_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     freemium_trial_used: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
     avatar: Mapped[str | None] = mapped_column(Text, nullable=True)
     bio: Mapped[str | None] = mapped_column(Text, nullable=True)
     learning_goals: Mapped[str | None] = mapped_column(Text, nullable=True)  # JSON array string

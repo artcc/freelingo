@@ -170,6 +170,16 @@
     sans-serif;
 }
 
+@utility font-target-cyrillic {
+  font-family:
+    var(--font-geist-sans),
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
 @utility font-target-ja {
   font-family:
     var(--font-noto-ja), 'Hiragino Sans', 'Yu Gothic', Meiryo, system-ui,

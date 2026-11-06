@@ -16,6 +16,8 @@ from pathlib import Path
 
 import pytest
 
+from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
+
 FRONTEND_DATA = Path(__file__).resolve().parent.parent.parent / "frontend" / "src" / "data"
 
 CURRICULUM_FILE = FRONTEND_DATA / "curriculum.ts"
@@ -57,7 +59,46 @@ def test_data_files_exist() -> None:
     assert CURRICULUM_FILE.exists(), "Missing data file: curriculum.ts"
 
 
-@pytest.mark.parametrize("language", ["fr-FR", "it-IT", "pt-PT", "pl-PL", "ja-JP"])
+@pytest.mark.parametrize("language", sorted(SUPPORTED_TARGET_LANGUAGES))
+@pytest.mark.parametrize(
+    ("level", "minimums"),
+    [
+        ("A1", (8, 14, 190, 47, 20)),
+        ("A2", (8, 19, 180, 39, 20)),
+        ("B1", (8, 19, 102, 36, 20)),
+        ("B2", (8, 20, 95, 30, 16)),
+        ("C1", (8, 21, 75, 30, 14)),
+        ("C2", (8, 16, 75, 30, 14)),
+    ],
+)
+def test_language_package_meets_per_level_coverage_minimums(language, level, minimums):
+    """Learning Resources owns the bounds; upper thresholds require editorial review."""
+    from app.data.assessment_bank import get_assessment_bank
+    from app.data.curriculum import get_curriculum
+    from app.data.grammar import get_grammar_topics
+    from app.data.phrasebook import get_phrasebook_categories
+    from app.data.vocabulary import get_vocabulary_sets
+
+    counts = (
+        len({unit.id for unit in get_curriculum(language)[level]}),
+        len({topic.slug for topic in get_grammar_topics(language) if topic.level == level}),
+        sum(len(item.words) for item in get_vocabulary_sets(language) if item.level == level),
+        sum(
+            len(item.phrases) for item in get_phrasebook_categories(language) if item.level == level
+        ),
+        len(
+            [question for question in get_assessment_bank(language) if question.difficulty == level]
+        ),
+    )
+    for resource, count, minimum in zip(
+        ("units", "grammar", "vocabulary", "phrases", "assessment"), counts, minimums, strict=True
+    ):
+        assert count >= minimum, (language, level, resource, count, minimum)
+
+
+@pytest.mark.parametrize(
+    "language", ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ru-RU", "sv-SE"]
+)
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
 
@@ -71,6 +112,8 @@ def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> 
         ("fr-FR", "A1", 3, "verbes-frequents-present"),
         ("it-IT", "A2", 1, "stare-gerundio"),
         ("pt-PT", "A1", 0, "ter"),
+        ("pt-BR", "A1", 0, "ter"),
+        ("nl-NL", "A1", 0, "tegenwoordige-tijd"),
         ("ja-JP", "A2", 0, "plain-past"),
     ],
 )
@@ -92,19 +135,7 @@ def test_curriculum_grammar_refs_all_defined() -> None:
 
     # Collect all grammar slugs across all supported languages
     defined: set[str] = set()
-    for lang in (
-        "en-GB",
-        "en-US",
-        "es-ES",
-        "it-IT",
-        "pl-PL",
-        "pt-PT",
-        "fr-FR",
-        "de-DE",
-        "ja-JP",
-        "ko-KR",
-        "zh-CN",
-    ):
+    for lang in sorted(SUPPORTED_TARGET_LANGUAGES):
         defined.update(_get_grammar_slugs(lang))
 
     missing = referenced - defined
@@ -149,6 +180,8 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.pl.vocabulary as pl_vocabulary
     import app.data.pt.curriculum as pt_curriculum
     import app.data.pt.vocabulary as pt_vocabulary
+    import app.data.ru.curriculum as ru_curriculum
+    import app.data.ru.vocabulary as ru_vocabulary
     import app.data.zh.curriculum as zh_curriculum
     import app.data.zh.vocabulary as zh_vocabulary
 
@@ -163,23 +196,12 @@ def test_curriculum_vocab_refs_all_defined() -> None:
         "Portuguese", pt_curriculum.CURRICULUM, pt_vocabulary.VOCABULARY_SETS
     )
     _check_language_vocab_refs("Chinese", zh_curriculum.CURRICULUM, zh_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Russian", ru_curriculum.CURRICULUM, ru_vocabulary.VOCABULARY_SETS)
 
 
 def test_grammar_related_refs_all_defined() -> None:
     """Every slug in a grammar topic's related[] array must exist in that language's grammar data."""
-    for lang_code in (
-        "en-GB",
-        "en-US",
-        "es-ES",
-        "it-IT",
-        "pl-PL",
-        "pt-PT",
-        "fr-FR",
-        "de-DE",
-        "ja-JP",
-        "ko-KR",
-        "zh-CN",
-    ):
+    for lang_code in sorted(SUPPORTED_TARGET_LANGUAGES):
         defined = _get_grammar_slugs(lang_code)
         related = _get_grammar_related_refs(lang_code)
 
@@ -199,6 +221,7 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
@@ -209,6 +232,7 @@ def test_vocabulary_export_completeness() -> None:
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ru", ru_sets),
         ("zh", zh_sets),
     ]:
         for s in sets:
@@ -228,19 +252,7 @@ def test_vocabulary_export_completeness() -> None:
 
 def test_grammar_slug_uniqueness() -> None:
     """No two grammar topics should share the same slug within a language."""
-    for lang_code in (
-        "en-GB",
-        "en-US",
-        "es-ES",
-        "it-IT",
-        "pl-PL",
-        "pt-PT",
-        "fr-FR",
-        "de-DE",
-        "ja-JP",
-        "ko-KR",
-        "zh-CN",
-    ):
+    for lang_code in sorted(SUPPORTED_TARGET_LANGUAGES):
         from app.data.grammar import get_grammar_topics
 
         topics = get_grammar_topics(lang_code)
@@ -265,6 +277,7 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
@@ -275,6 +288,7 @@ def test_vocabulary_id_uniqueness() -> None:
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ru", ru_sets),
         ("zh", zh_sets),
     ]:
         seen: set[str] = set()

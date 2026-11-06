@@ -42,7 +42,7 @@
       },
       "languages": {
         "question": "Hvilke sprog kan jeg lære?",
-        "answer": "Britisk og amerikansk engelsk, spansk, italiensk, portugisisk, tysk, fransk, japansk, koreansk og kinesisk fra det kinesiske fastland. Du kan lære flere samtidig med separate planer og fremskridt for hvert sprog."
+        "answer": "{languages}. Du kan lære flere samtidig med separate planer og fremskridt for hvert sprog."
       },
       "start": {
         "question": "Hvordan kommer jeg i gang med at lære?",
@@ -92,6 +92,8 @@
     "footerProduct": "Produkt",
     "footerLegal": "Juridisk",
     "languageGreetings": {
+      "ru-RU": "Привет!",
+      "sv-SE": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -99,6 +101,8 @@
       "es-ES": "¡Hola!",
       "fr-FR": "Bonjour !",
       "it-IT": "Ciao!",
+      "pt-BR": "Oi!",
+      "nl-NL": "Hallo!",
       "pt-PT": "Olá!",
       "ja-JP": "こんにちは！",
       "ko-KR": "안녕하세요!",
@@ -1288,7 +1292,7 @@
     "workflowStep5": "Brug flashcards til at træne ordforråd ved siden af",
     "workflowStep6": "Øv frie samtaler med Lingu",
     "q_language": "Hvilket sprog kommer jeg til at lære?",
-    "a_language": "FreeLingo understøtter i øjeblikket flere sprog (amerikansk engelsk, britisk engelsk, fransk, tysk, italiensk, japansk, koreansk, kinesisk fra Fastlandskina, portugisisk og spansk), og vi tilføjer flere med tiden. Når et nyt sprog bliver tilgængeligt, finder du det under Indstillinger → Mine sprog – tilføj det, og begynd at lære med det samme.",
+    "a_language": "FreeLingo understøtter i øjeblikket flere sprog ({languages}), og vi tilføjer flere med tiden. Når et nyt sprog bliver tilgængeligt, finder du det under Indstillinger → Mine sprog – tilføj det, og begynd at lære med det samme.",
     "q_assessment": "Hvad er niveauvurderingen?",
     "a_assessment": "En adaptiv test med højst 15 spørgsmål fra en spørgsmålsbank for dit studiesprog. Den dækker grammatik, ordforråd og læseforståelse fra A1 til C2. Resultatet anslår dit CEFR-niveau og viser styrker og øveområder; du kan ændre det foreslåede niveau, før du opretter planen.",
     "q_studyPlan": "Hvad er læringsplanen, og hvordan opretter jeg en?",
@@ -1475,11 +1479,21 @@
     "supportedLanguages": "Tilgængelige sprog"
   },
   "targetLanguages": {
+    "sv-SE": "Svensk",
+    "sv": "Svensk",
+    "sv-SE-description": "Svensk, som det tales i Sverige.",
+    "ru-RU": "Russisk",
+    "ru": "Russisk",
+    "ru-RU-description": "Russisk, som det tales i Rusland, med det kyrilliske alfabet.",
+    "nl-NL": "Nederlandsk (Nederlandene)",
+    "nl": "Nederlandsk",
+    "nl-NL-description": "Nederlandsk, som det tales i Nederlandene.",
     "en-US": "Amerikansk engelsk",
     "en-GB": "Britisk engelsk",
     "es-ES": "Spansk",
     "it-IT": "Italiensk",
-    "pt-PT": "Portugisisk",
+    "pt-BR": "Portugisisk (Brasilien)",
+    "pt-PT": "Portugisisk (Portugal)",
     "fr-FR": "Fransk",
     "de-DE": "Tysk",
     "pl-PL": "Polsk",
@@ -1498,6 +1512,7 @@
     "zh": "Kinesisk",
     "es-ES-description": "Spansk, som det tales i Spanien.",
     "it-IT-description": "Italiensk, som det tales i Italien.",
+    "pt-BR-description": "Portugisisk, som det tales i Brasilien.",
     "pt-PT-description": "Portugisisk, som det tales i Portugal.",
     "en-US-description": "Engelsk, som det tales i USA.",
     "en-GB-description": "Engelsk, som det tales i Storbritannien.",
@@ -1764,11 +1779,11 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.11.0",
+    "version": "v1.12.0",
     "cta": "Forstået",
     "entry1": {
-      "label": "Nu kan du lære polsk!",
-      "desc": "Polsk er nu tilgængeligt som læringssprog med indhold fra A1 til C2. Vælg det, når du starter, eller tilføj det under Indstillinger → Mine sprog."
+      "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",
+      "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
     "entry2": {
       "label": "Forbedringer af læringen",

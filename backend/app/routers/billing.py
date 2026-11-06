@@ -13,6 +13,7 @@ import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.app_logger import get_logger
@@ -20,8 +21,10 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.core.limiter import limiter
+from app.models.billing_webhook import StripeWebhookReceipt
 from app.models.user import User
-from app.services.subscription_service import apply_subscription_quotas
+from app.services import revenuecat_service, stripe_checkout_service
+from app.services.subscription_service import apply_subscription_quotas, is_subscribed
 
 router = APIRouter(prefix="/api/billing", tags=["billing"])
 logger = get_logger(__name__)
@@ -87,6 +90,19 @@ async def create_checkout_session(
     Uses get_current_user (not require_subscription) so unsubscribed users
     can start a new subscription.
     """
+    if revenuecat_service.revenuecat_enabled():
+        try:
+            await revenuecat_service.sync_user(db, current_user.id)
+            await revenuecat_service.sync_customer_attributes(db, current_user.id)
+            await db.commit()
+        except revenuecat_service.RevenueCatError:
+            await db.rollback()
+            raise HTTPException(
+                status_code=503, detail="RevenueCat synchronization failed"
+            ) from None
+    if is_subscribed(current_user, settings.STRIPE_ENABLED):
+        raise HTTPException(status_code=409, detail="subscription_already_active")
+
     price_id = (
         settings.STRIPE_PRICE_MONTHLY if body.plan == "monthly" else settings.STRIPE_PRICE_YEARLY
     )
@@ -96,34 +112,14 @@ async def create_checkout_session(
             detail="Stripe prices not configured",
         )
 
-    # Get or create Stripe Customer
-    customer_id = current_user.stripe_customer_id
-    if not customer_id:
-        customer = stripe.Customer.create(
-            email=current_user.email or "",
-            name=current_user.display_name,
-            metadata={"user_id": str(current_user.id)},
-        )
-        customer_id = customer.id
-        current_user.stripe_customer_id = customer_id
-        await db.commit()
-
-    subscription_data: dict = {"metadata": {"user_id": str(current_user.id)}}
-    if settings.STRIPE_TRIAL_DAYS > 0 and not current_user.trial_used:
-        subscription_data["trial_period_days"] = settings.STRIPE_TRIAL_DAYS
-
-    session = stripe.checkout.Session.create(
-        customer=customer_id,
-        line_items=[{"price": price_id, "quantity": 1}],
-        mode="subscription",
-        locale="auto",
-        allow_promotion_codes=True,
-        metadata={"user_id": str(current_user.id)},
-        subscription_data=subscription_data,
-        success_url=f"{settings.STRIPE_BASE_URL}/billing/success",
-        cancel_url=f"{settings.STRIPE_BASE_URL}/billing/canceled",
-    )
-    return {"url": session.url}
+    try:
+        return {"url": await stripe_checkout_service.create_checkout(db, current_user.id, price_id)}
+    except stripe_checkout_service.CheckoutConflict as exc:
+        await db.rollback()
+        raise HTTPException(status_code=409, detail=str(exc)) from None
+    except stripe.StripeError:
+        await db.rollback()
+        raise HTTPException(status_code=503, detail="Stripe billing unavailable") from None
 
 
 @router.post("/portal")
@@ -133,16 +129,31 @@ async def create_portal_session(
     current_user: User = Depends(get_current_user),
 ) -> dict:
     """Create a Stripe Customer Portal session for subscription management."""
+    if revenuecat_service.revenuecat_enabled():
+        try:
+            management_url = await revenuecat_service.get_management_url(current_user.id)
+        except revenuecat_service.RevenueCatError:
+            if not current_user.stripe_customer_id:
+                raise HTTPException(
+                    status_code=503, detail="Billing management unavailable"
+                ) from None
+            logger.warning("[billing] RevenueCat management unavailable; using Stripe portal")
+        else:
+            if management_url:
+                return {"url": management_url}
     if not current_user.stripe_customer_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No active subscription found",
         )
 
-    session = stripe.billing_portal.Session.create(
-        customer=current_user.stripe_customer_id,
-        return_url=f"{settings.STRIPE_BASE_URL}/settings",
-    )
+    try:
+        session = await stripe.billing_portal.Session.create_async(
+            customer=current_user.stripe_customer_id,
+            return_url=f"{settings.STRIPE_BASE_URL}/settings",
+        )
+    except stripe.StripeError:
+        raise HTTPException(status_code=503, detail="Stripe billing unavailable") from None
     return {"url": session.url}
 
 
@@ -173,6 +184,25 @@ async def stripe_webhook(
     event_type: str = event["type"]
     logger.info("[billing] Stripe event received: %s", event_type)
 
+    if event_type not in {
+        "checkout.session.completed",
+        "customer.subscription.updated",
+        "customer.subscription.deleted",
+        "invoice.payment_failed",
+    }:
+        return {"received": True}
+    event_id = _sget(event, "id")
+    if not isinstance(event_id, str) or not event_id or len(event_id) > 255:
+        raise HTTPException(status_code=400, detail="Invalid event ID")
+    db.add(StripeWebhookReceipt(event_id=event_id))
+    try:
+        await db.flush()
+    except IntegrityError:
+        await db.rollback()
+        if await db.get(StripeWebhookReceipt, event_id) is not None:
+            return {"received": True}
+        raise
+
     try:
         if event_type == "checkout.session.completed":
             await _handle_checkout_completed(db, event["data"]["object"])
@@ -182,10 +212,9 @@ async def stripe_webhook(
             await _handle_subscription_deleted(db, event["data"]["object"])
         elif event_type == "invoice.payment_failed":
             await _handle_payment_failed(db, event["data"]["object"])
-        else:
-            logger.debug("[billing] Unhandled event type: %s", event_type)
+        await db.commit()
     except Exception as exc:  # noqa: BLE001
-        logger.exception("[billing] Error processing event %s: %s", event_type, exc)
+        logger.error("[billing] Error processing event %s (%s)", event_type, type(exc).__name__)
         await db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -238,7 +267,12 @@ def _invoice_subscription_id(invoice: object) -> str | None:
 
 
 async def _get_user_by_customer_id(db: AsyncSession, customer_id: str) -> User | None:
-    result = await db.execute(select(User).where(User.stripe_customer_id == customer_id))
+    result = await db.execute(
+        select(User)
+        .where(User.stripe_customer_id == customer_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
     return result.scalar_one_or_none()
 
 
@@ -285,8 +319,15 @@ async def _handle_checkout_completed(db: AsyncSession, session: object) -> None:
         metadata = _sget(session, "metadata") or {}
         user_id_str: str | None = _sget(metadata, "user_id")
         if user_id_str:
-            user = await db.get(User, int(user_id_str))
+            user = await db.scalar(
+                select(User)
+                .where(User.id == int(user_id_str))
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
             if user:
+                if user.stripe_customer_id and user.stripe_customer_id != customer_id:
+                    return  # A late session from an old Customer must not rebind the account.
                 user.stripe_customer_id = customer_id
 
     if not user:
@@ -296,9 +337,6 @@ async def _handle_checkout_completed(db: AsyncSession, session: object) -> None:
         )
         return
 
-    if subscription_id:
-        user.stripe_subscription_id = subscription_id
-
     if not subscription_id:
         logger.warning(
             "[billing] checkout.session.completed missing subscription for customer %s",
@@ -307,23 +345,44 @@ async def _handle_checkout_completed(db: AsyncSession, session: object) -> None:
         return
 
     # Determine current status and period end from Stripe before granting access.
-    try:
-        sub = await stripe.Subscription.retrieve_async(subscription_id)
-    except Exception as exc:  # noqa: BLE001
-        msg = f"Could not retrieve subscription {subscription_id}"
-        logger.warning("[billing] %s: %s", msg, exc)
-        raise RuntimeError(msg) from exc
+    sub = await stripe.Subscription.retrieve_async(subscription_id)
 
-    status = _normalize_subscription_status(getattr(sub, "status", None), "none")
-    ends_at = _subscription_period_end(sub)
-
-    user.subscription_status = status
-    user.subscription_ends_at = ends_at
-    user.cancel_at_period_end = False
-    if status == "trialing":
+    if _sget(sub, "status") == "trialing" or _sget(sub, "trial_start") is not None:
         user.trial_used = True
-    await apply_subscription_quotas(user, db)
-    logger.info("[billing] User %s subscription activated — status=%s", user.id, status)
+    if user.stripe_subscription_id and user.stripe_subscription_id != subscription_id:
+        # A replay of an earlier checkout must not replace the current binding,
+        # even if the old session was completed before its webhook was delivered.
+        if _sget(sub, "status") in ("canceled", "incomplete_expired"):
+            return
+        current = await stripe.Subscription.retrieve_async(user.stripe_subscription_id)
+        if _sget(current, "status") not in ("canceled", "incomplete_expired"):
+            return
+    user.stripe_subscription_id = subscription_id
+    await _apply_stripe_snapshot(db, user, sub)
+
+
+async def _apply_stripe_snapshot(db: AsyncSession, user: User, subscription: object) -> None:
+    if (
+        _sget(subscription, "status") == "trialing"
+        or _sget(subscription, "trial_start") is not None
+    ):
+        user.trial_used = True
+    if revenuecat_service.revenuecat_enabled():
+        return
+    was_active = is_subscribed(user, True)
+    user.revenuecat_synced_at = None
+    user.subscription_status = _normalize_subscription_status(
+        _sget(subscription, "status"), user.subscription_status
+    )
+    cancel_at = _sget(subscription, "cancel_at")
+    user.cancel_at_period_end = user.subscription_status != "canceled" and (
+        bool(_sget(subscription, "cancel_at_period_end", False)) or cancel_at not in (None, 0)
+    )
+    ends_at = _subscription_period_end(subscription)
+    if ends_at is not None:
+        user.subscription_ends_at = ends_at
+    if not was_active and is_subscribed(user, True):
+        await apply_subscription_quotas(user, db, commit=False)
 
 
 async def _handle_subscription_updated(db: AsyncSession, subscription: object) -> None:
@@ -344,23 +403,12 @@ async def _handle_subscription_updated(db: AsyncSession, subscription: object) -
     ):
         return
 
-    user.subscription_status = _normalize_subscription_status(
-        _sget(subscription, "status"), user.subscription_status
-    )
-    cancel_period_end = bool(_sget(subscription, "cancel_at_period_end", False))
-    cancel_at = _sget(subscription, "cancel_at")
-    user.cancel_at_period_end = cancel_period_end or (cancel_at is not None and cancel_at != 0)
-    ends_at = _subscription_period_end(subscription)
-    if ends_at is not None:
-        user.subscription_ends_at = ends_at
-
-    await db.commit()
-    logger.info(
-        "[billing] User %s subscription updated — status=%s cancel_at_period_end=%s",
-        user.id,
-        user.subscription_status,
-        user.cancel_at_period_end,
-    )
+    if revenuecat_service.revenuecat_enabled():
+        return
+    if not event_subscription_id:
+        raise ValueError("Subscription update missing subscription ID")
+    current = await stripe.Subscription.retrieve_async(event_subscription_id)
+    await _apply_stripe_snapshot(db, user, current)
 
 
 async def _handle_subscription_deleted(db: AsyncSession, subscription: object) -> None:
@@ -380,10 +428,12 @@ async def _handle_subscription_deleted(db: AsyncSession, subscription: object) -
     ):
         return
 
-    user.subscription_status = "canceled"
-    user.cancel_at_period_end = False
-    await db.commit()
-    logger.info("[billing] User %s subscription canceled", user.id)
+    if revenuecat_service.revenuecat_enabled():
+        return
+    if not event_subscription_id:
+        raise ValueError("Subscription deletion missing subscription ID")
+    current = await stripe.Subscription.retrieve_async(event_subscription_id)
+    await _apply_stripe_snapshot(db, user, current)
 
 
 async def _handle_payment_failed(db: AsyncSession, invoice: object) -> None:
@@ -396,6 +446,8 @@ async def _handle_payment_failed(db: AsyncSession, invoice: object) -> None:
         return
 
     event_subscription_id = _invoice_subscription_id(invoice)
+    if not event_subscription_id:
+        return  # An unrelated one-off invoice must not change subscription access.
     if not _subscription_event_is_current(
         user,
         event_subscription_id,
@@ -403,6 +455,7 @@ async def _handle_payment_failed(db: AsyncSession, invoice: object) -> None:
     ):
         return
 
-    user.subscription_status = "past_due"
-    await db.commit()
-    logger.info("[billing] User %s payment failed — marked past_due", user.id)
+    if revenuecat_service.revenuecat_enabled():
+        return
+    current = await stripe.Subscription.retrieve_async(event_subscription_id)
+    await _apply_stripe_snapshot(db, user, current)
