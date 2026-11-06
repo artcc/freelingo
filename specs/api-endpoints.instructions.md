@@ -15,6 +15,34 @@ in `rate-limiting.instructions.md`.
 This document owns the HTTP/WebSocket interface inventory. Domain specifications own business
 behavior; `umami.instructions.md` owns analytics event semantics, privacy, deduplication, and delivery.
 
+## Postman templates and maintenance
+
+The project owner's private **Proyectos** Postman workspace contains the **FreeLingo** collection and
+the **FreeLingo — Development** environment for backend exploration, manual testing, and native
+iOS/Android integration. These resources belong to the project owner and are not publicly accessible
+or included with the open-source repository. The identifiers below are maintainer references, not
+public access links. External contributors can use the backend contract and this specification
+without access to the owner's Postman account.
+
+Maintainers with authorized account access maintain these templates through the Postman MCP
+integration; the backend routes, request/response models, and this specification remain the source
+of truth.
+
+- Workspace ID: `1e73c0a3-eee6-4d10-822d-ae3ebf0746f6`.
+- Collection UID: `22384073-1725e760-7c64-44e1-9e35-78beb24f88e7`.
+- For every backend change affecting the API contract, assess the collection impact: paths, methods,
+  authentication, headers, query parameters, bodies, response examples, scripts, variables, and
+  HTTP/SSE/WebSocket behavior.
+- Before changing Postman, tell the maintainer exactly which folders, requests, examples, scripts,
+  or environment definitions need updating and why.
+- Fetch the current Postman resources through MCP, preserve unrelated requests and local conventions,
+  and update the affected templates rather than creating duplicates. Read back the saved resources
+  and report what changed and any remaining limitations.
+- Keep credential values out of shared templates. Preparing or synchronizing requests does not
+  authorize executing them against a running service; request execution requires explicit approval.
+- Keep these templates in Postman. Do not add collection/environment exports or temporary generation
+  artifacts to the repository unless the maintainer explicitly requests them.
+
 ---
 
 ## Health — `/health`
