@@ -87,7 +87,7 @@ def _build_tutor_system_prompt(
 
 MAX_HISTORY = 30
 DEFAULT_CEFR = "A2"
-DEFAULT_TARGET_LANG = "en-GB"
+DEFAULT_TARGET_LANG = "es-ES"
 
 
 async def _resolve_chat_context(

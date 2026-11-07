@@ -80,7 +80,7 @@ def _set_to_source(s: VocabularySet) -> dict:
 @limiter.limit("60/minute")
 def list_vocabulary_sets(
     request: Request,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return all vocabulary sets for the given target language."""
@@ -93,7 +93,7 @@ def list_vocabulary_sets(
 def list_vocabulary_by_level(
     request: Request,
     level: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return vocabulary sets for a specific CEFR level."""
@@ -113,7 +113,7 @@ def list_vocabulary_by_level(
 def get_vocabulary_set_detail(
     request: Request,
     set_id: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return a single vocabulary set by ID."""
@@ -130,7 +130,7 @@ def get_vocabulary_set_detail(
 async def generate_vocabulary_native_help(
     request: Request,
     set_id: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),

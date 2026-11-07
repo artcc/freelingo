@@ -28,21 +28,8 @@ COMPLETION_UNIT_IDS = frozenset({COMPLETION_UNIT_ID, LEGACY_COMPLETION_UNIT_ID})
 _LESSON_TYPES: tuple[str, ...] = get_args(LessonType)
 
 _LANG_MODULES: dict[str, str] = {
-    "en-GB": "app.data.en_GB.curriculum",
-    "en-US": "app.data.en_US.curriculum",
-    "de": "app.data.de.curriculum",
     "es": "app.data.es.curriculum",
-    "fr": "app.data.fr.curriculum",
-    "it": "app.data.it.curriculum",
-    "pl": "app.data.pl.curriculum",
-    "nl": "app.data.nl.curriculum",
-    "ru": "app.data.ru.curriculum",
-    "sv": "app.data.sv.curriculum",
-    "ja": "app.data.ja.curriculum",
-    "ko": "app.data.ko.curriculum",
-    "pt": "app.data.pt.curriculum",
-    "pt-BR": "app.data.pt_BR.curriculum",
-    "zh": "app.data.zh.curriculum",
+    "es-ES": "app.data.es.curriculum",
 }
 
 _CACHE: dict[str, object] = {}
@@ -188,7 +175,7 @@ _I18N = {
 
 def _resolve_module(target_language: str) -> object:
     module_name = _LANG_MODULES.get(target_language) or _LANG_MODULES.get(
-        target_language.split("-")[0], "app.data.en_GB.curriculum"
+        target_language.split("-")[0], "app.data.es.curriculum"
     )
 
     if module_name not in _CACHE:
@@ -204,7 +191,7 @@ def get_curriculum(target_language: str) -> dict:
     return mod.CURRICULUM
 
 
-def get_curriculum_units(level: str, target_language: str = "en-GB") -> list:
+def get_curriculum_units(level: str, target_language: str = "es-ES") -> list:
     """Return curriculum units for a CEFR level in the given target language."""
     curriculum = get_curriculum(target_language)
     return curriculum.get(level, [])
@@ -277,7 +264,7 @@ def distribute_units(
     units: list[CurriculumUnit],
     total_weeks: int,
     days_per_week: int,
-    target_language: str = "en-GB",
+    target_language: str = "es-ES",
 ) -> list[dict]:
     """Distribute curriculum units across the plan's lesson slots.
 
@@ -299,7 +286,7 @@ def distribute_units(
 
     The allocation is deterministic: identical inputs produce identical output.
     """
-    i18n = _I18N.get(target_language) or _I18N.get(target_language.split("-")[0], _I18N["en-GB"])
+    i18n = _I18N.get(target_language) or _I18N.get(target_language.split("-")[0], _I18N["es-ES"])
 
     total_slots = total_weeks * days_per_week
     # Completion test always owns exactly the final slot; everything else teaches.

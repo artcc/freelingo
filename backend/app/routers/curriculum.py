@@ -29,7 +29,7 @@ def _to_response(u: CurriculumUnit) -> dict:
 @limiter.limit("60/minute")
 def get_all_curriculum(
     request: Request,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ) -> dict:
     curriculum = get_curriculum(language)
@@ -48,7 +48,7 @@ def get_all_curriculum(
 def get_curriculum_by_level(
     request: Request,
     level: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ) -> list:
     units = get_curriculum_units(level, language)

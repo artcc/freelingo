@@ -19,7 +19,7 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[str] = mapped_column(String(10), nullable=False, default="user")
     native_language: Mapped[str] = mapped_column(String(10), nullable=False)
-    target_language: Mapped[str] = mapped_column(String(10), nullable=False, default="en-GB")
+    target_language: Mapped[str] = mapped_column(String(10), nullable=False, default="es-ES")
     ui_locale: Mapped[str | None] = mapped_column(String(10), nullable=True)
     flashcard_back_content: Mapped[str] = mapped_column(
         String(20), nullable=False, default="definition", server_default="definition"

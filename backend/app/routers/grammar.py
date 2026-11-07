@@ -86,7 +86,7 @@ def _topic_to_source(t: GrammarTopic) -> dict:
 @limiter.limit("60/minute")
 def list_grammar_topics(
     request: Request,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return all grammar topics for the given target language."""
@@ -99,7 +99,7 @@ def list_grammar_topics(
 def get_grammar_topic_detail(
     request: Request,
     slug: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return a single grammar topic by slug."""
@@ -117,7 +117,7 @@ def get_grammar_topic_detail(
 async def generate_grammar_native_help(
     request: Request,
     slug: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),

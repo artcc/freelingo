@@ -12,21 +12,8 @@ import sys
 from app.data._types import CEFRLevel, VocabularyEntry, VocabularySet  # noqa: F401
 
 _LANG_MODULES: dict[str, str] = {
-    "en-GB": "app.data.en_GB.vocabulary",
-    "en-US": "app.data.en_US.vocabulary",
-    "de": "app.data.de.vocabulary",
     "es": "app.data.es.vocabulary",
-    "fr": "app.data.fr.vocabulary",
-    "it": "app.data.it.vocabulary",
-    "pl": "app.data.pl.vocabulary",
-    "nl": "app.data.nl.vocabulary",
-    "ru": "app.data.ru.vocabulary",
-    "sv": "app.data.sv.vocabulary",
-    "ja": "app.data.ja.vocabulary",
-    "ko": "app.data.ko.vocabulary",
-    "pt": "app.data.pt.vocabulary",
-    "pt-BR": "app.data.pt_BR.vocabulary",
-    "zh": "app.data.zh.vocabulary",
+    "es-ES": "app.data.es.vocabulary",
 }
 
 _CACHE: dict[str, list[VocabularySet]] = {}
@@ -34,7 +21,7 @@ _CACHE: dict[str, list[VocabularySet]] = {}
 
 def _resolve_sets(target_language: str) -> list[VocabularySet]:
     module_name = _LANG_MODULES.get(target_language) or _LANG_MODULES.get(
-        target_language.split("-")[0], "app.data.en_GB.vocabulary"
+        target_language.split("-")[0], "app.data.es.vocabulary"
     )
 
     if module_name not in _CACHE:
@@ -44,12 +31,12 @@ def _resolve_sets(target_language: str) -> list[VocabularySet]:
     return _CACHE[module_name]
 
 
-def get_vocabulary_sets(target_language: str = "en-GB") -> list[VocabularySet]:
+def get_vocabulary_sets(target_language: str = "es-ES") -> list[VocabularySet]:
     """Return all vocabulary sets for the given target language."""
     return _resolve_sets(target_language)
 
 
-def get_vocabulary_set(set_id: str, target_language: str = "en-GB") -> VocabularySet | None:
+def get_vocabulary_set(set_id: str, target_language: str = "es-ES") -> VocabularySet | None:
     """Return a single vocabulary set by ID for the given target language."""
     sets = _resolve_sets(target_language)
     for s in sets:
@@ -59,7 +46,7 @@ def get_vocabulary_set(set_id: str, target_language: str = "en-GB") -> Vocabular
 
 
 def get_vocabulary_by_level(
-    level: CEFRLevel, target_language: str = "en-GB"
+    level: CEFRLevel, target_language: str = "es-ES"
 ) -> list[VocabularySet]:
     """Return all vocabulary sets for a specific CEFR level."""
     sets = _resolve_sets(target_language)

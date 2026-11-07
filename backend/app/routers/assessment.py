@@ -199,7 +199,7 @@ async def start_assessment(
 @limiter.limit("60/minute")
 async def get_assessment_bank(
     request: Request,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """
@@ -277,7 +277,7 @@ async def submit_assessment(
             detail="No active assessment session.",
         )
     session = json.loads(session_raw)
-    target_language = session.get("target_language") or data.target_language or "en-GB"
+    target_language = session.get("target_language") or data.target_language or "es-ES"
     language_prompt_overlay = get_language_prompt_overlay(target_language)
 
     try:

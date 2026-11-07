@@ -41,7 +41,7 @@ class StudyPlan(Base):
         index=True,
     )
     cefr_level: Mapped[str] = mapped_column(String(10), nullable=False)
-    target_language: Mapped[str] = mapped_column(String(10), nullable=False, default="en-GB")
+    target_language: Mapped[str] = mapped_column(String(10), nullable=False, default="es-ES")
     goals: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     duration_weeks: Mapped[int] = mapped_column(Integer, nullable=False, default=12)
     days_per_week: Mapped[int] = mapped_column(Integer, nullable=False, default=4)

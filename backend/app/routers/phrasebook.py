@@ -83,7 +83,7 @@ def _category_to_source(c: PhrasebookCategory) -> dict:
 @limiter.limit("60/minute")
 def list_phrasebook_categories(
     request: Request,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return all phrasebook categories for the given target language."""
@@ -96,7 +96,7 @@ def list_phrasebook_categories(
 def list_phrasebook_by_level(
     request: Request,
     level: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return phrasebook categories for a specific CEFR level."""
@@ -116,7 +116,7 @@ def list_phrasebook_by_level(
 def get_phrasebook_category_detail(
     request: Request,
     category_id: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ):
     """Return a single phrasebook category by ID."""
@@ -134,7 +134,7 @@ def get_phrasebook_category_detail(
 async def generate_phrasebook_native_help(
     request: Request,
     category_id: str,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
@@ -224,7 +224,7 @@ async def get_phrase_audio(
     request: Request,
     category_id: str,
     phrase_index: int,
-    language: str = Query("en-GB", description="BCP-47 target language code"),
+    language: str = Query("es-ES", description="BCP-47 target language code"),
     _current_user: User = Depends(get_current_user),
 ) -> FileResponse:
     """Return cached TTS audio for a phrase. Generates and caches on first request."""
