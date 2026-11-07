@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
@@ -496,7 +496,13 @@ function DetailView({
 // ---------------------------------------------------------------------------
 
 export default function FeedbackPage() {
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  return <FeedbackContent key={sessionVersion} />
+}
+
+function FeedbackContent() {
   const t = useTranslations('feedback')
+  const tCommon = useTranslations('common')
   const locale = useLocale()
   const currentUserId = useAuthStore((s) => s.user?.id)
   const isAdmin = useAuthStore((s) => s.user?.role === 'admin')
@@ -510,6 +516,11 @@ export default function FeedbackPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showCreate, setShowCreate] = useState(false)
+  const loadController = useRef<AbortController | null>(null)
+  const listContext = useRef('')
+  const [votingId, setVotingId] = useState<number | null>(null)
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [reload, setReload] = useState(0)
 
   // Detail view
   const [selectedEntry, setSelectedEntry] = useState<FeedbackEntry | null>(null)
@@ -524,6 +535,24 @@ export default function FeedbackPage() {
       currentSort: SortOption,
       currentStatus: string
     ) => {
+      loadController.current?.abort()
+      const controller = new AbortController()
+      loadController.current = controller
+      const signal = AbortSignal.any([
+        controller.signal,
+        AbortSignal.timeout(20_000),
+      ])
+      const context = JSON.stringify([
+        pageIndex,
+        currentTab,
+        currentSort,
+        currentStatus,
+      ])
+      if (listContext.current !== context) {
+        setEntries([])
+        setTotal(0)
+        listContext.current = context
+      }
       setLoading(true)
       setError('')
       try {
@@ -535,33 +564,31 @@ export default function FeedbackPage() {
           limit: String(PAGE_SIZE),
         })
         if (currentStatus) params.set('status', currentStatus)
-        const res = await apiFetch(`/api/feedback?${params.toString()}`)
+        const res = await apiFetch(`/api/feedback?${params.toString()}`, {
+          signal,
+        })
         if (!res.ok) throw new Error()
         const data = await res.json()
+        signal.throwIfAborted()
+        if (loadController.current !== controller) return
         setEntries(data.items)
         setTotal(data.total)
       } catch {
-        setError(t('errorLoad'))
+        if (loadController.current === controller) setError(t('errorLoad'))
       } finally {
-        setLoading(false)
+        if (loadController.current === controller) setLoading(false)
       }
     },
     [t]
   )
 
-  // Reload when page changes
   useEffect(() => {
     loadEntries(page, tab, sort, statusFilter)
-  }, [loadEntries, page]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Reset to page 0 when tab/sort/filter changes
-  useEffect(() => {
-    if (page !== 0) {
-      setPage(0)
-    } else {
-      loadEntries(0, tab, sort, statusFilter)
+    return () => {
+      loadController.current?.abort()
+      loadController.current = null
     }
-  }, [tab, sort, statusFilter]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadEntries, page, tab, sort, statusFilter, reload])
 
   function handleVoteToggled(
     entryId: number,
@@ -587,6 +614,7 @@ export default function FeedbackPage() {
   }, [])
 
   function handleEntryDeleted(entryId: number) {
+    if (!loadController.current) return
     const newTotal = total - 1
     setTotal(newTotal)
     setEntries((prev) => prev.filter((e) => e.id !== entryId))
@@ -600,9 +628,23 @@ export default function FeedbackPage() {
   }
 
   async function handleDeleteFromList(entry: FeedbackEntry) {
-    await apiFetch(`/api/feedback/${entry.id}`, { method: 'DELETE' })
-    setDeletePending(null)
-    handleEntryDeleted(entry.id)
+    if (deletingId !== null || loading) return
+    const owner = loadController.current
+    setDeletingId(entry.id)
+    try {
+      const res = await apiFetch(`/api/feedback/${entry.id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error()
+      if (!loadController.current) return
+      setDeletePending(null)
+      if (loadController.current === owner) handleEntryDeleted(entry.id)
+      else setReload((value) => value + 1)
+    } catch {
+      if (loadController.current === owner) setError(t('errorSubmit'))
+    } finally {
+      if (loadController.current) setDeletingId(null)
+    }
   }
 
   const statusOptions = useMemo(
@@ -658,7 +700,10 @@ export default function FeedbackPage() {
         {(['feature', 'bug'] as Tab[]).map((tabOption) => (
           <button
             key={tabOption}
-            onClick={() => setTab(tabOption)}
+            onClick={() => {
+              setPage(0)
+              setTab(tabOption)
+            }}
             className={`-mb-px border-b-2 px-5 py-2 font-mono text-xs tracking-widest uppercase transition-colors ${
               tab === tabOption
                 ? 'border-fl-fg text-fl-fg'
@@ -685,7 +730,10 @@ export default function FeedbackPage() {
         {(['votes', 'date'] as SortOption[]).map((s) => (
           <button
             key={s}
-            onClick={() => setSort(s)}
+            onClick={() => {
+              setPage(0)
+              setSort(s)
+            }}
             className={`text-fl-hint border px-3 py-1 font-mono tracking-widest uppercase transition-colors ${
               sort === s
                 ? 'border-fl-fg/40 text-fl-fg'
@@ -701,7 +749,10 @@ export default function FeedbackPage() {
         </span>
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => {
+            setPage(0)
+            setStatusFilter(e.target.value)
+          }}
           className="bg-fl-bg border-fl-border text-fl-hint text-fl-muted-1 focus:border-fl-border-2 appearance-none border px-3 py-1 font-mono transition-colors focus:outline-none"
         >
           {statusOptions.map((o) => (
@@ -716,20 +767,31 @@ export default function FeedbackPage() {
       {error && (
         <div className="border-fl-error/40 text-fl-error border px-4 py-3 font-mono text-xs">
           ✕ {error}
+          <button
+            onClick={() => loadEntries(page, tab, sort, statusFilter)}
+            disabled={loading}
+            className="ml-3 underline disabled:opacity-50"
+          >
+            {tCommon('retry')}
+          </button>
         </div>
       )}
 
       {/* List */}
       <div className="border-fl-border bg-fl-surface border">
-        {loading ? (
+        {loading && (
           <PageLoading
             fullScreen={false}
             className="block px-6 py-10 text-center"
           />
-        ) : entries.length === 0 ? (
-          <p className="text-fl-muted-2 px-6 py-10 text-center font-mono text-xs">
-            {t('noEntries')}
-          </p>
+        )}
+        {entries.length === 0 ? (
+          !loading &&
+          !error && (
+            <p className="text-fl-muted-2 px-6 py-10 text-center font-mono text-xs">
+              {t('noEntries')}
+            </p>
+          )
         ) : (
           <div>
             {entries.map((entry, i) => {
@@ -752,21 +814,44 @@ export default function FeedbackPage() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
+                        disabled={loading || votingId !== null}
                         onClick={async (e) => {
                           e.stopPropagation()
-                          const res = await apiFetch(
-                            `/api/feedback/${entry.id}/vote`,
-                            {
-                              method: 'POST',
-                            }
-                          )
-                          if (res.ok) {
+                          if (loading || votingId !== null) return
+                          const owner = loadController.current
+                          const sessionVersion =
+                            useAuthStore.getState().sessionVersion
+                          setVotingId(entry.id)
+                          try {
+                            const res = await apiFetch(
+                              `/api/feedback/${entry.id}/vote`,
+                              { method: 'POST' }
+                            )
+                            if (!res.ok) throw new Error()
                             const data = await res.json()
+                            if (
+                              useAuthStore.getState().sessionVersion !==
+                              sessionVersion
+                            ) {
+                              return
+                            }
+                            if (loadController.current !== owner) {
+                              if (loadController.current) {
+                                setReload((value) => value + 1)
+                              }
+                              return
+                            }
                             handleVoteToggled(
                               entry.id,
                               data.voted,
                               data.vote_count
                             )
+                          } catch {
+                            if (loadController.current === owner) {
+                              setError(t('errorSubmit'))
+                            }
+                          } finally {
+                            if (loadController.current) setVotingId(null)
                           }
                         }}
                         className={`border px-2 py-1 font-mono text-sm leading-none transition-colors ${
@@ -824,6 +909,7 @@ export default function FeedbackPage() {
                       )}
                       {canDelete && (
                         <button
+                          disabled={loading || deletingId !== null}
                           onClick={(e) => {
                             e.stopPropagation()
                             setDeletePending(entry)
@@ -857,9 +943,10 @@ export default function FeedbackPage() {
           type={tab}
           onClose={() => setShowCreate(false)}
           onCreated={() => {
+            if (!loadController.current) return
             setShowCreate(false)
             setPage(0)
-            loadEntries(0, tab, sort, statusFilter)
+            setReload((value) => value + 1)
           }}
         />
       )}
@@ -871,6 +958,7 @@ export default function FeedbackPage() {
         message={t('deleteEntryConfirmMessage')}
         confirmLabel={t('deleteEntryConfirm')}
         danger
+        confirming={deletingId !== null}
         onConfirm={() => deletePending && handleDeleteFromList(deletePending)}
         onCancel={() => setDeletePending(null)}
       />

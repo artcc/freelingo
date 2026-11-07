@@ -38,6 +38,8 @@ export default function PricingSection({
   const tBilling = useTranslations('billing')
   const tLanding = useTranslations('landing')
   const locale = useLocale()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const [lookupVersion, setLookupVersion] = useState<number | null>(null)
   const [subscribed, setSubscribed] = useState<boolean | null>(
     hasSession ? null : false
   )
@@ -46,30 +48,49 @@ export default function PricingSection({
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const checkoutRequest = useRef<AbortController | null>(null)
-  useEffect(() => () => checkoutRequest.current?.abort(), [])
+  useEffect(() => {
+    setCheckoutLoading(null)
+    setCheckoutError(null)
+    return () => checkoutRequest.current?.abort()
+  }, [sessionVersion])
 
   useEffect(() => {
-    if (!hasSession) return
+    if (!hasSession) {
+      setSubscribed(false)
+      setTrialUsed(false)
+      setLookupVersion(null)
+      return
+    }
+    let cancelled = false
+    setSubscribed(null)
     async function checkSubscription() {
       const state = await getLandingSubscriptionState()
+      if (
+        cancelled ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
+      )
+        return
       setSubscribed(state.subscribed)
       setTrialUsed(state.trialUsed)
+      setLookupVersion(sessionVersion)
     }
-    checkSubscription()
-  }, [hasSession])
+    void checkSubscription()
+    return () => {
+      cancelled = true
+    }
+  }, [hasSession, sessionVersion])
 
   if (!stripeEnabled) return null
 
-  if (subscribed === null) {
+  if (hasSession && (subscribed === null || lookupVersion !== sessionVersion)) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="bg-fl-bg/80 absolute inset-0 backdrop-blur-sm" />
-        <PageLoading fullScreen={false} showDot={false} className="relative" />
-      </div>
+      <section className="mx-auto flex min-h-80 w-full max-w-5xl items-center justify-center px-6 pb-24">
+        <PageLoading fullScreen={false} />
+      </section>
     )
   }
 
-  if (subscribed) return null
+  if (hasSession && subscribed) return null
 
   async function startCheckout(plan: BillingInterval) {
     if (checkoutLoading) return

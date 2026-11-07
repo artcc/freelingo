@@ -43,7 +43,8 @@ to check application and test code together.
 ## Route families
 
 - `(auth)`: login, registration, onboarding, account recovery/verification, and billing-return pages
-  under a shared layout. Onboarding and billing returns are included in middleware's protected list.
+  outside the authenticated shell and its loading provider. Onboarding and billing returns are
+  included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
 - `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
   Presentation metadata lives in `lib/games.ts`; see `games.instructions.md` for catalog behavior.
@@ -151,43 +152,53 @@ the rendering configuration described under Streaming and media, independently o
 
 ## Page loading
 
-`components/ui/page-loading.tsx` provides general page loading with `LinguAvatar` playing `reposo`
-at 75 × 75 px on mobile and 150 × 150 px on desktop, centered localized text, and optional subtext
-in Geist Sans. Text is visible independently of avatar readiness. A spinner is shown while the 3D
-module/model loads; static artwork is reserved for reduced motion or loading failures. Inline mode
-stays compact, with a decorative spinner disabled by `showDot={false}`; its rotation respects reduced
-motion. Both modes hold one global loading-counter slot while mounted and release it on unmount.
-General and generation screens reuse `PageLoadingPresentation`: the avatar/title block is centered
-between equal flexible grid tracks, with descriptions and delay warnings in the lower track so they
-do not shift that block. Short viewports allow the presentation to scroll rather than clipping text.
-Page-specific minimum-height overrides are not supported; standalone loading uses the dynamic viewport.
+`components/ui/page-loading.tsx` provides general page loading with a lightweight decorative spinner,
+localized text, and optional subtext in Geist Sans. Inline mode stays compact, with its spinner
+disabled by `showDot={false}`. Indicators respect reduced motion. Both modes hold one global
+loading-counter slot while mounted and release it on unmount.
+General and generation screens reuse `PageLoadingPresentation`: the indicator has a stable reserved
+position, independent of title wrapping, descriptions, and delay warnings. Short viewports allow
+scrolling rather than clipping text. Standalone full-page loading uses the dynamic viewport.
+Loading presentations do not mount the 3D avatar or wait for model or image readiness.
 
 `app/(app)/loading.tsx` reuses `PageLoading` and the application background, keeping the route Suspense
 fallback consistent with client-side loading. Once hydrated,
 the fallback participates in the same mounted loading counter.
 
-`components/ui/page-loading-boundary.tsx` coordinates a 500 ms minimum presentation inside the
-authenticated app layout. A persistent `PageLoadingProvider` shares the clock across route fallback,
-initialization, page loading, and exercise generation. `PageLoadingViewport` presents the loading UI
-while underlying content remains mounted but invisible, inert, and hidden from assistive technology.
+`components/ui/page-loading-boundary.tsx` coordinates presentation inside the authenticated app layout.
+A persistent `PageLoadingProvider` shares the clock across route fallback, initialization, page
+loading, and exercise generation. `PageLoadingViewport` hides and makes underlying content inert
+immediately while a full-page load is registered. It delays the visible indicator by 200 ms; loads
+that finish before that deadline do not show an indicator or retain ready content. Once shown, the
+presentation remains visible for at least 300 ms from its appearance. Underlying content stays
+mounted and hidden from assistive technology during the wait and any retained presentation.
 The app shell occupies `100dvh`; the main loading viewport fills the remaining area beside the desktop
 sidebar and below the mobile header and any verification banner. The viewport contains a persistent
 full-height content scroller and a sibling loading overlay. Hidden page height and content scroll
 position do not determine loading placement. Initialization uses the entire dynamic viewport.
-Requests and page effects continue normally; the minimum is presentation-only and does not delay
-authentication, exercise delivery, or retry timers. Consecutive loading states share the same deadline,
-including handoffs after 500 ms; slow loads end without an additional minimum wait. Once the
-presentation has finished, a new loading cycle gets a new minimum. Provider unmount cancels pending
-timers. Retained presentation does not hold extra global activity-counter slots. Inline indicators
-and consumers outside this provider retain their normal lifetime. Avatar readiness never gates content.
+Requests and page effects continue normally; timing is presentation-only and does not delay
+authentication, exercise delivery, or retry timers. Consecutive loading states share the same cycle,
+including immediate handoffs after the minimum has expired. Slow loads end without another minimum
+wait. Provider unmount cancels pending timers. Retained presentation does not hold extra global
+activity-counter slots. Inline indicators and consumers outside this provider appear immediately
+and have no retained minimum. Managed consumers do not render an independent indicator during SSR.
+Resource errors, retries, cancellation, and request deadlines belong to their consumers;
+the viewport never declares a pending operation successful or starts a request.
 
 Reading and Listening share `components/ui/exercise-generation-loading.tsx` for their generation
-screens, with `LinguAvatar` playing `pensando` at 75 × 75 px on mobile and 150 × 150 px on desktop.
-Each page supplies its localized status text independently of avatar readiness, with descriptions and
-delay warnings below the centered avatar/title block. A spinner precedes the first animated frame; reduced motion and loading
-failures use static artwork. Generation participates in the shared minimum presentation above.
-The component retains the mounted loading-counter lifecycle used by `PageLoading`. See
-`reading.instructions.md` and `listening.instructions.md` for generation behavior.
+screens, using static Lingu artwork. Each page supplies localized status, description, and delay
+warning text. Generation participates in the same presentation cycle and mounted loading-counter
+lifecycle as `PageLoading`. See `reading.instructions.md` and `listening.instructions.md` for
+generation behavior.
+
+The fixed monochrome top loading bar remains a secondary activity indicator. It delays appearance
+by 200 ms, measures its 300 ms minimum visible duration once per activity cycle, and exits over
+150 ms. It suppresses presentation while the full-page viewport is busy, including retained
+presentation. Completion does not depend solely
+on a CSS animation event, so reduced motion cannot leave the bar stuck. The counter aggregates
+requests and mounted loading consumers; it is not a progress percentage or a page-readiness signal.
+Local section updates use compact indicators and preserve usable surrounding content. A new
+language or authentication session must not display or accept results belonging to an obsolete scope.
 
 ## Written-chat response presentation
 
@@ -422,6 +433,8 @@ The landing's `LanguageBubbles` reuses `LinguAvatar` in the centered 140 × 140 
 `saludo` with `loop`. Its transparent canvas lets the landing's light/dark background show
 through. The avatar and language circle remain transparent and hidden from assistive technology
 until `onReady`, then fade in together without a preliminary PNG or staggered bubble entrances.
+While waiting, a text-free spinner occupies the avatar's center outside the hidden group; it has a
+localized accessible label, respects reduced motion, and disappears on `onReady`.
 The reserved space, surrounding language positions, and container dimensions remain stable.
 Flag images use fixed 14 × 10 px boxes matching their declared image dimensions, with flex shrinking
 disabled and centered `object-cover` cropping to keep a uniform size without stretching the artwork.

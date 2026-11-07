@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { getGrammarTopics, type GrammarTopic } from '@/data/grammar'
@@ -8,6 +8,7 @@ import type { GrammarCategory } from '@/data/types'
 import { CEFR_LEVELS } from '@/data/curriculum'
 import { useLanguageStore } from '@/store/language'
 import { PageLoading } from '@/components/ui/page-loading'
+import { useAuthStore } from '@/store/auth'
 
 function TopicCard({ topic }: { topic: GrammarTopic }) {
   return (
@@ -39,31 +40,73 @@ export default function GrammarIndexPage() {
   const t = useTranslations('grammar')
   const tCommon = useTranslations('common')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const invalidationVersion = useLanguageStore((s) => s.invalidationVersion)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const languageCode = activeLanguage?.code
+  const scope = `${sessionVersion}:${invalidationVersion}:${languageCode}:${needsRefresh}`
   const [topics, setTopics] = useState<GrammarTopic[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
+  const [loadedScope, setLoadedScope] = useState<string | null>(null)
+  const [attempt, setAttempt] = useState(0)
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState<GrammarCategory | 'All'>(
     'All'
   )
 
-  const fetchTopics = useCallback(async (lang: string) => {
+  useEffect(() => {
+    const controller = new AbortController()
+    const isCurrent = () => {
+      const state = useLanguageStore.getState()
+      return (
+        !controller.signal.aborted &&
+        useAuthStore.getState().sessionVersion === sessionVersion &&
+        state.invalidationVersion === invalidationVersion &&
+        state.activeLanguage?.code === languageCode &&
+        state.needsRefresh === needsRefresh &&
+        !state.isSwitching
+      )
+    }
     setLoading(true)
     setLoadError(false)
-    try {
-      const data = await getGrammarTopics(lang)
-      setTopics(data)
-    } catch {
-      setLoadError(true)
-      setTopics([])
-    } finally {
-      setLoading(false)
+    setTopics([])
+    async function load() {
+      try {
+        if (needsRefresh || !languageCode) {
+          const ok = await useLanguageStore
+            .getState()
+            .fetchLanguages(controller.signal)
+          if (!isCurrent()) return
+          const state = useLanguageStore.getState()
+          if (!ok || state.needsRefresh || !state.activeLanguage) {
+            throw new Error('Could not resolve active language')
+          }
+          return
+        }
+        const data = await getGrammarTopics(languageCode, controller.signal)
+        if (isCurrent()) setTopics(data)
+      } catch {
+        if (isCurrent()) setLoadError(true)
+      } finally {
+        if (isCurrent()) {
+          setLoadedScope(scope)
+          setLoading(false)
+        }
+      }
     }
-  }, [])
-
-  useEffect(() => {
-    fetchTopics(activeLanguage?.code ?? 'en-GB')
-  }, [activeLanguage?.code, fetchTopics])
+    if (!isSwitching) void load()
+    return () => controller.abort()
+  }, [
+    languageCode,
+    needsRefresh,
+    isSwitching,
+    invalidationVersion,
+    sessionVersion,
+    scope,
+    attempt,
+  ])
 
   const allCategories: GrammarCategory[] = useMemo(
     () =>
@@ -92,16 +135,21 @@ export default function GrammarIndexPage() {
     return allCategories.filter((c) => cats.has(c))
   }, [topics, allCategories])
 
-  if (loading) {
+  if (loading || loadedScope !== scope || isSwitching) {
     return <PageLoading />
   }
 
   if (loadError) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
-        <p className="text-fl-muted-2 font-mono text-sm">{tCommon('error')}</p>
+        <p role="alert" className="text-fl-muted-2 font-mono text-sm">
+          {tCommon('error')}
+        </p>
         <button
-          onClick={() => fetchTopics(activeLanguage?.code ?? 'en-GB')}
+          onClick={() => {
+            setLoading(true)
+            setAttempt((value) => value + 1)
+          }}
           className="text-fl-accent font-mono text-xs tracking-widest uppercase underline"
         >
           {tCommon('retry')}

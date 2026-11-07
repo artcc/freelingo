@@ -112,7 +112,6 @@ describe('FeedbackPage unread labels', () => {
     }
     mockApiFetch
       .mockResolvedValueOnce(jsonResponse(list))
-      .mockResolvedValueOnce(jsonResponse(list))
       .mockResolvedValueOnce(jsonResponse({ voted: true, vote_count: 1 }))
 
     render(<FeedbackPage />)

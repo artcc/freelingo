@@ -7,6 +7,8 @@ import { apiFetch } from '@/lib/api'
 import type { VocabularySet } from '@/data/types'
 import { CEFR_LEVELS, type CEFRLevel } from '@/data/curriculum'
 import { useLanguageStore } from '@/store/language'
+import { useAuthStore } from '@/store/auth'
+import { PageLoading } from '@/components/ui/page-loading'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -46,17 +48,81 @@ export default function VocabularyIndexPage() {
   const t = useTranslations('vocabulary')
   const tCommon = useTranslations('common')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const invalidationVersion = useLanguageStore((s) => s.invalidationVersion)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const languageCode = activeLanguage?.code
+  const scope = `${sessionVersion}:${invalidationVersion}:${languageCode}:${needsRefresh}`
   const [activeLevel, setActiveLevel] = useState<CEFRLevel | 'All'>('All')
   const [search, setSearch] = useState('')
   const [vocabSets, setVocabSets] = useState<VocabularySet[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
+  const [loadedScope, setLoadedScope] = useState<string | null>(null)
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
-    const lang = activeLanguage?.code ?? 'en-GB'
-    apiFetch(`/api/vocabulary?language=${lang}`)
-      .then((r) => r.json())
-      .then((d: { sets: VocabularySet[] }) => setVocabSets(d.sets))
-      .catch(() => setVocabSets([]))
-  }, [activeLanguage?.code])
+    const controller = new AbortController()
+    const isCurrent = () => {
+      const state = useLanguageStore.getState()
+      return (
+        !controller.signal.aborted &&
+        useAuthStore.getState().sessionVersion === sessionVersion &&
+        state.invalidationVersion === invalidationVersion &&
+        state.activeLanguage?.code === languageCode &&
+        state.needsRefresh === needsRefresh &&
+        !state.isSwitching
+      )
+    }
+    setLoading(true)
+    setLoadError(false)
+    setVocabSets([])
+    async function load() {
+      try {
+        if (needsRefresh || !languageCode) {
+          const ok = await useLanguageStore
+            .getState()
+            .fetchLanguages(controller.signal)
+          if (!isCurrent()) return
+          const state = useLanguageStore.getState()
+          if (!ok || state.needsRefresh || !state.activeLanguage) {
+            throw new Error('Could not resolve active language')
+          }
+          return
+        }
+        const signal = AbortSignal.any([
+          controller.signal,
+          AbortSignal.timeout(20_000),
+        ])
+        const response = await apiFetch(
+          `/api/vocabulary?language=${encodeURIComponent(languageCode)}`,
+          { signal }
+        )
+        if (!response.ok) throw new Error('Could not load vocabulary')
+        const data: { sets: VocabularySet[] } = await response.json()
+        signal.throwIfAborted()
+        if (isCurrent()) setVocabSets(data.sets)
+      } catch {
+        if (isCurrent()) setLoadError(true)
+      } finally {
+        if (isCurrent()) {
+          setLoadedScope(scope)
+          setLoading(false)
+        }
+      }
+    }
+    if (!isSwitching) void load()
+    return () => controller.abort()
+  }, [
+    languageCode,
+    needsRefresh,
+    isSwitching,
+    invalidationVersion,
+    sessionVersion,
+    scope,
+    attempt,
+  ])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase()
@@ -70,6 +136,27 @@ export default function VocabularyIndexPage() {
 
   const totalWords = vocabSets.reduce((acc, s) => acc + s.words.length, 0)
   const usedLevels = [...new Set(vocabSets.map((s) => s.level))] as CEFRLevel[]
+
+  if (loading || loadedScope !== scope || isSwitching) return <PageLoading />
+
+  if (loadError) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+        <p role="alert" className="text-fl-muted-2 font-mono text-sm">
+          {tCommon('error')}
+        </p>
+        <button
+          onClick={() => {
+            setLoading(true)
+            setAttempt((value) => value + 1)
+          }}
+          className="text-fl-accent font-mono text-xs tracking-widest uppercase underline"
+        >
+          {tCommon('retry')}
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 p-6">

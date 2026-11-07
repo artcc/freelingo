@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import {
@@ -24,6 +24,7 @@ import { PageLoading } from '@/components/ui/page-loading'
 import { Pagination } from '@/components/ui/pagination'
 import { AdminAuthorBadge } from '@/components/feedback/AdminAuthorBadge'
 import { apiFetch } from '@/lib/api'
+import { useAuthStore } from '@/store/auth'
 
 interface FeedbackAuthor {
   id: number
@@ -77,7 +78,13 @@ function formatDate(iso: string, locale: string): string {
 }
 
 export default function AdminFeedbackPage() {
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  return <AdminFeedbackContent key={sessionVersion} />
+}
+
+function AdminFeedbackContent() {
   const t = useTranslations('feedback')
+  const tCommon = useTranslations('common')
   const tAdmin = useTranslations('admin')
   const locale = useLocale()
   const searchParams = useSearchParams()
@@ -106,6 +113,9 @@ export default function AdminFeedbackPage() {
   const [savingStatus, setSavingStatus] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [deletePending, setDeletePending] = useState<FeedbackEntry | null>(null)
+  const loadController = useRef<AbortController | null>(null)
+  const listContext = useRef('')
+  const [reload, setReload] = useState(0)
 
   const getStatusLabel = useCallback(
     (status: string): string => {
@@ -122,7 +132,12 @@ export default function AdminFeedbackPage() {
   )
 
   const loadTypeTotal = useCallback(
-    async (type: 'feature' | 'bug', query: string, currentStatus: string) => {
+    async (
+      type: 'feature' | 'bug',
+      query: string,
+      currentStatus: string,
+      signal: AbortSignal
+    ) => {
       const params = new URLSearchParams({
         type,
         skip: '0',
@@ -130,8 +145,10 @@ export default function AdminFeedbackPage() {
       })
       if (query.trim()) params.set('q', query.trim())
       if (currentStatus) params.set('status', currentStatus)
-      const res = await apiFetch(`/api/feedback?${params.toString()}`)
-      if (!res.ok) return 0
+      const res = await apiFetch(`/api/feedback?${params.toString()}`, {
+        signal,
+      })
+      if (!res.ok) throw new Error()
       const data = await res.json()
       return data.total ?? 0
     },
@@ -146,6 +163,26 @@ export default function AdminFeedbackPage() {
       currentStatus: string,
       currentSort: SortFilter
     ) => {
+      loadController.current?.abort()
+      const controller = new AbortController()
+      loadController.current = controller
+      const signal = AbortSignal.any([
+        controller.signal,
+        AbortSignal.timeout(20_000),
+      ])
+      const context = JSON.stringify([
+        pageIndex,
+        query,
+        currentType,
+        currentStatus,
+        currentSort,
+      ])
+      if (listContext.current !== context) {
+        setEntries([])
+        setTotal(0)
+        setTypeTotals({ feature: 0, bug: 0 })
+        listContext.current = context
+      }
       setLoading(true)
       setError('')
       try {
@@ -159,7 +196,11 @@ export default function AdminFeedbackPage() {
         if (currentType !== 'all') params.set('type', currentType)
         if (currentStatus) params.set('status', currentStatus)
 
-        const res = await apiFetch(`/api/feedback?${params.toString()}`)
+        const res = await apiFetch(`/api/feedback?${params.toString()}`, {
+          signal,
+        })
+        if (loadController.current !== controller) return
+        signal.throwIfAborted()
         if (res.status === 403) {
           setError(tAdmin('adminRequired'))
           return
@@ -167,16 +208,18 @@ export default function AdminFeedbackPage() {
         if (!res.ok) throw new Error()
         const [data, featureCount, bugCount] = await Promise.all([
           res.json(),
-          loadTypeTotal('feature', query, currentStatus),
-          loadTypeTotal('bug', query, currentStatus),
+          loadTypeTotal('feature', query, currentStatus, signal),
+          loadTypeTotal('bug', query, currentStatus, signal),
         ])
+        signal.throwIfAborted()
+        if (loadController.current !== controller) return
         setEntries(data.items)
         setTotal(data.total)
         setTypeTotals({ feature: featureCount, bug: bugCount })
       } catch {
-        setError(t('errorLoad'))
+        if (loadController.current === controller) setError(t('errorLoad'))
       } finally {
-        setLoading(false)
+        if (loadController.current === controller) setLoading(false)
       }
     },
     [loadTypeTotal, t, tAdmin]
@@ -184,24 +227,24 @@ export default function AdminFeedbackPage() {
 
   useEffect(() => {
     loadEntries(page, searchTerm, typeFilter, statusFilter, sortFilter)
-  }, [loadEntries, page]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (page !== 0) {
-      setPage(0)
-    } else {
-      loadEntries(0, searchTerm, typeFilter, statusFilter, sortFilter)
+    return () => {
+      loadController.current?.abort()
+      loadController.current = null
     }
-  }, [typeFilter, statusFilter, sortFilter]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    loadEntries,
+    page,
+    searchTerm,
+    typeFilter,
+    statusFilter,
+    sortFilter,
+    reload,
+  ])
 
   function handleSearch() {
-    const term = searchInput
-    setSearchTerm(term)
-    if (page !== 0) {
-      setPage(0)
-    } else {
-      loadEntries(0, term, typeFilter, statusFilter, sortFilter)
-    }
+    setSearchTerm(searchInput)
+    setPage(0)
+    setReload((value) => value + 1)
   }
 
   function clearFilters() {
@@ -210,15 +253,18 @@ export default function AdminFeedbackPage() {
     setTypeFilter('all')
     setStatusFilter('')
     setSortFilter('date')
-    if (page !== 0) {
-      setPage(0)
-    } else {
-      loadEntries(0, '', 'all', '', 'date')
-    }
+    setPage(0)
   }
 
   async function handleStatusChange(entry: FeedbackEntry, newStatus: string) {
-    if (entry.status === newStatus) return
+    if (
+      entry.status === newStatus ||
+      loading ||
+      savingStatus !== null ||
+      deletingId !== null
+    )
+      return
+    const owner = loadController.current
     setSavingStatus(entry.id)
     setError('')
     try {
@@ -228,6 +274,10 @@ export default function AdminFeedbackPage() {
         body: JSON.stringify({ status: newStatus }),
       })
       if (!res.ok) throw new Error()
+      if (loadController.current !== owner) {
+        if (loadController.current) setReload((value) => value + 1)
+        return
+      }
       if (statusFilter && newStatus !== statusFilter) {
         await loadEntries(
           page,
@@ -242,13 +292,16 @@ export default function AdminFeedbackPage() {
         prev.map((e) => (e.id === entry.id ? { ...e, status: newStatus } : e))
       )
     } catch {
-      setError(tAdmin('feedbackStatusError'))
+      if (loadController.current === owner)
+        setError(tAdmin('feedbackStatusError'))
     } finally {
-      setSavingStatus(null)
+      if (loadController.current) setSavingStatus(null)
     }
   }
 
   async function handleDelete(entry: FeedbackEntry) {
+    if (loading || savingStatus !== null || deletingId !== null) return
+    const owner = loadController.current
     setDeletingId(entry.id)
     setError('')
     try {
@@ -256,7 +309,12 @@ export default function AdminFeedbackPage() {
         method: 'DELETE',
       })
       if (!res.ok) throw new Error()
+      if (!loadController.current) return
       setDeletePending(null)
+      if (loadController.current !== owner) {
+        setReload((value) => value + 1)
+        return
+      }
       const newTotal = total - 1
       setTotal(newTotal)
       setEntries((prev) => prev.filter((e) => e.id !== entry.id))
@@ -274,9 +332,10 @@ export default function AdminFeedbackPage() {
         )
       }
     } catch {
-      setError(tAdmin('feedbackDeleteError'))
+      if (loadController.current === owner)
+        setError(tAdmin('feedbackDeleteError'))
     } finally {
-      setDeletingId(null)
+      if (loadController.current) setDeletingId(null)
     }
   }
 
@@ -321,10 +380,6 @@ export default function AdminFeedbackPage() {
     statusFilter ||
     sortFilter !== 'date'
 
-  if (loading && entries.length === 0) {
-    return <PageLoading label={tAdmin('loading')} />
-  }
-
   return (
     <div className="mx-auto max-w-6xl space-y-4 p-6">
       <AdminPageHeader
@@ -356,6 +411,13 @@ export default function AdminFeedbackPage() {
       {error && (
         <div className="border-fl-error/40 text-fl-error border px-4 py-3 font-mono text-xs">
           {error}
+          <button
+            onClick={() => setReload((value) => value + 1)}
+            disabled={loading}
+            className="ml-3 underline disabled:opacity-50"
+          >
+            {tCommon('retry')}
+          </button>
         </div>
       )}
 
@@ -402,7 +464,10 @@ export default function AdminFeedbackPage() {
 
           <select
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value as TypeFilter)}
+            onChange={(e) => {
+              setPage(0)
+              setTypeFilter(e.target.value as TypeFilter)
+            }}
             className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 appearance-none border px-4 py-2 font-mono text-xs transition-colors focus:outline-none"
             aria-label={tAdmin('feedbackTypeFilter')}
           >
@@ -415,7 +480,10 @@ export default function AdminFeedbackPage() {
 
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setPage(0)
+              setStatusFilter(e.target.value)
+            }}
             className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 appearance-none border px-4 py-2 font-mono text-xs transition-colors focus:outline-none"
             aria-label={t('filterStatus')}
           >
@@ -428,7 +496,10 @@ export default function AdminFeedbackPage() {
 
           <select
             value={sortFilter}
-            onChange={(e) => setSortFilter(e.target.value as SortFilter)}
+            onChange={(e) => {
+              setPage(0)
+              setSortFilter(e.target.value as SortFilter)
+            }}
             className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 appearance-none border px-4 py-2 font-mono text-xs transition-colors focus:outline-none"
             aria-label={t('sortBy')}
           >
@@ -450,10 +521,20 @@ export default function AdminFeedbackPage() {
           </button>
         </div>
 
-        {entries.length === 0 && !loading ? (
-          <p className="text-fl-muted-2 px-6 py-10 text-center font-mono text-xs">
-            {hasFilters ? tAdmin('noFilteredFeedback') : t('noEntries')}
-          </p>
+        {loading && (
+          <PageLoading
+            fullScreen={false}
+            label={tAdmin('loading')}
+            className="p-4"
+          />
+        )}
+        {entries.length === 0 ? (
+          !loading &&
+          !error && (
+            <p className="text-fl-muted-2 px-6 py-10 text-center font-mono text-xs">
+              {hasFilters ? tAdmin('noFilteredFeedback') : t('noEntries')}
+            </p>
+          )
         ) : (
           <>
             <div className="hidden lg:block">
@@ -521,7 +602,11 @@ export default function AdminFeedbackPage() {
                             onChange={(e) =>
                               handleStatusChange(entry, e.target.value)
                             }
-                            disabled={savingStatus === entry.id}
+                            disabled={
+                              loading ||
+                              savingStatus !== null ||
+                              deletingId !== null
+                            }
                             className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 appearance-none border px-3 py-2 font-mono text-xs transition-colors focus:outline-none disabled:opacity-50"
                             aria-label={tAdmin('feedbackStatusAction')}
                           >
@@ -542,7 +627,11 @@ export default function AdminFeedbackPage() {
                       <td className="px-5 py-4 text-right align-top">
                         <button
                           onClick={() => setDeletePending(entry)}
-                          disabled={deletingId === entry.id}
+                          disabled={
+                            loading ||
+                            savingStatus !== null ||
+                            deletingId !== null
+                          }
                           className="border-fl-error/30 text-fl-error-fg hover:border-fl-error hover:text-fl-error inline-flex size-8 items-center justify-center border transition-colors disabled:opacity-40"
                           aria-label={tAdmin('delete')}
                           title={tAdmin('delete')}
@@ -611,7 +700,9 @@ export default function AdminFeedbackPage() {
                       onChange={(e) =>
                         handleStatusChange(entry, e.target.value)
                       }
-                      disabled={savingStatus === entry.id}
+                      disabled={
+                        loading || savingStatus !== null || deletingId !== null
+                      }
                       className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 appearance-none border px-3 py-2 font-mono text-xs transition-colors focus:outline-none disabled:opacity-50"
                       aria-label={tAdmin('feedbackStatusAction')}
                     >
@@ -623,7 +714,9 @@ export default function AdminFeedbackPage() {
                     </select>
                     <button
                       onClick={() => setDeletePending(entry)}
-                      disabled={deletingId === entry.id}
+                      disabled={
+                        loading || savingStatus !== null || deletingId !== null
+                      }
                       className="border-fl-error/30 text-fl-label text-fl-error-fg hover:border-fl-error hover:text-fl-error inline-flex items-center justify-center gap-2 border px-3 py-2 font-mono tracking-widest uppercase transition-colors disabled:opacity-40"
                     >
                       {deletingId === entry.id ? (
@@ -658,6 +751,7 @@ export default function AdminFeedbackPage() {
         message={t('deleteEntryConfirmMessage')}
         confirmLabel={t('deleteEntryConfirm')}
         danger
+        confirming={deletingId !== null}
         onConfirm={() => deletePending && handleDelete(deletePending)}
         onCancel={() => setDeletePending(null)}
       />

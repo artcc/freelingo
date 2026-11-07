@@ -8,10 +8,10 @@ const { mockApiFetch, mockSearchParams, navigationState } = vi.hoisted(() => ({
   navigationState: { pathname: '/admin' },
 }))
 
-vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
-  useTranslations: () => (key: string) => key,
-}))
+vi.mock('next-intl', () => {
+  const translate = (key: string) => key
+  return { useLocale: () => 'en', useTranslations: () => translate }
+})
 
 vi.mock('next/link', () => ({
   default: ({
@@ -147,7 +147,9 @@ describe('admin page query params', () => {
 
     render(<AdminUsersPage />)
 
-    await waitFor(() => expect(screen.getAllByText('Ada').length).toBeGreaterThan(0))
+    await waitFor(() =>
+      expect(screen.getAllByText('Ada').length).toBeGreaterThan(0)
+    )
     const usersCalls = mockApiFetch.mock.calls.filter(([url]) =>
       String(url).startsWith('/api/admin/users?')
     )

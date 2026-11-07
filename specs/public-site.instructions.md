@@ -29,7 +29,8 @@ Spaced repetition, XP and streaks are supplementary copy rather than a separate 
 The hero uses one animated Lingu in `LanguageBubbles`.
 Language greetings surround Lingu in a wide elliptical orbit from the small-screen breakpoint;
 on narrower viewports they wrap into spaced rows below the avatar. The hero reserves the orbit's
-width, and Lingu and the greetings appear together when the avatar is ready. Orbit offsets use
+width, showing a spinner without visible text in Lingu's position until the avatar is ready; Lingu
+and the greetings then appear together. Orbit offsets use
 rounded CSS custom properties and centered margin positioning so server and browser markup agree
 without relying on serialized `calc()` expressions. Floating animations respect reduced motion.
 
@@ -64,6 +65,12 @@ It does not promise a fixed signup-trial duration: public config omits `FREEMIUM
 That period is independent of the optional Stripe subscription trial; a missing Stripe trial duration
 defaults to zero on the landing. Trial eligibility and checkout behavior remain defined by the billing
 specification. Reviews use the publication contract in `reviews.instructions.md`.
+
+For visitors with a session, the subscription check uses a reserved loading region inside pricing.
+The rest of the landing remains available to pointer and keyboard navigation. Subscription results
+from an obsolete session or an unmounted pricing section cannot update its presentation. The check
+continues to use the session-restoration and billing contracts owned by the platform and subscription
+specifications.
 
 ## FAQ, localization, and accessibility
 

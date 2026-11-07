@@ -31,7 +31,7 @@ export function ExerciseGenerationLoading({
         label={label}
         subtext={description}
         warning={warning}
-        animation="pensando"
+        artwork
         heading
       />
     ),

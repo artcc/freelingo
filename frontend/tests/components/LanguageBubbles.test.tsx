@@ -39,15 +39,22 @@ vi.mock('next/image', () => ({
 describe('LanguageBubbles', () => {
   it('reveals Lingu and the language bubbles together when the avatar is ready', () => {
     const { container } = render(<LanguageBubbles />)
-    const group = container.firstElementChild
+    const group = container.querySelector('[aria-hidden="true"].opacity-0')
+    const loading = screen.getByRole('status', { name: 'loading' })
 
+    expect(loading).toBeVisible()
+    expect(loading.textContent).toBe('')
+    expect(loading.querySelector('svg')).toHaveClass('motion-safe:animate-spin')
     expect(group).toHaveAttribute('aria-hidden', 'true')
     expect(group).toHaveClass('opacity-0')
     expect(screen.queryByRole('img', { name: 'FreeLingo' })).toBeNull()
-    expect(screen.queryAllByRole('img', { name: /^Localized / })).toHaveLength(0)
+    expect(screen.queryAllByRole('img', { name: /^Localized / })).toHaveLength(
+      0
+    )
 
     fireEvent.click(screen.getByTestId('lingu-ready'))
 
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
     expect(group).toHaveAttribute('aria-hidden', 'false')
     expect(group).toHaveClass('opacity-100')
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
@@ -78,7 +85,10 @@ describe('LanguageBubbles', () => {
     )
     expect(screen.getByText('Привет!')).toHaveAttribute('lang', 'ru-RU')
     expect(screen.getByText('Привет!')).toHaveClass('font-target-cyrillic')
-    expect(screen.getByAltText('Localized sv-SE')).toHaveAttribute('src', '/flags/sweden.jpg')
+    expect(screen.getByAltText('Localized sv-SE')).toHaveAttribute(
+      'src',
+      '/flags/sweden.jpg'
+    )
     expect(screen.getByText('Hej!')).toHaveAttribute('lang', 'sv-SE')
     expect(screen.getByText('Hej!')).toHaveClass('font-target-latin')
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
@@ -90,12 +100,14 @@ describe('LanguageBubbles', () => {
       container.querySelectorAll<HTMLDivElement>('div[style]')
     ).filter((el) => el.style.getPropertyValue('--bubble-x'))
 
-    expect(container.firstElementChild).toHaveClass('flex-wrap', 'gap-y-4')
+    expect(container.querySelector('.flex-wrap')).toHaveClass('gap-y-4')
     expect(wrappers).toHaveLength(SUPPORTED_TARGET_LANGUAGES.length)
     const xPositions = wrappers.map((el) =>
       Number.parseFloat(el.style.getPropertyValue('--bubble-x'))
     )
-    expect(Math.max(...xPositions) - Math.min(...xPositions)).toBeGreaterThan(420)
+    expect(Math.max(...xPositions) - Math.min(...xPositions)).toBeGreaterThan(
+      420
+    )
     for (const wrapper of wrappers) {
       expect(wrapper).toHaveClass('relative', 'sm:absolute')
       const x = Number.parseFloat(wrapper.style.getPropertyValue('--bubble-x'))
@@ -107,8 +119,12 @@ describe('LanguageBubbles', () => {
   it('hydrates server markup despite tiny differences in trigonometric precision', () => {
     const cos = Math.cos
     const sin = Math.sin
-    const serverCos = vi.spyOn(Math, 'cos').mockImplementation((angle) => cos(angle) + 1e-15)
-    const serverSin = vi.spyOn(Math, 'sin').mockImplementation((angle) => sin(angle) - 1e-15)
+    const serverCos = vi
+      .spyOn(Math, 'cos')
+      .mockImplementation((angle) => cos(angle) + 1e-15)
+    const serverSin = vi
+      .spyOn(Math, 'sin')
+      .mockImplementation((angle) => sin(angle) - 1e-15)
     const container = document.createElement('div')
     try {
       container.innerHTML = renderToString(<LanguageBubbles />)
