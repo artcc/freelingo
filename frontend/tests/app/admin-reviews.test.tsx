@@ -3,28 +3,40 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import AdminReviewsPage from '@/app/(app)/admin/reviews/page'
 
-vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
-  useTranslations:
-    (namespace: string) => (key: string, values?: Record<string, string | number>) => {
-      if (namespace === 'targetLanguages' && key === 'de-DE') return 'German'
-      if (key === 'learningLanguage') return `Learning ${values?.language}`
-      if (key === 'starsLabel')
-        return namespace === 'landingReviews'
-          ? `${values?.rating} out of 5 stars`
-          : `${values?.rating} stars`
-      if (key === 'total') return `${values?.total} total`
-      const labels: Record<string, string> = {
-        approve: 'Approve',
-        approved: 'Approved',
-        cancel: 'Cancel',
-        delete: 'Delete',
-        pending: 'Pending',
-        ratingOnly: 'Rating-only review.',
+vi.mock('next-intl', () => {
+  type Translate = (
+    key: string,
+    values?: Record<string, string | number>
+  ) => string
+  const translators = new Map<string, Translate>()
+  return {
+    useLocale: () => 'en',
+    useTranslations: (namespace: string) => {
+      if (!translators.has(namespace)) {
+        translators.set(namespace, (key, values) => {
+          if (namespace === 'targetLanguages' && key === 'de-DE')
+            return 'German'
+          if (key === 'learningLanguage') return `Learning ${values?.language}`
+          if (key === 'starsLabel')
+            return namespace === 'landingReviews'
+              ? `${values?.rating} out of 5 stars`
+              : `${values?.rating} stars`
+          if (key === 'total') return `${values?.total} total`
+          const labels: Record<string, string> = {
+            approve: 'Approve',
+            approved: 'Approved',
+            cancel: 'Cancel',
+            delete: 'Delete',
+            pending: 'Pending',
+            ratingOnly: 'Rating-only review.',
+          }
+          return labels[key] ?? key
+        })
       }
-      return labels[key] ?? key
+      return translators.get(namespace)
     },
-}))
+  }
+})
 vi.mock('next/link', () => ({
   default: ({
     href,

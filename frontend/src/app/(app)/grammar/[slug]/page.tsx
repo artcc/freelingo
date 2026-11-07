@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { use } from 'react'
@@ -14,7 +14,7 @@ import {
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { useAuthStore } from '@/store/auth'
 import { useAnalyticsView } from '@/hooks/useAnalyticsView'
-import { useLanguageStore } from '@/store/language'
+import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { PageLoading } from '@/components/ui/page-loading'
 
 function renderExplanation(text: string) {
@@ -90,94 +90,96 @@ export default function GrammarDetailPage({
 }: {
   params: Promise<{ slug: string }>
 }) {
-  const t = useTranslations('grammar')
   const tCommon = useTranslations('common')
-  const tNav = useTranslations('nav')
-  const tLang = useTranslations('languages')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
-  const user = useAuthStore((s) => s.user)
-  const nativeLanguageName = user?.native_language
-    ? tLang(user.native_language)
-    : ''
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const invalidationVersion = useLanguageStore((s) => s.invalidationVersion)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const nativeLanguage = useAuthStore((s) => s.user?.native_language)
+  const languageCode = activeLanguage?.code
+  const scope = `${sessionVersion}:${invalidationVersion}:${languageCode}:${needsRefresh}`
   const { slug } = use(params)
-
-  const [topics, setTopics] = useState<GrammarTopic[]>([])
-  const [topicsLanguage, setTopicsLanguage] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [loadError, setLoadError] = useState(false)
-  const [nativeHelpOpen, setNativeHelpOpen] = useState(false)
-  const [nativeHelp, setNativeHelp] = useState<GrammarNativeHelp | null>(null)
-  const [loadingNativeHelp, setLoadingNativeHelp] = useState(false)
-  const [nativeHelpError, setNativeHelpError] = useState(false)
-
-  const topic = topics.find((t) => t.slug === slug)
-  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
   const analyticsRef = useAnalyticsView(
     'grammar_viewed',
-    `${targetLanguageCode}:${slug}`
+    `${languageCode}:${slug}`
   )
 
-  const fetchTopics = useCallback(async (lang: string) => {
+  const [topics, setTopics] = useState<GrammarTopic[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
+  const [loadedScope, setLoadedScope] = useState<string | null>(null)
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const isCurrent = () => {
+      const state = useLanguageStore.getState()
+      return (
+        !controller.signal.aborted &&
+        useAuthStore.getState().sessionVersion === sessionVersion &&
+        state.invalidationVersion === invalidationVersion &&
+        state.activeLanguage?.code === languageCode &&
+        state.needsRefresh === needsRefresh
+      )
+    }
     setLoading(true)
     setLoadError(false)
-    try {
-      const data = await getGrammarTopics(lang)
-      setTopics(data)
-      setTopicsLanguage(lang)
-    } catch {
-      setLoadError(true)
-      setTopics([])
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchTopics(targetLanguageCode)
-  }, [targetLanguageCode, fetchTopics])
-
-  useEffect(() => {
-    if (!topic) return
-    setNativeHelp(null)
-    setNativeHelpError(false)
-    setNativeHelpOpen(topic.level === 'A1' || topic.level === 'A2')
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- topic?.slug and topic?.level avoid unnecessary runs; topic object identity changes every render
-  }, [topic?.slug, topic?.level, targetLanguageCode])
-
-  const generateNativeHelp = useCallback(async () => {
-    if (!topic || loadingNativeHelp) return
-    setLoadingNativeHelp(true)
-    setNativeHelpError(false)
-    try {
-      const help = await getGrammarNativeHelp(topic.slug, targetLanguageCode)
-      if (help) {
-        setNativeHelp(help)
-      } else {
-        setNativeHelpError(true)
+    setTopics([])
+    async function load() {
+      try {
+        if (useLanguageStore.getState().isSwitching) {
+          await waitForLanguageSwitch(controller.signal)
+        }
+        if (!isCurrent()) return
+        if (needsRefresh || !languageCode) {
+          const ok = await useLanguageStore
+            .getState()
+            .fetchLanguages(controller.signal)
+          if (!isCurrent()) return
+          const state = useLanguageStore.getState()
+          if (!ok || state.needsRefresh || !state.activeLanguage) {
+            throw new Error('Could not resolve active language')
+          }
+          return
+        }
+        const data = await getGrammarTopics(languageCode, controller.signal)
+        if (isCurrent()) setTopics(data)
+      } catch {
+        if (isCurrent()) setLoadError(true)
+      } finally {
+        if (isCurrent()) {
+          setLoadedScope(scope)
+          setLoading(false)
+        }
       }
-    } catch {
-      setNativeHelpError(true)
-    } finally {
-      setLoadingNativeHelp(false)
     }
-  }, [loadingNativeHelp, targetLanguageCode, topic])
+    void load()
+    return () => controller.abort()
+  }, [
+    languageCode,
+    needsRefresh,
+    invalidationVersion,
+    sessionVersion,
+    scope,
+    attempt,
+  ])
 
-  useEffect(() => {
-    if (nativeHelpOpen && topic && !nativeHelp && !loadingNativeHelp) {
-      generateNativeHelp()
-    }
-  }, [generateNativeHelp, loadingNativeHelp, nativeHelp, nativeHelpOpen, topic])
-
-  if (loading) {
+  if (loading || loadedScope !== scope || (loadError && isSwitching)) {
     return <PageLoading />
   }
 
   if (loadError) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
-        <p className="text-fl-muted-2 font-mono text-sm">{tCommon('error')}</p>
+        <p role="alert" className="text-fl-muted-2 font-mono text-sm">
+          {tCommon('error')}
+        </p>
         <button
-          onClick={() => fetchTopics(targetLanguageCode)}
+          onClick={() => {
+            setLoading(true)
+            setAttempt((value) => value + 1)
+          }}
           className="text-fl-accent font-mono text-xs tracking-widest uppercase underline"
         >
           {tCommon('retry')}
@@ -186,7 +188,130 @@ export default function GrammarDetailPage({
     )
   }
 
+  const topic = topics.find((item) => item.slug === slug)
   if (!topic) notFound()
+
+  return (
+    <>
+      {isSwitching && <PageLoading />}
+      <div hidden={isSwitching} inert={isSwitching}>
+        <GrammarTopicContent
+          key={`${scope}:${slug}:${nativeLanguage}`}
+          topic={topic}
+          topics={topics}
+          targetLanguageCode={languageCode!}
+          analyticsRef={analyticsRef}
+        />
+      </div>
+    </>
+  )
+}
+
+function GrammarTopicContent({
+  topic,
+  topics,
+  targetLanguageCode,
+  analyticsRef,
+}: {
+  topic: GrammarTopic
+  topics: GrammarTopic[]
+  targetLanguageCode: string
+  analyticsRef: (node: HTMLElement | null) => void
+}) {
+  const t = useTranslations('grammar')
+  const tCommon = useTranslations('common')
+  const tNav = useTranslations('nav')
+  const tLang = useTranslations('languages')
+  const nativeLanguage = useAuthStore((s) => s.user?.native_language)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const nativeLanguageName = nativeLanguage ? tLang(nativeLanguage) : ''
+  const [nativeHelpOpen, setNativeHelpOpen] = useState(
+    topic.level === 'A1' || topic.level === 'A2'
+  )
+  const [nativeHelp, setNativeHelp] = useState<GrammarNativeHelp | null>(null)
+  const [loadingNativeHelp, setLoadingNativeHelp] = useState(false)
+  const [nativeHelpError, setNativeHelpError] = useState(false)
+  const helpRequest = useRef<AbortController | null>(null)
+
+  useEffect(
+    () => () => {
+      helpRequest.current?.abort()
+      helpRequest.current = null
+    },
+    []
+  )
+
+  const generateNativeHelp = useCallback(async () => {
+    if (
+      !nativeLanguage ||
+      helpRequest.current ||
+      useLanguageStore.getState().isSwitching
+    ) {
+      return
+    }
+    const controller = new AbortController()
+    helpRequest.current = controller
+    const sessionVersion = useAuthStore.getState().sessionVersion
+    const invalidationVersion = useLanguageStore.getState().invalidationVersion
+    const isCurrent = () => {
+      const auth = useAuthStore.getState()
+      const context = useLanguageStore.getState()
+      return (
+        !controller.signal.aborted &&
+        helpRequest.current === controller &&
+        auth.sessionVersion === sessionVersion &&
+        auth.user?.native_language === nativeLanguage &&
+        context.activeLanguage?.code === targetLanguageCode &&
+        context.invalidationVersion === invalidationVersion &&
+        !context.needsRefresh
+      )
+    }
+    setLoadingNativeHelp(true)
+    setNativeHelpError(false)
+    try {
+      const help = await getGrammarNativeHelp(
+        topic.slug,
+        targetLanguageCode,
+        controller.signal
+      )
+      if (!isCurrent()) return
+      if (help) setNativeHelp(help)
+      else setNativeHelpError(true)
+    } catch {
+      if (isCurrent()) setNativeHelpError(true)
+    } finally {
+      if (isCurrent()) {
+        helpRequest.current = null
+        setLoadingNativeHelp(false)
+      }
+    }
+  }, [nativeLanguage, targetLanguageCode, topic.slug])
+
+  useEffect(() => {
+    if (
+      !isSwitching &&
+      nativeHelpOpen &&
+      !nativeHelp &&
+      !loadingNativeHelp &&
+      !nativeHelpError
+    ) {
+      // Let StrictMode finish its setup replay before starting the POST.
+      let cancelled = false
+      queueMicrotask(() => {
+        if (!cancelled) void generateNativeHelp()
+      })
+      return () => {
+        cancelled = true
+      }
+    }
+  }, [
+    generateNativeHelp,
+    isSwitching,
+    loadingNativeHelp,
+    nativeHelp,
+    nativeHelpOpen,
+    nativeHelpError,
+  ])
 
   const hasTable = topic.explanation.includes('|')
   const explanationLines = topic.explanation.split('\n')
@@ -197,10 +322,7 @@ export default function GrammarDetailPage({
     .filter(Boolean)
 
   return (
-    <div
-      ref={topicsLanguage === targetLanguageCode ? analyticsRef : undefined}
-      className="mx-auto max-w-4xl space-y-4 p-6"
-    >
+    <div ref={analyticsRef} className="mx-auto max-w-4xl space-y-4 p-6">
       <nav className="text-fl-label text-fl-muted-3 flex items-center gap-2 font-mono">
         <Link
           href="/grammar"

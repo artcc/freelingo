@@ -9,6 +9,7 @@ import { useFreemiumStore } from '@/store/freemium'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { Pagination } from '@/components/ui/pagination'
+import { PageLoading } from '@/components/ui/page-loading'
 import {
   gameRequest,
   GameRequestError,
@@ -177,7 +178,7 @@ export function GameCatalog({
         </div>
       )}
       {!catalog && !noPlan && !error && (
-        <p role="status">{common('loading')}</p>
+        <PageLoading fullScreen={false} label={common('loading')} />
       )}
       {catalog && (
         <>

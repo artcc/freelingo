@@ -820,7 +820,7 @@
     "feedback": "Feedback",
     "corrections": "Corectări",
     "completeLesson": "Finalizează lecția",
-    "completing": "Se finalizează...",
+    "completing": "Se salvează progresul și se pregătește următoarea lecție...",
     "relatedGrammar": "Gramatică conexă",
     "explanation": "Explicație",
     "exercises": "Exerciții",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Limbi noi: poloneză, portugheză braziliană, rusă, neerlandeză și suedeză",

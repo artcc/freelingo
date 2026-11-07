@@ -820,7 +820,7 @@
     "feedback": "Feedback",
     "corrections": "Rettelser",
     "completeLesson": "Gennemfør lektion",
-    "completing": "Gennemfører...",
+    "completing": "Gemmer dine fremskridt og forbereder den næste lektion...",
     "relatedGrammar": "Relateret grammatik",
     "explanation": "Forklaring",
     "exercises": "Øvelser",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Forstået",
     "entry1": {
       "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",

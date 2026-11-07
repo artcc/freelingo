@@ -4,6 +4,7 @@ import React from 'react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { useLanguageStore } from '@/store/language'
 import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
+import { useAuthStore } from '@/store/auth'
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -58,7 +59,8 @@ function seedStore(
     supportedLanguages: SUPPORTED_TARGET_LANGUAGES,
     availableLanguageCodes: ['en-US', 'en-GB', 'es-ES', 'it-IT', 'pt-PT'],
     isSwitching: false,
-    fetchLanguages: vi.fn().mockResolvedValue(undefined),
+    needsRefresh: false,
+    fetchLanguages: vi.fn().mockResolvedValue(true),
     switchLanguage: vi.fn().mockResolvedValue(true),
     addLanguage: vi.fn().mockResolvedValue(true),
     removeLanguage: vi.fn().mockResolvedValue(true),
@@ -108,6 +110,81 @@ describe('LanguageSwitcher', () => {
     useLanguageStore.setState({ activeLanguage: null })
     const { container } = render(<LanguageSwitcher />)
     expect(container.querySelector('.animate-pulse')).toBeTruthy()
+    expect(screen.getByRole('status')).toHaveAccessibleName('loading')
+    expect(screen.getByRole('status')).toHaveClass('motion-reduce:animate-none')
+  })
+
+  it('shows an initial lookup failure and retries without treating it as an empty account', async () => {
+    const fetchLanguages = vi
+      .fn()
+      .mockResolvedValueOnce(false)
+      .mockImplementationOnce(async () => {
+        useLanguageStore.setState({
+          activeLanguage: SUPPORTED_TARGET_LANGUAGES[0],
+        })
+        return true
+      })
+    seedStore({ activeLanguage: null, fetchLanguages })
+    render(<LanguageSwitcher />)
+    expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+    expect(screen.queryByRole('status')).toBeNull()
+    expect(screen.queryByText('noLanguages')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    expect(await screen.findByText('en-US')).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it.each([true, false])(
+    'finishes a successful lookup without an active language (empty=%s)',
+    async (empty) => {
+      seedStore({
+        activeLanguage: null,
+        ...(empty ? { userLanguages: [] } : {}),
+      })
+      render(<LanguageSwitcher />)
+      expect(await screen.findByRole('link')).toHaveTextContent(
+        empty ? 'noLanguages' : 'selectLanguage'
+      )
+      expect(screen.getByRole('link')).toHaveAttribute(
+        'href',
+        '/settings/languages'
+      )
+      expect(screen.queryByRole('status')).toBeNull()
+      expect(screen.queryByRole('alert')).toBeNull()
+    }
+  )
+
+  it('ignores completion from an obsolete session and cancels the consumer wait on exit', async () => {
+    let resolveOld!: (ok: boolean) => void
+    let resolveCurrent!: (ok: boolean) => void
+    const fetchLanguages = vi
+      .fn()
+      .mockReturnValueOnce(
+        new Promise<boolean>((resolve) => {
+          resolveOld = resolve
+        })
+      )
+      .mockReturnValueOnce(
+        new Promise<boolean>((resolve) => {
+          resolveCurrent = resolve
+        })
+      )
+    seedStore({ activeLanguage: null, fetchLanguages })
+    const view = render(<LanguageSwitcher />)
+    const oldSignal = fetchLanguages.mock.calls[0][0] as AbortSignal
+    act(() => useAuthStore.getState().startSession('another-account'))
+    expect(oldSignal.aborted).toBe(true)
+    await act(async () => {
+      resolveOld(false)
+    })
+    expect(screen.getByRole('status')).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).toBeNull()
+    view.unmount()
+    expect((fetchLanguages.mock.calls[1][0] as AbortSignal).aborted).toBe(true)
+    await act(async () => {
+      resolveCurrent(false)
+    })
+    expect(screen.queryByRole('alert')).toBeNull()
   })
 
   it('does not open dropdown when only one language', () => {

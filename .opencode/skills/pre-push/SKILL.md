@@ -29,7 +29,9 @@ Fixes what can be fixed automatically: Python lint + format, JS/TS lint + format
 
 The full backend suite requires >= 70% aggregate coverage. SQLite in-memory, no Docker needed.
 
-Use a command timeout of at least 600 seconds for the full backend suite; the current run takes about 4 minutes and can exceed shorter 120-second tool defaults.
+Use a command timeout of 900 seconds (15 minutes) for the full backend suite and the complete
+`./scripts/pre-push.sh` run. The growing suite can exceed 10 minutes; do not rely on shorter tool
+defaults. If it reaches this limit, report the interruption before retrying with a longer timeout.
 
 ### 2. Frontend lint + typecheck + tests
 

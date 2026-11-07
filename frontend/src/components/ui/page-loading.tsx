@@ -1,11 +1,9 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
-import LinguAvatar, {
-  type LinguAnimation,
-} from '@/components/lingu/LinguAvatar'
 import { useLoadingStore } from '@/store/loading'
 import { usePageLoadingPresentation } from './page-loading-boundary'
 
@@ -57,7 +55,6 @@ export function PageLoading({
       <span
         className={`text-fl-muted-2 font-sans text-sm leading-relaxed ${className}`}
         role="status"
-        aria-busy="true"
         aria-label={text}
       >
         {showDot && (
@@ -74,19 +71,19 @@ export function PageLoading({
   return managed ? null : <div className="h-dvh">{presentation}</div>
 }
 
-/** Shared geometry: secondary text never moves the centered avatar/title block. */
+/** A fixed indicator slot anchors both phases independently of all wrapping text. */
 export function PageLoadingPresentation({
   label,
   subtext,
   warning,
-  animation = 'reposo',
+  artwork = false,
   heading = false,
   className = '',
 }: {
   label: string
   subtext?: string
   warning?: string
-  animation?: LinguAnimation
+  artwork?: boolean
   heading?: boolean
   className?: string
 }) {
@@ -94,32 +91,55 @@ export function PageLoadingPresentation({
 
   return (
     <div
-      className={`grid h-full grid-rows-[minmax(1.5rem,1fr)_auto_minmax(1.5rem,1fr)] justify-items-center overflow-y-auto px-6 text-center ${className}`}
+      className={`h-full overflow-y-auto px-6 text-center ${className}`}
       role="status"
-      aria-busy="true"
       aria-label={label}
+      tabIndex={0}
     >
-      <div aria-hidden="true" />
-      <div className="flex w-full max-w-sm flex-col items-center gap-6">
-        <LinguAvatar
-          animation={animation}
-          className="h-[75px] w-[75px] shrink-0 md:h-[150px] md:w-[150px]"
-        />
-        <Label className="text-fl-fg font-sans text-lg leading-7 font-medium">
-          {label}
-        </Label>
-      </div>
-      <div className="w-full max-w-sm space-y-6 pt-2 pb-6">
-        {subtext && (
-          <p className="text-fl-muted-1 font-sans text-sm leading-relaxed">
-            {subtext}
-          </p>
-        )}
-        {warning && (
-          <p className="text-fl-muted-2 font-sans text-sm leading-5">
-            {warning}
-          </p>
-        )}
+      <div
+        className={`grid h-full justify-items-center ${
+          artwork
+            ? 'min-h-[123px] grid-rows-[minmax(1.5rem,1fr)_75px_minmax(1.5rem,1fr)] md:min-h-[198px] md:grid-rows-[minmax(1.5rem,1fr)_150px_minmax(1.5rem,1fr)]'
+            : 'min-h-[72px] grid-rows-[minmax(1.5rem,1fr)_24px_minmax(1.5rem,1fr)]'
+        }`}
+      >
+        <div aria-hidden="true" />
+        <div
+          aria-hidden="true"
+          className={`relative flex items-center justify-center ${
+            artwork ? 'size-[75px] md:size-[150px]' : 'size-6'
+          }`}
+        >
+          {artwork ? (
+            <Image
+              src="/logo.png"
+              alt=""
+              width={150}
+              height={150}
+              sizes="(min-width: 768px) 150px, 75px"
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <Loader2 className="text-fl-muted-2 size-6 motion-safe:animate-spin" />
+          )}
+        </div>
+        <div
+          className={`w-full max-w-sm space-y-2 self-start pb-6 ${artwork ? 'pt-6' : 'pt-4'}`}
+        >
+          <Label className="text-fl-fg font-sans text-lg leading-7 font-medium">
+            {label}
+          </Label>
+          {subtext && (
+            <p className="text-fl-muted-1 font-sans text-sm leading-relaxed">
+              {subtext}
+            </p>
+          )}
+          {warning && (
+            <p className="text-fl-muted-2 pt-4 font-sans text-sm leading-5">
+              {warning}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )

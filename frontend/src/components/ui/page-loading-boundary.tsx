@@ -10,24 +10,30 @@ import {
   type ReactNode,
 } from 'react'
 
-const MIN_VISIBLE_MS = 500
+const APPEAR_DELAY_MS = 200
+const MIN_VISIBLE_MS = 300
+
+const idleSnapshot = { busy: false, presentation: null as ReactNode }
 
 function createLoadingController() {
   const owners = new Map<symbol, ReactNode>()
   const listeners = new Set<() => void>()
-  let presentation: ReactNode = null
+  let snapshot = idleSnapshot
   let startedAt: number | null = null
-  let timer: ReturnType<typeof setTimeout> | undefined
+  let shownAt: number | null = null
+  let appearanceTimer: ReturnType<typeof setTimeout> | undefined
+  let finishTimer: ReturnType<typeof setTimeout> | undefined
   let disposed = false
 
-  const publish = (next: ReactNode) => {
-    presentation = next
+  const publish = (busy: boolean, presentation: ReactNode) => {
+    snapshot = { busy, presentation }
     listeners.forEach((listener) => listener())
   }
   const finish = () => {
-    timer = undefined
+    finishTimer = undefined
     startedAt = null
-    publish(null)
+    shownAt = null
+    publish(false, null)
   }
 
   return {
@@ -37,31 +43,64 @@ function createLoadingController() {
         listeners.delete(listener)
       }
     },
-    getSnapshot: () => presentation,
+    getSnapshot: () => snapshot,
     show(id: symbol, view: ReactNode) {
       disposed = false
-      clearTimeout(timer)
-      timer = undefined
+      clearTimeout(finishTimer)
+      finishTimer = undefined
       startedAt ??= performance.now()
       owners.set(id, view)
-      publish(view)
+      if (shownAt !== null || snapshot.presentation !== null) {
+        publish(true, view)
+        return
+      }
+      publish(true, null)
+      clearTimeout(appearanceTimer)
+      appearanceTimer = setTimeout(
+        () => {
+          appearanceTimer = undefined
+          if (disposed || owners.size === 0) return
+          publish(true, [...owners.values()].at(-1) ?? null)
+        },
+        Math.max(0, APPEAR_DELAY_MS - (performance.now() - startedAt))
+      )
     },
     hide(id: symbol) {
       if (!owners.delete(id) || disposed) return
       if (owners.size > 0) {
-        publish([...owners.values()].at(-1) ?? null)
+        publish(
+          true,
+          snapshot.presentation === null
+            ? null
+            : ([...owners.values()].at(-1) ?? null)
+        )
         return
       }
-      const remaining = MIN_VISIBLE_MS - (performance.now() - (startedAt ?? 0))
+      clearTimeout(appearanceTimer)
+      appearanceTimer = undefined
+      // A timer firing is not evidence that React committed the indicator.
+      if (shownAt === null) publish(true, null)
+      const remaining =
+        shownAt === null ? 0 : MIN_VISIBLE_MS - (performance.now() - shownAt)
       // Defer even an expired deadline so a same-commit handoff shares the clock.
-      timer = setTimeout(finish, Math.max(0, remaining))
+      finishTimer = setTimeout(finish, Math.max(0, remaining))
+    },
+    presented() {
+      if (owners.size > 0 && snapshot.presentation !== null) {
+        shownAt ??= performance.now()
+      }
     },
     resume() {
       disposed = false
     },
     dispose() {
       disposed = true
-      clearTimeout(timer)
+      clearTimeout(appearanceTimer)
+      clearTimeout(finishTimer)
+      owners.clear()
+      startedAt = null
+      shownAt = null
+      snapshot = idleSnapshot
     },
   }
 }
@@ -69,10 +108,8 @@ function createLoadingController() {
 const LoadingContext = createContext<ReturnType<
   typeof createLoadingController
 > | null>(null)
-const serverSnapshot = () => null
-const subscribeHydration = () => () => {}
-const clientHydrated = () => true
-const serverHydrated = () => false
+const serverSnapshot = () => idleSnapshot
+const subscribeWithoutProvider = () => () => {}
 
 export function PageLoadingProvider({ children }: { children: ReactNode }) {
   const [controller] = useState(createLoadingController)
@@ -89,15 +126,20 @@ export function PageLoadingProvider({ children }: { children: ReactNode }) {
   )
 }
 
+/** Includes the blank delay and retained presentation, not only active owners. */
+export function usePageLoadingActive() {
+  const controller = useContext(LoadingContext)
+  return useSyncExternalStore(
+    controller?.subscribe ?? subscribeWithoutProvider,
+    controller ? () => controller.getSnapshot().busy : () => false,
+    () => false
+  )
+}
+
 /** Register only full-page loading; network activity and inline indicators stay independent. */
 export function usePageLoadingPresentation(view: ReactNode) {
   const controller = useContext(LoadingContext)
   const id = useMemo(() => Symbol('page-loading'), [])
-  const hydrated = useSyncExternalStore(
-    subscribeHydration,
-    clientHydrated,
-    serverHydrated
-  )
 
   useLayoutEffect(() => {
     if (!controller || view === null) return
@@ -105,7 +147,7 @@ export function usePageLoadingPresentation(view: ReactNode) {
     return () => controller.hide(id)
   }, [controller, id, view])
 
-  return controller !== null && view !== null && hydrated
+  return controller !== null && view !== null
 }
 
 export function PageLoadingViewport({
@@ -134,18 +176,22 @@ function LoadingViewport({
   children: ReactNode
   className: string
 }) {
-  const presentation = useSyncExternalStore(
+  const { busy, presentation } = useSyncExternalStore(
     controller.subscribe,
     controller.getSnapshot,
     serverSnapshot
   )
-  const busy = presentation !== null
+
+  useLayoutEffect(() => {
+    if (presentation !== null) controller.presented()
+  }, [controller, presentation])
 
   return (
     <div className={`relative min-h-0 flex-1 overflow-hidden ${className}`}>
       <div
         className={`h-full overflow-y-auto ${busy ? 'invisible' : ''}`}
         inert={busy}
+        aria-busy={busy}
         aria-hidden={busy || undefined}
       >
         {children}

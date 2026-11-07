@@ -186,7 +186,15 @@ navigation.
 
 Client state is split across auth, config, freemium, language, loading, progress, and theme stores.
 The loading store uses a request counter and completion state; API calls through `apiFetch` participate
-automatically.
+automatically. Page and section presentation, timing, and coordination with the top activity bar are
+owned by `architecture-frontend.instructions.md` (Page loading). Network activity alone never grants
+access or determines whether a page's data is ready.
+
+The language selector distinguishes an initial lookup, a failed lookup with Retry, and a successful
+lookup without an active language. Language-management loading stays within its content section.
+The current-usage panel in Settings also distinguishes pending, failed, and successful quota reads;
+a failure exits the placeholder and offers Retry. Obsolete responses cannot publish data or finish
+a newer load.
 
 The shared config store caches a successful `/api/config` response. Network, HTTP, and JSON parsing
 failures preserve the current values without marking the configuration as loaded, allowing the next
@@ -286,6 +294,12 @@ feature limit is nonzero.
 
 The first message can create its conversation. Prompt history uses at most the latest 30 messages.
 Voice conversations share the conversation list and are distinguished by source.
+
+Conversation-list and message-history reads have explicit local loading and recoverable error states.
+A failed history read does not represent an empty conversation. Only the current request may publish
+messages or release its loading state; selecting another conversation, starting a new chat, changing
+language/session, or unmounting invalidates previous reads. A delayed initial list cannot replace a
+newer user selection. Streaming response presentation remains separate from history loading.
 
 The chat Next.js route preserves SSE streaming. Backend events are JSON frames for conversation ID,
 visible token, memory confirmation, response reset, completion, and errors. `response_reset` requires

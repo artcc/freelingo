@@ -83,6 +83,16 @@ describe('reviews API client', () => {
     expect(mockApiFetch.mock.calls[0][0]).toContain('target_language=es-ES')
   })
 
+  it('passes an optional cancellation signal to admin review reads', async () => {
+    const controller = new AbortController()
+    mockApiFetch.mockResolvedValueOnce(jsonResponse({ items: [], total: 0 }))
+    await fetchAdminReviews({}, controller.signal)
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      expect.stringContaining('/api/admin/reviews?'),
+      { signal: controller.signal }
+    )
+  })
+
   it('updates approval and deletes reviews', async () => {
     mockApiFetch
       .mockResolvedValueOnce(jsonResponse({ id: 2 }))

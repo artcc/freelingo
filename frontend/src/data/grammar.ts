@@ -54,25 +54,33 @@ export interface GrammarNativeHelp {
 }
 
 export async function getGrammarTopics(
-  targetLanguage: string = 'en-GB'
+  targetLanguage: string = 'en-GB',
+  signal?: AbortSignal
 ): Promise<GrammarTopic[]> {
+  const requestSignal = signal
+    ? AbortSignal.any([signal, AbortSignal.timeout(20_000)])
+    : AbortSignal.timeout(20_000)
   const res = await apiFetch(
-    `/api/grammar?language=${encodeURIComponent(targetLanguage)}`
+    `/api/grammar?language=${encodeURIComponent(targetLanguage)}`,
+    { signal: requestSignal }
   )
-  if (!res.ok) return []
+  if (!res.ok) throw new Error('Could not load grammar topics')
   const data = await res.json()
+  requestSignal.throwIfAborted()
   return data.topics ?? []
 }
 
 export async function getGrammarNativeHelp(
   slug: string,
-  targetLanguage: string = 'en-GB'
+  targetLanguage: string = 'en-GB',
+  signal?: AbortSignal
 ): Promise<GrammarNativeHelp | null> {
   const res = await apiFetch(
     `/api/grammar/${encodeURIComponent(slug)}/native-help?language=${encodeURIComponent(targetLanguage)}`,
-    { method: 'POST' }
+    { method: 'POST', signal }
   )
   if (!res.ok) return null
   const data = await res.json()
+  signal?.throwIfAborted()
   return data.native_help ?? null
 }

@@ -2,9 +2,11 @@
 
 import { useEffect, useState, useRef, useMemo } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useLanguageStore } from '@/store/language'
+import { useAuthStore } from '@/store/auth'
 import { getLanguageByCode } from '@/lib/target-languages'
 import { trackBrowserEvent } from '@/lib/analytics'
 
@@ -19,17 +21,26 @@ export default function LanguageSwitcher() {
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
   const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
   const switchLanguage = useLanguageStore((s) => s.switchLanguage)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
 
   const [open, setOpen] = useState(false)
   const [toast, setToast] = useState(false)
   const [toastMsg, setToastMsg] = useState('')
   const [switchFailed, setSwitchFailed] = useState(false)
-  const [recovering, setRecovering] = useState(false)
+  const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>(
+    'loading'
+  )
+  const [attempt, setAttempt] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    fetchLanguages()
-  }, [fetchLanguages])
+    const controller = new AbortController()
+    setLoadState('loading')
+    void fetchLanguages(controller.signal).then((ok) => {
+      if (!controller.signal.aborted) setLoadState(ok ? 'ready' : 'error')
+    })
+    return () => controller.abort()
+  }, [fetchLanguages, attempt, sessionVersion])
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -70,27 +81,30 @@ export default function LanguageSwitcher() {
 
   const skeleton = useMemo(
     () => (
-      <div className="flex animate-pulse items-center gap-2 px-5 py-2.5">
+      <div
+        role="status"
+        aria-label={tCommon('loading')}
+        className="flex animate-pulse items-center gap-2 px-5 py-2.5 motion-reduce:animate-none"
+      >
         <div className="bg-fl-border h-3.5 w-5 rounded-sm" />
         <div className="bg-fl-border h-3 w-20 rounded" />
       </div>
     ),
-    []
+    [tCommon]
   )
 
-  if (switchFailed && needsRefresh) {
+  if (
+    (switchFailed && needsRefresh) ||
+    (loadState === 'error' && (!activeLanguage || needsRefresh))
+  ) {
     return (
       <div className="space-y-2 px-5 py-2.5">
         <p role="alert" className="text-fl-error-fg text-xs">
           {tCommon('errorMessage')}
         </p>
         <button
-          disabled={recovering || isSwitching}
-          onClick={async () => {
-            setRecovering(true)
-            await fetchLanguages()
-            setRecovering(false)
-          }}
+          disabled={loadState === 'loading' || isSwitching}
+          onClick={() => setAttempt((value) => value + 1)}
           className="text-fl-muted-2 hover:text-fl-fg text-xs disabled:opacity-50"
         >
           {tCommon('retry')}
@@ -100,7 +114,15 @@ export default function LanguageSwitcher() {
   }
 
   if (!activeLanguage) {
-    return skeleton
+    if (loadState === 'loading') return skeleton
+    return (
+      <Link
+        href="/settings/languages"
+        className="text-fl-muted-2 hover:text-fl-fg block px-5 py-2.5 text-xs"
+      >
+        {tLang(userLanguages.length === 0 ? 'noLanguages' : 'selectLanguage')}
+      </Link>
+    )
   }
 
   const multiple = userLanguages.length > 1
@@ -109,7 +131,7 @@ export default function LanguageSwitcher() {
     <div ref={ref} className="relative w-full">
       {toast && (
         <div className="pointer-events-none fixed inset-x-0 top-16 z-50 flex justify-center">
-          <div className="animate-in fade-in slide-in-from-top-2 border-fl-border bg-fl-surface text-fl-muted-1 pointer-events-auto border px-4 py-2 font-mono text-xs tracking-widest uppercase shadow-lg">
+          <div className="animate-in fade-in slide-in-from-top-2 border-fl-border bg-fl-surface text-fl-muted-1 pointer-events-auto border px-4 py-2 font-mono text-xs tracking-widest uppercase shadow-lg motion-reduce:animate-none">
             {toastMsg}
           </div>
         </div>

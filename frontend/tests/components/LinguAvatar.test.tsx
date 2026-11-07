@@ -107,7 +107,7 @@ describe('Lingu loading fallback', () => {
     expect(onReady).toHaveBeenCalledTimes(1)
   })
 
-  it('releases the route loading slot before the avatar is ready without clearing other activity', () => {
+  it('uses a lightweight route spinner and releases only its own activity slot', () => {
     useLoadingStore.setState({ count: 2, complete: false })
     const { unmount } = render(
       <StrictMode>
@@ -117,7 +117,11 @@ describe('Lingu loading fallback', () => {
 
     expect(screen.getByRole('status', { name: 'loading' })).toBeInTheDocument()
     expect(screen.getByText('loading')).toBeVisible()
-    expect(screen.getByTestId('scene')).toBeInTheDocument()
+    expect(screen.queryByTestId('scene')).not.toBeInTheDocument()
+    expect(scene.props).toBeNull()
+    expect(screen.getByRole('status').querySelector('svg')).toHaveClass(
+      'motion-safe:animate-spin'
+    )
     expect(useLoadingStore.getState().count).toBe(3)
 
     unmount()

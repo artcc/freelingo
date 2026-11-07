@@ -192,7 +192,7 @@ async function showCheckout(component: string) {
     await screen.findByText('trialNoChargeTrialUsed')
     return { ...view, button: 'trialCtaMonthlyTrialUsed', error: 'trialError' }
   }
-  landingState.mockResolvedValueOnce({ subscribed: false, trialUsed: false })
+  landingState.mockResolvedValue({ subscribed: false, trialUsed: false })
   const view = render(
     <PricingSection
       allowRegistration
@@ -301,6 +301,10 @@ describe.each(['onboarding', 'landing'])(
         expect(useAuthStore.getState().user?.subscription_status).toBe('none')
         if (invalidation === 'session')
           expect(useAuthStore.getState().user?.id).toBe(2)
+        if (invalidation === 'session' && component === 'landing') {
+          const buttons = await screen.findAllByText(view.button)
+          expect(buttons[0].closest('button')).not.toBeDisabled()
+        }
         expect(push).not.toHaveBeenCalled()
         expect(window.location.assign).not.toHaveBeenCalled()
         expect(screen.queryByText(view.error)).toBeNull()

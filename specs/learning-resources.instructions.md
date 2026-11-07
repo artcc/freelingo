@@ -179,10 +179,22 @@ The index groups by CEFR level and searches title, summary, and category. Catego
 returned data. Detail currently loads the full collection and locates the slug locally rather than
 calling the single-topic endpoint.
 
+Grammar and Phrasebook catalogue clients reject unsuccessful HTTP responses rather than returning
+empty collections. Their pages and the Vocabulary index distinguish pending, failed, and successful
+empty reads, and offer retry after failure. Catalogue loads resolve the current language context and
+discard obsolete responses and completion callbacks on context changes or unmount. Read-only
+catalogue requests use a bounded client wait independently of native-help generation.
+
 Detail renders explanation, structure, rules, examples, mistakes, and related links. Example
 translations returned by the API are not displayed. A1/A2 native help opens and generates on load;
 B1-C2 generates when opened. Grammar pages do not provide TTS, flashcard creation, or automatic
 current-slug chat context. Lesson `grammar_refs` provide the implemented cross-link.
+
+Native help automatically starts at most once per open resource context until it succeeds or fails.
+Failure leaves a manual retry action instead of starting another automatic request. Help belongs to
+its topic, target/native languages, and authentication session; replacing that context cancels and
+invalidates pending help, including late errors and loading completion. A rejected provisional
+language switch preserves the existing help or manual retry state when its context is unchanged.
 
 ## Vocabulary hub
 
@@ -243,8 +255,10 @@ display phrases directly rather than through expansion controls. Each phrase has
 copy buttons; clicking text itself does not copy.
 
 A1/A2 help panels begin open but generation still requires button action. B1-C2 begins closed. Help
-state can survive an active-language change when category IDs are reused. Phrasebook does not create
-flashcards.
+belongs to its category, target/native languages, and authentication session. Context replacement
+cancels pending help and discards its state even when category IDs are reused. A provisional language
+switch that fails without changing context preserves existing help and errors. Phrasebook does not
+create flashcards.
 
 ## Progress and competencies
 

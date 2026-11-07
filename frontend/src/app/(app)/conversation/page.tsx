@@ -174,6 +174,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
     practice?.cefrLevel ?? null
   )
   const [planReady, setPlanReady] = useState(!!practice)
+  const [planLanguage, setPlanLanguage] = useState<string | undefined>()
   const [voiceTrial, setVoiceTrial] = useState<{
     token: string
     durationSeconds: number
@@ -189,6 +190,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
 
   useEffect(() => {
     if (practice) return
+    const controller = new AbortController()
     const raw = sessionStorage.getItem('voice_context')
     if (raw) {
       sessionStorage.removeItem('voice_context')
@@ -252,18 +254,29 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
       }
     }
     setPlanReady(false)
-    apiFetch('/api/study-plan/today')
+    setCefrLevel(null)
+    apiFetch('/api/study-plan/today', { signal: controller.signal })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data?.cefr_level) setCefrLevel(data.cefr_level)
+        if (!controller.signal.aborted && data?.cefr_level) {
+          setCefrLevel(data.cefr_level)
+        }
       })
       .catch(() => {
         /* sin plan — usa default 1500ms */
       })
-      .finally(() => setPlanReady(true))
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setPlanLanguage(activeLanguage?.code)
+          setPlanReady(true)
+        }
+      })
+    return () => controller.abort()
   }, [activeLanguage?.code, practice])
 
-  if (!planReady) return null
+  if (!practice && (!planReady || planLanguage !== activeLanguage?.code)) {
+    return <ConversationLoading />
+  }
 
   return (
     <MaintenanceGate>

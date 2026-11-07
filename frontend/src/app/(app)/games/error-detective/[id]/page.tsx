@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { PageLoading } from '@/components/ui/page-loading'
 import {
   gameRequest,
   GameRequestError,
@@ -194,11 +195,11 @@ export default function DetectiveSessionPage() {
           </button>
         </div>
       )}
-      {!session && !error && <p role="status">{common('loading')}</p>}
+      {!session && !error && (
+        <PageLoading fullScreen={false} label={common('loading')} />
+      )}
       {session?.status === 'generating' && !error && (
-        <p role="status" className="text-fl-muted-2">
-          {t('generatingDescription')}
-        </p>
+        <PageLoading fullScreen={false} label={t('generatingDescription')} />
       )}
       {session?.status === 'failed' && (
         <div role="alert" className="space-y-4">

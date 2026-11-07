@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.5] - 2026-11-07
+
+### Changed
+
+- Page loading uses lightweight indicators with delayed appearance and a shared minimum visible duration. Exercise preparation uses static Lingu artwork, keeping loading independent of the 3D model and its animation startup.
+- The top loading bar retains its appearance and coordinates with full-page loading. Section updates and landing subscription checks keep their feedback within the affected content.
+- The landing shows a text-free spinner while Lingu and the surrounding language greetings prepare to appear together.
+- Lesson completion explains that progress is being saved and the next lesson prepared while the existing full-page loading indicator is visible.
+
+### Fixed
+
+- Vocabulary, chat history, usage limits, and language selection distinguish pending requests, empty results, and recoverable failures instead of showing false empty states or indefinite placeholders.
+- Resource and list loading discards obsolete responses, avoids duplicate filter requests, and preserves current loading state when requests overlap. Grammar help stops automatic retries after a failure and offers an explicit retry.
+- Voice conversation shows a loading state while preparing its plan context before the conversation module is available.
+
 ## [1.12.0] - 2026-11-06
 
 ### Added

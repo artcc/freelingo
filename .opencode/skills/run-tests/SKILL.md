@@ -30,7 +30,9 @@ missing tools implicitly with `npx`. Run all commands below from the repository 
 ./scripts/local.sh backend python -m pytest -v
 ```
 
-Use a command timeout of at least 600 seconds for the full backend suite; the current run takes about 4 minutes and can exceed shorter 120-second tool defaults.
+Use a command timeout of 900 seconds (15 minutes) for the full backend suite. The growing suite can
+exceed 10 minutes; do not rely on shorter tool defaults. If it reaches this limit, report the
+interruption before retrying with a longer timeout.
 
 Options:
 
