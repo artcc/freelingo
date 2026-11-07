@@ -820,7 +820,7 @@
     "feedback": "Feedback",
     "corrections": "Correzioni",
     "completeLesson": "Completa lezione",
-    "completing": "Completamento...",
+    "completing": "Salvataggio dei progressi e preparazione della lezione successiva...",
     "relatedGrammar": "Grammatica correlata",
     "explanation": "Spiegazione",
     "exercises": "Esercizi",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Capito",
     "entry1": {
       "label": "Nuove lingue: polacco, portoghese del Brasile, russo, neerlandese e svedese",

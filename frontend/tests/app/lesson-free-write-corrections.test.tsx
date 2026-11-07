@@ -18,7 +18,8 @@ vi.mock('next/link', () => ({
   ),
 }))
 vi.mock('next-intl', () => ({
-  useTranslations: () => Object.assign((key: string) => key, { rich: (key: string) => key }),
+  useTranslations: () =>
+    Object.assign((key: string) => key, { rich: (key: string) => key }),
   useLocale: () => 'en',
 }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
@@ -71,7 +72,9 @@ vi.mock('@/components/ui/WordTooltip', () => ({
     dismissTooltip: vi.fn(),
   }),
 }))
-vi.mock('@/components/ui/page-loading', () => ({ PageLoading: () => null }))
+vi.mock('@/components/ui/page-loading', () => ({
+  PageLoading: ({ label }: { label: string }) => <p role="status">{label}</p>,
+}))
 vi.mock('@/components/reviews/ReviewPrompt', () => ({
   ReviewPrompt: () => null,
   getReviewPromptDismissal: () => ({ count: 0, lastDismissedAt: null }),
@@ -220,7 +223,9 @@ describe('LessonPage free-write corrections', () => {
   it('offers voice practice when reviewing a completed lesson', async () => {
     mockApi(lessonDetail({ isCompleted: true }))
     await renderLesson()
-    expect(await screen.findByRole('button', { name: 'action' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('button', { name: 'action' })
+    ).toBeInTheDocument()
   })
 
   it('does not offer lesson practice before completion', async () => {
@@ -235,14 +240,57 @@ describe('LessonPage free-write corrections', () => {
     mocks.apiFetch.mockImplementation((url: string) => {
       if (url === '/api/lessons/1') return Promise.resolve(jsonResponse(detail))
       if (url === '/api/lessons/1/complete') {
-        return Promise.resolve(jsonResponse({ ...detail.lesson, is_completed: true }))
+        return Promise.resolve(
+          jsonResponse({ ...detail.lesson, is_completed: true })
+        )
       }
       return Promise.resolve(new Response(null, { status: 404 }))
     })
     await renderLesson()
-    fireEvent.click(await screen.findByRole('button', { name: 'completeLesson' }))
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'completeLesson' })
+    )
     await screen.findByText('lessonDone')
     expect(screen.getByRole('button', { name: 'action' })).toBeInTheDocument()
+  })
+
+  it('shows an informative loading state until the next lesson is prepared', async () => {
+    const detail = lessonDetail({ exercise: { user_answer: ANSWER, score: 1 } })
+    let todayCalls = 0
+    let resolveToday!: (value: Response) => void
+    mocks.apiFetch.mockImplementation((url: string) => {
+      if (url === '/api/lessons/1') return Promise.resolve(jsonResponse(detail))
+      if (url === '/api/lessons/1/complete') {
+        return Promise.resolve(
+          jsonResponse({ ...detail.lesson, is_completed: true })
+        )
+      }
+      if (url === '/api/study-plan/today') {
+        todayCalls += 1
+        if (todayCalls > 1) {
+          return new Promise<Response>((resolve) => {
+            resolveToday = resolve
+          })
+        }
+      }
+      return Promise.resolve(new Response(null, { status: 404 }))
+    })
+    await renderLesson()
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'completeLesson' })
+    )
+
+    expect(await screen.findByRole('status')).toHaveTextContent('completing')
+    expect(screen.queryByText('lessonDone')).toBeNull()
+    expect(todayCalls).toBe(2)
+
+    await act(async () => {
+      resolveToday(
+        jsonResponse({ progress_day: 1, total_days: 2, lessons: [] })
+      )
+    })
+    expect(await screen.findByText('lessonDone')).toBeInTheDocument()
+    expect(screen.queryByRole('status')).toBeNull()
   })
 
   it('renders inline annotations, the corrections list and the amber state after evaluation', async () => {

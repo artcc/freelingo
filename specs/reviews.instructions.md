@@ -185,6 +185,13 @@ Administrators can approve, unapprove, and delete with confirmation. After mutat
 the effective page so filters and page bounds remain valid. Backend authorization protects every
 administrative request.
 
+Initial queue loading and subsequent refreshes stay inside the queue, leaving its header and filters
+visible. Same-query refreshes retain existing rows while the current read is pending; a new query
+clears obsolete rows. Filter changes reset
+pagination as part of the same update; each request owns its result, error, and completion, so older
+responses cannot overwrite newer filter results or release a newer loading state. Unmount and session
+replacement invalidate pending reads.
+
 ## Landing carousel
 
 The server-rendered landing requests `/api/reviews/public?limit=50` and

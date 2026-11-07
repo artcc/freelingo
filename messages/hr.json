@@ -820,7 +820,7 @@
     "feedback": "Povratne informacije",
     "corrections": "Ispravci",
     "completeLesson": "Dovrši lekciju",
-    "completing": "Dovršavanje...",
+    "completing": "Spremanje tvog napretka i priprema sljedeće lekcije...",
     "relatedGrammar": "Povezana gramatika",
     "explanation": "Objašnjenje",
     "exercises": "Zadaci",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Razumijem",
     "entry1": {
       "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",

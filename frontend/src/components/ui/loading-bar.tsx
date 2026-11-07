@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLoadingStore } from '@/store/loading'
+import { usePageLoadingActive } from './page-loading-boundary'
 
-const MIN_VISIBLE_MS = 600
-const COMPLETE_DURATION_MS = 400
+const APPEAR_DELAY_MS = 200
+const MIN_VISIBLE_MS = 300
+const COMPLETE_DURATION_MS = 150
 
 type Phase = 'hidden' | 'loading' | 'completing'
 
@@ -14,35 +16,73 @@ export function LoadingBar() {
   const count = useLoadingStore((s) => s.count)
   const complete = useLoadingStore((s) => s.complete)
   const finishComplete = useLoadingStore((s) => s.finishComplete)
+  const fullPageActive = usePageLoadingActive()
+  const pending = count > 0
 
   const [phase, setPhase] = useState<Phase>('hidden')
-  const visibleSince = useRef(0)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const startedAt = useRef<number | null>(null)
+  const visibleSince = useRef<number | null>(null)
 
-  useEffect(() => {
-    if (count > 0) {
-      // New request started — show loading immediately, cancel any pending complete
-      if (timerRef.current) clearTimeout(timerRef.current)
-      visibleSince.current = Date.now()
-      setPhase('loading')
+  useLayoutEffect(() => {
+    if (phase === 'loading' && pending && !fullPageActive) {
+      visibleSince.current ??= performance.now()
+    }
+  }, [phase, pending, fullPageActive])
+
+  useLayoutEffect(() => {
+    if (fullPageActive) {
+      startedAt.current = null
+      visibleSince.current = null
+      setPhase('hidden')
+      if (!pending && complete) finishComplete()
       return
     }
 
-    if (complete && phase === 'loading') {
-      // All requests finished — wait minimum visible time, then exit
-      const elapsed = Date.now() - visibleSince.current
-      const remaining = Math.max(0, MIN_VISIBLE_MS - elapsed)
-      timerRef.current = setTimeout(() => {
-        setPhase('completing')
-      }, remaining)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    if (pending) {
+      if (phase === 'hidden') {
+        startedAt.current ??= performance.now()
+        timer = setTimeout(
+          () => {
+            setPhase('loading')
+          },
+          Math.max(0, APPEAR_DELAY_MS - (performance.now() - startedAt.current))
+        )
+      } else if (phase === 'completing') {
+        // A handoff during exit belongs to the already-visible cycle.
+        setPhase('loading')
+      }
+    } else if (phase === 'loading') {
+      if (visibleSince.current === null) {
+        // Activity can finish after the reveal timer but before its first commit.
+        startedAt.current = null
+        setPhase('hidden')
+        if (complete) finishComplete()
+        return
+      }
+      const remaining = Math.max(
+        0,
+        MIN_VISIBLE_MS - (performance.now() - visibleSince.current)
+      )
+      timer = setTimeout(() => setPhase('completing'), remaining)
+    } else if (phase === 'completing') {
+      // Completion also works when reduced motion disables CSS animations.
+      timer = setTimeout(() => {
+        startedAt.current = null
+        visibleSince.current = null
+        setPhase('hidden')
+        finishComplete()
+      }, COMPLETE_DURATION_MS)
+    } else {
+      startedAt.current = null
+      visibleSince.current = null
+      if (complete) finishComplete()
     }
 
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-    }
-  }, [count, complete, phase])
+    return () => clearTimeout(timer)
+  }, [pending, complete, phase, fullPageActive, finishComplete])
 
-  if (phase === 'hidden') return null
+  if (fullPageActive || phase === 'hidden') return null
 
   return (
     <div
@@ -57,15 +97,6 @@ export function LoadingBar() {
             : 'animate-loading-bar'
         }`}
         style={{ width: '100%' }}
-        onAnimationEnd={(e) => {
-          if (
-            phase === 'completing' &&
-            e.nativeEvent.animationName === 'loading-bar-complete'
-          ) {
-            setPhase('hidden')
-            finishComplete()
-          }
-        }}
       />
       <style>{`
         @keyframes loading-bar {
@@ -82,6 +113,12 @@ export function LoadingBar() {
         }
         .animate-loading-bar-complete {
           animation: loading-bar-complete ${COMPLETE_DURATION_MS}ms ease-out forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-loading-bar,
+          .animate-loading-bar-complete {
+            animation: none;
+          }
         }
       `}</style>
     </div>

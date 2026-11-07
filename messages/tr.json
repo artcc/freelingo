@@ -820,7 +820,7 @@
     "feedback": "Geri bildirim",
     "corrections": "Düzeltmeler",
     "completeLesson": "Dersi Tamamla",
-    "completing": "Tamamlanıyor...",
+    "completing": "İlerlemeniz kaydediliyor ve sonraki ders hazırlanıyor...",
     "relatedGrammar": "İlgili Dil Bilgisi",
     "explanation": "Açıklama",
     "exercises": "Alıştırmalar",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Anladım",
     "entry1": {
       "label": "Yeni diller: Lehçe, Brezilya Portekizcesi, Rusça, Felemenkçe ve İsveççe",

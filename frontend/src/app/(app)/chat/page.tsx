@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useEffectEvent, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
@@ -48,6 +48,12 @@ interface ChatSseEvent {
 }
 
 export default function ChatPage() {
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const languageCode = useLanguageStore((s) => s.activeLanguage?.code)
+  return <ChatContent key={`${sessionVersion}:${languageCode ?? 'en-GB'}`} />
+}
+
+function ChatContent() {
   const t = useTranslations('chat')
   const tCommon = useTranslations('common')
   const tLang = useTranslations('targetLanguages')
@@ -75,6 +81,16 @@ export default function ChatPage() {
   const [loadingConvs, setLoadingConvs] = useState(true)
   const [convLoadError, setConvLoadError] = useState(false)
   const [loadingMsgs, setLoadingMsgs] = useState(false)
+  const [msgLoadError, setMsgLoadError] = useState(false)
+  const [awaitingInitialSelection, setAwaitingInitialSelection] = useState(true)
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+  const mounted = useRef(false)
+  const listController = useRef<AbortController | null>(null)
+  const messageController = useRef<AbortController | null>(null)
+  const streamController = useRef<AbortController | null>(null)
+  const deleteController = useRef<AbortController | null>(null)
+  const selectionVersion = useRef(0)
+  const selectedId = useRef<number | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [deletePending, setDeletePending] = useState<number | null>(null)
   const {
@@ -130,71 +146,109 @@ export default function ChatPage() {
     }
   }, [sending])
 
-  const loadConversations = useCallback(async () => {
+  async function loadConversations(autoSelect = false) {
+    listController.current?.abort()
+    const controller = new AbortController()
+    listController.current = controller
+    const signal = AbortSignal.any([
+      controller.signal,
+      AbortSignal.timeout(20_000),
+    ])
+    const selection = selectionVersion.current
+    setLoadingConvs(true)
+    setConvLoadError(false)
     try {
-      const res = await apiFetch('/api/chat/conversations')
-      if (res.ok) {
-        const data: Conversation[] = await res.json()
-        setConversations(data)
-        return data
+      const res = await apiFetch('/api/chat/conversations', { signal })
+      if (!res.ok) throw new Error()
+      const data: Conversation[] = await res.json()
+      signal.throwIfAborted()
+      if (listController.current !== controller) return null
+      setConversations(data)
+      if (autoSelect && selectionVersion.current === selection) {
+        setAwaitingInitialSelection(false)
+        if (data.length > 0) void selectConversation(data[0].id)
       }
+      return data
     } catch {
-      /* ignore */
-    }
-    return null
-  }, [])
-
-  // Load conversations on mount, auto-select the most recent
-  useEffect(() => {
-    async function init() {
-      setConvLoadError(false)
-      setLoadingConvs(true)
-      const data = await loadConversations()
-      if (data === null) {
-        setConvLoadError(true)
-        setLoadingConvs(false)
-        return
-      }
-      if (data.length > 0) {
-        selectConversation(data[0].id)
-      } else {
-        setActiveId(null)
-        setMessages([])
-      }
-      setLoadingConvs(false)
-    }
-    init()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeLanguage?.code])
-
-  async function selectConversation(id: number) {
-    dismissTooltip()
-    if (window.innerWidth < 768) setSidebarOpen(false)
-    setActiveId(id)
-    setMessages([])
-    setError('')
-    setLoadingMsgs(true)
-    try {
-      const res = await apiFetch(`/api/chat/conversations/${id}/messages`)
-      if (res.ok) {
-        const data = await res.json()
-        setMessages(data.messages || [])
-      }
-    } catch {
-      /* ignore */
+      if (listController.current === controller) setConvLoadError(true)
+      return null
     } finally {
-      setLoadingMsgs(false)
+      if (listController.current === controller) setLoadingConvs(false)
     }
   }
 
-  async function newChat() {
+  const initialize = useEffectEvent(() => {
+    void loadConversations(true)
+  })
+  useEffect(() => {
+    mounted.current = true
+    initialize()
+    return () => {
+      mounted.current = false
+      listController.current?.abort()
+      listController.current = null
+      messageController.current?.abort()
+      messageController.current = null
+      streamController.current?.abort()
+      streamController.current = null
+      deleteController.current?.abort()
+      deleteController.current = null
+    }
+  }, [])
+
+  async function selectConversation(id: number) {
+    if (streamController.current || deletingId === id) return
+    ++selectionVersion.current
+    messageController.current?.abort()
+    const controller = new AbortController()
+    messageController.current = controller
+    const signal = AbortSignal.any([
+      controller.signal,
+      AbortSignal.timeout(20_000),
+    ])
+    dismissTooltip()
+    if (window.innerWidth < 768) setSidebarOpen(false)
+    setActiveId(id)
+    selectedId.current = id
+    setAwaitingInitialSelection(false)
+    setMessages([])
+    setError('')
+    setMsgLoadError(false)
+    setLoadingMsgs(true)
+    try {
+      const res = await apiFetch(`/api/chat/conversations/${id}/messages`, {
+        signal,
+      })
+      if (!res.ok) throw new Error()
+      const data = await res.json()
+      signal.throwIfAborted()
+      if (messageController.current !== controller) return
+      setMessages(data.messages || [])
+    } catch {
+      if (messageController.current === controller) setMsgLoadError(true)
+    } finally {
+      if (messageController.current === controller) setLoadingMsgs(false)
+    }
+  }
+
+  function newChat() {
+    if (streamController.current) return
+    ++selectionVersion.current
+    messageController.current?.abort()
+    messageController.current = null
     // Don't create — let the first message auto-create the conversation
     dismissTooltip()
     setActiveId(null)
+    selectedId.current = null
+    setAwaitingInitialSelection(false)
+    setLoadingMsgs(false)
+    setMsgLoadError(false)
     setMessages([])
     setError('')
     if (window.innerWidth < 768) setSidebarOpen(false)
-    requestAnimationFrame(() => inputRef.current?.focus())
+    requestAnimationFrame(() => {
+      if (mounted.current) inputRef.current?.focus()
+    })
   }
 
   function continueInVoice() {
@@ -215,25 +269,79 @@ export default function ChatPage() {
   }
 
   async function deleteConversation(id: number) {
-    await apiFetch(`/api/chat/conversations/${id}`, { method: 'DELETE' })
-    setDeletePending(null)
-    const updated = await loadConversations()
-    if (updated === null) {
-      setConvLoadError(true)
-      return
+    if (deleteController.current || streamController.current) return
+    const controller = new AbortController()
+    deleteController.current = controller
+    setDeletingId(id)
+    setError('')
+    // Invalidate list snapshots that may still include the deleted conversation.
+    listController.current?.abort()
+    listController.current = null
+    setLoadingConvs(false)
+    if (selectedId.current === id) {
+      messageController.current?.abort()
+      messageController.current = null
+      setLoadingMsgs(false)
     }
-    if (activeId === id) {
-      if (updated.length > 0) {
-        selectConversation(updated[0].id)
-      } else {
-        setActiveId(null)
-        setMessages([])
+    const selection = ++selectionVersion.current
+    try {
+      const res = await apiFetch(`/api/chat/conversations/${id}`, {
+        method: 'DELETE',
+        signal: controller.signal,
+      })
+      if (!res.ok) throw new Error()
+      if (deleteController.current !== controller) return
+      setDeletePending(null)
+      setConversations((prev) => prev.filter((item) => item.id !== id))
+      const replaceActive =
+        selectionVersion.current === selection && selectedId.current === id
+      if (replaceActive) {
+        newChat()
+      }
+      const replacementSelection = selectionVersion.current
+      const updated = await loadConversations()
+      if (deleteController.current !== controller) return
+      if (
+        replaceActive &&
+        updated &&
+        selectionVersion.current === replacementSelection &&
+        updated.length > 0
+      ) {
+        void selectConversation(updated[0].id)
+      }
+    } catch {
+      if (
+        deleteController.current === controller &&
+        selectionVersion.current === selection
+      ) {
+        setError(tCommon('error'))
+        if (selectedId.current === id) setMsgLoadError(true)
+      }
+    } finally {
+      if (deleteController.current === controller) {
+        deleteController.current = null
+        setDeletingId(null)
       }
     }
   }
 
+  const historyPending =
+    loadingMsgs ||
+    (loadingConvs && awaitingInitialSelection) ||
+    (deletingId !== null && deletingId === activeId)
+  const historyFailed =
+    msgLoadError || (convLoadError && awaitingInitialSelection)
+  const historyUnavailable =
+    loadingMsgs ||
+    msgLoadError ||
+    awaitingInitialSelection ||
+    deletingId !== null
+
   async function sendMessage() {
-    if (!input.trim() || sending) return
+    if (!input.trim() || streamController.current || historyUnavailable) return
+    const controller = new AbortController()
+    streamController.current = controller
+    ++selectionVersion.current
     const text = input.trim()
     setInput('')
     setError('')
@@ -243,14 +351,17 @@ export default function ChatPage() {
     try {
       const res = await apiFetch('/api/chat', {
         method: 'POST',
+        signal: controller.signal,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, conversation_id: activeId }),
       })
+      if (streamController.current !== controller) return
 
       if (!res.ok) {
         let message = t('errorMessage')
         if (res.status === 429) {
           const data = await res.json().catch(() => ({}))
+          if (streamController.current !== controller) return
           if (
             typeof data.detail === 'string' &&
             data.detail.startsWith('Monthly token limit reached')
@@ -268,9 +379,11 @@ export default function ChatPage() {
 
       if (!res.body) throw new Error(t('errorMessage'))
       for await (const data of readSseData<ChatSseEvent>(res.body)) {
+        if (streamController.current !== controller) return
         if (data.conversation_id && !activeId) {
           setActiveId(data.conversation_id)
-          loadConversations().then((list) => list && setConversations(list))
+          selectedId.current = data.conversation_id
+          void loadConversations()
         }
         if (data.response_reset) {
           dismissTooltip()
@@ -305,16 +418,19 @@ export default function ChatPage() {
           ) {
             decrementFreemium('chat_remaining')
           }
-          loadConversations().then((list) => list && setConversations(list))
+          void loadConversations()
         }
         if (data.memory_updated) showMemoryToast()
       }
       if (!streamCompleted) throw new Error(t('errorMessage'))
     } catch {
-      setError(t('errorMessage'))
+      if (streamController.current === controller) setError(t('errorMessage'))
     } finally {
-      setSending(false)
-      inputRef.current?.focus()
+      if (streamController.current === controller) {
+        streamController.current = null
+        setSending(false)
+        inputRef.current?.focus()
+      }
     }
   }
 
@@ -342,6 +458,7 @@ export default function ChatPage() {
               </span>
               <button
                 onClick={newChat}
+                disabled={sending}
                 className="text-fl-label text-fl-muted-1 hover:text-fl-fg font-mono tracking-widest uppercase transition-colors"
                 title={t('newConversation')}
               >
@@ -349,74 +466,67 @@ export default function ChatPage() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto">
-              {loadingConvs ? (
+              {loadingConvs && (
                 <PageLoading fullScreen={false} className="block px-4 py-4" />
-              ) : convLoadError ? (
+              )}
+              {convLoadError && (
                 <div className="flex flex-col items-center gap-3 px-4 py-6">
                   <p className="text-fl-error font-mono text-xs">
                     {tCommon('error')}
                   </p>
                   <button
-                    onClick={() => {
-                      setConvLoadError(false)
-                      setLoadingConvs(true)
-                      loadConversations()
-                        .then((data) => {
-                          if (data === null) {
-                            setConvLoadError(true)
-                          } else if (data.length > 0) {
-                            selectConversation(data[0].id)
-                          }
-                        })
-                        .finally(() => setLoadingConvs(false))
-                    }}
+                    onClick={() => loadConversations(awaitingInitialSelection)}
+                    disabled={loadingConvs}
                     className="border-fl-border text-fl-label text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 border px-4 py-2 font-mono tracking-widest uppercase transition-colors"
                   >
                     {tCommon('retry')}
                   </button>
                 </div>
-              ) : conversations.length === 0 ? (
-                <p className="text-fl-label text-fl-muted-4 px-4 py-4 font-mono">
-                  {t('noConversation')}
-                </p>
-              ) : (
-                conversations.map((c) => (
-                  <div
-                    key={c.id}
-                    onClick={() => selectConversation(c.id)}
-                    className={`group border-fl-surface-2 flex cursor-pointer items-center justify-between border-b px-4 py-3 transition-colors ${
-                      activeId === c.id
-                        ? 'bg-fl-surface-2 border-l-fl-fg border-l-2'
-                        : 'hover:bg-fl-surface border-l-2 border-l-transparent'
-                    }`}
-                  >
-                    <span
-                      className={`text-fl-label truncate pr-1 font-mono leading-tight ${activeId === c.id ? 'text-fl-fg' : 'text-fl-muted-1'}`}
-                    >
-                      {c.source === 'voice' && (
-                        <span
-                          className="text-fl-muted-3 mr-1.5"
-                          title={t('voiceSession')}
-                        >
-                          🎤
-                        </span>
-                      )}
-                      {c.title}
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setDeletePending(c.id)
-                      }}
-                      className="text-fl-label text-fl-error-fg hover:text-fl-error shrink-0 font-mono opacity-0 transition-all group-hover:opacity-100"
-                      title={t('deleteConfirm')}
-                      aria-label={t('deleteConfirm')}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))
               )}
+              {conversations.length === 0
+                ? !loadingConvs &&
+                  !convLoadError && (
+                    <p className="text-fl-label text-fl-muted-4 px-4 py-4 font-mono">
+                      {t('noConversation')}
+                    </p>
+                  )
+                : conversations.map((c) => (
+                    <div
+                      key={c.id}
+                      onClick={() => selectConversation(c.id)}
+                      className={`group border-fl-surface-2 flex cursor-pointer items-center justify-between border-b px-4 py-3 transition-colors ${
+                        activeId === c.id
+                          ? 'bg-fl-surface-2 border-l-fl-fg border-l-2'
+                          : 'hover:bg-fl-surface border-l-2 border-l-transparent'
+                      }`}
+                    >
+                      <span
+                        className={`text-fl-label truncate pr-1 font-mono leading-tight ${activeId === c.id ? 'text-fl-fg' : 'text-fl-muted-1'}`}
+                      >
+                        {c.source === 'voice' && (
+                          <span
+                            className="text-fl-muted-3 mr-1.5"
+                            title={t('voiceSession')}
+                          >
+                            🎤
+                          </span>
+                        )}
+                        {c.title}
+                      </span>
+                      <button
+                        disabled={sending || deletingId !== null}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setDeletePending(c.id)
+                        }}
+                        className="text-fl-label text-fl-error-fg hover:text-fl-error shrink-0 font-mono opacity-0 transition-all group-hover:opacity-100"
+                        title={t('deleteConfirm')}
+                        aria-label={t('deleteConfirm')}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
             </div>
           </aside>
         )}
@@ -455,7 +565,7 @@ export default function ChatPage() {
                   </span>
                 )}
               </div>
-            ) : messages.length > 0 ? (
+            ) : messages.length > 0 && !historyUnavailable ? (
               <button
                 onClick={continueInVoice}
                 className="text-fl-hint text-fl-muted-2 hover:text-fl-fg ml-auto font-mono tracking-widest uppercase transition-colors"
@@ -469,9 +579,28 @@ export default function ChatPage() {
 
           {/* Messages */}
           <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-4">
-            {loadingMsgs ? (
+            {historyPending ? (
               <div className="flex h-full items-center justify-center">
                 <PageLoading fullScreen={false} />
+              </div>
+            ) : historyFailed ? (
+              <div
+                role="alert"
+                className="flex h-full flex-col items-center justify-center gap-3"
+              >
+                <p className="text-fl-error font-mono text-xs">
+                  {tCommon('error')}
+                </p>
+                <button
+                  onClick={() =>
+                    activeId !== null
+                      ? selectConversation(activeId)
+                      : loadConversations(true)
+                  }
+                  className="border-fl-border text-fl-muted-1 hover:text-fl-fg border px-4 py-2 font-mono text-xs"
+                >
+                  {tCommon('retry')}
+                </button>
               </div>
             ) : messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
@@ -596,13 +725,13 @@ export default function ChatPage() {
                     onKeyDown={(e) =>
                       e.key === 'Enter' && !e.shiftKey && sendMessage()
                     }
-                    disabled={sending || loadingMsgs}
+                    disabled={sending || historyUnavailable}
                     placeholder={t('placeholder')}
                     className="bg-fl-surface border-fl-border text-fl-fg placeholder:text-fl-border-2 focus:border-fl-border-2 flex-1 border px-4 py-3 font-mono text-base transition-colors focus:outline-none disabled:opacity-40"
                   />
                   <button
                     onClick={sendMessage}
-                    disabled={sending || !input.trim() || loadingMsgs}
+                    disabled={sending || !input.trim() || historyUnavailable}
                     className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-5 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-30"
                   >
                     {sending ? '...' : t('send')}
@@ -622,6 +751,7 @@ export default function ChatPage() {
           message={t('deleteMessage')}
           confirmLabel={t('deleteConfirm')}
           danger
+          confirming={deletingId !== null}
           onConfirm={() =>
             deletePending !== null && deleteConversation(deletePending)
           }

@@ -70,7 +70,8 @@ export async function fetchPublicReviews(limit = 50): Promise<ReviewPublic[]> {
 }
 
 export async function fetchAdminReviews(
-  filters: AdminReviewFilters = {}
+  filters: AdminReviewFilters = {},
+  signal?: AbortSignal
 ): Promise<PaginatedReviewsResponse> {
   const params = new URLSearchParams({
     order: filters.order ?? 'desc',
@@ -86,7 +87,9 @@ export async function fetchAdminReviews(
   if (filters.targetLanguage) {
     params.set('target_language', filters.targetLanguage)
   }
-  const res = await apiFetch(`/api/admin/reviews?${params.toString()}`)
+  const res = await apiFetch(`/api/admin/reviews?${params.toString()}`, {
+    signal,
+  })
   return parseOrThrow<PaginatedReviewsResponse>(res)
 }
 

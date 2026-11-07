@@ -44,37 +44,51 @@ export interface PhrasebookNativeHelp {
 }
 
 export async function getPhrasebookCategories(
-  targetLanguage: string = 'en-GB'
+  targetLanguage: string = 'en-GB',
+  signal?: AbortSignal
 ): Promise<PhrasebookCategory[]> {
+  const requestSignal = signal
+    ? AbortSignal.any([signal, AbortSignal.timeout(20_000)])
+    : AbortSignal.timeout(20_000)
   const res = await apiFetch(
-    `/api/phrasebook?language=${encodeURIComponent(targetLanguage)}`
+    `/api/phrasebook?language=${encodeURIComponent(targetLanguage)}`,
+    { signal: requestSignal }
   )
-  if (!res.ok) return []
+  if (!res.ok) throw new Error('Could not load phrasebook categories')
   const data = await res.json()
+  requestSignal.throwIfAborted()
   return data.categories ?? []
 }
 
 export async function getPhrasebookByLevel(
   level: string,
-  targetLanguage: string = 'en-GB'
+  targetLanguage: string = 'en-GB',
+  signal?: AbortSignal
 ): Promise<PhrasebookCategory[]> {
+  const requestSignal = signal
+    ? AbortSignal.any([signal, AbortSignal.timeout(20_000)])
+    : AbortSignal.timeout(20_000)
   const res = await apiFetch(
-    `/api/phrasebook/level/${encodeURIComponent(level)}?language=${encodeURIComponent(targetLanguage)}`
+    `/api/phrasebook/level/${encodeURIComponent(level)}?language=${encodeURIComponent(targetLanguage)}`,
+    { signal: requestSignal }
   )
-  if (!res.ok) return []
+  if (!res.ok) throw new Error('Could not load phrasebook categories')
   const data = await res.json()
+  requestSignal.throwIfAborted()
   return data.categories ?? []
 }
 
 export async function getPhrasebookNativeHelp(
   categoryId: string,
-  targetLanguage: string = 'en-GB'
+  targetLanguage: string = 'en-GB',
+  signal?: AbortSignal
 ): Promise<PhrasebookNativeHelp | null> {
   const res = await apiFetch(
     `/api/phrasebook/${encodeURIComponent(categoryId)}/native-help?language=${encodeURIComponent(targetLanguage)}`,
-    { method: 'POST' }
+    { method: 'POST', signal }
   )
   if (!res.ok) return null
   const data = await res.json()
+  signal?.throwIfAborted()
   return data.native_help ?? null
 }

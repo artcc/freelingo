@@ -820,7 +820,7 @@
     "feedback": "Feedback",
     "corrections": "Corrections",
     "completeLesson": "Complete Lesson",
-    "completing": "Completing...",
+    "completing": "Saving your progress and preparing the next lesson...",
     "relatedGrammar": "Related Grammar",
     "explanation": "Explanation",
     "exercises": "Exercises",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Got it",
     "entry1": {
       "label": "New languages: Polish, Brazilian Portuguese, Russian, Dutch, and Swedish",

@@ -254,9 +254,11 @@ Every response-body publication, error, navigation, and loading completion is
 discarded after unmount or context/session replacement. Plan-load failures offer retry; a successful
 null plan remains distinct from a request failure.
 
-The lesson page disables answer/regeneration/completion controls for completed lessons. After first
-completion it refreshes `/today`, can show day-complete state, refreshes freemium status, and may trigger
-the review prompt when the next returned lesson belongs to another unit or the plan is exhausted.
+The lesson page disables answer/regeneration/completion controls for completed lessons. While completion
+and its follow-up refreshes are pending, the shared full-page loading explains that progress is being
+saved and the next lesson prepared. After first completion it refreshes `/today`, can show day-complete
+state, refreshes freemium status, and may trigger the review prompt when the next returned lesson belongs
+to another unit or the plan is exhausted.
 
 My Plan loads its curriculum separately, distinguishing loading, failure, and a successful empty
 collection. The unit count is unset during loading or failure. HTTP/transport errors show a localized

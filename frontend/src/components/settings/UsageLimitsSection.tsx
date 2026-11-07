@@ -3,20 +3,46 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import { PageLoading } from '@/components/ui/page-loading'
+import { useAuthStore } from '@/store/auth'
 import { type QuotaStatus } from '@/types/api'
 
 export function UsageLimitsSection({ title }: { title?: string } = {}) {
   const t = useTranslations('settings')
+  const tCommon = useTranslations('common')
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const [quota, setQuota] = useState<QuotaStatus | null>(null)
+  const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
-    apiFetch('/api/auth/quota')
-      .then((r) => r.json())
-      .then((data: QuotaStatus) => setQuota(data))
-      .catch(() => {
-        /* silently ignore — section stays in skeleton state */
+    const controller = new AbortController()
+    setQuota(null)
+    setFailed(false)
+    const timeout = setTimeout(() => {
+      controller.abort()
+      setFailed(true)
+    }, 20_000)
+    apiFetch('/api/auth/quota', { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error('Quota unavailable')
+        return res.json()
       })
-  }, [])
+      .then((data: QuotaStatus) => {
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+          throw new Error('Invalid quota response')
+        }
+        if (!controller.signal.aborted) setQuota(data)
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setFailed(true)
+      })
+      .finally(() => clearTimeout(timeout))
+    return () => {
+      clearTimeout(timeout)
+      controller.abort()
+    }
+  }, [attempt, sessionVersion])
 
   return (
     <div className="border-fl-border bg-fl-surface border p-6">
@@ -26,12 +52,21 @@ export function UsageLimitsSection({ title }: { title?: string } = {}) {
           {title ?? t('sectionUsageLimits')}
         </span>
       </div>
-      {quota === null ? (
-        <div className="animate-pulse space-y-3">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="bg-fl-surface-2 h-4" />
-          ))}
+      {failed ? (
+        <div className="space-y-3">
+          <p role="alert" className="text-fl-error-fg text-sm">
+            {tCommon('errorMessage')}
+          </p>
+          <button
+            type="button"
+            className="text-fl-accent text-sm underline"
+            onClick={() => setAttempt((value) => value + 1)}
+          >
+            {tCommon('retry')}
+          </button>
         </div>
+      ) : quota === null ? (
+        <PageLoading fullScreen={false} />
       ) : (
         <div className="space-y-3">
           {[
@@ -82,7 +117,7 @@ export function UsageLimitsSection({ title }: { title?: string } = {}) {
                   <>
                     <div className="bg-fl-surface-2 h-1 flex-1 overflow-hidden">
                       <div
-                        className={`h-full transition-all ${exceeded ? 'bg-fl-error' : 'bg-fl-accent'}`}
+                        className={`h-full transition-all motion-reduce:transition-none ${exceeded ? 'bg-fl-error' : 'bg-fl-accent'}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>

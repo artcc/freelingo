@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { useLanguageStore } from '@/store/language'
+import { useAuthStore } from '@/store/auth'
 import {
   getLanguageByCode,
   TARGET_LANGUAGE_CATALOG,
@@ -29,6 +30,7 @@ export default function MyLanguagesPage() {
   const switchLanguage = useLanguageStore((s) => s.switchLanguage)
   const addLanguage = useLanguageStore((s) => s.addLanguage)
   const removeLanguage = useLanguageStore((s) => s.removeLanguage)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
 
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<UserLanguageInfo | null>(
@@ -38,16 +40,22 @@ export default function MyLanguagesPage() {
   const [switchingCode, setSwitchingCode] = useState<string | null>(null)
   const [toast, setToast] = useState('')
   const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
 
-  const load = useCallback(async () => {
-    setLoading(true)
-    await fetchLanguages()
-    setLoading(false)
-  }, [fetchLanguages])
+  const load = useCallback(() => setAttempt((value) => value + 1), [])
 
   useEffect(() => {
-    load()
-  }, [load])
+    const controller = new AbortController()
+    setLoading(true)
+    setFailed(false)
+    void fetchLanguages(controller.signal).then((ok) => {
+      if (controller.signal.aborted) return
+      setFailed(!ok)
+      setLoading(false)
+    })
+    return () => controller.abort()
+  }, [fetchLanguages, attempt, sessionVersion])
 
   function getLangInfo(code: string) {
     return getLanguageByCode(code)
@@ -108,7 +116,7 @@ export default function MyLanguagesPage() {
 
   return (
     <div className="mx-auto max-w-4xl p-6">
-      {needsRefresh && !switchingCode && (
+      {needsRefresh && !switchingCode && !failed && (
         <button
           onClick={load}
           disabled={loading}
@@ -120,7 +128,7 @@ export default function MyLanguagesPage() {
       {/* Toast */}
       {toast && (
         <div className="pointer-events-none fixed inset-x-0 top-16 z-50 flex justify-center">
-          <div className="animate-in fade-in slide-in-from-top-2 border-fl-border bg-fl-surface text-fl-muted-1 pointer-events-auto border px-4 py-2 font-mono text-xs tracking-widest uppercase shadow-lg">
+          <div className="animate-in fade-in slide-in-from-top-2 border-fl-border bg-fl-surface text-fl-muted-1 pointer-events-auto border px-4 py-2 font-mono text-xs tracking-widest uppercase shadow-lg motion-reduce:animate-none">
             {toast}
           </div>
         </div>
@@ -145,7 +153,7 @@ export default function MyLanguagesPage() {
         <h1 className="text-fl-fg font-mono text-xl font-bold tracking-widest uppercase">
           {t('myLanguages')}
         </h1>
-        {unusedCodes.length > 0 && (
+        {!loading && !failed && unusedCodes.length > 0 && (
           <button
             onClick={() => setAddModalOpen(true)}
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 px-4 py-2 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
@@ -157,7 +165,20 @@ export default function MyLanguagesPage() {
 
       {/* Language cards */}
       {loading ? (
-        <PageLoading />
+        <PageLoading fullScreen={false} />
+      ) : failed ? (
+        <div className="border-fl-border bg-fl-surface space-y-3 border p-6">
+          <p role="alert" className="text-fl-error-fg text-sm">
+            {tCommon('errorMessage')}
+          </p>
+          <button
+            type="button"
+            onClick={load}
+            className="text-fl-accent text-sm underline"
+          >
+            {tCommon('retry')}
+          </button>
+        </div>
       ) : userLanguages.length === 0 ? (
         <div className="border-fl-border bg-fl-surface border px-6 py-10 text-center">
           <p className="text-fl-muted-2 font-mono text-sm">

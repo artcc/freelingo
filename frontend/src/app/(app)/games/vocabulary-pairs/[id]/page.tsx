@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { PageLoading } from '@/components/ui/page-loading'
 import { gameRequest, GameRequestError } from '@/lib/detective'
 import type { VocabularyPairsSession } from '@/lib/vocabulary-pairs'
 import { useLanguageStore } from '@/store/language'
@@ -159,9 +160,14 @@ export default function VocabularyPairsSessionPage() {
           </button>
         </div>
       )}
-      {!session && !error && <p role="status">{common('loading')}</p>}
+      {!session && !error && (
+        <PageLoading fullScreen={false} label={common('loading')} />
+      )}
       {session?.status === 'generating' && !error && (
-        <p role="status">{shared('generatingDescription')}</p>
+        <PageLoading
+          fullScreen={false}
+          label={shared('generatingDescription')}
+        />
       )}
       {session?.status === 'failed' && (
         <p role="alert">{shared('failedDescription')}</p>

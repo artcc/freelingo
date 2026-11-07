@@ -473,6 +473,10 @@ export default function LessonPage() {
     )
   }
 
+  if (completingLesson) {
+    return <PageLoading label={t('completing')} />
+  }
+
   if (completed) {
     return (
       <>

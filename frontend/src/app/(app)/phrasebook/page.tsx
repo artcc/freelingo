@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import {
   getPhrasebookCategories,
@@ -10,7 +10,7 @@ import {
   type Register,
 } from '@/data/phrasebook'
 import type { CEFRLevel } from '@/data/types'
-import { useLanguageStore } from '@/store/language'
+import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { PageLoading } from '@/components/ui/page-loading'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
@@ -40,6 +40,7 @@ function CategoryCard({
   const tCommon = useTranslations('common')
   const tLang = useTranslations('languages')
   const user = useAuthStore((s) => s.user)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
   const nativeLanguageName = user?.native_language
     ? tLang(user.native_language)
     : ''
@@ -51,6 +52,8 @@ function CategoryCard({
   )
   const [loadingNativeHelp, setLoadingNativeHelp] = useState(false)
   const [nativeHelpError, setNativeHelpError] = useState(false)
+  const helpRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => helpRequest.current?.abort(), [])
   const phrases = cat.phrases.filter((p) => {
     const matchesRegister =
       registerFilter === 'All' || p.register === registerFilter
@@ -62,20 +65,44 @@ function CategoryCard({
   if (!phrases.length) return null
 
   async function generateNativeHelp() {
-    if (loadingNativeHelp) return
+    if (helpRequest.current || useLanguageStore.getState().isSwitching) return
+    const controller = new AbortController()
+    helpRequest.current = controller
+    const sessionVersion = useAuthStore.getState().sessionVersion
+    const invalidationVersion = useLanguageStore.getState().invalidationVersion
+    const isCurrent = () => {
+      const auth = useAuthStore.getState()
+      const context = useLanguageStore.getState()
+      return (
+        !controller.signal.aborted &&
+        auth.sessionVersion === sessionVersion &&
+        auth.user?.native_language === user?.native_language &&
+        context.activeLanguage?.code === language &&
+        context.invalidationVersion === invalidationVersion &&
+        !context.needsRefresh
+      )
+    }
     setLoadingNativeHelp(true)
     setNativeHelpError(false)
     try {
-      const help = await getPhrasebookNativeHelp(cat.id, language)
+      const help = await getPhrasebookNativeHelp(
+        cat.id,
+        language,
+        controller.signal
+      )
+      if (!isCurrent()) return
       if (help) {
         setNativeHelp(help)
       } else {
         setNativeHelpError(true)
       }
     } catch {
-      setNativeHelpError(true)
+      if (isCurrent()) setNativeHelpError(true)
     } finally {
-      setLoadingNativeHelp(false)
+      if (isCurrent()) {
+        helpRequest.current = null
+        setLoadingNativeHelp(false)
+      }
     }
   }
 
@@ -255,11 +282,13 @@ function CategoryCard({
                 >
                   {t(phrase.register)}
                 </span>
-                <AudioPlayer
-                  text={phrase.text}
-                  size="sm"
-                  audioUrl={`/api/phrasebook/audio/${encodeURIComponent(cat.id)}/${cat.phrases.indexOf(phrase)}?language=${encodeURIComponent(language)}`}
-                />
+                {!isSwitching && (
+                  <AudioPlayer
+                    text={phrase.text}
+                    size="sm"
+                    audioUrl={`/api/phrasebook/audio/${encodeURIComponent(cat.id)}/${cat.phrases.indexOf(phrase)}?language=${encodeURIComponent(language)}`}
+                  />
+                )}
                 <CopyButton text={phrase.text} />
               </div>
             </div>
@@ -309,30 +338,78 @@ export default function PhrasebookPage() {
   const t = useTranslations('phrasebook')
   const tCommon = useTranslations('common')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
+  const invalidationVersion = useLanguageStore((s) => s.invalidationVersion)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const nativeLanguage = useAuthStore((s) => s.user?.native_language)
+  const languageCode = activeLanguage?.code
+  const scope = `${sessionVersion}:${invalidationVersion}:${languageCode}:${needsRefresh}`
   const [categories, setCategories] = useState<PhrasebookCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
+  const [loadedScope, setLoadedScope] = useState<string | null>(null)
+  const [attempt, setAttempt] = useState(0)
   const [activeLevel, setActiveLevel] = useState<CEFRLevel | 'All'>('All')
   const [activeRegister, setActiveRegister] = useState<Register | 'All'>('All')
   const [search, setSearch] = useState('')
 
-  const fetchCategories = useCallback(async (lang: string) => {
+  useEffect(() => {
+    const controller = new AbortController()
+    const isCurrent = () => {
+      const state = useLanguageStore.getState()
+      return (
+        !controller.signal.aborted &&
+        useAuthStore.getState().sessionVersion === sessionVersion &&
+        state.invalidationVersion === invalidationVersion &&
+        state.activeLanguage?.code === languageCode &&
+        state.needsRefresh === needsRefresh
+      )
+    }
     setLoading(true)
     setLoadError(false)
-    try {
-      const data = await getPhrasebookCategories(lang)
-      setCategories(data)
-    } catch {
-      setLoadError(true)
-      setCategories([])
-    } finally {
-      setLoading(false)
+    setCategories([])
+    async function load() {
+      try {
+        if (useLanguageStore.getState().isSwitching) {
+          await waitForLanguageSwitch(controller.signal)
+        }
+        if (!isCurrent()) return
+        if (needsRefresh || !languageCode) {
+          const ok = await useLanguageStore
+            .getState()
+            .fetchLanguages(controller.signal)
+          if (!isCurrent()) return
+          const state = useLanguageStore.getState()
+          if (!ok || state.needsRefresh || !state.activeLanguage) {
+            throw new Error('Could not resolve active language')
+          }
+          return
+        }
+        const data = await getPhrasebookCategories(
+          languageCode,
+          controller.signal
+        )
+        if (isCurrent()) setCategories(data)
+      } catch {
+        if (isCurrent()) setLoadError(true)
+      } finally {
+        if (isCurrent()) {
+          setLoadedScope(scope)
+          setLoading(false)
+        }
+      }
     }
-  }, [])
-
-  useEffect(() => {
-    fetchCategories(activeLanguage?.code ?? 'en-GB')
-  }, [activeLanguage?.code, fetchCategories])
+    void load()
+    return () => controller.abort()
+  }, [
+    languageCode,
+    needsRefresh,
+    invalidationVersion,
+    sessionVersion,
+    scope,
+    attempt,
+  ])
 
   const filteredCategories = useMemo(() => {
     return categories.filter((cat) => {
@@ -351,16 +428,21 @@ export default function PhrasebookPage() {
 
   const totalPhrases = categories.reduce((acc, c) => acc + c.phrases.length, 0)
 
-  if (loading) {
+  if (loading || loadedScope !== scope || (loadError && isSwitching)) {
     return <PageLoading />
   }
 
   if (loadError) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
-        <p className="text-fl-muted-2 font-mono text-sm">{tCommon('error')}</p>
+        <p role="alert" className="text-fl-muted-2 font-mono text-sm">
+          {tCommon('error')}
+        </p>
         <button
-          onClick={() => fetchCategories(activeLanguage?.code ?? 'en-GB')}
+          onClick={() => {
+            setLoading(true)
+            setAttempt((value) => value + 1)
+          }}
           className="text-fl-accent font-mono text-xs tracking-widest uppercase underline"
         >
           {tCommon('retry')}
@@ -372,7 +454,7 @@ export default function PhrasebookPage() {
   const hasActiveFilters =
     activeLevel !== 'All' || activeRegister !== 'All' || !!search
 
-  return (
+  const content = (
     <div className="mx-auto max-w-4xl space-y-8 p-6">
       <div className="border-fl-border bg-fl-surface border">
         <div className="border-fl-border flex items-center gap-2 border-b px-6 py-4">
@@ -464,11 +546,11 @@ export default function PhrasebookPage() {
             <div className="grid gap-4 md:grid-cols-2">
               {cats.map((cat) => (
                 <CategoryCard
-                  key={cat.id}
+                  key={`${scope}:${nativeLanguage}:${cat.id}`}
                   cat={cat}
                   registerFilter={activeRegister}
                   search={search}
-                  language={activeLanguage?.code ?? 'en-GB'}
+                  language={languageCode!}
                 />
               ))}
             </div>
@@ -496,5 +578,14 @@ export default function PhrasebookPage() {
         </div>
       )}
     </div>
+  )
+
+  return (
+    <>
+      {isSwitching && <PageLoading />}
+      <div hidden={isSwitching} inert={isSwitching}>
+        {content}
+      </div>
+    </>
   )
 }

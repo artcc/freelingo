@@ -820,7 +820,7 @@
     "feedback": "Feedback",
     "corrections": "Correções",
     "completeLesson": "Concluir aula",
-    "completing": "Concluindo...",
+    "completing": "Salvando seu progresso e preparando a próxima lição...",
     "relatedGrammar": "Gramática relacionada",
     "explanation": "Explicação",
     "exercises": "Exercícios",
@@ -1779,7 +1779,7 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.12.0",
+    "version": "v1.12.5",
     "cta": "Entendido",
     "entry1": {
       "label": "Novos idiomas: polaco, português do Brasil, russo, neerlandês e sueco",
