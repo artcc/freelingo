@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Page loading uses lightweight indicators with delayed appearance and a shared minimum visible duration. Exercise preparation uses static Lingu artwork, keeping loading independent of the 3D model and its animation startup.
 - The top loading bar retains its appearance and coordinates with full-page loading. Section updates and landing subscription checks keep their feedback within the affected content.
 - The landing shows a text-free spinner while Lingu and the surrounding language greetings prepare to appear together.
+- Lesson completion explains that progress is being saved and the next lesson prepared while the existing full-page loading indicator is visible.
 
 ### Fixed
 
