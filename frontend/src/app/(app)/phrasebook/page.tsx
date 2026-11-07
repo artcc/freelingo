@@ -40,6 +40,7 @@ function CategoryCard({
   const tCommon = useTranslations('common')
   const tLang = useTranslations('languages')
   const user = useAuthStore((s) => s.user)
+  const isSwitching = useLanguageStore((s) => s.isSwitching)
   const nativeLanguageName = user?.native_language
     ? tLang(user.native_language)
     : ''
@@ -281,11 +282,13 @@ function CategoryCard({
                 >
                   {t(phrase.register)}
                 </span>
-                <AudioPlayer
-                  text={phrase.text}
-                  size="sm"
-                  audioUrl={`/api/phrasebook/audio/${encodeURIComponent(cat.id)}/${cat.phrases.indexOf(phrase)}?language=${encodeURIComponent(language)}`}
-                />
+                {!isSwitching && (
+                  <AudioPlayer
+                    text={phrase.text}
+                    size="sm"
+                    audioUrl={`/api/phrasebook/audio/${encodeURIComponent(cat.id)}/${cat.phrases.indexOf(phrase)}?language=${encodeURIComponent(language)}`}
+                  />
+                )}
                 <CopyButton text={phrase.text} />
               </div>
             </div>

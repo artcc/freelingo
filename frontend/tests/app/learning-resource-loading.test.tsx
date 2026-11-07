@@ -16,7 +16,6 @@ vi.mock('next-intl', () => ({
 vi.mock('@/components/ui/page-loading', () => ({
   PageLoading: () => <p role="status">Loading resources</p>,
 }))
-vi.mock('@/components/ui/AudioPlayer', () => ({ AudioPlayer: () => null }))
 
 const originalFetchLanguages = useLanguageStore.getState().fetchLanguages
 
@@ -362,6 +361,110 @@ describe('phrasebook provisional language switching', () => {
       },
     })
   }
+
+  describe('audio during a language switch', () => {
+    let audio: {
+      play: ReturnType<typeof vi.fn>
+      pause: ReturnType<typeof vi.fn>
+      onended: (() => void) | null
+      onerror: (() => void) | null
+    }
+    let createAudio: ReturnType<typeof vi.fn>
+
+    beforeEach(() => {
+      audio = {
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        onended: null,
+        onerror: null,
+      }
+      createAudio = vi.fn(function () {
+        return audio
+      })
+      vi.stubGlobal('Audio', createAudio)
+      vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:phrasebook-audio')
+      vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      cleanup()
+      vi.unstubAllGlobals()
+    })
+
+    it('stops playback immediately and preserves help when the switch is rejected', async () => {
+      useAuthStore.setState({ user: { id: 1, native_language: 'es' } as User })
+      api.mockImplementation((url: string) => {
+        if (url.includes('/audio/')) {
+          return Promise.resolve(new Response(new Blob(['audio'])))
+        }
+        if (url.includes('/native-help')) return Promise.resolve(helpResponse())
+        return Promise.resolve(Response.json(catalogs[2].body('Greetings')))
+      })
+      render(<PhrasebookPage />)
+      fireEvent.click(
+        await screen.findByRole('button', { name: 'common.nativeHelpShow' })
+      )
+      await screen.findByText('Preserved phrasebook help')
+      fireEvent.click(
+        screen.getByRole('button', { name: 'audioPlayer.ariaListen' })
+      )
+      await screen.findByRole('button', { name: 'audioPlayer.ariaStop' })
+      expect(audio.play).toHaveBeenCalledTimes(1)
+
+      act(() => useLanguageStore.setState({ isSwitching: true }))
+      expect(audio.pause).toHaveBeenCalledTimes(1)
+      expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:phrasebook-audio')
+      expect(
+        screen.queryByRole('button', { name: 'audioPlayer.ariaStop' })
+      ).toBeNull()
+
+      act(() => useLanguageStore.setState({ isSwitching: false }))
+      expect(screen.getByText('Preserved phrasebook help')).toBeVisible()
+      expect(
+        screen.getByRole('button', { name: 'audioPlayer.ariaListen' })
+      ).toBeVisible()
+      expect(audio.play).toHaveBeenCalledTimes(1)
+      expect(api).toHaveBeenCalledTimes(3)
+    })
+
+    it.each(['during switching', 'after rejection'])(
+      'cancels pending audio and ignores a late download %s',
+      async (completion) => {
+        const body = deferred<Blob>()
+        let signal: AbortSignal | undefined
+        api.mockImplementation((url: string, options: RequestInit) => {
+          if (url.includes('/audio/')) {
+            signal = options.signal as AbortSignal
+            return Promise.resolve({ ok: true, blob: () => body.promise })
+          }
+          return Promise.resolve(Response.json(catalogs[2].body('Greetings')))
+        })
+        render(<PhrasebookPage />)
+        const listen = await screen.findByRole('button', {
+          name: 'audioPlayer.ariaListen',
+        })
+        await act(async () => {
+          fireEvent.click(listen)
+        })
+        expect(signal?.aborted).toBe(false)
+        act(() => useLanguageStore.setState({ isSwitching: true }))
+        expect(signal?.aborted).toBe(true)
+        if (completion === 'after rejection') {
+          act(() => useLanguageStore.setState({ isSwitching: false }))
+        }
+        await act(async () => body.resolve(new Blob(['late audio'])))
+        expect(createAudio).not.toHaveBeenCalled()
+        expect(URL.createObjectURL).not.toHaveBeenCalled()
+        if (completion === 'during switching') {
+          act(() => useLanguageStore.setState({ isSwitching: false }))
+        }
+        expect(
+          screen.getByRole('button', { name: 'audioPlayer.ariaListen' })
+        ).toBeVisible()
+        expect(api).toHaveBeenCalledTimes(2)
+      }
+    )
+  })
 
   it('waits for an initial provisional switch before fetching its catalog', async () => {
     useLanguageStore.setState({ isSwitching: true })
