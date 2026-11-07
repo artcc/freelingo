@@ -38,6 +38,7 @@ SUPPORTED_LANGUAGES = {
 
 SUPPORTED_TARGET_LANGUAGES: set[str] = {
     "es-ES",
+    "ast-ES",
 }
 
 

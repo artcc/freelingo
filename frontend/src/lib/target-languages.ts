@@ -40,6 +40,7 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'en-US': LATIN_LANGUAGE_CAPABILITY,
   'en-GB': LATIN_LANGUAGE_CAPABILITY,
   'es-ES': LATIN_LANGUAGE_CAPABILITY,
+  'ast-ES': LATIN_LANGUAGE_CAPABILITY,
   'it-IT': LATIN_LANGUAGE_CAPABILITY,
   'pt-BR': LATIN_LANGUAGE_CAPABILITY,
   'pt-PT': LATIN_LANGUAGE_CAPABILITY,
@@ -90,6 +91,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     nameEn: 'Spanish',
     flagPath: '/flags/spain.jpg',
     iso639: 'es',
+  }),
+  withCapabilities({
+    code: 'ast-ES',
+    name: 'Asturianu',
+    nameEn: 'Asturian',
+    flagPath: '/flags/asturias.jpg',
+    iso639: 'ast',
   }),
 ]
 

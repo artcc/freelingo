@@ -14,6 +14,8 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic  # noqa
 _LANG_MODULES: dict[str, str] = {
     "es": "app.data.es.grammar",
     "es-ES": "app.data.es.grammar",
+    "ast": "app.data.ast.grammar",
+    "ast-ES": "app.data.ast.grammar",
 }
 
 _CACHE: dict[str, list[GrammarTopic]] = {}

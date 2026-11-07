@@ -14,6 +14,8 @@ from app.data._types import CEFRLevel, VocabularyEntry, VocabularySet  # noqa: F
 _LANG_MODULES: dict[str, str] = {
     "es": "app.data.es.vocabulary",
     "es-ES": "app.data.es.vocabulary",
+    "ast": "app.data.ast.vocabulary",
+    "ast-ES": "app.data.ast.vocabulary",
 }
 
 _CACHE: dict[str, list[VocabularySet]] = {}

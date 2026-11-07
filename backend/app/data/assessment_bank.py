@@ -14,6 +14,8 @@ from app.data._types import AssessmentQuestion  # noqa: F401
 _LANG_MODULES: dict[str, str] = {
     "es": "app.data.es.assessment_bank",
     "es-ES": "app.data.es.assessment_bank",
+    "ast": "app.data.ast.assessment_bank",
+    "ast-ES": "app.data.ast.assessment_bank",
 }
 
 _CACHE: dict[str, list[AssessmentQuestion]] = {}

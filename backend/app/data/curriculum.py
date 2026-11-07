@@ -30,6 +30,8 @@ _LESSON_TYPES: tuple[str, ...] = get_args(LessonType)
 _LANG_MODULES: dict[str, str] = {
     "es": "app.data.es.curriculum",
     "es-ES": "app.data.es.curriculum",
+    "ast": "app.data.ast.curriculum",
+    "ast-ES": "app.data.ast.curriculum",
 }
 
 _CACHE: dict[str, object] = {}
