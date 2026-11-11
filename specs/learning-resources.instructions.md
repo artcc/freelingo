@@ -248,12 +248,17 @@ romanization. The current page does not display romanization when supplied.
 - `GET /api/phrasebook/{category_id}`: authenticated, `60/minute`; unknown category returns `404`.
 - `POST /api/phrasebook/{category_id}/native-help`: authenticated, `10/minute`; uses shared cache.
 - `GET /api/phrasebook/audio/{category_id}/{phrase_index}`: authenticated, `30/minute`; returns
-  cached MP3, `404` for invalid category/index, or `503` without TTS.
+  cached WAV (`audio/wav`) for Gemini or MP3 (`audio/mpeg`) for local/OpenAI, `404` for invalid
+  category/index, or `503` without TTS. The `language` parameter defaults to `en-GB` and must be
+  an exact supported target-language code; invalid values return `400` before catalog lookup,
+  filesystem access, or synthesis.
 
 Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`. Instruction-capable OpenAI
-models use a synthesis hash covering text, language, model, voice, speed, format, and instructions;
-other providers/models retain a hash of language, category, index, and text. Generation writes a
-temporary file and replaces atomically. Responses use `Cache-Control: no-store`, and browser playback
+models use a synthesis hash covering text, language, model, voice, speed, format, and instructions.
+Gemini uses separate `.wav` files with a synthesis hash including provider, model, actual mapped
+voice, locale, style, text, and format. Local and legacy OpenAI models retain `.mp3` files with a hash
+of language, category, index, and text. Generation writes a temporary file and replaces atomically.
+Responses use `Cache-Control: no-store`, and browser playback
 bypasses its HTTP cache while retaining the backend disk cache. The endpoint passes the full target
 language to TTS for pronunciation guidance when supported by the configured model.
 

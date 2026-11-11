@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Slet konto",
     "sectionUsageLimits": "Forbrugsgrænser",
     "sectionVoice": "Stemme",
+    "voiceFemale": "Kvindelig",
+    "voiceMale": "Mandlig",
     "voiceHint": "Vælg Lingus stemme, og klik på afspil for at høre den.",
     "voicePlay": "Afspil",
     "voiceStop": "Stop",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Forstået",
     "entry1": {
       "label": "Forstå hvert svar bedre",
@@ -1815,14 +1817,18 @@
       "desc": "Hvis du ikke forstår noget under en stemmesamtale, kan du bede Lingu om hjælp. Lingu kan forklare det kort på dit modersmål og derefter fortsætte øvelsen på det sprog, du lærer."
     },
     "entry5": {
+      "label": "Mere naturlige og udtryksfulde stemmer",
+      "desc": "Nyd mere naturlige og udtryksfulde stemmer i dine lytteøvelser og samtaler med Lingu, så du får en tydeligere og mere behagelig lytteoplevelse."
+    },
+    "entry6": {
       "label": "Forbedringer af din studieplan",
       "desc": "Din plan viser nu dine fremskridt korrekt og giver dig mulighed for at fortsætte lektionerne og repetere de afsnit, du allerede har arbejdet med."
     },
-    "entry6": {
+    "entry7": {
       "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",
       "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
-    "entry7": {
+    "entry8": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

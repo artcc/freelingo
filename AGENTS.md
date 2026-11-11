@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.12.10**
+**Current version: 1.12.15**
 
 ## Project
 
@@ -78,9 +78,9 @@ Use the narrowest relevant spec first:
 
 ## Development environment
 
-- Docker is unavailable locally and the application is not deployed on this machine. Do not suggest local Docker commands or runtime checks.
-- Local validation is limited to backend tests/static checks and frontend lint/typecheck/unit tests. Deployment checks belong to the maintainer.
-- Local runtimes, dependencies and caches must stay inside the repository. Use `./scripts/bootstrap.sh` to install the exact toolchain from `scripts/toolchain.env`, and `./scripts/local.sh {root|backend|frontend} command` for commands. Do not use global Python/Node/npm, Homebrew installations, or bare `npx` for project work.
+- Local application development uses OrbStack or Colima with Docker CLI/Compose on macOS, `docker-compose.dev.yml`, and `run-dev.sh` with macOS Keychain credentials. See `DEVELOPMENT.md` for setup and `specs/docker.instructions.md` for container topology. Do not assume the runtime is installed or the stack is running; obtain explicit authorization before starting/rebuilding containers or running application checks.
+- Automated local validation uses backend tests/static checks and frontend lint/typecheck/unit tests without requiring containers or a running application. This complements the interactive Compose workflow. Deployment checks belong to the maintainer.
+- Host-side validation runtimes, dependencies and caches must stay inside the repository. Use `./scripts/bootstrap.sh` to install the exact toolchain from `scripts/toolchain.env`, and `./scripts/local.sh {root|backend|frontend} command` for host-side Python/Node commands. Do not use global Python/Node/npm, Homebrew installations, or bare `npx` for project work.
 - `.local/`, `.venv/` and `frontend/node_modules/` are generated and Git-ignored. Bootstrap reconstructs them; `--recreate` replaces an existing `.venv`. Python development tools and their indirect dependencies are pinned in `backend/requirements-dev.txt` and `backend/constraints-dev.txt`. Dependency installation belongs to bootstrap, not validation scripts.
 - Use the `run-tests` skill for requested targeted validation and the `pre-push` skill for final full validation.
 - Ask before running tests, builds, linters, typechecks, formatters, or other validation. Do not launch full suites automatically.

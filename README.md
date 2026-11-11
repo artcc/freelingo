@@ -7,7 +7,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)](#quick-start)
-![Version](https://img.shields.io/badge/version-1.12.10-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.12.15-brightgreen?style=flat-square)
 
 <img src="assets/logo_large.png" alt="FreeLingo — language learning with Lingu, your voice conversation partner" width="900" />
 
@@ -126,7 +126,7 @@ freelingo/
 - **Backend:** FastAPI, SQLAlchemy async, Alembic, Pydantic v2
 - **Data:** PostgreSQL 16 and Redis 7
 - **LLM:** Ollama, OpenAI, Anthropic, or DeepSeek
-- **Speech:** Kokoro-FastAPI or OpenAI TTS; faster-whisper or OpenAI Whisper
+- **Speech:** Kokoro-FastAPI, OpenAI, or Gemini TTS; faster-whisper or OpenAI Whisper
 - **Auth:** JWT access and refresh tokens with admin/user roles
 - **Deployment:** Docker Compose
 
@@ -139,12 +139,12 @@ Choose **[Docker Compose](#option-a--git-clone--docker-compose)** for a command-
 
 - Docker and Docker Compose; Git for the clone-based setup.
 - A supported cloud LLM API or [Ollama](https://ollama.com).
-- An NVIDIA GPU for the default local speech containers, or an OpenAI API key for cloud speech.
+- An NVIDIA GPU for the default local speech containers, or cloud speech credentials (OpenAI for STT; OpenAI or Gemini for TTS).
 - For production voice: HTTPS and reverse-proxy routing for `/ws/*`, as explained
   [below](#reverse-proxy-requirement-real-time-conversation).
 
 Choose your [speech providers](#configuring-tts--stt) before starting the stack. The default Compose
-file includes GPU containers for both local speech services; selecting OpenAI in `.env` does not
+file includes GPU containers for both local speech services; selecting a cloud provider in `.env` does not
 disable those containers automatically.
 
 ### Option A — Git clone + Docker Compose
@@ -200,8 +200,8 @@ disable this behavior.
 
 - **Language model:** `LLM_PROVIDER` selects `ollama`, `openai`, `anthropic`, or `deepseek`.
   The recommended Ollama model is `gemma4:e4b`; configure another through `.env`.
-- **Speech:** `TTS_PROVIDER` and `STT_PROVIDER` are independent. Each selects `local`
-  (Kokoro / faster-whisper) or `openai`. See [speech setup](#configuring-tts--stt).
+- **Speech:** `TTS_PROVIDER` selects `local` (Kokoro), `openai`, or `gemini`; `STT_PROVIDER`
+  independently selects `local` (faster-whisper) or `openai`. See [speech setup](#configuring-tts--stt).
 
 <details>
 <summary><strong>OpenAI and Anthropic model settings</strong></summary>
@@ -287,11 +287,12 @@ such as HTTPS or localhost; ordinary HTTP access through a server IP does not pr
 
 ## Configuring TTS & STT
 
-TTS and STT are required services. Each supports two providers selected independently via `.env`.
+TTS and STT are required services, selected independently via `.env`. Both default to local providers.
 
-- `TTS_PROVIDER=local` uses Kokoro-FastAPI; `TTS_PROVIDER=openai` uses OpenAI TTS.
+- `TTS_PROVIDER=local` uses Kokoro-FastAPI; `openai` uses OpenAI TTS; `gemini` uses Gemini TTS.
 - `STT_PROVIDER=local` uses faster-whisper; `STT_PROVIDER=openai` uses OpenAI Whisper.
 - `OPENAI_API_KEY` is required when either service uses OpenAI.
+- `GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`.
 
 ### Local speech
 
@@ -320,10 +321,14 @@ OPENAI_API_KEY=sk-...
 ```
 
 Remove the corresponding `kokoro` and/or `whisper` service blocks from your deployment Compose file
-when using OpenAI for those services; changing the provider variables alone does not remove their
+when using cloud providers for those services; changing the provider variables alone does not remove their
 GPU reservations.
 
-The services reuse `OPENAI_API_KEY` when OpenAI is also the LLM provider. See [.env.example](.env.example) for
+For Gemini TTS, select `TTS_PROVIDER=gemini` and set `GEMINI_API_KEY` on the backend. The default model
+is `gemini-3.8-flash-tts`; configurable female/male voices produce native WAV audio. STT remains an
+independent local or OpenAI choice. Settings stores the Gemini voice preference separately from OpenAI.
+
+OpenAI speech services reuse `OPENAI_API_KEY` when OpenAI is also the LLM provider. See [.env.example](.env.example) for
 available settings and [the speech-services specification](specs/speech-services.instructions.md) for
 provider contracts.
 

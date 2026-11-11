@@ -141,7 +141,9 @@ describe('registration availability', () => {
       screen.getByRole('button', { name: 'auth.register.submit' })
     ).toBeInTheDocument()
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
-    expect(fetch).toHaveBeenCalledWith('/api/config')
+    expect(fetch).toHaveBeenCalledWith('/api/config', {
+      signal: expect.any(AbortSignal),
+    })
   })
 
   it.each(['', 'invite='])(
@@ -182,8 +184,13 @@ describe('registration availability', () => {
 
   it('opens an unvalidated invite immediately even while config is unavailable', async () => {
     searchParams.set('invite', 'supplied-token')
-    vi.mocked(fetch).mockReturnValueOnce(new Promise(() => {}))
-    render(<RegisterPage />)
+    let resolveConfig!: (response: Response) => void
+    vi.mocked(fetch).mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveConfig = resolve
+      })
+    )
+    const { unmount } = render(<RegisterPage />)
     expect(
       screen.getByRole('button', { name: 'auth.register.submit' })
     ).toBeInTheDocument()
@@ -191,6 +198,11 @@ describe('registration availability', () => {
       screen.queryByText('auth.register.registrationClosed')
     ).not.toBeInTheDocument()
     expect(apiFetch).not.toHaveBeenCalled()
+    unmount()
+    await act(async () => {
+      resolveConfig(configResponse(false))
+      await useConfigStore.getState().load()
+    })
   })
 
   it.each([null, 'monthly', 'yearly'])(

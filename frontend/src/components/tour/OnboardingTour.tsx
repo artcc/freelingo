@@ -46,7 +46,6 @@ export default function OnboardingTour() {
   const [step, setStep] = useState(0)
   const [animation, setAnimation] = useState<LinguAnimation>('saludo')
   const [audioState, setAudioState] = useState<PlayerState>('idle')
-  const [voice, setVoice] = useState<string | null>(null)
   const visited = useRef(new Set([0]))
   const dialogRef = useRef<HTMLDialogElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -56,7 +55,6 @@ export default function OnboardingTour() {
   useEffect(() => {
     try {
       setVisible(!localStorage.getItem(TOUR_STORAGE_KEY))
-      setVoice(localStorage.getItem('tts_voice'))
     } catch {
       setVisible(true)
     }
@@ -204,9 +202,8 @@ export default function OnboardingTour() {
                 {t(`${current.id}.desc`)}
               </p>
               <AudioPlayer
-                key={`${locale}:${current.id}:${voice ?? ''}`}
+                key={`${locale}:${current.id}`}
                 text={t(`${current.id}.desc`)}
-                voice={voice ?? undefined}
                 audioUrl={audioUrl}
                 audioMethod="POST"
                 timeoutMs={75_000}

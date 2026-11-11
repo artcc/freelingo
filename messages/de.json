@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Konto löschen",
     "sectionUsageLimits": "Nutzungslimits",
     "sectionVoice": "Stimme",
+    "voiceFemale": "Weiblich",
+    "voiceMale": "Männlich",
     "voiceHint": "Wähle Lingus Stimme und klicke auf Abspielen, um sie zu hören.",
     "voicePlay": "Abspielen",
     "voiceStop": "Stopp",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Verstanden",
     "entry1": {
       "label": "Verstehe jede Antwort besser",
@@ -1815,14 +1817,18 @@
       "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
     },
     "entry5": {
+      "label": "Natürlichere und ausdrucksstärkere Stimmen",
+      "desc": "Genieße natürlichere und ausdrucksstärkere Stimmen in deinen Hörübungen und Gesprächen mit Lingu – für ein klareres und angenehmeres Hörerlebnis."
+    },
+    "entry6": {
       "label": "Verbesserungen an deinem Lernplan",
       "desc": "Dein Lernplan zeigt deinen Fortschritt jetzt korrekt an. Du kannst Lektionen fortsetzen und bereits bearbeitete Einheiten wiederholen."
     },
-    "entry6": {
+    "entry7": {
       "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
       "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
-    "entry7": {
+    "entry8": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

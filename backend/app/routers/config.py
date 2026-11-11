@@ -51,6 +51,7 @@ async def get_config(
         "freemium_trial_enabled": settings.FREEMIUM_TRIAL_ENABLED,
         "tts_provider": settings.TTS_PROVIDER,
         "openai_tts_voice": settings.OPENAI_TTS_VOICE,
+        "gemini_tts_voice": settings.GEMINI_TTS_VOICE,
         "maintenance_mode": maintenance_mode,
         "price_monthly": settings.PRICE_MONTHLY,
         "price_yearly": settings.PRICE_YEARLY,

@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ExerciseAudioPlayer } from '@/components/ui/exercise-audio-player'
 import { useAuthStore, type User } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 
 const apiFetch = vi.hoisted(() => vi.fn())
 vi.mock('@/lib/api', () => ({ apiFetch }))
@@ -45,7 +46,7 @@ class FakeAudio extends EventTarget {
 
 async function play() {
   await act(async () => {
-    fireEvent.click(screen.getByRole('button', { name: 'Play' }))
+    fireEvent.click(screen.getByRole('button', { name: 'listen' }))
   })
 }
 
@@ -57,7 +58,12 @@ function expectReleased(audio: FakeAudio, url: string) {
 }
 
 beforeEach(() => {
+  useConfigStore.setState(
+    { ...useConfigStore.getInitialState(), loaded: true },
+    true
+  )
   localStorage.removeItem('tts_voice')
+  localStorage.removeItem('gemini_tts_voice')
   audios = []
   playResults = []
   apiFetch.mockReset().mockImplementation(async () => response())
@@ -84,6 +90,113 @@ afterEach(() => {
 })
 
 describe('ExerciseAudioPlayer lifecycle', () => {
+  it('waits for config and plays the first TTS request with the Gemini preference', async () => {
+    useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
+    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    const pending = deferred<Response>()
+    const configFetch = vi.fn().mockReturnValueOnce(pending.promise)
+    vi.stubGlobal('fetch', configFetch)
+    render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ text: 'Bonjour', studyPlanId: 7 }}
+      />
+    )
+    await act(async () =>
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    )
+    expect(apiFetch).not.toHaveBeenCalled()
+    await act(async () =>
+      pending.resolve(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+    )
+    expect(configFetch).toHaveBeenCalledTimes(1)
+    expect(JSON.parse(apiFetch.mock.calls[0][1].body).voice).toBe('male')
+    expect(audios).toHaveLength(1)
+    expect(audios[0].play).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
+  })
+
+  it.each(['unmount', 'session', 'timeout', 'failure'])(
+    'does not synthesize after config %s',
+    async (outcome) => {
+      useConfigStore.setState({ loaded: false })
+      const pending = deferred<Response>()
+      vi.stubGlobal('fetch', vi.fn().mockReturnValueOnce(pending.promise))
+      if (outcome === 'timeout') vi.useFakeTimers()
+      const { unmount } = render(
+        <ExerciseAudioPlayer
+          exerciseId={42}
+          tts={{ text: 'Bonjour', studyPlanId: 7 }}
+        />
+      )
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+      )
+      if (outcome === 'unmount') unmount()
+      if (outcome === 'session')
+        act(() => useAuthStore.getState().startSession('second'))
+      if (outcome === 'timeout')
+        await act(async () => vi.advanceTimersByTimeAsync(90_000))
+      await act(async () =>
+        pending.resolve(
+          outcome === 'failure'
+            ? new Response('', { status: 503 })
+            : new Response(JSON.stringify({ tts_provider: 'gemini' }))
+        )
+      )
+      expect(apiFetch).not.toHaveBeenCalled()
+      expect(audios).toHaveLength(0)
+      if (outcome === 'failure' || outcome === 'timeout')
+        expect(screen.getByText('audioError')).toBeVisible()
+    }
+  )
+  it.each([
+    ['gemini', 'male'],
+    ['openai', 'nova'],
+  ])('uses the %s preference for plan-owned TTS', async (provider, voice) => {
+    useConfigStore.setState({ ttsProvider: provider })
+    localStorage.setItem('tts_voice', 'nova')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ text: 'Bonjour', studyPlanId: 7 }}
+      />
+    )
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    })
+    expect(apiFetch).toHaveBeenCalledWith(
+      '/api/tts',
+      expect.objectContaining({
+        body: JSON.stringify({ text: 'Bonjour', study_plan_id: 7, voice }),
+      })
+    )
+  })
+
+  it('discards pending TTS on provider changes without a stored preference', async () => {
+    const pending = deferred<Response>()
+    apiFetch.mockReturnValueOnce(pending.promise)
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ text: 'Bonjour', studyPlanId: 7 }}
+      />
+    )
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    })
+    const signal = apiFetch.mock.calls[0][1].signal as AbortSignal
+    act(() => useConfigStore.setState({ ttsProvider: 'gemini' }))
+    await act(async () => pending.resolve(response()))
+
+    expect(signal.aborted).toBe(true)
+    expect(audios).toHaveLength(0)
+    expect(screen.getByRole('button', { name: 'listen' })).toBeEnabled()
+  })
+
   describe.each(['fetch', 'blob', 'play'] as const)('pending %s', (stage) => {
     it.each(['unmount', 'exercise', 'session', 'logout'])(
       'cancels on %s and ignores completion after cancellation',
@@ -133,8 +246,8 @@ describe('ExerciseAudioPlayer lifecycle', () => {
         }
         expect(screen.queryByText('audioError')).not.toBeInTheDocument()
         if (change !== 'unmount') {
-          expect(screen.getByRole('button', { name: 'Play' })).toBeEnabled()
-          expect(screen.getByRole('progressbar')).toHaveAttribute(
+          expect(screen.getByRole('button', { name: 'listen' })).toBeEnabled()
+          expect(screen.getByRole('slider')).toHaveAttribute(
             'aria-valuenow',
             '0'
           )
@@ -163,7 +276,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       audio.dispatchEvent(new Event('timeupdate'))
     })
     expect(screen.getByText('100s')).toBeVisible()
-    const progress = screen.getByRole('progressbar')
+    const progress = screen.getByRole('slider', { name: 'ariaSeek' })
     expect(progress).toHaveAttribute('aria-valuenow', '30')
     vi.spyOn(progress, 'getBoundingClientRect').mockReturnValue({
       left: 10,
@@ -173,7 +286,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     expect(audio.currentTime).toBe(50)
     expect(progress).toHaveAttribute('aria-valuenow', '50')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
+    fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
     expect(audio.pause).toHaveBeenCalledTimes(1)
     expect(URL.revokeObjectURL).not.toHaveBeenCalled()
     await play()
@@ -195,6 +308,35 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledTimes(2)
   })
 
+  it.each([undefined, { text: 'Bonjour', studyPlanId: 7 }])(
+    'provides translated controls and keyboard seeking for source %j',
+    async (tts) => {
+      render(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
+      const slider = screen.getByRole('slider', { name: 'ariaSeek' })
+      expect(slider).toHaveAttribute('tabindex', '0')
+      fireEvent.keyDown(slider, { key: 'End' })
+      expect(slider).toHaveAttribute('aria-valuenow', '0')
+      await play()
+      expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
+      const audio = audios[0]
+      for (const [key, expected] of [
+        ['ArrowLeft', 0],
+        ['ArrowRight', 5],
+        ['ArrowUp', 10],
+        ['ArrowDown', 5],
+        ['End', 100],
+        ['ArrowRight', 100],
+        ['Home', 0],
+      ] as const) {
+        fireEvent.keyDown(slider, { key })
+        expect(audio.currentTime).toBe(expected)
+        expect(slider).toHaveAttribute('aria-valuenow', String(expected))
+      }
+      fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
+      expect(screen.getByRole('button', { name: 'listen' })).toBeEnabled()
+    }
+  )
+
   it('resets playback, progress and first-play tracking for a different exercise', async () => {
     const firstCallback = vi.fn()
     const nextCallback = vi.fn()
@@ -210,9 +352,9 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     })
     rerender(<ExerciseAudioPlayer exerciseId={43} onFirstPlay={nextCallback} />)
     expectReleased(oldAudio, 'blob:1')
-    expect(screen.getByRole('button', { name: 'Play' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'listen' })).toBeEnabled()
     expect(screen.queryByText('100s')).not.toBeInTheDocument()
-    expect(screen.getByRole('progressbar')).toHaveAttribute(
+    expect(screen.getByRole('slider')).toHaveAttribute(
       'aria-valuenow',
       '0'
     )
@@ -226,9 +368,9 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       oldAudio.dispatchEvent(new Event('loadedmetadata'))
       oldAudio.dispatchEvent(new Event('timeupdate'))
     })
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
     expect(screen.queryByText('audioError')).not.toBeInTheDocument()
-    expect(screen.getByRole('progressbar')).toHaveAttribute(
+    expect(screen.getByRole('slider')).toHaveAttribute(
       'aria-valuenow',
       '0'
     )
@@ -253,7 +395,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
         if (settlement === 'resolve') oldPlay.resolve()
         else oldPlay.reject(new Error('Old playback failed'))
       })
-      expect(screen.getByRole('button', { name: 'Pause' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
       expect(screen.queryByText('audioError')).not.toBeInTheDocument()
       expect(audios[1].pause).not.toHaveBeenCalled()
       expect(onFirstPlay).toHaveBeenCalledTimes(1)
@@ -275,7 +417,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       render(<ExerciseAudioPlayer exerciseId={42} onFirstPlay={onFirstPlay} />)
       await play()
       if (failure === 'resume') {
-        fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
+        fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
         audios[0].play.mockRejectedValueOnce(new Error('Resume failed'))
         await play()
       }
@@ -284,7 +426,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       expect(screen.getByText('audioError')).toBeVisible()
       if (audios.length) expectReleased(audios[0], 'blob:1')
       await play()
-      expect(screen.getByRole('button', { name: 'Pause' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
       expect(screen.queryByText('audioError')).not.toBeInTheDocument()
       expect(onFirstPlay).toHaveBeenCalledTimes(1)
     }
@@ -300,7 +442,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     expectReleased(audios[0], 'blob:1')
     await play()
     await act(async () => failedPlay.reject(new Error('Late rejection')))
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
     expect(audios[1].pause).not.toHaveBeenCalled()
     expect(onFirstPlay).toHaveBeenCalledTimes(1)
   })
@@ -323,7 +465,7 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     expect(firstCallback).not.toHaveBeenCalled()
     expect(latestCallback).toHaveBeenCalledTimes(1)
     expect(audios[0].pause).not.toHaveBeenCalled()
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
   })
 
   it.each(['playing', 'paused'])(
@@ -334,14 +476,14 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       await play()
       const oldAudio = audios[0]
       if (state === 'paused')
-        fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
+        fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
       act(() => {
         useAuthStore.getState().startSession('other-account')
         // Cleanup happens at the store boundary, not in a later React effect.
         expectReleased(oldAudio, 'blob:1')
         useAuthStore.getState().setUser({ ...user, id: 2 })
       })
-      expect(screen.getByRole('button', { name: 'Play' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: 'listen' })).toBeEnabled()
       await play()
       expect(onFirstPlay).toHaveBeenCalledTimes(2)
       expect(audios[1].play).toHaveBeenCalledTimes(1)
@@ -352,10 +494,10 @@ describe('ExerciseAudioPlayer lifecycle', () => {
   it('prevents overlapping resume calls and cancels a pending resume on unmount', async () => {
     const { unmount } = render(<ExerciseAudioPlayer exerciseId={42} />)
     await play()
-    fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
+    fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
     const pending = deferred<void>()
     audios[0].play.mockReturnValueOnce(pending.promise)
-    const button = screen.getByRole('button', { name: 'Play' })
+    const button = screen.getByRole('button', { name: 'listen' })
     act(() => {
       fireEvent.click(button)
       fireEvent.click(button)
@@ -517,6 +659,36 @@ describe('ExerciseAudioPlayer lesson TTS', () => {
     }
   )
 
+  it('allows slow config, synthesis and transfer within the TTS budget', async () => {
+    vi.useFakeTimers()
+    useConfigStore.setState({ loaded: false })
+    const config = deferred<Response>()
+    const synthesis = deferred<Response>()
+    const transfer = deferred<Blob>()
+    vi.stubGlobal('fetch', vi.fn().mockReturnValueOnce(config.promise))
+    apiFetch.mockReturnValueOnce(synthesis.promise)
+    const { unmount } = render(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
+    await listen()
+    await act(async () => vi.advanceTimersByTimeAsync(19_000))
+    await act(async () =>
+      config.resolve(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+    )
+    const signal = apiFetch.mock.calls[0][1].signal as AbortSignal
+    await act(async () => vi.advanceTimersByTimeAsync(50_000))
+    const audioResponse = response()
+    vi.spyOn(audioResponse, 'blob').mockReturnValueOnce(transfer.promise)
+    await act(async () => synthesis.resolve(audioResponse))
+    await act(async () => vi.advanceTimersByTimeAsync(10_000))
+    expect(signal.aborted).toBe(false)
+    expect(screen.getByRole('button', { name: 'listen' })).toBeDisabled()
+    await act(async () => transfer.resolve(blob()))
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
+    await act(async () => vi.advanceTimersByTimeAsync(20_000))
+    expect(signal.aborted).toBe(false)
+    expect(audios[0].play).toHaveBeenCalledTimes(1)
+    unmount()
+  })
+
   it('times out TTS, permits retry and discards the late response', async () => {
     vi.useFakeTimers()
     const pending = deferred<Response>()
@@ -524,7 +696,10 @@ describe('ExerciseAudioPlayer lesson TTS', () => {
     render(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
     await listen()
     const signal = apiFetch.mock.calls[0][1].signal as AbortSignal
-    await act(async () => vi.advanceTimersByTimeAsync(60_000))
+    await act(async () => vi.advanceTimersByTimeAsync(89_999))
+    expect(signal.aborted).toBe(false)
+    expect(screen.getByRole('button', { name: 'listen' })).toBeDisabled()
+    await act(async () => vi.advanceTimersByTimeAsync(1))
     expect(signal.aborted).toBe(true)
     expect(screen.getByText('audioError')).toBeVisible()
     await listen()

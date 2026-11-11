@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Excluir conta",
     "sectionUsageLimits": "Limites de uso",
     "sectionVoice": "Voz",
+    "voiceFemale": "Feminina",
+    "voiceMale": "Masculina",
     "voiceHint": "Escolha a voz de Lingu e clique em reproduzir para a ouvir.",
     "voicePlay": "Reproduzir",
     "voiceStop": "Parar",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Entendido",
     "entry1": {
       "label": "Compreende melhor cada resposta",
@@ -1815,14 +1817,18 @@
       "desc": "Se não perceberes algo durante uma conversa de voz, pede ajuda ao Lingu. Pode explicar-te brevemente na tua língua materna e depois retomar a prática no idioma que estás a aprender."
     },
     "entry5": {
+      "label": "Vozes mais naturais e expressivas",
+      "desc": "Desfruta de vozes mais naturais e expressivas nos teus exercícios de compreensão oral e conversas com o Lingu, para uma experiência de escuta mais clara e agradável."
+    },
+    "entry6": {
       "label": "Melhorias no teu plano de estudo",
       "desc": "Agora o teu plano mostra corretamente o teu progresso e permite-te continuar as lições e rever as unidades que já trabalhaste."
     },
-    "entry6": {
+    "entry7": {
       "label": "Novos idiomas: polaco, português do Brasil, russo, neerlandês e sueco",
       "desc": "Adicionámos o polaco, o português do Brasil, o russo, o neerlandês e o sueco como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
-    "entry7": {
+    "entry8": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import React from 'react'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -44,6 +45,10 @@ describe('AudioPlayer', () => {
   let urlCounter: number
 
   beforeEach(() => {
+    useConfigStore.setState(
+      { ...useConfigStore.getInitialState(), loaded: true },
+      true
+    )
     urlCounter = 0
     revokeCalls = []
     currentAudioMock = makeAudioMock()
@@ -565,6 +570,187 @@ describe('AudioPlayer', () => {
 
   // ───────────── AUDIO ENDED ─────────────
 
+  it('waits for the shared config load and plays the first request with the Gemini preference', async () => {
+    useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
+    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    let finish!: (response: Response) => void
+    fetchMock.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve
+      })
+    )
+    fetchMock.mockResolvedValueOnce(makeOkResponse())
+    const layoutLoad = useConfigStore.getState().load()
+    render(<AudioPlayer text="Hello" />)
+    fireEvent.click(screen.getByRole('button'))
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/config')
+
+    await act(async () => {
+      finish(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+      await layoutLoad
+    })
+
+    await waitFor(() => expect(screen.getByText(PAUSE)).toBeDefined())
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body).voice).toBe('male')
+    expect(currentAudioMock!.play).toHaveBeenCalledTimes(1)
+  })
+
+  it('allows slow config, synthesis and audio transfer within the default budget', async () => {
+    vi.useFakeTimers()
+    try {
+      useConfigStore.setState({ loaded: false })
+      let configure!: (response: Response) => void
+      let synthesize!: (response: ReturnType<typeof makeOkResponse>) => void
+      let transfer!: (blob: Blob) => void
+      const audioResponse = {
+        ...makeOkResponse(),
+        blob: () =>
+          new Promise<Blob>((resolve) => {
+            transfer = resolve
+          }),
+      }
+      fetchMock
+        .mockReturnValueOnce(
+          new Promise<Response>((resolve) => {
+            configure = resolve
+          })
+        )
+        .mockReturnValueOnce(
+          new Promise((resolve) => {
+            synthesize = resolve
+          })
+        )
+      const { unmount } = render(<AudioPlayer text="Hello" />)
+      await act(async () => fireEvent.click(screen.getByRole('button')))
+      await act(async () => vi.advanceTimersByTimeAsync(19_000))
+      await act(async () =>
+        configure(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+      )
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+      const signal = fetchMock.mock.calls[1][1].signal as AbortSignal
+      await act(async () => vi.advanceTimersByTimeAsync(50_000))
+      await act(async () => synthesize(audioResponse))
+      await act(async () => vi.advanceTimersByTimeAsync(10_000))
+      expect(signal.aborted).toBe(false)
+      expect(screen.getByText(LOADING)).toBeDefined()
+      await act(async () => transfer(new Blob(['audio'], { type: 'audio/wav' })))
+      expect(screen.getByText(PAUSE)).toBeDefined()
+      await act(async () => vi.advanceTimersByTimeAsync(20_000))
+      expect(signal.aborted).toBe(false)
+      expect(currentAudioMock!.play).toHaveBeenCalledTimes(1)
+      unmount()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it.each([
+    { timeoutMs: undefined, budget: 90_000 },
+    { timeoutMs: 75_000, budget: 75_000 },
+  ])(
+    'enforces the default or overridden budget $budget',
+    async ({ timeoutMs, budget }) => {
+      vi.useFakeTimers()
+      try {
+        fetchMock.mockImplementation(
+          (_, { signal }: RequestInit) =>
+            new Promise((_, reject) => {
+              signal!.addEventListener('abort', () => reject(signal!.reason))
+            })
+        )
+        const { unmount } = render(
+          <AudioPlayer
+            text="Hello"
+            timeoutMs={timeoutMs}
+            audioUrl={timeoutMs ? '/api/tts/tour/en/step1' : undefined}
+            audioMethod="POST"
+          />
+        )
+        await act(async () => fireEvent.click(screen.getByRole('button')))
+        const signal = fetchMock.mock.calls[0][1].signal as AbortSignal
+        await act(async () => vi.advanceTimersByTimeAsync(budget - 1))
+        expect(signal.aborted).toBe(false)
+        expect(screen.getByText(LOADING)).toBeDefined()
+        await act(async () => vi.advanceTimersByTimeAsync(1))
+        expect(signal.aborted).toBe(true)
+        expect(screen.getByText(ERROR)).toBeDefined()
+        unmount()
+      } finally {
+        vi.useRealTimers()
+      }
+    }
+  )
+
+  it.each(['unmount', 'timeout', 'failure'])(
+    'does not synthesize after config %s',
+    async (outcome) => {
+      useConfigStore.setState({ loaded: false })
+      localStorage.setItem('tts_voice', 'coral')
+      let finish!: (response: Response) => void
+      fetchMock.mockReturnValueOnce(
+        new Promise((resolve) => {
+          finish = resolve
+        })
+      )
+      const { unmount } = render(<AudioPlayer text="Hello" timeoutMs={1} />)
+      fireEvent.click(screen.getByRole('button'))
+      if (outcome === 'unmount') unmount()
+      if (outcome === 'timeout')
+        await waitFor(() => expect(screen.getByText(ERROR)).toBeDefined())
+      await act(async () =>
+        finish(
+          outcome === 'failure'
+            ? new Response('', { status: 503 })
+            : new Response(JSON.stringify({ tts_provider: 'gemini' }))
+        )
+      )
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(URL.createObjectURL).not.toHaveBeenCalled()
+      if (outcome === 'failure') expect(screen.getByText(ERROR)).toBeDefined()
+    }
+  )
+
+  it.each([
+    ['gemini', 'nova', 'male'],
+    ['openai', 'male', 'coral'],
+  ])(
+    'uses only a compatible preference for %s',
+    async (provider, explicit, expected) => {
+      useConfigStore.setState({ ttsProvider: provider })
+      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('gemini_tts_voice', 'male')
+      fetchMock.mockResolvedValueOnce(makeOkResponse())
+      render(<AudioPlayer text="Hello" voice={explicit} />)
+
+      await act(async () => fireEvent.click(screen.getByRole('button')))
+
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body).voice).toBe(expected)
+    }
+  )
+
+  it('cancels pending audio on a provider change even without a selected voice', async () => {
+    let resolve!: (response: ReturnType<typeof makeOkResponse>) => void
+    fetchMock.mockReturnValueOnce(
+      new Promise((done) => {
+        resolve = done
+      })
+    )
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    render(<AudioPlayer text="Hello" />)
+    fireEvent.click(screen.getByRole('button'))
+    const signal = fetchMock.mock.calls[0][1].signal as AbortSignal
+
+    act(() => useConfigStore.setState({ ttsProvider: 'gemini' }))
+    await act(async () => resolve(makeOkResponse()))
+
+    expect(signal.aborted).toBe(true)
+    expect(URL.createObjectURL).not.toHaveBeenCalled()
+    expect(screen.getByText(PLAY)).toBeDefined()
+  })
+
   it('revokes object URL and returns to idle when audio ends', async () => {
     fetchMock.mockResolvedValueOnce(makeOkResponse())
 
@@ -760,6 +946,45 @@ describe('AudioPlayer', () => {
       vi.useRealTimers()
     }
   })
+
+  it.each(['fetch', 'blob'] as const)(
+    'reports the deadline even when %s ignores abort and discards late audio',
+    async (stage) => {
+      vi.useFakeTimers()
+      try {
+        let deliver!: () => void
+        const response = makeOkResponse()
+        if (stage === 'fetch') {
+          fetchMock.mockReturnValueOnce(
+            new Promise((resolve) => {
+              deliver = () => resolve(response)
+            })
+          )
+        } else {
+          response.blob = () =>
+            new Promise<Blob>((resolve) => {
+              deliver = () => resolve(new Blob(['audio']))
+            })
+          fetchMock.mockResolvedValueOnce(response)
+        }
+        const { unmount } = render(<AudioPlayer text="Hello" timeoutMs={100} />)
+        await act(async () => fireEvent.click(screen.getByRole('button')))
+        const signal = fetchMock.mock.calls[0][1].signal as AbortSignal
+        await act(async () => vi.advanceTimersByTimeAsync(100))
+        expect(signal.aborted).toBe(true)
+        expect(screen.getByText(ERROR)).toBeDefined()
+        await act(async () => deliver())
+        expect(URL.createObjectURL).not.toHaveBeenCalled()
+        expect(currentAudioMock!.play).not.toHaveBeenCalled()
+        expect(screen.getByText(ERROR)).toBeDefined()
+        await act(async () => vi.advanceTimersByTimeAsync(2000))
+        expect(screen.getByText(PLAY)).toBeDefined()
+        unmount()
+      } finally {
+        vi.useRealTimers()
+      }
+    }
+  )
 
   it('still reports a request timeout and recovers', async () => {
     vi.useFakeTimers()

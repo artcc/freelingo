@@ -50,7 +50,10 @@ function showTour(withNews = false) {
 }
 
 beforeEach(() => {
-  useConfigStore.setState({ analyticsEnabled: false })
+  useConfigStore.setState(
+    { ...useConfigStore.getInitialState(), loaded: true },
+    true
+  )
   localStorage.clear()
   MockAudio.instances = []
   useAuthStore.setState({ accessToken: 'test-token', user: null })
@@ -180,6 +183,23 @@ describe('dashboard tour', () => {
       'reposo'
     )
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:tour-audio')
+  })
+
+  it('uses the Gemini preference for tour narration and preserves the OpenAI preference', async () => {
+    useConfigStore.setState({ ttsProvider: 'gemini' })
+    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    showTour()
+    fireEvent.click(await screen.findByRole('button', { name: es.tour.listen }))
+    await waitFor(() => expect(MockAudio.instances).toHaveLength(1))
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/tts/tour/es/step1',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ text: es.tour.step1.desc, voice: 'male' }),
+      })
+    )
+    expect(localStorage.getItem('tts_voice')).toBe('coral')
   })
 
   it('stops playback when changing steps and does not autoplay the next one', async () => {

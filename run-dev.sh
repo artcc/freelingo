@@ -1,12 +1,24 @@
 #!/bin/bash
 # Sensible vars read from macOS Keychain — never touch disk
+# export ANTHROPIC_API_KEY=$(security find-generic-password -a anthropic -s freelingo -w 2>/dev/null)
+# export DEEPSEEK_API_KEY=$(security find-generic-password -a deepseek -s freelingo -w 2>/dev/null)
+export GEMINI_API_KEY=$(security find-generic-password -a gemini -s freelingo -w 2>/dev/null)
 export OPENAI_API_KEY=$(security find-generic-password -a openai -s freelingo -w 2>/dev/null)
 export POSTGRES_PASSWORD=$(security find-generic-password -a postgres -s freelingo -w 2>/dev/null)
 export REDIS_PASSWORD=$(security find-generic-password -a redis -s freelingo -w 2>/dev/null)
 export SECRET_KEY=$(security find-generic-password -a secretkey -s freelingo -w 2>/dev/null)
 
 missing=false
-for var in OPENAI_API_KEY POSTGRES_PASSWORD REDIS_PASSWORD SECRET_KEY; do
+required_vars=(
+  # ANTHROPIC_API_KEY
+  # DEEPSEEK_API_KEY
+  GEMINI_API_KEY
+  OPENAI_API_KEY
+  POSTGRES_PASSWORD
+  REDIS_PASSWORD
+  SECRET_KEY
+)
+for var in "${required_vars[@]}"; do
   eval "val=\$$var"
   if [ -z "$val" ]; then
     echo "MISSING: $var not found in Keychain."
@@ -17,10 +29,13 @@ done
 if [ "$missing" = true ]; then
   echo ""
   echo "Save them first:"
-  echo "  security add-generic-password -a openai    -s freelingo -w \"sk-tu-key\""
-  echo "  security add-generic-password -a postgres  -s freelingo -w \"devpass\""
-  echo "  security add-generic-password -a redis     -s freelingo -w \"devpass\""
-  echo "  security add-generic-password -a secretkey -s freelingo -w \"\$(openssl rand -hex 32)\""
+  echo "  security add-generic-password -U -a anthropic -s freelingo -w"
+  echo "  security add-generic-password -U -a deepseek  -s freelingo -w"
+  echo "  security add-generic-password -U -a gemini    -s freelingo -w"
+  echo "  security add-generic-password -U -a openai    -s freelingo -w"
+  echo "  security add-generic-password -U -a postgres  -s freelingo -w"
+  echo "  security add-generic-password -U -a redis     -s freelingo -w"
+  echo "  security add-generic-password -U -a secretkey -s freelingo -w"
   exit 1
 fi
 

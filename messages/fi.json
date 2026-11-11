@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Poista tili",
     "sectionUsageLimits": "Käyttörajat",
     "sectionVoice": "Ääni",
+    "voiceFemale": "Naisääni",
+    "voiceMale": "Miesääni",
     "voiceHint": "Valitse Lingun ääni ja kuuntele sitä painamalla toistopainiketta.",
     "voicePlay": "Toista",
     "voiceStop": "Pysäytä",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Selvä",
     "entry1": {
       "label": "Ymmärrä jokainen vastaus paremmin",
@@ -1815,14 +1817,18 @@
       "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
     },
     "entry5": {
+      "label": "Luonnollisemmat ja ilmeikkäämmät äänet",
+      "desc": "Nauti luonnollisemmista ja ilmeikkäämmistä äänistä kuunteluharjoituksissa ja keskusteluissa Lingun kanssa. Ne tekevät kuuntelukokemuksesta selkeämmän ja miellyttävämmän."
+    },
+    "entry6": {
       "label": "Parannuksia opiskelusuunnitelmaasi",
       "desc": "Suunnitelmasi näyttää nyt edistymisesi oikein ja antaa sinun jatkaa oppitunteja sekä kerrata jo käsittelemiäsi osioita."
     },
-    "entry6": {
+    "entry7": {
       "label": "Uudet kielet: puola, brasilianportugali, venäjä, hollanti ja ruotsi",
       "desc": "Puola, brasilianportugali, venäjä, hollanti ja ruotsi ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
-    "entry7": {
+    "entry8": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }
