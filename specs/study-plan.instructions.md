@@ -48,8 +48,8 @@ separately rejects an empty resolved curriculum or a grid too short to give ever
 lesson. Both creation endpoints run this check before creating a language row or changing plans.
 
 `current_unit` is not advanced by current production flows and normally remains the first unit for the
-life of a plan. Frontend uses it for active-unit presentation, so it must not be treated as reliable
-progress-derived state elsewhere.
+life of a plan. It is not a progress cursor. My Plan derives the current teaching unit from
+`progress_day` and the persisted schedule instead.
 
 ## Deterministic generation
 
@@ -242,6 +242,25 @@ My Plan combines scheduled slots from `generated_plan` with persisted `/lessons`
 completed lessons open read-only review, and ungenerated future slots have no action. Its level-test
 node and banner are gated by the backend `completion` state, not by unit competency: `ready` opens the
 real assessment and `taken` shows the persisted result.
+
+The current unit is the unit of the scheduled slot at `progress_day`. A matching-plan `/today` response
+can advance that position; a response for another plan or an older position is discarded, including its
+lesson actions and completion state. The final assessment slot and an exhausted plan have no active
+teaching unit. The card's Start action belongs to a persisted incomplete lesson at that exact position
+in the same unit. Completed units do not retain the current-unit label.
+
+Unit completion and card percentages count completed slots against every slot scheduled for that unit,
+including slots not yet generated. Competency scores do not complete units, affect these percentages,
+or unlock cards. A reached unit, a unit with generated lessons, a completed unit, and a unit whose
+prerequisite is completed remain accessible. The first curriculum unit and units without a prerequisite
+are also accessible. Skipping advances position and access, not completion; this remains true at the
+end of the plan. Unit grouping and position use the persisted grid, not curriculum-list order.
+
+Persisted lesson metadata is required to show completion: a failed `/lessons` read offers the plan-load
+retry rather than showing false zero progress. Existing lesson IDs preserve review, current-day Start,
+and Resume actions when `/today` or pending metadata is unavailable. Parallel metadata reads cannot
+replace a known completed lesson with an incomplete state or a pending action. Retrying clears the
+previous attempt's auxiliary state.
 
 My Plan waits for a resolved language before loading these resources. Missing or invalidated context
 uses the shared language GET with a recoverable retry on failure. A switch unmounts the old content;

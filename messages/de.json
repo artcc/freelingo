@@ -1779,21 +1779,17 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Verstanden",
     "entry1": {
+      "label": "Verbesserungen an deinem Lernplan",
+      "desc": "Dein Lernplan zeigt deinen Fortschritt jetzt korrekt an. Du kannst Lektionen fortsetzen und bereits bearbeitete Einheiten wiederholen."
+    },
+    "entry2": {
       "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
       "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
-    "entry2": {
-      "label": "Verbesserungen beim Lernen",
-      "desc": "Wir verbessern unsere Lernsysteme und Sprachinhalte weiter, damit du mit klareren, besser aufeinander abgestimmten und hilfreichen Übungen lernen kannst."
-    },
     "entry3": {
-      "label": "Flüssigere Sprachgespräche",
-      "desc": "Wir haben die Gespräche mit Lingu verbessert: für eine flüssigere Sprachausgabe und klarere Hinweise, wer gerade an der Reihe ist."
-    },
-    "entry4": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

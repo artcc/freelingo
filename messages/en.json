@@ -1779,21 +1779,17 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Got it",
     "entry1": {
+      "label": "Improvements to your study plan",
+      "desc": "Your plan now shows your progress correctly and lets you continue lessons and review units you've already worked on."
+    },
+    "entry2": {
       "label": "New languages: Polish, Brazilian Portuguese, Russian, Dutch, and Swedish",
       "desc": "Polish, Brazilian Portuguese, Russian, Dutch, and Swedish are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
-    "entry2": {
-      "label": "Learning improvements",
-      "desc": "We're continuing to refine our learning systems and language content to make your practice clearer, more consistent, and more useful."
-    },
     "entry3": {
-      "label": "Smoother voice conversations",
-      "desc": "We've refined conversations with Lingu for smoother voice playback and clearer turn indicators."
-    },
-    "entry4": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

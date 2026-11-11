@@ -49,7 +49,7 @@ function renderUnitCard(
     index: number
     lessonCount: number
     grammarCount: number
-    competency: number
+    progress: number
     status: Partial<UnitStatus>
     onClick: () => void
     onStartLesson: () => void
@@ -60,7 +60,7 @@ function renderUnitCard(
     index: overrides.index ?? 0,
     lessonCount: overrides.lessonCount ?? 5,
     grammarCount: overrides.grammarCount ?? 2,
-    competency: overrides.competency ?? 0.6,
+    progress: overrides.progress ?? 0.6,
     status: { ...defaultStatus, ...overrides.status },
     onClick: overrides.onClick ?? vi.fn(),
     onStartLesson: overrides.onStartLesson,
@@ -79,7 +79,7 @@ describe('UnitCard', () => {
   // ── Status states ──────────────────────────────────────────────────────
 
   it('renders completed unit with checkmark icon', () => {
-    renderUnitCard({ status: { completed: true }, competency: 1 })
+    renderUnitCard({ status: { completed: true }, progress: 1 })
     expect(screen.getByRole('img', { name: 'completed' })).toBeInTheDocument()
     expect(screen.queryByText('currentUnit')).not.toBeInTheDocument()
   })
@@ -148,23 +148,23 @@ describe('UnitCard', () => {
   // ── Progress bar ───────────────────────────────────────────────────────
 
   it('renders progress bar for non-locked units', () => {
-    const { container } = renderUnitCard({ competency: 0.42 })
+    const { container } = renderUnitCard({ progress: 0.42 })
     expect(screen.getByText('42%')).toBeInTheDocument()
     const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar).toBeInTheDocument()
     expect(bar.style.width).toBe('42%')
   })
 
-  it('renders 0% progress bar when competency is 0', () => {
-    const { container } = renderUnitCard({ competency: 0 })
+  it('renders 0% progress bar when progress is 0', () => {
+    const { container } = renderUnitCard({ progress: 0 })
     expect(screen.getByText('0%')).toBeInTheDocument()
     const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
     expect(bar.style.width).toBe('0%')
   })
 
-  it('renders 100% progress bar when competency is 1', () => {
+  it('renders 100% progress bar when progress is 1', () => {
     const { container } = renderUnitCard({
-      competency: 1,
+      progress: 1,
       status: { completed: true },
     })
     expect(screen.getByText('100%')).toBeInTheDocument()

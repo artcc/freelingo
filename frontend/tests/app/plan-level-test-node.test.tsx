@@ -47,6 +47,7 @@ const planPayload = {
   duration_weeks: 1,
   days_per_week: 2,
   current_unit: 'a1_unit_1',
+  progress_day: 0,
   completion_test_taken: false,
   completion_test_score: null,
   completion_test_recommendation: null,
@@ -91,6 +92,8 @@ function mockPlan(
       }
       return Promise.resolve(
         jsonResponse({
+          plan_id: currentPlan.id,
+          progress_day: currentPlan.progress_day,
           lessons: [],
           completion: {
             state: completionState,
@@ -404,6 +407,8 @@ describe('My Plan level test node', () => {
           finish(
             jsonResponse(
               {
+                plan_id: 7,
+                progress_day: 0,
                 completion: { state: 'ready' },
                 lessons: [
                   {
@@ -471,7 +476,7 @@ describe('My Plan level test node', () => {
       }
       expect(signal.aborted).toBe(true)
       await act(async () =>
-        finish({ lessons: [], completion: { state: 'ready' } })
+        finish({ plan_id: 7, progress_day: 0, lessons: [], completion: { state: 'ready' } })
       )
       expect(screen.queryByText('levelComplete')).not.toBeInTheDocument()
       expect(mockPush).not.toHaveBeenCalled()

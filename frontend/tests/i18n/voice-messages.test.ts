@@ -25,10 +25,6 @@ const messageKeys = [
   'lessonPractice.cancel',
   'lessonPractice.unavailable',
   'lessonPractice.back',
-  'whatsNew.entry1.label',
-  'whatsNew.entry1.desc',
-  'whatsNew.entry2.label',
-  'whatsNew.entry2.desc',
 ] as const
 
 const english = createTranslator({ locale: 'en', messages: en })

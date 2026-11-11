@@ -1779,21 +1779,17 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Razumijem",
     "entry1": {
+      "label": "Poboljšanja tvog plana učenja",
+      "desc": "Tvoj plan sada ispravno prikazuje napredak i omogućuje ti nastavak lekcija te ponavljanje već obrađenih cjelina."
+    },
+    "entry2": {
       "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",
       "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
-    "entry2": {
-      "label": "Poboljšanja učenja",
-      "desc": "Nastavljamo poboljšavati sustave za učenje i jezične sadržaje kako bi tvoje vježbanje bilo jasnije, dosljednije i korisnije."
-    },
     "entry3": {
-      "label": "Tečniji glasovni razgovori",
-      "desc": "Poboljšali smo razgovore s Linguom za tečniju reprodukciju glasa i jasnije oznake čiji je red za govor."
-    },
-    "entry4": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

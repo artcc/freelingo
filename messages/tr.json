@@ -1779,21 +1779,17 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Anladım",
     "entry1": {
+      "label": "Çalışma planında iyileştirmeler",
+      "desc": "Planın artık ilerlemeni doğru şekilde gösteriyor, derslere devam etmene ve daha önce çalıştığın üniteleri tekrar etmene olanak tanıyor."
+    },
+    "entry2": {
       "label": "Yeni diller: Lehçe, Brezilya Portekizcesi, Rusça, Felemenkçe ve İsveççe",
       "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi, Brezilya Portekizcesini, Rusçayı, Felemenkçeyi ve İsveççeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
     },
-    "entry2": {
-      "label": "Öğrenimde iyileştirmeler",
-      "desc": "Daha anlaşılır, tutarlı ve faydalı bir pratik deneyimi sunmak için öğrenme sistemlerimizi ve dil içeriklerimizi geliştirmeye devam ediyoruz."
-    },
     "entry3": {
-      "label": "Daha akıcı sesli konuşmalar",
-      "desc": "Daha akıcı ses oynatımı ve konuşma sırasını daha net gösteren işaretler için Lingu ile sohbetleri iyileştirdik."
-    },
-    "entry4": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

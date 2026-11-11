@@ -1779,21 +1779,17 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Begrepen",
     "entry1": {
+      "label": "Verbeteringen aan je studieplan",
+      "desc": "Je plan toont nu je voortgang correct en laat je lessen voortzetten en eerder behandelde onderdelen herhalen."
+    },
+    "entry2": {
       "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
       "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
-    "entry2": {
-      "label": "Verbeteringen voor het leren",
-      "desc": "We blijven onze leersystemen en taalinhoud verbeteren, zodat je met duidelijkere, beter op elkaar afgestemde en nuttigere oefeningen kunt leren."
-    },
     "entry3": {
-      "label": "Vloeiendere spraakgesprekken",
-      "desc": "We hebben gesprekken met Lingu verbeterd voor vloeiendere spraakweergave en duidelijkere aanwijzingen over wie aan de beurt is."
-    },
-    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

@@ -340,6 +340,10 @@ Exercise skill uses lesson type as its key. Updates apply `0.7 * previous + 0.3 
 starts at the latest score. Lesson completion applies the lesson's mean answered-exercise score, or
 0.5 when none is available, to every competency in the unit. Mastery is `score >= 0.80`.
 
+Mastery is distinct from finishing scheduled lessons. My Plan unit cards show the fraction of scheduled
+lessons completed and use plan position and lesson completion for navigation, independently of mastery.
+The current-unit, completion, and access rules are owned by `study-plan.instructions.md`.
+
 - `GET /api/progress/summary`: authenticated, `60/minute`; summarizes the active plan, returns zeros
   without one, and exposes skill JSON from the latest daily row. Includes `today_xp` and seven
   chronological `activity_week` entries (`date`, `active`, `xp`), ending on the current UTC day.
