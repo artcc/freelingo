@@ -847,6 +847,8 @@
     "questionTranslationError": "De vraag kon niet worden vertaald. Probeer het opnieuw.",
     "retryQuestionTranslation": "Probeer de vraag opnieuw te vertalen",
     "regenerateExercise": "Oefening opnieuw genereren",
+    "listeningIncomplete": "Deze luisteroefening is onvolledig. Genereer de oefening opnieuw voordat je antwoordt.",
+    "listeningUnavailable": "Audio is niet beschikbaar voor deze opgeslagen oefening. Je opgeslagen antwoord en score blijven behouden.",
     "regeneratingExercise": "Opnieuw genereren...",
     "regenerateError": "De oefening kon niet opnieuw worden gegenereerd. Probeer het opnieuw.",
     "regenerateNotNeeded": "Deze oefening hoeft niet opnieuw te worden gegenereerd.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Opname stoppen"
   },
   "audioPlayer": {
+    "ariaPause": "Audio pauzeren",
+    "ariaSeek": "Audiopositie",
     "listen": "Luisteren",
     "stop": "Stoppen",
     "ariaListen": "Luister naar uitspraak",

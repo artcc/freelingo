@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Self
+from typing import Literal, Self
 
-from pydantic import BaseModel, field_serializer, field_validator, model_validator
+from pydantic import BaseModel, Field, field_serializer, field_validator, model_validator
 
-from app.utils.lesson_exercises import valid_question_translation
+from app.utils.lesson_exercises import valid_listening_content, valid_question_translation
 
 
 class ExerciseContent(BaseModel):
-    type: str
+    type: Literal["multiple_choice", "fill_blank", "free_write", "pronunciation", "listening"]
     question: str
     options: list[str] | None = None
     correct: str
@@ -17,6 +17,7 @@ class ExerciseContent(BaseModel):
     native_explanation: str | None = None
     native_hint: str | None = None
     question_translation: str | None = None
+    listening_text: str | None = Field(default=None, max_length=5000)
 
     @model_validator(mode="after")
     def validate_exercise_content(self) -> Self:
@@ -24,6 +25,13 @@ class ExerciseContent(BaseModel):
             raise ValueError("exercises must include a question")
         if not self.correct.strip():
             raise ValueError("exercises must include a correct answer")
+        if self.type == "listening" and not valid_listening_content(
+            self.listening_text, self.options, self.correct
+        ):
+            raise ValueError(
+                "listening exercises require nonblank listening_text of at most 5000 characters, "
+                "at least two distinct nonblank options and correct matching one option exactly"
+            )
         if self.type == "fill_blank" and "___" not in self.question:
             if self.explanation and "___" in self.explanation:
                 self.question, self.explanation = self.explanation, self.question
@@ -64,6 +72,20 @@ class LessonContent(BaseModel):
     grammar_refs: list[str] = []
     unit_id: str | None = None
 
+    @model_validator(mode="after")
+    def require_listening_exercise(self) -> Self:
+        if self.lesson_type == "listening" and not any(
+            exercise.type == "listening" for exercise in self.exercises
+        ):
+            raise ValueError("listening lessons must include at least one listening exercise")
+        return self
+
+
+class ListeningLessonContent(LessonContent):
+    """Validate a requested listening lesson inside structured-output retries."""
+
+    lesson_type: Literal["listening"]
+
 
 class LessonResponse(BaseModel):
     id: int
@@ -100,6 +122,8 @@ class ExerciseResponse(BaseModel):
     native_hint: str | None = None
     question_translation: str | None = None
     question_translation_language: str | None = None
+    listening_text: str | None = None
+    listening_ready: bool = False
     answered_at: datetime | None = None
 
     model_config = {"from_attributes": True}

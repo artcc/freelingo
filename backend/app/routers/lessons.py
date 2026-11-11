@@ -53,6 +53,8 @@ from app.services.progress_rewards import reward_plan_completion
 from app.services.progress_service import update_daily_progress, upsert_unit_competency
 from app.utils.lesson_exercises import (
     cached_question_translation,
+    exercise_listening_ready,
+    exercise_listening_text,
     normalized_exercise_text,
     stamp_question_translation,
     valid_question_translation,
@@ -178,7 +180,9 @@ def _answer_feedback(native_language: str, key: str, *, answer: str = "") -> str
     return messages[key].format(answer=answer)
 
 
-def _exercise_has_technical_error(exercise: Exercise) -> bool:
+def _exercise_has_technical_error(exercise: Exercise, content_exercise: dict | None = None) -> bool:
+    if exercise.exercise_type == "listening":
+        return not exercise_listening_ready(exercise, content_exercise or {})
     if not exercise.question.strip() or not exercise.correct_answer.strip():
         return True
     if exercise.exercise_type == "multiple_choice":
@@ -259,14 +263,17 @@ async def _get_exercise_index(exercise: Exercise, lesson: Lesson, db: AsyncSessi
     return exercise_index
 
 
-def _exercise_source(exercise: Exercise) -> dict:
-    return {
+def _exercise_source(exercise: Exercise, content_exercise: dict | None = None) -> dict:
+    source = {
         "type": exercise.exercise_type,
         "question": exercise.question,
         "options": copy.deepcopy(exercise.options),
         "correct": exercise.correct_answer,
         "explanation": exercise.explanation,
     }
+    if exercise.exercise_type == "listening":
+        source["listening_text"] = copy.deepcopy((content_exercise or {}).get("listening_text"))
+    return source
 
 
 async def _lock_lesson_generation_context(
@@ -296,7 +303,11 @@ async def _lock_lesson_generation_context(
 
 
 def _require_regenerable_exercise(
-    exercise: Exercise, lesson: Lesson, *, after_generation: bool = False
+    exercise: Exercise,
+    lesson: Lesson,
+    content_exercise: dict | None = None,
+    *,
+    after_generation: bool = False,
 ) -> None:
     if lesson.is_completed:
         raise HTTPException(
@@ -308,7 +319,15 @@ def _require_regenerable_exercise(
             status_code=status.HTTP_409_CONFLICT,
             detail="Answered exercises cannot be regenerated",
         )
-    if not _exercise_has_technical_error(exercise):
+    if exercise.exercise_type not in {
+        "multiple_choice",
+        "fill_blank",
+        "free_write",
+        "pronunciation",
+        "listening",
+    }:
+        raise HTTPException(status_code=409, detail="Unsupported exercise type")
+    if not _exercise_has_technical_error(exercise, content_exercise):
         raise HTTPException(
             status_code=(
                 status.HTTP_409_CONFLICT if after_generation else status.HTTP_400_BAD_REQUEST
@@ -318,7 +337,12 @@ def _require_regenerable_exercise(
 
 
 def _regeneration_inputs(
-    lesson: Lesson, exercise: Exercise, *, target_language: str, native_language: str
+    lesson: Lesson,
+    exercise: Exercise,
+    content_exercise: dict | None = None,
+    *,
+    target_language: str,
+    native_language: str,
 ) -> dict:
     content = lesson.content or {}
     return {
@@ -328,7 +352,7 @@ def _regeneration_inputs(
         "exercise_type": exercise.exercise_type,
         "lesson_explanation": copy.deepcopy(content.get("explanation")),
         "lesson_vocabulary": copy.deepcopy(content.get("vocabulary")),
-        "invalid_exercise": _exercise_source(exercise),
+        "invalid_exercise": _exercise_source(exercise, content_exercise),
         "target_language": target_language,
         "native_language": native_language,
     }
@@ -362,7 +386,9 @@ async def get_lesson(
         native_exp = None
         native_hint = None
         question_translation = None
+        content_exercise = {}
         if index < len(content_exercises) and isinstance(content_exercises[index], dict):
+            content_exercise = content_exercises[index]
             native_exp = content_exercises[index].get("native_explanation")
             native_hint = content_exercises[index].get("native_hint")
             question_translation = cached_question_translation(
@@ -384,6 +410,8 @@ async def get_lesson(
                 native_explanation=native_exp if isinstance(native_exp, str) else None,
                 native_hint=native_hint if isinstance(native_hint, str) else None,
                 question_translation=question_translation,
+                listening_text=exercise_listening_text(ex, content_exercise),
+                listening_ready=exercise_listening_ready(ex, content_exercise),
                 question_translation_language=(
                     current_user.native_language if question_translation else None
                 ),
@@ -519,7 +547,13 @@ async def answer_exercise(
     if not exercise:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
 
-    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db)
+    lesson = await _get_lesson_for_user(
+        exercise.lesson_id, current_user.id, db, for_update=exercise.exercise_type == "listening"
+    )
+    if exercise.exercise_type == "listening":
+        exercise = await db.get(Exercise, exercise_id, populate_existing=True, with_for_update=True)
+        if exercise is None or exercise.lesson_id != lesson.id:
+            raise HTTPException(status_code=404, detail="Exercise not found")
 
     plan = await db.get(StudyPlan, lesson.study_plan_id)
     if not plan:
@@ -534,7 +568,24 @@ async def answer_exercise(
             status_code=status.HTTP_409_CONFLICT, detail="Exercise already answered"
         )
 
-    if exercise.exercise_type == "free_write":
+    if exercise.exercise_type == "listening":
+        _, _, content_exercise = await _get_exercise_content_entry(exercise, lesson, db)
+        if not exercise_listening_ready(exercise, content_exercise):
+            raise HTTPException(status_code=409, detail="Listening exercise needs regeneration")
+        if data.answer not in exercise.options:
+            raise HTTPException(status_code=422, detail="Answer must match one option exactly")
+        is_correct = data.answer == exercise.correct_answer
+        exercise.score = 1.0 if is_correct else 0.0
+        exercise.feedback = (
+            _answer_feedback(current_user.native_language, "correct")
+            if is_correct
+            else _answer_feedback(
+                current_user.native_language,
+                "correct_answer",
+                answer=exercise.correct_answer,
+            )
+        )
+    elif exercise.exercise_type == "free_write":
         prompt = exercise.question
         # Bug 4: use exercise-specific criteria from options if available
         criteria = [opt for opt in (exercise.options or []) if isinstance(opt, str) and opt.strip()]
@@ -630,7 +681,7 @@ async def answer_exercise(
                     answer=exercise.correct_answer,
                 )
             )
-    else:
+    elif exercise.exercise_type == "multiple_choice":
         user_ans = data.answer.strip().lower()
         correct_ans = exercise.correct_answer.strip().lower()
         # Compatibility: old exercises may store correct_answer as bare letter ("a")
@@ -651,6 +702,8 @@ async def answer_exercise(
                 answer=exercise.correct_answer,
             )
         )
+    else:
+        raise HTTPException(status_code=409, detail="Unsupported exercise type")
 
     exercise.user_answer = data.answer
     exercise.answered_at = datetime.now(UTC).replace(tzinfo=None)
@@ -688,7 +741,8 @@ async def regenerate_invalid_exercise(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
 
     lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db)
-    _require_regenerable_exercise(exercise, lesson)
+    _, _, content_exercise = await _get_exercise_content_entry(exercise, lesson, db)
+    _require_regenerable_exercise(exercise, lesson, content_exercise)
 
     plan = await db.get(StudyPlan, lesson.study_plan_id)
     if not plan:
@@ -700,7 +754,11 @@ async def regenerate_invalid_exercise(
     user_id, lesson_id, plan_id = current_user.id, lesson.id, plan.id
     native_language, target_language = current_user.native_language, plan.target_language
     generation_inputs = _regeneration_inputs(
-        lesson, exercise, target_language=target_language, native_language=native_language
+        lesson,
+        exercise,
+        content_exercise,
+        target_language=target_language,
+        native_language=native_language,
     )
     await db.commit()
     deadline = asyncio.get_running_loop().time() + LESSON_HELP_TIMEOUT_SECONDS
@@ -721,16 +779,22 @@ async def regenerate_invalid_exercise(
         exercise = await db.get(Exercise, exercise_id, populate_existing=True, with_for_update=True)
         if exercise is None or exercise.lesson_id != lesson_id:
             raise HTTPException(status_code=404, detail="Exercise not found")
-        _require_regenerable_exercise(exercise, lesson, after_generation=True)
+        content, content_exercises, content_exercise = await _get_exercise_content_entry(
+            exercise, lesson, db
+        )
+        _require_regenerable_exercise(exercise, lesson, content_exercise, after_generation=True)
         if (
             _regeneration_inputs(
-                lesson, exercise, target_language=target_language, native_language=native_language
+                lesson,
+                exercise,
+                content_exercise,
+                target_language=target_language,
+                native_language=native_language,
             )
             != generation_inputs
         ):
             raise ValueError("Exercise source changed during regeneration")
 
-        content, content_exercises, _ = await _get_exercise_content_entry(exercise, lesson, db)
         exercise_index = await _get_exercise_index(exercise, lesson, db)
         exercise.question = regenerated.question
         exercise.options = regenerated.options
@@ -769,6 +833,8 @@ async def regenerate_invalid_exercise(
         explanation=exercise.explanation,
         native_explanation=regenerated.native_explanation,
         native_hint=regenerated.native_hint,
+        listening_text=exercise_listening_text(exercise, content_exercises[exercise_index]),
+        listening_ready=exercise_listening_ready(exercise, content_exercises[exercise_index]),
         question_translation=content_exercises[exercise_index].get("question_translation"),
         question_translation_language=content_exercises[exercise_index].get(
             "question_translation_language"
@@ -804,6 +870,11 @@ async def _generate_exercise_native_help(
     lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db)
     _, _, content_exercise = await _get_exercise_content_entry(exercise, lesson, db)
 
+    if exercise.exercise_type == "listening" and not exercise_listening_ready(
+        exercise, content_exercise
+    ):
+        raise HTTPException(status_code=409, detail="Listening exercise needs regeneration")
+
     cached = content_exercise.get(field)
     if isinstance(cached, str) and cached.strip():
         return {field: cached}
@@ -824,7 +895,7 @@ async def _generate_exercise_native_help(
 
     user_id, lesson_id, plan_id = current_user.id, lesson.id, lesson.study_plan_id
     native_language = current_user.native_language
-    source = _exercise_source(exercise)
+    source = _exercise_source(exercise, content_exercise)
     prompt_inputs = {
         "target_language_name": get_language_name(target_language),
         "native_language_name": get_native_language_name(native_language),
@@ -832,6 +903,7 @@ async def _generate_exercise_native_help(
         "question": source["question"],
         "correct_answer": source["correct"],
         "explanation": source["explanation"] or "",
+        "listening_text": source.get("listening_text"),
     }
     if field == "native_hint":
         prompt = build_native_exercise_hint_on_demand_prompt(
@@ -866,11 +938,14 @@ async def _generate_exercise_native_help(
         exercise = await db.get(Exercise, exercise_id, populate_existing=True)
         if exercise is None or exercise.lesson_id != lesson_id:
             raise HTTPException(status_code=404, detail="Exercise not found")
-        if _exercise_source(exercise) != source:
-            raise ValueError("Exercise source changed")
         content, content_exercises, content_exercise = await _get_exercise_content_entry(
             exercise, lesson, db
         )
+        if _exercise_source(exercise, content_exercise) != source or (
+            exercise.exercise_type == "listening"
+            and not exercise_listening_ready(exercise, content_exercise)
+        ):
+            raise ValueError("Exercise source changed")
         cached = content_exercise.get(field)
         if isinstance(cached, str) and cached.strip():
             text = cached

@@ -847,6 +847,8 @@
     "questionTranslationError": "Could not translate the question. Please try again.",
     "retryQuestionTranslation": "Retry question translation",
     "regenerateExercise": "Regenerate exercise",
+    "listeningIncomplete": "This listening exercise is incomplete. Regenerate it before answering.",
+    "listeningUnavailable": "Audio is unavailable for this saved exercise. Your recorded answer and score are preserved.",
     "regeneratingExercise": "Regenerating...",
     "regenerateError": "Could not regenerate the exercise. Try again.",
     "regenerateNotNeeded": "This exercise does not need regeneration.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Stop recording"
   },
   "audioPlayer": {
+    "ariaPause": "Pause audio",
+    "ariaSeek": "Audio position",
     "listen": "Listen",
     "stop": "Stop",
     "ariaListen": "Listen to pronunciation",

@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/auth'
 interface ExerciseAudioPlayerProps {
   exerciseId: number
   onFirstPlay?: () => void
+  tts?: { text: string; studyPlanId: number }
 }
 
 interface Playback {
@@ -16,13 +17,33 @@ interface Playback {
   url: string | null
   detach: (() => void) | null
   pending: boolean
+  timeout: ReturnType<typeof setTimeout> | null
+}
+
+function storedVoice() {
+  try {
+    return typeof window !== 'undefined'
+      ? (localStorage.getItem('tts_voice') ?? undefined)
+      : undefined
+  } catch {
+    return undefined
+  }
 }
 
 export function ExerciseAudioPlayer({
   exerciseId,
   onFirstPlay,
+  tts,
 }: ExerciseAudioPlayerProps) {
   const t = useTranslations('listening')
+  const tAudio = useTranslations('audioPlayer')
+  const voice = tts ? storedVoice() : undefined
+  const source = JSON.stringify([
+    exerciseId,
+    tts?.text,
+    tts?.studyPlanId,
+    voice,
+  ])
   const [state, setState] = useState<
     'idle' | 'loading' | 'playing' | 'paused' | 'error'
   >('idle')
@@ -34,7 +55,7 @@ export function ExerciseAudioPlayer({
   const sessionVersion = useAuthStore((auth) => auth.sessionVersion)
   const userId = useAuthStore((auth) => auth.user?.id)
   const contextRef = useRef<{
-    exerciseId: number
+    source: string
     sessionVersion: number
     userId: number | undefined
   } | null>(null)
@@ -43,6 +64,7 @@ export function ExerciseAudioPlayer({
     const playback = playbackRef.current
     playbackRef.current = null
     if (!playback) return
+    if (playback.timeout) clearTimeout(playback.timeout)
     playback.controller.abort()
     playback.detach?.()
     if (playback.audio) {
@@ -58,7 +80,7 @@ export function ExerciseAudioPlayer({
   }, [onFirstPlay])
 
   useLayoutEffect(() => {
-    contextRef.current = { exerciseId, sessionVersion, userId }
+    contextRef.current = { source, sessionVersion, userId }
     const reset = () => {
       stopPlayback()
       playedRef.current = false
@@ -78,7 +100,7 @@ export function ExerciseAudioPlayer({
       contextRef.current = null
       stopPlayback()
     }
-  }, [exerciseId, sessionVersion, userId, stopPlayback])
+  }, [source, sessionVersion, userId, stopPlayback])
 
   async function handlePlayPause() {
     const context = contextRef.current
@@ -87,7 +109,7 @@ export function ExerciseAudioPlayer({
       return (
         context !== null &&
         contextRef.current === context &&
-        context.exerciseId === exerciseId &&
+        context.source === source &&
         auth.sessionVersion === context.sessionVersion &&
         auth.user?.id === context.userId
       )
@@ -108,6 +130,7 @@ export function ExerciseAudioPlayer({
         url: null,
         detach: null,
         pending: false,
+        timeout: null,
       }
       setProgress(0)
       setDuration(0)
@@ -128,11 +151,26 @@ export function ExerciseAudioPlayer({
 
     playback.pending = true
     setState('loading')
+    if (tts) playback.timeout = setTimeout(fail, 60_000)
     try {
       if (!playback.audio) {
-        const res = await apiFetch(`/api/listening/audio/${exerciseId}`, {
-          signal: playback.controller.signal,
-        })
+        const res = await apiFetch(
+          tts ? '/api/tts' : `/api/listening/audio/${exerciseId}`,
+          {
+            signal: playback.controller.signal,
+            ...(tts
+              ? {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    text: tts.text,
+                    study_plan_id: tts.studyPlanId,
+                    voice,
+                  }),
+                }
+              : {}),
+          }
+        )
         if (!current()) return
         if (!res.ok) throw new Error(`${res.status}`)
         const blob = await res.blob()
@@ -151,9 +189,10 @@ export function ExerciseAudioPlayer({
         }
         const ended = () => {
           if (!current()) return
-          stopPlayback()
+          if (tts) audio.currentTime = 0
+          else stopPlayback()
           setProgress(100)
-          setState('idle')
+          setState(tts ? 'paused' : 'idle')
         }
         audio.addEventListener('loadedmetadata', metadata)
         audio.addEventListener('timeupdate', timeupdate)
@@ -168,6 +207,7 @@ export function ExerciseAudioPlayer({
       }
 
       const audio = playback.audio
+      if (tts && audio.currentTime === 0) setProgress(0)
       await audio.play()
       if (!current()) {
         // A browser may settle play() after cleanup; stop only that old element.
@@ -183,22 +223,32 @@ export function ExerciseAudioPlayer({
     } catch {
       fail()
     } finally {
+      if (playback.timeout) clearTimeout(playback.timeout)
+      playback.timeout = null
       playback.pending = false
     }
   }
 
   function handleSeek(e: React.MouseEvent<HTMLDivElement>) {
-    if (!playbackRef.current?.audio || playbackRef.current.audio.duration === 0)
-      return
     const rect = e.currentTarget.getBoundingClientRect()
-    const ratio = (e.clientX - rect.left) / rect.width
-    playbackRef.current.audio.currentTime =
-      ratio * playbackRef.current.audio.duration
+    if (rect.width > 0) seek((e.clientX - rect.left) / rect.width)
+  }
+
+  function seek(position: number) {
+    const audio = playbackRef.current?.audio
+    if (!audio || !Number.isFinite(audio.duration) || audio.duration <= 0)
+      return
+    const ratio = Math.max(0, Math.min(1, position))
+    audio.currentTime = ratio * audio.duration
     setProgress(ratio * 100)
   }
 
   const icon = state === 'loading' ? '◌' : state === 'playing' ? '▐▐' : '▶'
-  const label = state === 'playing' ? 'Pause' : 'Play'
+  const label = tts
+    ? tAudio(state === 'playing' ? 'ariaPause' : 'listen')
+    : state === 'playing'
+      ? 'Pause'
+      : 'Play'
 
   return (
     <div className="border-fl-border bg-fl-surface space-y-2 border p-4">
@@ -215,7 +265,27 @@ export function ExerciseAudioPlayer({
         <div
           className="bg-fl-border relative h-1.5 flex-1 cursor-pointer"
           onClick={handleSeek}
-          role="progressbar"
+          role={tts ? 'slider' : 'progressbar'}
+          tabIndex={tts ? 0 : undefined}
+          aria-label={tts ? tAudio('ariaSeek') : undefined}
+          onKeyDown={
+            tts
+              ? (event) => {
+                  const positions: Record<string, number> = {
+                    ArrowLeft: progress / 100 - 0.05,
+                    ArrowDown: progress / 100 - 0.05,
+                    ArrowRight: progress / 100 + 0.05,
+                    ArrowUp: progress / 100 + 0.05,
+                    Home: 0,
+                    End: 1,
+                  }
+                  if (event.key in positions) {
+                    event.preventDefault()
+                    seek(positions[event.key])
+                  }
+                }
+              : undefined
+          }
           aria-valuenow={Math.round(progress)}
           aria-valuemin={0}
           aria-valuemax={100}

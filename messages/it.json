@@ -847,6 +847,8 @@
     "questionTranslationError": "Impossibile tradurre la domanda. Riprova.",
     "retryQuestionTranslation": "Riprova a tradurre la domanda",
     "regenerateExercise": "Rigenera esercizio",
+    "listeningIncomplete": "Questo esercizio di ascolto è incompleto. Rigeneralo prima di rispondere.",
+    "listeningUnavailable": "L’audio non è disponibile per questo esercizio salvato. La risposta e il punteggio registrati vengono conservati.",
     "regeneratingExercise": "Rigenerazione...",
     "regenerateError": "Impossibile rigenerare l’esercizio. Riprova.",
     "regenerateNotNeeded": "Questo esercizio non deve essere rigenerato.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Ferma registrazione"
   },
   "audioPlayer": {
+    "ariaPause": "Metti in pausa l’audio",
+    "ariaSeek": "Posizione dell’audio",
     "listen": "Ascolta",
     "stop": "Ferma",
     "ariaListen": "Ascolta la pronuncia",

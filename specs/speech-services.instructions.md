@@ -250,6 +250,17 @@ provide phoneme-level lip sync.
 Stopping, replacing content, and unmounting abort requests, stop playback, remove audio handlers, and
 release Blob URLs and timers. Each tour screen requires its own manual playback action.
 
+`ExerciseAudioPlayer` also supports lesson-owned TTS sources in addition to its default protected
+Listening MP3 lookup. In TTS mode it posts the exercise source text, preferred voice and owning
+`study_plan_id` to `/api/tts`; backend ownership and persisted plan language resolution still apply.
+It offers play/pause, seeking, replay and manual retry after failure. Replays retain the synthesized
+audio within the same player context, avoiding another TTS request. This is transient browser reuse,
+not a persistent backend audio cache. TTS playback work has a 60-second client deadline, and its seek
+control supports keyboard navigation. Leaving the player, regenerating its source, changing the owning
+plan or authentication session releases audio, listeners, timers and Blob URLs and cancels pending
+work. Late completions cannot publish obsolete audio. The separate Listening module continues to use
+its persisted exercise MP3 endpoint.
+
 `VoiceRecorder`:
 
 - requires a resource-owning plan ID;

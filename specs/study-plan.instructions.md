@@ -216,6 +216,41 @@ Lesson/API contracts. Usable free-write corrections persist for reload and revie
 One unanswered technically invalid exercise can be regenerated in place. Regeneration must preserve
 exercise type and synchronize the relational row with `lesson.content.exercises`.
 
+### Listening exercises inside lessons
+
+`listening` is an exercise type as well as a lesson type. A listening exercise has its own
+`listening_text`, a target-language question, distinct answer options, and one correct option.
+The source is nonblank and limited to 5000 characters, matching the TTS input limit. It lives in
+`lesson.content.exercises`, alongside native support; questions, options, and answers retain their
+existing relational columns. Generation accepts only the five implemented exercise types:
+`multiple_choice`, `fill_blank`, `free_write`, `pronunciation`, and `listening`.
+Newly generated listening lessons must contain at least one listening exercise; existing saved
+lessons are not regenerated automatically.
+
+The detail and regeneration responses expose `listening_text` and `listening_ready`. Readiness
+requires usable source text and valid options matching the exercise. Incomplete legacy listening
+exercises can be regenerated while unanswered and their lesson remains incomplete. The replacement
+keeps the exercise ID and type and supplies a complete source/question/options set. Answering an
+incomplete listening exercise returns a conflict without recording a score or progress; a submitted
+answer outside its options is rejected. Valid listening answers use deterministic option scoring.
+
+The lesson player synthesizes the source on demand through the existing TTS gateway, supplying the
+lesson's persisted `study_plan_id`. It offers play/pause, seeking and replay; repeated playback within
+the same player reuses the audio. TTS transport and cleanup rules belong to
+`speech-services.instructions.md`. These exercises remain part of lesson progress and completion,
+not the separate Listening exercise pool or attempt quota.
+
+The interface reveals the transcript after answering and during review, using the lesson's target
+language. This is a presentation rule: lesson detail already returns generated content and answer
+keys. It does not provide the separate Listening module's pre-answer API secrecy. Generated prompts
+must keep listening source text out of the explanation and pre-answer hints, and every task requiring
+audio must use the listening exercise format rather than relying on an unplayable external dialogue.
+Prompt constraints do not establish semantic correctness or guarantee absence of answer leakage.
+On-demand exercise hints and explanations receive the matching listening source as untrusted
+reference data and reject incomplete listening exercises. An in-flight response is discarded if the
+source changes. Hints must not quote or translate the transcript; explanations may refer to evidence
+without reproducing the complete source.
+
 ### Optional question translation
 
 At every CEFR level, learners can reveal or hide a translation of the exercise question into their

@@ -847,6 +847,8 @@
     "questionTranslationError": "Întrebarea nu a putut fi tradusă. Încearcă din nou.",
     "retryQuestionTranslation": "Încearcă din nou să traduci întrebarea",
     "regenerateExercise": "Regenerează exercițiul",
+    "listeningIncomplete": "Acest exercițiu de ascultare este incomplet. Regenerează-l înainte de a răspunde.",
+    "listeningUnavailable": "Sunetul nu este disponibil pentru acest exercițiu salvat. Răspunsul și scorul înregistrate sunt păstrate.",
     "regeneratingExercise": "Se regenerează...",
     "regenerateError": "Exercițiul nu a putut fi regenerat. Încearcă din nou.",
     "regenerateNotNeeded": "Acest exercițiu nu trebuie regenerat.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Oprește înregistrarea"
   },
   "audioPlayer": {
+    "ariaPause": "Pune sunetul pe pauză",
+    "ariaSeek": "Poziția înregistrării audio",
     "listen": "Ascultă",
     "stop": "Oprește",
     "ariaListen": "Ascultă pronunția",

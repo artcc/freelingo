@@ -847,6 +847,8 @@
     "questionTranslationError": "Kysymyksen kääntäminen epäonnistui. Yritä uudelleen.",
     "retryQuestionTranslation": "Yritä kääntää kysymys uudelleen",
     "regenerateExercise": "Luo tehtävä uudelleen",
+    "listeningIncomplete": "Tämä kuuntelutehtävä on puutteellinen. Luo se uudelleen ennen vastaamista.",
+    "listeningUnavailable": "Tämän tallennetun tehtävän ääni ei ole saatavilla. Tallennettu vastauksesi ja pistemääräsi säilyvät.",
     "regeneratingExercise": "Luodaan uudelleen...",
     "regenerateError": "Tehtävää ei voitu luoda uudelleen. Yritä uudelleen.",
     "regenerateNotNeeded": "Tätä tehtävää ei tarvitse luoda uudelleen.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Lopeta nauhoitus"
   },
   "audioPlayer": {
+    "ariaPause": "Keskeytä ääni",
+    "ariaSeek": "Äänen toistokohta",
     "listen": "Kuuntele",
     "stop": "Pysäytä",
     "ariaListen": "Kuuntele ääntämistä",

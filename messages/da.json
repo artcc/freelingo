@@ -847,6 +847,8 @@
     "questionTranslationError": "Spørgsmålet kunne ikke oversættes. Prøv igen.",
     "retryQuestionTranslation": "Prøv at oversætte spørgsmålet igen",
     "regenerateExercise": "Opret øvelsen igen",
+    "listeningIncomplete": "Denne lytteøvelse er ufuldstændig. Opret den igen, før du svarer.",
+    "listeningUnavailable": "Lyd er ikke tilgængelig for denne gemte øvelse. Dit gemte svar og resultat bevares.",
     "regeneratingExercise": "Opretter igen...",
     "regenerateError": "Øvelsen kunne ikke oprettes igen. Prøv igen.",
     "regenerateNotNeeded": "Denne øvelse behøver ikke at blive oprettet igen.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Stop optagelse"
   },
   "audioPlayer": {
+    "ariaPause": "Sæt lyd på pause",
+    "ariaSeek": "Lydposition",
     "listen": "Lyt",
     "stop": "Stop",
     "ariaListen": "Lyt til udtalen",

@@ -8,6 +8,7 @@ from app.schemas.lessons import (
     FillBlankEvaluation,
     FreeWriteEvaluation,
     LessonContent,
+    ListeningLessonContent,
     PronunciationEvaluation,
 )
 from app.services.language_helpers import get_language_name, get_native_language_name
@@ -187,8 +188,12 @@ async def generate_lesson(
 
     lesson = await llm_adapter.structured_output(
         [{"role": "system", "content": prompt}],
-        LessonContent,
+        ListeningLessonContent if lesson_type == "listening" else LessonContent,
     )
+    if lesson_type == "listening" and not any(
+        exercise.type == "listening" for exercise in lesson.exercises
+    ):
+        raise ValueError("Listening lesson generation requires a listening exercise")
     lesson.grammar_refs = [s for s in lesson.grammar_refs if s in valid_slugs]
     # Sanitize fill_blank exercises: question MUST contain ___ (the gapped sentence).
     # If the LLM put the instruction in question and the actual sentence in explanation,
@@ -219,6 +224,7 @@ async def regenerate_exercise(
     language_prompt_overlay = get_language_prompt_overlay(target_language)
     options_schema = {
         "multiple_choice": '["option 1", "option 2", "option 3", "option 4"]',
+        "listening": '["option 1", "option 2", "option 3", "option 4"]',
         "fill_blank": "null",
         "free_write": '["grading criterion 1", "grading criterion 2"]',
         "pronunciation": '["short pronunciation hint"]',

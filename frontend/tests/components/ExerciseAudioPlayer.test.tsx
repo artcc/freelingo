@@ -57,6 +57,7 @@ function expectReleased(audio: FakeAudio, url: string) {
 }
 
 beforeEach(() => {
+  localStorage.removeItem('tts_voice')
   audios = []
   playResults = []
   apiFetch.mockReset().mockImplementation(async () => response())
@@ -76,6 +77,8 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  vi.useRealTimers()
+  localStorage.removeItem('tts_voice')
   useAuthStore.setState(useAuthStore.getInitialState(), true)
   vi.unstubAllGlobals()
 })
@@ -146,9 +149,12 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       <ExerciseAudioPlayer exerciseId={42} onFirstPlay={onFirstPlay} />
     )
     await play()
-    expect(apiFetch).toHaveBeenCalledExactlyOnceWith('/api/listening/audio/42', {
-      signal: expect.any(AbortSignal),
-    })
+    expect(apiFetch).toHaveBeenCalledExactlyOnceWith(
+      '/api/listening/audio/42',
+      {
+        signal: expect.any(AbortSignal),
+      }
+    )
     expect(onFirstPlay).toHaveBeenCalledTimes(1)
     const audio = audios[0]
     act(() => {
@@ -202,13 +208,14 @@ describe('ExerciseAudioPlayer lifecycle', () => {
       oldAudio.currentTime = 60
       oldAudio.dispatchEvent(new Event('timeupdate'))
     })
-    rerender(
-      <ExerciseAudioPlayer exerciseId={43} onFirstPlay={nextCallback} />
-    )
+    rerender(<ExerciseAudioPlayer exerciseId={43} onFirstPlay={nextCallback} />)
     expectReleased(oldAudio, 'blob:1')
     expect(screen.getByRole('button', { name: 'Play' })).toBeEnabled()
     expect(screen.queryByText('100s')).not.toBeInTheDocument()
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '0')
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuenow',
+      '0'
+    )
     await play()
     expect(apiFetch.mock.calls[1][0]).toBe('/api/listening/audio/43')
     expect(firstCallback).toHaveBeenCalledTimes(1)
@@ -221,7 +228,10 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     })
     expect(screen.getByRole('button', { name: 'Pause' })).toBeEnabled()
     expect(screen.queryByText('audioError')).not.toBeInTheDocument()
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '0')
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuenow',
+      '0'
+    )
     expect(audios[1].pause).not.toHaveBeenCalled()
   })
 
@@ -357,5 +367,170 @@ describe('ExerciseAudioPlayer lifecycle', () => {
     expectReleased(audios[0], 'blob:1')
     await act(async () => pending.resolve())
     expect(audios[0].pause).toHaveBeenCalledTimes(3)
+  })
+})
+
+describe('ExerciseAudioPlayer lesson TTS', () => {
+  const tts = { text: 'Le train arrive à midi.', studyPlanId: 7 }
+
+  async function listen() {
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    })
+  }
+
+  it('uses the persisted plan and voice, supports keyboard seek and reuses synthesis after ending', async () => {
+    localStorage.setItem('tts_voice', 'nova')
+    const onFirstPlay = vi.fn()
+    const { rerender, unmount } = render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={tts}
+        onFirstPlay={onFirstPlay}
+      />
+    )
+    await listen()
+    expect(apiFetch).toHaveBeenCalledExactlyOnceWith('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: tts.text, study_plan_id: 7, voice: 'nova' }),
+      signal: expect.any(AbortSignal),
+    })
+    const audio = audios[0]
+    act(() => audio.dispatchEvent(new Event('loadedmetadata')))
+    const seek = screen.getByRole('slider', { name: 'ariaSeek' })
+    fireEvent.keyDown(seek, { key: 'ArrowRight' })
+    expect(audio.currentTime).toBe(5)
+    fireEvent.keyDown(seek, { key: 'End' })
+    expect(audio.currentTime).toBe(100)
+    fireEvent.keyDown(seek, { key: 'ArrowRight' })
+    expect(audio.currentTime).toBe(100)
+    fireEvent.keyDown(seek, { key: 'Home' })
+    expect(audio.currentTime).toBe(0)
+    fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
+    await listen()
+    rerender(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ ...tts }}
+        onFirstPlay={onFirstPlay}
+      />
+    )
+    act(() => {
+      audio.currentTime = 100
+      audio.dispatchEvent(new Event('ended'))
+    })
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled()
+    await listen()
+    expect(audio.currentTime).toBe(0)
+    expect(audio.play).toHaveBeenCalledTimes(3)
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+    expect(onFirstPlay).toHaveBeenCalledTimes(1)
+    unmount()
+    expectReleased(audio, 'blob:1')
+  })
+
+  describe.each(['fetch', 'blob', 'play'] as const)(
+    'pending TTS %s',
+    (stage) => {
+      it.each(['text', 'plan', 'voice', 'session', 'unmount'] as const)(
+        'cancels on %s replacement and ignores late work',
+        async (change) => {
+          const fetchResult = deferred<Response>()
+          const blobResult = deferred<Blob>()
+          const playResult = deferred<void>()
+          const firstResponse = response()
+          if (stage === 'fetch')
+            apiFetch.mockReturnValueOnce(fetchResult.promise)
+          if (stage === 'blob') {
+            vi.spyOn(firstResponse, 'blob').mockReturnValueOnce(
+              blobResult.promise
+            )
+            apiFetch.mockResolvedValueOnce(firstResponse)
+          }
+          if (stage === 'play') playResults.push(() => playResult.promise)
+          const onFirstPlay = vi.fn()
+          const { rerender, unmount } = render(
+            <ExerciseAudioPlayer
+              exerciseId={42}
+              tts={tts}
+              onFirstPlay={onFirstPlay}
+            />
+          )
+          await listen()
+          const signal = apiFetch.mock.calls[0][1].signal as AbortSignal
+          if (change === 'unmount') unmount()
+          else if (change === 'session') {
+            act(() => useAuthStore.getState().startSession('new-session'))
+          } else {
+            if (change === 'voice') localStorage.setItem('tts_voice', 'nova')
+            rerender(
+              <ExerciseAudioPlayer
+                exerciseId={42}
+                tts={{
+                  text: change === 'text' ? 'Un nouveau texte.' : tts.text,
+                  studyPlanId: change === 'plan' ? 8 : tts.studyPlanId,
+                }}
+                onFirstPlay={onFirstPlay}
+              />
+            )
+          }
+          expect(signal.aborted).toBe(true)
+          if (stage === 'play') expectReleased(audios[0], 'blob:1')
+          await act(async () => {
+            if (stage === 'fetch') fetchResult.resolve(firstResponse)
+            if (stage === 'blob') blobResult.resolve(blob())
+            if (stage === 'play') playResult.resolve()
+          })
+          expect(onFirstPlay).not.toHaveBeenCalled()
+          if (stage !== 'play') expect(Audio).not.toHaveBeenCalled()
+          expect(screen.queryByText('audioError')).not.toBeInTheDocument()
+          if (change !== 'unmount') {
+            await listen()
+            expect(
+              screen.getByRole('button', { name: 'ariaPause' })
+            ).toBeEnabled()
+            expect(onFirstPlay).toHaveBeenCalledTimes(1)
+          }
+        }
+      )
+    }
+  )
+
+  it.each(['http', 'network', 'media'] as const)(
+    'allows retry after a TTS %s failure',
+    async (failure) => {
+      if (failure === 'http')
+        apiFetch.mockResolvedValueOnce(new Response(null, { status: 503 }))
+      if (failure === 'network')
+        apiFetch.mockRejectedValueOnce(new TypeError('Offline'))
+      render(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
+      await listen()
+      if (failure === 'media') {
+        act(() => audios[0].dispatchEvent(new Event('error')))
+        expectReleased(audios[0], 'blob:1')
+      }
+      expect(screen.getByText('audioError')).toBeVisible()
+      await listen()
+      expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
+      expect(apiFetch).toHaveBeenCalledTimes(2)
+    }
+  )
+
+  it('times out TTS, permits retry and discards the late response', async () => {
+    vi.useFakeTimers()
+    const pending = deferred<Response>()
+    apiFetch.mockReturnValueOnce(pending.promise)
+    render(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
+    await listen()
+    const signal = apiFetch.mock.calls[0][1].signal as AbortSignal
+    await act(async () => vi.advanceTimersByTimeAsync(60_000))
+    expect(signal.aborted).toBe(true)
+    expect(screen.getByText('audioError')).toBeVisible()
+    await listen()
+    await act(async () => pending.resolve(response()))
+    expect(audios).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
+    expect(audios[0].pause).not.toHaveBeenCalled()
   })
 })

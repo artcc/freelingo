@@ -847,6 +847,8 @@
     "questionTranslationError": "Det gick inte att översätta frågan. Försök igen.",
     "retryQuestionTranslation": "Försök översätta frågan igen",
     "regenerateExercise": "Skapa om övningen",
+    "listeningIncomplete": "Den här hörövningen är ofullständig. Skapa om den innan du svarar.",
+    "listeningUnavailable": "Ljud är inte tillgängligt för den här sparade övningen. Ditt sparade svar och resultat behålls.",
     "regeneratingExercise": "Skapar om...",
     "regenerateError": "Det gick inte att skapa om övningen. Försök igen.",
     "regenerateNotNeeded": "Den här övningen behöver inte skapas om.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Stoppa inspelning"
   },
   "audioPlayer": {
+    "ariaPause": "Pausa ljud",
+    "ariaSeek": "Ljudposition",
     "listen": "Lyssna",
     "stop": "Stoppa",
     "ariaListen": "Lyssna på uttal",

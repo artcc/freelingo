@@ -847,6 +847,8 @@
     "questionTranslationError": "Pitanje nije moguće prevesti. Pokušaj ponovno.",
     "retryQuestionTranslation": "Pokušaj ponovno prevesti pitanje",
     "regenerateExercise": "Ponovno stvori zadatak",
+    "listeningIncomplete": "Ovaj zadatak slušanja nije potpun. Ponovno ga stvori prije odgovaranja.",
+    "listeningUnavailable": "Zvuk nije dostupan za ovaj spremljeni zadatak. Tvoj spremljeni odgovor i rezultat ostaju sačuvani.",
     "regeneratingExercise": "Ponovno stvaranje...",
     "regenerateError": "Zadatak nije bilo moguće ponovno stvoriti. Pokušaj ponovno.",
     "regenerateNotNeeded": "Ovaj zadatak ne treba ponovno stvarati.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Zaustavi snimanje"
   },
   "audioPlayer": {
+    "ariaPause": "Pauziraj zvuk",
+    "ariaSeek": "Položaj reprodukcije zvuka",
     "listen": "Poslušaj",
     "stop": "Zaustavi",
     "ariaListen": "Poslušaj izgovor",

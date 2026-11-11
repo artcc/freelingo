@@ -847,6 +847,8 @@
     "questionTranslationError": "Die Frage konnte nicht übersetzt werden. Bitte versuche es erneut.",
     "retryQuestionTranslation": "Frage erneut übersetzen",
     "regenerateExercise": "Übung neu generieren",
+    "listeningIncomplete": "Diese Hörübung ist unvollständig. Generiere sie neu, bevor du antwortest.",
+    "listeningUnavailable": "Für diese gespeicherte Übung ist kein Audio verfügbar. Deine gespeicherte Antwort und Punktzahl bleiben erhalten.",
     "regeneratingExercise": "Wird neu generiert...",
     "regenerateError": "Die Übung konnte nicht neu generiert werden. Versuche es erneut.",
     "regenerateNotNeeded": "Diese Übung muss nicht neu generiert werden.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Aufnahme stoppen"
   },
   "audioPlayer": {
+    "ariaPause": "Audio pausieren",
+    "ariaSeek": "Audioposition",
     "listen": "Anhören",
     "stop": "Stopp",
     "ariaListen": "Aussprache anhören",
