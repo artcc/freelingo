@@ -40,6 +40,13 @@ interface TodayLesson {
   is_completed?: boolean
 }
 
+interface TodayResponse {
+  plan_id: number
+  progress_day: number
+  lessons: TodayLesson[]
+  completion?: CompletionState
+}
+
 type LessonAction = 'start' | 'continue' | 'review'
 
 interface Lesson {
@@ -58,7 +65,7 @@ interface StudyPlan {
   cefr_level: string
   duration_weeks: number
   days_per_week: number
-  current_unit: string
+  progress_day: number
   completion_test_taken: boolean
   completion_test_score: number | null
   completion_test_recommendation: string | null
@@ -73,10 +80,6 @@ interface StudyPlan {
       }[]
     }[]
   }
-}
-
-interface CompetencyMap {
-  [unitId: string]: number // 0–1
 }
 
 interface CompletionState {
@@ -185,12 +188,11 @@ function PlanContent({ language }: { language: TargetLanguage }) {
   const [plan, setPlan] = useState<StudyPlan | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [competencies, setCompetencies] = useState<CompetencyMap>({})
   const [activeDrawer, setActiveDrawer] = useState<CurriculumUnit | null>(null)
-  const [activeLessonId, setActiveLessonId] = useState<number | null>(null)
+  const [todayProgressDay, setTodayProgressDay] = useState<number | null>(null)
   const [pendingLessons, setPendingLessons] = useState<PendingLesson[]>([])
   const [lessonStates, setLessonStates] = useState<
-    Record<string, Pick<Lesson, 'id' | 'completed' | 'action'>>
+    Record<string, Pick<Lesson, 'id' | 'completed'>>
   >({})
   const [completion, setCompletion] = useState<CompletionState | null>(null)
   const [units, setUnits] = useState<CurriculumUnit[]>([])
@@ -220,25 +222,22 @@ function PlanContent({ language }: { language: TargetLanguage }) {
       setLoading(true)
       setError('')
       setCompletion(null)
-      setActiveLessonId(null)
+      setTodayProgressDay(null)
+      setLessonStates({})
+      setPendingLessons([])
+      setActiveDrawer(null)
       // /today can generate a lesson. Its transport lifetime belongs to this
       // context, but it must not consume the read-only plan's 20-second budget.
       const todayRequest = apiFetch('/api/study-plan/today', {
         signal: controller.signal,
       })
         .then(async (res) =>
-          res.ok
-            ? ((await res.json()) as {
-                lessons: TodayLesson[]
-                completion?: CompletionState
-              })
-            : null
+          res.ok ? ((await res.json()) as TodayResponse) : null
         )
         .catch(() => null)
       try {
-        const [planRes, compRes, pendingRes, lessonsRes] = await Promise.all([
+        const [planRes, pendingRes, lessonsRes] = await Promise.all([
           apiFetch('/api/study-plan/current', { signal }),
-          apiFetch('/api/progress/competencies', { signal }).catch(() => null),
           apiFetch('/api/study-plan/pending-lessons', { signal }).catch(
             () => null
           ),
@@ -261,42 +260,21 @@ function PlanContent({ language }: { language: TargetLanguage }) {
         setPlan(planData)
         if (!planData) return
 
-        if (compRes?.ok) {
-          const compData = await compRes.json()
-          if (obsolete()) return
-          signal.throwIfAborted()
-          // Backend returns [{unit_id, score}, ...] or Record<string, number>
-          if (Array.isArray(compData)) {
-            const map: CompetencyMap = {}
-            for (const item of compData as {
-              unit_id: string
-              score: number
-            }[]) {
-              map[item.unit_id] = item.score
-            }
-            setCompetencies(map)
-          } else {
-            setCompetencies(compData as CompetencyMap)
-          }
+        if (!lessonsRes?.ok) {
+          throw new Error('Failed to load lesson progress')
         }
 
-        const states: Record<
-          string,
-          Pick<Lesson, 'id' | 'completed' | 'action'>
-        > = {}
+        const states: Record<string, Pick<Lesson, 'id' | 'completed'>> = {}
 
-        if (lessonsRes?.ok) {
-          const generatedLessons = (await lessonsRes.json()) as PlanLesson[]
-          if (obsolete()) return
-          signal.throwIfAborted()
-          for (const lesson of generatedLessons) {
-            states[
-              lessonKey(lesson.week_number, lesson.day_number, lesson.title)
-            ] = {
-              id: lesson.id,
-              completed: lesson.is_completed,
-              action: lesson.is_completed ? 'review' : undefined,
-            }
+        const generatedLessons = (await lessonsRes.json()) as PlanLesson[]
+        if (obsolete()) return
+        signal.throwIfAborted()
+        for (const lesson of generatedLessons) {
+          states[
+            lessonKey(lesson.week_number, lesson.day_number, lesson.title)
+          ] = {
+            id: lesson.id,
+            completed: lesson.is_completed,
           }
         }
 
@@ -304,14 +282,26 @@ function PlanContent({ language }: { language: TargetLanguage }) {
           const pendingData = (await pendingRes.json()) as PendingLesson[]
           if (obsolete()) return
           signal.throwIfAborted()
-          setPendingLessons(pendingData)
+          setPendingLessons(
+            pendingData.filter(
+              (lesson) =>
+                !states[
+                  lessonKey(lesson.week_number, lesson.day_number, lesson.title)
+                ]?.completed
+            )
+          )
           for (const lesson of pendingData) {
+            const key = lessonKey(
+              lesson.week_number,
+              lesson.day_number,
+              lesson.title
+            )
+            if (states[key]?.completed) continue
             states[
               lessonKey(lesson.week_number, lesson.day_number, lesson.title)
             ] = {
               id: lesson.id,
               completed: false,
-              action: 'continue',
             }
           }
         }
@@ -319,22 +309,43 @@ function PlanContent({ language }: { language: TargetLanguage }) {
         setLessonStates(states)
         void todayRequest
           .then((todayData) => {
-            if (obsolete() || !todayData) return
-            setCompletion(todayData.completion ?? null)
-            const nextLesson = todayData.lessons.find(
-              (l) => l.id != null && !l.is_completed
+            if (
+              obsolete() ||
+              !todayData ||
+              todayData.plan_id !== planData.id ||
+              todayData.progress_day < planData.progress_day
             )
-            setActiveLessonId(nextLesson?.id ?? null)
+              return
+            setTodayProgressDay(todayData.progress_day)
+            setCompletion(todayData.completion ?? null)
             const todayStates: typeof states = {}
             for (const lesson of todayData.lessons) {
               if (lesson.id == null) continue
               todayStates[lessonKey(lesson.week, lesson.day, lesson.title)] = {
                 id: lesson.id,
                 completed: lesson.is_completed ?? false,
-                action: lesson.is_completed ? 'review' : 'start',
               }
             }
-            setLessonStates((previous) => ({ ...previous, ...todayStates }))
+            setLessonStates((previous) => {
+              const merged = { ...previous }
+              for (const [key, state] of Object.entries(todayStates)) {
+                // Completion is irreversible; parallel reads can be older than /lessons.
+                if (!merged[key]?.completed) merged[key] = state
+              }
+              return merged
+            })
+            setPendingLessons((previous) =>
+              previous.filter(
+                (lesson) =>
+                  !todayStates[
+                    lessonKey(
+                      lesson.week_number,
+                      lesson.day_number,
+                      lesson.title
+                    )
+                  ]?.completed
+              )
+            )
           })
           .catch(() => {
             // An unavailable supplementary response must not hide the loaded plan.
@@ -385,12 +396,37 @@ function PlanContent({ language }: { language: TargetLanguage }) {
   }
 
   const level = plan.cefr_level as CEFRLevel
-  const allLessons = flattenLessons(plan).map((lesson) => ({
-    ...lesson,
-    ...lessonStates[lessonKey(lesson.week, lesson.day, lesson.title)],
-  }))
+  const progressDay = todayProgressDay ?? plan.progress_day
+  const dayIndex = (lesson: Lesson) =>
+    (lesson.week - 1) * plan.days_per_week + lesson.day - 1
+  const allLessons = flattenLessons(plan).map((lesson): Lesson => {
+    const state = lessonStates[lessonKey(lesson.week, lesson.day, lesson.title)]
+    return {
+      ...lesson,
+      ...state,
+      action:
+        state?.id != null
+          ? state.completed
+            ? 'review'
+            : dayIndex(lesson) === progressDay
+              ? 'start'
+              : 'continue'
+          : undefined,
+    }
+  })
   const byUnit = lessonsByUnit(allLessons)
-  const currentUnitId = plan.current_unit
+  // The persisted current_unit is only an initial value, not a progress cursor.
+  const currentUnitId = allLessons.find(
+    (lesson) => dayIndex(lesson) === progressDay
+  )?.unit_id
+  const completedUnits = new Set(
+    Object.entries(byUnit)
+      .filter(
+        ([, lessons]) =>
+          lessons.length > 0 && lessons.every((lesson) => lesson.completed)
+      )
+      .map(([unitId]) => unitId)
+  )
 
   // The real level test unlocks when the learner reaches the plan's final
   // position, as reported by the backend completion contract.
@@ -473,19 +509,32 @@ function PlanContent({ language }: { language: TargetLanguage }) {
         {units.map((unit, i) => {
           const unitLessons = byUnit[unit.id] ?? []
           const completedLessons = unitLessons.filter((l) => l.completed).length
-          const isActive = unit.id === currentUnitId
-          const unitComp = competencies[unit.id] ?? 0
-          const isCompleted =
-            unitComp >= 0.8 ||
-            (completedLessons > 0 && completedLessons === unitLessons.length)
+          const isCompleted = completedUnits.has(unit.id)
+          const isActive = unit.id === currentUnitId && !isCompleted
+          const activeLesson = unitLessons.find(
+            (lesson) =>
+              lesson.id != null &&
+              !lesson.completed &&
+              dayIndex(lesson) === progressDay
+          )
 
-          // A unit is locked if its prerequisite is not completed
+          // Reached units and generated lessons stay accessible even after a skipped day.
+          const isReached = unitLessons.some(
+            (lesson) => dayIndex(lesson) <= progressDay
+          )
+          const hasGeneratedLessons = unitLessons.some(
+            (lesson) => lesson.id != null
+          )
           const prereqUnit = unit.prerequisite_unit
           const prereqCompleted = prereqUnit
-            ? (competencies[prereqUnit] ?? 0) >= 0.8
+            ? completedUnits.has(prereqUnit)
             : true
           const isLocked =
-            !isActive && !isCompleted && !prereqCompleted && i > 0
+            !isReached &&
+            !hasGeneratedLessons &&
+            !isCompleted &&
+            !prereqCompleted &&
+            i > 0
 
           return (
             <UnitCard
@@ -494,7 +543,11 @@ function PlanContent({ language }: { language: TargetLanguage }) {
               index={i}
               lessonCount={unitLessons.length || unit.lesson_types.length}
               grammarCount={unit.grammar_points.length}
-              competency={unitComp}
+              progress={
+                unitLessons.length > 0
+                  ? completedLessons / unitLessons.length
+                  : 0
+              }
               status={{
                 completed: isCompleted,
                 active: isActive,
@@ -503,8 +556,8 @@ function PlanContent({ language }: { language: TargetLanguage }) {
               }}
               onClick={() => setActiveDrawer(unit)}
               onStartLesson={
-                isActive && activeLessonId != null
-                  ? () => router.push(`/lesson/${activeLessonId}`)
+                isActive && activeLesson?.id != null
+                  ? () => router.push(`/lesson/${activeLesson.id}`)
                   : undefined
               }
             />
@@ -518,7 +571,7 @@ function PlanContent({ language }: { language: TargetLanguage }) {
             index={units.length}
             lessonCount={1}
             grammarCount={0}
-            competency={
+            progress={
               plan.completion_test_score != null
                 ? plan.completion_test_score
                 : 0
