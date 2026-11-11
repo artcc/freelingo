@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+from unittest.mock import AsyncMock, Mock
+
 import pytest
+
+from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
 
 
 class FakePhrasebookNativeHelpLLM:
@@ -374,3 +378,64 @@ async def test_polish_language_returns_polish_categories(client, test_user):
     assert len(categories) == 28
     assert any(c["id"] == "powitania" for c in categories)
     assert any(c["situation"] == "Powitania i pożegnania" for c in categories)
+
+
+@pytest.mark.parametrize("provider", ["local", "openai", "gemini"])
+@pytest.mark.parametrize(
+    "language", ["/app/unexpected", "../../escape", "en/../../../escape", "..\\escape", "xx-XX", ""]
+)
+async def test_phrase_audio_rejects_invalid_language_before_storage_or_synthesis(
+    client, test_user, monkeypatch, provider, language
+):
+    from app.main import app
+    from app.routers import phrasebook as phrasebook_router
+
+    service = Mock(synthesize=AsyncMock(return_value=b"audio"))
+    monkeypatch.setattr(app.state, "tts_service", service, raising=False)
+    monkeypatch.setattr(phrasebook_router.settings, "TTS_PROVIDER", provider)
+    lookup = Mock(side_effect=AssertionError("Invalid language reached the catalog"))
+    mkdir = Mock(side_effect=AssertionError("Invalid language reached the filesystem"))
+    monkeypatch.setattr(phrasebook_router, "get_phrasebook_category", lookup)
+    monkeypatch.setattr(phrasebook_router.os, "makedirs", mkdir)
+    _, headers = test_user
+
+    response = await client.get(
+        "/api/phrasebook/audio/greetings/0", headers=headers, params={"language": language}
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Unsupported target language"
+    lookup.assert_not_called()
+    mkdir.assert_not_called()
+    service.synthesize.assert_not_awaited()
+
+
+@pytest.mark.parametrize("language", [None, *sorted(SUPPORTED_TARGET_LANGUAGES)])
+async def test_phrase_audio_keeps_supported_languages_and_reuses_cache(
+    client, test_user, monkeypatch, tmp_path, language
+):
+    from app.data.phrasebook import get_phrasebook_categories
+    from app.main import app
+    from app.routers import phrasebook as phrasebook_router
+
+    effective_language = language or "en-GB"
+    category = get_phrasebook_categories(effective_language)[0]
+    service = Mock(synthesize=AsyncMock(return_value=b"ID3audio"))
+    monkeypatch.setattr(app.state, "tts_service", service, raising=False)
+    monkeypatch.setattr(phrasebook_router.settings, "AUDIO_STORAGE_PATH", str(tmp_path))
+    _, headers = test_user
+    url = f"/api/phrasebook/audio/{category.id}/0"
+    params = {"language": language} if language is not None else {}
+
+    first = await client.get(url, headers=headers, params=params)
+    cached = await client.get(url, headers=headers, params=params)
+
+    assert first.status_code == cached.status_code == 200
+    assert first.content == cached.content == b"ID3audio"
+    assert first.headers["content-type"] == "audio/mpeg"
+    service.synthesize.assert_awaited_once_with(
+        category.phrases[0].text, language=effective_language
+    )
+    files = list((tmp_path / "phrasebook" / effective_language.split("-")[0]).glob("*.mp3"))
+    assert len(files) == 1
+    assert files[0].read_bytes() == b"ID3audio"

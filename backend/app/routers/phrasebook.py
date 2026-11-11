@@ -21,6 +21,7 @@ from app.data.phrasebook import (
     get_phrasebook_category,
 )
 from app.models.user import User
+from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
 from app.schemas.phrasebook import (
     PhrasebookCategoriesResponse,
     PhrasebookCategoryDetailResponse,
@@ -230,6 +231,11 @@ async def get_phrase_audio(
     _current_user: User = Depends(get_current_user),
 ) -> FileResponse:
     """Return cached TTS audio for a phrase. Generates and caches on first request."""
+    if language not in SUPPORTED_TARGET_LANGUAGES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unsupported target language",
+        )
     category = get_phrasebook_category(category_id, language)
     if not category:
         raise HTTPException(

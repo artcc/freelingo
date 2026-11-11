@@ -398,7 +398,7 @@ describe.each([
     expect(screen.getByText('A new passage.')).toBeVisible()
     expect(screen.getByText('A new passage.')).toHaveAttribute('lang', 'en-GB')
     if (feature === 'listening') {
-      expect(screen.getByRole('button', { name: 'Play' })).toBeVisible()
+      expect(screen.getByRole('button', { name: 'listen' })).toBeVisible()
       expect(screen.getByText('transcript')).toBeVisible()
     }
     expect(screen.getAllByRole('button', { name: 'show' })).toHaveLength(5)

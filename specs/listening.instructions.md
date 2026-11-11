@@ -258,7 +258,8 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 
 `ExerciseAudioPlayer` fetches the protected MP3 or WAV through `apiFetch`, preserves its MIME type,
 creates a Blob URL, and provides play, pause, progress, click-to-seek, browser-derived duration,
-and an error state. Listening does not
+and an error state. Playback labels are localized; seeking uses a focusable slider supporting arrow
+keys, Home, and End for both persisted Listening audio and lesson TTS. Listening does not
 require audio playback before answers can be submitted.
 Unmount, exercise replacement or authentication-session replacement cancels pending playback work,
 detaches media listeners and releases its audio/Blob URL. Late fetch, Blob and play completions cannot

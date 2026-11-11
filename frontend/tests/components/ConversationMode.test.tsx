@@ -132,6 +132,16 @@ function microphone() {
   }
 }
 
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  let reject!: (error: Error) => void
+  const promise = new Promise<T>((done, fail) => {
+    resolve = done
+    reject = fail
+  })
+  return { promise, resolve, reject }
+}
+
 function deferWarmup(ignoreAbort = false) {
   let resolve!: (response: { ok: boolean; status?: number }) => void
   let reject!: (error: Error) => void
@@ -218,6 +228,338 @@ afterEach(() => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  describe('authentication ownership', () => {
+    const originalUser = mapUser({
+      id: 1,
+      username: 'voice-test',
+      display_name: 'Voice Test',
+      role: 'user',
+    })
+
+    beforeEach(() => useAuthStore.setState({ user: originalUser }))
+
+    function replaceIdentity(change: 'session' | 'user' | 'logout') {
+      if (change === 'session') {
+        useAuthStore.getState().startSession('next-token')
+        useAuthStore.getState().setUser(originalUser)
+      } else if (change === 'user') {
+        useAuthStore.getState().setUser({ ...originalUser, id: 2 })
+      } else {
+        useAuthStore.getState().logout()
+      }
+    }
+
+    describe.each(['resume', 'microphone', 'vad', 'config', 'warmup'] as const)(
+      'pending %s',
+      (stage) => {
+        it.each(['session', 'user'] as const)(
+          'invalidates immediately on %s replacement without disturbing the next attempt',
+          async (change) => {
+            const oldMic = microphone()
+            const nextMic = microphone()
+            const pending = deferred<void>()
+            const permission = deferred<MediaStream>()
+            const response = deferred<Response>()
+            const configFetch = vi.fn().mockReturnValue(response.promise)
+            let warmupSignal: AbortSignal | undefined
+            mocks.getUserMedia.mockResolvedValue(nextMic.stream)
+            if (stage !== 'resume')
+              mocks.getUserMedia.mockResolvedValueOnce(oldMic.stream)
+            if (stage === 'resume') {
+              const resume = vi.fn().mockResolvedValue(undefined)
+              resume.mockReturnValueOnce(pending.promise)
+              vi.stubGlobal(
+                'AudioContext',
+                class {
+                  state = 'suspended'
+                  close = mocks.closeAudio
+                  resume = resume
+                }
+              )
+            }
+            if (stage === 'microphone') {
+              mocks.getUserMedia
+                .mockReset()
+                .mockResolvedValue(nextMic.stream)
+                .mockReturnValueOnce(permission.promise)
+            }
+            if (stage === 'vad')
+              mocks.start.mockReturnValueOnce(pending.promise)
+            if (stage === 'config') {
+              useConfigStore.setState({ loaded: false })
+              vi.stubGlobal('fetch', configFetch)
+            }
+            if (stage === 'warmup') {
+              mocks.apiFetch.mockImplementation((url, options) => {
+                if (url === '/api/conversation/warmup') {
+                  warmupSignal = options.signal
+                  return response.promise
+                }
+                return Promise.resolve({ ok: true, json: async () => null })
+              })
+            }
+            render(<ConversationMode />)
+            await act(async () => {
+              fireEvent.click(screen.getByRole('button', { name: 'start' }))
+            })
+            expect(MockWebSocket.instances).toHaveLength(0)
+            if (stage === 'config')
+              expect(configFetch).toHaveBeenCalledTimes(1)
+            if (stage === 'warmup') expect(warmupSignal).toBeDefined()
+            if (stage === 'vad') expect(mocks.start).toHaveBeenCalledTimes(1)
+
+            act(() => {
+              replaceIdentity(change)
+              // Resource invalidation is synchronous at the auth-store boundary.
+              expect(mocks.closeAudio).toHaveBeenCalledTimes(1)
+              if (stage === 'vad' || stage === 'config' || stage === 'warmup')
+                expect(oldMic.stop).toHaveBeenCalledTimes(1)
+              if (warmupSignal) expect(warmupSignal.aborted).toBe(true)
+            })
+            mocks.apiFetch.mockResolvedValue({
+              ok: true,
+              json: async () => null,
+            })
+            await act(async () => {
+              fireEvent.click(screen.getByRole('button', { name: 'start' }))
+            })
+            // VAD operations remain serialized; both config consumers share one load.
+            expect(MockWebSocket.instances).toHaveLength(
+              stage === 'vad' || stage === 'config' ? 0 : 1
+            )
+            await act(async () => {
+              pending.resolve()
+              permission.resolve(oldMic.stream)
+              response.resolve(
+                new Response(JSON.stringify({ tts_provider: 'gemini' }))
+              )
+            })
+            await waitFor(() =>
+              expect(MockWebSocket.instances).toHaveLength(1)
+            )
+            const current = MockWebSocket.instances[0]
+            act(() => current.onopen?.())
+            expect(JSON.parse(current.send.mock.calls[0][0]).token).toBe(
+              change === 'session' ? 'next-token' : 'token'
+            )
+            expect(mocks.closeAudio).toHaveBeenCalledTimes(1)
+            expect(nextMic.stop).not.toHaveBeenCalled()
+            expect(current.close).not.toHaveBeenCalled()
+            expect(oldMic.stop).toHaveBeenCalledTimes(
+              stage === 'resume' ? 0 : 1
+            )
+            expect(screen.queryByText(/errorConnection|errorMic/)).toBeNull()
+            if (stage === 'config') {
+              expect(configFetch).toHaveBeenCalledTimes(1)
+              expect(configFetch.mock.calls[0][1].signal.aborted).toBe(false)
+            }
+            if (stage === 'vad') {
+              expect(mocks.pause).toHaveBeenCalledTimes(1)
+              expect(mocks.start).toHaveBeenCalledTimes(2)
+              expect(mocks.pause.mock.invocationCallOrder[0]).toBeLessThan(
+                mocks.start.mock.invocationCallOrder[1]
+              )
+            }
+          }
+        )
+      }
+    )
+
+    it.each(['resume', 'microphone', 'vad', 'warmup'] as const)(
+      'ignores an obsolete %s rejection after a replacement attempt starts',
+      async (stage) => {
+        const pending = deferred<void>()
+        const nextMic = microphone()
+        mocks.getUserMedia.mockResolvedValue(nextMic.stream)
+        if (stage === 'vad' || stage === 'warmup')
+          mocks.getUserMedia.mockResolvedValueOnce(microphone().stream)
+        if (stage === 'resume') {
+          const resume = vi.fn().mockResolvedValue(undefined)
+          resume.mockReturnValueOnce(pending.promise)
+          vi.stubGlobal(
+            'AudioContext',
+            class {
+              state = 'suspended'
+              close = mocks.closeAudio
+              resume = resume
+            }
+          )
+        }
+        if (stage === 'microphone')
+          mocks.getUserMedia.mockReturnValueOnce(pending.promise)
+        if (stage === 'vad') mocks.start.mockReturnValueOnce(pending.promise)
+        if (stage === 'warmup') {
+          mocks.apiFetch.mockImplementation((url) =>
+            url === '/api/conversation/warmup'
+              ? pending.promise
+              : Promise.resolve({ ok: true, json: async () => null })
+          )
+        }
+        render(<ConversationMode />)
+        await act(async () => {
+          fireEvent.click(screen.getByRole('button', { name: 'start' }))
+        })
+        act(() => replaceIdentity('session'))
+        mocks.apiFetch.mockResolvedValue({ ok: true, json: async () => null })
+        await act(async () => {
+          fireEvent.click(screen.getByRole('button', { name: 'start' }))
+        })
+        await act(async () => pending.reject(new Error('Obsolete failure')))
+        await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+        expect(MockWebSocket.instances[0].close).not.toHaveBeenCalled()
+        expect(mocks.closeAudio).toHaveBeenCalledTimes(1)
+        expect(nextMic.stop).not.toHaveBeenCalled()
+        expect(screen.queryByText(/errorConnection|errorMic/)).toBeNull()
+      }
+    )
+
+    describe.each(['connecting', 'live'] as const)('%s WebSocket', (stage) => {
+      it.each(['session', 'user', 'logout'] as const)(
+        'closes on %s replacement and ignores stale socket/audio callbacks',
+        async (change) => {
+          const mic = microphone()
+          mocks.getUserMedia.mockResolvedValueOnce(mic.stream)
+          render(<ConversationMode />)
+          fireEvent.click(screen.getByRole('button', { name: 'start' }))
+          await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+          const old = MockWebSocket.instances[0]
+          const oldOpen = old.onopen!
+          const oldMessage = old.onmessage!
+          const oldError = old.onerror!
+          const oldClose = old.onclose!
+          const oldIdle = mocks.onAudioIdle!
+          const decoded = deferred<ArrayBuffer>()
+          const playback = deferred<void>()
+          if (stage === 'live') {
+            act(() => oldOpen())
+            const blob = new Blob()
+            blob.arrayBuffer = vi.fn(() => decoded.promise)
+            mocks.enqueue.mockReturnValueOnce(playback.promise)
+            act(() => {
+              old.message({
+                type: 'transcript',
+                role: 'assistant',
+                final: true,
+                text: 'Private previous transcript',
+              })
+              oldMessage({ data: blob })
+              oldMessage({ data: new ArrayBuffer(8) })
+            })
+          } else {
+            old.readyState = 0
+          }
+          act(() => {
+            replaceIdentity(change)
+            expect(old.close).toHaveBeenCalledTimes(1)
+            expect(mic.stop).toHaveBeenCalledTimes(1)
+            expect(mocks.cancel).toHaveBeenCalledTimes(1)
+            expect(mocks.closeAudio).toHaveBeenCalledTimes(1)
+          })
+          expect(old.onopen).toBeNull()
+          expect(old.onmessage).toBeNull()
+          expect(old.onerror).toBeNull()
+          expect(old.onclose).toBeNull()
+          expect(screen.queryByText('Private previous transcript')).toBeNull()
+          const oldSendCount = old.send.mock.calls.length
+          act(() => {
+            speak()
+            mocks.options.onVADMisfire?.()
+          })
+          expect(old.send).toHaveBeenCalledTimes(oldSendCount)
+          expect(screen.getByTestId('speaking')).toHaveTextContent('false')
+          if (change === 'logout') {
+            act(() => {
+              useAuthStore.getState().startSession('next-token')
+              useAuthStore.getState().setUser(originalUser)
+            })
+          }
+          const current = await start()
+          mocks.enqueue.mockClear()
+          act(() => current.onmessage?.({ data: new ArrayBuffer(8) }))
+          expect(screen.getByText('statusSpeaking')).toBeInTheDocument()
+          await act(async () => {
+            oldOpen()
+            oldMessage({ data: new ArrayBuffer(8) })
+            oldMessage({
+              data: JSON.stringify({
+                type: 'session_end',
+                reason: 'inactivity',
+              }),
+            })
+            oldError()
+            oldClose({ code: 1006, reason: '' })
+            oldIdle()
+            if (stage === 'live') {
+              decoded.resolve(new ArrayBuffer(8))
+              playback.reject(new Error('Obsolete playback'))
+            }
+          })
+          expect(old.send).toHaveBeenCalledTimes(oldSendCount)
+          expect(mocks.enqueue).toHaveBeenCalledTimes(1)
+          expect(current.close).not.toHaveBeenCalled()
+          expect(mocks.closeAudio).toHaveBeenCalledTimes(1)
+          expect(screen.getByText('statusSpeaking')).toBeInTheDocument()
+          expect(screen.queryByText(/errorConnection|sessionEnded/)).toBeNull()
+        }
+      )
+    })
+
+    it('does not auto-start the previous chat context after authentication changes', async () => {
+      const mic = microphone()
+      const permission = deferred<MediaStream>()
+      mocks.getUserMedia.mockReturnValueOnce(permission.promise)
+      render(
+        <ConversationMode
+          autoStart
+          initialContext={[{ role: 'user', content: 'Previous account context' }]}
+        />
+      )
+      await waitFor(() => expect(mocks.getUserMedia).toHaveBeenCalledTimes(1))
+      act(() => replaceIdentity('session'))
+      await act(async () => permission.resolve(mic.stream))
+      expect(mic.stop).toHaveBeenCalledTimes(1)
+      expect(mocks.getUserMedia).toHaveBeenCalledTimes(1)
+      expect(mocks.start).not.toHaveBeenCalled()
+      expect(MockWebSocket.instances).toHaveLength(0)
+      expect(screen.getByRole('button', { name: 'start' })).toBeEnabled()
+    })
+
+    it('preserves pending startup and live playback during token rotation and same-user updates', async () => {
+      const mic = microphone()
+      mocks.getUserMedia.mockResolvedValueOnce(mic.stream)
+      const pending = deferWarmup()
+      render(<ConversationMode />)
+      await act(async () => {
+        fireEvent.click(screen.getByRole('button', { name: 'start' }))
+      })
+      act(() => {
+        useAuthStore.getState().setTokens('rotated-token')
+        useAuthStore.getState().setUser({
+          ...originalUser,
+          displayName: 'Updated',
+        })
+      })
+      expect(pending.signal.aborted).toBe(false)
+      await act(async () => pending.resolve({ ok: true }))
+      const ws = MockWebSocket.instances[0]
+      act(() => ws.onopen?.())
+      expect(JSON.parse(ws.send.mock.calls[0][0]).token).toBe('rotated-token')
+      act(() => ws.onmessage?.({ data: new ArrayBuffer(8) }))
+      act(() => {
+        useAuthStore.getState().setTokens('rotated-again')
+        useAuthStore.getState().setUser({
+          ...originalUser,
+          displayName: 'Again',
+        })
+      })
+      expect(screen.getByText('statusSpeaking')).toBeInTheDocument()
+      expect(ws.close).not.toHaveBeenCalled()
+      expect(mic.stop).not.toHaveBeenCalled()
+      expect(mocks.cancel).not.toHaveBeenCalled()
+      expect(mocks.closeAudio).not.toHaveBeenCalled()
+    })
+  })
+
   it('resolves delayed provider configuration before opening the trial WebSocket', async () => {
     useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
     localStorage.setItem('tts_voice', 'coral')

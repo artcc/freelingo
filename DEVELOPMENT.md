@@ -48,8 +48,8 @@ the secret out of shell history. The account names map to these environment vari
 - `redis`: `REDIS_PASSWORD`.
 - `secretkey`: `SECRET_KEY`, the application's JWT signing secret.
 
-`run-dev.sh` loads the `openai`, `postgres`, `redis`, and `secretkey` entries automatically and
-requires all four. Anthropic, DeepSeek, and Gemini have commented exports and entries in
+`run-dev.sh` loads the `gemini`, `openai`, `postgres`, `redis`, and `secretkey` entries automatically and
+requires all five. Anthropic and DeepSeek have commented exports and entries in
 `required_vars`; uncomment both lines for each provider you enable. The script loads its key from
 Keychain and checks that it is present before starting Compose. Select the active providers in
 `.env.dev` and keep secret values out of that file.

@@ -7,6 +7,9 @@ import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { resolveConfiguredTtsVoice, resolveTtsVoice } from '@/lib/tts-voice'
 
+// Includes public config (20s), the TTS proxy (60s), and browser transport.
+const TTS_TIMEOUT_MS = 90_000
+
 interface ExerciseAudioPlayerProps {
   exerciseId: number
   onFirstPlay?: () => void
@@ -153,7 +156,7 @@ export function ExerciseAudioPlayer({
 
     playback.pending = true
     setState('loading')
-    if (tts) playback.timeout = setTimeout(fail, 60_000)
+    if (tts) playback.timeout = setTimeout(fail, TTS_TIMEOUT_MS)
     try {
       if (!playback.audio) {
         const config = useConfigStore.getState()
@@ -253,11 +256,7 @@ export function ExerciseAudioPlayer({
   }
 
   const icon = state === 'loading' ? '◌' : state === 'playing' ? '▐▐' : '▶'
-  const label = tts
-    ? tAudio(state === 'playing' ? 'ariaPause' : 'listen')
-    : state === 'playing'
-      ? 'Pause'
-      : 'Play'
+  const label = tAudio(state === 'playing' ? 'ariaPause' : 'listen')
 
   return (
     <div className="border-fl-border bg-fl-surface space-y-2 border p-4">
@@ -274,27 +273,23 @@ export function ExerciseAudioPlayer({
         <div
           className="bg-fl-border relative h-1.5 flex-1 cursor-pointer"
           onClick={handleSeek}
-          role={tts ? 'slider' : 'progressbar'}
-          tabIndex={tts ? 0 : undefined}
-          aria-label={tts ? tAudio('ariaSeek') : undefined}
-          onKeyDown={
-            tts
-              ? (event) => {
-                  const positions: Record<string, number> = {
-                    ArrowLeft: progress / 100 - 0.05,
-                    ArrowDown: progress / 100 - 0.05,
-                    ArrowRight: progress / 100 + 0.05,
-                    ArrowUp: progress / 100 + 0.05,
-                    Home: 0,
-                    End: 1,
-                  }
-                  if (event.key in positions) {
-                    event.preventDefault()
-                    seek(positions[event.key])
-                  }
-                }
-              : undefined
-          }
+          role="slider"
+          tabIndex={0}
+          aria-label={tAudio('ariaSeek')}
+          onKeyDown={(event) => {
+            const positions: Record<string, number> = {
+              ArrowLeft: progress / 100 - 0.05,
+              ArrowDown: progress / 100 - 0.05,
+              ArrowRight: progress / 100 + 0.05,
+              ArrowUp: progress / 100 + 0.05,
+              Home: 0,
+              End: 1,
+            }
+            if (event.key in positions) {
+              event.preventDefault()
+              seek(positions[event.key])
+            }
+          }}
           aria-valuenow={Math.round(progress)}
           aria-valuemin={0}
           aria-valuemax={100}

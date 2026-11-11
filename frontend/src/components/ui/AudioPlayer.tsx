@@ -10,7 +10,8 @@ import { apiFetch } from '@/lib/api'
 import { resolveConfiguredTtsVoice, resolveTtsVoice } from '@/lib/tts-voice'
 import { useConfigStore } from '@/store/config'
 
-const TTS_TIMEOUT_MS = 15_000
+// Includes public config (20s), the TTS proxy (60s), and browser transport.
+const TTS_TIMEOUT_MS = 90_000
 const ttsLogger = getLogger('tts')
 
 interface AudioPlayerProps {
@@ -128,7 +129,10 @@ export function AudioPlayer({
     const analyticsSession = useAuthStore.getState().sessionVersion
     const analyticsPath = window.location.pathname
     controllerRef.current = controller
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+    const timeoutId = setTimeout(() => {
+      controller.abort()
+      showError()
+    }, timeoutMs)
     timeoutRef.current = timeoutId
     let failed = false
     const showError = () => {

@@ -314,6 +314,9 @@ Listening generation bounds this wait to 20 seconds and rechecks session and lea
 if a provisional language switch interrupts the wait, a rejected switch resumes a read-only lookup.
 Conversation resolves the voice within warmup before opening its WebSocket. Settings previews release
 audio and discard pending responses on account-session changes.
+Conversation invalidates its entire microphone, warmup, WebSocket, and playback lifecycle when the
+authentication session or user changes, including during asynchronous startup. Access-token rotation
+within the same session does not interrupt conversation.
 
 Dashboard's `components/dashboard/ProgressOverview.tsx` renders existing plan-scoped progress with
 prominent XP/streak cards, today's XP, a seven-day UTC strip, and compact lesson/accuracy metrics.
@@ -538,6 +541,9 @@ HTTP audio playback and TTS proxies preserve the backend MIME type (`audio/wav` 
 `audio/mpeg` for local/OpenAI). Voice playback decodes either binary format with `decodeAudioData`
 and supplies the matching MIME type to its HTML audio fallback. The WebSocket framing and turn
 pipeline remain provider-independent; persisted Listening recordings retain their own format.
+Player request budgets and the TTS proxy's cancellation/deadline behavior are defined in
+`speech-services.instructions.md`. Both sources in `ExerciseAudioPlayer` share localized controls
+and keyboard-accessible seeking.
 
 Detailed behavior belongs to `platform.instructions.md`, `speech-services.instructions.md`, and
 `voice-conversation.instructions.md`.

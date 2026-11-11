@@ -270,6 +270,8 @@ unconfirmed provider. Initial config arrival does not cancel the first pending p
 provider changes cancel player audio. Preview playback is also canceled on account-session changes.
 HTTP playback and proxies preserve the response MIME type. The player supports loading, playing,
 stop, and error states and is used across lessons, flashcards, vocabulary, chat, and phrasebook.
+Its default 90-second request budget includes public configuration, authentication renewal, synthesis,
+and response download. Callers may override it; the dashboard tour retains its 75-second budget.
 Error Detective also uses this same component and endpoint for the full corrected sentence, after
 the correction step has been submitted. Generated explanations are not spoken. Existing provider
 and voice-preference rules apply; audio failure does not change the game result or block completion.
@@ -296,8 +298,9 @@ Listening audio lookup. In TTS mode it posts the exercise source text, preferred
 `study_plan_id` to `/api/tts`; backend ownership and persisted plan language resolution still apply.
 It offers play/pause, seeking, replay and manual retry after failure. Replays retain the synthesized
 audio within the same player context, avoiding another TTS request. This is transient browser reuse,
-not a persistent backend audio cache. TTS playback work has a 60-second client deadline, and its seek
-control supports keyboard navigation. Leaving the player, regenerating its source, changing the owning
+not a persistent backend audio cache. TTS playback work has a 90-second client deadline, including
+configuration loading. Both TTS and persisted Listening audio use a keyboard-accessible seek slider
+and localized playback labels. Leaving the player, regenerating its source, changing the owning
 plan or authentication session releases audio, listeners, timers and Blob URLs and cancels pending
 work. Late completions cannot publish obsolete audio. The separate Listening module continues to use
 its persisted exercise audio endpoint, supporting WAV and MP3.
@@ -314,7 +317,10 @@ its persisted exercise audio endpoint, supporting WAV and MP3.
 - prevents another recording while transcription or result handling is pending.
 
 The dedicated Next.js TTS route forwards authentication and trace context but buffers the backend
-audio before responding and preserves its MIME type. The STT route parses and reconstructs multipart
+audio before responding and preserves its MIME type. It propagates browser cancellation to its backend
+request and bounds backend response headers and body with a 60-second deadline. Transport failures
+return `502`; cancellation or deadline expiry returns `504`. Transport cancellation does not guarantee
+that already-started backend or provider synthesis stops. The STT route parses and reconstructs multipart
 data, forwards auth and cookies, and propagates request cancellation to the backend.
 
 ## Persistent and transient audio
@@ -334,7 +340,9 @@ For instruction-capable OpenAI models, Phrasebook uses a synthesis hash covering
 model, voice, speed, format, and instructions. Gemini uses its synthesis identity and separate `.wav`
 files; local and legacy OpenAI models retain the category/phrase/text cache identity and `.mp3` files.
 Phrasebook responses use `Cache-Control: no-store` because their public URL does not
-identify the synthesis settings. Tour, Phrasebook, and voice-preview audio is generated on demand for a new key, leaving
+identify the synthesis settings. Phrasebook validates its target-language query before deriving a
+cache directory; its request and error contract belongs to `api-endpoints.instructions.md` (Phrasebook).
+Tour, Phrasebook, and voice-preview audio is generated on demand for a new key, leaving
 previous files intact. Listening recordings remain attached to their exercises and are not regenerated
 by model or prompt changes. A provider-side update behind a model alias does not change cache keys.
 

@@ -42,6 +42,12 @@ interface TranscriptEntry {
   text: string
 }
 
+interface SessionOwner {
+  attempt: number
+  sessionVersion: number
+  userId: number | undefined
+}
+
 function QuotaBar({
   label,
   used,
@@ -307,6 +313,7 @@ export default function ConversationMode({
   const tPractice = useTranslations('lessonPractice')
   const locale = useLocale()
   const accessToken = useAuthStore((s) => s.accessToken)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
 
@@ -376,6 +383,7 @@ export default function ConversationMode({
   const cleanEndRef = useRef(false)
   const mountedRef = useRef(true)
   const startAttemptRef = useRef(0)
+  const sessionOwnerRef = useRef<SessionOwner | null>(null)
   const warmupRef = useRef<{
     controller: AbortController
     timeout: ReturnType<typeof setTimeout>
@@ -393,6 +401,18 @@ export default function ConversationMode({
     'unknown'
   )
   const sessionStartedAtRef = useRef<number | null>(null)
+
+  const isCurrentSession = useCallback((owner: SessionOwner | null) => {
+    const auth = useAuthStore.getState()
+    return (
+      owner !== null &&
+      mountedRef.current &&
+      sessionOwnerRef.current === owner &&
+      startAttemptRef.current === owner.attempt &&
+      auth.sessionVersion === owner.sessionVersion &&
+      auth.user?.id === owner.userId
+    )
+  }, [])
 
   useEffect(() => {
     assistantSpeakingRef.current = assistantSpeaking
@@ -453,7 +473,7 @@ export default function ConversationMode({
     },
     onFrameProcessed: (probabilities, frame) => {
       if (
-        !sessionActiveRef.current ||
+        !isCurrentSession(sessionOwnerRef.current) ||
         !(probabilities.isSpeech >= VAD_POSITIVE_SPEECH_THRESHOLD)
       )
         return
@@ -464,7 +484,7 @@ export default function ConversationMode({
       energy.samples += frame.length
     },
     onSpeechStart: () => {
-      if (!sessionActiveRef.current) return
+      if (!isCurrentSession(sessionOwnerRef.current)) return
       convLogger.info('vad speech start', {
         assistantSpeaking: assistantSpeakingRef.current,
       })
@@ -473,12 +493,13 @@ export default function ConversationMode({
       if (!assistantTurnActiveRef.current) setAssistantThinking(false)
     },
     onVADMisfire: () => {
+      if (!isCurrentSession(sessionOwnerRef.current)) return
       speechStartedAtRef.current = null
       speechEnergyRef.current = { sumSquares: 0, samples: 0 }
       if (mountedRef.current) setUserSpeaking(false)
     },
     onSpeechEnd: (audio: Float32Array) => {
-      if (!mountedRef.current) return
+      if (!isCurrentSession(sessionOwnerRef.current)) return
       const minUtteranceMs = assistantTurnActiveRef.current
         ? INTERRUPTION_MIN_UTTERANCE_MS
         : MIN_UTTERANCE_MS
@@ -659,6 +680,7 @@ export default function ConversationMode({
         return
       closeReasonRef.current = reason
       startAttemptRef.current++
+      sessionOwnerRef.current = null
       if (warmupRef.current) {
         clearTimeout(warmupRef.current.timeout)
         warmupRef.current.controller.abort()
@@ -727,6 +749,31 @@ export default function ConversationMode({
   // ─── Auto-start when opened as overlay from chat ────────────────────────
   const pendingAutoStartRef = useRef(false)
 
+  useEffect(
+    () =>
+      useAuthStore.subscribe((auth, previous) => {
+        if (
+          auth.sessionVersion === previous.sessionVersion &&
+          auth.user?.id === previous.user?.id
+        )
+          return
+        pendingAutoStartRef.current = false
+        const owner = sessionOwnerRef.current
+        if (!owner || isCurrentSession(owner)) return
+        cleanEndRef.current = true
+        finalizeSession()
+        sessionStartedAtRef.current = null
+        if (mountedRef.current) {
+          setTranscript([])
+          setErrorMsg(null)
+          setQuota(null)
+          setReviewPromptOpen(false)
+          setStatus('ready')
+        }
+      }),
+    [finalizeSession, isCurrentSession]
+  )
+
   useEffect(() => {
     if (autoStart && !sessionActive) {
       pendingAutoStartRef.current = true
@@ -751,16 +798,14 @@ export default function ConversationMode({
   // ─── WebSocket ────────────────────────────────────────────────────────────
   const connectWs = useCallback(
     (token: string, context?: ChatContextItem[], voice?: string) => {
+      const owner = sessionOwnerRef.current
+      if (!isCurrentSession(owner)) return
       convLogger.info('opening conversation websocket')
       const url = buildConversationWsUrl()
       const ws = new WebSocket(url)
       ws.binaryType = 'arraybuffer'
       wsRef.current = ws
-      const attempt = startAttemptRef.current
-      const isCurrent = () =>
-        mountedRef.current &&
-        startAttemptRef.current === attempt &&
-        wsRef.current === ws
+      const isCurrent = () => isCurrentSession(owner) && wsRef.current === ws
 
       ws.onopen = () => {
         if (!isCurrent()) return
@@ -1011,14 +1056,18 @@ export default function ConversationMode({
       trialMode,
       refreshCurrentUser,
       finalizeSession,
+      isCurrentSession,
       showMemoryToast,
     ]
   )
 
   // ─── Session lifecycle ────────────────────────────────────────────────────
   async function handleStart(topicContext?: ChatContextItem[]) {
+    const auth = useAuthStore.getState()
     if (
-      !accessToken ||
+      !auth.accessToken ||
+      auth.sessionVersion !== sessionVersion ||
+      auth.user?.id !== user?.id ||
       vad.loading ||
       vad.errored ||
       sessionActiveRef.current ||
@@ -1029,8 +1078,13 @@ export default function ConversationMode({
     )
       return
 
-    const startAttempt = ++startAttemptRef.current
-    const startSessionVersion = useAuthStore.getState().sessionVersion
+    const owner: SessionOwner = {
+      attempt: ++startAttemptRef.current,
+      sessionVersion: auth.sessionVersion,
+      userId: auth.user?.id,
+    }
+    sessionOwnerRef.current = owner
+    const isCurrent = () => isCurrentSession(owner)
     sessionActiveRef.current = true
 
     // AudioContext MUST be created during a user-gesture (this click handler)
@@ -1049,12 +1103,12 @@ export default function ConversationMode({
         await ctx.resume()
       }
     } catch (error) {
+      if (!isCurrent()) return
       convLogger.warn('audio context resume failed', { error })
     }
-    if (!mountedRef.current || startAttemptRef.current !== startAttempt) return
+    if (!isCurrent()) return
     audioQueueRef.current = createAudioQueue(ctx, () => {
-      if (!mountedRef.current || startAttemptRef.current !== startAttempt)
-        return
+      if (!isCurrent()) return
       assistantSpeakingRef.current = false
       setAssistantSpeaking(false)
     })
@@ -1093,27 +1147,25 @@ export default function ConversationMode({
           noiseSuppression: true,
         },
       })
-      if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
+      if (!isCurrent()) {
         stream.getTracks().forEach((track) => track.stop())
         return
       }
       micStreamRef.current = stream
       const startVad = vadOperationRef.current.then(async () => {
-        if (!mountedRef.current || startAttemptRef.current !== startAttempt)
-          return
+        if (!isCurrent()) return
         await vad.start()
       })
       vadOperationRef.current = startVad.catch(() => {})
       await startVad
     } catch {
-      if (!mountedRef.current || startAttemptRef.current !== startAttempt)
-        return
+      if (!isCurrent()) return
       setErrorMsg(t('errorMic'))
       setStatus('error')
       finalizeSession()
       return
     }
-    if (!mountedRef.current || startAttemptRef.current !== startAttempt) return
+    if (!isCurrent()) return
 
     const controller = new AbortController()
     let timedOut = false
@@ -1122,18 +1174,11 @@ export default function ConversationMode({
       controller.abort()
     }, WARMUP_TIMEOUT_MS)
     warmupRef.current = { controller, timeout }
-    const unsubscribeSession = useAuthStore.subscribe((auth) => {
-      if (auth.sessionVersion !== startSessionVersion) {
-        finalizeSession()
-        if (mountedRef.current) setStatus('ready')
-      }
-    })
     let warmupResponse: Response
     let voice: string | undefined
     try {
       voice = await resolveConfiguredTtsVoice(controller.signal)
-      if (!mountedRef.current || startAttemptRef.current !== startAttempt)
-        return
+      if (!isCurrent()) return
       warmupResponse = await apiFetch('/api/conversation/warmup', {
         method: 'POST',
         signal: controller.signal,
@@ -1145,9 +1190,7 @@ export default function ConversationMode({
           : {}),
       })
     } catch (error) {
-      if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
-        return
-      }
+      if (!isCurrent()) return
       setErrorMsg(t('errorConnection'))
       warmupLogger.error(
         timedOut ? 'warmup timeout' : 'warmup request failed',
@@ -1160,17 +1203,14 @@ export default function ConversationMode({
       finalizeSession()
       return
     } finally {
-      unsubscribeSession()
       clearTimeout(timeout)
       if (warmupRef.current?.controller === controller) {
         warmupRef.current = null
       }
     }
 
+    if (!isCurrent()) return
     if (!warmupResponse.ok) {
-      if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
-        return
-      }
       setErrorMsg(t('errorConnection'))
       warmupLogger.error('warmup bad status', { status: warmupResponse.status })
       setStatus('error')
@@ -1178,9 +1218,6 @@ export default function ConversationMode({
       return
     }
 
-    if (!mountedRef.current || startAttemptRef.current !== startAttempt) {
-      return
-    }
     const latestToken = useAuthStore.getState().accessToken
     if (!latestToken) {
       setErrorMsg(t('errorUnauthorized'))

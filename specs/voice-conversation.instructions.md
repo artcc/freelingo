@@ -57,6 +57,11 @@ The frontend resolves voice preferences for the selected provider: `tts_voice` f
 `gemini_tts_voice` (`female`/`male`) for Gemini. Invalid WebSocket voice choices fall back to the
 configured provider default for both OpenAI and Gemini; local TTS uses its configured voice.
 
+Changing the authenticated user or authentication session invalidates pending startup and ends an
+active browser voice session: microphone tracks, warmup requests, WebSocket, and playback are released.
+Late microphone permissions and callbacks cannot resume the previous session. Refreshing the access
+token within the same authentication session does not interrupt conversation.
+
 Suggested conversation topics supply a learner message about the selected topic without naming a
 practice language. The session's resolved target language remains authoritative; starters do not
 request English when a different target language is selected.
