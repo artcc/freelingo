@@ -105,7 +105,7 @@ function isListeningReady(exercise: ExerciseItem) {
     exercise.listening_ready === true &&
     typeof exercise.listening_text === 'string' &&
     exercise.listening_text.trim().length > 0 &&
-    exercise.listening_text.length <= 5000 &&
+    [...exercise.listening_text].length <= 5000 &&
     Array.isArray(exercise.options) &&
     exercise.options.length >= 2 &&
     exercise.options.every(
@@ -158,6 +158,7 @@ function LessonContent() {
   const [currentExercise, setCurrentExercise] = useState(0)
   const [answer, setAnswer] = useState('')
   const [evaluating, setEvaluating] = useState(false)
+  const [voiceRecorderBusy, setVoiceRecorderBusy] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [dayComplete, setDayComplete] = useState(false)
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
@@ -428,7 +429,13 @@ function LessonContent() {
 
   async function regenerateCurrentExercise() {
     const exercise = exercises[currentExercise]
-    if (!exercise || exercise.score != null || isReview || operationRef.current)
+    if (
+      !exercise ||
+      exercise.score != null ||
+      isReview ||
+      operationRef.current ||
+      voiceRecorderBusy
+    )
       return
 
     const controller = new AbortController()
@@ -963,7 +970,7 @@ function LessonContent() {
                   <button
                     type="button"
                     onClick={regenerateCurrentExercise}
-                    disabled={operationPending}
+                    disabled={operationPending || voiceRecorderBusy}
                     className="text-fl-caption text-fl-muted-1 hover:text-fl-fg border-fl-border hover:border-fl-border-2 border px-2 py-1 font-mono tracking-widest uppercase transition-colors disabled:opacity-50"
                   >
                     {regeneratingExercise
@@ -1186,6 +1193,7 @@ function LessonContent() {
                     <VoiceRecorder
                       studyPlanId={lesson.study_plan_id}
                       onTranscription={(text) => submitAnswer(text)}
+                      onBusyChange={setVoiceRecorderBusy}
                       maxSeconds={8}
                       disabled={operationPending}
                     />

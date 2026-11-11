@@ -228,6 +228,23 @@ describe('Lesson listening exercises', () => {
     }
   )
 
+  it('accepts a valid 5000-character source containing a supplementary Unicode character', async () => {
+    const text = `${'字'.repeat(4999)}𠀀`
+    saved = detail([exercise({ listening_text: text })])
+    await openLesson()
+    expect(screen.queryByText('listeningIncomplete')).not.toBeInTheDocument()
+    await click('listen')
+    expect(mocks.apiFetch).toHaveBeenCalledWith(
+      '/api/tts',
+      expect.objectContaining({
+        body: JSON.stringify({ text, study_plan_id: 42 }),
+      })
+    )
+    await click('À midi')
+    await click('submitAnswer')
+    expect(screen.getByText('100%')).toBeVisible()
+  })
+
   it('locks choices, submit and regeneration while an answer is pending', async () => {
     const pending = deferred<Response>()
     mocks.apiFetch.mockImplementation((url: string) =>
@@ -518,4 +535,79 @@ describe('Lesson listening exercises', () => {
       screen.queryByText('Quand le train arrive-t-il ?')
     ).not.toBeInTheDocument()
   })
+})
+
+describe('Lesson pronunciation operation exclusion', () => {
+  it.each(['recording', 'transcribing'] as const)(
+    'preserves the spoken answer when regeneration is requested while %s',
+    async (stage) => {
+      saved = detail([
+        exercise({
+          exercise_type: 'pronunciation',
+          question: 'Dites bonjour.',
+          correct_answer: 'Bonjour',
+          options: [],
+        }),
+      ])
+      const stt = deferred<Response>()
+      const regeneration = deferred<Response>()
+      const stop = vi.fn()
+      const processor = {
+        connect: vi.fn(),
+        disconnect: vi.fn(),
+        onaudioprocess: null as
+          | ((event: {
+              inputBuffer: { getChannelData: () => Float32Array }
+            }) => void)
+          | null,
+      }
+      vi.stubGlobal('navigator', {
+        mediaDevices: {
+          getUserMedia: vi.fn(async () => ({
+            getTracks: () => [{ stop }],
+          })),
+        },
+      })
+      vi.stubGlobal(
+        'AudioContext',
+        vi.fn(function () {
+          return {
+            sampleRate: 16000,
+            destination: {},
+            createMediaStreamSource: () => ({ connect: vi.fn() }),
+            createScriptProcessor: () => processor,
+            close: vi.fn(async () => {}),
+          }
+        })
+      )
+      mocks.apiFetch.mockImplementation((url: string) => {
+        if (url === '/api/stt') return stt.promise
+        if (url.endsWith('/regenerate')) return regeneration.promise
+        return request(url)
+      })
+
+      await openLesson()
+      await click('ariaRecord')
+      processor.onaudioprocess!({
+        inputBuffer: { getChannelData: () => new Float32Array([0.5, 0.2]) },
+      })
+      if (stage === 'transcribing') await click('ariaStop')
+      await click('regenerateExercise')
+      if (stage === 'recording') await click('ariaStop')
+      await act(async () => stt.resolve(json({ text: 'Bonjour' })))
+      await act(async () => regeneration.resolve(json({}, 400)))
+
+      expect(mocks.apiFetch).toHaveBeenCalledWith(
+        '/api/lessons/exercises/10/answer',
+        expect.objectContaining({
+          body: JSON.stringify({ answer: 'Bonjour' }),
+        })
+      )
+      expect(stop).toHaveBeenCalledOnce()
+      expect(
+        mocks.apiFetch.mock.calls.some(([url]) => url.endsWith('/regenerate'))
+      ).toBe(false)
+      expect(screen.getByText('100%')).toBeVisible()
+    }
+  )
 })

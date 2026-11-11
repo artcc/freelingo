@@ -172,8 +172,9 @@ An incomplete listening exercise shows recovery guidance and permits regeneratio
 answer submission is blocked until the response marks it ready. Regeneration replaces the mapped
 exercise, including its source and readiness. Failed answer requests retain the answer and do not
 publish a score. Answer options expose their selected state to assistive technology. In-flight
-answer/regeneration work prevents conflicting actions. Domain validation
-belongs to `study-plan.instructions.md`; player transport and resource lifecycle belong to
+answer/regeneration work prevents conflicting actions. Pronunciation recording and transcription also
+block exercise regeneration, while the recorder's stop control remains available during capture.
+Domain validation belongs to `study-plan.instructions.md`; player transport and resource lifecycle belong to
 `speech-services.instructions.md`.
 
 ## Lesson question translation
