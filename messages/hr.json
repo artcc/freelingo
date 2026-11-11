@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Izbriši račun",
     "sectionUsageLimits": "Ograničenja upotrebe",
     "sectionVoice": "Glas",
+    "voiceFemale": "Ženski",
+    "voiceMale": "Muški",
     "voiceHint": "Odaberi Linguov glas i klikni na reprodukciju da ga poslušaš.",
     "voicePlay": "Reproduciraj",
     "voiceStop": "Zaustavi",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Razumijem",
     "entry1": {
       "label": "Bolje razumij svaki odgovor",

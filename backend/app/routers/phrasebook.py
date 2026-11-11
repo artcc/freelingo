@@ -2,6 +2,7 @@ import asyncio
 import hashlib
 import json
 import os
+import tempfile
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.responses import FileResponse
@@ -28,6 +29,7 @@ from app.schemas.phrasebook import (
     PhrasebookNativeHelpContentResponse,
     PhrasebookNativeHelpResponse,
 )
+from app.services.gemini_tts_service import GeminiTTSService
 from app.services.language_helpers import get_language_name, get_native_language_name
 from app.services.llm_adapter import LLMError, llm_adapter
 from app.services.prompts.phrasebook import build_phrasebook_native_help_prompt
@@ -37,7 +39,7 @@ from app.services.resource_native_help import (
     native_help_lock_key,
     upsert_native_help,
 )
-from app.services.tts_service import OpenAITTSService
+from app.services.tts_service import OpenAITTSService, get_tts_audio_format
 
 router = APIRouter(prefix="/api/phrasebook", tags=["phrasebook"])
 logger = get_logger(__name__)
@@ -248,10 +250,13 @@ async def get_phrase_audio(
         f"{language}:{category_id}:{phrase_index}:{phrase.text}".encode()
     ).hexdigest()[:16]
     tts_service = getattr(request.app.state, "tts_service", None)
-    if isinstance(tts_service, OpenAITTSService) and tts_service.get_instructions(language):
+    if isinstance(tts_service, GeminiTTSService) or (
+        isinstance(tts_service, OpenAITTSService) and tts_service.get_instructions(language)
+    ):
         cache_key = tts_service.get_cache_key(phrase.text, language=language)
     audio_dir = os.path.join(settings.AUDIO_STORAGE_PATH, "phrasebook", iso)
-    cache_path = os.path.join(audio_dir, f"{cache_key}.mp3")
+    extension, media_type = get_tts_audio_format(tts_service)
+    cache_path = os.path.join(audio_dir, f"{cache_key}.{extension}")
 
     if not os.path.isfile(cache_path):
         if tts_service is None:
@@ -262,10 +267,17 @@ async def get_phrase_audio(
 
         os.makedirs(audio_dir, exist_ok=True)
         audio = await tts_service.synthesize(phrase.text, language=language)
-        tmp_path = cache_path + ".tmp"
-        with open(tmp_path, "wb") as fh:  # noqa: PTH123
-            fh.write(audio)
-        os.replace(tmp_path, cache_path)
+        if not audio:
+            raise HTTPException(status_code=503, detail="Phrase audio is unavailable")
+        tmp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=audio_dir, suffix=".tmp", delete=False) as fh:
+                tmp_path = fh.name
+                fh.write(audio)
+            os.replace(tmp_path, cache_path)
+        finally:
+            if tmp_path is not None and os.path.exists(tmp_path):
+                os.remove(tmp_path)
         logger.info(
             "phrasebook_audio_cached",
             language=language,
@@ -277,6 +289,6 @@ async def get_phrase_audio(
 
     return FileResponse(
         path=cache_path,
-        media_type="audio/mpeg",
+        media_type=media_type,
         headers={"Cache-Control": "no-store"},
     )

@@ -6,9 +6,17 @@ import httpx
 import openai
 
 from app.core.app_logger import get_logger
+from app.services.gemini_tts_service import GeminiTTSService
 from app.services.prompts.speech import build_speech_instructions
 
 logger = get_logger(__name__)
+
+
+def get_tts_audio_format(service: object) -> tuple[str, str]:
+    """Return the file extension and MIME type of the selected adapter's output."""
+    if isinstance(service, GeminiTTSService):
+        return "wav", "audio/wav"
+    return "mp3", "audio/mpeg"
 
 
 class KokoroTTSService:

@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Hesabı Sil",
     "sectionUsageLimits": "Kullanım Sınırları",
     "sectionVoice": "Ses",
+    "voiceFemale": "Kadın",
+    "voiceMale": "Erkek",
     "voiceHint": "Lingu'nun sesini seçin ve dinlemek için oynat'a tıklayın.",
     "voicePlay": "Oynat",
     "voiceStop": "Durdur",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Anladım",
     "entry1": {
       "label": "Her yanıtı daha iyi anla",

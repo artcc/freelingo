@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Radera konto",
     "sectionUsageLimits": "Användningsgränser",
     "sectionVoice": "Röst",
+    "voiceFemale": "Kvinnlig",
+    "voiceMale": "Manlig",
     "voiceHint": "Välj Lingus röst och klicka på spela upp för att höra den.",
     "voicePlay": "Spela upp",
     "voiceStop": "Stoppa",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Förstå varje svar bättre",

@@ -1,4 +1,5 @@
 import os
+import tempfile
 import time
 import uuid
 
@@ -18,9 +19,10 @@ from app.models.user import User
 from app.schemas.auth import SUPPORTED_UI_LOCALES
 from app.schemas.tts_stt import ContextualTTSRequest, TTSRequest
 from app.services.chat_markdown import chat_markdown_to_speech
+from app.services.gemini_tts_service import GEMINI_VOICES, GeminiTTSService
 from app.services.prompts.common import TUTOR_DISPLAY_NAME
 from app.services.tour_audio import OPENAI_VOICES, get_tour_audio
-from app.services.tts_service import OpenAITTSService
+from app.services.tts_service import OpenAITTSService, get_tts_audio_format
 
 router = APIRouter(prefix="/api", tags=["tts"])
 logger = get_logger(__name__)
@@ -49,6 +51,8 @@ async def tour_narration(
         raise HTTPException(status_code=404, detail="Unknown tour narration")
     if settings.TTS_PROVIDER == "openai" and body.voice and body.voice not in OPENAI_VOICES:
         raise HTTPException(status_code=400, detail="Invalid voice name")
+    if settings.TTS_PROVIDER == "gemini" and body.voice and body.voice not in GEMINI_VOICES:
+        raise HTTPException(status_code=400, detail="Invalid voice name")
     service = getattr(request.app.state, "tts_service", None)
     if service is None:
         raise HTTPException(status_code=503, detail="TTS service is not enabled")
@@ -60,7 +64,8 @@ async def tour_narration(
         logger.exception("tour_narration_failed", locale=locale, step=step)
         raise HTTPException(status_code=503, detail="Tour narration is unavailable")
     # The URL doesn't contain the text/model revision; always consult the disk cache.
-    return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": "no-store"})
+    _, media_type = get_tts_audio_format(service)
+    return FileResponse(path, media_type=media_type, headers={"Cache-Control": "no-store"})
 
 
 @router.post("/tts")
@@ -113,11 +118,14 @@ async def text_to_speech(
             raise HTTPException(status_code=422, detail="No speakable text")
 
     synth_t0 = time.perf_counter()
-    # For local Kokoro TTS, ignore the client voice param — only OpenAI voices
-    # should be forwarded. Prevents 400 errors when user switches from OpenAI
-    # to local and stale OpenAI voice names (e.g. "nova") remain in localStorage.
+    # Kokoro keeps its configured voice, including after a provider switch.
     voice = body.voice if settings.TTS_PROVIDER != "local" else None
+    if settings.TTS_PROVIDER == "gemini":
+        voice = voice or None
+    if settings.TTS_PROVIDER == "gemini" and voice and voice not in GEMINI_VOICES:
+        raise HTTPException(status_code=400, detail="Invalid voice name")
     audio = await tts_service.synthesize(text, voice, language=language)
+    _, media_type = get_tts_audio_format(tts_service)
     synth_ms = (time.perf_counter() - synth_t0) * 1000
     total_ms = (time.perf_counter() - t0) * 1000
 
@@ -134,7 +142,7 @@ async def text_to_speech(
 
     return Response(
         content=audio,
-        media_type="audio/mpeg",
+        media_type=media_type,
         headers={
             "X-TTS-Trace-ID": trace_id,
             "X-TTS-Backend-Synth-Ms": f"{synth_ms:.1f}",
@@ -150,19 +158,15 @@ async def voice_preview(
     voice: str,
     current_user: User = Depends(get_current_user),
 ) -> FileResponse:
-    """Return a cached preview audio clip for the given OpenAI TTS voice.
-
-    The MP3 is generated once and persisted to disk so subsequent requests
-    are served from the local cache without incurring further API costs.
-    Only available when TTS_PROVIDER=openai.
-    """
-    if settings.TTS_PROVIDER != "openai":
+    """Return a cached preview for a voice of the selected cloud TTS provider."""
+    if settings.TTS_PROVIDER not in {"openai", "gemini"}:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Voice preview is only available with OpenAI TTS",
+            detail="Voice preview is only available with cloud TTS",
         )
 
-    if voice not in _OPENAI_VOICES:
+    voices = GEMINI_VOICES if settings.TTS_PROVIDER == "gemini" else _OPENAI_VOICES
+    if voice not in voices:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid voice name")
 
     tts_service = getattr(request.app.state, "tts_service", None)
@@ -173,18 +177,32 @@ async def voice_preview(
         )
 
     cache_path = os.path.join(_PREVIEW_DIR, f"{voice}.mp3")
+    _, media_type = get_tts_audio_format(tts_service)
+    if isinstance(tts_service, GeminiTTSService):
+        key = tts_service.get_cache_key(_PREVIEW_TEXT, voice, "en-GB")
+        cache_path = os.path.join(_PREVIEW_DIR, f"gemini-{voice}-{key}.wav")
     if isinstance(tts_service, OpenAITTSService) and tts_service.get_instructions():
         key = tts_service.get_cache_key(_PREVIEW_TEXT, voice)
         cache_path = os.path.join(_PREVIEW_DIR, f"{voice}-{key}.mp3")
 
     if not os.path.exists(cache_path):
         os.makedirs(_PREVIEW_DIR, exist_ok=True)
-        audio = await tts_service.synthesize(_PREVIEW_TEXT, voice)
+        if isinstance(tts_service, GeminiTTSService):
+            audio = await tts_service.synthesize(_PREVIEW_TEXT, voice, language="en-GB")
+        else:
+            audio = await tts_service.synthesize(_PREVIEW_TEXT, voice)
+        if not audio:
+            raise HTTPException(status_code=503, detail="Voice preview is unavailable")
         # Write atomically via a temp file to avoid partial reads
-        tmp_path = cache_path + ".tmp"
-        with open(tmp_path, "wb") as fh:  # noqa: PTH123
-            fh.write(audio)
-        os.replace(tmp_path, cache_path)
+        tmp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=_PREVIEW_DIR, suffix=".tmp", delete=False) as fh:
+                tmp_path = fh.name
+                fh.write(audio)
+            os.replace(tmp_path, cache_path)
+        finally:
+            if tmp_path is not None and os.path.exists(tmp_path):
+                os.remove(tmp_path)
         logger.info("tts_preview_cached", voice=voice, bytes=len(audio))
 
-    return FileResponse(cache_path, media_type="audio/mpeg", headers={"Cache-Control": "no-store"})
+    return FileResponse(cache_path, media_type=media_type, headers={"Cache-Control": "no-store"})

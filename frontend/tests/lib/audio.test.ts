@@ -224,6 +224,36 @@ describe('createAudioQueue playback order', () => {
     }
   })
 
+  it.each([
+    ['WAV', float32ToWav(new Float32Array([0.5]), 24000), 'audio/wav'],
+    ['MP3', new TextEncoder().encode('ID3audio').buffer, 'audio/mpeg'],
+    ['short input', new ArrayBuffer(3), 'audio/mpeg'],
+    [
+      'non-WAVE RIFF',
+      new TextEncoder().encode('RIFF0000WEBP').buffer,
+      'audio/mpeg',
+    ],
+  ] as const)(
+    'uses the correct MIME type for %s fallback',
+    async (_name, bytes, type) => {
+      const { ctx } = audioContext([])
+      const { fallback, play, createUrl, revokeUrl } = htmlAudio([])
+      ctx.decodeAudioData.mockRejectedValueOnce(new Error('Decode failed'))
+      const queue = createAudioQueue(ctx as unknown as AudioContext)
+      try {
+        const playback = queue.enqueue(bytes)
+        await vi.waitFor(() => expect(play).toHaveBeenCalledTimes(1))
+        expect(createUrl.mock.calls[0][0]).toBeInstanceOf(Blob)
+        expect((createUrl.mock.calls[0][0] as Blob).type).toBe(type)
+        fallback.dispatchEvent(new Event('ended'))
+        await playback
+        expect(revokeUrl).toHaveBeenCalledWith('blob:voice-test')
+      } finally {
+        queue.cancel()
+      }
+    }
+  )
+
   it('waits for every preceding source and finishes fallback before the next chunk', async () => {
     const events: string[] = []
     const { ctx, sources } = audioContext(events)

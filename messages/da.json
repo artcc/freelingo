@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Slet konto",
     "sectionUsageLimits": "Forbrugsgrænser",
     "sectionVoice": "Stemme",
+    "voiceFemale": "Kvindelig",
+    "voiceMale": "Mandlig",
     "voiceHint": "Vælg Lingus stemme, og klik på afspil for at høre den.",
     "voicePlay": "Afspil",
     "voiceStop": "Stop",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Forstået",
     "entry1": {
       "label": "Forstå hvert svar bedre",

@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.15] - Unreleased
+
+### Added
+
+- Optional Gemini TTS with configurable female and male voices, separate voice preferences and previews, and regional pronunciation context across speech features.
+
+### Changed
+
+- Gemini speech uses native WAV audio for playback and persistent caches. Listening retains playback of existing MP3 recordings when the configured provider changes; local and OpenAI speech continue using MP3.
+
+### Fixed
+
+- Listening generation uses Kokoro's configured voice when local TTS is selected, ignoring stale cloud voice preferences.
+
 ## [1.12.10] - 2026-11-11
 
 ### Added

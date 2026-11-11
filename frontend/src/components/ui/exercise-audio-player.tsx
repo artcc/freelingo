@@ -4,6 +4,8 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
+import { resolveConfiguredTtsVoice, resolveTtsVoice } from '@/lib/tts-voice'
 
 interface ExerciseAudioPlayerProps {
   exerciseId: number
@@ -20,16 +22,6 @@ interface Playback {
   timeout: ReturnType<typeof setTimeout> | null
 }
 
-function storedVoice() {
-  try {
-    return typeof window !== 'undefined'
-      ? (localStorage.getItem('tts_voice') ?? undefined)
-      : undefined
-  } catch {
-    return undefined
-  }
-}
-
 export function ExerciseAudioPlayer({
   exerciseId,
   onFirstPlay,
@@ -37,12 +29,13 @@ export function ExerciseAudioPlayer({
 }: ExerciseAudioPlayerProps) {
   const t = useTranslations('listening')
   const tAudio = useTranslations('audioPlayer')
-  const voice = tts ? storedVoice() : undefined
+  const hasTts = !!tts
   const source = JSON.stringify([
     exerciseId,
     tts?.text,
     tts?.studyPlanId,
-    voice,
+    tts ? resolveTtsVoice('local') : undefined,
+    tts ? resolveTtsVoice('gemini') : undefined,
   ])
   const [state, setState] = useState<
     'idle' | 'loading' | 'playing' | 'paused' | 'error'
@@ -95,12 +88,21 @@ export function ExerciseAudioPlayer({
         reset()
       }
     })
+    const unsubscribeConfig = useConfigStore.subscribe((config, previous) => {
+      if (
+        hasTts &&
+        previous.loaded &&
+        config.ttsProvider !== previous.ttsProvider
+      )
+        reset()
+    })
     return () => {
       unsubscribe()
+      unsubscribeConfig()
       contextRef.current = null
       stopPlayback()
     }
-  }, [source, sessionVersion, userId, stopPlayback])
+  }, [source, sessionVersion, userId, stopPlayback, hasTts])
 
   async function handlePlayPause() {
     const context = contextRef.current
@@ -154,6 +156,13 @@ export function ExerciseAudioPlayer({
     if (tts) playback.timeout = setTimeout(fail, 60_000)
     try {
       if (!playback.audio) {
+        const config = useConfigStore.getState()
+        const voice = tts
+          ? config.loaded
+            ? resolveTtsVoice(config.ttsProvider)
+            : await resolveConfiguredTtsVoice(playback.controller.signal)
+          : undefined
+        if (!current()) return
         const res = await apiFetch(
           tts ? '/api/tts' : `/api/listening/audio/${exerciseId}`,
           {

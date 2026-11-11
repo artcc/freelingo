@@ -1,14 +1,14 @@
 ---
 description: "Current-state specification for text-to-speech and speech-to-text providers, backend gateways, plan-derived recognition language, persistent audio, and reusable frontend audio components."
-applyTo: "backend/app/services/{tts_service,stt_service,chat_markdown}.py, backend/app/routers/{tts,stt}.py, backend/app/schemas/tts_stt.py, backend/app/core/config.py, backend/app/main.py, frontend/src/components/ui/{AudioPlayer,VoiceRecorder,exercise-audio-player}.tsx, frontend/src/app/api/{tts,stt}/**, docker-compose*.yml, .env.example"
+applyTo: "backend/app/services/{tts_service,gemini_tts_service,stt_service,chat_markdown}.py, backend/app/routers/{tts,stt}.py, backend/app/schemas/tts_stt.py, backend/app/core/config.py, backend/app/main.py, frontend/src/components/ui/{AudioPlayer,VoiceRecorder,exercise-audio-player}.tsx, frontend/src/app/api/{tts,stt}/**, docker-compose*.yml, .env.example"
 ---
 
 # Speech Services
 
 ## Purpose
 
-The backend is the only gateway to speech providers. Browser code never calls Kokoro, Whisper, or
-OpenAI speech APIs directly and never receives provider credentials.
+The backend is the only gateway to speech providers. Browser code never calls Kokoro, Whisper,
+OpenAI, or Gemini speech APIs directly and never receives provider credentials.
 
 Text-to-speech (TTS) and speech-to-text (STT) are configured independently. Their backend service
 objects are created during FastAPI startup and stored in `app.state.tts_service` and
@@ -18,13 +18,19 @@ objects are created during FastAPI startup and stored in `app.state.tts_service`
 
 TTS configuration:
 
-- `TTS_PROVIDER=local` selects Kokoro; `openai` selects OpenAI TTS.
+- `TTS_PROVIDER=local` selects Kokoro by default; `openai` selects OpenAI TTS and `gemini` selects Gemini TTS.
 - `TTS_BASE_URL` defaults to `http://kokoro:8880`.
 - `TTS_VOICE` defaults to `af_heart` for Kokoro.
 - `OPENAI_TTS_MODEL` defaults to `tts-1` in backend `Settings`. Both Compose files instead supply
   `gpt-4o-mini-tts` when the operator omits the variable; this model is used when `TTS_PROVIDER=openai`.
 - `OPENAI_TTS_VOICE` defaults to `nova`.
 - `OPENAI_TTS_SPEED` defaults to `1.0`.
+- `GEMINI_TTS_MODEL` defaults to `gemini-3.8-flash-tts`; configured models must support the Gemini
+  3.8 TTS Interactions contract below. Older preview-model contracts are not supported.
+- `GEMINI_TTS_VOICE` defaults to `female` and accepts `female` or `male`.
+- `GEMINI_TTS_FEMALE_VOICE` defaults to `Kore`; `GEMINI_TTS_MALE_VOICE` defaults to `Puck`.
+  These operator-configurable names map the public voice choices to actual provider voices.
+- `GEMINI_TTS_TIMEOUT_SECONDS` defaults to `50`.
 
 STT configuration:
 
@@ -34,11 +40,12 @@ STT configuration:
 - `STT_MODEL` and `STT_ENGINE` configure the local Whisper container as `ASR_MODEL` and
   `ASR_ENGINE`; they are not backend `Settings` fields.
 
-`OPENAI_API_KEY` is required at startup when either selected provider is OpenAI. Provider values are
-not enum-validated: values other than `openai` currently select the local adapter.
+`OPENAI_API_KEY` is required at startup when either selected speech provider is OpenAI.
+`GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`. Local defaults remain independent of
+cloud credentials. `TTS_PROVIDER` rejects values outside `local`, `openai`, and `gemini`.
 
-The public configuration exposes the selected TTS provider and default OpenAI TTS voice. It does
-not expose provider credentials or the selected STT provider.
+The public configuration exposes the selected TTS provider, default OpenAI TTS voice, and
+`gemini_tts_voice` (`female` or `male`). It does not expose provider credentials or the selected STT provider.
 
 ## TTS adapters
 
@@ -90,7 +97,28 @@ to any selected voice, preserving its vocal identity. `nova` is the configured d
 voice; user preferences continue to take precedence. These instructions guide the model rather than
 guaranteeing accent quality for every voice or text.
 
-Neither current TTS adapter chooses a model or voice automatically from the target language.
+### Gemini
+
+The Gemini adapter uses the existing HTTPX client capabilities with REST
+`POST https://generativelanguage.googleapis.com/v1beta/interactions` and `x-goog-api-key`
+authentication. Requests use `store=false` and `stream=false`; spoken text is separate from style
+instructions. `speech_config` supplies the effective provider voice and an explicit regional language
+when context is available. Without language context, no regional language is forced.
+
+The adapter returns native WAV containing PCM16 mono audio at 24 kHz, without transcoding, FFmpeg,
+external encoders, or an additional provider SDK. Local and OpenAI requests retain their MP3 format.
+`get_tts_audio_format()` determines the MIME type and extension used by HTTP responses and caches.
+Gemini synthesis identities include provider, model, actual mapped voice, locale, style, text, and
+output format; changing a voice mapping must invalidate its cache even when the public choice is unchanged.
+
+Synthesis rejects incomplete interactions, missing or ambiguous audio, invalid base64, and malformed
+or truncated WAV. The configured timeout bounds the request and response validation; cancellation
+closes the HTTP client, and the adapter does not add automatic retries. Health checks list models
+with authentication and a maximum five-second timeout, without generating audio; they do not prove
+model-specific synthesis availability. Logs contain request metadata and latency, not transcripts,
+audio data, or credentials.
+
+No TTS adapter chooses a model or voice automatically from the target language.
 
 ## STT adapters
 
@@ -127,6 +155,7 @@ There is no implicit English fallback.
   is never used to resolve supplied context. Without context, synthesis infers language from the text.
 - Ignores the client voice when the configured provider is local, preventing stale OpenAI voice
   preferences from reaching Kokoro.
+- Gemini accepts `female` or `male`; an invalid supplied Gemini voice returns `400`.
 - With `conversation_id`, converts the supplied Markdown to spoken text through
   `chat_markdown_to_speech()` after ownership and language resolution. Bold/italic markers and list
   numbering/bullets are omitted; words, literal punctuation and paragraph/list boundaries are kept.
@@ -135,7 +164,7 @@ There is no implicit English fallback.
   without calling the provider. This also applies to replaying voice-origin history from the chat page.
 - Plan-only and context-free requests pass their text directly to the provider. The WebSocket voice
   pipeline does not use this conversion. Stored transcripts retain their original content.
-- Returns `audio/mpeg` bytes.
+- Returns the adapter MIME type: `audio/wav` for Gemini or `audio/mpeg` for local/OpenAI.
 - Accepts or creates `X-TTS-Trace-ID` and returns backend synthesis and total latency headers.
 - Returns `503` only when no TTS service object is registered; provider exceptions otherwise
   propagate through normal server error handling.
@@ -144,12 +173,15 @@ There is no implicit English fallback.
 
 - Requires authentication.
 - Rate limit: `60/minute`.
-- Exists only for OpenAI TTS; local-provider requests return `404`.
-- Accepts `alloy`, `ash`, `coral`, `echo`, `fable`, `nova`, `onyx`, `sage`, or `shimmer`.
+- Supports OpenAI and Gemini TTS; local-provider requests return `404`.
+- OpenAI accepts `alloy`, `ash`, `coral`, `echo`, `fable`, `nova`, `onyx`, `sage`, or `shimmer`;
+  Gemini accepts `female` or `male`.
 - Invalid voices return `400`; a missing service object returns `503`.
 - Generates the Lingu preview and atomically caches it under `/app/tts_previews/`.
   Instruction-capable OpenAI models use `{voice}-{sha256}.mp3`, with text, model, voice, speed, format,
   language context, and instructions in the identity; other models retain `{voice}.mp3`.
+- Gemini previews use separate hashed `.wav` files with the Gemini synthesis identity above.
+  Responses use the adapter's MIME type.
 - Returns `Cache-Control: no-store`; Settings requests previews with `cache: 'no-store'` so browser
   caches cannot mask synthesis changes behind the unchanged public URL. The backend disk cache is
   retained.
@@ -161,18 +193,19 @@ There is no implicit English fallback.
 - `messages/*.json` owns tour copy. The frontend resolves the displayed paragraph through i18n and
   sends it as `text` in the JSON request body. The backend validates text length (1–5000 characters;
   invalid or missing text returns `422`) and synthesizes that supplied text.
-- An optional JSON `voice` selects a supported OpenAI voice (`400` for an invalid selection).
+- An optional JSON `voice` selects a supported OpenAI voice or Gemini `female`/`male`
+  (`400` for an invalid selection).
   Omission uses the configured default. Kokoro always uses its configured default, ignoring client voice preferences.
   Locale follows the interface, not the learned language, and supplies pronunciation guidance when
-  the configured OpenAI model supports instructions.
-- `services/tour_audio.py` stores shared MP3 files at
-  `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.mp3`. The hash includes the exact text, locale,
-  effective provider/model/voice/speed, output format, and instructions when supported. Requests never
-  overwrite a different version.
+  the configured provider/model supports it.
+- `services/tour_audio.py` stores shared audio files at
+  `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.{extension}` (`wav` for Gemini, otherwise `mp3`).
+  The hash includes the exact text, locale, effective provider/model/actual voice/speed, output format,
+  and style or instructions when supported. Requests never overwrite a different version.
 - Shared-volume file locks serialize generation across workers; cancellable acquisition and synthesis
   share a 60-second deadline. A second request rechecks the file after obtaining the lock. Writes use
   unique temporary files and atomic replacement; empty output and failures do not publish audio.
-- Returns `audio/mpeg` and `Cache-Control: no-store`: the backend disk cache is authoritative because
+- Returns the adapter MIME type and `Cache-Control: no-store`: the backend disk cache is authoritative because
   the URL does not identify text or provider revisions. Missing service/provider failure returns `503`;
   the generation deadline returns `504`. The UI permits retry without blocking the tour.
 - The Next.js proxy has a 70-second deadline and the browser a 75-second budget. Browser navigation
@@ -227,7 +260,15 @@ Voice conversation uses its own capture pipeline and WebSocket contract, describ
 ## Frontend components and proxies
 
 `AudioPlayer` requests TTS, creates a Blob URL, and plays it with the browser Audio API. Voice
-precedence is explicit prop, stored `tts_voice`, then backend default. It supports loading, playing,
+precedence is explicit prop, the selected provider's stored preference, then backend default.
+OpenAI uses `tts_voice`; Gemini uses the separate `gemini_tts_voice` key with `female`/`male` choices.
+Settings exposes the selected provider's selector and previews; local TTS uses its configured voice.
+Shared voice resolution applies to the tour, lesson audio, Listening generation, and conversation too.
+Synthesis waits for public provider configuration before resolving a preference. The wait shares the
+config load, respects the consumer's cancellation/deadline, and reports failure instead of using an
+unconfirmed provider. Initial config arrival does not cancel the first pending playback; later
+provider changes cancel player audio. Preview playback is also canceled on account-session changes.
+HTTP playback and proxies preserve the response MIME type. The player supports loading, playing,
 stop, and error states and is used across lessons, flashcards, vocabulary, chat, and phrasebook.
 Error Detective also uses this same component and endpoint for the full corrected sentence, after
 the correction step has been submitted. Generated explanations are not spoken. Existing provider
@@ -251,7 +292,7 @@ Stopping, replacing content, and unmounting abort requests, stop playback, remov
 release Blob URLs and timers. Each tour screen requires its own manual playback action.
 
 `ExerciseAudioPlayer` also supports lesson-owned TTS sources in addition to its default protected
-Listening MP3 lookup. In TTS mode it posts the exercise source text, preferred voice and owning
+Listening audio lookup. In TTS mode it posts the exercise source text, preferred voice and owning
 `study_plan_id` to `/api/tts`; backend ownership and persisted plan language resolution still apply.
 It offers play/pause, seeking, replay and manual retry after failure. Replays retain the synthesized
 audio within the same player context, avoiding another TTS request. This is transient browser reuse,
@@ -259,7 +300,7 @@ not a persistent backend audio cache. TTS playback work has a 60-second client d
 control supports keyboard navigation. Leaving the player, regenerating its source, changing the owning
 plan or authentication session releases audio, listeners, timers and Blob URLs and cancels pending
 work. Late completions cannot publish obsolete audio. The separate Listening module continues to use
-its persisted exercise MP3 endpoint.
+its persisted exercise audio endpoint, supporting WAV and MP3.
 
 `VoiceRecorder`:
 
@@ -273,27 +314,35 @@ its persisted exercise MP3 endpoint.
 - prevents another recording while transcription or result handling is pending.
 
 The dedicated Next.js TTS route forwards authentication and trace context but buffers the backend
-audio before responding. The STT route parses and reconstructs multipart data, forwards auth and
-cookies, and propagates request cancellation to the backend.
+audio before responding and preserves its MIME type. The STT route parses and reconstructs multipart
+data, forwards auth and cookies, and propagates request cancellation to the backend.
 
 ## Persistent and transient audio
 
 `POST /api/tts`, STT recordings, and voice-conversation audio are transient.
 
-Persistent MP3 uses include:
+Persistent audio uses include:
 
-- Listening: `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
+- Listening: `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.wav` for Gemini or `.mp3` for local/OpenAI.
 - Phrasebook: hashed files below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`.
 - OpenAI previews: `/app/tts_previews/{voice}.mp3` or `{voice}-{sha256}.mp3`, depending on model support
   for pronunciation instructions.
-- Dashboard tour: `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.mp3`.
+- Gemini previews: separate hashed `.wav` files below `/app/tts_previews/`.
+- Dashboard tour: `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.{extension}`.
 
 For instruction-capable OpenAI models, Phrasebook uses a synthesis hash covering text, language,
-model, voice, speed, format, and instructions. Other providers/models retain the category/phrase/text
-cache identity. Phrasebook responses use `Cache-Control: no-store` because their public URL does not
+model, voice, speed, format, and instructions. Gemini uses its synthesis identity and separate `.wav`
+files; local and legacy OpenAI models retain the category/phrase/text cache identity and `.mp3` files.
+Phrasebook responses use `Cache-Control: no-store` because their public URL does not
 identify the synthesis settings. Tour, Phrasebook, and voice-preview audio is generated on demand for a new key, leaving
 previous files intact. Listening recordings remain attached to their exercises and are not regenerated
 by model or prompt changes. A provider-side update behind a model alias does not change cache keys.
+
+Listening playback uses the persisted allowed extension, not the current provider. Paths are rebuilt
+from configured storage, the integer exercise ID, and an allowlisted `.mp3` or `.wav` extension;
+database paths are not accepted as arbitrary filesystem locations. Existing MP3 recordings remain
+playable without a schema migration. PCM16 mono at 24 kHz uses about 2.88 MB per minute before the
+small WAV header; account for this in persistent storage and audio-transfer capacity.
 
 The compose stack mounts persistent host storage for generated audio and previews. Local Kokoro and
 Whisper services use internal network addresses and are not called from the frontend.

@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
 import { apiFetch } from '@/lib/api'
+import { resolveConfiguredTtsVoice } from '@/lib/tts-voice'
 import { createCheckout } from '@/lib/billing'
 import { float32ToWav, createAudioQueue, type AudioQueue } from '@/lib/audio'
 import { getLogger, silentLogger } from '@/lib/logger'
@@ -749,7 +750,7 @@ export default function ConversationMode({
 
   // ─── WebSocket ────────────────────────────────────────────────────────────
   const connectWs = useCallback(
-    (token: string, context?: ChatContextItem[]) => {
+    (token: string, context?: ChatContextItem[], voice?: string) => {
       convLogger.info('opening conversation websocket')
       const url = buildConversationWsUrl()
       const ws = new WebSocket(url)
@@ -764,11 +765,7 @@ export default function ConversationMode({
       ws.onopen = () => {
         if (!isCurrent()) return
         const authPayload: Record<string, unknown> = { type: 'auth', token }
-        const storedVoice =
-          typeof window !== 'undefined'
-            ? localStorage.getItem('tts_voice')
-            : null
-        if (storedVoice) authPayload.voice = storedVoice
+        if (voice) authPayload.voice = voice
         if (context?.length) authPayload.context = context
         if (targetLanguage) authPayload.target_language = targetLanguage
         if (voiceTrialToken) authPayload.voice_trial_token = voiceTrialToken
@@ -1033,6 +1030,7 @@ export default function ConversationMode({
       return
 
     const startAttempt = ++startAttemptRef.current
+    const startSessionVersion = useAuthStore.getState().sessionVersion
     sessionActiveRef.current = true
 
     // AudioContext MUST be created during a user-gesture (this click handler)
@@ -1124,8 +1122,18 @@ export default function ConversationMode({
       controller.abort()
     }, WARMUP_TIMEOUT_MS)
     warmupRef.current = { controller, timeout }
+    const unsubscribeSession = useAuthStore.subscribe((auth) => {
+      if (auth.sessionVersion !== startSessionVersion) {
+        finalizeSession()
+        if (mountedRef.current) setStatus('ready')
+      }
+    })
     let warmupResponse: Response
+    let voice: string | undefined
     try {
+      voice = await resolveConfiguredTtsVoice(controller.signal)
+      if (!mountedRef.current || startAttemptRef.current !== startAttempt)
+        return
       warmupResponse = await apiFetch('/api/conversation/warmup', {
         method: 'POST',
         signal: controller.signal,
@@ -1152,6 +1160,7 @@ export default function ConversationMode({
       finalizeSession()
       return
     } finally {
+      unsubscribeSession()
       clearTimeout(timeout)
       if (warmupRef.current?.controller === controller) {
         warmupRef.current = null
@@ -1181,7 +1190,7 @@ export default function ConversationMode({
       return
     }
     try {
-      connectWs(latestToken, topicContext ?? initialContext)
+      connectWs(latestToken, topicContext ?? initialContext, voice)
     } catch {
       setErrorMsg(t('errorConnection'))
       setStatus('error')

@@ -21,6 +21,7 @@ from app.services.progress_rewards import award_progress_reward
 from app.services.progress_service import lock_progress_plan, update_daily_progress
 from app.services.prompts.common import get_language_prompt_overlay
 from app.services.prompts.comprehension import build_listening_generation_prompt
+from app.services.tts_service import get_tts_audio_format
 
 logger = logging.getLogger(__name__)
 
@@ -147,8 +148,9 @@ async def generate_and_save_exercise(
     db.add(exercise)
     await db.flush()  # assigns exercise.id without committing the transaction
 
-    # Write MP3 with the exercise ID as filename
-    audio_path = os.path.join(audio_dir, f"{exercise.id}.mp3")
+    # Keep the format in the persisted path so provider switches preserve playback.
+    extension, _ = get_tts_audio_format(tts_service)
+    audio_path = os.path.join(audio_dir, f"{exercise.id}.{extension}")
     try:
         with open(audio_path, "wb") as fh:
             fh.write(audio_bytes)

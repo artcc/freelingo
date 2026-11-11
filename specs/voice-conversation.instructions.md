@@ -53,6 +53,10 @@ The session fixes user, plan, target language, CEFR level, native language, voic
 mode at connection time. They are not refreshed globally during the session, except memories and
 native language before each normal user turn.
 
+The frontend resolves voice preferences for the selected provider: `tts_voice` for OpenAI and
+`gemini_tts_voice` (`female`/`male`) for Gemini. Invalid WebSocket voice choices fall back to the
+configured provider default for both OpenAI and Gemini; local TTS uses its configured voice.
+
 Suggested conversation topics supply a learner message about the selected topic without naming a
 practice language. The session's resolved target language remains authoritative; starters do not
 request English when a different target language is selected.
@@ -73,8 +77,9 @@ reference, even when another language has an active plan. It does not create a l
 
 The pipeline converts the resolved target language to ISO 639-1 and declares it in every STT call.
 TTS receives the full resolved BCP-47 target language so regional distinctions such as `en-GB` and
-`en-US` remain available. OpenAI uses it in pronunciation instructions for `gpt-4o-mini-tts` and its
-snapshots; legacy/unknown OpenAI models and Kokoro ignore it.
+`en-US` remain available. Gemini supplies explicit regional language in `speech_config`; OpenAI uses
+it in pronunciation instructions for `gpt-4o-mini-tts` and its snapshots. Legacy/unknown OpenAI
+models and Kokoro ignore it.
 
 ### Lesson practice context
 
@@ -127,7 +132,8 @@ items and the pipeline starts with the last 10 accepted messages.
 - `status`: `transcribing`, `thinking`, `speaking`, or `listening`, with `turn_id`; the current
   pipeline does not emit `speaking`.
 - `transcript`: final user or assistant text with `turn_id`.
-- Binary: one synthesized assistant audio fragment, without turn metadata.
+- Binary: one synthesized assistant audio fragment, without turn metadata; native WAV for Gemini
+  or MP3 for local/OpenAI. Provider selection does not add protocol frames or alter turn sequencing.
 - `barge_in`: active generation was cancelled by new binary input.
 - `interrupted`: acknowledgement of an explicit interrupt; current frontend ignores it.
 - `turn_complete`: backend work finished; browser playback may still be draining.
@@ -232,14 +238,18 @@ over microphone detections. The localized preparing-response label covers the wa
 utterance, transcription, generation, and gaps between audio fragments while backend work is pending.
 The interface returns to listening only after both backend work and playback have finished.
 
-The Web Audio queue preserves decode order, schedules decoded chunks contiguously, and reports idle
-only after pending decodes and active sources drain. If Web Audio decoding fails, it falls back to an
-HTML audio element after all preceding Web Audio sources have ended. Subsequent chunks wait for that
-element to finish. Cancellation releases both the wait for preceding sources and active fallback
+The Web Audio queue uses `decodeAudioData` for both WAV and MP3, preserves decode order, schedules
+decoded chunks contiguously, and reports idle only after pending decodes and active sources drain.
+If Web Audio decoding fails, it falls back to an
+HTML audio element with the matching `audio/wav` or `audio/mpeg` MIME type after all preceding Web
+Audio sources have ended. Subsequent chunks wait for that element to finish. Cancellation releases
+both the wait for preceding sources and active fallback
 playback, removes fallback listeners and Blob URLs, invalidates pending generations, stops active
 sources, and prevents stale callbacks from restarting playback.
 
 ## Persistence
+
+Captured and synthesized voice audio remains transient; only transcript and session data is persisted.
 
 A voice session creates or reuses a `Conversation`. Reuse requires a positive supplied conversation
 ID owned by the user and a compatible target language. The current frontend does not send this ID,

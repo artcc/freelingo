@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Usuń konto",
     "sectionUsageLimits": "Limity użytkowania",
     "sectionVoice": "Głos",
+    "voiceFemale": "Żeński",
+    "voiceMale": "Męski",
     "voiceHint": "Wybierz głos Lingu i kliknij odtwarzaj, aby go posłuchać.",
     "voicePlay": "Odtwórz",
     "voiceStop": "Zatrzymaj",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Rozumiem",
     "entry1": {
       "label": "Lepiej zrozum każdą odpowiedź",

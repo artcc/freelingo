@@ -7,6 +7,8 @@ import { useAuthStore } from '@/store/auth'
 import { getLogger } from '@/lib/logger'
 import { trackBrowserEvent } from '@/lib/analytics'
 import { apiFetch } from '@/lib/api'
+import { resolveConfiguredTtsVoice, resolveTtsVoice } from '@/lib/tts-voice'
+import { useConfigStore } from '@/store/config'
 
 const TTS_TIMEOUT_MS = 15_000
 const ttsLogger = getLogger('tts')
@@ -28,16 +30,6 @@ interface AudioPlayerProps {
 }
 
 export type PlayerState = 'idle' | 'loading' | 'playing' | 'error'
-
-function storedVoice() {
-  try {
-    return typeof window !== 'undefined'
-      ? (localStorage.getItem('tts_voice') ?? undefined)
-      : undefined
-  } catch {
-    return undefined
-  }
-}
 
 export function AudioPlayer({
   text,
@@ -62,8 +54,10 @@ export function AudioPlayer({
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const t = useTranslations('audioPlayer')
 
-  // Resolve voice: explicit prop > user localStorage preference > backend default
-  const resolvedVoice = voice ?? storedVoice()
+  const voicePreferences = JSON.stringify([
+    resolveTtsVoice('local', voice),
+    resolveTtsVoice('gemini', voice),
+  ])
 
   const releaseAudio = useCallback(() => {
     if (audioRef.current) {
@@ -89,7 +83,7 @@ export function AudioPlayer({
     text,
     audioUrl,
     audioMethod,
-    resolvedVoice,
+    voicePreferences,
     studyPlanId,
     conversationId,
     sessionVersion,
@@ -99,6 +93,22 @@ export function AudioPlayer({
   useEffect(() => {
     onStateChange?.(state)
   }, [state, onStateChange])
+
+  useEffect(
+    () =>
+      useConfigStore.subscribe((config, previous) => {
+        // Initial config arrival resumes the request already waiting for it.
+        if (previous.loaded && config.ttsProvider !== previous.ttsProvider) {
+          controllerRef.current?.abort()
+          controllerRef.current = null
+          if (timeoutRef.current) clearTimeout(timeoutRef.current)
+          if (recoveryRef.current) clearTimeout(recoveryRef.current)
+          releaseAudio()
+          setState('idle')
+        }
+      }),
+    [releaseAudio]
+  )
 
   async function handleClick() {
     if (state === 'loading') return
@@ -122,7 +132,12 @@ export function AudioPlayer({
     timeoutRef.current = timeoutId
     let failed = false
     const showError = () => {
-      if (failed || controllerRef.current !== controller) return
+      if (
+        failed ||
+        controllerRef.current !== controller ||
+        useAuthStore.getState().sessionVersion !== analyticsSession
+      )
+        return
       failed = true
       clearTimeout(timeoutId)
       releaseAudio()
@@ -134,6 +149,19 @@ export function AudioPlayer({
       }, 2000)
     }
     try {
+      const config = useConfigStore.getState()
+      const resolvedVoice =
+        audioMethod === 'POST'
+          ? config.loaded
+            ? resolveTtsVoice(config.ttsProvider, voice)
+            : await resolveConfiguredTtsVoice(controller.signal, voice)
+          : undefined
+      if (
+        controller.signal.aborted ||
+        controllerRef.current !== controller ||
+        useAuthStore.getState().sessionVersion !== analyticsSession
+      )
+        return
       const traceId = `tts-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
       const t0 = performance.now()
 

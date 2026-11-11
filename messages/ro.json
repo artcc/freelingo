@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Șterge contul",
     "sectionUsageLimits": "Limite de utilizare",
     "sectionVoice": "Voce",
+    "voiceFemale": "Feminină",
+    "voiceMale": "Masculină",
     "voiceHint": "Alege vocea lui Lingu și apasă redare pentru a o asculta.",
     "voicePlay": "Redă",
     "voiceStop": "Opreşte",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Înțelege mai bine fiecare răspuns",

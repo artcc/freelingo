@@ -97,6 +97,12 @@ RevenueCat, Redis, and database operations exposed to the frontend.
 Provider adapters normalize contracts and errors, but HTTP mapping remains feature-specific at router
 boundaries. Detailed interfaces live in `services.instructions.md` and the relevant domain specs.
 
+`get_tts_audio_format()` resolves the selected adapter's audio MIME type and extension. Gemini TTS
+uses HTTPX REST Interactions and native WAV; local/OpenAI TTS use MP3. Routers and persistent audio
+services preserve that format without external encoders. Listening playback rebuilds a safe path from
+the exercise ID and persisted allowlisted extension, independently of the currently configured provider.
+Provider contracts and cache identities belong to `speech-services.instructions.md`.
+
 Provider request/stream state belongs to the individual operation, not shared mutable adapter state.
 Comprehension background tasks own independent database/Redis resources. A Redis lease and a PostgreSQL
 commit are separate boundaries; a pre-save ownership check is not transactional fencing.

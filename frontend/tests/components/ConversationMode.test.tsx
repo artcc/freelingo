@@ -97,7 +97,9 @@ vi.mock('@/components/conversation/StatusIndicator', async (importOriginal) => {
 
 import ConversationMode from '@/components/conversation/ConversationMode'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 import { mapUser } from '@/lib/mappers'
+import { float32ToWav } from '@/lib/audio'
 
 class MockWebSocket {
   static OPEN = 1
@@ -176,6 +178,11 @@ function speak(audio = new Float32Array(24000).fill(0.05)) {
 }
 
 beforeEach(() => {
+  useConfigStore.setState(
+    { ...useConfigStore.getInitialState(), loaded: true },
+    true
+  )
+  localStorage.clear()
   vi.clearAllMocks()
   MockWebSocket.instances = []
   mocks.starters = []
@@ -211,6 +218,122 @@ afterEach(() => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it('resolves delayed provider configuration before opening the trial WebSocket', async () => {
+    useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
+    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    let finish!: (response: Response) => void
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockReturnValueOnce(
+        new Promise((resolve) => {
+          finish = resolve
+        })
+      )
+    )
+    render(<ConversationMode trialMode voiceTrialToken="trial-token" />)
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith('/api/config', {
+        signal: expect.any(AbortSignal),
+      })
+    )
+    expect(MockWebSocket.instances).toHaveLength(0)
+    expect(
+      mocks.apiFetch.mock.calls.some(
+        ([url]) => url === '/api/conversation/warmup'
+      )
+    ).toBe(false)
+    await act(async () =>
+      finish(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+    )
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+      type: 'auth',
+      token: 'token',
+      voice: 'male',
+      voice_trial_token: 'trial-token',
+    })
+  })
+
+  it.each(['unmount', 'timeout', 'failure'])(
+    'does not open a WebSocket after config %s',
+    async (outcome) => {
+      useConfigStore.setState({ loaded: false })
+      if (outcome === 'timeout') vi.useFakeTimers()
+      let finish!: (response: Response) => void
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockReturnValueOnce(
+          new Promise((resolve) => {
+            finish = resolve
+          })
+        )
+      )
+      const { unmount } = render(<ConversationMode />)
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'start' }))
+      )
+      expect(fetch).toHaveBeenCalledTimes(1)
+      if (outcome === 'unmount') unmount()
+      if (outcome === 'timeout') {
+        await act(async () => vi.advanceTimersByTimeAsync(75_000))
+      }
+      await act(async () =>
+        finish(
+          outcome === 'failure'
+            ? new Response('', { status: 503 })
+            : new Response(JSON.stringify({ tts_provider: 'gemini' }))
+        )
+      )
+      expect(MockWebSocket.instances).toHaveLength(0)
+      expect(
+        mocks.apiFetch.mock.calls.some(
+          ([url]) => url === '/api/conversation/warmup'
+        )
+      ).toBe(false)
+      if (outcome !== 'unmount')
+        expect(screen.getByText(/errorConnection/)).toBeVisible()
+    }
+  )
+  it.each([
+    ['gemini', 'male', false],
+    ['gemini', 'male', true],
+    ['openai', 'coral', false],
+    ['openai', 'coral', true],
+  ] as const)(
+    'authenticates %s with voice %s (trial: %s) and accepts WAV frames',
+    async (provider, voice, trial) => {
+      useConfigStore.setState({ ttsProvider: provider })
+      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('gemini_tts_voice', 'male')
+      render(
+        <ConversationMode
+          targetLanguage="fr-FR"
+          voiceTrialToken={trial ? 'assessment-trial' : undefined}
+          trialMode={trial}
+        />
+      )
+      fireEvent.click(screen.getByRole('button', { name: 'start' }))
+      await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+      const ws = MockWebSocket.instances[0]
+      act(() => ws.onopen?.())
+
+      expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+        type: 'auth',
+        token: 'token',
+        voice,
+        target_language: 'fr-FR',
+        ...(trial ? { voice_trial_token: 'assessment-trial' } : {}),
+      })
+      const wav = float32ToWav(new Float32Array([0.5]), 24000)
+      act(() => ws.onmessage?.({ data: wav }))
+      expect(mocks.enqueue).toHaveBeenCalledWith(wav)
+    }
+  )
+
   it.each(['current', 'replace-session', 'unmount'])(
     'handles a completed demo checkout conflict for %s',
     async (action) => {

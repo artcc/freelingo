@@ -372,7 +372,7 @@ AI-generated listening comprehension exercises shared across users at the same C
 - exercise_type — Type: string; Notes: E.g. `"story"`, `"dialogue"`, `"news_report"` — varies by level
 - topic — Type: string; Notes: Short topic description
 - text — Type: text; Notes: Full transcript (never returned to client before submission)
-- audio_path — Type: string; Notes: Absolute path to MP3 on disk, e.g. `/data/audio/listening/42.mp3`
+- audio_path — Type: string; Notes: Absolute path to MP3 or WAV on disk, e.g. `/data/audio/listening/42.mp3` or `/data/audio/listening/42.wav`
 - duration_seconds — Type: integer; Notes: Persisted duration field; current generation normally leaves its default `0`
 - questions — Type: JSON; Notes: List of `{index, question, options: {A,B,C,D}, correct}` objects
 - play_count — Type: integer; Notes: Incremented on submitted attempts, including replays (server default 0); not a count of audio playback or exercise delivery

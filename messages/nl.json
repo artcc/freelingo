@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Account verwijderen",
     "sectionUsageLimits": "Gebruikslimieten",
     "sectionVoice": "Stem",
+    "voiceFemale": "Vrouwelijk",
+    "voiceMale": "Mannelijk",
     "voiceHint": "Kies de stem van Lingu en klik op afspelen om die te horen.",
     "voicePlay": "Afspelen",
     "voiceStop": "Stoppen",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Begrepen",
     "entry1": {
       "label": "Begrijp elk antwoord beter",

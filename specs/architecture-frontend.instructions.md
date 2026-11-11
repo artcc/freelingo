@@ -298,6 +298,23 @@ Zustand stores shared cross-route state:
 Screen-specific forms, async state, playback, selections, and modal state remain local React state.
 Do not promote local state into a global store without a cross-route requirement.
 
+Public configuration includes the selected TTS provider and `gemini_tts_voice` default. Shared
+`lib/tts-voice.ts` resolves provider-specific voice preferences: OpenAI uses browser storage key
+`tts_voice`; Gemini uses `gemini_tts_voice` with `female`/`male` choices. Settings shows the active
+provider's selector and previews. Audio players, tour, Listening generation, and conversation reuse
+that resolution; local TTS uses its configured backend voice. The preference keys remain separate
+when the operator changes provider.
+
+The config store shares concurrent loads with a 20-second deadline covering headers and body;
+failure releases the shared operation for retry, and late responses cannot overwrite new config.
+`resolveConfiguredTtsVoice` waits for a successful load
+before resolving a synthesis preference and supports consumer cancellation; unavailable configuration
+uses the consumer's error state. Initial configuration arrival preserves the pending first playback.
+Listening generation bounds this wait to 20 seconds and rechecks session and learning context;
+if a provisional language switch interrupts the wait, a rejected switch resumes a read-only lookup.
+Conversation resolves the voice within warmup before opening its WebSocket. Settings previews release
+audio and discard pending responses on account-session changes.
+
 Dashboard's `components/dashboard/ProgressOverview.tsx` renders existing plan-scoped progress with
 prominent XP/streak cards, today's XP, a seven-day UTC strip, and compact lesson/accuracy metrics.
 `today_xp` and `activity_week` come from `/api/progress/summary` and stay in page-local state. Request
@@ -516,6 +533,11 @@ Chat consumes JSON SSE events and must handle response reset before appending su
 Voice conversation owns microphone/VAD and playback lifecycle with cancellation and late-callback
 guards. Resource audio components fetch authenticated blobs and release object URLs on replacement or
 unmount.
+
+HTTP audio playback and TTS proxies preserve the backend MIME type (`audio/wav` for Gemini,
+`audio/mpeg` for local/OpenAI). Voice playback decodes either binary format with `decodeAudioData`
+and supplies the matching MIME type to its HTML audio fallback. The WebSocket framing and turn
+pipeline remain provider-independent; persisted Listening recordings retain their own format.
 
 Detailed behavior belongs to `platform.instructions.md`, `speech-services.instructions.md`, and
 `voice-conversation.instructions.md`.

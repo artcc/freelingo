@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import io
+import wave
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -440,6 +442,72 @@ async def test_audio_serves_file(user_with_plan, tmp_path) -> None:
         r = await ac.get(f"/api/listening/audio/{ex.id}", headers=headers)
     assert r.status_code == 200
     assert r.headers["content-type"].startswith("audio/mpeg")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("extension", "provider", "media_type"),
+    [("mp3", "gemini", "audio/mpeg"), ("wav", "openai", "audio/wav")],
+)
+async def test_audio_preserves_persisted_format_after_provider_switch(
+    user_with_plan, tmp_path, monkeypatch, extension, provider, media_type
+) -> None:
+    from app.core.config import settings
+
+    ac, _, headers, _user, db = user_with_plan
+    exercise = await _make_exercise(db)
+    exercise.audio_path = f"/old-storage/listening/{exercise.id}.{extension}"
+    await db.commit()
+    buffer = io.BytesIO()
+    with wave.open(buffer, "wb") as audio:
+        audio.setnchannels(1)
+        audio.setsampwidth(2)
+        audio.setframerate(24000)
+        audio.writeframes(b"\x00\x00" * 240)
+    payload = buffer.getvalue() if extension == "wav" else b"ID3legacy-mp3"
+    directory = tmp_path / "listening"
+    directory.mkdir()
+    (directory / f"{exercise.id}.{extension}").write_bytes(payload)
+    monkeypatch.setattr(settings, "AUDIO_STORAGE_PATH", str(tmp_path))
+    monkeypatch.setattr(settings, "TTS_PROVIDER", provider)
+
+    response = await ac.get(f"/api/listening/audio/{exercise.id}", headers=headers)
+
+    assert response.status_code == 200
+    assert response.content == payload
+    assert response.headers["content-type"] == media_type
+    app.state.tts_service.synthesize.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("stored_extension", ["wav", "mp3", "txt"])
+async def test_audio_uses_only_allowlisted_extension_from_untrusted_database_path(
+    user_with_plan, tmp_path, monkeypatch, stored_extension
+) -> None:
+    from app.core.config import settings
+
+    ac, _, headers, _user, db = user_with_plan
+    exercise = await _make_exercise(db)
+    outside = tmp_path / f"private.{stored_extension}"
+    outside.write_bytes(b"private-file-must-not-be-served")
+    exercise.audio_path = str(tmp_path / "listening" / ".." / outside.name)
+    await db.commit()
+    extension = "wav" if stored_extension == "wav" else "mp3"
+    directory = tmp_path / "listening"
+    directory.mkdir()
+    safe_file = directory / f"{exercise.id}.{extension}"
+    safe_file.write_bytes(b"safe-owned-audio")
+    monkeypatch.setattr(settings, "AUDIO_STORAGE_PATH", str(tmp_path))
+
+    response = await ac.get(f"/api/listening/audio/{exercise.id}", headers=headers)
+
+    assert response.status_code == 200
+    assert response.content == b"safe-owned-audio"
+    assert response.headers["content-type"] == ("audio/wav" if extension == "wav" else "audio/mpeg")
+    safe_file.unlink()
+    response = await ac.get(f"/api/listening/audio/{exercise.id}", headers=headers)
+    assert response.status_code == 404
+    assert response.json()["detail"] == "audio_not_found"
 
 
 # ---------------------------------------------------------------------------

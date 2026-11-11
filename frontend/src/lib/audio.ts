@@ -224,7 +224,14 @@ export function createAudioQueue(
       if (generationToken !== generation) return
     }
 
-    const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' })
+    const header = new DataView(arrayBuffer)
+    const isWav =
+      header.byteLength >= 12 &&
+      header.getUint32(0) === 0x52494646 && // RIFF
+      header.getUint32(8) === 0x57415645 // WAVE
+    const blob = new Blob([arrayBuffer], {
+      type: isWav ? 'audio/wav' : 'audio/mpeg',
+    })
     const url = URL.createObjectURL(blob)
     const audio = new Audio(url)
     audioQueueLogger.warn('using HTMLAudio fallback for TTS chunk', {

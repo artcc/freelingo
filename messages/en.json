@@ -425,6 +425,8 @@
     "deleteAccountConfirm": "Delete Account",
     "sectionUsageLimits": "Usage Limits",
     "sectionVoice": "Voice",
+    "voiceFemale": "Female",
+    "voiceMale": "Male",
     "voiceHint": "Choose Lingu's voice and click play to hear it.",
     "voicePlay": "Play",
     "voiceStop": "Stop",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Got it",
     "entry1": {
       "label": "Understand every answer better",

@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ExerciseAudioPlayer } from '@/components/ui/exercise-audio-player'
 import { useAuthStore, type User } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 
 const apiFetch = vi.hoisted(() => vi.fn())
 vi.mock('@/lib/api', () => ({ apiFetch }))
@@ -57,7 +58,12 @@ function expectReleased(audio: FakeAudio, url: string) {
 }
 
 beforeEach(() => {
+  useConfigStore.setState(
+    { ...useConfigStore.getInitialState(), loaded: true },
+    true
+  )
   localStorage.removeItem('tts_voice')
+  localStorage.removeItem('gemini_tts_voice')
   audios = []
   playResults = []
   apiFetch.mockReset().mockImplementation(async () => response())
@@ -84,6 +90,113 @@ afterEach(() => {
 })
 
 describe('ExerciseAudioPlayer lifecycle', () => {
+  it('waits for config and plays the first TTS request with the Gemini preference', async () => {
+    useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
+    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    const pending = deferred<Response>()
+    const configFetch = vi.fn().mockReturnValueOnce(pending.promise)
+    vi.stubGlobal('fetch', configFetch)
+    render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ text: 'Bonjour', studyPlanId: 7 }}
+      />
+    )
+    await act(async () =>
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    )
+    expect(apiFetch).not.toHaveBeenCalled()
+    await act(async () =>
+      pending.resolve(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+    )
+    expect(configFetch).toHaveBeenCalledTimes(1)
+    expect(JSON.parse(apiFetch.mock.calls[0][1].body).voice).toBe('male')
+    expect(audios).toHaveLength(1)
+    expect(audios[0].play).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('button', { name: 'ariaPause' })).toBeEnabled()
+  })
+
+  it.each(['unmount', 'session', 'timeout', 'failure'])(
+    'does not synthesize after config %s',
+    async (outcome) => {
+      useConfigStore.setState({ loaded: false })
+      const pending = deferred<Response>()
+      vi.stubGlobal('fetch', vi.fn().mockReturnValueOnce(pending.promise))
+      if (outcome === 'timeout') vi.useFakeTimers()
+      const { unmount } = render(
+        <ExerciseAudioPlayer
+          exerciseId={42}
+          tts={{ text: 'Bonjour', studyPlanId: 7 }}
+        />
+      )
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+      )
+      if (outcome === 'unmount') unmount()
+      if (outcome === 'session')
+        act(() => useAuthStore.getState().startSession('second'))
+      if (outcome === 'timeout')
+        await act(async () => vi.advanceTimersByTimeAsync(60_000))
+      await act(async () =>
+        pending.resolve(
+          outcome === 'failure'
+            ? new Response('', { status: 503 })
+            : new Response(JSON.stringify({ tts_provider: 'gemini' }))
+        )
+      )
+      expect(apiFetch).not.toHaveBeenCalled()
+      expect(audios).toHaveLength(0)
+      if (outcome === 'failure' || outcome === 'timeout')
+        expect(screen.getByText('audioError')).toBeVisible()
+    }
+  )
+  it.each([
+    ['gemini', 'male'],
+    ['openai', 'nova'],
+  ])('uses the %s preference for plan-owned TTS', async (provider, voice) => {
+    useConfigStore.setState({ ttsProvider: provider })
+    localStorage.setItem('tts_voice', 'nova')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ text: 'Bonjour', studyPlanId: 7 }}
+      />
+    )
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    })
+    expect(apiFetch).toHaveBeenCalledWith(
+      '/api/tts',
+      expect.objectContaining({
+        body: JSON.stringify({ text: 'Bonjour', study_plan_id: 7, voice }),
+      })
+    )
+  })
+
+  it('discards pending TTS on provider changes without a stored preference', async () => {
+    const pending = deferred<Response>()
+    apiFetch.mockReturnValueOnce(pending.promise)
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    render(
+      <ExerciseAudioPlayer
+        exerciseId={42}
+        tts={{ text: 'Bonjour', studyPlanId: 7 }}
+      />
+    )
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'listen' }))
+    })
+    const signal = apiFetch.mock.calls[0][1].signal as AbortSignal
+    act(() => useConfigStore.setState({ ttsProvider: 'gemini' }))
+    await act(async () => pending.resolve(response()))
+
+    expect(signal.aborted).toBe(true)
+    expect(audios).toHaveLength(0)
+    expect(screen.getByRole('button', { name: 'listen' })).toBeEnabled()
+  })
+
   describe.each(['fetch', 'blob', 'play'] as const)('pending %s', (stage) => {
     it.each(['unmount', 'exercise', 'session', 'logout'])(
       'cancels on %s and ignores completion after cancellation',

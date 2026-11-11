@@ -56,7 +56,9 @@ describe('Landing FAQ', () => {
       const names = SUPPORTED_TARGET_LANGUAGES.map(
         ({ code }) => catalog.targetLanguages[code] as string
       ).sort(new Intl.Collator(locale).compare)
-      const list = new Intl.ListFormat(locale, { type: 'conjunction' }).format(names)
+      const list = new Intl.ListFormat(locale, { type: 'conjunction' }).format(
+        names
+      )
       const { container } = render(
         <NextIntlClientProvider locale={locale} messages={catalog}>
           <LandingFAQ />
@@ -88,7 +90,9 @@ describe('Landing FAQ', () => {
     const { container, rerender } = render(<FAQ />)
     const answer = () => container.querySelector('[id$="-languages-answer"]')
 
-    expect(answer()?.textContent).toMatch(/^American English, British English, Chinese/)
+    expect(answer()?.textContent).toMatch(
+      /^American English, British English, Chinese/
+    )
     rerender(
       <NextIntlClientProvider locale="es" messages={spanish}>
         <LandingFAQ />
@@ -140,9 +144,9 @@ describe('Landing FAQ', () => {
     fireEvent.click(free)
     expect(free).toHaveAttribute('aria-expanded', 'false')
     expect(screen.queryByRole('region')).toBeNull()
-    const events = vi.mocked(fetch).mock.calls.filter(
-      ([url]) => url === '/api/analytics/public'
-    )
+    const events = vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => url === '/api/analytics/public')
     expect(events).toHaveLength(2)
     for (const [, options] of events) {
       expect(options).toMatchObject({ method: 'POST', credentials: 'omit' })
@@ -171,6 +175,8 @@ describe('Landing FAQ', () => {
       messages.landing.faq.modes.answer
     )
     expect(fetch).toHaveBeenCalledTimes(1)
-    expect(fetch).toHaveBeenCalledWith('/api/config')
+    expect(fetch).toHaveBeenCalledWith('/api/config', {
+      signal: expect.any(AbortSignal),
+    })
   })
 })

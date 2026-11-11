@@ -50,6 +50,7 @@ from app.schemas.listening import (
 )
 from app.services.comprehension_help import explain_question
 from app.services.exercise_generation import GenerationLease, get_generation_state
+from app.services.gemini_tts_service import GEMINI_VOICES
 from app.services.learning_analytics import (
     LearningEvent,
     record_exercise_completed,
@@ -177,6 +178,10 @@ async def generate_exercise(
     redis: Redis = Depends(get_redis),
 ) -> ListeningGeneratingResponse:
     """Reuse available work or start one generation for this level and language."""
+    if settings.TTS_PROVIDER == "local":
+        voice = ""
+    if settings.TTS_PROVIDER == "gemini" and voice and voice not in GEMINI_VOICES:
+        raise HTTPException(status_code=400, detail="Invalid voice name")
     level, target_language = plan.cefr_level, plan.target_language
     if await get_available_exercise(level, target_language, current_user.id, db) is not None:
         return ListeningGeneratingResponse(status="available")
@@ -218,10 +223,10 @@ async def get_audio(
     db: AsyncSession = Depends(get_db),
 ) -> FileResponse:
     """
-    Stream the MP3 audio file for the exercise.
+    Stream the persisted MP3 or WAV audio file for the exercise.
 
-    The path is always constructed from exercise_id (integer) — never from
-    a DB-stored string — to prevent path traversal.
+    The path uses exercise_id (integer) and an allowlisted stored extension,
+    never the database path itself, to prevent path traversal.
     """
     exercise = await db.get(ListeningExercise, exercise_id)
     if exercise is None:
@@ -229,13 +234,17 @@ async def get_audio(
     if exercise.target_language != plan.target_language:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="exercise_not_found")
 
-    audio_path = os.path.join(settings.AUDIO_STORAGE_PATH, "listening", f"{exercise_id}.mp3")
+    # Only the allowlisted extension is taken from storage metadata, never its directory.
+    extension = "wav" if os.path.splitext(exercise.audio_path)[1] == ".wav" else "mp3"
+    audio_path = os.path.join(
+        settings.AUDIO_STORAGE_PATH, "listening", f"{exercise_id}.{extension}"
+    )
     if not os.path.isfile(audio_path):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="audio_not_found")
 
     return FileResponse(
         path=audio_path,
-        media_type="audio/mpeg",
+        media_type="audio/wav" if extension == "wav" else "audio/mpeg",
         headers={"Accept-Ranges": "bytes"},
     )
 

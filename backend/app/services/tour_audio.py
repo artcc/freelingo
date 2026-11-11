@@ -9,7 +9,8 @@ import tempfile
 from pathlib import Path
 
 from app.core.config import settings
-from app.services.tts_service import KokoroTTSService, OpenAITTSService
+from app.services.gemini_tts_service import GeminiTTSService
+from app.services.tts_service import KokoroTTSService, OpenAITTSService, get_tts_audio_format
 
 OPENAI_VOICES = frozenset(
     {"alloy", "ash", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"}
@@ -17,15 +18,15 @@ OPENAI_VOICES = frozenset(
 
 
 async def get_tour_audio(
-    service: KokoroTTSService | OpenAITTSService,
+    service: KokoroTTSService | OpenAITTSService | GeminiTTSService,
     *,
     locale: str,
     text: str,
     voice: str | None,
 ) -> Path:
-    is_openai = isinstance(service, OpenAITTSService)
-    effective_voice = (voice or service.voice) if is_openai else service.voice
-    if is_openai:
+    is_cloud = isinstance(service, (OpenAITTSService, GeminiTTSService))
+    effective_voice = (voice or service.voice) if is_cloud else service.voice
+    if is_cloud:
         key = service.get_cache_key(text, effective_voice, locale)
     else:
         identity = {
@@ -40,7 +41,8 @@ async def get_tour_audio(
         key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
     directory = Path(settings.AUDIO_STORAGE_PATH) / "tour" / locale
     directory.mkdir(parents=True, exist_ok=True)
-    path = directory / f"{key}.mp3"
+    extension, _ = get_tts_audio_format(service)
+    path = directory / f"{key}.{extension}"
 
     def cached() -> bool:
         return path.is_file() and path.stat().st_size > 0

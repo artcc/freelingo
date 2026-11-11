@@ -424,6 +424,8 @@
     "deleteAccountMessage": "Esta acción eliminará tu cuenta y todos tus datos de forma permanente. Esta acción no se puede deshacer.",
     "deleteAccountConfirm": "Eliminar cuenta",
     "sectionVoice": "Voz",
+    "voiceFemale": "Femenina",
+    "voiceMale": "Masculina",
     "voiceHint": "Elige la voz de Lingu y pulsa reproducir para escucharla.",
     "voicePlay": "Reproducir",
     "voiceStop": "Detener",
@@ -1796,7 +1798,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Entendido",
     "entry1": {
       "label": "Comprende mejor cada respuesta",

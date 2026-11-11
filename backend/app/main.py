@@ -54,6 +54,7 @@ from app.routers import (
 )
 from app.routers import config as config_router
 from app.routers import health as health_router
+from app.services.gemini_tts_service import GeminiTTSService
 from app.services.stt_service import OpenAISTTService, WhisperSTTService
 from app.services.tts_service import KokoroTTSService, OpenAITTSService
 
@@ -91,6 +92,15 @@ async def lifespan(app: FastAPI):  # noqa: ANN201
             model=settings.OPENAI_TTS_MODEL,
             voice=settings.OPENAI_TTS_VOICE,
             speed=settings.OPENAI_TTS_SPEED,
+        )
+    elif settings.TTS_PROVIDER == "gemini":
+        app.state.tts_service = GeminiTTSService(
+            api_key=settings.GEMINI_API_KEY,
+            model=settings.GEMINI_TTS_MODEL,
+            voice=settings.GEMINI_TTS_VOICE,
+            female_voice=settings.GEMINI_TTS_FEMALE_VOICE,
+            male_voice=settings.GEMINI_TTS_MALE_VOICE,
+            timeout=settings.GEMINI_TTS_TIMEOUT_SECONDS,
         )
     else:
         app.state.tts_service = KokoroTTSService(settings.TTS_BASE_URL, settings.TTS_VOICE)
