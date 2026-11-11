@@ -16,7 +16,7 @@ interface Props {
   index: number
   lessonCount: number
   grammarCount: number
-  competency: number // 0–1, completion ratio
+  progress: number // 0–1: lesson completion ratio, or assessment score for the level test
   status: UnitStatus
   onClick: () => void
   /** When provided and status.active, an EMPEZAR CTA is rendered on the card */
@@ -75,7 +75,7 @@ export default function UnitCard({
   index,
   lessonCount,
   grammarCount,
-  competency,
+  progress,
   status,
   onClick,
   onStartLesson,
@@ -83,7 +83,7 @@ export default function UnitCard({
   const t = useTranslations('plan')
   const tCommon = useTranslations('common')
   const statusId = useId()
-  const barWidth = Math.round(competency * 100)
+  const barWidth = Math.round(progress * 100)
 
   return (
     <div

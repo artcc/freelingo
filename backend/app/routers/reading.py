@@ -1,8 +1,18 @@
 from __future__ import annotations
 
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Request, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    Header,
+    HTTPException,
+    Path,
+    Request,
+    status,
+)
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,6 +30,7 @@ from app.core.limiter import limiter
 from app.models.reading import ReadingExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
+from app.schemas.comprehension_help import QuestionExplanationResponse
 from app.schemas.exercise_generation import ExerciseContext
 from app.schemas.learning_analytics import ExerciseStartedRequest
 from app.schemas.reading import (
@@ -33,6 +44,7 @@ from app.schemas.reading import (
     ReadingSubmitRequest,
     ReadingSubmitResponse,
 )
+from app.services.comprehension_help import explain_question
 from app.services.exercise_generation import GenerationLease, get_generation_state
 from app.services.learning_analytics import (
     LearningEvent,
@@ -276,10 +288,28 @@ async def submit_reading_attempt(
     await maybe_record_freemium_usage(current_user, "reading")
 
     return ReadingSubmitResponse(
+        attempt_id=attempt.id,
         score=attempt.score,
         xp_earned=attempt.xp_earned,
         correct_answers=correct_answers,
     )
+
+
+@router.post(
+    "/attempts/{attempt_id}/questions/{question_index}/explanation",
+    response_model=QuestionExplanationResponse,
+)
+@limiter.limit("10/minute")
+async def explain_reading_question(
+    request: Request,
+    attempt_id: Annotated[int, Path(ge=1, le=2_147_483_647)],
+    question_index: Annotated[int, Path(ge=0, le=2_147_483_647)],
+    _maintenance: None = Depends(require_not_maintenance),
+    current_user: User = Depends(require_subscription_or_freemium_readonly("reading")),
+    db: AsyncSession = Depends(get_db),
+    redis: Redis = Depends(get_redis),
+) -> QuestionExplanationResponse:
+    return await explain_question("reading", attempt_id, question_index, current_user, db, redis)
 
 
 @router.get("/history", response_model=ReadingHistoryResponse)

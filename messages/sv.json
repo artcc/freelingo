@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Varför det här svaret",
+    "hide": "Dölj förklaringen",
+    "loading": "Förbereder förklaringen...",
+    "error": "Förklaringen är inte tillgänglig. Försök igen.",
+    "evidence": "Utdrag ur originaltexten",
+    "language": "Förklaring på {language}"
+  },
   "landing": {
     "freeTrialNote": "Inledande Premium-åtkomst vid registrering, utan kort. Därefter gratis med användningsgränser om du inte tecknar abonnemang.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Visa på",
     "hint": "Ledtråd",
     "showNativeHint": "Visa ledtråd på",
+    "showQuestionTranslation": "Visa översättningen av frågan på {language}",
+    "hideQuestionTranslation": "Dölj översättningen av frågan",
+    "translatingQuestion": "Översätter frågan...",
+    "questionTranslationError": "Det gick inte att översätta frågan. Försök igen.",
+    "retryQuestionTranslation": "Försök översätta frågan igen",
     "regenerateExercise": "Skapa om övningen",
+    "listeningIncomplete": "Den här hörövningen är ofullständig. Skapa om den innan du svarar.",
+    "listeningUnavailable": "Ljud är inte tillgängligt för den här sparade övningen. Ditt sparade svar och resultat behålls.",
     "regeneratingExercise": "Skapar om...",
     "regenerateError": "Det gick inte att skapa om övningen. Försök igen.",
     "regenerateNotNeeded": "Den här övningen behöver inte skapas om.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Stoppa inspelning"
   },
   "audioPlayer": {
+    "ariaPause": "Pausa ljud",
+    "ariaSeek": "Ljudposition",
     "listen": "Lyssna",
     "stop": "Stoppa",
     "ariaListen": "Lyssna på uttal",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Jag förstår",
     "entry1": {
+      "label": "Förstå varje svar bättre",
+      "desc": "När du har slutfört Reading eller Listening kan du be om en förklaring på ditt modersmål med ett utdrag ur texten som motiverar svaret. Du kan också läsa texten eller lyssna på ljudet igen medan du repeterar."
+    },
+    "entry2": {
+      "label": "Förbättringar av inlärningssystemet",
+      "desc": "Nu kan du vid behov visa en översättning av övningsfrågorna till ditt modersmål, samtidigt som originalfrågan finns kvar på språket du lär dig."
+    },
+    "entry3": {
+      "label": "Ditt ordförråd, med översättning",
+      "desc": "Nya kort som du lägger till från Ordförråd innehåller en översättning till ditt modersmål. Korten du redan har behåller sitt innehåll."
+    },
+    "entry4": {
+      "label": "Lingu hjälper dig när du behöver det",
+      "desc": "Om du inte förstår något under ett röstsamtal kan du be Lingu om hjälp. Lingu kan förklara det kort på ditt modersmål och sedan återgå till att öva på språket du lär dig."
+    },
+    "entry5": {
+      "label": "Förbättringar av din studieplan",
+      "desc": "Din plan visar nu dina framsteg korrekt och låter dig fortsätta med lektionerna och repetera de avsnitt du redan har arbetat med."
+    },
+    "entry6": {
       "label": "Nya språk: polska, brasiliansk portugisiska, ryska, nederländska och svenska",
       "desc": "Polska, brasiliansk portugisiska, ryska, nederländska och svenska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
     },
-    "entry2": {
-      "label": "Förbättringar för lärandet",
-      "desc": "Vi fortsätter att förbättra våra inlärningssystem och vårt språkinnehåll för att göra dina övningar tydligare, mer sammanhängande och mer användbara."
-    },
-    "entry3": {
-      "label": "Smidigare röstsamtal",
-      "desc": "Vi har förbättrat samtalen med Lingu för smidigare röstuppspelning och tydligare signaler om vems tur det är att prata."
-    },
-    "entry4": {
+    "entry7": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

@@ -140,6 +140,59 @@ expire the cache window so a later visit can retry.
 Session-scoped quota caching, unknown balances, and paywall presentation are defined in
 `subscriptions-freemium.instructions.md`.
 
+### Post-answer comprehension review
+
+Reading results retain the full passage; Listening results include the existing authenticated audio
+player alongside the revealed transcript. `components/comprehension/QuestionExplanation.tsx` adds a
+collapsed per-question explanation control only after a saved `attempt_id` is returned. Opening it
+requests help explicitly, with local loading, a 30-second client deadline and manual retry. It never
+resubmits answers or changes local quota/progress. Evidence uses `TargetLanguageText`; the explanation
+uses the profile native language and `lang` attribute, with interface-localized labels.
+
+Help state is keyed by feature, attempt, question, source, plan/language/level, native language, user
+and authentication session. Context replacement or unmount cancels requests and discards late results;
+language switching/invalidation hides the control and clears its help state. Returned language codes
+must match and the evidence must occur in the displayed passage/transcript. The owning saved attempt
+remains the backend authority; domain and cache rules live in Reading, Listening and Services specs.
+
+`ExerciseAudioPlayer` owns cancellable media work per exercise and authentication session. Unmount or
+context replacement releases pending requests, audio, event listeners and Blob URLs. Late completions
+cannot restart playback; ordinary access-token refresh does not restart the current audio. Its first-play
+callback fires once per exercise context and is omitted for result-review playback.
+
+## Lesson listening exercises
+
+The lesson page renders `listening` as a multiple-choice comprehension task with the shared
+`ExerciseAudioPlayer`. Its TTS source is the mapped exercise's `listening_text`, and its context is
+the loaded lesson's `study_plan_id`, never the currently selected language. Source or plan replacement
+invalidates playback even if regeneration retains the exercise ID. The transcript is displayed through
+`TargetLanguageText` in the persisted lesson language after evaluation or during review.
+
+An incomplete listening exercise shows recovery guidance and permits regeneration when unanswered;
+answer submission is blocked until the response marks it ready. Regeneration replaces the mapped
+exercise, including its source and readiness. Failed answer requests retain the answer and do not
+publish a score. Answer options expose their selected state to assistive technology. In-flight
+answer/regeneration work prevents conflicting actions. Pronunciation recording and transcription also
+block exercise regeneration, while the recorder's stop control remains available during capture.
+Domain validation belongs to `study-plan.instructions.md`; player transport and resource lifecycle belong to
+`speech-services.instructions.md`.
+
+## Lesson question translation
+
+`components/lesson/QuestionTranslation.tsx` provides a collapsed, keyboard-accessible reveal/hide
+control below the original question. Its label names the profile's native language using the UI's
+language catalog. The original `TargetLanguageText` and word-selection interaction remain independent.
+The translated text uses its native-language `lang` attribute and automatic direction.
+
+Matching support from the lesson response opens without a request. Otherwise the component requests
+the exercise's question-translation endpoint, shows local loading, and offers manual retry on failure.
+The request has a 30-second client deadline. Translation state is local to the component, so opening
+support does not replace the exercise array or reset a draft answer. The parent keys it by lesson,
+exercise, source question, native/target language, user and authentication session, and unmounts it
+during regeneration. Unmount cancels the request; obsolete responses cannot publish text, errors, or
+loading state into a different context. Responses must match both the source question and native
+language. See `study-plan.instructions.md` for pedagogical, cache, and persistence rules.
+
 ## Lingu avatar
 
 Voice conversations show the animated Lingu avatar between the transcript and controls, at 65 × 65

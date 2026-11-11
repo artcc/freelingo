@@ -63,6 +63,7 @@ memories, feedback reads/mutations, and review reads/deletes.
 - `POST /api/lessons/exercises/{exercise_id}/answer`: `20/minute`.
 - `POST /api/lessons/exercises/{exercise_id}/regenerate`: `5/hour`.
 - Lesson/exercise native explanation or hint generation: `10/minute`.
+- `POST /api/lessons/exercises/{exercise_id}/question-translation`: `10/minute`, including cache hits.
 - Grammar, Vocabulary, or Phrasebook native-help generation: `10/minute`.
 - `GET /api/phrasebook/audio/{category_id}/{phrase_index}`: `30/minute`.
 - `POST /api/flashcards/generate`: `20/minute`.
@@ -93,6 +94,7 @@ Both domains use:
 - `POST /api/{domain}/generate`: `5/minute`.
 - `POST /api/{domain}/started`: `20/minute`.
 - `POST /api/{domain}/attempt`: `20/minute`.
+- `POST /api/{domain}/attempts/{attempt_id}/questions/{question_index}/explanation`: `10/minute`, including cache hits.
 - history and Listening audio retrieval: `60/minute`.
 
 Generation status uses immediate `/next` responses and non-overlapping client queries every ten

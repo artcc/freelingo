@@ -1,102 +1,254 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import { useAuthStore } from '@/store/auth'
 
 interface ExerciseAudioPlayerProps {
   exerciseId: number
   onFirstPlay?: () => void
+  tts?: { text: string; studyPlanId: number }
+}
+
+interface Playback {
+  controller: AbortController
+  audio: HTMLAudioElement | null
+  url: string | null
+  detach: (() => void) | null
+  pending: boolean
+  timeout: ReturnType<typeof setTimeout> | null
+}
+
+function storedVoice() {
+  try {
+    return typeof window !== 'undefined'
+      ? (localStorage.getItem('tts_voice') ?? undefined)
+      : undefined
+  } catch {
+    return undefined
+  }
 }
 
 export function ExerciseAudioPlayer({
   exerciseId,
   onFirstPlay,
+  tts,
 }: ExerciseAudioPlayerProps) {
   const t = useTranslations('listening')
+  const tAudio = useTranslations('audioPlayer')
+  const voice = tts ? storedVoice() : undefined
+  const source = JSON.stringify([
+    exerciseId,
+    tts?.text,
+    tts?.studyPlanId,
+    voice,
+  ])
   const [state, setState] = useState<
     'idle' | 'loading' | 'playing' | 'paused' | 'error'
   >('idle')
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const blobUrlRef = useRef<string | null>(null)
+  const playbackRef = useRef<Playback | null>(null)
   const playedRef = useRef(false)
+  const onFirstPlayRef = useRef(onFirstPlay)
+  const sessionVersion = useAuthStore((auth) => auth.sessionVersion)
+  const userId = useAuthStore((auth) => auth.user?.id)
+  const contextRef = useRef<{
+    source: string
+    sessionVersion: number
+    userId: number | undefined
+  } | null>(null)
+
+  const stopPlayback = useCallback(() => {
+    const playback = playbackRef.current
+    playbackRef.current = null
+    if (!playback) return
+    if (playback.timeout) clearTimeout(playback.timeout)
+    playback.controller.abort()
+    playback.detach?.()
+    if (playback.audio) {
+      playback.audio.pause()
+      playback.audio.removeAttribute('src')
+      playback.audio.load()
+    }
+    if (playback.url) URL.revokeObjectURL(playback.url)
+  }, [])
+
+  useLayoutEffect(() => {
+    onFirstPlayRef.current = onFirstPlay
+  }, [onFirstPlay])
+
+  useLayoutEffect(() => {
+    contextRef.current = { source, sessionVersion, userId }
+    const reset = () => {
+      stopPlayback()
+      playedRef.current = false
+      setState('idle')
+      setProgress(0)
+      setDuration(0)
+    }
+    reset()
+    // Stop immediately on authentication changes, including before React commits.
+    const unsubscribe = useAuthStore.subscribe((auth) => {
+      if (auth.sessionVersion !== sessionVersion || auth.user?.id !== userId) {
+        reset()
+      }
+    })
+    return () => {
+      unsubscribe()
+      contextRef.current = null
+      stopPlayback()
+    }
+  }, [source, sessionVersion, userId, stopPlayback])
 
   async function handlePlayPause() {
-    if (state === 'loading') return
+    const context = contextRef.current
+    const sameContext = () => {
+      const auth = useAuthStore.getState()
+      return (
+        context !== null &&
+        contextRef.current === context &&
+        context.source === source &&
+        auth.sessionVersion === context.sessionVersion &&
+        auth.user?.id === context.userId
+      )
+    }
+    if (!sameContext() || playbackRef.current?.pending) return
 
     if (state === 'playing') {
-      audioRef.current?.pause()
+      playbackRef.current?.audio?.pause()
       setState('paused')
       return
     }
 
-    if (state === 'paused' && audioRef.current) {
-      try {
-        await audioRef.current.play()
-        setState('playing')
-      } catch {
-        setState('error')
+    if (state !== 'paused' || !playbackRef.current?.audio) {
+      stopPlayback()
+      playbackRef.current = {
+        controller: new AbortController(),
+        audio: null,
+        url: null,
+        detach: null,
+        pending: false,
+        timeout: null,
       }
-      return
+      setProgress(0)
+      setDuration(0)
+    }
+    const playback = playbackRef.current
+    if (!playback) return
+    const current = () =>
+      sameContext() &&
+      playbackRef.current === playback &&
+      !playback.controller.signal.aborted
+    const fail = () => {
+      if (!current()) return
+      stopPlayback()
+      setProgress(0)
+      setDuration(0)
+      setState('error')
     }
 
+    playback.pending = true
     setState('loading')
+    if (tts) playback.timeout = setTimeout(fail, 60_000)
     try {
-      const res = await apiFetch(`/api/listening/audio/${exerciseId}`)
-      if (!res.ok) throw new Error(`${res.status}`)
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      blobUrlRef.current = url
+      if (!playback.audio) {
+        const res = await apiFetch(
+          tts ? '/api/tts' : `/api/listening/audio/${exerciseId}`,
+          {
+            signal: playback.controller.signal,
+            ...(tts
+              ? {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    text: tts.text,
+                    study_plan_id: tts.studyPlanId,
+                    voice,
+                  }),
+                }
+              : {}),
+          }
+        )
+        if (!current()) return
+        if (!res.ok) throw new Error(`${res.status}`)
+        const blob = await res.blob()
+        if (!current()) return
+        playback.url = URL.createObjectURL(blob)
+        const audio = new Audio(playback.url)
+        playback.audio = audio
 
-      const audio = new Audio(url)
-      audioRef.current = audio
-
-      audio.addEventListener('loadedmetadata', () => {
-        setDuration(audio.duration)
-      })
-      audio.addEventListener('timeupdate', () => {
-        if (audio.duration > 0) {
-          setProgress((audio.currentTime / audio.duration) * 100)
+        const metadata = () => {
+          if (current()) setDuration(audio.duration)
         }
-      })
-      audio.addEventListener('ended', () => {
-        setProgress(100)
-        setState('idle')
-      })
-      audio.addEventListener('error', () => setState('error'))
+        const timeupdate = () => {
+          if (current() && audio.duration > 0) {
+            setProgress((audio.currentTime / audio.duration) * 100)
+          }
+        }
+        const ended = () => {
+          if (!current()) return
+          if (tts) audio.currentTime = 0
+          else stopPlayback()
+          setProgress(100)
+          setState(tts ? 'paused' : 'idle')
+        }
+        audio.addEventListener('loadedmetadata', metadata)
+        audio.addEventListener('timeupdate', timeupdate)
+        audio.addEventListener('ended', ended)
+        audio.addEventListener('error', fail)
+        playback.detach = () => {
+          audio.removeEventListener('loadedmetadata', metadata)
+          audio.removeEventListener('timeupdate', timeupdate)
+          audio.removeEventListener('ended', ended)
+          audio.removeEventListener('error', fail)
+        }
+      }
 
+      const audio = playback.audio
+      if (tts && audio.currentTime === 0) setProgress(0)
       await audio.play()
+      if (!current()) {
+        // A browser may settle play() after cleanup; stop only that old element.
+        audio.pause()
+        return
+      }
       setState('playing')
 
       if (!playedRef.current) {
         playedRef.current = true
-        onFirstPlay?.()
+        onFirstPlayRef.current?.()
       }
     } catch {
-      setState('error')
+      fail()
+    } finally {
+      if (playback.timeout) clearTimeout(playback.timeout)
+      playback.timeout = null
+      playback.pending = false
     }
   }
 
   function handleSeek(e: React.MouseEvent<HTMLDivElement>) {
-    const audio = audioRef.current
-    if (!audio || audio.duration === 0) return
     const rect = e.currentTarget.getBoundingClientRect()
-    const ratio = (e.clientX - rect.left) / rect.width
+    if (rect.width > 0) seek((e.clientX - rect.left) / rect.width)
+  }
+
+  function seek(position: number) {
+    const audio = playbackRef.current?.audio
+    if (!audio || !Number.isFinite(audio.duration) || audio.duration <= 0)
+      return
+    const ratio = Math.max(0, Math.min(1, position))
     audio.currentTime = ratio * audio.duration
     setProgress(ratio * 100)
   }
 
-  useEffect(() => {
-    return () => {
-      audioRef.current?.pause()
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current)
-    }
-  }, [])
-
   const icon = state === 'loading' ? '◌' : state === 'playing' ? '▐▐' : '▶'
-  const label = state === 'playing' ? 'Pause' : 'Play'
+  const label = tts
+    ? tAudio(state === 'playing' ? 'ariaPause' : 'listen')
+    : state === 'playing'
+      ? 'Pause'
+      : 'Play'
 
   return (
     <div className="border-fl-border bg-fl-surface space-y-2 border p-4">
@@ -113,7 +265,27 @@ export function ExerciseAudioPlayer({
         <div
           className="bg-fl-border relative h-1.5 flex-1 cursor-pointer"
           onClick={handleSeek}
-          role="progressbar"
+          role={tts ? 'slider' : 'progressbar'}
+          tabIndex={tts ? 0 : undefined}
+          aria-label={tts ? tAudio('ariaSeek') : undefined}
+          onKeyDown={
+            tts
+              ? (event) => {
+                  const positions: Record<string, number> = {
+                    ArrowLeft: progress / 100 - 0.05,
+                    ArrowDown: progress / 100 - 0.05,
+                    ArrowRight: progress / 100 + 0.05,
+                    ArrowUp: progress / 100 + 0.05,
+                    Home: 0,
+                    End: 1,
+                  }
+                  if (event.key in positions) {
+                    event.preventDefault()
+                    seek(positions[event.key])
+                  }
+                }
+              : undefined
+          }
           aria-valuenow={Math.round(progress)}
           aria-valuemin={0}
           aria-valuemax={100}

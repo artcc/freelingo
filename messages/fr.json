@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Pourquoi cette réponse",
+    "hide": "Masquer l’explication",
+    "loading": "Préparation de l’explication...",
+    "error": "L’explication est indisponible. Réessayez.",
+    "evidence": "Extrait du texte original",
+    "language": "Explication en {language}"
+  },
   "landing": {
     "freeTrialNote": "Accès Premium initial à l'inscription, sans carte. Ensuite, restez gratuitement avec des limites si vous ne vous abonnez pas.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Voir en",
     "hint": "Indice",
     "showNativeHint": "Voir l’indice en",
+    "showQuestionTranslation": "Voir la traduction de la question en {language}",
+    "hideQuestionTranslation": "Masquer la traduction de la question",
+    "translatingQuestion": "Traduction de la question en cours...",
+    "questionTranslationError": "Impossible de traduire la question. Réessaie.",
+    "retryQuestionTranslation": "Réessayer de traduire la question",
     "regenerateExercise": "Regénérer l’exercice",
+    "listeningIncomplete": "Cet exercice de compréhension orale est incomplet. Régénère-le avant de répondre.",
+    "listeningUnavailable": "L’audio n’est pas disponible pour cet exercice enregistré. Ta réponse et ton score sont conservés.",
     "regeneratingExercise": "Regénération...",
     "regenerateError": "Impossible de régénérer l’exercice. Réessaie.",
     "regenerateNotNeeded": "Cet exercice n’a pas besoin d’être régénéré.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Arrêter l'enregistrement"
   },
   "audioPlayer": {
+    "ariaPause": "Mettre l’audio en pause",
+    "ariaSeek": "Position de l’audio",
     "listen": "Écouter",
     "stop": "Arrêter",
     "ariaListen": "Écouter la prononciation",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Compris",
     "entry1": {
+      "label": "Comprends mieux chaque réponse",
+      "desc": "Après un exercice de Reading ou de Listening, tu peux demander une explication dans ta langue maternelle, accompagnée d'un extrait du texte qui justifie la réponse. Tu peux aussi relire le passage ou réécouter l'audio pendant tes révisions."
+    },
+    "entry2": {
+      "label": "Des améliorations du système d'apprentissage",
+      "desc": "Tu peux désormais consulter la traduction des énoncés dans ta langue maternelle quand tu en as besoin, tout en gardant la question originale dans la langue que tu apprends."
+    },
+    "entry3": {
+      "label": "Ton vocabulaire, avec traduction",
+      "desc": "Les nouvelles cartes que tu ajoutes depuis Vocabulaire incluent la traduction dans ta langue maternelle. Les cartes que tu possèdes déjà conservent leur contenu."
+    },
+    "entry4": {
+      "label": "Lingu t'aide quand tu en as besoin",
+      "desc": "Si tu ne comprends pas quelque chose pendant une conversation vocale, demande de l'aide à Lingu. Lingu peut te l'expliquer brièvement dans ta langue maternelle, puis reprendre la pratique dans la langue que tu apprends."
+    },
+    "entry5": {
+      "label": "Des améliorations pour ton programme d'apprentissage",
+      "desc": "Ton programme affiche désormais correctement ta progression et te permet de poursuivre les leçons et de réviser les unités déjà travaillées."
+    },
+    "entry6": {
       "label": "Nouvelles langues : polonais, portugais du Brésil, russe, néerlandais et suédois",
       "desc": "Le polonais, le portugais du Brésil, le russe, le néerlandais et le suédois sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
     },
-    "entry2": {
-      "label": "Des améliorations pour apprendre",
-      "desc": "Nous continuons d'améliorer nos systèmes d'apprentissage et nos contenus linguistiques pour te proposer une pratique plus claire, cohérente et utile."
-    },
-    "entry3": {
-      "label": "Des conversations vocales plus fluides",
-      "desc": "Nous avons amélioré les conversations avec Lingu pour une lecture audio plus fluide et des indications plus claires sur les tours de parole."
-    },
-    "entry4": {
+    "entry7": {
       "label": "Une expérience plus fluide",
       "desc": "Nous avons aussi corrigé de petits bugs et peaufiné quelques détails pour rendre ton apprentissage quotidien avec FreeLingo encore plus agréable."
     }

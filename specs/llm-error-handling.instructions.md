@@ -40,6 +40,13 @@ also includes TTS and persistence and is configured by `EXERCISE_GENERATION_TIME
 The exercise coordinator maps Python, HTTPX, normalized LLM, and OpenAI SDK timeout exceptions to the
 same `timeout` status, including OpenAI TTS failures outside the LLM adapter.
 
+On-demand lesson question translation, native explanations and native hints use the same deadline-aware
+structured-output path with a 20-second generation budget. Exercise regeneration has an outer
+20-second generation budget. These writers do not hold a database transaction or the lesson writer
+lock while awaiting the provider. Question translation finishes generation within the client's
+30-second timeout; timeout and invalid or obsolete translation return `503`. Cache and concurrent-write
+rules belong to `study-plan.instructions.md` (Optional question translation).
+
 ## Structured output
 
 `structured_output()` appends the JSON-only instruction, parses and validates the first response, and

@@ -66,6 +66,7 @@ class CorrectAnswerOut(BaseModel):
 
 
 class ListeningSubmitResponse(BaseModel):
+    attempt_id: int
     score: int
     xp_earned: int
     correct_answers: list[CorrectAnswerOut]

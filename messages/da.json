@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Hvorfor dette svar",
+    "hide": "Skjul forklaringen",
+    "loading": "Forbereder forklaringen...",
+    "error": "Forklaringen er ikke tilgængelig. Prøv igen.",
+    "evidence": "Uddrag fra originalteksten",
+    "language": "Forklaring på {language}"
+  },
   "landing": {
     "freeTrialNote": "Indledende Premium-adgang ved tilmelding uden kort. Derefter gratis med forbrugsgrænser, hvis du ikke tegner abonnement.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Vis på",
     "hint": "Tip",
     "showNativeHint": "Vis tip på",
+    "showQuestionTranslation": "Vis oversættelsen af spørgsmålet på {language}",
+    "hideQuestionTranslation": "Skjul oversættelsen af spørgsmålet",
+    "translatingQuestion": "Oversætter spørgsmålet...",
+    "questionTranslationError": "Spørgsmålet kunne ikke oversættes. Prøv igen.",
+    "retryQuestionTranslation": "Prøv at oversætte spørgsmålet igen",
     "regenerateExercise": "Opret øvelsen igen",
+    "listeningIncomplete": "Denne lytteøvelse er ufuldstændig. Opret den igen, før du svarer.",
+    "listeningUnavailable": "Lyd er ikke tilgængelig for denne gemte øvelse. Dit gemte svar og resultat bevares.",
     "regeneratingExercise": "Opretter igen...",
     "regenerateError": "Øvelsen kunne ikke oprettes igen. Prøv igen.",
     "regenerateNotNeeded": "Denne øvelse behøver ikke at blive oprettet igen.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Stop optagelse"
   },
   "audioPlayer": {
+    "ariaPause": "Sæt lyd på pause",
+    "ariaSeek": "Lydposition",
     "listen": "Lyt",
     "stop": "Stop",
     "ariaListen": "Lyt til udtalen",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Forstået",
     "entry1": {
+      "label": "Forstå hvert svar bedre",
+      "desc": "Når du har gennemført Reading eller Listening, kan du bede om en forklaring på dit modersmål med et uddrag fra teksten, der underbygger svaret. Du kan også læse teksten eller lytte til lyden igen, mens du repeterer."
+    },
+    "entry2": {
+      "label": "Forbedringer af læringssystemet",
+      "desc": "Nu kan du se en oversættelse af øvelsesspørgsmålene til dit modersmål, når du har brug for det, mens det oprindelige spørgsmål stadig vises på det sprog, du lærer."
+    },
+    "entry3": {
+      "label": "Dit ordforråd, med oversættelse",
+      "desc": "Nye kort, du tilføjer fra Ordforråd, indeholder en oversættelse til dit modersmål. De kort, du allerede har, beholder deres indhold."
+    },
+    "entry4": {
+      "label": "Lingu hjælper, når du har brug for det",
+      "desc": "Hvis du ikke forstår noget under en stemmesamtale, kan du bede Lingu om hjælp. Lingu kan forklare det kort på dit modersmål og derefter fortsætte øvelsen på det sprog, du lærer."
+    },
+    "entry5": {
+      "label": "Forbedringer af din studieplan",
+      "desc": "Din plan viser nu dine fremskridt korrekt og giver dig mulighed for at fortsætte lektionerne og repetere de afsnit, du allerede har arbejdet med."
+    },
+    "entry6": {
       "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",
       "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
-    "entry2": {
-      "label": "Forbedringer af læringen",
-      "desc": "Vi fortsætter med at forbedre vores læringssystemer og sprogindhold, så dine øvelser bliver tydeligere, mere sammenhængende og mere nyttige."
-    },
-    "entry3": {
-      "label": "Mere flydende stemmesamtaler",
-      "desc": "Vi har forbedret samtalerne med Lingu med mere flydende stemmeafspilning og tydeligere signaler om, hvis tur det er til at tale."
-    },
-    "entry4": {
+    "entry7": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

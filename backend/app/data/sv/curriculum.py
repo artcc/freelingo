@@ -203,7 +203,7 @@ CURRICULUM: dict[str, list[CurriculumUnit]] = {
             ["sv_housing_a2"],
             ["reading", "vocabulary", "grammar", "listening", "speaking", "writing", "review"],
             [
-                "Jämför två bostäder med större, billigare och lika … som.",
+                "Jämför två bostäder med större, billigare och lika ... som.",
                 "Beskriver bestämda saker med den, det eller de och rätt adjektivform.",
                 "Förklarar ett enkelt fel i bostaden och väljer ett alternativ efter givna behov.",
             ],
@@ -273,7 +273,7 @@ CURRICULUM: dict[str, list[CurriculumUnit]] = {
             ["speaking", "writing", "listening", "reading", "vocabulary", "grammar", "review"],
             [
                 "Bjuder in, tackar ja eller nej och föreslår ett annat datum.",
-                "Skiljer varaktighet från tidpunkt med i, om och för … sedan.",
+                "Skiljer varaktighet från tidpunkt med i, om och för ... sedan.",
                 "Anger ett möjligt villkor med om och anpassar ordföljden när villkoret står först.",
             ],
             2,
@@ -435,7 +435,7 @@ CURRICULUM: dict[str, list[CurriculumUnit]] = {
             [
                 "Jämför antal och mängd med fler, färre, mer och mindre.",
                 "Beskriver vanor och osäkerhet med naturlig placering av satsadverb.",
-                "Lägger till och kontrasterar information med också, inte heller och varken … eller.",
+                "Lägger till och kontrasterar information med också, inte heller och varken ... eller.",
             ],
             2,
             "b1-unit-5",
@@ -583,7 +583,7 @@ CURRICULUM: dict[str, list[CurriculumUnit]] = {
             ["writing", "reading", "speaking", "listening", "grammar", "vocabulary", "review"],
             [
                 "Utvecklar ett resonemang med relevanta kontraster och tillägg.",
-                "Förstår ju … desto utan att förväxla samband med bevisad orsak.",
+                "Förstår ju ... desto utan att förväxla samband med bevisad orsak.",
                 "Växlar mellan verb och nominalisering utan att dölja aktörer eller ändra plan till resultat.",
             ],
             2,

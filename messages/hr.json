@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Zašto ovaj odgovor",
+    "hide": "Sakrij objašnjenje",
+    "loading": "Priprema objašnjenja...",
+    "error": "Objašnjenje nije dostupno. Pokušaj ponovno.",
+    "evidence": "Ulomak izvornog teksta",
+    "language": "Jezik objašnjenja: {language}"
+  },
   "landing": {
     "freeTrialNote": "Početni Premium pristup pri registraciji, bez kartice. Nakon toga besplatno uz ograničenja ako se ne pretplatiš.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Prikaži na jeziku",
     "hint": "Savjet",
     "showNativeHint": "Prikaži savjet na jeziku",
+    "showQuestionTranslation": "Prikaži prijevod pitanja (jezik: {language})",
+    "hideQuestionTranslation": "Sakrij prijevod pitanja",
+    "translatingQuestion": "Prevođenje pitanja...",
+    "questionTranslationError": "Pitanje nije moguće prevesti. Pokušaj ponovno.",
+    "retryQuestionTranslation": "Pokušaj ponovno prevesti pitanje",
     "regenerateExercise": "Ponovno stvori zadatak",
+    "listeningIncomplete": "Ovaj zadatak slušanja nije potpun. Ponovno ga stvori prije odgovaranja.",
+    "listeningUnavailable": "Zvuk nije dostupan za ovaj spremljeni zadatak. Tvoj spremljeni odgovor i rezultat ostaju sačuvani.",
     "regeneratingExercise": "Ponovno stvaranje...",
     "regenerateError": "Zadatak nije bilo moguće ponovno stvoriti. Pokušaj ponovno.",
     "regenerateNotNeeded": "Ovaj zadatak ne treba ponovno stvarati.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Zaustavi snimanje"
   },
   "audioPlayer": {
+    "ariaPause": "Pauziraj zvuk",
+    "ariaSeek": "Položaj reprodukcije zvuka",
     "listen": "Poslušaj",
     "stop": "Zaustavi",
     "ariaListen": "Poslušaj izgovor",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Razumijem",
     "entry1": {
+      "label": "Bolje razumij svaki odgovor",
+      "desc": "Nakon što završiš Reading ili Listening, možeš zatražiti objašnjenje na svom materinskom jeziku uz ulomak iz teksta koji obrazlaže odgovor. Tijekom ponavljanja možeš ponovno pročitati tekst ili poslušati zvučni zapis."
+    },
+    "entry2": {
+      "label": "Poboljšanja sustava učenja",
+      "desc": "Sada možeš pogledati prijevod zadataka na svoj materinski jezik kad god ti zatreba, dok izvorno pitanje ostaje na jeziku koji učiš."
+    },
+    "entry3": {
+      "label": "Tvoj vokabular, s prijevodom",
+      "desc": "Nove kartice koje dodaš iz Vokabulara uključuju prijevod na tvoj materinski jezik. Kartice koje već imaš zadržavaju svoj sadržaj."
+    },
+    "entry4": {
+      "label": "Lingu ti pomaže kad ti zatreba",
+      "desc": "Ako nešto ne razumiješ tijekom glasovnog razgovora, zatraži pomoć od Lingua. Može ti to ukratko objasniti na tvom materinskom jeziku, a zatim nastaviti vježbu na jeziku koji učiš."
+    },
+    "entry5": {
+      "label": "Poboljšanja tvog plana učenja",
+      "desc": "Tvoj plan sada ispravno prikazuje napredak i omogućuje ti nastavak lekcija te ponavljanje već obrađenih cjelina."
+    },
+    "entry6": {
       "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",
       "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
-    "entry2": {
-      "label": "Poboljšanja učenja",
-      "desc": "Nastavljamo poboljšavati sustave za učenje i jezične sadržaje kako bi tvoje vježbanje bilo jasnije, dosljednije i korisnije."
-    },
-    "entry3": {
-      "label": "Tečniji glasovni razgovori",
-      "desc": "Poboljšali smo razgovore s Linguom za tečniju reprodukciju glasa i jasnije oznake čiji je red za govor."
-    },
-    "entry4": {
+    "entry7": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

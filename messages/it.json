@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Perché questa risposta",
+    "hide": "Nascondi spiegazione",
+    "loading": "Preparazione della spiegazione...",
+    "error": "La spiegazione non è disponibile. Riprova.",
+    "evidence": "Estratto dal testo originale",
+    "language": "Spiegazione in {language}"
+  },
   "landing": {
     "freeTrialNote": "Accesso Premium iniziale alla registrazione, senza carta. Poi resti gratis con limiti se non ti abboni.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Mostra in",
     "hint": "Suggerimento",
     "showNativeHint": "Mostra suggerimento in",
+    "showQuestionTranslation": "Mostra la traduzione della domanda in {language}",
+    "hideQuestionTranslation": "Nascondi la traduzione della domanda",
+    "translatingQuestion": "Traduzione della domanda in corso...",
+    "questionTranslationError": "Impossibile tradurre la domanda. Riprova.",
+    "retryQuestionTranslation": "Riprova a tradurre la domanda",
     "regenerateExercise": "Rigenera esercizio",
+    "listeningIncomplete": "Questo esercizio di ascolto è incompleto. Rigeneralo prima di rispondere.",
+    "listeningUnavailable": "L’audio non è disponibile per questo esercizio salvato. La risposta e il punteggio registrati vengono conservati.",
     "regeneratingExercise": "Rigenerazione...",
     "regenerateError": "Impossibile rigenerare l’esercizio. Riprova.",
     "regenerateNotNeeded": "Questo esercizio non deve essere rigenerato.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Ferma registrazione"
   },
   "audioPlayer": {
+    "ariaPause": "Metti in pausa l’audio",
+    "ariaSeek": "Posizione dell’audio",
     "listen": "Ascolta",
     "stop": "Ferma",
     "ariaListen": "Ascolta la pronuncia",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Capito",
     "entry1": {
+      "label": "Comprendi meglio ogni risposta",
+      "desc": "Dopo aver completato Reading o Listening, puoi chiedere una spiegazione nella tua lingua madre con un estratto del testo che giustifica la risposta. Puoi anche rileggere il brano o riascoltare l'audio mentre ripassi."
+    },
+    "entry2": {
+      "label": "Miglioramenti al sistema di apprendimento",
+      "desc": "Ora puoi consultare la traduzione delle domande degli esercizi nella tua lingua madre quando ne hai bisogno, mantenendo la domanda originale nella lingua che stai imparando."
+    },
+    "entry3": {
+      "label": "Il tuo vocabolario, con traduzione",
+      "desc": "Le nuove schede che aggiungi da Vocabolario includono la traduzione nella tua lingua madre. Le schede che hai già mantengono il loro contenuto."
+    },
+    "entry4": {
+      "label": "Lingu ti aiuta quando ne hai bisogno",
+      "desc": "Se non capisci qualcosa durante una conversazione vocale, chiedi aiuto a Lingu. Può spiegartelo brevemente nella tua lingua madre e poi riprendere la pratica nella lingua che stai imparando."
+    },
+    "entry5": {
+      "label": "Miglioramenti al tuo piano di studio",
+      "desc": "Ora il tuo piano mostra correttamente i tuoi progressi e ti permette di continuare le lezioni e ripassare le unità già affrontate."
+    },
+    "entry6": {
       "label": "Nuove lingue: polacco, portoghese del Brasile, russo, neerlandese e svedese",
       "desc": "Il polacco, il portoghese del Brasile, il russo, il neerlandese e lo svedese sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
-    "entry2": {
-      "label": "Miglioramenti nell'apprendimento",
-      "desc": "Continuiamo a perfezionare i sistemi di apprendimento e i contenuti linguistici per offrirti una pratica più chiara, coerente e utile."
-    },
-    "entry3": {
-      "label": "Conversazioni vocali più fluide",
-      "desc": "Abbiamo migliorato le conversazioni con Lingu per una riproduzione vocale più fluida e indicazioni più chiare sui turni di parola."
-    },
-    "entry4": {
+    "entry7": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

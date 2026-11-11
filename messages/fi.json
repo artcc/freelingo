@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Miksi tämä vastaus",
+    "hide": "Piilota selitys",
+    "loading": "Valmistellaan selitystä...",
+    "error": "Selitys ei ole saatavilla. Yritä uudelleen.",
+    "evidence": "Ote alkuperäisestä tekstistä",
+    "language": "Selityksen kieli: {language}"
+  },
   "landing": {
     "freeTrialNote": "Alkuvaiheen Premium-käyttö rekisteröityessä ilman korttia. Sen jälkeen maksuton käyttö rajoituksin, ellet tilaa.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Näytä kielellä",
     "hint": "Vihje",
     "showNativeHint": "Näytä vihje kielellä",
+    "showQuestionTranslation": "Näytä kysymyksen käännös kielellä {language}",
+    "hideQuestionTranslation": "Piilota kysymyksen käännös",
+    "translatingQuestion": "Käännetään kysymystä...",
+    "questionTranslationError": "Kysymyksen kääntäminen epäonnistui. Yritä uudelleen.",
+    "retryQuestionTranslation": "Yritä kääntää kysymys uudelleen",
     "regenerateExercise": "Luo tehtävä uudelleen",
+    "listeningIncomplete": "Tämä kuuntelutehtävä on puutteellinen. Luo se uudelleen ennen vastaamista.",
+    "listeningUnavailable": "Tämän tallennetun tehtävän ääni ei ole saatavilla. Tallennettu vastauksesi ja pistemääräsi säilyvät.",
     "regeneratingExercise": "Luodaan uudelleen...",
     "regenerateError": "Tehtävää ei voitu luoda uudelleen. Yritä uudelleen.",
     "regenerateNotNeeded": "Tätä tehtävää ei tarvitse luoda uudelleen.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Lopeta nauhoitus"
   },
   "audioPlayer": {
+    "ariaPause": "Keskeytä ääni",
+    "ariaSeek": "Äänen toistokohta",
     "listen": "Kuuntele",
     "stop": "Pysäytä",
     "ariaListen": "Kuuntele ääntämistä",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Selvä",
     "entry1": {
+      "label": "Ymmärrä jokainen vastaus paremmin",
+      "desc": "Kun olet suorittanut Reading- tai Listening-harjoituksen, voit pyytää selityksen äidinkielelläsi sekä vastauksen perustelevaan tekstikohtaan viittaavan lainauksen. Voit myös lukea tekstin tai kuunnella äänitteen uudelleen kerratessasi."
+    },
+    "entry2": {
+      "label": "Parannuksia oppimisjärjestelmään",
+      "desc": "Voit nyt tarvittaessa katsoa tehtävänantojen käännöksen omalla äidinkielelläsi. Alkuperäinen kysymys pysyy näkyvissä opiskelemallasi kielellä."
+    },
+    "entry3": {
+      "label": "Sanastosi käännöksineen",
+      "desc": "Sanasto-osiosta lisäämäsi uudet muistikortit sisältävät käännöksen äidinkielellesi. Nykyisten korttiesi sisältö säilyy ennallaan."
+    },
+    "entry4": {
+      "label": "Lingu auttaa, kun tarvitset apua",
+      "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
+    },
+    "entry5": {
+      "label": "Parannuksia opiskelusuunnitelmaasi",
+      "desc": "Suunnitelmasi näyttää nyt edistymisesi oikein ja antaa sinun jatkaa oppitunteja sekä kerrata jo käsittelemiäsi osioita."
+    },
+    "entry6": {
       "label": "Uudet kielet: puola, brasilianportugali, venäjä, hollanti ja ruotsi",
       "desc": "Puola, brasilianportugali, venäjä, hollanti ja ruotsi ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
-    "entry2": {
-      "label": "Parannuksia oppimiseen",
-      "desc": "Kehitämme edelleen oppimisjärjestelmiämme ja kielisisältöjä, jotta harjoittelusi olisi selkeämpää, johdonmukaisempaa ja hyödyllisempää."
-    },
-    "entry3": {
-      "label": "Sujuvammat puhekeskustelut",
-      "desc": "Olemme parantaneet keskusteluja Lingun kanssa: puhe toistuu sujuvammin ja puheenvuorot ilmaistaan selkeämmin."
-    },
-    "entry4": {
+    "entry7": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

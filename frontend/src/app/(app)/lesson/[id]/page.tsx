@@ -1,6 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
@@ -11,9 +17,11 @@ import { useLanguageStore } from '@/store/language'
 import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { getGrammarTopics, type GrammarTopic } from '@/data/grammar'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
+import { ExerciseAudioPlayer } from '@/components/ui/exercise-audio-player'
 import { VoiceRecorder } from '@/components/ui/VoiceRecorder'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { LessonVoicePracticeButton } from '@/components/lesson/LessonVoicePracticeButton'
+import { QuestionTranslation } from '@/components/lesson/QuestionTranslation'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
@@ -52,6 +60,10 @@ interface ExerciseItem {
   feedback: string | null
   corrections: FreeWriteCorrection[] | null
   native_hint: string | null
+  question_translation?: string | null
+  question_translation_language?: string | null
+  listening_text?: string | null
+  listening_ready?: boolean
 }
 
 interface LessonData {
@@ -80,7 +92,32 @@ function getLessonUnitId(lesson: LessonData | null): string | null {
 }
 
 export default function LessonPage() {
+  const params = useParams()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const userId = useAuthStore((s) => s.user?.id)
+  return (
+    <LessonContent key={JSON.stringify([params.id, sessionVersion, userId])} />
+  )
+}
+
+function isListeningReady(exercise: ExerciseItem) {
+  return (
+    exercise.listening_ready === true &&
+    typeof exercise.listening_text === 'string' &&
+    exercise.listening_text.trim().length > 0 &&
+    [...exercise.listening_text].length <= 5000 &&
+    Array.isArray(exercise.options) &&
+    exercise.options.length >= 2 &&
+    exercise.options.every(
+      (option) => typeof option === 'string' && option.trim()
+    ) &&
+    exercise.options.includes(exercise.correct_answer)
+  )
+}
+
+function LessonContent() {
   const t = useTranslations('lesson')
+  const tListening = useTranslations('listening')
   const tCommon = useTranslations('common')
   const tPlan = useTranslations('plan')
   const tError = useTranslations('error')
@@ -92,6 +129,7 @@ export default function LessonPage() {
   const completeLesson = useProgressStore((s) => s.completeLesson)
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const user = useAuthStore((s) => s.user)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const freemiumStatus = useFreemiumStore((s) => s.status)
@@ -120,6 +158,7 @@ export default function LessonPage() {
   const [currentExercise, setCurrentExercise] = useState(0)
   const [answer, setAnswer] = useState('')
   const [evaluating, setEvaluating] = useState(false)
+  const [voiceRecorderBusy, setVoiceRecorderBusy] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [dayComplete, setDayComplete] = useState(false)
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
@@ -167,12 +206,28 @@ export default function LessonPage() {
   const completingLessonRef = useRef(false)
   const [completingLesson, setCompletingLesson] = useState(false)
   const isReview = lesson?.is_completed ?? false
+  const loadControllerRef = useRef<AbortController | null>(null)
+  const operationRef = useRef<AbortController | null>(null)
+
+  useLayoutEffect(() => {
+    return () => {
+      loadControllerRef.current?.abort()
+      operationRef.current?.abort()
+    }
+  }, [])
 
   const loadLesson = useCallback(async () => {
+    loadControllerRef.current?.abort()
+    const controller = new AbortController()
+    loadControllerRef.current = controller
     setLoading(true)
     try {
-      const res = await apiFetch(`/api/lessons/${id}`)
+      const res = await apiFetch(`/api/lessons/${id}`, {
+        signal: controller.signal,
+      })
+      if (!res.ok) throw new Error(`${res.status}`)
       const data = await res.json()
+      if (controller.signal.aborted) return
       setLesson(data.lesson)
       setLessonTargetLanguage(data.target_language)
       setExercises(data.exercises)
@@ -180,9 +235,9 @@ export default function LessonPage() {
         data.lesson?.cefr_level === 'A1' || data.lesson?.cefr_level === 'A2'
       )
     } catch {
-      setLoadError(true)
+      if (!controller.signal.aborted) setLoadError(true)
     } finally {
-      setLoading(false)
+      if (!controller.signal.aborted) setLoading(false)
     }
   }, [id])
 
@@ -321,11 +376,21 @@ export default function LessonPage() {
   }, [currentExercise, activeQuestion, dismissTooltip])
 
   async function submitAnswer(overrideAnswer?: string) {
-    if (isReview) return
+    if (isReview || operationRef.current) return
     const finalAnswer = overrideAnswer ?? answer
     if (!finalAnswer.trim()) return
     const exercise = exercises[currentExercise]
+    if (!exercise || exercise.score != null) return
+    if (
+      exercise.exercise_type === 'listening' &&
+      (!isListeningReady(exercise) || !exercise.options?.includes(finalAnswer))
+    ) {
+      return
+    }
+    const controller = new AbortController()
+    operationRef.current = controller
     setEvaluating(true)
+    setSubmitError(false)
     try {
       const res = await apiFetch(
         `/api/lessons/exercises/${exercise.id}/answer`,
@@ -333,40 +398,56 @@ export default function LessonPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ answer: finalAnswer }),
+          signal: controller.signal,
         }
       )
+      if (!res.ok) throw new Error(`${res.status}`)
       const result = await res.json()
-      setExercises((prev) => {
-        const copy = [...prev]
-        copy[currentExercise] = {
-          ...copy[currentExercise],
-          score: result.score,
-          feedback: result.feedback,
-          corrections: result.corrections ?? null,
-          user_answer: finalAnswer,
-        }
-        return copy
-      })
+      if (controller.signal.aborted) return
+      setExercises((prev) =>
+        prev.map((item) =>
+          item.id === exercise.id
+            ? {
+                ...item,
+                score: result.score,
+                feedback: result.feedback,
+                corrections: result.corrections ?? null,
+                user_answer: finalAnswer,
+              }
+            : item
+        )
+      )
       if (overrideAnswer !== undefined) setAnswer(overrideAnswer)
       setSubmitError(false)
     } catch {
-      setSubmitError(true)
+      if (!controller.signal.aborted) setSubmitError(true)
     } finally {
-      setEvaluating(false)
+      if (operationRef.current === controller) operationRef.current = null
+      if (!controller.signal.aborted) setEvaluating(false)
     }
   }
 
   async function regenerateCurrentExercise() {
     const exercise = exercises[currentExercise]
-    if (!exercise || isEvaluated || isReview) return
+    if (
+      !exercise ||
+      exercise.score != null ||
+      isReview ||
+      operationRef.current ||
+      voiceRecorderBusy
+    )
+      return
 
+    const controller = new AbortController()
+    operationRef.current = controller
     setRegeneratingExercise(true)
     setRegenerateError(null)
     try {
       const res = await apiFetch(
         `/api/lessons/exercises/${exercise.id}/regenerate`,
-        { method: 'POST' }
+        { method: 'POST', signal: controller.signal }
       )
+      if (controller.signal.aborted) return
       if (!res.ok) {
         setRegenerateError(
           res.status === 400 ? t('regenerateNotNeeded') : t('regenerateError')
@@ -374,21 +455,22 @@ export default function LessonPage() {
         return
       }
       const regenerated = await res.json()
-      setExercises((prev) => {
-        const copy = [...prev]
-        copy[currentExercise] = regenerated
-        return copy
-      })
+      if (controller.signal.aborted) return
+      setExercises((prev) =>
+        prev.map((item) => (item.id === exercise.id ? regenerated : item))
+      )
       setAnswer('')
       setSubmitError(false)
     } catch {
-      setRegenerateError(t('regenerateError'))
+      if (!controller.signal.aborted) setRegenerateError(t('regenerateError'))
     } finally {
-      setRegeneratingExercise(false)
+      if (operationRef.current === controller) operationRef.current = null
+      if (!controller.signal.aborted) setRegeneratingExercise(false)
     }
   }
 
   function nextExercise() {
+    if (operationRef.current) return
     if (currentExercise < exercises.length - 1) {
       setCurrentExercise(currentExercise + 1)
     }
@@ -544,7 +626,10 @@ export default function LessonPage() {
   }
 
   const exercise = exercises[currentExercise]
-  const isEvaluated = exercise?.score !== null
+  const isEvaluated = exercise?.score != null
+  const isListening = exercise?.exercise_type === 'listening'
+  const listeningReady = !!exercise && isListeningReady(exercise)
+  const operationPending = evaluating || regeneratingExercise
   const isAnswerCorrect = (exercise?.score ?? 0) >= 1
   const exerciseCorrections = (exercise?.corrections ?? []).filter(
     (c) => c.original && c.corrected
@@ -567,10 +652,12 @@ export default function LessonPage() {
   const showAnnotatedAnswer = !!answerSegments?.some((s) => s.type === 'fix')
   const isNativeHintOpen = exercise ? openNativeHintIds.has(exercise.id) : false
   const hasMultipleChoiceOptions =
-    exercise?.exercise_type === 'multiple_choice' &&
+    (exercise?.exercise_type === 'multiple_choice' ||
+      (isListening && listeningReady)) &&
     Array.isArray(exercise.options) &&
     exercise.options.length > 0
-  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
+  const targetLanguageCode =
+    lessonTargetLanguage ?? activeLanguage?.code ?? 'en-GB'
   const explanation = lesson?.content?.explanation as
     Record<string, unknown> | undefined
   const nativeExplanation = lesson?.content?.native_explanation as
@@ -875,6 +962,7 @@ export default function LessonPage() {
                       fill_blank: t('exerciseTypeFillBlank'),
                       free_write: t('exerciseTypeFreeWrite'),
                       pronunciation: t('exerciseTypePronunciation'),
+                      listening: tPlan('lessonTypes.listening'),
                     } as Record<string, string>
                   )[exercise.exercise_type] ?? exercise.exercise_type}
                 </span>
@@ -882,7 +970,7 @@ export default function LessonPage() {
                   <button
                     type="button"
                     onClick={regenerateCurrentExercise}
-                    disabled={regeneratingExercise}
+                    disabled={operationPending || voiceRecorderBusy}
                     className="text-fl-caption text-fl-muted-1 hover:text-fl-fg border-fl-border hover:border-fl-border-2 border px-2 py-1 font-mono tracking-widest uppercase transition-colors disabled:opacity-50"
                   >
                     {regeneratingExercise
@@ -917,11 +1005,68 @@ export default function LessonPage() {
               >
                 {exercise.question}
               </TargetLanguageText>
+              {user?.native_language && !regeneratingExercise && (
+                <QuestionTranslation
+                  key={JSON.stringify([
+                    id,
+                    exercise.id,
+                    exercise.question,
+                    user.id,
+                    sessionVersion,
+                    user.native_language,
+                    targetLanguageCode,
+                  ])}
+                  exerciseId={exercise.id}
+                  question={exercise.question}
+                  nativeLanguage={user.native_language}
+                  nativeLanguageName={nativeLanguageName}
+                  translation={exercise.question_translation}
+                  translationLanguage={exercise.question_translation_language}
+                />
+              )}
               {regenerateError && (
                 <p className="text-fl-error font-mono text-xs">
                   {regenerateError}
                 </p>
               )}
+
+              {isListening && !listeningReady && (
+                <p role="status" className="text-fl-muted-1 text-sm">
+                  {t(
+                    isReview || isEvaluated
+                      ? 'listeningUnavailable'
+                      : 'listeningIncomplete'
+                  )}
+                </p>
+              )}
+              {isListening &&
+                listeningReady &&
+                lesson &&
+                !regeneratingExercise && (
+                  <ExerciseAudioPlayer
+                    exerciseId={exercise.id}
+                    tts={{
+                      text: exercise.listening_text!,
+                      studyPlanId: lesson.study_plan_id,
+                    }}
+                  />
+                )}
+              {isListening &&
+                (isEvaluated || isReview) &&
+                exercise.listening_text && (
+                  <div className="border-fl-border space-y-2 border px-4 py-3">
+                    <p className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
+                      {tListening('transcript')}
+                    </p>
+                    <TargetLanguageText
+                      as="p"
+                      languageCode={lessonTargetLanguage}
+                      className="text-fl-muted-1 whitespace-pre-wrap"
+                    >
+                      {exercise.listening_text}
+                    </TargetLanguageText>
+                  </div>
+                )}
 
               {nativeLanguageName &&
                 (!isEvaluated ||
@@ -964,7 +1109,13 @@ export default function LessonPage() {
                     return (
                       <button
                         key={opt}
-                        disabled={isEvaluated || isReview}
+                        aria-pressed={isSelected}
+                        disabled={
+                          isEvaluated ||
+                          isReview ||
+                          operationPending ||
+                          (isListening && !listeningReady)
+                        }
                         onClick={() => setAnswer(opt)}
                         className={`flex w-full items-center justify-between gap-3 border px-4 py-3 text-left transition-colors disabled:opacity-100 ${
                           isCorrect
@@ -1004,6 +1155,15 @@ export default function LessonPage() {
                     )
                   })}
                 </div>
+              ) : isListening ? (
+                (isReview || isEvaluated) && exercise.user_answer ? (
+                  <TargetLanguageText
+                    as="p"
+                    languageCode={lessonTargetLanguage}
+                  >
+                    {exercise.user_answer}
+                  </TargetLanguageText>
+                ) : null
               ) : exercise.exercise_type === 'pronunciation' ? (
                 <div className="space-y-4">
                   {/* Target phrase + listen button */}
@@ -1033,8 +1193,9 @@ export default function LessonPage() {
                     <VoiceRecorder
                       studyPlanId={lesson.study_plan_id}
                       onTranscription={(text) => submitAnswer(text)}
+                      onBusyChange={setVoiceRecorderBusy}
                       maxSeconds={8}
-                      disabled={evaluating}
+                      disabled={operationPending}
                     />
                   )}
                   {evaluating && (
@@ -1088,7 +1249,7 @@ export default function LessonPage() {
                       placeholder={t('yourAnswer')}
                       value={answer}
                       onChange={(e) => setAnswer(e.target.value)}
-                      disabled={isEvaluated || isReview}
+                      disabled={isEvaluated || isReview || operationPending}
                     />
                   )}
                   {isEvaluated && (
@@ -1126,7 +1287,13 @@ export default function LessonPage() {
                   <>
                     <button
                       onClick={() => submitAnswer()}
-                      disabled={evaluating || !answer.trim()}
+                      disabled={
+                        operationPending ||
+                        !answer.trim() ||
+                        (isListening &&
+                          (!listeningReady ||
+                            !exercise.options?.includes(answer)))
+                      }
                       className="bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-40"
                     >
                       {evaluating ? tCommon('checking') : t('submitAnswer')}

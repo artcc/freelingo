@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Dlaczego ta odpowiedź",
+    "hide": "Ukryj wyjaśnienie",
+    "loading": "Przygotowywanie wyjaśnienia...",
+    "error": "Wyjaśnienie jest niedostępne. Spróbuj ponownie.",
+    "evidence": "Fragment oryginalnego tekstu",
+    "language": "Język wyjaśnienia: {language}"
+  },
   "landing": {
     "freeTrialNote": "Początkowy dostęp Premium po rejestracji, bez karty. Potem bezpłatnie z limitami, jeśli nie wykupisz subskrypcji.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Pokaż w",
     "hint": "Wskazówka",
     "showNativeHint": "Pokaż wskazówkę w",
+    "showQuestionTranslation": "Pokaż tłumaczenie pytania (język: {language})",
+    "hideQuestionTranslation": "Ukryj tłumaczenie pytania",
+    "translatingQuestion": "Tłumaczenie pytania...",
+    "questionTranslationError": "Nie udało się przetłumaczyć pytania. Spróbuj ponownie.",
+    "retryQuestionTranslation": "Spróbuj ponownie przetłumaczyć pytanie",
     "regenerateExercise": "Wygeneruj ćwiczenie ponownie",
+    "listeningIncomplete": "To ćwiczenie ze słuchania jest niekompletne. Wygeneruj je ponownie przed udzieleniem odpowiedzi.",
+    "listeningUnavailable": "Dźwięk nie jest dostępny dla tego zapisanego ćwiczenia. Twoja zapisana odpowiedź i wynik zostają zachowane.",
     "regeneratingExercise": "Generowanie...",
     "regenerateError": "Nie udało się wygenerować ćwiczenia ponownie. Spróbuj jeszcze raz.",
     "regenerateNotNeeded": "To ćwiczenie nie wymaga ponownego generowania.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Zatrzymaj nagrywanie"
   },
   "audioPlayer": {
+    "ariaPause": "Wstrzymaj dźwięk",
+    "ariaSeek": "Pozycja nagrania",
     "listen": "Słuchaj",
     "stop": "Zatrzymaj",
     "ariaListen": "Posłuchaj wymowy",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Lepiej zrozum każdą odpowiedź",
+      "desc": "Po ukończeniu Reading lub Listening możesz poprosić o wyjaśnienie w swoim języku ojczystym wraz z fragmentem tekstu uzasadniającym odpowiedź. Podczas powtórki możesz też ponownie przeczytać tekst lub odsłuchać nagranie."
+    },
+    "entry2": {
+      "label": "Ulepszenia systemu nauki",
+      "desc": "Teraz możesz w razie potrzeby wyświetlić tłumaczenie treści zadań na swój język ojczysty, zachowując oryginalne pytanie w języku, którego się uczysz."
+    },
+    "entry3": {
+      "label": "Twoje słownictwo z tłumaczeniem",
+      "desc": "Nowe fiszki dodawane z sekcji Słownictwo zawierają tłumaczenie na Twój język ojczysty. Fiszki, które już masz, zachowują swoją treść."
+    },
+    "entry4": {
+      "label": "Lingu pomaga, gdy tego potrzebujesz",
+      "desc": "Jeśli nie rozumiesz czegoś podczas rozmowy głosowej, poproś Lingu o pomoc. Może krótko wyjaśnić to w Twoim języku ojczystym, a potem wrócić do ćwiczeń w języku, którego się uczysz."
+    },
+    "entry5": {
+      "label": "Ulepszenia Twojego planu nauki",
+      "desc": "Twój plan teraz poprawnie pokazuje postępy i pozwala kontynuować lekcje oraz powtarzać przerobione już rozdziały."
+    },
+    "entry6": {
       "label": "Nowe języki: polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki",
       "desc": "Dodaliśmy polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
-    "entry2": {
-      "label": "Ulepszenia w nauce",
-      "desc": "Nadal udoskonalamy systemy nauki i materiały językowe, aby Twoje ćwiczenia były bardziej przejrzyste, spójne i przydatne."
-    },
-    "entry3": {
-      "label": "Płynniejsze rozmowy głosowe",
-      "desc": "Usprawniliśmy rozmowy z Lingu, aby zapewnić płynniejsze odtwarzanie głosu i wyraźniejsze wskazówki, kiedy mówić."
-    },
-    "entry4": {
+    "entry7": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

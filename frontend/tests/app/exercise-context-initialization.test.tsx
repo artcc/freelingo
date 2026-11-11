@@ -128,6 +128,83 @@ function answerExercise() {
 describe.each([
   { feature: 'listening', Page: ListeningPage },
   { feature: 'reading', Page: ReadingPage },
+])('$feature result review', ({ feature, Page }) => {
+  it('keeps the full material available and offers question help only after submission', async () => {
+    useAuthStore.setState({
+      user: {
+        id: 1,
+        username: 'learner',
+        displayName: 'Learner',
+        role: 'user',
+        native_language: 'es',
+        conversation_max_duration: 300,
+        conversation_inactivity_timeout: 30,
+      },
+    })
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).startsWith(`/api/${feature}/next`)) return ready()
+      if (url === `/api/${feature}/attempt`)
+        return json({
+          attempt_id: 81,
+          score: 5,
+          xp_earned: 50,
+          text: 'A new passage.',
+          correct_answers: Array.from({ length: 5 }, (_, index) => ({
+            index,
+            correct: 'A',
+          })),
+        })
+      if (url === `/api/${feature}/attempts/81/questions/0/explanation`)
+        return json({
+          explanation: 'La opción A coincide con el texto.',
+          evidence: 'new passage',
+          native_language: 'es',
+          target_language: 'en-GB',
+        })
+      return json({}, 404)
+    })
+    render(<Page />)
+    await screen.findByText(/Fresh exercise/)
+    expect(screen.queryByRole('button', { name: 'show' })).not.toBeInTheDocument()
+    if (feature === 'listening') {
+      expect(screen.queryByText('A new passage.')).not.toBeInTheDocument()
+    }
+    answerExercise()
+    fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+    await screen.findByText('resultsLabel')
+    expect(screen.getByText('A new passage.')).toBeVisible()
+    expect(screen.getByText('A new passage.')).toHaveAttribute('lang', 'en-GB')
+    if (feature === 'listening') {
+      expect(screen.getByRole('button', { name: 'Play' })).toBeVisible()
+      expect(screen.getByText('transcript')).toBeVisible()
+    }
+    expect(screen.getAllByRole('button', { name: 'show' })).toHaveLength(5)
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([url]) => String(url).endsWith('/explanation'))
+    ).toBe(false)
+    fireEvent.click(screen.getAllByRole('button', { name: 'show' })[0])
+    expect(
+      await screen.findByText('La opción A coincide con el texto.')
+    ).toBeVisible()
+    const request = vi.mocked(fetch).mock.calls.find(([url]) =>
+      String(url).endsWith('/explanation')
+    )!
+    expect(request[1]?.method).toBe('POST')
+    expect(request[1]?.body).toBeUndefined()
+    expect(screen.getByText('5/5')).toBeVisible()
+    expect(screen.getByText('+50')).toBeVisible()
+  })
+})
+
+describe.each([
+  { feature: 'listening', Page: ListeningPage },
+  { feature: 'reading', Page: ReadingPage },
 ])('$feature analytics integration', ({ feature, Page }) => {
   it('keeps the first-answer signal when interaction precedes passive effect cleanup', async () => {
     useConfigStore.setState({ analyticsEnabled: true })

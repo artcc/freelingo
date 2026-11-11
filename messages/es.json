@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Por qué esta respuesta",
+    "hide": "Ocultar explicación",
+    "loading": "Preparando la explicación...",
+    "error": "La explicación no está disponible. Vuelve a intentarlo.",
+    "evidence": "Fragmento del texto original",
+    "language": "Explicación en {language}"
+  },
   "landing": {
     "freeTrialNote": "Periodo inicial de acceso Premium sin tarjeta al registrarte. Después, gratis con límites si no te suscribes.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Ver en",
     "hint": "Pista",
     "showNativeHint": "Ver pista en",
+    "showQuestionTranslation": "Ver traducción del enunciado en {language}",
+    "hideQuestionTranslation": "Ocultar traducción del enunciado",
+    "translatingQuestion": "Traduciendo el enunciado...",
+    "questionTranslationError": "No se pudo traducir el enunciado. Inténtalo de nuevo.",
+    "retryQuestionTranslation": "Reintentar traducción del enunciado",
     "regenerateExercise": "Regenerar ejercicio",
+    "listeningIncomplete": "Este ejercicio de comprensión oral está incompleto. Regénéralo antes de responder.",
+    "listeningUnavailable": "El audio no está disponible para este ejercicio guardado. Tu respuesta y puntuación se conservan.",
     "regeneratingExercise": "Regenerando...",
     "regenerateError": "No se pudo regenerar el ejercicio. Inténtalo de nuevo.",
     "regenerateNotNeeded": "Este ejercicio no necesita regenerarse.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Detener grabación"
   },
   "audioPlayer": {
+    "ariaPause": "Pausar audio",
+    "ariaSeek": "Posición del audio",
     "listen": "Escuchar",
     "stop": "Detener",
     "ariaListen": "Escuchar pronunciación",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Entendido",
     "entry1": {
+      "label": "Comprende mejor cada respuesta",
+      "desc": "Después de completar Reading o Listening, puedes pedir una explicación en tu idioma nativo con un fragmento del texto que justifica la respuesta. También puedes releer el pasaje o volver a escuchar el audio mientras repasas."
+    },
+    "entry2": {
+      "label": "Mejoras en el sistema de aprendizaje",
+      "desc": "Ahora puedes consultar la traducción de los enunciados a tu idioma nativo cuando lo necesites, manteniendo la pregunta original en el idioma que estás aprendiendo."
+    },
+    "entry3": {
+      "label": "Tu vocabulario, con traducción",
+      "desc": "Las nuevas tarjetas que añadas desde Vocabulario incluyen la traducción a tu idioma nativo. Las tarjetas que ya tienes conservan su contenido."
+    },
+    "entry4": {
+      "label": "Lingu te ayuda cuando lo necesitas",
+      "desc": "Si no entiendes algo durante una conversación de voz, pide ayuda a Lingu. Puede explicártelo brevemente en tu idioma nativo y después retomar la práctica en el idioma que estás aprendiendo."
+    },
+    "entry5": {
+      "label": "Mejoras en tu plan de estudio",
+      "desc": "Ahora tu plan muestra correctamente tu progreso y te permite continuar las lecciones y repasar las unidades que ya has trabajado."
+    },
+    "entry6": {
       "label": "Nuevos idiomas: polaco, portugués de Brasil, ruso, neerlandés y sueco",
       "desc": "Añadimos el polaco, el portugués de Brasil, el ruso, el neerlandés y el sueco como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
     },
-    "entry2": {
-      "label": "Mejoras en el aprendizaje",
-      "desc": "Seguimos afinando los sistemas de aprendizaje y los contenidos de idiomas para ofrecerte una práctica más clara, coherente y útil."
-    },
-    "entry3": {
-      "label": "Conversaciones de voz más fluidas",
-      "desc": "Hemos afinado las conversaciones con Lingu para ofrecer una reproducción de voz más fluida e indicaciones de turno más claras."
-    },
-    "entry4": {
+    "entry7": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "De ce acest răspuns",
+    "hide": "Ascunde explicația",
+    "loading": "Se pregătește explicația...",
+    "error": "Explicația nu este disponibilă. Încearcă din nou.",
+    "evidence": "Fragment din textul original",
+    "language": "Explicație în {language}"
+  },
   "landing": {
     "freeTrialNote": "Acces Premium inițial la înregistrare, fără card. Apoi continui gratuit cu limite dacă nu te abonezi.",
     "modes": {
@@ -833,7 +841,14 @@
     "showNativeExplanation": "Arată în",
     "hint": "Indiciu",
     "showNativeHint": "Arată indiciu în",
+    "showQuestionTranslation": "Arată traducerea întrebării în {language}",
+    "hideQuestionTranslation": "Ascunde traducerea întrebării",
+    "translatingQuestion": "Se traduce întrebarea...",
+    "questionTranslationError": "Întrebarea nu a putut fi tradusă. Încearcă din nou.",
+    "retryQuestionTranslation": "Încearcă din nou să traduci întrebarea",
     "regenerateExercise": "Regenerează exercițiul",
+    "listeningIncomplete": "Acest exercițiu de ascultare este incomplet. Regenerează-l înainte de a răspunde.",
+    "listeningUnavailable": "Sunetul nu este disponibil pentru acest exercițiu salvat. Răspunsul și scorul înregistrate sunt păstrate.",
     "regeneratingExercise": "Se regenerează...",
     "regenerateError": "Exercițiul nu a putut fi regenerat. Încearcă din nou.",
     "regenerateNotNeeded": "Acest exercițiu nu trebuie regenerat.",
@@ -1435,6 +1450,8 @@
     "ariaStop": "Oprește înregistrarea"
   },
   "audioPlayer": {
+    "ariaPause": "Pune sunetul pe pauză",
+    "ariaSeek": "Poziția înregistrării audio",
     "listen": "Ascultă",
     "stop": "Oprește",
     "ariaListen": "Ascultă pronunția",
@@ -1779,21 +1796,33 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.12.5",
+    "version": "v1.12.10",
     "cta": "Am înțeles",
     "entry1": {
+      "label": "Înțelege mai bine fiecare răspuns",
+      "desc": "După ce termini Reading sau Listening, poți cere o explicație în limba ta maternă, însoțită de un fragment din text care justifică răspunsul. De asemenea, poți reciti textul sau reasculta înregistrarea în timp ce recapitulezi."
+    },
+    "entry2": {
+      "label": "Îmbunătățiri ale sistemului de învățare",
+      "desc": "Acum poți consulta traducerea enunțurilor în limba ta maternă ori de câte ori ai nevoie, păstrând întrebarea originală în limba pe care o înveți."
+    },
+    "entry3": {
+      "label": "Vocabularul tău, cu traducere",
+      "desc": "Noile fișe pe care le adaugi din Vocabular includ traducerea în limba ta maternă. Fișele pe care le ai deja își păstrează conținutul."
+    },
+    "entry4": {
+      "label": "Lingu te ajută când ai nevoie",
+      "desc": "Dacă nu înțelegi ceva în timpul unei conversații vocale, cere-i ajutor lui Lingu. Îți poate explica pe scurt în limba ta maternă, apoi poate relua practica în limba pe care o înveți."
+    },
+    "entry5": {
+      "label": "Îmbunătățiri ale planului tău de studiu",
+      "desc": "Planul tău afișează acum corect progresul și îți permite să continui lecțiile și să recapitulezi unitățile deja parcurse."
+    },
+    "entry6": {
       "label": "Limbi noi: poloneză, portugheză braziliană, rusă, neerlandeză și suedeză",
       "desc": "Am adăugat poloneza, portugheza braziliană, rusa, neerlandeza și suedeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
-    "entry2": {
-      "label": "Îmbunătățiri pentru învățare",
-      "desc": "Continuăm să perfecționăm sistemele de învățare și conținutul lingvistic pentru a-ți oferi exerciții mai clare, mai coerente și mai utile."
-    },
-    "entry3": {
-      "label": "Conversații vocale mai fluide",
-      "desc": "Am îmbunătățit conversațiile cu Lingu pentru o redare vocală mai fluidă și indicații mai clare despre când este rândul tău să vorbești."
-    },
-    "entry4": {
+    "entry7": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }
