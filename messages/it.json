@@ -1782,18 +1782,14 @@
     "version": "v1.12.10",
     "cta": "Capito",
     "entry1": {
+      "label": "Miglioramenti al tuo piano di studio",
+      "desc": "Ora il tuo piano mostra correttamente i tuoi progressi e ti permette di continuare le lezioni e ripassare le unità già affrontate."
+    },
+    "entry2": {
       "label": "Nuove lingue: polacco, portoghese del Brasile, russo, neerlandese e svedese",
       "desc": "Il polacco, il portoghese del Brasile, il russo, il neerlandese e lo svedese sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
-    "entry2": {
-      "label": "Miglioramenti nell'apprendimento",
-      "desc": "Continuiamo a perfezionare i sistemi di apprendimento e i contenuti linguistici per offrirti una pratica più chiara, coerente e utile."
-    },
     "entry3": {
-      "label": "Conversazioni vocali più fluide",
-      "desc": "Abbiamo migliorato le conversazioni con Lingu per una riproduzione vocale più fluida e indicazioni più chiare sui turni di parola."
-    },
-    "entry4": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

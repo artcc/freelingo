@@ -1782,18 +1782,14 @@
     "version": "v1.12.10",
     "cta": "Entendido",
     "entry1": {
+      "label": "Mejoras en tu plan de estudio",
+      "desc": "Ahora tu plan muestra correctamente tu progreso y te permite continuar las lecciones y repasar las unidades que ya has trabajado."
+    },
+    "entry2": {
       "label": "Nuevos idiomas: polaco, portugués de Brasil, ruso, neerlandés y sueco",
       "desc": "Añadimos el polaco, el portugués de Brasil, el ruso, el neerlandés y el sueco como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
     },
-    "entry2": {
-      "label": "Mejoras en el aprendizaje",
-      "desc": "Seguimos afinando los sistemas de aprendizaje y los contenidos de idiomas para ofrecerte una práctica más clara, coherente y útil."
-    },
     "entry3": {
-      "label": "Conversaciones de voz más fluidas",
-      "desc": "Hemos afinado las conversaciones con Lingu para ofrecer una reproducción de voz más fluida e indicaciones de turno más claras."
-    },
-    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

@@ -1782,18 +1782,14 @@
     "version": "v1.12.10",
     "cta": "Forstået",
     "entry1": {
+      "label": "Forbedringer af din studieplan",
+      "desc": "Din plan viser nu dine fremskridt korrekt og giver dig mulighed for at fortsætte lektionerne og repetere de afsnit, du allerede har arbejdet med."
+    },
+    "entry2": {
       "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",
       "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
-    "entry2": {
-      "label": "Forbedringer af læringen",
-      "desc": "Vi fortsætter med at forbedre vores læringssystemer og sprogindhold, så dine øvelser bliver tydeligere, mere sammenhængende og mere nyttige."
-    },
     "entry3": {
-      "label": "Mere flydende stemmesamtaler",
-      "desc": "Vi har forbedret samtalerne med Lingu med mere flydende stemmeafspilning og tydeligere signaler om, hvis tur det er til at tale."
-    },
-    "entry4": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

@@ -1782,18 +1782,14 @@
     "version": "v1.12.10",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Ulepszenia Twojego planu nauki",
+      "desc": "Twój plan teraz poprawnie pokazuje postępy i pozwala kontynuować lekcje oraz powtarzać przerobione już rozdziały."
+    },
+    "entry2": {
       "label": "Nowe języki: polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki",
       "desc": "Dodaliśmy polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
-    "entry2": {
-      "label": "Ulepszenia w nauce",
-      "desc": "Nadal udoskonalamy systemy nauki i materiały językowe, aby Twoje ćwiczenia były bardziej przejrzyste, spójne i przydatne."
-    },
     "entry3": {
-      "label": "Płynniejsze rozmowy głosowe",
-      "desc": "Usprawniliśmy rozmowy z Lingu, aby zapewnić płynniejsze odtwarzanie głosu i wyraźniejsze wskazówki, kiedy mówić."
-    },
-    "entry4": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }
