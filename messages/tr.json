@@ -1817,14 +1817,18 @@
       "desc": "Sesli bir konuşma sırasında bir şeyi anlamazsan Lingu'dan yardım iste. Sana ana dilinde kısaca açıklayabilir, ardından öğrendiğin dilde pratiğe devam edebilir."
     },
     "entry5": {
+      "label": "Daha doğal ve etkileyici sesler",
+      "desc": "Dinleme alıştırmalarında ve Lingu ile konuşmalarında daha doğal ve etkileyici seslerle daha net ve keyifli bir dinleme deneyiminin tadını çıkar."
+    },
+    "entry6": {
       "label": "Çalışma planında iyileştirmeler",
       "desc": "Planın artık ilerlemeni doğru şekilde gösteriyor, derslere devam etmene ve daha önce çalıştığın üniteleri tekrar etmene olanak tanıyor."
     },
-    "entry6": {
+    "entry7": {
       "label": "Yeni diller: Lehçe, Brezilya Portekizcesi, Rusça, Felemenkçe ve İsveççe",
       "desc": "A1'den C2'ye kadar içeriklerle Lehçeyi, Brezilya Portekizcesini, Rusçayı, Felemenkçeyi ve İsveççeyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
     },
-    "entry7": {
+    "entry8": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }
