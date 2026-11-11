@@ -179,7 +179,7 @@ lesson and persist question, options, correct/user answer, score, feedback, expl
 free-write corrections, and answer timestamp.
 
 Generated lesson content stores richer structures including target-language explanation, optional
-native explanation, exercise native explanation/hint, vocabulary support, grammar references, and unit
+native explanation, exercise native explanation/hint and question translation, vocabulary support, grammar references, and unit
 metadata.
 
 Existing lesson JSON with only the older core vocabulary/explanation fields remains readable. Runtime
@@ -190,7 +190,7 @@ response mapping must tolerate absent optional native-support and enriched-vocab
 1. `/today` materializes the current slot as lesson and exercise rows.
 2. `GET /api/lessons/{id}` verifies ownership and returns detail.
 3. The frontend submits answers through `/api/lessons/exercises/{id}/answer`.
-4. Optional native explanation/hint and invalid-exercise regeneration endpoints update generated JSON
+4. Optional native explanation/hint, question translation, and invalid-exercise regeneration endpoints update generated JSON
    and, for regeneration, the existing exercise row.
 5. `POST /api/lessons/{id}/complete` locks the lesson and atomically persists first completion,
    progress, XP, and competencies.
@@ -215,6 +215,31 @@ Lesson/API contracts. Usable free-write corrections persist for reload and revie
 
 One unanswered technically invalid exercise can be regenerated in place. Regeneration must preserve
 exercise type and synchronize the relational row with `lesson.content.exercises`.
+
+### Optional question translation
+
+At every CEFR level, learners can reveal or hide a translation of the exercise question into their
+profile's native language, independently of UI locale. The target-language question stays visible;
+hints and post-answer explanations remain separate support. Translation is available before answering
+and during review, without changing answers, scores, or progress.
+
+Lesson generation and invalid-exercise replacement include optional `question_translation`. Missing
+translations are generated on demand. Each cached translation lives in the corresponding generated
+exercise JSON, with server-stamped `question_translation_language` and `question_translation_source`.
+Reuse requires an exact match with the current native language and the displayed, compatibility-normalized
+question. Regeneration replaces this support along with the exercise. Missing or mismatched metadata
+is a cache miss, including when the native language changes.
+
+Runtime validation rejects empty translations or altered blank markers; normalization that swaps a
+generated fill-blank question discards its original translation. Prompt rules require faithful task
+instructions, unchanged quoted target-language text and practice phrases, and no completed blanks or
+solutions. Structural validation alone does not establish translation quality or absence of semantic
+answer leakage.
+
+Native-support and regeneration writers serialize updates with a lesson-row lock and read the current
+exercise after acquiring it, so concurrent support requests do not overwrite other lesson JSON updates.
+The question translation endpoint derives the target language from the lesson's persisted plan and
+the destination language from the authenticated profile.
 
 ## Progress and competencies
 

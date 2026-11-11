@@ -833,6 +833,11 @@
     "showNativeExplanation": "Prikaži na jeziku",
     "hint": "Savjet",
     "showNativeHint": "Prikaži savjet na jeziku",
+    "showQuestionTranslation": "Prikaži prijevod pitanja (jezik: {language})",
+    "hideQuestionTranslation": "Sakrij prijevod pitanja",
+    "translatingQuestion": "Prevođenje pitanja...",
+    "questionTranslationError": "Pitanje nije moguće prevesti. Pokušaj ponovno.",
+    "retryQuestionTranslation": "Pokušaj ponovno prevesti pitanje",
     "regenerateExercise": "Ponovno stvori zadatak",
     "regeneratingExercise": "Ponovno stvaranje...",
     "regenerateError": "Zadatak nije bilo moguće ponovno stvoriti. Pokušaj ponovno.",
@@ -1790,6 +1795,10 @@
       "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
     "entry3": {
+      "label": "Poboljšanja sustava učenja",
+      "desc": "Sada možeš pogledati prijevod zadataka na svoj materinski jezik kad god ti zatreba, dok izvorno pitanje ostaje na jeziku koji učiš."
+    },
+    "entry4": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

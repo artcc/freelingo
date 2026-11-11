@@ -202,7 +202,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B2",
         "Jämförelse",
         "Beskriv hur två förändringar hänger ihop.",
-        "Ju … desto kopplar två grader till varandra: Ju mer jag övar, desto säkrare blir jag. Ju-delen har bisatsliknande ordföljd. I desto-delen följer det böjda verbet efter jämförelseledet. Konstruktionen uttrycker ett samband, inte automatiskt ett vetenskapligt bevis för orsak.",
+        "Ju ... desto kopplar två grader till varandra: Ju mer jag övar, desto säkrare blir jag. Ju-delen har bisatsliknande ordföljd. I desto-delen följer det böjda verbet efter jämförelseledet. Konstruktionen uttrycker ett samband, inte automatiskt ett vetenskapligt bevis för orsak.",
         rules=[
             "Båda leden behöver en jämförande betydelse.",
             "Skriv desto säkrare blir jag, inte desto jag blir säkrare.",

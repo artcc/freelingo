@@ -833,6 +833,11 @@
     "showNativeExplanation": "Show in",
     "hint": "Hint",
     "showNativeHint": "Show hint in",
+    "showQuestionTranslation": "Show question translation in {language}",
+    "hideQuestionTranslation": "Hide question translation",
+    "translatingQuestion": "Translating question...",
+    "questionTranslationError": "Could not translate the question. Please try again.",
+    "retryQuestionTranslation": "Retry question translation",
     "regenerateExercise": "Regenerate exercise",
     "regeneratingExercise": "Regenerating...",
     "regenerateError": "Could not regenerate the exercise. Try again.",
@@ -1790,6 +1795,10 @@
       "desc": "Polish, Brazilian Portuguese, Russian, Dutch, and Swedish are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
     "entry3": {
+      "label": "Improvements to the learning system",
+      "desc": "You can now view a translation of exercise questions in your native language whenever you need it, while keeping the original question in the language you're learning."
+    },
+    "entry4": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

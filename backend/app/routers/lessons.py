@@ -29,6 +29,8 @@ from app.schemas.lessons import (
     NativeExerciseExplanationResponse,
     NativeExerciseHintResponse,
     NativeExplanationResponse,
+    NativeQuestionTranslation,
+    QuestionTranslationResponse,
 )
 from app.services.language_helpers import get_language_name, get_native_language_name
 from app.services.learning_analytics import LearningEvent, record_learning_event
@@ -47,7 +49,12 @@ from app.services.llm_adapter import (
 )
 from app.services.progress_rewards import reward_plan_completion
 from app.services.progress_service import update_daily_progress, upsert_unit_competency
-from app.utils.lesson_exercises import normalized_exercise_text
+from app.utils.lesson_exercises import (
+    cached_question_translation,
+    normalized_exercise_text,
+    stamp_question_translation,
+    valid_question_translation,
+)
 
 router = APIRouter(prefix="/api/lessons", tags=["lessons"])
 
@@ -194,7 +201,7 @@ async def _get_lesson_for_user(
         .where(Lesson.id == lesson_id, UserLanguage.user_id == user_id)
     )
     if for_update:
-        query = query.with_for_update(of=Lesson)
+        query = query.with_for_update(of=Lesson).execution_options(populate_existing=True)
     result = await db.execute(query)
     lesson = result.scalar_one_or_none()
     if not lesson:
@@ -274,9 +281,13 @@ async def get_lesson(
         q, exp = normalized_exercise_text(ex)
         native_exp = None
         native_hint = None
+        question_translation = None
         if index < len(content_exercises) and isinstance(content_exercises[index], dict):
             native_exp = content_exercises[index].get("native_explanation")
             native_hint = content_exercises[index].get("native_hint")
+            question_translation = cached_question_translation(
+                content_exercises[index], q, current_user.native_language
+            )
         fixed.append(
             ExerciseResponse(
                 id=ex.id,
@@ -292,6 +303,10 @@ async def get_lesson(
                 explanation=exp,
                 native_explanation=native_exp if isinstance(native_exp, str) else None,
                 native_hint=native_hint if isinstance(native_hint, str) else None,
+                question_translation=question_translation,
+                question_translation_language=(
+                    current_user.native_language if question_translation else None
+                ),
                 answered_at=ex.answered_at,
             )
         )
@@ -592,7 +607,8 @@ async def regenerate_invalid_exercise(
     if not exercise:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
 
-    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db)
+    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db, for_update=True)
+    await db.refresh(exercise)
     if lesson.is_completed:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -656,6 +672,7 @@ async def regenerate_invalid_exercise(
     exercise.answered_at = None
 
     content_exercises[exercise_index] = regenerated.model_dump()
+    stamp_question_translation(content_exercises[exercise_index], current_user.native_language)
     content["exercises"] = content_exercises
     lesson.content = content
 
@@ -675,6 +692,10 @@ async def regenerate_invalid_exercise(
         explanation=exercise.explanation,
         native_explanation=regenerated.native_explanation,
         native_hint=regenerated.native_hint,
+        question_translation=content_exercises[exercise_index].get("question_translation"),
+        question_translation_language=content_exercises[exercise_index].get(
+            "question_translation_language"
+        ),
         answered_at=exercise.answered_at,
     )
 
@@ -691,7 +712,8 @@ async def generate_exercise_native_explanation(
     if not exercise:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
 
-    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db)
+    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db, for_update=True)
+    await db.refresh(exercise)
     content, content_exercises, content_exercise = await _get_exercise_content_entry(
         exercise, lesson, db
     )
@@ -754,7 +776,8 @@ async def generate_exercise_native_hint(
     if not exercise:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
 
-    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db)
+    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db, for_update=True)
+    await db.refresh(exercise)
     content, content_exercises, content_exercise = await _get_exercise_content_entry(
         exercise, lesson, db
     )
@@ -800,6 +823,75 @@ async def generate_exercise_native_hint(
     return {"native_hint": native_hint}
 
 
+@router.post(
+    "/exercises/{exercise_id}/question-translation", response_model=QuestionTranslationResponse
+)
+@limiter.limit("10/minute")
+async def translate_exercise_question(
+    request: Request,
+    exercise_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    exercise = await db.get(Exercise, exercise_id)
+    if not exercise:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found")
+
+    # All native-help/regeneration writers share this lock to preserve the lesson JSON.
+    lesson = await _get_lesson_for_user(exercise.lesson_id, current_user.id, db, for_update=True)
+    await db.refresh(exercise)
+    native_language = current_user.native_language
+    if not native_language:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Native language is required"
+        )
+    question, _ = normalized_exercise_text(exercise)
+    content, content_exercises, content_exercise = await _get_exercise_content_entry(
+        exercise, lesson, db
+    )
+    translation = cached_question_translation(content_exercise, question, native_language)
+    if translation is None:
+        plan = await db.get(StudyPlan, lesson.study_plan_id)
+        if not plan:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Study plan not found for lesson",
+            )
+        from app.services.prompts.lesson import build_question_translation_prompt
+
+        prompt = build_question_translation_prompt(
+            target_language_name=get_language_name(plan.target_language),
+            native_language_name=get_native_language_name(native_language),
+            exercise_type=exercise.exercise_type,
+            question=question,
+        )
+        try:
+            result = await llm_adapter.structured_output(
+                [{"role": "user", "content": prompt}], NativeQuestionTranslation
+            )
+            translation = result.question_translation
+            if not valid_question_translation(question, translation):
+                raise ValueError("Question translation must preserve blanks")
+        except (LLMError, LLMTimeoutError, LLMUnavailableError, ValueError) as exc:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Could not translate exercise question at this time",
+            ) from exc
+
+        content_exercise["question_translation"] = translation
+        content_exercise["question_translation_source"] = question
+        content_exercise["question_translation_language"] = native_language
+        content["exercises"] = content_exercises
+        lesson.content = content
+        await db.commit()
+
+    return QuestionTranslationResponse(
+        question=question,
+        question_translation=translation,
+        question_translation_language=native_language,
+    )
+
+
 @router.post("/{lesson_id}/native-explanation")
 @limiter.limit("10/minute")
 async def generate_native_explanation(
@@ -808,7 +900,7 @@ async def generate_native_explanation(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    lesson = await _get_lesson_for_user(lesson_id, current_user.id, db)
+    lesson = await _get_lesson_for_user(lesson_id, current_user.id, db, for_update=True)
 
     content = dict(lesson.content or {})
     if content.get("native_explanation"):

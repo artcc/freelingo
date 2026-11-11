@@ -175,8 +175,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "odmieniamy całą grupę, np. *z pięcioma studentami*."
         ),
         structure=(
-            "mianownik/biernik, niemęskoosobowe: 2–4, 22–24, 32–34… + bilety; "
-            "5–21, 25–31… + biletów\n"
+            "mianownik/biernik, niemęskoosobowe: 2–4, 22–24, 32–34... + bilety; "
+            "5–21, 25–31... + biletów\n"
             "męskoosobowe: dwaj studenci przyszli / dwóch studentów przyszło"
         ),
         rules=[
@@ -767,7 +767,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "lub spójniku stoi osobno: *ja bym chciał*."
         ),
         structure="forma przeszła + bym / byś / by / byśmy / byście / by\ngdyby + forma przeszła, "
-        "… + tryb warunkowy",
+        "... + tryb warunkowy",
         rules=[
             "Cząstka by odmienia się przez osoby: bym, byś, by, byśmy, byście, by.",
             "Cząstkę by piszemy łącznie z czasownikiem: chciałbym, poszlibyśmy.",
@@ -798,7 +798,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         title="Zdania ze spójnikiem że",
         level="A2",
         category="Składnia",
-        summary="Myślę, że…; nie wiem, czy…; chcę, żeby… — mowa zależna i życzenia.",
+        summary="Myślę, że...; nie wiem, czy...; chcę, żeby... — mowa zależna i życzenia.",
         explanation=(
             "Spójnik **że** wprowadza zdanie podrzędne twierdzące: *Myślę, że masz rację. Wiem, "
             "że spóźnię się.*\n\n"
@@ -905,7 +905,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "większy → największy, mały → mniejszy → najmniejszy, wysoki → wyższy → najwyższy.\n\n"
             "Porównanie tworzymy na dwa sposoby: **od + dopełniacz** (*większy od brata*) albo "
             "**niż**, po którym przypadek zależy od funkcji porównywanego członu "
-            "(*większy niż brat*, ale *lubię ją bardziej niż jego*). Równość wyraża *tak … jak*: *tak wysoki "
+            "(*większy niż brat*, ale *lubię ją bardziej niż jego*). Równość wyraża *tak ... jak*: *tak wysoki "
             "jak ja*."
         ),
         structure="-szy / -iejszy → stopień wyższy\nnaj- + stopień wyższy\nwiększy od + D. · "
@@ -915,7 +915,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Po od używamy dopełniacza. Niż nie narzuca przypadku: wyższy niż ja, "
             "ale pomagam jej częściej niż jemu.",
             "Formy nieregularne trzeba zapamiętać: lepszy, gorszy, większy, mniejszy.",
-            "Równość wyrażamy konstrukcją tak … jak lub taki sam jak.",
+            "Równość wyrażamy konstrukcją tak ... jak lub taki sam jak.",
         ],
         examples=[
             GrammarExample(text="Ten pokój jest większy od mojego."),

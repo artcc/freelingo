@@ -833,6 +833,11 @@
     "showNativeExplanation": "Ver em",
     "hint": "Pista",
     "showNativeHint": "Ver pista em",
+    "showQuestionTranslation": "Ver tradução da pergunta em {language}",
+    "hideQuestionTranslation": "Ocultar tradução da pergunta",
+    "translatingQuestion": "A traduzir a pergunta...",
+    "questionTranslationError": "Não foi possível traduzir a pergunta. Tenta novamente.",
+    "retryQuestionTranslation": "Tentar traduzir a pergunta novamente",
     "regenerateExercise": "Regenerar exercício",
     "regeneratingExercise": "A regenerar...",
     "regenerateError": "Não foi possível regenerar o exercício. Tenta novamente.",
@@ -1790,6 +1795,10 @@
       "desc": "Adicionámos o polaco, o português do Brasil, o russo, o neerlandês e o sueco como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
     "entry3": {
+      "label": "Melhorias no sistema de aprendizagem",
+      "desc": "Agora podes consultar a tradução dos enunciados para a tua língua materna sempre que precisares, mantendo a pergunta original no idioma que estás a aprender."
+    },
+    "entry4": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

@@ -278,11 +278,11 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "sv-inte-heller-b1",
-        "Också, inte heller och både … och",
+        "Också, inte heller och både ... och",
         "B1",
         "Samband",
         "Lägg till positiv och negativ information.",
-        "Också lägger till något positivt: Jag kommer också. Inte heller lägger till en negation: Jag kommer inte heller. Både … och kopplar ihop två delar som gäller. Varken … eller negerar normalt båda delarna utan ytterligare inte.",
+        "Också lägger till något positivt: Jag kommer också. Inte heller lägger till en negation: Jag kommer inte heller. Både ... och kopplar ihop två delar som gäller. Varken ... eller negerar normalt båda delarna utan ytterligare inte.",
         rules=[
             "Varken kaffe eller te betyder inget av de två.",
             "Placera också nära den information som ska läggas till när det finns risk för missförstånd.",
@@ -328,7 +328,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "sv-repair-b1",
-        "Det jag menar är …",
+        "Det jag menar är ...",
         "B1",
         "Samspel",
         "Förtydliga och kontrollera att du förstått.",

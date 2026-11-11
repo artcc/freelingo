@@ -5,6 +5,8 @@ from typing import Self
 
 from pydantic import BaseModel, field_serializer, field_validator, model_validator
 
+from app.utils.lesson_exercises import valid_question_translation
+
 
 class ExerciseContent(BaseModel):
     type: str
@@ -14,6 +16,7 @@ class ExerciseContent(BaseModel):
     explanation: str | None = None
     native_explanation: str | None = None
     native_hint: str | None = None
+    question_translation: str | None = None
 
     @model_validator(mode="after")
     def validate_exercise_content(self) -> Self:
@@ -24,8 +27,11 @@ class ExerciseContent(BaseModel):
         if self.type == "fill_blank" and "___" not in self.question:
             if self.explanation and "___" in self.explanation:
                 self.question, self.explanation = self.explanation, self.question
+                self.question_translation = None
             else:
                 raise ValueError("fill_blank exercises must include ___ in the question")
+        if not valid_question_translation(self.question, self.question_translation):
+            self.question_translation = None
         if self.type != "multiple_choice":
             return self
         options = [option for option in (self.options or []) if option.strip()]
@@ -92,6 +98,8 @@ class ExerciseResponse(BaseModel):
     explanation: str | None = None
     native_explanation: str | None = None
     native_hint: str | None = None
+    question_translation: str | None = None
+    question_translation_language: str | None = None
     answered_at: datetime | None = None
 
     model_config = {"from_attributes": True}
@@ -105,6 +113,22 @@ class LessonDetailResponse(BaseModel):
     lesson: LessonResponse
     exercises: list[ExerciseResponse]
     target_language: str
+
+
+class NativeQuestionTranslation(BaseModel):
+    question_translation: str
+
+    @field_validator("question_translation")
+    @classmethod
+    def require_translation(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("Question translation must not be empty")
+        return value.strip()
+
+
+class QuestionTranslationResponse(NativeQuestionTranslation):
+    question: str
+    question_translation_language: str
 
 
 class ExerciseAnswerRequest(BaseModel):

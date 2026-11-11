@@ -195,7 +195,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample("Jag vill bara kontrollera tidsfristen, sedan får du fortsätta."),
-            GrammarExample("Om jag återknyter till det du sa om kostnaden …"),
+            GrammarExample("Om jag återknyter till det du sa om kostnaden ..."),
         ],
     ),
     GrammarTopic(

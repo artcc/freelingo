@@ -215,7 +215,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "sv-concession-argument-c1",
-        "Visserligen … men och likväl",
+        "Visserligen ... men och likväl",
         "C1",
         "Argumentation",
         "Medge en invändning utan att ge upp slutsatsen.",
@@ -268,7 +268,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "C1",
         "Samspel och text",
         "Sammanfatta en konflikt utan att lägga till samförstånd.",
-        "Använd källmarkörer och parallella konstruktioner: Gruppen vill … medan ledningen bedömer … Skilj gemensamma mål från oenighet om medel. Uttryck som båda är överens om kräver att den gemensamma punkten faktiskt är belagd.",
+        "Använd källmarkörer och parallella konstruktioner: Gruppen vill ... medan ledningen bedömer ... Skilj gemensamma mål från oenighet om medel. Uttryck som båda är överens om kräver att den gemensamma punkten faktiskt är belagd.",
         rules=[
             "Tillskriv varje ståndpunkt rätt deltagare.",
             "Gör inte en vilja till ett fattat beslut.",

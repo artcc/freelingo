@@ -833,6 +833,11 @@
     "showNativeExplanation": "Auf",
     "hint": "Hinweis",
     "showNativeHint": "Hinweis auf",
+    "showQuestionTranslation": "Übersetzung der Frage auf {language} anzeigen",
+    "hideQuestionTranslation": "Übersetzung der Frage ausblenden",
+    "translatingQuestion": "Frage wird übersetzt...",
+    "questionTranslationError": "Die Frage konnte nicht übersetzt werden. Bitte versuche es erneut.",
+    "retryQuestionTranslation": "Frage erneut übersetzen",
     "regenerateExercise": "Übung neu generieren",
     "regeneratingExercise": "Wird neu generiert...",
     "regenerateError": "Die Übung konnte nicht neu generiert werden. Versuche es erneut.",
@@ -1790,6 +1795,10 @@
       "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
     "entry3": {
+      "label": "Verbesserungen am Lernsystem",
+      "desc": "Du kannst dir jetzt bei Bedarf eine Übersetzung der Aufgabenstellungen in deine Muttersprache anzeigen lassen. Die ursprüngliche Frage bleibt dabei in der Sprache sichtbar, die du lernst."
+    },
+    "entry4": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

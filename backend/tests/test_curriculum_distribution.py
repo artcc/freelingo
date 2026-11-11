@@ -567,6 +567,8 @@ async def test_today_passes_complete_unit_context_to_generate_lesson(
                     {
                         "type": "multiple_choice",
                         "question": "q",
+                        "question_translation": "pregunta",
+                        "question_translation_language": "wrong-model-metadata",
                         "options": ["a", "b"],
                         "correct": "a",
                         "explanation": "e",
@@ -588,6 +590,15 @@ async def test_today_passes_complete_unit_context_to_generate_lesson(
     unit = next(u for u in units if u.id == captured["unit_id"])
     assert captured["grammar_points"] == unit.grammar_points
     assert captured["vocabulary_set_ids"] == unit.vocabulary_set_ids
+
+    lesson_id = resp.json()["lessons"][0]["id"]
+    detail = await client.get(f"/api/lessons/{lesson_id}", headers=headers)
+    assert detail.status_code == 200
+    exercise = detail.json()["exercises"][0]
+    assert exercise["question_translation"] == "pregunta"
+    assert exercise["question_translation_language"] == user.native_language
+    cached = detail.json()["lesson"]["content"]["exercises"][0]
+    assert cached["question_translation_source"] == "q"
 
 
 # ── T7: slot titles stay a safe join key ──────────────────────────────────────

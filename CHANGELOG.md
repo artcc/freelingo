@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.12.10] - Unreleased
 
+### Added
+
+- Lesson exercises offer an optional question translation in the learner's native language at every level, including existing lessons, while keeping the original question and separate hints available.
+
 ### Fixed
 
 - My Plan follows the actual study-plan position, places Start on the correct unit, and keeps reached lessons accessible for review or resumption. Unit completion and percentages reflect completed scheduled lessons rather than competency scores.

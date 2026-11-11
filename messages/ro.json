@@ -833,6 +833,11 @@
     "showNativeExplanation": "Arată în",
     "hint": "Indiciu",
     "showNativeHint": "Arată indiciu în",
+    "showQuestionTranslation": "Arată traducerea întrebării în {language}",
+    "hideQuestionTranslation": "Ascunde traducerea întrebării",
+    "translatingQuestion": "Se traduce întrebarea...",
+    "questionTranslationError": "Întrebarea nu a putut fi tradusă. Încearcă din nou.",
+    "retryQuestionTranslation": "Încearcă din nou să traduci întrebarea",
     "regenerateExercise": "Regenerează exercițiul",
     "regeneratingExercise": "Se regenerează...",
     "regenerateError": "Exercițiul nu a putut fi regenerat. Încearcă din nou.",
@@ -1790,6 +1795,10 @@
       "desc": "Am adăugat poloneza, portugheza braziliană, rusa, neerlandeza și suedeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
     "entry3": {
+      "label": "Îmbunătățiri ale sistemului de învățare",
+      "desc": "Acum poți consulta traducerea enunțurilor în limba ta maternă ori de câte ori ai nevoie, păstrând întrebarea originală în limba pe care o înveți."
+    },
+    "entry4": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

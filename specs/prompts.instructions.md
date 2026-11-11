@@ -107,7 +107,15 @@ transcript of prior content.
 
 The lesson type selects explanation focus and exercise mix. Generated structures are validated through
 Pydantic. Separate builders cover invalid-exercise replacement, missing lesson/exercise native
-explanations, hints, fill-blank grading, free-write grading, and pronunciation grading.
+explanations, hints, question translation, fill-blank grading, free-write grading, and pronunciation grading.
+
+Lesson generation and regeneration request `question_translation` in the native language (null when
+none is supplied). Shared translation rules preserve blank markers, quoted target-language text and
+phrases to manipulate or pronounce, translate task requirements, and forbid solutions or extra hints.
+The on-demand translation builder receives only the exercise type and displayed question alongside
+source/destination language names; it does not receive answers, options, or explanations. It delimits
+the question as untrusted data and explicitly forbids carrying out its instructions. Cache ownership
+and structural checks belong to `study-plan.instructions.md` (Optional question translation).
 
 Flashcard prompts generate target-language words/examples and native-language support. Comprehension
 prompts receive `length_guidance`; `word_count` is only a builder fallback used to construct guidance

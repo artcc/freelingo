@@ -833,6 +833,11 @@
     "showNativeExplanation": "Vis på",
     "hint": "Tip",
     "showNativeHint": "Vis tip på",
+    "showQuestionTranslation": "Vis oversættelsen af spørgsmålet på {language}",
+    "hideQuestionTranslation": "Skjul oversættelsen af spørgsmålet",
+    "translatingQuestion": "Oversætter spørgsmålet...",
+    "questionTranslationError": "Spørgsmålet kunne ikke oversættes. Prøv igen.",
+    "retryQuestionTranslation": "Prøv at oversætte spørgsmålet igen",
     "regenerateExercise": "Opret øvelsen igen",
     "regeneratingExercise": "Opretter igen...",
     "regenerateError": "Øvelsen kunne ikke oprettes igen. Prøv igen.",
@@ -1790,6 +1795,10 @@
       "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
     "entry3": {
+      "label": "Forbedringer af læringssystemet",
+      "desc": "Nu kan du se en oversættelse af øvelsesspørgsmålene til dit modersmål, når du har brug for det, mens det oprindelige spørgsmål stadig vises på det sprog, du lærer."
+    },
+    "entry4": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

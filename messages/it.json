@@ -833,6 +833,11 @@
     "showNativeExplanation": "Mostra in",
     "hint": "Suggerimento",
     "showNativeHint": "Mostra suggerimento in",
+    "showQuestionTranslation": "Mostra la traduzione della domanda in {language}",
+    "hideQuestionTranslation": "Nascondi la traduzione della domanda",
+    "translatingQuestion": "Traduzione della domanda in corso...",
+    "questionTranslationError": "Impossibile tradurre la domanda. Riprova.",
+    "retryQuestionTranslation": "Riprova a tradurre la domanda",
     "regenerateExercise": "Rigenera esercizio",
     "regeneratingExercise": "Rigenerazione...",
     "regenerateError": "Impossibile rigenerare l’esercizio. Riprova.",
@@ -1790,6 +1795,10 @@
       "desc": "Il polacco, il portoghese del Brasile, il russo, il neerlandese e lo svedese sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
     "entry3": {
+      "label": "Miglioramenti al sistema di apprendimento",
+      "desc": "Ora puoi consultare la traduzione delle domande degli esercizi nella tua lingua madre quando ne hai bisogno, mantenendo la domanda originale nella lingua che stai imparando."
+    },
+    "entry4": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }
