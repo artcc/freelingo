@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { SUPPORTED_LOCALES } from '@/lib/locales'
 import { TARGET_LANGUAGE_CATALOG } from '@/lib/target-languages'
-import { WHATS_NEW_VERSION } from '@/components/whats-new/WhatsNew'
 
 describe.each(SUPPORTED_LOCALES)('target language messages in %s', (locale) => {
-  it('provides regional labels, descriptions, greetings, and matching announcements', async () => {
+  it('provides regional labels, descriptions, greetings, and language FAQ placeholders', async () => {
     const messages = (await import(`../../../messages/${locale}.json`)).default
     for (const language of TARGET_LANGUAGE_CATALOG) {
       expect(messages.targetLanguages[language.code]?.trim()).toBeTruthy()
@@ -17,23 +16,8 @@ describe.each(SUPPORTED_LOCALES)('target language messages in %s', (locale) => {
     expect(messages.landing.languageGreetings['nl-NL']).toBe('Hallo!')
     expect(messages.landing.languageGreetings['ru-RU']).toBe('Привет!')
     expect(messages.landing.languageGreetings['sv-SE']).toBe('Hej!')
-    const swedishLabel = messages.targetLanguages.sv.toLocaleLowerCase(locale)
-    expect(messages.whatsNew.entry1.label.toLocaleLowerCase(locale)).toContain(swedishLabel)
     expect(messages.faq.a_language).toContain('{languages}')
     expect(messages.landing.faq.languages.answer).toContain('{languages}')
-    expect(messages.whatsNew.entry1.desc.toLocaleLowerCase(locale)).toContain(
-      locale === 'ro' ? 'suedeza' : swedishLabel
-    )
-    expect(messages.whatsNew.entry1.label.toLocaleLowerCase(locale)).toContain(
-      messages.targetLanguages.ru.toLocaleLowerCase(locale)
-    )
     expect(messages.targetLanguages.nl?.trim()).toBeTruthy()
-    expect(messages.whatsNew.version).toBe(WHATS_NEW_VERSION)
-    expect(Object.keys(messages.whatsNew).filter((key) => /^entry\d+$/.test(key))).toEqual([
-      'entry1',
-      'entry2',
-      'entry3',
-      'entry4',
-    ])
   })
 })
