@@ -236,10 +236,19 @@ instructions, unchanged quoted target-language text and practice phrases, and no
 solutions. Structural validation alone does not establish translation quality or absence of semantic
 answer leakage.
 
-Native-support and regeneration writers serialize updates with a lesson-row lock and read the current
-exercise after acquiring it, so concurrent support requests do not overwrite other lesson JSON updates.
+Native-support and regeneration writers run generation within a 20-second budget without an open
+database transaction or lesson-row lock. They acquire the shared writer lock only to reread and
+revalidate the current source and merge their result, so optional support cannot hold up lesson
+completion while waiting for the provider. Native support preserves concurrently saved help and
+learning state, reuses a usable result saved by another request, and rejects obsolete source or profile
+language context. Regeneration rechecks that the lesson remains incomplete and the exercise remains
+unanswered and technically invalid before replacing it.
+
 The question translation endpoint derives the target language from the lesson's persisted plan and
-the destination language from the authenticated profile.
+the destination language from the authenticated profile. Before persisting, it verifies that the
+displayed question and profile native language still match, then merges only the matching exercise's
+translation fields into the current lesson JSON. An expired generation budget or obsolete translation
+returns `503` without persisting the generated translation.
 
 ## Progress and competencies
 

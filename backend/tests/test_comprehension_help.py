@@ -8,6 +8,7 @@ import pytest
 import pytest_asyncio
 from redis.exceptions import ConnectionError as RedisConnectionError
 from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.deps import get_redis
@@ -19,6 +20,7 @@ from app.models.resource_native_help import ResourceNativeHelp
 from app.schemas.comprehension_help import QuestionExplanationContent
 from app.services import comprehension_help
 from app.services.llm_adapter import LLMError
+from app.services.resource_native_help import calculate_source_hash, upsert_native_help
 from tests.conftest import make_study_plan
 from tests.exercise_redis import GenerationRedis
 
@@ -160,6 +162,53 @@ async def test_review_uses_native_language_cache_without_changing_progress(help_
     attempt = await case.db.get(case.attempt_model, attempt_id)
     assert attempt.score == 0 and attempt.xp_earned == 0
     assert await case.db.scalar(select(func.sum(Progress.xp_earned))) == 0
+
+
+@pytest.mark.asyncio
+async def test_regression_reuses_concurrent_cache_repair_before_lock(help_case, monkeypatch):
+    case = help_case
+    attempt_id = await submit(case)
+    cache_context = {
+        "resource_type": f"{case.feature}_explanation",
+        "resource_key": f"{case.exercise.id}:0",
+        "target_language": case.exercise.target_language,
+        "native_language": case.user.native_language,
+        "source_hash": calculate_source_hash(
+            {
+                "version": 1,
+                "text": case.exercise.text,
+                "question": case.exercise.questions[0],
+                "level": case.exercise.level,
+            }
+        ),
+    }
+    invalid_content = {"explanation": "Old malformed entry", "evidence": "not in passage"}
+    cached = await upsert_native_help(case.db, **cache_context, content=invalid_content)
+    winner = case.llm.return_value.model_dump()
+    case.llm.side_effect = LLMError("unavailable")
+    original_set = case.redis.set
+
+    async def repair_before_acquiring_lock(*args, **kwargs):
+        async with AsyncSession(bind=case.db.bind, expire_on_commit=False) as other:
+            await upsert_native_help(other, **cache_context, content=winner)
+        # The first session still holds its stale instance until the protected reread.
+        assert cached.content == invalid_content
+        return await original_set(*args, **kwargs)
+
+    acquire = AsyncMock(side_effect=repair_before_acquiring_lock)
+    monkeypatch.setattr(case.redis, "set", acquire)
+    response = await case.client.post(explanation_url(case, attempt_id), headers=case.headers)
+
+    assert response.status_code == 200, response.text
+    assert response.json() == {
+        **winner,
+        "native_language": case.user.native_language,
+        "target_language": case.exercise.target_language,
+    }
+    acquire.assert_awaited_once()
+    case.llm.assert_not_awaited()
+    assert cached.content == winner
+    assert not any(key.startswith("native_help:") for key in case.redis._store)
 
 
 @pytest.mark.asyncio

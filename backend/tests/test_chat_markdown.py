@@ -43,6 +43,17 @@ def test_cjk_list_boundaries_use_full_width_stops(language):
     assert chat_markdown_to_speech("- **你好**\n- 再见！", language) == "你好。\n再见！"
 
 
+@pytest.mark.parametrize("ellipsis", ["…", "..."])
+@pytest.mark.parametrize(
+    ("language", "text"),
+    [("en-GB", "Wait"), ("ja-JP", "考えてみましょう"), ("zh-CN", "想一想")],
+)
+@pytest.mark.parametrize("quoted", [False, True])
+def test_list_ellipses_do_not_receive_an_extra_stop(language, text, ellipsis, quoted):
+    content = f'"{text}{ellipsis}"' if quoted else f"{text}{ellipsis}"
+    assert chat_markdown_to_speech(f"- {content}", language) == content
+
+
 @pytest.mark.parametrize(
     ("label", "expected"),
     [

@@ -1,12 +1,17 @@
 """Native question support across legacy lessons, cache changes and generation failures."""
 
+import asyncio
 from copy import deepcopy
 from unittest.mock import AsyncMock, patch
 
 import pytest
 import pytest_asyncio
+from sqlalchemy import delete, update
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.lesson import Exercise, Lesson
+from app.models.user import User
+from app.routers import lessons as lessons_router
 from app.schemas.lessons import ExerciseContent, LessonContent, NativeQuestionTranslation
 from app.services.llm_adapter import LLMError
 from tests.conftest import make_study_plan
@@ -221,6 +226,211 @@ async def test_translation_failures_preserve_content_and_allow_retry(
         ),
     ):
         assert (await client.post(endpoint, headers=headers)).status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_translation_releases_read_transaction_and_locks_only_to_persist(
+    client, test_user, db_session, translation_exercise, monkeypatch
+):
+    _, headers = test_user
+    _, exercise = translation_exercise
+    endpoint = f"/api/lessons/exercises/{exercise.id}/question-translation"
+    events = []
+    execute = db_session.execute
+
+    async def track_locks(statement, *args, **kwargs):
+        if getattr(statement, "_for_update_arg", None) is not None:
+            events.append("lock")
+        return await execute(statement, *args, **kwargs)
+
+    async def generate(*args, **kwargs):
+        assert events == []
+        assert not db_session.in_transaction()
+        budget = kwargs["deadline"] - asyncio.get_running_loop().time()
+        assert 0 < budget <= 20
+        events.append("generation")
+        return NativeQuestionTranslation(question_translation="Yo ___ estudiante.")
+
+    monkeypatch.setattr(db_session, "execute", track_locks)
+    llm = AsyncMock(side_effect=generate)
+    monkeypatch.setattr(lessons_router.llm_adapter, "structured_output", llm)
+    response = await client.post(endpoint, headers=headers)
+    assert response.status_code == 200
+    assert events == ["generation", "lock"]
+    assert not db_session.in_transaction()
+
+    events.clear()
+    cached = await client.post(endpoint, headers=headers)
+    assert cached.status_code == 200
+    assert cached.json() == response.json()
+    assert events == []
+    llm.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_translation_server_deadline_cancels_provider_and_preserves_content(
+    client, test_user, db_session, translation_exercise, monkeypatch
+):
+    _, headers = test_user
+    lesson, exercise = translation_exercise
+    endpoint = f"/api/lessons/exercises/{exercise.id}/question-translation"
+    original = deepcopy(lesson.content)
+    cancelled = asyncio.Event()
+
+    async def generate(*args, **kwargs):
+        assert not db_session.in_transaction()
+        assert 0 < kwargs["deadline"] - asyncio.get_running_loop().time() <= 0.05
+        try:
+            # Deliberately ignore the adapter deadline to exercise the outer budget.
+            await asyncio.Event().wait()
+        except asyncio.CancelledError:
+            cancelled.set()
+            raise
+
+    monkeypatch.setattr(lessons_router, "QUESTION_TRANSLATION_TIMEOUT_SECONDS", 0.05)
+    monkeypatch.setattr(lessons_router.llm_adapter, "structured_output", generate)
+    async with asyncio.timeout(2):
+        response = await client.post(endpoint, headers=headers)
+    assert response.status_code == 503
+    assert response.json()["detail"] == "Could not translate exercise question at this time"
+    assert cancelled.is_set()
+    assert not db_session.in_transaction()
+    await db_session.refresh(lesson)
+    assert lesson.content == original
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "change",
+    [
+        "question",
+        "legacy_question",
+        "native_language",
+        "exercise_moved",
+        "exercise_deleted",
+        "lesson_deleted",
+    ],
+)
+async def test_translation_rejects_context_changed_during_generation(
+    client, test_user, db_session, translation_exercise, monkeypatch, change
+):
+    user, headers = test_user
+    lesson, exercise = translation_exercise
+    user_id, lesson_id, exercise_id, plan_id = user.id, lesson.id, exercise.id, lesson.study_plan_id
+    if change == "legacy_question":
+        exercise.question, exercise.explanation = "Complétez la phrase.", exercise.question
+        await db_session.commit()
+    concurrent_content = deepcopy(lesson.content)
+    concurrent_content["exercises"][0]["native_hint"] = "Ayuda guardada mientras se traducía."
+
+    async def generate(*args, **kwargs):
+        async with AsyncSession(bind=db_session.bind, expire_on_commit=False) as other:
+            await other.execute(
+                update(Lesson).where(Lesson.id == lesson_id).values(content=concurrent_content)
+            )
+            if change in ("question", "legacy_question"):
+                field = "explanation" if change == "legacy_question" else "question"
+                await other.execute(
+                    update(Exercise)
+                    .where(Exercise.id == exercise_id)
+                    .values(**{field: "Je ___ professeur."})
+                )
+            elif change == "native_language":
+                await other.execute(
+                    update(User).where(User.id == user_id).values(native_language="de")
+                )
+            elif change == "exercise_moved":
+                replacement = Lesson(
+                    study_plan_id=plan_id,
+                    title="Another lesson",
+                    lesson_type="grammar",
+                    cefr_level="A1",
+                    week_number=1,
+                    day_number=1,
+                    content={},
+                )
+                other.add(replacement)
+                await other.flush()
+                await other.execute(
+                    update(Exercise)
+                    .where(Exercise.id == exercise_id)
+                    .values(lesson_id=replacement.id)
+                )
+            elif change == "exercise_deleted":
+                await other.execute(delete(Exercise).where(Exercise.id == exercise_id))
+            else:
+                await other.execute(delete(Lesson).where(Lesson.id == lesson_id))
+            await other.commit()
+        return NativeQuestionTranslation(question_translation="Yo ___ estudiante.")
+
+    monkeypatch.setattr(lessons_router.llm_adapter, "structured_output", generate)
+    response = await client.post(
+        f"/api/lessons/exercises/{exercise_id}/question-translation", headers=headers
+    )
+    assert response.status_code == 503
+    assert response.json()["detail"] == "Could not translate exercise question at this time"
+    assert not db_session.in_transaction()
+    saved = await db_session.get(Lesson, lesson_id, populate_existing=True)
+    if change == "lesson_deleted":
+        assert saved is None
+    else:
+        assert saved.content == concurrent_content
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("concurrent_translation", [None, "Traducción concurrente ___ válida."])
+async def test_translation_merges_latest_help_and_reuses_concurrent_cache(
+    client, test_user, db_session, translation_exercise, monkeypatch, concurrent_translation
+):
+    _, headers = test_user
+    lesson, exercise = translation_exercise
+    lesson_id, exercise_id = lesson.id, exercise.id
+    question = exercise.question
+    concurrent_content = deepcopy(lesson.content)
+    concurrent_content["native_explanation"] = {"text": "Explicación reciente."}
+    entry = concurrent_content["exercises"][0]
+    entry["native_hint"] = "Pista reciente."
+    entry["native_explanation"] = "Explicación del ejercicio reciente."
+    if concurrent_translation:
+        entry.update(
+            question_translation=concurrent_translation,
+            question_translation_source=question,
+            question_translation_language="es",
+        )
+
+    async def generate(*args, **kwargs):
+        async with AsyncSession(bind=db_session.bind, expire_on_commit=False) as other:
+            await other.execute(
+                update(Lesson)
+                .where(Lesson.id == lesson_id)
+                .values(content=concurrent_content, is_completed=True)
+            )
+            await other.execute(
+                update(Exercise)
+                .where(Exercise.id == exercise_id)
+                .values(user_answer="suis", score=1.0)
+            )
+            await other.commit()
+        return NativeQuestionTranslation(question_translation="Yo ___ estudiante.")
+
+    monkeypatch.setattr(lessons_router.llm_adapter, "structured_output", generate)
+    response = await client.post(
+        f"/api/lessons/exercises/{exercise_id}/question-translation", headers=headers
+    )
+    assert response.status_code == 200
+    expected_translation = concurrent_translation or "Yo ___ estudiante."
+    assert response.json()["question_translation"] == expected_translation
+    entry.update(
+        question_translation=expected_translation,
+        question_translation_source=question,
+        question_translation_language="es",
+    )
+    await db_session.refresh(lesson)
+    await db_session.refresh(exercise)
+    assert lesson.content == concurrent_content
+    assert lesson.is_completed
+    assert exercise.user_answer == "suis"
+    assert exercise.score == 1.0
 
 
 @pytest.mark.parametrize("translation", [None, "", "Yo soy estudiante.", "Yo ___ ___ estudiante."])

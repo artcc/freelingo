@@ -24,13 +24,16 @@ async def get_cached_native_help(
     native_language: str,
     source_hash: str,
 ) -> ResourceNativeHelp | None:
+    # Another request may have updated an entry already present in this session.
     result = await db.execute(
-        select(ResourceNativeHelp).where(
+        select(ResourceNativeHelp)
+        .where(
             ResourceNativeHelp.resource_type == resource_type,
             ResourceNativeHelp.resource_key == resource_key,
             ResourceNativeHelp.target_language == target_language,
             ResourceNativeHelp.native_language == native_language,
         )
+        .execution_options(populate_existing=True)
     )
     cached = result.scalar_one_or_none()
     if cached and cached.source_hash == source_hash:
