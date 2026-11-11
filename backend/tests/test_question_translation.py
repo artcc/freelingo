@@ -199,6 +199,26 @@ async def test_translation_checks_authentication_and_ownership(
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("exercise_id", [0, -1, 2_147_483_648, 9_223_372_036_854_775_808])
+async def test_translation_rejects_out_of_range_exercise_ids(client, test_user, exercise_id):
+    with patch("app.routers.lessons.llm_adapter.structured_output", AsyncMock()) as llm:
+        response = await client.post(
+            f"/api/lessons/exercises/{exercise_id}/question-translation", headers=test_user[1]
+        )
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["loc"] == ["path", "exercise_id"]
+    llm.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_translation_accepts_maximum_exercise_id_as_a_resource_lookup(client, test_user):
+    response = await client.post(
+        "/api/lessons/exercises/2147483647/question-translation", headers=test_user[1]
+    )
+    assert response.status_code == 404
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("output", ["Yo soy estudiante.", "Yo ___ ___ estudiante.", "   ", None])
 async def test_translation_failures_preserve_content_and_allow_retry(
     client, test_user, db_session, translation_exercise, output

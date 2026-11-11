@@ -378,7 +378,7 @@ async def test_refresh_keeps_prompt_clean_when_disabled_tools_and_memory_read_fa
         ("Well. Let's continue.", ["Well.", "Let's continue."]),
         ("Well... let's continue.", ["Well... let's continue."]),
         ("... Let's continue.", ["... Let's continue."]),
-        ("Well... let's continue.", ["Well... let's continue."]),
+        ("Well… let's continue.", ["Well… let's continue."]),
         ("It costs 3.50... is that OK?", ["It costs 3.50... is that OK?"]),
         ("It costs 3.50. Let's continue.", ["It costs 3.50.", "Let's continue."]),
         ("考えてみましょう...次に進みます。", ["考えてみましょう...次に進みます。"]),

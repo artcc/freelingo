@@ -3,9 +3,9 @@ import copy
 import json
 import re
 from datetime import UTC, datetime
-from typing import Literal
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from redis.asyncio import Redis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -909,7 +909,7 @@ async def generate_exercise_native_hint(
 @limiter.limit("10/minute")
 async def translate_exercise_question(
     request: Request,
-    exercise_id: int,
+    exercise_id: Annotated[int, Path(ge=1, le=2_147_483_647)],
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
