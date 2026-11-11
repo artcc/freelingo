@@ -22,6 +22,7 @@ import { PageLoading } from '@/components/ui/page-loading'
 import { ExerciseGenerationLoading } from '@/components/ui/exercise-generation-loading'
 import { Pagination } from '@/components/ui/pagination'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
+import { QuestionExplanation } from '@/components/comprehension/QuestionExplanation'
 import {
   ReviewPrompt,
   getReviewPromptDismissal,
@@ -41,6 +42,7 @@ interface CorrectAnswer {
 }
 
 interface SubmitResult {
+  attempt_id: number
   score: number
   xp_earned: number
   correct_answers: CorrectAnswer[]
@@ -97,7 +99,9 @@ function ReadingPage() {
     null
   )
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [result, setResult] = useState<SubmitResult | null>(null)
+  const [result, setResult] = useState<
+    (SubmitResult & { sessionVersion: number }) | null
+  >(null)
   const [history, setHistory] = useState<AttemptItem[]>([])
   const [historyTotal, setHistoryTotal] = useState(0)
   const [historyPage, setHistoryPage] = useState(0)
@@ -259,7 +263,7 @@ function ReadingPage() {
       const data = (await res.json()) as SubmitResult
       await waitForLanguageSwitch(controller.signal)
       if (!current()) return
-      setResult(data)
+      setResult({ ...data, sessionVersion })
       dismissTooltip()
       setPageState('results')
       if (
@@ -309,7 +313,7 @@ function ReadingPage() {
   const allAnswered = exercise
     ? Object.keys(answers).length === exercise.questions.length
     : false
-  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
+  const targetLanguageCode = exercise?.target_language ?? 'en-GB'
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (pageState === 'loading') {
@@ -447,6 +451,21 @@ function ReadingPage() {
           </div>
         </div>
 
+        <div>
+          <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
+            {t('textLabel')}
+          </p>
+          <div className="border-fl-border bg-fl-surface border p-5">
+            <TargetLanguageText
+              as="p"
+              languageCode={exercise.target_language}
+              className="reading-text text-fl-fg max-w-[70ch] whitespace-pre-wrap select-text"
+            >
+              {exercise.text}
+            </TargetLanguageText>
+          </div>
+        </div>
+
         {/* Question review */}
         <div className="space-y-3">
           <p className="text-fl-label text-fl-muted-3 font-mono tracking-widest uppercase">
@@ -495,6 +514,16 @@ function ReadingPage() {
                     </div>
                   ))}
                 </div>
+                {exerciseContext && (
+                  <QuestionExplanation
+                    feature="reading"
+                    attemptId={result.attempt_id}
+                    questionIndex={q.index}
+                    sourceText={exercise.text}
+                    context={exerciseContext}
+                    sessionVersion={result.sessionVersion}
+                  />
+                )}
               </div>
             )
           })}

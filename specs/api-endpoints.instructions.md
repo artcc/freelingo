@@ -338,6 +338,15 @@ path. `/generate` retains its `skipped_empty` behavior for empty normalized batc
 - **GET `/all`** — Rate limit: 60/min. All user's flashcards
 - **POST `/api/flashcards`** — Rate limit: 60/min. Creates a flashcard manually.
 - **POST `/bulk`** — Rate limit: 60/min. Requires `{flashcards, study_plan_id, target_language}`. The positive integer plan ID and language must match the authenticated user's active persisted plan at validation time; mismatch returns 409 `flashcard_context_changed` before inserting any cards. Missing or invalid context returns 422. The supplied ID is an expected-context guard, not authorization to write to another plan. Creates multiple cards in that resolved plan and skips normalized-word duplicates within it.
+  New cards with blank translations receive contextual translations in the profile's native language
+  before insertion. Supplied translations are preserved. Existing cards, including missing translations
+  and user edits, are never updated. Incomplete/invalid or unavailable translation returns 503
+  `ai_service_unavailable` without a partial import. Batches accept at most 100 cards and at most 10,000
+  characters per definition/example (422 otherwise). Only the first 300 characters of each contextual
+  field are sent to the translator; stored card text is preserved. Translation, including corrective
+  retry, has a shared 20-second deadline. Native language, active language/plan and duplicates are
+  rechecked before insertion under user-then-language-then-plan locks. Changed context returns 409;
+  lock contention returns 503 `flashcard_import_busy` without waiting or partially importing.
 - **POST `/{card_id}/review`** — Rate limit: 60/min. Requires a strict integer `quality` in 0–5 and a UUID `review_id` (422 otherwise). Identity is scoped to the owned card. Records an SM-2 review, credits vocabulary progress to its persisted `study_plan_id`, and stores the response receipt in one transaction. Repeating the same ID and quality returns the original `FlashcardReviewResponse` without applying scheduling or XP again, including after subsequent reviews or suspension. Reusing the ID with another quality returns 409 `flashcard_review_conflict`. Response fields include the card snapshot and `xp_earned` granted by that original attempt (currently 2); replay does not grant additional XP. New attempts on suspended cards return 409. Missing or foreign cards return 404 before receipt access. Receipt lifetime follows the card.
 - **POST `/generate`** — Rate limit: 20/min. Requests N flashcards via LLM with native-language translations. The backend derives the target language from the authenticated user's active study plan; the request body has no client-supplied `target_language`. Returns `FlashcardGenerationResult`: `flashcards`, `created`, `skipped_duplicates` and `skipped_empty`. Counters describe actual model output after normalization and active-plan deduplication, including duplicates within the generated batch and suspended existing cards. Fewer model results than requested are not counted as duplicates. Empty normalized words have a separate counter. Counters are server-computed, not part of the LLM structured-output schema. Persisted cards and `FlashcardResponse` include the owning plan's `study_plan_id`.
 - **POST `/from-word`** — Rate limit: 30/min. Saves a word as a flashcard: body `{word, context, cefr_level}`. Best-effort deduplication is scoped to the user's active plan, with the oldest matching card winning. Comparison is case-insensitive, collapses Unicode whitespace runs, and trims boundary spaces without changing the persisted word's capitalization. An input match skips the AI; otherwise the AI's canonical word is checked before insertion. Concurrent first-time saves can still both insert. Returns `FlashcardFromWordResponse` (`FlashcardResponse` plus `already_saved: bool`): `true` means the card is already in My Vocabulary (`source="from_text"`). Generated/imported cards are promoted in place with `UPDATE RETURNING` and return `false`, preserving review progress. If a card disappears before promotion, the request continues as a miss; response data is captured before commit without a subsequent refresh.
@@ -504,7 +513,16 @@ an invalid supplied UUID returns 422, and omission preserves attempt, XP, and qu
 - **POST `/started`** — Rate limit: 20/min. Auth: require_subscription_or_freemium_readonly,
   with maintenance and active-plan checks. Accepts the shared start-signal body/header above and returns 204.
 - **GET `/audio/{exercise_id}`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Serves the MP3 for the given exercise as a `FileResponse` (`audio/mpeg`). Returns 404 if the exercise or its audio file does not exist.
-- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
+- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns `attempt_id`, score, XP, correct answers, and transcript. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
+- **POST `/attempts/{attempt_id}/questions/{question_index}/explanation`** — Rate limit: 10/min,
+  including cache hits. Auth: read-only subscription/freemium access plus maintenance. No body.
+  Requires an owned saved attempt and owned persisted plan with matching exercise language;
+  neither the active language nor a caller-supplied language determines ownership. Returns
+  `{explanation, evidence, native_language, target_language}`. Native language comes from the profile;
+  evidence is a literal source quote. Missing/foreign attempts or questions return 404; IDs outside the
+  positive PostgreSQL integer range (question indices allow zero) return 422; busy/unavailable/invalid
+  generation returns 503. No attempt, progress or quota is consumed. Shared cache/generation behavior is
+  defined in `services.instructions.md` (Comprehension review help).
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, and transcripts. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ## Reading — `/api/reading`
@@ -515,7 +533,9 @@ Reading reads use read-only subscription/freemium access; generation and attempt
 - **POST `/generate`** — Rate limit: 5/min. Auth: require_subscription_or_freemium. Acquires a renewable, owner-scoped per-(level, language) Redis lease and enqueues a bounded `BackgroundTask`. Returns HTTP 202 `{"status":"generating"}` for new or existing work, or `{"status":"available"}` when an exercise can already be used.
 - **POST `/started`** — Rate limit: 20/min. Auth: require_subscription_or_freemium_readonly,
   with maintenance and active-plan checks. Accepts the shared start-signal body/header above and returns 204.
-- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
+- **POST `/attempt`** — Rate limit: 20/min. Body: `{exercise_id, answers: dict[str,str], replay: bool=false, context}`. Returns `attempt_id`, score, XP, and correct answers. Initial duplicate attempts return 409; replay persists with the spaced-reward rules above. Attempt, reward, and daily activity commit together.
+- **POST `/attempts/{attempt_id}/questions/{question_index}/explanation`** — Rate limit: 10/min.
+  Same post-attempt explanation contract as Listening above, using owned Reading attempts and passages.
 - **GET `/history`** — Rate limit: 60/min. Auth: require_subscription_or_freemium_readonly. Returns paginated list of the user's past attempts with scores, XP, exercise text, and correct answers. Query params: `skip` (default 0), `limit` (default 10, max 50).
 
 ---

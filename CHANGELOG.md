@@ -4,15 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.12.10] - Unreleased
+## [1.12.10] - 2026-11-11
 
 ### Added
 
 - Lesson exercises offer an optional question translation in the learner's native language at every level, including existing lessons, while keeping the original question and separate hints available.
+- Reading and Listening offer optional native-language explanations after submission, with a literal quote supporting each correct answer. Reading results retain the full passage, and Listening results include audio playback alongside the transcript.
+
+### Changed
+
+- Vocabulary imports translate new cards with missing translations into the learner's native language, preserving existing cards and supplied translations. Failed translation or a changed study/profile context prevents partial imports.
+- In voice conversations, Lingu can briefly explain in the learner's native language when asked for help or told something is unclear, then return to target-language practice.
 
 ### Fixed
 
 - My Plan follows the actual study-plan position, places Start on the correct unit, and keeps reached lessons accessible for review or resumption. Unit completion and percentages reflect completed scheduled lessons rather than competency scores.
+- Listening cancels pending audio and releases playback resources when leaving an exercise or changing accounts, preventing late playback after the player disappears.
 
 ## [1.12.5] - 2026-11-07
 

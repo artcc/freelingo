@@ -221,7 +221,14 @@ captured values and rejects a mismatch with the server's active plan before inse
 refreshes the language context and set for inspection; it never automatically resubmits the import.
 Late set responses and add results are discarded after context changes. Browsing without a plan is
 allowed, but adding requires one. Bulk creation deduplicates normalized words within the resolved
-plan. The page sends an empty translation and the bulk endpoint does not generate one.
+plan. The page sends an empty translation; the bulk endpoint translates only new cards that lack one,
+using each word's definition/example and the profile's native language. Existing cards are never
+backfilled or overwritten, including when they are untranslated. Supplied nonblank translations are
+preserved. The complete translation batch must validate before any insertion; failure returns a
+recoverable 503 without a partial import. After generation, user-then-language-then-plan locks protect
+a fresh native-language and study-context check plus bulk insertion; cards created meanwhile are skipped
+without changes. Lock contention returns recoverable 503 instead of waiting. Request and provider-size
+limits, timeout and error codes are specified in `api-endpoints.instructions.md` (Flashcards).
 
 Vocabulary native help begins collapsed and is generated on request. Progress treats an item as
 covered only when its plan-owned flashcard has `repetitions > 0`.

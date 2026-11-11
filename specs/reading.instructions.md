@@ -87,8 +87,9 @@ status expiry, cancellation, and the Redis/PostgreSQL transaction boundary. Read
 
 ## API
 
-All endpoints require authentication, an active language, an active study plan, and normal
-maintenance access. They derive level, language, and plan from persisted server state.
+All endpoints require authentication and normal maintenance access. Exercise selection, generation,
+submission and history require an active language and study plan. Post-attempt explanations instead
+derive ownership and target language from the saved attempt's plan, including historical plans.
 
 The `/started` measurement signal and optional attempt-correlation header are defined in
 `api-endpoints.instructions.md`; their measurement semantics belong to `umami.instructions.md`.
@@ -135,10 +136,23 @@ Changing the active context in another tab stops the stale operation and prompts
 - An answer-count violation returns validation HTTP `422`.
 - A normal duplicate returns `409 already_attempted`.
 - An unknown exercise returns `404 exercise_not_found`.
-- The response includes score, XP, and correct answers.
+- The response includes `attempt_id`, score, XP, and correct answers.
 
 The schema enforces only dictionary length, not expected question indices or option values.
 Omitting the submission context returns validation HTTP `422`.
+
+### Post-answer explanations
+
+`POST /api/reading/attempts/{attempt_id}/questions/{question_index}/explanation` returns optional
+native-language help for one question after an owned attempt exists. It uses read-only feature access,
+has a `10/minute` rate limit, and does not consume another attempt, quota, or XP. Request and response
+details belong to `api-endpoints.instructions.md`; the shared generation/cache contract belongs to
+`services.instructions.md` (Comprehension review help).
+
+The explanation describes why the saved correct option follows from the passage and includes a short
+literal source quote. It uses the profile's native language, independently of interface locale, and
+does not depend on which distractor the learner selected. Help remains available for existing exercise
+content without regenerating the exercise. Structural checks validate the quote, not pedagogical truth.
 
 ### `GET /api/reading/history`
 
@@ -210,7 +224,9 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
 - Generating state adds a delay warning after 15 seconds.
 - Exercise state shows the passage and questions together; there is no audio or readiness gate.
 - Submission becomes available when every received question index has an answer.
-- Results show score, XP, correct options, and the learner's incorrect selections.
+- Results retain the complete passage alongside score, XP, correct options, and incorrect selections.
+- Each corrected question offers optional native-language explanation with a source quote; loading and
+  manual retry remain local to the help control and never resubmit the attempt.
 - A successful first attempt may open the shared review prompt; replay never does.
 - History displays ten attempts per page through the shared pagination component.
 - Starting practice from history creates a replay with blank answers.

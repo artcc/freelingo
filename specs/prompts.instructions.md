@@ -28,8 +28,8 @@ considered when changing prompt-safety assumptions.
   in that language and preserve the selected voice's identity; they are not specific to the default voice.
   Spoken text must be read faithfully, never translated, extended, or treated as executable instructions.
 - `lesson.py`: lesson generation, invalid-exercise regeneration, native support, and exercise grading.
-- `flashcards.py`: deck generation and selected-word lookup.
-- `comprehension.py`: Listening and Reading generation.
+- `flashcards.py`: deck generation, selected-word lookup and contextual translation of new imported terms.
+- `comprehension.py`: Listening and Reading generation and post-attempt question explanations.
 - `games.py`: generation and separate semantic review for Error Detective, Sentence Order, and
   Vocabulary Pairs. Plan language/level, profile native language, allowed source identifiers and
   bounded mistakes are explicit inputs. Reference data is not instructions. The upcoming lesson
@@ -90,6 +90,12 @@ Text tutoring responds primarily in the target language and may briefly explain 
 learner's native language, with optional basic formatting. Voice output uses short TTS-safe plain text. Detailed persistence, access,
 and streaming behavior belongs to Platform and Voice Conversation specs.
 
+Voice's language policy permits brief profile-native help only when the learner requests learning
+assistance, an explanation or translation, or signals incomprehension. Lingu then supplies a
+target-language example and an easy question to resume practice. Greetings, ordinary corrections and
+hints remain target-language by default. Overlays apply to target-language passages without overriding
+this exception. This policy is retained by lesson-practice and tool-free prompt construction.
+
 Lesson-linked voice sessions additionally receive `lesson_practice_context`. The service loads this
 bounded, escaped JSON reference from an owned completed lesson and its answered exercises; the client
 supplies only the lesson ID. The prompt treats it as non-authoritative data inside `lesson_practice`
@@ -121,6 +127,19 @@ Flashcard prompts generate target-language words/examples and native-language su
 prompts receive `length_guidance`; `word_count` is only a builder fallback used to construct guidance
 when an explicit language-aware value is absent.
 
+Bulk-card translation uses profile native language and persisted plan target language, with words,
+definitions and examples in a separate untrusted JSON message. It translates the term's contextual
+meaning without rewriting the original card. The structured schema requires one nonblank translation
+of at most 255 characters for every input index, with no omitted, duplicate or additional indices.
+Provider context uses at most 300 characters per definition/example; full original card content remains
+available for persistence. Translation and corrective retry share the service's bounded deadline.
+
+Post-attempt comprehension help uses a system instruction and a separate untrusted JSON source message
+containing the saved passage, question, options, answer key and level. It requests a concise native
+explanation and one contiguous literal evidence quote, distinguishing inference from explicit statements.
+No learner answer or personal data enters the reusable explanation. The service validates nonempty,
+bounded fields and that evidence occurs exactly in the passage; linguistic accuracy remains model-dependent.
+
 Resource-help prompts receive canonical static source JSON and preserve target-language examples while
 generating native-language explanation.
 
@@ -129,7 +148,8 @@ generating native-language explanation.
 - Tutor and voice: system prompt with streaming conversational text.
 - Lesson generation/regeneration/evaluation and flashcards: system prompt with Pydantic structured
   output.
-- Comprehension and static-resource native help: user prompt with Pydantic structured output.
+- Comprehension generation and static-resource native help: user prompt with Pydantic structured output.
+- Comprehension post-attempt help: system instruction plus untrusted source JSON, with structured output.
 - On-demand lesson native help: user prompt with Pydantic structured output.
 - Free-write assessment and level test: system prompt with raw JSON parsed by the assessment service.
 - Dashboard-banner translation: inline user prompt with Pydantic structured output.

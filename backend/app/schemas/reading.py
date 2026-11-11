@@ -73,6 +73,7 @@ class CorrectAnswerOut(BaseModel):
 
 
 class ReadingSubmitResponse(BaseModel):
+    attempt_id: int
     score: int
     xp_earned: int
     correct_answers: list[CorrectAnswerOut]

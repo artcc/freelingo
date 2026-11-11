@@ -1,12 +1,21 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import { useAuthStore } from '@/store/auth'
 
 interface ExerciseAudioPlayerProps {
   exerciseId: number
   onFirstPlay?: () => void
+}
+
+interface Playback {
+  controller: AbortController
+  audio: HTMLAudioElement | null
+  url: string | null
+  detach: (() => void) | null
+  pending: boolean
 }
 
 export function ExerciseAudioPlayer({
@@ -19,81 +28,174 @@ export function ExerciseAudioPlayer({
   >('idle')
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const blobUrlRef = useRef<string | null>(null)
+  const playbackRef = useRef<Playback | null>(null)
   const playedRef = useRef(false)
+  const onFirstPlayRef = useRef(onFirstPlay)
+  const sessionVersion = useAuthStore((auth) => auth.sessionVersion)
+  const userId = useAuthStore((auth) => auth.user?.id)
+  const contextRef = useRef<{
+    exerciseId: number
+    sessionVersion: number
+    userId: number | undefined
+  } | null>(null)
+
+  const stopPlayback = useCallback(() => {
+    const playback = playbackRef.current
+    playbackRef.current = null
+    if (!playback) return
+    playback.controller.abort()
+    playback.detach?.()
+    if (playback.audio) {
+      playback.audio.pause()
+      playback.audio.removeAttribute('src')
+      playback.audio.load()
+    }
+    if (playback.url) URL.revokeObjectURL(playback.url)
+  }, [])
+
+  useLayoutEffect(() => {
+    onFirstPlayRef.current = onFirstPlay
+  }, [onFirstPlay])
+
+  useLayoutEffect(() => {
+    contextRef.current = { exerciseId, sessionVersion, userId }
+    const reset = () => {
+      stopPlayback()
+      playedRef.current = false
+      setState('idle')
+      setProgress(0)
+      setDuration(0)
+    }
+    reset()
+    // Stop immediately on authentication changes, including before React commits.
+    const unsubscribe = useAuthStore.subscribe((auth) => {
+      if (auth.sessionVersion !== sessionVersion || auth.user?.id !== userId) {
+        reset()
+      }
+    })
+    return () => {
+      unsubscribe()
+      contextRef.current = null
+      stopPlayback()
+    }
+  }, [exerciseId, sessionVersion, userId, stopPlayback])
 
   async function handlePlayPause() {
-    if (state === 'loading') return
+    const context = contextRef.current
+    const sameContext = () => {
+      const auth = useAuthStore.getState()
+      return (
+        context !== null &&
+        contextRef.current === context &&
+        context.exerciseId === exerciseId &&
+        auth.sessionVersion === context.sessionVersion &&
+        auth.user?.id === context.userId
+      )
+    }
+    if (!sameContext() || playbackRef.current?.pending) return
 
     if (state === 'playing') {
-      audioRef.current?.pause()
+      playbackRef.current?.audio?.pause()
       setState('paused')
       return
     }
 
-    if (state === 'paused' && audioRef.current) {
-      try {
-        await audioRef.current.play()
-        setState('playing')
-      } catch {
-        setState('error')
+    if (state !== 'paused' || !playbackRef.current?.audio) {
+      stopPlayback()
+      playbackRef.current = {
+        controller: new AbortController(),
+        audio: null,
+        url: null,
+        detach: null,
+        pending: false,
       }
-      return
+      setProgress(0)
+      setDuration(0)
+    }
+    const playback = playbackRef.current
+    if (!playback) return
+    const current = () =>
+      sameContext() &&
+      playbackRef.current === playback &&
+      !playback.controller.signal.aborted
+    const fail = () => {
+      if (!current()) return
+      stopPlayback()
+      setProgress(0)
+      setDuration(0)
+      setState('error')
     }
 
+    playback.pending = true
     setState('loading')
     try {
-      const res = await apiFetch(`/api/listening/audio/${exerciseId}`)
-      if (!res.ok) throw new Error(`${res.status}`)
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      blobUrlRef.current = url
+      if (!playback.audio) {
+        const res = await apiFetch(`/api/listening/audio/${exerciseId}`, {
+          signal: playback.controller.signal,
+        })
+        if (!current()) return
+        if (!res.ok) throw new Error(`${res.status}`)
+        const blob = await res.blob()
+        if (!current()) return
+        playback.url = URL.createObjectURL(blob)
+        const audio = new Audio(playback.url)
+        playback.audio = audio
 
-      const audio = new Audio(url)
-      audioRef.current = audio
-
-      audio.addEventListener('loadedmetadata', () => {
-        setDuration(audio.duration)
-      })
-      audio.addEventListener('timeupdate', () => {
-        if (audio.duration > 0) {
-          setProgress((audio.currentTime / audio.duration) * 100)
+        const metadata = () => {
+          if (current()) setDuration(audio.duration)
         }
-      })
-      audio.addEventListener('ended', () => {
-        setProgress(100)
-        setState('idle')
-      })
-      audio.addEventListener('error', () => setState('error'))
+        const timeupdate = () => {
+          if (current() && audio.duration > 0) {
+            setProgress((audio.currentTime / audio.duration) * 100)
+          }
+        }
+        const ended = () => {
+          if (!current()) return
+          stopPlayback()
+          setProgress(100)
+          setState('idle')
+        }
+        audio.addEventListener('loadedmetadata', metadata)
+        audio.addEventListener('timeupdate', timeupdate)
+        audio.addEventListener('ended', ended)
+        audio.addEventListener('error', fail)
+        playback.detach = () => {
+          audio.removeEventListener('loadedmetadata', metadata)
+          audio.removeEventListener('timeupdate', timeupdate)
+          audio.removeEventListener('ended', ended)
+          audio.removeEventListener('error', fail)
+        }
+      }
 
+      const audio = playback.audio
       await audio.play()
+      if (!current()) {
+        // A browser may settle play() after cleanup; stop only that old element.
+        audio.pause()
+        return
+      }
       setState('playing')
 
       if (!playedRef.current) {
         playedRef.current = true
-        onFirstPlay?.()
+        onFirstPlayRef.current?.()
       }
     } catch {
-      setState('error')
+      fail()
+    } finally {
+      playback.pending = false
     }
   }
 
   function handleSeek(e: React.MouseEvent<HTMLDivElement>) {
-    const audio = audioRef.current
-    if (!audio || audio.duration === 0) return
+    if (!playbackRef.current?.audio || playbackRef.current.audio.duration === 0)
+      return
     const rect = e.currentTarget.getBoundingClientRect()
     const ratio = (e.clientX - rect.left) / rect.width
-    audio.currentTime = ratio * audio.duration
+    playbackRef.current.audio.currentTime =
+      ratio * playbackRef.current.audio.duration
     setProgress(ratio * 100)
   }
-
-  useEffect(() => {
-    return () => {
-      audioRef.current?.pause()
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current)
-    }
-  }, [])
 
   const icon = state === 'loading' ? '◌' : state === 'playing' ? '▐▐' : '▶'
   const label = state === 'playing' ? 'Pause' : 'Play'

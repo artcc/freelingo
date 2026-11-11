@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Porquê esta resposta",
+    "hide": "Ocultar explicação",
+    "loading": "A preparar a explicação...",
+    "error": "A explicação não está disponível. Tenta novamente.",
+    "evidence": "Excerto do texto original",
+    "language": "Explicação em {language}"
+  },
   "landing": {
     "freeTrialNote": "Acesso Premium inicial ao se cadastrar, sem cartão. Depois, continue grátis com limites se não assinar.",
     "modes": {
@@ -1787,18 +1795,30 @@
     "version": "v1.12.10",
     "cta": "Entendido",
     "entry1": {
-      "label": "Melhorias no teu plano de estudo",
-      "desc": "Agora o teu plano mostra corretamente o teu progresso e permite-te continuar as lições e rever as unidades que já trabalhaste."
+      "label": "Compreende melhor cada resposta",
+      "desc": "Depois de completares Reading ou Listening, podes pedir uma explicação na tua língua materna com um excerto do texto que justifica a resposta. Também podes reler o texto ou voltar a ouvir o áudio enquanto revês."
     },
     "entry2": {
-      "label": "Novos idiomas: polaco, português do Brasil, russo, neerlandês e sueco",
-      "desc": "Adicionámos o polaco, o português do Brasil, o russo, o neerlandês e o sueco como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
-    },
-    "entry3": {
       "label": "Melhorias no sistema de aprendizagem",
       "desc": "Agora podes consultar a tradução dos enunciados para a tua língua materna sempre que precisares, mantendo a pergunta original no idioma que estás a aprender."
     },
+    "entry3": {
+      "label": "O teu vocabulário, com tradução",
+      "desc": "Os novos cartões que adicionares a partir de Vocabulário incluem a tradução para a tua língua materna. Os cartões que já tens mantêm o seu conteúdo."
+    },
     "entry4": {
+      "label": "O Lingu ajuda-te quando precisas",
+      "desc": "Se não perceberes algo durante uma conversa de voz, pede ajuda ao Lingu. Pode explicar-te brevemente na tua língua materna e depois retomar a prática no idioma que estás a aprender."
+    },
+    "entry5": {
+      "label": "Melhorias no teu plano de estudo",
+      "desc": "Agora o teu plano mostra corretamente o teu progresso e permite-te continuar as lições e rever as unidades que já trabalhaste."
+    },
+    "entry6": {
+      "label": "Novos idiomas: polaco, português do Brasil, russo, neerlandês e sueco",
+      "desc": "Adicionámos o polaco, o português do Brasil, o russo, o neerlandês e o sueco como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
+    },
+    "entry7": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

@@ -107,6 +107,13 @@ and translation cache metadata. The lifecycle/cache contract is defined in `stud
 
 `flashcard_sm2.py` applies SM-2 updates for quality 0-5 and generates cards with native-language
 translation context. Generated cards receive target language from the persisted active plan.
+Its bulk-translation helper translates supplied new-card terms in context and validates exactly one
+nonblank, length-bounded translation per input index before returning. The router deduplicates first,
+preserves existing cards and provided translations, and rechecks context/duplicates before insertion.
+Translation and any corrective retry share a 20-second provider deadline. Only the first 300 characters
+of each definition/example enter the prompt, without changing stored originals. Request bounds and
+nonblocking user/language/plan lock checks are documented in `api-endpoints.instructions.md` (Flashcards).
+The import contract is defined in `learning-resources.instructions.md` (Vocabulary hub).
 
 `progress_service.py` updates daily XP, streak, exercise skill EMA, and unit competency EMA. It can
 flush without committing so lesson completion can include progress in one transaction. Progress is
@@ -132,6 +139,8 @@ request being answered. Transcript reads order by timestamp and ID to keep equal
 `resource_native_help.py` hashes canonical resource source data, returns only hash-current cache rows,
 upserts generated help, and builds Redis lock keys. Grammar, Vocabulary, and Phrasebook identify cache
 rows by resource type/key, target language, and native language; source hash determines freshness.
+Comprehension explanations reuse these cache primitives under separate resource types; their access
+and concurrency rules are defined below.
 
 ## Language helpers and lifecycle
 
@@ -197,6 +206,27 @@ replay eligibility, source keys, reward limits, ledger dates, and progress dates
 
 Pool selection, content/audio persistence, attempts, and history belong to
 `listening.instructions.md` and `reading.instructions.md`.
+
+### Comprehension review help
+
+`comprehension_help.py` serves post-attempt explanations for both domains. It verifies the saved attempt
+and its plan belong to the authenticated user, and that the exercise language matches that plan, before
+reading shared cached content. It does not depend on the currently active language or plan.
+
+- Cache types are `reading_explanation` and `listening_explanation`, keyed by exercise ID/question index,
+  target language and profile native language. The source hash covers the passage, full question, level
+  and prompt-contract version. Content is reusable across learners because it contains no personal answer.
+- Structured output contains a short native explanation and a contiguous exact source quote. Empty,
+  oversized or nonliteral evidence is rejected; existing malformed cached content is regenerated.
+- A token-owned Redis lock lasts 90 seconds. Generation and cache persistence have a 20-second deadline;
+  acquisition/release each have a two-second bound, leaving margin within the client's 30-second budget.
+  The provider receives the same generation deadline, including corrective retries. Busy or unavailable
+  generation returns recoverable 503. Release compares the owner token, so an old request cannot delete
+  a replacement lock.
+- Cache writes reuse the existing uniqueness constraint; a concurrent insert conflict reloads a valid
+  cache winner or returns 503. Redis and database commits are separate boundaries.
+- Help never creates an attempt, changes an answer/score, credits progress, or consumes feature quota.
+  The endpoint uses the feature's read-only access policy, maintenance checks and its own rate limit.
 
 ### Shared generation coordinator
 

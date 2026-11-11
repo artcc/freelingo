@@ -152,6 +152,14 @@ The voice system prompt requires plain text without Markdown formatting for spok
 transcripts. The shared output policy in `prompts.instructions.md` also applies to greetings,
 lesson-linked practice, and tool-free fallbacks.
 
+Voice remains in the target language by default. On a learning-related request for help, explanation,
+translation, or an explicit indication of incomprehension, Lingu may give one or two brief sentences in
+the profile's native language, followed by a target-language example and an easy target-language question.
+This does not change session language or STT/TTS context. Speaking another language, hesitation or an
+error alone does not trigger native help. The same policy covers lesson practice and tool-free fallbacks;
+target-language overlays apply only to target-language passages. The prompt policy is not a guarantee
+that target-language STT will correctly recognize a request spoken in another language.
+
 A normal turn:
 
 1. Assigns a turn ID and emits `transcribing`.

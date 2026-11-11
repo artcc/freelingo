@@ -140,6 +140,26 @@ expire the cache window so a later visit can retry.
 Session-scoped quota caching, unknown balances, and paywall presentation are defined in
 `subscriptions-freemium.instructions.md`.
 
+### Post-answer comprehension review
+
+Reading results retain the full passage; Listening results include the existing authenticated audio
+player alongside the revealed transcript. `components/comprehension/QuestionExplanation.tsx` adds a
+collapsed per-question explanation control only after a saved `attempt_id` is returned. Opening it
+requests help explicitly, with local loading, a 30-second client deadline and manual retry. It never
+resubmits answers or changes local quota/progress. Evidence uses `TargetLanguageText`; the explanation
+uses the profile native language and `lang` attribute, with interface-localized labels.
+
+Help state is keyed by feature, attempt, question, source, plan/language/level, native language, user
+and authentication session. Context replacement or unmount cancels requests and discards late results;
+language switching/invalidation hides the control and clears its help state. Returned language codes
+must match and the evidence must occur in the displayed passage/transcript. The owning saved attempt
+remains the backend authority; domain and cache rules live in Reading, Listening and Services specs.
+
+`ExerciseAudioPlayer` owns cancellable media work per exercise and authentication session. Unmount or
+context replacement releases pending requests, audio, event listeners and Blob URLs. Late completions
+cannot restart playback; ordinary access-token refresh does not restart the current audio. Its first-play
+callback fires once per exercise context and is omitted for result-review playback.
+
 ## Lesson question translation
 
 `components/lesson/QuestionTranslation.tsx` provides a collapsed, keyboard-accessible reveal/hide

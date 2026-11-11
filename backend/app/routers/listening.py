@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import (
@@ -9,6 +10,7 @@ from fastapi import (
     Depends,
     Header,
     HTTPException,
+    Path,
     Query,
     Request,
     status,
@@ -32,6 +34,7 @@ from app.core.limiter import limiter
 from app.models.listening import ListeningExercise
 from app.models.study_plan import StudyPlan
 from app.models.user import User
+from app.schemas.comprehension_help import QuestionExplanationResponse
 from app.schemas.exercise_generation import ExerciseContext
 from app.schemas.learning_analytics import ExerciseStartedRequest
 from app.schemas.listening import (
@@ -45,6 +48,7 @@ from app.schemas.listening import (
     ListeningSubmitResponse,
     QuestionOut,
 )
+from app.services.comprehension_help import explain_question
 from app.services.exercise_generation import GenerationLease, get_generation_state
 from app.services.learning_analytics import (
     LearningEvent,
@@ -332,11 +336,29 @@ async def submit_listening_attempt(
     await maybe_record_freemium_usage(current_user, "listening")
 
     return ListeningSubmitResponse(
+        attempt_id=attempt.id,
         score=attempt.score,
         xp_earned=attempt.xp_earned,
         correct_answers=correct_answers,
         text=exercise.text,
     )
+
+
+@router.post(
+    "/attempts/{attempt_id}/questions/{question_index}/explanation",
+    response_model=QuestionExplanationResponse,
+)
+@limiter.limit("10/minute")
+async def explain_listening_question(
+    request: Request,
+    attempt_id: Annotated[int, Path(ge=1, le=2_147_483_647)],
+    question_index: Annotated[int, Path(ge=0, le=2_147_483_647)],
+    _maintenance: None = Depends(require_not_maintenance),
+    current_user: User = Depends(require_subscription_or_freemium_readonly("listening")),
+    db: AsyncSession = Depends(get_db),
+    redis: Redis = Depends(get_redis),
+) -> QuestionExplanationResponse:
+    return await explain_question("listening", attempt_id, question_index, current_user, db, redis)
 
 
 @router.get("/history", response_model=ListeningHistoryResponse)

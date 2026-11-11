@@ -17,8 +17,13 @@ from app.services.conversation_pipeline import (
     ConversationPipeline,
     _build_conversation_system_prompt,
 )
+from app.services.language_helpers import get_language_name
 from app.services.llm_adapter import LLMError, LLMTimeoutError, LLMUnavailableError
-from app.services.prompts.common import TUTOR_DISPLAY_NAME
+from app.services.prompts.common import (
+    PLAIN_TEXT_OUTPUT_INSTRUCTION,
+    TUTOR_DISPLAY_NAME,
+    get_language_prompt_overlay,
+)
 
 # ---------------------------------------------------------------------------
 # Shared helpers
@@ -106,6 +111,139 @@ def test_pipeline_humanizes_native_language_code_in_system_prompt() -> None:
 
     assert "Student's native language: Spanish" in pipeline.system_prompt
     assert "Student's native language: es" not in pipeline.system_prompt
+
+
+@pytest.mark.parametrize(
+    ("target_language", "native_language"),
+    [("en-GB", "Spanish"), ("ja-JP", "French"), ("pt-BR", "German")],
+)
+def test_voice_prompt_limits_native_support_and_scopes_language_overlay(
+    target_language, native_language
+) -> None:
+    target_name = get_language_name(target_language)
+    overlay = get_language_prompt_overlay(target_language)
+    prompt = _build_conversation_system_prompt(
+        student_name="Alice",
+        cefr_level="A2",
+        native_language=native_language,
+        target_language_name=target_name,
+        user_context="",
+        memory_context="",
+        language_prompt_overlay=overlay,
+    )
+    normalized = " ".join(prompt.split())
+
+    assert f"Keep immersion in {target_name} by default, including greetings" in normalized
+    assert "Only when the student asks for help, an explanation or a translation" in normalized
+    assert "or indicates that they do not understand" in normalized
+    assert f"in {native_language}, the native language supplied by their profile" in normalized
+    assert "Do not choose the support language from the interface locale" in normalized
+    assert (
+        "Speaking another language, hesitating or making a mistake alone does not trigger"
+        in normalized
+    )
+    assert "native-language support to one or two short sentences" in normalized
+    assert f"give a simple example in {target_name}" in normalized
+    assert f"end with one easy question in {target_name}" in normalized
+    assert "temporary support, not a change of study language" in normalized
+    assert "Language-specific guidance below applies to target-language passages only" in normalized
+    assert prompt.index("- LANGUAGE POLICY:") < prompt.index("Language-specific guidance:")
+    assert overlay in prompt
+    assert "ALWAYS respond in" not in prompt
+    assert "translate full documents" in prompt
+    assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("lesson_context", ["", "LESSON_CONTEXT_MARKER"])
+@pytest.mark.parametrize("entrypoint", ["greeting", "user_turn", "no_tools"])
+async def test_voice_native_support_policy_reaches_session_prompts_and_fallback(
+    lesson_context, entrypoint
+) -> None:
+    pipeline = _make_pipeline(
+        native_language="es",
+        target_language="fr-FR",
+        lesson_practice_context=lesson_context,
+        study_plan_id=17,
+    )
+    pipeline._memory_tools_available = entrypoint != "no_tools"
+    pipeline.stt.transcribe = AsyncMock(return_value="Je ne comprends pas.")
+    pipeline.tts.synthesize = AsyncMock(return_value=b"audio")
+    response = "Es una acción pasada. Je suis allé à Paris. Où es-tu allé ?"
+
+    async def response_stream():
+        yield response
+
+    pipeline.llm.chat = AsyncMock(return_value=response_stream())
+    ws = FakeWS()
+    try:
+        if entrypoint == "greeting":
+            await pipeline._greet(ws)
+        else:
+            await pipeline._process(b"audio", ws)
+            pipeline.stt.transcribe.assert_awaited_once_with(
+                b"audio", "audio.wav", "audio/wav", language="fr"
+            )
+
+        call = pipeline.llm.chat.call_args
+        prompts = [call.args[0][0]["content"]]
+        if entrypoint == "user_turn":
+            fallback_prompt = call.kwargs["fallback_messages"][0]["content"]
+            assert "save_user_memory" not in fallback_prompt
+            prompts.append(fallback_prompt)
+        else:
+            assert "save_user_memory" not in prompts[0]
+            assert "tools" not in call.kwargs
+
+        for prompt in prompts:
+            normalized = " ".join(prompt.split())
+            assert "Keep immersion in French by default" in normalized
+            assert "in Spanish, the native language supplied by their profile" in normalized
+            assert (
+                "give a simple example in French and end with one easy question in French"
+                in normalized
+            )
+            assert "ALWAYS respond in" not in prompt
+            assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
+            if lesson_context:
+                assert "<lesson_practice>\nLESSON_CONTEXT_MARKER\n</lesson_practice>" in prompt
+                assert "do not end the session" in prompt
+
+        assert [call.args[0] for call in pipeline.tts.synthesize.await_args_list] == [
+            "Es una acción pasada.",
+            "Je suis allé à Paris.",
+            "Où es-tu allé ?",
+        ]
+        assert all(call.args[2] == "fr-FR" for call in pipeline.tts.synthesize.await_args_list)
+        assert pipeline._study_plan_id == 17
+        assert pipeline._target_language == "fr-FR"
+        assert pipeline.history[-1] == {"role": "assistant", "content": response}
+        assert "turn_complete" in ws.types()
+    finally:
+        await pipeline.cleanup()
+
+
+@pytest.mark.asyncio
+async def test_voice_native_support_uses_refreshed_profile_language() -> None:
+    pipeline = _make_pipeline(user_id=7, native_language="es", target_language="ja-JP")
+    db = AsyncMock()
+    db.get.return_value = MagicMock(native_language="fr")
+    session = MagicMock()
+    session.__aenter__ = AsyncMock(return_value=db)
+    session.__aexit__ = AsyncMock(return_value=False)
+
+    with (
+        patch("app.services.conversation_pipeline.db_session", return_value=session),
+        patch("app.services.conversation_pipeline.get_user_memories", AsyncMock(return_value=[])),
+    ):
+        await pipeline._refresh_memory_prompt()
+
+    normalized = " ".join(pipeline.system_prompt.split())
+    assert "in French, the native language supplied by their profile" in normalized
+    assert "in Spanish, the native language supplied by their profile" not in normalized
+    assert "Keep immersion in Japanese by default" in normalized
+    assert pipeline._target_language == "ja-JP"
+    assert pipeline._stt_language == "ja"
 
 
 def test_system_prompt_includes_user_context() -> None:

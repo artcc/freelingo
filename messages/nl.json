@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Waarom dit antwoord",
+    "hide": "Uitleg verbergen",
+    "loading": "Uitleg voorbereiden...",
+    "error": "De uitleg is niet beschikbaar. Probeer het opnieuw.",
+    "evidence": "Fragment uit de oorspronkelijke tekst",
+    "language": "Uitleg in het {language}"
+  },
   "landing": {
     "freeTrialNote": "Eerste periode Premium bij registratie, zonder betaalkaart. Daarna gratis met gebruikslimieten als je geen abonnement neemt.",
     "modes": {
@@ -1787,18 +1795,30 @@
     "version": "v1.12.10",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Verbeteringen aan je studieplan",
-      "desc": "Je plan toont nu je voortgang correct en laat je lessen voortzetten en eerder behandelde onderdelen herhalen."
+      "label": "Begrijp elk antwoord beter",
+      "desc": "Na het afronden van Reading of Listening kun je om uitleg in je moedertaal vragen, met een tekstfragment dat het antwoord onderbouwt. Tijdens het herhalen kun je de tekst ook opnieuw lezen of de audio nog eens beluisteren."
     },
     "entry2": {
-      "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
-      "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
-    },
-    "entry3": {
       "label": "Verbeteringen aan het leersysteem",
       "desc": "Je kunt nu wanneer je dat nodig hebt een vertaling van de oefenvragen in je moedertaal bekijken, terwijl de oorspronkelijke vraag zichtbaar blijft in de taal die je leert."
     },
+    "entry3": {
+      "label": "Je woordenschat, met vertaling",
+      "desc": "Nieuwe flashcards die je vanuit Woordenschat toevoegt, bevatten een vertaling in je moedertaal. De kaarten die je al hebt, behouden hun inhoud."
+    },
     "entry4": {
+      "label": "Lingu helpt wanneer je het nodig hebt",
+      "desc": "Begrijp je iets niet tijdens een spraakgesprek? Vraag Lingu om hulp. Lingu kan het kort in je moedertaal uitleggen en daarna verdergaan met oefenen in de taal die je leert."
+    },
+    "entry5": {
+      "label": "Verbeteringen aan je studieplan",
+      "desc": "Je plan toont nu je voortgang correct en laat je lessen voortzetten en eerder behandelde onderdelen herhalen."
+    },
+    "entry6": {
+      "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
+      "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
+    },
+    "entry7": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

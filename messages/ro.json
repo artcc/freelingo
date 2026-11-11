@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "De ce acest răspuns",
+    "hide": "Ascunde explicația",
+    "loading": "Se pregătește explicația...",
+    "error": "Explicația nu este disponibilă. Încearcă din nou.",
+    "evidence": "Fragment din textul original",
+    "language": "Explicație în {language}"
+  },
   "landing": {
     "freeTrialNote": "Acces Premium inițial la înregistrare, fără card. Apoi continui gratuit cu limite dacă nu te abonezi.",
     "modes": {
@@ -1787,18 +1795,30 @@
     "version": "v1.12.10",
     "cta": "Am înțeles",
     "entry1": {
-      "label": "Îmbunătățiri ale planului tău de studiu",
-      "desc": "Planul tău afișează acum corect progresul și îți permite să continui lecțiile și să recapitulezi unitățile deja parcurse."
+      "label": "Înțelege mai bine fiecare răspuns",
+      "desc": "După ce termini Reading sau Listening, poți cere o explicație în limba ta maternă, însoțită de un fragment din text care justifică răspunsul. De asemenea, poți reciti textul sau reasculta înregistrarea în timp ce recapitulezi."
     },
     "entry2": {
-      "label": "Limbi noi: poloneză, portugheză braziliană, rusă, neerlandeză și suedeză",
-      "desc": "Am adăugat poloneza, portugheza braziliană, rusa, neerlandeza și suedeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
-    },
-    "entry3": {
       "label": "Îmbunătățiri ale sistemului de învățare",
       "desc": "Acum poți consulta traducerea enunțurilor în limba ta maternă ori de câte ori ai nevoie, păstrând întrebarea originală în limba pe care o înveți."
     },
+    "entry3": {
+      "label": "Vocabularul tău, cu traducere",
+      "desc": "Noile fișe pe care le adaugi din Vocabular includ traducerea în limba ta maternă. Fișele pe care le ai deja își păstrează conținutul."
+    },
     "entry4": {
+      "label": "Lingu te ajută când ai nevoie",
+      "desc": "Dacă nu înțelegi ceva în timpul unei conversații vocale, cere-i ajutor lui Lingu. Îți poate explica pe scurt în limba ta maternă, apoi poate relua practica în limba pe care o înveți."
+    },
+    "entry5": {
+      "label": "Îmbunătățiri ale planului tău de studiu",
+      "desc": "Planul tău afișează acum corect progresul și îți permite să continui lecțiile și să recapitulezi unitățile deja parcurse."
+    },
+    "entry6": {
+      "label": "Limbi noi: poloneză, portugheză braziliană, rusă, neerlandeză și suedeză",
+      "desc": "Am adăugat poloneza, portugheza braziliană, rusa, neerlandeza și suedeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
+    },
+    "entry7": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

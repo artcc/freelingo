@@ -324,6 +324,10 @@ and saves only after learner confirmation. Learners can correct a recognition er
 Due cards are ordered by `next_review`. Generation derives target language from the plan and native
 translation context from the user profile. Reviewing always credits the card's stored plan.
 
+Vocabulary-set imports generate missing translations only for new cards. Existing cards and their
+translations remain unchanged; import failures do not save a partial batch. The canonical import and
+context rules live in `learning-resources.instructions.md` (Vocabulary hub).
+
 ### Flashcard review sessions
 
 The review page starts with a setup view offering 5, 10 (default), or all due cards. A shorter queue
