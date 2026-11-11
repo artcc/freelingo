@@ -98,8 +98,9 @@ Redis/PostgreSQL transaction boundary.
 
 ## API
 
-All endpoints require authentication, an active language, an active study plan, and normal
-maintenance access. They derive level, language, and plan from persisted server state.
+All endpoints require authentication and normal maintenance access. Exercise selection, generation,
+audio, submission and history require an active language and study plan. Post-attempt explanations
+instead derive ownership and target language from the saved attempt's plan, including historical plans.
 
 The `/started` measurement signal and optional attempt-correlation header are defined in
 `api-endpoints.instructions.md`; their measurement semantics belong to `umami.instructions.md`.
@@ -157,10 +158,23 @@ Changing the active context in another tab stops the stale operation and prompts
    earlier-level exercise in the same language and use the spaced-replay reward rules below.
 - A normal duplicate returns `409 already_attempted`.
 - An unknown exercise returns `404 exercise_not_found`.
-- The response includes score, XP, correct answers, and the full transcript.
+- The response includes `attempt_id`, score, XP, correct answers, and the full transcript.
 
 The current request schema does not require exactly five Listening answers. Missing answers score as
 incorrect. Omitting the submission context returns validation HTTP `422`.
+
+### Post-answer explanations
+
+`POST /api/listening/attempts/{attempt_id}/questions/{question_index}/explanation` returns optional
+native-language help for one question after an owned attempt exists. It uses read-only feature access,
+has a `10/minute` rate limit, and does not consume another attempt, quota, or XP. Request and response
+details belong to `api-endpoints.instructions.md`; the shared generation/cache contract belongs to
+`services.instructions.md` (Comprehension review help).
+
+The explanation describes why the saved correct option follows from the transcript and includes a
+short literal source quote. It uses the profile's native language, independently of interface locale,
+and does not depend on which distractor the learner selected. Existing exercises can receive help
+without regeneration. Structural checks validate the quote, not pedagogical truth.
 
 ### `GET /api/listening/history`
 
@@ -232,7 +246,9 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 - Generating state adds a delay warning after 15 seconds.
 - Exercise state shows topic, type, level, authenticated audio playback, and all questions.
 - Submission becomes available when every received question index has an answer.
-- Results reveal transcript, correct answers, score, and XP.
+- Results reveal transcript, correct answers, score, and XP, with audio playback alongside the transcript.
+- Each corrected question offers optional native-language explanation with a source quote; loading and
+  manual retry remain local to the help control and never resubmit the attempt.
 - A successful first attempt may open the shared review prompt; replay never does.
 - History displays ten attempts per page through the shared pagination component.
 - Starting practice from history creates a replay with blank answers.
@@ -240,6 +256,9 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 `ExerciseAudioPlayer` fetches the protected MP3 through `apiFetch`, creates a Blob URL, and provides
 play, pause, progress, click-to-seek, browser-derived duration, and an error state. Listening does not
 require audio playback before answers can be submitted.
+Unmount, exercise replacement or authentication-session replacement cancels pending playback work,
+detaches media listeners and releases its audio/Blob URL. Late fetch, Blob and play completions cannot
+start obsolete audio or replace a newer player's state. Playback failure permits an explicit retry.
 
 Question prompts, revealed transcripts, and history transcripts support the shared single-selection
 word-save flow. Answer options are not vocabulary-selection surfaces. Saving derives the destination

@@ -503,14 +503,14 @@ One moderated product review per user.
 
 ## ResourceNativeHelp (`resource_native_helps`)
 
-Global cache for native-language study help generated for static learning resources.
+Global cache for native-language study help and post-attempt comprehension explanations.
 
 - id — Type: integer; Notes: Primary key
-- resource_type — Type: string; Notes: `"grammar"`, `"phrasebook"`, or `"vocabulary"`
+- resource_type — Type: string; Notes: `"grammar"`, `"phrasebook"`, `"vocabulary"`, `"reading_explanation"`, or `"listening_explanation"`
 - resource_key — Type: string; Notes: Stable resource identifier, e.g. grammar topic slug
 - target_language — Type: string; Notes: BCP-47 learning language for the source content
 - native_language — Type: string; Notes: User native-language code used for the generated help
-- source_hash — Type: string; Notes: SHA-256 hash of the source static content used to generate `content`
+- source_hash — Type: string; Notes: SHA-256 hash of the source content used to generate `content`
 - content — Type: JSONB; Notes: Generated native-language help JSON
 - created_at — Type: datetime; Notes: Auto-set on creation
 - updated_at — Type: datetime; Notes: Updated whenever stale cached help is regenerated
@@ -527,6 +527,10 @@ Global cache for native-language study help generated for static learning resour
 - Grammar native help keeps target-language example sentences unchanged while translating explanations, notes, traps, and glossary support into the user's native language.
 - Phrasebook native help keeps target-language phrases unchanged while generating native-language usage tips, register notes, phrase notes, traps, and glossary support.
 - Vocabulary native help keeps target-language words and example phrases unchanged while generating native-language study tips, word notes, traps, glossary support, and practice prompts.
+- Comprehension explanations use `resource_key="{exercise_id}:{question_index}"`; content stores an
+  explanation and literal evidence quote, never a learner's answer. The source hash covers passage,
+  question, level and prompt-contract version. Access and lifecycle belong to `services.instructions.md`
+  (Comprehension review help).
 
 ## Memory (`memories`)
 

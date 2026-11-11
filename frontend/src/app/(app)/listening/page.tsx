@@ -26,6 +26,7 @@ import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { Pagination } from '@/components/ui/pagination'
 import { ExerciseAudioPlayer } from '@/components/ui/exercise-audio-player'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
+import { QuestionExplanation } from '@/components/comprehension/QuestionExplanation'
 import {
   ReviewPrompt,
   getReviewPromptDismissal,
@@ -42,6 +43,7 @@ interface CorrectAnswer {
 }
 
 interface SubmitResult {
+  attempt_id: number
   score: number
   xp_earned: number
   correct_answers: CorrectAnswer[]
@@ -95,7 +97,9 @@ function ListeningPage() {
     null
   )
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [result, setResult] = useState<SubmitResult | null>(null)
+  const [result, setResult] = useState<
+    (SubmitResult & { sessionVersion: number }) | null
+  >(null)
   const [history, setHistory] = useState<AttemptItem[]>([])
   const [historyTotal, setHistoryTotal] = useState(0)
   const [historyPage, setHistoryPage] = useState(0)
@@ -263,7 +267,7 @@ function ListeningPage() {
       const data = (await res.json()) as SubmitResult
       await waitForLanguageSwitch(controller.signal)
       if (!current()) return
-      setResult(data)
+      setResult({ ...data, sessionVersion })
       setPageState('results')
       if (
         shouldShowExerciseReviewPrompt(getReviewPromptDismissal(), !isReplay)
@@ -312,7 +316,7 @@ function ListeningPage() {
   const allAnswered = exercise
     ? Object.keys(answers).length === exercise.questions.length
     : false
-  const targetLanguageCode = activeLanguage?.code ?? 'en-GB'
+  const targetLanguageCode = exercise?.target_language ?? 'en-GB'
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (pageState === 'loading') {
@@ -470,6 +474,13 @@ function ListeningPage() {
           </div>
         </div>
 
+        <div>
+          <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
+            {t('listenLabel')}
+          </p>
+          <ExerciseAudioPlayer key={exercise.id} exerciseId={exercise.id} />
+        </div>
+
         {/* Transcript */}
         <div>
           <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
@@ -537,6 +548,16 @@ function ListeningPage() {
                     </div>
                   ))}
                 </div>
+                {exerciseContext && (
+                  <QuestionExplanation
+                    feature="listening"
+                    attemptId={result.attempt_id}
+                    questionIndex={q.index}
+                    sourceText={result.text}
+                    context={exerciseContext}
+                    sessionVersion={result.sessionVersion}
+                  />
+                )}
               </div>
             )
           })}

@@ -144,8 +144,12 @@ async def test_review_requires_a_valid_attempt_identity(client, test_user, conte
 
 @pytest.mark.parametrize("language", ["en-GB", "en-US", "it-IT"])
 async def test_vocabulary_import_uses_serialized_current_plan_context(
-    client, test_user, db_session, language
+    client, test_user, db_session, language, monkeypatch
 ):
+    from unittest.mock import AsyncMock
+
+    translate = AsyncMock(side_effect=lambda cards, **kwargs: ["traducción"] * len(cards))
+    monkeypatch.setattr("app.routers.flashcards.translate_flashcards", translate)
     user, headers = test_user
     plan = await make_study_plan(
         db_session, user_id=user.id, target_language=language, cefr_level="A1", is_active=True
@@ -192,10 +196,16 @@ async def test_vocabulary_import_uses_serialized_current_plan_context(
     assert len(cards) == imported.json()["created"]
     assert {card.word for card in cards} == {word["word"].strip() for word in words}
     assert all(card.study_plan_id == plan.id and card.user_id == user.id for card in cards)
+    assert all(card.translation == "traducción" for card in cards)
+    assert translate.await_args.kwargs == {
+        "native_language": user.native_language,
+        "target_language": language,
+    }
 
     repeated = await client.post("/api/flashcards/bulk", headers=headers, json=payload)
     assert repeated.status_code == 200
     assert repeated.json()["created"] == 0
+    translate.assert_awaited_once()
 
 
 async def test_stale_set_import_is_rejected_after_another_tab_switches_language(

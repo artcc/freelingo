@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Warum diese Antwort",
+    "hide": "Erklärung ausblenden",
+    "loading": "Erklärung wird vorbereitet...",
+    "error": "Die Erklärung ist nicht verfügbar. Bitte versuche es erneut.",
+    "evidence": "Auszug aus dem Originaltext",
+    "language": "Erklärung auf {language}"
+  },
   "landing": {
     "freeTrialNote": "Anfänglicher Premium-Zugang bei der Registrierung, ohne Karte. Danach kostenlos mit Nutzungslimits, sofern du kein Abo abschließt.",
     "modes": {
@@ -1787,18 +1795,30 @@
     "version": "v1.12.10",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Verbesserungen an deinem Lernplan",
-      "desc": "Dein Lernplan zeigt deinen Fortschritt jetzt korrekt an. Du kannst Lektionen fortsetzen und bereits bearbeitete Einheiten wiederholen."
+      "label": "Verstehe jede Antwort besser",
+      "desc": "Nach einer Reading- oder Listening-Übung kannst du eine Erklärung in deiner Muttersprache anfordern, mit einer Textstelle, die die Antwort begründet. Beim Wiederholen kannst du den Text auch noch einmal lesen oder das Audio erneut anhören."
     },
     "entry2": {
-      "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
-      "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
-    },
-    "entry3": {
       "label": "Verbesserungen am Lernsystem",
       "desc": "Du kannst dir jetzt bei Bedarf eine Übersetzung der Aufgabenstellungen in deine Muttersprache anzeigen lassen. Die ursprüngliche Frage bleibt dabei in der Sprache sichtbar, die du lernst."
     },
+    "entry3": {
+      "label": "Dein Wortschatz, mit Übersetzung",
+      "desc": "Neue Karteikarten, die du aus dem Wortschatz hinzufügst, enthalten eine Übersetzung in deine Muttersprache. Der Inhalt deiner vorhandenen Karten bleibt erhalten."
+    },
     "entry4": {
+      "label": "Lingu hilft dir, wenn du es brauchst",
+      "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
+    },
+    "entry5": {
+      "label": "Verbesserungen an deinem Lernplan",
+      "desc": "Dein Lernplan zeigt deinen Fortschritt jetzt korrekt an. Du kannst Lektionen fortsetzen und bereits bearbeitete Einheiten wiederholen."
+    },
+    "entry6": {
+      "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
+      "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
+    },
+    "entry7": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

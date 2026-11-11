@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Hvorfor dette svar",
+    "hide": "Skjul forklaringen",
+    "loading": "Forbereder forklaringen...",
+    "error": "Forklaringen er ikke tilgængelig. Prøv igen.",
+    "evidence": "Uddrag fra originalteksten",
+    "language": "Forklaring på {language}"
+  },
   "landing": {
     "freeTrialNote": "Indledende Premium-adgang ved tilmelding uden kort. Derefter gratis med forbrugsgrænser, hvis du ikke tegner abonnement.",
     "modes": {
@@ -1787,18 +1795,30 @@
     "version": "v1.12.10",
     "cta": "Forstået",
     "entry1": {
-      "label": "Forbedringer af din studieplan",
-      "desc": "Din plan viser nu dine fremskridt korrekt og giver dig mulighed for at fortsætte lektionerne og repetere de afsnit, du allerede har arbejdet med."
+      "label": "Forstå hvert svar bedre",
+      "desc": "Når du har gennemført Reading eller Listening, kan du bede om en forklaring på dit modersmål med et uddrag fra teksten, der underbygger svaret. Du kan også læse teksten eller lytte til lyden igen, mens du repeterer."
     },
     "entry2": {
-      "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",
-      "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
-    },
-    "entry3": {
       "label": "Forbedringer af læringssystemet",
       "desc": "Nu kan du se en oversættelse af øvelsesspørgsmålene til dit modersmål, når du har brug for det, mens det oprindelige spørgsmål stadig vises på det sprog, du lærer."
     },
+    "entry3": {
+      "label": "Dit ordforråd, med oversættelse",
+      "desc": "Nye kort, du tilføjer fra Ordforråd, indeholder en oversættelse til dit modersmål. De kort, du allerede har, beholder deres indhold."
+    },
     "entry4": {
+      "label": "Lingu hjælper, når du har brug for det",
+      "desc": "Hvis du ikke forstår noget under en stemmesamtale, kan du bede Lingu om hjælp. Lingu kan forklare det kort på dit modersmål og derefter fortsætte øvelsen på det sprog, du lærer."
+    },
+    "entry5": {
+      "label": "Forbedringer af din studieplan",
+      "desc": "Din plan viser nu dine fremskridt korrekt og giver dig mulighed for at fortsætte lektionerne og repetere de afsnit, du allerede har arbejdet med."
+    },
+    "entry6": {
+      "label": "Nye sprog: polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk",
+      "desc": "Polsk, brasiliansk portugisisk, russisk, nederlandsk og svensk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
+    },
+    "entry7": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

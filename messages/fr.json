@@ -1,4 +1,12 @@
 {
+  "questionExplanation": {
+    "show": "Pourquoi cette réponse",
+    "hide": "Masquer l’explication",
+    "loading": "Préparation de l’explication...",
+    "error": "L’explication est indisponible. Réessayez.",
+    "evidence": "Extrait du texte original",
+    "language": "Explication en {language}"
+  },
   "landing": {
     "freeTrialNote": "Accès Premium initial à l'inscription, sans carte. Ensuite, restez gratuitement avec des limites si vous ne vous abonnez pas.",
     "modes": {
@@ -1787,18 +1795,30 @@
     "version": "v1.12.10",
     "cta": "Compris",
     "entry1": {
-      "label": "Des améliorations pour ton programme d'apprentissage",
-      "desc": "Ton programme affiche désormais correctement ta progression et te permet de poursuivre les leçons et de réviser les unités déjà travaillées."
+      "label": "Comprends mieux chaque réponse",
+      "desc": "Après un exercice de Reading ou de Listening, tu peux demander une explication dans ta langue maternelle, accompagnée d'un extrait du texte qui justifie la réponse. Tu peux aussi relire le passage ou réécouter l'audio pendant tes révisions."
     },
     "entry2": {
-      "label": "Nouvelles langues : polonais, portugais du Brésil, russe, néerlandais et suédois",
-      "desc": "Le polonais, le portugais du Brésil, le russe, le néerlandais et le suédois sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
-    },
-    "entry3": {
       "label": "Des améliorations du système d'apprentissage",
       "desc": "Tu peux désormais consulter la traduction des énoncés dans ta langue maternelle quand tu en as besoin, tout en gardant la question originale dans la langue que tu apprends."
     },
+    "entry3": {
+      "label": "Ton vocabulaire, avec traduction",
+      "desc": "Les nouvelles cartes que tu ajoutes depuis Vocabulaire incluent la traduction dans ta langue maternelle. Les cartes que tu possèdes déjà conservent leur contenu."
+    },
     "entry4": {
+      "label": "Lingu t'aide quand tu en as besoin",
+      "desc": "Si tu ne comprends pas quelque chose pendant une conversation vocale, demande de l'aide à Lingu. Lingu peut te l'expliquer brièvement dans ta langue maternelle, puis reprendre la pratique dans la langue que tu apprends."
+    },
+    "entry5": {
+      "label": "Des améliorations pour ton programme d'apprentissage",
+      "desc": "Ton programme affiche désormais correctement ta progression et te permet de poursuivre les leçons et de réviser les unités déjà travaillées."
+    },
+    "entry6": {
+      "label": "Nouvelles langues : polonais, portugais du Brésil, russe, néerlandais et suédois",
+      "desc": "Le polonais, le portugais du Brésil, le russe, le néerlandais et le suédois sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
+    },
+    "entry7": {
       "label": "Une expérience plus fluide",
       "desc": "Nous avons aussi corrigé de petits bugs et peaufiné quelques détails pour rendre ton apprentissage quotidien avec FreeLingo encore plus agréable."
     }

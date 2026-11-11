@@ -290,7 +290,7 @@ export default function VocabularySetPage({
         word: w.word,
         definition: w.definition,
         example_sentence: w.example,
-        translation: '', // user's native language translation will be added by LLM generation
+        translation: '', // Bulk import translates new cards into the profile's native language.
       }))
       const res = await apiFetch('/api/flashcards/bulk', {
         method: 'POST',

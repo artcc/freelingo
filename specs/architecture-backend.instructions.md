@@ -101,6 +101,10 @@ Provider request/stream state belongs to the individual operation, not shared mu
 Comprehension background tasks own independent database/Redis resources. A Redis lease and a PostgreSQL
 commit are separate boundaries; a pre-save ownership check is not transactional fencing.
 
+`comprehension_help.py` shares post-attempt explanation behavior between Reading and Listening, using
+their persisted attempt ownership and the existing native-help cache. Its bounded generation and
+cache contract lives in `services.instructions.md` (Comprehension review help).
+
 Domain writes that must succeed together share a database transaction. Progress/reward serialization
 uses plan-row locks compatible with foreign-key inserts. Flashcard review acquires the plan progress
 lock before the card lock; receipt lookup follows card locking. Preserve this lock order when changing

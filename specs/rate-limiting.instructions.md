@@ -94,6 +94,7 @@ Both domains use:
 - `POST /api/{domain}/generate`: `5/minute`.
 - `POST /api/{domain}/started`: `20/minute`.
 - `POST /api/{domain}/attempt`: `20/minute`.
+- `POST /api/{domain}/attempts/{attempt_id}/questions/{question_index}/explanation`: `10/minute`, including cache hits.
 - history and Listening audio retrieval: `60/minute`.
 
 Generation status uses immediate `/next` responses and non-overlapping client queries every ten

@@ -6,6 +6,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, field_serializer, field_validator
 
+FLASHCARD_BULK_MAX_CARDS = 100
+
 
 class FlashcardCreate(BaseModel):
     word: str = Field(max_length=100)
@@ -14,8 +16,13 @@ class FlashcardCreate(BaseModel):
     translation: str = Field(max_length=255)
 
 
+class FlashcardBulkItem(FlashcardCreate):
+    definition: str = Field(max_length=10000)
+    example_sentence: str = Field(max_length=10000)
+
+
 class FlashcardBulkCreate(BaseModel):
-    flashcards: list[FlashcardCreate]
+    flashcards: list[FlashcardBulkItem] = Field(max_length=FLASHCARD_BULK_MAX_CARDS)
     study_plan_id: int = Field(strict=True, ge=1, le=2_147_483_647)
     target_language: str = Field(min_length=1, max_length=10)
 
