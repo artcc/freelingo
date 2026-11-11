@@ -71,6 +71,13 @@ Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites t
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
 
+The generic `/api/:path*` rewrite is a `fallback`, allowing static and dynamic Route Handlers to run
+first. Voice-preview and Phrasebook audio GET handlers share `lib/audio-proxy.ts` to accommodate
+on-demand synthesis beyond the rewrite's 30-second timeout. Their 60-second deadline covers response
+headers and body; they preserve authentication, trusted client-IP headers, query parameters, ranges,
+backend status and audio MIME type. Speech proxy and cache contracts belong to
+`speech-services.instructions.md`.
+
 `api/conversation/warmup` uses a dedicated handler to accommodate speech-provider cold starts beyond
 the generic rewrite's 30-second timeout. It forwards authentication cookies, bearer authorization,
 and the optional trial-token body; preserves backend status, content type, and `Retry-After`; and

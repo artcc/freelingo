@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for text-to-speech and speech-to-text providers, backend gateways, plan-derived recognition language, persistent audio, and reusable frontend audio components."
-applyTo: "backend/app/services/{tts_service,gemini_tts_service,stt_service,chat_markdown}.py, backend/app/routers/{tts,stt}.py, backend/app/schemas/tts_stt.py, backend/app/core/config.py, backend/app/main.py, frontend/src/components/ui/{AudioPlayer,VoiceRecorder,exercise-audio-player}.tsx, frontend/src/app/api/{tts,stt}/**, docker-compose*.yml, .env.example"
+applyTo: "backend/app/services/{tts_service,gemini_tts_service,stt_service,chat_markdown}.py, backend/app/routers/{tts,stt}.py, backend/app/schemas/tts_stt.py, backend/app/core/config.py, backend/app/main.py, frontend/src/components/ui/{AudioPlayer,VoiceRecorder,exercise-audio-player}.tsx, frontend/src/app/api/{tts,stt,phrasebook/audio}/**, frontend/src/lib/audio-proxy.ts, docker-compose*.yml, .env.example"
 ---
 
 # Speech Services
@@ -320,7 +320,12 @@ The dedicated Next.js TTS route forwards authentication and trace context but bu
 audio before responding and preserves its MIME type. It propagates browser cancellation to its backend
 request and bounds backend response headers and body with a 60-second deadline. Transport failures
 return `502`; cancellation or deadline expiry returns `504`. Transport cancellation does not guarantee
-that already-started backend or provider synthesis stops. The STT route parses and reconstructs multipart
+that already-started backend or provider synthesis stops. Dedicated GET handlers for voice previews
+and Phrasebook audio use the same 60-second budget, including response download, because a cache miss
+requires synthesis. They preserve authentication, trusted client-IP headers, query parameters, range
+requests, backend status, MIME type and `Retry-After`, and return `Cache-Control: no-store`.
+The generic API rewrite runs as a fallback after dynamic handlers, so it cannot intercept these
+requests or tour narration with its shorter timeout. The STT route parses and reconstructs multipart
 data, forwards auth and cookies, and propagates request cancellation to the backend.
 
 ## Persistent and transient audio
