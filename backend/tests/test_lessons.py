@@ -269,6 +269,9 @@ async def test_regenerate_invalid_multiple_choice_exercise(client, test_user, db
                     "question": "Ich ___ um 7 Uhr auf.",
                     "options": [],
                     "correct": "stehe",
+                    "question_translation": "Traducción antigua.",
+                    "question_translation_language": "es",
+                    "question_translation_source": "Pregunta antigua.",
                 }
             ],
         },
@@ -294,6 +297,7 @@ async def test_regenerate_invalid_multiple_choice_exercise(client, test_user, db
         explanation="Use first-person singular with aufstehen.",
         native_explanation="Usa la primera persona singular.",
         native_hint="Fíjate en el sujeto ich.",
+        question_translation="Yo ___ a las 7.",
     )
 
     with patch("app.routers.lessons.regenerate_exercise", AsyncMock(return_value=regenerated)):
@@ -307,9 +311,12 @@ async def test_regenerate_invalid_multiple_choice_exercise(client, test_user, db
     assert data["id"] == exercise.id
     assert data["options"] == ["stehe", "steht", "stehen", "stehst"]
     assert data["correct_answer"] == "stehe"
+    assert data["question_translation"] == "Yo ___ a las 7."
+    assert data["question_translation_language"] == "es"
     await db_session.refresh(exercise)
     await db_session.refresh(lesson)
     assert exercise.options == ["stehe", "steht", "stehen", "stehst"]
+    assert lesson.content["exercises"][0]["question_translation_source"] == exercise.question
     assert lesson.content["exercises"][0]["options"] == [
         "stehe",
         "steht",

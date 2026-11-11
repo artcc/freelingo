@@ -833,6 +833,11 @@
     "showNativeExplanation": "Ver en",
     "hint": "Pista",
     "showNativeHint": "Ver pista en",
+    "showQuestionTranslation": "Ver traducción del enunciado en {language}",
+    "hideQuestionTranslation": "Ocultar traducción del enunciado",
+    "translatingQuestion": "Traduciendo el enunciado...",
+    "questionTranslationError": "No se pudo traducir el enunciado. Inténtalo de nuevo.",
+    "retryQuestionTranslation": "Reintentar traducción del enunciado",
     "regenerateExercise": "Regenerar ejercicio",
     "regeneratingExercise": "Regenerando...",
     "regenerateError": "No se pudo regenerar el ejercicio. Inténtalo de nuevo.",
@@ -1790,6 +1795,10 @@
       "desc": "Añadimos el polaco, el portugués de Brasil, el ruso, el neerlandés y el sueco como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
     },
     "entry3": {
+      "label": "Mejoras en el sistema de aprendizaje",
+      "desc": "Ahora puedes consultar la traducción de los enunciados a tu idioma nativo cuando lo necesites, manteniendo la pregunta original en el idioma que estás aprendiendo."
+    },
+    "entry4": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

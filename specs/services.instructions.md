@@ -88,6 +88,7 @@ LLM calls. The eligibility contract lives in `study-plan.instructions.md`.
 constraints. It:
 
 - generates lesson explanation, vocabulary, and validated exercise structures;
+- includes optional native-language question translations in generated/replacement exercises;
 - varies instructions by declared lesson type;
 - summarizes bounded prior-unit content to reduce repetition;
 - generates/caches missing native explanations and hints;
@@ -96,6 +97,11 @@ constraints. It:
 
 Persisted plan ownership supplied by routers determines language. Detailed lifecycle and compatibility
 behavior belongs to `study-plan.instructions.md`.
+
+The lessons router generates missing question translations through the existing LLM adapter and stores
+them in lesson JSON. `utils/lesson_exercises.py` owns source normalization, blank-preservation checks,
+and translation cache metadata. The lifecycle/cache contract is defined in `study-plan.instructions.md`
+(Optional question translation); prompt composition is defined in `prompts.instructions.md`.
 
 ## Flashcards and progress
 

@@ -34,6 +34,7 @@ from app.services.study_plan_generator import (
     generate_study_plan,
 )
 from app.services.user_language_service import ensure_user_language, get_active_language
+from app.utils.lesson_exercises import stamp_question_translation
 
 logger = get_logger(__name__)
 
@@ -324,6 +325,9 @@ async def get_today_lessons(
                     previous_lessons=previous_lessons,
                 )
                 content_dict = content.model_dump() if hasattr(content, "model_dump") else content
+
+                for item in content_dict.get("exercises") or []:
+                    stamp_question_translation(item, current_user.native_language)
 
                 lesson = Lesson(
                     study_plan_id=plan.id,

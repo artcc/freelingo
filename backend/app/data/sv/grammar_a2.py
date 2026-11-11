@@ -76,7 +76,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "A2",
         "Adjektiv",
         "Jämför egenskaper hos två saker.",
-        "Många adjektiv får -are och -ast: billig, billigare, billigast. Vanliga oregelbundna former är bra – bättre – bäst och stor – större – störst. Mindre är komparativ av liten. Använd än efter komparativ och lika … som för likhet.",
+        "Många adjektiv får -are och -ast: billig, billigare, billigast. Vanliga oregelbundna former är bra – bättre – bäst och stor – större – störst. Mindre är komparativ av liten. Använd än efter komparativ och lika ... som för likhet.",
         rules=[
             "Dyrare än uttrycker skillnad; lika dyr som uttrycker samma grad.",
             "Alla adjektiv får inte -are: mer intressant är ett vanligt mönster.",
@@ -324,7 +324,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Om kan uttrycka ett möjligt villkor. Presens används ofta både i villkoret och om den framtida följden: Om det regnar tar vi bussen. Det betyder inte att det redan regnar. En inledande om-sats följs av huvudsatsens böjda verb.",
         rules=[
             "Skilj villkors-om från om i en indirekt ja-nej-fråga.",
-            "Sätt inte före verbet i om-satsen: Om du inte kan komma …",
+            "Sätt inte före verbet i om-satsen: Om du inte kan komma ...",
         ],
         examples=[
             GrammarExample("Om jag hinner ringer jag ikväll."),

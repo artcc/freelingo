@@ -833,6 +833,11 @@
     "showNativeExplanation": "Näytä kielellä",
     "hint": "Vihje",
     "showNativeHint": "Näytä vihje kielellä",
+    "showQuestionTranslation": "Näytä kysymyksen käännös kielellä {language}",
+    "hideQuestionTranslation": "Piilota kysymyksen käännös",
+    "translatingQuestion": "Käännetään kysymystä...",
+    "questionTranslationError": "Kysymyksen kääntäminen epäonnistui. Yritä uudelleen.",
+    "retryQuestionTranslation": "Yritä kääntää kysymys uudelleen",
     "regenerateExercise": "Luo tehtävä uudelleen",
     "regeneratingExercise": "Luodaan uudelleen...",
     "regenerateError": "Tehtävää ei voitu luoda uudelleen. Yritä uudelleen.",
@@ -1790,6 +1795,10 @@
       "desc": "Puola, brasilianportugali, venäjä, hollanti ja ruotsi ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
     "entry3": {
+      "label": "Parannuksia oppimisjärjestelmään",
+      "desc": "Voit nyt tarvittaessa katsoa tehtävänantojen käännöksen omalla äidinkielelläsi. Alkuperäinen kysymys pysyy näkyvissä opiskelemallasi kielellä."
+    },
+    "entry4": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

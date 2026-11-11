@@ -17,7 +17,7 @@ class _SpeechMarkdownParser(MarkdownIt):
 
 # Match the chat renderer's CommonMark syntax; HTML is parsed only to omit it.
 _PARSER = _SpeechMarkdownParser("commonmark")
-_SENTENCE_ENDINGS = ".!?;:…。！？；："
+_SENTENCE_ENDINGS = ".!?;:...。！？；："
 _CLOSING_MARKS = "\"'”’»」』)]}）】"
 
 

@@ -14,6 +14,7 @@ import { AudioPlayer } from '@/components/ui/AudioPlayer'
 import { VoiceRecorder } from '@/components/ui/VoiceRecorder'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { LessonVoicePracticeButton } from '@/components/lesson/LessonVoicePracticeButton'
+import { QuestionTranslation } from '@/components/lesson/QuestionTranslation'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
@@ -52,6 +53,8 @@ interface ExerciseItem {
   feedback: string | null
   corrections: FreeWriteCorrection[] | null
   native_hint: string | null
+  question_translation?: string | null
+  question_translation_language?: string | null
 }
 
 interface LessonData {
@@ -92,6 +95,7 @@ export default function LessonPage() {
   const completeLesson = useProgressStore((s) => s.completeLesson)
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const user = useAuthStore((s) => s.user)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const freemiumStatus = useFreemiumStore((s) => s.status)
@@ -917,6 +921,25 @@ export default function LessonPage() {
               >
                 {exercise.question}
               </TargetLanguageText>
+              {user?.native_language && !regeneratingExercise && (
+                <QuestionTranslation
+                  key={JSON.stringify([
+                    id,
+                    exercise.id,
+                    exercise.question,
+                    user.id,
+                    sessionVersion,
+                    user.native_language,
+                    targetLanguageCode,
+                  ])}
+                  exerciseId={exercise.id}
+                  question={exercise.question}
+                  nativeLanguage={user.native_language}
+                  nativeLanguageName={nativeLanguageName}
+                  translation={exercise.question_translation}
+                  translationLanguage={exercise.question_translation_language}
+                />
+              )}
               {regenerateError && (
                 <p className="text-fl-error font-mono text-xs">
                   {regenerateError}

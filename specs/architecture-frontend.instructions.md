@@ -140,6 +140,22 @@ expire the cache window so a later visit can retry.
 Session-scoped quota caching, unknown balances, and paywall presentation are defined in
 `subscriptions-freemium.instructions.md`.
 
+## Lesson question translation
+
+`components/lesson/QuestionTranslation.tsx` provides a collapsed, keyboard-accessible reveal/hide
+control below the original question. Its label names the profile's native language using the UI's
+language catalog. The original `TargetLanguageText` and word-selection interaction remain independent.
+The translated text uses its native-language `lang` attribute and automatic direction.
+
+Matching support from the lesson response opens without a request. Otherwise the component requests
+the exercise's question-translation endpoint, shows local loading, and offers manual retry on failure.
+The request has a 30-second client deadline. Translation state is local to the component, so opening
+support does not replace the exercise array or reset a draft answer. The parent keys it by lesson,
+exercise, source question, native/target language, user and authentication session, and unmounts it
+during regeneration. Unmount cancels the request; obsolete responses cannot publish text, errors, or
+loading state into a different context. Responses must match both the source question and native
+language. See `study-plan.instructions.md` for pedagogical, cache, and persistence rules.
+
 ## Lingu avatar
 
 Voice conversations show the animated Lingu avatar between the transcript and controls, at 65 × 65

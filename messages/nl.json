@@ -833,6 +833,11 @@
     "showNativeExplanation": "Toon in",
     "hint": "Hint",
     "showNativeHint": "Toon hint in",
+    "showQuestionTranslation": "Toon de vertaling van de vraag in het {language}",
+    "hideQuestionTranslation": "Verberg de vertaling van de vraag",
+    "translatingQuestion": "Vraag wordt vertaald...",
+    "questionTranslationError": "De vraag kon niet worden vertaald. Probeer het opnieuw.",
+    "retryQuestionTranslation": "Probeer de vraag opnieuw te vertalen",
     "regenerateExercise": "Oefening opnieuw genereren",
     "regeneratingExercise": "Opnieuw genereren...",
     "regenerateError": "De oefening kon niet opnieuw worden gegenereerd. Probeer het opnieuw.",
@@ -1790,6 +1795,10 @@
       "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
     "entry3": {
+      "label": "Verbeteringen aan het leersysteem",
+      "desc": "Je kunt nu wanneer je dat nodig hebt een vertaling van de oefenvragen in je moedertaal bekijken, terwijl de oorspronkelijke vraag zichtbaar blijft in de taal die je leert."
+    },
+    "entry4": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

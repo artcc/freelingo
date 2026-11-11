@@ -13,7 +13,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "**Rejestr** to konfiguracja środków językowych zależna od sytuacji, relacji "
             "między rozmówcami i celu wypowiedzi. Ten sam komunikat można przekazać na kilka "
             "sposobów; ich **stosowność** zależy od gatunku i relacji z odbiorcą.\n"
-            "- **Oficjalny**: formuły, nominalizacje, brak ekspresji („Niniejszym informuję…”).\n"
+            "- **Oficjalny**: formuły, nominalizacje, brak ekspresji („Niniejszym informuję...”).\n"
             "- **Neutralny**: jasność i rzeczowość bez patyny urzędowej.\n"
             "- **Potoczny**: elipsa, partykuły, ekspresja („Daj znać, czy ogarniamy temat”).\n"
             "Rejestr nie jest tym samym co **styl**: rejestr opisuje sytuację użycia, styl — "
@@ -327,7 +327,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "by wcześniej rzeczywiście coś wynikało; inaczej staje się pustym łącznikiem.\n"
             "*Szablon nie jest błędem* — błędem jest szablon zamiast treści."
         ),
-        structure="W związku z + N (instr.) … uprzejmie informuję, że …",
+        structure="W związku z + N (instr.) ... uprzejmie informuję, że ...",
         rules=[
             "Formuła otwarcia musi odpowiadać gatunkowi i relacji służbowej.",
             "Nie łączyć dwóch formuł o tej samej funkcji w jednym zdaniu.",
@@ -436,7 +436,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         explanation=(
             "Tryby w polszczyźnie pełnią funkcje **modalne**, nie tylko gramatyczne.\n"
             "- **Rozkaźnik** służy też grzeczności i namowie: *Niech Pan siada*, "
-            "*Powiedzmy, że…*, *Niech mi Pan wybaczy*.\n"
+            "*Powiedzmy, że...*, *Niech mi Pan wybaczy*.\n"
             "- **Tryb warunkowy** tworzy dystans i przypuszczenie: *Byłoby wskazane, abyśmy "
             "przełożyli decyzję*, *Chciałbym zapytać*.\n"
             "- **Partykuła -by** wchodzi w skład spójników i form życzących: *żeby*, *gdyby*, "
@@ -555,7 +555,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "- **Performatywność**: *niniejszym oświadczam*, *zobowiązuję się* — wypowiedzenie "
             "tworzy skutek.\n"
             "- **Modalność normatywna**: *ma obowiązek*, *może*, *nie może*, *jest obowiązany*.\n"
-            "- **Definicje legalne**: *W rozumieniu niniejszej ustawy…* wiążą w całym akcie.\n"
+            "- **Definicje legalne**: *W rozumieniu niniejszej ustawy...* wiążą w całym akcie.\n"
             "- **Odesłania i domniemania**: *Z zastrzeżeniem ust. 2*, *uważa się za zachowany*.\n"
             "Precyzja wymaga **stałości terminologicznej**: jeśli termin zdefiniowano raz, "
             "nie wolno używać go później w innym znaczeniu. Zasada ta koliduje z postulatem "
@@ -684,7 +684,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ),
         explanation=(
             "**Definicja** ustala znaczenie terminu na użytek tekstu. Definicja **nominalna** "
-            "wprowadza termin (*Przez „klienta” rozumie się…*), **realna** opisuje przedmiot.\n"
+            "wprowadza termin (*Przez „klienta” rozumie się...*), **realna** opisuje przedmiot.\n"
             "Klasyczna struktura: *definiendum* + łącznik + *genus proximum* + *differentia "
             "specifica*, czyli termin, klasa nadrzędna i cecha odróżniająca.\n"
             "- *Klient to osoba fizyczna, która zawarła umowę za pośrednictwem serwisu.*\n"
@@ -817,7 +817,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "**kwalifikator** i **odparcie**.\n"
             "- **Kontrargument** atakuje przesłankę lub uzasadnienie, nie osobę.\n"
             "- **Koncesja** uznaje część racji przeciwnika i zwiększa wiarygodność: *Owszem, "
-            "koszty rosną, ale…*\n"
+            "koszty rosną, ale...*\n"
             "- **Ciężar dowodu** spoczywa na tym, kto formułuje twierdzenie: *Proszę wskazać, "
             "które procedury znosimy*.\n"
             "Typowe błędy: **słomiana kukła**, **fałszywa dychotomia**, **petitio principii**, "
@@ -1028,7 +1028,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 text="Dla klientów kluczowych powstał dedykowany zespół wsparcia.",
                 translation=None,
-                note="kalka „dedicated team”; lepiej: zespół przeznaczony dla…",
+                note="kalka „dedicated team”; lepiej: zespół przeznaczony dla...",
             ),
             GrammarExample(
                 text="To robi różnicę.",

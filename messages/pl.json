@@ -833,6 +833,11 @@
     "showNativeExplanation": "Pokaż w",
     "hint": "Wskazówka",
     "showNativeHint": "Pokaż wskazówkę w",
+    "showQuestionTranslation": "Pokaż tłumaczenie pytania (język: {language})",
+    "hideQuestionTranslation": "Ukryj tłumaczenie pytania",
+    "translatingQuestion": "Tłumaczenie pytania...",
+    "questionTranslationError": "Nie udało się przetłumaczyć pytania. Spróbuj ponownie.",
+    "retryQuestionTranslation": "Spróbuj ponownie przetłumaczyć pytanie",
     "regenerateExercise": "Wygeneruj ćwiczenie ponownie",
     "regeneratingExercise": "Generowanie...",
     "regenerateError": "Nie udało się wygenerować ćwiczenia ponownie. Spróbuj jeszcze raz.",
@@ -1790,6 +1795,10 @@
       "desc": "Dodaliśmy polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
     "entry3": {
+      "label": "Ulepszenia systemu nauki",
+      "desc": "Teraz możesz w razie potrzeby wyświetlić tłumaczenie treści zadań na swój język ojczysty, zachowując oryginalne pytanie w języku, którego się uczysz."
+    },
+    "entry4": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }
