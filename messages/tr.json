@@ -847,6 +847,8 @@
     "questionTranslationError": "Soru çevrilemedi. Lütfen tekrar dene.",
     "retryQuestionTranslation": "Soruyu çevirmeyi tekrar dene",
     "regenerateExercise": "Alıştırmayı yeniden oluştur",
+    "listeningIncomplete": "Bu dinleme alıştırması eksik. Yanıtlamadan önce yeniden oluştur.",
+    "listeningUnavailable": "Bu kayıtlı alıştırma için ses mevcut değil. Kayıtlı yanıtın ve puanın korunur.",
     "regeneratingExercise": "Yeniden oluşturuluyor...",
     "regenerateError": "Alıştırma yeniden oluşturulamadı. Tekrar deneyin.",
     "regenerateNotNeeded": "Bu alıştırmanın yeniden oluşturulmasına gerek yok.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Kaydı durdur"
   },
   "audioPlayer": {
+    "ariaPause": "Sesi duraklat",
+    "ariaSeek": "Ses konumu",
     "listen": "Dinle",
     "stop": "Durdur",
     "ariaListen": "Telaffuzu dinle",

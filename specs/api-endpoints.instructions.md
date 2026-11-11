@@ -314,12 +314,18 @@ Lesson viewing and exercise answering use `get_current_user` (always free). Only
 - **POST `/exercises/{id}/native-hint`** — Rate limit: 10/min. Auth: get_current_user. Generates and caches a concise pre-answer native-language hint for an exercise whose generated JSON lacks `native_hint`. Hints must help without revealing the correct answer. If already present, returns the cached hint idempotently.
 - **POST `/exercises/{id}/question-translation`** — Rate limit: 10/min, including cache hits. Auth: get_current_user with lesson ownership verification. No request body. The exercise ID must be an integer from `1` through `2147483647`; invalid IDs return `422` before the exercise lookup. Returns `{question, question_translation, question_translation_language}` using the displayed, compatibility-normalized question, persisted plan target language, and profile native language. Generates only on a cache miss; works for answered exercises and completed lessons. Returns `404` for missing/unowned resources, `400` without a native language, or `503` for unavailable/invalid generation. Cache matching and preservation rules belong to `study-plan.instructions.md` (Optional question translation).
 - **POST `/exercises/{id}/regenerate`** — Rate limit: 5/hour. Auth: get_current_user. Regenerates one unanswered, technically invalid exercise on demand while preserving the rest of the lesson. Rejects completed lessons, answered exercises, and exercises that pass validation.
-- **POST `/exercises/{id}/answer`** — Rate limit: 20/min. Auth: get_current_user. Submits an answer, evaluates multiple choice, fill, free-write, or pronunciation exercises, and returns score plus feedback. For free-write exercises the response also carries `corrections` (objects with `original`, `corrected`, `explanation`), which are persisted on the exercise and included in `GET /{lesson_id}` exercise payloads.
+- **POST `/exercises/{id}/answer`** — Rate limit: 20/min. Auth: get_current_user. Submits an answer, evaluates multiple choice, fill, free-write, pronunciation, or listening exercises, and returns score plus feedback. Listening uses deterministic option scoring; incomplete listening exercises return `409`, and answers outside their options return `422`, without saving a score or progress. For free-write exercises the response also carries `corrections` (objects with `original`, `corrected`, `explanation`), which are persisted on the exercise and included in `GET /{lesson_id}` exercise payloads.
 
 Exercise payloads from detail and regeneration also expose optional `question_translation` and
 `question_translation_language`. Detail returns these only when the cached source and native language
 match; missing or obsolete support is represented by null. The nested lesson content remains the saved
 JSON, so consumers use the mapped exercise fields for current question translations.
+
+Detail and regeneration exercise payloads also expose nullable `listening_text` and boolean
+`listening_ready`. Incomplete legacy listening exercises are eligible for regeneration under the
+existing unanswered/incomplete-lesson rules. Listening playback uses `POST /api/tts` with source text
+and the lesson's owning `study_plan_id`, not `/api/listening/audio/{id}`. The source, validation and
+presentation contract belongs to `study-plan.instructions.md` (Listening exercises inside lessons).
 
 ---
 

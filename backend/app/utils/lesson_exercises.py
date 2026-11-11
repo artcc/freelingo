@@ -9,6 +9,44 @@ if TYPE_CHECKING:
     from app.models.lesson import Exercise
 
 
+def valid_listening_content(listening_text: Any, options: Any, correct: Any) -> bool:
+    """Validate the TTS source and an unambiguous, exact option-based answer key."""
+    return (
+        isinstance(listening_text, str)
+        and bool(listening_text.strip())
+        and len(listening_text) <= 5000
+        and isinstance(options, list)
+        and len(options) >= 2
+        and all(isinstance(option, str) and option.strip() for option in options)
+        and len({option.strip() for option in options}) == len(options)
+        and isinstance(correct, str)
+        and options.count(correct) == 1
+    )
+
+
+def exercise_listening_text(exercise: Exercise, content: dict) -> str | None:
+    """Only reuse a JSON source when its exercise still matches the persisted row."""
+    text = content.get("listening_text")
+    if (
+        exercise.exercise_type == "listening"
+        and content.get("type") == exercise.exercise_type
+        and content.get("question") == exercise.question
+        and content.get("options") == exercise.options
+        and content.get("correct") == exercise.correct_answer
+        and isinstance(text, str)
+        and text.strip()
+        and len(text) <= 5000
+    ):
+        return text
+    return None
+
+
+def exercise_listening_ready(exercise: Exercise, content: dict) -> bool:
+    return bool(exercise.question.strip()) and valid_listening_content(
+        exercise_listening_text(exercise, content), exercise.options, exercise.correct_answer
+    )
+
+
 def normalized_exercise_text(exercise: Exercise) -> tuple[str, str | None]:
     """Restore legacy fill-blank prompts without mutating persisted exercises."""
     question, explanation = exercise.question, exercise.explanation

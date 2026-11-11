@@ -115,6 +115,16 @@ The lesson type selects explanation focus and exercise mix. Generated structures
 Pydantic. Separate builders cover invalid-exercise replacement, missing lesson/exercise native
 explanations, hints, question translation, fill-blank grading, free-write grading, and pronunciation grading.
 
+Listening lessons request actual `listening` exercises, with a self-contained `listening_text` suited
+to single-voice synthesis and multiple-choice questions answerable from that source. The source belongs
+to the exercise rather than the explanation. Prompts forbid exposing it in pre-answer support or
+asking learners to listen in an exercise format without audio controls. Pronunciation remains a
+separate exercise format. Regeneration of incomplete listening exercises supplies source text and
+valid options together while preserving the type. Structural validation and recovery rules belong to
+`study-plan.instructions.md` (Listening exercises inside lessons).
+Requested listening lessons select a listening-specific output schema, so a wrong returned lesson
+type or missing listening exercise participates in the adapter's existing corrective retry.
+
 Lesson generation and regeneration request `question_translation` in the native language (null when
 none is supplied). Shared translation rules preserve blank markers, quoted target-language text and
 phrases to manipulate or pronounce, translate task requirements, and forbid solutions or extra hints.

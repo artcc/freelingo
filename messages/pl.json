@@ -847,6 +847,8 @@
     "questionTranslationError": "Nie udało się przetłumaczyć pytania. Spróbuj ponownie.",
     "retryQuestionTranslation": "Spróbuj ponownie przetłumaczyć pytanie",
     "regenerateExercise": "Wygeneruj ćwiczenie ponownie",
+    "listeningIncomplete": "To ćwiczenie ze słuchania jest niekompletne. Wygeneruj je ponownie przed udzieleniem odpowiedzi.",
+    "listeningUnavailable": "Dźwięk nie jest dostępny dla tego zapisanego ćwiczenia. Twoja zapisana odpowiedź i wynik zostają zachowane.",
     "regeneratingExercise": "Generowanie...",
     "regenerateError": "Nie udało się wygenerować ćwiczenia ponownie. Spróbuj jeszcze raz.",
     "regenerateNotNeeded": "To ćwiczenie nie wymaga ponownego generowania.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Zatrzymaj nagrywanie"
   },
   "audioPlayer": {
+    "ariaPause": "Wstrzymaj dźwięk",
+    "ariaSeek": "Pozycja nagrania",
     "listen": "Słuchaj",
     "stop": "Zatrzymaj",
     "ariaListen": "Posłuchaj wymowy",

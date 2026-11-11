@@ -160,6 +160,22 @@ context replacement releases pending requests, audio, event listeners and Blob U
 cannot restart playback; ordinary access-token refresh does not restart the current audio. Its first-play
 callback fires once per exercise context and is omitted for result-review playback.
 
+## Lesson listening exercises
+
+The lesson page renders `listening` as a multiple-choice comprehension task with the shared
+`ExerciseAudioPlayer`. Its TTS source is the mapped exercise's `listening_text`, and its context is
+the loaded lesson's `study_plan_id`, never the currently selected language. Source or plan replacement
+invalidates playback even if regeneration retains the exercise ID. The transcript is displayed through
+`TargetLanguageText` in the persisted lesson language after evaluation or during review.
+
+An incomplete listening exercise shows recovery guidance and permits regeneration when unanswered;
+answer submission is blocked until the response marks it ready. Regeneration replaces the mapped
+exercise, including its source and readiness. Failed answer requests retain the answer and do not
+publish a score. Answer options expose their selected state to assistive technology. In-flight
+answer/regeneration work prevents conflicting actions. Domain validation
+belongs to `study-plan.instructions.md`; player transport and resource lifecycle belong to
+`speech-services.instructions.md`.
+
 ## Lesson question translation
 
 `components/lesson/QuestionTranslation.tsx` provides a collapsed, keyboard-accessible reveal/hide

@@ -847,6 +847,8 @@
     "questionTranslationError": "No se pudo traducir el enunciado. Inténtalo de nuevo.",
     "retryQuestionTranslation": "Reintentar traducción del enunciado",
     "regenerateExercise": "Regenerar ejercicio",
+    "listeningIncomplete": "Este ejercicio de comprensión oral está incompleto. Regénéralo antes de responder.",
+    "listeningUnavailable": "El audio no está disponible para este ejercicio guardado. Tu respuesta y puntuación se conservan.",
     "regeneratingExercise": "Regenerando...",
     "regenerateError": "No se pudo regenerar el ejercicio. Inténtalo de nuevo.",
     "regenerateNotNeeded": "Este ejercicio no necesita regenerarse.",
@@ -1448,6 +1450,8 @@
     "ariaStop": "Detener grabación"
   },
   "audioPlayer": {
+    "ariaPause": "Pausar audio",
+    "ariaSeek": "Posición del audio",
     "listen": "Escuchar",
     "stop": "Detener",
     "ariaListen": "Escuchar pronunciación",
