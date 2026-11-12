@@ -99,8 +99,7 @@ Registration, session, billing, and Redis quota behavior is defined in `platform
 
 The receipt commits atomically with all account snapshots affected by the event. A rollback leaves
 the event retryable; a committed ID prevents duplicate processing. Receipts contain no customer IDs,
-foreign keys, or raw webhook payloads, and remain valid after account deletion. Revision
-`0058_revenuecat_sync` creates this table and the nullable synchronization marker on `users`.
+foreign keys, or raw webhook payloads, and remain valid after account deletion.
 
 ## StripeWebhookReceipt (`stripe_webhook_receipts`)
 
@@ -125,10 +124,9 @@ back the receipt, keeping delivery retryable. Receipts contain no raw payloads o
 
 Reservations commit before session creation and survive uncertain provider outcomes. Creation and
 replacement serialize on the owning user row. No session URL, payment credentials, or raw provider
-response is persisted. Revision `0059_billing_idempotency` creates both Stripe billing tables without
-rewriting existing account state; `0060_checkout_customer_request` adds the nullable Customer request
-column without changing existing session reservations. Workflow rules live in
-`subscriptions-freemium.instructions.md`.
+response is persisted. Billing schema compatibility requires preserving existing account state and
+session reservations; `customer_parameters` is nullable for reservations without Customer request data.
+Workflow rules live in `subscriptions-freemium.instructions.md`.
 
 ## DashboardBanner (`dashboard_banners`)
 
