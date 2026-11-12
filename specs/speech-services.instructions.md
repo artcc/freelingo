@@ -28,8 +28,10 @@ TTS configuration:
 - `GEMINI_TTS_MODEL` defaults to `gemini-3.8-flash-tts`; configured models must support the Gemini
   3.8 TTS Interactions contract below. Older preview-model contracts are not supported.
 - `GEMINI_TTS_VOICE` defaults to `female` and accepts `female` or `male`.
-- `GEMINI_TTS_FEMALE_VOICE` defaults to `Kore`; `GEMINI_TTS_MALE_VOICE` defaults to `Puck`.
-  These operator-configurable names map the public voice choices to actual provider voices.
+- `GEMINI_TTS_FEMALE_VOICE` defaults to `Kore` and `GEMINI_TTS_MALE_VOICE` to `Puck` in backend
+  `Settings`. Both Compose files instead supply `Sulafat` and `Achird` when the operator omits
+  these variables, matching `.env.example` and `.env.dev`. These operator-configurable names
+  map the public voice choices to actual provider voices.
 - `GEMINI_TTS_TIMEOUT_SECONDS` defaults to `50`.
 
 STT configuration:
@@ -366,8 +368,10 @@ Startup creates configured adapter objects but does not prove provider health. A
 checks call adapter `health()` methods. Conversation warmup attempts provider work in parallel within
 a shared 60-second budget. It logs and suppresses individual failures, cancels unfinished probes at
 the deadline, and logs the timeout. Its `ready` response is therefore not a strict health guarantee.
-The conversation frontend allows 75 seconds for the warmup request, including transport and
-authentication overhead, and aborts its request on timeout, manual stop, or unmount.
+The conversation frontend resolves public configuration under its separate 20-second deadline,
+then allows 75 seconds for the warmup request, including transport and authentication overhead.
+Waiting for configuration does not consume that warmup budget. Manual stop, session replacement,
+or unmount cancels either wait; warmup timeout aborts the request.
 
 ## Related specifications
 

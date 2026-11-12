@@ -86,8 +86,10 @@ endpoint supporting Responses, not only Chat Completions.
 
 Both Compose files forward optional Gemini TTS configuration exclusively to the backend:
 `GEMINI_API_KEY`, `GEMINI_TTS_MODEL` (default `gemini-3.8-flash-tts`), `GEMINI_TTS_VOICE`
-(default `female`), `GEMINI_TTS_FEMALE_VOICE` (default `Kore`), `GEMINI_TTS_MALE_VOICE`
-(default `Puck`), and `GEMINI_TTS_TIMEOUT_SECONDS` (default `50`). `TTS_PROVIDER=gemini` requires
+(default `female`), `GEMINI_TTS_FEMALE_VOICE` (default `Sulafat`), `GEMINI_TTS_MALE_VOICE`
+(default `Achird`), and `GEMINI_TTS_TIMEOUT_SECONDS` (default `50`). These Compose voice defaults
+match `.env.example` and `.env.dev`; backend `Settings` alone defaults to `Kore` and `Puck`.
+`TTS_PROVIDER=gemini` requires
 the API key at startup; local TTS/STT defaults remain unchanged. `.env.example` documents these
 settings. The supported model/voice and REST contracts belong to `speech-services.instructions.md`.
 Gemini uses native WAV with no extra service, encoder, or dependency. Existing audio and preview

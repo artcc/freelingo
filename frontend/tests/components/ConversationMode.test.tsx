@@ -600,6 +600,47 @@ describe('ConversationMode session lifecycle', () => {
     })
   })
 
+  it.each(['success', 'timeout'] as const)(
+    'preserves the full warmup budget after delayed configuration (%s)',
+    async (outcome) => {
+      vi.useFakeTimers()
+      useConfigStore.setState({ loaded: false })
+      localStorage.setItem('gemini_tts_voice', 'male')
+      const config = deferred<Response>()
+      vi.stubGlobal('fetch', vi.fn().mockReturnValue(config.promise))
+      const warmup = deferWarmup()
+      render(<ConversationMode />)
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'start' }))
+      )
+      expect(fetch).toHaveBeenCalledTimes(1)
+      await act(async () => vi.advanceTimersByTimeAsync(18_000))
+      await act(async () =>
+        config.resolve(new Response(JSON.stringify({ tts_provider: 'gemini' })))
+      )
+      expect(warmup.signal).toBeDefined()
+      await act(async () => vi.advanceTimersByTimeAsync(58_000))
+      expect(warmup.signal.aborted).toBe(false)
+      expect(screen.queryByText(/errorConnection/)).not.toBeInTheDocument()
+      expect(MockWebSocket.instances).toHaveLength(0)
+
+      if (outcome === 'success') {
+        await act(async () => warmup.resolve({ ok: true }))
+        expect(MockWebSocket.instances).toHaveLength(1)
+        const ws = MockWebSocket.instances[0]
+        act(() => ws.onopen?.())
+        expect(JSON.parse(ws.send.mock.calls[0][0])).toMatchObject({
+          voice: 'male',
+        })
+      } else {
+        await act(async () => vi.advanceTimersByTimeAsync(17_000))
+        expect(warmup.signal.aborted).toBe(true)
+        expect(screen.getByText(/errorConnection/)).toBeVisible()
+        expect(MockWebSocket.instances).toHaveLength(0)
+      }
+    }
+  )
+
   it.each(['unmount', 'timeout', 'failure'])(
     'does not open a WebSocket after config %s',
     async (outcome) => {

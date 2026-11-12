@@ -386,7 +386,7 @@ export default function ConversationMode({
   const sessionOwnerRef = useRef<SessionOwner | null>(null)
   const warmupRef = useRef<{
     controller: AbortController
-    timeout: ReturnType<typeof setTimeout>
+    timeout?: ReturnType<typeof setTimeout>
   } | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
   const vadOperationRef = useRef<Promise<void>>(Promise.resolve())
@@ -1169,16 +1169,19 @@ export default function ConversationMode({
 
     const controller = new AbortController()
     let timedOut = false
-    const timeout = setTimeout(() => {
-      timedOut = true
-      controller.abort()
-    }, WARMUP_TIMEOUT_MS)
-    warmupRef.current = { controller, timeout }
+    let timeout: ReturnType<typeof setTimeout> | undefined
+    warmupRef.current = { controller }
     let warmupResponse: Response
     let voice: string | undefined
     try {
       voice = await resolveConfiguredTtsVoice(controller.signal)
       if (!isCurrent()) return
+      // Configuration has its own deadline; preserve the full warmup budget.
+      timeout = setTimeout(() => {
+        timedOut = true
+        controller.abort()
+      }, WARMUP_TIMEOUT_MS)
+      warmupRef.current = { controller, timeout }
       warmupResponse = await apiFetch('/api/conversation/warmup', {
         method: 'POST',
         signal: controller.signal,

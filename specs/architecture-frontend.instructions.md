@@ -322,7 +322,9 @@ before resolving a synthesis preference and supports consumer cancellation; unav
 uses the consumer's error state. Initial configuration arrival preserves the pending first playback.
 Listening generation bounds this wait to 20 seconds and rechecks session and learning context;
 if a provisional language switch interrupts the wait, a rejected switch resumes a read-only lookup.
-Conversation resolves the voice within warmup before opening its WebSocket. Settings previews release
+Conversation resolves the voice before sending warmup and opening its WebSocket. Configuration keeps
+its separate 20-second deadline; the 75-second warmup request budget starts after that resolution.
+Both waits share cancellation on session cleanup. Settings previews release
 audio and discard pending responses on account-session changes.
 Conversation invalidates its entire microphone, warmup, WebSocket, and playback lifecycle when the
 authentication session or user changes, including during asynchronous startup. Access-token rotation
