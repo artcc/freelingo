@@ -163,9 +163,15 @@ The voice system prompt requires plain text without Markdown formatting for spok
 transcripts. The shared output policy in `prompts.instructions.md` also applies to greetings,
 lesson-linked practice, and tool-free fallbacks.
 
+The conversational prompt contract is defined in `prompts.instructions.md` (Tutor prompts). Openings
+use supplied topic or chat context, and ordinary turns develop the learner's contributions with
+selective corrections, varied responses and optional follow-up questions. These are model instructions,
+not output validation. A conversational farewell does not close the WebSocket or emit a session-end event.
+
 Voice remains in the target language by default. On a learning-related request for help, explanation,
 translation, or an explicit indication of incomprehension, Lingu may give one or two brief sentences in
-the profile's native language, followed by a target-language example and an easy target-language question.
+the profile's native language and returns naturally to the target language in the same reply.
+Examples and follow-up questions are optional aids under the prompt policy, not a fixed response sequence.
 This does not change session language or STT/TTS context. Speaking another language, hesitation or an
 error alone does not trigger native help. The same policy covers lesson practice and tool-free fallbacks;
 target-language overlays apply only to target-language passages. The prompt policy is not a guarantee
@@ -178,7 +184,9 @@ A normal turn:
 3. Returns to `listening` without LLM, completion event, or persistence when STT is empty.
 4. Emits the final user transcript and appends it to in-memory context.
 5. Refreshes global memories and native language best-effort.
-6. Builds the prompt from system context and up to the latest 20 messages.
+6. Builds the prompt from system context and up to the latest 40 messages, including the current
+   learner message. Greetings and tool-free fallbacks use the same history limit; the greeting's
+   session-start trigger is additional. Older messages are not summarized into the prompt.
 7. Consumes the complete normalized LLM stream, including at most one native memory-tool round.
 8. Splits completed assistant text on full stops, keeping dots between decimal digits and consecutive
    dot runs (ellipses) inside the same fragment. Fragments without any Unicode letter or number are

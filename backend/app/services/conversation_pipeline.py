@@ -30,7 +30,7 @@ from app.services.memory_service import (
     get_user_memories,
 )
 from app.services.prompts.common import get_language_prompt_overlay
-from app.services.prompts.tutor import build_conversation_system_prompt
+from app.services.prompts.tutor import CONVERSATION_START_PROMPT, build_conversation_system_prompt
 from app.services.quota_service import record_session_seconds
 from app.utils.db import db_session
 
@@ -41,6 +41,8 @@ logger = get_logger(__name__)
 
 TTS_MAX_RETRIES = 1
 TTS_RETRY_DELAY_SECONDS = 0.2
+
+CONVERSATION_HISTORY_MESSAGE_LIMIT = 40
 
 WARNING_ADVANCE_SECONDS = 60  # How many seconds before timeout to send the warning
 
@@ -423,14 +425,18 @@ class ConversationPipeline:
         turn_id = self._next_turn_id()
         trigger = {
             "role": "user",
-            "content": "[Session started. Greet the student warmly and naturally — one or two sentences max — and invite them to speak.]",
+            "content": CONVERSATION_START_PROMPT,
         }
         greeting_prompt = _build_conversation_system_prompt(
             **self._prompt_args,
             memory_context=self._memory_context,
             memory_tools_enabled=False,
         )
-        messages = [{"role": "system", "content": greeting_prompt}] + self.history[-20:] + [trigger]
+        messages = (
+            [{"role": "system", "content": greeting_prompt}]
+            + self.history[-CONVERSATION_HISTORY_MESSAGE_LIMIT:]
+            + [trigger]
+        )
 
         try:
             full_response = ""
@@ -633,7 +639,9 @@ class ConversationPipeline:
         # (alongside the assistant reply) so no orphan rows are written on
         # LLM failures or barge-in cancellations.
         await self._refresh_memory_prompt()
-        messages = [{"role": "system", "content": self.system_prompt}] + self.history[-20:]
+        messages = [{"role": "system", "content": self.system_prompt}] + self.history[
+            -CONVERSATION_HISTORY_MESSAGE_LIMIT:
+        ]
 
         full_response = ""
         clean_full_response = ""
@@ -667,7 +675,7 @@ class ConversationPipeline:
                             memory_tools_enabled=False,
                         ),
                     }
-                ] + self.history[-20:]
+                ] + self.history[-CONVERSATION_HISTORY_MESSAGE_LIMIT:]
                 memory_kwargs = {
                     "tools": [
                         build_save_user_memory_tool(str(self._prompt_args["native_language"]))

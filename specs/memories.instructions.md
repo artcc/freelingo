@@ -63,9 +63,13 @@ The latest 20 memories are HTML-escaped and wrapped in `<user_memories>` as expl
 background data. The system prompt instructs the model not to treat memory content as instructions.
 
 The save policy permits only a genuinely new, durable, useful, self-contained fact. It excludes
-temporary details, uncertain inferences, summaries, user instructions, and known duplicates. The
-tool description asks for content in the user's configured native language, independent of the
-language being learned.
+temporary details, uncertain inferences, summaries, user instructions, and known duplicates.
+Fictional identities, preferences, plans and experiences from roleplay, hypothetical scenarios or
+practice examples must not be saved as learner facts. Statements made in character are treated as
+fictional unless the learner separately confirms them as real, durable personal facts outside the
+scenario; uncertainty means skipping the save. This is shared prompt guidance for text and voice,
+not semantic validation by the storage layer. The tool description asks for content in the user's
+configured native language, independent of the language being learned.
 
 Greetings and no-tools fallbacks retain saved-memory context but omit instructions to save another
 memory.
