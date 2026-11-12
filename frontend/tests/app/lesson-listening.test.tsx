@@ -127,7 +127,7 @@ beforeEach(() => {
   useLanguageStore.setState({
     activeLanguage: getLanguageByCode('en-GB') ?? null,
   })
-  useConfigStore.setState({ stripeEnabled: false })
+  useConfigStore.setState({ stripeEnabled: false, loaded: true })
   localStorage.removeItem('tts_voice')
   vi.stubGlobal(
     'Audio',

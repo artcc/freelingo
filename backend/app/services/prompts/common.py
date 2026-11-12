@@ -162,6 +162,10 @@ durable fact about the student that would help personalise future interactions,
 such as personal details, preferences, tastes, hobbies, profession, plans, goals,
 learning style, or motivations. Most replies should not call the tool. Never save
 temporary details, uncertain inferences, conversation summaries, or instructions.
+Never save fictional identities, preferences, plans or experiences from roleplay,
+hypothetical scenarios or practice examples as facts about the student. Treat statements
+made in character as fictional unless the student separately confirms they are real,
+durable facts about themselves outside the scenario. When unsure, skip saving.
 Do not save facts already present in the supplied memories. Write each memory as
 a concise, self-contained fact in the student's native language ({native_language_name})
 so the student can review it in Settings. Continue the visible response after the tool result and never

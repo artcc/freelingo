@@ -424,9 +424,12 @@
     "deleteAccountMessage": "Acest lucru va șterge permanent contul tău și toate datele asociate. Această acțiune nu poate fi anulată.",
     "deleteAccountConfirm": "Șterge contul",
     "sectionUsageLimits": "Limite de utilizare",
-    "sectionVoice": "Voce",
-    "voiceHint": "Alege vocea lui Lingu și apasă redare pentru a o asculta.",
-    "voicePlay": "Redă",
+    "sectionVoice": "Vocea lui Lingu",
+    "voiceFemale": "Voce feminină",
+    "voiceMale": "Voce masculină",
+    "voiceHint": "Alege cum vrei să sune vocea lui Lingu.",
+    "voiceCharacter": "Caldă și prietenoasă",
+    "voicePlay": "Ascultă",
     "voiceStop": "Opreşte",
     "quotaSessions": "Sesiuni / săptămână",
     "quotaMinutesDay": "Minute / zi",
@@ -469,7 +472,7 @@
     "cardSessionSecurity": "Sesiune și securitate",
     "cardTheme": "Temă",
     "cardConversationTiming": "Durata conversației",
-    "cardTutorVoice": "Vocea tutorelui",
+    "cardTutorVoice": "Vocea lui Lingu",
     "cardCurrentUsage": "Utilizare curentă",
     "cardProductReview": "Recenzie produs",
     "cardLegalDocuments": "Documente legale",
@@ -1796,7 +1799,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Înțelege mai bine fiecare răspuns",
@@ -1815,14 +1818,18 @@
       "desc": "Dacă nu înțelegi ceva în timpul unei conversații vocale, cere-i ajutor lui Lingu. Îți poate explica pe scurt în limba ta maternă, apoi poate relua practica în limba pe care o înveți."
     },
     "entry5": {
+      "label": "Voci mai naturale și mai expresive",
+      "desc": "Bucură-te de voci mai naturale și mai expresive în exercițiile de ascultare și în conversațiile cu Lingu, pentru o experiență de ascultare mai clară și mai plăcută."
+    },
+    "entry6": {
       "label": "Îmbunătățiri ale planului tău de studiu",
       "desc": "Planul tău afișează acum corect progresul și îți permite să continui lecțiile și să recapitulezi unitățile deja parcurse."
     },
-    "entry6": {
+    "entry7": {
       "label": "Limbi noi: poloneză, portugheză braziliană, rusă, neerlandeză și suedeză",
       "desc": "Am adăugat poloneza, portugheza braziliană, rusa, neerlandeza și suedeza ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
-    "entry7": {
+    "entry8": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

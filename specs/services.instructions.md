@@ -176,12 +176,19 @@ It does not call a provider or persist anything. The HTTP TTS router invokes it 
 `conversation_id`; other TTS callers
 and the voice pipeline continue supplying their existing text.
 
-`tts_service.py` exposes `synthesize(text, voice=None, language=None) -> bytes` through local Kokoro or
-OpenAI. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts` and its snapshots,
-using the supplied language/region when available and requesting language inference otherwise.
+`tts_service.py` implements local Kokoro and OpenAI; `gemini_tts_service.py` implements Gemini.
+All expose `synthesize(text, voice=None, language=None) -> bytes`. `get_tts_audio_format()` supplies
+the selected adapter's output MIME type and extension: local/OpenAI use MP3;
+Gemini uses native WAV. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts`
+and its snapshots, using the supplied language/region when available and requesting language inference otherwise.
 Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
 Voice selection remains independent of language. OpenAI synthesis cache keys include instructions
 only when supported by the configured model.
+
+Gemini uses HTTPX REST Interactions with separate spoken text and style, mapped female/male voices,
+and explicit regional language when supplied. Its cache identity includes the actual voice mapping
+and output format. Provider configuration and the supported Gemini 3.8 contract are owned by
+`speech-services.instructions.md`; no transcoding or additional SDK is required.
 
 `stt_service.py` exposes
 `transcribe(audio_bytes, filename, mime_type, *, language) -> str` through local faster-whisper or

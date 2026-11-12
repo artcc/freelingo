@@ -3,6 +3,7 @@ import {
   cleanup,
   fireEvent,
   render,
+  renderHook,
   screen,
   waitFor,
 } from '@testing-library/react'
@@ -12,6 +13,7 @@ import AssessmentPage from '@/app/(app)/assessment/page'
 import ListeningPage from '@/app/(app)/listening/page'
 import ReadingPage from '@/app/(app)/reading/page'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
 import { getLanguageByCode } from '@/lib/target-languages'
 import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
@@ -93,6 +95,7 @@ beforeEach(() => {
   })
   useAuthStore.setState({ user: null, accessToken: 'token' })
   useConfigStore.setState({
+    ttsProvider: 'local',
     loaded: true,
     analyticsEnabled: false,
     stripeEnabled: false,
@@ -124,6 +127,220 @@ function answerExercise() {
     )
   }
 }
+
+describe('Listening voice preference', () => {
+  it('resumes a read-only lookup when config settles before a rejected switch effect', async () => {
+    useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
+    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('gemini_tts_voice', 'male')
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    const config = deferred<Response>()
+    const switchResponse = deferred<Response>()
+    const lookups: string[] = []
+    vi.mocked(fetch).mockImplementation(async (input) => {
+      const url = String(input)
+      if (url === '/api/config') return config.promise
+      if (url === '/api/languages/active') return switchResponse.promise
+      if (url.startsWith('/api/listening/next?')) {
+        lookups.push(url)
+        return lookups.length > 1
+          ? ready()
+          : json({
+              available: false,
+              exercise: null,
+              context: {
+                study_plan_id: 8,
+                target_language: 'en-GB',
+                level: 'A1',
+              },
+              generation_status: 'idle',
+            })
+      }
+      return json({}, 404)
+    })
+    const onExercise = vi.fn()
+    const setPageState = vi.fn()
+    const setError = vi.fn()
+    const dismissTooltip = vi.fn()
+    const { result } = renderHook(() =>
+      useExerciseGeneration({
+        feature: 'listening',
+        language: 'en-GB',
+        studyPlanId: 8,
+        level: 'A1',
+        onExercise,
+        setPageState,
+        setError,
+        dismissTooltip,
+      })
+    )
+    await waitFor(() => expect(setPageState).toHaveBeenLastCalledWith('idle'))
+    let generating!: Promise<void>
+    act(() => {
+      generating = result.current.generate()
+    })
+    expect(setPageState).toHaveBeenLastCalledWith('generating')
+    expect(lookups).toHaveLength(1)
+
+    let switching!: Promise<boolean>
+    await act(async () => {
+      config.resolve(json({ tts_provider: 'gemini' }))
+      await useConfigStore.getState().load()
+      // Queue the switch after voice resolution but before its caller resumes.
+      await Promise.resolve()
+      switching = useLanguageStore.getState().switchLanguage('es-ES')
+      await generating
+    })
+    expect(useLanguageStore.getState().isSwitching).toBe(true)
+    expect(lookups).toHaveLength(1)
+    await act(async () => {
+      switchResponse.resolve(json({ detail: 'Language not available' }, 422))
+      expect(await switching).toBe(false)
+    })
+
+    await waitFor(() =>
+      expect(setPageState).toHaveBeenLastCalledWith('exercise')
+    )
+    expect(onExercise).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 42 }),
+      { study_plan_id: 8, target_language: 'en-GB', level: 'A1' }
+    )
+    expect(lookups).toHaveLength(2)
+    for (const url of lookups) {
+      expect(
+        Object.fromEntries(new URL(url, 'http://localhost').searchParams)
+      ).toEqual({
+        expected_target_language: 'en-GB',
+        expected_study_plan_id: '8',
+        expected_level: 'A1',
+      })
+    }
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([, options]) => options?.method === 'POST')
+    ).toHaveLength(0)
+    expect(
+      vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/languages')
+    ).toHaveLength(0)
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
+  it.each([
+    ['gemini', 'male', false],
+    ['openai', 'coral', false],
+    ['gemini', 'male', true],
+  ] as const)(
+    'generates audio with the %s preference %s (config pending: %s)',
+    async (provider, voice, pendingConfig) => {
+      useConfigStore.setState({
+        ttsProvider: pendingConfig ? 'local' : provider,
+        loaded: !pendingConfig,
+      })
+      const config = deferred<Response>()
+      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('gemini_tts_voice', 'male')
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      let generated = false
+      vi.mocked(fetch).mockImplementation(async (input) => {
+        const url = String(input)
+        if (url === '/api/config') return config.promise
+        if (url.startsWith('/api/listening/generate?')) {
+          generated = true
+          return json({})
+        }
+        if (url.startsWith('/api/listening/next?')) {
+          return generated
+            ? ready()
+            : json({
+                available: false,
+                exercise: null,
+                context: {
+                  study_plan_id: 8,
+                  target_language: 'en-GB',
+                  level: 'A1',
+                },
+                generation_status: 'idle',
+              })
+        }
+        return json({}, 404)
+      })
+      render(<ListeningPage />)
+      fireEvent.click(await screen.findByRole('button', { name: 'generate' }))
+      if (pendingConfig) {
+        await waitFor(() =>
+          expect(fetch).toHaveBeenCalledWith('/api/config', {
+            signal: expect.any(AbortSignal),
+          })
+        )
+        expect(generated).toBe(false)
+        await act(async () => config.resolve(json({ tts_provider: provider })))
+      }
+      await screen.findByText(/Fresh exercise/)
+      const request = vi
+        .mocked(fetch)
+        .mock.calls.find(([url]) =>
+          String(url).startsWith('/api/listening/generate?')
+        )!
+      const url = new URL(String(request[0]), 'http://localhost')
+      expect(url.searchParams.get('voice')).toBe(voice)
+      expect(url.searchParams.get('expected_study_plan_id')).toBe('8')
+      expect(request[1]?.method).toBe('POST')
+    }
+  )
+
+  it.each(['failure', 'unmount'])(
+    'does not generate after config %s',
+    async (outcome) => {
+      useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
+      localStorage.setItem('tts_voice', 'coral')
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      const config = deferred<Response>()
+      vi.mocked(fetch).mockImplementation(async (input) => {
+        if (String(input) === '/api/config') return config.promise
+        return json({
+          available: false,
+          exercise: null,
+          context: { study_plan_id: 8, target_language: 'en-GB', level: 'A1' },
+          generation_status: 'idle',
+        })
+      })
+      const { unmount } = render(<ListeningPage />)
+      fireEvent.click(await screen.findByRole('button', { name: 'generate' }))
+      await waitFor(() =>
+        expect(fetch).toHaveBeenCalledWith('/api/config', {
+          signal: expect.any(AbortSignal),
+        })
+      )
+      if (outcome === 'unmount') unmount()
+      await act(async () =>
+        config.resolve(
+          outcome === 'failure'
+            ? json({}, 503)
+            : json({ tts_provider: 'gemini' })
+        )
+      )
+      expect(
+        vi
+          .mocked(fetch)
+          .mock.calls.some(([url]) =>
+            String(url).startsWith('/api/listening/generate?')
+          )
+      ).toBe(false)
+      if (outcome === 'failure')
+        expect(await screen.findByText('unavailable')).toBeVisible()
+    }
+  )
+})
 
 describe.each([
   { feature: 'listening', Page: ListeningPage },
@@ -169,7 +386,9 @@ describe.each([
     })
     render(<Page />)
     await screen.findByText(/Fresh exercise/)
-    expect(screen.queryByRole('button', { name: 'show' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'show' })
+    ).not.toBeInTheDocument()
     if (feature === 'listening') {
       expect(screen.queryByText('A new passage.')).not.toBeInTheDocument()
     }
@@ -179,7 +398,7 @@ describe.each([
     expect(screen.getByText('A new passage.')).toBeVisible()
     expect(screen.getByText('A new passage.')).toHaveAttribute('lang', 'en-GB')
     if (feature === 'listening') {
-      expect(screen.getByRole('button', { name: 'Play' })).toBeVisible()
+      expect(screen.getByRole('button', { name: 'listen' })).toBeVisible()
       expect(screen.getByText('transcript')).toBeVisible()
     }
     expect(screen.getAllByRole('button', { name: 'show' })).toHaveLength(5)
@@ -192,9 +411,9 @@ describe.each([
     expect(
       await screen.findByText('La opción A coincide con el texto.')
     ).toBeVisible()
-    const request = vi.mocked(fetch).mock.calls.find(([url]) =>
-      String(url).endsWith('/explanation')
-    )!
+    const request = vi
+      .mocked(fetch)
+      .mock.calls.find(([url]) => String(url).endsWith('/explanation'))!
     expect(request[1]?.method).toBe('POST')
     expect(request[1]?.body).toBeUndefined()
     expect(screen.getByText('5/5')).toBeVisible()

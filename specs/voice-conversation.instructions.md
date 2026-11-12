@@ -53,6 +53,15 @@ The session fixes user, plan, target language, CEFR level, native language, voic
 mode at connection time. They are not refreshed globally during the session, except memories and
 native language before each normal user turn.
 
+The frontend resolves voice preferences for the selected provider: `tts_voice` for OpenAI and
+`gemini_tts_voice` (`female`/`male`) for Gemini. Invalid WebSocket voice choices fall back to the
+configured provider default for both OpenAI and Gemini; local TTS uses its configured voice.
+
+Changing the authenticated user or authentication session invalidates pending startup and ends an
+active browser voice session: microphone tracks, warmup requests, WebSocket, and playback are released.
+Late microphone permissions and callbacks cannot resume the previous session. Refreshing the access
+token within the same authentication session does not interrupt conversation.
+
 Suggested conversation topics supply a learner message about the selected topic without naming a
 practice language. The session's resolved target language remains authoritative; starters do not
 request English when a different target language is selected.
@@ -73,8 +82,9 @@ reference, even when another language has an active plan. It does not create a l
 
 The pipeline converts the resolved target language to ISO 639-1 and declares it in every STT call.
 TTS receives the full resolved BCP-47 target language so regional distinctions such as `en-GB` and
-`en-US` remain available. OpenAI uses it in pronunciation instructions for `gpt-4o-mini-tts` and its
-snapshots; legacy/unknown OpenAI models and Kokoro ignore it.
+`en-US` remain available. Gemini supplies explicit regional language in `speech_config`; OpenAI uses
+it in pronunciation instructions for `gpt-4o-mini-tts` and its snapshots. Legacy/unknown OpenAI
+models and Kokoro ignore it.
 
 ### Lesson practice context
 
@@ -127,7 +137,8 @@ items and the pipeline starts with the last 10 accepted messages.
 - `status`: `transcribing`, `thinking`, `speaking`, or `listening`, with `turn_id`; the current
   pipeline does not emit `speaking`.
 - `transcript`: final user or assistant text with `turn_id`.
-- Binary: one synthesized assistant audio fragment, without turn metadata.
+- Binary: one synthesized assistant audio fragment, without turn metadata; native WAV for Gemini
+  or MP3 for local/OpenAI. Provider selection does not add protocol frames or alter turn sequencing.
 - `barge_in`: active generation was cancelled by new binary input.
 - `interrupted`: acknowledgement of an explicit interrupt; current frontend ignores it.
 - `turn_complete`: backend work finished; browser playback may still be draining.
@@ -152,9 +163,15 @@ The voice system prompt requires plain text without Markdown formatting for spok
 transcripts. The shared output policy in `prompts.instructions.md` also applies to greetings,
 lesson-linked practice, and tool-free fallbacks.
 
+The conversational prompt contract is defined in `prompts.instructions.md` (Tutor prompts). Openings
+use supplied topic or chat context, and ordinary turns develop the learner's contributions with
+selective corrections, varied responses and optional follow-up questions. These are model instructions,
+not output validation. A conversational farewell does not close the WebSocket or emit a session-end event.
+
 Voice remains in the target language by default. On a learning-related request for help, explanation,
 translation, or an explicit indication of incomprehension, Lingu may give one or two brief sentences in
-the profile's native language, followed by a target-language example and an easy target-language question.
+the profile's native language and returns naturally to the target language in the same reply.
+Examples and follow-up questions are optional aids under the prompt policy, not a fixed response sequence.
 This does not change session language or STT/TTS context. Speaking another language, hesitation or an
 error alone does not trigger native help. The same policy covers lesson practice and tool-free fallbacks;
 target-language overlays apply only to target-language passages. The prompt policy is not a guarantee
@@ -167,7 +184,9 @@ A normal turn:
 3. Returns to `listening` without LLM, completion event, or persistence when STT is empty.
 4. Emits the final user transcript and appends it to in-memory context.
 5. Refreshes global memories and native language best-effort.
-6. Builds the prompt from system context and up to the latest 20 messages.
+6. Builds the prompt from system context and up to the latest 40 messages, including the current
+   learner message. Greetings and tool-free fallbacks use the same history limit; the greeting's
+   session-start trigger is additional. Older messages are not summarized into the prompt.
 7. Consumes the complete normalized LLM stream, including at most one native memory-tool round.
 8. Splits completed assistant text on full stops, keeping dots between decimal digits and consecutive
    dot runs (ellipses) inside the same fragment. Fragments without any Unicode letter or number are
@@ -232,14 +251,18 @@ over microphone detections. The localized preparing-response label covers the wa
 utterance, transcription, generation, and gaps between audio fragments while backend work is pending.
 The interface returns to listening only after both backend work and playback have finished.
 
-The Web Audio queue preserves decode order, schedules decoded chunks contiguously, and reports idle
-only after pending decodes and active sources drain. If Web Audio decoding fails, it falls back to an
-HTML audio element after all preceding Web Audio sources have ended. Subsequent chunks wait for that
-element to finish. Cancellation releases both the wait for preceding sources and active fallback
+The Web Audio queue uses `decodeAudioData` for both WAV and MP3, preserves decode order, schedules
+decoded chunks contiguously, and reports idle only after pending decodes and active sources drain.
+If Web Audio decoding fails, it falls back to an
+HTML audio element with the matching `audio/wav` or `audio/mpeg` MIME type after all preceding Web
+Audio sources have ended. Subsequent chunks wait for that element to finish. Cancellation releases
+both the wait for preceding sources and active fallback
 playback, removes fallback listeners and Blob URLs, invalidates pending generations, stops active
 sources, and prevents stale callbacks from restarting playback.
 
 ## Persistence
+
+Captured and synthesized voice audio remains transient; only transcript and session data is persisted.
 
 A voice session creates or reuses a `Conversation`. Reuse requires a positive supplied conversation
 ID owned by the user and a compatible target language. The current frontend does not send this ID,

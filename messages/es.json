@@ -423,9 +423,12 @@
     "deleteAccountTitle": "Eliminar cuenta",
     "deleteAccountMessage": "Esta acción eliminará tu cuenta y todos tus datos de forma permanente. Esta acción no se puede deshacer.",
     "deleteAccountConfirm": "Eliminar cuenta",
-    "sectionVoice": "Voz",
-    "voiceHint": "Elige la voz de Lingu y pulsa reproducir para escucharla.",
-    "voicePlay": "Reproducir",
+    "sectionVoice": "La voz de Lingu",
+    "voiceFemale": "Voz femenina",
+    "voiceMale": "Voz masculina",
+    "voiceHint": "Elige cómo quieres escuchar a Lingu.",
+    "voiceCharacter": "Cálida y cercana",
+    "voicePlay": "Escuchar",
     "voiceStop": "Detener",
     "sectionUsageLimits": "Límites de uso",
     "quotaSessions": "Sesiones / semana",
@@ -469,7 +472,7 @@
     "cardSessionSecurity": "Sesión y seguridad",
     "cardTheme": "Tema",
     "cardConversationTiming": "Tiempos de conversación",
-    "cardTutorVoice": "Voz del tutor",
+    "cardTutorVoice": "La voz de Lingu",
     "cardCurrentUsage": "Uso actual",
     "cardProductReview": "Reseña del producto",
     "cardLegalDocuments": "Documentos legales",
@@ -1796,7 +1799,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Entendido",
     "entry1": {
       "label": "Comprende mejor cada respuesta",
@@ -1815,14 +1818,18 @@
       "desc": "Si no entiendes algo durante una conversación de voz, pide ayuda a Lingu. Puede explicártelo brevemente en tu idioma nativo y después retomar la práctica en el idioma que estás aprendiendo."
     },
     "entry5": {
+      "label": "Voces más naturales y expresivas",
+      "desc": "Disfruta de voces más naturales y expresivas en tus ejercicios de Listening y conversaciones con Lingu, para una experiencia de escucha más clara y agradable."
+    },
+    "entry6": {
       "label": "Mejoras en tu plan de estudio",
       "desc": "Ahora tu plan muestra correctamente tu progreso y te permite continuar las lecciones y repasar las unidades que ya has trabajado."
     },
-    "entry6": {
+    "entry7": {
       "label": "Nuevos idiomas: polaco, portugués de Brasil, ruso, neerlandés y sueco",
       "desc": "Añadimos el polaco, el portugués de Brasil, el ruso, el neerlandés y el sueco como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
     },
-    "entry7": {
+    "entry8": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

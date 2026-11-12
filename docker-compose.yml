@@ -61,6 +61,12 @@ services:
       OPENAI_TTS_MODEL: ${OPENAI_TTS_MODEL:-gpt-4o-mini-tts}
       OPENAI_TTS_VOICE: ${OPENAI_TTS_VOICE:-nova}
       OPENAI_TTS_SPEED: ${OPENAI_TTS_SPEED:-1.0}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_TTS_MODEL: ${GEMINI_TTS_MODEL:-gemini-3.8-flash-tts}
+      GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-female}
+      GEMINI_TTS_FEMALE_VOICE: ${GEMINI_TTS_FEMALE_VOICE:-Sulafat}
+      GEMINI_TTS_MALE_VOICE: ${GEMINI_TTS_MALE_VOICE:-Achird}
+      GEMINI_TTS_TIMEOUT_SECONDS: ${GEMINI_TTS_TIMEOUT_SECONDS:-50}
       STT_PROVIDER: ${STT_PROVIDER:-local}
       STT_BASE_URL: ${STT_BASE_URL:-http://whisper:9000}
       OPENAI_STT_MODEL: ${OPENAI_STT_MODEL:-whisper-1}
@@ -138,7 +144,7 @@ services:
 
   # TTS (Kokoro-FastAPI) ──────────────────────────────────────────
   # Only required when TTS_PROVIDER=local (default).
-  # Set TTS_PROVIDER=openai to use OpenAI TTS instead — no local service needed.
+  # Set TTS_PROVIDER=openai or gemini to use cloud TTS — no local service needed.
   # Upstream image (0.4.0+), cu128 variant for Blackwell/RTX 50-series.
   # For Maxwell/Pascal/Turing/Ampere/Hopper GPUs: use :latest (cu126).
   # CPU-only host: use :cpu-latest and remove the 'deploy' block.

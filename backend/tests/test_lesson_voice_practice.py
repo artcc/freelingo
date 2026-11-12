@@ -435,7 +435,7 @@ async def test_practice_context_survives_greeting_history_truncation_and_memory_
     pipeline.history = [{"role": "user", "content": f"Turn {i}"} for i in range(40)]
     await pipeline._process(b"wav", ws)
     call = llm.chat.call_args
-    assert len(call.args[0]) == 21
+    assert len(call.args[0]) == 41
     assert "Turn 0" not in str(call.args[0])
     assert "LESSON_CONTEXT_MARKER" in call.args[0][0]["content"]
     assert "LESSON_CONTEXT_MARKER" in call.kwargs["fallback_messages"][0]["content"]

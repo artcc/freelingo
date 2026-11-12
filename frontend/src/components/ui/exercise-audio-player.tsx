@@ -4,6 +4,11 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
+import { resolveConfiguredTtsVoice, resolveTtsVoice } from '@/lib/tts-voice'
+
+// Includes public config (20s), the TTS proxy (60s), and browser transport.
+const TTS_TIMEOUT_MS = 90_000
 
 interface ExerciseAudioPlayerProps {
   exerciseId: number
@@ -20,16 +25,6 @@ interface Playback {
   timeout: ReturnType<typeof setTimeout> | null
 }
 
-function storedVoice() {
-  try {
-    return typeof window !== 'undefined'
-      ? (localStorage.getItem('tts_voice') ?? undefined)
-      : undefined
-  } catch {
-    return undefined
-  }
-}
-
 export function ExerciseAudioPlayer({
   exerciseId,
   onFirstPlay,
@@ -37,12 +32,13 @@ export function ExerciseAudioPlayer({
 }: ExerciseAudioPlayerProps) {
   const t = useTranslations('listening')
   const tAudio = useTranslations('audioPlayer')
-  const voice = tts ? storedVoice() : undefined
+  const hasTts = !!tts
   const source = JSON.stringify([
     exerciseId,
     tts?.text,
     tts?.studyPlanId,
-    voice,
+    tts ? resolveTtsVoice('local') : undefined,
+    tts ? resolveTtsVoice('gemini') : undefined,
   ])
   const [state, setState] = useState<
     'idle' | 'loading' | 'playing' | 'paused' | 'error'
@@ -95,12 +91,21 @@ export function ExerciseAudioPlayer({
         reset()
       }
     })
+    const unsubscribeConfig = useConfigStore.subscribe((config, previous) => {
+      if (
+        hasTts &&
+        previous.loaded &&
+        config.ttsProvider !== previous.ttsProvider
+      )
+        reset()
+    })
     return () => {
       unsubscribe()
+      unsubscribeConfig()
       contextRef.current = null
       stopPlayback()
     }
-  }, [source, sessionVersion, userId, stopPlayback])
+  }, [source, sessionVersion, userId, stopPlayback, hasTts])
 
   async function handlePlayPause() {
     const context = contextRef.current
@@ -151,9 +156,16 @@ export function ExerciseAudioPlayer({
 
     playback.pending = true
     setState('loading')
-    if (tts) playback.timeout = setTimeout(fail, 60_000)
+    if (tts) playback.timeout = setTimeout(fail, TTS_TIMEOUT_MS)
     try {
       if (!playback.audio) {
+        const config = useConfigStore.getState()
+        const voice = tts
+          ? config.loaded
+            ? resolveTtsVoice(config.ttsProvider)
+            : await resolveConfiguredTtsVoice(playback.controller.signal)
+          : undefined
+        if (!current()) return
         const res = await apiFetch(
           tts ? '/api/tts' : `/api/listening/audio/${exerciseId}`,
           {
@@ -244,11 +256,7 @@ export function ExerciseAudioPlayer({
   }
 
   const icon = state === 'loading' ? '◌' : state === 'playing' ? '▐▐' : '▶'
-  const label = tts
-    ? tAudio(state === 'playing' ? 'ariaPause' : 'listen')
-    : state === 'playing'
-      ? 'Pause'
-      : 'Play'
+  const label = tAudio(state === 'playing' ? 'ariaPause' : 'listen')
 
   return (
     <div className="border-fl-border bg-fl-surface space-y-2 border p-4">
@@ -265,27 +273,23 @@ export function ExerciseAudioPlayer({
         <div
           className="bg-fl-border relative h-1.5 flex-1 cursor-pointer"
           onClick={handleSeek}
-          role={tts ? 'slider' : 'progressbar'}
-          tabIndex={tts ? 0 : undefined}
-          aria-label={tts ? tAudio('ariaSeek') : undefined}
-          onKeyDown={
-            tts
-              ? (event) => {
-                  const positions: Record<string, number> = {
-                    ArrowLeft: progress / 100 - 0.05,
-                    ArrowDown: progress / 100 - 0.05,
-                    ArrowRight: progress / 100 + 0.05,
-                    ArrowUp: progress / 100 + 0.05,
-                    Home: 0,
-                    End: 1,
-                  }
-                  if (event.key in positions) {
-                    event.preventDefault()
-                    seek(positions[event.key])
-                  }
-                }
-              : undefined
-          }
+          role="slider"
+          tabIndex={0}
+          aria-label={tAudio('ariaSeek')}
+          onKeyDown={(event) => {
+            const positions: Record<string, number> = {
+              ArrowLeft: progress / 100 - 0.05,
+              ArrowDown: progress / 100 - 0.05,
+              ArrowRight: progress / 100 + 0.05,
+              ArrowUp: progress / 100 + 0.05,
+              Home: 0,
+              End: 1,
+            }
+            if (event.key in positions) {
+              event.preventDefault()
+              seek(positions[event.key])
+            }
+          }}
           aria-valuenow={Math.round(progress)}
           aria-valuemin={0}
           aria-valuemax={100}

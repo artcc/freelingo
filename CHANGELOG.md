@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.15] - 2026-11-12
+
+### Added
+
+- Optional Gemini TTS with configurable female and male voices, separate voice preferences and previews, and regional pronunciation context across speech features.
+
+### Changed
+
+- Gemini speech uses native WAV audio for playback and persistent caches. Listening retains playback of existing MP3 recordings when the configured provider changes; local and OpenAI speech continue using MP3.
+- Lingu's text-chat guidance prioritizes conversational continuity, varied replies, and selective corrections, with brief native-language learning support and fictional practice scenarios. Shared text and voice memory guidance excludes fictional practice details from saved learner facts.
+- Voice tutor guidance emphasizes context-aware openings, topic continuity, fewer repetitive questions and stock responses, level-appropriate help, and selective conversational corrections. Brief native-language help returns naturally to the learned language without a mandatory example-and-question sequence. Voice turns retain up to 40 recent messages for continuity.
+
+### Fixed
+
+- Listening generation uses Kokoro's configured voice when local TTS is selected, ignoring stale cloud voice preferences.
+
 ## [1.12.10] - 2026-11-11
 
 ### Added

@@ -189,11 +189,7 @@ function ListeningPage() {
   })
 
   function handleGenerate() {
-    const voice =
-      typeof window !== 'undefined'
-        ? (localStorage.getItem('tts_voice') ?? '')
-        : ''
-    void generate(voice)
+    void generate()
   }
 
   async function handleSubmit() {

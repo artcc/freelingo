@@ -27,12 +27,18 @@ class Settings(BaseSettings):
     ANTHROPIC_MAX_TOKENS: int = 8192
     DEEPSEEK_API_KEY: str = ""
     DEEPSEEK_MODEL: str = "deepseek-chat"
-    TTS_PROVIDER: str = "local"  # local | openai
+    TTS_PROVIDER: Literal["local", "openai", "gemini"] = "local"
     TTS_BASE_URL: str = "http://kokoro:8880"
     TTS_VOICE: str = "af_heart"
     OPENAI_TTS_MODEL: str = "tts-1"
     OPENAI_TTS_VOICE: str = "nova"
     OPENAI_TTS_SPEED: float = 1.0
+    GEMINI_API_KEY: str = ""
+    GEMINI_TTS_MODEL: str = "gemini-3.8-flash-tts"
+    GEMINI_TTS_VOICE: Literal["female", "male"] = "female"
+    GEMINI_TTS_FEMALE_VOICE: str = "Kore"
+    GEMINI_TTS_MALE_VOICE: str = "Puck"
+    GEMINI_TTS_TIMEOUT_SECONDS: float = Field(default=50.0, gt=0, allow_inf_nan=False)
     STT_PROVIDER: str = "local"  # local | openai
     STT_BASE_URL: str = "http://whisper:9000"
     OPENAI_STT_MODEL: str = "whisper-1"

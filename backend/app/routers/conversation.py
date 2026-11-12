@@ -34,6 +34,7 @@ from app.services.freemium_service import (
     check_voice_quota,
     is_freemium_trial_active,
 )
+from app.services.gemini_tts_service import GEMINI_VOICES
 from app.services.language_helpers import lesson_practice_title, voice_session_title
 from app.services.lesson_voice_practice import load_lesson_voice_practice
 from app.services.llm_adapter import llm_adapter
@@ -228,6 +229,9 @@ async def conversation_ws(
                 }
             )
             if voice_pref not in _VALID_VOICES:
+                voice_pref = ""
+        elif settings.TTS_PROVIDER == "gemini":
+            if not isinstance(voice_pref, str) or voice_pref not in GEMINI_VOICES:
                 voice_pref = ""
         else:
             voice_pref = ""  # local TTS ignores voice param

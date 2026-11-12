@@ -265,8 +265,10 @@ level and language are authoritative.
 
 Tutor context includes profile, goals, plan/progress information, native and target languages, and
 global memories. It does not currently inject a current-unit topic list or recent-mistake list.
-Lingu responds primarily in the target language and may use concise native-language correction when
-helpful.
+Lingu prioritizes conversational continuity and selective corrections, responding primarily in the
+target language with brief profile-native learning support when needed. Everyday conversation and
+fictional language-practice scenarios are within its tutoring scope. The canonical conversation,
+correction, and language-support policies are defined in `prompts.instructions.md` (Tutor prompts).
 The written tutor permits optional Markdown bold, italics, bullet/numbered lists and paragraphs,
 following the chat-specific policy in `prompts.instructions.md`. Plain text remains valid. The same
 policy applies to tool-free fallback responses; voice and generated learning resources retain their

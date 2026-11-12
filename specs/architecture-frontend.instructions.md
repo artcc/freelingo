@@ -71,6 +71,13 @@ Ordinary JSON APIs use same-origin `/api` requests proxied by Next.js rewrites t
 SSE JSON frames. TTS and STT handlers proxy authenticated binary/multipart traffic and propagate
 cancellation where supported.
 
+The generic `/api/:path*` rewrite is a `fallback`, allowing static and dynamic Route Handlers to run
+first. Voice-preview and Phrasebook audio GET handlers share `lib/audio-proxy.ts` to accommodate
+on-demand synthesis beyond the rewrite's 30-second timeout. Their 60-second deadline covers response
+headers and body; they preserve authentication, trusted client-IP headers, query parameters, ranges,
+backend status and audio MIME type. Speech proxy and cache contracts belong to
+`speech-services.instructions.md`.
+
 `api/conversation/warmup` uses a dedicated handler to accommodate speech-provider cold starts beyond
 the generic rewrite's 30-second timeout. It forwards authentication cookies, bearer authorization,
 and the optional trial-token body; preserves backend status, content type, and `Retry-After`; and
@@ -298,6 +305,31 @@ Zustand stores shared cross-route state:
 Screen-specific forms, async state, playback, selections, and modal state remain local React state.
 Do not promote local state into a global store without a cross-route requirement.
 
+Public configuration includes the selected TTS provider and `gemini_tts_voice` default. Shared
+`lib/tts-voice.ts` resolves provider-specific voice preferences: OpenAI uses browser storage key
+`tts_voice`; Gemini uses `gemini_tts_voice` with `female`/`male` choices. Settings shows the active
+provider's selector and previews under the localized “Lingu's voice” heading, with an invitation to
+choose how Lingu sounds and a “Listen” preview action. Gemini options use localized “Female voice”
+and “Male voice” labels, with a shared “Warm and friendly” description associated with the selector
+for assistive technology. Audio players, tour, Listening generation, and conversation reuse
+that resolution; local TTS uses its configured backend voice. The preference keys remain separate
+when the operator changes provider.
+
+The config store shares concurrent loads with a 20-second deadline covering headers and body;
+failure releases the shared operation for retry, and late responses cannot overwrite new config.
+`resolveConfiguredTtsVoice` waits for a successful load
+before resolving a synthesis preference and supports consumer cancellation; unavailable configuration
+uses the consumer's error state. Initial configuration arrival preserves the pending first playback.
+Listening generation bounds this wait to 20 seconds and rechecks session and learning context;
+if a provisional language switch interrupts the wait, a rejected switch resumes a read-only lookup.
+Conversation resolves the voice before sending warmup and opening its WebSocket. Configuration keeps
+its separate 20-second deadline; the 75-second warmup request budget starts after that resolution.
+Both waits share cancellation on session cleanup. Settings previews release
+audio and discard pending responses on account-session changes.
+Conversation invalidates its entire microphone, warmup, WebSocket, and playback lifecycle when the
+authentication session or user changes, including during asynchronous startup. Access-token rotation
+within the same session does not interrupt conversation.
+
 Dashboard's `components/dashboard/ProgressOverview.tsx` renders existing plan-scoped progress with
 prominent XP/streak cards, today's XP, a seven-day UTC strip, and compact lesson/accuracy metrics.
 `today_xp` and `activity_week` come from `/api/progress/summary` and stay in page-local state. Request
@@ -516,6 +548,14 @@ Chat consumes JSON SSE events and must handle response reset before appending su
 Voice conversation owns microphone/VAD and playback lifecycle with cancellation and late-callback
 guards. Resource audio components fetch authenticated blobs and release object URLs on replacement or
 unmount.
+
+HTTP audio playback and TTS proxies preserve the backend MIME type (`audio/wav` for Gemini,
+`audio/mpeg` for local/OpenAI). Voice playback decodes either binary format with `decodeAudioData`
+and supplies the matching MIME type to its HTML audio fallback. The WebSocket framing and turn
+pipeline remain provider-independent; persisted Listening recordings retain their own format.
+Player request budgets and the TTS proxy's cancellation/deadline behavior are defined in
+`speech-services.instructions.md`. Both sources in `ExerciseAudioPlayer` share localized controls
+and keyboard-accessible seeking.
 
 Detailed behavior belongs to `platform.instructions.md`, `speech-services.instructions.md`, and
 `voice-conversation.instructions.md`.

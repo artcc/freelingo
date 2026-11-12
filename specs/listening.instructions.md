@@ -23,7 +23,7 @@ scores, XP, and completion history belong to the learner and their study plan.
 - `level` and `target_language` define the exercise pool and have a composite lookup index.
 - `exercise_type` identifies the generated format.
 - `topic` and `text` store the LLM output.
-- `audio_path` records the generated MP3 path.
+- `audio_path` records the generated audio path, including its `.mp3` or `.wav` extension.
 - `duration_seconds` defaults to `0`; current generation does not calculate it.
 - `questions` stores question, options, index, and correct answer as JSON.
 - `play_count` is incremented when an attempt is submitted, including a replay.
@@ -66,14 +66,15 @@ The service:
 2. Builds a language-aware prompt with level-specific length guidance.
 3. Requests structured output through `llm_adapter.structured_output()`.
 4. Synthesizes the generated text with the configured TTS service, optional requested voice, and full
-   BCP-47 target language. Instruction-capable OpenAI models use that language for native regional
-   pronunciation, as described in `speech-services.instructions.md`.
+   BCP-47 target language. Gemini and instruction-capable OpenAI models use that language for native
+   regional pronunciation, as described in `speech-services.instructions.md`.
 5. Inserts the exercise to obtain its database ID.
-6. Writes the MP3 as `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.mp3`.
+6. Writes `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.{extension}` using the adapter's format:
+   `.wav` for Gemini or `.mp3` for local/OpenAI.
 7. Stores the path and commits the exercise.
 
 If writing audio or the pre-commit ownership guard fails or is cancelled, the service removes the
-uncommitted MP3 on a best-effort basis; the session rolls back the uncommitted row. Audio is retained
+uncommitted audio on a best-effort basis; the session rolls back the uncommitted row. Audio is retained
 once commit has been attempted, including an uncertain commit outcome or a later refresh failure.
 
 Types currently used are `monologue`, `announcement`, `voicemail`, `dialogue`, `story`, `podcast`,
@@ -130,7 +131,8 @@ Changing the active context in another tab stops the stale operation and prompts
 
 - Rate limit: `5/minute`.
 - Access: freemium consuming-feature policy, without consuming quota at generation time.
-- Optional `voice` query parameter is passed to TTS.
+- Optional `voice` query parameter is passed to cloud TTS; local Kokoro ignores it and uses its configured voice.
+- Gemini accepts only `female` or `male`; an invalid supplied voice returns `400` before background generation.
 - Returns HTTP `202` with `status: "generating"`, whether this request acquired the lease or found
   generation already in progress; returns `status: "available"` when an exercise can already be used.
 
@@ -139,11 +141,12 @@ Changing the active context in another tab stops the stale operation and prompts
 - Rate limit: `60/minute`.
 - Access: freemium read-only policy.
 - Requires the exercise language to match the active plan language.
-- Reconstructs the path from configured storage and the integer exercise ID rather than trusting
-  `audio_path` from the database.
-- Returns `audio/mpeg` with `Accept-Ranges: bytes`.
+- Reconstructs the path from configured storage, the integer exercise ID, and the allowlisted `.mp3`
+  or `.wav` extension recorded in `audio_path`; it never uses the database value as an arbitrary path.
+- Returns `audio/mpeg` for MP3 or `audio/wav` for WAV, with `Accept-Ranges: bytes`. The persisted
+  format determines playback, not the currently configured provider; existing MP3 needs no schema migration.
 - Returns `404 exercise_not_found` for an absent or different-language exercise.
-- Returns `404 audio_not_found` when the MP3 is missing.
+- Returns `404 audio_not_found` when the audio file is missing.
 
 ### `POST /api/listening/attempt`
 
@@ -253,8 +256,10 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 - History displays ten attempts per page through the shared pagination component.
 - Starting practice from history creates a replay with blank answers.
 
-`ExerciseAudioPlayer` fetches the protected MP3 through `apiFetch`, creates a Blob URL, and provides
-play, pause, progress, click-to-seek, browser-derived duration, and an error state. Listening does not
+`ExerciseAudioPlayer` fetches the protected MP3 or WAV through `apiFetch`, preserves its MIME type,
+creates a Blob URL, and provides play, pause, progress, click-to-seek, browser-derived duration,
+and an error state. Playback labels are localized; seeking uses a focusable slider supporting arrow
+keys, Home, and End for both persisted Listening audio and lesson TTS. Listening does not
 require audio playback before answers can be submitted.
 Unmount, exercise replacement or authentication-session replacement cancels pending playback work,
 detaches media listeners and releases its audio/Blob URL. Late fetch, Blob and play completions cannot

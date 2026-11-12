@@ -424,9 +424,12 @@
     "deleteAccountMessage": "Diese Aktion löscht dein Konto und alle deine Daten dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteAccountConfirm": "Konto löschen",
     "sectionUsageLimits": "Nutzungslimits",
-    "sectionVoice": "Stimme",
-    "voiceHint": "Wähle Lingus Stimme und klicke auf Abspielen, um sie zu hören.",
-    "voicePlay": "Abspielen",
+    "sectionVoice": "Lingus Stimme",
+    "voiceFemale": "Weibliche Stimme",
+    "voiceMale": "Männliche Stimme",
+    "voiceHint": "Wähle, wie Lingu für dich klingen soll.",
+    "voiceCharacter": "Warm und freundlich",
+    "voicePlay": "Anhören",
     "voiceStop": "Stopp",
     "quotaSessions": "Sitzungen / Woche",
     "quotaMinutesDay": "Minuten / Tag",
@@ -469,7 +472,7 @@
     "cardSessionSecurity": "Sitzung und Sicherheit",
     "cardTheme": "Design",
     "cardConversationTiming": "Gesprächszeiten",
-    "cardTutorVoice": "Tutor-Stimme",
+    "cardTutorVoice": "Lingus Stimme",
     "cardCurrentUsage": "Aktuelle Nutzung",
     "cardProductReview": "Produktbewertung",
     "cardLegalDocuments": "Rechtliche Dokumente",
@@ -1796,7 +1799,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Verstanden",
     "entry1": {
       "label": "Verstehe jede Antwort besser",
@@ -1815,14 +1818,18 @@
       "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
     },
     "entry5": {
+      "label": "Natürlichere und ausdrucksstärkere Stimmen",
+      "desc": "Genieße natürlichere und ausdrucksstärkere Stimmen in deinen Hörübungen und Gesprächen mit Lingu – für ein klareres und angenehmeres Hörerlebnis."
+    },
+    "entry6": {
       "label": "Verbesserungen an deinem Lernplan",
       "desc": "Dein Lernplan zeigt deinen Fortschritt jetzt korrekt an. Du kannst Lektionen fortsetzen und bereits bearbeitete Einheiten wiederholen."
     },
-    "entry6": {
+    "entry7": {
       "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
       "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
-    "entry7": {
+    "entry8": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

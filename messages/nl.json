@@ -424,9 +424,12 @@
     "deleteAccountMessage": "Dit verwijdert je account en alle bijbehorende gegevens permanent. Deze actie kan niet ongedaan worden gemaakt.",
     "deleteAccountConfirm": "Account verwijderen",
     "sectionUsageLimits": "Gebruikslimieten",
-    "sectionVoice": "Stem",
-    "voiceHint": "Kies de stem van Lingu en klik op afspelen om die te horen.",
-    "voicePlay": "Afspelen",
+    "sectionVoice": "De stem van Lingu",
+    "voiceFemale": "Vrouwelijke stem",
+    "voiceMale": "Mannelijke stem",
+    "voiceHint": "Kies hoe je wilt dat Lingu klinkt.",
+    "voiceCharacter": "Warm en vriendelijk",
+    "voicePlay": "Luisteren",
     "voiceStop": "Stoppen",
     "quotaSessions": "Sessies / week",
     "quotaMinutesDay": "Minuten / dag",
@@ -469,7 +472,7 @@
     "cardSessionSecurity": "Sessie en beveiliging",
     "cardTheme": "Thema",
     "cardConversationTiming": "Gesprekstiming",
-    "cardTutorVoice": "Tutorstem",
+    "cardTutorVoice": "De stem van Lingu",
     "cardCurrentUsage": "Huidig gebruik",
     "cardProductReview": "Productreview",
     "cardLegalDocuments": "Juridische documenten",
@@ -1796,7 +1799,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Begrepen",
     "entry1": {
       "label": "Begrijp elk antwoord beter",
@@ -1815,14 +1818,18 @@
       "desc": "Begrijp je iets niet tijdens een spraakgesprek? Vraag Lingu om hulp. Lingu kan het kort in je moedertaal uitleggen en daarna verdergaan met oefenen in de taal die je leert."
     },
     "entry5": {
+      "label": "Natuurlijkere en expressievere stemmen",
+      "desc": "Geniet van natuurlijkere en expressievere stemmen in je luisteroefeningen en gesprekken met Lingu, voor een duidelijkere en prettigere luisterervaring."
+    },
+    "entry6": {
       "label": "Verbeteringen aan je studieplan",
       "desc": "Je plan toont nu je voortgang correct en laat je lessen voortzetten en eerder behandelde onderdelen herhalen."
     },
-    "entry6": {
+    "entry7": {
       "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
       "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
-    "entry7": {
+    "entry8": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

@@ -424,9 +424,12 @@
     "deleteAccountMessage": "Tvoj račun i svi podaci bit će trajno izbrisani. Ovu radnju nije moguće poništiti.",
     "deleteAccountConfirm": "Izbriši račun",
     "sectionUsageLimits": "Ograničenja upotrebe",
-    "sectionVoice": "Glas",
-    "voiceHint": "Odaberi Linguov glas i klikni na reprodukciju da ga poslušaš.",
-    "voicePlay": "Reproduciraj",
+    "sectionVoice": "Linguov glas",
+    "voiceFemale": "Ženski glas",
+    "voiceMale": "Muški glas",
+    "voiceHint": "Odaberi kako želiš da Lingu zvuči.",
+    "voiceCharacter": "Topao i prijateljski",
+    "voicePlay": "Poslušaj",
     "voiceStop": "Zaustavi",
     "quotaSessions": "Razgovori / tjedan",
     "quotaMinutesDay": "Minute / dan",
@@ -469,7 +472,7 @@
     "cardSessionSecurity": "Sesija i sigurnost",
     "cardTheme": "Tema",
     "cardConversationTiming": "Trajanje razgovora",
-    "cardTutorVoice": "Glas učitelja",
+    "cardTutorVoice": "Linguov glas",
     "cardCurrentUsage": "Trenutačna upotreba",
     "cardProductReview": "Recenzija proizvoda",
     "cardLegalDocuments": "Pravni dokumenti",
@@ -1796,7 +1799,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.12.10",
+    "version": "v1.12.15",
     "cta": "Razumijem",
     "entry1": {
       "label": "Bolje razumij svaki odgovor",
@@ -1815,14 +1818,18 @@
       "desc": "Ako nešto ne razumiješ tijekom glasovnog razgovora, zatraži pomoć od Lingua. Može ti to ukratko objasniti na tvom materinskom jeziku, a zatim nastaviti vježbu na jeziku koji učiš."
     },
     "entry5": {
+      "label": "Prirodniji i izražajniji glasovi",
+      "desc": "Uživaj u prirodnijim i izražajnijim glasovima u vježbama slušanja i razgovorima s Linguom, za jasnije i ugodnije iskustvo slušanja."
+    },
+    "entry6": {
       "label": "Poboljšanja tvog plana učenja",
       "desc": "Tvoj plan sada ispravno prikazuje napredak i omogućuje ti nastavak lekcija te ponavljanje već obrađenih cjelina."
     },
-    "entry6": {
+    "entry7": {
       "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",
       "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
-    "entry7": {
+    "entry8": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

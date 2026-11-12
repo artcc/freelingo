@@ -143,8 +143,9 @@ def test_voice_prompt_limits_native_support_and_scopes_language_overlay(
         in normalized
     )
     assert "native-language support to one or two short sentences" in normalized
-    assert f"give a simple example in {target_name}" in normalized
-    assert f"end with one easy question in {target_name}" in normalized
+    assert f"Return naturally to {target_name} in the same reply" in normalized
+    assert "only when useful, not as a fixed sequence" in normalized
+    assert "force another question when the student wants to finish" in normalized
     assert "temporary support, not a change of study language" in normalized
     assert "Language-specific guidance below applies to target-language passages only" in normalized
     assert prompt.index("- LANGUAGE POLICY:") < prompt.index("Language-specific guidance:")
@@ -199,10 +200,8 @@ async def test_voice_native_support_policy_reaches_session_prompts_and_fallback(
             normalized = " ".join(prompt.split())
             assert "Keep immersion in French by default" in normalized
             assert "in Spanish, the native language supplied by their profile" in normalized
-            assert (
-                "give a simple example in French and end with one easy question in French"
-                in normalized
-            )
+            assert "Return naturally to French in the same reply" in normalized
+            assert "only when useful, not as a fixed sequence" in normalized
             assert "ALWAYS respond in" not in prompt
             assert PLAIN_TEXT_OUTPUT_INSTRUCTION in prompt
             if lesson_context:
@@ -368,6 +367,54 @@ async def test_refresh_keeps_prompt_clean_when_disabled_tools_and_memory_read_fa
 # ---------------------------------------------------------------------------
 # _greet
 # ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("entrypoint", ["greeting", "user_turn", "no_tools"])
+async def test_voice_context_preserves_older_details_within_bounded_window(entrypoint) -> None:
+    pipeline = _make_pipeline(lesson_practice_context="LESSON_CONTEXT_MARKER")
+    pipeline._memory_tools_available = entrypoint != "no_tools"
+    history = [
+        {"role": "user" if index % 2 == 0 else "assistant", "content": f"Message {index}"}
+        for index in range(46)
+    ]
+    history[16]["content"] = "I am travelling to Edinburgh by train."
+    pipeline.history = history.copy()
+    current_message = {"role": "user", "content": "What could I do there?"}
+    pipeline.stt.transcribe = AsyncMock(return_value=current_message["content"])
+    pipeline.tts.synthesize = AsyncMock(return_value=b"audio")
+
+    async def response_stream():
+        yield "You could explore the old town."
+
+    pipeline.llm.chat = AsyncMock(return_value=response_stream())
+    ws = FakeWS()
+    try:
+        if entrypoint == "greeting":
+            await pipeline._greet(ws)
+        else:
+            await pipeline._process(b"audio", ws)
+
+        call = pipeline.llm.chat.call_args
+        messages = call.args[0]
+        assert messages[0]["role"] == "system"
+        assert "LESSON_CONTEXT_MARKER" in messages[0]["content"]
+        if entrypoint == "greeting":
+            sent_history = messages[1:-1]
+            assert sent_history == history[6:]
+        else:
+            sent_history = messages[1:]
+            assert sent_history == history[7:] + [current_message]
+        assert len(sent_history) == 40
+        assert history[16] in sent_history
+        assert history[0] not in sent_history
+        if entrypoint == "user_turn":
+            fallback = call.kwargs["fallback_messages"]
+            assert fallback[1:] == sent_history
+            assert "LESSON_CONTEXT_MARKER" in fallback[0]["content"]
+            assert "save_user_memory" not in fallback[0]["content"]
+    finally:
+        await pipeline.cleanup()
 
 
 @pytest.mark.asyncio
