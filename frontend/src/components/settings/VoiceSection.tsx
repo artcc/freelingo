@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useId } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useConfigStore } from '@/store/config'
@@ -18,6 +18,7 @@ const logger = getLogger('voice-preview')
 
 export function VoiceSection({ title }: { title?: string } = {}) {
   const t = useTranslations('settings')
+  const characterId = useId()
   const ttsProvider = useConfigStore((s) => s.ttsProvider)
   const openaiTtsVoice = useConfigStore((s) => s.openaiTtsVoice)
   const geminiTtsVoice = useConfigStore((s) => s.geminiTtsVoice)
@@ -173,6 +174,7 @@ export function VoiceSection({ title }: { title?: string } = {}) {
       <div className="flex items-center gap-3">
         <select
           aria-label={title ?? t('sectionVoice')}
+          aria-describedby={ttsProvider === 'gemini' ? characterId : undefined}
           value={selectedVoice}
           onChange={(e) => selectVoice(e.target.value)}
           className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 flex-1 appearance-none border px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors focus:outline-none"
@@ -198,6 +200,14 @@ export function VoiceSection({ title }: { title?: string } = {}) {
               : t('voicePlay')}
         </button>
       </div>
+      {ttsProvider === 'gemini' && (
+        <p
+          id={characterId}
+          className="text-fl-hint text-fl-muted-3 mt-2 font-sans"
+        >
+          {t('voiceCharacter')}
+        </p>
+      )}
     </div>
   )
 }

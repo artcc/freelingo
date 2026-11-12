@@ -308,7 +308,10 @@ Do not promote local state into a global store without a cross-route requirement
 Public configuration includes the selected TTS provider and `gemini_tts_voice` default. Shared
 `lib/tts-voice.ts` resolves provider-specific voice preferences: OpenAI uses browser storage key
 `tts_voice`; Gemini uses `gemini_tts_voice` with `female`/`male` choices. Settings shows the active
-provider's selector and previews. Audio players, tour, Listening generation, and conversation reuse
+provider's selector and previews under the localized “Lingu's voice” heading, with an invitation to
+choose how Lingu sounds and a “Listen” preview action. Gemini options use localized “Female voice”
+and “Male voice” labels, with a shared “Warm and friendly” description associated with the selector
+for assistive technology. Audio players, tour, Listening generation, and conversation reuse
 that resolution; local TTS uses its configured backend voice. The preference keys remain separate
 when the operator changes provider.
 
