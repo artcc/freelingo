@@ -9,7 +9,19 @@ import pytest
 
 @pytest.mark.parametrize(
     "language",
-    ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ko-KR", "ru-RU", "sv-SE"],
+    [
+        "fr-FR",
+        "it-IT",
+        "pt-BR",
+        "pt-PT",
+        "pl-PL",
+        "nl-NL",
+        "ja-JP",
+        "ko-KR",
+        "ru-RU",
+        "sv-SE",
+        "da-DK",
+    ],
 )
 def test_reviewed_banks_have_valid_answers_references_and_balanced_positions(language):
     from app.data.assessment_bank import get_assessment_bank

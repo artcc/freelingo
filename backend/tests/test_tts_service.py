@@ -66,6 +66,7 @@ async def test_other_models_keep_the_original_request(service, model):
         ("sv", "Swedish from Sweden"),
         ("sv-SE", "Swedish from Sweden"),
         ("da", "Danish from Denmark"),
+        ("da-DK", "Danish from Denmark"),
         ("fi", "Finnish from Finland"),
         ("hr", "Croatian from Croatia"),
     ],

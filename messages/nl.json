@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "da-DK": "Deens",
+    "da": "Deens",
+    "da-DK-description": "Deens zoals gesproken in Denemarken.",
     "sv-SE": "Zweeds",
     "sv": "Zweeds",
     "sv-SE-description": "Zweeds zoals gesproken in Zweden.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Begrepen",
     "entry1": {
       "label": "Begrijp elk antwoord beter",

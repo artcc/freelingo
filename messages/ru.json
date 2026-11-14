@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Доступные языки"
   },
   "targetLanguages": {
+    "da-DK": "Датский",
+    "da": "Датский",
+    "da-DK-description": "Датский язык, используемый в Дании.",
     "sv-SE": "Шведский",
     "sv": "Шведский",
     "sv-SE-description": "Шведский язык, используемый в Швеции.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "Что нового",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Понятно",
     "entry1": {
       "label": "Лучше понимай каждый ответ",

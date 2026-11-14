@@ -1,0 +1,217 @@
+"""Danish C1 placement items: judgement, agreement and contextual interpretation."""
+
+from app.data._types import AssessmentQuestion
+
+C1_QUESTIONS: list[AssessmentQuestion] = [
+    AssessmentQuestion(
+        "da-g-c1-001",
+        "grammar",
+        "C1",
+        "Efter en opringning til receptionen skriver Lea om reparationen: "
+        "'Teknikeren skulle være færdig på torsdag.' Hvilken læsning passer bedst her?",
+        [
+            "Lea pålægger på receptionens vegne teknikeren at afslutte arbejdet torsdag.",
+            "Lea gengiver receptionens oplysning om torsdag uden selv at garantere den.",
+            "Lea kritiserer receptionens plan om torsdag som en frist, teknikeren har overskredet.",
+            "Lea foreslår receptionen torsdag som en ny frist, der endnu skal forhandles.",
+        ],
+        "Lea gengiver receptionens oplysning om torsdag uden selv at garantere den.",
+        "da-inference-modals-c1",
+    ),
+    AssessmentQuestion(
+        "da-g-c1-002",
+        "grammar",
+        "C1",
+        "Der står: 'Vi gennemfører arbejdsdagen, medmindre der varsles storm.' "
+        "Du skal omskrive beskeden uden at tilføje nye betingelser. Hvilken version passer?",
+        [
+            "Vi gennemfører arbejdsdagen, også hvis der bliver varslet storm.",
+            "Vi gennemfører arbejdsdagen, når en varslet storm er overstået.",
+            "Vi gennemfører kun arbejdsdagen, hvis det bliver helt vindstille.",
+            "Vi gennemfører arbejdsdagen, hvis der ikke bliver varslet storm.",
+        ],
+        "Vi gennemfører arbejdsdagen, hvis der ikke bliver varslet storm.",
+        "da-unless-boundaries-c1",
+    ),
+    AssessmentQuestion(
+        "da-g-c1-003",
+        "grammar",
+        "C1",
+        "I referatet står: 'Nora lovede Emil at spørge udlejeren om ekstra nøgler.' "
+        "Hvilken opfølgning svarer til den beskrevne aftale?",
+        [
+            "Vi spørger Nora, om hun har kontaktet udlejeren om nøglerne.",
+            "Vi spørger Emil, om han har bedt udlejeren kontakte Nora.",
+            "Vi spørger udlejeren, om Emil har fået de nøgler, Nora bestilte.",
+            "Vi spørger Nora, hvornår hun udleverer de nøgler, udlejeren har godkendt.",
+        ],
+        "Vi spørger Nora, om hun har kontaktet udlejeren om nøglerne.",
+        "da-infinitive-agents-c1",
+    ),
+    AssessmentQuestion(
+        "da-g-c1-004",
+        "grammar",
+        "C1",
+        "Et notat siger: 'Ikke alle afdelinger har meldt tilbage.' "
+        "Der står ingen tal. Hvilken konklusion holder sig inden for oplysningerne?",
+        [
+            "De fleste afdelinger har svaret, men enkelte svar afventer godkendelse.",
+            "Omkring halvdelen af afdelingerne mangler at sende et svar.",
+            "Der mangler svar fra mindst én afdeling, men fordelingen fremgår ikke.",
+            "De afdelinger, der har svaret, udgør et mindretal af den samlede gruppe.",
+        ],
+        "Der mangler svar fra mindst én afdeling, men fordelingen fremgår ikke.",
+        "da-quantifier-scope-c1",
+    ),
+    AssessmentQuestion(
+        "da-g-c1-005",
+        "grammar",
+        "C1",
+        "En kollega siger: 'Vi er jo enige om at skære åbningstiden ned.' "
+        "På sidste møde bad du om flere oplysninger, men tilsluttede dig ikke forslaget. "
+        "Du vil rette antagelsen og holde drøftelsen åben. Hvad siger du?",
+        [
+            "Ja, lad os tage datoen for ændringen, når de sidste oplysninger er kommet.",
+            "Det er vist bedst, at vi først orienterer kunderne om den nye åbningstid.",
+            "Jeg er enig i, at vi nok skal have kortere åbningstid; spørgsmålet er hvor meget.",
+            "Den enighed har vi ikke afklaret endnu. Jeg vil gerne se tallene, før jeg tager stilling.",
+        ],
+        "Den enighed har vi ikke afklaret endnu. Jeg vil gerne se tallene, før jeg tager stilling.",
+        "da-jo-vel-vist-nok-c1",
+    ),
+    AssessmentQuestion(
+        "da-g-c1-006",
+        "grammar",
+        "C1",
+        "På mødet siger Ali: 'Jeg kan godt lige kigge på udkastet i morgen, men "
+        "jeg når næppe en grundig gennemgang.' Hvilket referat bevarer hans tilsagn?",
+        [
+            "Ali færdigbehandler udkastet i morgen og vender tilbage med sin godkendelse.",
+            "Ali tilbyder at se kort på udkastet i morgen; en grundig gennemgang er usandsynlig.",
+            "Ali undersøger i morgen, om han senere får tid til at åbne udkastet.",
+            "Ali gennemgår udkastet grundigt, men forventer først at svare efter i morgen.",
+        ],
+        "Ali tilbyder at se kort på udkastet i morgen; en grundig gennemgang er usandsynlig.",
+        "da-register-recasting-c1",
+    ),
+    AssessmentQuestion(
+        "da-v-c1-001",
+        "vocabulary",
+        "C1",
+        "Midt i en drøftelse siger mødelederen: 'Jeg har en bagkant klokken halv fire.' "
+        "Hvilken reaktion passer bedst, hvis I vil sikre hendes deltagelse i beslutningen?",
+        [
+            "Så venter vi med afstemningen, til du kommer tilbage efter halv fire.",
+            "Så tager vi de første spørgsmål uden dig og samler op klokken halv fire.",
+            "Så tager vi beslutningspunktet nu og gemmer orienteringen til sidst.",
+            "Så aftaler vi, at du sender dine bemærkninger, inden mødet begynder.",
+        ],
+        "Så tager vi beslutningspunktet nu og gemmer orienteringen til sidst.",
+    ),
+    AssessmentQuestion(
+        "da-v-c1-002",
+        "vocabulary",
+        "C1",
+        "Efter et afslag svarer foreningen kommunen: 'Vi tager afgørelsen til efterretning.' "
+        "Hvilken læsning holder sig inden for svarets betydning?",
+        [
+            "Den har noteret afgørelsen; svaret siger ikke i sig selv, om den deler begrundelsen.",
+            "Den accepterer begrundelsen, men ønsker et andet praktisk resultat.",
+            "Den betragter afgørelsen som et foreløbigt forslag, der endnu kan forhandles.",
+            "Den trækker sin kritik tilbage mod at få en nærmere forklaring senere.",
+        ],
+        "Den har noteret afgørelsen; svaret siger ikke i sig selv, om den deler begrundelsen.",
+    ),
+    AssessmentQuestion(
+        "da-v-c1-003",
+        "vocabulary",
+        "C1",
+        "Efter at have glemt sit eget oplæg siger Sofie med et glimt i øjet: "
+        "'Som I kan høre, er jeg jo grundigt forberedt.' Hvilken reaktion matcher "
+        "bedst tonen uden at gøre hende til grin?",
+        [
+            "Det er godt, at du har forberedt alle detaljer; lad os høre de sidste tal.",
+            "Så bør vi nok få en anden til at holde oplægget, hvis du ikke tager det alvorligt.",
+            "Jeg synes, du skal forklare, hvorfor de andre ikke sendte dig materialet.",
+            "Så tager vi den på hukommelsen sammen. Jeg har mine noter, hvis du får brug for dem.",
+        ],
+        "Så tager vi den på hukommelsen sammen. Jeg har mine noter, hvis du får brug for dem.",
+    ),
+    AssessmentQuestion(
+        "da-v-c1-004",
+        "vocabulary",
+        "C1",
+        "En kunde skriver: 'Omfanget ligger fast, men der er lidt råderum i tidsplanen.' "
+        "Hvilket forslag udnytter netop det råderum, kunden nævner?",
+        [
+            "Vi kan beholde datoen, hvis I fjerner den sidste del af opgaven.",
+            "Vi kan levere hele opgaven mandag i stedet for fredag til den aftalte pris.",
+            "Vi kan levere en mindre løsning fredag og aftale en ny pris bagefter.",
+            "Vi kan fastholde planen, hvis I selv overtager kontrollen af leverancen.",
+        ],
+        "Vi kan levere hele opgaven mandag i stedet for fredag til den aftalte pris.",
+    ),
+    AssessmentQuestion(
+        "da-r-c1-001",
+        "reading",
+        "C1",
+        "Læs: 'Bestyrelsen anbefaler nye vinduer. Et flertal vil dog først se en "
+        "samlet beregning af lån og vedligeholdelse. Der blev derfor kun afsat penge "
+        "til en rådgiver. Næste møde skal behandle rådgiverens oplæg.' "
+        "Hvilken besked til en fraværende beboer er dækkende?",
+        [
+            "Vinduerne er vedtaget; rådgiveren skal nu finde den billigste finansiering.",
+            "Bestyrelsen har trukket anbefalingen tilbage, indtil beboerne foreslår et lån.",
+            "Flertallet har afvist nye vinduer og valgt rådgivning som en varig løsning.",
+            "Der er bevilget penge til at oplyse sagen, mens selve udskiftningen endnu afventer.",
+        ],
+        "Der er bevilget penge til at oplyse sagen, mens selve udskiftningen endnu afventer.",
+    ),
+    AssessmentQuestion(
+        "da-r-c1-002",
+        "reading",
+        "C1",
+        "Læs: 'Jeg havde afsat en halv time til at samle reolen. Tre timer senere "
+        "sad jeg på gulvet med to skruer tilovers. Min karriere som møbelsnedker "
+        "måtte vist vente lidt endnu.' Hvilken virkning har den sidste sætning?",
+        [
+            "Den forklarer, at fortælleren har søgt en læreplads, som nu må udsættes.",
+            "Den gør fortællerens overvurdering af egne evner til en humoristisk pointe.",
+            "Den flytter ansvaret for forsinkelsen over på producentens mangelfulde anvisning.",
+            "Den antyder, at fortælleren trods forsinkelsen har bevist sin faglige dygtighed.",
+        ],
+        "Den gør fortællerens overvurdering af egne evner til en humoristisk pointe.",
+    ),
+    AssessmentQuestion(
+        "da-r-c1-003",
+        "reading",
+        "C1",
+        "Læs: 'Butikkerne ønsker længere parkeringstid. Beboerne frygter mere trafik. "
+        "Begge grupper har sagt ja til at tælle biler i to uger. Butikkerne understreger, "
+        "at optællingen ikke erstatter deres ønske; beboerne vil se tallene først.' "
+        "Hvad kan mødelederen skrive?",
+        [
+            "Parterne har aftalt et fælles undersøgelsesgrundlag, men har ikke afklaret ændringen.",
+            "Parterne støtter længere parkeringstid, hvis optællingen gennemføres som planlagt.",
+            "Butikkerne har sat deres ønske i bero, mens beboerne forbereder et modforslag.",
+            "Beboerne har accepteret butikkernes behov, men mangler at vælge optællingsdatoerne.",
+        ],
+        "Parterne har aftalt et fælles undersøgelsesgrundlag, men har ikke afklaret ændringen.",
+    ),
+    AssessmentQuestion(
+        "da-r-c1-004",
+        "reading",
+        "C1",
+        "Læs: 'Efter indførelsen af fællesspisning faldt madspildet i kantinen. "
+        "Samtidig blev portionerne mindre, og antallet af gæster ændrede sig. "
+        "Køkkenlederen er glad for udviklingen, men efterlyser tal pr. gæst.' "
+        "Hvorfor er de ekstra tal relevante?",
+        [
+            "De kan vise, om gæsterne foretrækker fællesspisning frem for individuel servering.",
+            "De kan afgøre, om mindre portioner var den eneste årsag til faldet i madspild.",
+            "De kan belyse, om faldet også ses, når ændringen i gæsteantal tages i betragtning.",
+            "De kan vise, om de mindre portioner har gjort kantinens samlede indkøb billigere.",
+        ],
+        "De kan belyse, om faldet også ses, når ændringen i gæsteantal tages i betragtning.",
+    ),
+]

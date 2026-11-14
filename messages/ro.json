@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Limbi disponibile"
   },
   "targetLanguages": {
+    "da-DK": "Daneză",
+    "da": "Daneză",
+    "da-DK-description": "Daneza vorbită în Danemarca.",
     "sv-SE": "Suedeză",
     "sv": "Suedeză",
     "sv-SE-description": "Suedeza vorbită în Suedia.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Înțelege mai bine fiecare răspuns",

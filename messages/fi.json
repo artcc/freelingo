@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Saatavilla olevat kielet"
   },
   "targetLanguages": {
+    "da-DK": "Tanska",
+    "da": "Tanska",
+    "da-DK-description": "Tanskassa puhuttu tanska.",
     "sv-SE": "Ruotsi",
     "sv": "Ruotsi",
     "sv-SE-description": "Ruotsissa puhuttu ruotsi.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Selvä",
     "entry1": {
       "label": "Ymmärrä jokainen vastaus paremmin",

@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Kullanılabilir diller"
   },
   "targetLanguages": {
+    "da-DK": "Danca",
+    "da": "Danca",
+    "da-DK-description": "Danimarka'da konuşulan Danca.",
     "sv-SE": "İsveççe",
     "sv": "İsveççe",
     "sv-SE-description": "İsveç'te konuşulan İsveççe.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Anladım",
     "entry1": {
       "label": "Her yanıtı daha iyi anla",

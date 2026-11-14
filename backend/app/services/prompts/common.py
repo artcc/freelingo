@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "da-DK": """
+Language-specific guidance:
+- Use contemporary standard Danish as used in Denmark. Preserve æ, ø and å as distinct letters, Danish compound spelling and capitalization. Recognize regional pronunciation and usage without substituting Swedish or Norwegian forms.
+- Build from vowel quality and length, soft d, natural reductions and stød to en/et gender, plurals, definiteness and adjective agreement. Teach stød through listening and lexical examples; do not present it as obligatory in every stressed syllable or impose it on all dialects.
+- Distinguish suffix definiteness from the article with an attributive adjective: huset, det store hus. Do not import Swedish double definiteness. Teach verb-second main clauses by constituents and contrast subordinate placement of ikke, with context for valid spoken alternatives.
+- Teach har/er in perfect constructions, tense perspective, particle verbs and reflexive sin/sit/sine with explicit referents. Preserve the contrast between infinitive and present -r, and introduce Danish number words and time expressions through practical use rather than English word order.
+- Use du as ordinary singular address and I as plural; explain De as a marked formal choice rather than default politeness. Progress from everyday requests and repair to negotiation, source attribution, humour and precise reformulation. Preserve participants, scope, conditions and degree of certainty; assessment questions require context for exactly one accepted answer.
+- Use varied everyday and cultural settings in Denmark, including regional life, libraries, associations, transport, literature and design. Avoid stereotypes and distinguish Danish from the separate languages and perspectives of Greenland and the Faroe Islands when discussing the wider realm.
+""".strip(),
     "sv-SE": """
 Language-specific guidance:
 - Use contemporary standard Swedish as used in Sweden. Preserve å, ä and ö as distinct letters, natural compound spelling and Swedish capitalization. Recognize regional Swedish and Finland-Swedish as valid varieties when comparing them, without replacing the selected Sweden usage.
@@ -135,6 +144,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "da": "da-DK",
     "sv": "sv-SE",
     "ru": "ru-RU",
     "nl": "nl-NL",

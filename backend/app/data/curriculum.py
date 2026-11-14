@@ -30,6 +30,7 @@ _LESSON_TYPES: tuple[str, ...] = get_args(LessonType)
 _LANG_MODULES: dict[str, str] = {
     "en-GB": "app.data.en_GB.curriculum",
     "en-US": "app.data.en_US.curriculum",
+    "da": "app.data.da.curriculum",
     "de": "app.data.de.curriculum",
     "es": "app.data.es.curriculum",
     "fr": "app.data.fr.curriculum",
@@ -48,6 +49,15 @@ _LANG_MODULES: dict[str, str] = {
 _CACHE: dict[str, object] = {}
 
 _I18N = {
+    "da-DK": {
+        "lesson_title": "{title} – Lektion {n}",
+        "test_unit_title": "Afsluttende prøve på niveau {level}",
+        "test_title": "Afsluttende prøve på niveau {level}",
+        "test_objectives": [
+            "Repetér niveauets grammatik og ordforråd",
+            "Tag niveauprøven for at vurdere dit næste skridt i læringen",
+        ],
+    },
     "sv-SE": {
         "lesson_title": "{title} – Lektion {n}",
         "test_unit_title": "Avslutande prov för nivå {level}",

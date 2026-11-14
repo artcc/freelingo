@@ -17,7 +17,7 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
+The application recognizes `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -100,7 +100,7 @@ New code must not infer a plan-owned operation's language from the compatibility
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
-Mandarin with simplified characters, and standard Swedish from Sweden.
+Mandarin with simplified characters, standard Swedish from Sweden, and standard Danish from Denmark.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -138,8 +138,18 @@ or conversational alternatives. Shared speech guidance requests Swedish vowel qu
 contrasts, pitch accents and natural phrasing. OpenAI speech and Whisper support Swedish; the
 English-only Kokoro voice configuration is not suitable for this target language.
 
+`da-DK` resolves to the independent `backend/app/data/da/` package; `da` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Danish uses Latin text with æ, ø
+and å, visible word spacing, word-based comprehension lengths, ISO `da` recognition and the Denmark
+flag. Its curriculum introduces pronunciation, en/et gender and definiteness before subordinate word
+order and advanced discourse. Generated content distinguishes Danish definiteness from Swedish double
+definiteness and preserves V2, negation scope, reflexive reference and register. Shared speech guidance
+requests Danish vowels, soft d, natural reductions and stød where appropriate without treating regional
+pronunciation as an error. OpenAI TTS, Gemini TTS and Whisper support Danish; the English-only Kokoro
+voice configuration is not suitable for this target language.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Polish, Russian and Swedish.
+other current languages, including Danish, Polish, Russian and Swedish.
 
 ## Speech recognition
 

@@ -14,6 +14,7 @@ from app.data._types import CEFRLevel, VocabularyEntry, VocabularySet  # noqa: F
 _LANG_MODULES: dict[str, str] = {
     "en-GB": "app.data.en_GB.vocabulary",
     "en-US": "app.data.en_US.vocabulary",
+    "da": "app.data.da.vocabulary",
     "de": "app.data.de.vocabulary",
     "es": "app.data.es.vocabulary",
     "fr": "app.data.fr.vocabulary",
