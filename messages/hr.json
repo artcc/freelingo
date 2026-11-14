@@ -1822,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Razumijem",
     "entry1": {
-      "label": "Bolje razumij svaki odgovor",
-      "desc": "Nakon što završiš Reading ili Listening, možeš zatražiti objašnjenje na svom materinskom jeziku uz ulomak iz teksta koji obrazlaže odgovor. Tijekom ponavljanja možeš ponovno pročitati tekst ili poslušati zvučni zapis."
+      "label": "Novi jezici: hrvatski, češki, danski, finski i rumunjski",
+      "desc": "Dodali smo hrvatski, češki, danski, finski i rumunjski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
     "entry2": {
-      "label": "Poboljšanja sustava učenja",
-      "desc": "Sada možeš pogledati prijevod zadataka na svoj materinski jezik kad god ti zatreba, dok izvorno pitanje ostaje na jeziku koji učiš."
+      "label": "Bolje razumij svaki odgovor",
+      "desc": "Pogledaj prijevod zadataka na svoj materinski jezik dok izvorno pitanje ostaje vidljivo. Nakon što završiš Reading ili Listening, zatraži objašnjenje na svom materinskom jeziku uz ulomak iz teksta koji obrazlaže odgovor. Tijekom ponavljanja možeš ponovno pročitati tekst ili poslušati zvučni zapis."
     },
     "entry3": {
-      "label": "Tvoj vokabular, s prijevodom",
-      "desc": "Nove kartice koje dodaš iz Vokabulara uključuju prijevod na tvoj materinski jezik. Kartice koje već imaš zadržavaju svoj sadržaj."
-    },
-    "entry4": {
       "label": "Lingu ti pomaže kad ti zatreba",
       "desc": "Ako nešto ne razumiješ tijekom glasovnog razgovora, zatraži pomoć od Lingua. Može ti to ukratko objasniti na tvom materinskom jeziku, a zatim nastaviti vježbu na jeziku koji učiš."
     },
-    "entry5": {
+    "entry4": {
       "label": "Prirodniji i izražajniji glasovi",
       "desc": "Uživaj u prirodnijim i izražajnijim glasovima u vježbama slušanja i razgovorima s Linguom, za jasnije i ugodnije iskustvo slušanja."
     },
-    "entry6": {
-      "label": "Poboljšanja tvog plana učenja",
-      "desc": "Tvoj plan sada ispravno prikazuje napredak i omogućuje ti nastavak lekcija te ponavljanje već obrađenih cjelina."
-    },
-    "entry7": {
-      "label": "Novi jezici: poljski, brazilski portugalski, ruski, nizozemski i švedski",
-      "desc": "Dodali smo poljski, brazilski portugalski, ruski, nizozemski i švedski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

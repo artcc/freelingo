@@ -1822,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Got it",
     "entry1": {
-      "label": "Understand every answer better",
-      "desc": "After completing Reading or Listening, you can ask for an explanation in your native language with a passage from the text that supports the answer. You can also reread the passage or listen to the audio again as you review."
+      "label": "New languages: Croatian, Czech, Danish, Finnish, and Romanian",
+      "desc": "Croatian, Czech, Danish, Finnish, and Romanian are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
     "entry2": {
-      "label": "Improvements to the learning system",
-      "desc": "You can now view a translation of exercise questions in your native language whenever you need it, while keeping the original question in the language you're learning."
+      "label": "Understand every answer better",
+      "desc": "View exercise questions translated into your native language while keeping the original visible. After completing Reading or Listening, ask for an explanation in your native language with a passage that supports the answer. You can also reread the passage or listen to the audio again as you review."
     },
     "entry3": {
-      "label": "Your vocabulary, with translations",
-      "desc": "New flashcards you add from Vocabulary include a translation into your native language. The cards you already have keep their content."
-    },
-    "entry4": {
       "label": "Lingu helps when you need it",
       "desc": "If you don't understand something during a voice conversation, ask Lingu for help. Lingu can briefly explain it in your native language, then return to practising the language you're learning."
     },
-    "entry5": {
+    "entry4": {
       "label": "More natural and expressive voices",
       "desc": "Enjoy more natural and expressive voices in your Listening exercises and conversations with Lingu, for a clearer and more enjoyable listening experience."
     },
-    "entry6": {
-      "label": "Improvements to your study plan",
-      "desc": "Your plan now shows your progress correctly and lets you continue lessons and review units you've already worked on."
-    },
-    "entry7": {
-      "label": "New languages: Polish, Brazilian Portuguese, Russian, Dutch, and Swedish",
-      "desc": "Polish, Brazilian Portuguese, Russian, Dutch, and Swedish are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
-    },
-    "entry8": {
+    "entry5": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

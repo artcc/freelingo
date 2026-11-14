@@ -1822,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Selvä",
     "entry1": {
-      "label": "Ymmärrä jokainen vastaus paremmin",
-      "desc": "Kun olet suorittanut Reading- tai Listening-harjoituksen, voit pyytää selityksen äidinkielelläsi sekä vastauksen perustelevaan tekstikohtaan viittaavan lainauksen. Voit myös lukea tekstin tai kuunnella äänitteen uudelleen kerratessasi."
+      "label": "Uudet kielet: kroatia, tšekki, tanska, suomi ja romania",
+      "desc": "Kroatia, tšekki, tanska, suomi ja romania ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
     "entry2": {
-      "label": "Parannuksia oppimisjärjestelmään",
-      "desc": "Voit nyt tarvittaessa katsoa tehtävänantojen käännöksen omalla äidinkielelläsi. Alkuperäinen kysymys pysyy näkyvissä opiskelemallasi kielellä."
+      "label": "Ymmärrä jokainen vastaus paremmin",
+      "desc": "Katso tehtävänantojen käännökset äidinkielelläsi alkuperäisen kysymyksen pysyessä näkyvissä. Reading- tai Listening-harjoituksen jälkeen voit pyytää selityksen äidinkielelläsi sekä vastausta tukevan lainauksen tekstistä. Voit myös lukea tekstin tai kuunnella äänitteen uudelleen kerratessasi."
     },
     "entry3": {
-      "label": "Sanastosi käännöksineen",
-      "desc": "Sanasto-osiosta lisäämäsi uudet muistikortit sisältävät käännöksen äidinkielellesi. Nykyisten korttiesi sisältö säilyy ennallaan."
-    },
-    "entry4": {
       "label": "Lingu auttaa, kun tarvitset apua",
       "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
     },
-    "entry5": {
+    "entry4": {
       "label": "Luonnollisemmat ja ilmeikkäämmät äänet",
       "desc": "Nauti luonnollisemmista ja ilmeikkäämmistä äänistä kuunteluharjoituksissa ja keskusteluissa Lingun kanssa. Ne tekevät kuuntelukokemuksesta selkeämmän ja miellyttävämmän."
     },
-    "entry6": {
-      "label": "Parannuksia opiskelusuunnitelmaasi",
-      "desc": "Suunnitelmasi näyttää nyt edistymisesi oikein ja antaa sinun jatkaa oppitunteja sekä kerrata jo käsittelemiäsi osioita."
-    },
-    "entry7": {
-      "label": "Uudet kielet: puola, brasilianportugali, venäjä, hollanti ja ruotsi",
-      "desc": "Puola, brasilianportugali, venäjä, hollanti ja ruotsi ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }
