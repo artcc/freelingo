@@ -104,6 +104,7 @@
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1501,6 +1502,9 @@
     "supportedLanguages": "Saatavilla olevat kielet"
   },
   "targetLanguages": {
+    "hr-HR": "Kroatia",
+    "hr": "Kroatia",
+    "hr-HR-description": "Kroatiassa puhuttu kroatia.",
     "cs-CZ": "Tšekki",
     "cs": "Tšekki",
     "cs-CZ-description": "Tšekissä puhuttu tšekki.",

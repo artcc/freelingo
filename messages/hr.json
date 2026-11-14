@@ -104,6 +104,7 @@
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1501,6 +1502,9 @@
     "supportedLanguages": "Dostupni jezici"
   },
   "targetLanguages": {
+    "hr-HR": "Hrvatski",
+    "hr": "Hrvatski",
+    "hr-HR-description": "Hrvatski kakav se govori u Hrvatskoj.",
     "cs-CZ": "Češki",
     "cs": "Češki",
     "cs-CZ-description": "Češki kakav se govori u Češkoj.",

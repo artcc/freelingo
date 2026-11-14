@@ -234,10 +234,12 @@ and [.env.example](.env.example).
 
 ### Study languages
 
-Learn one language or several side by side. Each has its own A1–C2 curriculum, placement test,
-grammar reference, vocabulary and phrasebook.
+Choose from 18 study languages, counting each regional variant separately, and learn one or several
+side by side. Each has its own A1–C2 curriculum, placement test, grammar reference, vocabulary and
+phrasebook.
 
 - **Chinese:** Mainland Mandarin, in simplified characters (`zh-CN`).
+- **Croatian:** Croatia (`hr-HR`).
 - **Czech:** Czechia (`cs-CZ`).
 - **Danish:** Denmark (`da-DK`).
 - **Dutch:** Netherlands (`nl-NL`).

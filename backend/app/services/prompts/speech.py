@@ -105,7 +105,8 @@ _PRONUNCIATION_GUIDANCE = {
         "Keep syllables clear and rhythm natural without English vowel reduction."
     ),
     "hr": (
-        "Use native Croatian vowels, syllabic r, consonant distinctions, and natural lexical accent. "
+        "Use native Croatian vowels, syllabic r, č/ć and dž/đ distinctions, and palatal lj and nj. "
+        "Preserve natural lexical accent, vowel length and Croatian ijekavian pronunciation. "
         "Avoid English diphthongs, r, and stress patterns."
     ),
 }

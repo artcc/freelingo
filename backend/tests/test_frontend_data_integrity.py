@@ -110,6 +110,7 @@ def test_language_package_meets_per_level_coverage_minimums(language, level, min
         "sv-SE",
         "da-DK",
         "cs-CZ",
+        "hr-HR",
     ],
 )
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
@@ -185,6 +186,8 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.es.vocabulary as es_vocabulary
     import app.data.fr.curriculum as fr_curriculum
     import app.data.fr.vocabulary as fr_vocabulary
+    import app.data.hr.curriculum as hr_curriculum
+    import app.data.hr.vocabulary as hr_vocabulary
     import app.data.it.curriculum as it_curriculum
     import app.data.it.vocabulary as it_vocabulary
     import app.data.ja.curriculum as ja_curriculum
@@ -204,6 +207,7 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     _check_language_vocab_refs("English", en_curriculum.CURRICULUM, en_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Spanish", es_curriculum.CURRICULUM, es_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("French", fr_curriculum.CURRICULUM, fr_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Croatian", hr_curriculum.CURRICULUM, hr_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Italian", it_curriculum.CURRICULUM, it_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Polish", pl_curriculum.CURRICULUM, pl_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Japanese", ja_curriculum.CURRICULUM, ja_vocabulary.VOCABULARY_SETS)
@@ -233,6 +237,7 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.cs.vocabulary import VOCABULARY_SETS as cs_sets
     from app.data.en_GB.vocabulary import VOCABULARY_SETS as en_sets
     from app.data.es.vocabulary import VOCABULARY_SETS as es_sets
+    from app.data.hr.vocabulary import VOCABULARY_SETS as hr_sets
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
@@ -245,6 +250,7 @@ def test_vocabulary_export_completeness() -> None:
         ("cs", cs_sets),
         ("en", en_sets),
         ("es", es_sets),
+        ("hr", hr_sets),
         ("it", it_sets),
         ("pl", pl_sets),
         ("ja", ja_sets),
@@ -291,6 +297,7 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.cs.vocabulary import VOCABULARY_SETS as cs_sets
     from app.data.en_GB.vocabulary import VOCABULARY_SETS as en_sets
     from app.data.es.vocabulary import VOCABULARY_SETS as es_sets
+    from app.data.hr.vocabulary import VOCABULARY_SETS as hr_sets
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
@@ -303,6 +310,7 @@ def test_vocabulary_id_uniqueness() -> None:
         ("cs", cs_sets),
         ("en", en_sets),
         ("es", es_sets),
+        ("hr", hr_sets),
         ("it", it_sets),
         ("pl", pl_sets),
         ("ja", ja_sets),

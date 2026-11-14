@@ -189,6 +189,43 @@ class TestGenerateAndSaveExercise:
         assert exercise.target_language == "zh-CN"
 
     @pytest.mark.asyncio
+    async def test_croatian_generation_keeps_overlay_word_lengths_and_tts_locale(
+        self, db_session, tmp_path
+    ):
+        from app.schemas.listening import ListeningGenerationResponse
+        from app.services.listening_service import generate_and_save_exercise
+        from app.services.prompts.common import get_language_prompt_overlay
+
+        response = ListeningGenerationResponse(
+            topic="Svakodnevni život",
+            text="Danas idem u školu.",
+            questions=_QUESTIONS,
+        )
+        tts = _FakeTTS()
+        with patch(
+            "app.services.listening_service.llm_adapter.structured_output",
+            new=AsyncMock(return_value=response),
+        ) as mock_structured:
+            exercise = await generate_and_save_exercise(
+                level="A1",
+                target_language="hr-HR",
+                db=db_session,
+                tts_service=tts,
+                storage_path=str(tmp_path),
+            )
+
+        prompt = mock_structured.await_args.args[0][0]["content"]
+        overlay = get_language_prompt_overlay("hr-HR")
+        assert overlay and overlay in prompt
+        for marker in ("standard Croatian", "seven cases", "clitic", "ijekavian"):
+            assert marker in prompt
+        assert "Length: approximately 80 words" in prompt
+        assert exercise.target_language == "hr-HR"
+        assert exercise.text == response.text
+        tts.synthesize.assert_awaited_once_with(response.text, None, language="hr-HR")
+        assert mock_structured.await_args.args[1] is ListeningGenerationResponse
+
+    @pytest.mark.asyncio
     async def test_returns_uncompleted_exercise(self, db_session, exercise):
         from app.services.listening_service import get_available_exercise
 

@@ -20,6 +20,7 @@ LANGUAGE_CASES = [
     ("sv-SE", "sv"),
     ("da-DK", "da"),
     ("cs-CZ", "cs"),
+    ("hr-HR", "hr"),
     ("ja-JP", "ja"),
     ("ko-KR", "ko"),
     ("pt-BR", "pt"),

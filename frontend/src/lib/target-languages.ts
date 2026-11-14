@@ -50,6 +50,7 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'sv-SE': LATIN_LANGUAGE_CAPABILITY,
   'da-DK': LATIN_LANGUAGE_CAPABILITY,
   'cs-CZ': LATIN_LANGUAGE_CAPABILITY,
+  'hr-HR': LATIN_LANGUAGE_CAPABILITY,
   'ru-RU': {
     script: 'cyrillic',
     fontClass: 'font-target-cyrillic',
@@ -183,6 +184,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     nameEn: 'Czech',
     flagPath: '/flags/czech_republic.jpg',
     iso639: 'cs',
+  }),
+  withCapabilities({
+    code: 'hr-HR',
+    name: 'Hrvatski',
+    nameEn: 'Croatian',
+    flagPath: '/flags/croatia.jpg',
+    iso639: 'hr',
   }),
   withCapabilities({
     code: 'ja-JP',

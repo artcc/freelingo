@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "hr": [
+        "daily life, public transport, libraries and local services in Croatia",
+        "Croatian literature, theatre, cinema, music and contemporary cultural life",
+        "regional life in Slavonia, Istria, Dalmatia, Zagreb and Croatian island communities",
+        "Croatian national parks, Adriatic coastal environments and sustainable tourism debates",
+    ],
     "cs": [
         "daily life, public transport, libraries and local services in Czechia",
         "Czech literature, theatre, cinema, music, architecture and contemporary cultural life",

@@ -17,7 +17,9 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
+The application recognizes 18 study languages, counting each regional variant separately:
+`en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `hr-HR`, `it-IT`, `nl-NL`,
+`pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -100,8 +102,8 @@ New code must not infer a plan-owned operation's language from the compatibility
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
-Mandarin with simplified characters, standard Swedish from Sweden, standard Danish from Denmark, and
-standard Czech from Czechia.
+Mandarin with simplified characters, standard Swedish from Sweden, standard Danish from Denmark,
+standard Czech from Czechia, and standard Croatian from Croatia.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -159,8 +161,19 @@ or Polish. Shared speech guidance requests vowel length independently of stress,
 consonants, syllabic r/l and natural voicing assimilation. OpenAI TTS, Gemini TTS and Whisper support
 Czech; the English-only Kokoro voice configuration is not suitable for this target language.
 
+`hr-HR` resolves to the independent `backend/app/data/hr/` package; `hr` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Croatian uses Latin text with
+č, ć, đ, š and ž, the digraphs dž, lj and nj, standard ijekavian spelling, visible word spacing,
+word-based comprehension lengths, ISO `hr` recognition and the Croatia flag. Its curriculum develops
+spelling and pronunciation before gender, animacy, cases, aspect, clitics and advanced interaction.
+Generated content distinguishes standard, regional and conversational usage, preserves participants
+and certainty in reformulations, and does not substitute neighbouring language conventions. Shared
+speech guidance requests Croatian consonant contrasts, syllabic r, natural lexical accent, vowel
+length and ijekavian pronunciation. OpenAI TTS, Gemini TTS and Whisper support Croatian; the
+English-only Kokoro voice configuration is not suitable for this target language.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Czech, Danish, Polish, Russian and Swedish.
+other current languages, including Croatian, Czech, Danish, Polish, Russian and Swedish.
 
 ## Speech recognition
 

@@ -130,6 +130,7 @@ class Settings(BaseSettings):
         "en-US",
         "es-ES",
         "fr-FR",
+        "hr-HR",
         "it-IT",
         "ja-JP",
         "ko-KR",

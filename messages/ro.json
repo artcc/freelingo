@@ -104,6 +104,7 @@
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1501,6 +1502,9 @@
     "supportedLanguages": "Limbi disponibile"
   },
   "targetLanguages": {
+    "hr-HR": "Croată",
+    "hr": "Croată",
+    "hr-HR-description": "Croata vorbită în Croația.",
     "cs-CZ": "Cehă",
     "cs": "Cehă",
     "cs-CZ-description": "Ceha vorbită în Cehia.",

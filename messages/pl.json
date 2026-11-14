@@ -104,6 +104,7 @@
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1501,6 +1502,9 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "hr-HR": "Chorwacki",
+    "hr": "Chorwacki",
+    "hr-HR-description": "Chorwacki używany w Chorwacji.",
     "cs-CZ": "Czeski",
     "cs": "Czeski",
     "cs-CZ-description": "Czeski używany w Czechach.",

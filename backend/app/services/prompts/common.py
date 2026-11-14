@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "hr-HR": """
+Language-specific guidance:
+- Use contemporary standard Croatian as used in Croatia, in Latin script with č, ć, đ, š and ž, and the digraphs dž, lj and nj. Preserve standard ijekavian spelling, including contextual ije/je alternations. Recognize Croatian regional and conversational usage without replacing the selected standard with Serbian, Bosnian or Montenegrin conventions.
+- Build from spelling, consonant contrasts, syllabic r and natural lexical accent to gender, animacy, agreement and the seven cases. Teach case functions with verb and preposition government. Introduce pitch and length through listening without imposing one accent pattern on every regional speaker.
+- Teach imperfective and perfective aspect through context rather than equating it with tense. Develop present, perfekt, futur I and futur II with their actual uses, agreement and Croatian spelling. Teach conditional forms bih, bi, bi, bismo, biste, bi and distinguish hypothetical meaning from polite requests.
+- Teach clitic placement by prosodic and syntactic units, not a rigid second-written-word rule; respect auxiliary and pronoun ordering and the special position of je. Preserve reflexive se, possessive svoj with explicit referents, negative concord, numeral agreement and information focus. Use ti or polite/plural vi consistently, with appropriate agreement.
+- Progress from everyday interaction to negotiation, mediation, humour and precise reformulation across registers. Do not impose obligatory English-style tense backshift on reported speech. Preserve participants, source attribution, conditions, scope and degree of certainty. Assessment questions need enough context for exactly one accepted answer.
+- Use varied Croatian settings: daily life, public transport, libraries, Zagreb and other cities, Slavonia, Istria, Dalmatia, island communities, literature, music and contemporary environmental debates. Distinguish standard, regional and literary usage without stereotypes; teach aorist and imperfect primarily for recognition in their appropriate contexts.
+""".strip(),
     "cs-CZ": """
 Language-specific guidance:
 - Use contemporary standard Czech as used in Czechia. Preserve Czech diacritics, including vowel length, ě and ř, and natural compound spelling. Distinguish standard, common spoken Czech and regional usage without treating every conversational variant as an error or substituting Slovak or Polish forms.
@@ -153,6 +162,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "hr": "hr-HR",
     "cs": "cs-CZ",
     "da": "da-DK",
     "sv": "sv-SE",

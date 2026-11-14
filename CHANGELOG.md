@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
-- New study languages: Czech from Czechia (`cs-CZ`) and Danish from Denmark (`da-DK`), each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, language-specific cultural and generation guidance, and localized selection with its national flag.
+- New study languages: Croatian from Croatia (`hr-HR`), Czech from Czechia (`cs-CZ`), and Danish from Denmark (`da-DK`), each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, language-specific cultural and generation guidance, and localized selection with its national flag.
 
 ## [1.12.15] - 2026-11-12
 

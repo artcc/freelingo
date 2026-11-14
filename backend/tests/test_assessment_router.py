@@ -1143,7 +1143,7 @@ async def test_complete_with_language_in_session(
 
 
 @pytest.mark.parametrize(
-    "target_language", ["pl-PL", "fr-FR", "nl-NL", "ru-RU", "sv-SE", "da-DK", "cs-CZ"]
+    "target_language", ["pl-PL", "fr-FR", "nl-NL", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"]
 )
 @pytest.mark.parametrize("session_scope", ["profile", "legacy", "requested"])
 async def test_complete_explicit_language_ignores_stale_quiz_session(
@@ -1219,7 +1219,8 @@ async def test_complete_without_explicit_language_preserves_quiz_fallback(
 
 
 @pytest.mark.parametrize(
-    "target_language", ["xx-XX", "pl-PL", "en-US", "", "pl", "cs", "cs-cz", "cs-CZ"]
+    "target_language",
+    ["xx-XX", "pl-PL", "en-US", "", "pl", "cs", "cs-cz", "cs-CZ", "hr", "hr-hr", "hr-HR"],
 )
 @pytest.mark.parametrize("language_source", ["explicit", "scoped", "legacy", "profile"])
 async def test_complete_rejects_unavailable_language_without_state_changes(

@@ -42,6 +42,7 @@ LANGUAGES = (
     "sv-SE",
     "da-DK",
     "cs-CZ",
+    "hr-HR",
     "pt-BR",
     "pt-PT",
     "ja-JP",
