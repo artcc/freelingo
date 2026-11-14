@@ -46,6 +46,7 @@ Common documentation targets:
 - Service, provider, or environment changes: `services.instructions.md`, `architecture-backend.instructions.md`, `docker.instructions.md`, and possibly `README.md`.
 - Auth or cross-system flow changes: `platform.instructions.md`, `architecture.instructions.md`.
 - Frontend structure changes: `architecture-frontend.instructions.md` and the affected domain spec.
+- Interface/native-language additions: follow `add-ui-native-language.instructions.md` for the coordinated implementation and documentation checklist.
 - Public landing or static project-site content, navigation, and presentation: `public-site.instructions.md`.
 - Public indexing, metadata, canonical URLs, sitemap, robots, and structured data: `seo.instructions.md`.
 - Shared Listening/Reading generation: `services.instructions.md` owns the backend coordinator; `architecture-frontend.instructions.md` owns the shared client. Keep domain-specific content, audio, scoring, and history in `listening.instructions.md` and `reading.instructions.md`.
@@ -59,7 +60,7 @@ Use the narrowest relevant spec first:
 - Architecture: `architecture.instructions.md`, `architecture-backend.instructions.md`, `architecture-frontend.instructions.md`.
 - Public landing and static project site: `public-site.instructions.md`.
 - Technical SEO and Search Console: `seo.instructions.md`.
-- Platform and languages: `platform.instructions.md`, `target-language.instructions.md`, `multi-language.instructions.md`, `add-target-language.instructions.md`.
+- Platform and languages: `platform.instructions.md`, `target-language.instructions.md`, `multi-language.instructions.md`, `add-target-language.instructions.md`, `add-ui-native-language.instructions.md`.
 - Learning: `study-plan.instructions.md`, `learning-resources.instructions.md`, `listening.instructions.md`, `reading.instructions.md`, `games.instructions.md`.
 - Speech and AI: `speech-services.instructions.md`, `voice-conversation.instructions.md`, `memories.instructions.md`, `prompts.instructions.md`, `llm-error-handling.instructions.md`.
 - Access and community: `subscriptions-freemium.instructions.md`, `feedback.instructions.md`, `reviews.instructions.md`, `whats-new.instructions.md`.

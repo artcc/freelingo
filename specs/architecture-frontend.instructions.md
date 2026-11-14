@@ -454,6 +454,12 @@ backend authorization.
 in `lib/locales.ts`; target-language metadata is separate from UI locale. Missing translation catalogs
 fall back to English according to the platform contract.
 
+For interface/native-language additions, follow
+[Add Interface or Native Language](add-ui-native-language.instructions.md). It owns the cross-project
+registration, catalog, packaging, script/direction, accessibility, and completion checklist. Current
+selectors and initial browser detection include additional explicit inventories; changing
+`SUPPORTED_LOCALES` alone does not complete an addition.
+
 Locale selection, profile persistence, and cookies are coordinated by Settings and middleware. A
 target-language switch must not mutate UI locale or global account preferences.
 Visible copy, including resource counts, errors, role labels, tooltips, and accessibility text, uses

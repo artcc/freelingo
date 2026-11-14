@@ -264,6 +264,11 @@ On self-hosted installations, `AVAILABLE_TARGET_LANGUAGES` controls which option
 Your native language is a separate choice made during registration. It is used for translations,
 explanations and tutor feedback to support you while you learn.
 
+The interface language is another independent choice in **Settings**. It controls menus and interface
+text without changing your native language or the languages you study. Maintainer implementation guides:
+[adding a study language](specs/add-target-language.instructions.md) and
+[adding an interface or native language](specs/add-ui-native-language.instructions.md).
+
 ## Linux host: Redis memory overcommit
 
 Redis requires `vm.overcommit_memory=1` on the host for reliable background saves (RDB snapshots).
