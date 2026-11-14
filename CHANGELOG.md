@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - The landing and static project site use a two-column desktop hero with Lingu and six greetings, stacking content and entry actions before Lingu on mobile. Supported languages appear in separate wrapping rows, alphabetically ordered by their translated names; the English project site retains static Lingu artwork.
 
+### Security
+
+- Updated transitive Hono dependencies to `hono` 4.13.18 and `@hono/node-server` 2.1.8 to address middleware and validation bypasses, HTML injection, and WebSocket upgrade vulnerabilities.
+
 ## [1.12.15] - 2026-11-12
 
 ### Added
