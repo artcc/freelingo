@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "fi": [
+        "daily life, public transport, libraries and local services in Finland",
+        "Finnish literature, music, cinema, design and contemporary regional cultural life",
+        "Finnish lakes, forests and jokaisenoikeudet with responsibilities and local restrictions",
+        "linguistic diversity, Swedish and Sámi perspectives, and environmental debates in Finland",
+    ],
     "hr": [
         "daily life, public transport, libraries and local services in Croatia",
         "Croatian literature, theatre, cinema, music and contemporary cultural life",

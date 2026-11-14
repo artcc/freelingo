@@ -105,6 +105,7 @@
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
       "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1502,6 +1503,9 @@
     "supportedLanguages": "Limbi disponibile"
   },
   "targetLanguages": {
+    "fi-FI": "Finlandeză",
+    "fi": "Finlandeză",
+    "fi-FI-description": "Finlandeza vorbită în Finlanda.",
     "hr-HR": "Croată",
     "hr": "Croată",
     "hr-HR-description": "Croata vorbită în Croația.",

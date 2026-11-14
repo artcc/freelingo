@@ -43,6 +43,7 @@ LANGUAGES = (
     "da-DK",
     "cs-CZ",
     "hr-HR",
+    "fi-FI",
     "pt-BR",
     "pt-PT",
     "ja-JP",

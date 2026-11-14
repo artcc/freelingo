@@ -105,6 +105,7 @@
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
       "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1502,6 +1503,9 @@
     "supportedLanguages": "Tilgængelige sprog"
   },
   "targetLanguages": {
+    "fi-FI": "Finsk",
+    "fi": "Finsk",
+    "fi-FI-description": "Finsk, som det tales i Finland.",
     "hr-HR": "Kroatisk",
     "hr": "Kroatisk",
     "hr-HR-description": "Kroatisk, som det tales i Kroatien.",

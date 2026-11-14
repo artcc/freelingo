@@ -107,6 +107,7 @@ def test_regional_language_names_and_hints_are_prompt_ready() -> None:
     assert get_language_name("da-DK") == "Danish"
     assert get_language_name("cs-CZ") == "Czech"
     assert get_language_name("hr-HR") == "Croatian"
+    assert get_language_name("fi-FI") == "Finnish"
     assert get_language_name("zh-CN") == "Chinese (Mainland China)"
     assert _get_lang_hint("es-ES") == get_language_prompt_overlay("es-ES")
     assert _get_lang_hint("pl-PL") == get_language_prompt_overlay("pl-PL")
@@ -115,6 +116,7 @@ def test_regional_language_names_and_hints_are_prompt_ready() -> None:
     assert _get_lang_hint("da-DK") == get_language_prompt_overlay("da-DK")
     assert _get_lang_hint("cs-CZ") == get_language_prompt_overlay("cs-CZ")
     assert _get_lang_hint("hr-HR") == get_language_prompt_overlay("hr-HR")
+    assert _get_lang_hint("fi-FI") == get_language_prompt_overlay("fi-FI")
     assert _get_lang_hint("pt-PT") == get_language_prompt_overlay("pt-PT")
 
 
@@ -186,6 +188,7 @@ def test_language_prompt_overlays_cover_supported_learning_languages() -> None:
         "da-DK": "standard Danish",
         "cs-CZ": "standard Czech",
         "hr-HR": "standard Croatian",
+        "fi-FI": "standard Finnish",
         "zh-CN": "Mainland China Standard Mandarin",
     }
 
@@ -296,7 +299,9 @@ def test_tutor_prompts_use_central_tutor_display_name() -> None:
     assert "named FreeLingo" not in conversation_prompt
 
 
-@pytest.mark.parametrize("language", ["pt-PT", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"])
+@pytest.mark.parametrize(
+    "language", ["pt-PT", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+)
 def test_tutor_prompt_can_include_language_overlay(language) -> None:
     overlay = get_language_prompt_overlay(language)
     prompt = build_tutor_system_prompt(
@@ -320,7 +325,9 @@ def test_tutor_prompt_can_include_language_overlay(language) -> None:
         assert "Avoid Brazilian Portuguese" in prompt
 
 
-@pytest.mark.parametrize("language", ["es-ES", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"])
+@pytest.mark.parametrize(
+    "language", ["es-ES", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+)
 def test_conversation_prompt_can_include_language_overlay(language) -> None:
     overlay = get_language_prompt_overlay(language)
     prompt = build_conversation_system_prompt(
@@ -373,7 +380,9 @@ def test_lesson_generation_prompt_uses_target_language_and_schema() -> None:
     assert "partitive-articles, present-tense" in prompt
 
 
-@pytest.mark.parametrize("language", ["de-DE", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"])
+@pytest.mark.parametrize(
+    "language", ["de-DE", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+)
 def test_lesson_prompts_can_include_language_overlay(language) -> None:
     overlay = get_language_prompt_overlay(language)
     generation = build_lesson_generation_prompt(
@@ -478,7 +487,9 @@ def test_lesson_evaluation_prompts_delimit_dynamic_data() -> None:
     assert "French phrase aloud" in pronunciation
 
 
-@pytest.mark.parametrize("language", ["es-ES", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"])
+@pytest.mark.parametrize(
+    "language", ["es-ES", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+)
 def test_flashcard_prompts_use_language_and_data_delimiters(language) -> None:
     overlay = get_language_prompt_overlay(language)
     name = get_language_name(language)
@@ -510,7 +521,9 @@ def test_flashcard_prompts_use_language_and_data_delimiters(language) -> None:
     assert '"word": "<clean target-language term>"' in lookup
 
 
-@pytest.mark.parametrize("language", ["de-DE", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"])
+@pytest.mark.parametrize(
+    "language", ["de-DE", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+)
 def test_comprehension_prompts_use_target_language(language) -> None:
     overlay = get_language_prompt_overlay(language)
     name = get_language_name(language)
@@ -578,7 +591,9 @@ def test_comprehension_prompts_accept_language_aware_length_guidance() -> None:
     assert "Use romaji only as a short support aid" in reading
 
 
-@pytest.mark.parametrize("language", ["pt-PT", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR"])
+@pytest.mark.parametrize(
+    "language", ["pt-PT", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+)
 def test_assessment_prompts_use_language_schema_and_delimiters(language) -> None:
     overlay = get_language_prompt_overlay(language)
     name = get_language_name(language)
@@ -666,6 +681,28 @@ def test_croatian_game_generation_and_review_prompts_include_language_overlay(
 
     assert overlay and overlay in generation
     assert "Croatian" in generation
+    assert "Spanish" in generation
+    assert overlay in review
+
+
+@pytest.mark.parametrize("language", ["fi", "fi-FI"])
+@pytest.mark.parametrize(
+    ("builder", "review_builder"),
+    [
+        (detective_prompt, detective_review_prompt),
+        (sentence_order_prompt, sentence_order_review_prompt),
+        (vocabulary_pairs_prompt, vocabulary_pairs_review_prompt),
+    ],
+)
+def test_finnish_game_generation_and_review_prompts_include_language_overlay(
+    language, builder, review_builder
+) -> None:
+    overlay = get_language_prompt_overlay(language)
+    generation = builder(language, "es", "A2", "review", {"sources": []})
+    review = review_builder(generation, {"challenges": []})
+
+    assert overlay and overlay in generation
+    assert "Finnish" in generation
     assert "Spanish" in generation
     assert overlay in review
 

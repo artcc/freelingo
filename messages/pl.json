@@ -105,6 +105,7 @@
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
       "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1502,6 +1503,9 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "fi-FI": "Fiński",
+    "fi": "Fiński",
+    "fi-FI-description": "Fiński używany w Finlandii.",
     "hr-HR": "Chorwacki",
     "hr": "Chorwacki",
     "hr-HR-description": "Chorwacki używany w Chorwacji.",

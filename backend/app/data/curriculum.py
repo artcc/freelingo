@@ -34,6 +34,7 @@ _LANG_MODULES: dict[str, str] = {
     "da": "app.data.da.curriculum",
     "de": "app.data.de.curriculum",
     "es": "app.data.es.curriculum",
+    "fi": "app.data.fi.curriculum",
     "fr": "app.data.fr.curriculum",
     "hr": "app.data.hr.curriculum",
     "it": "app.data.it.curriculum",
@@ -51,6 +52,15 @@ _LANG_MODULES: dict[str, str] = {
 _CACHE: dict[str, object] = {}
 
 _I18N = {
+    "fi-FI": {
+        "lesson_title": "{title} – Oppitunti {n}",
+        "test_unit_title": "Tason {level} lopputesti",
+        "test_title": "Tason {level} lopputesti",
+        "test_objectives": [
+            "Kertaa tason kielioppi ja sanasto",
+            "Tee lopputesti ja arvioi seuraava askel opinnoissasi",
+        ],
+    },
     "hr-HR": {
         "lesson_title": "{title} – Lekcija {n}",
         "test_unit_title": "Završni test razine {level}",

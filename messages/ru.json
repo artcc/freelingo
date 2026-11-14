@@ -105,6 +105,7 @@
       "da-DK": "Hej!",
       "cs-CZ": "Ahoj!",
       "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1502,6 +1503,9 @@
     "supportedLanguages": "Доступные языки"
   },
   "targetLanguages": {
+    "fi-FI": "Финский",
+    "fi": "Финский",
+    "fi-FI-description": "Финский язык, используемый в Финляндии.",
     "hr-HR": "Хорватский",
     "hr": "Хорватский",
     "hr-HR-description": "Хорватский язык, используемый в Хорватии.",

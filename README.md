@@ -234,7 +234,7 @@ and [.env.example](.env.example).
 
 ### Study languages
 
-Choose from 18 study languages, counting each regional variant separately, and learn one or several
+Choose from 19 study languages, counting each regional variant separately, and learn one or several
 side by side. Each has its own A1–C2 curriculum, placement test, grammar reference, vocabulary and
 phrasebook.
 
@@ -244,6 +244,7 @@ phrasebook.
 - **Danish:** Denmark (`da-DK`).
 - **Dutch:** Netherlands (`nl-NL`).
 - **English:** British (`en-GB`) and American (`en-US`).
+- **Finnish:** Finland (`fi-FI`).
 - **French** (`fr-FR`).
 - **German** (`de-DE`).
 - **Italian** (`it-IT`).

@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 18 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(18)
+  it('contains exactly 19 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(19)
   })
 
   const expectedCodes = [
@@ -26,6 +26,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'da-DK',
     'cs-CZ',
     'hr-HR',
+    'fi-FI',
     'pt-BR',
     'pt-PT',
     'fr-FR',
@@ -68,6 +69,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/denmark.jpg')
     expect(paths).toContain('/flags/czech_republic.jpg')
     expect(paths).toContain('/flags/croatia.jpg')
+    expect(paths).toContain('/flags/finland.jpg')
     expect(paths).toContain('/flags/brazil.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
@@ -101,6 +103,9 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(
       SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'hr')
     ).toHaveLength(1)
+    expect(
+      SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'fi')
+    ).toHaveLength(1)
     expect(SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'nl')).toHaveLength(1)
     expect(
       SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'ru')
@@ -116,7 +121,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(18)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(19)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -133,6 +138,7 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'da-DK',
       'cs-CZ',
       'hr-HR',
+      'fi-FI',
       'ja-JP',
       'ko-KR',
       'zh-CN',
@@ -276,6 +282,34 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
       expect(getLanguageByCode(code)?.romanization).toBeUndefined()
       expect(getLanguageByCode('hr')).toBeUndefined()
+    }
+  )
+
+  it.each(['fi-FI', 'FI-fi', 'fi-fi'])(
+    'resolves Finnish metadata and Latin typography for %s',
+    (code) => {
+      expect(getLanguageByCode(code)).toEqual({
+        code: 'fi-FI',
+        name: 'Suomi',
+        nameEn: 'Finnish',
+        flagPath: '/flags/finland.jpg',
+        iso639: 'fi',
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(TARGET_LANGUAGE_CAPABILITIES['fi-FI']).toEqual({
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(getTargetLanguageCapability(code)).toEqual(
+        TARGET_LANGUAGE_CAPABILITIES['fi-FI']
+      )
+      expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
+      expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+      expect(getLanguageByCode(code)?.romanization).toBeUndefined()
+      expect(getLanguageByCode('fi')).toBeUndefined()
     }
   )
 

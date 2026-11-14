@@ -18,7 +18,9 @@ vi.mock('next-intl', () => ({
             ? 'Ahoj!'
             : key === 'languageGreetings.hr-HR'
               ? 'Bok!'
-              : key,
+              : key === 'languageGreetings.fi-FI'
+                ? 'Hei!'
+                : key,
 }))
 
 vi.mock('@/components/lingu/LinguAvatar', () => ({
@@ -110,6 +112,12 @@ describe('LanguageBubbles', () => {
     )
     expect(screen.getByText('Bok!')).toHaveAttribute('lang', 'hr-HR')
     expect(screen.getByText('Bok!')).toHaveClass('font-target-latin')
+    expect(screen.getByAltText('Localized fi-FI')).toHaveAttribute(
+      'src',
+      '/flags/finland.jpg'
+    )
+    expect(screen.getByText('Hei!')).toHaveAttribute('lang', 'fi-FI')
+    expect(screen.getByText('Hei!')).toHaveClass('font-target-latin')
     const greetings = screen.getAllByText('Hej!')
     expect(greetings).toHaveLength(2)
     expect(greetings.map((greeting) => greeting.getAttribute('lang'))).toEqual([

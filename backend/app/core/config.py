@@ -129,6 +129,7 @@ class Settings(BaseSettings):
         "en-GB",
         "en-US",
         "es-ES",
+        "fi-FI",
         "fr-FR",
         "hr-HR",
         "it-IT",

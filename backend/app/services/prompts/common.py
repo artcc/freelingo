@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "fi-FI": """
+Language-specific guidance:
+- Use contemporary standard Finnish as used in Finland. Preserve ä and ö, meaningful single and double vowels and consonants, and natural compound spelling. Distinguish standard written Finnish, everyday spoken Finnish and regional varieties without treating valid conversational forms as universal errors.
+- Build from first-syllable stress independent of vowel and consonant length, vowel harmony and consonant gradation to stems, case endings and verb types. Teach cases with their communicative functions and lexical government; Finnish has no grammatical gender or articles. Hän does not specify gender.
+- Introduce the partitive through quantity, negation, ongoing events and lexical government. Contrast partitive and total objects with explicit context for boundedness and result; do not equate case mechanically with English tense. Teach possession with minulla on and distinguish inner and outer local cases using actual place usage.
+- Teach the inflected negative verb, present and past tenses, perfect and pluperfect, conditional, imperative and passive through practical contexts. Finnish has no dedicated future tense; use present forms and time expressions naturally. Distinguish the impersonal passive from conversational me plus passive without imposing written agreement on every spoken example.
+- Progress to infinitives, participles, reduced clauses, possessive suffixes, information structure and focus particles while preserving subjects, participants, scope, time and degree of certainty. Balance interpretation with negotiation, mediation, humour and precise reformulation. Assessment questions need enough context for exactly one accepted answer.
+- Use varied Finnish settings: everyday services, libraries, public transport, regional life, literature, music, design and environmental discussion. Explain jokaisenoikeudet with responsibilities and local restrictions. Respect Finland's linguistic diversity, including Swedish and the separate Sámi languages, without conflating them with Finnish or relying on stereotypes.
+""".strip(),
     "hr-HR": """
 Language-specific guidance:
 - Use contemporary standard Croatian as used in Croatia, in Latin script with č, ć, đ, š and ž, and the digraphs dž, lj and nj. Preserve standard ijekavian spelling, including contextual ije/je alternations. Recognize Croatian regional and conversational usage without replacing the selected standard with Serbian, Bosnian or Montenegrin conventions.
@@ -162,6 +171,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "fi": "fi-FI",
     "hr": "hr-HR",
     "cs": "cs-CZ",
     "da": "da-DK",

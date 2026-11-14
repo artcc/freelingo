@@ -17,8 +17,8 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes 18 study languages, counting each regional variant separately:
-`en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `hr-HR`, `it-IT`, `nl-NL`,
+The application recognizes 19 study languages, counting each regional variant separately:
+`en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-FR`, `hr-HR`, `it-IT`, `nl-NL`,
 `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
@@ -103,7 +103,7 @@ Prompt builders receive an explicit target-language name and shared overlay. Cur
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
 Mandarin with simplified characters, standard Swedish from Sweden, standard Danish from Denmark,
-standard Czech from Czechia, and standard Croatian from Croatia.
+standard Czech from Czechia, standard Croatian from Croatia, and standard Finnish from Finland.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -172,8 +172,19 @@ speech guidance requests Croatian consonant contrasts, syllabic r, natural lexic
 length and ijekavian pronunciation. OpenAI TTS, Gemini TTS and Whisper support Croatian; the
 English-only Kokoro voice configuration is not suitable for this target language.
 
+`fi-FI` resolves to the independent `backend/app/data/fi/` package; `fi` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Finnish uses Latin text with ä and ö,
+visible word spacing, word-based comprehension lengths, ISO `fi` recognition and the Finland flag.
+Its curriculum develops vowel and consonant length, vowel harmony and consonant gradation before
+extended case, object, verb and discourse contrasts. Generated content distinguishes standard written,
+spoken and regional Finnish, preserves participants and scope, and teaches partitive versus total
+objects through context rather than English tense equivalents. Shared speech guidance requests native
+vowel quality, meaningful vowel and consonant length and initial word stress. OpenAI TTS, Gemini
+`gemini-3.8-flash-tts` and Whisper support Finnish; Gemini `gemini-3.8-flash-lite-tts` does not list
+Finnish support, and the English-only Kokoro voice configuration is not suitable for this target.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Croatian, Czech, Danish, Polish, Russian and Swedish.
+other current languages, including Croatian, Czech, Danish, Finnish, Polish, Russian and Swedish.
 
 ## Speech recognition
 
