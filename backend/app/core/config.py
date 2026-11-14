@@ -123,6 +123,7 @@ class Settings(BaseSettings):
 
     # Multi-language — operator-configured subset of supported target languages.
     AVAILABLE_TARGET_LANGUAGES: list[str] = [
+        "da-DK",
         "de-DE",
         "en-GB",
         "en-US",

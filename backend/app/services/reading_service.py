@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "da": [
+        "daily life, cycling, public transport, libraries and local services in Denmark",
+        "Danish literature, cinema, music, architecture and design",
+        "associations, folk high schools, seasonal traditions and regional life in Denmark",
+        "Danish coastal environments, island communities and contemporary sustainability debates",
+    ],
     "sv": [
         "daily life, public transport, libraries, housing and local services in Sweden",
         "Swedish literature, music, cinema, design and regional cultural life",

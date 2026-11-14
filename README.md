@@ -7,7 +7,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)](#quick-start)
-![Version](https://img.shields.io/badge/version-1.12.15-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.12.20-brightgreen?style=flat-square)
 
 <img src="assets/logo_large.png" alt="FreeLingo — language learning with Lingu, your voice conversation partner" width="900" />
 
@@ -238,6 +238,7 @@ Learn one language or several side by side. Each has its own A1–C2 curriculum,
 grammar reference, vocabulary and phrasebook.
 
 - **Chinese:** Mainland Mandarin, in simplified characters (`zh-CN`).
+- **Danish:** Denmark (`da-DK`).
 - **Dutch:** Netherlands (`nl-NL`).
 - **English:** British (`en-GB`) and American (`en-US`).
 - **French** (`fr-FR`).

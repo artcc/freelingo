@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Available languages"
   },
   "targetLanguages": {
+    "da-DK": "Danish",
+    "da": "Danish",
+    "da-DK-description": "Danish as spoken in Denmark.",
     "sv-SE": "Swedish",
     "sv": "Swedish",
     "sv-SE-description": "Swedish as spoken in Sweden.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Got it",
     "entry1": {
       "label": "Understand every answer better",

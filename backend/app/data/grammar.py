@@ -14,6 +14,7 @@ from app.data._types import GrammarExample, GrammarMistake, GrammarTopic  # noqa
 _LANG_MODULES: dict[str, str] = {
     "en-GB": "app.data.en_GB.grammar",
     "en-US": "app.data.en_US.grammar",
+    "da": "app.data.da.grammar",
     "de": "app.data.de.grammar",
     "es": "app.data.es.grammar",
     "fr": "app.data.fr.grammar",

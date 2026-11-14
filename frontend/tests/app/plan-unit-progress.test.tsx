@@ -124,7 +124,7 @@ describe('My Plan unit progression', () => {
   })
 
   it.each([
-    'de-DE', 'en-GB', 'en-US', 'es-ES', 'fr-FR', 'it-IT', 'ja-JP', 'ko-KR',
+    'da-DK', 'de-DE', 'en-GB', 'en-US', 'es-ES', 'fr-FR', 'it-IT', 'ja-JP', 'ko-KR',
     'nl-NL', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sv-SE', 'zh-CN',
   ])('moves the active card and review access to unit 2 in %s', async (language) => {
     scenario(language)

@@ -18,6 +18,7 @@ LANGUAGE_CASES = [
     ("nl-NL", "nl"),
     ("ru-RU", "ru"),
     ("sv-SE", "sv"),
+    ("da-DK", "da"),
     ("ja-JP", "ja"),
     ("ko-KR", "ko"),
     ("pt-BR", "pt"),

@@ -11,7 +11,8 @@ vi.mock('next-intl', () => ({
       ? `Localized ${key}`
       : key === 'languageGreetings.ru-RU'
         ? 'Привет!'
-        : key === 'languageGreetings.sv-SE'
+        : key === 'languageGreetings.sv-SE' ||
+            key === 'languageGreetings.da-DK'
           ? 'Hej!'
           : key,
 }))
@@ -89,8 +90,19 @@ describe('LanguageBubbles', () => {
       'src',
       '/flags/sweden.jpg'
     )
-    expect(screen.getByText('Hej!')).toHaveAttribute('lang', 'sv-SE')
-    expect(screen.getByText('Hej!')).toHaveClass('font-target-latin')
+    expect(screen.getByAltText('Localized da-DK')).toHaveAttribute(
+      'src',
+      '/flags/denmark.jpg'
+    )
+    const greetings = screen.getAllByText('Hej!')
+    expect(greetings).toHaveLength(2)
+    expect(greetings.map((greeting) => greeting.getAttribute('lang'))).toEqual([
+      'sv-SE',
+      'da-DK',
+    ])
+    for (const greeting of greetings) {
+      expect(greeting).toHaveClass('font-target-latin')
+    }
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
   })
 

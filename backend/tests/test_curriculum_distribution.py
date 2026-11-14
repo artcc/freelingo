@@ -40,6 +40,7 @@ LANGUAGES = (
     "nl-NL",
     "ru-RU",
     "sv-SE",
+    "da-DK",
     "pt-BR",
     "pt-PT",
     "ja-JP",

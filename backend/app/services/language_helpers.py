@@ -21,6 +21,7 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
         "iso639": "en",
         "flag": "🇬🇧",
     },
+    "da-DK": {"name": "Danish", "self_name": "Dansk", "iso639": "da", "flag": "🇩🇰"},
     "de-DE": {"name": "German", "self_name": "Deutsch", "iso639": "de", "flag": "🇩🇪"},
     "es-ES": {
         "name": "Spanish (Spain)",
@@ -67,6 +68,12 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
 }
 
 _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
+    "da-DK": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
     "sv-SE": {
         "script": "latin",
         "romanization": "",
@@ -160,6 +167,7 @@ _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
 }
 
 _LANGUAGE_CAPABILITY_ALIASES: dict[str, str] = {
+    "da": "da-DK",
     "sv": "sv-SE",
     "ru": "ru-RU",
     "nl": "nl-NL",

@@ -102,6 +102,7 @@
     "languageGreetings": {
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
+      "da-DK": "Hej!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1499,6 +1500,9 @@
     "supportedLanguages": "Tillgängliga språk"
   },
   "targetLanguages": {
+    "da-DK": "Danska",
+    "da": "Danska",
+    "da-DK-description": "Danska som talas i Danmark.",
     "sv-SE": "Svenska",
     "sv": "Svenska",
     "sv-SE-description": "Svenska som talas i Sverige.",
@@ -1799,7 +1803,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.12.15",
+    "version": "v1.12.20",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Förstå varje svar bättre",
