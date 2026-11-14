@@ -3,26 +3,14 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { LanguageBubbles } from '@/components/LanguageBubbles'
-import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => (key: string) =>
     namespace === 'targetLanguages'
       ? `Localized ${key}`
-      : key === 'languageGreetings.ru-RU'
-        ? 'Привет!'
-        : key === 'languageGreetings.sv-SE' ||
-            key === 'languageGreetings.da-DK'
-          ? 'Hej!'
-          : key === 'languageGreetings.cs-CZ'
-            ? 'Ahoj!'
-            : key === 'languageGreetings.hr-HR'
-              ? 'Bok!'
-              : key === 'languageGreetings.fi-FI'
-                ? 'Hei!'
-                : key === 'languageGreetings.ro-RO'
-                  ? 'Bună!'
-                  : key,
+      : key === 'languageGreetings.ja-JP'
+        ? 'こんにちは！'
+        : key,
 }))
 
 vi.mock('@/components/lingu/LinguAvatar', () => ({
@@ -68,115 +56,56 @@ describe('LanguageBubbles', () => {
     expect(group).toHaveClass('opacity-100')
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
     expect(screen.getAllByRole('img', { name: /^Localized / })).toHaveLength(
-      SUPPORTED_TARGET_LANGUAGES.length
+      6
     )
   })
 
-  it('renders one bubble per supported target language', () => {
+  it('shows a small greeting sample with localized labels and target-language typography', () => {
     render(<LanguageBubbles />)
     fireEvent.click(screen.getByTestId('lingu-ready'))
 
     expect(screen.getAllByRole('img', { name: /^Localized / })).toHaveLength(
-      SUPPORTED_TARGET_LANGUAGES.length
+      6
     )
-    expect(screen.getByAltText('Localized de-DE')).toBeInTheDocument()
-    expect(screen.getByAltText('Localized nl-NL')).toHaveAttribute(
+    expect(screen.getByAltText('Localized en-GB')).toHaveAttribute(
       'src',
-      '/flags/netherlands.jpg'
+      '/flags/uk.jpg'
     )
-    expect(screen.getByAltText('Localized pt-BR')).toHaveAttribute(
+    expect(screen.getByAltText('Localized es-ES')).toHaveAttribute(
       'src',
-      '/flags/brazil.jpg'
+      '/flags/spain.jpg'
     )
-    expect(screen.getByAltText('Localized ru-RU')).toHaveAttribute(
+    expect(screen.getByAltText('Localized fr-FR')).toHaveAttribute(
       'src',
-      '/flags/russia.jpg'
+      '/flags/france.jpg'
     )
-    expect(screen.getByText('Привет!')).toHaveAttribute('lang', 'ru-RU')
-    expect(screen.getByText('Привет!')).toHaveClass('font-target-cyrillic')
-    expect(screen.getByAltText('Localized sv-SE')).toHaveAttribute(
+    expect(screen.getByAltText('Localized ja-JP')).toHaveAttribute(
       'src',
-      '/flags/sweden.jpg'
+      '/flags/japan.jpg'
     )
-    expect(screen.getByAltText('Localized da-DK')).toHaveAttribute(
+    expect(screen.getByAltText('Localized de-DE')).toHaveAttribute(
       'src',
-      '/flags/denmark.jpg'
+      '/flags/germany.jpg'
     )
-    expect(screen.getByAltText('Localized cs-CZ')).toHaveAttribute(
+    expect(screen.getByAltText('Localized it-IT')).toHaveAttribute(
       'src',
-      '/flags/czech_republic.jpg'
+      '/flags/italy.jpg'
     )
-    expect(screen.getByText('Ahoj!')).toHaveAttribute('lang', 'cs-CZ')
-    expect(screen.getByText('Ahoj!')).toHaveClass('font-target-latin')
-    expect(screen.getByAltText('Localized hr-HR')).toHaveAttribute(
-      'src',
-      '/flags/croatia.jpg'
+    expect(screen.getByText('こんにちは！')).toHaveAttribute('lang', 'ja-JP')
+    expect(screen.getByText('こんにちは！')).toHaveClass('font-target-ja')
+    expect(screen.getByText('languageGreetings.en-GB')).toHaveAttribute(
+      'lang',
+      'en-GB'
     )
-    expect(screen.getByText('Bok!')).toHaveAttribute('lang', 'hr-HR')
-    expect(screen.getByText('Bok!')).toHaveClass('font-target-latin')
-    expect(screen.getByAltText('Localized fi-FI')).toHaveAttribute(
-      'src',
-      '/flags/finland.jpg'
+    expect(screen.getByText('languageGreetings.en-GB')).toHaveClass(
+      'font-target-latin'
     )
-    expect(screen.getByText('Hei!')).toHaveAttribute('lang', 'fi-FI')
-    expect(screen.getByText('Hei!')).toHaveClass('font-target-latin')
-    expect(screen.getByAltText('Localized ro-RO')).toHaveAttribute(
-      'src',
-      '/flags/romania.jpg'
-    )
-    expect(screen.getByText('Bună!')).toHaveAttribute('lang', 'ro-RO')
-    expect(screen.getByText('Bună!')).toHaveClass('font-target-latin')
-    const greetings = screen.getAllByText('Hej!')
-    expect(greetings).toHaveLength(2)
-    expect(greetings.map((greeting) => greeting.getAttribute('lang'))).toEqual([
-      'sv-SE',
-      'da-DK',
-    ])
-    for (const greeting of greetings) {
-      expect(greeting).toHaveClass('font-target-latin')
-    }
     expect(screen.getByRole('img', { name: 'FreeLingo' })).toBeInTheDocument()
   })
 
-  it('uses a wider desktop orbit and wrapping mobile layout for all languages', () => {
-    const { container } = render(<LanguageBubbles />)
-    const wrappers = Array.from(
-      container.querySelectorAll<HTMLDivElement>('div[style]')
-    ).filter((el) => el.style.getPropertyValue('--bubble-x'))
-
-    expect(container.querySelector('.flex-wrap')).toHaveClass('gap-y-4')
-    expect(wrappers).toHaveLength(SUPPORTED_TARGET_LANGUAGES.length)
-    const xPositions = wrappers.map((el) =>
-      Number.parseFloat(el.style.getPropertyValue('--bubble-x'))
-    )
-    expect(Math.max(...xPositions) - Math.min(...xPositions)).toBeGreaterThan(
-      420
-    )
-    for (const wrapper of wrappers) {
-      expect(wrapper).toHaveClass('relative', 'sm:absolute')
-      const x = Number.parseFloat(wrapper.style.getPropertyValue('--bubble-x'))
-      const y = Number.parseFloat(wrapper.style.getPropertyValue('--bubble-y'))
-      expect(Math.hypot(x / 215, y / 140)).toBeCloseTo(1, 2)
-    }
-  })
-
-  it('hydrates server markup despite tiny differences in trigonometric precision', () => {
-    const cos = Math.cos
-    const sin = Math.sin
-    const serverCos = vi
-      .spyOn(Math, 'cos')
-      .mockImplementation((angle) => cos(angle) + 1e-15)
-    const serverSin = vi
-      .spyOn(Math, 'sin')
-      .mockImplementation((angle) => sin(angle) - 1e-15)
+  it('hydrates server markup without changing the initial loading presentation', () => {
     const container = document.createElement('div')
-    try {
-      container.innerHTML = renderToString(<LanguageBubbles />)
-    } finally {
-      serverCos.mockRestore()
-      serverSin.mockRestore()
-    }
-
+    container.innerHTML = renderToString(<LanguageBubbles />)
     const serverMarkup = container.innerHTML
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
     try {

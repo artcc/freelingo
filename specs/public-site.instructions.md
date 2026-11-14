@@ -26,13 +26,18 @@ The static written English correction example accompanies an explanation of voic
 from a completed lesson, whose content and answered exercises can inform Lingu's conversation. It
 uses `TargetLanguageText` with `en-GB`, localized labels, and no simulated controls or API requests.
 Spaced repetition, XP and streaks are supplementary copy rather than a separate feature grid.
-The hero uses one animated Lingu in `LanguageBubbles`.
-Language greetings surround Lingu in a wide elliptical orbit from the small-screen breakpoint;
-on narrower viewports they wrap into spaced rows below the avatar. The hero reserves the orbit's
-width, showing a spinner without visible text in Lingu's position until the avatar is ready; Lingu
-and the greetings then appear together. Orbit offsets use
-rounded CSS custom properties and centered margin positioning so server and browser markup agree
-without relying on serialized `calc()` expressions. Floating animations respect reduced motion.
+
+The hero uses two columns from the large-screen breakpoint: copy and entry actions on the left,
+and one animated Lingu in `LanguageBubbles` on the right. Smaller viewports stack the copy and actions
+before Lingu. Six fixed greeting bubbles accompany the avatar: British English, Japanese, German,
+Italian, Spanish, and French. The Japanese bubble is offset farther right to leave room for Lingu.
+Avatar sizing, readiness, and reduced-motion behavior belong to `architecture-frontend.instructions.md`.
+
+A separate section below the hero columns lists every `SUPPORTED_TARGET_LANGUAGES` entry in
+centered, wrapping rows. Each non-interactive label shows a decorative flag and its localized
+`targetLanguages` name, including regional distinctions. Ordering uses `Intl.Collator` with the
+active interface locale and translated names. The heading reuses `onboarding.subtitle`.
+This list renders on the server independently of avatar readiness.
 
 ## Cloud and self-hosting
 
@@ -94,5 +99,11 @@ the landing's Cloud/self-hosted terminology, learning journey, and operational d
 duplicating dynamic prices or trial durations. Its CTAs lead to FreeLingo Cloud and the repository
 installation guide.
 
-Its CSS preserves the solid blue-tinted theme and language orbit, compact hero spacing, visible
-keyboard focus, and reduced-motion support. Its canonical URL is defined in `seo.instructions.md`.
+Its hero follows the landing's two-column desktop layout and stacked mobile order, with the same
+six fixed greetings. Lingu uses the static `assets/logo.png` image, without animation or readiness
+gating. A separate wrapping list includes all supported study languages and regional variants,
+ordered alphabetically by their English names from `messages/en.json`; keep this static list aligned
+with the application catalog.
+
+Its CSS preserves the solid blue-tinted theme, compact hero spacing, visible keyboard focus, and
+reduced-motion support. Its canonical URL is defined in `seo.instructions.md`.

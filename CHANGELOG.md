@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.12.20] - Unreleased
+## [1.12.20] - 2026-11-14
 
 ### Added
 
 - New study languages: Croatian from Croatia (`hr-HR`), Czech from Czechia (`cs-CZ`), Danish from Denmark (`da-DK`), Finnish from Finland (`fi-FI`), and Romanian from Romania (`ro-RO`), each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, language-specific cultural and generation guidance, and localized selection with its national flag.
+
+### Changed
+
+- The landing and static project site use a two-column desktop hero with Lingu and six greetings, stacking content and entry actions before Lingu on mobile. Supported languages appear in separate wrapping rows, alphabetically ordered by their translated names; the English project site retains static Lingu artwork.
 
 ## [1.12.15] - 2026-11-12
 

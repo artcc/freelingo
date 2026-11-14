@@ -2,6 +2,7 @@ import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import type { ReviewPublic, ReviewPublicSummary } from '@/types/api'
+import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 
 const { mockHas, mockLandingNav, mockReviewsCarousel } = vi.hoisted(() => ({
   mockHas: vi.fn(),
@@ -205,6 +206,13 @@ describe('Landing Home', () => {
     expect(within(main).getByText('journey.practiceDesc')).toBeInTheDocument()
     expect(within(main).getByText('journey.speakDesc')).toBeInTheDocument()
     expect(main.querySelector('.reveal h1')).toBeNull()
+    const languages = within(main).getByRole('region', { name: 'subtitle' })
+    expect(within(languages).getAllByRole('listitem')).toHaveLength(
+      SUPPORTED_TARGET_LANGUAGES.length
+    )
+    for (const language of SUPPORTED_TARGET_LANGUAGES) {
+      expect(within(languages).getByText(language.code)).toBeVisible()
+    }
   })
 
   it.each([
