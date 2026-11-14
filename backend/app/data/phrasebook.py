@@ -14,6 +14,7 @@ from app.data._types import CEFRLevel, PhrasebookCategory, PhrasebookEntry  # no
 _LANG_MODULES: dict[str, str] = {
     "en-GB": "app.data.en_GB.phrasebook",
     "en-US": "app.data.en_US.phrasebook",
+    "cs": "app.data.cs.phrasebook",
     "da": "app.data.da.phrasebook",
     "de": "app.data.de.phrasebook",
     "es": "app.data.es.phrasebook",

@@ -401,6 +401,7 @@ class TestLanguageAPI:
         assert "ru-RU" in data["all_supported_languages"]
         assert "sv-SE" in data["all_supported_languages"]
         assert "da-DK" in data["all_supported_languages"]
+        assert "cs-CZ" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -462,7 +463,7 @@ class TestLanguageAPI:
         assert res.status_code == 400
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("language", ["xx-XX", "ru", "ru-ru", "da", "da-dk"])
+    @pytest.mark.parametrize("language", ["xx-XX", "ru", "ru-ru", "da", "da-dk", "cs", "cs-cz"])
     async def test_supported_languages_validation(self, client, db_session, language):
         """POST /api/languages requires a supported canonical target code."""
         user, headers = await _make_user(db_session)
@@ -499,7 +500,7 @@ class TestLanguageAPI:
         assert res.json()["target_language"] == "pl-PL"
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("language", ["nl-NL", "ru-RU", "sv-SE", "da-DK"])
+    @pytest.mark.parametrize("language", ["nl-NL", "ru-RU", "sv-SE", "da-DK", "cs-CZ"])
     async def test_add_plan_switch_and_remove_preserve_other_language(
         self, client, db_session, language
     ):

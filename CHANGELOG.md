@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
-- Danish from Denmark (`da-DK`) as a study language, with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, Danish cultural and generation guidance, and localized language selection using the Denmark flag.
+- New study languages: Czech from Czechia (`cs-CZ`) and Danish from Denmark (`da-DK`), each with an A1–C2 curriculum, grammar reference, vocabulary, phrasebook, placement bank, language-specific cultural and generation guidance, and localized selection with its national flag.
 
 ## [1.12.15] - 2026-11-12
 

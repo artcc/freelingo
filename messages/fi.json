@@ -103,6 +103,7 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1501,9 @@
     "supportedLanguages": "Saatavilla olevat kielet"
   },
   "targetLanguages": {
+    "cs-CZ": "Tšekki",
+    "cs": "Tšekki",
+    "cs-CZ-description": "Tšekissä puhuttu tšekki.",
     "da-DK": "Tanska",
     "da": "Tanska",
     "da-DK-description": "Tanskassa puhuttu tanska.",

@@ -103,6 +103,7 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1501,9 @@
     "supportedLanguages": "Lingue disponibili"
   },
   "targetLanguages": {
+    "cs-CZ": "Ceco",
+    "cs": "Ceco",
+    "cs-CZ-description": "Ceco parlato in Cechia.",
     "da-DK": "Danese",
     "da": "Danese",
     "da-DK-description": "Danese parlato in Danimarca.",

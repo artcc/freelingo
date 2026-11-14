@@ -98,7 +98,19 @@ def test_language_package_meets_per_level_coverage_minimums(language, level, min
 
 @pytest.mark.parametrize(
     "language",
-    ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ru-RU", "sv-SE", "da-DK"],
+    [
+        "fr-FR",
+        "it-IT",
+        "pt-BR",
+        "pt-PT",
+        "pl-PL",
+        "nl-NL",
+        "ja-JP",
+        "ru-RU",
+        "sv-SE",
+        "da-DK",
+        "cs-CZ",
+    ],
 )
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
@@ -165,6 +177,8 @@ def _check_language_vocab_refs(lang: str, curriculum: dict, vocab_sets: list) ->
 def test_curriculum_vocab_refs_all_defined() -> None:
     """Every vocabulary_set_ids reference in every language's curriculum must exist
     in that language's vocabulary data."""
+    import app.data.cs.curriculum as cs_curriculum
+    import app.data.cs.vocabulary as cs_vocabulary
     import app.data.en_GB.curriculum as en_curriculum
     import app.data.en_GB.vocabulary as en_vocabulary
     import app.data.es.curriculum as es_curriculum
@@ -186,6 +200,7 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.zh.curriculum as zh_curriculum
     import app.data.zh.vocabulary as zh_vocabulary
 
+    _check_language_vocab_refs("Czech", cs_curriculum.CURRICULUM, cs_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("English", en_curriculum.CURRICULUM, en_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Spanish", es_curriculum.CURRICULUM, es_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("French", fr_curriculum.CURRICULUM, fr_vocabulary.VOCABULARY_SETS)
@@ -215,6 +230,7 @@ def test_grammar_related_refs_all_defined() -> None:
 
 def test_vocabulary_export_completeness() -> None:
     """Every vocabulary set ID in the backend data must belong to exactly one CEFR level."""
+    from app.data.cs.vocabulary import VOCABULARY_SETS as cs_sets
     from app.data.en_GB.vocabulary import VOCABULARY_SETS as en_sets
     from app.data.es.vocabulary import VOCABULARY_SETS as es_sets
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
@@ -226,6 +242,7 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
+        ("cs", cs_sets),
         ("en", en_sets),
         ("es", es_sets),
         ("it", it_sets),
@@ -271,6 +288,7 @@ def test_grammar_slug_uniqueness() -> None:
 
 def test_vocabulary_id_uniqueness() -> None:
     """No vocabulary set ID should be duplicated within a single language."""
+    from app.data.cs.vocabulary import VOCABULARY_SETS as cs_sets
     from app.data.en_GB.vocabulary import VOCABULARY_SETS as en_sets
     from app.data.es.vocabulary import VOCABULARY_SETS as es_sets
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
@@ -282,6 +300,7 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
+        ("cs", cs_sets),
         ("en", en_sets),
         ("es", es_sets),
         ("it", it_sets),

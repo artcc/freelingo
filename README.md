@@ -238,6 +238,7 @@ Learn one language or several side by side. Each has its own A1–C2 curriculum,
 grammar reference, vocabulary and phrasebook.
 
 - **Chinese:** Mainland Mandarin, in simplified characters (`zh-CN`).
+- **Czech:** Czechia (`cs-CZ`).
 - **Danish:** Denmark (`da-DK`).
 - **Dutch:** Netherlands (`nl-NL`).
 - **English:** British (`en-GB`) and American (`en-US`).

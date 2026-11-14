@@ -103,6 +103,7 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1501,9 @@
     "supportedLanguages": "Kullanılabilir diller"
   },
   "targetLanguages": {
+    "cs-CZ": "Çekçe",
+    "cs": "Çekçe",
+    "cs-CZ-description": "Çekya'da konuşulan Çekçe.",
     "da-DK": "Danca",
     "da": "Danca",
     "da-DK-description": "Danimarka'da konuşulan Danca.",

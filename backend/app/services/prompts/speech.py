@@ -1,6 +1,7 @@
 """Pronunciation instructions for instruction-capable speech models."""
 
 _SPEECH_LANGUAGES = {
+    "cs": "Czech from Czechia",
     "en": "British English",
     "en-US": "American English",
     "es": "Spanish from Spain",
@@ -25,6 +26,12 @@ _SPEECH_LANGUAGES = {
 
 
 _PRONUNCIATION_GUIDANCE = {
+    "cs": (
+        "Use native Czech vowel length independently of first-syllable stress. In prepositional "
+        "phrases, place stress on a preceding monosyllabic preposition where appropriate. "
+        "Preserve ř, palatal consonants, syllabic r and l, natural voicing assimilation and final "
+        "devoicing. Keep Czech vowel quality and phrasing rather than English reductions."
+    ),
     "en": "Use contemporary British vowel sounds and natural connected speech, without theatrical diction.",
     "en-US": "Use natural American vowels, rhotic r, and conversational connected speech.",
     "es": (

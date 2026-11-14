@@ -61,7 +61,7 @@ describe('TargetLanguageSelector', () => {
     )
 
     const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(16)
+    expect(buttons).toHaveLength(17)
   })
 
   it('renders nothing when availableCodes is empty', () => {
@@ -165,6 +165,7 @@ describe('TargetLanguageSelector', () => {
     ['ru-RU', '/flags/russia.jpg'],
     ['sv-SE', '/flags/sweden.jpg'],
     ['da-DK', '/flags/denmark.jpg'],
+    ['cs-CZ', '/flags/czech_republic.jpg'],
   ])('selects %s with its flag only while enabled by the backend', (code, flag) => {
     const onChange = vi.fn()
     const { rerender } = render(
@@ -272,6 +273,7 @@ describe('TargetLanguageSelector', () => {
     expect(srcs).toContain('/flags/netherlands.jpg')
     expect(srcs).toContain('/flags/russia.jpg')
     expect(srcs).toContain('/flags/denmark.jpg')
+    expect(srcs).toContain('/flags/czech_republic.jpg')
     expect(srcs).toContain('/flags/japan.jpg')
     expect(srcs).toContain('/flags/south_korea.jpg')
     expect(srcs).toContain('/flags/china.jpg')

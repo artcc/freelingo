@@ -103,6 +103,7 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1501,9 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "cs-CZ": "Czeski",
+    "cs": "Czeski",
+    "cs-CZ-description": "Czeski używany w Czechach.",
     "da-DK": "Duński",
     "da": "Duński",
     "da-DK-description": "Duński używany w Danii.",

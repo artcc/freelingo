@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "cs-CZ": """
+Language-specific guidance:
+- Use contemporary standard Czech as used in Czechia. Preserve Czech diacritics, including vowel length, ě and ř, and natural compound spelling. Distinguish standard, common spoken Czech and regional usage without treating every conversational variant as an error or substituting Slovak or Polish forms.
+- Build from the alphabet, vowel length independent of first-syllable stress, palatal consonants and ř to gender, animacy, agreement and the seven cases. Introduce case endings with their communicative functions and verb or preposition government; do not import English articles.
+- Teach imperfective and perfective aspect through context, distinguishing process, repetition and bounded result rather than equating aspect with tense. Develop motion verbs and prefixes gradually. Preserve natural past-tense agreement, conditional auxiliaries and reflexive se/si and svůj with explicit referents.
+- Teach clitic placement by prosodic and syntactic units rather than a rigid second-written-word rule. Respect information structure, negative concord, numeral agreement and the scope of focus particles. Use ty or vy consistently with the relationship, and distinguish polite singular address from plural agreement.
+- Progress from everyday interaction to interpretation, negotiation, mediation, humour and precise reformulation across registers. Preserve participants, source attribution, conditions, scope and degree of certainty. Give assessment questions enough context for exactly one accepted answer.
+- Use varied everyday and cultural settings across Czechia, including Bohemia, Moravia and Czech Silesia, public transport, libraries, literature, music, regional life and contemporary debates. Avoid stereotypes and distinguish Czech from the separate Slovak language.
+""".strip(),
     "da-DK": """
 Language-specific guidance:
 - Use contemporary standard Danish as used in Denmark. Preserve æ, ø and å as distinct letters, Danish compound spelling and capitalization. Recognize regional pronunciation and usage without substituting Swedish or Norwegian forms.
@@ -144,6 +153,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "cs": "cs-CZ",
     "da": "da-DK",
     "sv": "sv-SE",
     "ru": "ru-RU",

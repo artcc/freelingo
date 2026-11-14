@@ -41,6 +41,7 @@ LANGUAGES = (
     "ru-RU",
     "sv-SE",
     "da-DK",
+    "cs-CZ",
     "pt-BR",
     "pt-PT",
     "ja-JP",

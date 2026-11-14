@@ -103,6 +103,7 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1501,9 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "cs-CZ": "Tsjechisch",
+    "cs": "Tsjechisch",
+    "cs-CZ-description": "Tsjechisch zoals gesproken in Tsjechië.",
     "da-DK": "Deens",
     "da": "Deens",
     "da-DK-description": "Deens zoals gesproken in Denemarken.",

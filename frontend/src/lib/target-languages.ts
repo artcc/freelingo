@@ -49,6 +49,7 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'nl-NL': LATIN_LANGUAGE_CAPABILITY,
   'sv-SE': LATIN_LANGUAGE_CAPABILITY,
   'da-DK': LATIN_LANGUAGE_CAPABILITY,
+  'cs-CZ': LATIN_LANGUAGE_CAPABILITY,
   'ru-RU': {
     script: 'cyrillic',
     fontClass: 'font-target-cyrillic',
@@ -175,6 +176,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     nameEn: 'Danish',
     flagPath: '/flags/denmark.jpg',
     iso639: 'da',
+  }),
+  withCapabilities({
+    code: 'cs-CZ',
+    name: 'Čeština',
+    nameEn: 'Czech',
+    flagPath: '/flags/czech_republic.jpg',
+    iso639: 'cs',
   }),
   withCapabilities({
     code: 'ja-JP',

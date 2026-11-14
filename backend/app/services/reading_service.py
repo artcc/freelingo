@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "cs": [
+        "daily life, public transport, libraries and local services in Czechia",
+        "Czech literature, theatre, cinema, music, architecture and contemporary cultural life",
+        "regional traditions and everyday life in Bohemia, Moravia and Czech Silesia",
+        "Czech hiking culture, marked trails, landscape conservation and sustainability debates",
+    ],
     "da": [
         "daily life, cycling, public transport, libraries and local services in Denmark",
         "Danish literature, cinema, music, architecture and design",

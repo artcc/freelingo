@@ -1142,7 +1142,9 @@ async def test_complete_with_language_in_session(
     assert result["cefr_level"] == "A1"
 
 
-@pytest.mark.parametrize("target_language", ["pl-PL", "fr-FR", "nl-NL", "ru-RU", "sv-SE", "da-DK"])
+@pytest.mark.parametrize(
+    "target_language", ["pl-PL", "fr-FR", "nl-NL", "ru-RU", "sv-SE", "da-DK", "cs-CZ"]
+)
 @pytest.mark.parametrize("session_scope", ["profile", "legacy", "requested"])
 async def test_complete_explicit_language_ignores_stale_quiz_session(
     client: AsyncClient,
@@ -1216,7 +1218,9 @@ async def test_complete_without_explicit_language_preserves_quiz_fallback(
     assert plan.target_language == "pl-PL"
 
 
-@pytest.mark.parametrize("target_language", ["xx-XX", "pl-PL", "en-US", "", "pl"])
+@pytest.mark.parametrize(
+    "target_language", ["xx-XX", "pl-PL", "en-US", "", "pl", "cs", "cs-cz", "cs-CZ"]
+)
 @pytest.mark.parametrize("language_source", ["explicit", "scoped", "legacy", "profile"])
 async def test_complete_rejects_unavailable_language_without_state_changes(
     client: AsyncClient,

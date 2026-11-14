@@ -17,7 +17,7 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
+The application recognizes `en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -100,7 +100,8 @@ New code must not infer a plan-owned operation's language from the compatibility
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
-Mandarin with simplified characters, standard Swedish from Sweden, and standard Danish from Denmark.
+Mandarin with simplified characters, standard Swedish from Sweden, standard Danish from Denmark, and
+standard Czech from Czechia.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -148,8 +149,18 @@ requests Danish vowels, soft d, natural reductions and stød where appropriate w
 pronunciation as an error. OpenAI TTS, Gemini TTS and Whisper support Danish; the English-only Kokoro
 voice configuration is not suitable for this target language.
 
+`cs-CZ` resolves to the independent `backend/app/data/cs/` package; `cs` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Czech uses Latin text with Czech
+diacritics, visible word spacing, word-based comprehension lengths, ISO `cs` recognition and the Czech
+Republic flag. Its curriculum introduces spelling, vowel length and stress before gender, animacy,
+cases, aspect, motion verbs, clitics and advanced discourse. Generated content preserves Czech
+diacritics and distinguishes standard, common spoken and regional usage without substituting Slovak
+or Polish. Shared speech guidance requests vowel length independently of stress, ř, palatal
+consonants, syllabic r/l and natural voicing assimilation. OpenAI TTS, Gemini TTS and Whisper support
+Czech; the English-only Kokoro voice configuration is not suitable for this target language.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Danish, Polish, Russian and Swedish.
+other current languages, including Czech, Danish, Polish, Russian and Swedish.
 
 ## Speech recognition
 

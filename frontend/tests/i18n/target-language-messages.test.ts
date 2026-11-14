@@ -17,6 +17,7 @@ describe.each(SUPPORTED_LOCALES)('target language messages in %s', (locale) => {
     expect(messages.landing.languageGreetings['ru-RU']).toBe('Привет!')
     expect(messages.landing.languageGreetings['sv-SE']).toBe('Hej!')
     expect(messages.landing.languageGreetings['da-DK']).toBe('Hej!')
+    expect(messages.landing.languageGreetings['cs-CZ']).toBe('Ahoj!')
     expect(messages.faq.a_language).toContain('{languages}')
     expect(messages.landing.faq.languages.answer).toContain('{languages}')
     expect(messages.targetLanguages.nl?.trim()).toBeTruthy()

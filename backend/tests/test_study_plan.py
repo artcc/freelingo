@@ -63,7 +63,22 @@ async def test_get_current_plan_after_generate(client, test_user):
 
 @pytest.mark.parametrize(
     "target_language",
-    ["xx-XX", "ru", "ru-ru", "", "ru-RU", "sv", "sv-se", "sv-SE", "da", "da-dk", "da-DK"],
+    [
+        "xx-XX",
+        "ru",
+        "ru-ru",
+        "",
+        "ru-RU",
+        "sv",
+        "sv-se",
+        "sv-SE",
+        "da",
+        "da-dk",
+        "da-DK",
+        "cs",
+        "cs-cz",
+        "cs-CZ",
+    ],
 )
 @pytest.mark.parametrize("language_source", ["explicit", "active", "profile"])
 async def test_generate_rejects_unavailable_language_without_state_changes(
@@ -117,7 +132,7 @@ async def test_generate_rejects_unavailable_language_without_state_changes(
         ("profile", True),
     ],
 )
-@pytest.mark.parametrize("target_language", ["ru-RU", "sv-SE", "da-DK"])
+@pytest.mark.parametrize("target_language", ["ru-RU", "sv-SE", "da-DK", "cs-CZ"])
 async def test_generate_uses_available_language_from_each_source(
     client, test_user, db_session, monkeypatch, language_source, explicit_null, target_language
 ):
