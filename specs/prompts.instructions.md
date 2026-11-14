@@ -83,6 +83,16 @@ V2/subordinate negation, perfect auxiliaries, reflexive reference, number words 
 It preserves Danish usage independently of Swedish and Norwegian. The canonical variety,
 writing-system and speech rules are defined in `target-language.instructions.md`.
 
+Czech (`cs-CZ`, internal alias `cs`) has explicit diacritic, vowel-length, stress, gender/animacy,
+case, aspect, motion-verb, clitic and register guidance. It distinguishes standard and conversational
+Czech usage while preserving meaning and source attribution in advanced reformulations. The canonical
+variety, writing-system and speech rules are defined in `target-language.instructions.md`.
+
+Croatian (`hr-HR`, internal alias `hr`) has explicit Latin-script, ijekavian spelling, pronunciation,
+gender/animacy, case, aspect, conditional and clitic guidance. It preserves Croatian usage, natural
+reported speech and source attribution, and distinguishes standard, regional and literary registers.
+The canonical variety, writing-system and speech rules are defined in `target-language.instructions.md`.
+
 `MEMORY_SYSTEM_INSTRUCTION_BASE` and `get_memory_system_instruction()` advertise the native
 `save_user_memory` tool only when the request actually offers that tool. No-tools fallbacks may retain
 escaped memory context but must not instruct the model to call an unavailable tool.

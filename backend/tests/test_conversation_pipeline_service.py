@@ -115,7 +115,13 @@ def test_pipeline_humanizes_native_language_code_in_system_prompt() -> None:
 
 @pytest.mark.parametrize(
     ("target_language", "native_language"),
-    [("en-GB", "Spanish"), ("ja-JP", "French"), ("pt-BR", "German")],
+    [
+        ("en-GB", "Spanish"),
+        ("ja-JP", "French"),
+        ("pt-BR", "German"),
+        ("fi-FI", "Spanish"),
+        ("ro-RO", "Spanish"),
+    ],
 )
 def test_voice_prompt_limits_native_support_and_scopes_language_overlay(
     target_language, native_language

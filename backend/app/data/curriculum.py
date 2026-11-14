@@ -30,13 +30,17 @@ _LESSON_TYPES: tuple[str, ...] = get_args(LessonType)
 _LANG_MODULES: dict[str, str] = {
     "en-GB": "app.data.en_GB.curriculum",
     "en-US": "app.data.en_US.curriculum",
+    "cs": "app.data.cs.curriculum",
     "da": "app.data.da.curriculum",
     "de": "app.data.de.curriculum",
     "es": "app.data.es.curriculum",
+    "fi": "app.data.fi.curriculum",
     "fr": "app.data.fr.curriculum",
+    "hr": "app.data.hr.curriculum",
     "it": "app.data.it.curriculum",
     "pl": "app.data.pl.curriculum",
     "nl": "app.data.nl.curriculum",
+    "ro": "app.data.ro.curriculum",
     "ru": "app.data.ru.curriculum",
     "sv": "app.data.sv.curriculum",
     "ja": "app.data.ja.curriculum",
@@ -49,6 +53,42 @@ _LANG_MODULES: dict[str, str] = {
 _CACHE: dict[str, object] = {}
 
 _I18N = {
+    "ro-RO": {
+        "lesson_title": "{title} – Lecția {n}",
+        "test_unit_title": "Test final de nivel {level}",
+        "test_title": "Test final de nivel {level}",
+        "test_objectives": [
+            "Recapitulează gramatica și vocabularul acestui nivel",
+            "Susține testul final și evaluează următorul pas în învățare",
+        ],
+    },
+    "fi-FI": {
+        "lesson_title": "{title} – Oppitunti {n}",
+        "test_unit_title": "Tason {level} lopputesti",
+        "test_title": "Tason {level} lopputesti",
+        "test_objectives": [
+            "Kertaa tason kielioppi ja sanasto",
+            "Tee lopputesti ja arvioi seuraava askel opinnoissasi",
+        ],
+    },
+    "hr-HR": {
+        "lesson_title": "{title} – Lekcija {n}",
+        "test_unit_title": "Završni test razine {level}",
+        "test_title": "Završni test razine {level}",
+        "test_objectives": [
+            "Ponoviti gramatiku i vokabular ove razine",
+            "Riješiti završni test i procijeniti sljedeći korak u učenju",
+        ],
+    },
+    "cs-CZ": {
+        "lesson_title": "{title} – Lekce {n}",
+        "test_unit_title": "Závěrečný test úrovně {level}",
+        "test_title": "Závěrečný test úrovně {level}",
+        "test_objectives": [
+            "Zopakovat gramatiku a slovní zásobu této úrovně",
+            "Absolvovat závěrečný test a posoudit další krok ve studiu",
+        ],
+    },
     "da-DK": {
         "lesson_title": "{title} – Lektion {n}",
         "test_unit_title": "Afsluttende prøve på niveau {level}",

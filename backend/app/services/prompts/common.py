@@ -23,6 +23,42 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "ro-RO": """
+Language-specific guidance:
+- Use contemporary standard Romanian from Romania. Preserve ă, â, î, ș and ț with comma-below ș/ț, current â/î spelling and meaningful hyphens. Distinguish standard, conversational and regional usage without treating every valid alternative as an error or substituting another Romance language.
+- Build from vowel quality, lexical stress and spelling to masculine, feminine and neuter nouns, plurals, suffixed definite articles and agreement. Teach genitive/dative forms, possessive articles al/a/ai/ale and demonstratives through explicit referents and practical contexts.
+- Teach present, compound perfect, imperfect, pluperfect, future, conjunctive with să, conditional and imperative with their actual uses. Do not impose English tense backshift on reported speech; distinguish literary and regional simple-perfect usage from ordinary compound-perfect narration.
+- Develop direct-object marking with pe, clitic doubling and clitic order gradually, with context for person, definiteness and register. Preserve reflexive forms, negative concord and agreement; do not equate Romanian clitic placement with Spanish or Italian rules. Use tu or dumneavoastră consistently with the relationship.
+- Progress from everyday interaction to negotiation, mediation, humour and precise reformulation. Preserve participants, temporal reference, source attribution, negation scope, conditions and degree of certainty. Placement questions require enough context for exactly one accepted answer.
+- Use varied Romanian settings, including everyday services, public transport, libraries, regional life, literature, cinema, music, the Carpathians and the Danube Delta. Respect linguistic diversity, distinguish Romanian from Romani and avoid stereotypes or conflating Romanian-speaking communities with a single nationality.
+""".strip(),
+    "fi-FI": """
+Language-specific guidance:
+- Use contemporary standard Finnish as used in Finland. Preserve ä and ö, meaningful single and double vowels and consonants, and natural compound spelling. Distinguish standard written Finnish, everyday spoken Finnish and regional varieties without treating valid conversational forms as universal errors.
+- Build from first-syllable stress independent of vowel and consonant length, vowel harmony and consonant gradation to stems, case endings and verb types. Teach cases with their communicative functions and lexical government; Finnish has no grammatical gender or articles. Hän does not specify gender.
+- Introduce the partitive through quantity, negation, ongoing events and lexical government. Contrast partitive and total objects with explicit context for boundedness and result; do not equate case mechanically with English tense. Teach possession with minulla on and distinguish inner and outer local cases using actual place usage.
+- Teach the inflected negative verb, present and past tenses, perfect and pluperfect, conditional, imperative and passive through practical contexts. Finnish has no dedicated future tense; use present forms and time expressions naturally. Distinguish the impersonal passive from conversational me plus passive without imposing written agreement on every spoken example.
+- Progress to infinitives, participles, reduced clauses, possessive suffixes, information structure and focus particles while preserving subjects, participants, scope, time and degree of certainty. Balance interpretation with negotiation, mediation, humour and precise reformulation. Assessment questions need enough context for exactly one accepted answer.
+- Use varied Finnish settings: everyday services, libraries, public transport, regional life, literature, music, design and environmental discussion. Explain jokaisenoikeudet with responsibilities and local restrictions. Respect Finland's linguistic diversity, including Swedish and the separate Sámi languages, without conflating them with Finnish or relying on stereotypes.
+""".strip(),
+    "hr-HR": """
+Language-specific guidance:
+- Use contemporary standard Croatian as used in Croatia, in Latin script with č, ć, đ, š and ž, and the digraphs dž, lj and nj. Preserve standard ijekavian spelling, including contextual ije/je alternations. Recognize Croatian regional and conversational usage without replacing the selected standard with Serbian, Bosnian or Montenegrin conventions.
+- Build from spelling, consonant contrasts, syllabic r and natural lexical accent to gender, animacy, agreement and the seven cases. Teach case functions with verb and preposition government. Introduce pitch and length through listening without imposing one accent pattern on every regional speaker.
+- Teach imperfective and perfective aspect through context rather than equating it with tense. Develop present, perfekt, futur I and futur II with their actual uses, agreement and Croatian spelling. Teach conditional forms bih, bi, bi, bismo, biste, bi and distinguish hypothetical meaning from polite requests.
+- Teach clitic placement by prosodic and syntactic units, not a rigid second-written-word rule; respect auxiliary and pronoun ordering and the special position of je. Preserve reflexive se, possessive svoj with explicit referents, negative concord, numeral agreement and information focus. Use ti or polite/plural vi consistently, with appropriate agreement.
+- Progress from everyday interaction to negotiation, mediation, humour and precise reformulation across registers. Do not impose obligatory English-style tense backshift on reported speech. Preserve participants, source attribution, conditions, scope and degree of certainty. Assessment questions need enough context for exactly one accepted answer.
+- Use varied Croatian settings: daily life, public transport, libraries, Zagreb and other cities, Slavonia, Istria, Dalmatia, island communities, literature, music and contemporary environmental debates. Distinguish standard, regional and literary usage without stereotypes; teach aorist and imperfect primarily for recognition in their appropriate contexts.
+""".strip(),
+    "cs-CZ": """
+Language-specific guidance:
+- Use contemporary standard Czech as used in Czechia. Preserve Czech diacritics, including vowel length, ě and ř, and natural compound spelling. Distinguish standard, common spoken Czech and regional usage without treating every conversational variant as an error or substituting Slovak or Polish forms.
+- Build from the alphabet, vowel length independent of first-syllable stress, palatal consonants and ř to gender, animacy, agreement and the seven cases. Introduce case endings with their communicative functions and verb or preposition government; do not import English articles.
+- Teach imperfective and perfective aspect through context, distinguishing process, repetition and bounded result rather than equating aspect with tense. Develop motion verbs and prefixes gradually. Preserve natural past-tense agreement, conditional auxiliaries and reflexive se/si and svůj with explicit referents.
+- Teach clitic placement by prosodic and syntactic units rather than a rigid second-written-word rule. Respect information structure, negative concord, numeral agreement and the scope of focus particles. Use ty or vy consistently with the relationship, and distinguish polite singular address from plural agreement.
+- Progress from everyday interaction to interpretation, negotiation, mediation, humour and precise reformulation across registers. Preserve participants, source attribution, conditions, scope and degree of certainty. Give assessment questions enough context for exactly one accepted answer.
+- Use varied everyday and cultural settings across Czechia, including Bohemia, Moravia and Czech Silesia, public transport, libraries, literature, music, regional life and contemporary debates. Avoid stereotypes and distinguish Czech from the separate Slovak language.
+""".strip(),
     "da-DK": """
 Language-specific guidance:
 - Use contemporary standard Danish as used in Denmark. Preserve æ, ø and å as distinct letters, Danish compound spelling and capitalization. Recognize regional pronunciation and usage without substituting Swedish or Norwegian forms.
@@ -144,6 +180,10 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "ro": "ro-RO",
+    "fi": "fi-FI",
+    "hr": "hr-HR",
+    "cs": "cs-CZ",
     "da": "da-DK",
     "sv": "sv-SE",
     "ru": "ru-RU",

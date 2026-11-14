@@ -123,12 +123,15 @@ class Settings(BaseSettings):
 
     # Multi-language — operator-configured subset of supported target languages.
     AVAILABLE_TARGET_LANGUAGES: list[str] = [
+        "cs-CZ",
         "da-DK",
         "de-DE",
         "en-GB",
         "en-US",
         "es-ES",
+        "fi-FI",
         "fr-FR",
+        "hr-HR",
         "it-IT",
         "ja-JP",
         "ko-KR",
@@ -136,6 +139,7 @@ class Settings(BaseSettings):
         "pl-PL",
         "pt-BR",
         "pt-PT",
+        "ro-RO",
         "ru-RU",
         "sv-SE",
         "zh-CN",

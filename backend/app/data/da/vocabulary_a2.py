@@ -96,7 +96,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en kuffert",
                 "noun",
-                "En rejsetaske med faste sider og ofte hjul.",
+                "En rejsetaske med håndtag, ofte også hjul, som kan åbnes helt.",
                 "Min kuffert er blå.",
             ),
             VocabularyEntry(
@@ -398,7 +398,7 @@ A2_SETS: list[VocabularySet] = [
                 "en tablet",
                 "noun",
                 "En lille fast portion medicin, som man ofte synker.",
-                "Hvor mange tabletter står der på pakken?",
+                "Pakken indeholder tyve tabletter.",
             ),
             VocabularyEntry(
                 "en dosis",
@@ -683,7 +683,8 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en returret",
                 "noun",
-                "En mulighed for at levere en vare tilbage efter bestemte vilkår.",
+                "En ret til at levere en købt vare tilbage og få pengene tilbage "
+                "efter bestemte vilkår.",
                 "Hvilke regler gælder for returret her?",
             ),
             VocabularyEntry(
@@ -1053,7 +1054,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en sagsbehandler",
                 "noun",
-                "En medarbejder, der behandler en bestemt sag, for eksempel i kommunen.",
+                "En medarbejder, der undersøger ansøgninger og hjælper med at afgøre dem.",
                 "Kan jeg tale med min sagsbehandler?",
             ),
             VocabularyEntry(
@@ -1113,7 +1114,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "oplyse",
                 "verb",
-                "Give bestemte oplysninger til nogen.",
+                "Fortælle eller skrive noget, som modtageren skal vide.",
                 "Du skal oplyse din adresse.",
             ),
             VocabularyEntry(

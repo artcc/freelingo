@@ -103,6 +103,10 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1504,18 @@
     "supportedLanguages": "Idiomas disponibles"
   },
   "targetLanguages": {
+    "ro-RO": "Rumano (Rumanía)",
+    "ro": "Rumano",
+    "ro-RO-description": "Rumano tal como se habla en Rumanía.",
+    "fi-FI": "Finés",
+    "fi": "Finés",
+    "fi-FI-description": "Finés hablado en Finlandia.",
+    "hr-HR": "Croata",
+    "hr": "Croata",
+    "hr-HR-description": "Croata hablado en Croacia.",
+    "cs-CZ": "Checo",
+    "cs": "Checo",
+    "cs-CZ-description": "Checo hablado en Chequia.",
     "da-DK": "Danés",
     "da": "Danés",
     "da-DK-description": "Danés hablado en Dinamarca.",
@@ -1806,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Entendido",
     "entry1": {
-      "label": "Comprende mejor cada respuesta",
-      "desc": "Después de completar Reading o Listening, puedes pedir una explicación en tu idioma nativo con un fragmento del texto que justifica la respuesta. También puedes releer el pasaje o volver a escuchar el audio mientras repasas."
+      "label": "Nuevos idiomas: croata, checo, danés, finés y rumano",
+      "desc": "Añadimos el croata, el checo, el danés, el finés y el rumano como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
     },
     "entry2": {
-      "label": "Mejoras en el sistema de aprendizaje",
-      "desc": "Ahora puedes consultar la traducción de los enunciados a tu idioma nativo cuando lo necesites, manteniendo la pregunta original en el idioma que estás aprendiendo."
+      "label": "Comprende mejor cada respuesta",
+      "desc": "Consulta la traducción de los enunciados a tu idioma nativo sin perder la pregunta original. Después de completar Reading o Listening, pide una explicación en tu idioma nativo con un fragmento del texto que justifica la respuesta. Además, puedes releer el pasaje o volver a escuchar el audio mientras repasas."
     },
     "entry3": {
-      "label": "Tu vocabulario, con traducción",
-      "desc": "Las nuevas tarjetas que añadas desde Vocabulario incluyen la traducción a tu idioma nativo. Las tarjetas que ya tienes conservan su contenido."
-    },
-    "entry4": {
       "label": "Lingu te ayuda cuando lo necesitas",
       "desc": "Si no entiendes algo durante una conversación de voz, pide ayuda a Lingu. Puede explicártelo brevemente en tu idioma nativo y después retomar la práctica en el idioma que estás aprendiendo."
     },
-    "entry5": {
+    "entry4": {
       "label": "Voces más naturales y expresivas",
       "desc": "Disfruta de voces más naturales y expresivas en tus ejercicios de Listening y conversaciones con Lingu, para una experiencia de escucha más clara y agradable."
     },
-    "entry6": {
-      "label": "Mejoras en tu plan de estudio",
-      "desc": "Ahora tu plan muestra correctamente tu progreso y te permite continuar las lecciones y repasar las unidades que ya has trabajado."
-    },
-    "entry7": {
-      "label": "Nuevos idiomas: polaco, portugués de Brasil, ruso, neerlandés y sueco",
-      "desc": "Añadimos el polaco, el portugués de Brasil, el ruso, el neerlandés y el sueco como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Una experiencia más fluida",
       "desc": "También hemos corregido pequeños errores y pulido algunos detalles para que disfrutes más de tu día a día con FreeLingo."
     }

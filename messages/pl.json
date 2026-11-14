@@ -103,6 +103,10 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1504,18 @@
     "supportedLanguages": "Dostępne języki"
   },
   "targetLanguages": {
+    "ro-RO": "Rumuński (Rumunia)",
+    "ro": "Rumuński",
+    "ro-RO-description": "Język rumuński używany w Rumunii.",
+    "fi-FI": "Fiński",
+    "fi": "Fiński",
+    "fi-FI-description": "Fiński używany w Finlandii.",
+    "hr-HR": "Chorwacki",
+    "hr": "Chorwacki",
+    "hr-HR-description": "Chorwacki używany w Chorwacji.",
+    "cs-CZ": "Czeski",
+    "cs": "Czeski",
+    "cs-CZ-description": "Czeski używany w Czechach.",
     "da-DK": "Duński",
     "da": "Duński",
     "da-DK-description": "Duński używany w Danii.",
@@ -1806,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Rozumiem",
     "entry1": {
-      "label": "Lepiej zrozum każdą odpowiedź",
-      "desc": "Po ukończeniu Reading lub Listening możesz poprosić o wyjaśnienie w swoim języku ojczystym wraz z fragmentem tekstu uzasadniającym odpowiedź. Podczas powtórki możesz też ponownie przeczytać tekst lub odsłuchać nagranie."
+      "label": "Nowe języki: chorwacki, czeski, duński, fiński i rumuński",
+      "desc": "Dodaliśmy chorwacki, czeski, duński, fiński i rumuński jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
     },
     "entry2": {
-      "label": "Ulepszenia systemu nauki",
-      "desc": "Teraz możesz w razie potrzeby wyświetlić tłumaczenie treści zadań na swój język ojczysty, zachowując oryginalne pytanie w języku, którego się uczysz."
+      "label": "Lepiej zrozum każdą odpowiedź",
+      "desc": "Zobacz tłumaczenie treści zadań na swój język ojczysty, zachowując widoczne oryginalne pytanie. Po ukończeniu Reading lub Listening poproś o wyjaśnienie w swoim języku ojczystym wraz z fragmentem tekstu uzasadniającym odpowiedź. Podczas powtórki możesz też ponownie przeczytać tekst lub odsłuchać nagranie."
     },
     "entry3": {
-      "label": "Twoje słownictwo z tłumaczeniem",
-      "desc": "Nowe fiszki dodawane z sekcji Słownictwo zawierają tłumaczenie na Twój język ojczysty. Fiszki, które już masz, zachowują swoją treść."
-    },
-    "entry4": {
       "label": "Lingu pomaga, gdy tego potrzebujesz",
       "desc": "Jeśli nie rozumiesz czegoś podczas rozmowy głosowej, poproś Lingu o pomoc. Może krótko wyjaśnić to w Twoim języku ojczystym, a potem wrócić do ćwiczeń w języku, którego się uczysz."
     },
-    "entry5": {
+    "entry4": {
       "label": "Bardziej naturalne i ekspresyjne głosy",
       "desc": "Ciesz się bardziej naturalnymi i ekspresyjnymi głosami w ćwiczeniach ze słuchania i rozmowach z Lingu, dzięki którym słuchanie staje się wyraźniejsze i przyjemniejsze."
     },
-    "entry6": {
-      "label": "Ulepszenia Twojego planu nauki",
-      "desc": "Twój plan teraz poprawnie pokazuje postępy i pozwala kontynuować lekcje oraz powtarzać przerobione już rozdziały."
-    },
-    "entry7": {
-      "label": "Nowe języki: polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki",
-      "desc": "Dodaliśmy polski, portugalski brazylijski, rosyjski, niderlandzki i szwedzki jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

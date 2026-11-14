@@ -7,9 +7,9 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-g-b1-001",
         "grammar",
         "B1",
-        "Vælg neutral skriftlig ordstilling: Vi flytter mødet, fordi Maja ___.",
+        "Vælg den korrekte formulering: Vi flytter mødet, fordi Maja ___.",
         [
-            "kan ikke deltage",
+            "ikke kan deltager",
             "ikke kan deltage",
             "ikke deltage kan",
             "deltage ikke kan",
@@ -39,9 +39,9 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "Der er tale om en vane, som stadig gælder: Jeg ___ gå en tur efter aftensmaden.",
         [
             "plejer at",
-            "plejede",
-            "plejer til",
-            "plejede på",
+            "plejede at",
+            "plejer",
+            "pleje at",
         ],
         "plejer at",
         "da-habits-b1",
@@ -64,7 +64,8 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-g-b1-005",
         "grammar",
         "B1",
-        "Værkstedet skriver: Cyklen er først klar på torsdag. " "Hvilken plan passer med beskeden?",
+        "Du bruger cyklen til arbejde hver dag. Værkstedet skriver: Cyklen er først "
+        "klar på torsdag. Hvilken plan passer med beskeden?",
         [
             "Jeg kan hente den onsdag, hvis jeg kommer sent.",
             "Jeg skal hente den senest onsdag aften.",
@@ -81,12 +82,12 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "Du spørger, om der kommer flere til fællesspisningen. "
         "Arrangøren svarer: Der kommer nok nogle efter arbejde. Hvad udtrykker nok her?",
         [
-            "En forventning, som arrangøren ikke gør helt sikker.",
-            "En bekræftelse på, at alle allerede er kommet.",
-            "En oplysning om, at der er mad nok til alle.",
-            "Et krav om, at deltagerne skal arbejde først.",
+            "En forventning om flere deltagere, men ikke et løfte.",
+            "En bekræftelse på, at de ventede deltagere er kommet.",
+            "En vurdering af, at der kommer tilstrækkeligt mange.",
+            "En besked om, at flere deltagere har lovet at komme.",
         ],
-        "En forventning, som arrangøren ikke gør helt sikker.",
+        "En forventning om flere deltagere, men ikke et løfte.",
         "da-particles-jo-nok-b1",
     ),
     AssessmentQuestion(
@@ -122,7 +123,8 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-v-b1-001",
         "vocabulary",
         "B1",
-        "Brevet siger: Vedhæft en kopi af lejekontrakten. Hvad skal du gøre?",
+        "I den digitale formular står der: Vedhæft en kopi af lejekontrakten. "
+        "Hvad skal du gøre?",
         [
             "Aflevere nøglerne sammen med kontrakten.",
             "Skrive en ny kontrakt med samme betingelser.",
@@ -162,14 +164,14 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-v-b1-004",
         "vocabulary",
         "B1",
-        "Klubben skriver: Kontingentet betales halvårligt. Hvad betaler medlemmerne for?",
+        "Klubben skriver: Kontingentet betales halvårligt. Hvor ofte skal medlemmerne betale?",
         [
-            "En bøde for at aflyse en træning.",
-            "Deres medlemskab af klubben.",
-            "En billet til en bestemt kamp.",
-            "Et lån af en træners private bil.",
+            "En gang hver anden måned.",
+            "En gang hver sjette måned.",
+            "En gang hver tredje måned.",
+            "En gang hver tolvte måned.",
         ],
-        "Deres medlemskab af klubben.",
+        "En gang hver sjette måned.",
     ),
     AssessmentQuestion(
         "da-v-b1-005",
@@ -201,7 +203,8 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-v-b1-007",
         "vocabulary",
         "B1",
-        "Naboen spørger: Kan du give en hånd med bordene? Hvilket svar imødekommer ønsket?",
+        "Naboen er ved at bære de tunge borde ind og spørger: Kan du give en hånd "
+        "med bordene? Hvilket svar imødekommer ønsket?",
         [
             "Ja, jeg kan fortælle dig, hvad bordene kostede.",
             "Ja, hvilken ende skal jeg tage fat i?",
@@ -260,16 +263,17 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-r-b1-003",
         "reading",
         "B1",
-        "Læs: Vi har modtaget din ansøgning, men mangler dokumentation for din "
-        "adresse. Send den senest den 18. maj. Vi kan først behandle sagen, når "
+        "Læs brevet fra kommunen: Vi har modtaget din ansøgning, men mangler "
+        "dokumentation for din adresse. Send den senest den 18. maj. "
+        "Vi kan først behandle sagen, når "
         "alle bilag er modtaget. Hvorfor har ansøgeren endnu ikke fået en afgørelse?",
         [
             "Ansøgningen er kommet til den forkerte kommune.",
             "Kommunen har afvist den oplyste adresse.",
-            "Kommunen mangler en oplysning, der skal dokumenteres.",
+            "Kommunen mangler et bilag, der bekræfter den oplyste adresse.",
             "Ansøgeren har bedt om at vente til efter den 18. maj.",
         ],
-        "Kommunen mangler en oplysning, der skal dokumenteres.",
+        "Kommunen mangler et bilag, der bekræfter den oplyste adresse.",
     ),
     AssessmentQuestion(
         "da-r-b1-004",
@@ -310,12 +314,12 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "Reservedelen kommer først fredag. Svar inden onsdag klokken 12, hvis "
         "du vil have os til at bestille den. Hvornår skal kunden handle?",
         [
-            "Når reservedelen er ankommet fredag.",
-            "Efter at lampen er blevet repareret.",
-            "Onsdag eftermiddag, når prisen er kendt.",
-            "Inden onsdag middag for at godkende bestillingen.",
+            "Fredag formiddag, når reservedelen er kommet.",
+            "Efter reparationen, når lampen skal hentes.",
+            "Onsdag eftermiddag, før reservedelen bliver bestilt.",
+            "Inden onsdag middag, så delen kan bestilles.",
         ],
-        "Inden onsdag middag for at godkende bestillingen.",
+        "Inden onsdag middag, så delen kan bestilles.",
     ),
     AssessmentQuestion(
         "da-r-b1-007",

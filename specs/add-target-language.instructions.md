@@ -128,6 +128,11 @@ Update `targetLanguages` labels/descriptions and landing greetings consistently 
 catalogs. UI locale support is independent; adding a learning language does not add a new interface
 locale automatically.
 
+Adding an interface locale or user native language follows the separate
+[Add Interface or Native Language](add-ui-native-language.instructions.md) checklist. Its catalogs,
+account flows, emails, announcements, and native-support requirements do not imply a new learning
+package.
+
 ## Required test updates
 
 Backend coverage must include:

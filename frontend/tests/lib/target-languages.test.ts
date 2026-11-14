@@ -10,8 +10,8 @@ import {
 } from '@/lib/target-languages'
 
 describe('SUPPORTED_TARGET_LANGUAGES', () => {
-  it('contains exactly 16 languages', () => {
-    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(16)
+  it('contains exactly 20 languages', () => {
+    expect(SUPPORTED_TARGET_LANGUAGES).toHaveLength(20)
   })
 
   const expectedCodes = [
@@ -24,6 +24,10 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     'ru-RU',
     'sv-SE',
     'da-DK',
+    'cs-CZ',
+    'hr-HR',
+    'fi-FI',
+    'ro-RO',
     'pt-BR',
     'pt-PT',
     'fr-FR',
@@ -64,6 +68,10 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(paths).toContain('/flags/russia.jpg')
     expect(paths).toContain('/flags/sweden.jpg')
     expect(paths).toContain('/flags/denmark.jpg')
+    expect(paths).toContain('/flags/czech_republic.jpg')
+    expect(paths).toContain('/flags/croatia.jpg')
+    expect(paths).toContain('/flags/finland.jpg')
+    expect(paths).toContain('/flags/romania.jpg')
     expect(paths).toContain('/flags/brazil.jpg')
     expect(paths).toContain('/flags/portugal.jpg')
     expect(paths).toContain('/flags/france.jpg')
@@ -91,6 +99,18 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
     expect(
       SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'da')
     ).toHaveLength(1)
+    expect(
+      SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'cs')
+    ).toHaveLength(1)
+    expect(
+      SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'hr')
+    ).toHaveLength(1)
+    expect(
+      SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'fi')
+    ).toHaveLength(1)
+    expect(
+      SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'ro')
+    ).toHaveLength(1)
     expect(SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'nl')).toHaveLength(1)
     expect(
       SUPPORTED_TARGET_LANGUAGES.filter((l) => l.iso639 === 'ru')
@@ -106,7 +126,7 @@ describe('SUPPORTED_TARGET_LANGUAGES', () => {
 
 describe('TARGET_LANGUAGE_CATALOG', () => {
   it('contains the current supported languages plus CJK catalog entries', () => {
-    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(16)
+    expect(TARGET_LANGUAGE_CATALOG).toHaveLength(20)
     expect(TARGET_LANGUAGE_CATALOG.map((l) => l.code)).toEqual([
       'en-US',
       'en-GB',
@@ -121,6 +141,10 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       'ru-RU',
       'sv-SE',
       'da-DK',
+      'cs-CZ',
+      'hr-HR',
+      'fi-FI',
+      'ro-RO',
       'ja-JP',
       'ko-KR',
       'zh-CN',
@@ -209,6 +233,117 @@ describe('TARGET_LANGUAGE_CATALOG', () => {
       expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
       expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
       expect(getLanguageByCode('da')).toBeUndefined()
+    }
+  )
+
+  it.each(['cs-CZ', 'CS-cz', 'cs-cz'])(
+    'resolves Czech metadata and Latin typography for %s',
+    (code) => {
+      expect(getLanguageByCode(code)).toEqual({
+        code: 'cs-CZ',
+        name: 'Čeština',
+        nameEn: 'Czech',
+        flagPath: '/flags/czech_republic.jpg',
+        iso639: 'cs',
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(TARGET_LANGUAGE_CAPABILITIES['cs-CZ']).toEqual({
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(getTargetLanguageCapability(code)).toEqual(
+        TARGET_LANGUAGE_CAPABILITIES['cs-CZ']
+      )
+      expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
+      expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+      expect(getLanguageByCode('cs')).toBeUndefined()
+    }
+  )
+
+  it.each(['hr-HR', 'HR-hr', 'hr-hr'])(
+    'resolves Croatian metadata and Latin typography for %s',
+    (code) => {
+      expect(getLanguageByCode(code)).toEqual({
+        code: 'hr-HR',
+        name: 'Hrvatski',
+        nameEn: 'Croatian',
+        flagPath: '/flags/croatia.jpg',
+        iso639: 'hr',
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(TARGET_LANGUAGE_CAPABILITIES['hr-HR']).toEqual({
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(getTargetLanguageCapability(code)).toEqual(
+        TARGET_LANGUAGE_CAPABILITIES['hr-HR']
+      )
+      expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
+      expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+      expect(getLanguageByCode(code)?.romanization).toBeUndefined()
+      expect(getLanguageByCode('hr')).toBeUndefined()
+    }
+  )
+
+  it.each(['fi-FI', 'FI-fi', 'fi-fi'])(
+    'resolves Finnish metadata and Latin typography for %s',
+    (code) => {
+      expect(getLanguageByCode(code)).toEqual({
+        code: 'fi-FI',
+        name: 'Suomi',
+        nameEn: 'Finnish',
+        flagPath: '/flags/finland.jpg',
+        iso639: 'fi',
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(TARGET_LANGUAGE_CAPABILITIES['fi-FI']).toEqual({
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(getTargetLanguageCapability(code)).toEqual(
+        TARGET_LANGUAGE_CAPABILITIES['fi-FI']
+      )
+      expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
+      expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+      expect(getLanguageByCode(code)?.romanization).toBeUndefined()
+      expect(getLanguageByCode('fi')).toBeUndefined()
+    }
+  )
+
+  it.each(['ro-RO', 'RO-ro', 'ro-ro'])(
+    'resolves Romanian metadata and Latin typography for %s',
+    (code) => {
+      expect(getLanguageByCode(code)).toEqual({
+        code: 'ro-RO',
+        name: 'Română',
+        nameEn: 'Romanian (Romania)',
+        flagPath: '/flags/romania.jpg',
+        iso639: 'ro',
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(TARGET_LANGUAGE_CAPABILITIES['ro-RO']).toEqual({
+        script: 'latin',
+        fontClass: 'font-target-latin',
+        usesWordSpacing: true,
+      })
+      expect(getTargetLanguageCapability(code)).toEqual(
+        TARGET_LANGUAGE_CAPABILITIES['ro-RO']
+      )
+      expect(getTargetLanguageTextClass(code)).toContain('font-target-latin')
+      expect(getTargetLanguageTextClass(code)).toContain('leading-relaxed')
+      expect(getLanguageByCode(code)?.romanization).toBeUndefined()
+      expect(getLanguageByCode('ro')).toBeUndefined()
     }
   )
 

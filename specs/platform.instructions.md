@@ -419,6 +419,12 @@ does not change this session identity.
 The application distinguishes UI locale, native language, learned target language, active
 `UserLanguage`, and resource-owning `StudyPlan.target_language`.
 
+UI locale and native language are independent account preferences whose supported inventories
+currently coincide. UI controls, public pages, and tour narration use the rendered interface locale;
+pedagogical support, generated memories, deterministic learning feedback, voice-session titles, and
+account emails use the native language where their domain contracts specify it. Administrator email
+notifications use the first administrator's native language with English fallback.
+
 The interface locales are `en`, `es`, `fr`, `pt`, `de`, `it`, `pl`, `nl`, `ro`, `ru`, `tr`, `sv`, `da`, `fi`, and `hr`. Locale
 resolution uses `NEXT_LOCALE`, then `Accept-Language`, then English. Only header entries with a parsed
 quality greater than 0 and no greater than 1 are considered. The initial browser script preserves a
@@ -428,7 +434,20 @@ Settings synchronizes `NEXT_LOCALE` and `LOCALE_DETECTED` with the selected inte
 when that selection differs from the currently rendered locale, even if the profile already stores
 the selected value. A failed save leaves locale cookies and the displayed language unchanged.
 
+The frontend registration form initially selects native `es`, independently of the rendered UI, and
+does not send a UI preference. Login and session restoration load the stored `ui_locale` without automatically
+applying it to cookies or the rendered interface; logout retains locale cookies. Settings can therefore
+show a saved preference different from the currently rendered locale. The interface selector has no
+option to reset the preference to automatic browser detection.
+
+Changing native language does not globally retranslate saved content. Language-aware help caches and
+question translations follow their domain matching rules; existing learning content and historical
+records can retain their original language.
+
 Target-language metadata and typography are specified separately from UI localization.
+The canonical implementation and completion checklist for adding interface/native languages is
+[Add Interface or Native Language](add-ui-native-language.instructions.md). It covers the coordinated
+registrations, catalogs, native consumers, announcements, speech, compatibility, and verification.
 
 ## Runtime configuration
 

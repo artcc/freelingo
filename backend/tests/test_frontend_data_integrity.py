@@ -98,7 +98,22 @@ def test_language_package_meets_per_level_coverage_minimums(language, level, min
 
 @pytest.mark.parametrize(
     "language",
-    ["fr-FR", "it-IT", "pt-BR", "pt-PT", "pl-PL", "nl-NL", "ja-JP", "ru-RU", "sv-SE", "da-DK"],
+    [
+        "fr-FR",
+        "it-IT",
+        "pt-BR",
+        "pt-PT",
+        "pl-PL",
+        "nl-NL",
+        "ja-JP",
+        "ru-RU",
+        "sv-SE",
+        "da-DK",
+        "cs-CZ",
+        "hr-HR",
+        "fi-FI",
+        "ro-RO",
+    ],
 )
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
     from app.data.grammar import get_grammar_topics
@@ -165,12 +180,18 @@ def _check_language_vocab_refs(lang: str, curriculum: dict, vocab_sets: list) ->
 def test_curriculum_vocab_refs_all_defined() -> None:
     """Every vocabulary_set_ids reference in every language's curriculum must exist
     in that language's vocabulary data."""
+    import app.data.cs.curriculum as cs_curriculum
+    import app.data.cs.vocabulary as cs_vocabulary
     import app.data.en_GB.curriculum as en_curriculum
     import app.data.en_GB.vocabulary as en_vocabulary
     import app.data.es.curriculum as es_curriculum
     import app.data.es.vocabulary as es_vocabulary
+    import app.data.fi.curriculum as fi_curriculum
+    import app.data.fi.vocabulary as fi_vocabulary
     import app.data.fr.curriculum as fr_curriculum
     import app.data.fr.vocabulary as fr_vocabulary
+    import app.data.hr.curriculum as hr_curriculum
+    import app.data.hr.vocabulary as hr_vocabulary
     import app.data.it.curriculum as it_curriculum
     import app.data.it.vocabulary as it_vocabulary
     import app.data.ja.curriculum as ja_curriculum
@@ -181,14 +202,19 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.pl.vocabulary as pl_vocabulary
     import app.data.pt.curriculum as pt_curriculum
     import app.data.pt.vocabulary as pt_vocabulary
+    import app.data.ro.curriculum as ro_curriculum
+    import app.data.ro.vocabulary as ro_vocabulary
     import app.data.ru.curriculum as ru_curriculum
     import app.data.ru.vocabulary as ru_vocabulary
     import app.data.zh.curriculum as zh_curriculum
     import app.data.zh.vocabulary as zh_vocabulary
 
+    _check_language_vocab_refs("Czech", cs_curriculum.CURRICULUM, cs_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("English", en_curriculum.CURRICULUM, en_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Spanish", es_curriculum.CURRICULUM, es_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Finnish", fi_curriculum.CURRICULUM, fi_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("French", fr_curriculum.CURRICULUM, fr_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Croatian", hr_curriculum.CURRICULUM, hr_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Italian", it_curriculum.CURRICULUM, it_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Polish", pl_curriculum.CURRICULUM, pl_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Japanese", ja_curriculum.CURRICULUM, ja_vocabulary.VOCABULARY_SETS)
@@ -198,6 +224,7 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     )
     _check_language_vocab_refs("Chinese", zh_curriculum.CURRICULUM, zh_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Russian", ru_curriculum.CURRICULUM, ru_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Romanian", ro_curriculum.CURRICULUM, ro_vocabulary.VOCABULARY_SETS)
 
 
 def test_grammar_related_refs_all_defined() -> None:
@@ -215,24 +242,32 @@ def test_grammar_related_refs_all_defined() -> None:
 
 def test_vocabulary_export_completeness() -> None:
     """Every vocabulary set ID in the backend data must belong to exactly one CEFR level."""
+    from app.data.cs.vocabulary import VOCABULARY_SETS as cs_sets
     from app.data.en_GB.vocabulary import VOCABULARY_SETS as en_sets
     from app.data.es.vocabulary import VOCABULARY_SETS as es_sets
+    from app.data.fi.vocabulary import VOCABULARY_SETS as fi_sets
+    from app.data.hr.vocabulary import VOCABULARY_SETS as hr_sets
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ro.vocabulary import VOCABULARY_SETS as ro_sets
     from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
+        ("cs", cs_sets),
         ("en", en_sets),
         ("es", es_sets),
+        ("fi", fi_sets),
+        ("hr", hr_sets),
         ("it", it_sets),
         ("pl", pl_sets),
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ro", ro_sets),
         ("ru", ru_sets),
         ("zh", zh_sets),
     ]:
@@ -271,24 +306,32 @@ def test_grammar_slug_uniqueness() -> None:
 
 def test_vocabulary_id_uniqueness() -> None:
     """No vocabulary set ID should be duplicated within a single language."""
+    from app.data.cs.vocabulary import VOCABULARY_SETS as cs_sets
     from app.data.en_GB.vocabulary import VOCABULARY_SETS as en_sets
     from app.data.es.vocabulary import VOCABULARY_SETS as es_sets
+    from app.data.fi.vocabulary import VOCABULARY_SETS as fi_sets
+    from app.data.hr.vocabulary import VOCABULARY_SETS as hr_sets
     from app.data.it.vocabulary import VOCABULARY_SETS as it_sets
     from app.data.ja.vocabulary import VOCABULARY_SETS as ja_sets
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ro.vocabulary import VOCABULARY_SETS as ro_sets
     from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
     for lang, sets in [
+        ("cs", cs_sets),
         ("en", en_sets),
         ("es", es_sets),
+        ("fi", fi_sets),
+        ("hr", hr_sets),
         ("it", it_sets),
         ("pl", pl_sets),
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ro", ro_sets),
         ("ru", ru_sets),
         ("zh", zh_sets),
     ]:

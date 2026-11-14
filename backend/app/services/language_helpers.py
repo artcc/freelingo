@@ -21,6 +21,7 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
         "iso639": "en",
         "flag": "🇬🇧",
     },
+    "cs-CZ": {"name": "Czech", "self_name": "Čeština", "iso639": "cs", "flag": "🇨🇿"},
     "da-DK": {"name": "Danish", "self_name": "Dansk", "iso639": "da", "flag": "🇩🇰"},
     "de-DE": {"name": "German", "self_name": "Deutsch", "iso639": "de", "flag": "🇩🇪"},
     "es-ES": {
@@ -30,8 +31,16 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
         "flag": "🇪🇸",
     },
     "fr-FR": {"name": "French", "self_name": "Français", "iso639": "fr", "flag": "🇫🇷"},
+    "fi-FI": {"name": "Finnish", "self_name": "Suomi", "iso639": "fi", "flag": "🇫🇮"},
+    "hr-HR": {"name": "Croatian", "self_name": "Hrvatski", "iso639": "hr", "flag": "🇭🇷"},
     "it-IT": {"name": "Italian", "self_name": "Italiano", "iso639": "it", "flag": "🇮🇹"},
     "pl-PL": {"name": "Polish", "self_name": "Polski", "iso639": "pl", "flag": "🇵🇱"},
+    "ro-RO": {
+        "name": "Romanian (Romania)",
+        "self_name": "Română",
+        "iso639": "ro",
+        "flag": "🇷🇴",
+    },
     "ru-RU": {"name": "Russian", "self_name": "Русский", "iso639": "ru", "flag": "🇷🇺"},
     "sv-SE": {"name": "Swedish", "self_name": "Svenska", "iso639": "sv", "flag": "🇸🇪"},
     "nl-NL": {
@@ -68,6 +77,30 @@ _LANGUAGE_INFO: dict[str, dict[str, str]] = {
 }
 
 _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
+    "ro-RO": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
+    "fi-FI": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
+    "hr-HR": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
+    "cs-CZ": {
+        "script": "latin",
+        "romanization": "",
+        "uses_word_spacing": True,
+        "reading_length_unit": "words",
+    },
     "da-DK": {
         "script": "latin",
         "romanization": "",
@@ -167,6 +200,10 @@ _LANGUAGE_CAPABILITIES: dict[str, dict[str, str | bool]] = {
 }
 
 _LANGUAGE_CAPABILITY_ALIASES: dict[str, str] = {
+    "ro": "ro-RO",
+    "fi": "fi-FI",
+    "hr": "hr-HR",
+    "cs": "cs-CZ",
     "da": "da-DK",
     "sv": "sv-SE",
     "ru": "ru-RU",

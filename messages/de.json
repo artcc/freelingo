@@ -103,6 +103,10 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1504,18 @@
     "supportedLanguages": "Verfügbare Sprachen"
   },
   "targetLanguages": {
+    "ro-RO": "Rumänisch (Rumänien)",
+    "ro": "Rumänisch",
+    "ro-RO-description": "Rumänisch, wie es in Rumänien gesprochen wird.",
+    "fi-FI": "Finnisch",
+    "fi": "Finnisch",
+    "fi-FI-description": "Finnisch, wie es in Finnland gesprochen wird.",
+    "hr-HR": "Kroatisch",
+    "hr": "Kroatisch",
+    "hr-HR-description": "Kroatisch, wie es in Kroatien gesprochen wird.",
+    "cs-CZ": "Tschechisch",
+    "cs": "Tschechisch",
+    "cs-CZ-description": "Tschechisch, wie es in Tschechien gesprochen wird.",
     "da-DK": "Dänisch",
     "da": "Dänisch",
     "da-DK-description": "Dänisch, wie es in Dänemark gesprochen wird.",
@@ -1806,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Verstanden",
     "entry1": {
-      "label": "Verstehe jede Antwort besser",
-      "desc": "Nach einer Reading- oder Listening-Übung kannst du eine Erklärung in deiner Muttersprache anfordern, mit einer Textstelle, die die Antwort begründet. Beim Wiederholen kannst du den Text auch noch einmal lesen oder das Audio erneut anhören."
+      "label": "Neue Sprachen: Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch",
+      "desc": "Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
     "entry2": {
-      "label": "Verbesserungen am Lernsystem",
-      "desc": "Du kannst dir jetzt bei Bedarf eine Übersetzung der Aufgabenstellungen in deine Muttersprache anzeigen lassen. Die ursprüngliche Frage bleibt dabei in der Sprache sichtbar, die du lernst."
+      "label": "Verstehe jede Antwort besser",
+      "desc": "Lass dir Aufgabenstellungen in deiner Muttersprache anzeigen, während die ursprüngliche Frage sichtbar bleibt. Nach einer Reading- oder Listening-Übung kannst du eine Erklärung in deiner Muttersprache mit einer Textstelle anfordern, die die Antwort begründet. Beim Wiederholen kannst du den Text erneut lesen oder das Audio noch einmal anhören."
     },
     "entry3": {
-      "label": "Dein Wortschatz, mit Übersetzung",
-      "desc": "Neue Karteikarten, die du aus dem Wortschatz hinzufügst, enthalten eine Übersetzung in deine Muttersprache. Der Inhalt deiner vorhandenen Karten bleibt erhalten."
-    },
-    "entry4": {
       "label": "Lingu hilft dir, wenn du es brauchst",
       "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
     },
-    "entry5": {
+    "entry4": {
       "label": "Natürlichere und ausdrucksstärkere Stimmen",
       "desc": "Genieße natürlichere und ausdrucksstärkere Stimmen in deinen Hörübungen und Gesprächen mit Lingu – für ein klareres und angenehmeres Hörerlebnis."
     },
-    "entry6": {
-      "label": "Verbesserungen an deinem Lernplan",
-      "desc": "Dein Lernplan zeigt deinen Fortschritt jetzt korrekt an. Du kannst Lektionen fortsetzen und bereits bearbeitete Einheiten wiederholen."
-    },
-    "entry7": {
-      "label": "Neue Sprachen: Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch",
-      "desc": "Polnisch, brasilianisches Portugiesisch, Russisch, Niederländisch und Schwedisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

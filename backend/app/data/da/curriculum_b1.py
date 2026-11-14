@@ -93,7 +93,7 @@ B1_UNITS: list[CurriculumUnit] = [
         ["listening", "speaking", "vocabulary", "grammar", "reading", "writing", "review"],
         [
             "Deltager i planlægningen af et arrangement.",
-            "Skelner mellem fælles viden og et forsigtigt gæt.",
+            "Skelner mellem en henvisning til fælles viden og en sandsynlig forventning.",
             "Bruger almindelige faste verbforbindelser i en samtale.",
         ],
         2,

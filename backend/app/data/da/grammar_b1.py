@@ -13,7 +13,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "et tidspunkt i fortiden. Hjælpeverbet følger normalt samme mønster som i førnutid: "
         "har pakket bliver til havde pakket, og er flyttet bliver til var flyttet. "
         "Datid fører ofte fortællingen videre, mens førdatid giver baggrunden.",
-        structure="Da + datid, havde/var + grundled + kort tillægsform.",
+        structure="Da + grundled + datid, havde/var + grundled + kort tillægsform.",
         rules=[
             "Brug en tydelig fortidig ramme, når rækkefølgen ellers kan misforstås.",
             "Vælg hjælpeverbum efter verbets betydning og brug.",
@@ -79,8 +79,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "I almindelige ledsætninger står ikke før det bøjede verbum: fordi hun ikke kan "
         "komme. I en fremsættende hovedsætning står det normalt efter: Hun kan ikke komme. "
         "Allerede, ofte og sikkert kan stå på samme centrale adverbialplads. "
-        "Talesprog kan have hovedsætningsordstilling i visse at-sætninger; det er ikke "
-        "et mønster, man frit kan overføre til alle ledsætninger.",
+        "Talesprog kan have hovedsætningsordstilling i visse at- og fordi-sætninger, "
+        "også i formelle samtaler. Det er ikke et mønster, man frit kan overføre til "
+        "alle ledsætninger.",
         structure="fordi/hvis/at + grundled + ikke + bøjet verbum",
         rules=[
             "Med to verber står ikke før hjælpeverbet i den neutrale ledsætning.",
@@ -164,7 +165,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Den handlende kan tilføjes med af. Valget mellem s-passiv og blive-passiv "
         "afhænger også af teksttype; forskellen er ikke blot rigtig eller forkert.",
         rules=[
-            "Bevar tiden ved omskrivning: Kommunen sendte brevet → Brevet blev sendt.",
+            "Bevar tid og aktør: Kommunen sendte brevet → Brevet blev sendt af kommunen.",
             "Af angiver den handlende: af kommunen.",
         ],
         examples=[
@@ -362,7 +363,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "en aktivitet kan blot betyde at opdage den. Placeringen af et genstandsled "
         "afhænger af forbindelsen, så lær et helt eksempel sammen med udtrykket.",
         rules=[
-            "Møde op kan stå uden genstandsled; mødestedet kan angives med til eller på.",
+            "Møde op kan stå uden genstandsled: til mødet, på kontoret eller i fælleshuset.",
             "Giv ikke alle småord samme funktion: nogle indgår i faste forholdsordsforbindelser.",
         ],
         examples=[
@@ -377,8 +378,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B1",
         "Indrømmelse og kontrast",
         "Vis, at et forhold ikke forhindrer et andet.",
-        "Selv om indleder en ledsætning og kan beskrive både et faktisk og et tænkt "
-        "hinder. Alligevel fremhæver, at følgen går imod en forventning. Trods "
+        "Selv om indleder en ledsætning og kan beskrive både en faktisk og en tænkt "
+        "hindring. Alligevel fremhæver, at følgen går imod en forventning. Trods "
         "efterfølges af et navneordsudtryk, mens selv om efterfølges af en sætning. "
         "Sammenhængen viser, om hindringen allerede er kendt.",
         rules=[

@@ -103,6 +103,10 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1504,18 @@
     "supportedLanguages": "Tillgängliga språk"
   },
   "targetLanguages": {
+    "ro-RO": "Rumänska (Rumänien)",
+    "ro": "Rumänska",
+    "ro-RO-description": "Rumänska som talas i Rumänien.",
+    "fi-FI": "Finska",
+    "fi": "Finska",
+    "fi-FI-description": "Finska som talas i Finland.",
+    "hr-HR": "Kroatiska",
+    "hr": "Kroatiska",
+    "hr-HR-description": "Kroatiska som talas i Kroatien.",
+    "cs-CZ": "Tjeckiska",
+    "cs": "Tjeckiska",
+    "cs-CZ-description": "Tjeckiska som talas i Tjeckien.",
     "da-DK": "Danska",
     "da": "Danska",
     "da-DK-description": "Danska som talas i Danmark.",
@@ -1806,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Jag förstår",
     "entry1": {
-      "label": "Förstå varje svar bättre",
-      "desc": "När du har slutfört Reading eller Listening kan du be om en förklaring på ditt modersmål med ett utdrag ur texten som motiverar svaret. Du kan också läsa texten eller lyssna på ljudet igen medan du repeterar."
+      "label": "Nya språk: kroatiska, tjeckiska, danska, finska och rumänska",
+      "desc": "Kroatiska, tjeckiska, danska, finska och rumänska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
     },
     "entry2": {
-      "label": "Förbättringar av inlärningssystemet",
-      "desc": "Nu kan du vid behov visa en översättning av övningsfrågorna till ditt modersmål, samtidigt som originalfrågan finns kvar på språket du lär dig."
+      "label": "Förstå varje svar bättre",
+      "desc": "Visa övningsfrågorna översatta till ditt modersmål medan originalfrågan finns kvar. Efter Reading eller Listening kan du be om en förklaring på ditt modersmål med ett textutdrag som motiverar svaret. Du kan också läsa texten eller lyssna på ljudet igen medan du repeterar."
     },
     "entry3": {
-      "label": "Ditt ordförråd, med översättning",
-      "desc": "Nya kort som du lägger till från Ordförråd innehåller en översättning till ditt modersmål. Korten du redan har behåller sitt innehåll."
-    },
-    "entry4": {
       "label": "Lingu hjälper dig när du behöver det",
       "desc": "Om du inte förstår något under ett röstsamtal kan du be Lingu om hjälp. Lingu kan förklara det kort på ditt modersmål och sedan återgå till att öva på språket du lär dig."
     },
-    "entry5": {
+    "entry4": {
       "label": "Naturligare och mer uttrycksfulla röster",
       "desc": "Njut av naturligare och mer uttrycksfulla röster i dina hörövningar och samtal med Lingu, för en tydligare och behagligare lyssningsupplevelse."
     },
-    "entry6": {
-      "label": "Förbättringar av din studieplan",
-      "desc": "Din plan visar nu dina framsteg korrekt och låter dig fortsätta med lektionerna och repetera de avsnitt du redan har arbetat med."
-    },
-    "entry7": {
-      "label": "Nya språk: polska, brasiliansk portugisiska, ryska, nederländska och svenska",
-      "desc": "Polska, brasiliansk portugisiska, ryska, nederländska och svenska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
-    },
-    "entry8": {
+    "entry5": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

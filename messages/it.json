@@ -103,6 +103,10 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1504,18 @@
     "supportedLanguages": "Lingue disponibili"
   },
   "targetLanguages": {
+    "ro-RO": "Rumeno (Romania)",
+    "ro": "Rumeno",
+    "ro-RO-description": "Rumeno parlato in Romania.",
+    "fi-FI": "Finlandese",
+    "fi": "Finlandese",
+    "fi-FI-description": "Finlandese parlato in Finlandia.",
+    "hr-HR": "Croato",
+    "hr": "Croato",
+    "hr-HR-description": "Croato parlato in Croazia.",
+    "cs-CZ": "Ceco",
+    "cs": "Ceco",
+    "cs-CZ-description": "Ceco parlato in Cechia.",
     "da-DK": "Danese",
     "da": "Danese",
     "da-DK-description": "Danese parlato in Danimarca.",
@@ -1806,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Capito",
     "entry1": {
-      "label": "Comprendi meglio ogni risposta",
-      "desc": "Dopo aver completato Reading o Listening, puoi chiedere una spiegazione nella tua lingua madre con un estratto del testo che giustifica la risposta. Puoi anche rileggere il brano o riascoltare l'audio mentre ripassi."
+      "label": "Nuove lingue: croato, ceco, danese, finlandese e rumeno",
+      "desc": "Il croato, il ceco, il danese, il finlandese e il rumeno sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
     "entry2": {
-      "label": "Miglioramenti al sistema di apprendimento",
-      "desc": "Ora puoi consultare la traduzione delle domande degli esercizi nella tua lingua madre quando ne hai bisogno, mantenendo la domanda originale nella lingua che stai imparando."
+      "label": "Comprendi meglio ogni risposta",
+      "desc": "Consulta la traduzione delle domande nella tua lingua madre mantenendo visibile la domanda originale. Dopo aver completato Reading o Listening, chiedi una spiegazione nella tua lingua madre con un estratto del testo che giustifica la risposta. Puoi anche rileggere il brano o riascoltare l'audio mentre ripassi."
     },
     "entry3": {
-      "label": "Il tuo vocabolario, con traduzione",
-      "desc": "Le nuove schede che aggiungi da Vocabolario includono la traduzione nella tua lingua madre. Le schede che hai già mantengono il loro contenuto."
-    },
-    "entry4": {
       "label": "Lingu ti aiuta quando ne hai bisogno",
       "desc": "Se non capisci qualcosa durante una conversazione vocale, chiedi aiuto a Lingu. Può spiegartelo brevemente nella tua lingua madre e poi riprendere la pratica nella lingua che stai imparando."
     },
-    "entry5": {
+    "entry4": {
       "label": "Voci più naturali ed espressive",
       "desc": "Scopri voci più naturali ed espressive nei tuoi esercizi di ascolto e nelle conversazioni con Lingu, per un'esperienza di ascolto più chiara e piacevole."
     },
-    "entry6": {
-      "label": "Miglioramenti al tuo piano di studio",
-      "desc": "Ora il tuo piano mostra correttamente i tuoi progressi e ti permette di continuare le lezioni e ripassare le unità già affrontate."
-    },
-    "entry7": {
-      "label": "Nuove lingue: polacco, portoghese del Brasile, russo, neerlandese e svedese",
-      "desc": "Il polacco, il portoghese del Brasile, il russo, il neerlandese e lo svedese sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

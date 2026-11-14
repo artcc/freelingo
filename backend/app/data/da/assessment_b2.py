@@ -39,12 +39,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Læs: Hvis vi havde fået advarslen i tide, kunne vi have flyttet arrangementet. "
         "Hvilken gengivelse bevarer betydningen?",
         [
-            "Vi fik advarslen i tide, men valgte at beholde stedet.",
-            "Vi flyttede arrangementet, før advarslen kom.",
-            "En advarsel i tide ville have gjort flytning unødvendig.",
-            "En tidligere advarsel ville have givet os mulighed for at flytte det.",
+            "Trods en rettidig advarsel valgte vi at gennemføre arrangementet på det aftalte sted.",
+            "Vi nåede at flytte arrangementet, selv om advarslen kom senere end ventet.",
+            "En tidligere advarsel ville have fjernet behovet for at flytte arrangementet.",
+            "En rettidig advarsel ville have givet os mulighed for at flytte det.",
         ],
-        "En tidligere advarsel ville have givet os mulighed for at flytte det.",
+        "En rettidig advarsel ville have givet os mulighed for at flytte det.",
         "da-counterfactual-b2",
     ),
     AssessmentQuestion(
@@ -55,10 +55,10 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "En kollega har forstået det som en indvending mod beløbet. "
         "Hvilket svar retter netop den misforståelse?",
         [
-            "Det var prisen, der gjorde leveringstiden længere.",
+            "Det var kombinationen af pris og leveringstid, jeg ville have ændret.",
             "Det var leveringstiden, jeg kritiserede, ikke prisen.",
-            "Det var kritikken, der fik prisen til at stige.",
-            "Det var leveringen, jeg roste på grund af prisen.",
+            "Det var prisen, jeg ville forhandle, hvis leveringen skulle tage seks uger.",
+            "Det var den korte leveringstid, jeg ville betale ekstra for.",
         ],
         "Det var leveringstiden, jeg kritiserede, ikke prisen.",
         "da-cleft-b2",
@@ -70,12 +70,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Læs: Lederen lovede Sara at kontakte leverandøren. "
         "Hvem har påtaget sig at kontakte leverandøren?",
         [
-            "Sara, fordi hun bliver nævnt efter lovede.",
-            "Lederen, som gav løftet om handlingen.",
-            "Leverandøren, som skal kontakte Sara.",
-            "Sara og leverandøren, som skal kontakte lederen.",
+            "Sara har lovet selv at tage kontakten.",
+            "Lederen har lovet selv at tage kontakten.",
+            "Leverandøren har lovet at kontakte Sara.",
+            "Lederen og Sara har lovet at ringe sammen.",
         ],
-        "Lederen, som gav løftet om handlingen.",
+        "Lederen har lovet selv at tage kontakten.",
         "da-infinitive-controls-b2",
     ),
     AssessmentQuestion(
@@ -85,9 +85,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Aftalen siger: Lokalet kan kun lånes, hvis foreningen har en ansvarsforsikring. "
         "Hvilken læsning er præcis?",
         [
-            "Forsikringen er valgfri, når en forening låner lokalet.",
-            "Alle forsikrede foreninger er garanteret adgang til lokalet.",
-            "Forsikringen kræves kun, hvis der allerede er sket en skade.",
+            "En forsikring giver foreningen fortrinsret, når lokalet fordeles.",
+            "En forsikring er i sig selv nok til at få lov til at låne lokalet.",
+            "Foreningen må låne lokalet, hvis den tegner forsikringen bagefter.",
             "Forsikring er nødvendig, men teksten udelukker ikke andre krav.",
         ],
         "Forsikring er nødvendig, men teksten udelukker ikke andre krav.",
@@ -100,12 +100,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "En ven siger: Den nye café skulle være rigtig god; det siger mine naboer i hvert fald. "
         "Hvordan præsenterer vennen vurderingen?",
         [
-            "Som en oplysning fra andre, ikke som sin egen sikre erfaring.",
-            "Som et krav, caféen skal opfylde for at få lov at åbne.",
-            "Som en tidligere plan om selv at drive caféen.",
-            "Som en sikker konklusion efter selv at have spist der.",
+            "Som en andenhåndsoplysning frem for en personlig erfaring.",
+            "Som et ønske om, at caféen fremover vil forbedre sin kvalitet.",
+            "Som en vurdering, der tidligere gjaldt, men nu er blevet forældet.",
+            "Som en bekræftet vurdering, vennen og naboerne er nået frem til sammen.",
         ],
-        "Som en oplysning fra andre, ikke som sin egen sikre erfaring.",
+        "Som en andenhåndsoplysning frem for en personlig erfaring.",
         "da-evidential-modals-b2",
     ),
     AssessmentQuestion(
@@ -154,12 +154,13 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "da-v-b2-003",
         "vocabulary",
         "B2",
-        "En beboer vil gøre indsigelse mod en byggeplan. Hvilken handling passer til ønsket?",
+        "En beboer vil gøre indsigelse mod en byggeplan. "
+        "Hvilken handling udtrykker selve indsigelsen?",
         [
             "At sende en begrundet protest mod en del af planen.",
-            "At bestille en kopi for at følge med uden at kommentere.",
-            "At melde sig som frivillig til byggearbejdet.",
-            "At erklære sin støtte til planen uden forbehold.",
+            "At bede om aktindsigt for at kunne læse sagens bilag.",
+            "At anmode om mere tid til at tage stilling til planen.",
+            "At sende oplysninger om, hvem der ejer nabogrunden.",
         ],
         "At sende en begrundet protest mod en del af planen.",
     ),
@@ -171,10 +172,10 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "arbejdstid og opgavevalg. Hvilken bemærkning hjælper bedst med at afklare "
         "deres uenighed?",
         [
-            "Lad os vælge det korteste forslag, så vi kan komme videre.",
-            "I er enige om ordet, så vi behøver ikke flere forklaringer.",
+            "Lad os stemme om forslagene, så vi kan se, hvilket der har størst opbakning.",
+            "Lad os beregne prisen på forslagene, før vi tager stilling til deres indhold.",
             "Måske taler vi forbi hinanden; hvad vil hver af jer kunne ændre?",
-            "Begge forslag er lige uklare, så vi tager dem af dagsordenen.",
+            "Måske kan I hver især gå lidt på kompromis, så vi kan mødes på midten.",
         ],
         "Måske taler vi forbi hinanden; hvad vil hver af jer kunne ændre?",
     ),
@@ -187,9 +188,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "besøg fra eftermiddagen. Biblioteket fortsætter forsøget, men vil undersøge "
         "omkostningen pr. ekstra besøgende. Hvilken konklusion er bedst underbygget?",
         [
-            "De fleste aftenbesøg kom fra helt nye brugere.",
-            "Det højere aftental beviser, at ordningen allerede betaler sig.",
-            "Biblioteket har besluttet at erstatte eftermiddagsåbningen.",
+            "Aftenbesøgene kan regnes som nye besøg oven i det hidtidige samlede tal.",
+            "Den lille samlede stigning skyldes især, at færre gæster besøger biblioteket.",
+            "Det samlede besøgstal er tilstrækkeligt til at afgøre, om forsøget betaler sig.",
             "Aftentallet alene viser ikke, hvor stor den samlede gevinst er.",
         ],
         "Aftentallet alene viser ikke, hvor stor den samlede gevinst er.",
@@ -237,8 +238,8 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Om Sofie skal have færre aftenvagter end kollegerne.",
             "Om reglerne for vagtbytte kan ændres uden at ændre fordelingen.",
-            "Om lederen har regnet antallet af aftenvagter forkert sammen.",
-            "Om alle aftenvagter kan afskaffes i den næste plan.",
+            "Om en tidligere offentliggørelse af planen kan erstatte vagtbytte.",
+            "Om de ansatte med størst behov skal fritages for faste aftenvagter.",
         ],
         "Om reglerne for vagtbytte kan ændres uden at ændre fordelingen.",
     ),
@@ -282,12 +283,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "har endnu ikke modtaget det og mangler derfor de nye priser. "
         "Hvilken opfølgning svarer til den aftalte ansvarsfordeling?",
         [
-            "Asta skal opdatere budgettet uden priser, så Emil kan sende det til leverandøren.",
-            "Emil skal videresende svaret, så Asta kan opdatere budgettet på det aftalte grundlag.",
-            "Leverandøren skal overtage Astas opgave og skrive et helt nyt budget.",
-            "Asta skal minde Emil om, at han selv lovede at opdatere budgettet.",
+            "Asta skal hente priserne hos leverandøren og sende dem til Emil, som opdaterer budgettet.",
+            "Emil skal videresende priserne til Asta, som derefter opdaterer budgettet.",
+            "Emil skal indarbejde priserne i budgettet og sende det til Asta til godkendelse.",
+            "Asta skal bruge de gamle priser, indtil Emil har godkendt leverandørens svar.",
         ],
-        "Emil skal videresende svaret, så Asta kan opdatere budgettet på det aftalte grundlag.",
+        "Emil skal videresende priserne til Asta, som derefter opdaterer budgettet.",
     ),
     AssessmentQuestion(
         "da-r-b2-008",
@@ -299,9 +300,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "og behovet for yderligere ændringer. Hvad kendetegner løsningen?",
         [
             "Den giver begge parter noget og gør plads til en senere fælles vurdering.",
-            "Den opfylder caféens ønske uden at ændre dens tidligere åbningstid.",
-            "Den erstatter udeserveringen med en permanent lukning af gården.",
-            "Den udsætter enhver ændring, indtil parterne har målt støjen i to måneder.",
+            "Den giver caféen den tidligere åbningstid tilbage, når de to måneder er gået.",
+            "Den giver beboerne ret til at afslutte udeserveringen efter de to måneder.",
+            "Den lader åbningstiden afhænge af en støjmåling, som skal foretages før ændringen.",
         ],
         "Den giver begge parter noget og gør plads til en senere fælles vurdering.",
     ),

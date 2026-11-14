@@ -64,6 +64,30 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "ro": [
+        "daily life, public transport, libraries and local services in Romania",
+        "Romanian literature, cinema, theatre, music and contemporary regional cultural life",
+        "everyday life and linguistic diversity in Bucharest, Transylvania, Banat and Moldova in Romania",
+        "the Carpathians, the Danube Delta and Romanian conservation and sustainable tourism debates",
+    ],
+    "fi": [
+        "daily life, public transport, libraries and local services in Finland",
+        "Finnish literature, music, cinema, design and contemporary regional cultural life",
+        "Finnish lakes, forests and jokaisenoikeudet with responsibilities and local restrictions",
+        "linguistic diversity, Swedish and Sámi perspectives, and environmental debates in Finland",
+    ],
+    "hr": [
+        "daily life, public transport, libraries and local services in Croatia",
+        "Croatian literature, theatre, cinema, music and contemporary cultural life",
+        "regional life in Slavonia, Istria, Dalmatia, Zagreb and Croatian island communities",
+        "Croatian national parks, Adriatic coastal environments and sustainable tourism debates",
+    ],
+    "cs": [
+        "daily life, public transport, libraries and local services in Czechia",
+        "Czech literature, theatre, cinema, music, architecture and contemporary cultural life",
+        "regional traditions and everyday life in Bohemia, Moravia and Czech Silesia",
+        "Czech hiking culture, marked trails, landscape conservation and sustainability debates",
+    ],
     "da": [
         "daily life, cycling, public transport, libraries and local services in Denmark",
         "Danish literature, cinema, music, architecture and design",

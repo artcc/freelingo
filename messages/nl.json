@@ -103,6 +103,10 @@
       "ru-RU": "Привет!",
       "sv-SE": "Hej!",
       "da-DK": "Hej!",
+      "cs-CZ": "Ahoj!",
+      "hr-HR": "Bok!",
+      "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1500,6 +1504,18 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "ro-RO": "Roemeens (Roemenië)",
+    "ro": "Roemeens",
+    "ro-RO-description": "Roemeens zoals gesproken in Roemenië.",
+    "fi-FI": "Fins",
+    "fi": "Fins",
+    "fi-FI-description": "Fins zoals gesproken in Finland.",
+    "hr-HR": "Kroatisch",
+    "hr": "Kroatisch",
+    "hr-HR-description": "Kroatisch zoals gesproken in Kroatië.",
+    "cs-CZ": "Tsjechisch",
+    "cs": "Tsjechisch",
+    "cs-CZ-description": "Tsjechisch zoals gesproken in Tsjechië.",
     "da-DK": "Deens",
     "da": "Deens",
     "da-DK-description": "Deens zoals gesproken in Denemarken.",
@@ -1806,34 +1822,22 @@
     "version": "v1.12.20",
     "cta": "Begrepen",
     "entry1": {
-      "label": "Begrijp elk antwoord beter",
-      "desc": "Na het afronden van Reading of Listening kun je om uitleg in je moedertaal vragen, met een tekstfragment dat het antwoord onderbouwt. Tijdens het herhalen kun je de tekst ook opnieuw lezen of de audio nog eens beluisteren."
+      "label": "Nieuwe talen: Kroatisch, Tsjechisch, Deens, Fins en Roemeens",
+      "desc": "Kroatisch, Tsjechisch, Deens, Fins en Roemeens zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
     },
     "entry2": {
-      "label": "Verbeteringen aan het leersysteem",
-      "desc": "Je kunt nu wanneer je dat nodig hebt een vertaling van de oefenvragen in je moedertaal bekijken, terwijl de oorspronkelijke vraag zichtbaar blijft in de taal die je leert."
+      "label": "Begrijp elk antwoord beter",
+      "desc": "Bekijk oefenvragen vertaald naar je moedertaal terwijl de oorspronkelijke vraag zichtbaar blijft. Vraag na Reading of Listening om uitleg in je moedertaal met een tekstfragment dat het antwoord onderbouwt. Tijdens het herhalen kun je de tekst ook opnieuw lezen of de audio nog eens beluisteren."
     },
     "entry3": {
-      "label": "Je woordenschat, met vertaling",
-      "desc": "Nieuwe flashcards die je vanuit Woordenschat toevoegt, bevatten een vertaling in je moedertaal. De kaarten die je al hebt, behouden hun inhoud."
-    },
-    "entry4": {
       "label": "Lingu helpt wanneer je het nodig hebt",
       "desc": "Begrijp je iets niet tijdens een spraakgesprek? Vraag Lingu om hulp. Lingu kan het kort in je moedertaal uitleggen en daarna verdergaan met oefenen in de taal die je leert."
     },
-    "entry5": {
+    "entry4": {
       "label": "Natuurlijkere en expressievere stemmen",
       "desc": "Geniet van natuurlijkere en expressievere stemmen in je luisteroefeningen en gesprekken met Lingu, voor een duidelijkere en prettigere luisterervaring."
     },
-    "entry6": {
-      "label": "Verbeteringen aan je studieplan",
-      "desc": "Je plan toont nu je voortgang correct en laat je lessen voortzetten en eerder behandelde onderdelen herhalen."
-    },
-    "entry7": {
-      "label": "Nieuwe talen: Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds",
-      "desc": "Pools, Braziliaans Portugees, Russisch, Nederlands en Zweeds zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
-    },
-    "entry8": {
+    "entry5": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

@@ -22,7 +22,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-1",
             ),
             PhrasebookEntry(
-                "Mener du, at hun havde lovet at ringe, eller at nogen siger, hun faktisk ringede?",
+                "Mener du, at hun burde have ringet, eller at nogen siger, hun faktisk ringede?",
                 "Afklar to forskellige læsninger af hun skulle have ringet.",
                 "neutral",
                 "c2-unit-1",
@@ -142,7 +142,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-4",
             ),
             PhrasebookEntry(
-                "Den vurdering ligger hos figuren; fortælleren bekræfter den ikke direkte.",
+                "Vurderingen er figurens egen; fortælleren bekræfter den ikke direkte.",
                 "Adskil perspektiver i en litterær drøftelse.",
                 "formal",
                 "c2-unit-4",
@@ -174,7 +174,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-5",
             ),
             PhrasebookEntry(
-                "Et hurtigt møde, sagde vi. Kaffen har da i hvert fald fået lov at trække.",
+                "Et hurtigt møde, sagde vi. Kaffen har da i hvert fald fået tid til at blive kold.",
                 "Brug mildt ironisk ekko med kolleger, der deler oplevelsen af et langt møde.",
                 "informal",
                 "c2-unit-5",
@@ -186,7 +186,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-5",
             ),
             PhrasebookEntry(
-                "Jeg mente ikke, at du skulle trække dit forslag. Jeg bad om en præcisering af fristen.",
+                "Jeg mente ikke, at du skulle trække dit forslag tilbage. Jeg bad om en præcisering af fristen.",
                 "Afgræns den ønskede ændring efter en misforstået indvending.",
                 "neutral",
                 "c2-unit-5",

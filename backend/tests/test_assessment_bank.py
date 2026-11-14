@@ -21,6 +21,10 @@ import pytest
         "ru-RU",
         "sv-SE",
         "da-DK",
+        "cs-CZ",
+        "hr-HR",
+        "fi-FI",
+        "ro-RO",
     ],
 )
 def test_reviewed_banks_have_valid_answers_references_and_balanced_positions(language):

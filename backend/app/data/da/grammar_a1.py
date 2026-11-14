@@ -99,7 +99,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "endelse: en cykel–cyklen, en bil–bilen, et hus–huset, et æble–æblet. "
         "Bestemt form bruges, når det er klart, hvilken ting man mener. Brug ikke en "
         "ekstra artikel foran i denne enkle konstruktion. Udtryk med tillægsord som "
-        "den røde cykel har et andet mønster, som behandles senere.",
+        "den røde cykel har et andet mønster, som behandles senere.\n\n"
+        "Når du udpeger noget, kan du bruge denne, dette eller disse med ubestemt "
+        "navneord: denne cykel, dette hus, disse bøger. Også den cykel og det hus "
+        "kan udpege noget bestemt, især med tryk på den eller det; navneordet "
+        "får heller ikke bestemt endelse her.",
         rules=[
             "Lær hele parret: en nøgle–nøglen.",
             "Bestemt form afhænger af sammenhængen, ikke kun af en tidligere omtale.",
@@ -144,7 +148,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Fortæl, hvem noget tilhører.",
         "Min, din og vores kan vise ejerskab eller tilknytning. Min og din bøjes efter "
         "det, der ejes: min cykel, mit hus, mine bøger; din cykel, dit hus, dine bøger. "
-        "Hans, hendes, vores og jeres har samme form foran en-ord, et-ord og flertal. "
+        "Hans, hendes, vores, jeres og deres har samme form foran en-ord, et-ord og flertal. "
         "Efter disse ord står navneordet i ubestemt form.",
         rules=[
             "Det ejede navneords køn bestemmer min eller mit.",
@@ -165,7 +169,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Mange tillægsord har en grundform til en-ord, en t-form til et-ord og en e-form "
         "til flertal: stor, stort, store. Det gælder både foran navneordet og efter er: "
         "et stort bord; bordet er stort. Nogle ord har særlige former: en god dag, "
-        "et godt svar, gode venner. Andre ændres ikke, for eksempel moderne.",
+        "et godt svar, gode venner. Lille bruges ved både en-ord og et-ord, men "
+        "hedder små i flertal: en lille taske, et lille bord, små tasker. "
+        "Andre ord ændres ikke, for eksempel moderne.",
         rules=[
             "Lær almindelige former sammen: ny–nyt–nye.",
             "Flertalsformen afhænger ikke af, om navneordet er fælleskøn eller intetkøn.",
@@ -214,7 +220,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Et ja-nej-spørgsmål begynder normalt med verbet: Bor du her? Et spørgeled "
         "kommer foran verbet: Hvor bor du? Hvad spørger om en ting eller handling, "
         "hvem om en person, hvor om et sted, hvornår om tid og hvordan om en måde. "
-        "Når hvem selv er subjekt, indsættes ikke et ekstra subjekt: Hvem kommer?",
+        "Hvorfor spørger om en grund: Hvorfor går du? Hvilken, hvilket og hvilke "
+        "bruges til at vælge eller identificere: Hvilken bus? Hvilket tog? Hvilke bøger? "
+        "Formen følger navneordets køn og tal. Når hvem selv er subjekt, indsættes "
+        "ikke et ekstra subjekt: Hvem kommer?",
         rules=[
             "Hvor gammel er du? spørger om alder.",
             "Hvor meget koster det? spørger om en pris.",
@@ -235,12 +244,18 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "I en enkel hovedsætning med subjektet først står ikke efter det bøjede verbum: "
         "Jeg drikker ikke kaffe. Med et hjælpeverbum kommer ikke mellem de to verber: "
         "Jeg kan ikke komme. Når et tidsled står først, står ikke normalt efter subjektet: "
-        "I dag arbejder jeg ikke. Ledsætninger har et andet grundmønster.",
+        "I dag arbejder jeg ikke. Ledsætninger har et andet grundmønster. "
+        "Jo kan bruges til at modsige et negativt spørgsmål: Bor du ikke her? "
+        "Jo, jeg bor her. Nej, jeg bor ikke her bekræfter derimod nægtelsen.",
         rules=[
             "Brug jeg er ikke, jeg har ikke og jeg kan ikke som korte mønstre.",
             "Et negativt svar kan udbygges: Nej, jeg bor ikke her.",
         ],
-        examples=[GrammarExample("Hun er ikke hjemme."), GrammarExample("Vi spiser ikke kød.")],
+        examples=[
+            GrammarExample("Hun er ikke hjemme."),
+            GrammarExample("Vi spiser ikke kød."),
+            GrammarExample("Bor du ikke her? — Jo, jeg bor her."),
+        ],
         common_mistakes=[
             GrammarMistake(
                 "Jeg ikke drikker kaffe.",
@@ -265,7 +280,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "syv er 7.15, og kvart i otte er 7.45. Digitale tider kan læses direkte: "
         "sytten tredive er 17.30. Sig om morgenen eller om aftenen, når det er nødvendigt.",
         rules=[
-            "Skriv sammensatte tal som ét ord: femogtyve.",
+            "Skriv tal mellem 21 og 99 som ét ord: femogtyve. Ved hundreder: to hundrede.",
             "Spørg Hvad er klokken? om tiden nu og Hvornår? om en aftale.",
         ],
         examples=[
@@ -327,12 +342,20 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Subjektsformerne jeg, du, han, hun, vi, I og de har objektformerne mig, dig, "
         "ham, hende, os, jer og dem. Objektformen bruges blandt andet efter et verbum, "
         "når personen modtager handlingen, og efter forholdsord: Hun hjælper mig; "
-        "en gave til dig. Den og det har samme form som subjekt og objekt.",
+        "en gave til dig. Den og det har samme form som subjekt og objekt.\n\n"
+        "Lær også det almindelige mønster Jeg kender ham ikke. Et kort, tryksvagt "
+        "objektspronomen står her før ikke. Med et modalverbum står objektet efter "
+        "navneformen: Jeg kan ikke hjælpe ham. Kontrasttryk og mere omfattende "
+        "ordstillingsmønstre behandles senere.",
         rules=[
             "Skeln mellem Jeg hjælper og Hun hjælper mig.",
             "Efter til og med bruges objektform: til os, med dem.",
         ],
-        examples=[GrammarExample("Kan du hjælpe os?"), GrammarExample("Kaffen er til hende.")],
+        examples=[
+            GrammarExample("Kan du hjælpe os?"),
+            GrammarExample("Kaffen er til hende."),
+            GrammarExample("Jeg kender ham ikke."),
+        ],
         common_mistakes=[
             GrammarMistake(
                 "Han hjælper jeg.", "Han hjælper mig.", "Personen er objekt, ikke subjekt."

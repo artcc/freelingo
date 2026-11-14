@@ -9,7 +9,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B2",
         "Ordstilling",
         "Placér et tryksvagt objektspronomen i forhold til ikke.",
-        "I en enkel hovedsætning med det fulde verbum på anden plads står et "
+        "I en enkel hovedsætning med hovedverbet på anden plads står et "
         "tryksvagt objektspronomen normalt før ikke: Jeg kender ham ikke. "
         "Hvis et hovedverbum bliver stående efter et hjælpeverbum, flytter "
         "objektet ikke foran dette verbum: Jeg har ikke mødt ham. Et betonet "
@@ -31,9 +31,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B2",
         "Betydning og fokus",
         "Afklar præcis, hvad en benægtelse omfatter.",
-        "Ikke alle siger, at en påstand ikke gælder for hele gruppen; det angiver "
-        "ikke en bestemt andel. Ingen benægter derimod for hvert medlem af "
-        "gruppen. Placering og tryk kan ændre, hvad ikke rammer. Alle kom ikke "
+        "Ikke alle kom betyder, at mindst én i den relevante gruppe ikke kom; "
+        "det angiver ikke en bestemt andel. Ingen kom betyder, at ingen i gruppen "
+        "kom. Placering og tryk kan ændre, hvad ikke rammer. Alle kom ikke "
         "kan være tvetydigt i praksis, så skriv ikke alle kom eller ingen kom, "
         "når forskellen er vigtig.",
         rules=[
@@ -175,7 +175,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Der arbejdes på sagen",
         "B2",
         "Upersonlige konstruktioner",
-        "Beskriv en aktivitet eller en oplysning uden et konkret grundled.",
+        "Beskriv en aktivitet eller en oplysning uden at nævne den handlende eller kilden.",
         "Der kan være formelt grundled i upersonlig passiv: Der arbejdes på "
         "sagen. Det kan indlede en konstruktion med en efterfølgende indholdssætning: "
         "Det forventes, at arbejdet slutter fredag. Konstruktionerne er almindelige "
@@ -396,7 +396,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample("Planen er dyr, men den kan gennemføres."),
-            GrammarExample("De vil spare på vedligeholdelsen. Det er jeg uenig i."),
+            GrammarExample("De foreslår at spare på vedligeholdelsen. Det er jeg imod."),
         ],
     ),
     GrammarTopic(

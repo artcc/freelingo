@@ -17,7 +17,9 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
+The application recognizes 20 study languages, counting each regional variant separately:
+`en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-FR`, `hr-HR`, `it-IT`, `nl-NL`,
+`pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ro-RO`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -100,7 +102,9 @@ New code must not infer a plan-owned operation's language from the compatibility
 Prompt builders receive an explicit target-language name and shared overlay. Current overlays specify
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
-Mandarin with simplified characters, standard Swedish from Sweden, and standard Danish from Denmark.
+Mandarin with simplified characters, standard Swedish from Sweden, standard Danish from Denmark,
+standard Czech from Czechia, standard Croatian from Croatia, standard Finnish from Finland, and
+standard Romanian from Romania.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -148,8 +152,52 @@ requests Danish vowels, soft d, natural reductions and stød where appropriate w
 pronunciation as an error. OpenAI TTS, Gemini TTS and Whisper support Danish; the English-only Kokoro
 voice configuration is not suitable for this target language.
 
+`cs-CZ` resolves to the independent `backend/app/data/cs/` package; `cs` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Czech uses Latin text with Czech
+diacritics, visible word spacing, word-based comprehension lengths, ISO `cs` recognition and the Czech
+Republic flag. Its curriculum introduces spelling, vowel length and stress before gender, animacy,
+cases, aspect, motion verbs, clitics and advanced discourse. Generated content preserves Czech
+diacritics and distinguishes standard, common spoken and regional usage without substituting Slovak
+or Polish. Shared speech guidance requests vowel length independently of stress, ř, palatal
+consonants, syllabic r/l and natural voicing assimilation. OpenAI TTS, Gemini TTS and Whisper support
+Czech; the English-only Kokoro voice configuration is not suitable for this target language.
+
+`hr-HR` resolves to the independent `backend/app/data/hr/` package; `hr` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Croatian uses Latin text with
+č, ć, đ, š and ž, the digraphs dž, lj and nj, standard ijekavian spelling, visible word spacing,
+word-based comprehension lengths, ISO `hr` recognition and the Croatia flag. Its curriculum develops
+spelling and pronunciation before gender, animacy, cases, aspect, clitics and advanced interaction.
+Generated content distinguishes standard, regional and conversational usage, preserves participants
+and certainty in reformulations, and does not substitute neighbouring language conventions. Shared
+speech guidance requests Croatian consonant contrasts, syllabic r, natural lexical accent, vowel
+length and ijekavian pronunciation. OpenAI TTS, Gemini TTS and Whisper support Croatian; the
+English-only Kokoro voice configuration is not suitable for this target language.
+
+`fi-FI` resolves to the independent `backend/app/data/fi/` package; `fi` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Finnish uses Latin text with ä and ö,
+visible word spacing, word-based comprehension lengths, ISO `fi` recognition and the Finland flag.
+Its curriculum develops vowel and consonant length, vowel harmony and consonant gradation before
+extended case, object, verb and discourse contrasts. Generated content distinguishes standard written,
+spoken and regional Finnish, preserves participants and scope, and teaches partitive versus total
+objects through context rather than English tense equivalents. Shared speech guidance requests native
+vowel quality, meaningful vowel and consonant length and initial word stress. OpenAI TTS, Gemini
+`gemini-3.8-flash-tts` and Whisper support Finnish; Gemini `gemini-3.8-flash-lite-tts` does not list
+Finnish support, and the English-only Kokoro voice configuration is not suitable for this target.
+
+`ro-RO` resolves to the independent `backend/app/data/ro/` package; `ro` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Romanian uses Latin text with
+ă, â, î, ș and ț, comma-below ș/ț, visible word spacing, word-based comprehension lengths, ISO `ro`
+recognition and the Romania flag. Its curriculum develops spelling, pronunciation, gender, agreement
+and suffixed definite articles before extended case, tense, conjunctive, conditional and clitic
+contrasts, then advanced interaction and discourse. Generated content uses contemporary Romanian
+from Romania, distinguishes standard, regional and conversational usage, and preserves participants,
+scope and certainty in reformulations. Shared speech guidance requests Romanian vowel distinctions,
+native r and lexical stress. OpenAI TTS, Gemini `gemini-3.8-flash-tts` and
+`gemini-3.8-flash-lite-tts`, and Whisper list Romanian support; the English-only Kokoro voice
+configuration is not suitable for this target.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Danish, Polish, Russian and Swedish.
+other current languages, including Croatian, Czech, Danish, Finnish, Polish, Romanian, Russian and Swedish.
 
 ## Speech recognition
 

@@ -60,6 +60,7 @@ async def test_other_models_keep_the_original_request(service, model):
         ("nl", "Dutch from the Netherlands"),
         ("nl-NL", "Dutch from the Netherlands"),
         ("ro", "Romanian from Romania"),
+        ("ro-RO", "Romanian from Romania"),
         ("ru", "Russian from Russia"),
         ("ru-RU", "Russian from Russia"),
         ("tr", "Turkish from Turkey"),
@@ -67,8 +68,12 @@ async def test_other_models_keep_the_original_request(service, model):
         ("sv-SE", "Swedish from Sweden"),
         ("da", "Danish from Denmark"),
         ("da-DK", "Danish from Denmark"),
+        ("cs", "Czech from Czechia"),
+        ("cs-CZ", "Czech from Czechia"),
         ("fi", "Finnish from Finland"),
+        ("fi-FI", "Finnish from Finland"),
         ("hr", "Croatian from Croatia"),
+        ("hr-HR", "Croatian from Croatia"),
     ],
 )
 async def test_capable_models_receive_the_requested_language(service, model, language, expected):

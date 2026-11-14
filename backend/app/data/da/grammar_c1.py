@@ -109,9 +109,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Indrømmelse",
         "Anerkend et modhensyn og fasthold en begrundet beslutning.",
         "Selvom sætter et forhold i modsætning til det forventede resultat. Uanset om "
-        "gør beslutningen uafhængig af de nævnte muligheder. Selvom hun er erfaren "
-        "præsenterer erfaring som et indrømmet forhold; uanset om hun er erfaren "
-        "lader spørgsmålet stå åbent. De to konstruktioner er derfor ikke frit udskiftelige.",
+        "gør beslutningen uafhængig af de nævnte muligheder. I Selvom hun er erfaren, "
+        "har hun brug for oplæring præsenteres erfaringen normalt som et givet forhold. "
+        "Uanset om hun er erfaren, har hun brug for oplæring gør behovet uafhængigt "
+        "af erfaringen. Selvom kan også have en hypotetisk læsning i andre sammenhænge. "
+        "Afgør derfor ud fra hele udsagnet, om forholdet fremstilles som givet.",
         rules=[
             "En indrømmelse er ikke nødvendigvis en tilslutning til modpartens konklusion.",
             "Bevar, om et forhold fremstilles som givet eller som uafklaret.",
@@ -204,9 +206,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "C1",
         "Rækkevidde",
         "Bevar styrken i et udsagn om grupper og nødvendighed.",
-        "Ikke alle afviser, at hele den relevante gruppe er omfattet; det angiver "
-        "ikke en bestemt andel. Ingen udelukker hele gruppen. Ikke nødvendigvis "
-        "afviser, at en følge er sikker, men udelukker ikke, at den kan indtræffe. "
+        "Ikke alle har svaret betyder, at mindst én i gruppen endnu ikke har svaret; "
+        "det angiver ikke en bestemt andel. Ingen har svaret betyder nul svar fra "
+        "gruppen. Ikke nødvendigvis afviser, at en følge er sikker, men udelukker "
+        "ikke, at den kan indtræffe. "
         "En sammenfatning må ikke gøre disse svagere udsagn stærkere.",
         rules=[
             "Sæt ikke lighedstegn mellem ikke alle og de færreste.",
@@ -401,7 +404,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Register",
         "Tilpas formuleringen uden at ændre tilsagnet.",
         "Et mundtligt Det kan jeg godt lige kigge på kan i en arbejdsbesked blive til "
-        "Jeg kan gennemgå det kort. Det er ikke det samme som Jeg godkender det. "
+        "Jeg kan se nærmere på sagen. Det er ikke det samme som Jeg godkender den. "
+        "Lige kan nedtone opgavens omfang uden at love en bestemt varighed. "
         "Når tale omsættes til referat, skal småord, modalitet og begrænsninger "
         "vurderes for deres funktion, ikke blot slettes som fyld.",
         rules=[
@@ -410,9 +414,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample("Jeg ser på det i morgen, men jeg kan ikke love et svar samme dag."),
-            GrammarExample(
-                "Sagen gennemgås i morgen; tidspunktet for svaret er endnu ikke aftalt."
-            ),
+            GrammarExample("Jeg ser på sagen i morgen, men kan ikke love at svare samme dag."),
         ],
         related=["da-polite-distance-c1", "da-unpacking-nouns-c1"],
     ),

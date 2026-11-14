@@ -156,6 +156,135 @@ class TestReadingGenerationService:
         assert "Use standard Japanese" in prompt
         assert exercise.target_language == "ja-JP"
 
+    @pytest.mark.asyncio
+    async def test_croatian_generation_keeps_overlay_culture_and_word_lengths(self, db_session):
+        from app.schemas.reading import ReadingGenerationResponse
+        from app.services.prompts.common import get_language_prompt_overlay
+        from app.services.reading_service import _get_cultural_topics, generate_and_save_exercise
+
+        topics = _get_cultural_topics("hr-HR")
+        assert topics
+        assert topics == _get_cultural_topics("hr")
+        assert set(topics).isdisjoint(_get_cultural_topics("en-GB"))
+        assert set(topics).isdisjoint(_get_cultural_topics("cs-CZ"))
+        response = ReadingGenerationResponse(
+            topic="Život u gradu",
+            text="Danas idem u knjižnicu.",
+            questions=_QUESTIONS,
+        )
+
+        with (
+            patch(
+                "app.services.reading_service.llm_adapter.structured_output",
+                new=AsyncMock(return_value=response),
+            ) as mock_structured,
+            patch(
+                "app.services.reading_service.random.choice", side_effect=lambda items: items[-1]
+            ),
+        ):
+            exercise = await generate_and_save_exercise(
+                level="A1",
+                target_language="hr-HR",
+                db=db_session,
+            )
+
+        prompt = mock_structured.await_args.args[0][0]["content"]
+        overlay = get_language_prompt_overlay("hr-HR")
+        assert overlay and overlay in prompt
+        for marker in ("standard Croatian", "seven cases", "clitic", "ijekavian"):
+            assert marker in prompt
+        assert f"Topic area: {topics[-1]}" in prompt
+        assert "Length: approximately 80 words" in prompt
+        assert exercise.target_language == "hr-HR"
+        assert exercise.text == response.text
+        assert mock_structured.await_args.args[1] is ReadingGenerationResponse
+
+    @pytest.mark.asyncio
+    async def test_finnish_generation_keeps_overlay_culture_and_word_lengths(self, db_session):
+        from app.schemas.reading import ReadingGenerationResponse
+        from app.services.prompts.common import get_language_prompt_overlay
+        from app.services.reading_service import _get_cultural_topics, generate_and_save_exercise
+
+        topics = _get_cultural_topics("fi-FI")
+        assert topics
+        assert topics == _get_cultural_topics("fi")
+        assert set(topics).isdisjoint(_get_cultural_topics("en-GB"))
+        assert set(topics).isdisjoint(_get_cultural_topics("sv-SE"))
+        response = ReadingGenerationResponse(
+            topic="Elämää kaupungissa",
+            text="Tänään menen kirjastoon.",
+            questions=_QUESTIONS,
+        )
+
+        with (
+            patch(
+                "app.services.reading_service.llm_adapter.structured_output",
+                new=AsyncMock(return_value=response),
+            ) as mock_structured,
+            patch(
+                "app.services.reading_service.random.choice", side_effect=lambda items: items[-1]
+            ),
+        ):
+            exercise = await generate_and_save_exercise(
+                level="A1",
+                target_language="fi-FI",
+                db=db_session,
+            )
+
+        prompt = mock_structured.await_args.args[0][0]["content"]
+        overlay = get_language_prompt_overlay("fi-FI")
+        assert overlay and overlay in prompt
+        for marker in ("standard Finnish", "vowel harmony", "consonant gradation", "partitive"):
+            assert marker in prompt
+        assert f"Topic area: {topics[-1]}" in prompt
+        assert "Length: approximately 80 words" in prompt
+        assert exercise.target_language == "fi-FI"
+        assert exercise.text == response.text
+        assert mock_structured.await_args.args[1] is ReadingGenerationResponse
+
+    @pytest.mark.asyncio
+    async def test_romanian_generation_keeps_overlay_culture_and_word_lengths(self, db_session):
+        from app.schemas.reading import ReadingGenerationResponse
+        from app.services.prompts.common import get_language_prompt_overlay
+        from app.services.reading_service import _get_cultural_topics, generate_and_save_exercise
+
+        topics = _get_cultural_topics("ro-RO")
+        assert topics
+        assert topics == _get_cultural_topics("ro")
+        assert set(topics).isdisjoint(_get_cultural_topics("en-GB"))
+        assert set(topics).isdisjoint(_get_cultural_topics("it-IT"))
+        response = ReadingGenerationResponse(
+            topic="Viața în oraș",
+            text="Astăzi merg la bibliotecă.",
+            questions=_QUESTIONS,
+        )
+
+        with (
+            patch(
+                "app.services.reading_service.llm_adapter.structured_output",
+                new=AsyncMock(return_value=response),
+            ) as mock_structured,
+            patch(
+                "app.services.reading_service.random.choice", side_effect=lambda items: items[-1]
+            ),
+        ):
+            exercise = await generate_and_save_exercise(
+                level="A1",
+                target_language="ro-RO",
+                db=db_session,
+            )
+
+        prompt = mock_structured.await_args.args[0][0]["content"]
+        overlay = get_language_prompt_overlay("ro-RO")
+        assert overlay and overlay in prompt
+        for marker in ("standard Romanian from Romania", "ă, â, î, ș and ț", "clitic"):
+            assert marker in prompt
+        assert f"Topic area: {topics[-1]}" in prompt
+        assert "Length: approximately 80 words" in prompt
+        assert exercise.target_language == "ro-RO"
+        assert exercise.text == response.text
+        assert mock_structured.await_args.args[1] is ReadingGenerationResponse
+
 
 # ---------------------------------------------------------------------------
 # Fixtures

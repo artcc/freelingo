@@ -14,7 +14,15 @@ vi.mock('next-intl', () => ({
         : key === 'languageGreetings.sv-SE' ||
             key === 'languageGreetings.da-DK'
           ? 'Hej!'
-          : key,
+          : key === 'languageGreetings.cs-CZ'
+            ? 'Ahoj!'
+            : key === 'languageGreetings.hr-HR'
+              ? 'Bok!'
+              : key === 'languageGreetings.fi-FI'
+                ? 'Hei!'
+                : key === 'languageGreetings.ro-RO'
+                  ? 'Bună!'
+                  : key,
 }))
 
 vi.mock('@/components/lingu/LinguAvatar', () => ({
@@ -94,6 +102,30 @@ describe('LanguageBubbles', () => {
       'src',
       '/flags/denmark.jpg'
     )
+    expect(screen.getByAltText('Localized cs-CZ')).toHaveAttribute(
+      'src',
+      '/flags/czech_republic.jpg'
+    )
+    expect(screen.getByText('Ahoj!')).toHaveAttribute('lang', 'cs-CZ')
+    expect(screen.getByText('Ahoj!')).toHaveClass('font-target-latin')
+    expect(screen.getByAltText('Localized hr-HR')).toHaveAttribute(
+      'src',
+      '/flags/croatia.jpg'
+    )
+    expect(screen.getByText('Bok!')).toHaveAttribute('lang', 'hr-HR')
+    expect(screen.getByText('Bok!')).toHaveClass('font-target-latin')
+    expect(screen.getByAltText('Localized fi-FI')).toHaveAttribute(
+      'src',
+      '/flags/finland.jpg'
+    )
+    expect(screen.getByText('Hei!')).toHaveAttribute('lang', 'fi-FI')
+    expect(screen.getByText('Hei!')).toHaveClass('font-target-latin')
+    expect(screen.getByAltText('Localized ro-RO')).toHaveAttribute(
+      'src',
+      '/flags/romania.jpg'
+    )
+    expect(screen.getByText('Bună!')).toHaveAttribute('lang', 'ro-RO')
+    expect(screen.getByText('Bună!')).toHaveClass('font-target-latin')
     const greetings = screen.getAllByText('Hej!')
     expect(greetings).toHaveLength(2)
     expect(greetings.map((greeting) => greeting.getAttribute('lang'))).toEqual([
