@@ -398,7 +398,7 @@ A2_SETS: list[VocabularySet] = [
                 "en tablet",
                 "noun",
                 "En lille fast portion medicin, som man ofte synker.",
-                "Hvor mange tabletter står der på pakken?",
+                "Pakken indeholder tyve tabletter.",
             ),
             VocabularyEntry(
                 "en dosis",
@@ -1053,7 +1053,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en sagsbehandler",
                 "noun",
-                "En medarbejder, der behandler en bestemt sag, for eksempel i kommunen.",
+                "En medarbejder, der undersøger ansøgninger og hjælper med at afgøre dem.",
                 "Kan jeg tale med min sagsbehandler?",
             ),
             VocabularyEntry(
@@ -1113,7 +1113,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "oplyse",
                 "verb",
-                "Give bestemte oplysninger til nogen.",
+                "Fortælle eller skrive noget, som modtageren skal vide.",
                 "Du skal oplyse din adresse.",
             ),
             VocabularyEntry(

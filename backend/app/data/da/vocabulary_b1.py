@@ -238,7 +238,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en sagsbehandler",
                 "noun",
-                "En medarbejder, der undersøger og behandler konkrete sager.",
+                "En medarbejder, der undersøger henvendelser og forbereder eller træffer afgørelser.",
                 "Sagsbehandleren bad om en kopi af aftalen.",
             ),
             VocabularyEntry(
@@ -521,7 +521,7 @@ B1_SETS: list[VocabularySet] = [
                 "en arbejdsdag",
                 "noun",
                 "En dag afsat til arbejde, også fælles praktiske opgaver.",
-                "Til arbejdsdagen maler vi bænke og rydder ukrudt.",
+                "Til arbejdsdagen maler vi bænke og fjerner ukrudt.",
             ),
             VocabularyEntry(
                 "et fællesskab",

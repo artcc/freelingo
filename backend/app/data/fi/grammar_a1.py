@@ -88,9 +88,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[GrammarExample("Tämä on pieni talo."), GrammarExample("Talo on vanha.")],
         common_mistakes=[
             GrammarMistake(
-                "Tämä pieni talo.",
+                "Tämä ovat pieni talo.",
                 "Tämä on pieni talo.",
-                "Kokonaisessa esittelylauseessa tarvitaan on.",
+                "Yhtä taloa esiteltäessä tämä saa verbimuodon on.",
             )
         ],
         related=["fi-olla-pronouns-a1"],
@@ -106,7 +106,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Pääte liittyy vartaloon, joka voi poiketa perusmuodosta: käsi–käden. "
         "Opettele tavalliset muodot pareina. Minä-pronominin genetiivi on minun. "
         "Huolitellussa yleiskielessä omistus ilmaistaan myös omistusliitteellä: minun nimeni. "
-        "Harjoittele aluksi valmiita ilmauksia nimeni ja sinun nimesi.",
+        "Harjoittele aluksi valmiita ilmauksia nimeni ja sinun nimesi.\n\n"
+        "Omistusliitteet ovat -ni, -si, -nsa/-nsä, -mme ja -nne: minun kirjani, "
+        "sinun kirjasi, hänen kirjansa, meidän kirjamme, teidän kirjanne, heidän kirjansa. "
+        "Hänen kirjansa ja heidän kirjansa käyttävät samaa liitettä. Puheessa kuulet myös ilmauksia kuten "
+        "mun kirja; ne ovat puhekieltä. Nimen jälkeen liitettä ei yleensä tarvita: Ainon kirja.",
         structure="Ainon + kirja; minun nimeni; sinun nimesi",
         rules=["Omistaja tulee ennen omistettavaa asiaa.", "Genetiivin -n ei ole monikon tunnus."],
         examples=[GrammarExample("Tämä on Ainon koti."), GrammarExample("Minun nimeni on Eero.")],
@@ -279,9 +283,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Menen kauppaan."),
         ],
         common_mistakes=[
-            GrammarMistake(
-                "Menen talossa.", "Menen taloon.", "Kun talo on määränpää, käytä taloon."
-            )
+            GrammarMistake("Menen talo.", "Menen taloon.", "Kun talo on määränpää, käytä taloon.")
         ],
         related=["fi-vowel-harmony-a1", "fi-questions-a1"],
     ),

@@ -207,6 +207,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "C1",
         "Povezivanje radnji",
         "Sažmite radnje istoga sudionika bez pogrešnog pripisivanja i promjene slijeda.",
+        "Glagolski prilog sadašnji tvorimo od trećeg lica množine prezenta nesvršenog "
+        "glagola dodavanjem -ći: čitaju — čitajući, pišu — pišući. Glagolski prilog "
+        "prošli obično tvorimo od svršenog glagola nastavkom -vši ili -avši: pregledati "
+        "— pregledavši, doći — došavši. Učite osnovu uz glagol; prilog se ne mijenja "
+        "prema osobi, rodu ni broju.\n\n"
         "U rečenici Pregledavši nacrt, arhitektica je poslala primjedbe obje radnje "
         "pripadaju arhitektici. Glagolski prilog prošli obično označuje prethodnu radnju; "
         "sadašnji prikazuje istodobnost ili okolnost. Kada radnje imaju različite "
@@ -280,8 +285,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Vremenski odnosi",
         "Odvojite slijed priče od redoslijeda kojim pripovjedač iznosi informacije.",
         "Perfekt s izrazima već, ranije i prije toga može jasno prikazati radnju koja "
-        "prethodi drugoj prošloj radnji. Pluskvamperfekt, primjerice bio je otišao, "
-        "dodatno ističe prethodnost, ali nije obvezan kada je odnos već jasan. "
+        "prethodi drugoj prošloj radnji. Čest obrazac pluskvamperfekta spaja perfekt "
+        "glagola biti s glagolskim pridjevom radnim: bio je otišao, bila je otišla. "
+        "Postoje i oblici s imperfektom glagola biti, osobito u književnim tekstovima. "
+        "Pluskvamperfekt dodatno ističe prethodnost, ali nije obvezan kada je odnos već "
+        "jasan. "
         "Pripovjedni prezent približava događaj slušatelju; promjena vremena sama po sebi "
         "ne premješta stvarni događaj u sadašnjost.",
         rules=[
@@ -472,7 +480,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Promijenite stil poruke bez promjene uvjeta, rokova ili odnosa među sudionicima.",
         "Formalni dopis može tražiti izričito imenovane sudionike i preglednu strukturu, "
         "ali ne mora biti prepun glagolskih imenica. Razgovorno Možemo uskočiti ako nam "
-        "javite do srijede može postati Možemo preuzeti zadatak pod uvjetom da nas "
+        "javite do srijede može postati Možemo preuzeti zadatak ako nas "
         "obavijestite do srijede. Zamjena možemo s preuzet ćemo promijenila bi obvezu, "
         "a ne samo stil.",
         rules=[
@@ -482,10 +490,12 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Nemamo još zeleno svjetlo. — Još nismo dobili odobrenje za početak radova."
+                "Nemamo još zeleno svjetlo za početak radova. — "
+                "Još nismo dobili odobrenje za početak radova."
             ),
             GrammarExample(
-                "Mogli bismo uskočiti u petak. — Postoji mogućnost da u petak preuzmemo zamjenu."
+                "Mogli bismo uskočiti umjesto vas u petak. — "
+                "Postoji mogućnost da vas u petak zamijenimo."
             ),
         ],
         related=["hr-reported-commitments-c1", "hr-reformulation-repair-c1"],

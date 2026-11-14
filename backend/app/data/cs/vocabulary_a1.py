@@ -129,7 +129,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "adresa",
                 "noun",
-                "Údaj o ulici, domu a obci, kde někdo bydlí.",
+                "Údaj o ulici, čísle domu a obci, kde někdo bydlí.",
                 "Jaká je vaše adresa?",
             ),
             VocabularyEntry(
@@ -274,7 +274,10 @@ A1_SETS: list[VocabularySet] = [
                 "den", "noun", "Časový úsek dlouhý dvacet čtyři hodin.", "Dnes je hezký den."
             ),
             VocabularyEntry(
-                "týden", "noun", "Sedm dní od pondělí do neděle.", "Týden má sedm dní."
+                "týden",
+                "noun",
+                "Období sedmi dní; v kalendáři od pondělí do neděle.",
+                "Týden má sedm dní.",
             ),
             VocabularyEntry("ráno", "adverb", "Na začátku dne po noci.", "Ráno vstávám v sedm."),
             VocabularyEntry(
@@ -340,7 +343,7 @@ A1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry("dělat", "verb", "Vykonávat nějakou činnost.", "Co děláš ráno?"),
             VocabularyEntry(
-                "mít", "verb", "Vlastnit něco nebo něco mít k dispozici.", "Máme nový stůl."
+                "mít", "verb", "Vlastnit něco, například auto nebo telefon.", "Máme nový stůl."
             ),
             VocabularyEntry(
                 "vstávat",
@@ -487,7 +490,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "banán",
                 "noun",
-                "Podlouhlé ovoce se slupkou, která je ve zralosti často žlutá.",
+                "Podlouhlý plod, obvykle se žlutou slupkou a měkkou světlou dužinou.",
                 "Mám jeden banán.",
             ),
             VocabularyEntry(

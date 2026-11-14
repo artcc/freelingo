@@ -43,7 +43,7 @@ C1_SETS: list[VocabularySet] = [
                 "veridicitate",
                 "noun",
                 "Concordanță a unei relatări cu faptele reale.",
-                "Redacția verifică veridicitatea imaginilor înainte de publicare.",
+                "Redacția verifică veridicitatea relatării înainte de publicare.",
             ),
             VocabularyEntry(
                 "rezervă",
@@ -474,7 +474,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "a agrea",
                 "verb",
-                "A accepta o soluție sau o formulare în cadrul unei înțelegeri.",
+                "În limbaj profesional, a accepta o soluție sau o formulare într-o înțelegere.",
                 "Am agreat textul invitației, dar nu și lista invitaților.",
             ),
             VocabularyEntry(

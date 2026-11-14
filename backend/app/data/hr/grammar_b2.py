@@ -324,7 +324,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample(
                 "Prijava se razmatra samo ako je dokumentacija potpuna.",
-                note="Potpuna dokumentacija omogućuje razmatranje, ali ne jamči pozitivan ishod.",
+                note="Potpuna dokumentacija nužan je uvjet, ali sama ne jamči "
+                "da će prijava biti razmotrena ili odobrena.",
             ),
             GrammarExample(
                 "Zadržat ćemo isti termin, osim ako predavač zatraži promjenu.",
@@ -374,7 +375,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Padežima i slaganjem sačuvajte tko vrši radnju i na koga se ona odnosi.",
             "Za kontrast osobe odaberite naglašeni oblik: meni, njemu, njoj.",
-            "Ne svodite hrvatske nenaglasnice na pravilo da uvijek moraju stajati iza prve riječi.",
+            "Ne svodite zanaglasnice na pravilo da uvijek moraju stajati iza prve riječi.",
         ],
         examples=[
             GrammarExample(

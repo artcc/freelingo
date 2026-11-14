@@ -209,7 +209,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "kenkä",
                 "noun",
-                "Jalkaterää suojaava ulkona käytettävä vaate.",
+                "Jalkaterää suojaava jalkine, jossa on tavallisesti pohja.",
                 "Etsin uusia kenkiä.",
             ),
             VocabularyEntry(
@@ -316,7 +316,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "lähtö",
                 "noun",
-                "Hetki tai tapahtuma, jolloin poistutaan matkaan.",
+                "Hetki tai tapahtuma, jolloin lähdetään matkalle.",
                 "Junan lähtö on kello yhdeksän.",
             ),
             VocabularyEntry(
@@ -856,7 +856,7 @@ A2_SETS: list[VocabularySet] = [
                 "uimahalli",
                 "noun",
                 "Sisärakennus, jossa on altaita uimista varten.",
-                "Uimahalli on lämpimämpi kuin järvi.",
+                "Uimahallin vesi on lämpimämpää kuin järven vesi.",
             ),
             VocabularyEntry(
                 "konsertti",

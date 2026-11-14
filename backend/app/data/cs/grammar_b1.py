@@ -209,8 +209,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Porovnávejte způsob, míru a četnost děje.",
         "Příslovce rozvíjí sloveso: dobře spím, rychle cestuji. Ve srovnání používáme "
         "lépe, rychleji, častěji nebo více a méně s dalším příslovcem. Přídavné jméno "
-        "naopak popisuje vlastnost osoby či věci: lepší byt. Tvary lépe a líp jsou "
-        "obě běžné možnosti; líp je hovorové.",
+        "naopak popisuje vlastnost osoby či věci: lepší byt. Podoby lépe a líp jsou "
+        "obě běžné; líp je hovorové.",
         rules=[
             "Rozlišujte lepší spojení a cestovat lépe.",
             "Méně často znamená nižší četnost, ne kratší trvání jednotlivého děje.",
@@ -268,7 +268,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Pokud nebo jestli s oznamovacím způsobem často uvádí otevřenou podmínku: "
         "Pokud budu mít čas, přijdu. Kdyby uvádí představovanou podmínku; tvary "
         "kdybych, kdybys, kdyby, kdybychom, kdybyste, kdyby už obsahují osobu. "
-        "V hlavní větě obvykle následuje podmiňovací způsob.",
+        "V hlavní větě obvykle následuje podmiňovací způsob. Stejné tvary "
+        "mohou s jasným časovým údajem označit i neuskutečněnou minulou možnost: "
+        "Kdybych měl včera čas, přišel bych. Zda jde o minulost, přítomnost "
+        "nebo budoucnost, proto určujeme z celého sdělení.",
         structure="Kdybych + příčestí na -l, + příčestí na -l + bych.",
         rules=[
             "Nezdvojujte osobní tvar: kdybych měl, nikoli kdybych bych měl.",
@@ -279,6 +282,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Kdybych měl kratší pracovní dobu, chodil bych na kurz češtiny."),
             GrammarExample("Kdybychom bydleli blíž, nemuseli bychom tak brzy vstávat."),
             GrammarExample("Pokud zítra skončím včas, přijdu na schůzku."),
+            GrammarExample(
+                "Kdybych včera nezmeškal autobus, dorazil bych včas.",
+                note="Mluvčí vysvětluje minulou situaci: autobus zmeškal a včas nedorazil.",
+            ),
         ],
         related=["cs-conditional-b1"],
     ),
@@ -347,9 +354,14 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Slovesné vazby",
         "Rozlišujte osobu, které se ptáte, a věc, na kterou se ptáte.",
         "Slovesa bát se a účastnit se vyžadují druhý pád: bojím se chyby, účastním "
-        "se schůzky. U ptát se stojí osoba ve druhém pádě, ale téma otázky vyjadřuje "
-        "na se čtvrtým pádem: Ptám se úřednice na termín. Zvratné se je součástí "
-        "těchto slovesných spojení a nelze ho libovolně vypustit.",
+        "se schůzky. U ptát se stojí dotazovaná osoba ve druhém pádě; téma otázky "
+        "běžně vyjadřuje na se čtvrtým pádem: Ptám se úřednice na termín. "
+        "Zvratné se je součástí "
+        "těchto slovesných spojení a nelze ho libovolně vypustit.\n\n"
+        "Ve druhém pádě množného čísla rozlišujeme například kolegů, schůzek, "
+        "otázek, možností a měst. Přídavná jména mají -ých nebo -ích: "
+        "nových kolegů, pracovních schůzek. Stejný pád použijeme také "
+        "po bez nebo od: bez potřebných dokladů, od nových kolegů.",
         rules=[
             "Ptát se koho není stejná vazba jako odpovídat komu.",
             "Zápor běžně nemění předmět na druhý pád: Nemám doklad.",
@@ -359,6 +371,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Zeptám se kolegyně na číslo kanceláře."),
             GrammarExample("Zítra se účastníme informační schůzky."),
             GrammarExample("Nebojte se drobných chyb."),
+            GrammarExample(
+                "Účastním se pravidelných schůzek a ptám se kolegů na jejich zkušenosti."
+            ),
         ],
         common_mistakes=[
             GrammarMistake(

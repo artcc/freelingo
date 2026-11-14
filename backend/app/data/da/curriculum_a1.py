@@ -12,7 +12,7 @@ A1_UNITS: list[CurriculumUnit] = [
         ["da_identity_a1"],
         ["listening", "speaking", "vocabulary", "grammar", "reading", "writing", "review"],
         [
-            "Hilser, siger sit navn og fortæller, hvor man bor.",
+            "Hilser, siger sit navn og fortæller, hvor man bor, med korte indøvede udtryk.",
             "Staver sit navn og genkender bogstaverne æ, ø og å.",
             "Lytter efter tryk og vokallyde og beder om gentagelse.",
         ],
@@ -49,7 +49,7 @@ A1_UNITS: list[CurriculumUnit] = [
         ["da_routines_a1"],
         ["listening", "grammar", "vocabulary", "speaking", "reading", "writing", "review"],
         [
-            "Spørger til daglige rutiner og aftaler et klokkeslæt.",
+            "Spørger til daglige rutiner, svarer med ja, nej eller jo og aftaler et klokkeslæt.",
             "Forstår halv otte som 7.30 og genkender tallene i en pris.",
             "Begynder en sætning med et tidsudtryk og placerer verbet korrekt.",
         ],

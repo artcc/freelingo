@@ -37,30 +37,30 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "da-g-c1-003",
         "grammar",
         "C1",
-        "I referatet står: 'Nora lovede Emil at spørge udlejeren om ekstra nøgler.' "
-        "Hvilken opfølgning svarer til den beskrevne aftale?",
+        "I referatet står: 'Nora lovede Emil at bede udlejeren om at bestille ekstra nøgler.' "
+        "Hvilken gengivelse bevarer både ansvarsfordelingen og graden af tilsagn?",
         [
-            "Vi spørger Nora, om hun har kontaktet udlejeren om nøglerne.",
-            "Vi spørger Emil, om han har bedt udlejeren kontakte Nora.",
-            "Vi spørger udlejeren, om Emil har fået de nøgler, Nora bestilte.",
-            "Vi spørger Nora, hvornår hun udleverer de nøgler, udlejeren har godkendt.",
+            "Nora har påtaget sig at spørge udlejeren; en bestilling er ikke bekræftet.",
+            "Emil har påtaget sig at spørge udlejeren; Nora skal bagefter hente nøglerne.",
+            "Udlejeren har påtaget sig at bestille nøglerne; Nora skal orientere Emil.",
+            "Nora har påtaget sig at bestille nøglerne; udlejeren skal blot godkende prisen.",
         ],
-        "Vi spørger Nora, om hun har kontaktet udlejeren om nøglerne.",
+        "Nora har påtaget sig at spørge udlejeren; en bestilling er ikke bekræftet.",
         "da-infinitive-agents-c1",
     ),
     AssessmentQuestion(
         "da-g-c1-004",
         "grammar",
         "C1",
-        "Et notat siger: 'Ikke alle afdelinger har meldt tilbage.' "
-        "Der står ingen tal. Hvilken konklusion holder sig inden for oplysningerne?",
+        "Et notat siger: 'Ikke alle afdelinger har meldt tilbage om begge forslag.' "
+        "Hvilken konklusion kan drages uden oplysninger om de enkelte svar?",
         [
-            "De fleste afdelinger har svaret, men enkelte svar afventer godkendelse.",
-            "Omkring halvdelen af afdelingerne mangler at sende et svar.",
-            "Der mangler svar fra mindst én afdeling, men fordelingen fremgår ikke.",
-            "De afdelinger, der har svaret, udgør et mindretal af den samlede gruppe.",
+            "Mindst én afdeling har endnu ikke meldt tilbage om nogen af forslagene.",
+            "Hver afdeling har meldt tilbage om mindst ét forslag, men ikke om dem begge.",
+            "Mindst én afdeling mangler at melde tilbage om mindst ét af forslagene.",
+            "Det ene forslag har fået svar fra alle, mens det andet kun har fået enkelte svar.",
         ],
-        "Der mangler svar fra mindst én afdeling, men fordelingen fremgår ikke.",
+        "Mindst én afdeling mangler at melde tilbage om mindst ét af forslagene.",
         "da-quantifier-scope-c1",
     ),
     AssessmentQuestion(
@@ -74,9 +74,9 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
             "Ja, lad os tage datoen for ændringen, når de sidste oplysninger er kommet.",
             "Det er vist bedst, at vi først orienterer kunderne om den nye åbningstid.",
             "Jeg er enig i, at vi nok skal have kortere åbningstid; spørgsmålet er hvor meget.",
-            "Den enighed har vi ikke afklaret endnu. Jeg vil gerne se tallene, før jeg tager stilling.",
+            "Jeg har ikke tilsluttet mig endnu. Lad os se tallene, før vi beslutter noget.",
         ],
-        "Den enighed har vi ikke afklaret endnu. Jeg vil gerne se tallene, før jeg tager stilling.",
+        "Jeg har ikke tilsluttet mig endnu. Lad os se tallene, før vi beslutter noget.",
         "da-jo-vel-vist-nok-c1",
     ),
     AssessmentQuestion(
@@ -87,11 +87,11 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "jeg når næppe en grundig gennemgang.' Hvilket referat bevarer hans tilsagn?",
         [
             "Ali færdigbehandler udkastet i morgen og vender tilbage med sin godkendelse.",
-            "Ali tilbyder at se kort på udkastet i morgen; en grundig gennemgang er usandsynlig.",
+            "Ali tilbyder at se på udkastet i morgen; en grundig gennemgang er usandsynlig.",
             "Ali undersøger i morgen, om han senere får tid til at åbne udkastet.",
             "Ali gennemgår udkastet grundigt, men forventer først at svare efter i morgen.",
         ],
-        "Ali tilbyder at se kort på udkastet i morgen; en grundig gennemgang er usandsynlig.",
+        "Ali tilbyder at se på udkastet i morgen; en grundig gennemgang er usandsynlig.",
         "da-register-recasting-c1",
     ),
     AssessmentQuestion(
@@ -115,27 +115,28 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "Efter et afslag svarer foreningen kommunen: 'Vi tager afgørelsen til efterretning.' "
         "Hvilken læsning holder sig inden for svarets betydning?",
         [
-            "Den har noteret afgørelsen; svaret siger ikke i sig selv, om den deler begrundelsen.",
+            "Den noterer afgørelsen uden dermed at tilslutte sig dens begrundelse.",
             "Den accepterer begrundelsen, men ønsker et andet praktisk resultat.",
             "Den betragter afgørelsen som et foreløbigt forslag, der endnu kan forhandles.",
             "Den trækker sin kritik tilbage mod at få en nærmere forklaring senere.",
         ],
-        "Den har noteret afgørelsen; svaret siger ikke i sig selv, om den deler begrundelsen.",
+        "Den noterer afgørelsen uden dermed at tilslutte sig dens begrundelse.",
     ),
     AssessmentQuestion(
         "da-v-c1-003",
         "vocabulary",
         "C1",
-        "Efter at have glemt sit eget oplæg siger Sofie med et glimt i øjet: "
+        "Sofie opdager, at hun har glemt sine talepapirer derhjemme, "
+        "og siger med et glimt i øjet: "
         "'Som I kan høre, er jeg jo grundigt forberedt.' Hvilken reaktion matcher "
         "bedst tonen uden at gøre hende til grin?",
         [
             "Det er godt, at du har forberedt alle detaljer; lad os høre de sidste tal.",
             "Så bør vi nok få en anden til at holde oplægget, hvis du ikke tager det alvorligt.",
             "Jeg synes, du skal forklare, hvorfor de andre ikke sendte dig materialet.",
-            "Så tager vi den på hukommelsen sammen. Jeg har mine noter, hvis du får brug for dem.",
+            "Så må vi hjælpe hukommelsen på vej. Jeg har mine noter, hvis du får brug for dem.",
         ],
-        "Så tager vi den på hukommelsen sammen. Jeg har mine noter, hvis du får brug for dem.",
+        "Så må vi hjælpe hukommelsen på vej. Jeg har mine noter, hvis du får brug for dem.",
     ),
     AssessmentQuestion(
         "da-v-c1-004",
@@ -160,12 +161,12 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "til en rådgiver. Næste møde skal behandle rådgiverens oplæg.' "
         "Hvilken besked til en fraværende beboer er dækkende?",
         [
-            "Vinduerne er vedtaget; rådgiveren skal nu finde den billigste finansiering.",
-            "Bestyrelsen har trukket anbefalingen tilbage, indtil beboerne foreslår et lån.",
-            "Flertallet har afvist nye vinduer og valgt rådgivning som en varig løsning.",
-            "Der er bevilget penge til at oplyse sagen, mens selve udskiftningen endnu afventer.",
+            "Udskiftningen er vedtaget, mens rådgiveren skal afklare lån og vedligeholdelse.",
+            "Rådgiveren skal kun beregne vedligeholdelse, da lånet allerede er godkendt.",
+            "Udskiftningen er udsat på ubestemt tid; rådgiveren skal finde en anden løsning.",
+            "Pengene går foreløbig til rådgivning; selve udskiftningen er ikke vedtaget.",
         ],
-        "Der er bevilget penge til at oplyse sagen, mens selve udskiftningen endnu afventer.",
+        "Pengene går foreløbig til rådgivning; selve udskiftningen er ikke vedtaget.",
     ),
     AssessmentQuestion(
         "da-r-c1-002",

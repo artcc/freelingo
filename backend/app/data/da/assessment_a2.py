@@ -91,7 +91,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "A2",
         "Du betaler hver måned for at bo i en anden persons lejlighed. "
         "Hvad kaldes den person, som lejer boligen ud til dig?",
-        ["en lejer", "en deltager", "en udlejer", "en træner"],
+        ["en lejer", "en vicevært", "en udlejer", "en nabo"],
         "en udlejer",
     ),
     AssessmentQuestion(
@@ -108,7 +108,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "A2",
         "Du skal møde op hos kommunen med legitimation for at få hjælp til et nyt pas. "
         "Hvilket sted passer til dette ærinde?",
-        ["et vaskeri", "et apotek", "et vandrerhjem", "borgerservice"],
+        ["et jobcenter", "et apotek", "en bank", "borgerservice"],
         "borgerservice",
     ),
     AssessmentQuestion(
@@ -117,7 +117,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "A2",
         "Du kender ordets betydning og stavning, men er usikker på lydene, når du siger det. "
         "Hvad vil du især øve?",
-        ["din underskrift", "din udtale", "din ansøgning", "din tilmelding"],
+        ["din stavning", "din udtale", "din håndskrift", "din grammatik"],
         "din udtale",
     ),
     AssessmentQuestion(
@@ -197,12 +197,12 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "torsdag. Vi køber mad efter antallet af tilmeldte. Tag selv en tallerken og "
         "bestik med. Amir vil deltage. Hvad skal han gøre?",
         [
-            "Købe mad til hele gruppen og møde op uden tilmelding.",
-            "Tilmelde sig søndag og låne bestik ved ankomsten.",
-            "Betale for en tallerken og vente på en invitation.",
-            "Give besked senest torsdag og medbringe noget at spise af.",
+            "Tilmelde sig torsdag og medbringe en ret til fællesbordet.",
+            "Tilmelde sig søndag og medbringe tallerken og bestik.",
+            "Tilmelde sig torsdag og låne tallerken og bestik på stedet.",
+            "Tilmelde sig senest torsdag og medbringe tallerken og bestik.",
         ],
-        "Give besked senest torsdag og medbringe noget at spise af.",
+        "Tilmelde sig senest torsdag og medbringe tallerken og bestik.",
     ),
     AssessmentQuestion(
         "da-r-a2-004",

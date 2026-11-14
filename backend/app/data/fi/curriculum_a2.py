@@ -13,8 +13,8 @@ A2_UNITS: list[CurriculumUnit] = [
         ["vocabulary", "listening", "grammar", "reading", "speaking", "writing", "review"],
         [
             "Kuvailen asunnon huoneita ja tavaroita.",
-            "Käytän tavallisia vahvoja ja heikkoja vartaloita.",
-            "Kerron useasta tutusta esineestä.",
+            "Taivutan tuttuja sanoja, kun kerron asunnon sijainnista ja tavaroiden omistajista.",
+            "Kuvailen useita esineitä ja erotan esimerkiksi muodot pienet talot ja talot ovat pieniä.",
         ],
         2,
         "a1-unit-8",
@@ -30,7 +30,7 @@ A2_UNITS: list[CurriculumUnit] = [
         [
             "Pyydän oikeankokoista tuotetta.",
             "Viittaan lähellä ja kaukana oleviin tavaroihin.",
-            "Kerron, mistä tuotteita löytyy.",
+            "Kerron, mistä tuotteita löytyy ja mitä kaupassa ei ole.",
         ],
         2,
         "a2-unit-1",
@@ -46,7 +46,7 @@ A2_UNITS: list[CurriculumUnit] = [
         [
             "Selvitän reitin ja kulkuvälineen.",
             "Kuvailen paikan sijaintia toisen paikan avulla.",
-            "Erotan kesken olevan tekemisen ja loppuun tehdyn kokonaisuuden.",
+            "Erotan kesken olevan tekemisen ja tavoitellun tai saavutetun valmiin tuloksen.",
         ],
         2,
         "a2-unit-2",
@@ -93,7 +93,7 @@ A2_UNITS: list[CurriculumUnit] = [
         ["listening", "speaking", "vocabulary", "reading", "grammar", "writing", "review"],
         [
             "Vertailen kahta retki- tai harrastusvaihtoehtoa.",
-            "Annan lyhyen ohjeen yhdelle henkilölle.",
+            "Annan lyhyen ohjeen yhdelle henkilölle tai ryhmälle.",
             "Ymmärrän yksinkertaisen kiellon.",
         ],
         2,

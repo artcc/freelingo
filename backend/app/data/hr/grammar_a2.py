@@ -43,7 +43,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "više zasebnih predmeta genitiv množine: puno jabuka.\n\n"
         "Nakon pet i većih jednostavnih brojeva u ovim izrazima dolazi genitiv množine: "
         "pet limuna, šest jaja. Uz dva, tri i četiri učimo drukčije oblike: dva limuna, "
-        "dvije jabuke, tri jaja. Imenica jaje u nominativu množine glasi jaja.",
+        "dvije jabuke, tri jaja. Imenica jaje u nominativu množine glasi jaja.\n\n"
+        "Genitiv množine često ima -a, ali osnova se može promijeniti: limun — limuna, "
+        "jabuka — jabuka, kruška — krušaka. Neke imenice imaju -i: stvar — stvari. "
+        "Uči i česte posebne oblike: puno ljudi, puno djece. Pridjev u genitivu "
+        "množine često završava na -ih: pet zrelih jabuka.",
         structure="mjera / malo / puno + genitiv; pet + genitiv množine",
         rules=[
             "Čaša vode i boca ulja sadrže genitiv jednine.",
@@ -97,7 +101,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "imenicama mijenja se suglasnik: majka – majci, ruka – ruci.\n\n"
         "Dativ koristimo uz dati, pisati, pomoći i pripadati. Pridjev također mijenja "
         "oblik: dobrom prijatelju, dobroj prijateljici. Primatelj nije isto što i "
-        "predmet: dajem sestri knjigu.",
+        "predmet: dajem sestri knjigu.\n\n"
+        "U množini su česti nastavci -ima i -ama: prijateljima, roditeljima, "
+        "sestrama, kolegama. Pridjev ima -im: pomažem starim susjedima, pišem "
+        "novim kolegicama. Oblike učimo uz imenicu, ne samo prema spolu osobe.",
         structure="komu? prijatelju / sestri / djetetu",
         rules=[
             "U rečenici Pišem bratu riječ bratu označuje primatelja.",
@@ -109,6 +116,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 "Pomažemo starom susjedu.",
                 note="Dativ imaju i pridjev starom i imenica susjedu.",
+            ),
+            GrammarExample(
+                "Šaljem pozive dobrim prijateljima.",
+                note="Dobrim prijateljima označuje više primatelja u dativu množine.",
             ),
         ],
         related=["hr-object-clitics-a2"],
@@ -125,7 +136,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "prijateljem, morem. Ženske imenice na -a imaju -om: sestrom.\n\n"
         "Sa olakšava izgovor, osobito ispred s, š, z i ž: sa sestrom, sa ženom. "
         "Uobičajen je i izraz sa mnom. Pridjevi imaju oblike poput dobrim prijateljem "
-        "i dobrom prijateljicom.",
+        "i dobrom prijateljicom.\n\n"
+        "U množini se dativ, lokativ i instrumental podudaraju u obliku: prijateljima, "
+        "kolegicama. Usporedi: pomažem prijateljima, govorim o prijateljima, putujem "
+        "s prijateljima. O s lokativom ovdje označuje temu razgovora. "
+        "Prijedlog i značenje pokazuju ulogu. Za mjesta kažemo "
+        "u gradovima i u školama; za društvo s dobrim prijateljima i s novim kolegicama.",
         structure="s(a) + instrumental društva; instrumental sredstva bez s(a)",
         rules=[
             "S prijateljem označuje društvo, a biciklom sredstvo prijevoza.",
@@ -184,7 +200,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Osobu pokazuje pomoćni glagol: radio sam, radio si.",
             "Zamjenicu često izostavljamo: Jučer sam radio.",
-            "U trećem licu kažemo Ona je čitala, a ne Ona čitala.",
+            "U neutralnoj punoj rečenici kažemo Ona je čitala. "
+            "Krnji perfekt bez pomoćnog glagola susreće se u posebnim pripovjednim "
+            "ili razgovornim kontekstima.",
         ],
         examples=[
             GrammarExample("Jučer sam bio u Zadru.", note="Govornik koristi muški oblik bio."),
@@ -240,7 +258,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "radio. Prošli vikend sam radio. Niječni oblik može početi rečenicu: Nisam radio.",
         structure="Jesi li radio? / Gdje si radio? / Nisam radio.",
         rules=[
-            "Za treće lice pitanje je Je li Ana došla?, a ne Je Ana došla?",
+            "U standardnom pitanju s li kažemo Je li Ana došla?; li pišemo odvojeno.",
             "Negaciju pišemo spojeno: nisam, nije, nisu.",
             "Pomoćni oblik ne stavljamo mehanički na kraj: Jučer sam gledala film.",
         ],
@@ -300,7 +318,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         structure="Sutra ću putovati. / Putovat ću. / Ići ću. / Neću putovati.",
         rules=[
             "Pomoćni oblik i infinitiv pišemo odvojeno: vidjet ću, doći ću.",
-            "Kad pomoćni oblik dolazi prvi, infinitiv je pun: ću vidjeti.",
+            "Kad pomoćni oblik prethodi infinitivu, infinitiv je pun: Sutra ću vidjeti Anu.",
             "Pitanje može glasiti Hoćeš li putovati? ili Kad ćeš putovati?",
         ],
         examples=[
@@ -510,7 +528,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "ponovili? ili Možete li ponoviti?\n\n"
         "Ovdje uvježbavamo uobičajene izraze, a ne sve vrste pogodbenih rečenica. "
         "Želio bih/Željela bih i Molio bih/Molila bih također uvode ljubaznu želju "
-        "ili zahtjev. Bih ne zamjenjujemo s bi kad govorimo u prvom licu jednine.",
+        "ili zahtjev. U standardnom jeziku prvo lice jednine glasi bih, iako se "
+        "u razgovoru čuje i bi.",
         structure="Htio/Htjela bih + infinitiv; Biste li + radni pridjev?",
         rules=[
             "Muški govornik kaže htio bih, a ženska govornica htjela bih.",
@@ -538,7 +557,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Za poznatog primatelja koristimo kratki dativ: mi, ti, mu, joj, nam, vam, im. "
         "Za poznati predmet česti su kratki akuzativi me, te, ga, je, nas, vas, ih. "
         "Predajem račun službeniku postaje Predajem mu račun; čitam poruku postaje "
-        "Čitam je. Referent mora biti jasan iz konteksta.\n\n"
+        "Čitam je. Referent mora biti jasan iz konteksta. Za ženski rod postoji i "
+        "akuzativ ju. Ispred pomoćnog je upotrebljavamo ju: Ana ju je pročitala, "
+        "pri čemu ju zamjenjuje poruku, a je tvori perfekt.\n\n"
         "Iza prijedloga i pod naglaskom ovdje vježbamo duge oblike: za mene, s njim. "
         "Kad su dvije kratke zamjenice zajedno, "
         "dativ prethodi akuzativu: Dajem mu ga. Uz pomoćni glagol u perfektu: "

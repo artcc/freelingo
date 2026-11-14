@@ -37,7 +37,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Punem întrebări și negăm evenimente trecute.",
         "Într-o întrebare păstrăm auxiliarul și participiul: Ai cumpărat biletul? "
         "Putem adăuga un cuvânt interogativ: Când ai plecat? Cu cine ai venit?\n\n"
-        "La negație, nu se pune înaintea auxiliarului: Nu am plecat. Formele "
+        "La negație, cuvântul «nu» se pune înaintea auxiliarului: Nu am plecat. Formele "
         "n-am, n-ai, n-a, n-ați și n-au sunt contrageri corecte, scrise cu cratimă. "
         "În răspunsul scurt putem păstra numai auxiliarul: Da, am.",
         structure="Ai + participiu?; nu + auxiliar + participiu",
@@ -134,7 +134,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "Eu am trezit la șapte.", "Eu m-am trezit la șapte.", "Aici este a se trezi."
+                "Eu s-am trezit la șapte.",
+                "Eu m-am trezit la șapte.",
+                "Pentru eu folosim m-am; s-a și s-au apar la persoana a treia.",
             )
         ],
         related=["ro-reflexive-present-a2", "ro-perfect-a2"],
@@ -175,7 +177,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "vecina – vecinei, vecinii – vecinilor.\n\nLa nume masculine folosim "
         "lui înaintea numelui: camera lui Andrei. La multe nume feminine "
         "folosim o terminație: camera Mariei, telefonul Anei. Unele nume "
-        "feminine cer lui: camera lui Carmen.",
+        "feminine cer lui: camera lui Carmen. În conversația familiară se aude și "
+        "camera lui Maria; pentru exprimarea standard îngrijită exersăm camera Mariei.",
         structure="obiect identificat + posesor la genitiv",
         rules=[
             "Lui poate preceda un nume propriu; nu îl adăugăm înainte de vecinului.",
@@ -188,7 +191,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "Camera lui Maria.", "Camera Mariei.", "În registrul standard folosim Mariei."
+                "Camera vecina.", "Camera vecinei.", "Posesorul cere aici genitivul vecinei."
             )
         ],
         related=["ro-dative-a2"],
@@ -256,7 +259,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Îl caut, o citesc: pronume de obiect",
         "A2",
         "Pronume",
-        "Evităm repetarea numelui unei persoane sau al unui lucru.",
+        "Evităm repetarea numelor de persoane sau de lucruri.",
         "Pronumele de acuzativ sunt mă, te, îl, o, ne, vă, îi, le. Pentru un obiect "
         "masculin sau neutru la singular folosim îl: formularul – îl completez. "
         "Pentru feminin folosim o: cererea – o completez.\n\nLa plural avem îi "
@@ -421,8 +424,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "A2",
         "Moduri verbale",
         "Exprimăm scopuri și acțiuni dorite prin conjunctiv.",
-        "După vreau, trebuie, pot și înainte de un scop folosim des conjunctivul: "
-        "Vreau să vin. Învăț să conduc. La multe verbe, persoana a treia diferă "
+        "După vreau, trebuie și pot folosim des conjunctivul: Vreau să vin. "
+        "Conjunctivul poate exprima și scopul: Vin să discutăm. "
+        "La multe verbe, persoana a treia diferă "
         "de indicativ: vine – să vină, face – să facă, citește – să citească.\n\n"
         "A fi are formele să fiu, să fii, să fie, să fim, să fiți, să fie. A avea "
         "are să am, să ai, să aibă, să avem, să aveți, să aibă. Subiectul poate "
@@ -430,7 +434,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         structure="să + verb acordat cu persoana care face acțiunea",
         rules=[
             "La persoana a treia singular și plural formele sunt identice: să vină.",
-            "Nu vine după să: Vreau să nu întârzii.",
+            "Negația «nu» vine după «să»: Vreau să nu întârzii.",
             "Să fii are doi i la persoana a doua singular.",
         ],
         examples=[
@@ -520,7 +524,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "Nu fă zgomot!", "Nu face zgomot!", "Imperativul negativ singular cere face."
+                "Nu fă zgomot!",
+                "Nu face zgomot!",
+                "În româna standard, imperativul negativ singular cere face; fă este afirmativ.",
             )
         ],
         related=["ro-subjunctive-a2", "ro-accusative-clitics-a2"],

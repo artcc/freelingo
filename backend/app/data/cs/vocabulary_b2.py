@@ -435,7 +435,7 @@ B2_SETS: list[VocabularySet] = [
                 "prodloužit",
                 "verb",
                 "Zvětšit dobu trvání nebo posunout konec stanoveného období.",
-                "Požádali jsme o prodloužení lhůty k dodání podkladů.",
+                "Potřebujeme prodloužit lhůtu k dodání podkladů.",
             ),
             VocabularyEntry(
                 "vyhradit si",
@@ -565,7 +565,7 @@ B2_SETS: list[VocabularySet] = [
                 "shoda",
                 "noun",
                 "Stav, kdy mají účastníci stejný názor nebo přijímají stejné řešení.",
-                "Na místě konání už panuje shoda, zbývá určit termín.",
+                "Ohledně místa konání už panuje shoda, zbývá určit termín.",
             ),
             VocabularyEntry(
                 "rozpor",

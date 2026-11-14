@@ -42,7 +42,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "at foregribe",
                 "verb",
-                "At tage stilling eller handle, før det rette grundlag eller tidspunkt foreligger.",
+                "At gøre eller omtale noget på forhånd, før det ellers skulle ske eller afgøres.",
                 "Jeg vil ikke foregribe udvalgets vurdering.",
             ),
             VocabularyEntry(
@@ -179,7 +179,7 @@ C2_SETS: list[VocabularySet] = [
                 "et påbud",
                 "noun",
                 "Et bindende krav fra en myndighed om at gøre noget.",
-                "Ejeren fik et påbud om at udbedre flugtvejen.",
+                "Ejeren fik et påbud om at udbedre manglerne ved flugtvejen.",
             ),
             VocabularyEntry(
                 "en undtagelsesbestemmelse",
@@ -220,7 +220,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "med forbehold af",
                 "phrase",
-                "Under hensyntagen til en begrænsning eller en overordnet betingelse.",
+                "Under hensyntagen til en begrænsning eller en overordnet betingelse; "
+                "formelt, især juridisk sprog.",
                 "Aftalen gælder med forbehold af forsamlingens godkendelse.",
             ),
         ],
@@ -264,7 +265,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en fortællerstemme",
                 "noun",
-                "Den stemme, der fremstiller og organiserer en fortælling.",
+                "Den sproglige måde, fortælleren formidler begivenheder og vurderinger på.",
                 "Fortællerstemmen lægger afstand til figurens selvforklaring.",
             ),
             VocabularyEntry(

@@ -84,7 +84,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
                 "a2-unit-2",
             ),
             PhrasebookEntry(
-                "Dajem ključ susjedi dok sam na poslu.",
+                "Susjeda čuva moj ključ dok sam na poslu.",
                 "Objašnjavate komu povjeravate ključ tijekom odsutnosti.",
                 "neutral",
                 "a2-unit-2",

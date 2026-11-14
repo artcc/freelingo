@@ -86,7 +86,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
         "🤝",
         [
             PhrasebookEntry(
-                "Na delší smlouvu můžeme přistoupit, pokud bude obsahovat možnost předčasného ukončení.",
+                "Na delší dobu trvání smlouvy můžeme přistoupit, pokud ji půjde předčasně ukončit.",
                 "Nabízíte ústupek a současně formulujete konkrétní ochrannou podmínku.",
                 "formal",
                 "c1-unit-3",
@@ -244,7 +244,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 "c1-unit-7",
             ),
             PhrasebookEntry(
-                "Zkusím vaše stanovisko shrnout a prosím vás o opravu, pokud něco posunu.",
+                "Zkusím vaše stanovisko shrnout a prosím vás o opravu, pokud něco vyložím nepřesně.",
                 "Před zprostředkováním názoru nabízíte jeho nositeli možnost upřesnění.",
                 "neutral",
                 "c1-unit-7",

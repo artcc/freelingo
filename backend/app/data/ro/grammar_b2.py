@@ -209,10 +209,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B2",
         "Forme nepersonale",
         "Legați acțiuni simultane sau exprimați împrejurarea unei concluzii.",
-        "Gerunziul se termină în -ând sau -ind: lucrând, citind, fiind. În formulările "
-        "obișnuite fără subiect propriu explicit, autorul se identifică prin subiectul "
-        "propoziției principale: Citind raportul, am observat eroarea. Verificați această "
-        "legătură pentru a evita un autor imposibil ori ambiguu.",
+        "Gerunziul se termină în -ând sau -ind: lucrând, citind, fiind. Autorul se "
+        "identifică adesea prin subiectul propoziției principale: Citind raportul, "
+        "am observat eroarea. Gerunziul poate avea și un subiect propriu: "
+        "Terminându-se ședința, participanții au ieșit. Nu impuneți același subiect "
+        "tuturor construcțiilor; verificați cine participă la fiecare acțiune.",
         rules=[
             "Negația se poate forma cu ne-: neștiind, neavând.",
             "Cliticele se atașează: explicându-i, citindu-l, spunându-le.",
@@ -221,12 +222,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Comparând ofertele, am observat diferența de garanție."),
             GrammarExample("Neavând toate datele, comisia a amânat decizia."),
-        ],
-        common_mistakes=[
-            GrammarMistake(
-                "Citind contractul, clauza mi s-a părut neclară.",
-                "Când am citit contractul, clauza mi s-a părut neclară.",
-                "Cititorul trebuie identificat clar; clauza nu citește.",
+            GrammarExample(
+                "Terminându-se ședința, participanții au ieșit.",
+                note="Ședința se termină, participanții ies: subiectele sunt diferite și explicite.",
             ),
         ],
         related=["ro-infinitive-b2", "ro-discourse-aspect-b2"],
@@ -372,7 +370,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Forme precum o fi acasă și o fi uitat exprimă adesea o presupunere, nu o informație "
         "confirmată. O fi este frecvent în conversație. Formele cu va fi și gerunziu, precum "
         "va fi lucrând, sunt mai puțin obișnuite și se urmăresc aici pentru recunoaștere. "
-        "Va fi plecat poate avea și valoare de viitor anterior; reperul temporal decide.",
+        "Va fi plecat poate avea și valoare de viitor anterior: o acțiune încheiată "
+        "înaintea unui reper viitor. Acesta se formează cu voi, vei, va, vom, veți, vor "
+        "+ fi + participiu. Reperul temporal și contextul disting anterioritatea de presupunere.",
         rules=[
             "O fi uitat nu dovedește uitarea; vorbitorul propune o explicație.",
             "Într-un mesaj formal, probabil sau este posibil să pot exprima presupunerea mai transparent.",
@@ -384,6 +384,10 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 "Va fi fiind obosit după atâta drum.",
                 note="Formă mai rară; se urmărește înțelegerea, nu folosirea obligatorie.",
+            ),
+            GrammarExample(
+                "Până vei ajunge mâine, voi fi terminat raportul.",
+                note="Viitor anterior: terminarea precedă sosirea de mâine.",
             ),
         ],
         related=["ro-modal-certainty-b2", "ro-reported-stance-b2"],
@@ -451,7 +455,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Programul a fost redus. Acest lucru a afectat accesul navetiștilor."),
             GrammarExample("Varianta este mai ieftină; în schimb, necesită mai mult timp."),
             GrammarExample(
-                "Acceptăm în principiu; cu alte cuvinte, detaliile încă trebuie negociate."
+                "Acceptăm în principiu; cu alte cuvinte, suntem de acord cu ideea generală, "
+                "dar detaliile încă trebuie negociate."
             ),
         ],
         related=["ro-focus-b2", "ro-reported-stance-b2", "ro-proportion-b2"],

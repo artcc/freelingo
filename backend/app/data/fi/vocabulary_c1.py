@@ -277,7 +277,7 @@ C1_SETS: list[VocabularySet] = [
                 "ajautua",
                 "verb",
                 "Joutua tilanteeseen ilman selvää suunnitelmaa tai omaa tavoitetta.",
-                "Ajautuimme sateelta suojaan pieneen kahvilaan.",
+                "Ajautuimme väittelyyn siitä, kenen piti varata liput.",
             ),
             VocabularyEntry(
                 "kietoutua",

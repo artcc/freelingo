@@ -152,12 +152,12 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "B1",
         "Lähetä vastaus viimeistään perjantaina. Mikä vastaa ohjetta?",
         [
-            "Vastauksen voi lähettää aiemmin, mutta perjantai on viimeinen lähetyspäivä.",
+            "Vastauksen saa lähettää jo aiemmin tai perjantaina.",
             "Vastaus pitää lähettää perjantain jälkeen.",
             "Vastauksen voi lähettää aikaisintaan perjantaina.",
             "Vastauksen pitää saapua ennen perjantain alkamista.",
         ],
-        "Vastauksen voi lähettää aiemmin, mutta perjantai on viimeinen lähetyspäivä.",
+        "Vastauksen saa lähettää jo aiemmin tai perjantaina.",
     ),
     AssessmentQuestion(
         "fi-v-b1-006",
@@ -236,8 +236,8 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "B1",
         "Etsin asuntoa läheltä keskustaa, mutta vuokrat olivat liian korkeita. Löysin "
         "lopulta pienemmän asunnon kauempaa. Työmatka kestää nyt kymmenen minuuttia "
-        "pidempään, mutta asema on lähellä ja vuokraan jäävä ero riittää kuukausilippuun "
-        "sekä säästöön. En tarvitse enää omaa autoa. "
+        "pidempään, mutta asema on lähellä ja vuokrissa säästyvä raha riittää kuukausilippuun "
+        "ja sitä jää vielä säästöönkin. En tarvitse enää omaa autoa. "
         "Mikä oli kirjoittajan ratkaisun tärkeä etu?",
         [
             "Asumisen säästö kattaa matkalipun ja jättää rahaa yli.",

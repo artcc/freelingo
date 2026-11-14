@@ -190,7 +190,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "suglasnost",
                 "noun",
-                "Izričito prihvaćanje ili dopuštenje za određeni postupak.",
+                "Prihvaćanje prijedloga ili dopuštenje za određeni postupak.",
                 "Suglasnost za snimanje ne obuhvaća automatski i javnu objavu snimke.",
             ),
             VocabularyEntry(

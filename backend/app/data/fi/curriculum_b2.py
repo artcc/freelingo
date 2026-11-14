@@ -30,7 +30,7 @@ B2_UNITS: list[CurriculumUnit] = [
         [
             "Erotan oman havaintoni toisen esittämästä väitteestä.",
             "Välitän tiedon säilyttäen tekijän ja tapahtumien aikajärjestyksen.",
-            "Kuvaan, mikä on vielä käsittelemättä tai selvittämättä.",
+            "Kuvaan käsittelemättömät hakemukset ja vielä ratkaisemattomat kysymykset.",
         ],
         2,
         "b2-unit-1",

@@ -174,7 +174,8 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 "c1-unit-5",
             ),
             PhrasebookEntry(
-                "Nije toliko sporan cilj koliko posljedice za ljude koji ovdje žive cijele godine.",
+                "Nije toliko sporan cilj koliko su sporne posljedice "
+                "za ljude koji ovdje žive cijele godine.",
                 "Pomicanjem težišta vraćate raspravu na potrebe stalnih stanovnika.",
                 "neutral",
                 "c1-unit-5",

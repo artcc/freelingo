@@ -1,4 +1,4 @@
-"""Romanian A1 vocabulary: seven sets of twenty-eight contextualised entries."""
+"""Romanian A1 vocabulary in seven contextualised sets."""
 
 from app.data._types import VocabularyEntry, VocabularySet
 
@@ -38,7 +38,7 @@ A1_SETS: list[VocabularySet] = [
                 "România", "noun", "Țară cu capitala la București.", "Sunt din România."
             ),
             VocabularyEntry(
-                "română", "noun", "Limba vorbită în România.", "Acest cuvânt este în română."
+                "română", "noun", "Limba oficială a României.", "Acest cuvânt este în română."
             ),
             VocabularyEntry(
                 "limbă",
@@ -54,7 +54,7 @@ A1_SETS: list[VocabularySet] = [
                 "sunet",
                 "noun",
                 "Ceea ce auzim când vorbim sau ascultăm.",
-                "Ș este un sunet din română.",
+                "Cuvântul «șase» începe cu sunetul redat de litera ș.",
             ),
             VocabularyEntry(
                 "întrebare",
@@ -210,15 +210,20 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "masă",
                 "noun",
-                "Mobilă pe care punem lucruri sau mâncăm.",
+                "Obiect de mobilier pe care punem lucruri sau mâncăm.",
                 "Aici sunt o masă și două scaune.",
             ),
             VocabularyEntry(
-                "scaun", "noun", "Mobilă pe care stă o persoană.", "Aici este un scaun."
+                "scaun", "noun", "Obiect de mobilier pe care stăm așezați.", "Aici este un scaun."
             ),
-            VocabularyEntry("pat", "noun", "Mobilă în care dormim.", "Aici sunt două paturi."),
             VocabularyEntry(
-                "dulap", "noun", "Mobilă în care păstrăm haine sau obiecte.", "Dulapul este aici."
+                "pat", "noun", "Obiect de mobilier în care dormim.", "Aici sunt două paturi."
+            ),
+            VocabularyEntry(
+                "dulap",
+                "noun",
+                "Obiect de mobilier în care păstrăm haine sau alte lucruri.",
+                "Dulapul este aici.",
             ),
             VocabularyEntry(
                 "cheie", "noun", "Obiect cu care încuiem sau descuiem.", "Cheile sunt aici."
@@ -381,7 +386,10 @@ A1_SETS: list[VocabularySet] = [
                 "Nu vreau zahăr în cafea.",
             ),
             VocabularyEntry(
-                "sare", "noun", "Ingredient alb care dă gust sărat.", "Supa are multă sare."
+                "sare",
+                "noun",
+                "Substanță minerală folosită în cantități mici pentru a da gust mâncării.",
+                "Supa are multă sare.",
             ),
             VocabularyEntry(
                 "magazin", "noun", "Loc de unde cumpărăm produse.", "Magazinul este deschis."
@@ -411,12 +419,34 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "proaspăt", "adjective", "Făcut sau cules de curând.", "Pâinea este proaspătă."
             ),
-            VocabularyEntry(
-                "cald", "adjective", "Cu o temperatură plăcut ridicată.", "Ceaiul este cald."
-            ),
+            VocabularyEntry("cald", "adjective", "Cu o temperatură ridicată.", "Ceaiul este cald."),
             VocabularyEntry("rece", "adjective", "Cu o temperatură joasă.", "Apa este rece."),
             VocabularyEntry(
                 "dulce", "adjective", "Cu gust asemănător zahărului.", "Mărul este dulce."
+            ),
+            VocabularyEntry(
+                "alb", "adjective", "De culoarea laptelui sau a zăpezii.", "Ouăle sunt albe."
+            ),
+            VocabularyEntry(
+                "negru", "adjective", "De culoarea cărbunelui.", "Telefonul este negru."
+            ),
+            VocabularyEntry(
+                "roșu", "adjective", "De culoarea sângelui.", "Cumpăr două mere roșii."
+            ),
+            VocabularyEntry(
+                "verde", "adjective", "De culoarea ierbii proaspete.", "Acest măr este verde."
+            ),
+            VocabularyEntry(
+                "albastru", "adjective", "De culoarea cerului senin.", "Pixul este albastru."
+            ),
+            VocabularyEntry(
+                "galben", "adjective", "De culoarea unei lămâi coapte.", "Perele sunt galbene."
+            ),
+            VocabularyEntry(
+                "mare", "adjective", "Cu dimensiuni peste cele obișnuite.", "Vreau o cafea mare."
+            ),
+            VocabularyEntry(
+                "mic", "adjective", "Cu dimensiuni sub cele obișnuite.", "Cumpăr o pâine mică."
             ),
         ],
     ),

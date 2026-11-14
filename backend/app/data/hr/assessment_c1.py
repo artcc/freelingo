@@ -128,8 +128,9 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c1-001",
         "vocabulary",
         "C1",
-        "Udruga podržava prijedlog u osnovi, ali još nije pregledala proračun ni raspored. "
-        "Koja riječ precizno dopunjuje njezinu izjavu: „Prijedlog podržavamo ___; "
+        "Udruga još nije pregledala proračun ni raspored. Želi izraziti podršku prijedlogu "
+        "bez prihvaćanja svih pojedinosti. Koja riječ prenosi tu namjeru u izjavi: "
+        "„Prijedlog podržavamo ___; "
         "o pojedinostima ćemo se očitovati nakon pregleda”?",
         [
             "bezrezervno",
@@ -174,8 +175,9 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c1-004",
         "vocabulary",
         "C1",
-        "Na predstavljanju izložbe kustosica govori o radu koji je osobno obavila, a ne o "
-        "tuđim izvještajima. Kaže: „O stanju predmeta prije obnove govorim ___.”",
+        "Na predstavljanju izložbe kustosica govori o radu koji je osobno obavila. "
+        "Koji izraz označuje izvor njezina znanja u rečenici: "
+        "„O stanju predmeta prije obnove govorim ___”?",
         [
             "iz druge ruke",
             "u dobroj vjeri",
@@ -192,10 +194,10 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "Dvoje kolega sve glasnije ponavlja iste prigovore. Treća osoba želi smiriti ton i "
         "vratiti razgovor na činjenice. Koja je replika najprikladnija?",
         [
-            "Hajdemo ostati pri svome pa poslije usporediti zaključke.",
-            "Hajdemo prijeći preko toga pa završiti sastanak.",
+            "Hajdemo ostati pri svome; neka svatko zapiše svoju verziju dogovora.",
+            "Hajdemo to staviti na stranu i prijeći na sljedeću točku dnevnog reda.",
             "Hajdemo spustiti loptu i pogledati što zapravo piše u dogovoru.",
-            "Hajdemo povući riječ i prihvatiti zadnji prijedlog.",
+            "Hajdemo krenuti od nule i sastaviti posve novi prijedlog dogovora.",
         ],
         "Hajdemo spustiti loptu i pogledati što zapravo piše u dogovoru.",
         "hr-diplomatic-questions-c1",

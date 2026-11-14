@@ -144,7 +144,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Fortæl, hvem noget tilhører.",
         "Min, din og vores kan vise ejerskab eller tilknytning. Min og din bøjes efter "
         "det, der ejes: min cykel, mit hus, mine bøger; din cykel, dit hus, dine bøger. "
-        "Hans, hendes, vores og jeres har samme form foran en-ord, et-ord og flertal. "
+        "Hans, hendes, vores, jeres og deres har samme form foran en-ord, et-ord og flertal. "
         "Efter disse ord står navneordet i ubestemt form.",
         rules=[
             "Det ejede navneords køn bestemmer min eller mit.",
@@ -235,12 +235,18 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "I en enkel hovedsætning med subjektet først står ikke efter det bøjede verbum: "
         "Jeg drikker ikke kaffe. Med et hjælpeverbum kommer ikke mellem de to verber: "
         "Jeg kan ikke komme. Når et tidsled står først, står ikke normalt efter subjektet: "
-        "I dag arbejder jeg ikke. Ledsætninger har et andet grundmønster.",
+        "I dag arbejder jeg ikke. Ledsætninger har et andet grundmønster. "
+        "Jo kan bruges til at modsige et negativt spørgsmål: Bor du ikke her? "
+        "Jo, jeg bor her. Nej, jeg bor ikke her bekræfter derimod nægtelsen.",
         rules=[
             "Brug jeg er ikke, jeg har ikke og jeg kan ikke som korte mønstre.",
             "Et negativt svar kan udbygges: Nej, jeg bor ikke her.",
         ],
-        examples=[GrammarExample("Hun er ikke hjemme."), GrammarExample("Vi spiser ikke kød.")],
+        examples=[
+            GrammarExample("Hun er ikke hjemme."),
+            GrammarExample("Vi spiser ikke kød."),
+            GrammarExample("Bor du ikke her? — Jo, jeg bor her."),
+        ],
         common_mistakes=[
             GrammarMistake(
                 "Jeg ikke drikker kaffe.",
@@ -265,7 +271,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "syv er 7.15, og kvart i otte er 7.45. Digitale tider kan læses direkte: "
         "sytten tredive er 17.30. Sig om morgenen eller om aftenen, når det er nødvendigt.",
         rules=[
-            "Skriv sammensatte tal som ét ord: femogtyve.",
+            "Skriv tal mellem 21 og 99 som ét ord: femogtyve. Ved hundreder: to hundrede.",
             "Spørg Hvad er klokken? om tiden nu og Hvornår? om en aftale.",
         ],
         examples=[

@@ -48,7 +48,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "vyprávět",
                 "verb",
-                "Slovy popisovat události tak, jak se odehrály.",
+                "Slovy líčit skutečné nebo vymyšlené události.",
                 "Babička nám vyprávěla o svém prvním zaměstnání.",
             ),
             VocabularyEntry(
@@ -85,7 +85,7 @@ B1_SETS: list[VocabularySet] = [
                 "zpočátku",
                 "adverb",
                 "V první části určitého období nebo děje.",
-                "Zpočátku jsem nikomu nerozuměl, ale postupně to bylo lepší.",
+                "Zpočátku jsem rozuměl jen málo, ale postupně to bylo lepší.",
             ),
             VocabularyEntry(
                 "nečekaný",
@@ -672,7 +672,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "spolehlivý",
                 "adjective",
-                "Takový, na který se lze v běžných podmínkách dobře spolehnout.",
+                "Takový, který obvykle funguje správně nebo plní dohodnuté povinnosti.",
                 "Hledám spolehlivý telefon, který vydrží několik let.",
             ),
             VocabularyEntry(

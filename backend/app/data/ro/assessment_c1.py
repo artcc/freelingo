@@ -42,11 +42,11 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "va răspunde mâine întrebărilor.» Cine a contestat concluziile cui?",
         [
             "Cercetătoarea a contestat concluziile editorului și va explica mâine obiecțiile.",
-            "Editorul a contestat concluziile cercetătoarei, care va răspunde mâine întrebărilor.",
+            "Editorul a contestat concluziile cercetătoarei; ea va răspunde mâine întrebărilor.",
             "Editorul a contestat întrebările cercetătoarei, care își va prezenta mâine concluziile.",
             "Cercetătoarea a contestat propriile concluzii, iar editorul va răspunde mâine.",
         ],
-        "Editorul a contestat concluziile cercetătoarei, care va răspunde mâine întrebărilor.",
+        "Editorul a contestat concluziile cercetătoarei; ea va răspunde mâine întrebărilor.",
         "ro-relative-case-c1",
     ),
     AssessmentQuestion(
@@ -83,15 +83,15 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "ro-g-c1-006",
         "grammar",
         "C1",
-        "Într-o discuție, Ana spune: «I-am cerut lui Vlad să-mi trimită schița joi, "
-        "dar încă nu mi-a confirmat.» Ce însemnare redă fidel situația?",
+        "Într-o discuție, Ana spune: «I-am cerut lui Vlad să-mi trimită schița până joi. "
+        "Încă nu mi-a spus dacă poate respecta termenul.» Ce însemnare redă fidel situația?",
         [
-            "Ana a cerut ca Vlad să-i trimită schița joi; acceptarea termenului rămâne neconfirmată.",
-            "Vlad a cerut ca Ana să-i trimită schița joi; acceptarea termenului rămâne neconfirmată.",
-            "Ana a promis că îi trimite lui Vlad schița joi; primirea ei rămâne neconfirmată.",
-            "Vlad a promis că îi trimite Anei schița joi; încheierea lucrării rămâne neconfirmată.",
+            "Ana a cerut ca Vlad să-i trimită schița până joi; termenul nu este confirmat.",
+            "Vlad a cerut ca Ana să-i trimită schița până joi; termenul nu este confirmat.",
+            "Ana a promis să-i trimită schița lui Vlad până joi; primirea nu este confirmată.",
+            "Vlad a promis să-i trimită schița Anei până joi; finalizarea nu este confirmată.",
         ],
-        "Ana a cerut ca Vlad să-i trimită schița joi; acceptarea termenului rămâne neconfirmată.",
+        "Ana a cerut ca Vlad să-i trimită schița până joi; termenul nu este confirmat.",
         "ro-subjunctive-agency-c1",
     ),
     AssessmentQuestion(
@@ -112,8 +112,8 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "ro-v-c1-002",
         "vocabulary",
         "C1",
-        "Se presupunea că poarta fusese închisă înainte de ora opt. "
-        "O înregistrare datată arată că era încă deschisă la opt și jumătate. "
+        "Se presupunea că poarta fusese închisă înainte de ora opt și rămăsese închisă "
+        "toată dimineața. O înregistrare datată arată că era deschisă la opt și jumătate. "
         "Ce verb descrie raportul dintre înregistrare și presupunerea inițială?",
         [
             "Înregistrarea coroborează presupunerea.",
@@ -159,15 +159,15 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "Anunțul bibliotecii: «Recomandăm înscrierea online pentru reducerea timpului "
         "de așteptare. Cererile pe hârtie se primesc în continuare, între 10 și 14. "
         "Programarea telefonică este necesară doar pentru consultarea fondului vechi.» "
-        "Mihai vrea să depună singur cererea pentru un abonament obișnuit, fără internet "
-        "și fără o programare inutilă. Ce variantă este susținută de anunț?",
+        "Un cititor rezumă: «Fără internet, trebuie întâi să telefonăm pentru orice serviciu.» "
+        "Ce răspuns corectează interpretarea lui fără să restrângă opțiunile din anunț?",
         [
-            "Poate cere telefonic o programare pentru fondul vechi și apoi solicita abonamentul.",
-            "Poate trimite pe cineva să completeze online cererea înainte de a veni personal.",
-            "Poate depune cererea după ora 14, când înscrierile online nu mai au prioritate.",
-            "Poate depune cererea pe hârtie în intervalul anunțat, fără programarea menționată.",
+            "Telefonul înlocuiește înscrierea online; la ghișeu se verifică doar actele deja trimise.",
+            "Cererile pe hârtie sunt pentru fondul vechi; abonamentele obișnuite se cer online.",
+            "Înscrierea online este opțională, dar orice vizită la ghișeu cere programare telefonică.",
+            "Pentru înscriere poți veni la ghișeu între 10 și 14; doar fondul vechi cere programare.",
         ],
-        "Poate depune cererea pe hârtie în intervalul anunțat, fără programarea menționată.",
+        "Pentru înscriere poți veni la ghișeu între 10 și 14; doar fondul vechi cere programare.",
     ),
     AssessmentQuestion(
         "ro-r-c1-002",

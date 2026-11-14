@@ -268,7 +268,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 "Ano, ráda půjdu.",
                 "Mluvčí žena přijímá pozvání; muž řekne rád půjdu. Učte se celý výraz.",
-                "informal",
+                "neutral",
                 "a1-unit-6",
             ),
             PhrasebookEntry(

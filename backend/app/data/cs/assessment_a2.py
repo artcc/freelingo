@@ -84,7 +84,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "cs-g-a2-009",
         "grammar",
         "A2",
-        "Doplňte zájmeno: Před jídlem si myju ruce. Potom ___ myju celý.",
+        "Doplňte zájmeno: Ráno ___ myju a potom si čistím zuby.",
         ["si", "se", "mi", "mě"],
         "se",
         "cs-reflexives-a2",
@@ -144,7 +144,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "A2",
         "Přijdete do ordinace dříve a zdravotní sestra ještě ošetřuje jiného pacienta. "
         "Kam vás obvykle pošle počkat?",
-        ["Do kabinky.", "Do sklepa.", "Na nástupiště.", "Do čekárny."],
+        ["Do ordinace.", "Do lékárny.", "Na recepci.", "Do čekárny."],
         "Do čekárny.",
     ),
     AssessmentQuestion(
@@ -167,8 +167,8 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "cs-v-a2-006",
         "vocabulary",
         "A2",
-        "Mléko chcete uložit tak, aby zůstalo studené. Kam ho dáte?",
-        ["Do trouby.", "Do pračky.", "Na schodiště.", "Do lednice."],
+        "Otevřené mléko chcete uchovat studené, ale nechcete ho zmrazit. Kam ho dáte?",
+        ["Do trouby.", "Do mrazáku.", "Do skříně.", "Do lednice."],
         "Do lednice.",
     ),
     AssessmentQuestion(

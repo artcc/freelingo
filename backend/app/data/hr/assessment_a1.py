@@ -164,12 +164,12 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "Obavijest: «Trgovina radi od ponedjeljka do subote. Nedjeljom ne radi.» "
         "Danas je nedjelja. Što možeš zaključiti?",
         [
-            "Danas mogu kupovati ujutro.",
-            "Danas mogu kupovati navečer.",
-            "Danas mogu kupovati cijeli dan.",
-            "Danas ne mogu kupovati u toj trgovini.",
+            "Danas trgovina radi samo ujutro.",
+            "Danas trgovina radi samo navečer.",
+            "Danas trgovina radi cijeli dan.",
+            "Danas trgovina uopće ne radi.",
         ],
-        "Danas ne mogu kupovati u toj trgovini.",
+        "Danas trgovina uopće ne radi.",
         "hr-negation-a1",
     ),
     AssessmentQuestion(

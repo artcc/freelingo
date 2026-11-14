@@ -43,7 +43,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "g-a1-005",
         "grammar",
         "A1",
-        "Täydennä ostos: Haluan kaksi ___.",
+        "Täydennä lause: Haluan kaksi ___.",
         ["omena", "omenat", "omenaa", "omenan"],
         "omenaa",
         "fi-partitive-a1",
@@ -182,7 +182,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "A1",
         "Aino kirjoittaa: Minulla ei ole leipää. Maito on myös loppu. Kahvia on vielä paljon. "
         "Eero menee kauppaan Ainon puolesta. "
-        "Millä ostoksilla Eero hankkii molemmat tuotteet, jotka Ainolta puuttuvat?",
+        "Mitkä kaksi tuotetta ovat loppu?",
         ["Kahvi ja tee.", "Leipä ja maito.", "Maito ja kahvi.", "Leipä ja kahvi."],
         "Leipä ja maito.",
     ),

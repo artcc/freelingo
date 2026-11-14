@@ -65,7 +65,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Jmenné a slovesné vyjadřování",
         "Zpřehledněte řetězce podstatných jmen bez domýšlení chybějícího původce.",
         "Výrazy jako „odmítnutí návrhu vedením“ zhušťují děj, předmět a původce. "
-        "Instrumentál zde umožňuje rozvedení „vedení odmítlo návrh“. Samotné "
+        "Instrumentál určuje původce; v minulém kontextu můžeme spojení rozvést "
+        "jako „vedení odmítlo návrh“. Samotné "
         "„odmítnutí vedení“ však může znamenat, že vedení něco odmítlo, nebo že někdo "
         "odmítl vedení. Při převodu na slovesnou větu musí původce vyplývat z textu; "
         "není-li známý, zachovejte neosobní či pasivní vyjádření.",
@@ -122,7 +123,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Pokračování „možná už všichni, ještě jsem to nespočítal“ však tuto hranici "
         "ruší bez nutného rozporu. Také zmínka o pracovním vytížení může v reakci "
         "na pozvání naznačit odmítnutí, ale následující replika může výklad změnit. "
-        "Ne každá implikace je stejně snadno odvolatelná; opírejte se o celé vyjádření.",
+        "Takový kontextový náznak označujeme jako konverzační implikaturu. "
+        "Nejde o logický důsledek, který by byl nutně pravdivý spolu s původní větou. "
+        "Při výkladu se opírejte o celé vyjádření.",
         rules=[
             "Zkuste, zda lze náznak zrušit dodatkem bez popření původního tvrzení.",
             "Při zápisu jednání neproměňujte nepřímý signál v potvrzené rozhodnutí.",
@@ -205,8 +208,13 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Pozoroval souseda, který držel dalekohled.",
-                note="Vedlejší věta jednoznačně přiřazuje dalekohled sousedovi.",
+                "Pozoroval souseda, který měl u sebe dalekohled.",
+                note="Tato verze odpovídá výkladu, že dalekohled měl soused. "
+                "Bez kontextu nelze z původní věty vybrat právě tento výklad.",
+            ),
+            GrammarExample(
+                "Dalekohledem pozoroval souseda.",
+                note="Tato verze výslovně označuje dalekohled za nástroj pozorování.",
             ),
             GrammarExample(
                 "Hledáme zkušené překladatele a zkušené redaktory.",
@@ -337,9 +345,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Otázka v daném vyprávění zachycuje Pavlovo rozhořčení.",
             ),
             GrammarExample(
-                "Eva považovala nabídku za nedostatečnou; "
-                "vypravěč její hodnotu samostatně neposuzuje.",
-                note="Věcná parafráze zachovává nositele hodnocení.",
+                "Eva pochybovala o velkorysosti nabídky.",
+                note="Parafráze otázky z výkladu zachovává nositelku pochybnosti. "
+                "Nepřidává konkrétní důvod, proč nabídku zpochybnila.",
             ),
         ],
         related=["cs-ironic-echo-c2", "cs-cross-genre-reformulation-c2"],
@@ -368,6 +376,11 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 "Po dvou hodinách v dešti jsme nebyli zrovna nadšení.",
                 note="Kontext podporuje silnější nespokojenost, než naznačuje mírná formulace.",
+            ),
+            GrammarExample(
+                "Když jsem zjistila, že jsem čekala u jiného vchodu, nebyla jsem na sebe "
+                "zrovna pyšná. Teď už se tomu směju.",
+                note="Osobní vyprávění spojuje tlumenou sebekritiku s pozdějším odstupem.",
             ),
         ],
         related=["cs-metalinguistic-negation-c2", "cs-ironic-echo-c2"],
@@ -418,12 +431,12 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "„Proberu to s účetní.“ — Vedoucí přislíbil konzultaci s účetní.",
+                "Vedoucí Jan: „Proberu to s účetní.“ — Jan přislíbil konzultaci s účetní.",
                 note="Zápis nepřipisuje účetní souhlas ani povinnost věc vyřešit.",
             ),
             GrammarExample(
                 "Zkušební provoz se doporučuje, není však podmínkou schválení. "
-                "— Nejdřív si provoz vyzkoušet je vhodné, ale ke schválení to není nutné.",
+                "— Vyzkoušet si provoz je vhodné, ale ke schválení to není nutné.",
                 note="Srozumitelnější verze zachovává rozdíl mezi doporučením a požadavkem.",
             ),
         ],

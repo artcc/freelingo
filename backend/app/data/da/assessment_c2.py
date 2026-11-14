@@ -12,10 +12,10 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Målingerne fra maj viser, at den nuværende løsning burde have været valgt tidligere.",
             "Med målingerne i maj ville en anden løsning med sikkerhed allerede være gennemført.",
-            "Tidligere adgang til målingerne kunne have ført til et andet valg frem mod i dag.",
+            "Adgang til målingerne i maj kunne have ført til en anden løsning, end vi står med nu.",
             "Hvis målingerne kommer nu, kan den løsning, der blev valgt i maj, snart ændres.",
         ],
-        "Tidligere adgang til målingerne kunne have ført til et andet valg frem mod i dag.",
+        "Adgang til målingerne i maj kunne have ført til en anden løsning, end vi står med nu.",
         "da-mixed-counterfactuals-c2",
     ),
     AssessmentQuestion(
@@ -120,9 +120,9 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
             "Så må vi forklare igen, at tonen var vigtigere end detaljerne i kritikken.",
             "Så bør vi lade sagen ligge, indtil de kritiske deltagere selv tager den op.",
             "Så kan vi samle op ved at fremhæve de punkter, som ingen havde indvendinger imod.",
-            "Så lad os anerkende det konkrete problem og spørge, hvad der stadig mangler et svar.",
+            "Så lad os anerkende problemet og spørge, hvilke spørgsmål der stadig mangler svar på.",
         ],
-        "Så lad os anerkende det konkrete problem og spørge, hvad der stadig mangler et svar.",
+        "Så lad os anerkende problemet og spørge, hvilke spørgsmål der stadig mangler svar på.",
     ),
     AssessmentQuestion(
         "da-v-c2-003",
@@ -132,12 +132,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "'Kontakten må ikke foregribe generalforsamlingens beslutning.' "
         "Hvilken indledning til samtalen passer?",
         [
-            "Vi undersøger mulige vilkår; en eventuel bestilling kræver stadig forsamlingens godkendelse.",
+            "Vi undersøger vilkårene; forsamlingen skal stadig godkende en bestilling.",
             "Vi er klar til at bestille, hvis I holder den pris, vi orienterer forsamlingen om.",
             "Vi har valgt jer som leverandør, men venter med at offentliggøre det til forsamlingen.",
             "Vi kan give et foreløbigt tilsagn, som forsamlingen senere får mulighed for at justere.",
         ],
-        "Vi undersøger mulige vilkår; en eventuel bestilling kræver stadig forsamlingens godkendelse.",
+        "Vi undersøger vilkårene; forsamlingen skal stadig godkende en bestilling.",
     ),
     AssessmentQuestion(
         "da-v-c2-004",
@@ -175,7 +175,7 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Læs: 'Et forsøg med færre møder gav mere sammenhængende arbejdstid i to "
         "afdelinger. Deltagerne havde selv meldt sig, og begge afdelinger havde "
         "erfarne koordinatorer. Rapporten anbefaler et større forsøg. Direktøren "
-        "vil indføre ordningen i hele virksomheden næste måned.' Hvilken vurdering "
+        "vil indføre ordningen permanent i hele virksomheden næste måned.' Hvilken vurdering "
         "skelner mest præcist mellem grundlag og beslutning?",
         [
             "Direktørens beslutning følger rapportens anbefaling, fordi flere afdelinger giver et større forsøg.",

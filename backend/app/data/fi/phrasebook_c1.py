@@ -16,7 +16,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 "c1-unit-1",
             ),
             PhrasebookEntry(
-                "Tämä on huoltajan kertoma tieto; en ole itse käynyt paikalla.",
+                "Tämä on huoltotyöntekijän kertoma tieto; en ole itse käynyt paikalla.",
                 "Välität tietoa rakennuksen kunnosta ja kerrot samalla tiedon rajat.",
                 "neutral",
                 "c1-unit-1",
@@ -105,7 +105,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Pyydän, että tämä rajaus merkitään pöytäkirjaan.",
-                "Varmistat, että päätöksen olennainen ehto säilyy kirjallisessa muistissa.",
+                "Varmistat, että päätöksen olennainen ehto säilyy kirjallisessa merkinnässä.",
                 "formal",
                 "c1-unit-3",
             ),
@@ -200,7 +200,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
         "💬",
         [
             PhrasebookEntry(
-                "Taisin sanoa epäselvästi. Tarkoitin vain tämän viikon vuoroja.",
+                "Taisin ilmaista asian epäselvästi. Tarkoitin vain tämän viikon vuoroja.",
                 "Korjaat oman ilmauksesi syyttämättä kuulijaa väärin ymmärtämisestä.",
                 "neutral",
                 "c1-unit-6",
@@ -219,7 +219,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Sellaista sattuu. Katsotaan yhdessä, miten tästä päästään eteenpäin.",
-                "Vastaat toisen itseironiaan tukevasti tekemättä hänestä vitsin kohdetta.",
+                "Vastaat toisen itseironiaan kannustavasti tekemättä hänestä vitsin kohdetta.",
                 "neutral",
                 "c1-unit-6",
             ),
@@ -239,7 +239,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
         [
             PhrasebookEntry(
                 "Teille tärkeintä on ennakoitava aikataulu, teille taas mahdollisuus vaihtaa vuoroja.",
-                "Nimeät kahden osapuolen tarpeet arvottamatta niitä.",
+                "Nimeät osapuolten tarpeet arvottamatta niitä; osoitat katseella, kumpaa puhuttelet.",
                 "neutral",
                 "c1-unit-7",
             ),

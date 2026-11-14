@@ -48,7 +48,12 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Částky se přesně liší o jednu fakturu; zřejmě jsme ji započítali dvakrát."
+                "Součty se liší přesně o částku na jedné faktuře; "
+                "zřejmě jsme ji započítali dvakrát."
+            ),
+            GrammarExample(
+                "To musí být omyl: v potvrzení je jiný termín, než jsme si domluvili.",
+                note="Musí vyjadřuje silný úsudek mluvčího, nikoli příkaz udělat chybu.",
             ),
             GrammarExample(
                 "Ticho v sále nemusí znamenat souhlas; účastníci možná čekají na vysvětlení."
@@ -168,6 +173,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Termín můžeme potvrdit pouze tehdy, pokud dostaneme všechny podklady."),
             GrammarExample("Pokud cenu snížíte na dohodnutou částku, objednávku dnes potvrdíme."),
+            GrammarExample(
+                "Na společnou dovolenou pojedu jen tehdy, pokud si náklady rozdělíme předem. "
+                "Ještě si ale musím ověřit, zda dostanu volno.",
+                note="Dohoda o nákladech je nutná, sama však účast nezaručuje.",
+            ),
         ],
         related=["cs-exceptions-c1", "cs-hypothetical-concession-c1"],
     ),
@@ -470,9 +480,10 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Jana: „Zkusím se na ten návrh zítra mrknout.“ — "
+                "Jana: „Zkusím se na ten návrh zítra jen zběžně mrknout.“ — "
                 "Jana se pokusí návrh zítra zběžně projít.",
-                note="Pokus ani zběžný rozsah kontroly se nemění v závazek návrh dokončit.",
+                note="Při shrnutí ve stejný den zůstává zítra. Pokus ani výslovně zběžná "
+                "kontrola se nemění v závazek návrh dokončit.",
             ),
             GrammarExample(
                 "Petr: „S cenou problém nemám, ale termín neslíbím.“ — "

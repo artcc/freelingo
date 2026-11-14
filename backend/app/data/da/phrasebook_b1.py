@@ -79,7 +79,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "De kasser, jeg lånte af dig, er klar til at blive hentet.",
-                "Giv besked om, at lånte ting kan afleveres tilbage.",
+                "Giv ejeren besked om, at de lånte kasser kan hentes hos dig.",
                 "informal",
                 "b1-unit-2",
             ),
@@ -225,7 +225,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Der kommer nok flere, når de har fri fra arbejde.",
-                "Giv et forsigtigt bud på, hvorfor ikke alle er mødt endnu.",
+                "Udtryk en forventning om flere deltagere senere, uden at love det.",
                 "neutral",
                 "b1-unit-6",
             ),

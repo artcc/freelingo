@@ -189,9 +189,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "fordi jeg kan ikke komme",
+                "fordi jeg ikke komme kan",
                 "fordi jeg ikke kan komme",
-                "I det neutrale ledsætningsmønster står ikke før kan.",
+                "Efter ikke kommer det bøjede modalverbum kan før navneformen komme.",
             )
         ],
         related=["da-negation-a1", "da-initial-clause-a2"],
@@ -257,7 +257,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "sit kort, sine nøgler. Ved flertal som subjekt bruges deres: Børnene tager "
         "deres tasker. Min, din og vores skifter ikke til sin.",
         rules=[
-            "Brug ikke sin som subjektets eget ejestedord: Hendes læge ringer.",
+            "Brug ikke sin inde i selve subjektet: Hendes læge ringer, ikke Sin læge ringer.",
             "Find subjektet og den, der ejer tingen, før du vælger form.",
         ],
         examples=[
@@ -295,7 +295,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Indbyg et spørgsmål i en anden sætning.",
         "Et indirekte spørgsmål har ledsætningsordstilling: Hvornår begynder mødet? "
         "bliver til Ved du, hvornår mødet begynder? Et ja-nej-spørgsmål indledes med om: "
-        "Ved du, om mødet er aflyst? Når hvem er subjekt, kan der indgå der: "
+        "Ved du, om mødet er aflyst? Når hvem er subjekt, bruges normalt der: "
         "Ved du, hvem der kommer? Hele sætningen kan være et spørgsmål eller et udsagn.",
         rules=[
             "Byt ikke om på subjekt og verbum inde i det indirekte spørgsmål.",
@@ -390,8 +390,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Beskriv, hvordan en handling udføres.",
         "Et tillægsord beskriver et navneord: en tydelig besked. Et biord kan beskrive "
         "en handling: Hun taler tydeligt. Mange mådesbiord dannes med -t, men ikke "
-        "alle biord følger dette mønster; gerne, ofte og godt læres som almindelige "
-        "former. Den samme t-form kan være et tillægsord ved et-ord eller et biord.",
+        "alle biord dannes af tillægsord: gerne og ofte læres som selvstændige ord. "
+        "God har formen godt som mådesbiord: Hun synger godt. Den samme t-form kan "
+        "være et tillægsord ved et-ord eller et biord.",
         rules=[
             "Find ud af, om ordet beskriver en ting eller selve handlingen.",
             "Lær hyppige forbindelser: lytte godt, tale langsomt, svare venligt.",

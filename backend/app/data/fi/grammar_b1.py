@@ -132,7 +132,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Tavallisessa velvollisuusrakenteessa tekijä on genetiivissä ja verbi "
         "yksikön kolmannessa persoonassa: minun täytyy lähteä, meidän pitää ilmoittautua. "
         "Ei tarvitse poistaa velvollisuuden, mutta ei kiellä toimintaa. Ei saa "
-        "ilmaisee kiellon. Kielteisessä tarvita-rakenteessa tekijä on myös genetiivissä. "
+        "ilmaisee kiellon. Rakenteessa minun ei tarvitse tehdä tekijä on genetiivissä. "
+        "Tavallinen tarvita-verbi taipuu persoonassa: minä en tarvitse apua. "
         "Pitää-verbin muut merkitykset käyttävät muita rakenteita.",
         structure="minun täytyy tehdä; minun ei tarvitse tehdä; en saa tehdä",
         rules=[
@@ -272,7 +273,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Verbistä substantiiviksi",
         "Minen-muoto nimeää toiminnan ja taipuu substantiivin tavoin.",
         "Lukeminen ja opiskeleminen voivat olla lauseen aiheita tai täydennyksiä. "
-        "Taivutusvartalo on -mise-: lukemisen, lukemista, lukemisesta. Verbistä "
+        "Vokaalivartalo on -mise-: lukemisen, lukemisesta. Yksikön partitiivissa "
+        "käytetään konsonanttivartaloa -mis- ja päätettä -ta/-tä: lukemista. Verbistä "
         "tulee substantiivi, joten sen kohde voi olla genetiivissä: suomen opiskelu "
         "tai suomen opiskeleminen. Rakenne auttaa puhumaan tavoista ja tavoitteista "
         "yleisesti ilman tiettyä tekijää tai ajankohtaa.",
@@ -400,7 +402,12 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Pronominit ja ajanilmaukset sovitetaan kertojan näkökulmaan. Jos välität "
         "maanantain huomenna-sanan keskiviikkona, selkeä ilmaus voi olla tiistaina. "
         "Suomessa mennyt johtoverbi ei yksin pakota muuttamaan sivulauseen aikamuotoa. "
-        "Kysymys välitetään kysyvällä sivulauseella, ei väittävällä että-lauseella.",
+        "Kysymys välitetään kysyvällä sivulauseella, ei väittävällä että-lauseella.\n\n"
+        "Myös omistajan on säilyttävä selvänä. Aino otti laukkunsa viittaa tavallisesti "
+        "Ainon omaan laukkuun; Aino otti hänen laukkunsa viittaa toisen ihmisen laukkuun. "
+        "Omistusliite tulee sijapäätteen jälkeen: laukussani, laukustasi. Kolmannessa "
+        "persoonassa mahdollisia rinnakkaismuotoja ovat laukussaan ja harvinaisempi laukussansa. "
+        "Jos omistaja jää epäselväksi, käytä nimeä: Aino otti Eeron laukun.",
         rules=[
             "Toista nimi, jos hän voisi viitata kahteen eri henkilöön.",
             "Älä muuta lupaa, toivetta tai arviota varmaksi lupaukseksi.",
@@ -408,6 +415,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Ohjaaja sanoi, että kurssi alkaa ensi viikolla."),
             GrammarExample("Mikko kysyi, voinko auttaa häntä muutossa."),
+            GrammarExample(
+                "Aino sanoi, että hän otti Eeron laukun.",
+                note="Nimi kertoo yksiselitteisesti, että laukku kuuluu Eerolle eikä Ainolle.",
+            ),
         ],
         related=["fi-indirect-question-b1", "fi-pluperfect-b1"],
     ),
@@ -423,7 +434,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Yhtä ... kuin ilmaisee saman asteen. Määrän vertailussa käytetään "
         "enemmän ja vähemmän, ei aina adjektiivin komparatiivia.",
         rules=[
-            "Epäsäännöllisiä muotoja ovat hyvä–parempi–paras ja pitkä–pidempi–pisin.",
+            "Epäsäännöllisiä muotoja ovat hyvä–parempi–paras ja pitkä–pidempi–pisin; myös pitempi on yleiskieltä.",
             "Tee vertailun peruste näkyväksi: halvempi vuokra mutta pidempi työmatka.",
         ],
         examples=[
@@ -460,9 +471,10 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Liität uuden asian aiempaan ja kerrot, mihin lisäys kohdistuu.",
         "Kin-liite voi vastata myös-sanaa: minäkin tulen tarkoittaa, että joku "
         "muukin tulee. Tavallisessa kielteisessä lisäyksessä käytetään -kaan/-kään: "
-        "minäkään en tule. Liitteen paikka vaikuttaa painotukseen: luin kirjan "
-        "tarkoittaa muuta kuin luin kirjankin. Liitteillä on myös muita, asiayhteydestä "
-        "riippuvia merkityksiä, joten niitä ei voi vaihtaa mekaanisesti.",
+        "minäkään en tule. Liitteen paikka vaikuttaa painotukseen: minäkin luin kirjan "
+        "lisää minut lukijoihin, minä luin kirjankin lisää kirjan muihin lukemiini asioihin. "
+        "Liitteillä on myös muita, asiayhteydestä riippuvia merkityksiä, joten niitä ei voi "
+        "vaihtaa mekaanisesti.",
         rules=[
             "Kiinnitä liite siihen sanaan, jota haluat korostaa.",
             "Vokaalisointu säilyy: minäkään, hänkään, Pekkaakaan.",

@@ -54,7 +54,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-2",
             ),
             PhrasebookEntry(
-                "Îmi asum să cer aprobarea astăzi, nu pot însă anticipa decizia directoarei.",
+                "Îmi asum să cer aprobarea astăzi; nu pot însă anticipa decizia directoarei.",
                 "Promiți un demers aflat sub controlul tău și delimitezi decizia altei persoane.",
                 "neutral",
                 "c2-unit-2",
@@ -182,7 +182,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
         "💬",
         [
             PhrasebookEntry(
-                "Ca să nu iau acordul tău drept mai mult decât este: accepți ora sau și schimbarea locului?",
+                "Ca să nu dau acordului tău un sens mai larg: accepți ora sau și schimbarea locului?",
                 "Clarifici un răspuns scurt dat după două propuneri diferite.",
                 "neutral",
                 "c2-unit-6",

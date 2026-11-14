@@ -98,7 +98,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "dobírat si",
                 "verb",
-                "Žertem někoho škádlit nebo si z něj dělat legraci.",
+                "Hovorově: žertem někoho škádlit nebo si z něj dělat legraci.",
                 "Kolegové si ho dobírali kvůli jeho pověstné dochvilnosti.",
             ),
             VocabularyEntry(
@@ -140,7 +140,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "shodit někoho",
                 "phrase",
-                "Snížit něčí vážnost nebo sebejistotu, často před ostatními.",
+                "Hovorově: snížit něčí vážnost nebo sebejistotu, často před ostatními.",
                 "Chtěl situaci odlehčit, ne kolegyni před týmem shodit.",
             ),
             VocabularyEntry(
@@ -203,7 +203,7 @@ C2_SETS: list[VocabularySet] = [
                 "překroutit",
                 "verb",
                 "Změnit podání cizího sdělení tak, že dostane jiný smysl.",
-                "Zápis překroutil její ochotu jednat v souhlas s cenou.",
+                "Zápis překroutil její vyjádření: ochotu jednat vydával za souhlas s cenou.",
             ),
             VocabularyEntry(
                 "věcná podstata",
@@ -368,7 +368,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "bez újmy na",
                 "phrase",
-                "Tak, aby určité právo nebo nárok nebyly dotčeny.",
+                "V právním vyjadřování: tak, aby určité právo nebo nárok nebyly dotčeny.",
                 "Nabídku předkládáme bez újmy na našich dosavadních nárocích.",
             ),
         ],
@@ -481,7 +481,7 @@ C2_SETS: list[VocabularySet] = [
                 "zestručnit",
                 "verb",
                 "Zkrátit vyjádření při zachování potřebného obsahu.",
-                "Zprávu lze zestručnit, nikoli vypustit podmínku souhlasu.",
+                "Zprávu lze zestručnit, ale podmínku souhlasu je třeba zachovat.",
             ),
             VocabularyEntry(
                 "vypointovat",

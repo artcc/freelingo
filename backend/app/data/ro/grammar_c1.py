@@ -160,6 +160,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 "Ar fi trebuit să verificăm adresa. Data viitoare o confirmăm înainte de plecare.",
                 note="Evaluarea trecutului și soluția viitoare sunt exprimate separat.",
             ),
+            GrammarExample(
+                "Înțeleg că te-a deranjat așteptarea și îmi pare rău. "
+                "Data viitoare te anunț imediat dacă întârzii.",
+                note="Răspunsul recunoaște efectul întârzierii și propune o soluție concretă.",
+            ),
         ],
         related=["ro-reported-conditional-c1", "ro-focus-repair-c1"],
     ),
@@ -358,7 +363,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Condensare și argumentare",
         "Transformă numele unei acțiuni în propoziție fără să inversezi participanții.",
         "În «respingerea cererii de către comisie», cererea este obiectul respingerii, "
-        "iar comisia este autorul. Un genitiv izolat poate fi ambiguu: «criticarea "
+        "iar comisia este autorul. Un genitiv izolat poate fi ambiguu: «critica "
         "profesorului» poate avea profesorul ca autor sau ca țintă a criticii. "
         "Nu alege o interpretare doar pentru a simplifica textul; cere contextul lipsă. "
         "Timpul și modalitatea se recuperează din enunțul complet.",
@@ -369,7 +374,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample(
                 "Respingerea cererii de către comisie a surprins-o pe Ana. "
-                "— Comisia a respins cererea, iar Ana a fost surprinsă."
+                "— Comisia a respins cererea, ceea ce a surprins-o pe Ana."
             ),
             GrammarExample(
                 "Se propune revizuirea programului. — Există o propunere ca programul să fie revizuit.",

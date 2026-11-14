@@ -54,7 +54,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-2",
             ),
             PhrasebookEntry(
-                "Ten vtip vyzněl na tvůj účet. To jsem nechtěl a mrzí mě to.",
+                "Vyznělo to, jako bych si dělal legraci z tebe. To jsem nechtěl a mrzí mě to.",
                 "Přijetí odpovědnosti za zraňující účinek žertu bez zpochybnění reakce druhého.",
                 "informal",
                 "c2-unit-2",
@@ -72,7 +72,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-2",
             ),
             PhrasebookEntry(
-                "S tou mou slavnou organizací bych měl nejdřív najít vlastní poznámky.",
+                "Tak tohle je ta moje slavná organizace — nemůžu najít ani vlastní poznámky.",
                 "Sebeironie při drobném zmatku, která nepřenáší vinu na ostatní.",
                 "informal",
                 "c2-unit-2",
@@ -175,7 +175,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "S cenou souhlasíme za předpokladu, že zahrnuje i uvedení do provozu.",
-                "Podmíněný souhlas, který brání dodatečnému účtování podstatné části služby.",
+                "Podmíněný souhlas při vyjednávání o tom, co bude zahrnuto v ceně služby.",
                 "formal",
                 "c2-unit-5",
             ),
@@ -224,7 +224,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-6",
             ),
             PhrasebookEntry(
-                "Na vlastní účet se tomu zasměju, ale z vašeho zklamání si legraci dělat nechci.",
+                "Ze sebe si legraci udělám, ale z vašeho zklamání si ji dělat nechci.",
                 "Vymezení přijatelné sebeironie při citlivém společném hodnocení neúspěchu.",
                 "neutral",
                 "c2-unit-6",

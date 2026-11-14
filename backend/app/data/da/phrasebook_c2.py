@@ -22,7 +22,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-1",
             ),
             PhrasebookEntry(
-                "Mener du, at hun havde lovet at ringe, eller at nogen siger, hun faktisk ringede?",
+                "Mener du, at hun burde have ringet, eller at nogen siger, hun faktisk ringede?",
                 "Afklar to forskellige læsninger af hun skulle have ringet.",
                 "neutral",
                 "c2-unit-1",

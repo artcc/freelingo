@@ -51,6 +51,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "Preoblikujem administrativni tekst tako da ostanu jasni izvršitelji i primatelji radnji.",
             "Razlikujem najavljenu, odobrenu i provedenu mjeru.",
             "Ispravljam sažetak koji pogrešno pripisuje radnju drugom sudioniku.",
+            "Povezujem radnje istog sudionika glagolskim prilogom uz očuvanje vremenskog odnosa.",
         ],
         2,
         "c1-unit-2",

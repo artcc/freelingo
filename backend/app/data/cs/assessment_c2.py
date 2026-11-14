@@ -26,8 +26,7 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "zpochybnit předpoklad o minulosti, ne rovnou vysvětlovat dnešní postup. "
         "Která odpověď tento záměr naplňuje?",
         [
-            "Ke kterému předchozímu případu odkazujete slovem zase? "
-            "Tehdejší postup za obcházení nepovažujeme.",
+            "Nesouhlasíme s tím, že jsme obyvatele už dříve obešli. " "Z jakého případu vycházíte?",
             "Tentokrát jsme postupovali rychleji, "
             "protože jsme neměli čas na další veřejné setkání.",
             "Víme, že předchozí vynechání obyvatel vzbudilo odpor; "
@@ -35,8 +34,7 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
             "Příště obyvatele oslovíme dříve, "
             "abychom předešli podobnému hodnocení našeho postupu.",
         ],
-        "Ke kterému předchozímu případu odkazujete slovem zase? "
-        "Tehdejší postup za obcházení nepovažujeme.",
+        "Nesouhlasíme s tím, že jsme obyvatele už dříve obešli. " "Z jakého případu vycházíte?",
         "cs-presupposition-repair-c2",
     ),
     AssessmentQuestion(

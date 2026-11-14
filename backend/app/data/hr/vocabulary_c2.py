@@ -111,7 +111,8 @@ C2_SETS: list[VocabularySet] = [
                 "ograda",
                 "noun",
                 "U govoru ili tekstu, izraz koji ograničava sigurnost ili opseg tvrdnje.",
-                "Izbacivanjem ograde prema dostupnim podacima sažetak je postao previše kategoričan.",
+                "Izbacivanjem ograde „prema dostupnim podacima” "
+                "sažetak je postao previše kategoričan.",
             ),
             VocabularyEntry(
                 "pripisati",
@@ -221,7 +222,7 @@ C2_SETS: list[VocabularySet] = [
                 "prenaglasiti",
                 "verb",
                 "Istaknuti nešto više nego što sadržaj ili situacija opravdavaju.",
-                "Prenaglasio je riječ stručnjak pa je pohvala zazvučala ironično.",
+                "Prenaglasio je riječ „stručnjak” pa je pohvala zazvučala ironično.",
             ),
             VocabularyEntry(
                 "ublažiti",
@@ -239,7 +240,8 @@ C2_SETS: list[VocabularySet] = [
                 "odjek",
                 "noun",
                 "U govoru, prepoznatljivo ponavljanje ranije riječi, misli ili tona.",
-                "U njegovu baš smo to sjajno riješili čuo se ironičan odjek jutarnjeg obećanja.",
+                "U njegovu „baš smo to sjajno riješili” čuo se ironičan odjek "
+                "jutarnjeg obećanja.",
             ),
         ],
     ),
@@ -301,7 +303,7 @@ C2_SETS: list[VocabularySet] = [
                 "prizvuk",
                 "noun",
                 "Dodatna osjećajna ili značenjska nijansa izraza.",
-                "Riječ dom u tom odlomku ima prizvuk gubitka, a ne sigurnosti.",
+                "Riječ „dom” u tom odlomku ima prizvuk gubitka, a ne sigurnosti.",
             ),
             VocabularyEntry(
                 "živopisno",
@@ -541,7 +543,7 @@ C2_SETS: list[VocabularySet] = [
                 "zvučnost",
                 "noun",
                 "Dojmljivost izraza koja proizlazi iz njegova zvuka i ritma.",
-                "Zvučnost slogana ne može nadomjestiti nejasno obećanje.",
+                "Slogan je pamtljiv zbog zvučnosti, ali njegovo obećanje ostaje nejasno.",
             ),
             VocabularyEntry(
                 "težište",

@@ -62,6 +62,7 @@ B1_UNITS: list[CurriculumUnit] = [
         [
             "Zdvořile požádám o změnu pracovních podmínek.",
             "Popíšu, co bych udělal nebo udělala v představované situaci.",
+            "Vysvětlím, jak by jasně určená minulá situace mohla dopadnout jinak.",
             "Vysvětlím účel kurzu, schůzky nebo pracovního postupu.",
         ],
         2,

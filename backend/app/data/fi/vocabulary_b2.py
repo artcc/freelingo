@@ -164,7 +164,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "johtaa harhaan",
                 "phrase",
-                "Saada joku muodostamaan väärä käsitys.",
+                "Saada joku muodostamaan väärän käsityksen.",
                 "Pelkkä otsikko voi johtaa harhaan.",
             ),
             VocabularyEntry(
@@ -428,7 +428,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "neuvoteltavissa",
                 "adverb",
-                "Sellainen, jonka ehdoista voidaan vielä keskustella.",
+                "Niin, että ehdoista voidaan vielä sopia eivätkä ne ole lopulliset.",
                 "Toimituspäivä on vielä neuvoteltavissa.",
             ),
             VocabularyEntry(
@@ -520,7 +520,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "suorasukainen",
                 "adjective",
-                "Ilman kiertelyä ja joskus hyvin jyrkästi ilmaiseva.",
+                "Asiansa ilman kiertelyä ja joskus hyvin jyrkästi ilmaiseva.",
                 "Suorasukainen palaute yllätti uuden työntekijän.",
             ),
             VocabularyEntry(

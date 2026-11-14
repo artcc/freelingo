@@ -292,7 +292,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "la rândul meu",
                 "phrase",
-                "Marchează contribuția proprie după a altcuiva.",
+                "Introduce contribuția proprie după cea a altei persoane.",
                 "La rândul meu, îi voi ajuta cu pregătirile.",
             ),
         ],

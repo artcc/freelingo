@@ -45,17 +45,22 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "v tramvaji. U některých slov se mění i souhláska.\n\n"
         "Tvary přídavných jmen jsou například v novém hotelu a v nové škole. "
         "Předložku se učíme se slovem: v obchodě, ale na poště. Nevybíráme ji "
-        "jen podle toho, zda je místo uvnitř budovy.",
+        "jen podle toho, zda je místo uvnitř budovy.\n\n"
+        "V množném čísle se setkáme s koncovkami -ech, -ách a -ích: "
+        "v hotelech, ve školách, v ulicích, v městech. Po některých souhláskách "
+        "se mění i základ: park – v parcích. Přídavné jméno má například "
+        "-ých nebo -ích: v nových hotelech, v moderních budovách.",
         structure="v / na / o / po + 6. pád",
         rules=[
             "Kde? V Praze. O čem? O Praze.",
             "V a ve jsou podoby stejné předložky: v parku, ve škole.",
-            "Na tomto místě procvičujeme hlavně jednotné číslo a běžná místní jména.",
+            "Koncovky se učíme s konkrétním jménem: v hotelu – v hotelech.",
         ],
         examples=[
             GrammarExample("Čekám na hlavním nádraží."),
             GrammarExample("Mluvíme o nové cestě."),
             GrammarExample("Turisté chodí po městě."),
+            GrammarExample("V těchto ulicích jsou malé obchody."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -102,11 +107,16 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Třetí pád odpovídá na otázky komu a čemu. Používáme ho například po "
         "slovesech dát, pomáhat a telefonovat a po předložce k. Běžná spojení "
         "jsou pomáhám sestře, telefonuji mamince, jdu k lékaři. U mužských osob "
-        "se setkáme s koncovkami -ovi a -i: sousedovi, příteli, lékaři i lékařovi. "
+        "se setkáme s koncovkami -ovi, -u a -i: sousedovi, panu Novákovi, "
+        "příteli, lékaři i lékařovi. "
         "Obě poslední podoby jsou správné.\n\n"
         "U ženských jmen může změnu koncovky doprovázet změna souhlásky: "
         "maminka – mamince, kolegyně – kolegyni. Přídavné jméno má například "
-        "tvar novému nebo nové: k novému sousedovi, k nové sousedce.",
+        "tvar novému nebo nové: k novému sousedovi, k nové sousedce.\n\n"
+        "Běžné tvary množného čísla mají -ům, -ám nebo -ím: sousedům, "
+        "sousedkám, kolegyním, městům. Přídavné jméno má ve všech rodech "
+        "-ým nebo -ím: novým sousedům, novým sousedkám, cizím lidem. "
+        "Dítě má v množném čísle nepravidelný tvar dětem.",
         structure="pomáhat / telefonovat / dát něco + 3. pád; k + 3. pád",
         rules=[
             "Po k a ke je třetí pád: k domu, ke škole.",
@@ -117,6 +127,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Pomáhám nové sousedce."),
             GrammarExample("Dávám bratrovi klíč od bytu."),
             GrammarExample("Cesta vede ke škole."),
+            GrammarExample("Pomáháme novým sousedům a jejich dětem."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -141,7 +152,13 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "jmen, -ou u ženských jmen na -a a -í například u kolegyně: domem, "
         "městem, tramvají, kolegyní. Přídavná jména mají tvary s novým "
         "sousedem a s novou sousedkou. V místních spojeních se setkáme také "
-        "s před domem a za školou.",
+        "s před domem a za školou.\n\n"
+        "V množném čísle se učíme například spojení se sousedy, s auty, "
+        "se sestrami, s kolegyněmi a s tramvajemi. Koncovky tedy nelze "
+        "převzít z jednotného čísla. Přídavná jména mají zpravidla -ými "
+        "nebo -ími: s novými sousedy, s cizími lidmi. Některá častá jména "
+        "mají zvláštní tvary: s dětmi, rukama, nohama. U částí těla se přizpůsobuje "
+        "i koncovka přídavného jména: holýma rukama, dlouhýma nohama.",
         rules=[
             "S někým označuje společnost: bydlím s bratrem.",
             "Dopravní prostředek vyjádříme bez s: autobusem, metrem, autem.",
@@ -151,6 +168,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Jedu tramvají s novou kolegyní."),
             GrammarExample("Píšu adresu tužkou."),
             GrammarExample("Před domem je zahrada."),
+            GrammarExample("Mluvím s novými sousedy."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -166,11 +184,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Osobní zájmena po slovesech a předložkách",
         "A2",
         "Zájmena",
-        "Místo opakování jména použijeme mi, ti, ho, ji nebo delší tvar.",
+        "Místo opakování jména použijeme mi, ti, ho, ji nebo důrazový tvar.",
         "Krátké tvary zájmen používáme bez předložky a bez důrazu: pomáhá mi, "
         "dám ti klíč, vidím ho, znám ji. Často stojí za prvním větným celkem: "
-        "Dnes ti pomáhám. Delší tvary používáme po předložkách nebo při "
-        "zdůraznění: pro mě, ke mně, k tobě, se mnou, s tebou.\n\n"
+        "Dnes ti pomáhám. Po předložkách nebo při zdůraznění volíme příslušné "
+        "přízvučné tvary: pro mě, ke mně, k tobě, se mnou, s tebou. "
+        "Ne všechny se liší od nepřízvučných: nám a vám mají stejnou podobu.\n\n"
         "U třetí osoby začíná tvar po předložce často na n: bez něho, k němu, "
         "s ním; bez ní, k ní, s ní. Učíme se tvary podle pádu, ne jen podle "
         "rodu. Ve větě Dávám jí klíč je jí třetí pád; ve větě Vidím ji je ji "
@@ -187,9 +206,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "Jdu k mi.",
-                "Jdu ke mně.",
-                "Po předložce potřebujeme delší tvar zájmena: ke mně.",
+                "Eva jde k mi.",
+                "Eva jde ke mně.",
+                "Po předložce k nemůže stát mi; použijeme ke mně.",
             )
         ],
         related=["cs-dative-a2", "cs-instrumental-a2"],
@@ -199,7 +218,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Minulý čas: pracoval jsem a byla jsi",
         "A2",
         "Slovesa a čas",
-        "Řekneme, co se dělo před dneškem.",
+        "Řekneme, co se dělo před okamžikem, kdy mluvíme.",
         "Minulý čas tvoříme pomocí tvaru na -l a u první a druhé osoby také "
         "pomocí jsem, jsi, jsme, jste: pracoval jsem, pracovala jsi, pracovali jsme. "
         "Ve třetí osobě pomocné být nepřidáváme: Petr pracoval, Eva pracovala. "
@@ -207,7 +226,8 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "následujícím tématu.\n\n"
         "Pomocné sloveso obvykle stojí za prvním větným celkem: Včera jsem "
         "pracoval doma. Zápor přidáváme k tvaru na -l: nepracoval jsem. "
-        "Některá slovesa mají zvláštní základ: být – byl, jít – šel, mít – měl.",
+        "Některá slovesa mají zvláštní základ: být – byl, jít – šel, mít – měl. "
+        "Minulý čas může označovat i dnešní událost: Dnes ráno jsem pracoval.",
         structure="tvar na -l + jsem / jsi / jsme / jste; ve 3. osobě bez pomocného slovesa",
         rules=[
             "Já: byl jsem nebo byla jsem podle mluvčího.",
@@ -273,7 +293,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "pádem může označit vzdálenost do budoucnosti: za hodinu, za týden.\n\n"
         "Od a do mají druhý pád a označují hranice: od rána do večera, od "
         "pondělí do pátku. Pro pořadí událostí používáme nejdřív, potom a nakonec. "
-        "Samotné dvě hodiny vyjadřují délku, ve dvě hodiny konkrétní čas.",
+        "Samotné dvě hodiny vyjadřují délku, ve dvě hodiny konkrétní čas.\n\n"
+        "Datum vyjadřujeme řadovou číslovkou a názvem měsíce ve druhém pádě: "
+        "prvního května, druhého června, třetího září. Zápis 3. 9. čteme "
+        "třetího září; tečka označuje řadovou číslovku. Při domlouvání schůzky "
+        "můžeme říct třetího září v deset hodin.",
         rules=[
             "Délka: Čekal jsem hodinu. Minulý okamžik: Volal před hodinou.",
             "Den v týdnu: v úterý, ve středu, v pátek.",
@@ -283,6 +307,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Včera jsem čekala na autobus dvacet minut."),
             GrammarExample("Kurz začal před týdnem."),
             GrammarExample("Pracujeme od rána do večera."),
+            GrammarExample("Narodila jsem se druhého června."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -482,16 +507,23 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "A2",
         "Číslovky a pády",
         "Objednáme běžné množství a použijeme časté tvary druhého pádu.",
-        "V základních spojeních se dvěma až čtyřmi věcmi používáme tvary jako "
-        "dva rohlíky, tři banány, čtyři jablka. Od pěti je druhý pád množného "
-        "čísla: pět rohlíků, šest banánů, deset jablek. Stejný pád bývá po "
+        "V prvním a čtvrtém pádě u běžných počtů od dvou do čtyř používáme tvary jako "
+        "dva rohlíky, tři banány, čtyři jablka. U počtů od pěti do dvaceti "
+        "a u celých desítek následuje druhý pád množného "
+        "čísla: pět rohlíků, šest banánů, deset jablek. V jiných pádech se mění "
+        "i číslovka: s pěti rohlíky. Stejný druhý pád bývá po "
         "hodně a málo: hodně lidí, málo peněz. U ženského a středního rodu "
         "je tvar dvě: dvě tašky, dvě jablka.\n\n"
         "Druhý pád množného čísla nemá jednu univerzální koncovku: rohlíků, "
         "žen, jablek, vajec, lidí. Učíme se ho s často používaným množstvím. "
         "Po názvu obalu nebo míry následuje druhý pád: láhev vody, kilo "
-        "sýra, kilo brambor. Věta s pěti a více má v základním vyjádření "
-        "počtu tvar je: Na stole je pět jablek.",
+        "sýra, kilo brambor. U uvedených počtů od pěti do dvaceti a celých desítek "
+        "má základní vyjádření počtu tvar je: Na stole je pět jablek.\n\n"
+        "U množného čísla rozlišujeme také podmět a předmět: noví zákazníci "
+        "čekají, ale vidím nové zákazníky. Mužská životná jména tedy nemají "
+        "vždy stejný první a čtvrtý pád. U běžných neživotných, ženských "
+        "a středních jmen jsou oba tvary stejné: nové obchody, nové tašky, "
+        "nová jablka. Při nákupu použijeme například Chci dvě nové tašky.",
         rules=[
             "Jeden rohlík, dva rohlíky, pět rohlíků.",
             "Jedna taška, dvě tašky, pět tašek.",

@@ -7,15 +7,14 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-g-b1-001",
         "grammar",
         "B1",
-        "Pavel říká: Dopis jsem psal celé dopoledne, ale ještě ho musím dokončit. "
-        "Co z jeho slov vyplývá?",
+        "Pavel říká: „Dopis jsem psal celé dopoledne.“ " "Co z jeho slov víte jistě?",
         [
-            "Pavel dopis dokončil a čeká na odpověď.",
-            "Pavel se psaním strávil čas, ale dopis není hotový.",
-            "Pavel chce s psaním začít až odpoledne.",
-            "Pavel dopis dokončil během několika minut.",
+            "Pavel dopis dopoledne dokončil, ale ještě ho neposlal.",
+            "Pavel se dopoledne věnoval psaní; dokončení dopisu nepotvrdil.",
+            "Pavel si dopoledne psaní naplánoval a začne až odpoledne.",
+            "Pavel dopis dokončil a zbytek dopoledne čekal na odpověď.",
         ],
-        "Pavel se psaním strávil čas, ale dopis není hotový.",
+        "Pavel se dopoledne věnoval psaní; dokončení dopisu nepotvrdil.",
         "cs-narrative-aspect-b1",
     ),
     AssessmentQuestion(
@@ -24,7 +23,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "B1",
         "Doplňte popis dnešní konkrétní cesty: Obvykle do práce jezdím tramvají, "
         "ale právě teď ___ pěšky přes park.",
-        ["jezdím", "pojedu", "odjel jsem", "jdu"],
+        ["chodím", "půjdu", "šel jsem", "jdu"],
         "jdu",
         "cs-motion-direction-b1",
     ),
@@ -121,9 +120,9 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-v-b1-003",
         "vocabulary",
         "B1",
-        "Zaměstnavatel chce dokument, ve kterém najde vaše předchozí zaměstnání, "
-        "vzdělání a dovednosti. Co pošlete?",
-        ["Účtenku", "Domovní řád", "Jízdní řád", "Životopis"],
+        "Zaměstnavatel chce přehled vašeho vzdělání, dovedností a všech předchozích "
+        "zaměstnání. Který dokument pro něj připravíte?",
+        ["Pracovní smlouvu", "Výplatní pásku", "Pracovní posudek", "Životopis"],
         "Životopis",
     ),
     AssessmentQuestion(
@@ -153,7 +152,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-v-b1-006",
         "vocabulary",
         "B1",
-        "Nově koupená konvice netopí. Chcete u prodejce uplatnit požadavek "
+        "Nově koupená konvice neohřívá vodu. Chcete u prodejce uplatnit požadavek "
         "na řešení této vady. Co chcete podat?",
         ["Přihlášku", "Objednávku", "Pozvánku", "Reklamaci"],
         "Reklamaci",
@@ -164,7 +163,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "B1",
         "Za tuto lednici zaplatíte méně při nákupu, ale každý měsíc bude potřebovat "
         "více elektřiny. Která vlastnost může zvýšit vaše pozdější výdaje?",
-        ["Nižší kauce", "Vyšší spotřeba", "Kratší objížďka", "Větší sleva"],
+        ["Nižší pořizovací cena", "Vyšší spotřeba", "Kratší dodací lhůta", "Větší sleva"],
         "Vyšší spotřeba",
     ),
     AssessmentQuestion(
@@ -246,11 +245,11 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "Co Lenka navrhuje?",
         [
             "Vezme obě směny, pokud jí vedoucí potvrdí volné úterý.",
-            "Vymění si s kolegou směny, jestliže souhlasí s pondělním zastoupením.",
-            "Zastoupí kolegu v sobotu bez jakékoli podmínky.",
+            "Vezme sobotní směnu výměnou za zastoupení v pondělí.",
+            "Vezme sobotní směnu a pondělní výměnu domluví až později.",
             "Pondělní směnu zruší, pokud kolega do zítřka neodpoví.",
         ],
-        "Vymění si s kolegou směny, jestliže souhlasí s pondělním zastoupením.",
+        "Vezme sobotní směnu výměnou za zastoupení v pondělí.",
     ),
     AssessmentQuestion(
         "cs-r-b1-006",

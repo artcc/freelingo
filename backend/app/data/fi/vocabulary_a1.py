@@ -269,7 +269,9 @@ A1_SETS: list[VocabularySet] = [
                 "Ilmaista esimerkiksi olemassaoloa, tilaa tai sijaintia.",
                 "Olen kotona.",
             ),
-            VocabularyEntry("asua", "verb", "Pitää kotia jossakin paikassa.", "Asun Turussa."),
+            VocabularyEntry(
+                "asua", "verb", "Elää jossakin paikassa ja pitää siellä kotiaan.", "Asun Turussa."
+            ),
             VocabularyEntry(
                 "puhua", "verb", "Ilmaista ajatuksia sanoilla ääneen.", "Puhun vähän suomea."
             ),
@@ -587,13 +589,13 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "vasen",
                 "adjective",
-                "Oikean vastakkainen puoli.",
+                "Sillä puolella oleva, joka on oikean vastakohta.",
                 "Kauppa on kadun vasemmalla puolella.",
             ),
             VocabularyEntry(
                 "oikea",
                 "adjective",
-                "Vasemman vastakkainen puoli.",
+                "Sillä puolella oleva, joka on vasemman vastakohta.",
                 "Pysäkki on oikealla puolella.",
             ),
             VocabularyEntry(

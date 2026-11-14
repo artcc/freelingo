@@ -11,8 +11,9 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Tunnista, koskeeko varaus tapahtumaa, sen syytä vai lähteen arviota.",
         "Voi olla, että keskeytys johtui viasta jättää syyselityksen avoimeksi. "
         "Vika saattoi estää käynnistyksen esittää mahdollisen vaikutussuhteen. "
-        "On varmaa, että keskeytys saattoi johtua viasta vahvistaa mahdollisuuden "
-        "arvion, ei itse syytä. Sisäkkäiset ilmaukset on purettava väite kerrallaan.",
+        "On varmaa, että keskeytys saattoi johtua viasta esittää vikasyyn mahdollisuuden "
+        "varmana mutta ei vahvista vikaa todelliseksi syyksi. Sisäkkäiset ilmaukset on "
+        "purettava väite kerrallaan.",
         rules=[
             "Älä anna ulomman varmuusilmauksen vahvistaa kaikkea sisäkkäistä sisältöä tosiasiaksi.",
             "Tee tarvittaessa kaksi virkettä, jotta varauksen kohde näkyy.",

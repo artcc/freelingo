@@ -10,12 +10,12 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "Sari lukee taloyhtiön viestiketjua ja sanoo: "
         "«Hissi on kuulemma käytössä jo iltapäivällä.» Mitä hänen ilmauksestaan voi päätellä?",
         [
-            "Sari välittää muualta saamansa tiedon hissin arvioidusta käyttöönotosta.",
+            "Sari välittää muualta saamansa tiedon siitä, milloin hissi on käytössä.",
             "Sari ilmaisee epäilevänsä väitettä hissin iltapäiväisestä käyttöönotosta.",
             "Sari kertoo omasta havainnostaan hissin onnistuneen koekäytön aikana.",
             "Sari ottaa vastuun siitä, että hissi saadaan iltapäiväksi toimintakuntoon.",
         ],
-        "Sari välittää muualta saamansa tiedon hissin arvioidusta käyttöönotosta.",
+        "Sari välittää muualta saamansa tiedon siitä, milloin hissi on käytössä.",
         "fi-source-marking-c1",
     ),
     AssessmentQuestion(
@@ -23,11 +23,11 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "grammar",
         "C1",
         "Viestissä lukee: «Tilaisuus voidaan järjestää tässä salissa vain, jos poistumisreitti "
-        "saadaan esteettömäksi.» Reitti on nyt korjattu. Mikä seuraava toteamus on perusteltu?",
+        "saadaan esteettömäksi.» Reitti on nyt esteetön. Mikä seuraava toteamus on perusteltu?",
         [
             "Salin käyttö on nyt vahvistettu, joten muut järjestelyt voidaan päättää.",
-            "Salin käyttö pitää vielä estää, koska korjaus tehtiin vasta viestin jälkeen.",
-            "Salin käyttö on yhä mahdotonta, koska ehto koski vain alkuperäistä suunnitelmaa.",
+            "Salin käytön muut ehdot on jo tarkistettu, koska viesti mainitsi vain poistumisreitin.",
+            "Salin käytöstä voidaan sopia, sillä poistumisreitti oli viestin mukaan ainoa ehto.",
             "Mainittu este on poistettu, mutta viesti ei vahvista kaikkien ehtojen täyttymistä.",
         ],
         "Mainittu este on poistettu, mutta viesti ei vahvista kaikkien ehtojen täyttymistä.",
@@ -169,13 +169,13 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "fi-v-c1-004",
         "vocabulary",
         "C1",
-        "Kokouksen vetäjä toteaa: «Etsitään ensin ehdotusten yhteinen nimittäjä.» "
-        "Mikä vastaus toteuttaa tätä tavoitetta?",
+        "Kokouksessa vertaillaan kahta ehdotusta iltavuorojen jakamiseksi. Vetäjä toteaa: "
+        "«Etsitään ensin ehdotusten yhteinen nimittäjä.» Mikä vastaus vie vertailua tähän suuntaan?",
         [
             "Kummankin ehdotuksen hinta on erilainen, joten valitaan ensin laskutapa.",
             "Molemmissa halutaan turvata iltakäyttö; erimielisyys koskee vuorojen jakamista.",
             "Ensimmäinen ehdotus on lyhyempi, joten käytetään sen rakennetta tiedotteessa.",
-            "Kummassakin on avoimia kysymyksiä, joten palataan asiaan seuraavassa kokouksessa.",
+            "Toisen ehdotuksen vuorot sopivat minulle paremmin, joten kannatan sitä sellaisenaan.",
         ],
         "Molemmissa halutaan turvata iltakäyttö; erimielisyys koskee vuorojen jakamista.",
     ),
@@ -184,15 +184,16 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "reading",
         "C1",
         "Kirjasto kokeili myöhäisempää sulkemista tiistaisin. Kävijöitä tuli vähän, mutta "
-        "haastatellut iltatyöläiset pitivät kokeilua tärkeänä. Raportti suosittelee toista "
+        "haastatellut iltatyöläiset pitivät kokeilua tärkeänä. Osa heistä kuuli uusista ajoista "
+        "vasta jakson lopussa. Raportti suosittelee toista "
         "kokeilujaksoa paremman tiedotuksen jälkeen. Mihin suositus ensisijaisesti perustuu?",
         [
-            "Ensimmäinen jakso osoitti, että aukiolon laajentaminen lisäsi kaikkien ryhmien käyntejä.",
-            "Vähäinen käyttö ei vielä ratkaise palvelun tarvetta, jos mahdolliset käyttäjät eivät tunteneet sitä.",
-            "Haastateltujen mielipiteet riittävät vahvistamaan, että seuraavan jakson kävijämäärä kasvaa.",
-            "Iltatyöläisten haastattelut osoittivat, että aiempi sulkemisaika oli heille yleensä sopiva.",
+            "Ensimmäinen jakso vahvisti kysynnän riittäväksi; nyt etsitään sopivaa pysyvää sulkemisaikaa.",
+            "Tarvetta on vaikea arvioida, kun osa mahdollisista käyttäjistä ei tiennyt kokeilusta ajoissa.",
+            "Haastattelut ennustavat kävijämäärän kasvun; uusi jakso selvittää lähinnä kasvun suuruutta.",
+            "Vähäinen käyttö osoitti ilta-ajan tarpeettomaksi; toisella jaksolla verrataan päiväaikoja.",
         ],
-        "Vähäinen käyttö ei vielä ratkaise palvelun tarvetta, jos mahdolliset käyttäjät eivät tunteneet sitä.",
+        "Tarvetta on vaikea arvioida, kun osa mahdollisista käyttäjistä ei tiennyt kokeilusta ajoissa.",
     ),
     AssessmentQuestion(
         "fi-r-c1-002",

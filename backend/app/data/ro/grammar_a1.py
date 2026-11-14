@@ -15,7 +15,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Ș și ț au virgulă dedesubt. Ce și ci se citesc ca la începutul cuvintelor ceai "
         "și cinci; che și chi păstrează sunetul din casă: cheie, chitară. Ge și gi diferă "
         "de ghe și ghi: ger, girafă, gheață, ghid. Litera i de la sfârșitul unor "
-        "cuvinte poate fi foarte scurtă: bani.",
+        "cuvinte nu formează o silabă separată, ci modifică pronunțarea consoanei "
+        "precedente: bani. În taxi, i formează o silabă.\n\n"
+        "În eu, el, ea, ei, ele, ești și este, începutul se pronunță cu un sunet "
+        "scurt ca la începutul lui iepure. Nu extindem această pronunțare la orice "
+        "cuvânt cu e: elev începe direct cu vocala e.",
         structure="ă ≠ a; â = î ca sunet; ce / che; ge / ghe",
         rules=[
             "Păstrăm diacriticele: fată și fata sunt forme diferite.",
@@ -174,9 +178,15 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "A1",
         "Numerale",
         "Numărăm persoane și produse și înțelegem prețuri.",
-        "Folosim un măr, o pară, doi lei, două mere. Pentru cantități de la trei la "
-        "nouăsprezece spunem trei mere, zece lei. La douăzeci și la numerele mai "
-        "mari din exemplele de bază apare de: douăzeci de lei, treizeci și doi de lei.\n\n"
+        "Numărăm: zero, unu, doi, trei, patru, cinci, șase, șapte, opt, nouă, zece. "
+        "Urmează unsprezece, doisprezece, treisprezece, paisprezece, cincisprezece, "
+        "șaisprezece, șaptesprezece, optsprezece, nouăsprezece. Zecile sunt douăzeci, "
+        "treizeci, patruzeci, cincizeci, șaizeci, șaptezeci, optzeci și nouăzeci; "
+        "100 se citește o sută. Legăm zecile de unități prin și: douăzeci și trei.\n\n"
+        "Folosim un măr, o pară, doi lei, două mere. De la trei la nouăsprezece "
+        "nu punem de înaintea substantivului: trei mere, zece lei. Pentru numerele "
+        "de la douăzeci la o sută folosim de: douăzeci de lei, treizeci și doi de lei, "
+        "o sută de lei. Aici exersăm numerele până la o sută.\n\n"
         "Un leu are o sută de bani. În prețul scris 12,50 lei, virgula separă leii "
         "de bani: doisprezece lei și cincizeci de bani. Învățăm și douăsprezece mere, "
         "cu forma feminină pentru substantivul neutru la plural.",
@@ -203,7 +213,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "un băiat frumos, o fată frumoasă, băieți frumoși, fete frumoase. "
         "La neutru avem un măr roșu și două mere roșii.\n\n"
         "Nu toate adjectivele au patru forme diferite: mare are pluralul mari "
-        "pentru toate genurile. Folosim aceeași concordanță și după a fi: Casa este "
+        "pentru toate genurile. Folosim același acord și după a fi: Casa este "
         "mare. Casele sunt mari.",
         structure="substantiv + adjectiv acordat; substantiv + a fi + adjectiv acordat",
         rules=[
@@ -341,7 +351,12 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "multe forme de după să sunt identice cu prezentul: să merg, să mergi, "
         "să mergem, să mergeți.\n\nLa el, ea, ei și ele apar forme ca să meargă "
         "și să citească. Învățăm acum câteva expresii utile, iar formele neregulate "
-        "se dezvoltă ulterior. A putea are formele pot, poți, poate, putem, puteți, pot.",
+        "se dezvoltă ulterior. A putea are formele pot, poți, poate, putem, puteți, pot. "
+        "A vrea: vreau, vrei, vrea, vrem, vreți, vor.\n\n"
+        "Pentru nevoi imediate învățăm expresii întregi: Am nevoie de apă. Mi-e foame. "
+        "Mi-e sete. Mi-e frig. Mă simt rău. Mi-e înseamnă îmi este în aceste expresii. "
+        "Pentru ajutor: Puteți să mă ajutați? Formele mi-, îmi și mă se explică "
+        "în detaliu la nivelul următor.",
         structure="vreau / pot / trebuie + să + verb",
         rules=[
             "Trebuie să plec și trebuie să plecăm păstrează trebuie în acest tipar.",
@@ -351,6 +366,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Vreau să vorbesc cu un medic."),
             GrammarExample("Puteți să repetați? Nu pot să citesc acest cuvânt."),
+            GrammarExample("Mi-e sete. Vreau să beau apă.", note="Exprim o nevoie imediată."),
         ],
         common_mistakes=[
             GrammarMistake("Vreau să mergi eu.", "Vreau să merg eu.", "Eu cere forma merg.")
@@ -367,7 +383,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "plec, dar nu pot. Sau prezintă alternative: Ceai sau cafea?\n\n"
         "Când subiectul este același, nu trebuie repetat: Citesc și scriu. "
         "Punem de obicei virgulă înainte de dar, nu între două cuvinte legate "
-        "simplu prin și sau sau.",
+        "simplu prin «și» ori «sau».",
         structure="informație și informație; idee, dar contrast; opțiune sau opțiune",
         rules=[
             "În exemplele de bază folosim și pentru adăugare și dar pentru un contrast explicit.",

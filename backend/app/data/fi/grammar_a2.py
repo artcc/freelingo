@@ -14,7 +14,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Myös t–d, p–v ja k:n kato ovat tavallisia: katu–kadun, lupa–luvan, "
         "jalka–jalan. Verbeissä on esimerkiksi ottaa–otan–ottaa. "
         "Sääntö ei koske jokaista k:ta, p:tä tai t:tä. Opettele sanan perusmuoto, "
-        "genetiivi ja tarvittavat verbimuodot yhdessä.",
+        "genetiivi ja tarvittavat verbimuodot yhdessä.\n\n"
+        "Myös muu vartalo voi muuttua. Tavallisia sarjoja ovat huone–huoneen–huonetta, "
+        "nainen–naisen–naista ja uusi–uuden–uutta. I-loppuiset sanat eivät kaikki taivu "
+        "samoin: pankki–pankin, mutta ovi–oven. Nämä vartalonmuutokset eivät kaikki ole "
+        "astevaihtelua. Tarkista uuden sanan taivutusmalli ennen päätteen lisäämistä.",
         rules=[
             "Älä muuta kaikkia konsonantteja saman mallin mukaan.",
             "Genetiivi auttaa löytämään monen nominin taivutusvartalon.",
@@ -29,15 +33,19 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "fi-plural-nominative-a2",
-        "Monikon perusmuoto: talot ja kadut",
+        "Monikon perusmuoto ja genetiivi: talot ja talojen",
         "A2",
         "Nominit",
-        "Nimeä useita kokonaisia asioita.",
+        "Nimeä useita asioita ja kerro, kenelle ne kuuluvat.",
         "Monikon nominatiivin tunnus on -t. Se liittyy tavallisesti samaan vartaloon kuin "
         "yksikön genetiivin -n: talon–talot, kadun–kadut, huoneen–huoneet. "
-        "Kun monikollinen tekijä on lauseen alussa, verbi on yleiskielessä monikossa: "
+        "Tavallisen monikollisen subjektin kanssa verbi on yleiskielessä monikossa: "
         "Lapset leikkivät. Kaikki monikon tehtävät eivät käytä t-muotoa; epämääräinen "
-        "määrä ilmaistaan usein monikon partitiivilla.",
+        "määrä ilmaistaan usein monikon partitiivilla.\n\n"
+        "Useaan omistajaan tai määritteeseen viitataan monikon genetiivillä: "
+        "talojen ovet, lasten huone. Opettele tavalliset muodot sanoittain: "
+        "talo–talojen, huone–huoneiden, nainen–naisten, lapsi–lasten. "
+        "Monikon genetiivillä on useita päätteitä, joten pelkkä t:n vaihtaminen n:ksi ei riitä.",
         structure="talon → talot; huoneen → huoneet",
         rules=[
             "Käytä t-monikkoa esimerkiksi tutuista kokonaisista esineistä.",
@@ -46,6 +54,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Ikkunat ovat auki."),
             GrammarExample("Lapset leikkivät pihalla."),
+            GrammarExample("Lasten huoneen ikkunat ovat auki."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -64,7 +73,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "kuin substantiivi: pieni talo, pienessä talossa, pienet talot. "
         "Molempien sanojen vartalo voi muuttua. Olla-verbin jälkeinen adjektiivi noudattaa "
         "osittain eri sääntöjä: Talo on pieni, mutta Talot ovat pieniä. "
-        "Tässä harjoitellaan ensin nimen edellä olevaa määritettä.",
+        "Tässä harjoitellaan ensin nimen edellä olevaa määritettä. Kuvailevan predikatiivin "
+        "sija riippuu kuvattavasta asiasta: laskettavasta yksiköstä Talo on pieni, "
+        "aineesta Vesi on kylmää ja monista erillisistä asioista Talot ovat pieniä. "
+        "Monikollista paria tai kokonaisuutta kuvataan usein nominatiivilla: "
+        "Nämä housut ovat pitkät. Kaikki monikolliset kuvaukset eivät siis vaadi partitiivia; "
+        "sen tavalliset monikkomuodot harjoitellaan seuraavassa aiheessa.",
         rules=[
             "Taivuta myös edellä oleva kuvaileva sana.",
             "Opettele vartalot: pieni–pienen, uusi–uuden.",
@@ -72,6 +86,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Asun pienessä talossa."),
             GrammarExample("Uudet verhot ovat makuuhuoneessa."),
+            GrammarExample("Vesi on kylmää."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -90,7 +105,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Tavallisia muotoja ovat kirja–kirjoja, talo–taloja, kenkä–kenkiä, "
         "huone–huoneita ja nainen–naisia. Muoto riippuu sanatyypistä; yhtä päätettä "
         "ei voi lisätä kaikkiin sanoihin. Monikon tunnus i voi näkyä j:nä vokaalien "
-        "välissä. Paljon ja monta käyttäytyvät eri tavoin: paljon kirjoja, monta kirjaa.",
+        "välissä. Paljon ja monta käyttäytyvät eri tavoin: paljon kirjoja, monta kirjaa.\n\n"
+        "Paikan sisältöä esittelevässä lauseessa käytetään usein yksiköllistä verbiä ja "
+        "partitiivia: Pihalla on lapsia. Kun puhutaan jo tunnetuista lapsista, tavallinen "
+        "rakenne on Lapset ovat pihalla. Kielteisessä esittelylauseessa sanotaan "
+        "Pihalla ei ole lapsia. Valinta riippuu siis myös siitä, esitelläänkö uusi joukko "
+        "vai kerrotaanko tunnetun joukon sijainti.",
         rules=[
             "Opettele sanan monikon partitiivi osana taivutussarjaa.",
             "Adjektiivikin taipuu: uusia kenkiä.",
@@ -183,7 +203,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "Annan sinulta kirjan.",
+                "Annan sinä kirjan.",
                 "Annan sinulle kirjan.",
                 "Kun sinä saat kirjan, olet vastaanottaja: sinulle.",
             )
@@ -250,12 +270,13 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Imperfekti: eilen kävin",
         "A2",
         "Aika ja verbit",
-        "Kerro päättyneestä tapahtumasta menneenä ajankohtana.",
+        "Kerro tapahtumasta tai tilanteesta menneenä ajankohtana.",
         "Imperfekti kertoo menneestä: Eilen kävin kurssilla. Tunnus on usein i: "
         "puhun–puhuin, asun–asuin. Vartalo voi muuttua: menen–menin, "
-        "otan–otin, syön–söin. Joissakin verbeissä on si: haluan–halusin, "
-        "tarvitsen–tarvitsin. Olla taipuu olin, olit, oli, olimme, olitte, olivat. "
-        "Opettele tavalliset minä- ja hän-muodot yhdessä: luin–luki.",
+        "otan–otin, syön–söin, tarvitsen–tarvitsin. Joissakin verbeissä tunnus on "
+        "si: haluan–halusin, vastaan–vastasin. Olla taipuu olin, olit, oli, olimme, "
+        "olitte, olivat. Opettele tavalliset minä- ja hän-muodot yhdessä: luin–luki. "
+        "Imperfekti ei yksin tarkoita valmista tulosta: Luin kirjaa, mutta se jäi kesken.",
         rules=[
             "Käytä imperfektiä esimerkiksi eilen- ja viime viikolla -ilmauksissa.",
             "Persoonapääte tulee menneen ajan vartalon jälkeen.",
@@ -266,9 +287,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "Eilen minä menen kurssille.",
+                "Eilen minä menimme kurssille.",
                 "Eilen minä menin kurssille.",
-                "Tavallisessa menneen tapahtuman kertomisessa käytä imperfektiä.",
+                "Minä tarvitsee yksikön muodon menin; menimme on me-muoto.",
             )
         ],
         related=["fi-present-a1", "fi-gradation-a2", "fi-object-a2"],
@@ -311,8 +332,13 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "ilman tarkkaa mennyttä ajankohtaa tai asiasta, joka jatkuu nykyhetkeen: "
         "Olen asunut täällä kaksi vuotta. Imperfekti sijoittaa tapahtuman tavallisesti "
         "päättyneeseen ajankohtaan: Asuin siellä vuonna 2020. Aikamuodon valinta "
-        "riippuu kertojan näkökulmasta, ei vain yhdestä aikasanasta.",
-        rules=["Taivuta olla-verbi persoonassa.", "Monikossa partisiippi on esimerkiksi käyneet."],
+        "riippuu kertojan näkökulmasta, ei vain yhdestä aikasanasta. Yhtä henkilöä "
+        "teititeltäessä apuverbi on monikossa mutta partisiippi yksikössä: "
+        "Oletteko käynyt täällä aiemmin?",
+        rules=[
+            "Taivuta olla-verbi persoonassa.",
+            "Useasta henkilöstä: olette käyneet; yhtä teititeltäessä: olette käynyt.",
+        ],
         examples=[
             GrammarExample("Olen käynyt Oulussa."),
             GrammarExample("Olemme odottaneet tunnin.", note="Odotus liittyy nykyhetkeen."),
@@ -378,21 +404,30 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "fi-imperative-a2",
-        "Tule ja älä unohda",
+        "Tule, tulkaa ja älä unohda",
         "A2",
         "Verbit",
-        "Anna lyhyt ohje yhdelle ihmiselle.",
+        "Anna lyhyt ohje yhdelle tai usealle ihmiselle.",
         "Yhden henkilön tavallinen myönteinen käsky saadaan minä-muodosta ilman "
         "loppu-n: tulen–tule, otan–ota, luen–lue. Olla-verbin käsky on ole. "
         "Kielteinen käsky käyttää älä-sanaa: älä tule, älä ota. Kokonainen "
         "yksiköllinen esinekohde on käskyssä perusmuodossa: Ota takki. Kielteisessä "
         "käskyssä kohde on partitiivissa: Älä ota takkia. Suora käsky sopii ohjeisiin; "
-        "pyynnön voi pehmentää kysymyksellä Voitko auttaa?",
+        "pyynnön voi pehmentää kysymyksellä Voitko auttaa?\n\n"
+        "Usealle ihmiselle tai yhtä teititeltäessä käytetään muotoja tulkaa, "
+        "ottakaa, syökää ja olkaa. Vartalo voi erota sinä-käskystä: tule–tulkaa, "
+        "ota–ottakaa. Kielto on älkää ja pääverbin -ko/-kö-muoto: älkää tulko, "
+        "älkää ottako, älkää syökö. Myös tässä substantiivin totaaliobjekti on nominatiivissa: "
+        "Ottakaa takki mukaan.",
         rules=[
-            "Tämän aiheen muodot puhuttelevat yhtä ihmistä.",
+            "Erota tule yhdelle ja tulkaa usealle tai yhtä teititeltäessä.",
             "Älä-muodon jälkeen ei käytetä persoonapäätettä.",
         ],
-        examples=[GrammarExample("Sulje ovi, kiitos."), GrammarExample("Älä unohda avainta.")],
+        examples=[
+            GrammarExample("Sulje ovi, kiitos."),
+            GrammarExample("Älä unohda avainta."),
+            GrammarExample("Tulkaa sisään. Älkää jättäkö ovea auki."),
+        ],
         common_mistakes=[
             GrammarMistake(
                 "Ota takin.",

@@ -549,7 +549,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "alergie",
                 "noun",
-                "Reacție a corpului la o substanță.",
+                "Reacție exagerată a organismului la o substanță de obicei inofensivă.",
                 "Am o alergie la acest medicament.",
             ),
             VocabularyEntry(

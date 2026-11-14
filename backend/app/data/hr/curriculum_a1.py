@@ -28,7 +28,7 @@ A1_UNITS: list[CurriculumUnit] = [
         ["vocabulary", "listening", "grammar", "speaking", "reading", "writing", "review"],
         [
             "Predstavljam članove obitelji i opisujem dvije prostorije.",
-            "Povezujem imenicu s odgovarajućim oblikom pridjeva.",
+            "Opisujem osobe i stvari u jednini i množini uz odgovarajući oblik pridjeva.",
             "Kažem komu pripadaju poznate stvari.",
         ],
         2,
@@ -61,7 +61,7 @@ A1_UNITS: list[CurriculumUnit] = [
         [
             "Naručujem jelo i piće te tražim račun.",
             "Pitam za cijenu i odabirem proizvod.",
-            "Upotrebljavam akuzativ u kratkoj narudžbi.",
+            "Upotrebljavam akuzativ jednine i česte oblike množine u kratkoj narudžbi.",
         ],
         2,
         "a1-unit-3",

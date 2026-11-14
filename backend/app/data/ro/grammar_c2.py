@@ -50,8 +50,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Se contestă caracterizarea încetării implicării drept abandon.",
             ),
             GrammarExample(
-                "Nu e doar util, e indispensabil pentru accesul în clădire.",
-                note="Evaluarea este întărită, nu anulată.",
+                "Nu e util, e indispensabil pentru accesul în clădire.",
+                note="Se respinge cuvântul util ca prea slab, nu utilitatea obiectului.",
             ),
         ],
         related=["ro-scalar-focus-c2", "ro-ironic-echo-c2"],
@@ -171,8 +171,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Claritate și condensare",
         "Rezolvă o referință numai când contextul permite identificarea sigură a persoanei.",
         "În «Irina i-a spus Marei că proiectul său a fost selectat», posesivul "
-        "«său» nu identifică fără echivoc autoarea proiectului. Nici proximitatea "
-        "numelui, nici intuiția despre cine ar fi mai important nu sunt suficiente. "
+        "«său» nu identifică fără echivoc persoana căreia îi este atribuit proiectul. "
+        "Nici proximitatea numelui, nici intuiția despre cine ar fi mai important nu sunt suficiente. "
         "Repetarea numelui poate fi preferabilă eleganței aparente a pronumelui. "
         "Într-o reformulare, confirmă mai întâi posesorul și păstrează sursa informației.",
         rules=[
@@ -186,7 +186,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
             GrammarExample(
                 "Irina i-a spus Marei că proiectul Marei a fost selectat.",
-                note="Repetarea este justificată dacă identitatea autoarei a fost confirmată.",
+                note="Repetarea este justificată dacă legătura proiectului cu Mara a fost confirmată.",
             ),
         ],
         related=["ro-dense-nominals-c2", "ro-elliptical-recovery-c2"],
@@ -230,7 +230,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "automat gândul lui; lectura trebuie susținută de context. În repovestirea "
         "neutră, atribuie explicit judecata dacă altfel s-ar pierde perspectiva.",
         rules=[
-            "Distingi ceea ce personajul crede de ceea ce narațiunea confirmă.",
+            "Distinge ceea ce personajul crede de ceea ce narațiunea confirmă.",
             "Păstrează centrul temporal al gândului atunci când îl transformi în relatare.",
         ],
         examples=[

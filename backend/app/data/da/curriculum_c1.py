@@ -29,7 +29,7 @@ C1_UNITS: list[CurriculumUnit] = [
         [
             "Forhandler en tidsplan med tydelige betingelser og undtagelser.",
             "Anerkender en indvending uden at opgive sit eget hovedsynspunkt.",
-            "Skelner mellem en indrømmelse og en ændring af aftalens vilkår.",
+            "Skelner mellem at anerkende et argument og at acceptere ændrede aftalevilkår.",
         ],
         2,
         "c1-unit-1",

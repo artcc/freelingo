@@ -178,10 +178,10 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "oikeutta valita aloitusaika, toinen työnantajan oikeutta muuttaa vuoroja. "
         "Mitä yhteisen kirjauksen vaaraa tämä havainnollistaa?",
         [
-            "Puolueettomuutta: kummankaan tulkinnalle ei vielä ole annettu etusijaa.",
-            "Harkintavaltaa: kumpikin on jo saanut saman oikeuden päättää työajoista.",
+            "Sopimusaukkoa: osapuolet ovat tietoisesti jättäneet työajan määrittelyn myöhemmäksi.",
+            "Valtakiistaa: osapuolet ovat tunnistaneet tulkintaeron ja kiistäneet toistensa oikeudet.",
             "Näennäisyhteisymmärrystä: sama ilmaus peittää erilaiset käsitykset päätösvallasta.",
-            "Vastavuoroisuutta: molemmat ovat jo vaihtaneet oman oikeutensa yhteiseen etuun.",
+            "Sopimusrikkomusta: toinen osapuoli on jo muuttanut yhteisesti hyväksyttyjä työaikoja.",
         ],
         "Näennäisyhteisymmärrystä: sama ilmaus peittää erilaiset käsitykset päätösvallasta.",
     ),

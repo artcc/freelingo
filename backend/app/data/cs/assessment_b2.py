@@ -101,12 +101,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Pravidla uvádějí: O příspěvek lze žádat jen tehdy, pokud má spolek sídlo v obci. "
         "Co tato podmínka znamená?",
         [
-            "Sídlo v obci je nutné pro podání žádosti, ale nezaručuje přidělení příspěvku.",
+            "Sídlo v obci je nutné k žádosti, nikoli zárukou příspěvku.",
             "Sídlo v obci zaručuje přidělení příspěvku, pokud spolek podá žádost.",
             "Sídlo mimo obec umožňuje žádat, ale pouze o nižší částku.",
             "Sídlo v obci se vyžaduje až po schválení žádosti o příspěvek.",
         ],
-        "Sídlo v obci je nutné pro podání žádosti, ale nezaručuje přidělení příspěvku.",
+        "Sídlo v obci je nutné k žádosti, nikoli zárukou příspěvku.",
         "cs-conditional-limits-b2",
     ),
     AssessmentQuestion(
@@ -156,16 +156,16 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "cs-v-b2-003",
         "vocabulary",
         "B2",
-        "Kolega řekl: „Jestli ještě jednou změní rozvrh, budu tady bydlet.“ "
-        "Potom se usmál a dodal, že se samozřejmě stěhovat nechystá. "
-        "Jaký prostředek použil v první větě?",
+        "Rozvrh se tento týden měnil potřetí. Kolega při pohledu na další večerní směnu "
+        "s povzdechem řekl: „Ještě jedna změna a budu tady bydlet.“ "
+        "Jak jeho poznámku v této situaci nejspíše chápat?",
         [
-            "Závazný příslib.",
-            "Nadsázku.",
-            "Písemnou výhradu.",
-            "Doslovný popis záměru.",
+            "Žádá o ubytování, aby mohl přijmout další směny.",
+            "S nadsázkou si stěžuje, kolik času tráví v práci.",
+            "Nabízí, že se ujme plánování večerních směn.",
+            "Oznamuje, že si kvůli práci hledá byt v okolí.",
         ],
-        "Nadsázku.",
+        "S nadsázkou si stěžuje, kolik času tráví v práci.",
     ),
     AssessmentQuestion(
         "cs-v-b2-004",
@@ -190,12 +190,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Do konce roku proto otevřeme ještě dvě vybrané soboty a poté situaci vyhodnotíme.“ "
         "Který závěr nejlépe vystihuje rozhodnutí knihovny?",
         [
-            "Zájem čtenářů byl příliš malý na pokračování zkoušky.",
-            "Pravidelný sobotní provoz začne ihned po konci roku.",
-            "Další otevření závisí na tom, zda čtenáři přijmou vyšší poplatky.",
-            "Zájem je slibný, ale personální možnosti zatím umožňují jen omezené pokračování.",
+            "Slabá návštěvnost vede k ukončení zkoušky po dvou dalších sobotách.",
+            "Úspěšná zkouška umožní pravidelný sobotní provoz už od ledna.",
+            "Další soboty se otevřou až po přijetí nových pracovníků.",
+            "Zájem je slibný, ale počet pracovníků zatím omezuje pokračování.",
         ],
-        "Zájem je slibný, ale personální možnosti zatím umožňují jen omezené pokračování.",
+        "Zájem je slibný, ale počet pracovníků zatím omezuje pokračování.",
     ),
     AssessmentQuestion(
         "cs-r-b2-002",
@@ -240,8 +240,8 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Nejdřív s Evou ověř nový termín podle toho, kdy dostane čísla.",
             "Potvrď pátek, protože Eva už uvedla, že prezentaci do té doby zvládne.",
-            "Slib pondělí; za víkend Eva zpoždění určitě dožene.",
-            "Pošli vedení předběžná čísla a uveď, že prezentace je dokončená.",
+            "Posuň slíbený termín o den, stejně jako se posune dodání čísel.",
+            "Pošli Evě předběžná čísla a vedení potvrď původní páteční termín.",
         ],
         "Nejdřív s Evou ověř nový termín podle toho, kdy dostane čísla.",
     ),

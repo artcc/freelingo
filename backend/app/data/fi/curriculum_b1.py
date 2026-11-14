@@ -97,7 +97,7 @@ B1_UNITS: list[CurriculumUnit] = [
         ["fi_communication_b1"],
         ["listening", "speaking", "grammar", "reading", "vocabulary", "writing", "review"],
         [
-            "Välitän toisen viestin muuttamatta henkilöitä tai ajankohtaa.",
+            "Välitän toisen viestin muuttamatta henkilöitä, omistajaa tai ajankohtaa.",
             "Kerron samanaikaisista ja peräkkäisistä tapahtumista.",
             "Selitän ristiriidan ja tarkistan yhteisen käsityksen.",
         ],
@@ -138,7 +138,7 @@ B1_UNITS: list[CurriculumUnit] = [
         ["fi_arrangements_b1", "fi_housing_b1", "fi_communication_b1", "fi_choices_b1"],
         ["review", "listening", "speaking", "reading", "writing", "grammar", "vocabulary"],
         [
-            "Sovimme yhteisen tapahtuman tehtävistä, aikataulusta ja kustannuksista.",
+            "Sovin muiden kanssa yhteisen tapahtuman tehtävistä, aikataulusta ja kustannuksista.",
             "Selostan valmistelujen etenemisen ja ratkaisen väärinkäsityksen.",
             "Kirjoitan yhteenvedon päätöksistä ja perustelen oman ehdotukseni.",
         ],

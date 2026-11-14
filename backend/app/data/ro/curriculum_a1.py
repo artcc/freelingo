@@ -107,9 +107,9 @@ A1_UNITS: list[CurriculumUnit] = [
         ["ro_help_health_a1"],
         ["listening", "speaking", "reading", "grammar", "vocabulary", "writing", "review"],
         [
-            "Cer ajutor și spun de ce am nevoie.",
+            "Cer ajutor și exprim nevoi imediate: mi-e sete, mi-e frig, mă simt rău.",
             "Spun ce vreau și ce pot să fac.",
-            "Leg două informații cu și, dar sau sau.",
+            "Leg două informații cu «și», «dar» ori «sau».",
         ],
         2,
         "a1-unit-6",

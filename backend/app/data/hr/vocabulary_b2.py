@@ -164,7 +164,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "opovrgnuti",
                 "verb",
-                "Pokazati ili izjaviti da neka tvrdnja nije istinita.",
+                "Dokazima ili argumentima pokazati da neka tvrdnja nije točna.",
                 "Nova mjerenja opovrgnula su raniju procjenu o onečišćenju.",
             ),
             VocabularyEntry(

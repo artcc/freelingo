@@ -273,7 +273,7 @@ A2_SETS: list[VocabularySet] = [
                 "razgovor",
                 "noun",
                 "Razmjena riječi i misli među ljudima.",
-                "Imam ugodan razgovor sa susjedom.",
+                "Razgovor sa susjedom je ugodan.",
             ),
             VocabularyEntry(
                 "osmijeh",
@@ -285,7 +285,7 @@ A2_SETS: list[VocabularySet] = [
                 "zagrljaj",
                 "noun",
                 "Pokret kojim nekoga obuhvatimo rukama.",
-                "Majka daje djetetu zagrljaj.",
+                "Majka prima dijete u zagrljaj.",
             ),
             VocabularyEntry(
                 "pomagati",
@@ -764,7 +764,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "leđa",
                 "noun",
-                "Stražnji dio trupa od vrata do struka.",
+                "Stražnji dio trupa između vrata i zdjelice.",
                 "Nakon dugog sjedenja bole me leđa.",
             ),
             VocabularyEntry(
@@ -1104,7 +1104,8 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "jamstvo",
                 "noun",
-                "Obveza prodavatelja ili proizvođača pod određenim uvjetima.",
+                "Obveza prodavatelja ili proizvođača da prema navedenim uvjetima "
+                "otkloni nedostatak proizvoda.",
                 "Za ovaj uređaj imamo jamstvo od dvije godine.",
             ),
             VocabularyEntry(

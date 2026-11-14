@@ -55,7 +55,7 @@ A2_UNITS: list[CurriculumUnit] = [
         [
             "Beskriver symptomer og forklarer, hvorfor en aftale skal ændres.",
             "Bruger fordi og når med almindelig ledsætningsordstilling.",
-            "Skelner mellem sit eget og en anden persons ejerskab.",
+            "Fortæller, om en ting tilhører sætningens subjekt eller en anden person.",
         ],
         2,
         "a2-unit-2",

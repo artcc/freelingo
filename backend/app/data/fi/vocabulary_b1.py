@@ -55,7 +55,7 @@ B1_SETS: list[VocabularySet] = [
                 "huomata",
                 "verb",
                 "Tulla tietoiseksi jostakin havainnon kautta.",
-                "Huomasin puuttuvan avaimen vasta kotiovella.",
+                "Huomasin vasta kotiovella, että avain puuttui.",
             ),
             VocabularyEntry(
                 "unohtua",
@@ -556,7 +556,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "muistuttaa",
                 "verb",
-                "Auttaa toista pitämään asia mielessä.",
+                "Auttaa toista pitämään asian mielessä.",
                 "Muistutin ryhmää ilmoittautumisesta.",
             ),
             VocabularyEntry(
@@ -587,7 +587,8 @@ B1_SETS: list[VocabularySet] = [
                 "toisin sanoen",
                 "phrase",
                 "Ilmaus, joka aloittaa saman asian uuden selityksen.",
-                "Aika on siirtynyt tunnilla, toisin sanoen aloitamme kymmeneltä.",
+                "Aloitusta siirrettiin yhdeksästä tunnilla myöhemmäksi; "
+                "toisin sanoen aloitamme kymmeneltä.",
             ),
         ],
     ),
@@ -618,7 +619,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "säästö",
                 "noun",
-                "Rahaa tai muuta voimavaraa, jota kuluu aiempaa vähemmän.",
+                "Rahan tai muun voimavaran kulutuksen vähenemisestä saatu etu.",
                 "Yhteinen tilaus tuo pienen säästön.",
             ),
             VocabularyEntry(

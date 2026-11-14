@@ -30,7 +30,7 @@ B1_UNITS: list[CurriculumUnit] = [
         [
             "Opisujem dolazak, odlazak i promjenu prijevoznog sredstva.",
             "Objašnjavam obilazni put i provjeravam gdje trebam presjesti.",
-            "Prenosim kratke informacije o putovanju pravilno povezujući nenaglasnice.",
+            "Prenosim kratke informacije o putovanju pravilno povezujući zanaglasnice.",
         ],
         2,
         "b1-unit-1",

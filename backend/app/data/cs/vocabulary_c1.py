@@ -19,7 +19,7 @@ C1_SETS: list[VocabularySet] = [
                 "domněnka",
                 "noun",
                 "Předpokládané vysvětlení, které dosud není dostatečně ověřeno.",
-                "Bez dalších měření zůstává příčina poruchy pouze domněnkou.",
+                "Bez dalších měření zůstává navržené vysvětlení poruchy pouze domněnkou.",
             ),
             VocabularyEntry(
                 "podložit",
@@ -66,7 +66,8 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "nezávisle ověřit",
                 "phrase",
-                "Prověřit informaci jiným postupem nebo zdrojem než tím, z něhož pochází.",
+                "Prověřit informaci pomocí samostatných podkladů či měření, "
+                "ne pouze opakováním původního tvrzení.",
                 "Údaj výrobce chceme nezávisle ověřit ve zkušebně.",
             ),
             VocabularyEntry(

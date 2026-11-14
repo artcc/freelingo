@@ -104,7 +104,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "titular",
                 "noun",
-                "Persoană pe numele căreia este emis un drept sau un document.",
+                "Persoană care deține un drept sau pe numele căreia este emis un document.",
                 "Doar titularul contului poate cere această modificare.",
             ),
             VocabularyEntry(
@@ -238,8 +238,8 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "a aviza",
                 "verb",
-                "A examina și a aproba oficial un document sau un proiect.",
-                "Comisia a avizat planul de intervenție.",
+                "A examina un document sau un proiect și a formula o opinie oficială asupra lui.",
+                "Comisia a avizat favorabil planul; aprobarea finală revine consiliului.",
             ),
             VocabularyEntry(
                 "a soluționa",

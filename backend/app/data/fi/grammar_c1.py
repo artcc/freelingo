@@ -17,7 +17,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Nimeä lähde, jos vastaanottajan on voitava arvioida tiedon luotettavuutta.",
         ],
         examples=[
-            GrammarExample("Huoltajan mukaan ovikoodi vaihtuu huomenna."),
+            GrammarExample("Huoltoyhtiön mukaan ovikoodi vaihtuu huomenna."),
             GrammarExample("Ovikoodi on kuulemma jo vaihdettu; en ole vielä kokeillut sitä."),
             GrammarExample("Koodi muka toimii, vaikka kukaan meistä ei pääse sisään."),
         ],
@@ -73,7 +73,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Ellei sisältää kiellon ja esittää poikkeuksen. Vain jos nimeää välttämättömän ehdon "
         "mutta ei yksin takaa, että sen täyttyminen riittää.",
         rules=[
-            "Ellei lupa tule vastaa tässä ilmausta jos lupaa ei tule.",
+            "Ellei lupaa tule vastaa tässä ilmausta jos lupaa ei tule.",
             "Erota sopimuksessa välttämätön edellytys lupauksesta toteuttaa työ.",
         ],
         examples=[
@@ -136,7 +136,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Päätös tilan sulkemisesta siirrettiin: tilaa ei siis vielä päätetty sulkea."
+                "Tilan sulkemisesta päättäminen siirrettiin seuraavaan kokoukseen: "
+                "tilaa ei siis vielä päätetty sulkea."
             ),
             GrammarExample("Hakemuksen käsittely odottaa liitettä; hakemusta ei ole hylätty."),
         ],
@@ -292,7 +293,9 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Kerro lopuksi oma johtopäätöksesi, jos punnitset useita näkökulmia.",
         ],
         examples=[
-            GrammarExample("Tilaan pääsee portaita. Silti se ei ole kaikkien saavutettavissa."),
+            GrammarExample(
+                "Tilaan rakennettiin luiska. Silti raskas ulko-ovi vaikeuttaa itsenäistä sisäänpääsyä."
+            ),
             GrammarExample("Emme osta laitetta. Sen sijaan vuokraamme sen kuukaudeksi."),
         ],
     ),
@@ -389,7 +392,11 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Voisin ehkä vilkaista sitä. → Puhuja tarjoutui alustavasti katsomaan asiaa."
+                "Voisin ehkä vilkaista sitä. → Puhuja tarjoutui alustavasti katsomaan asiaa.",
+                note=(
+                    "Puhuja vastaa tässä avunpyyntöön; toisessa tilanteessa ilmaus voi kuvata "
+                    "mahdollisuutta."
+                ),
             ),
             GrammarExample("Se hinta, siitä pitää vielä puhua. → Hinnasta pitää vielä puhua."),
         ],

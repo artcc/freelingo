@@ -44,7 +44,7 @@ B2_UNITS: list[CurriculumUnit] = [
         ["da_administration_b2"],
         ["reading", "writing", "grammar", "vocabulary", "speaking", "listening", "review"],
         [
-            "Finder ansvarlige aktører i en tekst med passive konstruktioner.",
+            "Finder oplyste aktører i en passiv tekst og spørger til ansvaret, når det er uklart.",
             "Skelner mellem en gennemført handling og en beskrevet tilstand.",
             "Omskriver en tung besked til en tydelig praktisk forklaring.",
         ],

@@ -21,7 +21,7 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Nu am modernizat clădirea anul trecut, iar acum plătim mult pentru încălzire. "
         "Care reformulare leagă alternativa trecută de un efect prezent?",
         [
-            "Dacă modernizăm clădirea acum, am fi plătit mai puțin anul trecut.",
+            "Dacă am moderniza clădirea acum, am plăti mai puțin iarna viitoare.",
             "Dacă am fi modernizat clădirea, am fi plătit mai puțin anul trecut.",
             "Dacă am moderniza clădirea anul viitor, am plăti mai puțin după lucrări.",
             "Dacă am fi modernizat clădirea anul trecut, acum am plăti mai puțin.",
@@ -74,14 +74,15 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "grammar",
         "B2",
         "În discuție apar două formulări: «Doar Ana a trimis raportul» și "
-        "«Ana a trimis doar raportul». Ce afirmă a doua, fără să afirme și prima?",
+        "«Ana a trimis doar raportul». Care interpretare a celei de-a doua formulări "
+        "păstrează locul restricției?",
         [
-            "Restricția privește ce a trimis Ana, nu identitatea tuturor expeditorilor.",
-            "Restricția privește cine a trimis raportul, nu celelalte documente.",
-            "Ana a trimis raportul și cel puțin încă un document.",
-            "Altcineva a trimis raportul în locul Anei.",
+            "Ana nu a trimis alte documente; nu se precizează ce au trimis ceilalți.",
+            "Ceilalți nu au trimis raportul; nu se precizează ce altceva a trimis Ana.",
+            "Ana a trimis și alte documente; raportul este singurul cerut de ceilalți.",
+            "Raportul a fost trimis de altcineva; Ana s-a ocupat de celelalte documente.",
         ],
-        "Restricția privește ce a trimis Ana, nu identitatea tuturor expeditorilor.",
+        "Ana nu a trimis alte documente; nu se precizează ce au trimis ceilalți.",
         "ro-focus-b2",
     ),
     AssessmentQuestion(
@@ -157,12 +158,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "colectarea unor date mai detaliate înainte de a decide extinderea permanentă.» "
         "Care concluzie respectă limitele notei?",
         [
-            "Creșterea demonstrează că programul de seară este cauza principală.",
-            "Cursurile explică întreaga creștere, iar programul nu a avut niciun efect.",
-            "Lipsa datelor separate arată că extinderea programului a eșuat.",
-            "Creșterea este observată, dar contribuția fiecărei schimbări rămâne neclară.",
+            "Vizitele au crescut, iar efectul programului a fost separat de cel al cursurilor.",
+            "Cursurile au contribuit mai mult decât programul, potrivit comparației disponibile.",
+            "Noul program atrage prea puțini vizitatori pentru a justifica păstrarea lui.",
+            "Vizitele au crescut, dar nu știm cât a contribuit fiecare dintre cele două schimbări.",
         ],
-        "Creșterea este observată, dar contribuția fiecărei schimbări rămâne neclară.",
+        "Vizitele au crescut, dar nu știm cât a contribuit fiecare dintre cele două schimbări.",
     ),
     AssessmentQuestion(
         "ro-r-b2-002",
@@ -175,12 +176,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "în acest caz, prețul ar putea fi recalculat după joi.» "
         "Ce compromis trebuie să evalueze clientul?",
         [
-            "Semnarea până joi garantează data, dar lasă prețul deschis.",
-            "Așteptarea clarifică disponibilitatea, dar poate duce la pierderea prețului actual.",
-            "Confirmarea stocului obligă furnizorul să păstreze prețul și după joi.",
-            "Comanda semnată permite clientului să aleagă ulterior orice dată de livrare.",
+            "Semnarea până joi fixează livrarea, dar lasă prețul de confirmat.",
+            "Așteptarea clarifică stocul, dar prețul actual poate fi pierdut.",
+            "Confirmarea stocului prelungește oferta, dar amână automat livrarea.",
+            "Semnarea fixează prețul, dar rezervă livrarea înainte de confirmarea stocului.",
         ],
-        "Așteptarea clarifică disponibilitatea, dar poate duce la pierderea prețului actual.",
+        "Așteptarea clarifică stocul, dar prețul actual poate fi pierdut.",
     ),
     AssessmentQuestion(
         "ro-r-b2-003",
@@ -193,12 +194,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "cu verificarea siguranței pietonilor; comercianții cer testarea timpului de descărcare. "
         "Cum poate fi rezumat stadiul discuției?",
         [
-            "Există o variantă comună de analizat, iar acceptarea finală depinde de verificări.",
-            "Ambele grupuri au aprobat fără rezerve forma definitivă a proiectului.",
-            "Locatarii au acceptat eliminarea arborilor pentru o bandă permanentă.",
-            "Comercianții au renunțat la accesul auto în schimbul păstrării arborilor.",
+            "O variantă comună este în analiză, dar acordul final depinde de verificări.",
+            "Varianta este aprobată, iar testele vor stabili doar data aplicării ei.",
+            "Locatarii acceptă eliminarea arborilor dacă se confirmă siguranța pietonilor.",
+            "Comercianții acceptă accesul permanent dacă se reduce timpul de descărcare.",
         ],
-        "Există o variantă comună de analizat, iar acceptarea finală depinde de verificări.",
+        "O variantă comună este în analiză, dar acordul final depinde de verificări.",
     ),
     AssessmentQuestion(
         "ro-r-b2-004",
@@ -228,11 +229,11 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "dacă solicitarea acestei persoane fusese depusă în termen. Am cerut lămuriri "
         "și vom actualiza articolul după primirea lor.» Ce permite materialul să afirmăm?",
         [
-            "Cazul fără răspuns dovedește deja că firma și-a încălcat promisiunea.",
-            "Verificarea celor trei răspunsuri confirmă situația tuturor solicitanților.",
-            "A patra cerere a fost depusă cu întârziere, conform verificării redacției.",
-            "Afirmația generală a firmei nu este confirmată independent de cazurile verificate.",
+            "Cazul fără răspuns este o excepție dovedită la afirmația generală a firmei.",
+            "Cele trei răspunsuri permit confirmarea situației tuturor cererilor depuse în termen.",
+            "Lipsa răspunsului arată că a patra cerere a fost depusă după termen.",
+            "Verificările nu permit încă nici confirmarea, nici infirmarea afirmației generale.",
         ],
-        "Afirmația generală a firmei nu este confirmată independent de cazurile verificate.",
+        "Verificările nu permit încă nici confirmarea, nici infirmarea afirmației generale.",
     ),
 ]

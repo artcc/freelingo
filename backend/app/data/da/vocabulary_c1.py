@@ -18,7 +18,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en stikprøve",
                 "noun",
-                "En mindre udvalgt del, som undersøges på en større gruppes vegne.",
+                "Et udvalgt udsnit, som undersøges for at sige noget om en større gruppe.",
                 "Stikprøven omfattede beboere fra fem forskellige opgange.",
             ),
             VocabularyEntry(
@@ -146,7 +146,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en bagkant",
                 "noun",
-                "Et seneste sluttidspunkt, man ikke uden videre kan overskride.",
+                "Et fast seneste sluttidspunkt; et uformelt udtryk, især om møder og aftaler.",
                 "Jeg har en bagkant klokken fire, så lad os tage prisdelen først.",
             ),
         ],
@@ -208,7 +208,8 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "inhabil",
                 "adjective",
-                "Som har en interessekonflikt, der hindrer upartisk sagsbehandling.",
+                "Som på grund af sin tilknytning til en sag ikke må deltage i behandlingen, "
+                "fordi der kan være tvivl om upartiskheden.",
                 "Hun erklærede sig inhabil, fordi tilbuddet kom fra hendes eget firma.",
             ),
             VocabularyEntry(

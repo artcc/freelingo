@@ -85,7 +85,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Popište děj z pohledu osoby nebo věci, které se týká.",
         "Opisný trpný rod tvoří sloveso být a trpné příčestí: Žádost byla schválena. "
         "Příčestí se shoduje s podmětem: dokument byl podepsán, smlouvy byly "
-        "podepsány. Původce může být vyjádřen sedmým pádem, ale často chybí. "
+        "podepsány, účastníci byli pozváni, auta byla opravena. "
+        "V jednotném čísle rozlišujeme schválen, schválena, schváleno; "
+        "jiná slovesa mají základ na -t: přijat, přijata, přijato. "
+        "Základ se může změnit, proto se učíme celé dvojice, například "
+        "zaplatit – zaplacen. Původce může být vyjádřen sedmým pádem, ale často chybí. "
         "Při převodu do činného rodu ho doplňte pouze tehdy, pokud ho znáte. "
         "Vid pomáhá odlišit průběh a dokončení: byl projednáván oproti byl projednán.",
         rules=[
@@ -411,6 +415,11 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Nemusíš spěchat, vždyť máme ještě hodinu."),
             GrammarExample("To jsme si přece už vysvětlili.", note="Může znít netrpělivě."),
             GrammarExample("Snad se nám podaří najít termín, který bude vyhovovat oběma."),
+            GrammarExample(
+                "Vždyť jsme tu čekali celou věčnost! — To trochu přeháníš, ale máš pravdu, "
+                "že bychom se měli zeptat, kdy přijdeme na řadu.",
+                note="Odpověď rozpoznává nadsázku a zároveň reaguje na skutečnou nespokojenost.",
+            ),
         ],
         related=["cs-evidentiality-b2", "cs-polite-softening-b2"],
     ),

@@ -42,7 +42,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "ro-g-b1-004",
         "grammar",
         "B1",
-        "Îi ceri lui Dan să îți dea cheia. Înlocuiți «cheia» cu pronumele potrivit: "
+        "Îi ceri lui Dan să îți dea cheia. Alege combinația de pronume potrivită: "
         "«Dan, ___ dai, te rog?»",
         ["ți-o", "mi-l", "mi-o", "ți-l"],
         "mi-o",
@@ -207,12 +207,12 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "scării C vor avea apă, dar pot auzi zgomot în curte. Nu este necesar să rămâneți acasă.» "
         "Ce informație este corectă pentru un locatar de la scara C?",
         [
-            "Poate avea apă, deși lucrarea îi poate produce disconfort.",
+            "Va avea apă, deși este posibil să audă zgomotul lucrării.",
             "Trebuie să rămână acasă pentru accesul instalatorului.",
             "Va rămâne fără apă rece între orele 9 și 12.",
-            "Poate evita zgomotul dacă închide robinetul.",
+            "Va avea apă, iar lucrările se vor face în interiorul scării C.",
         ],
-        "Poate avea apă, deși lucrarea îi poate produce disconfort.",
+        "Va avea apă, deși este posibil să audă zgomotul lucrării.",
     ),
     AssessmentQuestion(
         "ro-r-b1-004",
@@ -226,7 +226,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
             "Să plătească factura, fiindcă suma este corectă.",
             "Să ceară schimbarea adresei firmei.",
             "Să amâne plata până primește documentul corectat.",
-            "Să trimită firmei o sumă mai mică.",
+            "Să achite factura și să solicite apoi corectarea numelui.",
         ],
         "Să amâne plata până primește documentul corectat.",
     ),
@@ -255,11 +255,11 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "Seara am completat raportul acasă. Călătoria nu a fost suficientă pentru tot, "
         "însă m-a ajutat să mă organizez.» Cum evaluează Mara timpul petrecut în tren?",
         [
-            "A fost suficient pentru redactarea și trimiterea raportului.",
-            "A fost inutil, deoarece nu a avut acces la notițe.",
-            "A fost folosit doar pentru odihnă înainte de lucru.",
-            "A fost util pentru pregătire, chiar dacă nu a terminat raportul.",
+            "A fost suficient ca să încheie redactarea raportului.",
+            "A fost pierdut, fiindcă nu a putut lucra deloc.",
+            "A fost dedicat corectării raportului deja terminat.",
+            "A fost util, dar a mai avut de lucru acasă.",
         ],
-        "A fost util pentru pregătire, chiar dacă nu a terminat raportul.",
+        "A fost util, dar a mai avut de lucru acasă.",
     ),
 ]

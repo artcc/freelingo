@@ -23,13 +23,13 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "prijatelj",
                 "noun",
-                "Muška osoba koju poznajemo i volimo.",
+                "Muška osoba s kojom smo bliski i kojoj vjerujemo.",
                 "Ivan je moj prijatelj.",
             ),
             VocabularyEntry(
                 "prijateljica",
                 "noun",
-                "Ženska osoba koju poznajemo i volimo.",
+                "Ženska osoba s kojom smo bliski i kojoj vjerujemo.",
                 "Ovo je moja prijateljica Maja.",
             ),
             VocabularyEntry("učenik", "noun", "Muška osoba koja uči u školi.", "Marko je učenik."),
@@ -109,9 +109,17 @@ A1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry("majka", "noun", "Ženski roditelj.", "Moja majka se zove Marija."),
             VocabularyEntry("otac", "noun", "Muški roditelj.", "Moj otac je liječnik."),
-            VocabularyEntry("brat", "noun", "Muško dijete istih roditelja.", "Moj brat je učenik."),
             VocabularyEntry(
-                "sestra", "noun", "Žensko dijete istih roditelja.", "Moja sestra je kod kuće."
+                "brat",
+                "noun",
+                "Muška osoba s kojom imamo barem jednog zajedničkog roditelja.",
+                "Moj brat je učenik.",
+            ),
+            VocabularyEntry(
+                "sestra",
+                "noun",
+                "Ženska osoba s kojom imamo barem jednog zajedničkog roditelja.",
+                "Moja sestra je kod kuće.",
             ),
             VocabularyEntry("dijete", "noun", "Vrlo mlada osoba.", "Dijete spava."),
             VocabularyEntry(
@@ -392,8 +400,19 @@ A1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry("more", "noun", "Velika površina slane vode.", "More je danas mirno."),
             VocabularyEntry("plaža", "noun", "Dio obale za kupanje i odmor.", "Idemo na plažu."),
-            VocabularyEntry("lijevo", "adverb", "Na lijevu stranu.", "Skrenite lijevo."),
-            VocabularyEntry("desno", "adverb", "Na desnu stranu.", "Banka je desno."),
+            VocabularyEntry(
+                "lijevo",
+                "adverb",
+                "Na strani tijela na kojoj je obično srce ili prema toj strani.",
+                "Skrenite lijevo.",
+            ),
+            VocabularyEntry(
+                "desno",
+                "adverb",
+                "Na strani tijela suprotnoj od one na kojoj je obično srce "
+                "ili prema toj strani.",
+                "Banka je desno.",
+            ),
             VocabularyEntry("ravno", "adverb", "Naprijed, bez skretanja.", "Idite ravno."),
             VocabularyEntry("blizu", "adverb", "Na maloj udaljenosti.", "Hotel je blizu."),
             VocabularyEntry("daleko", "adverb", "Na velikoj udaljenosti.", "Kolodvor nije daleko."),
@@ -519,7 +538,9 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "noga", "noun", "Dio tijela kojim stojimo i hodamo.", "Lijeva noga me boli."
             ),
-            VocabularyEntry("leđa", "noun", "Stražnji dio tijela ispod vrata.", "Bole me leđa."),
+            VocabularyEntry(
+                "leđa", "noun", "Stražnji dio trupa između vrata i zdjelice.", "Bole me leđa."
+            ),
             VocabularyEntry(
                 "trbuh", "noun", "Prednji dio tijela ispod prsnog koša.", "Boli me trbuh."
             ),
@@ -533,15 +554,19 @@ A1_SETS: list[VocabularySet] = [
                 "bolest",
                 "noun",
                 "Stanje u kojem tijelo ili um ne funkcionira zdravo.",
-                "To je bolest.",
+                "Gripa je česta bolest.",
             ),
             VocabularyEntry("zdrav", "adjective", "Koji nije bolestan.", "Danas sam zdrav."),
             VocabularyEntry("bolestan", "adjective", "Koji ima bolest.", "Marko je bolestan."),
             VocabularyEntry(
                 "umoran", "adjective", "Koji treba odmor.", "Umoran sam i želim spavati."
             ),
-            VocabularyEntry("gladan", "adjective", "Koji želi jesti.", "Gladan sam; trebam ručak."),
-            VocabularyEntry("žedan", "adjective", "Koji želi piti.", "Žedan sam; molim vodu."),
+            VocabularyEntry(
+                "gladan", "adjective", "Koji osjeća potrebu za hranom.", "Gladan sam; trebam ručak."
+            ),
+            VocabularyEntry(
+                "žedan", "adjective", "Koji osjeća potrebu za pićem.", "Žedan sam; molim vodu."
+            ),
             VocabularyEntry(
                 "hitno", "adverb", "Bez čekanja, jer je vrlo važno.", "Hitno trebam liječnika."
             ),
@@ -557,7 +582,10 @@ A1_SETS: list[VocabularySet] = [
                 "morati", "verb", "Imati obvezu ili nužnu potrebu.", "Moram se odmoriti."
             ),
             VocabularyEntry(
-                "željeti", "verb", "Imati želju za nečim.", "Želim razgovarati s liječnikom."
+                "željeti",
+                "verb",
+                "Htjeti nešto imati ili učiniti.",
+                "Želim razgovarati s liječnikom.",
             ),
             VocabularyEntry(
                 "punjač", "noun", "Uređaj koji puni bateriju.", "Trebam punjač za telefon."

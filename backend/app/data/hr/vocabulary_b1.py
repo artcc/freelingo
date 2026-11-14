@@ -354,7 +354,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "pričuva",
                 "noun",
-                "Zajednički novac stanara namijenjen održavanju zgrade.",
+                "Zajednička sredstva suvlasnika namijenjena održavanju zgrade.",
                 "Popravak krova plaćen je iz pričuve.",
             ),
             VocabularyEntry(
@@ -452,7 +452,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "izvornik",
                 "noun",
-                "Prvi, izvorni dokument, za razliku od njegove kopije.",
+                "Dokument u obliku u kojem je prvotno nastao, za razliku od njegove kopije.",
                 "Izvornik donesite na uvid.",
             ),
             VocabularyEntry(

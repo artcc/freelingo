@@ -61,7 +61,7 @@ C2_SETS: list[VocabularySet] = [
                 "väistämätön",
                 "adjective",
                 "Sellainen, jota ei kyseisissä oloissa voida estää.",
-                "Viivästys ei ollut väistämätön, jos varareitti olisi tunnettu ajoissa.",
+                "Viivästys ei olisi ollut väistämätön, jos varareitti olisi tunnettu ajoissa.",
             ),
             VocabularyEntry(
                 "jälkikäteinen",
@@ -173,7 +173,7 @@ C2_SETS: list[VocabularySet] = [
                 "määräysvalta",
                 "noun",
                 "Mahdollisuus päättää toiminnasta tai ohjata toisten ratkaisuja.",
-                "Huoltovastuu ei yksin anna määräysvaltaa tilan käyttötarkoitukseen.",
+                "Huoltovastuu ei yksin tuo määräysvaltaa tilan käyttöä koskevissa asioissa.",
             ),
             VocabularyEntry(
                 "poikkeusperuste",
@@ -357,7 +357,7 @@ C2_SETS: list[VocabularySet] = [
                 "myötäillä",
                 "verb",
                 "Osoittaa seuraavansa tai tukevansa toisen kantaa, joskus pintapuolisesti.",
-                "Hän myötäili keskustelua, mutta ei lopulta hyväksynyt esitystä.",
+                "Hän myötäili muiden näkemyksiä mutta ei lopulta hyväksynyt esitystä.",
             ),
             VocabularyEntry(
                 "periaatteellinen",
@@ -394,7 +394,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "mahtipontinen",
                 "adjective",
-                "Korostetun juhlava tai suuren vaikutelman tavoitteleva.",
+                "Liioitellun juhlava tai omaa merkitystään korostava.",
                 "Mahtipontinen ilmoitus kahvitauosta sai työtoverit hymyilemään.",
             ),
             VocabularyEntry(

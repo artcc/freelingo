@@ -10,7 +10,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
         "🔎",
         [
             PhrasebookEntry(
-                "Näillä tiedoilla en erottaisi vielä mahdollista selitystä todennäköisimmästä.",
+                "Näillä tiedoilla pitäisin tätä mahdollisena selityksenä, en vielä todennäköisimpänä.",
                 "Rajoitat liian varmaa tulkintaa keskeneräisessä selvityksessä.",
                 "formal",
                 "c2-unit-1",
@@ -169,7 +169,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Emme taida kiistellä samasta asiasta: minä puhun oikeudesta, sinä käytännön toteutuksesta.",
-                "Nimeät keskustelun eri tasot, jotta osapuolet lakkaisivat puhumasta ohi.",
+                "Nimeät keskustelun eri tasot, jotta osapuolet lakkaisivat puhumasta toistensa ohi.",
                 "neutral",
                 "c2-unit-5",
             ),

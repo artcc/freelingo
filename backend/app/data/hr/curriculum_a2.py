@@ -27,7 +27,7 @@ A2_UNITS: list[CurriculumUnit] = [
         ["hr_people_a2"],
         ["grammar", "vocabulary", "listening", "speaking", "reading", "writing", "review"],
         [
-            "Kažem komu pomažem i s kim provodim slobodno vrijeme.",
+            "Kažem komu pomažem i s kim provodim slobodno vrijeme, u jednini i množini.",
             "Razlikujem društvo od sredstva prijevoza.",
             "Obraćam se poznatoj osobi i pišem kratak poziv.",
         ],

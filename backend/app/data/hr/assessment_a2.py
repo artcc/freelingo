@@ -43,7 +43,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-g-a2-005",
         "grammar",
         "A2",
-        "Koja rečenica potvrđuje da je cijela knjiga završena?",
+        "Koja rečenica potvrđuje da je knjiga pročitana do kraja?",
         [
             "Jučer sam počeo čitati knjigu.",
             "Jučer sam čitao knjigu sat vremena.",
@@ -76,7 +76,8 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-g-a2-008",
         "grammar",
         "A2",
-        "Govorite o sebi i ljubazno tražite rezervaciju: Htjela ___ rezervirati sobu.",
+        "U pisanom upitu govorite o sebi. Dopunite standardnim oblikom: "
+        "Htjela ___ rezervirati sobu.",
         ["bi", "bih", "biste", "bismo"],
         "bih",
         "hr-polite-conditional-a2",
@@ -114,7 +115,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "A2",
         "S automobilom želite prijeći iz Splita na Brač. Koji prijevoz može prevesti "
         "i vas i automobil preko mora?",
-        ["vlak", "trajekt", "autobus", "dizalo"],
+        ["autobus", "trajekt", "jedrilica", "gliser"],
         "trajekt",
         "hr-route-a2",
     ),
@@ -131,8 +132,9 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-a2-006",
         "vocabulary",
         "A2",
-        "U sobi je samo jedan pokrivač, a noću vam je hladno. Što ćete zatražiti?",
-        ["dodatni balkon", "dodatnu deku", "dodatno dizalo", "dodatni pogled"],
+        "U sobi je samo jedan pokrivač, a noću vam je hladno. "
+        "Želite još jedan topli pokrivač. Što ćete zatražiti?",
+        ["dodatni jastuk", "dodatnu deku", "dodatni ručnik", "dodatnu plahtu"],
         "dodatnu deku",
         "hr-polite-conditional-a2",
     ),
@@ -187,12 +189,12 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "Petar kaže: Čitao sam putopis cijelo popodne, ali još imam dvadeset stranica. "
         "Što znamo o njegovu čitanju?",
         [
-            "Čitao je, ali knjiga još nije završena.",
+            "Još nije pročitao cijelu knjigu.",
             "Pročitao je knjigu i počeo novu.",
             "Tek sutra će početi čitati knjigu.",
             "Pročitao je samo dvadeset stranica.",
         ],
-        "Čitao je, ali knjiga još nije završena.",
+        "Još nije pročitao cijelu knjigu.",
         "hr-aspect-a2",
     ),
     AssessmentQuestion(
@@ -215,14 +217,14 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "reading",
         "A2",
         "Poruka ordinacije: Na pregled u utorak donesite svoju zdravstvenu iskaznicu. "
-        "Uputnica za ovaj pregled nije potrebna. Što je potrebno ponijeti?",
+        "Uputnica za ovaj pregled nije potrebna. Što je obvezno ponijeti?",
         [
-            "Uputnicu bez iskaznice.",
-            "Iskaznicu i obveznu uputnicu.",
-            "Samo račun iz ljekarne.",
-            "Zdravstvenu iskaznicu bez obvezne uputnice.",
+            "Samo liječničku uputnicu.",
+            "Iskaznicu i liječničku uputnicu.",
+            "Račun i liječničku uputnicu.",
+            "Samo zdravstvenu iskaznicu.",
         ],
-        "Zdravstvenu iskaznicu bez obvezne uputnice.",
+        "Samo zdravstvenu iskaznicu.",
         "hr-imperative-a2",
     ),
     AssessmentQuestion(

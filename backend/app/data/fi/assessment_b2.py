@@ -70,8 +70,8 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Vuokralaisen täytyy ilmoittaa viasta ilman tarpeetonta viivettä.",
             "Vuokralainen saa ilmoittaa viasta, jos pitää sitä hyödyllisenä.",
-            "Vuokralaisen kannattaa ilmoittaa viasta sopimuksen päätyttyä.",
-            "Vuokralainen voi pyytää lupaa vian ilmoittamiseen.",
+            "Vuokralaisen täytyy ilmoittaa viasta seuraavan määräaikaistarkastuksen yhteydessä.",
+            "Vuokralaisen kannattaa ilmoittaa viasta, mutta hän voi itse päättää ajankohdan.",
         ],
         "Vuokralaisen täytyy ilmoittaa viasta ilman tarpeetonta viivettä.",
         "fi-modal-obligation-b2",
@@ -80,12 +80,13 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "fi-g-b2-006",
         "grammar",
         "B2",
-        "Jos aikataulu olisi tarkistettu, päällekkäisyys olisi huomattu ennen varausta. "
+        "Varaus tehtiin aikataulua tarkistamatta, ja päällekkäisyys huomattiin vasta myöhemmin. "
+        "Kollega toteaa: Jos aikataulu olisi tarkistettu, päällekkäisyys olisi huomattu ennen varausta. "
         "Miten puhuja käsittelee tapahtumaa?",
         [
-            "Hän vahvistaa tarkistuksen ja havaitsemisen toteutuneen.",
-            "Hän määrää, että uusi varaus tarkistetaan huomenna.",
-            "Hän kertoo tarkistuksen olevan parhaillaan kesken.",
+            "Hän pitää tarkistusta tarpeettomana, koska päällekkäisyys huomattiin lopulta.",
+            "Hän kertoo toteutuneesta tarkistuksesta, jossa päällekkäisyys jäi havaitsematta.",
+            "Hän kuvaa tarkistusta, jonka avulla jo tehty varaus voidaan vielä perua.",
             "Hän kuvaa mennyttä vaihtoehtoa, joka ei toteutunut.",
         ],
         "Hän kuvaa mennyttä vaihtoehtoa, joka ei toteutunut.",
@@ -98,11 +99,11 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Kaikki osallistujat eivät hyväksyneet ehdotusta. Mitä tästä voidaan varmasti päätellä?",
         [
             "Yksikään osallistuja ei hyväksynyt ehdotusta.",
-            "Hyväksyntä ei ollut osallistujien kesken yksimielinen.",
+            "Ainakin yksi osallistuja jätti ehdotuksen hyväksymättä.",
             "Yli puolet osallistujista vastusti ehdotusta.",
             "Täsmälleen puolet osallistujista hyväksyi ehdotuksen.",
         ],
-        "Hyväksyntä ei ollut osallistujien kesken yksimielinen.",
+        "Ainakin yksi osallistuja jätti ehdotuksen hyväksymättä.",
         "fi-quantifier-scope-b2",
     ),
     AssessmentQuestion(
@@ -112,12 +113,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Kollega sanoo: Voisin ottaa tehtävän, jos saisin kaksi päivää lisäaikaa. "
         "Haluat tarkistaa hänen kantansa muuttamatta ehtoa lupaukseksi. Mitä sanot?",
         [
-            "Eli otat tehtävän, ja katsomme lisäaikaa myöhemmin?",
-            "Eli kieltäydyt tehtävästä myös pidemmällä aikataululla?",
-            "Ymmärsinkö oikein, että kaksi lisäpäivää voisi mahdollistaa tehtävän ottamisen?",
-            "Ymmärsinkö oikein, että tarvitset kaksi lisäpäivää nykyisen tehtäväsi perumiseen?",
+            "Eli otat tehtävän vastaan, ja sovimme lisäajasta myöhemmin?",
+            "Eli kaksi lisäpäivää ei muuttaisi kantaasi tehtävän vastaanottamiseen?",
+            "Eli kahden päivän jousto aikataulussa voisi tehdä tehtävästä sinulle mahdollisen?",
+            "Eli tarvitset kaksi lisäpäivää päättääksesi, otatko tehtävän vastaan?",
         ],
-        "Ymmärsinkö oikein, että kaksi lisäpäivää voisi mahdollistaa tehtävän ottamisen?",
+        "Eli kahden päivän jousto aikataulussa voisi tehdä tehtävästä sinulle mahdollisen?",
         "fi-repair-b2",
     ),
     AssessmentQuestion(
@@ -138,21 +139,21 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "fi-v-b2-002",
         "vocabulary",
         "B2",
-        "Raportissa esitetään suuri parannus, mutta vertailuryhmä puuttuu. "
+        "Raportin mukaan uusi työtapa nopeutti palvelua huomattavasti, mutta vertailuryhmä puuttuu. "
         "Haluat kyseenalaistaa johtopäätöksen asiallisesti. Mikä vastaus toteuttaa tavoitteen?",
         [
-            "Kirjataan tulos hyväksytyksi ja palataan siihen ensi vuonna.",
-            "Muokataan raportin ulkoasua ennen seuraavaa kokousta.",
-            "Pyydetään tutkijaa esittelemään oma koulutustaustansa.",
-            "Miten erotamme muutoksen vaikutuksen muista mahdollisista syistä?",
+            "Kuinka nopeasti uusi työtapa voidaan ottaa käyttöön muissakin toimipisteissä?",
+            "Miten voimme esittää todetun syy-yhteyden raportissa nykyistä selkeämmin?",
+            "Miten työtavan jo osoitettu hyöty vaikuttaa seuraavan vuoden resursointiin?",
+            "Miten erotamme työtavan vaikutuksen muista mahdollisista syistä?",
         ],
-        "Miten erotamme muutoksen vaikutuksen muista mahdollisista syistä?",
+        "Miten erotamme työtavan vaikutuksen muista mahdollisista syistä?",
     ),
     AssessmentQuestion(
         "fi-v-b2-003",
         "vocabulary",
         "B2",
-        "Asiakas kysyy, voiko viikon päästä annettava hinta vielä muuttua. "
+        "Asiakas saa hinta-arvion ja kysyy, voiko summa vielä muuttua. "
         "Myyjä vastaa: Tämä on vasta alustava arvio. Mitä vastaus tarkoittaa?",
         [
             "Luku voi tarkentua ennen lopullista tarjousta.",
@@ -188,10 +189,10 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "vertailutietoa remontin päätyttyä. Vakituista laajennusta ei vielä hyväksytty. "
         "Mikä johtopäätös ottaa tiedon rajat parhaiten huomioon?",
         [
-            "Kokeilu osoittaa, että kaikki toimipisteet hyötyvät samoista aukioloajoista.",
-            "Kysely antaa riittävän kuvan myös niistä, jotka eivät käyneet kirjastossa.",
+            "Kävijämäärän kasvu voidaan erottaa remontin vaikutuksesta myönteisen kyselyn avulla.",
+            "Laajennus voidaan jo vakinaistaa, koska kysely vahvistaa uusien aikojen tarpeellisuuden.",
             "Kasvu on kiinnostava havainto, mutta sen syy ja pysyvyys vaativat lisäselvitystä.",
-            "Remontti tekee kävijämäärästä käyttökelvottoman myös tulevassa seurannassa.",
+            "Remontin päätyttyä riittää kyselyn uusiminen, sillä kasvun syy on jo tiedossa.",
         ],
         "Kasvu on kiinnostava havainto, mutta sen syy ja pysyvyys vaativat lisäselvitystä.",
     ),
@@ -207,12 +208,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Ehdotan lyhyttä puhelua huomiseksi, jotta voimme ratkaista tämän kohdan. "
         "Mikä vastaus edistäisi tilauksen vahvistamista viestin mukaisesti?",
         [
-            "Täsmennämme huollon sisällön ja varmistamme sen sisältymisen toisenkin vuoden hintaan.",
+            "Täsmennämme huollon kirjallisesti; sovittu huolto sisältyy hintaan myös toisena vuonna.",
             "Vahvistamme tilauksen heti, sillä uusi hinta ja myöhäisempi toimitus on hyväksytty.",
             "Palautamme alkuperäisen toimituspäivän ja poistamme huollon toisen vuoden tarjouksesta.",
             "Lähetämme saman liitteen uudelleen ja pidämme huoltoa jo sovittuna.",
         ],
-        "Täsmennämme huollon sisällön ja varmistamme sen sisältymisen toisenkin vuoden hintaan.",
+        "Täsmennämme huollon kirjallisesti; sovittu huolto sisältyy hintaan myös toisena vuonna.",
     ),
     AssessmentQuestion(
         "fi-r-b2-003",

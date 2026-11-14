@@ -148,11 +148,12 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "hr-clitic-order-b1",
-        "Nenaglasnice u kratkoj poruci",
+        "Zanaglasnice u kratkoj poruci",
         "B1",
         "Red riječi",
         "Povežite kratke oblike poput sam, mu, ga i se.",
-        "Nenaglasnice ne stoje samostalno na početku izjavne rečenice. Često dolaze nakon "
+        "Zanaglasnice, odnosno enklitike, kratki su nenaglašeni oblici poput sam, mu i ga. "
+        "Ne stoje samostalno na početku izjavne rečenice. Često dolaze nakon "
         "prve naglašene riječi ili prve smislene cjeline. U čestoj skupini pomoćni glagol "
         "poput sam stoji prije zamjenica, a dativna zamjenica prije akuzativne. Oblik je "
         "ima posebno mjesto iza zamjenica: Ana mu ga je dala.",
@@ -164,7 +165,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample(
                 "Kartu sam mu poslala jutros.",
-                note="Nenaglasnice sam i mu slijede prvu istaknutu riječ.",
+                note="Zanaglasnice sam i mu slijede prvu istaknutu riječ.",
             ),
             GrammarExample(
                 "Luka mi ga je pokazao na karti.",
@@ -196,7 +197,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         structure="bih / bi / bi / bismo / biste / bi + glagolski pridjev radni",
         rules=[
             "Za prvo lice jednine standardni je oblik bih: Ja bih predložila drugi termin.",
-            "Za mi i vi koristimo bismo i biste, a ne bi.",
+            "U standardnom jeziku za mi i vi koristimo bismo i biste, a ne bi.",
             "U pitanju možemo reći Biste li ponovili? ili Možete li ponoviti?; oba su uljudna.",
         ],
         examples=[
@@ -421,7 +422,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "uz li: Zanima me radi li ured subotom. Upitnik ovisi o cijeloj rečenici.",
         rules=[
             "Zadržavamo upitnu riječ: gdje, kada, kako, koliko ili zašto.",
-            "Je li pišemo odvojeno; u primjeru Zanima me je li potvrda gotova riječ je glagol.",
+            "Je li pišemo odvojeno; u primjeru Zanima me je li potvrda gotova "
+            "oblik je pripada glagolu biti.",
             "Izjavna rečenica Ne znam kada ured radi završava točkom.",
         ],
         examples=[
@@ -508,7 +510,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Hrvatski dopušta različit red punih rečeničnih članova. Padeži pomažu prepoznati "
         "njihove uloge. Poznatu temu često stavljamo na početak, a novu informaciju prema "
         "kraju. Za jasan kontrast koristimo pune naglašene oblike: meni, tebi, njega. "
-        "Nenaglasnice i dalje slijede svoja pravila.",
+        "Zanaglasnice poput sam, mi i ga i dalje slijede svoja pravila.",
         rules=[
             "Položaj riječi i govorni naglasak zajedno određuju što je istaknuto.",
             "Kratko mi samo po sebi ne nosi kontrast kao meni u izrazu meni, a ne njemu.",

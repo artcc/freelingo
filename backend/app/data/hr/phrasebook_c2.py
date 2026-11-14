@@ -22,7 +22,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-1",
             ),
             PhrasebookEntry(
-                "Ispravak: rekla sam srijeda, a mislila sam četvrtak; mjesto i sat ostaju isti.",
+                "Ispravak: rekla sam „srijeda”, a mislila sam „četvrtak”; mjesto i sat ostaju isti.",
                 "Trenutačno ispravljanje dana sastanka bez mijenjanja ostalih pojedinosti.",
                 "neutral",
                 "c2-unit-1",
@@ -86,7 +86,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
         "💬",
         [
             PhrasebookEntry(
-                "Ovo tvoje baš smo se usrećili zvuči ironično; misliš na gužvu ili na smještaj?",
+                "Ovo tvoje „baš smo se usrećili” zvuči ironično; misliš na gužvu ili na smještaj?",
                 "Provjera predmeta šale tijekom zajedničkog putovanja.",
                 "informal",
                 "c2-unit-3",
@@ -104,7 +104,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-3",
             ),
             PhrasebookEntry(
-                "Kad kažete opet, na koji se raniji slučaj pozivate?",
+                "Kad kažete „opet”, na koji se raniji slučaj pozivate?",
                 "Provjera pretpostavke o ponovljenom propustu u formalnom razgovoru.",
                 "formal",
                 "c2-unit-3",
@@ -148,7 +148,8 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-4",
             ),
             PhrasebookEntry(
-                "Taj mi oblik bijaše daje starinski ton; u običnom bih razgovoru rekla bilo je.",
+                "Rečenica „Bijaše tiho” zvuči mi starinski; "
+                "u običnom bih razgovoru rekla „Bilo je tiho”.",
                 "Objašnjavanje dojma književnog vremena bez zahtjeva za njegovom svakodnevnom uporabom.",
                 "neutral",
                 "c2-unit-4",
@@ -186,7 +187,8 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-5",
             ),
             PhrasebookEntry(
-                "Čujem da oboje popuštamo, ali rješenje nije održivo ako svaki put odustane ista osoba.",
+                "Kažemo da oboje popuštamo, ali dogovor nije održiv "
+                "ako svaki put odustaje ista osoba.",
                 "Provjera pravednosti dogovora o ponavljajućim obiteljskim obvezama.",
                 "neutral",
                 "c2-unit-5",
@@ -206,7 +208,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-6",
             ),
             PhrasebookEntry(
-                "Kad kažeš može, pristaješ na promjenu datuma ili samo na provjeru drugog prostora?",
+                "Kad kažeš „može”, pristaješ na promjenu datuma ili samo na provjeru drugog prostora?",
                 "Razjašnjavanje skraćene replike koja može odgovarati na dva prijedloga.",
                 "informal",
                 "c2-unit-6",

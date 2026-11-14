@@ -252,7 +252,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "se acordă cu lucrul posedat, nu cu posesorul: o cheie a vecinului, două chei ale vecinului.",
         rules=[
             "Masculin singular: al; feminin singular: a; masculin plural: ai; feminin plural: ale.",
-            "Substantivele neutre cer al la singular și ale la plural: un dosar al, dosare ale.",
+            "La neutru: un dosar al comisiei, două dosare ale comisiei.",
             "Pentru nume masculine: lui Radu; pentru multe nume feminine: Anei.",
         ],
         examples=[

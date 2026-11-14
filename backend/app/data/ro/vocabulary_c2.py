@@ -60,7 +60,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "în subsidiar",
                 "phrase",
-                "Ca argument sau cerere secundară, pentru cazul în care prima nu este acceptată.",
+                "În plan secundar; în cereri juridice, dacă solicitarea principală nu este admisă.",
                 "Solicităm anularea taxei și, în subsidiar, reducerea ei.",
             ),
             VocabularyEntry(
@@ -92,7 +92,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "clauză suspensivă",
                 "phrase",
-                "Prevedere care leagă producerea unui efect de îndeplinirea unei condiții.",
+                "Prevedere contractuală care amână un efect până la un eveniment viitor și nesigur.",
                 "Clauza suspensivă prevede că acordul produce efecte după obținerea avizului.",
             ),
             VocabularyEntry(
@@ -146,7 +146,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "de drept",
                 "phrase",
-                "Prin efectul unei reguli juridice, fără a exprima doar o stare de fapt.",
+                "În acest context, prin efectul legii, "
+                "fără o decizie distinctă care să producă efectul.",
                 "Jurista explică dacă încetarea intervine de drept sau cere o notificare.",
             ),
         ],
@@ -344,7 +345,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "bunăoară",
                 "adverb",
-                "De exemplu, pentru a introduce un caz ilustrativ.",
+                "De exemplu; introduce un caz ilustrativ, mai ales în exprimarea livrescă.",
                 "Unele schimbări ajută; bunăoară, programul de seară atrage cititori noi.",
             ),
             VocabularyEntry(

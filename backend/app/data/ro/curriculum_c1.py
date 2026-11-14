@@ -35,6 +35,7 @@ C1_UNITS: list[CurriculumUnit] = [
             "Negociez o ofertă condiționată și precizez ce rămâne de confirmat.",
             "Recunosc un argument fără să accept automat concluzia interlocutorului.",
             "Formulez un reproș despre trecut fără să îl confund cu o cerere actuală.",
+            "Răspund unui reproș recunoscând efectul și propunând o soluție pentru viitor.",
         ],
         2,
         "c1-unit-1",

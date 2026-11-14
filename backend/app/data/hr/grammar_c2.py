@@ -24,8 +24,10 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
                 note="Pitanje razjašnjava upućivanje, a ne osporava najavu poziva.",
             ),
             GrammarExample(
-                "Luka je rekao Ivanu da ponese svoju bilježnicu. — Ivan treba ponijeti Ivanovu bilježnicu.",
-                note="Subjekt radnje ponijeti jest Ivan; bilježnica pripada njemu.",
+                "Luka je rekao Ivanu da ponese svoju bilježnicu. — "
+                "Luka je rekao Ivanu da ponese Ivanovu bilježnicu.",
+                note="U uobičajenom čitanju subjekt radnje ponijeti jest Ivan, a bilježnica "
+                "pripada njemu. Preoblikovanje čuva i podatak da je uputu dao Luka.",
             ),
         ],
         related=["hr-attachment-c2", "hr-self-correction-c2"],
@@ -499,11 +501,12 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Uplatu je potrebno izvršiti do petka. — Molim vas, platite do petka.",
+                "Uplatu ste dužni izvršiti do petka. — Morate platiti do petka.",
                 note="Jednostavnija formulacija zadržava obvezu i rok.",
             ),
             GrammarExample(
-                "Preporučujemo prethodnu najavu dolaska. — Bilo bi dobro da nam prije dolaska javite.",
+                "Preporučujemo da nam unaprijed najavite dolazak. — "
+                "Bilo bi dobro da nam prije dolaska javite da dolazite.",
                 note="Obje inačice preporučuju najavu; ni jedna je ne proglašava uvjetom ulaska.",
             ),
         ],

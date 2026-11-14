@@ -39,7 +39,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "U standardnom izgovoru razlikujemo č i ć te dž i đ. Č i dž izgovaraju se tvrđe, "
         "a ć i đ mekše. Slušaj parove čar – ćar i džak – đak. Regionalni izgovori mogu "
         "se razlikovati. Hrvatski naglasak nije uvijek na prvom slogu; mjesto, duljinu i "
-        "ton uči slušanjem poznatih riječi, bez zaključivanja iz običnog zapisa.",
+        "ton uči slušanjem poznatih riječi, bez zaključivanja iz običnog zapisa.\n\n"
+        "Standardni hrvatski ima ijekavske oblike. Zapis ije ili je uči uz riječ: "
+        "mlijeko, dijete, vrijeme, ali mjesto i pjesma. Ne zamjenjuj svaki je skupom ije.",
         rules=[
             "Š i ž nisu isti glasovi kao s i z: slušaj šal i žaba.",
             "Ne izgovaraj lj u ljubav kao odvojeno l pa j.",
@@ -90,7 +92,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Hrvatski nema članove; ovaj, ova i ovo pokazuju na nešto i nisu obvezni uz imenicu.\n\n"
         "Mnoge imenice muškog roda završavaju suglasnikom, ženskog na -a, a srednjeg "
         "na -o ili -e. To je pomoć, a ne pravilo bez iznimaka: tata je muškog roda, "
-        "noć ženskog, a dijete srednjeg.",
+        "noć ženskog, a dijete srednjeg.\n\n"
+        "U nominativu množine česti su oblici studenti, kuće i sela. Kratke muške "
+        "imenice često imaju dulju osnovu: stol — stolovi, ključ — ključevi. "
+        "Posebne oblike uči uz riječ: čovjek — ljudi, dijete — djeca.",
         rules=[
             "Uz novu imenicu zapamti rod: grad — muški, soba — ženski, more — srednji.",
             "Rod se ne određuje uvijek prema završnom slovu.",
@@ -185,7 +190,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Česticu li pišemo odvojeno: Je li to vaš ključ?",
             "Koliko pita za broj ili cijenu: Koliko košta?",
-            "Ne miješaj gdje za mjesto i kamo za odredište.",
+            "U standardnim pitanjima razlikuj gdje za mjesto i kamo za odredište.",
         ],
         examples=[
             GrammarExample("Gdje stanuješ?", note="Tražimo mjesto stanovanja."),
@@ -254,7 +259,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Kod muškog roda za neživo oblik je često jednak nominativu: kruh — kruh.\n\n"
         "Muške imenice za živo često imaju -a: Vidim prijatelja. Vidim psa. "
         "Kod srednjeg roda oblik je često isti: Želim mlijeko. Pridjev i zamjenica "
-        "također se mijenjaju: jedna mala kava — jednu malu kavu.",
+        "također se mijenjaju: jedna mala kava — jednu malu kavu.\n\n"
+        "U množini muške imenice često imaju -e i za živo i za neživo: vidim "
+        "prijatelje, kupujem stolove. Ženske imenice na -a imaju -e: kupujem jabuke. "
+        "Srednji rod obično zadržava oblik nominativa množine: vidim sela. "
+        "Uči cijele skupine: vidim dobre prijatelje, kupujem nove torbe.",
         rules=[
             "Za osnovni objekt pitamo koga ili što: Koga vidiš? Što kupuješ?",
             "Ne dodaj -a svakoj muškoj imenici: kupujem kruh, ali vidim prijatelja.",

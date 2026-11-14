@@ -121,10 +121,10 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Vlasnica će razmotriti povrat pologa nakon voditeljeve potvrde.",
             "Voditelj će osigurati povrat pologa uz naknadnu potvrdu vlasnice.",
-            "Voditelj će pokušati dogovoriti povrat pologa s vlasnicom.",
+            "Voditelj obećava pokušaj, a ishod ovisi o vlasničinu pristanku.",
             "Voditelj je s vlasnicom dogovorio povrat pologa, ali čeka uplatu.",
         ],
-        "Voditelj će pokušati dogovoriti povrat pologa s vlasnicom.",
+        "Voditelj obećava pokušaj, a ishod ovisi o vlasničinu pristanku.",
         "hr-commitment-c2",
     ),
     AssessmentQuestion(
@@ -176,8 +176,8 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c2-004",
         "vocabulary",
         "C2",
-        "Poslije neugodne primjedbe kolega kaže: „Ono o njezinu otkazu bilo je "
-        "podbadanje, ne savjet.” Kako ovdje tumači koleginu primjedbu?",
+        "Poslije kolegine neugodne primjedbe Ivan kaže: „Ono o njezinu otkazu bilo je "
+        "podbadanje, ne savjet.” Kako Ivan tumači tu primjedbu?",
         [
             "Kao nenamjernu zamjenu osobe o kojoj se govorilo.",
             "Kao neizravnu preporuku za sljedeći razgovor za posao.",
@@ -191,8 +191,8 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c2-005",
         "vocabulary",
         "C2",
-        "U razgovoru o romanu netko kaže: „Njezina slutnja nije isto što i "
-        "saznanje.” Što riječ slutnja ovdje označava?",
+        "U razgovoru o romanu netko kaže: „Njezina slutnja da će se brat vratiti "
+        "nije isto što i saznanje.” Što riječ slutnja ovdje označava?",
         [
             "Sjećanje na događaj koji je već osobno doživjela.",
             "Tuđu vijest koju je prihvatila kao pouzdanu.",
@@ -206,15 +206,16 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c2-006",
         "vocabulary",
         "C2",
-        "Sudionik kaže: „Načelno podržavam zajednički izlet, ali moram vidjeti "
-        "troškovnik.” Što u toj rečenici znači načelno?",
+        "Organizator je poruku „Načelno podržavam izlet; troškovnik još nisam vidjela” "
+        "unio u popis konačnih prijava. Kojom replikom sudionica najpreciznije "
+        "ispravlja status svoje potpore?",
         [
-            "Podržava osnovnu zamisao, bez prihvaćanja svih pojedinosti.",
-            "Prihvaća predložene troškove, bez odabira mjesta izleta.",
-            "Daje konačan pristanak, uz pravo na kasniji povrat novca.",
-            "Podržava tuđi odlazak, bez namjere da se osobno priključi.",
+            "Podržala sam zamisao, ali time nisam prihvatila financijske uvjete.",
+            "Prihvatila sam troškove, ali još nisam potvrdila odabir mjesta izleta.",
+            "Moja je prijava konačna, ali zadržavam pravo na kasniji povrat novca.",
+            "Podržala sam odlazak drugih, ali sam isključila svoje sudjelovanje.",
         ],
-        "Podržava osnovnu zamisao, bez prihvaćanja svih pojedinosti.",
+        "Podržala sam zamisao, ali time nisam prihvatila financijske uvjete.",
         "hr-commitment-c2",
     ),
     AssessmentQuestion(
@@ -237,15 +238,16 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c2-008",
         "vocabulary",
         "C2",
-        "Suradnica kaže: „Preformulirala sam obavijest. Rok i obveza potpisa "
-        "ostali su isti.” Što je učinila?",
+        "Urednica traži da se obavijest „Povrat pologa izvršit će se po utvrđenju "
+        "da nema nepodmirenih obveza” preformulira za stanare, bez promjene uvjeta. "
+        "Koja verzija odgovara tom zahtjevu?",
         [
-            "Dopunila je obavijest novim uvjetom za predaju.",
-            "Izrazila je isti sadržaj drukčijim riječima.",
-            "Ublažila je obvezu u neobveznu preporuku.",
-            "Zamijenila je autora koji odgovara za obavijest.",
+            "Polog će biti vraćen prije provjere, a eventualni dug naplaćen poslije.",
+            "Polog će biti vraćen nakon što se potvrdi da nema nepodmirenih obveza.",
+            "Polog može biti vraćen ako obećate da ćete podmiriti preostale obveze.",
+            "Polog će biti vraćen nakon provjere, umanjen za utvrđena dugovanja.",
         ],
-        "Izrazila je isti sadržaj drukčijim riječima.",
+        "Polog će biti vraćen nakon što se potvrdi da nema nepodmirenih obveza.",
         "hr-register-recasting-c2",
     ),
     AssessmentQuestion(
@@ -303,7 +305,7 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-r-c2-004",
         "reading",
         "C2",
-        "Marta je zastala pred praznim stolom. Naravno, za nju opet nije "
+        "Marta je zastala pred zaključanom dvoranom. Naravno, za nju opet nije "
         "bilo mjesta! Stisnula je torbu i okrenula se prema izlazu. "
         "Nije vidjela natpis na vratima: sastanak je premješten na kat. "
         "Kako treba razumjeti uzvik o mjestu?",
@@ -337,25 +339,26 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "hr-r-c2-006",
         "reading",
         "C2",
-        "Kad se Tea u petak vratila u stan, prozor je već bio popravljen. "
-        "Dan prije susjed joj je poslao fotografiju razbijenog stakla. "
-        "Majstor je došao u petak ujutro, dok je Tea još bila u vlaku. "
-        "Koji slijed odgovara tekstu?",
+        "Kad se Tea u petak vratila u stan i vidjela popravljen prozor, pomislila je "
+        "da je posao obavljen još prije nego što joj je susjed u četvrtak poslao "
+        "fotografiju. Tek je navečer pročitala majstorovu poruku poslanu toga jutra: "
+        "„Upravo sam završio; susjedova fotografija prikazuje stanje prije popravka.” "
+        "Kako ta poruka mijenja Teino prvotno tumačenje?",
         [
-            "Majstor je došao, Tea se vratila, a zatim je susjed poslao fotografiju.",
-            "Tea se vratila, susjed je poslao fotografiju, a potom je došao majstor.",
-            "Susjed je poslao fotografiju, majstor je došao, a potom se Tea vratila.",
-            "Susjed je poslao fotografiju, Tea se vratila, a zatim je došao majstor.",
+            "Popravak smješta prije slanja fotografije, ali poslije snimanja oštećenja.",
+            "Popravak smješta nakon svojeg povratka, neposredno prije čitanja poruke.",
+            "Popravak smješta nakon slanja fotografije, ali i dalje prije svojeg povratka.",
+            "Slanje fotografije smješta u petak, neposredno nakon dovršetka popravka.",
         ],
-        "Susjed je poslao fotografiju, majstor je došao, a potom se Tea vratila.",
+        "Popravak smješta nakon slanja fotografije, ali i dalje prije svojeg povratka.",
         "hr-narrative-time-c2",
     ),
     AssessmentQuestion(
         "hr-r-c2-007",
         "reading",
         "C2",
-        "Nakon što je raspored ostavio tri predavača u istoj prostoriji "
-        "u isto vrijeme, uredno složene mape nisu mnogo pomogle. "
+        "Raspored je trima zasebnim radionicama dodijelio istu prostoriju "
+        "u isto vrijeme. Uredno složene mape nisu mnogo pomogle. "
         "Koordinatorica ih pogleda i kaže: „Organizacija nam nije baš "
         "idealna.” Zatim zamoli kolegu da odmah nazove predavače. "
         "Što njezina formulacija najvjerojatnije čini?",

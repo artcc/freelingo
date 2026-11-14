@@ -156,7 +156,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "platit",
                 "verb",
-                "Být možné použít podle daných pravidel; také dávat peníze za něco.",
+                "Být použitelný podle daných pravidel; také dávat peníze za něco.",
                 "Jízdenka platí až do večera.",
             ),
             VocabularyEntry(
@@ -794,7 +794,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "odpočívat",
                 "verb",
-                "Přerušit námahu a nabírat sílu.",
+                "Nabírat sílu bez práce nebo jiné namáhavé činnosti.",
                 "Dnes budu odpočívat doma.",
             ),
             VocabularyEntry(

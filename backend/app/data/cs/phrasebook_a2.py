@@ -28,7 +28,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
                 "a2-unit-1",
             ),
             PhrasebookEntry(
-                "Jak dlouhé má vlak zpoždění?",
+                "Kolik minut má vlak zpoždění?",
                 "Potřebujete odhadnout další čekání na vlak.",
                 "neutral",
                 "a2-unit-1",
@@ -131,7 +131,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Přijedeme v pátek kolem šesté večer.",
-                "Informujete ubytování o plánovaném příjezdu.",
+                "Informujete recepci o plánovaném příjezdu.",
                 "neutral",
                 "a2-unit-4",
             ),
@@ -225,7 +225,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Mohl byste mi vrátit peníze na kartu?",
-                "Po domluveném vrácení nákupu žádáte prodejce o způsob úhrady.",
+                "Při vracení zboží žádáte o vrácení peněz na kartu; oslovujete muže.",
                 "formal",
                 "a2-unit-6",
             ),

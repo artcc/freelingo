@@ -88,9 +88,9 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
             "Samotný návrh rozpočtu, jehož obsah rada označila za nevyhovující.",
             "Projednání rozpočtu, při němž rada změnila rozsah připravované zakázky.",
             "Přípravu zakázky, kterou rada přesunula na pozdější jednání.",
-            "Odložení projednání rozpočtu, tedy událost vyjádřenou předchozí větou.",
+            "Skutečnost, že rada přesunula jednání o rozpočtu na později.",
         ],
-        "Odložení projednání rozpočtu, tedy událost vyjádřenou předchozí větou.",
+        "Skutečnost, že rada přesunula jednání o rozpočtu na později.",
         "cs-propositional-reference-c1",
     ),
     AssessmentQuestion(
@@ -128,7 +128,7 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-v-c1-001",
         "vocabulary",
         "C1",
-        "Dodavatel říká: „V ceně už nemáme ústupový prostor, můžeme ale jednat o splatnosti.“ "
+        "Dodavatel říká: „S cenou už níž jít nemůžeme, můžeme ale jednat o splatnosti.“ "
         "Který návrh navazuje přímo na nabídnutou možnost?",
         [
             "Ponechme dobu úhrady a zkusme dohodnout nižší cenu při stejném rozsahu.",
@@ -170,8 +170,8 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-v-c1-004",
         "vocabulary",
         "C1",
-        "Po kritice jedné části projektu kolega řekne: „Rád bych uvedl na pravou míru, "
-        "že moje výhrada se týkala termínu, ne práce vašeho týmu.“ Jakou funkci má "
+        "Po kritice jedné části projektu kolega řekne: „Rád bych to uvedl na pravou míru: "
+        "moje výhrada se týkala termínu, ne práce vašeho týmu.“ Jakou funkci má "
         "ustálené spojení „uvést na pravou míru“?",
         [
             "Zmírnit předchozí kritiku týmu, aniž by měnil její původní předmět.",

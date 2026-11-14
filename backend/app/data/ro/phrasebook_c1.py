@@ -11,7 +11,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
         [
             PhrasebookEntry(
                 "Pe ce vă bazați când spuneți că întârzierea se va prelungi?",
-                "Ceri temeiul unei estimări fără să pui la îndoială buna-credință a persoanei.",
+                "Ceri temeiul unei estimări; un ton calm ajută la evitarea impresiei de interogatoriu.",
                 "formal",
                 "c1-unit-1",
             ),
@@ -105,7 +105,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Îți duc eu valiza, dar spune-mi unde trebuie lăsată.",
-                "Oferi ajutor într-o călătorie și verifici limita sarcinii asumate.",
+                "Oferi ajutor într-o călătorie și clarifici unde trebuie dus bagajul.",
                 "informal",
                 "c1-unit-3",
             ),
@@ -227,7 +227,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Avem acordul asupra locului; data rămâne deschisă până răspund și ceilalți.",
-                "Rezumă un acord parțial fără să îl extinzi la întreaga organizare.",
+                "Rezumi un acord parțial fără să îl extinzi la întreaga organizare.",
                 "neutral",
                 "c1-unit-7",
             ),

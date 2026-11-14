@@ -262,7 +262,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "at udbedre",
                 "verb",
-                "At rette en fejl eller gøre en skade god igen.",
+                "At rette en fejl eller bringe noget beskadiget i orden.",
                 "Firmaet har to uger til at udbedre manglerne.",
             ),
             VocabularyEntry(
@@ -570,7 +570,8 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en anerkendelse",
                 "noun",
-                "Det at vise, at man ser en andens indsats eller synspunkt.",
+                "Det at acceptere et forhold eller vise respekt for en andens indsats "
+                "eller synspunkt.",
                 "En anerkendelse af problemet var et vigtigt første skridt.",
             ),
             VocabularyEntry(
@@ -636,7 +637,8 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "uforsonlig",
                 "adjective",
-                "Som ikke vil nærme sig modparten eller søge forsoning.",
+                "Som fastholder en fjendtlig holdning og afviser at slutte fred "
+                "eller finde et kompromis.",
                 "Den uforsonlige tone gjorde det svært at tale om løsninger.",
             ),
             VocabularyEntry(

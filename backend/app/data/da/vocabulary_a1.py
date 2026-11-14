@@ -31,10 +31,13 @@ A1_SETS: list[VocabularySet] = [
                 "Undskyld, hvad hedder du?",
             ),
             VocabularyEntry(
-                "ja", "adverb", "Et svar, der bekræfter et spørgsmål.", "Ja, jeg bor her."
+                "ja", "adverb", "Et svar, der bekræfter det, der spørges om.", "Ja, jeg bor her."
             ),
             VocabularyEntry(
-                "nej", "adverb", "Et svar, der afviser et spørgsmål.", "Nej, jeg er ikke lærer."
+                "nej",
+                "adverb",
+                "Et negativt svar eller et ord, man bruger til at sige fra.",
+                "Nej, jeg er ikke lærer.",
             ),
             VocabularyEntry(
                 "et navn", "noun", "Det ord, en person eller ting kaldes.", "Mit navn er Emil."
@@ -505,7 +508,10 @@ A1_SETS: list[VocabularySet] = [
                 "Hvad er prisen på brødet?",
             ),
             VocabularyEntry(
-                "en krone", "noun", "En enhed i Danmarks penge.", "Bollen koster tolv kroner."
+                "en krone",
+                "noun",
+                "Den danske pengeenhed; én svarer til hundrede øre.",
+                "Bollen koster tolv kroner.",
             ),
             VocabularyEntry(
                 "købe", "verb", "Få noget ved at betale for det.", "Jeg køber æbler og mælk."
@@ -542,7 +548,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "et toilet",
                 "noun",
-                "Det sted eller den installation, man bruger ved toiletbesøg.",
+                "En kumme, man bruger til at tisse eller have afføring i; også rummet med kummen.",
                 "Hvor er toilettet?",
             ),
             VocabularyEntry(
@@ -901,7 +907,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "kortbetaling",
                 "noun",
-                "Betaling med et betalingskort.",
+                "Det, at man betaler med et bankkort frem for sedler eller mønter.",
                 "Er kortbetaling mulig her?",
             ),
             VocabularyEntry(

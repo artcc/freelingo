@@ -84,7 +84,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Kielteinen partisiippi ilmaisee puuttuvaa toimintaa tai ominaisuutta.",
         "MATON-partisiippi muodostaa kielteisiä määritteitä: käsittelemätön hakemus "
         "on hakemus, jota ei ole käsitelty. Merkitys voi olla aktiivinen tai "
-        "passiivinen: puhumaton lapsi ei puhu, avaamaton kirje ei ole avattu. "
+        "passiivinen: puhumaton lapsi ei puhu; avaamaton kirje on kirje, jota ei ole avattu. "
         "Taivutusvartalo muuttuu: käsittelemättömän, käsittelemättömiä. Sanan merkitys "
         "ja asiayhteys ratkaisevat, onko kyse tilapäisestä tilanteesta vai ominaisuudesta.",
         rules=[

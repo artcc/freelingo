@@ -43,7 +43,8 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "ro-g-a2-005",
         "grammar",
         "A2",
-        "Răspunzi despre cererea depusă ieri. Alege forma standard.",
+        "Cineva întreabă: «Ai depus cererea?» Răspunzi afirmativ, înlocuind "
+        "«cererea» cu un pronume. Alege forma standard.",
         ["L-am depus ieri.", "O am depus ieri.", "Am depus-o ieri.", "Am depuse-o ieri."],
         "Am depus-o ieri.",
         "ro-perfect-clitics-a2",
@@ -61,9 +62,9 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "ro-g-a2-007",
         "grammar",
         "A2",
-        "Te adresezi singur recepționerei și formulezi o cerere politicoasă: «___ dori o cameră.»",
-        ["Ai", "Ați", "Ar", "Aș"],
-        "Aș",
+        "Ceri politicos o cameră pentru tine: «Eu ___ dori o cameră.»",
+        ["ai", "ați", "ar", "aș"],
+        "aș",
         "ro-polite-conditional-a2",
     ),
     AssessmentQuestion(
@@ -88,7 +89,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "vocabulary",
         "A2",
         "La magazin vrei să schimbi o cămașă. Vânzătoarea cere dovada cumpărării. Ce îi arăți?",
-        ["Bonul.", "Programul.", "Formularul de înscriere.", "Pașaportul."],
+        ["Bonul.", "Eticheta.", "Garanția.", "Cardul bancar."],
         "Bonul.",
     ),
     AssessmentQuestion(
@@ -103,7 +104,8 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "ro-v-a2-004",
         "vocabulary",
         "A2",
-        "Întâlnirea nu mai este vineri, ci luni. Ea va avea totuși loc. Ce face echipa?",
+        "Întâlnirea nu mai este vineri, ci luni, săptămâna următoare. "
+        "Ea va avea totuși loc. Ce face echipa?",
         ["Anulează întâlnirea.", "Amână întâlnirea.", "Refuză întâlnirea.", "Începe întâlnirea."],
         "Amână întâlnirea.",
     ),
@@ -111,8 +113,9 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "ro-v-a2-005",
         "vocabulary",
         "A2",
-        "Vrei să mergi de la Iași la București și apoi să revii la Iași. Ce fel de bilet ceri?",
-        ["Dus-întors.", "Doar dus.", "De intrare la muzeu.", "Abonament lunar de autobuz."],
+        "Vrei să mergi de la Iași la București și apoi să revii la Iași. "
+        "Ce fel de bilet acoperă ambele drumuri?",
+        ["Dus-întors.", "Doar dus.", "De transport local.", "Doar pentru întoarcere."],
         "Dus-întors.",
     ),
     AssessmentQuestion(
@@ -171,12 +174,12 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "ajuns într-o oră. Casa bunicilor este aceeași, dar acum în sat există "
         "și o farmacie.» Ce s-a schimbat la ultima călătorie descrisă?",
         [
-            "Persoana a plecat la bunici în alt anotimp.",
-            "Bunicii locuiau într-o altă casă din sat.",
-            "Autobuzul a făcut drumul într-o singură oră.",
-            "Persoana a folosit alt transport și a ajuns mai repede.",
+            "A călătorit în alt anotimp, pe același traseu.",
+            "A mers la altă casă, în același sat.",
+            "A luat tot autobuzul, dar drumul a fost mai scurt.",
+            "A mers cu mașina și a făcut mai puțin timp.",
         ],
-        "Persoana a folosit alt transport și a ajuns mai repede.",
+        "A mers cu mașina și a făcut mai puțin timp.",
         "ro-imperfect-a2",
     ),
     AssessmentQuestion(
@@ -190,8 +193,8 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "pentru a accepta această soluție?",
         [
             "Să lase cheia vecinei și să anunțe proprietarul.",
-            "Să rămână obligatoriu acasă marți dimineața.",
-            "Să îi ceară vecinei să facă reparația luni.",
+            "Să lase cheia instalatorului luni dimineața.",
+            "Să îi ceară vecinei să aștepte instalatorul marți.",
             "Să ducă cheia instalatorului marți după serviciu.",
         ],
         "Să lase cheia vecinei și să anunțe proprietarul.",
@@ -204,15 +207,15 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "Citește anunțul: «Pentru înscriere aveți nevoie de formularul completat, "
         "de actul de identitate în original și de o copie. Originalul se "
         "restituie imediat după verificare. Copia rămâne la dosar. Ghișeul "
-        "este deschis până la ora 14.» Mihai are formularul și originalul, "
-        "dar nu are copia. Ce îi lipsește?",
+        "este deschis până la ora 14.» Mihai vine cu toate actele cerute. "
+        "Ce document primește înapoi după verificare?",
         [
-            "Un alt formular, fără date completate.",
-            "Un al doilea act de identitate în original.",
-            "O reproducere a actului pentru dosar.",
-            "O confirmare că originalul va rămâne la ghișeu.",
+            "Formularul pe care l-a completat.",
+            "Copia actului de identitate.",
+            "Actul de identitate în original.",
+            "Dosarul cu toate documentele depuse.",
         ],
-        "O reproducere a actului pentru dosar.",
+        "Actul de identitate în original.",
     ),
     AssessmentQuestion(
         "ro-r-a2-005",
@@ -224,12 +227,12 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "200 de lei și vrea o geacă pe care să o poată spăla singură.» "
         "Ce alegere respectă ambele condiții ale Anei?",
         [
-            "Geaca verde, pentru că are prețul mai mic.",
-            "Oricare geacă, fiindcă ambele au aceeași întreținere.",
-            "Nicio geacă, fiindcă ambele depășesc suma disponibilă.",
-            "Geaca albastră, care se încadrează în buget și se spală acasă.",
+            "Geaca verde: este mai ieftină și se spală acasă.",
+            "Oricare geacă: ambele se pot spăla acasă.",
+            "Nicio geacă: ambele costă peste 200 de lei.",
+            "Geaca albastră: o poate plăti și spăla acasă.",
         ],
-        "Geaca albastră, care se încadrează în buget și se spală acasă.",
+        "Geaca albastră: o poate plăti și spăla acasă.",
         "ro-comparison-a2",
     ),
     AssessmentQuestion(

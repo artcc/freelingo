@@ -174,7 +174,7 @@ A2_CATEGORIES: list[PhrasebookCategory] = [
             PhrasebookEntry(
                 "Tak for din besked. Jeg sender dokumentet i morgen.",
                 "Svar kort og sagligt i en arbejdsrelateret mail.",
-                "formal",
+                "neutral",
                 "a2-unit-4",
             ),
         ],

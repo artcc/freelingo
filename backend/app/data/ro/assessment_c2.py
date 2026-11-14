@@ -14,9 +14,9 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
             "Primăria confirmă ipoteza expertului, dar nu stabilește încă amploarea fisurilor.",
             "Expertul confirmă legătura cu vibrațiile, iar primăria verifică primirea raportului.",
             "Redacția confirmă cauza fisurilor, citând raportul pe care primăria l-a primit.",
-            "Primăria confirmă primirea raportului, iar expertul propune o legătură încă posibilă.",
+            "Primăria confirmă primirea raportului, iar expertul propune o posibilă explicație.",
         ],
-        "Primăria confirmă primirea raportului, iar expertul propune o legătură încă posibilă.",
+        "Primăria confirmă primirea raportului, iar expertul propune o posibilă explicație.",
         "ro-layered-evidence-c2",
     ),
     AssessmentQuestion(
@@ -25,7 +25,8 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "C2",
         "Regula spune: «Cererile se depun vineri. Cei aflați în delegație le pot depune luni "
         "dacă anunță până joi. Dovada plății se anexează în toate cazurile.» "
-        "Ioana este în delegație și a anunțat miercuri. Ce variantă respectă regula?",
+        "Ioana este în delegație de miercuri până marțea următoare și a anunțat miercuri. "
+        "Poate trimite actele prin curier. Ce variantă respectă regula?",
         [
             "Ioana poate depune cererea luni și poate aduce dovada plății după întoarcere.",
             "Ioana poate depune cererea luni, cu dovada plății anexată la depunere.",
@@ -42,12 +43,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Ana spune: «Dacă aș fi acceptat atunci postul din Iași, acum aș locui mai aproape "
         "de părinți.» Care relatare păstrează participanții și reperele temporale?",
         [
-            "Ana imaginează o locuire actuală mai aproape de părinți, ca efect al unei alegeri trecute.",
-            "Ana imaginează o locuire trecută mai aproape de părinți, ca efect al unei alegeri actuale.",
+            "Ana își imaginează că ar locui acum mai aproape de părinți dacă ar fi acceptat acel post.",
+            "Ana se imaginează în trecut mai aproape de părinți, ca efect al unei decizii actuale.",
             "Ana regretă că părinții nu au acceptat atunci un post care i-ar fi apropiat de ea.",
             "Ana anunță că va accepta postul din Iași pentru a locui mai aproape de părinți.",
         ],
-        "Ana imaginează o locuire actuală mai aproape de părinți, ca efect al unei alegeri trecute.",
+        "Ana își imaginează că ar locui acum mai aproape de părinți dacă ar fi acceptat acel post.",
         "ro-counterfactual-alignment-c2",
     ),
     AssessmentQuestion(
@@ -145,7 +146,7 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "C2",
         "După câteva răspunsuri despre profit, jurnalista observă: "
         "«Invitatul a eludat întrebarea privind cine a autorizat plata.» "
-        "Ce comportament descrie verbul?",
+        "Ce comportament descrie aici verbul «a eluda»?",
         [
             "Invitatul a respins explicit premisa întrebării și a numit persoana responsabilă.",
             "Invitatul a evitat să răspundă direct la aspectul despre care fusese întrebat.",
@@ -182,9 +183,9 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
             "Radu apreciază originalitatea procedurii, iar colega îl ajută să o recomande altora.",
             "Radu critică memoria colegei, iar aceasta repară greșeala prin găsirea numărului.",
             "Radu anunță că va abandona înscrierea, iar colega încearcă să îl facă să revină.",
-            "Radu contrastează ironic promisiunea cu dificultatea trăită, iar colega răspunde solidar.",
+            "Radu ironizează promisiunea prin contrast cu experiența, iar colega îi oferă sprijin.",
         ],
-        "Radu contrastează ironic promisiunea cu dificultatea trăită, iar colega răspunde solidar.",
+        "Radu ironizează promisiunea prin contrast cu experiența, iar colega îi oferă sprijin.",
     ),
     AssessmentQuestion(
         "ro-r-c2-003",
@@ -193,14 +194,15 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Ioana citește o invitație și spune: «Nu e tocmai fericită formularea despre cei "
         "care au întârziat.» Autorul răspunde: «Dar n-am vrut să jignesc pe nimeni.» "
         "Ioana arată pasajul și adaugă: «Intenția o înțeleg; mă gândesc la cei care "
-        "îl vor citi fără explicația ta.» Ce răspuns ar continua cel mai constructiv discuția?",
+        "îl vor citi fără explicația ta.» Autorul vrea să păstreze cererea de punctualitate "
+        "și să revizuiască pasajul care poate jigni. Ce răspuns servește acestui scop?",
         [
-            "Să identificăm ce poate suna acuzator și să păstrăm cererea de punctualitate într-o formă mai neutră.",
-            "Să adăugăm că autorul nu a vrut să jignească, păstrând pasajul pentru a nu-i schimba mesajul.",
-            "Să precizăm numele celor vizați, astfel încât restul invitaților să nu se simtă criticați.",
-            "Să eliminăm orice referire la oră, fiindcă problema pare să fie însăși cererea de punctualitate.",
+            "Să înlocuim reproșul cu o explicație a efectului întârzierilor asupra programului comun.",
+            "Să păstrăm reproșul și să adăugăm că intenția autorului a fost înțeleasă greșit.",
+            "Să numim persoanele care întârzie, pentru ca reproșul să nu mai pară adresat tuturor.",
+            "Să renunțăm la orice referire la oră, lăsând participanții să își aleagă sosirea.",
         ],
-        "Să identificăm ce poate suna acuzator și să păstrăm cererea de punctualitate într-o formă mai neutră.",
+        "Să înlocuim reproșul cu o explicație a efectului întârzierilor asupra programului comun.",
     ),
     AssessmentQuestion(
         "ro-r-c2-004",

@@ -50,9 +50,11 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "C2",
         "Infinitiv og tid",
         "Bevar afsluttethed og tidsrelation i komprimerede udsagn.",
-        "Perfektum infinitiv består af at have eller at være sammen med et perfektum "
-        "participium: Hun hævder at have afleveret nøglen. Handlingen placeres før "
-        "det relevante holdepunkt, mens hævder bevarer kildeafstanden. I Han regner med "
+        "Perfektum infinitiv består af have eller være sammen med et perfektum "
+        "participium, ofte med at foran: Hun hævder at have afleveret nøglen. "
+        "Handlingen placeres før det relevante holdepunkt, mens hævder bevarer "
+        "kildeafstanden. Efter et modalverbum udelades at: Hun må have afleveret nøglen. "
+        "I Han regner med "
         "at være rejst inden fredag ligger holdepunktet fremme i tiden; formen er "
         "ikke bundet til fortid i forhold til taletidspunktet.",
         rules=[
@@ -129,16 +131,20 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "C2",
         "Regler og aftaler",
         "Gør en tæt regel anvendelig uden at udvide dens undtagelser.",
-        "En regel kan indeholde både en undtagelse og en betingelse for undtagelsen. "
-        "Lokalet må bruges efter klokken 22 ved lukkede arrangementer, hvis bestyrelsen "
-        "har godkendt det giver ikke alle lukkede arrangementer adgang. Del reglen op "
-        "i hovedregel, relevant gruppe og ekstra krav, før du omskriver den.",
+        "En regel kan indeholde både en undtagelse og en betingelse for undtagelsen: "
+        "Lokalet må normalt kun bruges indtil klokken 22. Lukkede arrangementer må dog "
+        "fortsætte senere, men kun hvis bestyrelsen har godkendt det. Her er både arrangementets "
+        "type og godkendelsen nødvendige for undtagelsen. Del reglen op i hovedregel, "
+        "relevant gruppe og ekstra krav, før du omskriver den.",
         rules=[
             "Bevar, om betingelser skal være opfyldt samtidig eller hver for sig.",
             "Spørg om rækkevidden, hvis en undtagelse kan knytte sig til flere led.",
         ],
         examples=[
-            GrammarExample("Fristen gælder også helligdage, medmindre andet er aftalt skriftligt."),
+            GrammarExample(
+                "Ansøgningen skal sendes digitalt. Ansøgere uden digital adgang må dog sende "
+                "den på papir, hvis det er aftalt med sagsbehandleren."
+            ),
             GrammarExample(
                 "Gæster må overnatte i højst tre døgn, dog længere med særskilt tilladelse."
             ),

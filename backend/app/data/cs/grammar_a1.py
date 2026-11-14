@@ -13,7 +13,8 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "ť a ď. Čárka označuje dlouhou samohlásku: á, é, í, ó, ú, ý. Písmeno ů má "
         "kroužek a vyslovuje se stejně dlouze jako ú. Dvojice ch tvoří v české abecedě "
         "jedno písmeno a stojí za h. Písmeno ě čteme podle okolí: dě, tě, ně znějí "
-        "měkce, bě a pě obsahují zvuk j; mě běžně vyslovujeme jako mně.\n\n"
+        "jako ďe, ťe, ňe; bě, pě a vě obsahují zvuk j. Mě vyslovujeme jako mně. "
+        "Jde o vysvětlení zvuků, ne o náhradní pravopis.\n\n"
         "Diakritiku při psaní zachovej. Jména osob a měst začínají velkým písmenem: "
         "Eva, Praha. Názvy jazyků a dnů mají malé písmeno: čeština, pondělí.",
         rules=[
@@ -47,7 +48,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Ř je samostatná česká hláska: jazyk se jemně chvěje jako u r a současně "
         "vzniká šum. Není to obyčejné r ani ž. Poslouchej krátká slova řeka, tři a "
         "dobře a opakuj je pomalu bez napětí. Výslovnost ř se podle okolních hlásek "
-        "mění. Pro začátek je důležitá srozumitelnost, ne rychlost.",
+        "mění. Pro začátek je důležitá srozumitelnost, ne rychlost.\n\n"
+        "Také r a l mohou tvořit slabiku bez samohlásky: krk, vlk. Nevkládej "
+        "do těchto slov další samohlásku. Některé souhlásky se při výslovnosti "
+        "přizpůsobují okolí: ve slově tužka zní ž jako š. Před pauzou zní "
+        "koncové d ve slově led jako t. Pravopis přitom zůstává stejný.",
         rules=[
             "Dlouhé samohlásky vyslovuj déle, ne automaticky silněji.",
             "Ú a ů označují stejnou dlouhou samohlásku.",
@@ -56,6 +61,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("To je malá káva.", note="Malá a káva mají přízvuk na první slabice."),
             GrammarExample("Jiří má tři knihy.", note="Poslouchej ř ve jméně a ve slově tři."),
+            GrammarExample(
+                "To je tužka.",
+                note="Píšeme ž, ale před neznělým k vyslovujeme š.",
+            ),
         ],
         related=["cs-alphabet-a1"],
     ),
@@ -171,17 +180,22 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Množné číslo nemá jednu společnou koncovku. Uč se dvojice: stůl–stoly, "
         "kniha–knihy, ulice–ulice, auto–auta, město–města. U mužských životných jmen "
         "jsou běžné tvary student–studenti a kamarád–kamarádi. Některé dvojice jsou "
-        "nepravidelné: dítě–děti, člověk–lidé. Se slovesem být použij jsou: Děti jsou doma.",
+        "nepravidelné: dítě–děti, člověk–lidé. Se slovesem být použij jsou: Děti jsou doma.\n\n"
+        "V prvním pádě se mění také ukazovací zájmeno a tvrdé přídavné jméno: "
+        "ti noví studenti, ty nové stoly, ty nové knihy, ta nová auta. Měkké "
+        "přídavné jméno má stále -í: moderní byty, moderní auta. Děti mají "
+        "v množném čísle ženskou shodu: ty malé děti.",
         rules=[
             "Po dva, dvě, tři a čtyři v prvním pádě stojí množné číslo: dvě knihy.",
-            "Po pět a vyšších základních číslovkách se používá jiný tvar; uč se "
-            "celé časté výrazy, například pět korun.",
+            "U počtů od pěti do deseti se v prvním pádě používá jiný tvar; "
+            "uč se celé časté výrazy, například pět korun.",
             "Příklady procvičují první pád, ne všechny pádové tvary.",
         ],
         examples=[
             GrammarExample("To jsou dvě auta."),
             GrammarExample("Studenti jsou tady."),
             GrammarExample("Děti jsou doma."),
+            GrammarExample("Ta nová auta jsou malá."),
         ],
         common_mistakes=[
             GrammarMistake("dvě dítě", "dvě děti", "Dítě má nepravidelné množné číslo děti.")
@@ -197,8 +211,8 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Sloveso se mění podle osoby. U slovesa dělat jsou tvary dělám, děláš, dělá, "
         "děláme, děláte, dělají. Bydlet má bydlím, bydlíš, bydlí, bydlíme, bydlíte, "
         "bydlí. Pracovat má pracuji, pracuješ, pracuje, pracujeme, pracujete, pracují. "
-        "Tvary pracuju a pracujou jsou běžné hovorové varianty; nejsou vhodné pro "
-        "každý formální text.\n\n"
+        "Tvary pracuju a pracujou jsou spisovné hovorové varianty. Pro neutrální "
+        "formální text můžeš zvolit pracuji a pracují.\n\n"
         "Častá slovesa se uč zvlášť: mít–mám, pít–piju nebo piji, jíst–jím, "
         "číst–čtu, psát–píšu nebo píši. Jedna koncovka neplatí pro všechna slovesa. "
         "Přítomný čas těchto sloves popisuje děj právě teď i pravidelný zvyk.",
@@ -305,7 +319,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "zůstávají stejná: mám čaj, mám auto.\n\n"
         "Mužská životná jména mají jiný tvar: vidím studenta, kamaráda, muže, tátu. "
         "Nejde tedy jen o konec slova. Přídavné jméno se také mění: "
-        "malá káva–malou kávu, nový student–nového studenta.",
+        "malá káva–malou kávu, nový student–nového studenta. Ve čtvrtém pádě "
+        "jednotného čísla mají ženská jména jako tramvaj a noc stejný tvar "
+        "jako v prvním: vidím tramvaj. Měkké přídavné jméno zde zůstává na -í: "
+        "mám moderní kuchyni.",
         structure="mám / chci / vidím + koho? co?",
         rules=[
             "U mužských jmen rozlišuj životnost: vidím stůl, ale vidím studenta.",
@@ -316,6 +333,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample("Mám vodu a čaj."),
             GrammarExample("Vidím kamaráda."),
             GrammarExample("Chci malou kávu."),
+            GrammarExample(
+                "Bolí mě hlava.",
+                note="Mě je čtvrtý pád zájmena já. Pro základní popis potíží "
+                "se nauč celý výraz Bolí mě…",
+            ),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -482,9 +504,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Spojování vět",
         "Spoj dvě jednoduché informace a nabídni volbu.",
         "A přidává další informaci: Mám čaj a vodu. Ale vyjadřuje rozdíl nebo "
-        "protiklad: Chci jít ven, ale nemám čas. Nebo nabízí možnosti: Chceš čaj, "
-        "nebo kávu? V krátkém výčtu bez zdůrazněného protikladu se před nebo "
-        "čárka obvykle nepíše: Můžete přijít v pondělí nebo v úterý.\n\n"
+        "protiklad: Chci jít ven, ale nemám čas. Nebo nabízí možnosti: Chceš čaj "
+        "nebo kávu? Při prosté nabídce možností čárku obvykle nepíšeme. "
+        "Pokud zdůrazňujeme vzájemné vyloučení možností, můžeme napsat "
+        "Chceš čaj, nebo kávu?\n\n"
         "Začni dvěma krátkými větami. Spojka nemění sama o sobě tvar slovesa "
         "ani nevyžaduje zvláštní slovosled.",
         rules=[

@@ -66,7 +66,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 "b2-unit-2",
             ),
             PhrasebookEntry(
-                "Kad je rekla sutra, mislila je na utorak, jer smo razgovarale u ponedjeljak.",
+                "Kad je rekla „sutra”, mislila je na utorak jer smo razgovarale u ponedjeljak.",
                 "Pojašnjavate datum obećane radnje pri kasnijem prepričavanju.",
                 "neutral",
                 "b2-unit-2",
@@ -169,7 +169,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 "b2-unit-5",
             ),
             PhrasebookEntry(
-                "Odnosi li se riječ samo na cijenu ili na cijelu ponudu?",
+                "Odnosi li se riječ „samo” na cijenu ili na cijelu ponudu?",
                 "Provjeravate koji je dio ponude ograničen prethodnim iskazom.",
                 "neutral",
                 "b2-unit-5",

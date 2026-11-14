@@ -93,7 +93,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
         [
             PhrasebookEntry(
                 "Ce faci?",
-                "Întrebare familiară despre activitatea de acum.",
+                "Întrebare familiară despre activitatea de acum; poate fi și un salut.",
                 "informal",
                 "a1-unit-3",
             ),

@@ -87,8 +87,8 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "ro-v-a1-002",
         "vocabulary",
         "A1",
-        "Vrei să scrii numele pe hârtie. Ce ceri?",
-        ["Un pix.", "Un scaun.", "O cheie.", "Un ceas."],
+        "Ai o foaie de hârtie, dar nu ai cu ce să scrii numele pe ea. Ce ceri?",
+        ["Un pix.", "Un dosar.", "Un plic.", "Un caiet."],
         "Un pix.",
     ),
     AssessmentQuestion(
@@ -120,7 +120,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "vocabulary",
         "A1",
         "Lucrezi mult și vrei să dormi. Cum descrii starea ta?",
-        ["Sunt liber.", "Sunt aproape.", "Sunt rece.", "Sunt obosit."],
+        ["Sunt vesel.", "Sunt grăbit.", "Sunt odihnit.", "Sunt obosit."],
         "Sunt obosit.",
     ),
     AssessmentQuestion(
@@ -164,8 +164,8 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "Radu este în oraș seara și vrea să mănânce. Unde poate merge?",
         [
             "La cafeneaua de lângă gară.",
-            "La gară, pentru cafea.",
-            "La hotel, pentru un bilet.",
+            "La restaurantul de lângă gară.",
+            "La cafeneaua de lângă hotel.",
             "La restaurantul de lângă hotel.",
         ],
         "La restaurantul de lângă hotel.",
@@ -239,12 +239,12 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "Citește mesajul: «Îmi pare rău, nu pot să vin la curs astăzi. Am febră "
         "și vreau să stau acasă. Citesc lecția mâine.» Ce spune persoana?",
         [
-            "Are febră și stă acasă.",
-            "Vine la curs și citește acasă seara.",
+            "Are febră și nu vine la curs.",
+            "Vine la curs, dar nu citește lecția.",
             "Nu vine pentru că lucrează astăzi.",
-            "Merge mâine la curs cu un medic.",
+            "Citește lecția astăzi și vine mâine.",
         ],
-        "Are febră și stă acasă.",
+        "Are febră și nu vine la curs.",
         "ro-modal-sa-a1",
     ),
 ]

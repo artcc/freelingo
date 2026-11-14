@@ -172,7 +172,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
                 "b2-unit-6",
             ),
             PhrasebookEntry(
-                "En arvostele yritystäsi, vaan ehdotan toista tapaa tehdä tämä.",
+                "En arvostele sinua, vaan ehdotan toista tapaa tehdä tämä.",
                 "Erotat työtapaa koskevan palautteen henkilöön kohdistuvasta arvostelusta.",
                 "neutral",
                 "b2-unit-6",
@@ -186,7 +186,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
         "⚖️",
         [
             PhrasebookEntry(
-                "Toisaalta säästämme rahaa, mutta samalla palvelu vaikeutuu osalle käyttäjistä.",
+                "Toisaalta säästämme rahaa, mutta samalla palvelun käyttö vaikeutuu osalle käyttäjistä.",
                 "Tuot kustannuskeskusteluun saavutettavuuden näkökulman.",
                 "neutral",
                 "b2-unit-7",

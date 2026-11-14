@@ -12,7 +12,7 @@ C2_UNITS: list[CurriculumUnit] = [
         ["fi_uncertainty_c2"],
         ["reading", "grammar", "listening", "vocabulary", "speaking", "writing", "review"],
         [
-            "Erotan epävarmuuden tapahtumasta epävarmuudesta sitä koskevassa selityksessä.",
+            "Erotan tapahtuman toteutumista koskevan epävarmuuden sen syytä koskevasta epävarmuudesta.",
             "Muotoilen potentiaalilla esitetyn arvion arkisemmin säilyttäen sen varmuusasteen.",
             "Arvioin mennyttä ratkaisua erottamalla silloisen tiedon myöhemmästä tiedosta.",
         ],
@@ -78,7 +78,7 @@ C2_UNITS: list[CurriculumUnit] = [
         [
             "Tunnustan osuvan vastaväitteen ja täsmennän erimielisyyden todellisen kohdan.",
             "Erotan toisen sanojen neutraalin toistamisen epäilevästä kaiuttamisesta.",
-            "Korjaan kärjistyneen keskustelun paljastamalla sen ristiriitaiset oletukset.",
+            "Palautan kärjistyneen keskustelun asiaan täsmentämällä ristiriitaiset oletukset.",
         ],
         2,
         "c2-unit-4",

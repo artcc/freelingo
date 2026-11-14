@@ -61,7 +61,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-g-a1-007",
         "grammar",
         "A1",
-        "Petr a Eva jsou v práci. Doma tedy ___.",
+        "Petr a Eva jsou teď v obchodě. Doma tedy ___.",
         ["není", "nejsem", "nejsi", "nejsou"],
         "nejsou",
         "cs-negation-a1",
@@ -96,7 +96,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "vocabulary",
         "A1",
         "Pavel a Eva mají stejné rodiče. Pavel říká: Eva je moje ___.",
-        ["sestra", "matka", "učitelka", "dcera"],
+        ["sestra", "matka", "babička", "dcera"],
         "sestra",
     ),
     AssessmentQuestion(
@@ -120,7 +120,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "vocabulary",
         "A1",
         "Je horko a potřebujete se napít vody. Co máte?",
-        ["Hlad.", "Žízeň.", "Čas.", "Rýži."],
+        ["Hlad.", "Žízeň.", "Strach.", "Radost."],
         "Žízeň.",
     ),
     AssessmentQuestion(
@@ -166,12 +166,12 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-r-a1-003",
         "reading",
         "A1",
-        "Petr píše: „Jsem na nádraží. Nemám jízdenku. Vlak jede za dvacet minut.“ "
-        "Co Petr potřebuje udělat před cestou?",
+        "Petr píše: „Jsem na nádraží. Nemám jízdenku. Jdu k pokladně. "
+        "Vlak jede za dvacet minut.“ Proč jde Petr k pokladně?",
         [
-            "Objednat si večeři.",
-            "Vrátit knihu.",
-            "Koupit si nový telefon.",
+            "Vrátit jízdenku na vlak.",
+            "Vyzvednout si zavazadlo.",
+            "Změnit čas svého odjezdu.",
             "Zaplatit za cestu vlakem.",
         ],
         "Zaplatit za cestu vlakem.",
@@ -217,9 +217,9 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-r-a1-007",
         "reading",
         "A1",
-        "Na lístku je: „Káva 40 Kč, čaj 30 Kč, voda 20 Kč.“ "
+        "Na lístku je: „Káva 40 Kč, čaj 30 Kč, studená voda 20 Kč, studený džus 25 Kč.“ "
         "Máte 30 Kč a chcete si koupit jeden teplý nápoj. Co si můžete dát?",
-        ["Kávu a vodu.", "Čaj.", "Kávu.", "Čaj a vodu."],
+        ["Vodu.", "Čaj.", "Kávu.", "Džus."],
         "Čaj.",
     ),
     AssessmentQuestion(

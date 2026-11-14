@@ -165,9 +165,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Stručnjakinja kaže: „Prema dosadašnjim mjerenjima uređaj troši manje, "
         "ali ispitivanje još nije završeno.” Što dodaje drugim dijelom rečenice?",
         [
-            "Jamstvo konačnog rezultata.",
-            "Uputu za uporabu.",
-            "Opoziv svih podataka.",
+            "Potvrdu konačnog rezultata.",
+            "Objašnjenje uzroka uštede.",
+            "Ispravak ranijeg mjerenja.",
             "Ogradu uz procjenu.",
         ],
         "Ogradu uz procjenu.",
@@ -277,10 +277,10 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Hoće li se početak rada odgoditi do uplate cijelog iznosa.",
             "Želi li dobavljač zamijeniti popust duljim rokom isporuke.",
-            "Hoće li ugovor zaštititi unaprijed uplaćeni iznos ako roba ne stigne.",
+            "Hoće li ugovor zaštititi unaprijed uplaćeni iznos ako isporuka izostane.",
             "Pristaje li kupac na nižu cijenu bez prethodne uplate.",
         ],
-        "Hoće li ugovor zaštititi unaprijed uplaćeni iznos ako roba ne stigne.",
+        "Hoće li ugovor zaštititi unaprijed uplaćeni iznos ako isporuka izostane.",
         "hr-necessary-conditions-b2",
     ),
     AssessmentQuestion(
@@ -345,9 +345,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "Ivan: Ne, ostanimo. Predugo sam čekao da sad odustanem.” "
         "Što Nika postiže svojim pitanjem?",
         [
-            "Provjerava datum Ivanova odlaska u mirovinu zbog službenog zahtjeva.",
+            "Provjerava može li Ivan ostati u redu dok ona ode obaviti drugi posao.",
             "Razdvaja moguću namjeru odlaska od pretjeranog izraza nezadovoljstva.",
-            "Traži Ivanovu potvrdu da će ured ostati otvoren do večeri.",
+            "Traži procjenu preostalog čekanja kako bi mogla isplanirati ostatak dana.",
             "Zaključuje da je Ivan već odustao i traži razlog njegove odluke.",
         ],
         "Razdvaja moguću namjeru odlaska od pretjeranog izraza nezadovoljstva.",

@@ -67,7 +67,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Aș vrea să confirmăm ora înainte să rezervăm.",
-                "Ceri stabilirea unui detaliu înaintea unei plăți.",
+                "Ceri stabilirea unui detaliu înaintea unei rezervări.",
                 "neutral",
                 "b1-unit-2",
             ),
@@ -111,7 +111,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Mi-l poți trimite din nou? Nu găsesc mesajul.",
-                "Ceri retrimiterea unui fișier deja identificat în discuție.",
+                "Ceri retrimiterea unui mesaj pe care nu îl mai găsești.",
                 "neutral",
                 "b1-unit-3",
             ),

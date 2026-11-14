@@ -49,7 +49,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "grammar",
         "A1",
         "Vælg tillægsordets form: De bor i et ___ hus.",
-        ["store", "stor", "stort", "størrelsen"],
+        ["store", "stor", "stort", "størst"],
         "stort",
         "da-adjectives-a1",
     ),

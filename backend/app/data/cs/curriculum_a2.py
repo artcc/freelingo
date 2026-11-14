@@ -14,6 +14,7 @@ A2_UNITS: list[CurriculumUnit] = [
         [
             "Zeptám se na cestu a popíšu, odkud a kam jedu.",
             "Rozliším místo a směr pomocí běžných předložek.",
+            "Popíšu místa i v běžných spojeních množného čísla, například v hotelech.",
             "Rozumím základním informacím o spojení a přestupu.",
         ],
         2,
@@ -30,6 +31,7 @@ A2_UNITS: list[CurriculumUnit] = [
             "Popíšu vybavení bytu a cestu k sousedovi.",
             "Řeknu, komu pomáhám a s kým bydlím.",
             "Nahradím známou osobu vhodným tvarem zájmena.",
+            "Řeknu, komu ze sousedů pomáhám a s kterými lidmi bydlím.",
         ],
         2,
         "a2-unit-1",
@@ -45,7 +47,7 @@ A2_UNITS: list[CurriculumUnit] = [
         [
             "Vyprávím krátce o minulém víkendu.",
             "Použiji minulý čas podle osoby, rodu a čísla.",
-            "Seřadím události a uvedu, kdy se staly.",
+            "Seřadím události a uvedu, kdy se staly, včetně jednoduchého data.",
         ],
         2,
         "a2-unit-2",
