@@ -17,9 +17,9 @@ Active-language lifecycle, plan isolation, and language deletion belong to
 
 ## Supported codes
 
-The application recognizes 19 study languages, counting each regional variant separately:
+The application recognizes 20 study languages, counting each regional variant separately:
 `en-GB`, `en-US`, `cs-CZ`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-FR`, `hr-HR`, `it-IT`, `nl-NL`,
-`pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ru-RU`, `sv-SE`, and `zh-CN`.
+`pl-PL`, `pt-BR`, `pt-PT`, `ja-JP`, `ko-KR`, `ro-RO`, `ru-RU`, `sv-SE`, and `zh-CN`.
 
 Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the same canonical set.
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
@@ -103,7 +103,8 @@ Prompt builders receive an explicit target-language name and shared overlay. Cur
 British/American English, Spanish from Spain, Brazilian and European Portuguese, French from France, German from
 Germany, standard Italian, standard Dutch from the Netherlands, standard Polish, contemporary Russian in Cyrillic, Japanese kanji/kana, South Korean Hangul, and Mainland
 Mandarin with simplified characters, standard Swedish from Sweden, standard Danish from Denmark,
-standard Czech from Czechia, standard Croatian from Croatia, and standard Finnish from Finland.
+standard Czech from Czechia, standard Croatian from Croatia, standard Finnish from Finland, and
+standard Romanian from Romania.
 
 Chat, voice, assessment, lessons, flashcards, Listening, and Reading consume these instructions where
 their prompt builders require them. There is no legacy `american`/`british` conversion contract.
@@ -183,8 +184,20 @@ vowel quality, meaningful vowel and consonant length and initial word stress. Op
 `gemini-3.8-flash-tts` and Whisper support Finnish; Gemini `gemini-3.8-flash-lite-tts` does not list
 Finnish support, and the English-only Kokoro voice configuration is not suitable for this target.
 
+`ro-RO` resolves to the independent `backend/app/data/ro/` package; `ro` is its internal dispatcher,
+capability and prompt alias, not an accepted account target code. Romanian uses Latin text with
+ă, â, î, ș and ț, comma-below ș/ț, visible word spacing, word-based comprehension lengths, ISO `ro`
+recognition and the Romania flag. Its curriculum develops spelling, pronunciation, gender, agreement
+and suffixed definite articles before extended case, tense, conjunctive, conditional and clitic
+contrasts, then advanced interaction and discourse. Generated content uses contemporary Romanian
+from Romania, distinguishes standard, regional and conversational usage, and preserves participants,
+scope and certainty in reformulations. Shared speech guidance requests Romanian vowel distinctions,
+native r and lexical stress. OpenAI TTS, Gemini `gemini-3.8-flash-tts` and
+`gemini-3.8-flash-lite-tts`, and Whisper list Romanian support; the English-only Kokoro voice
+configuration is not suitable for this target.
+
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
-other current languages, including Croatian, Czech, Danish, Finnish, Polish, Russian and Swedish.
+other current languages, including Croatian, Czech, Danish, Finnish, Polish, Romanian, Russian and Swedish.
 
 ## Speech recognition
 

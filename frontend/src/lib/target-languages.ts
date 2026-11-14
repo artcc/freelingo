@@ -52,6 +52,7 @@ export const TARGET_LANGUAGE_CAPABILITIES: Record<
   'cs-CZ': LATIN_LANGUAGE_CAPABILITY,
   'hr-HR': LATIN_LANGUAGE_CAPABILITY,
   'fi-FI': LATIN_LANGUAGE_CAPABILITY,
+  'ro-RO': LATIN_LANGUAGE_CAPABILITY,
   'ru-RU': {
     script: 'cyrillic',
     fontClass: 'font-target-cyrillic',
@@ -199,6 +200,13 @@ export const TARGET_LANGUAGE_CATALOG: TargetLanguage[] = [
     nameEn: 'Finnish',
     flagPath: '/flags/finland.jpg',
     iso639: 'fi',
+  }),
+  withCapabilities({
+    code: 'ro-RO',
+    name: 'Română',
+    nameEn: 'Romanian (Romania)',
+    flagPath: '/flags/romania.jpg',
+    iso639: 'ro',
   }),
   withCapabilities({
     code: 'ja-JP',

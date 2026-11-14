@@ -23,6 +23,15 @@ ANTHROPIC_SYSTEM_ONLY_TRIGGER = "Generate the content as specified."
 TUTOR_DISPLAY_NAME = "Lingu"
 
 _LANGUAGE_PROMPT_OVERLAYS: dict[str, str] = {
+    "ro-RO": """
+Language-specific guidance:
+- Use contemporary standard Romanian from Romania. Preserve ă, â, î, ș and ț with comma-below ș/ț, current â/î spelling and meaningful hyphens. Distinguish standard, conversational and regional usage without treating every valid alternative as an error or substituting another Romance language.
+- Build from vowel quality, lexical stress and spelling to masculine, feminine and neuter nouns, plurals, suffixed definite articles and agreement. Teach genitive/dative forms, possessive articles al/a/ai/ale and demonstratives through explicit referents and practical contexts.
+- Teach present, compound perfect, imperfect, pluperfect, future, conjunctive with să, conditional and imperative with their actual uses. Do not impose English tense backshift on reported speech; distinguish literary and regional simple-perfect usage from ordinary compound-perfect narration.
+- Develop direct-object marking with pe, clitic doubling and clitic order gradually, with context for person, definiteness and register. Preserve reflexive forms, negative concord and agreement; do not equate Romanian clitic placement with Spanish or Italian rules. Use tu or dumneavoastră consistently with the relationship.
+- Progress from everyday interaction to negotiation, mediation, humour and precise reformulation. Preserve participants, temporal reference, source attribution, negation scope, conditions and degree of certainty. Placement questions require enough context for exactly one accepted answer.
+- Use varied Romanian settings, including everyday services, public transport, libraries, regional life, literature, cinema, music, the Carpathians and the Danube Delta. Respect linguistic diversity, distinguish Romanian from Romani and avoid stereotypes or conflating Romanian-speaking communities with a single nationality.
+""".strip(),
     "fi-FI": """
 Language-specific guidance:
 - Use contemporary standard Finnish as used in Finland. Preserve ä and ö, meaningful single and double vowels and consonants, and natural compound spelling. Distinguish standard written Finnish, everyday spoken Finnish and regional varieties without treating valid conversational forms as universal errors.
@@ -171,6 +180,7 @@ Language-specific guidance:
 }
 
 _LANGUAGE_PROMPT_OVERLAY_ALIASES: dict[str, str] = {
+    "ro": "ro-RO",
     "fi": "fi-FI",
     "hr": "hr-HR",
     "cs": "cs-CZ",

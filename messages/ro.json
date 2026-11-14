@@ -106,6 +106,7 @@
       "cs-CZ": "Ahoj!",
       "hr-HR": "Bok!",
       "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1503,6 +1504,9 @@
     "supportedLanguages": "Limbi disponibile"
   },
   "targetLanguages": {
+    "ro-RO": "Română (România)",
+    "ro": "Română",
+    "ro-RO-description": "Limba română vorbită în România.",
     "fi-FI": "Finlandeză",
     "fi": "Finlandeză",
     "fi-FI-description": "Finlandeza vorbită în Finlanda.",

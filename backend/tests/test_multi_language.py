@@ -404,6 +404,7 @@ class TestLanguageAPI:
         assert "cs-CZ" in data["all_supported_languages"]
         assert "hr-HR" in data["all_supported_languages"]
         assert "fi-FI" in data["all_supported_languages"]
+        assert "ro-RO" in data["all_supported_languages"]
         assert "zh-CN" in data["all_supported_languages"]
 
     @pytest.mark.asyncio
@@ -498,6 +499,54 @@ class TestLanguageAPI:
         assert user.target_language == ("fi-FI" if accepted else "en-GB")
 
     @pytest.mark.asyncio
+    @pytest.mark.parametrize("enabled", [False, True])
+    async def test_romanian_availability_follows_operator_configuration(
+        self, client, db_session, monkeypatch, enabled
+    ):
+        from app.core.config import settings
+
+        _user, headers = await _make_user(db_session, language="en-GB")
+        available = ["en-GB", "ro-RO"] if enabled else ["en-GB"]
+        monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", available + ["ro", "ro-ro"])
+
+        response = await client.get("/api/languages", headers=headers)
+
+        assert response.status_code == 200
+        assert response.json()["all_supported_languages"] == available
+        added = await client.post(
+            "/api/languages", headers=headers, json={"target_language": "ro-RO"}
+        )
+        assert added.status_code == (201 if enabled else 422)
+        active = await client.get("/api/languages/active", headers=headers)
+        assert active.status_code == 200
+        assert active.json()["target_language"] == ("ro-RO" if enabled else "en-GB")
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("enabled", [False, True])
+    @pytest.mark.parametrize("language", ["ro", "ro-ro", "ro-RO"])
+    async def test_romanian_switch_requires_canonical_enabled_code(
+        self, client, db_session, monkeypatch, enabled, language
+    ):
+        from app.core.config import settings
+
+        user, headers = await _make_user(db_session, language="en-GB")
+        await _add_language(db_session, user.id, "ro-RO")
+        available = ["en-GB", "ro-RO"] if enabled else ["en-GB"]
+        monkeypatch.setattr(settings, "AVAILABLE_TARGET_LANGUAGES", available)
+        accepted = enabled and language == "ro-RO"
+
+        response = await client.put(
+            "/api/languages/active", headers=headers, json={"target_language": language}
+        )
+
+        assert response.status_code == (200 if accepted else 422)
+        active = await client.get("/api/languages/active", headers=headers)
+        assert active.status_code == 200
+        assert active.json()["target_language"] == ("ro-RO" if accepted else "en-GB")
+        await db_session.refresh(user)
+        assert user.target_language == ("ro-RO" if accepted else "en-GB")
+
+    @pytest.mark.asyncio
     async def test_remove_language_cascades(self, client, db_session):
         """Language deletion removes scoped data but preserves global memories."""
         user, headers = await _make_user(db_session)
@@ -558,7 +607,21 @@ class TestLanguageAPI:
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "language",
-        ["xx-XX", "ru", "ru-ru", "da", "da-dk", "cs", "cs-cz", "hr", "hr-hr", "fi", "fi-fi"],
+        [
+            "xx-XX",
+            "ru",
+            "ru-ru",
+            "da",
+            "da-dk",
+            "cs",
+            "cs-cz",
+            "hr",
+            "hr-hr",
+            "fi",
+            "fi-fi",
+            "ro",
+            "ro-ro",
+        ],
     )
     async def test_supported_languages_validation(self, client, db_session, language):
         """POST /api/languages requires a supported canonical target code."""
@@ -597,7 +660,7 @@ class TestLanguageAPI:
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
-        "language", ["nl-NL", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI"]
+        "language", ["nl-NL", "ru-RU", "sv-SE", "da-DK", "cs-CZ", "hr-HR", "fi-FI", "ro-RO"]
     )
     async def test_add_plan_switch_and_remove_preserve_other_language(
         self, client, db_session, language

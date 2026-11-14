@@ -112,6 +112,7 @@ def test_language_package_meets_per_level_coverage_minimums(language, level, min
         "cs-CZ",
         "hr-HR",
         "fi-FI",
+        "ro-RO",
     ],
 )
 def test_reviewed_grammar_explanations_have_renderable_line_breaks(language) -> None:
@@ -201,6 +202,8 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     import app.data.pl.vocabulary as pl_vocabulary
     import app.data.pt.curriculum as pt_curriculum
     import app.data.pt.vocabulary as pt_vocabulary
+    import app.data.ro.curriculum as ro_curriculum
+    import app.data.ro.vocabulary as ro_vocabulary
     import app.data.ru.curriculum as ru_curriculum
     import app.data.ru.vocabulary as ru_vocabulary
     import app.data.zh.curriculum as zh_curriculum
@@ -221,6 +224,7 @@ def test_curriculum_vocab_refs_all_defined() -> None:
     )
     _check_language_vocab_refs("Chinese", zh_curriculum.CURRICULUM, zh_vocabulary.VOCABULARY_SETS)
     _check_language_vocab_refs("Russian", ru_curriculum.CURRICULUM, ru_vocabulary.VOCABULARY_SETS)
+    _check_language_vocab_refs("Romanian", ro_curriculum.CURRICULUM, ro_vocabulary.VOCABULARY_SETS)
 
 
 def test_grammar_related_refs_all_defined() -> None:
@@ -248,6 +252,7 @@ def test_vocabulary_export_completeness() -> None:
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ro.vocabulary import VOCABULARY_SETS as ro_sets
     from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
@@ -262,6 +267,7 @@ def test_vocabulary_export_completeness() -> None:
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ro", ro_sets),
         ("ru", ru_sets),
         ("zh", zh_sets),
     ]:
@@ -310,6 +316,7 @@ def test_vocabulary_id_uniqueness() -> None:
     from app.data.ko.vocabulary import VOCABULARY_SETS as ko_sets
     from app.data.pl.vocabulary import VOCABULARY_SETS as pl_sets
     from app.data.pt.vocabulary import VOCABULARY_SETS as pt_sets
+    from app.data.ro.vocabulary import VOCABULARY_SETS as ro_sets
     from app.data.ru.vocabulary import VOCABULARY_SETS as ru_sets
     from app.data.zh.vocabulary import VOCABULARY_SETS as zh_sets
 
@@ -324,6 +331,7 @@ def test_vocabulary_id_uniqueness() -> None:
         ("ja", ja_sets),
         ("ko", ko_sets),
         ("pt", pt_sets),
+        ("ro", ro_sets),
         ("ru", ru_sets),
         ("zh", zh_sets),
     ]:

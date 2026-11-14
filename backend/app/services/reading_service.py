@@ -64,6 +64,12 @@ _TOPICS_BY_LEVEL: dict[str, list[str]] = {
 }
 
 _CULTURAL_TOPICS: dict[str, list[str]] = {
+    "ro": [
+        "daily life, public transport, libraries and local services in Romania",
+        "Romanian literature, cinema, theatre, music and contemporary regional cultural life",
+        "everyday life and linguistic diversity in Bucharest, Transylvania, Banat and Moldova in Romania",
+        "the Carpathians, the Danube Delta and Romanian conservation and sustainable tourism debates",
+    ],
     "fi": [
         "daily life, public transport, libraries and local services in Finland",
         "Finnish literature, music, cinema, design and contemporary regional cultural life",

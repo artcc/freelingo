@@ -22,6 +22,7 @@ LANGUAGE_CASES = [
     ("cs-CZ", "cs"),
     ("hr-HR", "hr"),
     ("fi-FI", "fi"),
+    ("ro-RO", "ro"),
     ("ja-JP", "ja"),
     ("ko-KR", "ko"),
     ("pt-BR", "pt"),
@@ -135,16 +136,18 @@ async def test_stt_rejects_invalid_study_plan_id(
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("target_language", ["it-IT", "ro-RO"])
 async def test_stt_rejects_study_plan_owned_by_another_user(
     client,
     test_user,
     admin_user,
     db_session,
     mock_stt_service,
+    target_language,
 ) -> None:
     _, headers = test_user
     other_user, _ = admin_user
-    other_plan = await _make_plan(db_session, other_user.id, "it-IT")
+    other_plan = await _make_plan(db_session, other_user.id, target_language)
 
     response = await client.post(
         "/api/stt",

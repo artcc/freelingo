@@ -106,6 +106,7 @@
       "cs-CZ": "Ahoj!",
       "hr-HR": "Bok!",
       "fi-FI": "Hei!",
+      "ro-RO": "Bună!",
       "en-US": "Hello!",
       "en-GB": "Hello!",
       "de-DE": "Hallo!",
@@ -1503,6 +1504,9 @@
     "supportedLanguages": "Beschikbare talen"
   },
   "targetLanguages": {
+    "ro-RO": "Roemeens (Roemenië)",
+    "ro": "Roemeens",
+    "ro-RO-description": "Roemeens zoals gesproken in Roemenië.",
     "fi-FI": "Fins",
     "fi": "Fins",
     "fi-FI-description": "Fins zoals gesproken in Finland.",

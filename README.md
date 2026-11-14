@@ -234,7 +234,7 @@ and [.env.example](.env.example).
 
 ### Study languages
 
-Choose from 19 study languages, counting each regional variant separately, and learn one or several
+Choose from 20 study languages, counting each regional variant separately, and learn one or several
 side by side. Each has its own A1–C2 curriculum, placement test, grammar reference, vocabulary and
 phrasebook.
 
@@ -252,6 +252,7 @@ phrasebook.
 - **Korean:** South Korea (`ko-KR`).
 - **Polish** (`pl-PL`).
 - **Portuguese:** Brazilian (`pt-BR`) and European (`pt-PT`).
+- **Romanian:** Romania (`ro-RO`).
 - **Russian** (`ru-RU`).
 - **Spanish:** Spain (`es-ES`).
 - **Swedish:** Sweden (`sv-SE`).

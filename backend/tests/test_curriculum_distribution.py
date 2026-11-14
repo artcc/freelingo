@@ -44,6 +44,7 @@ LANGUAGES = (
     "cs-CZ",
     "hr-HR",
     "fi-FI",
+    "ro-RO",
     "pt-BR",
     "pt-PT",
     "ja-JP",
