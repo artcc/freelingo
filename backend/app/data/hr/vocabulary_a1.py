@@ -195,7 +195,7 @@ A1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry("pisati", "verb", "Bilježiti riječi slovima.", "Pišem svoje ime."),
             VocabularyEntry(
-                "slušati", "verb", "Usmjeriti pozornost na zvuk ili govor.", "Slušam učiteljicu."
+                "slušati", "verb", "Usmjeravati pozornost na zvuk ili govor.", "Slušam učiteljicu."
             ),
             VocabularyEntry(
                 "govoriti", "verb", "Izražavati se riječima naglas.", "Govorite li hrvatski?"
@@ -553,7 +553,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "bolest",
                 "noun",
-                "Stanje u kojem tijelo ili um ne funkcionira zdravo.",
+                "Zdravstveni problem zbog kojeg se loše osjećamo ili tijelo ne radi kako treba.",
                 "Gripa je česta bolest.",
             ),
             VocabularyEntry("zdrav", "adjective", "Koji nije bolestan.", "Danas sam zdrav."),

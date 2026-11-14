@@ -12,15 +12,21 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Monissa sanoissa k, p ja t vaihtelevat taivutuksessa. Tavallisia pareja ovat "
         "kk–k, pp–p ja tt–t: pankki–pankin, kauppa–kaupan, matto–maton. "
         "Myös t–d, p–v ja k:n kato ovat tavallisia: katu–kadun, lupa–luvan, "
-        "jalka–jalan. Verbeissä on esimerkiksi ottaa–otan–ottaa. "
+        "jalka–jalan. Konsonanttiyhtymissä tavataan esimerkiksi nk–ng, mp–mm ja nt–nn: "
+        "Helsinki–Helsingin, kampa–kamman, ranta–rannan. Myös lt–ll ja rt–rr ovat "
+        "tavallisia: silta–sillan, virta–virran. Verbeissä on esimerkiksi ottaa–otan–ottaa. "
         "Sääntö ei koske jokaista k:ta, p:tä tai t:tä. Suuntakaan ei ole aina sama: "
         "ottaa–otan sisältää heikkenemisen, mutta tavata–tapaan vahvistumisen. "
         "Opettele nominin perusmuoto ja genetiivi sekä verbin perusmuoto ja "
-        "persoonamuodot yhdessä.\n\n"
+        "persoonamuodot yhdessä. Kauppa-sanan yksikön genetiivissä ja inessiivissä on "
+        "heikko aste, illatiivissa vahva: kaupan, kaupassa, kauppaan. Älä siis käytä "
+        "genetiivin heikkoa vartaloa kaikissa sijoissa. Ottaa-verbin minä-muodossa otan "
+        "ja kieltomuodossa en ota on heikko aste, hän-muodossa ottaa vahva aste.\n\n"
         "Myös muu vartalo voi muuttua. Tavallisia sarjoja ovat huone–huoneen–huonetta, "
         "nainen–naisen–naista ja uusi–uuden–uutta. I-loppuiset sanat eivät kaikki taivu "
         "samoin: pankki–pankin, mutta ovi–oven. Nämä vartalonmuutokset eivät kaikki ole "
-        "astevaihtelua. Tarkista uuden sanan taivutusmalli ennen päätteen lisäämistä.",
+        "astevaihtelua. Muita tuttuja malleja ovat puhelin–puhelimen–puhelinta ja "
+        "sairas–sairaan–sairasta. Tarkista uuden sanan taivutusmalli ennen päätteen lisäämistä.",
         rules=[
             "Älä muuta kaikkia konsonantteja saman mallin mukaan.",
             "Genetiivi auttaa löytämään monen nominin taivutusvartalon.",
@@ -264,7 +270,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "En lue kirjaa. Joidenkin verbien kohde on muutenkin partitiivissa, esimerkiksi "
         "odotan bussia. Kokonaisen kohteen muoto riippuu myös lauserakenteesta; "
         "käskyssä sanotaan Ota kirja. Tätä harjoitellaan käskyjen yhteydessä. "
-        "Persoonapronominien kokonaiset kohdemuodot ovat minut, sinut, hänet, meidät, teidät, heidät.",
+        "Persoonapronominien kokonaiset kohdemuodot ovat minut, sinut, hänet, meidät, teidät, heidät. "
+        "Totaaliobjekti ei siis tarkoita aina n-päätettä: monikossa sanotaan ostan liput, "
+        "mutta kielteisessä lauseessa en osta lippuja.",
         rules=[
             "Valitse muoto merkityksen ja verbin perusteella.",
             "Tämän tason tavallinen aktiivinen lause: ostan lipun; en osta lippua.",

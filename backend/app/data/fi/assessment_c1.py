@@ -218,12 +218,12 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "kerrottiin osan saapuneen. Vasta tiskillä selvisi, että asennusaika piti varata erikseen.» "
         "Mistä kertojan väärinkäsitys syntyi?",
         [
-            "Hän tulkitsi varaosan saatavuutta koskevan tiedon merkiksi työn valmistumisesta.",
+            "Hän oletti varaosan saapumisen merkitsevän, että laitteen voisi jo noutaa.",
             "Hän tulkitsi asennusajan vahvistuksen merkiksi varaosan tilauksen peruuntumisesta.",
             "Hän oletti korjaamon viestin koskevan toista laitetta kuin sitä, jonka oli jättänyt sinne.",
             "Hän oletti varaosan puuttuvan, vaikka korjaamo oli ilmoittanut asennuksen alkaneen.",
         ],
-        "Hän tulkitsi varaosan saatavuutta koskevan tiedon merkiksi työn valmistumisesta.",
+        "Hän oletti varaosan saapumisen merkitsevän, että laitteen voisi jo noutaa.",
     ),
     AssessmentQuestion(
         "fi-r-c1-004",
@@ -236,9 +236,9 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Ilmoitetaan pidennetyt aukioloajat ja pyydetään huoltoyhtiöltä lasku jälkikäteen.",
             "Pyydetään huoltoyhtiötä vahvistamaan seuranta, jonka se jo lupasi toteuttaa.",
-            "Sovitaan seurannan vastuuhenkilö, jotta huoltoyhtiö voi tehdä ehdollisen selvityksensä.",
+            "Sovitaan seurannan vastuuhenkilö ja toimitetaan tulokset kustannusten selvittämistä varten.",
             "Tilataan huoltoyhtiöltä lisätunnit, joiden kustannukset työryhmä on hyväksynyt.",
         ],
-        "Sovitaan seurannan vastuuhenkilö, jotta huoltoyhtiö voi tehdä ehdollisen selvityksensä.",
+        "Sovitaan seurannan vastuuhenkilö ja toimitetaan tulokset kustannusten selvittämistä varten.",
     ),
 ]

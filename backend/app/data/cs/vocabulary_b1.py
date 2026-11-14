@@ -477,7 +477,7 @@ B1_SETS: list[VocabularySet] = [
                 "doložit",
                 "verb",
                 "Prokázat určitou skutečnost vhodným dokumentem nebo důkazem.",
-                "K žádosti musíte doložit potvrzení o příjmu.",
+                "Výši příjmu musíte doložit potvrzením od zaměstnavatele.",
             ),
             VocabularyEntry(
                 "platnost",
@@ -606,7 +606,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "úspora",
                 "noun",
-                "Množství peněz nebo jiných prostředků, které se podařilo nevyužít.",
+                "Snížení výdajů nebo spotřeby oproti dřívější či očekávané hodnotě.",
                 "Roční úspora vody byla větší, než jsme čekali.",
             ),
             VocabularyEntry(

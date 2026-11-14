@@ -369,7 +369,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "cu atât mai puțin",
                 "phrase",
-                "Într-o măsură și mai redusă, într-o comparație orientată negativ.",
+                "Introduce un caz considerat și mai puțin posibil sau acceptabil "
+                "decât cel deja negat.",
                 "Nu aprob tonul mesajului, cu atât mai puțin atacul la persoană.",
             ),
         ],
@@ -425,7 +426,8 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "a salva aparențele",
                 "phrase",
-                "A păstra o imagine acceptabilă a unei situații în ochii celorlalți.",
+                "A păstra o imagine acceptabilă a unei situații în ochii celorlalți, "
+                "deși realitatea este mai puțin favorabilă.",
                 "Nu vreau doar să salvăm aparențele; vreau să rezolvăm neînțelegerea.",
             ),
             VocabularyEntry(

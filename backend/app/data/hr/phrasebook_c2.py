@@ -136,7 +136,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-4",
             ),
             PhrasebookEntry(
-                "Prepričat ću to običnim riječima, ali ne bih izgubila onu neizvjesnost na kraju.",
+                "Prepričat ću to običnim riječima, ali ne bih htjela izgubiti onu neizvjesnost na kraju.",
                 "Usmeno predstavljanje književnog ulomka prijatelju koji ga nije čitao.",
                 "informal",
                 "c2-unit-4",
@@ -202,7 +202,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
         "🗣️",
         [
             PhrasebookEntry(
-                "Da se vratim na tvoje prvo pitanje: prijevoz imamo, ali vozač još nije potvrđen.",
+                "Da se vratim na tvoje prvo pitanje: vozilo imamo, ali vozač još nije potvrđen.",
                 "Povratak na otvorenu temu nakon nekoliko upadica o smještaju.",
                 "informal",
                 "c2-unit-6",

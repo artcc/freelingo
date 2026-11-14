@@ -683,7 +683,8 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en returret",
                 "noun",
-                "En mulighed for at levere en vare tilbage efter bestemte vilkår.",
+                "En ret til at levere en købt vare tilbage og få pengene tilbage "
+                "efter bestemte vilkår.",
                 "Hvilke regler gælder for returret her?",
             ),
             VocabularyEntry(

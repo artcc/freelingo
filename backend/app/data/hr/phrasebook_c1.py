@@ -29,7 +29,8 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Čula sam to iz druge ruke; provjerit ću prije nego što prenesem dalje.",
-                "Prijateljima prenosite glasinu bez predstavljanja sebe kao neposredne svjedokinje.",
+                "Prijateljima objašnjavate da informaciju znate posredno "
+                "i da je želite provjeriti prije daljnjeg prenošenja.",
                 "informal",
                 "c1-unit-1",
             ),

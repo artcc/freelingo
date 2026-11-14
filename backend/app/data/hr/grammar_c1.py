@@ -140,7 +140,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Samo ako dobijemo dozvolu, otvorit ćemo terasu određuje dozvolu kao nužan uvjet; "
         "ne jamči da drugih zapreka nema. Pristajemo pod uvjetom da preuzmete osiguranje "
         "izriče uvjetovani pristanak. Osim ako uvodi iznimku od najavljenoga postupka, "
-        "pa se njegova odsutnost ne smije zamijeniti prisutnošću.",
+        "pa treba razlikovati slučaj u kojem iznimka vrijedi od onoga u kojem ne vrijedi.",
         rules=[
             "Sačuvajte samo ako pri preoblikovanju nužnog uvjeta.",
             "Razlikujte možemo prihvatiti od prihvatit ćemo.",
@@ -329,7 +329,7 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "hr-scalar-focus-c1",
-        "Samo, čak i i ne toliko koliko: opseg i težište",
+        "„Samo”, „čak i” i „ne toliko… koliko”: opseg i težište",
         "C1",
         "Isticanje i ograničavanje",
         "Odredite na što se odnosi ograničenje ili naglasak prije nego što sažmete poruku.",

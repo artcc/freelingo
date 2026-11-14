@@ -315,7 +315,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en spydighed",
                 "noun",
-                "En skarp bemærkning, der er beregnet på eller opleves som at såre.",
+                "En skarp bemærkning, der skal såre eller bliver opfattet som sårende.",
                 "Hans svar blev opfattet som en spydighed snarere end som et forsøg på humor.",
             ),
             VocabularyEntry(

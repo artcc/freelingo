@@ -247,7 +247,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "usnesení",
                 "noun",
-                "Formálně přijaté rozhodnutí kolektivního orgánu.",
+                "Formálně přijaté rozhodnutí, například zastupitelstva nebo soudu.",
                 "Usnesení zastupitelstva stanoví částku i účel dotace.",
             ),
             VocabularyEntry(

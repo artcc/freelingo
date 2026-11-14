@@ -8,7 +8,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Conjunctivul perfect: o acțiune anterioară",
         "B2",
         "Mod și anterioritate",
-        "Exprimați posibilitatea sau evaluarea unei acțiuni deja petrecute.",
+        "Exprimați posibilitatea sau evaluarea unei acțiuni anterioare.",
         "Conjunctivul perfect are forma să fi urmat de participiu: să fi plecat. "
         "Fi și participiul nu se schimbă după persoană: eu să fi plecat, ei să fi plecat. "
         "Contextul precizează persoana și reperul temporal. Comparați E posibil să plece "
@@ -422,8 +422,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Precizați ce excludeți, ce adăugați și ce corectați.",
         "Poziția lui doar schimbă domeniul restricției: Doar Ana a trimis raportul exclude "
         "alți expeditori; Ana a trimis doar raportul exclude alte obiecte trimise. "
-        "Nu… ci corectează o identificare sau o interpretare. Nici măcar marchează o "
-        "așteptare minimă neîndeplinită și apare într-o construcție negativă.",
+        "Nu… ci corectează o identificare sau o interpretare. Nici măcar evidențiază "
+        "un fapt negativ contrar așteptărilor din context: Nici măcar expertul nu "
+        "a găsit soluția. Apare într-o construcție negativă.",
         rules=[
             "Nu confundați nu doar… ci și, care adaugă, cu nu… ci, care corectează.",
             "Româna folosește concordanța negativă: Nici măcar Ana nu a răspuns.",

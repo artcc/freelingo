@@ -199,8 +199,8 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "ro-r-a1-005",
         "reading",
         "A1",
-        "Citește: «Camera mea are un pat și o masă. Telefonul este pe masă. "
-        "Cărțile sunt pe scaun, lângă pat. Cheile sunt lângă telefon.» "
+        "Citește: «Camera mea are un pat și o masă. Pe masă sunt telefonul și cheile. "
+        "Cărțile sunt pe scaun, lângă pat.» "
         "Unde sunt cheile?",
         ["Pe pat.", "Pe scaun.", "Sub pat.", "Pe masă."],
         "Pe masă.",

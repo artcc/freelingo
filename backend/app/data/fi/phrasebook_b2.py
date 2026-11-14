@@ -35,7 +35,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Saatuani lopulliset luvut päivitän kustannusarvion.",
-                "Kerrot, mikä vaihe edeltää oman työsi valmistumista.",
+                "Kerrot, minkä tiedon tarvitset ennen kustannusarvion päivittämistä.",
                 "neutral",
                 "b2-unit-3",
             ),

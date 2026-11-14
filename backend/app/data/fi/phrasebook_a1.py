@@ -74,7 +74,7 @@ A1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Onpa kaunis koti!",
-                "Vierailijan ystävällinen huomio asunnosta.",
+                "Vierailijan ystävällinen huomio asunnosta valmiina kohteliaisuusilmauksena.",
                 "neutral",
                 "a1-unit-2",
             ),

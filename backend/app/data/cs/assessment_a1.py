@@ -25,7 +25,7 @@ A1_QUESTIONS: list[AssessmentQuestion] = [
         "cs-g-a1-003",
         "grammar",
         "A1",
-        "Doplňte popis jednoho auta: To auto je ___.",
+        "Doplňte spisovný popis jednoho auta: To auto je ___.",
         ["nový", "nové", "nová", "novou"],
         "nové",
         "cs-adjectives-a1",

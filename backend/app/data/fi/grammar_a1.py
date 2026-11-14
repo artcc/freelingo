@@ -103,8 +103,10 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Liitä omistaja tai muu määrite asian nimeen.",
         "Yksikön genetiivin pääte on -n: Aino–Ainon, talo–talon. Se vastaa usein kysymykseen "
         "kenen: Ainon kirja. Genetiivi voi ilmaista myös muuta yhteyttä: talon ovi. "
-        "Pääte liittyy vartaloon, joka voi poiketa perusmuodosta: käsi–käden. "
-        "Opettele tavalliset muodot pareina. Minä-pronominin genetiivi on minun. "
+        "Pääte liittyy vartaloon, joka voi poiketa perusmuodosta: käsi–käden, "
+        "kauppa–kaupan. Kauppa-sanassa pp muuttuu p:ksi; tällaista konsonantin vaihtelua "
+        "kutsutaan astevaihteluksi. Opettele aluksi tutut muodot pareina. "
+        "Minä-pronominin genetiivi on minun. "
         "Huolitellussa yleiskielessä omistus ilmaistaan myös omistusliitteellä: minun nimeni. "
         "Harjoittele aluksi valmiita ilmauksia nimeni ja sinun nimesi.\n\n"
         "Omistusliitteet ovat -ni, -si, -nsa/-nsä, -mme ja -nne: minun kirjani, "
@@ -131,11 +133,13 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "puhumme, puhutte, puhuvat. Vartalon jälkeen tulevat persoonapäätteet. "
         "Kolmannen persoonan yksikössä vokaali usein pitenee. Kaikki verbit eivät taivu "
         "samalla tavalla: syödä–syön–syö, mennä–menen–menee, opiskella–opiskelen–opiskelee. "
-        "Oppimista auttaa perusmuodon ja minä-muodon pari. Preesens voi viitata myös tulevaan, "
+        "Myös haluta–haluan–haluaa ja tarvita–tarvitsen–tarvitsee ovat tavallisia malleja. "
+        "Opettele perusmuoto sekä minä- ja hän-muodot: konsonantti voi vaihtua, kuten "
+        "ottaa–otan–ottaa. Preesens voi viitata myös tulevaan, "
         "kun ajankohta on selvä.",
         structure="puhu-n, puhu-t, puhu-u, puhu-mme, puhu-tte, puhu-vat",
         rules=[
-            "Opettele verbin vartalo minä-muodon avulla.",
+            "Opettele minä- ja hän-muoto yhdessä; niiden vartalot voivat erota toisistaan.",
             "Yleiskielessä he puhuvat, eivät he puhu.",
         ],
         examples=[

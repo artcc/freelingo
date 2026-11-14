@@ -147,7 +147,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "„Nisu svi pristali” poriče opću suglasnost, ali samo po sebi ne govori "
         "koliko je ljudi pristalo. „Nitko nije pristao” isključuje svakoga. "
         "U hrvatskom se niječne zamjenice redovito povezuju s niječnim glagolom: "
-        "nitko nije nije potvrdni iskaz. Kod ispravljanja izraza može se odbaciti "
+        "„Nitko nije pristao” nije potvrdni iskaz. Kod ispravljanja izraza može se odbaciti "
         "naziv ili ocjena, a ne sam događaj.",
         rules=[
             "Iz djelomičnog nijekanja nemojte izvoditi precizan broj pristalih.",
@@ -529,8 +529,8 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample(
-                "Poslala sam mu odgovor. — Njemu sam poslala odgovor, ne njegovoj sestri.",
-                note="Naglašeni oblik omogućuje izričitu suprotnost primatelja.",
+                "Poslala sam mu odgovor. — Njemu sam poslala odgovor.",
+                note="Naglašeni oblik ističe primatelja, ali sam po sebi ne isključuje druge primatelje.",
             ),
             GrammarExample(
                 "Taj se prijedlog, nakon dugog razgovora sa stanarima, pokazao prihvatljivim.",

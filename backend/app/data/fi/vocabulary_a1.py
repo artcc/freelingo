@@ -434,7 +434,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "raha",
                 "noun",
-                "Maksamiseen käytettävä arvo, esimerkiksi kolikot ja setelit.",
+                "Se, millä ostokset maksetaan, esimerkiksi setelit, kolikot tai tilillä oleva summa.",
                 "Minulla ei ole rahaa mukana.",
             ),
             VocabularyEntry(
@@ -599,7 +599,10 @@ A1_SETS: list[VocabularySet] = [
                 "Pysäkki on oikealla puolella.",
             ),
             VocabularyEntry(
-                "suoraan", "adverb", "Eteenpäin ilman kääntymistä.", "Kävelen suoraan asemalle."
+                "suoraan",
+                "adverb",
+                "Eteenpäin kääntymättä; myös ilman kiertotietä tai välipysähdystä.",
+                "Kävelen suoraan asemalle, en käy kaupassa.",
             ),
             VocabularyEntry(
                 "lähellä", "adverb", "Vain lyhyen matkan päässä.", "Kirjasto on lähellä."

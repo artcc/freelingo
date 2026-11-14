@@ -76,8 +76,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "masculinul la singular și ca femininul la plural: un scaun, două scaune.\n\n"
         "Pluralul nu are o singură terminație: casă – case, carte – cărți, "
         "oraș – orașe, telefon – telefoane. Un și o prezintă de obicei ceva nou; "
-        "niște poate introduce un plural nespecificat: niște cărți.",
-        structure="un / o + singular; doi / două / niște + plural",
+        "niște poate introduce un plural nespecificat: niște cărți. Cu un substantiv "
+        "care numește o substanță, niște poate indica o cantitate neprecizată: niște apă.",
+        structure="un / o + singular; doi / două + plural; niște cărți / niște apă",
         rules=[
             "Nu toate substantivele terminate în consoană sunt masculine.",
             "Un scaun este neutru: la plural spunem două scaune.",
@@ -239,8 +240,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Prepoziții",
         "Spunem unde suntem, unde mergem și de unde venim.",
         "În indică adesea interiorul: în casă, în autobuz. La indică un punct sau "
-        "o destinație: la gară, la școală. Din arată ieșirea dintr-un loc: din "
-        "magazin; de la indică punctul de plecare: de la gară.\n\n"
+        "o destinație: la gară, la școală. Din poate indica originea sau ieșirea "
+        "dintr-un loc: Sunt din România. Ies din magazin. De la indică punctul "
+        "de plecare: Vin de la gară.\n\n"
         "Pe și sub localizează obiecte: pe masă, sub scaun. În expresiile simple "
         "fără alte determinări spunem în parc și pe masă, de obicei fără articol "
         "hotărât. Există construcții diferite, pe care le învățăm separat: cu "

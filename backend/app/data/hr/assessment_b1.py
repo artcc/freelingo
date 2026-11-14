@@ -32,7 +32,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "hr-g-b1-003",
         "grammar",
         "B1",
-        "Dopunite: Razgovarao sam sa susjedom Anom ___ sam jučer posudio ljestve.",
+        "Dopunite: Razgovarao sam sa susjedom Anom, ___ sam jučer posudio ljestve.",
         ["kojoj", "koju", "koja", "koje"],
         "kojoj",
         "hr-relative-clauses-b1",
@@ -216,7 +216,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "Pročitajte obavijest: Zahtjevi se predaju do petka. Presliku dokumenta "
         "možete poslati elektronički, a izvornik ćete pokazati pri preuzimanju potvrde. "
         "O datumu preuzimanja obavijestit ćemo vas nakon obrade zahtjeva.\n\n"
-        "Što osoba koja danas ima samo presliku može zaključiti?",
+        "Danas je srijeda. Što osoba koja danas ima samo presliku može zaključiti?",
         [
             "Presliku mora najprije zamijeniti ovjerenim dokumentom.",
             "Izvornik mora poslati elektronički zajedno s preslikom.",

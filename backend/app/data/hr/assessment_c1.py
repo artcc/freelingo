@@ -12,10 +12,10 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Laboratorij je time isključio prijevoz kao mogući izvor onečišćenja.",
             "Laboratorij je potvrdio da je uzorak prije prijevoza bio čist.",
-            "Vrijeme mogućeg onečišćenja još nije utvrđeno tim nalazom.",
+            "Ta rečenica ne potvrđuje ni čistoću uzorka ni vrijeme mogućeg onečišćenja.",
             "Iz nalaza proizlazi da je do onečišćenja došlo tijekom prijevoza.",
         ],
-        "Vrijeme mogućeg onečišćenja još nije utvrđeno tim nalazom.",
+        "Ta rečenica ne potvrđuje ni čistoću uzorka ni vrijeme mogućeg onečišćenja.",
         "hr-negation-scope-c1",
     ),
     AssessmentQuestion(

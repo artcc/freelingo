@@ -30,8 +30,9 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "virhemarginaali",
                 "noun",
-                "Arvio siitä, kuinka paljon mittaus tai arvio voi poiketa oikeasta.",
-                "Ryhmien välinen ero jäi ilmoitetun virhemarginaalin sisään.",
+                "Tilastollisen arvion satunnaista epävarmuutta kuvaava plus–miinus-raja "
+                "ilmoitetulla luottamustasolla; se ei kata kaikkia mahdollisia virhelähteitä.",
+                "Kyselyn kannatusarvio oli 40 prosenttia, ja virhemarginaali oli kolme prosenttiyksikköä.",
             ),
             VocabularyEntry(
                 "syy-yhteys",

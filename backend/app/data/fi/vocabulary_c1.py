@@ -110,7 +110,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "sitoumus",
                 "noun",
-                "Ilmaistu velvollisuus tai lupaus toimia tietyllä tavalla.",
+                "Lupaus tai velvoittautuminen toimia tietyllä tavalla.",
                 "Alustava kiinnostus ei vielä ollut sitoumus osallistua kustannuksiin.",
             ),
             VocabularyEntry(
@@ -214,7 +214,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "alustava",
                 "adjective",
-                "Ensimmäiseen valmisteluvaiheeseen kuuluva ja vielä muuttuva.",
+                "Ensimmäiseen valmisteluvaiheeseen kuuluva, ei vielä lopullinen.",
                 "Alustava suunnitelma lähetettiin kommentoitavaksi ennen päätöstä.",
             ),
             VocabularyEntry(
@@ -270,7 +270,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "havahtua",
                 "verb",
-                "Tulla äkkiä tietoiseksi tilanteesta tai herätä siitä johtuen.",
+                "Herätä äkisti tai tulla yhtäkkiä tietoiseksi jostakin.",
                 "Havahduin kuulutukseen ja huomasin junan vaihtaneen lähtölaituria.",
             ),
             VocabularyEntry(

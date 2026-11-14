@@ -52,7 +52,7 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "cs-g-b2-004",
         "grammar",
         "B2",
-        "V pondělí Klára řekla: „Pošlu vám podklady zítra.“ "
+        "V pondělí Klára vašemu týmu řekla: „Pošlu vám podklady zítra.“ "
         "Ve čtvrtek její výrok předáváte kolegovi. Které znění zachovává "
         "původní závazek, ale netvrdí, že už byl splněn?",
         [

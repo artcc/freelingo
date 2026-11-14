@@ -7,9 +7,9 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-g-b1-001",
         "grammar",
         "B1",
-        "Vælg neutral skriftlig ordstilling: Vi flytter mødet, fordi Maja ___.",
+        "Vælg den korrekte formulering: Vi flytter mødet, fordi Maja ___.",
         [
-            "kan ikke deltage",
+            "ikke kan deltager",
             "ikke kan deltage",
             "ikke deltage kan",
             "deltage ikke kan",
@@ -263,8 +263,9 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "da-r-b1-003",
         "reading",
         "B1",
-        "Læs: Vi har modtaget din ansøgning, men mangler dokumentation for din "
-        "adresse. Send den senest den 18. maj. Vi kan først behandle sagen, når "
+        "Læs brevet fra kommunen: Vi har modtaget din ansøgning, men mangler "
+        "dokumentation for din adresse. Send den senest den 18. maj. "
+        "Vi kan først behandle sagen, når "
         "alle bilag er modtaget. Hvorfor har ansøgeren endnu ikke fået en afgørelse?",
         [
             "Ansøgningen er kommet til den forkerte kommune.",

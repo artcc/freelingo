@@ -60,7 +60,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "A1",
         "Glagoli i zamjenice",
         "Predstavi se glagolom biti i odaberi ti ili vi.",
-        "Osobne zamjenice su ja, ti, on, ona, ono, mi, vi, oni, one i ona. "
+        "Osobne zamjenice u jednini su ja, ti, on, ona i ono, a u množini mi, vi, "
+        "oni, one i ona. Oblik ona uz je označuje ženski rod jednine, a uz su "
+        "srednji rod množine. "
         "Nenaglašeni oblici glagola biti u prezentu su sam, si, je, smo, ste, su. "
         "Zamjenicu često izostavljamo: Ja sam Ana. / Ana sam.\n\n"
         "Kratki oblici poput sam i smo ne stoje sami na početku obične izjavne rečenice. "
@@ -125,7 +127,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Pri opisu mijenjaj pridjev zajedno s imenicom.",
         ],
         examples=[
-            GrammarExample("To je nova torba.", note="Nova se slaže s torba u ženskom rodu."),
+            GrammarExample(
+                "To je nova torba.", note="Nova se slaže s imenicom torba u ženskom rodu."
+            ),
             GrammarExample("Ovo su nova sela.", note="Nova je ovdje srednji rod množine."),
         ],
         related=["hr-gender-a1", "hr-accusative-a1"],
@@ -378,7 +382,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Zovem se i odmaram se",
         "A1",
         "Glagoli",
-        "Sačuvaj se u glagolima koji ga trebaju.",
+        "Ne izostavljaj riječ se uz glagole koji je trebaju.",
         "Neki glagoli dolaze s riječju se: zvati se, odmarati se, tuširati se, "
         "osjećati se. Glagol mijenja oblik, a se ostaje isto: odmaram se, odmaraš se, "
         "odmaramo se.\n\n"

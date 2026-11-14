@@ -407,18 +407,14 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "čtrnáct", "numeral", "Počet 14, o dva více než dvanáct.", "Čekáme čtrnáct minut."
             ),
-            VocabularyEntry(
-                "patnáct", "numeral", "Počet 15; deset a pět.", "Mám patnáct korun."
-            ),
+            VocabularyEntry("patnáct", "numeral", "Počet 15; deset a pět.", "Mám patnáct korun."),
             VocabularyEntry(
                 "šestnáct", "numeral", "Počet 16; deset a šest.", "Vlak jede v šestnáct hodin."
             ),
             VocabularyEntry(
                 "sedmnáct", "numeral", "Počet 17; deset a sedm.", "To stojí sedmnáct korun."
             ),
-            VocabularyEntry(
-                "osmnáct", "numeral", "Počet 18; deset a osm.", "Máme osmnáct minut."
-            ),
+            VocabularyEntry("osmnáct", "numeral", "Počet 18; deset a osm.", "Máme osmnáct minut."),
             VocabularyEntry(
                 "devatenáct",
                 "numeral",

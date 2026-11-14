@@ -117,7 +117,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Betyder det, at jeg ikke behøver at sende originalen?",
-                "Kontrollér, om en kopi er tilstrækkelig.",
+                "Du har tilbudt at sende en kopi; kontrollér, om originalen også skal sendes.",
                 "neutral",
                 "b1-unit-3",
             ),

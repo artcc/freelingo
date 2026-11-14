@@ -459,7 +459,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
             GrammarExample(
                 "Și mi ți-l ia la întrebări de față cu toată lumea!",
-                note="Construcție narativă familiară, de recunoscut; pronumele implică auditoriul.",
+                note="Construcție narativă familiară, de recunoscut: mi implică afectiv "
+                "naratorul, ți implică interlocutorul, iar l îl desemnează pe cel luat la întrebări.",
             ),
         ],
         related=["ro-possessive-dative-c1", "ro-discourse-particles-c1"],

@@ -63,9 +63,14 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Precizia afirmației",
         "Controlează ce se exclude și ce așteptare este evocată prin focalizare.",
         "«Doar Ana poate aproba» restrânge persoanele autorizate; «Ana poate doar verifica» "
-        "restrânge acțiunile. «Nici măcar» situează un caz sub așteptarea minimă evocată "
-        "în context. «Abia» poate indica un moment considerat târziu sau o cantitate "
-        "insuficientă, dar nu înlocuiește automat «numai». Într-un text normativ, "
+        "restrânge acțiunile. «Nici măcar» poate nega un prag minim așteptat: "
+        "«Nu a trimis nici măcar o confirmare». Poate evidenția și nereușita "
+        "participantului de la care așteptam cel mai mult: «Nici măcar expertul "
+        "nu a găsit eroarea». Scara așteptărilor se reconstruiește din context. "
+        "«Abia» poate indica un moment considerat târziu, o cantitate considerată mică "
+        "sau atingerea cu dificultate a unui prag. În «Abia am reușit să-l conving», "
+        "reușita este afirmată, dar prezentată ca dificilă. Cuvântul nu înlocuiește "
+        "automat «numai». Într-un text normativ, "
         "clarifică domeniul printr-o a doua propoziție dacă accentul oral ar fi decisiv.",
         rules=[
             "Așază restricția lângă elementul vizat și verifică interpretarea întregului enunț.",
@@ -255,11 +260,15 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "literară; în unele varietăți regionale, inclusiv în Oltenia, are și utilizare "
         "orală vie. Recunoaște formele de persoana a treia singular din exemple: "
         "«deschise» corespunde lui «a deschis», «citi» lui «a citit», «se așeză» lui "
-        "«s-a așezat», iar «strânse» lui «a strâns». Nu este în sine o greșeală sau "
-        "un semn de limbă exclusiv veche. "
+        "«s-a așezat», «strânse» lui «a strâns», iar «împături» lui «a împăturit». "
+        "Perfectul simplu nu este în sine o greșeală sau un semn de limbă exclusiv veche. "
         "Alternanța cu imperfectul, mai-mult-ca-perfectul și prezentul narativ "
         "modifică perspectiva și ritmul. Obiectivul este interpretarea și adaptarea "
-        "registrului, nu înlocuirea sistematică a perfectului compus în conversație.",
+        "registrului, nu înlocuirea sistematică a perfectului compus în conversație.\n\n"
+        "Construcția «avea să» poate prezenta un eveniment ulterior unui reper trecut: "
+        "«Atunci nu știa că avea să revină peste un an». Într-un gând al personajului, "
+        "«aveau să vadă» poate exprima o așteptare sau o amenințare, fără confirmarea "
+        "naratorului că evenimentul s-a realizat.",
         rules=[
             "Nu deduce registrul numai dintr-o formă izolată; verifică genul textului și contextul.",
             "La repovestire, păstrează succesiunea, durata și raporturile de anterioritate.",

@@ -330,7 +330,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "objevují koncovky -ovi a -u; například panu Novákovi.",
         rules=[
             "Vazbu se učíme spolu se slovesem: rozumět někomu nebo něčemu.",
-            "Zájmena mají tvary mi, ti, mu, jí, nám, vám, jim; při zdůraznění volíme dlouhé tvary.",
+            "Bez důrazu užíváme mi, ti, mu, jí, nám, vám, jim. Při důrazu volíme "
+            "mně, tobě, jemu; tvary jí, nám, vám a jim se nemění.",
             "Děkovat komu za co spojuje třetí pád s předložkou za a čtvrtým pádem.",
         ],
         examples=[

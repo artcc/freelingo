@@ -42,9 +42,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
             "Trods en rettidig advarsel valgte vi at gennemføre arrangementet på det aftalte sted.",
             "Vi nåede at flytte arrangementet, selv om advarslen kom senere end ventet.",
             "En tidligere advarsel ville have fjernet behovet for at flytte arrangementet.",
-            "En tidligere advarsel ville have givet os mulighed for at flytte det.",
+            "En rettidig advarsel ville have givet os mulighed for at flytte det.",
         ],
-        "En tidligere advarsel ville have givet os mulighed for at flytte det.",
+        "En rettidig advarsel ville have givet os mulighed for at flytte det.",
         "da-counterfactual-b2",
     ),
     AssessmentQuestion(

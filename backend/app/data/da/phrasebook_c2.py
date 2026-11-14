@@ -142,7 +142,7 @@ C2_CATEGORIES: list[PhrasebookCategory] = [
                 "c2-unit-4",
             ),
             PhrasebookEntry(
-                "Den vurdering ligger hos figuren; fortælleren bekræfter den ikke direkte.",
+                "Vurderingen er figurens egen; fortælleren bekræfter den ikke direkte.",
                 "Adskil perspektiver i en litterær drøftelse.",
                 "formal",
                 "c2-unit-4",

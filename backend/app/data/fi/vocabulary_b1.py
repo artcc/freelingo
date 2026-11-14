@@ -42,7 +42,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "keskeyttää",
                 "verb",
-                "Lopettaa toiminta ennen sen tavallista päättymistä.",
+                "Pysäyttää toiminta tilapäisesti tai ennen sen valmistumista.",
                 "Jouduimme keskeyttämään matkan lumipyryn vuoksi.",
             ),
             VocabularyEntry(
@@ -232,7 +232,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "vuokranantaja",
                 "noun",
-                "Asunnon tai tilan käyttöoikeuden vuokraava osapuoli.",
+                "Osapuoli, joka antaa asunnon tai tilan toisen käyttöön maksua vastaan.",
                 "Vuokranantaja hyväksyi seinän maalaamisen.",
             ),
             VocabularyEntry(

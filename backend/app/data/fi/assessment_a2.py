@@ -17,7 +17,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "grammar",
         "A2",
         "Täydennä yleiskielinen lause: Tässä kaupassa on paljon ___.",
-        ["uudet kengät", "uutta kenkää", "uusia kenkiä", "uusiin kenkiin"],
+        ["uudet kengät", "uusien kenkien", "uusia kenkiä", "uusiin kenkiin"],
         "uusia kenkiä",
         "fi-plural-partitive-a2",
     ),

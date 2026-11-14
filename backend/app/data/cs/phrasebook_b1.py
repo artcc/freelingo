@@ -110,7 +110,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 "b1-unit-3",
             ),
             PhrasebookEntry(
-                "Na úklidu společné chodby se můžeme střídat.",
+                "V úklidu společné chodby se můžeme střídat.",
                 "Navrhněte spravedlivé rozdělení péče o dům.",
                 "neutral",
                 "b1-unit-3",

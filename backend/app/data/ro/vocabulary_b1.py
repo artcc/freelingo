@@ -48,7 +48,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "între timp",
                 "phrase",
-                "În intervalul dintre două momente menționate.",
+                "În același interval cu altă acțiune sau între două momente menționate.",
                 "Eu am cumpărat biletele; între timp, Ana a găsit cazare.",
             ),
             VocabularyEntry(

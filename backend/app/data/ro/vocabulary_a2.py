@@ -307,7 +307,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "contract",
                 "noun",
-                "Acord scris care stabilește drepturi și obligații.",
+                "Acord care stabilește drepturi și obligații, adesea consemnat în scris.",
                 "Contractul chiriașului este pe masă.",
             ),
             VocabularyEntry(
@@ -571,7 +571,7 @@ A2_SETS: list[VocabularySet] = [
                 "a completa",
                 "verb",
                 "A scrie informațiile cerute în spațiile unui document.",
-                "Îl completez cu litere mari.",
+                "Formularul este aici; îl completez cu litere mari.",
             ),
             VocabularyEntry(
                 "a semna",

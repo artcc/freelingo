@@ -117,7 +117,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "et svar",
                 "noun",
-                "Det, man siger eller skriver til et spørgsmål.",
+                "Det, man siger eller skriver som reaktion på et spørgsmål.",
                 "Tak for dit svar.",
             ),
             VocabularyEntry(
@@ -638,13 +638,13 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "højre",
                 "adverb",
-                "Retningen mod den ene side, modsat venstre.",
+                "Den side, der vender mod øst, når man ser mod nord.",
                 "Drej til højre ved lyskrydset.",
             ),
             VocabularyEntry(
                 "venstre",
                 "adverb",
-                "Retningen mod den anden side, modsat højre.",
+                "Den side, der vender mod vest, når man ser mod nord.",
                 "Apoteket ligger til venstre.",
             ),
             VocabularyEntry(
@@ -771,7 +771,7 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "god",
                 "adjective",
-                "Som man synes positivt om, eller som fungerer godt.",
+                "Som passer til behovet eller giver en behagelig oplevelse.",
                 "Det er en god film.",
             ),
             VocabularyEntry("varm", "adjective", "Med en høj temperatur.", "Det er en varm dag."),

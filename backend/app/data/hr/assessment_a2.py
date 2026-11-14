@@ -177,7 +177,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "reading",
         "A2",
         "Maja piše: U subotu sam bila na koncertu s Anom. Ivan je ostao kod kuće "
-        "jer je bio bolestan. Tko je bio s Majom na koncertu?",
+        "jer je bio bolestan. Tko je od spomenutih osoba bio s Majom na koncertu?",
         ["Ivan i Ana.", "Samo Ivan.", "Nitko od njih.", "Samo Ana."],
         "Samo Ana.",
         "hr-perfect-agreement-a2",
@@ -248,7 +248,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "reading",
         "A2",
         "Servis javlja: Uređaj je popravljen. Možete ga preuzeti danas do 17 sati "
-        "ili sutra od 9 do 12. Ana danas radi do 18 sati. "
+        "ili sutra od 9 do 12. Ana danas radi do 18 sati, a sutra ujutro je slobodna. "
         "Koji joj termin odgovara prema obavijesti?",
         ["Danas u 18.30.", "Sutra u 14.00.", "Sutra u 10.00.", "Danas u 17.30."],
         "Sutra u 10.00.",

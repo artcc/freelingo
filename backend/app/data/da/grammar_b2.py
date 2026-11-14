@@ -9,7 +9,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B2",
         "Ordstilling",
         "Placér et tryksvagt objektspronomen i forhold til ikke.",
-        "I en enkel hovedsætning med det fulde verbum på anden plads står et "
+        "I en enkel hovedsætning med hovedverbet på anden plads står et "
         "tryksvagt objektspronomen normalt før ikke: Jeg kender ham ikke. "
         "Hvis et hovedverbum bliver stående efter et hjælpeverbum, flytter "
         "objektet ikke foran dette verbum: Jeg har ikke mødt ham. Et betonet "

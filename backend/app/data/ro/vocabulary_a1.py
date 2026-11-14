@@ -49,7 +49,12 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "cuvânt", "noun", "Unitate de limbă cu un sens.", "Casă este un cuvânt."
             ),
-            VocabularyEntry("literă", "noun", "Semn scris pentru un sunet.", "Ă este o literă."),
+            VocabularyEntry(
+                "literă",
+                "noun",
+                "Semn al alfabetului folosit pentru a scrie cuvinte.",
+                "Ă este o literă.",
+            ),
             VocabularyEntry(
                 "sunet",
                 "noun",
@@ -246,7 +251,12 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "a învăța", "verb", "A dobândi cunoștințe sau deprinderi.", "Învăț română."
             ),
-            VocabularyEntry("a citi", "verb", "A înțelege cuvinte scrise.", "Citesc o carte."),
+            VocabularyEntry(
+                "a citi",
+                "verb",
+                "A parcurge un text scris, în gând sau cu voce tare.",
+                "Citesc o carte.",
+            ),
             VocabularyEntry(
                 "a scrie",
                 "verb",

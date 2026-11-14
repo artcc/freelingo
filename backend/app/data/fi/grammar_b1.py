@@ -11,7 +11,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Objektin sija auttaa erottamaan prosessin rajatusta kokonaisuudesta.",
         "Partitiivi sopii keskeneräiseen tai rajaamattomaan tekemiseen: luin raporttia. "
         "Totaaliobjekti esittää kohteen kokonaisuutena ja tekemisen rajattuna: luin raportin. "
-        "Myönteinenkään lause ei aina saa totaaliobjektia: odotan bussia kuvaa odottamista. "
+        "Partitiivi voi johtua myös rajaamattomasta määrästä: ostin omenoita ei väitä "
+        "ostamisen jääneen kesken. Ostin omenat tarkoittaa asiayhteydessä rajattua joukkoa. "
+        "Joidenkin verbien tavallinen objekti on partitiivissa: odotan bussia. "
         "Substantiivin monikollinen totaaliobjekti on nominatiivissa. Persoonapronomineilla on t-päätteinen "
         "akkusatiivi: näin hänet. Preesensissä rajattu toiminta voi viitata tulevaan.",
         structure="luen raporttia / luen raportin; luen raportit",

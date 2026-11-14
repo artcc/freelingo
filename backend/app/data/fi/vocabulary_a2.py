@@ -855,7 +855,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "uimahalli",
                 "noun",
-                "Sisärakennus, jossa on altaita uimista varten.",
+                "Rakennus, jossa on sisäaltaita uimista varten.",
                 "Uimahallin vesi on lämpimämpää kuin järven vesi.",
             ),
             VocabularyEntry(

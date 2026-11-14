@@ -18,7 +18,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en misforståelse",
                 "noun",
-                "En opfattelse, der bygger på en forkert forståelse.",
+                "En opfattelse, der ikke svarer til det, der blev sagt eller ment.",
                 "Misforståelsen opstod, fordi vi brugte ordet på to måder.",
             ),
             VocabularyEntry(
@@ -318,7 +318,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en følgevirkning",
                 "noun",
-                "En yderligere virkning, som opstår efter en ændring.",
+                "En yderligere konsekvens af en handling eller ændring.",
                 "Vi har endnu ikke overblik over alle følgevirkningerne.",
             ),
             VocabularyEntry(

@@ -343,7 +343,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "alustava",
                 "adjective",
-                "Ensimmäinen ja vielä tarkentuva.",
+                "Ensivaiheen käyttöön tarkoitettu, ei vielä lopullinen.",
                 "Aikataulu on tässä vaiheessa alustava.",
             ),
             VocabularyEntry(
@@ -643,7 +643,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "pitkällä aikavälillä",
                 "phrase",
-                "Kun tarkastellaan vaikutuksia useiden vuosien kuluessa.",
+                "Pitkän ajan kuluessa; ajanjakson pituus riippuu tarkasteltavasta asiasta.",
                 "Korjaus voi olla pitkällä aikavälillä halvin ratkaisu.",
             ),
         ],

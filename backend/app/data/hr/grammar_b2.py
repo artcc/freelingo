@@ -16,7 +16,8 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Uz unatoč upotrijebite dativ: unatoč kašnjenju, unatoč poteškoćama.",
             "Razlikujte priznatu činjenicu uz iako od mogućeg uvjeta uz čak i ako.",
-            "Dopusnu rečenicu odvojite zarezom: Iako se ne slažemo, možemo surađivati.",
+            "Dopusnu rečenicu koja stoji ispred glavne odvojite zarezom: "
+            "Iako se ne slažemo, možemo surađivati.",
         ],
         examples=[
             GrammarExample(
@@ -40,7 +41,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "B2",
         "Povezivanje tvrdnji",
         "Razlikujte usporedbu dvaju stajališta od ispravljanja pogrešne tvrdnje.",
-        "Dok može uspoređivati istodobne, ali suprotne pojave: Jedni traže park, dok "
+        "Dok može suprotstavljati pojave ili stajališta: Jedni traže park, dok "
         "drugi žele parkiralište. Međutim uvodi obrat u odnosu na prethodno očekivanje. "
         "Konstrukcija ne X, nego Y odbacuje X i zamjenjuje ga s Y; ne znači samo da "
         "među njima postoji razlika. Dok u drugim kontekstima označuje vrijeme.",
@@ -101,7 +102,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         rules=[
             "Sačuvajte ogradu iz izvornog iskaza: možda ne smije postati sigurno.",
             "Navedite izvor kada je važno razlikovati vlastito znanje od prenesene tvrdnje.",
-            "Glagol tvrditi sam po sebi ne znači da je tvrdnja ni dokazana ni opovrgnuta.",
+            "Glagol tvrditi sam po sebi ne potvrđuje ni istinitost ni neistinitost tvrdnje.",
         ],
         examples=[
             GrammarExample(

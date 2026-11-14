@@ -292,7 +292,8 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "personligt fremmøde",
                 "phrase",
-                "At man selv skal være til stede et bestemt sted.",
+                "Det, at man selv er fysisk til stede i stedet for at kontakte nogen "
+                "digitalt eller gennem en anden.",
                 "Brevet oplyser, om der kræves personligt fremmøde.",
             ),
         ],

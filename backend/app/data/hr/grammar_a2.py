@@ -281,7 +281,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "ponavljanje. Svršeni glagoli, primjerice pročitati i kupiti, prikazuju "
         "radnju kao cjelinu s granicom ili rezultatom. Vid nije isto što i vrijeme: "
         "jučer sam čitao i jučer sam pročitao obje su prošle radnje.\n\n"
-        "Čitao sam knjigu ne potvrđuje da je knjiga dovršena. Pročitao sam knjigu "
+        "Čitao sam knjigu ne potvrđuje da je čitanje knjige dovršeno. Pročitao sam knjigu "
         "potvrđuje čitanje cjeline. Parove učimo kao rječničke veze; dodavanje "
         "prefiksa ne daje uvijek jednostavan par istog značenja.",
         structure="čitati – pročitati; kupovati – kupiti; pisati – napisati",
@@ -477,7 +477,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample(
                 "Ova je soba veća od naše sobe.",
-                note="Veća se slaže sa soba, a od naše sobe je genitiv.",
+                note="Veća se slaže s imenicom soba, a iza od stoji genitiv naše sobe.",
             ),
             GrammarExample(
                 "Hotel je skuplji nego kamp.",

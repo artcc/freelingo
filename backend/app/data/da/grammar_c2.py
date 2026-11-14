@@ -40,7 +40,15 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample("Hun skulle have åbnet mødet, men blev syg om morgenen."),
-            GrammarExample("Han skulle have sendt brevet i går; det siger hans sekretær."),
+            GrammarExample(
+                "Han skulle have sendt brevet i går; sekretæren siger, at hun så ham "
+                "lægge det i postkassen.",
+                note="Taleren gengiver en oplysning fra sekretæren uden selv at bekræfte den.",
+            ),
+            GrammarExample(
+                "Det var en fejl at beslutte det alene; han skulle have ringet først.",
+                note="Taleren kritiserer, at opkaldet ikke kom før beslutningen.",
+            ),
         ],
         related=["da-inference-modals-c1"],
     ),

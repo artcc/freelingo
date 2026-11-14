@@ -152,9 +152,9 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
             "Raspored je utvrđen, a oko naknade se još može pregovarati.",
             "Cijena se može mijenjati ako sudionici pristanu na novi termin.",
             "Datum je privremen jer ovisi o naknadnom dogovoru o cijeni.",
-            "Cijena ostaje ista, a datumi se još mogu prilagoditi.",
+            "Cijena ostaje ista, a termini se još mogu prilagoditi.",
         ],
-        "Cijena ostaje ista, a datumi se još mogu prilagoditi.",
+        "Cijena ostaje ista, a termini se još mogu prilagoditi.",
         "hr-concessive-negotiation-c2",
     ),
     AssessmentQuestion(

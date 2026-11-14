@@ -192,7 +192,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
                 "b1-unit-6",
             ),
             PhrasebookEntry(
-                "Tarkoitin ensi perjantaita, en huomista.",
+                "Tarkoitin ensi viikon perjantaita, en huomista.",
                 "Korjaat väärin ymmärretyn päivämäärän.",
                 "neutral",
                 "b1-unit-6",

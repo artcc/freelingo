@@ -358,7 +358,9 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         common_mistakes=[
             GrammarMistake(
-                "O am citit ieri.", "Am citit-o ieri.", "La perfectul compus o urmează participiul."
+                "O am citit ieri.",
+                "Am citit-o ieri.",
+                "În româna standard, la perfectul compus o urmează participiul.",
             )
         ],
         related=["ro-accusative-clitics-a2", "ro-perfect-a2"],

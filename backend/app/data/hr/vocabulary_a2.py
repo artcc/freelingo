@@ -149,7 +149,7 @@ A2_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 "pola",
-                "numeral",
+                "adverb",
                 "Jedna od dviju jednakih količina neke cjeline.",
                 "Trebam pola litre mlijeka.",
             ),
@@ -1062,7 +1062,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "red",
                 "noun",
-                "Niz ljudi koji čekaju da dođu na potez.",
+                "Niz ljudi koji čekaju da ih posluže ili prime, jedan za drugim.",
                 "Čekam u redu ispred šaltera.",
             ),
             VocabularyEntry(
