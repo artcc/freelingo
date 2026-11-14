@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { cookies } from 'next/headers'
 import { getLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
@@ -21,6 +22,7 @@ import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { LandingReviewsCarousel } from '@/components/reviews/LandingReviewsCarousel'
 import type { ReviewPublic, ReviewPublicSummary } from '@/types/api'
 import { createPublicMetadata, SITE_URL } from '@/lib/seo'
+import { SUPPORTED_TARGET_LANGUAGES } from '@/lib/target-languages'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('landing')
@@ -53,7 +55,13 @@ export default async function Home() {
   const t = await getTranslations('landing')
   const tCommon = await getTranslations('common')
   const tGames = await getTranslations('games')
+  const tTarget = await getTranslations('targetLanguages')
+  const tOnboarding = await getTranslations('onboarding')
   const locale = await getLocale()
+  const collator = new Intl.Collator(locale)
+  const sortedLanguages = [...SUPPORTED_TARGET_LANGUAGES].sort((a, b) =>
+    collator.compare(tTarget(a.code), tTarget(b.code))
+  )
 
   let allowRegistration = false
   let stripeEnabled = false
@@ -167,48 +175,78 @@ export default async function Home() {
 
       <main className="contents">
         {/* Hero */}
-        <section className="flex flex-1 flex-col items-center justify-center px-6 pt-[10px] pb-12 text-center">
-          <div className="mb-1 flex w-full flex-col items-center">
-            <div className="mb-0 w-full max-w-[560px]">
+        <section className="mx-auto w-full max-w-6xl px-6 pt-12 pb-12 sm:pt-16 lg:pt-20">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-12">
+            <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
+              <span className="text-fl-label text-fl-muted-2 mb-4 font-mono tracking-widest uppercase">
+                {tCommon('tagline')}
+              </span>
+              <h1 className="text-fl-fg mb-5 max-w-2xl font-sans text-3xl leading-tight font-bold tracking-tight text-balance md:text-5xl">
+                {t('hero')}
+              </h1>
+              <p className="text-fl-muted-1 mb-8 max-w-xl font-sans text-base leading-relaxed md:text-lg">
+                {t('heroSub')}
+              </p>
+              <div className="flex flex-col items-center gap-3 sm:flex-row">
+                <Link href={startHref} className={startClassName}>
+                  {startLabel}
+                  <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
+                </Link>
+                <a
+                  href="#features"
+                  className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 focus-visible:outline-fl-accent inline-flex items-center justify-center gap-2 border px-6 py-3 font-sans text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transition-none"
+                >
+                  {t('howItWorks')}
+                  <ArrowDown className="size-4 shrink-0" aria-hidden="true" />
+                </a>
+              </div>
+              {showFreeNote && (
+                <p className="text-fl-muted-1 mt-4 max-w-lg font-sans text-sm leading-relaxed">
+                  {t(freemiumTrialEnabled ? 'freeTrialNote' : 'freeNote')}
+                </p>
+              )}
+              <p className="text-fl-muted-1 mt-4 max-w-xl font-sans text-sm leading-relaxed">
+                {t('modes.intro')}{' '}
+                <a
+                  href="#modalities"
+                  className="text-fl-accent focus-visible:outline-fl-accent underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  {t('modes.compare')}
+                </a>
+              </p>
+            </div>
+            <div className="min-w-0">
               <LanguageBubbles />
             </div>
-            <span className="text-fl-label text-fl-muted-2 mb-4 font-mono tracking-widest uppercase">
-              {tCommon('tagline')}
-            </span>
-            <h1 className="text-fl-fg mb-4 max-w-2xl font-sans text-3xl leading-tight font-bold tracking-tight text-balance md:text-5xl">
-              {t('hero')}
-            </h1>
-            <p className="text-fl-muted-1 mb-8 max-w-xl font-sans text-base leading-relaxed md:text-lg">
-              {t('heroSub')}
-            </p>
           </div>
-          <div className="flex flex-col items-center gap-3 sm:flex-row">
-            <Link href={startHref} className={startClassName}>
-              {startLabel}
-              <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
-            </Link>
-            <a
-              href="#features"
-              className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 focus-visible:outline-fl-accent inline-flex items-center justify-center gap-2 border px-6 py-3 font-sans text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transition-none"
+          <section
+            aria-labelledby="hero-languages-title"
+            className="border-fl-border mx-auto mt-10 max-w-5xl border-t pt-8 sm:mt-14"
+          >
+            <h2
+              id="hero-languages-title"
+              className="text-fl-fg mb-5 text-center font-sans text-lg font-semibold tracking-tight"
             >
-              {t('howItWorks')}
-              <ArrowDown className="size-4 shrink-0" aria-hidden="true" />
-            </a>
-          </div>
-          {showFreeNote && (
-            <p className="text-fl-muted-1 mt-4 max-w-lg font-sans text-sm leading-relaxed">
-              {t(freemiumTrialEnabled ? 'freeTrialNote' : 'freeNote')}
-            </p>
-          )}
-          <p className="text-fl-muted-1 mt-4 max-w-xl font-sans text-sm leading-relaxed">
-            {t('modes.intro')}{' '}
-            <a
-              href="#modalities"
-              className="text-fl-accent focus-visible:outline-fl-accent underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4"
-            >
-              {t('modes.compare')}
-            </a>
-          </p>
+              {tOnboarding('subtitle')}
+            </h2>
+            <ul className="flex flex-wrap justify-center gap-2.5">
+              {sortedLanguages.map((language) => (
+                <li
+                  key={language.code}
+                  className="border-fl-border bg-fl-surface text-fl-muted-1 flex max-w-full items-center gap-2 rounded-full border px-3 py-2 font-sans text-sm"
+                >
+                  <Image
+                    src={language.flagPath}
+                    alt=""
+                    width={18}
+                    height={13}
+                    className="h-[13px] w-[18px] shrink-0 rounded-[2px] object-cover"
+                  />
+                  {tTarget(language.code)}
+                </li>
+              ))}
+            </ul>
+          </section>
         </section>
 
         {/* Learning journey */}

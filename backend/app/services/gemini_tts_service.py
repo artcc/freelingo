@@ -20,6 +20,7 @@ _BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 _SPEECH_STYLE = "Warm, clear delivery with natural pronunciation."
 _SAMPLE_RATE = 24000
 _UI_LOCALES = {
+    "cs": "cs-CZ",
     "en": "en-GB",
     "es": "es-ES",
     "fr": "fr-FR",

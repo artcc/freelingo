@@ -65,37 +65,57 @@
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="language-orbit" aria-label="FreeLingo supported languages">
-        <img class="orbit-logo" src="assets/logo.png" alt="FreeLingo" />
-        <div class="language-bubble bubble-1" lang="nl-NL"><span aria-hidden="true">🇳🇱</span> Hallo</div>
-        <div class="language-bubble bubble-4" lang="en-GB"><span aria-hidden="true">🇬🇧</span> Hello</div>
-        <div class="language-bubble bubble-10" lang="en-US"><span aria-hidden="true">🇺🇸</span> Hi</div>
-        <div class="language-bubble bubble-8" lang="fr-FR"><span aria-hidden="true">🇫🇷</span> Bonjour</div>
-        <div class="language-bubble bubble-14" lang="de-DE"><span aria-hidden="true">🇩🇪</span> Hallo</div>
-        <div class="language-bubble bubble-6" lang="it-IT"><span aria-hidden="true">🇮🇹</span> Ciao</div>
-        <div class="language-bubble bubble-3" lang="ja"><span aria-hidden="true">🇯🇵</span> こんにちは</div>
-        <div class="language-bubble bubble-2" lang="ko"><span aria-hidden="true">🇰🇷</span> 안녕하세요</div>
-        <div class="language-bubble bubble-11" lang="zh-CN"><span aria-hidden="true">🇨🇳</span> 你好</div>
-        <div class="language-bubble bubble-5" lang="pl-PL"><span aria-hidden="true">🇵🇱</span> Cześć</div>
-        <div class="language-bubble bubble-7" lang="pt-BR"><span aria-hidden="true">🇧🇷</span> Oi</div>
-        <div class="language-bubble bubble-12" lang="pt-PT"><span aria-hidden="true">🇵🇹</span> Olá</div>
-        <div class="language-bubble bubble-9" lang="ru-RU"><span aria-hidden="true">🇷🇺</span> Привет</div>
-        <div class="language-bubble bubble-13" lang="es-ES"><span aria-hidden="true">🇪🇸</span> Hola</div>
-        <div class="language-bubble bubble-15" lang="sv-SE"><span aria-hidden="true">🇸🇪</span> Hej</div>
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow">AI language learning platform</p>
+          <h1 id="hero-title">Learn with Lingu, your AI language tutor.</h1>
+          <p class="hero-subtitle">
+            Follow a personalized study plan, reinforce what you learn with exercises and games,
+            and put it into practice in voice conversations with Lingu.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://freelingo.app" target="_blank" rel="noopener noreferrer">
+              Try FreeLingo Cloud
+            </a>
+            <a class="btn btn-secondary" href="#deploy">Self-host FreeLingo</a>
+          </div>
+          <p class="hero-options">Available as FreeLingo Cloud, with no installation, or self-hosted on your server.</p>
+        </div>
+        <div class="hero-lingu">
+          <img class="hero-lingu-image" src="assets/logo.png" alt="Lingu, the FreeLingo tutor" width="300" height="300" />
+          <div class="language-bubble greeting-en" lang="en-GB"><span aria-hidden="true">🇬🇧</span> Hello!</div>
+          <div class="language-bubble greeting-ja" lang="ja-JP"><span aria-hidden="true">🇯🇵</span> こんにちは！</div>
+          <div class="language-bubble greeting-de" lang="de-DE"><span aria-hidden="true">🇩🇪</span> Hallo!</div>
+          <div class="language-bubble greeting-it" lang="it-IT"><span aria-hidden="true">🇮🇹</span> Ciao!</div>
+          <div class="language-bubble greeting-es" lang="es-ES"><span aria-hidden="true">🇪🇸</span> ¡Hola!</div>
+          <div class="language-bubble greeting-fr" lang="fr-FR"><span aria-hidden="true">🇫🇷</span> Bonjour !</div>
+        </div>
       </div>
-      <p class="eyebrow">AI language learning platform</p>
-      <h1 id="hero-title">Learn with Lingu, your AI language tutor.</h1>
-      <p class="hero-subtitle">
-        Follow a personalized study plan, reinforce what you learn with exercises and games,
-        and put it into practice in voice conversations with Lingu.
-      </p>
-      <p class="hero-options">Available as FreeLingo Cloud, with no installation, or self-hosted on your server.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="https://freelingo.app" target="_blank" rel="noopener noreferrer">
-          Try FreeLingo Cloud
-        </a>
-        <a class="btn btn-secondary" href="#deploy">Self-host FreeLingo</a>
-      </div>
+      <section class="hero-languages" aria-labelledby="hero-languages-title">
+        <h2 id="hero-languages-title">Which language do you want to learn?</h2>
+        <ul class="language-list">
+          <li><span aria-hidden="true">🇺🇸</span> American English</li>
+          <li><span aria-hidden="true">🇬🇧</span> British English</li>
+          <li><span aria-hidden="true">🇨🇳</span> Chinese (Mainland China)</li>
+          <li><span aria-hidden="true">🇭🇷</span> Croatian</li>
+          <li><span aria-hidden="true">🇨🇿</span> Czech</li>
+          <li><span aria-hidden="true">🇩🇰</span> Danish</li>
+          <li><span aria-hidden="true">🇳🇱</span> Dutch (Netherlands)</li>
+          <li><span aria-hidden="true">🇫🇮</span> Finnish</li>
+          <li><span aria-hidden="true">🇫🇷</span> French</li>
+          <li><span aria-hidden="true">🇩🇪</span> German</li>
+          <li><span aria-hidden="true">🇮🇹</span> Italian</li>
+          <li><span aria-hidden="true">🇯🇵</span> Japanese</li>
+          <li><span aria-hidden="true">🇰🇷</span> Korean</li>
+          <li><span aria-hidden="true">🇵🇱</span> Polish</li>
+          <li><span aria-hidden="true">🇧🇷</span> Portuguese (Brazil)</li>
+          <li><span aria-hidden="true">🇵🇹</span> Portuguese (Portugal)</li>
+          <li><span aria-hidden="true">🇷🇴</span> Romanian (Romania)</li>
+          <li><span aria-hidden="true">🇷🇺</span> Russian</li>
+          <li><span aria-hidden="true">🇪🇸</span> Spanish</li>
+          <li><span aria-hidden="true">🇸🇪</span> Swedish</li>
+        </ul>
+      </section>
     </section>
 
     <section id="features" class="section" aria-labelledby="features-title">
@@ -142,7 +162,7 @@
             <span class="card-icon" aria-hidden="true">06</span>
             <h3>Multi-language progress</h3>
           </div>
-          <p>Study Dutch, English, French, German, Italian, Japanese, Korean, Mainland Chinese, Polish, Portuguese, Russian, Spanish, and Swedish side by side, with separate plans and progress for each language.</p>
+          <p>Study multiple languages side by side, with separate plans and progress for each language.</p>
         </article>
       </div>
     </section>

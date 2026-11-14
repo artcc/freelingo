@@ -7,7 +7,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)](#quick-start)
-![Version](https://img.shields.io/badge/version-1.12.15-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.12.20-brightgreen?style=flat-square)
 
 <img src="assets/logo_large.png" alt="FreeLingo — language learning with Lingu, your voice conversation partner" width="900" />
 
@@ -234,12 +234,17 @@ and [.env.example](.env.example).
 
 ### Study languages
 
-Learn one language or several side by side. Each has its own A1–C2 curriculum, placement test,
-grammar reference, vocabulary and phrasebook.
+Choose from 20 study languages, counting each regional variant separately, and learn one or several
+side by side. Each has its own A1–C2 curriculum, placement test, grammar reference, vocabulary and
+phrasebook.
 
 - **Chinese:** Mainland Mandarin, in simplified characters (`zh-CN`).
+- **Croatian:** Croatia (`hr-HR`).
+- **Czech:** Czechia (`cs-CZ`).
+- **Danish:** Denmark (`da-DK`).
 - **Dutch:** Netherlands (`nl-NL`).
 - **English:** British (`en-GB`) and American (`en-US`).
+- **Finnish:** Finland (`fi-FI`).
 - **French** (`fr-FR`).
 - **German** (`de-DE`).
 - **Italian** (`it-IT`).
@@ -247,6 +252,7 @@ grammar reference, vocabulary and phrasebook.
 - **Korean:** South Korea (`ko-KR`).
 - **Polish** (`pl-PL`).
 - **Portuguese:** Brazilian (`pt-BR`) and European (`pt-PT`).
+- **Romanian:** Romania (`ro-RO`).
 - **Russian** (`ru-RU`).
 - **Spanish:** Spain (`es-ES`).
 - **Swedish:** Sweden (`sv-SE`).
@@ -257,6 +263,11 @@ On self-hosted installations, `AVAILABLE_TARGET_LANGUAGES` controls which option
 
 Your native language is a separate choice made during registration. It is used for translations,
 explanations and tutor feedback to support you while you learn.
+
+The interface language is another independent choice in **Settings**. It controls menus and interface
+text without changing your native language or the languages you study. Maintainer implementation guides:
+[adding a study language](specs/add-target-language.instructions.md) and
+[adding an interface or native language](specs/add-ui-native-language.instructions.md).
 
 ## Linux host: Redis memory overcommit
 

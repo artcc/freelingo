@@ -454,6 +454,12 @@ backend authorization.
 in `lib/locales.ts`; target-language metadata is separate from UI locale. Missing translation catalogs
 fall back to English according to the platform contract.
 
+For interface/native-language additions, follow
+[Add Interface or Native Language](add-ui-native-language.instructions.md). It owns the cross-project
+registration, catalog, packaging, script/direction, accessibility, and completion checklist. Current
+selectors and initial browser detection include additional explicit inventories; changing
+`SUPPORTED_LOCALES` alone does not complete an addition.
+
 Locale selection, profile persistence, and cookies are coordinated by Settings and middleware. A
 target-language switch must not mutate UI locale or global account preferences.
 Visible copy, including resource counts, errors, role labels, tooltips, and accessibility text, uses
@@ -514,17 +520,22 @@ renderer; `@types/three` supplies development types.
 accepts any of these animations independently of the tour. Its optional `loop` prop overrides the
 catalog playback default for that instance. The tour currently selects only its five contextual animations.
 
-The landing's `LanguageBubbles` reuses `LinguAvatar` in the centered 140 × 140 px slot and repeats
-`saludo` with `loop`. Its transparent canvas lets the landing's light/dark background show
-through. The avatar and language circle remain transparent and hidden from assistive technology
-until `onReady`, then fade in together without a preliminary PNG or staggered bubble entrances.
+The landing's `LanguageBubbles` reuses `LinguAvatar` in a centered 220 × 220 px slot, increasing to
+300 × 300 px from the small-screen breakpoint, and repeats `saludo` with `loop`. Its transparent
+canvas lets the landing's light/dark background show through. The avatar and six greeting bubbles
+remain transparent and hidden from assistive technology until `onReady`, then fade in together
+without a preliminary PNG or staggered bubble entrances.
 While waiting, a text-free spinner occupies the avatar's center outside the hidden group; it has a
 localized accessible label, respects reduced motion, and disappears on `onReady`.
-The reserved space, surrounding language positions, and container dimensions remain stable.
-Flag images use fixed 14 × 10 px boxes matching their declared image dimensions, with flex shrinking
-disabled and centered `object-cover` cropping to keep a uniform size without stretching the artwork.
-Bubble floating starts when the group is ready. Reduced motion disables the entrance transition
-and floating; reduced motion and loading failures reveal the group with static Lingu artwork.
+The container reserves 260 px of height and up to 360 px of width, increasing to 360 px of height
+and up to 420 px of width from the small-screen breakpoint. Greeting positions use fixed responsive
+CSS offsets and do not float or depend on the full language catalog.
+Greetings render through `TargetLanguageText`. Flag images use fixed 18 × 13 px boxes matching
+their declared image dimensions, with flex shrinking disabled and centered `object-cover` cropping
+to keep a uniform size without stretching the artwork. Reduced motion disables the entrance
+transition; reduced motion and loading failures reveal the group with static Lingu artwork.
+`public-site.instructions.md` owns the hero layout, greeting selection, and separate server-rendered
+language list, which remains visible independently of this component's readiness.
 An optional `className` overrides the avatar's default responsive dimensions so other surfaces
 can size it to their own container.
 
