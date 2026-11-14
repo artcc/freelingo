@@ -316,7 +316,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "lähtö",
                 "noun",
-                "Hetki tai tapahtuma, jolloin lähdetään matkalle.",
+                "Poistuminen paikasta matkan alkaessa tai tämän tapahtuman ajankohta.",
                 "Junan lähtö on kello yhdeksän.",
             ),
             VocabularyEntry(
@@ -710,7 +710,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "rokotus",
                 "noun",
-                "Rokotteen antaminen suojaksi tiettyä tautia vastaan.",
+                "Tautia ehkäisevän valmisteen antaminen elimistön suojan vahvistamiseksi.",
                 "Olen saanut rokotuksen.",
             ),
             VocabularyEntry(

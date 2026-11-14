@@ -218,11 +218,11 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "„Tak tomu říkám bez čekání.“ Co její poznámka v tomto kontextu nejspíše dělá?",
         [
             "Oceňuje, že přepojování na nové lince probíhá rychleji než dřívější čekání.",
-            "Vrací dodavateli jeho slib jako ironický komentář k rozporu se zkušeností.",
+            "Připomíná dodavatelův slib jako ironický komentář k rozporu se zkušeností.",
             "Žádá kolegu, aby dobu přepojování nepočítal do celkové délky čekání.",
             "Připouští, že slib platil pro vyřízení požadavku, nikoli pro spojení s obsluhou.",
         ],
-        "Vrací dodavateli jeho slib jako ironický komentář k rozporu se zkušeností.",
+        "Připomíná dodavatelův slib jako ironický komentář k rozporu se zkušeností.",
         "cs-ironic-echo-c2",
     ),
     AssessmentQuestion(

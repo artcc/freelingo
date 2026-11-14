@@ -243,13 +243,21 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "ro-genitive-article-b1",
-        "Posesia: al, a, ai, ale",
+        "Posesia: al meu, al său, al vecinului",
         "B1",
         "Grupul nominal",
         "Exprimați apartenența și acordați articolul cu obiectul posedat.",
         "Genitivul poate urma direct un substantiv articulat: contractul proprietarului. "
         "Într-un contract al proprietarului apare articolul genitival al. Formele al, a, ai, ale "
-        "se acordă cu lucrul posedat, nu cu posesorul: o cheie a vecinului, două chei ale vecinului.",
+        "se acordă cu lucrul posedat, nu cu posesorul: o cheie a vecinului, două chei ale vecinului.\n\n"
+        "Când substantivul nu este repetat, folosim al meu, a mea, ai mei, ale mele: "
+        "Cheia aceasta este a mea. Pentru un singur posesor de persoana a treia există "
+        "său, sa, săi, sale: fratele său, sora sa, frații săi, surorile sale. "
+        "Genul posesorului nu rezultă din aceste forme; contextul arată cui îi aparține "
+        "lucrul. Pentru mai mulți posesori folosim lor: cheile lor.\n\n"
+        "Genitivul apare și după în fața, în spatele, înaintea sau împotriva: "
+        "în fața casei, înaintea ședinței, împotriva propunerii. Nu adăugăm "
+        "articolul al în aceste exemple cu substantive.",
         rules=[
             "Masculin singular: al; feminin singular: a; masculin plural: ai; feminin plural: ale.",
             "La neutru: un dosar al comisiei, două dosare ale comisiei.",
@@ -258,6 +266,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Am găsit o factură a asociației."),
             GrammarExample("Acestea sunt două documente ale proprietarului."),
+            GrammarExample("Eu am copia mea. Ana o caută pe a sa."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -277,7 +286,9 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Substantivele în genitiv și dativ au frecvent aceeași formă, dar funcții diferite. "
         "În Îi scriu proprietarului, forma indică destinatarul; în adresa proprietarului, "
         "ea indică apartenența. Forme utile sunt unui coleg, unei colege, unor colegi; "
-        "colegului, colegei, colegilor.",
+        "colegului, colegei, colegilor. Dativul apare și după datorită, grație și "
+        "mulțumită: datorită vecinei, grație ajutorului primit. În aceste exemple, "
+        "grupul exprimă cauza sau sprijinul, nu destinatarul. Prepoziția cere cazul.",
         rules=[
             "Învățați femininul împreună cu forma sa: vecină — unei vecine — vecinei.",
             "Reluați destinatarul când construcția o cere: Îi mulțumesc vecinei.",
@@ -286,6 +297,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Le-am trimis locatarilor anunțul."),
             GrammarExample("I-am dat unei colege copia contractului."),
+            GrammarExample("Am găsit apartamentul datorită unei colege."),
         ],
         related=["ro-dative-clitics-b1", "ro-genitive-article-b1"],
     ),

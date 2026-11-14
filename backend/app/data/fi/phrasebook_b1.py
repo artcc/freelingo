@@ -237,7 +237,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Minulle lyhyt työmatka on tärkeämpi kuin suuri asunto.",
-                "Selität omat valintaperusteesi asuntoa etsiessä.",
+                "Selität omat valintaperusteesi asuntoa etsiessäsi.",
                 "neutral",
                 "b1-unit-7",
             ),

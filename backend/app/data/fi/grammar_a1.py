@@ -16,7 +16,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "kirjaimiaan, eivät a:n ja o:n koristeita.",
         rules=[
             "Kuuntele sekä vokaalin että konsonantin kestoa.",
-            "Kirjoita pitkä äänne kahdella samalla kirjaimella.",
+            "Näissä pituuspareissa pitkä äänne kirjoitetaan kahdella samalla kirjaimella.",
         ],
         examples=[
             GrammarExample("Tuli on kuuma.", note="Tuli: lyhyt u."),
@@ -224,8 +224,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Ilmaise ainetta, määrää ja kielteisen lauseen kohdetta.",
         "Yksikön partitiivin tavallisia päätteitä ovat -a/-ä ja -ta/-tä: kahvi–kahvia, "
         "tee–teetä. Joidenkin sanojen vartalo muuttuu: vesi–vettä. Partitiivia käytetään "
-        "aineesta ilman rajattua määrää: Juon vettä. Sitä käytetään myös lukusanan kaksi "
-        "tai suuremman luvun jälkeen: kolme omenaa. Kielteisen lauseen kohde on tavallisesti "
+        "aineesta ilman rajattua määrää: Juon vettä. Sitä käytetään myös perusmuotoisen "
+        "lukusanan kaksi tai sitä suuremman luvun jälkeen: kolme omenaa. "
+        "Kielteisen lauseen kohde on tavallisesti "
         "partitiivissa: En osta leipää. Kaikki myönteisen lauseen kohteet eivät ole "
         "partitiivissa; kokonaisen kohteen muodot opitaan myöhemmin.",
         rules=[

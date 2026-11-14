@@ -12,7 +12,7 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Koja prerada uklanja nejasnoću i čuva govornika i izvršiteljicu poziva?",
         [
             "Petra je rekla Ani da će Ana nazvati majstora.",
-            "Ana je rekla Petri da će sama nazvati majstora.",
+            "Ana je rekla Petri da će Ana nazvati majstora.",
             "Ana je rekla Petri da će Petra nazvati majstora.",
             "Petra je rekla Ani da će Petra nazvati majstora.",
         ],
@@ -346,11 +346,11 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Kako ta poruka mijenja Teino prvotno tumačenje?",
         [
             "Popravak smješta prije slanja fotografije, ali poslije snimanja oštećenja.",
-            "Popravak smješta nakon svojeg povratka, neposredno prije čitanja poruke.",
-            "Popravak smješta nakon slanja fotografije, ali i dalje prije svojeg povratka.",
+            "Popravak smješta nakon Teina povratka, neposredno prije čitanja poruke.",
+            "Popravak smješta nakon slanja fotografije, ali i dalje prije Teina povratka.",
             "Slanje fotografije smješta u petak, neposredno nakon dovršetka popravka.",
         ],
-        "Popravak smješta nakon slanja fotografije, ali i dalje prije svojeg povratka.",
+        "Popravak smješta nakon slanja fotografije, ali i dalje prije Teina povratka.",
         "hr-narrative-time-c2",
     ),
     AssessmentQuestion(

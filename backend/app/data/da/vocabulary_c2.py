@@ -271,7 +271,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "at vedgå",
                 "verb",
-                "At åbent erkende et forhold, ofte noget kritisabelt.",
+                "At erkende eller indrømme et forhold, ofte noget kritisabelt.",
                 "Hun vedgik fejlen, men afviste, at den var bevidst.",
             ),
             VocabularyEntry(

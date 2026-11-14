@@ -61,7 +61,8 @@ C1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "C1",
         "Doseg negacije",
         "Razlikujte nedostatak potvrde, pobijanje tvrdnje i ograničenu primjenjivost.",
-        "U rečenici Nije dokazano da je voda onečišćena niječe se postojanje dokaza. "
+        "U rečenici Nije dokazano da je voda onečišćena niječe se da je onečišćenost "
+        "dokazana. Mogu postojati indicije koje još nisu dovoljne za takav zaključak. "
         "Voda time nije proglašena čistom. Dokazano je da voda nije onečišćena prenosi "
         "drukčiji nalaz. Slično tome, nisu svi prijedlozi prihvaćeni ne znači da nije "
         "prihvaćen nijedan prijedlog. Položaj negacije određuje opseg poricanja.",

@@ -10,12 +10,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "En projektleder siger: 'Havde vi fået målingerne i maj, kunne vi stå med "
         "en anden løsning nu.' Hvilken gengivelse bevarer både tid og sikkerhedsgrad?",
         [
-            "Målingerne fra maj viser, at den nuværende løsning burde have været valgt tidligere.",
-            "Med målingerne i maj ville en anden løsning med sikkerhed allerede være gennemført.",
-            "Adgang til målingerne i maj kunne have ført til en anden løsning, end vi står med nu.",
-            "Hvis målingerne kommer nu, kan den løsning, der blev valgt i maj, snart ændres.",
+            "Målingerne fra maj begrunder et tidligere valg af den løsning, vi bruger nu.",
+            "Målingerne i maj ville med sikkerhed have givet os en anden løsning nu.",
+            "Med målingerne i maj kunne vores nuværende løsning have været en anden.",
+            "Får vi målingerne nu, kan vi ændre den løsning, der blev valgt i maj.",
         ],
-        "Adgang til målingerne i maj kunne have ført til en anden løsning, end vi står med nu.",
+        "Med målingerne i maj kunne vores nuværende løsning have været en anden.",
         "da-mixed-counterfactuals-c2",
     ),
     AssessmentQuestion(
@@ -26,12 +26,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Foreningens talsperson vil først udfordre den historik, spørgsmålet bygger på. "
         "Hvilket svar gør det mest præcist?",
         [
-            "Hvilket tidligere forløb henviser du til? Vi mener ikke, at beboerne blev holdt udenfor dengang.",
-            "Vi kan godt forklare, hvorfor den seneste høring kom senere, end beboerne ønskede.",
-            "Den tidligere udelukkelse var uheldig; denne gang var der dog en anden begrundelse.",
-            "Vi vil gerne inddrage beboerne tidligere næste gang, når den nye plan foreligger.",
+            "Hvilken tidligere sag mener du? Vi bestrider, at beboerne blev holdt udenfor.",
+            "Sidst fik beboerne materialet sent, fordi vi måtte afvente rådgiverens svar.",
+            "Vi beklager den tidligere udelukkelse, men denne gang blev planen sendt til alle.",
+            "Sidste gang skete udelukkelsen ved en fejl; nu skyldes den hensynet til tidsplanen.",
         ],
-        "Hvilket tidligere forløb henviser du til? Vi mener ikke, at beboerne blev holdt udenfor dengang.",
+        "Hvilken tidligere sag mener du? Vi bestrider, at beboerne blev holdt udenfor.",
         "da-presupposed-background-c2",
     ),
     AssessmentQuestion(
@@ -43,10 +43,10 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         [
             "Hun afviser, at kunden får en senere betalingsfrist end oprindeligt aftalt.",
             "Hun afviser efterårets opkrævning, men accepterer en mindre betaling nu.",
-            "Hun begrænser rabatten til de kunder, der betaler inden efteråret.",
-            "Hun afviser at kalde tidsforskydningen en nedsættelse af det samlede beløb.",
+            "Hun begrænser rabatten til betalinger inden efteråret.",
+            "Hun skelner mellem en udskudt betaling og et lavere samlet beløb.",
         ],
-        "Hun afviser at kalde tidsforskydningen en nedsættelse af det samlede beløb.",
+        "Hun skelner mellem en udskudt betaling og et lavere samlet beløb.",
         "da-corrective-negation-c2",
     ),
     AssessmentQuestion(
@@ -57,12 +57,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "vedlægge dokumentationen igen, medmindre der er sket ændringer.' "
         "En tidligere godkendt ansøger har uændrede forhold. Hvad følger af formuleringen?",
         [
-            "Ansøgeren skal sende dokumentationen igen, men kan nøjes med en kortere version.",
-            "Ansøgeren er fritaget for at sende dokumentationen igen, uden at det dermed er forbudt.",
-            "Ansøgeren må kun vedlægge dokumentationen efter at have fået en ny godkendelse.",
-            "Ansøgeren er fritaget for at oplyse om senere ændringer i de godkendte forhold.",
+            "Ansøgeren kan udsætte dokumentationen, men skal sende den, før sagen afgøres.",
+            "Kravet bortfalder her; teksten siger ikke, at genindsendelse er forbudt.",
+            "Ansøgeren må kun gensende bilaget efter en ny godkendelse.",
+            "Ansøgeren behøver heller ikke oplyse om senere ændringer.",
         ],
-        "Ansøgeren er fritaget for at sende dokumentationen igen, uden at det dermed er forbudt.",
+        "Kravet bortfalder her; teksten siger ikke, at genindsendelse er forbudt.",
         "da-modal-scope-c2",
     ),
     AssessmentQuestion(
@@ -72,12 +72,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Læs: 'Nogle af kollegerne har læst oplægget; det kan for den sags skyld "
         "være dem alle.' Hvordan virker tilføjelsen?",
         [
-            "Den ophæver en nærliggende antydning om en begrænset gruppe uden at modsige første del.",
-            "Den retter første dels faktuelle fejl og bekræfter, at hele gruppen har læst oplægget.",
-            "Den udvider den omtalte gruppe fra kollegerne til andre mulige læsere.",
+            "Den ophæver antydningen 'ikke alle', men fastholder, at nogen har læst oplægget.",
+            "Den retter første dels fejl og bekræfter, at alle har læst oplægget.",
+            "Den ændrer, hvem kollegerne omfatter, men fastholder, at nogle af dem ikke har læst.",
             "Den svækker første del ved også at åbne for, at ingen kolleger har læst oplægget.",
         ],
-        "Den ophæver en nærliggende antydning om en begrænset gruppe uden at modsige første del.",
+        "Den ophæver antydningen 'ikke alle', men fastholder, at nogen har læst oplægget.",
         "da-cancellable-inference-c2",
     ),
     AssessmentQuestion(
@@ -87,12 +87,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "En faglig vurdering lyder: 'Ordningen er nok billig at etablere, "
         "men driften er dyrere end i de øvrige modeller.' Hvilket referat er loyalt?",
         [
-            "Vurderingen er usikker på etableringsprisen, men anbefaler ordningen på grund af driften.",
+            "Den lave etableringspris opvejer den dyrere drift, så ordningen samlet set anbefales.",
             "Vurderingen afviser, at etableringsprisen er lav, fordi driften ændrer beregningen.",
-            "Vurderingen anerkender den lave etableringspris og fremhæver driftsudgiften som modhensyn.",
+            "Vurderingen medgiver fordelen ved etableringen, men peger på driften som et modhensyn.",
             "Vurderingen stiller den lave etableringspris som betingelse for at undersøge driften.",
         ],
-        "Vurderingen anerkender den lave etableringspris og fremhæver driftsudgiften som modhensyn.",
+        "Vurderingen medgiver fordelen ved etableringen, men peger på driften som et modhensyn.",
         "da-nok-men-c2",
     ),
     AssessmentQuestion(
@@ -115,14 +115,14 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "C2",
         "En kollega siger efter en vanskelig samtale: 'Jeg prøvede at glatte ud, "
         "men endte med at få kritikken til at lyde uvæsentlig.' Hvilket næste svar "
-        "tager bedst højde for hendes erkendelse?",
+        "hjælper hende med at rette netop den virkning?",
         [
-            "Så må vi forklare igen, at tonen var vigtigere end detaljerne i kritikken.",
-            "Så bør vi lade sagen ligge, indtil de kritiske deltagere selv tager den op.",
-            "Så kan vi samle op ved at fremhæve de punkter, som ingen havde indvendinger imod.",
-            "Så lad os anerkende problemet og spørge, hvilke spørgsmål der stadig mangler svar på.",
+            "Så må vi forklare, hvorfor du nedtonede kritikken for at dæmpe konflikten.",
+            "Så må vi forklare vores gode hensigter frem for at genåbne indvendingerne.",
+            "Så lad os fremhæve enighedspunkterne og vente lidt med indvendingerne.",
+            "Så lad os tage kritikken alvorligt og følge op på de ubesvarede spørgsmål.",
         ],
-        "Så lad os anerkende problemet og spørge, hvilke spørgsmål der stadig mangler svar på.",
+        "Så lad os tage kritikken alvorligt og følge op på de ubesvarede spørgsmål.",
     ),
     AssessmentQuestion(
         "da-v-c2-003",
@@ -146,12 +146,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "En undersøgelse af tre store hospitaler anbefales som grundlag for en lille "
         "klinik. En læser efterlyser en vurdering af overførbarheden. Hvad vil hun have belyst?",
         [
-            "Om undersøgelsens forfattere har formidlet resultaterne i et sprog, klinikken forstår.",
-            "Om hospitalerne har brugt samme målemetode, så resultaterne kan sammenlignes indbyrdes.",
-            "Om forskelle i størrelse og arbejdsgange begrænser, hvad klinikken kan bruge resultaterne til.",
-            "Om klinikken kan bekræfte, at de tre hospitalers oprindelige registreringer var fejlfri.",
+            "Om resultaterne er beskrevet i et sprog, som klinikkens ansatte forstår.",
+            "Om hospitalernes resultater kan sammenlignes, fordi målemetoden er ens.",
+            "Om forskelle i rammerne begrænser resultaternes anvendelse på klinikken.",
+            "Om klinikken kan kontrollere, at hospitalernes registreringer er fejlfrie.",
         ],
-        "Om forskelle i størrelse og arbejdsgange begrænser, hvad klinikken kan bruge resultaterne til.",
+        "Om forskelle i rammerne begrænser resultaternes anvendelse på klinikken.",
     ),
     AssessmentQuestion(
         "da-r-c2-001",
@@ -178,12 +178,12 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "vil indføre ordningen permanent i hele virksomheden næste måned.' Hvilken vurdering "
         "skelner mest præcist mellem grundlag og beslutning?",
         [
-            "Direktørens beslutning følger rapportens anbefaling, fordi flere afdelinger giver et større forsøg.",
-            "Selvudvælgelsen gør resultatet ubrugeligt, så rapporten giver ikke grundlag for yderligere afprøvning.",
-            "Resultatet støtter mere afprøvning, mens en generel indførelse kræver antagelser, forsøget ikke afklarer.",
-            "Koordinatorernes erfaring forklarer forbedringen, så antallet af møder kan udelades af næste forsøg.",
+            "En permanent indførelse følger anbefalingen, fordi den omfatter flere afdelinger end forsøget.",
+            "Kun frivillige afdelinger med erfarne koordinatorer bør deltage i næste forsøg for at sikre overførbarhed.",
+            "Forsøget taler for videre afprøvning; en permanent udrulning bygger på yderligere antagelser.",
+            "Koordinatorernes erfaring forklarer effekten; næste forsøg behøver ikke ændre mødeantallet.",
         ],
-        "Resultatet støtter mere afprøvning, mens en generel indførelse kræver antagelser, forsøget ikke afklarer.",
+        "Forsøget taler for videre afprøvning; en permanent udrulning bygger på yderligere antagelser.",
     ),
     AssessmentQuestion(
         "da-r-c2-003",
@@ -191,15 +191,15 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "C2",
         "Læs: 'Efter den tredje ekstra arbejdsweekend sagde Maja: Sikke et familievenligt "
         "projekt. Lederen lo kort, men Maja fortsatte: Jeg har faktisk brug for, at vi "
-        "taler om planen. Lederen lagde kalenderen på bordet.' Hvilket svar fra lederen "
-        "følger bedst op på Majas skift til direkte tale?",
+        "taler om planen. Lederen lagde kalenderen på bordet.' Lederen vil først afklare "
+        "hendes bekymring uden at lægge en bestemt forklaring i munden på hende. Hvad siger han?",
         [
-            "Ja, den joke har vi efterhånden hørt et par gange. Skal vi se, hvem der kan tage næste weekend?",
-            "Jeg hører, at weekenderne er blevet et reelt problem. Lad os se på, hvilke opgaver vi kan flytte.",
-            "Du har ret i, at projektet er familievenligt på andre punkter. Dem bør vi også huske i planen.",
-            "Det var godt at få grinet lidt af det. Vi kan vende tilbage til kalenderen, når projektet er slut.",
+            "Er det især fordelingen mellem kollegerne, du mener er urimelig, selv om antallet af weekender passer?",
+            "Hvad betyder de ekstra weekender for dig, og hvilke dele af planen skal vi se nærmere på?",
+            "Vil du hellere bytte næste weekend med en kollega, så vi kan fortsætte efter den aftalte plan?",
+            "Vil du have, at vi aftaler regler for den slags jokes, så tonen på møderne bliver bedre?",
         ],
-        "Jeg hører, at weekenderne er blevet et reelt problem. Lad os se på, hvilke opgaver vi kan flytte.",
+        "Hvad betyder de ekstra weekender for dig, og hvilke dele af planen skal vi se nærmere på?",
     ),
     AssessmentQuestion(
         "da-r-c2-004",
@@ -210,11 +210,11 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "accepterer målingerne, men ønsker kun genforhandling ved overskridelser. "
         "Begge vil gerne åbne i juni.' Hvilken sammenfatning bør mægleren give?",
         [
-            "Parterne er enige om prøveordningen og åbningen; kun metoden til støjmåling mangler.",
-            "Parterne har accepteret retten til ophævelse, men skal afklare, om den gælder før oktober.",
-            "Arrangøren har accepteret beboernes vilkår mod til gengæld at få en sikker åbning i juni.",
-            "Parterne deler ønsket om åbning, men er uenige om, hvad en overskridelse skal give ret til.",
+            "Parterne har aftalt åbningen; kun metoden til støjmålingen er uafklaret.",
+            "Retten til ophævelse er aftalt; det er kun tidspunktet for den, der er omstridt.",
+            "Arrangøren accepterer vilkårene til gengæld for en garanti om åbning i juni.",
+            "Åbningen er et fælles ønske; retten til at ophæve aftalen er fortsat omstridt.",
         ],
-        "Parterne deler ønsket om åbning, men er uenige om, hvad en overskridelse skal give ret til.",
+        "Åbningen er et fælles ønske; retten til at ophæve aftalen er fortsat omstridt.",
     ),
 ]

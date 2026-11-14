@@ -22,15 +22,16 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "da-g-c1-002",
         "grammar",
         "C1",
-        "Der står: 'Vi gennemfører arbejdsdagen, medmindre der varsles storm.' "
+        "Der står: 'Vi gennemfører arbejdsdagen, medmindre der varsles storm, "
+        "eller adgangsvejen lukkes.' "
         "Du skal omskrive beskeden uden at tilføje nye betingelser. Hvilken version passer?",
         [
-            "Vi gennemfører arbejdsdagen, også hvis der bliver varslet storm.",
-            "Vi gennemfører arbejdsdagen, når en varslet storm er overstået.",
-            "Vi gennemfører kun arbejdsdagen, hvis det bliver helt vindstille.",
-            "Vi gennemfører arbejdsdagen, hvis der ikke bliver varslet storm.",
+            "Arbejdsdagen gennemføres, hvis der ikke varsles storm, også selv om adgangsvejen lukkes.",
+            "Arbejdsdagen gennemføres, hvis adgangsvejen er åben, også selv om der varsles storm.",
+            "Arbejdsdagen aflyses kun, hvis både stormvarslet og vejlukningen bliver aktuelle.",
+            "Arbejdsdagen gennemføres, hvis hverken stormvarslet eller vejlukningen bliver aktuelle.",
         ],
-        "Vi gennemfører arbejdsdagen, hvis der ikke bliver varslet storm.",
+        "Arbejdsdagen gennemføres, hvis hverken stormvarslet eller vejlukningen bliver aktuelle.",
         "da-unless-boundaries-c1",
     ),
     AssessmentQuestion(
@@ -126,17 +127,17 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "da-v-c1-003",
         "vocabulary",
         "C1",
-        "Sofie opdager, at hun har glemt sine talepapirer derhjemme, "
+        "Sofie leder forgæves efter sine talepapirer, går i stå midt i en sætning "
         "og siger med et glimt i øjet: "
         "'Som I kan høre, er jeg jo grundigt forberedt.' Hvilken reaktion matcher "
         "bedst tonen uden at gøre hende til grin?",
         [
-            "Det er godt, at du har forberedt alle detaljer; lad os høre de sidste tal.",
-            "Så bør vi nok få en anden til at holde oplægget, hvis du ikke tager det alvorligt.",
-            "Jeg synes, du skal forklare, hvorfor de andre ikke sendte dig materialet.",
-            "Så må vi hjælpe hukommelsen på vej. Jeg har mine noter, hvis du får brug for dem.",
+            "Du lyder godt forberedt; så lad os gå direkte til de punkter, du allerede har skrevet ned.",
+            "Vi kan springe dit oplæg over, så du ikke behøver at forklare noget uden papirerne.",
+            "Vi bør finde ud af, hvem der skulle have sendt dig materialet, før vi begynder.",
+            "Hukommelsen får vist lidt ekstra arbejde i dag. Du må gerne låne mine noter.",
         ],
-        "Så må vi hjælpe hukommelsen på vej. Jeg har mine noter, hvis du får brug for dem.",
+        "Hukommelsen får vist lidt ekstra arbejde i dag. Du må gerne låne mine noter.",
     ),
     AssessmentQuestion(
         "da-v-c1-004",

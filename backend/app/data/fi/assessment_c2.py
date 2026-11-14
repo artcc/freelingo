@@ -7,15 +7,15 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "fi-g-c2-001",
         "grammar",
         "C2",
-        "Selvityksessä todetaan: «On varmaa, että vika on saattanut vaikuttaa tulokseen, "
-        "mutta vaikutuksen toteutumisesta ei ole näyttöä.» Mikä yhteenveto säilyttää rajauksen?",
+        "Selvityksessä todetaan: «On varmaa, että vika on saattanut vaikuttaa tulokseen.» "
+        "Mikä yhteenveto säilyttää väitteen varmuusasteen lisäämättä siihen tietoa?",
         [
             "Vian vaikutus tulokseen on varmistettu, mutta sen suuruudesta tarvitaan lisänäyttöä.",
             "Vian olemassaolo on jäänyt epäselväksi, mutta sen vaikutus tulokseen on vahvistettu.",
-            "Vaikutusmahdollisuus on vahvistettu, mutta tapahtunutta vaikutusta ei ole osoitettu.",
+            "Vaikutuksen mahdollisuutta pidetään varmana, mutta itse vaikutusta ei väitetä varmistetuksi.",
             "Vaikutus on osoitettu vähäiseksi, mutta sen tarkkaa mekanismia ei vielä tunneta.",
         ],
-        "Vaikutusmahdollisuus on vahvistettu, mutta tapahtunutta vaikutusta ei ole osoitettu.",
+        "Vaikutuksen mahdollisuutta pidetään varmana, mutta itse vaikutusta ei väitetä varmistetuksi.",
         "fi-nested-modality-c2",
     ),
     AssessmentQuestion(

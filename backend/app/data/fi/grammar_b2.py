@@ -54,7 +54,9 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Partisiipit",
         "Agenttipartisiippi nimeää tekijän tiiviissä määritteessä.",
         "MA-partisiippi liittää tekijän toiminnan kohteeseen: asukkaan tekemä ehdotus "
-        "on ehdotus, jonka asukas teki. Tekijä on genetiivissä. Kun tekijänä on "
+        "on tässä ehdotus, jonka asukas teki. Agenttipartisiippi ei itsessään ilmaise mennyttä "
+        "aikaa: tuntemani ihminen on ihminen, jonka tunnen. Ajallinen tulkinta riippuu "
+        "verbistä ja asiayhteydestä. Tekijä on genetiivissä. Kun tekijänä on "
         "persoonapronomini, yleiskielessä käytetään omistusliitettä: minun tekemäni, "
         "hänen tekemänsä. Partisiippi taipuu pääsanan mukaan: asukkaan tekemästä "
         "ehdotuksesta. Rakenteen kohde on tekemisen kohde, ei tekijä.",
@@ -66,6 +68,10 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Käsittelemme asukkaiden esittämät toiveet kokouksessa."),
             GrammarExample("Löysitkö lähettämäni aikataulun?"),
+            GrammarExample(
+                "Tuntemani opettaja työskentelee tässä koulussa.",
+                note="Tunteminen jatkuu nykyhetkessä; partisiippi ei yksin sijoita sitä menneeseen.",
+            ),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -260,7 +266,7 @@ B2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Potentiaali ilmaisee arviota: valmistunee tarkoittaa suunnilleen "
         "valmistuu luultavasti. Tunnus on usein -ne-, mutta vartalo voi muuttua: "
         "tulla → tullee, mennä → mennee. Olla-verbin muoto on lienee. "
-        "Mennyt arvio voidaan ilmaista lienee saapunut. Muotoja esiintyy "
+        "Arvio aiemmasta tapahtumasta voidaan ilmaista muodolla lienee saapunut. Muotoja esiintyy "
         "etenkin kirjoitetussa kielessä; aktiivisen käytön sijaan keskeistä on "
         "tunnistaminen ja luonteva selittäminen tavallisilla sanoilla.",
         rules=[

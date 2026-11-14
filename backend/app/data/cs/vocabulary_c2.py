@@ -178,7 +178,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "zamlčený",
                 "adjective",
-                "Vynechaný ze sdělení, přestože je pro pochopení důležitý.",
+                "Záměrně neuvedený ve sdělení, ačkoli o něm mluvčí ví.",
                 "Zamlčená podmínka mění praktický význam nabídky.",
             ),
             VocabularyEntry(
@@ -253,7 +253,7 @@ C2_SETS: list[VocabularySet] = [
                 "původce děje",
                 "phrase",
                 "Osoba nebo jiný činitel, od něhož popisovaná činnost vychází.",
-                "Pasivní věta neuvádí původce děje, takže nevíme, kdo žádost zamítl.",
+                "Ve větě „Žádost byla zamítnuta“ není původce děje uveden.",
             ),
             VocabularyEntry(
                 "dosah",

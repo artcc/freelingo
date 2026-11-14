@@ -91,7 +91,7 @@ A1_UNITS: list[CurriculumUnit] = [
         ["ro_time_leisure_a1"],
         ["listening", "speaking", "grammar", "vocabulary", "reading", "writing", "review"],
         [
-            "Stabilesc ziua și ora unei întâlniri.",
+            "Stabilesc ziua, data și ora unei întâlniri.",
             "Vorbesc despre timpul meu liber.",
             "Spun cui aparține un obiect familiar.",
         ],

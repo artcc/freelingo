@@ -14,7 +14,7 @@ A2_UNITS: list[CurriculumUnit] = [
         [
             "Kuvailen asunnon huoneita ja tavaroita.",
             "Taivutan tuttuja sanoja, kun kerron asunnon sijainnista ja tavaroiden omistajista.",
-            "Kuvailen useita esineitä ja erotan esimerkiksi muodot pienet talot ja talot ovat pieniä.",
+            "Käytän adjektiiveja ilmauksissa kuten pieni talo, pienessä talossa ja pienet talot.",
         ],
         2,
         "a1-unit-8",
@@ -29,6 +29,7 @@ A2_UNITS: list[CurriculumUnit] = [
         ["listening", "speaking", "vocabulary", "grammar", "reading", "writing", "review"],
         [
             "Pyydän oikeankokoista tuotetta.",
+            "Kuvailen useita esineitä ja erotan esimerkiksi muodot pienet talot ja talot ovat pieniä.",
             "Viittaan lähellä ja kaukana oleviin tavaroihin.",
             "Kerron, mistä tuotteita löytyy ja mitä kaupassa ei ole.",
         ],

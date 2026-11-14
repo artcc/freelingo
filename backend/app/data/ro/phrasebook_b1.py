@@ -98,7 +98,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
         "🤝",
         [
             PhrasebookEntry(
-                "Îmi împrumuți scara până mâine? Ți-o aduc înapoi seara.",
+                "Îmi împrumuți scara până mâine seară? Ți-o aduc înapoi după serviciu.",
                 "Ceri un obiect și precizezi când îl înapoiezi.",
                 "informal",
                 "b1-unit-3",

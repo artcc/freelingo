@@ -67,7 +67,7 @@ B2_CATEGORIES: list[PhrasebookCategory] = [
             ),
             PhrasebookEntry(
                 "Kad je rekla „sutra”, mislila je na utorak jer smo razgovarale u ponedjeljak.",
-                "Pojašnjavate datum obećane radnje pri kasnijem prepričavanju.",
+                "Pojašnjavate na koji se dan odnosila sugovorničina izjava.",
                 "neutral",
                 "b2-unit-2",
             ),

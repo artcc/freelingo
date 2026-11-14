@@ -52,7 +52,7 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "hr-g-c1-004",
         "grammar",
         "C1",
-        "Urednica je pregledala članak, a zatim ga je autor poslao lektorici. Koja sažeta "
+        "Urednica je pregledala članak, a zatim ga je autor poslao lektorici. Koja "
         "verzija vjerno prenosi te dvije radnje?",
         [
             "Pregledavši članak, autor ga je poslao lektorici.",
@@ -128,8 +128,8 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "hr-v-c1-001",
         "vocabulary",
         "C1",
-        "Udruga još nije pregledala proračun ni raspored. Želi izraziti podršku prijedlogu "
-        "bez prihvaćanja svih pojedinosti. Koja riječ prenosi tu namjeru u izjavi: "
+        "Udruga je pozdravila zamisao zajedničkog festivala, ali prije konačnog odgovora "
+        "traži troškovnik i raspored. Koja riječ odgovara njezinu stavu u izjavi: "
         "„Prijedlog podržavamo ___; "
         "o pojedinostima ćemo se očitovati nakon pregleda”?",
         [
@@ -286,14 +286,14 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "C1",
         "Projektor je zatajio treći put. Voditeljica pogleda ugašeni zaslon i kaže: "
         "„Baš je divno kad se možemo osloniti na tehniku.” Suradnik želi priznati problem "
-        "i praktično nastaviti izlaganje. Koji odgovor najbolje odgovara situaciji?",
+        "i odmah nastaviti s preostalim sadržajem izlaganja. Koji odgovor najbolje odgovara situaciji?",
         [
-            "Slažem se, ova nam je oprema znatno olakšala današnje izlaganje.",
-            "Možemo preskočiti raspravu, očito smatraš da sadržaj nije dovoljno zanimljiv.",
-            "Danas nas baš iskušava; mogu podijeliti ispisane materijale dok ga ponovno uključimo.",
-            "Nema potrebe za prigovorom, sudionici su ionako trebali unaprijed pročitati materijale.",
+            "Oprema nas je usporila; podijelimo ispise i dogovorimo novi termin za ostatak izlaganja.",
+            "Očito trebamo drugi projektor; pričekajmo zamjenski uređaj pa nastavimo kad stigne.",
+            "Danas nas baš iskušava; podijelit ću ispise pa možemo nastaviti i bez slike na zaslonu.",
+            "Ne isplati se opet pokušavati; prijeđimo na pitanja, a ostatak neka pročitaju kod kuće.",
         ],
-        "Danas nas baš iskušava; mogu podijeliti ispisane materijale dok ga ponovno uključimo.",
+        "Danas nas baš iskušava; podijelit ću ispise pa možemo nastaviti i bez slike na zaslonu.",
         "hr-contextual-irony-c1",
     ),
     AssessmentQuestion(

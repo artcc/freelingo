@@ -100,12 +100,12 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "En ven siger: Den nye café skulle være rigtig god; det siger mine naboer i hvert fald. "
         "Hvordan præsenterer vennen vurderingen?",
         [
-            "Som en oplysning fra andre, ikke som sin egen sikre erfaring.",
-            "Som et krav, caféen skal opfylde for at få lov at åbne.",
-            "Som en tidligere plan om selv at drive caféen.",
-            "Som en sikker konklusion efter selv at have spist der.",
+            "Som en andenhåndsoplysning frem for en personlig erfaring.",
+            "Som et ønske om, at caféen fremover vil forbedre sin kvalitet.",
+            "Som en vurdering, der tidligere gjaldt, men nu er blevet forældet.",
+            "Som en bekræftet vurdering, vennen og naboerne er nået frem til sammen.",
         ],
-        "Som en oplysning fra andre, ikke som sin egen sikre erfaring.",
+        "Som en andenhåndsoplysning frem for en personlig erfaring.",
         "da-evidential-modals-b2",
     ),
     AssessmentQuestion(

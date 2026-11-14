@@ -54,7 +54,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "a infirma",
                 "verb",
-                "A arăta că o ipoteză sau o afirmație nu se confirmă.",
+                "A arăta, prin dovezi sau argumente, că o ipoteză ori o afirmație este greșită.",
                 "Registrul de acces a infirmat presupunerea că sala era goală.",
             ),
             VocabularyEntry(
@@ -504,7 +504,7 @@ C1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "a da curs",
                 "phrase",
-                "A pune în aplicare sau a începe soluționarea unei solicitări.",
+                "A răspunde favorabil unei solicitări, trecând la acțiunea cerută.",
                 "Asociația a dat curs cererii și a publicat procesul-verbal.",
             ),
         ],

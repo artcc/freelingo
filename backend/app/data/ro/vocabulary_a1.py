@@ -75,7 +75,7 @@ A1_SETS: list[VocabularySet] = [
                 "bună ziua",
                 "phrase",
                 "Salut politicos folosit în timpul zilei.",
-                "Bună ziua, doamna Popescu!",
+                "Bună ziua, doamnă Popescu!",
             ),
             VocabularyEntry(
                 "la revedere",
@@ -140,13 +140,13 @@ A1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "frate",
                 "noun",
-                "Băiat sau bărbat cu aceiași părinți ca altă persoană.",
+                "Băiat sau bărbat care are cel puțin un părinte comun cu altă persoană.",
                 "Aici sunt doi frați.",
             ),
             VocabularyEntry(
                 "soră",
                 "noun",
-                "Fată sau femeie cu aceiași părinți ca altă persoană.",
+                "Fată sau femeie care are cel puțin un părinte comun cu altă persoană.",
                 "Aici sunt două surori.",
             ),
             VocabularyEntry("bunic", "noun", "Tatăl mamei sau al tatălui.", "Bunicul este acasă."),

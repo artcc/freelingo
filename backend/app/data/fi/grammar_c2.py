@@ -148,7 +148,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "kertovan lauseen subjektiin.",
         rules=[
             "Pura rakenne tarvittaessa että-lauseeksi ennen tiivistämistä.",
-            "Säilytä nimeämättä jätetty toimija nimeämättä myös selkokielisemmässä esityksessä.",
+            "Älä lisää selventävään esitykseen toimijaa, jota alkuperäinen teksti ei yksilöi.",
         ],
         examples=[
             GrammarExample(
@@ -173,7 +173,10 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             "Älä vahvista selvitystehtävää toimeenpanovaltuudeksi.",
         ],
         examples=[
-            GrammarExample("Ehdotamme, että selvitetään, millä ehdoilla rajoituksia voisi jatkaa."),
+            GrammarExample(
+                "Ehdotamme, että selvitetään, millä ehdoilla määräaikaisia käyttörajoituksia "
+                "voisi jatkaa."
+            ),
             GrammarExample("Tilapäisen käytön lupa ei ole lupa muuttaa tilaa pysyvästi."),
         ],
         related=["fi-nominalisation-c1"],

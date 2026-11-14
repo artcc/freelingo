@@ -41,12 +41,15 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "grammar",
         "C2",
         "Ana spune: «Dacă aș fi acceptat atunci postul din Iași, acum aș locui mai aproape "
-        "de părinți.» Care relatare păstrează participanții și reperele temporale?",
+        "de părinți.» Ce poate nota interlocutorul fără să adauge o evaluare sau o concluzie?",
         [
             "Ana își imaginează că ar locui acum mai aproape de părinți dacă ar fi acceptat acel post.",
-            "Ana se imaginează în trecut mai aproape de părinți, ca efect al unei decizii actuale.",
-            "Ana regretă că părinții nu au acceptat atunci un post care i-ar fi apropiat de ea.",
-            "Ana anunță că va accepta postul din Iași pentru a locui mai aproape de părinți.",
+            "Ana regretă că a refuzat postul, deoarece apropierea de părinți conta "
+            "mai mult decât cariera.",
+            "Ana consideră că acceptarea acelui post era singura cale de a locui "
+            "acum mai aproape de părinți.",
+            "Ana spune că acceptarea postului ar fi apropiat-o de părinți doar "
+            "pentru o perioadă deja încheiată.",
         ],
         "Ana își imaginează că ar locui acum mai aproape de părinți dacă ar fi acceptat acel post.",
         "ro-counterfactual-alignment-c2",
@@ -58,10 +61,10 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Ordinea de zi include «analizarea de către comisie a propunerii de suspendare "
         "a evaluării cererilor depuse de asociații». Ce se poate afirma fără a adăuga informații?",
         [
-            "Asociațiile propun suspendarea, iar comisia va analiza cererile depuse de acestea.",
-            "Comisia a suspendat evaluarea și urmează să analizeze obiecțiile asociațiilor.",
+            "Comisia va analiza o propunere a asociațiilor, care au depus și cererile vizate.",
+            "Comisia va analiza durata suspendării deja aprobate pentru cererile asociațiilor.",
             "Comisia va analiza o propunere; asociațiile sunt cele care au depus cererile.",
-            "Asociațiile vor evalua propunerea comisiei înainte de suspendarea cererilor.",
+            "Comisia va analiza propunerea de a suspenda depunerea cererilor de către asociații.",
         ],
         "Comisia va analiza o propunere; asociațiile sunt cele care au depus cererile.",
         "ro-dense-nominals-c2",
@@ -89,9 +92,9 @@ C2_QUESTIONS: list[AssessmentQuestion] = [
         "Regula internă precizează: «Doar Ana poate aproba plata; Vlad poate doar verifica "
         "documentele.» Care reformulare păstrează domeniul celor două restricții?",
         [
-            "Ana se ocupă exclusiv de aprobări, iar Vlad este singurul care poate verifica actele.",
-            "Ana și Vlad pot aproba plata împreună, după ce Vlad verifică toate documentele.",
-            "Ana poate verifica documentele, iar Vlad poate aproba plata verificată de ea.",
+            "Ana are drept exclusiv de aprobare; verificarea actelor îi este rezervată lui Vlad.",
+            "Ana are drept exclusiv de aprobare și nu are dreptul să verifice ea însăși actele.",
+            "Ana are drept exclusiv de aprobare; Vlad poate verifica doar actele acestei plăți.",
             "Aprobarea îi este rezervată Anei; rolul lui Vlad este limitat la verificarea actelor.",
         ],
         "Aprobarea îi este rezervată Anei; rolul lui Vlad este limitat la verificarea actelor.",

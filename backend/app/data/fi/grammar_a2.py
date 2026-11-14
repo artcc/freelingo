@@ -13,8 +13,10 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "kk–k, pp–p ja tt–t: pankki–pankin, kauppa–kaupan, matto–maton. "
         "Myös t–d, p–v ja k:n kato ovat tavallisia: katu–kadun, lupa–luvan, "
         "jalka–jalan. Verbeissä on esimerkiksi ottaa–otan–ottaa. "
-        "Sääntö ei koske jokaista k:ta, p:tä tai t:tä. Opettele sanan perusmuoto, "
-        "genetiivi ja tarvittavat verbimuodot yhdessä.\n\n"
+        "Sääntö ei koske jokaista k:ta, p:tä tai t:tä. Suuntakaan ei ole aina sama: "
+        "ottaa–otan sisältää heikkenemisen, mutta tavata–tapaan vahvistumisen. "
+        "Opettele nominin perusmuoto ja genetiivi sekä verbin perusmuoto ja "
+        "persoonamuodot yhdessä.\n\n"
         "Myös muu vartalo voi muuttua. Tavallisia sarjoja ovat huone–huoneen–huonetta, "
         "nainen–naisen–naista ja uusi–uuden–uutta. I-loppuiset sanat eivät kaikki taivu "
         "samoin: pankki–pankin, mutta ovi–oven. Nämä vartalonmuutokset eivät kaikki ole "
@@ -68,17 +70,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Adjektiivi taipuu substantiivin mukana",
         "A2",
         "Nominit",
-        "Kuvaile esineitä myös monikossa ja paikallissijoissa.",
+        "Taivuta substantiivin edellä oleva adjektiivi tutussa luvussa ja sijassa.",
         "Substantiivin edessä oleva adjektiivi on tavallisesti samassa luvussa ja sijassa "
         "kuin substantiivi: pieni talo, pienessä talossa, pienet talot. "
-        "Molempien sanojen vartalo voi muuttua. Olla-verbin jälkeinen adjektiivi noudattaa "
-        "osittain eri sääntöjä: Talo on pieni, mutta Talot ovat pieniä. "
-        "Tässä harjoitellaan ensin nimen edellä olevaa määritettä. Kuvailevan predikatiivin "
-        "sija riippuu kuvattavasta asiasta: laskettavasta yksiköstä Talo on pieni, "
-        "aineesta Vesi on kylmää ja monista erillisistä asioista Talot ovat pieniä. "
-        "Monikollista paria tai kokonaisuutta kuvataan usein nominatiivilla: "
-        "Nämä housut ovat pitkät. Kaikki monikolliset kuvaukset eivät siis vaadi partitiivia; "
-        "sen tavalliset monikkomuodot harjoitellaan seuraavassa aiheessa.",
+        "Molempien sanojen vartalo voi muuttua: uusi huone, uuden huoneen ovi, "
+        "uudessa huoneessa, uudet huoneet. Tässä harjoitellaan substantiivin edellä "
+        "olevaa määritettä yksikön tutuissa sijoissa ja monikon nominatiivissa. "
+        "Olla-verbin jälkeiseen kuvaukseen tätä sääntöä ei sovelleta sellaisenaan; "
+        "sen sijanvalintaa käsitellään monikon partitiivin yhteydessä.",
         rules=[
             "Taivuta myös edellä oleva kuvaileva sana.",
             "Opettele vartalot: pieni–pienen, uusi–uuden.",
@@ -86,7 +85,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Asun pienessä talossa."),
             GrammarExample("Uudet verhot ovat makuuhuoneessa."),
-            GrammarExample("Vesi on kylmää."),
+            GrammarExample("Pienen huoneen ikkuna on auki."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -100,7 +99,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Monikon partitiivi: kirjoja ja kenkiä",
         "A2",
         "Nominit",
-        "Puhu epämääräisestä määrästä useita asioita.",
+        "Puhu epämääräisestä määrästä ja kuvaile useita asioita.",
         "Monikon partitiivi ilmaisee usein rajaamatonta määrää: Ostan omenoita. "
         "Tavallisia muotoja ovat kirja–kirjoja, talo–taloja, kenkä–kenkiä, "
         "huone–huoneita ja nainen–naisia. Muoto riippuu sanatyypistä; yhtä päätettä "
@@ -110,7 +109,15 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "partitiivia: Pihalla on lapsia. Kun puhutaan jo tunnetuista lapsista, tavallinen "
         "rakenne on Lapset ovat pihalla. Kielteisessä esittelylauseessa sanotaan "
         "Pihalla ei ole lapsia. Valinta riippuu siis myös siitä, esitelläänkö uusi joukko "
-        "vai kerrotaanko tunnetun joukon sijainti.",
+        "vai kerrotaanko tunnetun joukon sijainti.\n\n"
+        "Olla-verbin jälkeinen kuvaileva adjektiivi eli predikatiivi ei aina ole samassa "
+        "sijassa kuin subjekti. Sija riippuu kuvattavasta asiasta: laskettavasta yksiköstä "
+        "Talo on pieni, aineesta Vesi on kylmää ja monista erillisistä asioista "
+        "Talot ovat pieniä. Vertaa substantiivin edellä olevaa määritettä ja "
+        "predikatiivia: pienet talot – Talot ovat pieniä. Tavallisia adjektiivin "
+        "monikon partitiiveja ovat pieni–pieniä, uusi–uusia ja kaunis–kauniita. "
+        "Kun monikollinen sana tarkoittaa yhtä kokonaisuutta, predikatiivi on usein nominatiivissa: "
+        "Housut ovat pitkät. Kaikki monikolliset kuvaukset eivät siis vaadi partitiivia.",
         rules=[
             "Opettele sanan monikon partitiivi osana taivutussarjaa.",
             "Adjektiivikin taipuu: uusia kenkiä.",
@@ -118,6 +125,14 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Kaupassa on tuoreita omenoita."),
             GrammarExample("Tarvitsen uusia kenkiä."),
+            GrammarExample(
+                "Talot ovat pieniä.",
+                note="Vertaa substantiivin edellä olevaan määritteeseen: pienet talot.",
+            ),
+            GrammarExample(
+                "Housut ovat pitkät.",
+                note="Sana housut on monikollinen mutta tarkoittaa tässä yhtä vaatekappaletta.",
+            ),
         ],
         common_mistakes=[
             GrammarMistake(

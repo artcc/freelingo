@@ -53,30 +53,33 @@ C1_QUESTIONS: list[AssessmentQuestion] = [
         "ro-g-c1-004",
         "grammar",
         "C1",
-        "Instrucțiunea spune: «Nu este obligatoriu să ridicați documentele personal; "
-        "le poate ridica și o persoană împuternicită.» Ce mesaj păstrează regula?",
+        "Instrucțiunea spune: «Nu este obligatoriu să ridicați documentele personal. "
+        "Dacă trimiteți un reprezentant, acesta trebuie să prezinte o împuternicire. "
+        "Titularul prezintă doar actul de identitate.» Un coleg spune că trebuie să "
+        "pregătească o împuternicire chiar dacă merge el însuși. Ce răspuns păstrează regula?",
         [
-            "Este preferabil să trimiteți un reprezentant, deși puteți veni și personal.",
-            "Puteți veni personal numai dacă persoana împuternicită nu este disponibilă.",
-            "Trebuie să desemnați un reprezentant înainte de a putea veni personal.",
-            "Puteți veni personal sau puteți trimite pe cineva care are împuternicire.",
+            "Poți alege cine ridică actele, dar împuternicirea este necesară în ambele situații.",
+            "Poți merge personal cu actul de identitate numai dacă nu ai desemnat un reprezentant.",
+            "Poți trimite un reprezentant, iar acesta poate alege între actul tău și împuternicire.",
+            "Poți merge tu cu actul de identitate; împuternicirea este cerută reprezentantului.",
         ],
-        "Puteți veni personal sau puteți trimite pe cineva care are împuternicire.",
+        "Poți merge tu cu actul de identitate; împuternicirea este cerută reprezentantului.",
         "ro-modal-scope-c1",
     ),
     AssessmentQuestion(
         "ro-g-c1-005",
         "grammar",
         "C1",
-        "Un raport precizează: «Extinderea programului nu duce neapărat la creșterea "
-        "numărului de cititori.» Care reformulare păstrează forța afirmației?",
+        "Despre cele douăsprezece propuneri, secretara spune doar: "
+        "«Nu toate au fost respinse.» Se știe că fiecare a fost fie acceptată, fie respinsă. "
+        "Care însemnare ar adăuga o informație pe care secretara nu a oferit-o?",
         [
-            "Extinderea programului poate mări numărul de cititori doar dacă taxele scad.",
-            "Extinderea programului are un efect prea mic pentru a putea fi măsurat.",
-            "Extinderea programului poate atrage cititori, însă acest efect nu este garantat.",
-            "Extinderea programului este probabil să reducă numărul actual de cititori.",
+            "Cel puțin o propunere a fost acceptată, fără să știm numărul exact.",
+            "Respingerea nu a vizat întregul grup al celor douăsprezece propuneri.",
+            "Majoritatea propunerilor au fost acceptate, deși nu știm numărul exact.",
+            "Este posibil să fi fost acceptată o singură propunere, dar nu este sigur.",
         ],
-        "Extinderea programului poate atrage cititori, însă acest efect nu este garantat.",
+        "Majoritatea propunerilor au fost acceptate, deși nu știm numărul exact.",
         "ro-quantified-negation-c1",
     ),
     AssessmentQuestion(

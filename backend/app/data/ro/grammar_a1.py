@@ -47,7 +47,9 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "formele sunt, ești, este, suntem, sunteți, sunt. Este și e sunt ambele corecte; "
         "e apare des în conversație.\n\nPronumele poate lipsi când persoana este clară: "
         "Sunt Ana. Pentru adresare politicoasă folosim dumneavoastră cu sunteți, chiar "
-        "dacă vorbim cu o singură persoană.",
+        "dacă vorbim cu o singură persoană. În saluturi și cereri putem folosi "
+        "formele de adresare domnule și doamnă: Bună ziua, doamnă Popescu! "
+        "Mulțumesc, domnule Ionescu! Separăm adresarea prin virgulă.",
         structure="eu sunt; tu ești; el/ea este; noi suntem; voi sunteți; ei/ele sunt",
         rules=[
             "Eu și tu se folosesc pentru o persoană; noi și voi pentru mai multe persoane.",
@@ -288,7 +290,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
     ),
     GrammarTopic(
         "ro-time-a1",
-        "Când? Zilele și ora",
+        "Când? Zilele, data și ora",
         "A1",
         "Timp",
         "Spunem când are loc o activitate.",
@@ -297,8 +299,15 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "prin ceasul de 24 de ore sau prin formule uzuale: trei și jumătate, "
         "patru fără un sfert.\n\nDimineața, după-amiaza și seara sunt expresii "
         "obișnuite pentru părțile zilei. În fiecare luni și lunea descriu un "
-        "obicei repetat. Spunem la ora unu, dar la ora două.",
-        structure="luni la ora trei; dimineața; în fiecare sâmbătă",
+        "obicei repetat. Spunem la ora unu, dar la ora două.\n\n"
+        "Lunile sunt ianuarie, februarie, martie, aprilie, mai, iunie, iulie, august, "
+        "septembrie, octombrie, noiembrie și decembrie. Pentru lună spunem în mai; "
+        "pentru o dată, pe zece mai. Pentru prima zi a lunii folosim întâi: pe întâi mai. "
+        "Lunile se scriu cu literă mică.\n\n"
+        "Pentru ordine folosim primul și prima: primul curs, prima zi. Urmează "
+        "al doilea curs, a doua zi, al treilea curs, a treia zi. Aceste forme arată "
+        "poziția într-o serie, nu numărul total: două zile, dar a doua zi.",
+        structure="luni la ora trei; pe zece mai; primul curs; în fiecare sâmbătă",
         rules=[
             "Când? întreabă despre timp; Cât este ceasul? întreabă ora.",
             "La trei și jumătate înseamnă 3:30.",
@@ -307,6 +316,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Cursul începe marți la ora nouă."),
             GrammarExample("Sâmbăta citesc. Duminică merg la cinema."),
+            GrammarExample("Primul curs este pe zece mai, la ora două."),
         ],
         common_mistakes=[
             GrammarMistake("Ne vedem la luni.", "Ne vedem luni.", "Ziua nu cere la în acest tipar.")

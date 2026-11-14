@@ -95,8 +95,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "a se odihni. La prezent folosim mă, te, se, ne, vă, se înaintea verbului: "
         "mă trezesc, te trezești, se trezește, ne trezim, vă treziți, se trezesc.\n\n"
         "Nu fiecare acțiune personală este reflexivă: spunem dorm, nu mă dorm. "
-        "Negația precedă pronumele: Nu mă grăbesc.",
-        structure="mă / te / se / ne / vă / se + verb",
+        "Negația precedă pronumele: Nu mă grăbesc.\n\n"
+        "Alte verbe, precum a-și aminti, folosesc forme reflexive de dativ: îmi amintesc, "
+        "îți amintești, își amintește, ne amintim, vă amintiți, își amintesc. "
+        "Învățăm verbul cu pronumele potrivit: îmi amintesc adresa, nu mă amintesc adresa. "
+        "În aceste exemple, pronumele reflexiv se raportează la subiect.",
+        structure="mă / te / se / ne / vă / se; îmi / îți / își / ne / vă / își + verb",
         rules=[
             "Pronumele reflexiv și verbul se potrivesc cu aceeași persoană.",
             "Pronumele face parte din construcția învățată a verbului.",
@@ -105,6 +109,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("Ne trezim la șapte și ne pregătim pentru curs."),
             GrammarExample("Ioana se odihnește după serviciu."),
+            GrammarExample("Îmi amintesc prima zi de școală."),
         ],
         common_mistakes=[
             GrammarMistake("Eu se trezesc.", "Eu mă trezesc.", "Eu cere pronumele mă.")
@@ -121,8 +126,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "te-ai trezit, s-a trezit, ne-am trezit, v-ați trezit, s-au trezit. "
         "Cratima leagă formele pronunțate împreună.\n\nNegația se pune înaintea "
         "grupului: Nu m-am grăbit. Într-o întrebare păstrăm același grup: "
-        "La ce oră te-ai trezit? Participiul nu se acordă cu subiectul.",
-        structure="m-am / te-ai / s-a / ne-am / v-ați / s-au + participiu",
+        "La ce oră te-ai trezit? Participiul nu se acordă cu subiectul.\n\n"
+        "Pentru a-și aminti folosim mi-am amintit, ți-ai amintit, și-a amintit, "
+        "ne-am amintit, v-ați amintit, și-au amintit. Păstrăm diferența dintre "
+        "cele două serii: s-a trezit, dar și-a amintit.",
+        structure="m-am trezit / s-a trezit; mi-am amintit / și-a amintit",
         rules=[
             "Se devine s- înaintea auxiliarului a sau au.",
             "La voi folosim v-ați, nu vă ați.",
@@ -131,6 +139,7 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         examples=[
             GrammarExample("M-am îmbrăcat repede."),
             GrammarExample("Fetele s-au odihnit după drum."),
+            GrammarExample("Ne-am amintit adresa."),
         ],
         common_mistakes=[
             GrammarMistake(
@@ -178,7 +187,11 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "lui înaintea numelui: camera lui Andrei. La multe nume feminine "
         "folosim o terminație: camera Mariei, telefonul Anei. Unele nume "
         "feminine cer lui: camera lui Carmen. În conversația familiară se aude și "
-        "camera lui Maria; pentru exprimarea standard îngrijită exersăm camera Mariei.",
+        "camera lui Maria; pentru exprimarea standard îngrijită exersăm camera Mariei.\n\n"
+        "La feminin singular, forma substantivului folosită cu unei este adesea "
+        "aceeași ca la plural: o cameră – două camere – ușa unei camere. "
+        "Și adjectivul își schimbă forma: unei camere luminoase, ușa camerei luminoase. "
+        "La masculin spunem unui vecin amabil, iar la plural unor vecini amabili.",
         structure="obiect identificat + posesor la genitiv",
         rules=[
             "Lui poate preceda un nume propriu; nu îl adăugăm înainte de vecinului.",
@@ -236,7 +249,15 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "relua un destinatar exprimat: Îi dau vecinei cheia.\n\n"
         "Îi poate însemna lui sau ei; contextul arată persoana. În expresiile "
         "îmi place și îmi plac, verbul se acordă cu lucrul apreciat: Îmi place "
-        "camera. Îmi plac ferestrele.",
+        "camera. Îmi plac ferestrele.\n\n"
+        "Pentru contrast adăugăm formele accentuate mie, ție, lui, ei, nouă, vouă, lor "
+        "și păstrăm pronumele scurt: Mie îmi place, dar lui nu îi place. "
+        "Nouă ne trimite cheia, nu vouă. Formele accentuate nu sunt obligatorii "
+        "când nu avem nevoie să subliniem destinatarul.\n\n"
+        "La perfectul compus, pronumele rămâne înaintea auxiliarului, cu forme "
+        "precum mi-a scris, ți-am dat, i-am trimis, ne-a spus, v-am explicat, "
+        "le-am răspuns. Pentru el sau ea folosim i-: I-am scris Mariei. "
+        "Pentru ei sau ele folosim le-: Le-am scris vecinilor.",
         structure="îmi / îți / îi / ne / vă / le + verb",
         rules=[
             "Îi se folosește pentru un destinatar, le pentru mai mulți.",
@@ -293,7 +314,12 @@ A2_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Același tipar este frecvent cu o persoană precis identificată: "
         "Îl aștept pe medic.\n\nNu punem pe înaintea tuturor obiectelor: "
         "Caut un formular. Pentru o profesie nespecificată putem spune "
-        "Caut un medic, fără să desemnăm o persoană anume.",
+        "Caut un medic, fără să desemnăm o persoană anume.\n\n"
+        "Pentru contrast sau precizare folosim pronumele accentuate: pe mine, pe tine, "
+        "pe el, pe ea, pe noi, pe voi, pe ei, pe ele. Păstrăm pronumele scurt: "
+        "Pe mine mă caută, nu pe tine. După prepoziții precum cu sau pentru folosim "
+        "mine și tine, nu eu și tu: cu mine, pentru tine. Celelalte persoane "
+        "păstrează formele cunoscute: cu ea, pentru noi.",
         structure="îl / o / îi / le + verb + pe + persoană identificată",
         rules=[
             "Pe din Îl văd pe Andrei nu exprimă poziția deasupra unui lucru.",

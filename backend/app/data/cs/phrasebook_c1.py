@@ -60,7 +60,7 @@ C1_CATEGORIES: list[PhrasebookCategory] = [
                 "c1-unit-2",
             ),
             PhrasebookEntry(
-                "Pokud jde o cenu, máme jasno; zbývá posoudit dlouhodobé náklady.",
+                "Pokud jde o pořizovací cenu, máme jasno; zbývá posoudit provozní náklady.",
                 "Rozdělujete složitou debatu na již vyřešenou otázku a další krok.",
                 "neutral",
                 "c1-unit-2",

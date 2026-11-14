@@ -434,7 +434,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en aflysning",
                 "noun",
-                "En meddelelse om, at noget planlagt ikke finder sted.",
+                "Det, at en planlagt aktivitet ikke bliver gennemført.",
                 "Aflysningen kom, mens vi var på vej til stationen.",
             ),
             VocabularyEntry(
@@ -514,7 +514,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en bestyrelse",
                 "noun",
-                "En valgt gruppe, som leder en forening eller organisation.",
+                "En gruppe med det overordnede ansvar for ledelsen af en forening eller organisation.",
                 "Bestyrelsen mødes den første tirsdag i måneden.",
             ),
             VocabularyEntry(
@@ -636,7 +636,7 @@ B1_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en reservedel",
                 "noun",
-                "En ny del, som erstatter en ødelagt del i en ting.",
+                "En del beregnet til at erstatte en slidt eller ødelagt del i en maskine eller anden ting.",
                 "Værkstedet venter på en reservedel til vaskemaskinen.",
             ),
             VocabularyEntry(

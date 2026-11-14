@@ -32,7 +32,8 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Objekti",
         "Lauseen rakenne vaikuttaa kokonaisenkin kohteen muotoon.",
         "Kielteisen lauseen objekti on tavallisesti partitiivissa: en ostanut lippua. "
-        "Myönteisen käskyn yksiköllinen substantiiviobjekti on kokonaisena nominatiivissa: osta lippu. "
+        "Toisen persoonan myönteisen käskyn yksiköllinen substantiiviobjekti on kokonaisena "
+        "nominatiivissa: osta lippu, ostakaa lippu. "
         "Sama koskee tavallista täytyy-rakennetta: minun täytyy ostaa lippu. "
         "Tavallisessa myönteisessä persoonalauseessa sanotaan ostan lipun. "
         "Persoonapronominin totaaliobjekti säilyttää t-muodon myös käskyssä: kutsu hänet.",
@@ -380,7 +381,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Vaikka esittelee seikan, joka ei estä päälauseen tapahtumaa: vaikka satoi, "
         "lähdimme ulos. Silti ja kuitenkin voivat yhdistää erillisiä lauseita "
         "samaan vastakohtaiseen ajatukseen. Vaikka voi myös aloittaa kuvitellun "
-        "tilanteen: vaikka sataisi, lähtisimme. Aikamuoto ja asiayhteys erottavat "
+        "tilanteen: vaikka sataisi, lähtisimme. Tapaluokka, aikamuoto ja asiayhteys erottavat "
         "toteutuneen tilanteen kuvitellusta.",
         rules=[
             "Älä sekoita syytä ja vastakohtaa: koska ja vaikka muuttavat suhdetta.",

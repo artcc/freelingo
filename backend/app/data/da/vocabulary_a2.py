@@ -96,7 +96,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "en kuffert",
                 "noun",
-                "En rejsetaske med faste sider og ofte hjul.",
+                "En rejsetaske med håndtag, ofte også hjul, som kan åbnes helt.",
                 "Min kuffert er blå.",
             ),
             VocabularyEntry(

@@ -1128,7 +1128,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "podepsat",
                 "verb",
-                "Napsat vlastní podpis na dokument.",
+                "Napsat na dokument své jméno jako potvrzení souhlasu nebo autorství.",
                 "Žádost musíte podepsat.",
             ),
             VocabularyEntry(

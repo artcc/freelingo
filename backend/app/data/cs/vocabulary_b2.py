@@ -405,7 +405,7 @@ B2_SETS: list[VocabularySet] = [
                 "splatnost",
                 "noun",
                 "Doba, kdy má být peněžitý závazek uhrazen.",
-                "Dohodli jsme se na splatnosti faktury čtrnáct dnů.",
+                "Dohodli jsme se na čtrnáctidenní splatnosti faktury.",
             ),
             VocabularyEntry(
                 "dodatek",

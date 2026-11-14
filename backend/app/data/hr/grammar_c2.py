@@ -107,7 +107,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
             GrammarExample(
                 "Došlo je do otkazivanja sastanka. — Sastanak je otkazan.",
-                note="Ni jedna inačica ne otkriva tko je otkazao sastanak.",
+                note="Nijedna inačica ne otkriva tko je otkazao sastanak.",
             ),
         ],
         related=["hr-attachment-c2", "hr-evidence-scope-c2"],
@@ -133,7 +133,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
             GrammarExample(
                 "Nije dokazano da je voda onečišćena; to ne znači da je potvrđena njezina ispravnost.",
-                note="Izostanak dokaza nije dokaz suprotne tvrdnje.",
+                note="To što tvrdnja nije dokazana ne znači da je dokazana njezina suprotnost.",
             ),
         ],
         related=["hr-negation-scope-c2", "hr-commitment-c2"],
@@ -426,7 +426,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             ),
             GrammarExample(
                 "Ivana predlaže subotu; za nedjelju se zasad izjasnio samo Dario.",
-                note="Ni jedan prijedlog nije prikazan kao zajednička odluka.",
+                note="Nijedan prijedlog nije prikazan kao zajednička odluka.",
             ),
         ],
         related=["hr-elliptical-replies-c2", "hr-reference-repair-c2"],
@@ -507,7 +507,7 @@ C2_GRAMMAR_TOPICS: list[GrammarTopic] = [
             GrammarExample(
                 "Preporučujemo da nam unaprijed najavite dolazak. — "
                 "Bilo bi dobro da nam prije dolaska javite da dolazite.",
-                note="Obje inačice preporučuju najavu; ni jedna je ne proglašava uvjetom ulaska.",
+                note="Obje inačice preporučuju najavu; nijedna je ne proglašava uvjetom ulaska.",
             ),
         ],
         related=["hr-nominal-compression-c2", "hr-commitment-c2"],

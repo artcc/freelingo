@@ -323,13 +323,13 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "reading",
         "B2",
         "Pročitajte: „Stanari traže mir nakon dvadeset sati, a glazbena udruga traži "
-        "prostor za večernje probe. Voditelj predlaže ranije probe radnim danima i jednu "
-        "kasniju subotnju probu mjesečno, uz prethodnu najavu. Nijedna strana nije dobila "
-        "sve što je tražila, ali obje pristaju isprobati raspored.” Što je omogućilo dogovor?",
+        "prostor za večernje probe. Voditelj predlaže da probe radnim danima završe do "
+        "osam navečer, a jedna subotnja proba mjesečno do devet navečer, uz prethodnu "
+        "najavu. Stanari i udruga pristaju isprobati raspored.” Što je omogućilo dogovor?",
         [
-            "Stanari su odustali od ograničenja buke tijekom cijelog tjedna.",
-            "Udruga je prihvatila potpunu zabranu večernjih proba.",
-            "Voditelj je odgodio odlučivanje dok se ne pronađe drugi prostor.",
+            "Stanari su prihvatili kasniju probu svake subote uz prethodnu najavu.",
+            "Udruga je dobila kasnije probe radnim danima uz raniji završetak subotom.",
+            "Strane su prihvatile radne dane, a subotnji su termin ostavile za novi dogovor.",
             "Obje su strane prihvatile ograničenu prilagodbu svojih zahtjeva.",
         ],
         "Obje su strane prihvatile ograničenu prilagodbu svojih zahtjeva.",

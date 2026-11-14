@@ -31,7 +31,7 @@ C1_SETS: list[VocabularySet] = [
                 "naznaka",
                 "noun",
                 "Znak koji upućuje na mogućnost, ali je sam ne potvrđuje.",
-                "Pukotina je naznaka mogućeg oštećenja, ne konačna procjena sigurnosti.",
+                "Pukotina je naznaka mogućeg problema s nosivošću, ne konačna procjena sigurnosti.",
             ),
             VocabularyEntry(
                 "neprovjeren",

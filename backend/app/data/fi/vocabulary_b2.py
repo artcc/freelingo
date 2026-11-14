@@ -238,7 +238,8 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "esteettömyys",
                 "noun",
-                "Fyysisen ympäristön sopivuus myös liikkumisrajoitteisille.",
+                "Fyysisen ympäristön soveltuvuus erilaisille käyttäjille, myös ihmisille, joilla on "
+                "liikkumis- tai aistirajoitteita.",
                 "Tilan esteettömyys tarkistetaan ennen tapahtumaa.",
             ),
             VocabularyEntry(
@@ -306,7 +307,7 @@ B2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "todennäköisyys",
                 "noun",
-                "Arvio siitä, kuinka mahdollinen tapahtuman toteutuminen on.",
+                "Luku tai arvio, joka kuvaa, miten vahvasti tapahtuman toteutumista voidaan odottaa.",
                 "Ennusteessa sateen todennäköisyys kasvaa illaksi.",
             ),
             VocabularyEntry(

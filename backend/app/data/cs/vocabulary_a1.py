@@ -339,7 +339,10 @@ A1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry("bydlet", "verb", "Mít někde svůj domov.", "Bydlím tady."),
             VocabularyEntry(
-                "pracovat", "verb", "Vykonávat práci nebo zaměstnání.", "Pracujeme doma."
+                "pracovat",
+                "verb",
+                "Vykonávat činnost, například za mzdu.",
+                "Pracujeme doma.",
             ),
             VocabularyEntry("dělat", "verb", "Vykonávat nějakou činnost.", "Co děláš ráno?"),
             VocabularyEntry(
@@ -398,12 +401,57 @@ A1_SETS: list[VocabularySet] = [
                 "Počet 12, například počet měsíců v roce.",
                 "Je dvanáct hodin.",
             ),
+            VocabularyEntry(
+                "třináct", "numeral", "Počet 13, o jeden více než dvanáct.", "Máme třináct minut."
+            ),
+            VocabularyEntry(
+                "čtrnáct", "numeral", "Počet 14, o dva více než dvanáct.", "Čekáme čtrnáct minut."
+            ),
+            VocabularyEntry(
+                "patnáct", "numeral", "Počet 15; deset a pět.", "Mám patnáct korun."
+            ),
+            VocabularyEntry(
+                "šestnáct", "numeral", "Počet 16; deset a šest.", "Vlak jede v šestnáct hodin."
+            ),
+            VocabularyEntry(
+                "sedmnáct", "numeral", "Počet 17; deset a sedm.", "To stojí sedmnáct korun."
+            ),
+            VocabularyEntry(
+                "osmnáct", "numeral", "Počet 18; deset a osm.", "Máme osmnáct minut."
+            ),
+            VocabularyEntry(
+                "devatenáct",
+                "numeral",
+                "Počet 19, o jeden méně než dvacet.",
+                "Vlak jede v devatenáct hodin.",
+            ),
             VocabularyEntry("dvacet", "numeral", "Počet 20; dvě desítky.", "Mám dvacet korun."),
             VocabularyEntry(
                 "třicet", "numeral", "Počet 30; tři desítky.", "Káva stojí třicet korun."
             ),
             VocabularyEntry(
+                "čtyřicet", "numeral", "Počet 40; čtyři desítky.", "Čaj stojí čtyřicet korun."
+            ),
+            VocabularyEntry(
                 "padesát", "numeral", "Počet 50; pět desítek.", "Čaj stojí padesát korun."
+            ),
+            VocabularyEntry(
+                "šedesát", "numeral", "Počet 60; šest desítek.", "Hodina má šedesát minut."
+            ),
+            VocabularyEntry(
+                "sedmdesát",
+                "numeral",
+                "Počet 70; sedm desítek.",
+                "Jízdenka stojí sedmdesát korun.",
+            ),
+            VocabularyEntry(
+                "osmdesát", "numeral", "Počet 80; osm desítek.", "Účet je osmdesát korun."
+            ),
+            VocabularyEntry(
+                "devadesát",
+                "numeral",
+                "Počet 90; devět desítek.",
+                "To stojí devadesát korun.",
             ),
             VocabularyEntry("sto", "numeral", "Počet 100; deset desítek.", "Mám sto korun."),
             VocabularyEntry(

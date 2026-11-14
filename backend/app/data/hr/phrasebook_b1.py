@@ -231,7 +231,7 @@ B1_CATEGORIES: list[PhrasebookCategory] = [
         [
             PhrasebookEntry(
                 "Rekla je da će potvrditi termin do četvrtka.",
-                "Prenosite obećanje druge osobe bez pretvaranja plana u gotovu činjenicu.",
+                "Prenosite najavu druge osobe bez tvrdnje da je termin već potvrdila.",
                 "neutral",
                 "b1-unit-6",
             ),

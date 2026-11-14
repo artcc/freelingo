@@ -346,7 +346,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "nepomirljiv",
                 "adjective",
-                "Takav da se teško može uskladiti s drugim stavom ili zahtjevom.",
+                "Takav da se ne može uskladiti s drugim stavom ili zahtjevom.",
                 "Zahtjevi su djelovali nepomirljivo dok nismo razdvojili radni i privatni dio putovanja.",
             ),
             VocabularyEntry(
@@ -370,7 +370,7 @@ C2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "uvjetovati",
                 "verb",
-                "Učiniti prihvaćanje ili ostvarenje nečega ovisnim o određenom uvjetu.",
+                "Učiniti prihvaćanje ili ostvarenje nečega ovisnim o ispunjenju određenog zahtjeva.",
                 "Stanari su suglasnost uvjetovali prestankom glazbe u deset sati.",
             ),
             VocabularyEntry(

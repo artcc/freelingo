@@ -202,7 +202,7 @@ C1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 "přistoupit na",
-                "phrase",
+                "verb",
                 "Přijmout navrženou podmínku nebo řešení.",
                 "Na kratší lhůtu přistoupíme, pokud se zmenší rozsah zakázky.",
             ),
@@ -294,7 +294,7 @@ C1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 "ujmout se",
-                "phrase",
+                "verb",
                 "Převzít úkol, roli nebo péči o něco.",
                 "Koordinace jednání se ujala vedoucí knihovny.",
             ),
@@ -412,7 +412,7 @@ C1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 "ohradit se",
-                "phrase",
+                "verb",
                 "Výslovně odmítnout tvrzení nebo jednání, které člověk pokládá za nepřijatelné.",
                 "Ohradil se proti tomu, že zápis připisuje chybu pouze jeho týmu.",
             ),
@@ -436,7 +436,7 @@ C1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 "vyjasnit si",
-                "phrase",
+                "verb",
                 "Vzájemně si objasnit rozdílné výklady nebo očekávání.",
                 "Než práci rozdělíme, potřebujeme si vyjasnit odpovědnost za kontrolu.",
             ),
@@ -480,14 +480,14 @@ C1_SETS: list[VocabularySet] = [
             ),
             VocabularyEntry(
                 "rozcházet se",
-                "phrase",
+                "verb",
                 "Lišit se v názorech, závěrech nebo očekáváních.",
                 "V cíli se shodujeme, v navrženém postupu se však rozcházíme.",
             ),
             VocabularyEntry(
                 "přisuzovat",
                 "verb",
-                "Považovat určitou vlastnost, záměr nebo čin za někomu vlastní.",
+                "Připisovat někomu určitou vlastnost, záměr nebo čin.",
                 "Nepřisuzujme druhé straně záměry, které sama nevyjádřila.",
             ),
             VocabularyEntry(

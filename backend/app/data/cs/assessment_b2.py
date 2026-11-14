@@ -218,8 +218,9 @@ B2_QUESTIONS: list[AssessmentQuestion] = [
         "reading",
         "B2",
         "Zápis ze schůze obyvatel domu říká: „Pavel navrhl kameru u vchodu. Alena podpořila "
-        "lepší zabezpečení, ale upozornila na ochranu soukromí. Ostatní se shodli, "
-        "že nejprve opraví zámek. O kameře rozhodnou až po získání dalších informací.“ "
+        "lepší zabezpečení, ale upozornila na ochranu soukromí. Na tom, že nejprve "
+        "opraví zámek, se nakonec shodli všichni. O kameře rozhodnou až po získání "
+        "dalších informací.“ "
         "Které shrnutí zachovává rozsah dosažené shody?",
         [
             "Obyvatelé schválili kameru, pokud se při její instalaci opraví zámek.",

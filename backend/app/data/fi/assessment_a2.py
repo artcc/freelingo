@@ -70,7 +70,7 @@ A2_QUESTIONS: list[AssessmentQuestion] = [
         "g-a2-008",
         "grammar",
         "A2",
-        "Sää on epävarma. Haluat sanoa, että retki toteutuu vain hyvällä säällä. "
+        "Sää on epävarma. Haluat esittää hyvän sään retken toteutumisen ehdoksi. "
         "Täydennä: Lähdemme retkelle, ___ sää on hyvä.",
         ["vaikka", "jos", "että", "mutta"],
         "jos",

@@ -52,7 +52,7 @@ A2_SETS: list[VocabularySet] = [
             VocabularyEntry(
                 "dus-întors",
                 "adjective",
-                "Pentru plecare și revenire pe același traseu.",
+                "Pentru călătoria la destinație și revenirea la locul de plecare.",
                 "Am cumpărat un bilet dus-întors.",
             ),
             VocabularyEntry(

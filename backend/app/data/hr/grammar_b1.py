@@ -159,7 +159,7 @@ B1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "ima posebno mjesto iza zamjenica: Ana mu ga je dala.",
         rules=[
             "U skupini sam mu ga oblici označavaju vrijeme, primatelja i predmet.",
-            "Oblik je slijedi zamjeničke nenaglasnice: Poslao mi ga je.",
+            "Pomoćni oblik je slijedi zamjeničke zanaglasnice: Poslao mi ga je.",
             "Uz povratno se u perfektu trećeg lica jednine je se uobičajeno izostavlja: Vratio se.",
         ],
         examples=[

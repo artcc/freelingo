@@ -289,7 +289,11 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Základní čísla jsou nula, jedna, dva, tři, čtyři, pět, šest, sedm, osm, "
         "devět a deset. U podstatného jména se jeden mění podle rodu: jeden stůl, "
         "jedna kniha, jedno auto. Dva patří k mužskému rodu, dvě k ženskému "
-        "a střednímu: dva stoly, dvě knihy, dvě auta.\n\n"
+        "a střednímu: dva stoly, dvě knihy, dvě auta. Po deseti následují jedenáct, "
+        "dvanáct, třináct, čtrnáct, patnáct, šestnáct, sedmnáct, osmnáct a devatenáct. "
+        "Desítky jsou dvacet, třicet, čtyřicet, padesát, šedesát, sedmdesát, osmdesát "
+        "a devadesát; potom sto. Číslo 25 čteme dvacet pět nebo pětadvacet. "
+        "Pro začátek používej pořadí desítky a jednotky: třicet dva.\n\n"
         "Čas můžeš říct pomocí celých hodin: v osm hodin. Pro 8.30 je srozumitelné "
         "v osm třicet. Běžné půl deváté znamená také 8.30, ne 9.30. "
         "Ceny se pro začátek uč v celých spojeních: jedna koruna, dvě koruny, pět korun.",
@@ -300,6 +304,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         ],
         examples=[
             GrammarExample("Káva stojí třicet korun."),
+            GrammarExample("Čaj stojí čtyřicet pět korun."),
             GrammarExample("Schůzka je v osm třicet."),
             GrammarExample("Je jedna hodina."),
         ],
@@ -511,7 +516,7 @@ A1_GRAMMAR_TOPICS: list[GrammarTopic] = [
         "Začni dvěma krátkými větami. Spojka nemění sama o sobě tvar slovesa "
         "ani nevyžaduje zvláštní slovosled.",
         rules=[
-            "Před ale napiš čárku.",
+            "Před odporovací spojkou ale napiš čárku.",
             "Při prostém spojení dvou informací před a čárku obvykle nepiš.",
             "Vyber spojku podle významu: přidání, rozdíl, nebo volba.",
         ],

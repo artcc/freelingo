@@ -42,7 +42,7 @@ B1_QUESTIONS: list[AssessmentQuestion] = [
         "grammar",
         "B1",
         "Luka je Ani pokazao put na karti. Put zamjenjujemo s ga, a Ani s joj. "
-        "Koji je standardni red nenaglasnica u rečenici Luka ___ pokazao na karti?",
+        "Koji je standardni red zanaglasnica u rečenici Luka ___ pokazao na karti?",
         ["je ga joj", "ga joj je", "joj ga je", "joj je ga"],
         "joj ga je",
         "hr-clitic-order-b1",
