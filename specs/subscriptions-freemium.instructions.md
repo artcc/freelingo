@@ -96,7 +96,10 @@ access too.
 
 Redis failure while checking freemium access fails closed with HTTP `402` and
 `reason=freemium_unavailable`. A normal exhausted quota returns `reason=freemium_exhausted`, feature,
-remaining, and limit.
+remaining, and limit. Unavailability is not evidence of exhaustion or a Premium-only feature:
+clients show a localized retryable error rather than an upgrade offer based on that response.
+The HTTP/WebSocket error envelopes, including voice's compatibility fields, are defined in
+`api-endpoints.instructions.md`.
 
 Currently gated operations are:
 
@@ -332,14 +335,22 @@ false. Abandoning checkout does not consume the right. Verified Stripe snapshots
 or a non-null `trial_start` mark the trial as used, including when notification arrives after conversion
 to a paid subscription. Administrative access overrides do not mark it.
 
-The landing pricing subtitle, monthly badge, and all paid-plan CTAs advertise a Stripe trial only
-when configured trial days are positive and the user has not already used it. Otherwise, the subtitle
-uses the monthly/yearly plan-selection text, the monthly badge says Premium, and paid-plan CTAs use
+Landing pricing, dashboard, paywall, shared plan buttons, and onboarding advertise a Stripe trial only
+with a positive integer duration and known eligibility. An authenticated profile lookup failure or missing
+`trial_used` leaves eligibility unknown, not unused: these surfaces require `trial_used === false`.
+Store-based eligibility also waits for loaded configuration. Missing configured days default to zero.
+Otherwise, the landing subtitle uses the monthly/yearly plan-selection text, the monthly badge says
+Premium, and paid-plan CTAs use
 the plan-selection label. When a trial is available, the subtitle displays its configured duration,
 identifying it as additional trial days on subscription, with the card requirement and the paid
 plan price applying afterwards. Without a subscription trial, the subtitle states that the paid
 subscription starts on purchase. Paid cards also show the existing trial/payment terms next to
 their CTAs. The landing defaults missing Stripe trial days to zero.
+
+“Two months free” is shown only when finite positive configured prices represent whole cents and
+the yearly amount is exactly ten monthly amounts. Other annual prices retain their plan CTA without
+that savings claim. Landing strikethrough prices require finite amounts, a positive current price,
+and an original price strictly greater than the current price.
 
 The Stripe card trial and the freemium no-card trial are independent. A Stripe `trialing` status has
 subscription precedence and does not consume freemium counters.
@@ -468,12 +479,22 @@ frontend toggle. The UI's monthly/yearly override maps locally to active access 
 ## Frontend behavior
 
 The config store loads public runtime flags. The freemium store caches status for 60 seconds within
-the current authentication session. A synchronous auth subscription clears the snapshot, loaded flag,
+the current authentication session and UTC day, unless an active trial's expiration has passed.
+Concurrent non-forced reads share the pending request; forced reads supersede older reads and
+invalidate the cache timestamp. A synchronous auth subscription clears the snapshot, loaded flag,
 and cache timestamp on logout or session replacement, before another account can reuse them. Token
 rotation and language switches preserve the cache because quotas are global per user. Until the new
 session loads its own status, including after a failed GET, the snapshot stays null: quota banners
 show no balance and quota-based paywalls do not infer exhaustion. Backend access checks remain
 authoritative, and a later fetch can retry.
+
+For unsubscribed users with billing enabled, the authenticated shell refreshes quota on entry, UTC
+midnight (including the weekly Monday reset), trial expiration, and trial-toggle changes.
+Focus/visibility recovery requests stale status; hidden
+tabs defer boundary refreshes until visible. Trial countdowns react to their next displayed-day
+boundary and expiry, focus, visibility, and runtime toggles. Reaching a subscription trial's displayed
+end does not revoke a persisted `trialing` entitlement. Shared hook ownership and denial recovery live
+in `architecture-frontend.instructions.md`.
 
 The store provides optimistic decrement for chat, Listening, and Reading. A delayed chat completion
 can decrement only its originating authentication session. Lessons refresh authoritative status after
@@ -509,9 +530,18 @@ copy distinguishes initial no-card Premium access from the optional additional s
 It explains that
 subscribing starts the paid subscription unless additional trial days are explicitly offered, and
 does not present self-hosting as free infrastructure or necessarily local processing.
-Anonymous plan selection is carried through registration; authenticated users can start checkout
-directly. Billing success refreshes authentication and polls profile state before claiming Premium
-or redirecting. Billing cancellation never claims a charge occurred.
+Anonymous monthly/yearly selection is preserved through registration, legal-page returns, login, and
+onboarding. Selection retains purchase intent, not authorization to create Checkout automatically:
+onboarding presents explicit plan buttons even during the no-card trial when a plan was selected.
+Login routes an onboarded learner with a selected plan to Settings' plan section; shared buttons
+prioritize that plan. Dashboard purchase/payment-recovery actions remain available during the
+no-card trial. Navigation details belong to `platform.instructions.md`.
+
+Billing success restores authentication if needed and polls the persisted profile up to five times,
+1.5 seconds apart. Only `active` or `trialing` confirms Premium and starts the five-second dashboard
+redirect. Pending/error states do not confirm a purchase or payment; changing authentication session
+invalidates confirmation and its redirect. Cancellation offers dashboard and `/settings#plan`
+navigation without asserting either that payment occurred or that no charge occurred.
 
 The frontend is advisory: stale config or freemium state may temporarily present an action the
 backend rejects. Backend dependencies remain authoritative.

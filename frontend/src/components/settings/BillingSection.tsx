@@ -1,10 +1,22 @@
 'use client'
 
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { useBillingPortal } from '@/hooks/useBillingPortal'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
+import { getSelectedPlan } from '@/lib/checkout-navigation'
+
+function SelectedPlanButtons() {
+  const searchParams = useSearchParams()
+  return (
+    <SubscriptionPlanButtons
+      preferredPlan={getSelectedPlan(searchParams.get('plan'))}
+    />
+  )
+}
 
 export function BillingSection() {
   const tBilling = useTranslations('billing')
@@ -120,7 +132,9 @@ export function BillingSection() {
               : tBilling(paymentRecovery ? 'updatePayment' : 'manage')}
           </button>
         ) : (
-          <SubscriptionPlanButtons />
+          <Suspense fallback={<SubscriptionPlanButtons />}>
+            <SelectedPlanButtons />
+          </Suspense>
         )}
 
         {portalError && (

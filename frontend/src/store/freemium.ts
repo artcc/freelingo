@@ -36,6 +36,8 @@ type NumericFreemiumKey =
 
 let statusRequestId = 0
 let consumptionVersion = 0
+let pendingStatus: Promise<void> | null = null
+const DAY_MS = 86_400_000
 
 export const useFreemiumStore = create<FreemiumStore>((set, get) => ({
   status: null,
@@ -43,29 +45,50 @@ export const useFreemiumStore = create<FreemiumStore>((set, get) => ({
   lastFetch: 0,
   fetchStatus: async (force = false) => {
     const now = Date.now()
-    // Cache for 60 seconds
-    if (!force && get().loaded && now - get().lastFetch < 60_000) return
+    if (!useAuthStore.getState().accessToken) return
+    const { status, loaded, lastFetch } = get()
+    const trialEnd = Date.parse(status?.trial_ends_at ?? '')
+    const crossedTrialEnd = status?.trial_active && trialEnd <= now
+    // UTC midnight also covers Monday's weekly replenishment.
+    const sameDay = Math.floor(now / DAY_MS) === Math.floor(lastFetch / DAY_MS)
+    if (
+      !force &&
+      loaded &&
+      sameDay &&
+      !crossedTrialEnd &&
+      now - lastFetch < 60_000
+    )
+      return
+    if (!force && pendingStatus) return pendingStatus
     const requestId = ++statusRequestId
     const version = consumptionVersion
     const { sessionVersion } = useAuthStore.getState()
     if (force) set({ lastFetch: 0 })
-    try {
-      const res = await apiFetch('/api/freemium/status')
-      if (!res.ok) return
-      const data: FreemiumStatus = await res.json()
-      if (
-        requestId !== statusRequestId ||
-        useAuthStore.getState().sessionVersion !== sessionVersion
-      )
-        return
-      // A read started before a confirmed consumption may contain the old quota.
-      if (version !== consumptionVersion) {
-        await get().fetchStatus(true)
-        return
+    const request = (async () => {
+      try {
+        const res = await apiFetch('/api/freemium/status')
+        if (!res.ok) return
+        const data: FreemiumStatus = await res.json()
+        if (
+          requestId !== statusRequestId ||
+          useAuthStore.getState().sessionVersion !== sessionVersion
+        )
+          return
+        // A read started before a confirmed consumption may contain the old quota.
+        if (version !== consumptionVersion) {
+          await get().fetchStatus(true)
+          return
+        }
+        set({ status: data, loaded: true, lastFetch: now })
+      } catch {
+        // Non-fatal
       }
-      set({ status: data, loaded: true, lastFetch: now })
-    } catch {
-      // Non-fatal
+    })()
+    pendingStatus = request
+    try {
+      await request
+    } finally {
+      if (requestId === statusRequestId) pendingStatus = null
     }
   },
   decrement: (feature: NumericFreemiumKey) => {
@@ -86,5 +109,6 @@ export const useFreemiumStore = create<FreemiumStore>((set, get) => ({
 useAuthStore.subscribe((state, previous) => {
   if (state.sessionVersion === previous.sessionVersion) return
   ++statusRequestId
+  pendingStatus = null
   useFreemiumStore.setState({ status: null, loaded: false, lastFetch: 0 })
 })

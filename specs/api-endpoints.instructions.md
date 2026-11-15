@@ -61,6 +61,14 @@ of truth.
 
 - **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
 
+Shared consuming-feature dependencies return HTTP 402 with
+`detail: {reason: "freemium_exhausted", feature, remaining, limit}` for a confirmed exhausted quota.
+Unavailable quota checks instead return `reason: "freemium_unavailable"` with the feature and
+placeholder zero balances; those zeros do not establish exhaustion or a configured zero limit.
+Read-only dependencies can return `detail: "subscription_required"` when the feature limit is zero.
+Voice has the compatible additive envelope documented below. Access policy belongs to
+`subscriptions-freemium.instructions.md`.
+
 ## Analytics — `/api/analytics`
 
 - **POST `/ui`** — Rate limit: 60/min. Auth: get_current_user. Body: `{event, operation_id}`,
@@ -444,6 +452,14 @@ Full-duplex voice conversation pipeline.
 Both `POST /api/conversation/warmup` and `/ws/conversation` require an authenticated user with subscription or freemium access when `STRIPE_ENABLED=true`, except for a valid post-assessment voice trial token. Both reject non-admin users while maintenance mode is active.
 
 - **POST `/api/conversation/warmup`** — Rate limit: 20/min. Performs parallel best-effort TTS and STT probes within a shared 60-second budget before opening the WebSocket. Logs individual failures or budget exhaustion, cancels unfinished probes at the deadline, and returns ready even when probes fail or time out; this is not a strict provider-health check. A dedicated Next.js proxy forwards authentication and the request body with a 70-second deadline (504 on proxy timeout); the conversation client uses a 75-second abortable request timeout. Optional body: `{trial_token}`.
+
+Voice-access denial preserves HTTP 402 with `detail: "subscription_required"` for warmup and
+WebSocket `type: "error", code: "subscription_required"` followed by close 1008. Both add top-level
+`reason: "freemium_exhausted" | "freemium_unavailable"` and `feature: "voice"`. `remaining` and
+`limit` are seconds and appear only when the quota check returned a known result; infrastructure
+failure never fabricates a zero balance. A later demo-validation failure can report unavailability
+alongside a known quota balance. Clients must inspect the reason rather than treating the legacy
+detail/code as proof of exhaustion.
 
 **Authentication**: After the handshake, the client must send a JSON object containing a valid `token` within 10 seconds. The backend reads the token but does not require the `type` field to equal `auth`. Missing, malformed, or invalid authentication closes with code 1008.
 

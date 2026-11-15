@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useConfigStore } from '@/store/config'
+import { checkoutNavigationHref } from '@/lib/checkout-navigation'
 
 export default function TermsPage() {
   const t = useTranslations('legal.terms')
@@ -15,7 +16,7 @@ export default function TermsPage() {
   const loadConfig = useConfigStore((s) => s.load)
   const tRegister = useTranslations('auth.register')
   const invite = searchParams.get('invite')
-  const inviteQuery = invite ? `&invite=${encodeURIComponent(invite)}` : ''
+  const selectedPlan = searchParams.get('plan')
   const from = searchParams.get('from')
   const isFromSettings = from === 'settings'
   const isFromRegister = from === 'register'
@@ -27,11 +28,11 @@ export default function TermsPage() {
   const backHref = isFromSettings
     ? '/settings'
     : isFromRegister
-      ? invite
-        ? `/register?invite=${encodeURIComponent(invite)}`
-        : allowRegistration
-          ? '/register'
-          : '/login'
+      ? checkoutNavigationHref(
+          allowRegistration || invite ? '/register' : '/login',
+          selectedPlan,
+          invite
+        )
       : isFromLanding
         ? '/'
         : '/'
@@ -45,7 +46,7 @@ export default function TermsPage() {
   const privacyHref = isFromSettings
     ? '/privacy?from=settings'
     : isFromRegister
-      ? `/privacy?from=register${inviteQuery}`
+      ? checkoutNavigationHref('/privacy', selectedPlan, invite)
       : isFromLanding
         ? '/privacy?from=landing'
         : '/privacy'

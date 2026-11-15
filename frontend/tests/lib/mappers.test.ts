@@ -115,12 +115,49 @@ describe('mapUser', () => {
     expect(user.learning_goals).toBeNull()
     expect(user.subscription_status).toBe('none')
     expect(user.subscription_ends_at).toBeNull()
-    expect(user.trial_used).toBe(false)
+    expect(user.trial_used).toBeUndefined()
     expect(user.assessment_voice_trial_used).toBe(false)
     expect(user.freemium_trial_ends_at).toBeNull()
     expect(user.freemium_trial_used).toBe(false)
     expect(user.dismissed_dashboard_banner_revision).toBeNull()
   })
+
+  it.each(
+    [undefined, null, 'false', 'true', 0, 1, {}, []].map((value) => ({ value }))
+  )(
+    'keeps unknown trial eligibility for an unverified API flag ($value)',
+    ({ value }) => {
+      expect(
+        mapUser({ ...rawFull, trial_used: value }).trial_used
+      ).toBeUndefined()
+      expect(
+        mapUser({ ...rawFull, trial_used: value }, null).trial_used
+      ).toBeUndefined()
+    }
+  )
+
+  it.each([true, false])(
+    'honors explicit trial_used=%s over a previous value',
+    (value) => {
+      const current = { ...mapUser(rawFull), trial_used: !value }
+      expect(
+        mapUser({ ...rawFull, trial_used: value }, current).trial_used
+      ).toBe(value)
+    }
+  )
+
+  it.each([true, false, undefined])(
+    'preserves verified or unknown trial eligibility in a partial PATCH (%s)',
+    (value) => {
+      const current = { ...mapUser(rawFull), trial_used: value }
+      expect(mapUser({ id: current.id }, current).trial_used).toBe(value)
+      for (const invalid of [null, 'false', 0, {}]) {
+        expect(
+          mapUser({ id: current.id, trial_used: invalid }, current).trial_used
+        ).toBe(value)
+      }
+    }
+  )
 
   it('prefers API data over current user when both present', () => {
     const current: User = {

@@ -249,6 +249,10 @@ The Listening page keeps transient state locally. Its states are `loading`, `idl
 - Generating state adds a delay warning after 15 seconds.
 - Exercise state shows topic, type, level, authenticated audio playback, and all questions.
 - Submission becomes available when every received question index has an answer.
+- Quota exhaustion disables submission and adds an inline paywall while retaining the loaded exercise,
+  audio player, answers, and replay state. Confirmed access recovery restores manual submission without
+  replacing the exercise. Temporary quota-service unavailability shows a localized retryable error;
+  the shared classification/recovery contract lives in `architecture-frontend.instructions.md`.
 - Results reveal transcript, correct answers, score, and XP, with audio playback alongside the transcript.
 - Each corrected question offers optional native-language explanation with a source quote; loading and
   manual retry remain local to the help control and never resubmit the attempt.

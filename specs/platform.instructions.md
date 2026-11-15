@@ -38,6 +38,8 @@ When false, public signup actions lead to Login or are hidden, and `/register` w
 `invite` query parameter shows the localized closed-registration message and a Login action. Any
 supplied invite opens the existing form; only the backend validates and consumes the token. Legal
 page links preserve the supplied invite so reading the terms or privacy policy does not lose it.
+Registration, Login, and registration-origin legal navigation also preserve an explicitly selected
+`monthly` or `yearly` plan. Other plan values are discarded; destinations are fixed internal routes.
 When true, the existing public signup journey and pricing plan selection remain available.
 Authenticated dashboard and checkout actions do not depend on this flag.
 
@@ -135,10 +137,15 @@ Onboarding is distinct from CEFR assessment.
   corresponding `UserLanguage`.
 - `learning_goals=null` means onboarding remains pending; an empty list is a completed choice.
 - Depending on runtime billing settings, onboarding may include freemium confirmation or Stripe
-  plan selection.
+  plan selection. An explicitly selected paid plan retains the plan-selection step even while the
+  initial freemium trial is active. Checkout requires a separate button click, and learners may
+  still continue to Dashboard without subscribing.
 - Completion navigates to Dashboard, not directly to assessment.
 
 The authenticated shell redirects users with null learning goals back to onboarding.
+After Login, a selected plan leads to onboarding for an unfinished account or the subscription section
+of Settings for an onboarded account. The destination is chosen only after a successful, valid profile
+read; a failed profile lookup shows a localized retryable error without inferring unfinished onboarding.
 
 ## Placement and plan boundary
 

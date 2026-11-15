@@ -10,7 +10,7 @@ describe('useConfigStore', () => {
       analyticsEnabled: false,
       allowRegistration: false,
       stripeEnabled: false,
-      stripeTrialDays: 7,
+      stripeTrialDays: 0,
       freemiumTrialEnabled: true,
       ttsProvider: 'local',
       openaiTtsVoice: 'nova',
@@ -284,12 +284,23 @@ describe('useConfigStore', () => {
 
     expect(useConfigStore.getState().allowRegistration).toBe(false)
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
-    expect(useConfigStore.getState().stripeTrialDays).toBe(7)
+    expect(useConfigStore.getState().stripeTrialDays).toBe(0)
     expect(useConfigStore.getState().ttsProvider).toBe('local')
     expect(useConfigStore.getState().openaiTtsVoice).toBe('nova')
     expect(useConfigStore.getState().geminiTtsVoice).toBe('female')
     expect(useConfigStore.getState().maintenanceMode).toBe(false)
     expect(useConfigStore.getState().freemiumTrialEnabled).toBe(true)
     expect(useConfigStore.getState().dashboardBanner).toBeNull()
+  })
+
+  it('does not advertise a subscription trial when billing config omits its duration', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(JSON.stringify({ stripe_enabled: true }))
+    )
+
+    await useConfigStore.getState().load()
+
+    expect(useConfigStore.getState().stripeEnabled).toBe(true)
+    expect(useConfigStore.getState().stripeTrialDays).toBe(0)
   })
 })

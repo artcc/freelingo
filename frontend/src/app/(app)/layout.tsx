@@ -9,6 +9,8 @@ import { useConfigStore } from '@/store/config'
 import { apiFetch, requestAccessToken } from '@/lib/api'
 import { mapUser } from '@/lib/mappers'
 import { useLogout } from '@/hooks/useLogout'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
+import { useFreemiumStatusRefresh } from '@/hooks/useFreemiumStatusRefresh'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { ContactFormModal } from '@/components/ui/contact-form-modal'
 import { LoadingBar } from '@/components/ui/loading-bar'
@@ -83,7 +85,8 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   ])
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const showPremiumBadge = stripeEnabled && !isSubscribed(user, stripeEnabled)
-  const [trialDaysLeft, setTrialDaysLeft] = useState(0)
+  const { trialDaysLeft } = useTrialStatus()
+  useFreemiumStatusRefresh(!initializing)
 
   async function handleResendVerification() {
     const res = await apiFetch('/api/auth/resend-verification', {
@@ -142,48 +145,6 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    // Stripe trial countdown
-    if (
-      user?.subscription_status === 'trialing' &&
-      user?.subscription_ends_at &&
-      stripeEnabled
-    ) {
-      const days = Math.max(
-        1,
-        Math.ceil(
-          (new Date(user.subscription_ends_at).getTime() - Date.now()) /
-            (1000 * 60 * 60 * 24)
-        )
-      )
-      setTrialDaysLeft(days)
-      return
-    }
-    // Freemium trial countdown
-    if (
-      user?.freemium_trial_ends_at &&
-      stripeEnabled &&
-      user?.subscription_status !== 'active' &&
-      user?.subscription_status !== 'trialing'
-    ) {
-      const end = new Date(user.freemium_trial_ends_at)
-      if (end > new Date()) {
-        const days = Math.max(
-          1,
-          Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-        )
-        setTrialDaysLeft(days)
-        return
-      }
-    }
-    setTrialDaysLeft(0)
-  }, [
-    user?.subscription_status,
-    user?.subscription_ends_at,
-    user?.freemium_trial_ends_at,
-    stripeEnabled,
-  ])
 
   useEffect(() => {
     if (initializing) return
@@ -396,7 +357,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.13.0
+            v1.13.5
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -592,7 +553,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 </p>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.13.0
+                v1.13.5
               </p>
               <button
                 onClick={() => {

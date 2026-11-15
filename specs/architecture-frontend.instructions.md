@@ -116,6 +116,9 @@ silently switching pools. Returned exercise language and level must match that c
   are capped by the remaining budget; expiry stops the operation rather than sending an early retry.
 - Errors distinguish failure, timeout, unavailable status, context conflict, and no active plan.
   Generation messages use the shared `exerciseGeneration` translation namespace.
+- A confirmed access denial from lookup or generation reaches the page's access-recovery hook;
+  `freemium_unavailable` remains a localized availability error. An HTTP 402 alone does not identify
+  exhausted quota. Returned feature/reason metadata is interpreted through `lib/freemium-access.ts`.
 
 `services.instructions.md` (Shared generation coordinator) owns backend leases and deadlines.
 `multi-language.instructions.md` owns switch/reconciliation behavior: pending lookups pause during a
@@ -146,6 +149,10 @@ expire the cache window so a later visit can retry.
 
 Session-scoped quota caching, unknown balances, and paywall presentation are defined in
 `subscriptions-freemium.instructions.md`.
+
+An access denial during submission preserves the loaded exercise, selections, and replay state.
+The inline paywall disables submission without replacing the exercise. Confirmed access recovery
+re-enables the existing attempt; it does not submit answers or generate a replacement automatically.
 
 ### Post-answer comprehension review
 
@@ -304,6 +311,36 @@ Zustand stores shared cross-route state:
 
 Screen-specific forms, async state, playback, selections, and modal state remain local React state.
 Do not promote local state into a global store without a cross-route requirement.
+
+### Shared access presentation
+
+`hooks/useTrialStatus.ts` owns reactive trial activity and displayed-day countdowns.
+`hooks/useFreemiumStatusRefresh.ts` belongs to the authenticated shell and schedules boundary and
+focus/visibility quota refreshes. Cache lifetime, trial eligibility, and access policy are canonical in
+`subscriptions-freemium.instructions.md`.
+
+`lib/freemium-access.ts` maps confirmed feature denials separately from temporary unavailability.
+Its `useFreemiumAccessRecovery` hook retains a server denial even when the follow-up status read
+fails or the advisory snapshot still predates that denial. A new successful quota snapshot with
+available balance/trial, a confirmed Premium/new trial profile transition, eligible trial re-enablement,
+or billing disablement retires it. Session/user/feature replacement clears the obsolete denial.
+Retirement occurs on the confirming store event, so another forced refresh invalidating the cache
+before React renders cannot restore the old denial.
+
+Chat, lesson completion, comprehension, and voice reuse this recovery. Chat restores a rejected
+HTTP 402 message as a draft and removes its unpersisted optimistic turn. Lesson completion retains
+answers on failure and waits for provisional language switching before publishing success or errors;
+unchanged-context rejection of the switch permits the original result. Obsolete local completion
+does not undo a successful backend write or its session-owned quota reconciliation.
+
+`GameCatalog` refetches its authoritative catalog once a blocked state sees a positive quota,
+subscription/trial, or billing-toggle recovery transition in the same session/language/plan/level.
+It does not infer catalog mode availability from the global quota snapshot or start a game
+automatically. Catalog loads and creation responses reject obsolete scopes.
+
+`SubscriptionPlanButtons` shares explicit monthly/yearly Checkout actions, optional preferred-plan
+ordering, and trial/payment terms. `lib/billing-copy.ts` owns the price comparison behind the
+conditional annual savings label. Low-quota notices link to `/settings#plan`.
 
 Public configuration includes the selected TTS provider and `gemini_tts_voice` default. Shared
 `lib/tts-voice.ts` resolves provider-specific voice preferences: OpenAI uses browser storage key
@@ -469,6 +506,11 @@ into the source fields before translation. Both banner language selectors sort t
 names alphabetically using the active UI locale's collation. The translation editor marks only
 incomplete translations with a localized pending suffix, without adding completion checkmarks to
 options; the overall completion counter remains visible.
+
+Login/registration, billing, comprehension-access, and voice errors map recognized response codes
+or validation cases to friendly catalog messages and use a localized fallback for unknown failures.
+Raw server `detail`, provider messages, and browser media exception text are not interpolated into
+those error surfaces. Voice diagnostics remain separate from learner-facing copy.
 
 Product copy names Lingu when describing the tutor's actions, conversations, and exercise preparation.
 References to AI remain appropriate for technology, providers, and usage; this editorial convention

@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import type { ExerciseContext } from '@/lib/exercise-generation'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { useExerciseAnalytics } from '@/hooks/useExerciseAnalytics'
 import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
@@ -29,6 +30,10 @@ import {
 } from '@/components/reviews/ReviewPrompt'
 import { shouldShowExerciseReviewPrompt } from '@/lib/review-prompt-triggers'
 import { useFreemiumStore } from '@/store/freemium'
+import {
+  getFreemiumAccessFailure,
+  useFreemiumAccessRecovery,
+} from '@/lib/freemium-access'
 import { useConfigStore } from '@/store/config'
 import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 
@@ -139,12 +144,16 @@ function ReadingPage() {
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const decrementFreemium = useFreemiumStore((s) => s.decrement)
   const freemiumStatus = useFreemiumStore((s) => s.status)
+  const { accessDenied, reportAccessDenied } =
+    useFreemiumAccessRecovery('reading')
+  const { freemiumTrialActive } = useTrialStatus()
   const freemiumExhausted =
-    stripeEnabled &&
-    !isSubscribed(user, stripeEnabled) &&
-    !isFreemiumTrialActive(user, stripeEnabled) &&
-    freemiumStatus &&
-    freemiumStatus.reading_remaining <= 0
+    accessDenied ||
+    (stripeEnabled &&
+      !isSubscribed(user, stripeEnabled) &&
+      !freemiumTrialActive &&
+      freemiumStatus &&
+      freemiumStatus.reading_remaining <= 0)
 
   useEffect(() => {
     if (stripeEnabled && !isSubscribed(user, stripeEnabled)) {
@@ -190,6 +199,7 @@ function ReadingPage() {
     setPageState,
     setError,
     dismissTooltip,
+    onAccessDenied: reportAccessDenied,
   })
 
   async function handleSubmit() {
@@ -241,15 +251,22 @@ function ReadingPage() {
       })
       if (!res.ok) {
         if (res.status >= 500 || res.status === 408) reconcileQuota()
-        const d = (await res.json().catch(() => ({}))) as { detail?: string }
+        const d = (await res.json().catch(() => ({}))) as { detail?: unknown }
         await waitForLanguageSwitch(controller.signal)
         if (!current()) return
+        const access = getFreemiumAccessFailure(res.status, d, 'reading')
+        if (access === 'exhausted') {
+          reportAccessDenied()
+          return
+        }
         setError(
-          d.detail === 'study_context_changed'
-            ? tGeneration('contextChanged')
-            : d.detail === 'already_attempted'
-              ? t('alreadyAttempted')
-              : t('errorSubmit')
+          access === 'unavailable'
+            ? tGeneration('unavailable')
+            : d.detail === 'study_context_changed'
+              ? tGeneration('contextChanged')
+              : d.detail === 'already_attempted'
+                ? t('alreadyAttempted')
+                : t('errorSubmit')
         )
         return
       }
@@ -620,134 +637,125 @@ function ReadingPage() {
 
       <FreemiumQuotaBanner feature="reading" className="mb-4" />
 
-      {freemiumExhausted ? (
-        <PaywallBanner feature="reading" compact />
-      ) : (
-        <>
-          {/* Two-column on desktop, stacked on mobile */}
-          <div className="flex flex-col gap-5 md:grid md:grid-cols-[55fr_45fr] md:gap-6">
-            {/* Left: reading text */}
-            <div>
-              <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
-                {t('textLabel')}
-              </p>
-              <div className="border-fl-border bg-fl-surface relative border p-5">
-                <div
-                  ref={textRef}
-                  onPointerUp={() =>
-                    handleTextSelection(
-                      exercise?.text ?? '',
-                      exercise?.level ?? 'B1'
-                    )
-                  }
-                >
-                  <TargetLanguageText
-                    as="p"
-                    languageCode={exercise.target_language}
-                    className="reading-text text-fl-fg word-selectable max-w-[70ch] cursor-text whitespace-pre-wrap select-text"
-                  >
-                    {exercise.text}
-                  </TargetLanguageText>
-                </div>
-              </div>
-              <p className="text-fl-caption text-fl-muted-1 mt-2 text-center font-sans leading-relaxed">
-                {t('selectWordHint')}
-              </p>
-            </div>
-
-            {/* Right: questions */}
-            <div>
-              <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
-                {t('questionsLabel')}
-              </p>
-              <div className="space-y-4">
-                {exercise.questions.map((q) => (
-                  <div
-                    key={q.index}
-                    className="border-fl-border bg-fl-surface border p-4"
-                  >
-                    <TargetLanguageText
-                      as="p"
-                      languageCode={exercise.target_language}
-                      onPointerUp={() =>
-                        handleTextSelection(q.question, exercise.level)
-                      }
-                      className="text-fl-fg word-selectable mb-3 cursor-text select-text"
-                    >
-                      {q.index + 1}. {q.question}
-                    </TargetLanguageText>
-                    <div className="space-y-2">
-                      {Object.entries(q.options).map(([k, v]) => {
-                        const selected = answers[String(q.index)] === k
-                        return (
-                          <button
-                            key={k}
-                            onClick={() => {
-                              startAnalytics(
-                                exercise.id,
-                                exerciseContext,
-                                isReplay
-                              )
-                              setAnswers((prev) => ({
-                                ...prev,
-                                [String(q.index)]: k,
-                              }))
-                            }}
-                            className={`w-full border px-3 py-2 text-left transition-colors ${
-                              selected
-                                ? 'border-fl-accent text-fl-fg bg-fl-surface-2'
-                                : 'border-fl-border text-fl-muted-1 hover:border-fl-muted-2 hover:text-fl-fg'
-                            }`}
-                          >
-                            <span className="text-fl-label font-mono font-bold">
-                              {k}.
-                            </span>{' '}
-                            <TargetLanguageText
-                              languageCode={exercise.target_language}
-                            >
-                              {v}
-                            </TargetLanguageText>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {error && (
-                <p className="text-fl-caption text-fl-error-fg mt-3 font-mono">
-                  {error}
-                </p>
-              )}
-
-              <button
-                onClick={handleSubmit}
-                disabled={!allAnswered || submitting}
-                className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg mt-4 w-full border py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+      {freemiumExhausted && <PaywallBanner feature="reading" compact />}
+      {/* Two-column on desktop, stacked on mobile */}
+      <div className="flex flex-col gap-5 md:grid md:grid-cols-[55fr_45fr] md:gap-6">
+        {/* Left: reading text */}
+        <div>
+          <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
+            {t('textLabel')}
+          </p>
+          <div className="border-fl-border bg-fl-surface relative border p-5">
+            <div
+              ref={textRef}
+              onPointerUp={() =>
+                handleTextSelection(
+                  exercise?.text ?? '',
+                  exercise?.level ?? 'B1'
+                )
+              }
+            >
+              <TargetLanguageText
+                as="p"
+                languageCode={exercise.target_language}
+                className="reading-text text-fl-fg word-selectable max-w-[70ch] cursor-text whitespace-pre-wrap select-text"
               >
-                {submitting ? '...' : t('submit')}
-              </button>
+                {exercise.text}
+              </TargetLanguageText>
             </div>
           </div>
+          <p className="text-fl-caption text-fl-muted-1 mt-2 text-center font-sans leading-relaxed">
+            {t('selectWordHint')}
+          </p>
+        </div>
 
-          {/* Word-save tooltip */}
-          {selectedWord && (
-            <WordTooltip
-              word={selectedWord}
-              pos={tooltipPos}
-              saveState={saveState}
-              onSave={() => handleSaveWord()}
-              onDismiss={dismissTooltip}
-              labels={{
-                saveWord: tCommon('saveWord'),
-                wordSaved: tCommon('wordSaved'),
-                wordAlreadySaved: tCommon('wordAlreadySaved'),
-                wordSaveError: tCommon('wordSaveError'),
-              }}
-            />
+        {/* Right: questions */}
+        <div>
+          <p className="text-fl-label text-fl-muted-3 mb-2 font-mono tracking-widest uppercase">
+            {t('questionsLabel')}
+          </p>
+          <div className="space-y-4">
+            {exercise.questions.map((q) => (
+              <div
+                key={q.index}
+                className="border-fl-border bg-fl-surface border p-4"
+              >
+                <TargetLanguageText
+                  as="p"
+                  languageCode={exercise.target_language}
+                  onPointerUp={() =>
+                    handleTextSelection(q.question, exercise.level)
+                  }
+                  className="text-fl-fg word-selectable mb-3 cursor-text select-text"
+                >
+                  {q.index + 1}. {q.question}
+                </TargetLanguageText>
+                <div className="space-y-2">
+                  {Object.entries(q.options).map(([k, v]) => {
+                    const selected = answers[String(q.index)] === k
+                    return (
+                      <button
+                        key={k}
+                        onClick={() => {
+                          startAnalytics(exercise.id, exerciseContext, isReplay)
+                          setAnswers((prev) => ({
+                            ...prev,
+                            [String(q.index)]: k,
+                          }))
+                        }}
+                        className={`w-full border px-3 py-2 text-left transition-colors ${
+                          selected
+                            ? 'border-fl-accent text-fl-fg bg-fl-surface-2'
+                            : 'border-fl-border text-fl-muted-1 hover:border-fl-muted-2 hover:text-fl-fg'
+                        }`}
+                      >
+                        <span className="text-fl-label font-mono font-bold">
+                          {k}.
+                        </span>{' '}
+                        <TargetLanguageText
+                          languageCode={exercise.target_language}
+                        >
+                          {v}
+                        </TargetLanguageText>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {error && (
+            <p className="text-fl-caption text-fl-error-fg mt-3 font-mono">
+              {error}
+            </p>
           )}
-        </>
+
+          <button
+            onClick={handleSubmit}
+            disabled={!allAnswered || submitting || !!freemiumExhausted}
+            className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg mt-4 w-full border py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {submitting ? '...' : t('submit')}
+          </button>
+        </div>
+      </div>
+
+      {/* Word-save tooltip */}
+      {selectedWord && (
+        <WordTooltip
+          word={selectedWord}
+          pos={tooltipPos}
+          saveState={saveState}
+          onSave={() => handleSaveWord()}
+          onDismiss={dismissTooltip}
+          labels={{
+            saveWord: tCommon('saveWord'),
+            wordSaved: tCommon('wordSaved'),
+            wordAlreadySaved: tCommon('wordAlreadySaved'),
+            wordSaveError: tCommon('wordSaveError'),
+          }}
+        />
       )}
     </div>
   )

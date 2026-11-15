@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import SessionPage from '@/app/(app)/games/error-detective/[id]/page'
 import CatalogPage from '@/app/(app)/games/error-detective/page'
-import { gameRequest, type DetectiveSession } from '@/lib/detective'
+import { gameRequest, GameRequestError, type DetectiveSession } from '@/lib/detective'
 import { useLanguageStore } from '@/store/language'
 import { useFreemiumStore } from '@/store/freemium'
 import { getLanguageByCode } from '@/lib/target-languages'
@@ -65,6 +65,30 @@ describe('Detective session', () => {
 })
 
 describe('Detective catalog', () => {
+  it.each(['freemium_exhausted', 'freemium_unavailable', 'unknown'])(
+    'only presents a quota paywall for a confirmed denial (%s)',
+    async (reason) => {
+      vi.mocked(gameRequest).mockResolvedValueOnce({
+        study_plan_id: 1, target_language: 'en-GB', level: 'A1', limited: true,
+        quota: { remaining: 3, limit: 3 }, total: 1, history: [initial],
+        modes: { review: { available: false }, prepare: { available: false }, free: { available: true } },
+      }).mockRejectedValueOnce(new GameRequestError(402, reason))
+      render(<CatalogPage />)
+      fireEvent.click((await screen.findAllByRole('button', { name: 'start' }))[2])
+      if (reason === 'freemium_exhausted') {
+        expect(await screen.findByText('paywall')).toBeVisible()
+        expect(screen.getAllByRole('button', { name: 'start' })[2]).toBeDisabled()
+      } else {
+        expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+        expect(screen.queryByText('paywall')).not.toBeInTheDocument()
+        expect(screen.getAllByRole('button', { name: 'start' })[2]).toBeEnabled()
+      }
+      expect(screen.getByRole('link', { name: /ready/ })).toBeInTheDocument()
+      expect(push).not.toHaveBeenCalled()
+      expect(gameRequest).toHaveBeenCalledTimes(2)
+    }
+  )
+
   it.each(['success', 'failure'] as const)(
     'cancels creation on unmount and ignores a late %s',
     async (outcome) => {

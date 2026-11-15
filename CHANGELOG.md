@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.13.5] - Unreleased
+
+### Fixed
+
+- Preserve monthly or annual plan selection through registration, login, legal pages, onboarding, and subscription settings, with checkout requiring an explicit action.
+- Keep existing Premium actions available during the initial trial and link quota upgrade prompts directly to subscription settings.
+- Refresh trial countdowns and free-plan balances at expiration, UTC resets, and return to the app; recover consuming controls after access is restored without discarding learner answers.
+- Distinguish exhausted voice and exercise quotas from temporary service failures, with localized user-facing errors instead of technical server messages.
+- Show trial eligibility, annual savings, comparison prices, and Premium usage terms accurately; subscription and checkout-return pages no longer imply an unverified charge.
+
 ## [1.13.0] - 2026-11-14
 
 ### Security

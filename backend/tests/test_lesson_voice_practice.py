@@ -390,10 +390,21 @@ async def test_lesson_practice_cannot_bypass_voice_access(
 ):
     lesson, _ = practice_lesson
     monkeypatch.setattr(
-        router, "_check_voice_access", AsyncMock(return_value=(False, False, None, 0))
+        router,
+        "_check_voice_access",
+        AsyncMock(
+            return_value=(
+                False,
+                False,
+                None,
+                0,
+                {"reason": "freemium_exhausted", "feature": "voice", "remaining": 0, "limit": 0},
+            )
+        ),
     )
     ws = await voice_runtime.start(lesson_id=lesson.id)
     assert ws.send_json.await_args.args[0]["code"] == "subscription_required"
+    assert ws.send_json.await_args.args[0]["reason"] == "freemium_exhausted"
     voice_runtime.factory.assert_not_called()
     voice_runtime.quotas.assert_not_awaited()
 

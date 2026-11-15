@@ -13,7 +13,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Check, Diff, X } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
 import { useProgressStore } from '@/store/progress'
-import { useLanguageStore } from '@/store/language'
+import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { getGrammarTopics, type GrammarTopic } from '@/data/grammar'
 import { AudioPlayer } from '@/components/ui/AudioPlayer'
@@ -27,6 +27,11 @@ import { PageLoading } from '@/components/ui/page-loading'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { useFreemiumStore } from '@/store/freemium'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
+import {
+  getFreemiumAccessFailure,
+  useFreemiumAccessRecovery,
+} from '@/lib/freemium-access'
 import { useConfigStore } from '@/store/config'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import {
@@ -133,12 +138,16 @@ function LessonContent() {
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const freemiumStatus = useFreemiumStore((s) => s.status)
+  const { accessDenied, reportAccessDenied } =
+    useFreemiumAccessRecovery('lessons')
+  const { freemiumTrialActive } = useTrialStatus()
   const freemiumExhausted =
-    stripeEnabled &&
-    !isSubscribed(user, stripeEnabled) &&
-    !isFreemiumTrialActive(user, stripeEnabled) &&
-    freemiumStatus &&
-    freemiumStatus.lessons_remaining <= 0
+    accessDenied ||
+    (stripeEnabled &&
+      !isSubscribed(user, stripeEnabled) &&
+      !freemiumTrialActive &&
+      freemiumStatus &&
+      freemiumStatus.lessons_remaining <= 0)
   const nativeLanguageName = user?.native_language
     ? formatLanguageName(tLang(user.native_language), locale)
     : ''
@@ -205,6 +214,8 @@ function LessonContent() {
   >(null)
   const completingLessonRef = useRef(false)
   const [completingLesson, setCompletingLesson] = useState(false)
+  const [completionError, setCompletionError] = useState('')
+  const completionController = useRef<AbortController | null>(null)
   const isReview = lesson?.is_completed ?? false
   const loadControllerRef = useRef<AbortController | null>(null)
   const operationRef = useRef<AbortController | null>(null)
@@ -213,6 +224,7 @@ function LessonContent() {
     return () => {
       loadControllerRef.current?.abort()
       operationRef.current?.abort()
+      completionController.current?.abort()
     }
   }, [])
 
@@ -478,27 +490,51 @@ function LessonContent() {
 
   async function completeLessonHandler() {
     if (completingLessonRef.current) return
+    const controller = new AbortController()
+    completionController.current = controller
+    const current = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion &&
+      useLanguageStore.getState().activeLanguage?.code ===
+        activeLanguage?.code &&
+      !useLanguageStore.getState().isSwitching &&
+      !useLanguageStore.getState().needsRefresh
+    if (!current()) return
     completingLessonRef.current = true
     setCompletingLesson(true)
+    setCompletionError('')
 
     try {
       const completedUnitId = getLessonUnitId(lesson)
       const res = await apiFetch(`/api/lessons/${id}/complete`, {
         method: 'POST',
       })
-      if (!res.ok) return
+      if (!res.ok) {
+        const body: unknown = await res.json().catch(() => null)
+        await waitForLanguageSwitch(controller.signal)
+        if (!current()) return
+        const access = getFreemiumAccessFailure(res.status, body, 'lessons')
+        if (access === 'exhausted') reportAccessDenied()
+        else setCompletionError(tCommon('errorMessage'))
+        return
+      }
       if (
+        useAuthStore.getState().sessionVersion === sessionVersion &&
         !isSubscribed(user, stripeEnabled) &&
         !isFreemiumTrialActive(user, stripeEnabled)
       ) {
         await fetchFreemium(true)
       }
+      await waitForLanguageSwitch(controller.signal)
+      if (!current()) return
       if (lesson) completeLesson(lesson.id)
       // Detect if completing this lesson advanced the plan to the next day
       try {
         const todayRes = await apiFetch('/api/study-plan/today')
         if (todayRes.ok) {
           const d = await todayRes.json()
+          await waitForLanguageSwitch(controller.signal)
+          if (!current()) return
           if (progressDayAtStart >= 0 && d.progress_day > progressDayAtStart) {
             setDayComplete(true)
           }
@@ -521,10 +557,14 @@ function LessonContent() {
       } catch {
         // Non-fatal: failing to detect day-advance does not prevent lesson completion
       }
-      setCompleted(true)
+      await waitForLanguageSwitch(controller.signal)
+      if (current()) setCompleted(true)
+    } catch {
+      await waitForLanguageSwitch(controller.signal)
+      if (current()) setCompletionError(tCommon('errorMessage'))
     } finally {
       completingLessonRef.current = false
-      setCompletingLesson(false)
+      if (!controller.signal.aborted) setCompletingLesson(false)
     }
   }
 
@@ -1396,7 +1436,23 @@ function LessonContent() {
                       )}
                     </div>
                   )}
-                  <div className="flex items-center gap-4">
+                  {completionError && (
+                    <p
+                      role="alert"
+                      className="text-fl-error-fg font-mono text-xs"
+                    >
+                      {completionError}
+                    </p>
+                  )}
+                  <div
+                    className={
+                      currentExercise === exercises.length - 1 &&
+                      !isReview &&
+                      freemiumExhausted
+                        ? 'flex flex-col items-stretch gap-4'
+                        : 'flex items-center gap-4'
+                    }
+                  >
                     <div className="border-fl-border border px-4 py-2">
                       <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
                         {tCommon('score')}{' '}

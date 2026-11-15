@@ -701,17 +701,21 @@ describe('ProfileSection', () => {
     it('shows error when API fails during upload', async () => {
       mockApiFetch.mockResolvedValue({
         ok: false,
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve({ detail: 'Internal storage failure' }),
       })
       const { container } = render(<ProfileSection />)
       const file = new File(['photo'], 'photo.png', { type: 'image/png' })
       await selectFile(container, file)
       await waitFor(
         () => {
-          expect(screen.getByText(/avatarTypeError/)).toBeDefined()
+          expect(screen.getByText(/saveFailed/)).toBeDefined()
         },
         { timeout: 3000 }
       )
+      expect(screen.queryByText(/avatarTypeError/)).not.toBeInTheDocument()
+      expect(
+        screen.queryByText(/Internal storage failure/)
+      ).not.toBeInTheDocument()
     })
 
     it('clears file input value after selection', async () => {
@@ -764,21 +768,32 @@ describe('ProfileSection', () => {
     expect(user?.avatar).toBeNull()
   })
 
-  it('shows error when avatar remove API fails', async () => {
-    useAuthStore.setState({
-      accessToken: 'test-token',
-      user: { ...defaultUser, avatar: 'https://example.com/avatar.jpg' },
-    })
-    mockApiFetch.mockResolvedValue({
-      ok: false,
-      json: () => Promise.resolve({}),
-    })
-    render(<ProfileSection />)
-    fireEvent.click(screen.getByText('avatarRemove'))
-    await waitFor(() => {
-      expect(screen.getByText(/avatarTypeError/)).toBeDefined()
-    })
-  })
+  it.each(['http', 'network'])(
+    'shows a generic localized avatar removal error after %s failure',
+    async (failure) => {
+      useAuthStore.setState({
+        accessToken: 'test-token',
+        user: { ...defaultUser, avatar: 'https://example.com/avatar.jpg' },
+      })
+      if (failure === 'network') {
+        mockApiFetch.mockRejectedValue(new Error('Internal storage failure'))
+      } else {
+        mockApiFetch.mockResolvedValue({
+          ok: false,
+          json: () => Promise.resolve({ detail: 'Internal storage failure' }),
+        })
+      }
+      render(<ProfileSection />)
+      fireEvent.click(screen.getByText('avatarRemove'))
+      await waitFor(() => {
+        expect(screen.getByText(/saveFailed/)).toBeDefined()
+      })
+      expect(screen.queryByText(/avatarTypeError/)).not.toBeInTheDocument()
+      expect(
+        screen.queryByText(/Internal storage failure/)
+      ).not.toBeInTheDocument()
+    }
+  )
 
   // ── Save button disabled ────────────────────────────────────
 

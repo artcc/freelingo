@@ -20,6 +20,7 @@ export function useExerciseGeneration<T>({
   setPageState,
   setError,
   dismissTooltip,
+  onAccessDenied,
 }: {
   feature: 'listening' | 'reading'
   language: string | undefined
@@ -29,6 +30,7 @@ export function useExerciseGeneration<T>({
   setPageState: (state: 'loading' | 'generating' | 'idle' | 'exercise') => void
   setError: (error: string) => void
   dismissTooltip: () => void
+  onAccessDenied?: () => void
 }) {
   const t = useTranslations('exerciseGeneration')
   const tCommon = useTranslations('common')
@@ -48,6 +50,25 @@ export function useExerciseGeneration<T>({
       active.current?.abort()
       const controller = new AbortController()
       active.current = controller
+      const initialContext = useLanguageStore.getState()
+      const initialPlan = initialContext.userLanguages.find(
+        (item) => item.is_active
+      )?.plan
+      const current = () => {
+        const context = useLanguageStore.getState()
+        const plan = context.userLanguages.find((item) => item.is_active)?.plan
+        if (context.isSwitching) lastAutomaticLoad.current = null
+        return (
+          !controller.signal.aborted &&
+          useAuthStore.getState().sessionVersion === sessionVersion &&
+          !context.isSwitching &&
+          context.needsRefresh === initialContext.needsRefresh &&
+          context.activeLanguage?.code ===
+            initialContext.activeLanguage?.code &&
+          plan?.id === initialPlan?.id &&
+          plan?.cefr_level === initialPlan?.cefr_level
+        )
+      }
       setError('')
       dismissTooltip()
       setPageState(
@@ -103,21 +124,21 @@ export function useExerciseGeneration<T>({
             exerciseContext = context
           },
           onGenerating: () => {
-            if (!controller.signal.aborted) setPageState('generating')
+            if (current()) setPageState('generating')
           },
         })
-        if (controller.signal.aborted) return
+        if (!current()) return
         if (exercise && exerciseContext) onExercise(exercise, exerciseContext)
         setPageState(exercise ? 'exercise' : 'idle')
       } catch (error) {
-        if (
-          controller.signal.aborted ||
-          useAuthStore.getState().sessionVersion !== sessionVersion
-        )
-          return
+        if (!current()) return
         const code =
           error instanceof ExerciseGenerationError ? error.code : 'unavailable'
-        setError(code === 'noActivePlan' ? tCommon('noActivePlan') : t(code))
+        if (code === 'exhausted') {
+          onAccessDenied?.()
+        } else {
+          setError(code === 'noActivePlan' ? tCommon('noActivePlan') : t(code))
+        }
         setPageState('idle')
       } finally {
         if (active.current === controller) active.current = null
@@ -137,6 +158,7 @@ export function useExerciseGeneration<T>({
       t,
       tCommon,
       sessionVersion,
+      onAccessDenied,
     ]
   )
 

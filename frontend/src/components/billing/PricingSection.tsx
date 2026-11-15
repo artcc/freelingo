@@ -8,6 +8,7 @@ import { PageLoading } from '@/components/ui/page-loading'
 import { getLandingSubscriptionState } from '@/lib/landing-subscription'
 import { restoreAccessToken } from '@/lib/api'
 import { createCheckout } from '@/lib/billing'
+import { hasTwoMonthsFree } from '@/lib/billing-copy'
 import { useAuthStore } from '@/store/auth'
 
 type BillingInterval = 'monthly' | 'yearly'
@@ -43,7 +44,7 @@ export default function PricingSection({
   const [subscribed, setSubscribed] = useState<boolean | null>(
     hasSession ? null : false
   )
-  const [trialUsed, setTrialUsed] = useState(false)
+  const [trialUsed, setTrialUsed] = useState<boolean | null>(false)
   const [checkoutLoading, setCheckoutLoading] =
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
@@ -121,7 +122,8 @@ export default function PricingSection({
     }
   }
 
-  const canStartTrial = trialDays > 0 && !trialUsed
+  const canStartTrial =
+    Number.isInteger(trialDays) && trialDays > 0 && trialUsed === false
   const planIcons = [Circle, CircleDot, Diamond]
 
   const freeRows = ['f1', 'f2', 'f3', 'f4', 'f5']
@@ -145,12 +147,16 @@ export default function PricingSection({
       monthly: true,
       yearly: true,
     },
-    {
-      label: tBilling('planFeature.feature2'),
-      free: false,
-      monthly: false,
-      yearly: true,
-    },
+    ...(hasTwoMonthsFree(priceMonthly, priceYearly)
+      ? [
+          {
+            label: tBilling('planFeature.feature2'),
+            free: false,
+            monthly: false,
+            yearly: true,
+          },
+        ]
+      : []),
   ]
 
   const plans = [
@@ -248,14 +254,19 @@ export default function PricingSection({
               <div className="min-h-[4.25rem]">
                 {plan.price !== null ? (
                   <>
-                    <p className="text-fl-muted-2 font-mono text-sm line-through">
-                      {tBilling('priceOriginal', {
-                        price: new Intl.NumberFormat(locale).format(
-                          plan.originalPrice
-                        ),
-                        period: plan.priceLabel,
-                      })}
-                    </p>
+                    {Number.isFinite(plan.originalPrice) &&
+                      Number.isFinite(plan.price) &&
+                      plan.price > 0 &&
+                      plan.originalPrice > plan.price && (
+                        <p className="text-fl-muted-2 font-mono text-sm line-through">
+                          {tBilling('priceOriginal', {
+                            price: new Intl.NumberFormat(locale).format(
+                              plan.originalPrice
+                            ),
+                            period: plan.priceLabel,
+                          })}
+                        </p>
+                      )}
                     <p className="text-fl-fg flex items-baseline gap-2 font-mono text-xl font-bold">
                       {tBilling('priceAmount', {
                         amount: new Intl.NumberFormat(locale).format(

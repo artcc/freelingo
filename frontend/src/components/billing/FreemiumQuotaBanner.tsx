@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useFreemiumStore } from '@/store/freemium'
-import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
+import { useAuthStore, isSubscribed } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 
 interface FreemiumQuotaBannerProps {
   feature: 'chat' | 'lessons' | 'listening' | 'reading' | 'voice' | 'games'
@@ -19,20 +20,8 @@ export function FreemiumQuotaBanner({
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const status = useFreemiumStore((s) => s.status)
-  const [trialDaysLeft, setTrialDaysLeft] = useState(0)
-
-  const trial = isFreemiumTrialActive(user, stripeEnabled)
-
-  useEffect(() => {
-    if (trial && user?.freemium_trial_ends_at) {
-      const endsAt = new Date(user.freemium_trial_ends_at)
-      const days = Math.max(
-        1,
-        Math.ceil((endsAt.getTime() - Date.now()) / 86400000)
-      )
-      setTrialDaysLeft(days)
-    }
-  }, [trial, user?.freemium_trial_ends_at])
+  const { freemiumTrialActive: trial, freemiumTrialDaysLeft: trialDaysLeft } =
+    useTrialStatus()
 
   if (!stripeEnabled) return null
   if (isSubscribed(user, stripeEnabled)) return null
@@ -121,9 +110,12 @@ export function FreemiumQuotaBanner({
         </span>
       </span>
       {low && (
-        <span className="text-fl-accent tracking-widest uppercase">
+        <Link
+          href="/settings#plan"
+          className="text-fl-accent focus-visible:outline-fl-accent tracking-widest uppercase underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {t('freeLimit')}
-        </span>
+        </Link>
       )}
     </div>
   )

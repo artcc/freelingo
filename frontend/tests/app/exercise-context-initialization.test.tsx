@@ -807,6 +807,102 @@ describe.each([
   { feature: 'reading', Page: ReadingPage },
   { feature: 'listening', Page: ListeningPage },
 ])('$feature context initialization', ({ feature, Page }) => {
+  it('localizes an unexpected technical HTTP error without displaying its detail', async () => {
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).startsWith(`/api/${feature}/next?`)) return ready()
+      if (url === `/api/${feature}/attempt`)
+        return json({ detail: 'technical_internal_message' }, 422)
+      return json({})
+    })
+    render(<Page />)
+    await screen.findByText(/Fresh exercise/)
+    answerExercise()
+    fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+    expect(await screen.findByText('errorSubmit')).toBeVisible()
+    expect(screen.queryByText('technical_internal_message')).not.toBeInTheDocument()
+    expect(screen.queryByText('paywallLabel')).not.toBeInTheDocument()
+  })
+
+  it.each(['freemium_exhausted', 'freemium_unavailable'])(
+    'preserves answers and history access after %s with no retry loop',
+    async (reason) => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      useConfigStore.setState({ stripeEnabled: true })
+      useFreemiumStore.setState({ status: null, loaded: true, lastFetch: Date.now() })
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (String(url).startsWith(`/api/${feature}/next?`)) return ready()
+        if (url === `/api/${feature}/attempt`)
+          return json({ detail: { reason, feature, remaining: 0, limit: 3 } }, 402)
+        if (url === '/api/freemium/status') return json({}, 503)
+        return json({})
+      })
+      render(<Page />)
+      await screen.findByText(/Fresh exercise/)
+      answerExercise()
+      fireEvent.click(screen.getByRole('button', { name: 'submit' }))
+      if (reason === 'freemium_exhausted') {
+        expect(await screen.findByText(
+          feature === 'reading' ? 'paywallReadingTitle' : 'paywallListeningTitle'
+        )).toBeVisible()
+        expect(screen.getByRole('button', { name: 'submit' })).toBeDisabled()
+        expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === '/api/freemium/status')).toHaveLength(1)
+      } else {
+        expect(await screen.findByText('unavailable')).toBeVisible()
+        expect(screen.queryByText('paywallLabel')).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'submit' })).toBeEnabled()
+      }
+      for (let index = 0; index < 5; index += 1) {
+        expect(screen.getByRole('button', { name: new RegExp(`Answer ${index}`) }))
+          .toHaveClass('border-fl-accent')
+      }
+      expect(screen.getByRole('button', { name: 'history' })).toBeEnabled()
+      expect(screen.queryByText('resultsLabel')).not.toBeInTheDocument()
+      expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === `/api/${feature}/attempt`)).toHaveLength(1)
+      expect(vi.mocked(fetch).mock.calls.filter(([url]) => String(url).includes('/next?'))).toHaveLength(1)
+    }
+  )
+
+  it.each(['freemium_exhausted', 'freemium_unavailable'])(
+    'routes %s generation admission without another POST',
+    async (reason) => {
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+        userLanguages: languages().languages,
+      })
+      useConfigStore.setState({ stripeEnabled: true })
+      useFreemiumStore.setState({ status: null, loaded: true, lastFetch: Date.now() })
+      vi.mocked(fetch).mockImplementation(async (url) => {
+        if (String(url).includes('/next?'))
+          return json({
+            available: false,
+            exercise: null,
+            context: { study_plan_id: 8, target_language: 'en-GB', level: 'A1' },
+            generation_status: 'idle',
+          })
+        if (String(url).includes('/generate?'))
+          return json({ detail: { reason, feature } }, 402)
+        if (url === '/api/freemium/status') return json({}, 503)
+        return json({})
+      })
+      render(<Page />)
+      fireEvent.click(await screen.findByRole('button', { name: 'generate' }))
+      if (reason === 'freemium_exhausted')
+        expect(await screen.findByText('paywallLabel')).toBeVisible()
+      else {
+        expect(await screen.findByText('unavailable')).toBeVisible()
+        expect(screen.queryByText('paywallLabel')).not.toBeInTheDocument()
+      }
+      expect(vi.mocked(fetch).mock.calls.filter(([url]) => String(url).includes('/generate?'))).toHaveLength(1)
+    }
+  )
+
   it.each([
     'during-switch',
     'after-switch',
@@ -936,8 +1032,8 @@ describe.each([
             await screen.findByText('paywallListeningTitle')
           ).toBeInTheDocument()
           expect(
-            screen.queryByRole('button', { name: 'submit' })
-          ).not.toBeInTheDocument()
+            screen.getByRole('button', { name: 'submit' })
+          ).toBeDisabled()
         } else {
           await screen.findByText(/Replacement exercise/)
         }

@@ -25,8 +25,13 @@ export default function BillingSuccessPage() {
   const t = useTranslations('billing')
   const router = useRouter()
   const setUser = useAuthStore((s) => s.setUser)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const [confirmationSession] = useState(sessionVersion)
   const [countdown, setCountdown] = useState(5)
-  const [status, setStatus] = useState<ConfirmationStatus>('checking')
+  const [confirmationStatus, setStatus] =
+    useState<ConfirmationStatus>('checking')
+  const status =
+    sessionVersion === confirmationSession ? confirmationStatus : 'error'
 
   // Confirm the subscription from /me before claiming Premium is active.
   useEffect(() => {
@@ -80,13 +85,18 @@ export default function BillingSuccessPage() {
   // Auto-redirect countdown
   useEffect(() => {
     if (status !== 'confirmed') return
+    if (useAuthStore.getState().sessionVersion !== confirmationSession) return
     if (countdown <= 0) {
       router.push('/dashboard')
       return
     }
-    const id = setTimeout(() => setCountdown((n) => n - 1), 1000)
+    const id = setTimeout(() => {
+      if (useAuthStore.getState().sessionVersion === confirmationSession) {
+        setCountdown((n) => n - 1)
+      }
+    }, 1000)
     return () => clearTimeout(id)
-  }, [countdown, router, status])
+  }, [confirmationSession, countdown, router, status])
 
   const content = {
     checking: {

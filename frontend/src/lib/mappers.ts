@@ -35,7 +35,10 @@ export function mapUser(
       data.subscription_ends_at ?? current?.subscription_ends_at ?? null,
     cancel_at_period_end:
       data.cancel_at_period_end ?? current?.cancel_at_period_end ?? false,
-    trial_used: data.trial_used ?? current?.trial_used ?? false,
+    trial_used:
+      typeof data.trial_used === 'boolean'
+        ? data.trial_used
+        : current?.trial_used,
     assessment_voice_trial_used:
       data.assessment_voice_trial_used ??
       current?.assessment_voice_trial_used ??

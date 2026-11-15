@@ -1,12 +1,16 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import React from 'react'
 
-const localeState = vi.hoisted(() => ({ value: 'en' }))
+const localeState = vi.hoisted(() => ({
+  value: 'en',
+  yearlyLabel: null as string | null,
+}))
 
 vi.mock('next-intl', () => ({
   useLocale: () => localeState.value,
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => (key: string) =>
+    key === 'planYearly' && localeState.yearlyLabel ? localeState.yearlyLabel : key,
 }))
 
 vi.mock('next/link', () => ({
@@ -45,6 +49,7 @@ vi.mock('@/lib/landing-subscription', () => ({
 
 import PricingSection from '@/components/billing/PricingSection'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
+import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
 import { BillingSection } from '@/components/settings/BillingSection'
 import DashboardPage from '@/app/(app)/dashboard/page'
 import { useAuthStore, type User } from '@/store/auth'
@@ -87,6 +92,7 @@ function resetStores() {
   useConfigStore.setState({
     stripeEnabled: true,
     stripeTrialDays: 7,
+    freemiumTrialEnabled: true,
     ttsProvider: 'local',
     openaiTtsVoice: 'nova',
     maintenanceMode: false,
@@ -119,6 +125,7 @@ function resetStores() {
 
 beforeEach(() => {
   localeState.value = 'en'
+  localeState.yearlyLabel = null
   mockApiFetch.mockReset()
   mockLandingSubscriptionState.mockReset()
   resetStores()
@@ -129,6 +136,161 @@ beforeEach(() => {
 })
 
 describe('billing paywall UI', () => {
+  it.each(['paywall', 'plans'])(
+    'hides the fixed savings claim for unmatched prices in %s',
+    (component) => {
+      localeState.yearlyLabel = 'Annual · €110/year · 2 months free →'
+      useConfigStore.setState({ priceMonthly: 10, priceYearly: 110 })
+      render(component === 'paywall' ? <PaywallBanner /> : <SubscriptionPlanButtons />)
+      expect(screen.queryByText('2 months free')).not.toBeInTheDocument()
+      expect(screen.getByText('Annual · €110/year →')).toBeInTheDocument()
+      act(() => {
+        useConfigStore.setState({ priceYearly: 100 })
+      })
+      expect(screen.getByText('2 months free')).toBeInTheDocument()
+    }
+  )
+
+  it('keeps dashboard purchase actions available during the no-card trial', async () => {
+    useAuthStore.setState({
+      user: user({ freemium_trial_ends_at: '2099-01-01T00:00:00Z' }),
+    })
+    mockApiFetch
+      .mockResolvedValueOnce(jsonResponse({}))
+      .mockResolvedValueOnce(jsonResponse({ lessons: [] }))
+      .mockResolvedValueOnce(
+        jsonResponse({ url: 'https://checkout.stripe.com/pay/trial' })
+      )
+
+    render(<DashboardPage />)
+
+    expect(await screen.findByText('freemiumTrialTitle')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'planMonthly' }))
+    await waitFor(() =>
+      expect(window.location.assign).toHaveBeenCalledWith(
+        'https://checkout.stripe.com/pay/trial'
+      )
+    )
+    act(() => useConfigStore.setState({ freemiumTrialEnabled: false }))
+    expect(screen.queryByText('freemiumTrialTitle')).not.toBeInTheDocument()
+    expect(screen.getByText('premiumBannerTitle')).toBeInTheDocument()
+  })
+
+  it.each([0, -1, NaN, Infinity, 1.5])(
+    'does not promise a card trial for invalid duration %s',
+    (stripeTrialDays) => {
+      useConfigStore.setState({ stripeTrialDays })
+      render(<SubscriptionPlanButtons />)
+      expect(screen.queryByText('paywallNoCharge')).not.toBeInTheDocument()
+      expect(screen.getByText('paywallNoChargeTrialUsed')).toBeInTheDocument()
+    }
+  )
+
+  it.each([
+    { loaded: true, trialUsed: false, eligible: true },
+    { loaded: true, trialUsed: true, eligible: false },
+    { loaded: false, trialUsed: false, eligible: false },
+    { loaded: true, trialUsed: undefined, eligible: false },
+  ])('shows card-trial terms only with confirmed eligibility: %j', ({
+    loaded,
+    trialUsed,
+    eligible,
+  }) => {
+    useConfigStore.setState({ loaded })
+    useAuthStore.setState({ user: user({ trial_used: trialUsed }) })
+    render(<SubscriptionPlanButtons />)
+    expect(
+      screen.getByText(eligible ? 'paywallNoCharge' : 'paywallNoChargeTrialUsed')
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(eligible ? 'paywallNoChargeTrialUsed' : 'paywallNoCharge')
+    ).not.toBeInTheDocument()
+  })
+
+  it.each([-1, 0, 8, 9.99, NaN, Infinity])(
+    'omits invalid or non-discounted reference price %s',
+    (totalPriceMonthly) => {
+      render(
+        <PricingSection
+          allowRegistration
+          stripeEnabled
+          trialDays={0}
+          hasSession={false}
+          priceMonthly={9.99}
+          priceYearly={99.99}
+          totalPriceMonthly={totalPriceMonthly}
+          totalPriceYearly={99.99}
+        />
+      )
+      expect(screen.queryByText('priceOriginal')).not.toBeInTheDocument()
+    }
+  )
+
+  it('shows a valid reference price only above the current price', () => {
+    render(
+      <PricingSection
+        allowRegistration
+        stripeEnabled
+        trialDays={0}
+        hasSession={false}
+        priceMonthly={9.99}
+        priceYearly={99.99}
+        totalPriceMonthly={15}
+        totalPriceYearly={99.99}
+      />
+    )
+    expect(screen.getAllByText('priceOriginal')).toHaveLength(1)
+  })
+
+  it('keeps plans available without promising a trial after an unknown eligibility lookup', async () => {
+    mockLandingSubscriptionState.mockResolvedValueOnce({
+      subscribed: false,
+      trialUsed: null,
+    })
+    render(
+      <PricingSection
+        allowRegistration
+        stripeEnabled
+        trialDays={7}
+        hasSession
+        priceMonthly={10}
+        priceYearly={100}
+        totalPriceMonthly={10}
+        totalPriceYearly={100}
+      />
+    )
+    expect(await screen.findAllByRole('button', {
+      name: 'ctaRegisterTrialUsed',
+    })).toHaveLength(3)
+    expect(screen.queryByText('pricingDesc')).not.toBeInTheDocument()
+    expect(screen.queryByText('paywallNoCharge')).not.toBeInTheDocument()
+    expect(screen.getByText('pricingDescTrialUsed')).toBeInTheDocument()
+  })
+
+  it.each([
+    { monthly: 10, yearly: 100, claim: true },
+    { monthly: 10, yearly: 110, claim: false },
+    { monthly: 0, yearly: 0, claim: false },
+  ])('only compares two free months for matching prices: %j', ({
+    monthly,
+    yearly,
+    claim,
+  }) => {
+    render(
+      <PricingSection
+        allowRegistration
+        stripeEnabled
+        trialDays={0}
+        hasSession={false}
+        priceMonthly={monthly}
+        priceYearly={yearly}
+        totalPriceMonthly={monthly}
+        totalPriceYearly={yearly}
+      />
+    )
+    expect(!!screen.queryByText('planFeature.feature2')).toBe(claim)
+  })
+
   it.each(['paywall', 'settings'])(
     'refreshes the profile and removes purchase actions after an already-active conflict in %s',
     async (component) => {

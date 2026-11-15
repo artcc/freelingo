@@ -1,12 +1,16 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
+import {
+  checkoutNavigationHref,
+  getSelectedPlan,
+} from '@/lib/checkout-navigation'
 import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { PageLoading } from '@/components/ui/page-loading'
@@ -29,12 +33,6 @@ const LANGUAGES = [
   'hr',
 ] as const
 
-type SelectedPlan = 'monthly' | 'yearly'
-
-function getSelectedPlan(plan: string | null): SelectedPlan | null {
-  return plan === 'monthly' || plan === 'yearly' ? plan : null
-}
-
 function RegisterForm() {
   const t = useTranslations('auth.register')
   const tLang = useTranslations('languages')
@@ -56,6 +54,8 @@ function RegisterForm() {
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const activeRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => activeRequest.current?.abort(), [])
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -78,6 +78,13 @@ function RegisterForm() {
         return
       }
       setLoading(true)
+      activeRequest.current?.abort()
+      const controller = new AbortController()
+      activeRequest.current = controller
+      let sessionVersion = useAuthStore.getState().sessionVersion
+      const obsolete = () =>
+        controller.signal.aborted ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
       try {
         const sanitizedUsername = username.replace(/\s+/g, '_').toLowerCase()
         const body: Record<string, string | null> = {
@@ -93,11 +100,13 @@ function RegisterForm() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
+          signal: controller.signal,
         })
         if (!res.ok) {
           const data = await res.json().catch(() => ({}))
+          if (obsolete()) return
           let msg = t('error')
-          if (typeof data.detail === 'string') {
+          if (typeof data?.detail === 'string') {
             if (data.detail === 'Username already taken')
               msg = t('usernameTaken')
             else if (data.detail === 'Email already taken')
@@ -108,42 +117,28 @@ function RegisterForm() {
               msg = t('invalidInvite')
             else if (data.detail === 'Email domain not allowed')
               msg = t('invalidEmail')
-          } else if (Array.isArray(data.detail) && data.detail.length > 0) {
-            const first = data.detail[0] as { loc?: string[]; msg?: string }
-            const loc = (first.loc ?? []).join('.')
-            if (
-              loc.includes('email') ||
-              first.msg?.toLowerCase().includes('email')
-            ) {
+          } else if (res.status === 422 && Array.isArray(data?.detail)) {
+            const first = data.detail[0]
+            const field = Array.isArray(first?.loc) ? first.loc.at(-1) : null
+            if (field === 'email') {
               msg = t('invalidEmail')
-            } else if (loc.includes('password')) {
+            } else if (field === 'password') {
               msg = t('invalidPassword')
             }
           }
-          throw new Error(msg)
+          setError(msg)
+          return
         }
         const data = await res.json()
+        if (obsolete()) return
         startSession(data.access_token)
-        router.push(
-          selectedPlan ? `/onboarding?plan=${selectedPlan}` : '/onboarding'
-        )
-      } catch (err: unknown) {
-        const knownErrors = [
-          t('error'),
-          t('usernameTaken'),
-          t('emailTaken'),
-          t('registrationClosed'),
-          t('invalidInvite'),
-          t('invalidEmail'),
-          t('invalidPassword'),
-        ]
-        setError(
-          err instanceof Error && knownErrors.includes(err.message)
-            ? err.message
-            : t('error')
-        )
+        sessionVersion = useAuthStore.getState().sessionVersion
+        router.push(checkoutNavigationHref('/onboarding', selectedPlan))
+      } catch {
+        if (obsolete()) return
+        setError(t('error'))
       } finally {
-        setLoading(false)
+        if (!obsolete()) setLoading(false)
       }
     },
     [
@@ -378,22 +373,18 @@ function RegisterForm() {
               >
                 {t('termsAccept')}{' '}
                 <a
-                  href={
-                    invite
-                      ? `/terms?from=register&invite=${encodeURIComponent(invite)}`
-                      : '/terms?from=register'
-                  }
+                  href={checkoutNavigationHref('/terms', selectedPlan, invite)}
                   className="text-fl-muted-1 hover:text-fl-fg underline underline-offset-2 transition-colors"
                 >
                   {t('termsLink')}
                 </a>{' '}
                 {t('andWord')}{' '}
                 <a
-                  href={
+                  href={checkoutNavigationHref(
+                    '/privacy',
+                    selectedPlan,
                     invite
-                      ? `/privacy?from=register&invite=${encodeURIComponent(invite)}`
-                      : '/privacy?from=register'
-                  }
+                  )}
                   className="text-fl-muted-1 hover:text-fl-fg underline underline-offset-2 transition-colors"
                 >
                   {t('privacyLink')}
@@ -439,7 +430,7 @@ function RegisterForm() {
           <p className="text-fl-label text-fl-muted-2 mt-6 text-center font-mono tracking-wide">
             {t('hasAccount')}{' '}
             <Link
-              href="/login"
+              href={checkoutNavigationHref('/login', selectedPlan, invite)}
               className="text-fl-muted-1 hover:text-fl-fg transition-colors"
             >
               {t('login')}
@@ -454,7 +445,9 @@ function RegisterForm() {
 function RegistrationGate() {
   const t = useTranslations('auth.register')
   const tCommon = useTranslations('common')
-  const invite = useSearchParams().get('invite')
+  const searchParams = useSearchParams()
+  const invite = searchParams.get('invite')
+  const selectedPlan = getSelectedPlan(searchParams.get('plan'))
   const allowRegistration = useConfigStore((s) => s.allowRegistration)
   const loadConfig = useConfigStore((s) => s.load)
   const [configLoading, setConfigLoading] = useState(true)
@@ -496,7 +489,7 @@ function RegistrationGate() {
             {t('registrationClosed')}
           </p>
           <Link
-            href="/login"
+            href={checkoutNavigationHref('/login', selectedPlan)}
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 block py-3 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
             {t('login')}
