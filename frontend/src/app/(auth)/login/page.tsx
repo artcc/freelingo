@@ -7,6 +7,10 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api'
+import {
+  checkoutNavigationHref,
+  getSelectedPlan,
+} from '@/lib/checkout-navigation'
 import { mapUser } from '@/lib/mappers'
 import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
@@ -17,6 +21,8 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get('registered') === 'true'
+  const selectedPlan = getSelectedPlan(searchParams.get('plan'))
+  const invite = searchParams.get('invite')
   const allowRegistration = useConfigStore((s) => s.allowRegistration)
   const loadConfig = useConfigStore((s) => s.load)
 
@@ -63,17 +69,19 @@ function LoginForm() {
         })
         if (!res.ok) {
           const data = await res.json().catch(() => ({}))
-          if (Array.isArray(data.detail) && data.detail.length > 0) {
-            const first = data.detail[0] as { loc?: string[]; msg?: string }
-            const loc = (first.loc ?? []).join('.')
-            if (
-              loc.includes('email') ||
-              first.msg?.toLowerCase().includes('email')
-            ) {
-              throw new Error(t('invalidEmail'))
-            }
+          if (obsolete()) return
+          let message = t(
+            res.status === 401 && data?.detail === 'Invalid credentials'
+              ? 'error'
+              : 'loginFailed'
+          )
+          if (res.status === 422 && Array.isArray(data?.detail)) {
+            const first = data.detail[0]
+            const field = Array.isArray(first?.loc) ? first.loc.at(-1) : null
+            if (field === 'email') message = t('invalidEmail')
           }
-          throw new Error(t('error'))
+          setError(message)
+          return
         }
         const { access_token } = await res.json()
         if (obsolete()) return
@@ -82,26 +90,46 @@ function LoginForm() {
         const meRes = await apiFetch('/api/auth/me', {
           signal: controller.signal,
         })
-        if (meRes.ok) {
-          const data = await meRes.json()
-          if (obsolete()) return
-          setUser(mapUser(data))
+        if (!meRes.ok) throw new Error('Profile lookup failed')
+        const data = await meRes.json()
+        if (obsolete()) return
+        if (
+          !data ||
+          typeof data !== 'object' ||
+          Array.isArray(data) ||
+          !Number.isInteger(data.id) ||
+          data.id <= 0 ||
+          typeof data.username !== 'string' ||
+          !data.username ||
+          (data.learning_goals !== null &&
+            (!Array.isArray(data.learning_goals) ||
+              !data.learning_goals.every(
+                (goal: unknown) => typeof goal === 'string'
+              )))
+        ) {
+          throw new Error('Invalid profile response')
         }
+        const mappedUser = mapUser(data)
+        setUser(mappedUser)
         if (obsolete()) return
-        router.push('/dashboard')
-      } catch (err: unknown) {
-        if (obsolete()) return
-        setError(
-          err instanceof Error &&
-            (err.message === t('error') || err.message === t('invalidEmail'))
-            ? err.message
-            : t('loginFailed')
+        router.push(
+          selectedPlan
+            ? checkoutNavigationHref(
+                mappedUser.learning_goals === null
+                  ? '/onboarding'
+                  : '/settings',
+                selectedPlan
+              )
+            : '/dashboard'
         )
+      } catch {
+        if (obsolete()) return
+        setError(t('loginFailed'))
       } finally {
         if (!obsolete()) setLoading(false)
       }
     },
-    [email, password, router, startSession, setUser, t]
+    [email, password, router, selectedPlan, startSession, setUser, t]
   )
 
   return (
@@ -234,11 +262,11 @@ function LoginForm() {
             </button>
           </form>
 
-          {allowRegistration && (
+          {(allowRegistration || invite) && (
             <p className="text-fl-label text-fl-muted-2 mt-6 text-center font-mono tracking-wide">
               {t('noAccount')}{' '}
               <Link
-                href="/register"
+                href={checkoutNavigationHref('/register', selectedPlan, invite)}
                 className="text-fl-muted-1 hover:text-fl-fg transition-colors"
               >
                 {t('register')}

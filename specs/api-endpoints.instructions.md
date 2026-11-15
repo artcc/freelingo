@@ -61,6 +61,14 @@ of truth.
 
 - **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
 
+Shared consuming-feature dependencies return HTTP 402 with
+`detail: {reason: "freemium_exhausted", feature, remaining, limit}` for a confirmed exhausted quota.
+Unavailable quota checks instead return `reason: "freemium_unavailable"` with the feature and
+placeholder zero balances; those zeros do not establish exhaustion or a configured zero limit.
+Read-only dependencies can return `detail: "subscription_required"` when the feature limit is zero.
+Voice has the compatible additive envelope documented below. Access policy belongs to
+`subscriptions-freemium.instructions.md`.
+
 ## Analytics — `/api/analytics`
 
 - **POST `/ui`** — Rate limit: 60/min. Auth: get_current_user. Body: `{event, operation_id}`,
@@ -137,12 +145,27 @@ source IDs remain private; failed attempts never reveal the solution.
 - **POST `/me/avatar`** — Rate limit: 60/min. Uploads the authenticated user's profile avatar (JPEG/PNG, max 2 MB). Validates the declared content type, image signature, and minimal image structure, stores the image on disk under `/app/avatars` using a non-predictable UUID filename, and returns the user profile with `avatar` set to a cache-busted internal reference (`/api/avatars/{uuid}.{ext}?v={ms}`). The file reference is not publicly served.
 - **GET `/me/avatar-file`** — Rate limit: 60/min. Authenticated current-user avatar retrieval endpoint. Returns only the authenticated user's own avatar file; this is the supported image retrieval path used by the frontend. Responses are marked `Cache-Control: private, no-store`; client-side avatar reuse is handled by the frontend blob cache keyed by the stored avatar reference.
 - **DELETE `/me/avatar`** — Rate limit: 60/min. Removes profile avatar (sets to null)
-- **DELETE `/me`** — Rate limit: 5/min. Deletes own account and all associated data (CASCADE). Forbidden for admin accounts.
+- **DELETE `/me`** — Rate limit: 5/min. Deletes own account and all associated data (CASCADE), returning 204. Forbidden for admin accounts. Requires the shared billing precondition below; it never cancels provider billing automatically.
 - **GET `/quota`** — Rate limit: 60/min. Returns live conversation quota status for the authenticated user (sessions this week, minutes today, minutes this week)
 - **GET `/verify-email`** — Rate limit: 60/min. Verifies email via one-time token (query param `token`, TTL 24h in Redis)
 - **POST `/resend-verification`** — Rate limit: 3/min. Sends a new verification email to the authenticated user
 - **POST `/forgot-password`** — Rate limit: 5/min. Sends password reset link to the given email. Always returns 200 (anti-enumeration).
 - **POST `/reset-password`** — Rate limit: 5/min. Resets password using one-time token (TTL 1h in Redis)
+
+### Account deletion errors
+
+`DELETE /api/auth/me` and `DELETE /api/admin/users/{id}` share these responses, with a string `detail`:
+
+- `409 subscription_cancellation_required`: subscription renewal must be canceled first. Confirmed
+  scheduled cancellation can satisfy this condition before access expires.
+- `409 billing_checkout_pending`: Checkout remains open, a known Session has no confirmed terminal
+  outcome, or a reservation without a Session ID has not reached its stored deadline. Deadline expiry
+  does not bypass the remaining live Customer billing checks.
+- `503 billing_verification_unavailable`: provider billing state could not be verified, including an
+  obsolete RevenueCat snapshot; retry is permitted without assuming cancellation or deletion.
+
+These billing rejections precede local deletion/session side effects. Provider verification, locking,
+and cancellation policy belong to `subscriptions-freemium.instructions.md` (Account deletion and billing).
 
 ---
 
@@ -155,8 +178,8 @@ Requires `role="admin"`. All endpoints return 403 for non-admin users.
 - **GET `/users`** — Rate limit: 60/min. Lists users (paginated). Query params: `skip` (default 0), `limit` (default 10, max 100), `q` (search by username or email), `subscription` (`none`, `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, `paused`), `role` (`user`, `admin`), and `is_active` (`true`, `false`). Returns `{items, total, skip, limit}`.
 - **POST `/users`** — Rate limit: 60/min. Creates user directly (bypasses `ALLOW_REGISTRATION`). Body requires `username`, `email`, `password`, `display_name`, `native_language`, `target_language`, and optional `role`; sends verification email if `EMAIL_ENABLED=true`.
 - **GET `/users/{id}`** — Rate limit: 60/min. User detail, including admin-only Stripe identifiers (`stripe_customer_id`, `stripe_subscription_id`) and subscription state.
-- **PATCH `/users/{id}`** — Rate limit: 60/min. Edits role, activity, verification, display name, conversation/token quotas, `subscription_status`, and `subscription_ends_at`. Subscription status accepts the states exposed by the user schema.
-- **DELETE `/users/{id}`** — Rate limit: 5/min. Deletes account and all associated data (CASCADE)
+- **PATCH `/users/{id}`** — Rate limit: 60/min. Edits role, activity, verification, display name, conversation/token quotas, `subscription_status`, and `subscription_ends_at`. Subscription status accepts the states exposed by the user schema. Activation defaults precede explicit quota overrides in the same locked transaction; see `subscriptions-freemium.instructions.md` (Administration).
+- **DELETE `/users/{id}`** — Rate limit: 5/min. Deletes account and all associated data (CASCADE), returning `{"detail":"User deleted"}`. Self-deletion through this route returns 400. Shares the account-deletion billing errors above and never cancels provider billing automatically.
 - **GET `/users/{id}/stats`** — Rate limit: 60/min. Returns plan summary, active days, XP, streak, lessons, exercises, chat messages, chat/conversation token breakdown, completion-test data, and per-language usage.
 - **GET `/users/{id}/quota`** — Rate limit: 60/min. Live quota status from Redis (sessions this week, minutes today, minutes this week)
 - **POST `/invite`** — Rate limit: 60/min. Generates single-use invite link (48h Redis TTL)
@@ -445,13 +468,21 @@ Both `POST /api/conversation/warmup` and `/ws/conversation` require an authentic
 
 - **POST `/api/conversation/warmup`** — Rate limit: 20/min. Performs parallel best-effort TTS and STT probes within a shared 60-second budget before opening the WebSocket. Logs individual failures or budget exhaustion, cancels unfinished probes at the deadline, and returns ready even when probes fail or time out; this is not a strict provider-health check. A dedicated Next.js proxy forwards authentication and the request body with a 70-second deadline (504 on proxy timeout); the conversation client uses a 75-second abortable request timeout. Optional body: `{trial_token}`.
 
+Voice-access denial preserves HTTP 402 with `detail: "subscription_required"` for warmup and
+WebSocket `type: "error", code: "subscription_required"` followed by close 1008. Both add top-level
+`reason: "freemium_exhausted" | "freemium_unavailable"` and `feature: "voice"`. `remaining` and
+`limit` are seconds and appear only when the quota check returned a known result; infrastructure
+failure never fabricates a zero balance. A later demo-validation failure can report unavailability
+alongside a known quota balance. Clients must inspect the reason rather than treating the legacy
+detail/code as proof of exhaustion.
+
 **Authentication**: After the handshake, the client must send a JSON object containing a valid `token` within 10 seconds. The backend reads the token but does not require the `type` field to equal `auth`. Missing, malformed, or invalid authentication closes with code 1008.
 
 **Message flow**: Client sends audio chunks → STT transcription → LLM generates full response → sentence-level TTS → binary audio chunks returned (Gemini WAV or local/OpenAI MP3). The server starts the greeting as a cancellable task and immediately enters the receive loop; backend barge-in protocol remains available, while the current frontend ignores user speech during active tutor turns for stability.
 
 **Client → Server message types:**
 
-- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id`. It authenticates and can reuse an owned conversation outside lesson practice. Trial sessions are consumed when the WebSocket starts. Invalid OpenAI or Gemini voice choices fall back to the configured provider default; Gemini choices are `female` and `male`.
+- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id`. It authenticates and can reuse an owned conversation outside lesson practice. Trial sessions require the atomic demo claim when that access path is selected; claim/credential/commit failure emits `type: "error", code: "internal_error"` and closes with 1011 before conversation creation. Invalid OpenAI or Gemini voice choices fall back to the configured provider default; Gemini choices are `female` and `male`.
 - **Free-conversation language** — An explicit `target_language` must be an exact supported code. Omission or null resolves the active language, then `en-GB`; the resolved value is also validated. Invalid values emit `error` with `code=invalid_target_language` and close 1008 before general session quota consumption or conversation creation. Only an owned active plan in the resolved language supplies the level and plan reference; without one, the session uses A2 and a null plan reference. Full resolution policy is defined in `voice-conversation.instructions.md`.
 - **Lesson practice** — When `lesson_id` is present, the server requires a completed lesson belonging to the authenticated user. Its persisted plan determines language, level, and provenance; client `context`, `target_language`, and `conversation_id` do not override them. Invalid IDs (including null, booleans, strings, and fractional numbers), missing, foreign, or incomplete lessons emit `error` with `code=lesson_practice_unavailable` and close 1008 before consuming general session quota. Each start creates a voice conversation titled with a localized `Practice: {lesson title}`. Lesson context remains in the voice system prompt throughout the session. Existing access, maintenance, quota, timeout, and transcript rules apply; a verbal completion suggestion never emits a new control event.
   IDs must be in `1..2147483647`, matching the lesson's database column. The WebSocket rejects out-of-range IDs before lesson SQL lookup, and the frontend applies the same range before loading lesson metadata.

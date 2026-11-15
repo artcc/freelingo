@@ -1,8 +1,14 @@
 import { apiFetch } from '@/lib/api'
+import { getFreemiumAccessFailure } from '@/lib/freemium-access'
 
 type Feature = 'listening' | 'reading'
 type Failure =
-  'failed' | 'timeout' | 'unavailable' | 'noActivePlan' | 'contextChanged'
+  | 'failed'
+  | 'timeout'
+  | 'unavailable'
+  | 'noActivePlan'
+  | 'contextChanged'
+  | 'exhausted'
 
 export interface ExerciseContext {
   study_plan_id: number
@@ -50,6 +56,7 @@ function pause(ms: number, signal: AbortSignal): Promise<void> {
 async function request<T>(
   url: string,
   signal: AbortSignal,
+  feature: Feature,
   method = 'GET',
   timeout = 20_000
 ): Promise<T> {
@@ -72,13 +79,17 @@ async function request<T>(
     )
   }
   if (!response.ok) {
-    const body = (await response.json().catch(() => ({}))) as {
-      detail?: string
-    }
+    const body: unknown = await response.json().catch(() => null)
+    const access = getFreemiumAccessFailure(response.status, body, feature)
+    if (access) throw new ExerciseGenerationError(access)
+    const detail =
+      body && typeof body === 'object'
+        ? (body as { detail?: unknown }).detail
+        : undefined
     throw new ExerciseGenerationError(
-      body.detail === 'study_context_changed'
+      detail === 'study_context_changed'
         ? 'contextChanged'
-        : body.detail === 'No active study plan found'
+        : detail === 'No active study plan found'
           ? 'noActivePlan'
           : 'failed'
     )
@@ -130,6 +141,7 @@ export async function resolveExercise<T>({
       const data = await request<ExerciseResponse<T>>(
         `${base}/next?${query()}`,
         signal,
+        feature,
         'GET',
         Math.min(20_000, remaining())
       )
@@ -180,6 +192,7 @@ export async function resolveExercise<T>({
           await request(
             `${base}/generate?${params}`,
             signal,
+            feature,
             'POST',
             Math.min(20_000, remaining())
           )

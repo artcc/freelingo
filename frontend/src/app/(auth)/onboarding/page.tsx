@@ -1,14 +1,23 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 import { apiFetch, restoreAccessToken } from '@/lib/api'
 import { createCheckout } from '@/lib/billing'
-import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
+import {
+  hasTwoMonthsFree,
+  splitYearlyCta,
+  type BillingInterval,
+} from '@/lib/billing-copy'
+import {
+  checkoutNavigationHref,
+  getSelectedPlan,
+} from '@/lib/checkout-navigation'
 import { mapUser } from '@/lib/mappers'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { useLanguageStore } from '@/store/language'
@@ -31,10 +40,6 @@ const LEARNING_GOALS = [
 
 type LearningGoal = (typeof LEARNING_GOALS)[number]
 
-function getSelectedPlan(plan: string | null): BillingInterval | null {
-  return plan === 'monthly' || plan === 'yearly' ? plan : null
-}
-
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tCommon = useTranslations('common')
@@ -45,6 +50,7 @@ export default function OnboardingPage() {
   const setUser = useAuthStore((s) => s.setUser)
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
+  const configLoaded = useConfigStore((s) => s.loaded)
   const stripeTrialDays = useConfigStore((s) => s.stripeTrialDays)
   const priceMonthly = useConfigStore((s) => s.priceMonthly)
   const priceYearly = useConfigStore((s) => s.priceYearly)
@@ -66,28 +72,61 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [languagesLoaded, setLanguagesLoaded] = useState(false)
+  const [languagesError, setLanguagesError] = useState(false)
   const [checkoutLoading, setCheckoutLoading] =
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState('')
   const checkoutRequest = useRef<AbortController | null>(null)
-  useEffect(() => () => checkoutRequest.current?.abort(), [])
+  const profileRequest = useRef<AbortController | null>(null)
+  const languageRequest = useRef<AbortController | null>(null)
+  useEffect(
+    () => () => {
+      checkoutRequest.current?.abort()
+      profileRequest.current?.abort()
+      languageRequest.current?.abort()
+    },
+    []
+  )
 
   const targetLanguageName = tLang(
     getLanguageByCode(targetLanguage)?.iso639 ??
       DEFAULT_TARGET_LANGUAGE.split('-')[0]
   )
 
-  useEffect(() => {
-    loadConfig()
-    fetchLanguages().then(() => {
-      setLanguagesLoaded(true)
-      const codes = useLanguageStore.getState().availableLanguageCodes
-      if (codes.length > 0 && !codes.includes(targetLanguage)) {
-        setTargetLanguage(codes[0])
+  const loadLanguages = useCallback(async () => {
+    languageRequest.current?.abort()
+    const controller = new AbortController()
+    languageRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
+    setLanguagesLoaded(false)
+    setLanguagesError(false)
+    try {
+      if (!useAuthStore.getState().accessToken) {
+        await restoreAccessToken(controller.signal)
       }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (obsolete()) return
+      const loaded = await fetchLanguages(controller.signal)
+      if (obsolete()) return
+      if (!loaded) throw new Error('Language lookup failed')
+      const codes = useLanguageStore.getState().availableLanguageCodes
+      setTargetLanguage((current) =>
+        codes.length > 0 && !codes.includes(current) ? codes[0] : current
+      )
+    } catch {
+      if (!obsolete()) setLanguagesError(true)
+    } finally {
+      if (!obsolete()) setLanguagesLoaded(true)
+    }
   }, [fetchLanguages])
+
+  useEffect(() => {
+    void loadConfig()
+    void loadLanguages()
+    return () => languageRequest.current?.abort()
+  }, [loadConfig, loadLanguages])
 
   function toggleGoal(goal: LearningGoal) {
     setSelectedGoals((prev) =>
@@ -95,21 +134,44 @@ export default function OnboardingPage() {
     )
   }
 
+  const languageReady =
+    languagesLoaded &&
+    !languagesError &&
+    availableLanguageCodes.includes(targetLanguage)
+
   async function handleStep1(e: React.FormEvent) {
     e.preventDefault()
+    if (!languageReady) return
     setStep(2)
   }
 
   const subscribed = isSubscribed(user, stripeEnabled)
   const showTrial = stripeEnabled && !subscribed
-  const freemiumTrialActive = isFreemiumTrialActive(user, stripeEnabled)
-  const totalSteps = showTrial || freemiumTrialActive ? 3 : 2
+  const { freemiumTrialActive } = useTrialStatus()
+  const showCheckout =
+    showTrial && (!freemiumTrialActive || selectedPlan !== null)
+  const totalSteps = step === 3 || showTrial || freemiumTrialActive ? 3 : 2
 
   async function handleStep2() {
+    profileRequest.current?.abort()
+    const controller = new AbortController()
+    profileRequest.current = controller
     const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
     setLoading(true)
     setError('')
     try {
+      if (!useAuthStore.getState().accessToken) {
+        await restoreAccessToken(controller.signal)
+      }
+      if (obsolete()) return
+      if (!useConfigStore.getState().loaded) await loadConfig()
+      if (obsolete()) return
+      if (!useConfigStore.getState().loaded) {
+        throw new Error('Configuration unavailable')
+      }
       const body: Record<string, unknown> = {
         target_language: targetLanguage,
         learning_goals: selectedGoals,
@@ -118,23 +180,25 @@ export default function OnboardingPage() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        signal: controller.signal,
       })
       if (!res.ok) throw new Error(t('saveFailed'))
       const updated = await res.json()
-      if (useAuthStore.getState().sessionVersion !== sessionVersion) return
+      if (obsolete()) return
       const mapped = mapUser(updated, user)
       setUser(mapped)
-      const trialActive = isFreemiumTrialActive(mapped, stripeEnabled)
-      if (trialActive || showTrial) {
-        setStep(3)
+      const config = useConfigStore.getState()
+      if (!config.loaded) throw new Error('Configuration unavailable')
+      const trialActive = isFreemiumTrialActive(mapped, config.stripeEnabled)
+      if (trialActive || !isSubscribed(mapped, config.stripeEnabled)) {
         setStep(3)
       } else {
         router.push('/dashboard')
       }
     } catch {
-      setError(t('saveFailed'))
+      if (!obsolete()) setError(t('saveFailed'))
     } finally {
-      setLoading(false)
+      if (!obsolete()) setLoading(false)
     }
   }
 
@@ -153,7 +217,9 @@ export default function OnboardingPage() {
         try {
           await restoreAccessToken(controller.signal)
         } catch {
-          if (!obsolete()) router.push('/login')
+          if (!obsolete()) {
+            router.push(checkoutNavigationHref('/login', interval))
+          }
           return
         }
       }
@@ -173,11 +239,16 @@ export default function OnboardingPage() {
 
   const checkoutPlans: BillingInterval[] =
     selectedPlan === 'monthly' ? ['monthly', 'yearly'] : ['yearly', 'monthly']
-  const trialEligible = stripeTrialDays > 0 && !user?.trial_used
+  const trialEligible =
+    configLoaded &&
+    Number.isInteger(stripeTrialDays) &&
+    stripeTrialDays > 0 &&
+    user?.trial_used === false
   const yearlyCta = splitYearlyCta(
     t(trialEligible ? 'trialCtaYearly' : 'trialCtaYearlyTrialUsed', {
       price: new Intl.NumberFormat(locale).format(priceYearly),
-    })
+    }),
+    hasTwoMonthsFree(priceMonthly, priceYearly)
   )
 
   return (
@@ -211,11 +282,13 @@ export default function OnboardingPage() {
                     : t('title')
                   : step === 2
                     ? t('goals.title')
-                    : t(
-                        trialEligible
-                          ? 'trialHeadline'
-                          : 'trialHeadlineTrialUsed'
-                      )}
+                    : freemiumTrialActive && !showCheckout
+                      ? t('freemiumTrialTitle')
+                      : t(
+                          trialEligible
+                            ? 'trialHeadline'
+                            : 'trialHeadlineTrialUsed'
+                        )}
               </span>
             </div>
             <span className="text-fl-hint text-fl-muted-4 font-mono tabular-nums">
@@ -243,7 +316,7 @@ export default function OnboardingPage() {
                   <div className="border-fl-border text-fl-muted-2 border px-4 py-3 font-mono text-xs tracking-widest">
                     ...
                   </div>
-                ) : availableLanguageCodes.length > 0 ? (
+                ) : !languagesError && availableLanguageCodes.length > 0 ? (
                   <TargetLanguageSelector
                     value={targetLanguage}
                     onChange={setTargetLanguage}
@@ -256,10 +329,7 @@ export default function OnboardingPage() {
                     </p>
                     <button
                       type="button"
-                      onClick={() => {
-                        setLanguagesLoaded(false)
-                        fetchLanguages()
-                      }}
+                      onClick={() => void loadLanguages()}
                       className="text-fl-label text-fl-accent font-mono text-xs tracking-widest uppercase underline"
                     >
                       {tCommon('retry')}
@@ -269,7 +339,8 @@ export default function OnboardingPage() {
               </div>
               <button
                 type="submit"
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
+                disabled={!languageReady}
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
               >
                 {tCommon('next')}
               </button>
@@ -312,6 +383,8 @@ export default function OnboardingPage() {
                     <Loader2 className="mr-2 inline h-4 w-4 animate-spin" />
                     {tCommon('saving')}
                   </>
+                ) : error ? (
+                  tCommon('retry')
                 ) : (
                   t('continue')
                 )}
@@ -328,7 +401,7 @@ export default function OnboardingPage() {
           )}
 
           {/* Step 3: Trial confirmation */}
-          {step === 3 && freemiumTrialActive && (
+          {step === 3 && freemiumTrialActive && !showCheckout && (
             <div className="space-y-5 text-center">
               <h2 className="text-fl-fg font-mono text-base font-bold">
                 {t('freemiumTrialTitle')}
@@ -365,7 +438,7 @@ export default function OnboardingPage() {
           )}
 
           {/* Step 3: Stripe subscription */}
-          {step === 3 && !freemiumTrialActive && (
+          {step === 3 && showCheckout && (
             <div className="space-y-5 text-center">
               <h2 className="text-fl-fg font-mono text-base font-bold">
                 {t(trialEligible ? 'trialTitle' : 'trialTitleTrialUsed', {
@@ -431,7 +504,9 @@ export default function OnboardingPage() {
                 </p>
               )}
               <p className="text-fl-hint text-fl-muted-3 font-mono tracking-widest uppercase">
-                {t(trialEligible ? 'trialNoCharge' : 'trialNoChargeTrialUsed')}
+                {t(trialEligible ? 'trialNoCharge' : 'trialNoChargeTrialUsed', {
+                  days: stripeTrialDays,
+                })}
               </p>
               <button
                 type="button"
@@ -442,6 +517,16 @@ export default function OnboardingPage() {
                 {t('trialSkip')}
               </button>
             </div>
+          )}
+          {step === 3 && !freemiumTrialActive && !showCheckout && (
+            <button
+              type="button"
+              disabled={checkoutLoading !== null}
+              onClick={() => router.push('/dashboard')}
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
+            >
+              {t('goToDashboard')}
+            </button>
           )}
         </div>
       </div>

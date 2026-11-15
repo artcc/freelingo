@@ -104,6 +104,7 @@ beforeEach(() => {
   apiFetch.mockReset()
   apiFetch.mockImplementation(async () => languageResponse())
   useAuthStore.setState({ ...useAuthStore.getInitialState() }, true)
+  useAuthStore.getState().startSession('i18n-test-token')
   useConfigStore.setState(
     { ...useConfigStore.getInitialState(), loaded: true },
     true
@@ -174,7 +175,7 @@ describe('onboarding goals subtitle', () => {
   )
 
   it.each(['', 'unknown-language'])(
-    'safely displays the default for language=%s while languages load',
+    'waits for an enabled language before showing goals for language=%s',
     async (code) => {
       searchParams.set('language', code)
       let resolveLanguages!: (response: Response) => void
@@ -184,12 +185,20 @@ describe('onboarding goals subtitle', () => {
         })
       )
       renderOnboarding()
-      fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+      const next = screen.getByRole('button', { name: 'Next' })
+      expect(next).toBeDisabled()
+      fireEvent.click(next)
 
-      expect(screen.getByText(englishSubtitle)).toBeInTheDocument()
+      expect(screen.queryByText(englishSubtitle)).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: en.onboarding.continue })
+      ).not.toBeInTheDocument()
 
       await act(async () => resolveLanguages(languageResponse(['fr-FR'])))
 
+      expect(screen.getByRole('button', { name: /French/ })).toBeInTheDocument()
+      expect(next).toBeEnabled()
+      fireEvent.click(next)
       expect(
         screen.getByText(
           'Language: French. What do you want to use it for? Select all that apply.'
@@ -199,7 +208,7 @@ describe('onboarding goals subtitle', () => {
   )
 
   it.each(['HTTP', 'network'])(
-    'safely displays the default for an invalid query after a %s failure',
+    'keeps goals blocked after a %s failure until an enabled language is recovered',
     async (failure) => {
       searchParams.set('language', 'unknown-language')
       if (failure === 'HTTP') {
@@ -209,9 +218,27 @@ describe('onboarding goals subtitle', () => {
       }
       renderOnboarding()
       await screen.findByText(en.onboarding.saveFailed)
-      fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+      const next = screen.getByRole('button', { name: 'Next' })
+      expect(next).toBeDisabled()
+      fireEvent.click(next)
 
-      expect(screen.getByText(englishSubtitle)).toBeInTheDocument()
+      expect(screen.queryByText(englishSubtitle)).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: en.onboarding.continue })
+      ).not.toBeInTheDocument()
+
+      apiFetch.mockResolvedValueOnce(languageResponse(['fr-FR']))
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: en.common.retry }))
+      )
+      expect(screen.getByRole('button', { name: /French/ })).toBeInTheDocument()
+      expect(next).toBeEnabled()
+      fireEvent.click(next)
+      expect(
+        screen.getByText(
+          'Language: French. What do you want to use it for? Select all that apply.'
+        )
+      ).toBeInTheDocument()
     }
   )
 })

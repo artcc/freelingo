@@ -16,12 +16,21 @@ import {
 } from '@/lib/detective'
 import { useLanguageStore } from '@/store/language'
 import { useFreemiumStore } from '@/store/freemium'
+import { useAuthStore } from '@/store/auth'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 
 const button =
   'border-fl-border hover:border-fl-border-2 text-fl-fg border px-4 py-2 text-sm disabled:opacity-40'
 
 export default function DetectiveSessionPage() {
   const { id } = useParams<{ id: string }>()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  return <DetectiveSessionContent key={`${sessionVersion}:${id}`} />
+}
+
+function DetectiveSessionContent() {
+  const { id } = useParams<{ id: string }>()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const t = useTranslations('detective')
   const common = useTranslations('common')
   const tTarget = useTranslations('targetLanguages')
@@ -33,13 +42,18 @@ export default function DetectiveSessionPage() {
   const [abandon, setAbandon] = useState(false)
   const mutation = useRef<AbortController | null>(null)
   const busyRef = useRef(false)
+  const [completedNow, setCompletedNow] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
+    const current = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion
     let timer: ReturnType<typeof setTimeout>
     let failures = 0
     let end = Infinity
     setSession(null)
+    setCompletedNow(false)
     setError(false)
     setBusy(false)
     setAbandon(false)
@@ -48,7 +62,7 @@ export default function DetectiveSessionPage() {
         const data = await gameRequest<DetectiveSession>(`/sessions/${id}`, {
           signal: controller.signal,
         })
-        if (controller.signal.aborted) return
+        if (!current()) return
         if (data.game_type && data.game_type !== 'detective') {
           setError(true)
           return
@@ -68,7 +82,7 @@ export default function DetectiveSessionPage() {
           timer = setTimeout(() => void load(), 5000)
         } else void useFreemiumStore.getState().fetchStatus(true)
       } catch (e) {
-        if (controller.signal.aborted) return
+        if (!current()) return
         failures += 1
         const delay = Math.max(
           5000 * failures,
@@ -86,13 +100,22 @@ export default function DetectiveSessionPage() {
       mutation.current?.abort()
       busyRef.current = false
     }
-  }, [id, retry])
+  }, [id, retry, sessionVersion])
 
   async function submit(step: 'detect' | 'correct' | 'abandon', choice = 0) {
-    if (!session || busyRef.current || error) return
+    if (
+      !session ||
+      busyRef.current ||
+      error ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
+    )
+      return
     busyRef.current = true
     setBusy(true)
     const controller = new AbortController()
+    const current = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion
     mutation.current = controller
     try {
       const data = await gameRequest<DetectiveSession>(
@@ -106,17 +129,22 @@ export default function DetectiveSessionPage() {
               : JSON.stringify({ challenge: index, step, choice }),
         }
       )
-      if (controller.signal.aborted) return
+      if (!current()) return
       setSession(data)
+      setCompletedNow(
+        step !== 'abandon' &&
+          session.status === 'ready' &&
+          data.status === 'completed'
+      )
       setAbandon(false)
       if (step !== 'abandon') useLanguageStore.getState().invalidateLanguages()
     } catch {
-      if (!controller.signal.aborted) {
+      if (current()) {
         setError(true)
         setAbandon(false)
       }
     } finally {
-      if (!controller.signal.aborted) {
+      if (current()) {
         busyRef.current = false
         setBusy(false)
       }
@@ -355,6 +383,7 @@ export default function DetectiveSessionPage() {
               {t('plan')}
             </Link>
           </div>
+          {completedNow && <PremiumResultOffer feature="games" />}
         </section>
       )}
       <ConfirmDialog

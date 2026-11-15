@@ -224,6 +224,10 @@ The Reading page keeps transient state locally. Its states are `loading`, `idle`
 - Generating state adds a delay warning after 15 seconds.
 - Exercise state shows the passage and questions together; there is no audio or readiness gate.
 - Submission becomes available when every received question index has an answer.
+- Quota exhaustion disables submission and adds an inline paywall while retaining the passage,
+  questions, answers, and replay state. Confirmed access recovery restores manual submission without
+  replacing the exercise. Temporary quota-service unavailability shows a localized retryable error;
+  the shared classification/recovery contract lives in `architecture-frontend.instructions.md`.
 - Results retain the complete passage alongside score, XP, correct options, and incorrect selections.
 - Each corrected question offers optional native-language explanation with a source quote; loading and
   manual retry remain local to the help control and never resubmit the attempt.

@@ -15,12 +15,21 @@ import type {
 } from '@/lib/sentence-order'
 import { useLanguageStore } from '@/store/language'
 import { useFreemiumStore } from '@/store/freemium'
+import { useAuthStore } from '@/store/auth'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 
 const button =
   'border-fl-border hover:border-fl-border-2 text-fl-fg border px-4 py-2 text-sm disabled:opacity-40'
 
 export default function SentenceOrderSessionPage() {
   const { id } = useParams<{ id: string }>()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  return <SentenceOrderSessionContent key={`${sessionVersion}:${id}`} />
+}
+
+function SentenceOrderSessionContent() {
+  const { id } = useParams<{ id: string }>()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const t = useTranslations('sentenceOrder')
   const shared = useTranslations('detective')
   const common = useTranslations('common')
@@ -34,13 +43,18 @@ export default function SentenceOrderSessionPage() {
   const [abandon, setAbandon] = useState(false)
   const mutation = useRef<AbortController | null>(null)
   const busyRef = useRef(false)
+  const [completedNow, setCompletedNow] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
+    const current = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion
     let timer: ReturnType<typeof setTimeout>
     let failures = 0
     let end = Infinity
     setSession(null)
+    setCompletedNow(false)
     setError(false)
     setBusy(false)
     setAbandon(false)
@@ -53,7 +67,7 @@ export default function SentenceOrderSessionPage() {
             signal: controller.signal,
           }
         )
-        if (controller.signal.aborted) return
+        if (!current()) return
         if (data.game_type !== 'sentence-order') {
           setError(true)
           return
@@ -73,7 +87,7 @@ export default function SentenceOrderSessionPage() {
           timer = setTimeout(() => void load(), 5000)
         } else void useFreemiumStore.getState().fetchStatus(true)
       } catch (e) {
-        if (controller.signal.aborted) return
+        if (!current()) return
         failures += 1
         const delay = Math.max(
           5000 * failures,
@@ -91,10 +105,16 @@ export default function SentenceOrderSessionPage() {
       mutation.current?.abort()
       busyRef.current = false
     }
-  }, [id, retry])
+  }, [id, retry, sessionVersion])
 
   async function submit(action: 'answer' | 'abandon') {
-    if (!session || busyRef.current || error) return
+    if (
+      !session ||
+      busyRef.current ||
+      error ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
+    )
+      return
     if (
       action === 'answer' &&
       order.length !== session.challenges[index].fragments.length
@@ -103,6 +123,9 @@ export default function SentenceOrderSessionPage() {
     busyRef.current = true
     setBusy(true)
     const controller = new AbortController()
+    const current = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion
     mutation.current = controller
     try {
       const data = await gameRequest<SentenceOrderSession>(
@@ -116,17 +139,22 @@ export default function SentenceOrderSessionPage() {
               : JSON.stringify({ challenge: index, step: 'order', order }),
         }
       )
-      if (controller.signal.aborted) return
+      if (!current()) return
       setSession(data)
+      setCompletedNow(
+        action === 'answer' &&
+          session.status === 'ready' &&
+          data.status === 'completed'
+      )
       setAbandon(false)
       if (action === 'answer') useLanguageStore.getState().invalidateLanguages()
     } catch {
-      if (!controller.signal.aborted) {
+      if (current()) {
         setError(true)
         setAbandon(false)
       }
     } finally {
-      if (!controller.signal.aborted) {
+      if (current()) {
         busyRef.current = false
         setBusy(false)
       }
@@ -380,6 +408,9 @@ export default function SentenceOrderSessionPage() {
             </Link>
           </div>
         </section>
+      )}
+      {completedNow && session?.status === 'completed' && (
+        <PremiumResultOffer feature="games" />
       )}
       <ConfirmDialog
         open={abandon}

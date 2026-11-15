@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.13.5] - 2026-11-15
+
+### Added
+
+- Add permanent Premium links to desktop and mobile navigation, plus a dismissible trial-expiration notice on dashboard entry, remembered per account in the browser.
+- Offer contextual Premium continuation after completed learning activities, with a shared three-day cadence for optional invitations and immediate continuation offers when free quotas are exhausted.
+
+### Changed
+
+- Explain Premium benefits, the no-card trial expiration, and subscription payment terms in Plan and subscription settings, prioritizing monthly billing unless the learner selected another plan.
+- Make trial and Premium-only quota labels actionable, and offer upgrades before the last free use with clear daily or weekly renewal information.
+
+### Fixed
+
+- Preserve monthly or annual plan selection through registration, login, legal pages, onboarding, and subscription settings, with checkout requiring an explicit action.
+- Keep existing Premium actions available during the initial trial and link quota upgrade prompts directly to subscription settings.
+- Refresh trial countdowns and free-plan balances at expiration, UTC resets, and return to the app; recover consuming controls after access is restored without discarding learner answers.
+- Distinguish exhausted voice and exercise quotas from temporary service failures, with localized user-facing errors instead of technical server messages.
+- Show trial eligibility, annual savings, comparison prices, and Premium usage terms accurately; subscription and checkout-return pages no longer imply an unverified charge.
+- Preserve voice transcripts when the free allowance runs out, and allow post-assessment voice practice to continue when the account still has subscription, trial, or free-quota access.
+
 ## [1.13.0] - 2026-11-14
 
 ### Security

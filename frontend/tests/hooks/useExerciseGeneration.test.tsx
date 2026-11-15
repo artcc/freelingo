@@ -1,8 +1,9 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useExerciseGeneration } from '@/hooks/useExerciseGeneration'
-import { resolveExercise } from '@/lib/exercise-generation'
+import { ExerciseGenerationError, resolveExercise } from '@/lib/exercise-generation'
 import { useLanguageStore } from '@/store/language'
+import { useAuthStore } from '@/store/auth'
 import { StrictMode } from 'react'
 
 vi.mock('@/lib/exercise-generation', async (importOriginal) => ({
@@ -104,6 +105,37 @@ describe('useExerciseGeneration lifecycle', () => {
     })
     expect(onExercise).not.toHaveBeenCalled()
     expect(setPageState).not.toHaveBeenCalled()
+  })
+
+  it('does not route a late quota denial into a replacement session', async () => {
+    let reject!: (error: Error) => void
+    resolve.mockImplementationOnce(() => new Promise((_, fail) => { reject = fail }))
+      .mockResolvedValueOnce(null)
+    const onAccessDenied = vi.fn()
+    renderHook(() => useExerciseGeneration({
+      ...options,
+      language: 'en-GB',
+      onAccessDenied,
+    }))
+    act(() => useAuthStore.getState().startSession('replacement'))
+    await act(async () => reject(new ExerciseGenerationError('exhausted')))
+    expect(onAccessDenied).not.toHaveBeenCalled()
+    expect(setError).not.toHaveBeenCalledWith('exhausted')
+  })
+
+  it('routes exhaustion once without restarting the lookup on rerender', async () => {
+    const onAccessDenied = vi.fn()
+    resolve.mockRejectedValueOnce(new ExerciseGenerationError('exhausted'))
+    const { rerender } = renderHook(() => useExerciseGeneration({
+      ...options,
+      language: 'en-GB',
+      onAccessDenied,
+    }))
+    await waitFor(() => expect(onAccessDenied).toHaveBeenCalledTimes(1))
+    rerender()
+    expect(resolve).toHaveBeenCalledTimes(1)
+    expect(setPageState).toHaveBeenLastCalledWith('idle')
+    expect(setError).not.toHaveBeenCalledWith('exhausted')
   })
 
   it('cancels when the plan changes without changing language', async () => {

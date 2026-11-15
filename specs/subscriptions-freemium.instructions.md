@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for Stripe billing, optional RevenueCat entitlement synchronization, freemium access, paywalls, maintenance, and subscription administration."
-applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook,billing_checkout}.py, backend/app/services/{subscription_service,revenuecat_service,stripe_checkout_service,freemium_service,assessment_voice_trial}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
+applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook,billing_checkout}.py, backend/app/services/{subscription_service,revenuecat_service,stripe_checkout_service,freemium_service,assessment_voice_trial,account_deletion_service}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,auth,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
 ---
 
 # Subscriptions and Freemium
@@ -96,7 +96,10 @@ access too.
 
 Redis failure while checking freemium access fails closed with HTTP `402` and
 `reason=freemium_unavailable`. A normal exhausted quota returns `reason=freemium_exhausted`, feature,
-remaining, and limit.
+remaining, and limit. Unavailability is not evidence of exhaustion or a Premium-only feature:
+clients show a localized retryable error rather than an upgrade offer based on that response.
+The HTTP/WebSocket error envelopes, including voice's compatibility fields, are defined in
+`api-endpoints.instructions.md`.
 
 Currently gated operations are:
 
@@ -332,14 +335,22 @@ false. Abandoning checkout does not consume the right. Verified Stripe snapshots
 or a non-null `trial_start` mark the trial as used, including when notification arrives after conversion
 to a paid subscription. Administrative access overrides do not mark it.
 
-The landing pricing subtitle, monthly badge, and all paid-plan CTAs advertise a Stripe trial only
-when configured trial days are positive and the user has not already used it. Otherwise, the subtitle
-uses the monthly/yearly plan-selection text, the monthly badge says Premium, and paid-plan CTAs use
+Landing pricing, dashboard, paywall, shared plan buttons, and onboarding advertise a Stripe trial only
+with a positive integer duration and known eligibility. An authenticated profile lookup failure or missing
+`trial_used` leaves eligibility unknown, not unused: these surfaces require `trial_used === false`.
+Store-based eligibility also waits for loaded configuration. Missing configured days default to zero.
+Otherwise, the landing subtitle uses the monthly/yearly plan-selection text, the monthly badge says
+Premium, and paid-plan CTAs use
 the plan-selection label. When a trial is available, the subtitle displays its configured duration,
 identifying it as additional trial days on subscription, with the card requirement and the paid
 plan price applying afterwards. Without a subscription trial, the subtitle states that the paid
 subscription starts on purchase. Paid cards also show the existing trial/payment terms next to
 their CTAs. The landing defaults missing Stripe trial days to zero.
+
+“Two months free” is shown only when finite positive configured prices represent whole cents and
+the yearly amount is exactly ten monthly amounts. Other annual prices retain their plan CTA without
+that savings claim. Landing strikethrough prices require finite amounts, a positive current price,
+and an original price strictly greater than the current price.
 
 The Stripe card trial and the freemium no-card trial are independent. A Stripe `trialing` status has
 subscription precedence and does not consume freemium counters.
@@ -427,8 +438,15 @@ defaults to a five-minute session duration.
 
 Voice access gives precedence to subscription, freemium trial, and remaining freemium voice balance
 before considering the demo. Consequently, a supplied demo token is not consumed while an earlier
-access path succeeds. When selected, the WebSocket deletes the token and marks the durable right used
-as the session begins.
+access path succeeds. When selected, the WebSocket atomically claims the active account's unused
+durable right with a conditional database update, then requires deletion of exactly one Redis
+credential before committing. Concurrent connections cannot both claim the right, whether they
+present the same token or different valid tokens for that account.
+
+A failed claim, missing credential, Redis failure, or commit failure stops startup before conversation
+creation and rolls back the database claim. A credential already deleted from Redis is not restored
+after rollback; the learner can request a fresh token while the durable right remains unused. The
+wire-level denial is defined in `api-endpoints.instructions.md`.
 
 The demo does not grant access to chat, Listening, or Reading and remains subject to the user's
 general token, session, and minute limits. Its stored plan/language metadata does not currently force
@@ -449,7 +467,10 @@ replace the affected pages, but open clients do not receive push updates when th
 
 Administrative APIs expose subscription fields and accept subscription filtering and recognized
 status overrides. Moving a user from non-premium to `active` or `trialing` applies default quotas;
-setting `none` clears the end date. Overrides update local access only and do not modify Stripe.
+explicit conversation/token quotas in the same update are applied after those defaults, including
+zero-valued overrides. The update reloads and locks the user row and commits status, defaults, and
+explicit overrides together. Setting `none` clears the end date. Overrides update local access only
+and do not modify Stripe.
 In RevenueCat mode they do not modify RevenueCat either and can be replaced by the next reconciliation;
 durable provider-managed grants must be configured in RevenueCat. Quota overrides are retained across
 ordinary renewals and duplicate notifications.
@@ -468,12 +489,22 @@ frontend toggle. The UI's monthly/yearly override maps locally to active access 
 ## Frontend behavior
 
 The config store loads public runtime flags. The freemium store caches status for 60 seconds within
-the current authentication session. A synchronous auth subscription clears the snapshot, loaded flag,
+the current authentication session and UTC day, unless an active trial's expiration has passed.
+Concurrent non-forced reads share the pending request; forced reads supersede older reads and
+invalidate the cache timestamp. A synchronous auth subscription clears the snapshot, loaded flag,
 and cache timestamp on logout or session replacement, before another account can reuse them. Token
 rotation and language switches preserve the cache because quotas are global per user. Until the new
 session loads its own status, including after a failed GET, the snapshot stays null: quota banners
 show no balance and quota-based paywalls do not infer exhaustion. Backend access checks remain
 authoritative, and a later fetch can retry.
+
+For unsubscribed users with billing enabled, the authenticated shell refreshes quota on entry, UTC
+midnight (including the weekly Monday reset), trial expiration, and trial-toggle changes.
+Focus/visibility recovery requests stale status; hidden
+tabs defer boundary refreshes until visible. Trial countdowns react to their next displayed-day
+boundary and expiry, focus, visibility, and runtime toggles. Reaching a subscription trial's displayed
+end does not revoke a persisted `trialing` entitlement. Shared hook ownership and denial recovery live
+in `architecture-frontend.instructions.md`.
 
 The store provides optimistic decrement for chat, Listening, and Reading. A delayed chat completion
 can decrement only its originating authentication session. Lessons refresh authoritative status after
@@ -481,7 +512,10 @@ completion; voice refreshes after session end. Quota GETs reject superseded requ
 responses, including delayed body decoding; reads overlapping confirmed consumption reconcile again.
 
 `FreemiumQuotaBanner` shows active-trial time, remaining/limit values, Premium-only state for zero
-limits, and low-balance emphasis. `PaywallBanner` renders inline upgrade or payment-recovery actions.
+limits, and low-balance emphasis. Trial and Premium-only labels link to `/settings#plan`.
+The upgrade action appears with at most one remaining use or at most 25% of the balance; low-balance
+copy identifies daily or Monday weekly replenishment at 00:00 UTC. Zero-limit features never promise
+replenishment. `PaywallBanner` renders inline upgrade or payment-recovery actions.
 There is no `PaywallGate`; each feature page adapts only the consuming controls while preserving
 readable history where backend policy permits.
 
@@ -509,12 +543,104 @@ copy distinguishes initial no-card Premium access from the optional additional s
 It explains that
 subscribing starts the paid subscription unless additional trial days are explicitly offered, and
 does not present self-hosting as free infrastructure or necessarily local processing.
-Anonymous plan selection is carried through registration; authenticated users can start checkout
-directly. Billing success refreshes authentication and polls profile state before claiming Premium
-or redirecting. Billing cancellation never claims a charge occurred.
+Anonymous monthly/yearly selection is preserved through registration, legal-page returns, login, and
+onboarding. Selection retains purchase intent, not authorization to create Checkout automatically:
+onboarding presents explicit plan buttons even during the no-card trial when a plan was selected.
+Login routes an onboarded learner with a selected plan to Settings' plan section; shared buttons
+prioritize that plan. Dashboard purchase/payment-recovery actions remain available during the
+no-card trial. Navigation details belong to `platform.instructions.md`.
+
+### Upgrade invitations
+
+With loaded billing configuration and a known unsubscribed account, desktop navigation and the closed
+mobile header expose a permanent Premium link to `/settings#plan`. Navigation trial countdowns also
+link there. The Settings section is named Plan and subscription while billing is enabled; deployments
+without billing retain the usage-limits label. The dashboard's existing Premium banner retains its
+position and purchase actions.
+
+Settings explains Premium's voice, chat, comprehension, lesson, game, and multi-language benefits
+alongside the general account limits. An active no-card trial shows its localized expiration date and
+explains the absence of automatic charging. Settings prioritizes monthly billing when no valid plan
+was selected; explicit monthly/yearly purchase intent takes precedence. Other shared button consumers
+retain their existing default order. Detailed plan terms distinguish monthly and annual commitment,
+immediate paid subscription from an eligible card trial, and the independence of that trial from any
+remaining no-card days.
+
+A known expired no-card trial can show a dismissible notice on dashboard entry. It explains that
+progress is preserved and free access remains limited, and offers plans or continued free use.
+It is suppressed for subscribers, payment-recovery states, disabled trial/billing configuration,
+unknown expiration, and visits reserved for the onboarding tour or unseen release news. Such visits
+defer the notice until a later dashboard entry. Visit priority is captured before billing configuration
+or page loading finishes; dismissing tour/news while configuration is pending does not release that
+visit for another notice. Deferral is local to the current account/session visit, survives token
+rotation and profile refresh, and writes no acknowledgment or cooldown. It never mounts inside an
+exercise or conversation.
+Showing the notice records the account's trial expiration in browser-local preferences, so revisiting
+or logging in again in that browser does not repeat it. This preference is not synchronized between
+devices; clearing browser storage can permit another notice. Unavailable storage suppresses the notice.
+
+Newly completed activities can show an inline, contextual Premium invitation without replacing their
+result, corrections, or transcript. Saved history and read-only reviews are not new completion
+opportunities. Subscribers, payment-recovery states, unknown accounts, and pending/disabled billing
+configuration suppress soft invitations. Exhausted access for a payment-recovery state uses the
+existing portal paywall instead of new purchase actions. Review dialogs defer their presentation.
+
+Soft result invitations share a three-day frequency limit per account in the browser, recorded when
+their position becomes visible, and can be dismissed. The trial-expiration notice also starts this
+cooldown. Browser storage failures retain a page-session fallback. A confirmed exhausted feature
+balance can still show a continuation offer regardless of this soft-invitation cooldown; active
+no-card trials and unknown balances never imply exhaustion. Positive limits explain replenishment,
+while zero-limit features do not. Flashcard invitations promote additional Lingu practice without
+presenting flashcards as a paid feature. No invitation adds analytics events or changes access quotas.
+
+Billing success restores authentication if needed and polls the persisted profile up to five times,
+1.5 seconds apart. Only `active` or `trialing` confirms Premium and starts the five-second dashboard
+redirect. Pending/error states do not confirm a purchase or payment; changing authentication session
+invalidates confirmation and its redirect. Cancellation offers dashboard and `/settings#plan`
+navigation without asserting either that payment occurred or that no charge occurred.
 
 The frontend is advisory: stale config or freemium state may temporarily present an action the
 backend rejects. Backend dependencies remain authoritative.
+
+## Account deletion and billing
+
+Self-service and administrative account deletion share `account_deletion_service.py`. Deletion never
+cancels subscriptions, schedules cancellation, or expires Checkout sessions at a provider. The account
+owner must first cancel renewal through subscription management. A provider-confirmed scheduled
+cancellation permits deletion without waiting for the paid access period to finish.
+
+The service reloads and holds the user-row lock used by Checkout through the deletion transaction.
+It checks persisted Checkout reservations and live Stripe sessions/subscriptions, including purchases
+not yet attached to the profile, and checks RevenueCat when enabled or when `revenuecat_synced_at`
+records a previous synchronization. Historical RevenueCat billing remains subject to verification
+after either billing flag is disabled; missing provider credentials fail closed. A persisted Stripe Customer
+or Subscription ID still requires live Stripe verification when billing is disabled; disabling feature
+gates does not prove billing has ended. These Stripe SDK reads explicitly supply the configured
+`STRIPE_SECRET_KEY` rather than depending on billing-router initialization.
+
+RevenueCat verification reads the customer snapshot through `has_uncanceled_subscription` without
+synchronizing access or applying activation quotas. It validates the configured environment and
+entitlement structure and rejects snapshots older than `revenuecat_synced_at`. Billing checks inspect
+subscriptions independently of Premium entitlement status: expired access with an outstanding billing
+issue and no detected cancellation still blocks deletion. Without a billing issue, an uncanceled
+subscription with unknown or future expiration also blocks it. Expiration comes from the subscription
+or its matching entitlement when needed.
+
+Lifetime non-subscription purchases and local Premium grants without provider billing identities
+do not require cancellation merely because they grant access. Any separate renewable subscription
+must still satisfy the billing checks.
+
+An open Checkout blocks deletion. A reservation with an unknown Session ID blocks until its stored
+`expires_at`; after that deadline, the service still checks live open Sessions and all subscriptions
+for the persisted Customer before permitting deletion. A known Session must be complete with a
+subscription or confirmed expired. Provider verification failures and obsolete RevenueCat snapshots
+fail closed. The HTTP error codes are defined in `api-endpoints.instructions.md` (Account deletion errors).
+
+Billing denials occur before refresh-token invalidation, cookie removal, avatar cleanup, or account
+deletion. Settings and Admin retain their confirmation dialog with a localized recoverable error;
+they do not log out the learner, remove a listed account, or navigate as if deletion succeeded.
+Recovery from a confirmed cancellation-required response must offer subscription management
+independently of whether the cached profile already reflects that subscription.
 
 ## Related specifications
 

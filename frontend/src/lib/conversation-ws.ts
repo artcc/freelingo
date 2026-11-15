@@ -67,6 +67,10 @@ export interface ErrorMessage {
   type: 'error'
   code: string
   message?: string
+  reason?: 'freemium_exhausted' | 'freemium_unavailable'
+  feature?: 'voice'
+  remaining?: number
+  limit?: number
   turn_id?: number
 }
 

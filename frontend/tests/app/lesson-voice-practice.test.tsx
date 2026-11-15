@@ -85,6 +85,29 @@ function response(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), { status })
 }
 
+function setVoiceQuota(remaining: number) {
+  useFreemiumStore.setState({
+    loaded: true,
+    lastFetch: Date.now(),
+    status: {
+      trial_active: false,
+      trial_ends_at: null,
+      chat_remaining: 5,
+      chat_limit: 5,
+      lessons_remaining: 3,
+      lessons_limit: 3,
+      listening_remaining: 3,
+      listening_limit: 3,
+      reading_remaining: 3,
+      reading_limit: 3,
+      games_remaining: 3,
+      games_limit: 3,
+      voice_remaining_seconds: remaining,
+      voice_limit_seconds: 300,
+    },
+  })
+}
+
 beforeEach(() => {
   vi.clearAllMocks()
   mocks.params = 'lesson=7'
@@ -112,6 +135,7 @@ beforeEach(() => {
   useConfigStore.setState({ stripeEnabled: false, maintenanceMode: false })
   useLanguageStore.setState({
     activeLanguage: getLanguageByCode('en-GB') ?? null,
+    userLanguages: [],
   })
   useFreemiumStore.setState({ status: null, loaded: false })
 })
@@ -267,30 +291,115 @@ describe('Lesson practice entry', () => {
 
   it('keeps the existing voice paywall when the free quota is exhausted', async () => {
     useConfigStore.setState({ stripeEnabled: true })
-    useFreemiumStore.setState({
-      loaded: true,
-      lastFetch: Date.now(),
-      status: {
-        trial_active: false,
-        trial_ends_at: null,
-        chat_remaining: 5,
-        chat_limit: 5,
-        lessons_remaining: 3,
-        lessons_limit: 3,
-        listening_remaining: 3,
-        listening_limit: 3,
-        reading_remaining: 3,
-        reading_limit: 3,
-        games_remaining: 3,
-        games_limit: 3,
-        voice_remaining_seconds: 0,
-        voice_limit_seconds: 300,
-      },
-    })
+    setVoiceQuota(0)
     render(<ConversationPage />)
     await screen.findByTestId('paywall')
     expect(mocks.voice).not.toHaveBeenCalled()
   })
+
+  it.each(['ordinary', 'lesson', 'demo'] as const)(
+    'uses refreshed voice balance for %s without discarding the independent demo credential',
+    async (mode) => {
+      mocks.params = mode === 'lesson' ? 'lesson=7' : ''
+      useConfigStore.setState({ stripeEnabled: true })
+      setVoiceQuota(120)
+      if (mode === 'demo') {
+        sessionStorage.setItem(
+          'assessment_voice_trial',
+          JSON.stringify({ token: 'demo-token' })
+        )
+      }
+      render(<ConversationPage />)
+      await screen.findByTestId('voice')
+      act(() => setVoiceQuota(0))
+      if (mode === 'demo') {
+        expect(screen.getByTestId('voice')).toBeInTheDocument()
+        expect(screen.queryByTestId('paywall')).toBeNull()
+        expect(mocks.voice.mock.lastCall?.[0].voiceTrialToken).toBe('demo-token')
+      } else {
+        expect(screen.getByTestId('paywall')).toBeInTheDocument()
+        expect(screen.queryByTestId('voice')).toBeNull()
+      }
+      expect(
+        mocks.apiFetch.mock.calls.filter(
+          ([url]) => url === '/api/freemium/status'
+        )
+      ).toHaveLength(1)
+    }
+  )
+
+  it('discards lesson metadata from a replaced authentication session', async () => {
+    let oldBody!: (value: unknown) => void
+    mocks.apiFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          new Promise((resolve) => {
+            oldBody = resolve
+          }),
+      })
+      .mockResolvedValueOnce(response({}, 404))
+    render(<ConversationPage />)
+    await act(async () => Promise.resolve())
+    const signal = mocks.apiFetch.mock.calls[0][1].signal as AbortSignal
+    act(() => useAuthStore.getState().startSession('new-session'))
+    await screen.findByRole('alert')
+    expect(signal.aborted).toBe(true)
+    await act(async () => oldBody(detail()))
+    expect(mocks.voice).not.toHaveBeenCalled()
+    expect(screen.getByRole('alert')).toBeInTheDocument()
+  })
+
+  it.each([
+    [false, 'expiry'],
+    [true, 'expiry'],
+    [false, 'toggle'],
+    [true, 'toggle'],
+  ] as const)(
+    'preserves admitted voice sessions (active: %s) when trial access changes by %s',
+    async (active, boundary) => {
+      vi.useFakeTimers()
+      try {
+        useConfigStore.setState({
+          stripeEnabled: true,
+          freemiumTrialEnabled: true,
+        })
+        useAuthStore.setState({
+          user: {
+            ...useAuthStore.getState().user!,
+            freemium_trial_ends_at: new Date(Date.now() + 1000).toISOString(),
+          },
+        })
+        setVoiceQuota(0)
+        await act(async () => {
+          render(<ConversationPage />)
+        })
+        expect(screen.getByTestId('voice')).toBeInTheDocument()
+        if (active) {
+          act(() => mocks.voice.mock.lastCall?.[0].onSessionActiveChange(true))
+        }
+        if (boundary === 'expiry') {
+          await act(async () => vi.advanceTimersByTimeAsync(1000))
+        } else {
+          act(() => useConfigStore.setState({ freemiumTrialEnabled: false }))
+        }
+        if (active) {
+          expect(screen.getByTestId('voice')).toBeInTheDocument()
+          expect(screen.queryByTestId('paywall')).toBeNull()
+          act(() =>
+            mocks.voice.mock.lastCall?.[0].onSessionActiveChange(false)
+          )
+          expect(screen.getByTestId('voice')).toBeInTheDocument()
+          expect(screen.queryByTestId('paywall')).toBeNull()
+        } else {
+          expect(screen.getByTestId('paywall')).toBeInTheDocument()
+          expect(screen.queryByTestId('voice')).toBeNull()
+        }
+      } finally {
+        vi.useRealTimers()
+      }
+    }
+  )
 
   it('keeps maintenance gating', async () => {
     useConfigStore.setState({ maintenanceMode: true })
@@ -324,6 +433,38 @@ describe('Lesson practice entry', () => {
 })
 
 describe('Ordinary conversation loading', () => {
+  it('reloads ordinary voice context when the plan changes in the same language', async () => {
+    mocks.params = ''
+    mocks.apiFetch
+      .mockResolvedValueOnce(response({ cefr_level: 'A1' }))
+      .mockResolvedValueOnce(response({ cefr_level: 'B2' }))
+    render(<ConversationPage />)
+    await screen.findByTestId('voice')
+    expect(mocks.voice.mock.lastCall?.[0].cefrLevel).toBe('A1')
+    act(() =>
+      useLanguageStore.setState({
+        userLanguages: [
+          {
+            target_language: 'en-GB',
+            is_active: true,
+            progress: null,
+            plan: {
+              id: 99,
+              cefr_level: 'B2',
+              progress_day: 1,
+              total_days: 30,
+              completion_pct: 0,
+            },
+          },
+        ],
+      })
+    )
+    expect(screen.queryByTestId('voice')).toBeNull()
+    await screen.findByTestId('voice')
+    expect(mocks.voice.mock.lastCall?.[0].cefrLevel).toBe('B2')
+    expect(mocks.apiFetch).toHaveBeenCalledTimes(2)
+  })
+
   it('hands shared loading from the plan lookup to the dynamic voice module', async () => {
     mocks.params = ''
     mocks.moduleReady = false

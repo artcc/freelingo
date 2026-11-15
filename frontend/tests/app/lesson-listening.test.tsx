@@ -1,10 +1,12 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import LessonPage from '@/app/(app)/lesson/[id]/page'
 import { useAuthStore, type User } from '@/store/auth'
 import { useLanguageStore } from '@/store/language'
 import { useConfigStore } from '@/store/config'
+import { useFreemiumStore } from '@/store/freemium'
+import { useProgressStore } from '@/store/progress'
 import { getLanguageByCode } from '@/lib/target-languages'
 
 const mocks = vi.hoisted(() => ({ apiFetch: vi.fn(), lessonId: '1' }))
@@ -150,6 +152,109 @@ afterEach(() => {
 })
 
 describe('Lesson listening exercises', () => {
+  it('completes a resource-owned lesson after a game invalidates language progress', async () => {
+    saved = detail([exercise({ score: 1, user_answer: 'À midi', feedback: 'Bravo !' })])
+    useProgressStore.setState({ completedToday: [] })
+    useLanguageStore.getState().invalidateLanguages()
+    await openLesson()
+    await click('completeLesson')
+    expect(mocks.apiFetch.mock.calls.filter(([url]) => url.endsWith('/complete'))).toHaveLength(1)
+    expect(useProgressStore.getState().completedToday).toEqual([1])
+    expect(screen.queryByRole('button', { name: 'completeLesson' })).not.toBeInTheDocument()
+    expect(screen.queryByText('errorMessage')).not.toBeInTheDocument()
+  })
+
+  it.each([200, 402, 503])('settles completion HTTP %s after a rejected language switch', async (status) => {
+    saved = detail([exercise({ score: 1, user_answer: 'À midi', feedback: 'Bravo !' })])
+    useConfigStore.setState({ stripeEnabled: true })
+    useProgressStore.setState({ completedToday: [] })
+    const quota = {
+      trial_active: false, trial_ends_at: null,
+      chat_remaining: 3, chat_limit: 3, lessons_remaining: 1, lessons_limit: 3,
+      listening_remaining: 3, listening_limit: 3, reading_remaining: 3, reading_limit: 3,
+      games_remaining: 3, games_limit: 3, voice_remaining_seconds: 300, voice_limit_seconds: 300,
+    }
+    useFreemiumStore.setState({ status: quota, loaded: true, lastFetch: Date.now() })
+    const completion = deferred<Response>()
+    const switching = deferred<Response>()
+    mocks.apiFetch.mockImplementation((url: string) => {
+      if (url.endsWith('/complete')) return completion.promise
+      if (url === '/api/languages/active') return switching.promise
+      if (url === '/api/freemium/status') return Promise.resolve(json({ ...quota, lessons_remaining: 0 }))
+      return request(url)
+    })
+    await openLesson()
+    fireEvent.click(screen.getByRole('button', { name: 'completeLesson' }))
+    let change!: Promise<boolean>
+    act(() => { change = useLanguageStore.getState().switchLanguage('es-ES') })
+    await act(async () => {
+      completion.resolve(json({ detail: { reason: 'freemium_exhausted', feature: 'lessons' } }, status))
+    })
+    expect(useProgressStore.getState().completedToday).toEqual([])
+    await act(async () => {
+      switching.resolve(json({ detail: 'technical_internal_message' }, 422))
+      expect(await change).toBe(false)
+    })
+    if (status === 200) {
+      await waitFor(() => expect(useProgressStore.getState().completedToday).toEqual([1]))
+      expect(useFreemiumStore.getState().status?.lessons_remaining).toBe(0)
+      expect(screen.queryByRole('button', { name: 'completeLesson' })).not.toBeInTheDocument()
+      expect(screen.queryByText('paywallLessonsTitle')).not.toBeInTheDocument()
+    } else {
+      expect(await screen.findByText(status === 402 ? 'paywallLessonsTitle' : 'errorMessage')).toBeVisible()
+    }
+    expect(screen.queryByText('technical_internal_message')).not.toBeInTheDocument()
+    expect(mocks.apiFetch.mock.calls.filter(([url]) => url.endsWith('/complete'))).toHaveLength(1)
+  })
+
+  it.each([
+    { status: 402, reason: 'freemium_exhausted', message: 'paywallLessonsTitle' },
+    { status: 402, reason: 'freemium_unavailable', message: 'errorMessage' },
+    { status: 503, reason: 'service_unavailable', message: 'errorMessage' },
+  ])('surfaces completion rejection $reason and retains answers', async ({ status, reason, message }) => {
+    saved = detail([exercise({ score: 1, user_answer: 'À midi', feedback: 'Bravo !' })])
+    useConfigStore.setState({ stripeEnabled: true })
+    useFreemiumStore.setState({ status: null, loaded: true, lastFetch: Date.now() })
+    useProgressStore.setState({ completedToday: [] })
+    mocks.apiFetch.mockImplementation((url: string) => {
+      if (url.endsWith('/complete'))
+        return Promise.resolve(json({
+          detail: status === 503 ? 'technical_internal_message' : { reason, feature: 'lessons' },
+        }, status))
+      if (url === '/api/freemium/status') return Promise.resolve(json({}, 503))
+      return request(url)
+    })
+    await openLesson()
+    await click('completeLesson')
+    expect(screen.getByText(message)).toBeVisible()
+    expect(screen.queryByText('technical_internal_message')).not.toBeInTheDocument()
+    expect(screen.getByText('100%')).toBeVisible()
+    expect(screen.getByText('100%').parentElement?.parentElement).toHaveClass(
+      reason === 'freemium_exhausted' ? 'flex-col' : 'items-center'
+    )
+    expect(useProgressStore.getState().completedToday).toEqual([])
+    if (reason !== 'freemium_exhausted') {
+      expect(screen.getByRole('button', { name: 'completeLesson' })).toBeEnabled()
+      expect(screen.queryByText('paywallLessonsTitle')).not.toBeInTheDocument()
+    }
+    expect(mocks.apiFetch.mock.calls.filter(([url]) => url.endsWith('/complete'))).toHaveLength(1)
+  })
+
+  it('ignores late completion denial after leaving the lesson', async () => {
+    saved = detail([exercise({ score: 1, user_answer: 'À midi', feedback: 'Bravo !' })])
+    const transport = deferred<Response>()
+    mocks.apiFetch.mockImplementation((url: string) =>
+      url.endsWith('/complete') ? transport.promise : request(url)
+    )
+    const view = await openLesson()
+    fireEvent.click(screen.getByRole('button', { name: 'completeLesson' }))
+    view.unmount()
+    await act(async () => {
+      transport.resolve(json({ detail: { reason: 'freemium_exhausted', feature: 'lessons' } }, 402))
+    })
+    expect(mocks.apiFetch.mock.calls.some(([url]) => url === '/api/freemium/status')).toBe(false)
+  })
+
   it('plays plan-owned audio, submits a choice and reveals the transcript in the persisted language', async () => {
     await openLesson()
     expect(screen.getAllByText('lessonTypes.listening')).toHaveLength(2)

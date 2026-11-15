@@ -218,7 +218,10 @@ def mock_redis():
             return store.get(key)
 
         async def delete(self, key):
-            store.pop(key, None)
+            if key not in store:
+                return 0
+            del store[key]
+            return 1
 
         async def getex(self, key):
             return store.get(key)

@@ -437,7 +437,7 @@ async def test_delayed_renewal_preserves_access_and_quotas(
     assert response.status_code == 200
     assert response.json()["subscription_status"] == subscription_status
     redis = AsyncMock()
-    assert await _check_voice_access(user, redis) == (True, False, None, 0)
+    assert await _check_voice_access(user, redis) == (True, False, None, 0, None)
     assert not redis.mock_calls
     assert not provider.requests
 

@@ -83,6 +83,7 @@ describe('registration availability', () => {
   it.each(['replace-session', 'unmount'])(
     'ignores a late login profile after %s',
     async (action) => {
+      searchParams.set('plan', 'yearly')
       let finish!: (body: unknown) => void
       apiFetch
         .mockResolvedValueOnce(
@@ -205,7 +206,7 @@ describe('registration availability', () => {
     })
   })
 
-  it.each([null, 'monthly', 'yearly'])(
+  it.each([null, 'monthly', 'yearly', 'https://example.com', 'unknown'])(
     'preserves public registration and onboarding plan=%s',
     async (plan) => {
       vi.mocked(fetch).mockResolvedValueOnce(configResponse(true))
@@ -225,7 +226,9 @@ describe('registration availability', () => {
       )
       expect(useAuthStore.getState().accessToken).toBe('new-token')
       expect(push).toHaveBeenCalledWith(
-        plan ? `/onboarding?plan=${plan}` : '/onboarding'
+        plan === 'monthly' || plan === 'yearly'
+          ? `/onboarding?plan=${plan}`
+          : '/onboarding'
       )
     }
   )
@@ -305,6 +308,207 @@ describe('registration availability', () => {
       )
     }
   })
+
+  it.each(['monthly', 'yearly'])(
+    'preserves plan=%s and the invite across signup links without copying other parameters',
+    async (plan) => {
+      searchParams.set('plan', plan)
+      searchParams.set('invite', 'token+with/symbols')
+      searchParams.set('token', 'must-not-propagate')
+      searchParams.set('next', 'https://example.com')
+      render(<RegisterPage />)
+      await waitFor(() => expect(useConfigStore.getState().loaded).toBe(true))
+      expect(
+        screen.getByRole('link', { name: 'auth.register.login' })
+      ).toHaveAttribute('href', `/login?plan=${plan}&invite=token%2Bwith%2Fsymbols`)
+      for (const page of ['terms', 'privacy']) {
+        expect(
+          screen.getByRole('link', { name: `auth.register.${page}Link` })
+        ).toHaveAttribute(
+          'href',
+          `/${page}?from=register&plan=${plan}&invite=token%2Bwith%2Fsymbols`
+        )
+      }
+    }
+  )
+
+  it('keeps the selected plan when closed signup sends visitors to login', async () => {
+    searchParams.set('plan', 'yearly')
+    render(<RegisterPage />)
+    expect(
+      await screen.findByRole('link', { name: 'auth.register.login' })
+    ).toHaveAttribute('href', '/login?plan=yearly')
+  })
+
+  it('keeps invited signup accessible from login with its selected plan', async () => {
+    searchParams.set('invite', 'invite-token')
+    searchParams.set('plan', 'monthly')
+    render(<LoginPage />)
+    await waitFor(() => expect(useConfigStore.getState().loaded).toBe(true))
+    expect(
+      screen.getByRole('link', { name: 'auth.login.register' })
+    ).toHaveAttribute('href', '/register?plan=monthly&invite=invite-token')
+  })
+
+  it.each([
+    ['monthly', [], '/settings?plan=monthly#plan'],
+    ['yearly', null, '/onboarding?plan=yearly'],
+    ['https://example.com', [], '/dashboard'],
+  ])(
+    'continues login plan=%s without starting checkout',
+    async (plan, goals, destination) => {
+      searchParams.set('plan', String(plan))
+      apiFetch
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ access_token: 'login-token' }))
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              id: 1,
+              username: 'learner',
+              learning_goals: goals,
+            })
+          )
+        )
+      const { container } = render(<LoginPage />)
+      fireEvent.change(
+        container.querySelector('input[autocomplete="username"]')!,
+        { target: { value: 'learner@example.com' } }
+      )
+      fireEvent.change(container.querySelector('input[type="password"]')!, {
+        target: { value: 'Test1234!@' },
+      })
+      await act(async () => fireEvent.submit(container.querySelector('form')!))
+      expect(push).toHaveBeenCalledWith(destination)
+      expect(apiFetch).toHaveBeenCalledTimes(2)
+    }
+  )
+
+  it.each(['replace-session', 'unmount'])(
+    'ignores a late registration body after %s',
+    async (action) => {
+      searchParams.set('invite', 'invite-token')
+      searchParams.set('plan', 'yearly')
+      let finish!: (body: unknown) => void
+      apiFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          new Promise((resolve) => {
+            finish = resolve
+          }),
+      })
+      const { container, unmount } = render(<RegisterPage />)
+      await fillAndSubmit(container)
+      await waitFor(() => expect(finish).toBeDefined())
+      if (action === 'unmount') unmount()
+      else useAuthStore.getState().startSession('replacement-token')
+      await act(async () => finish({ access_token: 'obsolete-token' }))
+      expect(push).not.toHaveBeenCalled()
+      expect(useAuthStore.getState().accessToken).toBe(
+        action === 'unmount' ? null : 'replacement-token'
+      )
+    }
+  )
+
+  it.each([
+    [[], '/settings?plan=monthly#plan'],
+    [null, '/onboarding?plan=monthly'],
+  ])(
+    'waits for a successful profile retry before routing with goals=%s',
+    async (goals, destination) => {
+      searchParams.set('plan', 'monthly')
+      apiFetch
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ access_token: 'login-token' }))
+        )
+        .mockResolvedValueOnce(new Response('', { status: 503 }))
+      const { container } = render(<LoginPage />)
+      fireEvent.change(
+        container.querySelector('input[autocomplete="username"]')!,
+        { target: { value: 'learner@example.com' } }
+      )
+      fireEvent.change(container.querySelector('input[type="password"]')!, {
+        target: { value: 'Test1234!@' },
+      })
+      await act(async () => fireEvent.submit(container.querySelector('form')!))
+      expect(push).not.toHaveBeenCalled()
+      expect(useAuthStore.getState().user).toBeNull()
+      expect(screen.getByText(/auth.login.loginFailed/)).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'auth.login.submit' })
+      ).toBeEnabled()
+      expect(searchParams.get('plan')).toBe('monthly')
+
+      apiFetch
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ access_token: 'retry-token' }))
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              id: 1,
+              username: 'learner',
+              learning_goals: goals,
+            })
+          )
+        )
+      await act(async () => fireEvent.submit(container.querySelector('form')!))
+      expect(push).toHaveBeenCalledTimes(1)
+      expect(push).toHaveBeenCalledWith(destination)
+      expect(useAuthStore.getState().user?.learning_goals).toEqual(goals)
+      expect(useAuthStore.getState().accessToken).toBe('retry-token')
+      expect(
+        screen.queryByText(/auth.login.loginFailed/)
+      ).not.toBeInTheDocument()
+      expect(apiFetch).toHaveBeenCalledTimes(4)
+      expect(apiFetch.mock.calls.map(([path]) => path)).toEqual([
+        '/api/auth/login',
+        '/api/auth/me',
+        '/api/auth/login',
+        '/api/auth/me',
+      ])
+    }
+  )
+
+  it.each(
+    [
+      null,
+      {},
+      [],
+      { id: 1, username: 'learner' },
+      { id: 1, username: 'learner', learning_goals: 'travel' },
+      { id: 1, username: 'learner', learning_goals: [null] },
+      { learning_goals: null },
+    ].map((profile) => ({ profile }))
+  )(
+    'rejects malformed successful profiles without inferring onboarding ($profile)',
+    async ({ profile }) => {
+      searchParams.set('plan', 'yearly')
+      apiFetch
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ access_token: 'login-token' }))
+        )
+        .mockResolvedValueOnce(new Response(JSON.stringify(profile)))
+      const { container } = render(<LoginPage />)
+      fireEvent.change(
+        container.querySelector('input[autocomplete="username"]')!,
+        { target: { value: 'learner@example.com' } }
+      )
+      fireEvent.change(container.querySelector('input[type="password"]')!, {
+        target: { value: 'Test1234!@' },
+      })
+      await act(async () => fireEvent.submit(container.querySelector('form')!))
+      expect(push).not.toHaveBeenCalled()
+      expect(useAuthStore.getState().user).toBeNull()
+      expect(screen.getByText(/auth.login.loginFailed/)).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'auth.login.submit' })
+      ).toBeEnabled()
+      expect(searchParams.get('plan')).toBe('yearly')
+      expect(apiFetch).toHaveBeenCalledTimes(2)
+    }
+  )
 })
 
 describe.each([
@@ -356,5 +560,44 @@ describe.each([
       screen.getByRole('link', { name: `legal.${page}.linkBackSettings` })
     ).toHaveAttribute('href', '/settings')
     expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it.each(['monthly', 'yearly', 'https://example.com'])(
+    'preserves only a whitelisted plan=%s with the invite in legal navigation',
+    async (plan) => {
+      searchParams.set('from', 'register')
+      searchParams.set('plan', plan)
+      searchParams.set('invite', 'token+with/symbols')
+      searchParams.set('next', 'https://example.com')
+      searchParams.set('token', 'must-not-propagate')
+      render(<Page />)
+      await waitFor(() => expect(useConfigStore.getState().loaded).toBe(true))
+      const planQuery =
+        plan === 'monthly' || plan === 'yearly' ? `plan=${plan}&` : ''
+      expect(
+        screen.getByRole('link', { name: `legal.${page}.linkBack` })
+      ).toHaveAttribute(
+        'href',
+        `/register?${planQuery}invite=token%2Bwith%2Fsymbols`
+      )
+      expect(
+        screen.getByRole('link', {
+          name: `legal.${page}.link${other === 'terms' ? 'Terms' : 'Privacy'}`,
+        })
+      ).toHaveAttribute(
+        'href',
+        `/${other}?from=register&${planQuery}invite=token%2Bwith%2Fsymbols`
+      )
+    }
+  )
+
+  it('preserves the selected plan when returning to closed registration via login', async () => {
+    searchParams.set('from', 'register')
+    searchParams.set('plan', 'yearly')
+    render(<Page />)
+    await waitFor(() => expect(useConfigStore.getState().loaded).toBe(true))
+    expect(
+      screen.getByRole('link', { name: 'auth.register.login' })
+    ).toHaveAttribute('href', '/login?plan=yearly')
   })
 })

@@ -1,4 +1,8 @@
+from unittest.mock import AsyncMock
+
 import pytest
+
+from app.core.config import settings
 
 
 @pytest.mark.asyncio
@@ -125,6 +129,70 @@ async def test_update_user_not_found(client, admin_user):
         json={"display_name": "Ghost"},
     )
     assert response.status_code == 404
+
+
+@pytest.mark.parametrize("subscription_status", ["active", "trialing"])
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {},
+        {"monthly_tokens_limit": 0},
+        {
+            "conversation_weekly_sessions": 7,
+            "conversation_daily_minutes": 11,
+            "conversation_weekly_minutes": 31,
+            "monthly_tokens_limit": 123,
+        },
+    ],
+)
+async def test_activation_applies_defaults_before_explicit_quota_overrides(
+    client, admin_user, test_user, db_session, monkeypatch, subscription_status, overrides
+):
+    user, _ = test_user
+    _, headers = admin_user
+    monkeypatch.setattr(settings, "REVENUECAT_ENABLED", False)
+    defaults = {
+        "conversation_weekly_sessions": 20,
+        "conversation_daily_minutes": 40,
+        "conversation_weekly_minutes": 100,
+        "monthly_tokens_limit": 5000,
+    }
+    for field, value in defaults.items():
+        monkeypatch.setattr(settings, f"DEFAULT_{field.upper()}", value)
+        setattr(user, field, 1)
+    await db_session.commit()
+    commit = AsyncMock(wraps=db_session.commit)
+    monkeypatch.setattr(db_session, "commit", commit)
+    response = await client.patch(
+        f"/api/admin/users/{user.id}",
+        headers=headers,
+        json={"subscription_status": subscription_status, **overrides},
+    )
+    assert response.status_code == 200
+    commit.assert_awaited_once()
+    await db_session.refresh(user)
+    for field, value in (defaults | overrides).items():
+        assert response.json()[field] == value
+        assert getattr(user, field) == value
+
+
+async def test_updating_an_existing_premium_status_preserves_custom_quotas(
+    client, admin_user, test_user, db_session
+):
+    user, _ = test_user
+    user.subscription_status = "trialing"
+    user.monthly_tokens_limit = 321
+    user.conversation_weekly_sessions = 9
+    await db_session.commit()
+    response = await client.patch(
+        f"/api/admin/users/{user.id}",
+        headers=admin_user[1],
+        json={"subscription_status": "active", "conversation_daily_minutes": 17},
+    )
+    assert response.status_code == 200
+    assert response.json()["monthly_tokens_limit"] == 321
+    assert response.json()["conversation_weekly_sessions"] == 9
+    assert response.json()["conversation_daily_minutes"] == 17
 
 
 @pytest.mark.asyncio

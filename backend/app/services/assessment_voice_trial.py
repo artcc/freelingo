@@ -5,6 +5,8 @@ import secrets
 from dataclasses import dataclass
 
 from redis.asyncio import Redis
+from sqlalchemy import update
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.models.user import User
@@ -23,6 +25,10 @@ class AssessmentVoiceTrial:
     target_language: str
     cefr_level: str
     duration_seconds: int = TRIAL_DURATION_SECONDS
+
+
+class AssessmentVoiceTrialUnavailable(Exception):
+    """The account's one-time demo or its credential is no longer available."""
 
 
 def is_assessment_voice_trial_available(user: User, stripe_enabled: bool) -> bool:
@@ -114,8 +120,24 @@ async def validate_assessment_voice_trial_token(
 async def consume_assessment_voice_trial_token(
     redis: Redis,
     *,
-    user: User,
+    db: AsyncSession,
+    user_id: int,
     token: str,
 ) -> None:
-    await redis.delete(_token_key(user.id, token))
-    user.assessment_voice_trial_used = True
+    """Claim the global right; the caller must commit or roll back the transaction."""
+    claimed = await db.scalar(
+        update(User)
+        .where(
+            User.id == user_id,
+            User.is_active.is_(True),
+            User.assessment_voice_trial_used.is_(False),
+        )
+        .values(assessment_voice_trial_used=True)
+        .returning(User.id)
+    )
+    if claimed is None:
+        raise AssessmentVoiceTrialUnavailable()
+    # A failed commit restores the durable right, not the consumed credential.
+    # The user can request a new token; restoring this one could resurrect a replay.
+    if await redis.delete(_token_key(user_id, token)) != 1:
+        raise AssessmentVoiceTrialUnavailable()

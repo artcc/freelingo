@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from jwt.exceptions import PyJWTError
 from pydantic import BaseModel
+from redis.asyncio import Redis
 from sqlalchemy import select
 
 from app.core.app_logger import get_logger
@@ -55,30 +56,34 @@ WARMUP_TIMEOUT_SECONDS = 60
 
 async def _check_voice_access(
     user: User,
-    redis_client,
+    redis_client: Redis,
     voice_trial_token: str | None = None,
-) -> tuple[bool, bool, AssessmentVoiceTrial | None, int]:
+) -> tuple[bool, bool, AssessmentVoiceTrial | None, int, dict[str, str | int] | None]:
     """Check whether a user can access voice conversation.
 
-    Returns (allowed, freemium_ok, voice_trial, freemium_remaining_seconds).
+    Returns (allowed, freemium_ok, voice_trial, freemium_remaining_seconds, failure).
     - allowed: overall access granted
     - freemium_ok: access via freemium voice quota (for usage recording)
     - voice_trial: access via one-time assessment demo (None if not used)
     - freemium_remaining_seconds: remaining seconds when access is via voice quota
+    - failure: additive denial metadata, including quota seconds only when known
 
     Check order: subscribed → freemium trial → freemium voice quota → assessment trial.
     """
     if is_subscribed(user, settings.STRIPE_ENABLED):
-        return True, False, None, 0
+        return True, False, None, 0, None
 
     if is_freemium_trial_active(user.freemium_trial_ends_at):
-        return True, False, None, 0
+        return True, False, None, 0, None
 
+    vq = None
+    unavailable = False
     try:
         vq = await check_voice_quota(redis_client, user.id)
         if vq.allowed:
-            return True, True, None, vq.remaining
+            return True, True, None, vq.remaining, None
     except Exception:
+        unavailable = True
         logger.exception("[voice_access] Redis unavailable during freemium quota check")
 
     try:
@@ -89,11 +94,18 @@ async def _check_voice_access(
             stripe_enabled=settings.STRIPE_ENABLED,
         )
         if trial:
-            return True, False, trial, 0
+            return True, False, trial, 0, None
     except Exception:
+        unavailable = True
         logger.exception("[voice_access] Redis unavailable during assessment trial validation")
 
-    return False, False, None, 0
+    failure: dict[str, str | int] = {
+        "reason": "freemium_unavailable" if unavailable else "freemium_exhausted",
+        "feature": "voice",
+    }
+    if vq is not None:
+        failure.update(remaining=vq.remaining, limit=vq.limit)
+    return False, False, None, 0, failure
 
 
 class ConversationWarmupRequest(BaseModel):
@@ -138,13 +150,13 @@ async def conversation_warmup(
     Awaits best-effort provider probes within a shared time budget before
     the frontend opens the WebSocket. This is not a strict health check.
     """
-    allowed, _, _, _ = await _check_voice_access(
+    allowed, _, _, _, failure = await _check_voice_access(
         current_user,
         redis,
         voice_trial_token=data.trial_token if data else None,
     )
     if not allowed:
-        return JSONResponse({"detail": "subscription_required"}, status_code=402)
+        return JSONResponse({"detail": "subscription_required", **(failure or {})}, status_code=402)
 
     tts_service = getattr(request.app.state, "tts_service", None)
     stt_service = getattr(request.app.state, "stt_service", None)
@@ -281,12 +293,20 @@ async def conversation_ws(
         voice_trial = None
         freemium_ok = False
         freemium_remaining_seconds = 0
+        access_failure: dict[str, str | int] | None = {
+            "reason": "freemium_unavailable",
+            "feature": "voice",
+        }
         try:
             async with _redis_client() as redis_access:
-                allowed, freemium_ok, voice_trial, freemium_remaining_seconds = (
-                    await _check_voice_access(
-                        user, redis_access, voice_trial_token=voice_trial_token
-                    )
+                (
+                    allowed,
+                    freemium_ok,
+                    voice_trial,
+                    freemium_remaining_seconds,
+                    access_failure,
+                ) = await _check_voice_access(
+                    user, redis_access, voice_trial_token=voice_trial_token
                 )
         except Exception:
             logger.exception(
@@ -302,6 +322,7 @@ async def conversation_ws(
                     "type": "error",
                     "code": "subscription_required",
                     "message": "Voice conversation is not available on your current plan.",
+                    **(access_failure or {}),
                 }
             )
             await websocket.close(code=1008)
@@ -442,14 +463,17 @@ async def conversation_ws(
         if voice_trial:
             try:
                 async with db_session() as db_trial:
-                    trial_user = await db_trial.get(User, user_id)
-                    if trial_user:
+                    try:
                         await consume_assessment_voice_trial_token(
                             redis,
-                            user=trial_user,
+                            db=db_trial,
+                            user_id=user_id,
                             token=voice_trial.token,
                         )
                         await db_trial.commit()
+                    except Exception:
+                        await db_trial.rollback()
+                        raise
             except Exception as exc:
                 logger.error("[conversation] Failed to consume voice trial: %s", exc)
                 await websocket.send_json(

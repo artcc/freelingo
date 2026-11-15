@@ -11,7 +11,7 @@ interface ConfirmDialogProps {
   cancelLabel?: string
   danger?: boolean
   confirming?: boolean
-  error?: string
+  error?: ReactNode
   onConfirm: () => void
   onCancel: () => void
 }

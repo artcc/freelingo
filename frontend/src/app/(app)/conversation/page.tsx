@@ -7,7 +7,7 @@
  */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -20,8 +20,9 @@ import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { apiFetch } from '@/lib/api'
 import { useLanguageStore } from '@/store/language'
 import { useConfigStore } from '@/store/config'
-import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
+import { useAuthStore, isSubscribed } from '@/store/auth'
 import { useFreemiumStore } from '@/store/freemium'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 
 function ConversationLoading() {
   return <PageLoading />
@@ -44,11 +45,17 @@ interface LessonPractice {
 
 export default function ConversationPage() {
   const searchParams = useSearchParams()
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const userId = useAuthStore((s) => s.user?.id)
   const lessonId = searchParams.get('lesson')
+  const ownerKey = `${sessionVersion}:${userId}`
   return lessonId !== null ? (
-    <LessonConversationPage key={lessonId} lessonId={lessonId} />
+    <LessonConversationPage
+      key={`${ownerKey}:${lessonId}`}
+      lessonId={lessonId}
+    />
   ) : (
-    <ConversationPageContent />
+    <ConversationPageContent key={ownerKey} />
   )
 }
 
@@ -142,14 +149,28 @@ function LessonConversationPage({ lessonId }: { lessonId: string }) {
 
 function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
+  const activePlanId = useLanguageStore(
+    (s) =>
+      s.userLanguages.find(
+        (language) => language.target_language === s.activeLanguage?.code
+      )?.plan?.id
+  )
+  const planKey = `${activeLanguage?.code}:${activePlanId}`
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const user = useAuthStore((s) => s.user)
+  const { freemiumTrialActive } = useTrialStatus()
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const freemiumStatus = useFreemiumStore((s) => s.status)
+  const [sessionActive, setSessionActive] = useState(false)
+  const [sessionStarted, setSessionStarted] = useState(false)
+  const handleSessionActiveChange = useCallback((active: boolean) => {
+    setSessionActive(active)
+    if (active) setSessionStarted(true)
+  }, [])
   const freemiumExhausted =
     stripeEnabled &&
     !isSubscribed(user, stripeEnabled) &&
-    !isFreemiumTrialActive(user, stripeEnabled) &&
+    !freemiumTrialActive &&
     freemiumStatus &&
     freemiumStatus.voice_remaining_seconds <= 0
 
@@ -162,7 +183,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
   const showFreemiumVoicePill =
     stripeEnabled &&
     !isSubscribed(user, stripeEnabled) &&
-    !isFreemiumTrialActive(user, stripeEnabled) &&
+    !freemiumTrialActive &&
     freemiumStatus &&
     freemiumStatus.voice_limit_seconds > 0
 
@@ -174,7 +195,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
     practice?.cefrLevel ?? null
   )
   const [planReady, setPlanReady] = useState(!!practice)
-  const [planLanguage, setPlanLanguage] = useState<string | undefined>()
+  const [readyPlanKey, setReadyPlanKey] = useState<string>()
   const [voiceTrial, setVoiceTrial] = useState<{
     token: string
     durationSeconds: number
@@ -184,12 +205,14 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
 
   useEffect(() => {
     if (stripeEnabled && !isSubscribed(user, stripeEnabled)) {
-      fetchFreemium()
+      void fetchFreemium(true)
     }
   }, [stripeEnabled, user, fetchFreemium])
 
   useEffect(() => {
     if (practice) return
+    setSessionActive(false)
+    setSessionStarted(false)
     const controller = new AbortController()
     const raw = sessionStorage.getItem('voice_context')
     if (raw) {
@@ -267,14 +290,14 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
       })
       .finally(() => {
         if (!controller.signal.aborted) {
-          setPlanLanguage(activeLanguage?.code)
+          setReadyPlanKey(planKey)
           setPlanReady(true)
         }
       })
     return () => controller.abort()
-  }, [activeLanguage?.code, practice])
+  }, [planKey, practice])
 
-  if (!practice && (!planReady || planLanguage !== activeLanguage?.code)) {
+  if (!practice && (!planReady || readyPlanKey !== planKey)) {
     return <ConversationLoading />
   }
 
@@ -290,7 +313,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           voiceTrialDurationSeconds={voiceTrial.durationSeconds}
           trialMode
         />
-      ) : freemiumExhausted ? (
+      ) : freemiumExhausted && !sessionActive && !sessionStarted ? (
         <>
           <FreemiumQuotaBanner feature="voice" className="mb-4" />
           <PaywallBanner feature="voice" compact />
@@ -303,6 +326,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           targetLanguage={practice?.targetLanguage ?? activeLanguage?.code}
           lessonId={practice?.id}
           lessonTitle={practice?.title}
+          onSessionActiveChange={handleSessionActiveChange}
           freemiumVoiceRemaining={
             showFreemiumVoicePill ? freemiumVoiceRemaining : undefined
           }
