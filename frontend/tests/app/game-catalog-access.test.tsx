@@ -68,6 +68,53 @@ afterEach(() => {
 })
 
 describe('Games access through the real HTTP parser', () => {
+  it.each(['subscription', 'billing-disabled', 'trial-enabled'])(
+    'retains %s recovery while the exhausted catalog response is pending',
+    async (change) => {
+      useConfigStore.setState({ freemiumTrialEnabled: false })
+      useAuthStore.getState().setUser({
+        ...useAuthStore.getState().user!,
+        freemium_trial_ends_at: new Date(Date.now() + 60_000).toISOString(),
+      })
+      let finish!: (response: Response) => void
+      api.mockReturnValueOnce(new Promise((resolve) => { finish = resolve }))
+        .mockResolvedValueOnce(json({ ...catalog(0), limited: false }))
+      render(<GameCatalog gameType="detective" />)
+      await waitFor(() => expect(api).toHaveBeenCalledTimes(1))
+      act(() => {
+        if (change === 'subscription') useAuthStore.getState().setUser({
+          ...useAuthStore.getState().user!, subscription_status: 'active',
+        })
+        else if (change === 'billing-disabled') useConfigStore.setState({ stripeEnabled: false })
+        else useConfigStore.setState({ freemiumTrialEnabled: true })
+      })
+      await act(async () => finish(json(catalog(0))))
+      await waitFor(() => expect(screen.getAllByRole('button', { name: 'translated:start' })[2]).toBeEnabled())
+      expect(api).toHaveBeenCalledTimes(2)
+      expect(screen.queryByText('paywall')).not.toBeInTheDocument()
+      expect(push).not.toHaveBeenCalled()
+    }
+  )
+
+  it('rechecks an old creation denial when Premium was confirmed during the POST', async () => {
+    let finish!: (response: Response) => void
+    api.mockResolvedValueOnce(json(catalog(3)))
+      .mockReturnValueOnce(new Promise((resolve) => { finish = resolve }))
+      .mockResolvedValueOnce(json({ ...catalog(0), limited: false }))
+    render(<GameCatalog gameType="detective" />)
+    fireEvent.click((await screen.findAllByRole('button', { name: 'translated:start' }))[2])
+    act(() => useAuthStore.getState().setUser({
+      ...useAuthStore.getState().user!, subscription_status: 'active',
+    }))
+    await act(async () => finish(json({
+      detail: { reason: 'freemium_exhausted', feature: 'games' },
+    }, 402)))
+    await waitFor(() => expect(screen.getAllByRole('button', { name: 'translated:start' })[2]).toBeEnabled())
+    expect(api).toHaveBeenCalledTimes(3)
+    expect(screen.queryByText('paywall')).not.toBeInTheDocument()
+    expect(push).not.toHaveBeenCalled()
+  })
+
   it.each([
     { detail: { reason: 'freemium_exhausted', feature: 'games', remaining: 0, limit: 3 }, paywall: true },
     { detail: { reason: 'freemium_unavailable', feature: 'games', remaining: 0, limit: 0 }, paywall: false },

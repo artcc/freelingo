@@ -367,6 +367,13 @@
       "backToLogin": "Volver al inicio de sesión"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Antes de borrar esta cuenta, su titular debe cancelar la renovación desde la gestión de la suscripción. Borrar la cuenta no cancela la suscripción.",
+    "checkoutPending": "Hay una compra pendiente o aún no se puede confirmar su estado. Resuélvela antes de borrar esta cuenta. No se ha cancelado ninguna compra automáticamente.",
+    "verificationUnavailable": "No se ha podido verificar el estado de facturación. La cuenta no se ha borrado. Vuelve a intentarlo más tarde.",
+    "failed": "No se ha podido borrar la cuenta. Vuelve a intentarlo.",
+    "manageSubscription": "Gestionar suscripción"
+  },
   "settings": {
     "title": "Ajustes",
     "sectionAccount": "Cuenta",

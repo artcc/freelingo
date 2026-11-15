@@ -73,7 +73,7 @@ beforeEach(() => {
   useLanguageStore.setState({
     activeLanguage: null,
     availableLanguageCodes: ['en-GB'],
-    fetchLanguages: vi.fn().mockResolvedValue(undefined),
+    fetchLanguages: vi.fn().mockResolvedValue(true),
   })
   Object.defineProperty(window, 'location', {
     configurable: true,
@@ -187,6 +187,9 @@ async function showCheckout(component: string) {
   if (component === 'onboarding') {
     apiFetch.mockResolvedValueOnce(json(savedProfile()))
     const view = render(<OnboardingPage />)
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'next' })).toBeEnabled()
+    )
     fireEvent.click(screen.getByText('next'))
     fireEvent.click(screen.getByText('continue'))
     await screen.findByText('trialNoChargeTrialUsed')
@@ -332,6 +335,9 @@ describe.each(['onboarding', 'paywall', 'dashboard'])(
             json({ ...savedProfile(), trial_used: used })
           )
           render(<OnboardingPage />)
+          await waitFor(() =>
+            expect(screen.getByRole('button', { name: 'next' })).toBeEnabled()
+          )
           fireEvent.click(screen.getByText('next'))
           fireEvent.click(screen.getByText('continue'))
           await screen.findByText(

@@ -84,7 +84,7 @@ beforeEach(() => {
     {
       ...useLanguageStore.getInitialState(),
       availableLanguageCodes: ['en-GB'],
-      fetchLanguages: vi.fn().mockResolvedValue(undefined),
+      fetchLanguages: vi.fn().mockResolvedValue(true),
     },
     true
   )
@@ -96,6 +96,9 @@ afterEach(() => {
 })
 
 async function completeGoals() {
+  await act(async () => {
+    await Promise.resolve()
+  })
   await act(async () =>
     fireEvent.click(screen.getByRole('button', { name: 'next' }))
   )
@@ -105,6 +108,241 @@ async function completeGoals() {
 }
 
 describe('onboarding purchase intent', () => {
+  it('restores a fresh page session before loading languages and completing the selected plan', async () => {
+    searchParams.set('plan', 'monthly')
+    useAuthStore.setState({ accessToken: null, user: null })
+    let finishRestore!: () => void
+    restoreAccessToken.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishRestore = () => {
+            useAuthStore.getState().setTokens('restored-token')
+            resolve()
+          }
+        })
+    )
+    const fetchLanguages = vi.mocked(useLanguageStore.getState().fetchLanguages)
+    render(<OnboardingPage />)
+    expect(restoreAccessToken).toHaveBeenCalledWith(expect.any(AbortSignal))
+    expect(fetchLanguages).not.toHaveBeenCalled()
+    expect(apiFetch).not.toHaveBeenCalled()
+
+    await act(async () => finishRestore())
+    expect(fetchLanguages).toHaveBeenCalledWith(expect.any(AbortSignal))
+    expect(screen.getByRole('button', { name: /en-GB/ })).toBeInTheDocument()
+    await completeGoals()
+    expect(apiFetch).toHaveBeenCalledWith(
+      '/api/auth/me',
+      expect.objectContaining({ method: 'PATCH' })
+    )
+    expect(
+      screen.getByRole('button', { name: 'trialCtaMonthlyTrialUsed' })
+    ).toBeInTheDocument()
+    expect(push).not.toHaveBeenCalled()
+    expect(createCheckout).not.toHaveBeenCalled()
+  })
+
+  it('restores a missing token before saving onboarding preferences', async () => {
+    render(<OnboardingPage />)
+    await screen.findByRole('button', { name: /en-GB/ })
+    useAuthStore.setState({ accessToken: null })
+    restoreAccessToken.mockImplementationOnce(async () => {
+      expect(apiFetch).not.toHaveBeenCalled()
+      useAuthStore.getState().setTokens('restored-token')
+    })
+
+    await completeGoals()
+    expect(restoreAccessToken).toHaveBeenCalledWith(expect.any(AbortSignal))
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('button', { name: 'goToDashboard' })).toBeEnabled()
+  })
+
+  it.each(['replace-session', 'unmount'])(
+    'does not load languages after an obsolete restoration (%s)',
+    async (action) => {
+      useAuthStore.setState({ accessToken: null })
+      let finishRestore!: () => void
+      restoreAccessToken.mockReturnValueOnce(
+        new Promise<void>((resolve) => {
+          finishRestore = resolve
+        })
+      )
+      const fetchLanguages = vi.mocked(
+        useLanguageStore.getState().fetchLanguages
+      )
+      const { unmount } = render(<OnboardingPage />)
+      if (action === 'unmount') unmount()
+      else act(() => useAuthStore.getState().startSession('replacement-token'))
+      await act(async () => finishRestore())
+
+      expect(fetchLanguages).not.toHaveBeenCalled()
+      expect(apiFetch).not.toHaveBeenCalled()
+      expect(push).not.toHaveBeenCalled()
+      if (action === 'unmount') {
+        expect(restoreAccessToken.mock.calls[0][0].aborted).toBe(true)
+      }
+    }
+  )
+
+  it('allows retrying an authentication restoration failure before loading languages', async () => {
+    useAuthStore.setState({ accessToken: null })
+    restoreAccessToken.mockRejectedValueOnce(new Error('network'))
+    const fetchLanguages = vi.mocked(useLanguageStore.getState().fetchLanguages)
+    render(<OnboardingPage />)
+    const retry = await screen.findByRole('button', { name: 'retry' })
+    expect(fetchLanguages).not.toHaveBeenCalled()
+    restoreAccessToken.mockImplementationOnce(async () => {
+      useAuthStore.getState().setTokens('restored-token')
+    })
+
+    await act(async () => fireEvent.click(retry))
+    expect(screen.queryByRole('button', { name: 'retry' })).toBeNull()
+    expect(screen.getByRole('button', { name: /en-GB/ })).toBeInTheDocument()
+  })
+
+  it('finishes a successful language retry and replaces an unavailable default language', async () => {
+    useLanguageStore.setState({ availableLanguageCodes: [] })
+    const fetchLanguages = vi.mocked(useLanguageStore.getState().fetchLanguages)
+    fetchLanguages.mockResolvedValueOnce(false)
+    render(<OnboardingPage />)
+    const retry = await screen.findByRole('button', { name: 'retry' })
+    fetchLanguages.mockImplementationOnce(async () => {
+      useLanguageStore.setState({ availableLanguageCodes: ['fr-FR'] })
+      return true
+    })
+
+    await act(async () => fireEvent.click(retry))
+    expect(screen.queryByRole('button', { name: 'retry' })).toBeNull()
+    expect(screen.getByRole('button', { name: /fr-FR/ })).toBeInTheDocument()
+    await completeGoals()
+    expect(JSON.parse(apiFetch.mock.calls[0][1].body)).toEqual({
+      target_language: 'fr-FR',
+      learning_goals: [],
+    })
+  })
+
+  it('blocks step one while languages are pending or failed and advances only after a valid retry', async () => {
+    const fetchLanguages = vi.mocked(useLanguageStore.getState().fetchLanguages)
+    let finishLanguages!: (success: boolean) => void
+    fetchLanguages.mockReturnValueOnce(
+      new Promise<boolean>((resolve) => {
+        finishLanguages = resolve
+      })
+    )
+    const { container } = render(<OnboardingPage />)
+    const next = screen.getByRole('button', { name: 'next' })
+    expect(next).toBeDisabled()
+    fireEvent.click(next)
+    fireEvent.submit(container.querySelector('form')!)
+    expect(screen.queryByRole('button', { name: 'continue' })).toBeNull()
+
+    await act(async () => finishLanguages(false))
+    expect(next).toBeDisabled()
+    fireEvent.click(next)
+    fireEvent.submit(container.querySelector('form')!)
+    expect(screen.queryByRole('button', { name: 'continue' })).toBeNull()
+    expect(apiFetch).not.toHaveBeenCalled()
+
+    fetchLanguages.mockReturnValueOnce(
+      new Promise<boolean>((resolve) => {
+        finishLanguages = resolve
+      })
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    expect(next).toBeDisabled()
+    fireEvent.submit(container.querySelector('form')!)
+    expect(screen.queryByRole('button', { name: 'continue' })).toBeNull()
+
+    await act(async () => {
+      useLanguageStore.setState({ availableLanguageCodes: ['fr-FR'] })
+      finishLanguages(true)
+    })
+    expect(next).toBeEnabled()
+    expect(screen.getByRole('button', { name: /fr-FR/ })).toBeInTheDocument()
+    await completeGoals()
+    expect(JSON.parse(apiFetch.mock.calls[0][1].body).target_language).toBe(
+      'fr-FR'
+    )
+  })
+
+  it('keeps step one blocked when a successful lookup has no available selection', async () => {
+    useLanguageStore.setState({ availableLanguageCodes: [] })
+    const { container } = render(<OnboardingPage />)
+    await screen.findByRole('button', { name: 'retry' })
+    expect(screen.getByRole('button', { name: 'next' })).toBeDisabled()
+    fireEvent.submit(container.querySelector('form')!)
+    expect(screen.queryByRole('button', { name: 'continue' })).toBeNull()
+    expect(apiFetch).not.toHaveBeenCalled()
+  })
+
+  it('keeps another language retry available if recovery also fails', async () => {
+    useLanguageStore.setState({ availableLanguageCodes: [] })
+    vi.mocked(useLanguageStore.getState().fetchLanguages).mockResolvedValue(false)
+    render(<OnboardingPage />)
+    const retry = await screen.findByRole('button', { name: 'retry' })
+    await act(async () => fireEvent.click(retry))
+    expect(screen.getByRole('button', { name: 'retry' })).toBeEnabled()
+    expect(apiFetch).not.toHaveBeenCalled()
+  })
+
+  it('waits for pending billing configuration before saving and retains the selected plan', async () => {
+    searchParams.set('plan', 'yearly')
+    let finishConfig!: () => void
+    const pendingConfig = new Promise<void>((resolve) => {
+      finishConfig = resolve
+    })
+    useConfigStore.setState({
+      loaded: false,
+      stripeEnabled: false,
+      load: vi.fn(() => pendingConfig),
+    })
+    render(<OnboardingPage />)
+    await completeGoals()
+    expect(apiFetch).not.toHaveBeenCalled()
+    expect(push).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'saving' })).toBeDisabled()
+
+    await act(async () => {
+      useConfigStore.setState({ loaded: true, stripeEnabled: true })
+      finishConfig()
+    })
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+    expect(screen.getAllByRole('button')[0]).toHaveTextContent(
+      'trialCtaYearlyTrialUsed'
+    )
+    expect(push).not.toHaveBeenCalled()
+    expect(createCheckout).not.toHaveBeenCalled()
+  })
+
+  it('offers recovery after failed configuration without discarding the selected plan', async () => {
+    searchParams.set('plan', 'monthly')
+    const loadConfig = vi.fn().mockResolvedValue(undefined)
+    useConfigStore.setState({
+      loaded: false,
+      stripeEnabled: false,
+      load: loadConfig,
+    })
+    render(<OnboardingPage />)
+    await completeGoals()
+    expect(screen.getByText('✕ saveFailed')).toBeInTheDocument()
+    expect(apiFetch).not.toHaveBeenCalled()
+    expect(push).not.toHaveBeenCalled()
+    expect(searchParams.get('plan')).toBe('monthly')
+
+    loadConfig.mockImplementationOnce(async () => {
+      useConfigStore.setState({ loaded: true, stripeEnabled: true })
+    })
+    await act(async () =>
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    )
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+    expect(screen.getAllByRole('button')[0]).toHaveTextContent(
+      'trialCtaMonthlyTrialUsed'
+    )
+    expect(push).not.toHaveBeenCalled()
+    expect(createCheckout).not.toHaveBeenCalled()
+  })
+
   it('replaces no-card trial confirmation when it expires while the page is open', async () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2030-01-01T00:00:00Z'))

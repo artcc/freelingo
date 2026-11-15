@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 import { TrialExpiredNotice } from '@/components/billing/TrialExpiredNotice'
+import WhatsNew, { WHATS_NEW_VERSION } from '@/components/whats-new/WhatsNew'
 import { TOUR_STORAGE_KEY } from '@/lib/onboarding-tour'
 import { claimPremiumResultOffer } from '@/lib/premium-prompts'
 import { useAuthStore, type User } from '@/store/auth'
@@ -18,9 +19,7 @@ vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }))
 vi.mock('next-intl', () => ({
   useLocale: () => 'en',
   useTranslations: () => (key: string) => key,
-}))
-vi.mock('@/components/whats-new/WhatsNew', () => ({
-  WHATS_NEW_VERSION: 'test',
+  useMessages: () => ({}),
 }))
 vi.mock('next/link', () => ({
   default: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props} />,
@@ -36,6 +35,7 @@ const learner: User = {
   subscription_status: 'none',
   freemium_trial_ends_at: '2026-11-14T12:00:00Z',
 }
+const whatsNewKey = `fl_whats_new_seen_${WHATS_NEW_VERSION}`
 const balance = {
   trial_active: false,
   trial_ends_at: null,
@@ -58,13 +58,22 @@ function DashboardLoad({ loading }: { loading: boolean }) {
   return loading ? null : <TrialExpiredNotice />
 }
 
+function DashboardInvitations() {
+  return (
+    <>
+      <WhatsNew />
+      <TrialExpiredNotice />
+    </>
+  )
+}
+
 beforeEach(() => {
   vi.useFakeTimers()
   vi.setSystemTime('2026-11-15T12:00:00Z')
   push.mockReset()
   localStorage.clear()
   localStorage.setItem(TOUR_STORAGE_KEY, '1')
-  localStorage.setItem('fl_whats_new_seen_test', '1')
+  localStorage.setItem(whatsNewKey, '1')
   useAuthStore.getState().startSession('token')
   useAuthStore.getState().setUser(learner)
   useConfigStore.setState({
@@ -109,7 +118,7 @@ describe('trial expiry invitation', () => {
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
   })
 
-  it.each([TOUR_STORAGE_KEY, 'fl_whats_new_seen_test'])(
+  it.each([TOUR_STORAGE_KEY, whatsNewKey])(
     'leaves a visit with pending %s to its existing dialog',
     (key) => {
       localStorage.removeItem(key)
@@ -121,6 +130,87 @@ describe('trial expiry invitation', () => {
       expect(screen.getByRole('alertdialog')).toBeInTheDocument()
     }
   )
+
+  it('reserves the news visit when configuration arrives after news dismissal', () => {
+    localStorage.removeItem(whatsNewKey)
+    useConfigStore.setState({ loaded: false })
+    const visit = render(<DashboardInvitations />)
+    fireEvent.click(screen.getByRole('button', { name: 'cta →' }))
+    expect(localStorage.getItem(whatsNewKey)).toBe('1')
+
+    act(() => {
+      useAuthStore.getState().setTokens('rotated-token')
+      useAuthStore.getState().setUser({ ...learner, displayName: 'Updated' })
+    })
+    act(() => useConfigStore.setState({ loaded: true }))
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+    expect(localStorage.getItem('fl_premium_prompts_1')).toBeNull()
+
+    visit.unmount()
+    render(<DashboardInvitations />)
+    expect(screen.getByRole('alertdialog')).toHaveTextContent('expiredTitle')
+  })
+
+  it('reserves the tour visit even if it finishes before configuration loads', () => {
+    localStorage.removeItem(TOUR_STORAGE_KEY)
+    useConfigStore.setState({ loaded: false })
+    const visit = render(<TrialExpiredNotice />)
+    localStorage.setItem(TOUR_STORAGE_KEY, '1')
+
+    act(() => useConfigStore.setState({ loaded: true }))
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+    expect(localStorage.getItem('fl_premium_prompts_1')).toBeNull()
+
+    visit.unmount()
+    render(<TrialExpiredNotice />)
+    expect(screen.getByRole('alertdialog')).toHaveTextContent('expiredTitle')
+  })
+
+  it.each(['session', 'account'] as const)(
+    'does not carry a deferred visit into a replacement %s',
+    (replacement) => {
+      localStorage.removeItem(whatsNewKey)
+      useConfigStore.setState({ loaded: false })
+      render(<DashboardInvitations />)
+      fireEvent.click(screen.getByRole('button', { name: 'cta →' }))
+      act(() => {
+        if (replacement === 'session') {
+          useAuthStore.getState().startSession('replacement-token')
+          useAuthStore.getState().setUser(learner)
+        } else {
+          useAuthStore.getState().setUser({ ...learner, id: 2 })
+        }
+      })
+      expect(localStorage.getItem('fl_premium_prompts_1')).toBeNull()
+      expect(localStorage.getItem('fl_premium_prompts_2')).toBeNull()
+
+      act(() => useConfigStore.setState({ loaded: true }))
+      expect(screen.getByRole('alertdialog')).toHaveTextContent('expiredTitle')
+      const owner = replacement === 'session' ? 1 : 2
+      expect(localStorage.getItem(`fl_premium_prompts_${owner}`)).not.toBeNull()
+      if (replacement === 'account') {
+        expect(localStorage.getItem('fl_premium_prompts_1')).toBeNull()
+      }
+    }
+  )
+
+  it('rechecks visit priority for a replacement account before delayed configuration', () => {
+    useConfigStore.setState({ loaded: false })
+    const visit = render(<TrialExpiredNotice />)
+    localStorage.removeItem(TOUR_STORAGE_KEY)
+    act(() => useAuthStore.getState().setUser({ ...learner, id: 2 }))
+    localStorage.setItem(TOUR_STORAGE_KEY, '1')
+    act(() => useConfigStore.setState({ loaded: true }))
+
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+    expect(localStorage.getItem('fl_premium_prompts_1')).toBeNull()
+    expect(localStorage.getItem('fl_premium_prompts_2')).toBeNull()
+    visit.unmount()
+    render(<TrialExpiredNotice />)
+    expect(screen.getByRole('alertdialog')).toHaveTextContent('expiredTitle')
+    expect(localStorage.getItem('fl_premium_prompts_1')).toBeNull()
+    expect(localStorage.getItem('fl_premium_prompts_2')).not.toBeNull()
+  })
 
   it.each(['active', 'trialing', 'past_due', 'unpaid', 'paused'] as const)(
     'does not turn %s into an expired free-trial offer',

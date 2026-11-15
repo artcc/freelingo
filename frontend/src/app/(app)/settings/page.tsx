@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { useLogout } from '@/hooks/useLogout'
+import { useBillingPortal } from '@/hooks/useBillingPortal'
 import { ProfileSection } from '@/components/settings/ProfileSection'
 import { ConversationSection } from '@/components/settings/ConversationSection'
 import { VoiceSection } from '@/components/settings/VoiceSection'
@@ -47,6 +48,39 @@ export default function SettingsPage() {
   const [logoutConfirm, setLogoutConfirm] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
+  const deleteRequest = useRef<AbortController | null>(null)
+  const cancellationRequired =
+    stripeEnabled &&
+    !user?.cancel_at_period_end &&
+    [
+      'active',
+      'trialing',
+      'past_due',
+      'unpaid',
+      'paused',
+      'incomplete',
+    ].includes(user?.subscription_status ?? '')
+
+  useEffect(() => {
+    const unsubscribe = useAuthStore.subscribe((state, previous) => {
+      if (
+        state.sessionVersion !== previous.sessionVersion ||
+        state.user?.id !== previous.user?.id
+      ) {
+        deleteRequest.current?.abort()
+        deleteRequest.current = null
+        setDeleting(false)
+        setDeleteConfirm(false)
+        setDeleteError('')
+      }
+    })
+    return () => {
+      unsubscribe()
+      deleteRequest.current?.abort()
+      deleteRequest.current = null
+    }
+  }, [])
 
   const navItems = [
     { href: '#account', label: t('sectionAccount'), icon: User },
@@ -58,13 +92,45 @@ export default function SettingsPage() {
   ]
 
   async function handleDeleteAccount() {
+    if (deleteRequest.current) return
+    const controller = new AbortController()
+    deleteRequest.current = controller
+    const { sessionVersion, user: owner } = useAuthStore.getState()
+    const isCurrent = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion &&
+      useAuthStore.getState().user?.id === owner?.id
     setDeleting(true)
+    setDeleteError('')
     try {
-      await apiFetch('/api/auth/me', { method: 'DELETE' })
+      const res = await apiFetch('/api/auth/me', {
+        method: 'DELETE',
+        signal: controller.signal,
+      })
+      if (!isCurrent()) return
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        if (!isCurrent()) return
+        setDeleteError(
+          res.status === 409 &&
+            data?.detail === 'subscription_cancellation_required'
+            ? 'cancellationRequired'
+            : res.status === 409 && data?.detail === 'billing_checkout_pending'
+              ? 'checkoutPending'
+              : res.status === 503 &&
+                  data?.detail === 'billing_verification_unavailable'
+                ? 'verificationUnavailable'
+                : 'failed'
+        )
+        return
+      }
       logout()
       router.push('/login')
     } catch {
-      setDeleting(false)
+      if (isCurrent()) setDeleteError('failed')
+    } finally {
+      if (isCurrent()) setDeleting(false)
+      if (deleteRequest.current === controller) deleteRequest.current = null
     }
   }
 
@@ -113,7 +179,10 @@ export default function SettingsPage() {
 
               {user?.role !== 'admin' && (
                 <button
-                  onClick={() => setDeleteConfirm(true)}
+                  onClick={() => {
+                    setDeleteError('')
+                    setDeleteConfirm(true)
+                  }}
                   disabled={deleting}
                   className="text-fl-label text-fl-error border-fl-error/40 hover:border-fl-error/70 w-full border py-3 font-mono tracking-widest uppercase transition-colors disabled:opacity-40"
                 >
@@ -181,15 +250,72 @@ export default function SettingsPage() {
         onCancel={() => setLogoutConfirm(false)}
       />
 
-      <ConfirmDialog
-        open={deleteConfirm}
-        title={t('deleteAccountTitle')}
-        message={t('deleteAccountMessage')}
-        confirmLabel={t('deleteAccountConfirm')}
-        danger
-        onConfirm={handleDeleteAccount}
-        onCancel={() => setDeleteConfirm(false)}
-      />
+      {deleteConfirm && (
+        <DeleteAccountDialog
+          deleting={deleting}
+          error={deleteError}
+          cancellationRequired={cancellationRequired}
+          onConfirm={handleDeleteAccount}
+          onCancel={() => setDeleteConfirm(false)}
+        />
+      )}
     </div>
+  )
+}
+
+// The dialog owns portal work so closing it also cancels pending navigation.
+function DeleteAccountDialog({
+  deleting,
+  error,
+  cancellationRequired,
+  onConfirm,
+  onCancel,
+}: {
+  deleting: boolean
+  error: string
+  cancellationRequired: boolean
+  onConfirm: () => void
+  onCancel: () => void
+}) {
+  const t = useTranslations('settings')
+  const tDeletion = useTranslations('accountDeletion')
+  const {
+    openPortal,
+    loading: portalLoading,
+    error: portalError,
+  } = useBillingPortal()
+  const showCancellation =
+    error === 'cancellationRequired' || (!error && cancellationRequired)
+
+  return (
+    <ConfirmDialog
+      open
+      title={t('deleteAccountTitle')}
+      message={t('deleteAccountMessage')}
+      confirmLabel={t('deleteAccountConfirm')}
+      confirming={deleting || portalLoading}
+      error={
+        showCancellation ? (
+          <>
+            {tDeletion('cancellationRequired')}{' '}
+            <button
+              type="button"
+              onClick={openPortal}
+              disabled={deleting || portalLoading}
+              aria-busy={portalLoading}
+              className="underline underline-offset-4 disabled:opacity-50"
+            >
+              {tDeletion('manageSubscription')}
+            </button>
+            {portalError && <span className="mt-2 block">{portalError}</span>}
+          </>
+        ) : error ? (
+          tDeletion(error)
+        ) : undefined
+      }
+      danger
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+    />
   )
 }

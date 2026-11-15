@@ -274,7 +274,7 @@ export default function ConversationMode({
   // ─── UI State ────────────────────────────────────────────────────────────
   const [status, setStatus] = useState<ConvStatus>('loading')
   const [sessionActive, setSessionActive] = useState(false)
-  const [demoFinished, setDemoFinished] = useState(false)
+  const demoConsumed = user?.assessment_voice_trial_used === true
   const [resultOwner, setResultOwner] = useState<SessionOwner | null>(null)
   const regularAccessAvailable =
     !accessDenied &&
@@ -282,7 +282,7 @@ export default function ConversationMode({
       freemiumTrialActive ||
       (!!freemiumStatus && freemiumStatus.voice_remaining_seconds > 0))
   const demoAccessEnded =
-    trialMode && demoFinished && !sessionActive && !regularAccessAvailable
+    trialMode && demoConsumed && !sessionActive && !regularAccessAvailable
   const accessExhausted =
     stripeEnabled &&
     !sessionActive &&
@@ -290,7 +290,7 @@ export default function ConversationMode({
     (accessDenied ||
       (!!freemiumStatus &&
         freemiumStatus.voice_remaining_seconds <= 0 &&
-        !(trialMode && !demoFinished)))
+        !(trialMode && !demoConsumed)))
   const hasCompletedResult =
     status === 'ended' &&
     resultOwner?.sessionVersion === sessionVersion &&
@@ -813,7 +813,6 @@ export default function ConversationMode({
           setQuota(null)
           setReviewPromptOpen(false)
           setResultOwner(null)
-          setDemoFinished(false)
           setStatus('ready')
         }
       }),
@@ -1020,7 +1019,6 @@ export default function ConversationMode({
               cleanEndRef.current = true
               assistantTurnActiveRef.current = false
               if (sessionPracticeRef.current.completed) setResultOwner(owner)
-              if (trialMode) setDemoFinished(true)
               finalizeSession()
               convLogger.info('session end received', { reason: msg.reason })
               setStatus('ended')
@@ -1345,7 +1343,6 @@ export default function ConversationMode({
       ? Date.now() - sessionStartedAtRef.current
       : 0
     if (completedPractice) setResultOwner(owner)
-    if (trialMode && sessionStartedAtRef.current !== null) setDemoFinished(true)
     startAttemptRef.current++
     cleanEndRef.current = true
     finalizeSession('manual')
@@ -1419,7 +1416,7 @@ export default function ConversationMode({
         )}
       </div>
 
-      {trialMode && !regularAccessAvailable && !demoFinished && (
+      {trialMode && !regularAccessAvailable && !demoConsumed && (
         <div className="border-fl-accent/40 bg-fl-surface text-fl-muted-1 mb-4 border px-4 py-3 text-center font-mono text-xs tracking-widest uppercase">
           {t('trialBanner', {
             minutes: Math.round((voiceTrialDurationSeconds ?? 300) / 60),
@@ -1473,6 +1470,23 @@ export default function ConversationMode({
           />
         )}
         <div ref={transcriptEndRef} />
+        {status === 'ended' && (
+          <div className="border-fl-border bg-fl-surface text-fl-muted-2 mb-4 border px-4 py-3 font-mono text-xs">
+            {t('sessionEnded')}
+          </div>
+        )}
+        {demoAccessEnded && status === 'ended' ? (
+          !reviewPromptOpen && <TrialPremiumCta />
+        ) : hasCompletedResult ? (
+          <PremiumResultOffer
+            feature="voice"
+            blocked={reviewPromptOpen}
+            accessExhausted={accessExhausted}
+            className="mb-4"
+          />
+        ) : accessExhausted ? (
+          <PaywallBanner feature="voice" compact />
+        ) : null}
       </div>
 
       {/* Status message */}
@@ -1481,23 +1495,6 @@ export default function ConversationMode({
           ✕ {errorMsg}
         </div>
       )}
-      {status === 'ended' && (
-        <div className="border-fl-border bg-fl-surface text-fl-muted-2 mb-4 border px-4 py-3 font-mono text-xs">
-          {t('sessionEnded')}
-        </div>
-      )}
-      {demoAccessEnded && status === 'ended' ? (
-        !reviewPromptOpen && <TrialPremiumCta />
-      ) : hasCompletedResult ? (
-        <PremiumResultOffer
-          feature="voice"
-          blocked={reviewPromptOpen}
-          accessExhausted={accessExhausted}
-          className="mb-4 shrink-0"
-        />
-      ) : accessExhausted ? (
-        <PaywallBanner feature="voice" compact />
-      ) : null}
 
       {/* Conversation starters — shown when idle, hidden as soon as session starts */}
       {!trialMode &&

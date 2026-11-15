@@ -61,6 +61,7 @@ export function GameCatalog({
   const blocked = useRef(false)
   const quotaWasAvailable = useRef(false)
   const quotaRecoveryAttempted = useRef(false)
+  const accessRecoveryVersion = useRef(0)
   const languageCode = language?.code
 
   useEffect(() => {
@@ -85,7 +86,9 @@ export function GameCatalog({
       )
     }
     const recover = () => {
-      if (blocked.current && sameScope()) {
+      if (!sameScope()) return
+      ++accessRecoveryVersion.current
+      if (blocked.current) {
         // A positive advisory transition permits one new authoritative catalog read.
         blocked.current = false
         quotaRecoveryAttempted.current = true
@@ -137,6 +140,7 @@ export function GameCatalog({
 
   useEffect(() => {
     const controller = new AbortController()
+    const recoveryVersion = accessRecoveryVersion.current
     operation.current?.abort()
     operation.current = controller
     setCatalog(null)
@@ -180,6 +184,14 @@ export function GameCatalog({
           { signal: controller.signal }
         )
         if (current()) {
+          if (
+            data.limited &&
+            data.quota.remaining <= 0 &&
+            recoveryVersion !== accessRecoveryVersion.current
+          ) {
+            setRetry((value) => value + 1)
+            return
+          }
           blocked.current = data.limited && data.quota.remaining <= 0
           if (!blocked.current) quotaRecoveryAttempted.current = false
           else if (!quotaRecoveryAttempted.current) {
@@ -215,6 +227,7 @@ export function GameCatalog({
   async function start(mode: GameMode) {
     if (!catalog || busy || switching || pending.current) return
     const controller = new AbortController()
+    const recoveryVersion = accessRecoveryVersion.current
     operation.current?.abort()
     operation.current = controller
     const current = () => {
@@ -258,6 +271,10 @@ export function GameCatalog({
           (e.code === 'freemium_exhausted' ||
             e.code === 'subscription_required')
         ) {
+          if (recoveryVersion !== accessRecoveryVersion.current) {
+            setRetry((value) => value + 1)
+            return
+          }
           blocked.current = true
           quotaWasAvailable.current = false
           quotaRecoveryAttempted.current = false

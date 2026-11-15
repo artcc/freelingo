@@ -367,6 +367,13 @@
       "backToLogin": "Tillbaka till inloggningen"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Innan kontot kan raderas måste ägaren avbryta förnyelsen via prenumerationshanteringen. Att radera kontot avslutar inte prenumerationen.",
+    "checkoutPending": "Ett köp väntar eller så kan dess status ännu inte bekräftas. Lös detta innan du raderar kontot. Inget köp har avbrutits automatiskt.",
+    "verificationUnavailable": "Faktureringsstatusen kunde inte verifieras. Kontot har inte raderats. Försök igen senare.",
+    "failed": "Kontot kunde inte raderas. Försök igen.",
+    "manageSubscription": "Hantera prenumeration"
+  },
   "settings": {
     "title": "Inställningar",
     "sectionAccount": "Konto",

@@ -254,6 +254,57 @@ describe('ConversationMode freemium reconciliation', () => {
 
   beforeEach(() => useConfigStore.setState({ stripeEnabled: true }))
 
+  it.each([
+    { ending: 'manual', consumed: false },
+    { ending: 'server', consumed: false },
+    { ending: 'manual', consumed: true },
+    { ending: 'server', consumed: true },
+  ])(
+    'uses confirmed demo consumption after $ending closure and ordinary quota exhaustion (consumed: $consumed)',
+    async ({ ending, consumed }) => {
+      const profile = {
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: 'none',
+        assessment_voice_trial_used: false,
+      }
+      useAuthStore.getState().setUser(mapUser(profile))
+      useFreemiumStore.setState({ status, loaded: true, lastFetch: Date.now() })
+      const confirmation = deferred<unknown>()
+      mocks.apiFetch.mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () => url === '/api/auth/me' ? confirmation.promise : null,
+      }))
+      render(<ConversationMode trialMode voiceTrialToken="unused-demo" />)
+      const ws = await start()
+      act(() => {
+        useFreemiumStore.setState({
+          status: { ...status, voice_remaining_seconds: 0 },
+          lastFetch: Date.now(),
+        })
+        if (ending === 'manual') fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+        else ws.message({ type: 'session_end', reason: 'max_duration' })
+      })
+      expect(screen.queryByText('trialCtaDesc')).not.toBeInTheDocument()
+      await act(async () => confirmation.resolve({
+        ...profile, assessment_voice_trial_used: consumed,
+      }))
+      if (consumed) {
+        expect(screen.getByText('trialCtaDesc')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'startNew' })).not.toBeInTheDocument()
+      } else {
+        expect(screen.queryByText('trialCtaDesc')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('voice-paywall')).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
+        await start('startNew')
+        const warmups = mocks.apiFetch.mock.calls.filter(([url]) => url === '/api/conversation/warmup')
+        expect(warmups).toHaveLength(2)
+        expect(JSON.parse(warmups[1][1].body)).toEqual({ trial_token: 'unused-demo' })
+      }
+    }
+  )
+
   it.each(['no-card-trial', 'subscription', 'voice-quota'] as const)(
     'allows restarting a completed demo with %s access',
     async (access) => {
@@ -388,6 +439,11 @@ describe('ConversationMode freemium reconciliation', () => {
       expect(
         screen.getByRole('complementary', { name: 'resultTitle' })
       ).toHaveTextContent('exhaustedTitle')
+      const transcriptScroller = screen.getByText('I would like a cup of tea.').closest('.overflow-y-auto')
+      expect(transcriptScroller).not.toBeNull()
+      expect(transcriptScroller).toContainElement(
+        screen.getByRole('complementary', { name: 'resultTitle' })
+      )
       expect(
         screen.getByRole('link', { name: 'continuePremium' })
       ).toHaveAttribute('href', '/settings#plan')
@@ -1208,9 +1264,12 @@ describe('ConversationMode session lifecycle', () => {
         display_name: 'Learner',
         role: 'user',
         subscription_status: 'none',
+        assessment_voice_trial_used: true,
       }
       useConfigStore.setState({ stripeEnabled: true })
-      useAuthStore.getState().setUser(mapUser(profile))
+      useAuthStore.getState().setUser(mapUser({
+        ...profile, assessment_voice_trial_used: false,
+      }))
       mocks.apiFetch.mockImplementation(async (url: string) => ({
         ok: true,
         json: async () => (url === '/api/auth/me' ? profile : null),
@@ -1228,7 +1287,7 @@ describe('ConversationMode session lifecycle', () => {
       })
       fireEvent.click(screen.getByRole('button', { name: 'stop' }))
       await waitFor(() =>
-        expect(useAuthStore.getState().user?.username).toBe('learner')
+        expect(useAuthStore.getState().user?.assessment_voice_trial_used).toBe(true)
       )
       let finish!: (body: unknown) => void
       const body = new Promise((resolve) => {

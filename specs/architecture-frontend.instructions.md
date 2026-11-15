@@ -150,6 +150,13 @@ expire the cache window so a later visit can retry.
 Session-scoped quota caching, unknown balances, and paywall presentation are defined in
 `subscriptions-freemium.instructions.md`.
 
+Reading and Listening history reads have their own request identity, bounded fetch, loading, error,
+and manual retry state. HTTP or transport failure is not an empty history. A confirmed exhausted
+access response uses the shared denial recovery; temporary unavailability remains an error. Retry
+reloads the requested page, and pagination is disabled during loading or failure. Session,
+language/plan/level replacement, context invalidation, and unmount cancel obsolete reads and clear
+their history context. Responses wait for provisional language switching to settle before publishing.
+
 An access denial during submission preserves the loaded exercise, selections, and replay state.
 The inline paywall disables submission without replacing the exercise. Confirmed access recovery
 re-enables the existing attempt; it does not submit answers or generate a replacement automatically.
@@ -324,9 +331,13 @@ mount it only for new successful results and pass whether their review prompt bl
 The component consumes the existing auth, config, trial, and freemium stores; it does not make quota
 requests or authorize access. Its soft-offer lifecycle is scoped to account, authentication session,
 and feature. Intersection visibility and document visibility determine when it claims an invitation.
+Voice result invitations and continuation paywalls sit inside the transcript scroller so they do not
+reserve fixed vertical space outside the conversation result.
 
 `components/billing/TrialExpiredNotice.tsx` belongs to dashboard entry and reuses `ConfirmDialog`.
-It defers to existing tour/news browser preferences without changing those components.
+Its account/session-keyed visit captures tour/news priority before waiting for configuration or page
+loading. This local decision survives profile updates and token rotation; changing account/session
+or returning to Dashboard starts a new visit. Deferred visits do not acknowledge the trial.
 `lib/premium-prompts.ts` stores account-scoped browser presentation preferences under
 `fl_premium_prompts_<userId>`: the last offer timestamp and the acknowledged trial-expiration timestamp.
 These local preferences contain no credentials, are not analytics identifiers, and are never sent to
@@ -347,11 +358,14 @@ HTTP 402 message as a draft and removes its unpersisted optimistic turn. Lesson 
 answers on failure and waits for provisional language switching before publishing success or errors;
 unchanged-context rejection of the switch permits the original result. Obsolete local completion
 does not undo a successful backend write or its session-owned quota reconciliation.
+Language-summary `needsRefresh` alone does not block completion of a loaded, resource-owned lesson.
 
 `GameCatalog` refetches its authoritative catalog once a blocked state sees a positive quota,
 subscription/trial, or billing-toggle recovery transition in the same session/language/plan/level.
 It does not infer catalog mode availability from the global quota snapshot or start a game
-automatically. Catalog loads and creation responses reject obsolete scopes.
+automatically. Recovery transitions during an in-flight catalog read or creation are retained:
+a later blocked response from that older access state triggers a fresh catalog read instead of
+restoring a stale blocked state. Catalog loads and creation responses reject obsolete scopes.
 
 `SubscriptionPlanButtons` shares explicit monthly/yearly Checkout actions, optional preferred-plan
 ordering, and trial/payment terms. `lib/billing-copy.ts` owns the price comparison behind the

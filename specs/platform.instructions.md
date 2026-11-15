@@ -100,8 +100,9 @@ the pending-request reference of a newer session.
 Account-scoped consumers must not publish state from an earlier authentication session. The freemium
 cache and quota reconciliation contract is defined in `subscriptions-freemium.instructions.md`.
 
-Avatar recovery, landing subscription checks, onboarding checkout, pricing checkout, and billing-return
-restoration use the same refresh HTTP coordination. `restoreAccessToken` fills a missing access token
+Avatar recovery, landing subscription checks, onboarding language/profile/checkout operations,
+pricing checkout, and billing-return restoration use the same refresh HTTP coordination.
+`restoreAccessToken` fills a missing access token
 only if its session is unchanged and its caller has not been cancelled; it preserves any token already
 published by another consumer. Ordinary restoration failures are handled by the caller; account
 conflicts always follow the shared session-invalidation rule.
@@ -127,11 +128,20 @@ loads the user, and requires the account to remain active.
 
 Email verification and password reset use independent Redis-backed tokens with their own expirations.
 
+Account deletion requires explicit confirmation and a successful backend response before local logout
+or navigation. Billing conflicts and provider-verification failures leave the session and confirmation
+available for recovery. Self-deletion is forbidden for administrators. The shared self/admin billing
+precondition is owned by `subscriptions-freemium.instructions.md` (Account deletion and billing);
+`api-endpoints.instructions.md` owns its error codes.
+
 ## Account onboarding
 
 Onboarding is distinct from CEFR assessment.
 
 - The language selector is filtered by operator-enabled languages returned by the backend.
+- On a fresh page, onboarding restores the access token before reading authenticated languages.
+  Failed restoration or language lookup exposes Retry; progression requires a successful lookup and a
+  selected enabled language. Retry runs the same restoration and lookup sequence.
 - Personal learning goals are optional.
 - `PATCH /api/auth/me` persists `target_language` and `learning_goals`, creating or activating the
   corresponding `UserLanguage`.
@@ -141,6 +151,12 @@ Onboarding is distinct from CEFR assessment.
   initial freemium trial is active. Checkout requires a separate button click, and learners may
   still continue to Dashboard without subscribing.
 - Completion navigates to Dashboard, not directly to assessment.
+
+Before saving the profile, onboarding restores a missing token and requires successfully loaded
+runtime configuration. A failed configuration read leaves the profile unsaved and offers Retry.
+The post-save destination uses the current loaded configuration rather than captured defaults.
+Unmounted or replaced-session operations cannot publish readiness, profile changes, or navigation.
+If checkout restoration requires returning to Login, the chosen monthly/yearly interval is preserved.
 
 The authenticated shell redirects users with null learning goals back to onboarding.
 After Login, a selected plan leads to onboarding for an unfinished account or the subscription section

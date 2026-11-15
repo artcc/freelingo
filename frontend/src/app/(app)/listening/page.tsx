@@ -110,6 +110,28 @@ function ListeningPage() {
   const [historyTotal, setHistoryTotal] = useState(0)
   const [historyPage, setHistoryPage] = useState(0)
   const [historyLoading, setHistoryLoading] = useState(false)
+  const [historyFailure, setHistoryFailure] = useState<
+    'exhausted' | 'unavailable' | 'failed' | null
+  >(null)
+  const historyRequest = useRef<AbortController | null>(null)
+  useLayoutEffect(() => {
+    setHistory([])
+    setHistoryContext(null)
+    setHistoryTotal(0)
+    setHistoryPage(0)
+    setHistoryFailure(null)
+    setHistoryLoading(false)
+    return () => {
+      historyRequest.current?.abort()
+      historyRequest.current = null
+    }
+  }, [
+    activeLanguage?.code,
+    activePlan?.id,
+    activePlan?.cefr_level,
+    needsRefresh,
+    sessionVersion,
+  ])
   const [error, setError] = useState('')
 
   const user = useAuthStore((s) => s.user)
@@ -301,29 +323,67 @@ function ListeningPage() {
   }
 
   async function loadHistory(pageIndex = 0) {
+    historyRequest.current?.abort()
+    const controller = new AbortController()
+    historyRequest.current = controller
+    const current = () => {
+      const context = useLanguageStore.getState()
+      const plan = context.userLanguages.find((item) => item.is_active)?.plan
+      return (
+        !controller.signal.aborted &&
+        historyRequest.current === controller &&
+        useAuthStore.getState().sessionVersion === sessionVersion &&
+        context.activeLanguage?.code === activeLanguage?.code &&
+        plan?.id === activePlan?.id &&
+        plan?.cefr_level === activePlan?.cefr_level &&
+        !context.isSwitching &&
+        !context.needsRefresh
+      )
+    }
+    if (!current()) return
     setPageState('history')
     setHistoryPage(pageIndex)
     setHistoryLoading(true)
+    setHistoryFailure(null)
     try {
       const params = new URLSearchParams({
         skip: String(pageIndex * HISTORY_PAGE_SIZE),
         limit: String(HISTORY_PAGE_SIZE),
       })
-      const res = await apiFetch(`/api/listening/history?${params.toString()}`)
-      if (res.ok) {
-        const data = (await res.json()) as {
-          context: ExerciseContext
-          items: AttemptItem[]
-          total: number
+      const res = await apiFetch(
+        `/api/listening/history?${params.toString()}`,
+        {
+          signal: AbortSignal.any([
+            controller.signal,
+            AbortSignal.timeout(20_000),
+          ]),
         }
-        setHistory(data.items)
-        setHistoryContext(data.context)
-        setHistoryTotal(data.total)
+      )
+      if (!res.ok) {
+        const body: unknown = await res.json().catch(() => null)
+        await waitForLanguageSwitch(controller.signal)
+        if (!current()) return
+        const access = getFreemiumAccessFailure(res.status, body, 'listening')
+        setHistoryFailure(access ?? 'failed')
+        if (access === 'exhausted') reportAccessDenied()
+        return
       }
+      const data = (await res.json()) as {
+        context: ExerciseContext
+        items: AttemptItem[]
+        total: number
+      }
+      await waitForLanguageSwitch(controller.signal)
+      if (!current()) return
+      setHistory(data.items)
+      setHistoryContext(data.context)
+      setHistoryTotal(data.total)
     } catch {
-      /* ignore */
+      await waitForLanguageSwitch(controller.signal)
+      if (current()) setHistoryFailure('failed')
     } finally {
-      setHistoryLoading(false)
+      if (current()) setHistoryLoading(false)
+      if (historyRequest.current === controller) historyRequest.current = null
     }
   }
 
@@ -364,8 +424,26 @@ function ListeningPage() {
           </button>
         </div>
 
-        {historyLoading && history.length === 0 ? (
+        {historyLoading ? (
           <PageLoading fullScreen={false} className="block p-5" />
+        ) : historyFailure ? (
+          <div className="space-y-4">
+            {historyFailure === 'exhausted' ? (
+              accessDenied && <PaywallBanner feature="listening" compact />
+            ) : (
+              <p role="alert" className="text-fl-error-fg text-sm">
+                {historyFailure === 'unavailable'
+                  ? tGeneration('unavailable')
+                  : t('errorLoading')}
+              </p>
+            )}
+            <button
+              onClick={() => loadHistory(historyPage)}
+              className="border-fl-border text-fl-fg border px-4 py-2 text-sm"
+            >
+              {tCommon('retry')}
+            </button>
+          </div>
         ) : history.length === 0 ? (
           <div className="border-fl-border bg-fl-surface border p-6 text-center">
             <p className="text-fl-muted-3 font-mono text-xs tracking-wide">
@@ -426,15 +504,17 @@ function ListeningPage() {
           </div>
         )}
 
-        <Pagination
-          page={historyPage}
-          totalPages={Math.ceil(historyTotal / HISTORY_PAGE_SIZE)}
-          loading={historyLoading}
-          onPageChange={loadHistory}
-          prevLabel={`← ${tCommon('back')}`}
-          nextLabel={`${tCommon('next')} →`}
-          className="mt-4"
-        />
+        {!historyFailure && (
+          <Pagination
+            page={historyPage}
+            totalPages={Math.ceil(historyTotal / HISTORY_PAGE_SIZE)}
+            loading={historyLoading}
+            onPageChange={loadHistory}
+            prevLabel={`← ${tCommon('back')}`}
+            nextLabel={`${tCommon('next')} →`}
+            className="mt-4"
+          />
+        )}
 
         {/* Word-save tooltip */}
         {selectedWord && (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
@@ -72,15 +72,18 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [languagesLoaded, setLanguagesLoaded] = useState(false)
+  const [languagesError, setLanguagesError] = useState(false)
   const [checkoutLoading, setCheckoutLoading] =
     useState<BillingInterval | null>(null)
   const [checkoutError, setCheckoutError] = useState('')
   const checkoutRequest = useRef<AbortController | null>(null)
   const profileRequest = useRef<AbortController | null>(null)
+  const languageRequest = useRef<AbortController | null>(null)
   useEffect(
     () => () => {
       checkoutRequest.current?.abort()
       profileRequest.current?.abort()
+      languageRequest.current?.abort()
     },
     []
   )
@@ -90,17 +93,40 @@ export default function OnboardingPage() {
       DEFAULT_TARGET_LANGUAGE.split('-')[0]
   )
 
-  useEffect(() => {
-    loadConfig()
-    fetchLanguages().then(() => {
-      setLanguagesLoaded(true)
-      const codes = useLanguageStore.getState().availableLanguageCodes
-      if (codes.length > 0 && !codes.includes(targetLanguage)) {
-        setTargetLanguage(codes[0])
+  const loadLanguages = useCallback(async () => {
+    languageRequest.current?.abort()
+    const controller = new AbortController()
+    languageRequest.current = controller
+    const { sessionVersion } = useAuthStore.getState()
+    const obsolete = () =>
+      controller.signal.aborted ||
+      useAuthStore.getState().sessionVersion !== sessionVersion
+    setLanguagesLoaded(false)
+    setLanguagesError(false)
+    try {
+      if (!useAuthStore.getState().accessToken) {
+        await restoreAccessToken(controller.signal)
       }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (obsolete()) return
+      const loaded = await fetchLanguages(controller.signal)
+      if (obsolete()) return
+      if (!loaded) throw new Error('Language lookup failed')
+      const codes = useLanguageStore.getState().availableLanguageCodes
+      setTargetLanguage((current) =>
+        codes.length > 0 && !codes.includes(current) ? codes[0] : current
+      )
+    } catch {
+      if (!obsolete()) setLanguagesError(true)
+    } finally {
+      if (!obsolete()) setLanguagesLoaded(true)
+    }
   }, [fetchLanguages])
+
+  useEffect(() => {
+    void loadConfig()
+    void loadLanguages()
+    return () => languageRequest.current?.abort()
+  }, [loadConfig, loadLanguages])
 
   function toggleGoal(goal: LearningGoal) {
     setSelectedGoals((prev) =>
@@ -108,8 +134,14 @@ export default function OnboardingPage() {
     )
   }
 
+  const languageReady =
+    languagesLoaded &&
+    !languagesError &&
+    availableLanguageCodes.includes(targetLanguage)
+
   async function handleStep1(e: React.FormEvent) {
     e.preventDefault()
+    if (!languageReady) return
     setStep(2)
   }
 
@@ -131,6 +163,15 @@ export default function OnboardingPage() {
     setLoading(true)
     setError('')
     try {
+      if (!useAuthStore.getState().accessToken) {
+        await restoreAccessToken(controller.signal)
+      }
+      if (obsolete()) return
+      if (!useConfigStore.getState().loaded) await loadConfig()
+      if (obsolete()) return
+      if (!useConfigStore.getState().loaded) {
+        throw new Error('Configuration unavailable')
+      }
       const body: Record<string, unknown> = {
         target_language: targetLanguage,
         learning_goals: selectedGoals,
@@ -146,8 +187,10 @@ export default function OnboardingPage() {
       if (obsolete()) return
       const mapped = mapUser(updated, user)
       setUser(mapped)
-      const trialActive = isFreemiumTrialActive(mapped, stripeEnabled)
-      if (trialActive || !isSubscribed(mapped, stripeEnabled)) {
+      const config = useConfigStore.getState()
+      if (!config.loaded) throw new Error('Configuration unavailable')
+      const trialActive = isFreemiumTrialActive(mapped, config.stripeEnabled)
+      if (trialActive || !isSubscribed(mapped, config.stripeEnabled)) {
         setStep(3)
       } else {
         router.push('/dashboard')
@@ -273,7 +316,7 @@ export default function OnboardingPage() {
                   <div className="border-fl-border text-fl-muted-2 border px-4 py-3 font-mono text-xs tracking-widest">
                     ...
                   </div>
-                ) : availableLanguageCodes.length > 0 ? (
+                ) : !languagesError && availableLanguageCodes.length > 0 ? (
                   <TargetLanguageSelector
                     value={targetLanguage}
                     onChange={setTargetLanguage}
@@ -286,10 +329,7 @@ export default function OnboardingPage() {
                     </p>
                     <button
                       type="button"
-                      onClick={() => {
-                        setLanguagesLoaded(false)
-                        fetchLanguages()
-                      }}
+                      onClick={() => void loadLanguages()}
                       className="text-fl-label text-fl-accent font-mono text-xs tracking-widest uppercase underline"
                     >
                       {tCommon('retry')}
@@ -299,7 +339,8 @@ export default function OnboardingPage() {
               </div>
               <button
                 type="submit"
-                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
+                disabled={!languageReady}
+                className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-40"
               >
                 {tCommon('next')}
               </button>
@@ -342,6 +383,8 @@ export default function OnboardingPage() {
                     <Loader2 className="mr-2 inline h-4 w-4 animate-spin" />
                     {tCommon('saving')}
                   </>
+                ) : error ? (
+                  tCommon('retry')
                 ) : (
                   t('continue')
                 )}

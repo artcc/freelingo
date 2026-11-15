@@ -367,6 +367,13 @@
       "backToLogin": "Back to login"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Before deleting this account, its owner must cancel the subscription renewal through subscription management. Deleting the account does not cancel the subscription.",
+    "checkoutPending": "A purchase is pending or its status cannot yet be confirmed. Resolve it before deleting this account. No purchase has been cancelled automatically.",
+    "verificationUnavailable": "The billing status could not be verified. The account has not been deleted. Please try again later.",
+    "failed": "The account could not be deleted. Please try again.",
+    "manageSubscription": "Manage subscription"
+  },
   "settings": {
     "title": "Settings",
     "sectionAccount": "Account",

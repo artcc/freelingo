@@ -207,6 +207,34 @@ describe('billing paywall UI', () => {
     ).not.toBeInTheDocument()
   })
 
+  it.each([true, false])(
+    'preserves the landing plan in entry links with registration=%s',
+    (allowRegistration) => {
+      render(
+        <PricingSection
+          allowRegistration={allowRegistration}
+          stripeEnabled
+          trialDays={0}
+          hasSession={false}
+          priceMonthly={10}
+          priceYearly={100}
+          totalPriceMonthly={10}
+          totalPriceYearly={100}
+        />
+      )
+      const destination = allowRegistration ? '/register' : '/login'
+      expect(
+        screen.getAllByRole('link').map((link) => link.getAttribute('href'))
+      ).toEqual([
+        destination,
+        `${destination}?plan=monthly`,
+        `${destination}?plan=yearly`,
+        `${destination}?plan=yearly`,
+      ])
+      expect(mockApiFetch).not.toHaveBeenCalled()
+    }
+  )
+
   it.each([-1, 0, 8, 9.99, NaN, Infinity])(
     'omits invalid or non-discounted reference price %s',
     (totalPriceMonthly) => {

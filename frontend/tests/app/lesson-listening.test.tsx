@@ -152,6 +152,18 @@ afterEach(() => {
 })
 
 describe('Lesson listening exercises', () => {
+  it('completes a resource-owned lesson after a game invalidates language progress', async () => {
+    saved = detail([exercise({ score: 1, user_answer: 'À midi', feedback: 'Bravo !' })])
+    useProgressStore.setState({ completedToday: [] })
+    useLanguageStore.getState().invalidateLanguages()
+    await openLesson()
+    await click('completeLesson')
+    expect(mocks.apiFetch.mock.calls.filter(([url]) => url.endsWith('/complete'))).toHaveLength(1)
+    expect(useProgressStore.getState().completedToday).toEqual([1])
+    expect(screen.queryByRole('button', { name: 'completeLesson' })).not.toBeInTheDocument()
+    expect(screen.queryByText('errorMessage')).not.toBeInTheDocument()
+  })
+
   it.each([200, 402, 503])('settles completion HTTP %s after a rejected language switch', async (status) => {
     saved = detail([exercise({ score: 1, user_answer: 'À midi', feedback: 'Bravo !' })])
     useConfigStore.setState({ stripeEnabled: true })

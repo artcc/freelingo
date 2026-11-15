@@ -367,6 +367,13 @@
       "backToLogin": "Voltar ao login"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Antes de eliminar esta conta, o titular deve cancelar a renovação na gestão da subscrição. Eliminar a conta não cancela a subscrição.",
+    "checkoutPending": "Existe uma compra pendente ou ainda não é possível confirmar o seu estado. Resolva esta situação antes de eliminar a conta. Nenhuma compra foi cancelada automaticamente.",
+    "verificationUnavailable": "Não foi possível verificar o estado de faturação. A conta não foi eliminada. Tente novamente mais tarde.",
+    "failed": "Não foi possível eliminar a conta. Tente novamente.",
+    "manageSubscription": "Gerir subscrição"
+  },
   "settings": {
     "title": "Configurações",
     "sectionAccount": "Conta",

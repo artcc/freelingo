@@ -463,14 +463,17 @@ async def conversation_ws(
         if voice_trial:
             try:
                 async with db_session() as db_trial:
-                    trial_user = await db_trial.get(User, user_id)
-                    if trial_user:
+                    try:
                         await consume_assessment_voice_trial_token(
                             redis,
-                            user=trial_user,
+                            db=db_trial,
+                            user_id=user_id,
                             token=voice_trial.token,
                         )
                         await db_trial.commit()
+                    except Exception:
+                        await db_trial.rollback()
+                        raise
             except Exception as exc:
                 logger.error("[conversation] Failed to consume voice trial: %s", exc)
                 await websocket.send_json(

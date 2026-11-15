@@ -9,6 +9,7 @@ import { getLandingSubscriptionState } from '@/lib/landing-subscription'
 import { restoreAccessToken } from '@/lib/api'
 import { createCheckout } from '@/lib/billing'
 import { hasTwoMonthsFree } from '@/lib/billing-copy'
+import { checkoutNavigationHref } from '@/lib/checkout-navigation'
 import { useAuthStore } from '@/store/auth'
 
 type BillingInterval = 'monthly' | 'yearly'
@@ -307,7 +308,12 @@ export default function PricingSection({
               ) : (
                 <Link
                   href={
-                    !hasSession && !allowRegistration ? '/login' : plan.href
+                    !hasSession && !allowRegistration
+                      ? checkoutNavigationHref(
+                          '/login',
+                          plan.isFree ? null : plan.interval
+                        )
+                      : plan.href
                   }
                   className={`inline-block px-6 py-2.5 text-center font-mono text-sm font-bold tracking-widest uppercase transition-colors ${
                     plan.isFree
@@ -411,7 +417,10 @@ export default function PricingSection({
           </button>
         ) : (
           <Link
-            href={allowRegistration ? '/register?plan=yearly' : '/login'}
+            href={checkoutNavigationHref(
+              allowRegistration ? '/register' : '/login',
+              'yearly'
+            )}
             className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 inline-block px-10 py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
           >
             {allowRegistration

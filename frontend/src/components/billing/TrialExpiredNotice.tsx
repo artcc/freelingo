@@ -18,12 +18,32 @@ import { useConfigStore } from '@/store/config'
 export function TrialExpiredNotice() {
   const user = useAuthStore((s) => s.user)
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  return <TrialExpiryVisit key={`${sessionVersion}:${user?.id}`} />
+}
+
+function TrialExpiryVisit() {
+  const user = useAuthStore((s) => s.user)
   const loaded = useConfigStore((s) => s.loaded)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const trialEnabled = useConfigStore((s) => s.freemiumTrialEnabled)
   const pageLoading = usePageLoadingActive()
+  const [deferred, setDeferred] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    // Reserve the visit before delayed configuration or loading can finish.
+    try {
+      setDeferred(
+        !localStorage.getItem(TOUR_STORAGE_KEY) ||
+          !localStorage.getItem(`fl_whats_new_seen_${WHATS_NEW_VERSION}`)
+      )
+    } catch {
+      setDeferred(true)
+    }
+  }, [])
+
   const end = Date.parse(user?.freemium_trial_ends_at ?? '')
   if (
+    deferred !== false ||
     !loaded ||
     !stripeEnabled ||
     !trialEnabled ||
@@ -35,13 +55,7 @@ export function TrialExpiredNotice() {
   ) {
     return null
   }
-  return (
-    <ExpiredNotice
-      key={`${sessionVersion}:${user.id}:${end}`}
-      userId={user.id}
-      trialEnd={end}
-    />
-  )
+  return <ExpiredNotice key={end} userId={user.id} trialEnd={end} />
 }
 
 function ExpiredNotice({
@@ -57,17 +71,6 @@ function ExpiredNotice({
 
   useEffect(() => {
     if (trialEnd > Date.now()) return
-    // Leave tour/news visits to their existing dialogs. Retry on a later entry.
-    try {
-      if (
-        !localStorage.getItem(TOUR_STORAGE_KEY) ||
-        !localStorage.getItem(`fl_whats_new_seen_${WHATS_NEW_VERSION}`)
-      ) {
-        return
-      }
-    } catch {
-      return
-    }
     function showWhenVisible() {
       if (
         document.visibilityState === 'visible' &&

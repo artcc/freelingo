@@ -367,6 +367,13 @@
       "backToLogin": "Girişe dön"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Bu hesabı silmeden önce hesap sahibi, abonelik yönetiminden yenilemeyi iptal etmelidir. Hesabı silmek aboneliği iptal etmez.",
+    "checkoutPending": "Bekleyen bir satın alma işlemi var veya durumu henüz doğrulanamıyor. Hesabı silmeden önce bu durumu çözün. Hiçbir satın alma işlemi otomatik olarak iptal edilmedi.",
+    "verificationUnavailable": "Faturalandırma durumu doğrulanamadı. Hesap silinmedi. Lütfen daha sonra tekrar deneyin.",
+    "failed": "Hesap silinemedi. Lütfen tekrar deneyin.",
+    "manageSubscription": "Aboneliği yönet"
+  },
   "settings": {
     "title": "Ayarlar",
     "sectionAccount": "Hesap",

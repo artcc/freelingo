@@ -498,8 +498,7 @@ function LessonContent() {
       useAuthStore.getState().sessionVersion === sessionVersion &&
       useLanguageStore.getState().activeLanguage?.code ===
         activeLanguage?.code &&
-      !useLanguageStore.getState().isSwitching &&
-      !useLanguageStore.getState().needsRefresh
+      !useLanguageStore.getState().isSwitching
     if (!current()) return
     completingLessonRef.current = true
     setCompletingLesson(true)

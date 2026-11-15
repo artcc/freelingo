@@ -367,6 +367,13 @@
       "backToLogin": "Natrag na prijavu"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Prije brisanja ovog računa vlasnik mora otkazati obnovu u upravljanju pretplatom. Brisanje računa ne otkazuje pretplatu.",
+    "checkoutPending": "Kupnja je na čekanju ili njezin status još nije moguće potvrditi. Riješite to prije brisanja računa. Nijedna kupnja nije automatski otkazana.",
+    "verificationUnavailable": "Nije moguće provjeriti status naplate. Račun nije izbrisan. Pokušajte ponovno kasnije.",
+    "failed": "Račun nije moguće izbrisati. Pokušajte ponovno.",
+    "manageSubscription": "Upravljanje pretplatom"
+  },
   "settings": {
     "title": "Postavke",
     "sectionAccount": "Račun",

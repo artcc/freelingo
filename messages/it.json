@@ -367,6 +367,13 @@
       "backToLogin": "Torna al login"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Prima di eliminare questo account, il titolare deve annullare il rinnovo nella gestione dell’abbonamento. Eliminare l’account non annulla l’abbonamento.",
+    "checkoutPending": "Un acquisto è in sospeso oppure il suo stato non può ancora essere confermato. Risolvi la situazione prima di eliminare l’account. Nessun acquisto è stato annullato automaticamente.",
+    "verificationUnavailable": "Non è stato possibile verificare lo stato di fatturazione. L’account non è stato eliminato. Riprova più tardi.",
+    "failed": "Non è stato possibile eliminare l’account. Riprova.",
+    "manageSubscription": "Gestisci abbonamento"
+  },
   "settings": {
     "title": "Impostazioni",
     "sectionAccount": "Account",

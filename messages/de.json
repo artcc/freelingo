@@ -367,6 +367,13 @@
       "backToLogin": "Zurück zum Login"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Vor dem Löschen dieses Kontos muss der Kontoinhaber die automatische Verlängerung in der Abonnementverwaltung kündigen. Das Löschen des Kontos kündigt das Abonnement nicht.",
+    "checkoutPending": "Ein Kauf ist noch offen oder sein Status kann noch nicht bestätigt werden. Kläre dies vor dem Löschen des Kontos. Es wurde kein Kauf automatisch storniert.",
+    "verificationUnavailable": "Der Abrechnungsstatus konnte nicht überprüft werden. Das Konto wurde nicht gelöscht. Bitte versuche es später erneut.",
+    "failed": "Das Konto konnte nicht gelöscht werden. Bitte versuche es erneut.",
+    "manageSubscription": "Abonnement verwalten"
+  },
   "settings": {
     "title": "Einstellungen",
     "sectionAccount": "Konto",

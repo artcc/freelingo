@@ -1,6 +1,6 @@
 ---
 description: "Current-state specification for Stripe billing, optional RevenueCat entitlement synchronization, freemium access, paywalls, maintenance, and subscription administration."
-applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook,billing_checkout}.py, backend/app/services/{subscription_service,revenuecat_service,stripe_checkout_service,freemium_service,assessment_voice_trial}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
+applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_webhook,billing_checkout}.py, backend/app/services/{subscription_service,revenuecat_service,stripe_checkout_service,freemium_service,assessment_voice_trial,account_deletion_service}.py, backend/app/routers/{billing,revenuecat,freemium,config,admin,auth,conversation}.py, backend/app/schemas/revenuecat.py, frontend/src/store/{config,freemium,auth}.ts, frontend/src/components/billing/**, frontend/src/components/MaintenanceGate.tsx, frontend/src/app/(auth)/billing/**, frontend/src/app/(app)/{chat,conversation,listening,reading,lesson,settings,dashboard}/**, frontend/src/app/page.tsx, docker-compose*.yml, .env.example"
 ---
 
 # Subscriptions and Freemium
@@ -438,8 +438,15 @@ defaults to a five-minute session duration.
 
 Voice access gives precedence to subscription, freemium trial, and remaining freemium voice balance
 before considering the demo. Consequently, a supplied demo token is not consumed while an earlier
-access path succeeds. When selected, the WebSocket deletes the token and marks the durable right used
-as the session begins.
+access path succeeds. When selected, the WebSocket atomically claims the active account's unused
+durable right with a conditional database update, then requires deletion of exactly one Redis
+credential before committing. Concurrent connections cannot both claim the right, whether they
+present the same token or different valid tokens for that account.
+
+A failed claim, missing credential, Redis failure, or commit failure stops startup before conversation
+creation and rolls back the database claim. A credential already deleted from Redis is not restored
+after rollback; the learner can request a fresh token while the durable right remains unused. The
+wire-level denial is defined in `api-endpoints.instructions.md`.
 
 The demo does not grant access to chat, Listening, or Reading and remains subject to the user's
 general token, session, and minute limits. Its stored plan/language metadata does not currently force
@@ -460,7 +467,10 @@ replace the affected pages, but open clients do not receive push updates when th
 
 Administrative APIs expose subscription fields and accept subscription filtering and recognized
 status overrides. Moving a user from non-premium to `active` or `trialing` applies default quotas;
-setting `none` clears the end date. Overrides update local access only and do not modify Stripe.
+explicit conversation/token quotas in the same update are applied after those defaults, including
+zero-valued overrides. The update reloads and locks the user row and commits status, defaults, and
+explicit overrides together. Setting `none` clears the end date. Overrides update local access only
+and do not modify Stripe.
 In RevenueCat mode they do not modify RevenueCat either and can be replaced by the next reconciliation;
 durable provider-managed grants must be configured in RevenueCat. Quota overrides are retained across
 ordinary renewals and duplicate notifications.
@@ -560,7 +570,11 @@ A known expired no-card trial can show a dismissible notice on dashboard entry. 
 progress is preserved and free access remains limited, and offers plans or continued free use.
 It is suppressed for subscribers, payment-recovery states, disabled trial/billing configuration,
 unknown expiration, and visits reserved for the onboarding tour or unseen release news. Such visits
-defer the notice until a later dashboard entry. It never mounts inside an exercise or conversation.
+defer the notice until a later dashboard entry. Visit priority is captured before billing configuration
+or page loading finishes; dismissing tour/news while configuration is pending does not release that
+visit for another notice. Deferral is local to the current account/session visit, survives token
+rotation and profile refresh, and writes no acknowledgment or cooldown. It never mounts inside an
+exercise or conversation.
 Showing the notice records the account's trial expiration in browser-local preferences, so revisiting
 or logging in again in that browser does not repeat it. This preference is not synchronized between
 devices; clearing browser storage can permit another notice. Unavailable storage suppresses the notice.
@@ -587,6 +601,46 @@ navigation without asserting either that payment occurred or that no charge occu
 
 The frontend is advisory: stale config or freemium state may temporarily present an action the
 backend rejects. Backend dependencies remain authoritative.
+
+## Account deletion and billing
+
+Self-service and administrative account deletion share `account_deletion_service.py`. Deletion never
+cancels subscriptions, schedules cancellation, or expires Checkout sessions at a provider. The account
+owner must first cancel renewal through subscription management. A provider-confirmed scheduled
+cancellation permits deletion without waiting for the paid access period to finish.
+
+The service reloads and holds the user-row lock used by Checkout through the deletion transaction.
+It checks persisted Checkout reservations and live Stripe sessions/subscriptions, including purchases
+not yet attached to the profile, and checks RevenueCat when enabled or when `revenuecat_synced_at`
+records a previous synchronization. Historical RevenueCat billing remains subject to verification
+after either billing flag is disabled; missing provider credentials fail closed. A persisted Stripe Customer
+or Subscription ID still requires live Stripe verification when billing is disabled; disabling feature
+gates does not prove billing has ended. These Stripe SDK reads explicitly supply the configured
+`STRIPE_SECRET_KEY` rather than depending on billing-router initialization.
+
+RevenueCat verification reads the customer snapshot through `has_uncanceled_subscription` without
+synchronizing access or applying activation quotas. It validates the configured environment and
+entitlement structure and rejects snapshots older than `revenuecat_synced_at`. Billing checks inspect
+subscriptions independently of Premium entitlement status: expired access with an outstanding billing
+issue and no detected cancellation still blocks deletion. Without a billing issue, an uncanceled
+subscription with unknown or future expiration also blocks it. Expiration comes from the subscription
+or its matching entitlement when needed.
+
+Lifetime non-subscription purchases and local Premium grants without provider billing identities
+do not require cancellation merely because they grant access. Any separate renewable subscription
+must still satisfy the billing checks.
+
+An open Checkout blocks deletion. A reservation with an unknown Session ID blocks until its stored
+`expires_at`; after that deadline, the service still checks live open Sessions and all subscriptions
+for the persisted Customer before permitting deletion. A known Session must be complete with a
+subscription or confirmed expired. Provider verification failures and obsolete RevenueCat snapshots
+fail closed. The HTTP error codes are defined in `api-endpoints.instructions.md` (Account deletion errors).
+
+Billing denials occur before refresh-token invalidation, cookie removal, avatar cleanup, or account
+deletion. Settings and Admin retain their confirmation dialog with a localized recoverable error;
+they do not log out the learner, remove a listed account, or navigate as if deletion succeeded.
+Recovery from a confirmed cancellation-required response must offer subscription management
+independently of whether the cached profile already reflects that subscription.
 
 ## Related specifications
 

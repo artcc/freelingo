@@ -5,6 +5,11 @@ import { SUPPORTED_LOCALES } from '@/lib/locales'
 import en from '../../../messages/en.json'
 
 const errorKeys = [
+  'accountDeletion.cancellationRequired',
+  'accountDeletion.checkoutPending',
+  'accountDeletion.verificationUnavailable',
+  'accountDeletion.failed',
+  'accountDeletion.manageSubscription',
   'common.errorMessage',
   'auth.login.error',
   'auth.login.loginFailed',
@@ -93,86 +98,102 @@ function messageKeys(value: Record<string, unknown>, prefix = ''): string[] {
 }
 
 function placeholders(message: string) {
-  const names = [...message.matchAll(/\{(\w+)(?:,|\})/g)].map((match) => match[1])
+  const names = [...message.matchAll(/\{(\w+)(?:,|\})/g)].map(
+    (match) => match[1]
+  )
   return [...new Set(names)].sort()
 }
 
-describe.each(SUPPORTED_LOCALES)('billing and access messages in %s', (locale) => {
-  it('localizes every Premium invitation and keeps its billing placeholders', async () => {
-    const messages = (await import(`../../../messages/${locale}.json`)).default
-    expect(messageKeys(messages.premiumOffer).sort()).toEqual(
-      messageKeys(en.premiumOffer).sort()
-    )
-    const t = createTranslator({
-      locale,
-      messages,
-      onError: (error) => { throw error },
-    })
-    const keys = messageKeys(en.premiumOffer, 'premiumOffer') as Array<
-      Extract<Parameters<typeof english>[0], `premiumOffer.${string}`>
-    >
-    for (const key of keys) {
-      expect(placeholders(t.raw(key)), key).toEqual(placeholders(english.raw(key)))
-      const text = t(key, { days: 7, date: '15/11/2026' })
-      expect(text.trim(), key).not.toBe('')
-      expect(text, key).not.toMatch(/[{}]/)
-      if (locale !== 'en' && english.raw(key).split(/\s+/).length >= 4) {
-        expect(text, key).not.toBe(english(key, { days: 7, date: '15/11/2026' }))
-      }
-    }
-  })
-
-  it('has localized messages with matching placeholders and valid ICU', async () => {
-    const messages = (await import(`../../../messages/${locale}.json`)).default
-    const t = createTranslator({
-      locale,
-      messages,
-      onError: (error) => {
-        throw error
-      },
-    })
-
-    for (const key of [...errorKeys, ...billingKeys, ...durationKeys]) {
-      expect(t.has(key), key).toBe(true)
-      expect(typeof t.raw(key), key).toBe('string')
-      expect(placeholders(t.raw(key)), key).toEqual(placeholders(english.raw(key)))
-
-      const values = { days: 5 }
-      const text = t(key, values)
-      const source = english(key, values)
-      expect(text.trim(), key).not.toBe('')
-      expect(text, key).not.toBe(key)
-      expect(text, key).not.toMatch(/[{}]/)
-
-      // Short labels may legitimately match English; full sentences should not.
-      if (locale !== 'en' && source.trim().split(/\s+/).length >= 4) {
-        expect(text, key).not.toBe(source)
-      }
-    }
-
-    for (const key of errorKeys) {
-      expect(t(key), key).not.toMatch(
-        /\b(?:WebAssembly|WebSocket|Traceback|HTTP|API|backend|tokens?)\b|(?:stt|tts|llm)_failed|quota_exceeded_[a-z_]+/i
+describe.each(SUPPORTED_LOCALES)(
+  'billing and access messages in %s',
+  (locale) => {
+    it('localizes every Premium invitation and keeps its billing placeholders', async () => {
+      const messages = (await import(`../../../messages/${locale}.json`))
+        .default
+      expect(messageKeys(messages.premiumOffer).sort()).toEqual(
+        messageKeys(en.premiumOffer).sort()
       )
-    }
-  })
-
-  it('renders configured trial lengths and plural branches', async () => {
-    const messages = (await import(`../../../messages/${locale}.json`)).default
-    const t = createTranslator({
-      locale,
-      messages,
-      onError: (error) => {
-        throw error
-      },
+      const t = createTranslator({
+        locale,
+        messages,
+        onError: (error) => {
+          throw error
+        },
+      })
+      const keys = messageKeys(en.premiumOffer, 'premiumOffer') as Array<
+        Extract<Parameters<typeof english>[0], `premiumOffer.${string}`>
+      >
+      for (const key of keys) {
+        expect(placeholders(t.raw(key)), key).toEqual(
+          placeholders(english.raw(key))
+        )
+        const text = t(key, { days: 7, date: '15/11/2026' })
+        expect(text.trim(), key).not.toBe('')
+        expect(text, key).not.toMatch(/[{}]/)
+        if (locale !== 'en' && english.raw(key).split(/\s+/).length >= 4) {
+          expect(text, key).not.toBe(
+            english(key, { days: 7, date: '15/11/2026' })
+          )
+        }
+      }
     })
 
-    for (const days of [0, 1, 2, 5, 11, 21, 22, 25]) {
-      for (const key of durationKeys) {
-        const text = t(key, { days })
-        expect(text, key).toContain(String(days))
+    it('has localized messages with matching placeholders and valid ICU', async () => {
+      const messages = (await import(`../../../messages/${locale}.json`))
+        .default
+      const t = createTranslator({
+        locale,
+        messages,
+        onError: (error) => {
+          throw error
+        },
+      })
+
+      for (const key of [...errorKeys, ...billingKeys, ...durationKeys]) {
+        expect(t.has(key), key).toBe(true)
+        expect(typeof t.raw(key), key).toBe('string')
+        expect(placeholders(t.raw(key)), key).toEqual(
+          placeholders(english.raw(key))
+        )
+
+        const values = { days: 5 }
+        const text = t(key, values)
+        const source = english(key, values)
+        expect(text.trim(), key).not.toBe('')
+        expect(text, key).not.toBe(key)
         expect(text, key).not.toMatch(/[{}]/)
+
+        // Short labels may legitimately match English; full sentences should not.
+        if (locale !== 'en' && source.trim().split(/\s+/).length >= 4) {
+          expect(text, key).not.toBe(source)
+        }
       }
-    }
-  })
-})
+
+      for (const key of errorKeys) {
+        expect(t(key), key).not.toMatch(
+          /\b(?:WebAssembly|WebSocket|Traceback|HTTP|API|backend|tokens?)\b|(?:stt|tts|llm)_failed|quota_exceeded_[a-z_]+/i
+        )
+      }
+    })
+
+    it('renders configured trial lengths and plural branches', async () => {
+      const messages = (await import(`../../../messages/${locale}.json`))
+        .default
+      const t = createTranslator({
+        locale,
+        messages,
+        onError: (error) => {
+          throw error
+        },
+      })
+
+      for (const days of [0, 1, 2, 5, 11, 21, 22, 25]) {
+        for (const key of durationKeys) {
+          const text = t(key, { days })
+          expect(text, key).toContain(String(days))
+          expect(text, key).not.toMatch(/[{}]/)
+        }
+      }
+    })
+  }
+)

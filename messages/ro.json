@@ -367,6 +367,13 @@
       "backToLogin": "Înapoi la autentificare"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Înainte de ștergerea acestui cont, titularul trebuie să anuleze reînnoirea din gestionarea abonamentului. Ștergerea contului nu anulează abonamentul.",
+    "checkoutPending": "O achiziție este în așteptare sau starea ei nu poate fi încă confirmată. Rezolvă situația înainte de a șterge contul. Nicio achiziție nu a fost anulată automat.",
+    "verificationUnavailable": "Starea facturării nu a putut fi verificată. Contul nu a fost șters. Încearcă din nou mai târziu.",
+    "failed": "Contul nu a putut fi șters. Încearcă din nou.",
+    "manageSubscription": "Gestionează abonamentul"
+  },
   "settings": {
     "title": "Setări",
     "sectionAccount": "Cont",

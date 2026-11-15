@@ -15,6 +15,78 @@ from app.core.security import create_access_token
 from app.main import app
 from app.routers import conversation as conversation_router
 
+
+@pytest.mark.parametrize(
+    "failure", ["used", "inactive", "missing", "missing-token", "redis-error", "commit-error"]
+)
+async def test_demo_admission_rechecks_durable_right_after_quotas_and_fails_closed(
+    test_user, db_session, mock_redis, voice_runtime, monkeypatch, failure
+):
+    from app.models.user import User
+    from tests.test_assessment_voice_trial import issue_token
+
+    user, _ = test_user
+    user_id = user.id
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", False)
+    monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 0)
+    token = await issue_token(mock_redis, user_id)
+    key = f"assessment_voice_trial:{user_id}:{token}"
+
+    async def quotas(*args):
+        if failure == "used":
+            user.assessment_voice_trial_used = True
+            await db_session.commit()
+        elif failure == "inactive":
+            user.is_active = False
+            await db_session.commit()
+        elif failure == "missing":
+            await db_session.delete(user)
+            await db_session.commit()
+        elif failure == "missing-token":
+            await mock_redis.delete(key)
+        elif failure == "redis-error":
+            monkeypatch.setattr(
+                mock_redis, "delete", AsyncMock(side_effect=ConnectionError("offline"))
+            )
+        else:
+            monkeypatch.setattr(
+                db_session, "commit", AsyncMock(side_effect=RuntimeError("commit failed"))
+            )
+        return args[-1], None, None, None
+
+    voice_runtime.quotas.side_effect = quotas
+    ws = await voice_runtime.start(voice_trial_token=token)
+    assert ws.send_json.await_args.args[0]["code"] == "internal_error"
+    ws.close.assert_awaited_once_with(code=1011)
+    voice_runtime.factory.assert_not_called()
+    persisted = await db_session.get(User, user_id)
+    if failure == "missing":
+        assert persisted is None
+    else:
+        assert persisted.assessment_voice_trial_used is (failure == "used")
+    assert (await mock_redis.get(key) is None) is (failure in {"missing-token", "commit-error"})
+
+
+async def test_demo_right_is_not_claimed_when_general_quotas_deny_start(
+    test_user, mock_redis, voice_runtime, monkeypatch
+):
+    from tests.test_assessment_voice_trial import issue_token
+
+    user, _ = test_user
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", False)
+    monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 0)
+    token = await issue_token(mock_redis, user.id)
+    voice_runtime.quotas.side_effect = None
+    voice_runtime.quotas.return_value = (300, "quota_exceeded_sessions", "Limit reached", 1008)
+    ws = await voice_runtime.start(voice_trial_token=token)
+    assert ws.send_json.await_args.args[0]["code"] == "quota_exceeded_sessions"
+    voice_runtime.factory.assert_not_called()
+    assert not user.assessment_voice_trial_used
+    assert await mock_redis.get(f"assessment_voice_trial:{user.id}:{token}") is not None
+
+
 # ---------------------------------------------------------------------------
 # Helper: create a real user and return a valid JWT
 # ---------------------------------------------------------------------------

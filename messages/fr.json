@@ -367,6 +367,13 @@
       "backToLogin": "Retour à la connexion"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Avant de supprimer ce compte, son titulaire doit annuler le renouvellement dans la gestion de l’abonnement. Supprimer le compte ne résilie pas l’abonnement.",
+    "checkoutPending": "Un achat est en attente ou son statut ne peut pas encore être confirmé. Résolvez cette situation avant de supprimer ce compte. Aucun achat n’a été annulé automatiquement.",
+    "verificationUnavailable": "Le statut de facturation n’a pas pu être vérifié. Le compte n’a pas été supprimé. Veuillez réessayer plus tard.",
+    "failed": "Le compte n’a pas pu être supprimé. Veuillez réessayer.",
+    "manageSubscription": "Gérer l’abonnement"
+  },
   "settings": {
     "title": "Paramètres",
     "sectionAccount": "Compte",

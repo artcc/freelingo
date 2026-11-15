@@ -1,6 +1,13 @@
 import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react'
 import { NextIntlClientProvider } from 'next-intl'
 import { useAuthStore, type User } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
@@ -74,7 +81,7 @@ beforeEach(() => {
     {
       ...useLanguageStore.getInitialState(),
       availableLanguageCodes: ['en-GB'],
-      fetchLanguages: vi.fn().mockResolvedValue(undefined),
+      fetchLanguages: vi.fn().mockResolvedValue(true),
     },
     true
   )
@@ -178,6 +185,11 @@ describe.each(['es', 'en'] as const)('localized billing errors (%s)', (locale) =
       new Response(JSON.stringify({ ...learner, display_name: 'Learner' }))
     )
     renderLocalized(<OnboardingPage />, locale)
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: catalogs[locale].common.next })
+      ).toBeEnabled()
+    )
     await act(async () =>
       fireEvent.click(
         screen.getByRole('button', { name: catalogs[locale].common.next })
@@ -204,6 +216,11 @@ describe.each(['es', 'en'] as const)('localized billing errors (%s)', (locale) =
   it('discards backend details when saving onboarding preferences', async () => {
     failRequest('http')
     renderLocalized(<OnboardingPage />, locale)
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: catalogs[locale].common.next })
+      ).toBeEnabled()
+    )
     await act(async () =>
       fireEvent.click(
         screen.getByRole('button', { name: catalogs[locale].common.next })

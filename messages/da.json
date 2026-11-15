@@ -367,6 +367,13 @@
       "backToLogin": "Tilbage til login"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Før kontoen slettes, skal ejeren annullere fornyelsen via abonnementsadministrationen. Sletning af kontoen opsiger ikke abonnementet.",
+    "checkoutPending": "Et køb afventer, eller dets status kan endnu ikke bekræftes. Afklar dette, før du sletter kontoen. Ingen køb er blevet annulleret automatisk.",
+    "verificationUnavailable": "Faktureringsstatus kunne ikke bekræftes. Kontoen er ikke slettet. Prøv igen senere.",
+    "failed": "Kontoen kunne ikke slettes. Prøv igen.",
+    "manageSubscription": "Administrer abonnement"
+  },
   "settings": {
     "title": "Indstillinger",
     "sectionAccount": "Konto",

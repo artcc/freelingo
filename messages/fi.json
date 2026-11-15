@@ -367,6 +367,13 @@
       "backToLogin": "Takaisin kirjautumiseen"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Ennen tilin poistamista tilin omistajan on peruttava tilauksen uusiutuminen tilausten hallinnassa. Tilin poistaminen ei peru tilausta.",
+    "checkoutPending": "Osto on kesken tai sen tilaa ei voida vielä vahvistaa. Selvitä tilanne ennen tilin poistamista. Mitään ostoa ei ole peruttu automaattisesti.",
+    "verificationUnavailable": "Laskutuksen tilaa ei voitu vahvistaa. Tiliä ei ole poistettu. Yritä myöhemmin uudelleen.",
+    "failed": "Tiliä ei voitu poistaa. Yritä uudelleen.",
+    "manageSubscription": "Hallinnoi tilausta"
+  },
   "settings": {
     "title": "Asetukset",
     "sectionAccount": "Tili",

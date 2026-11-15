@@ -367,6 +367,13 @@
       "backToLogin": "Powrót do logowania"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Przed usunięciem konta jego właściciel musi anulować odnowienie w ustawieniach subskrypcji. Usunięcie konta nie anuluje subskrypcji.",
+    "checkoutPending": "Zakup jest w toku lub nie można jeszcze potwierdzić jego statusu. Rozwiąż tę sytuację przed usunięciem konta. Żaden zakup nie został anulowany automatycznie.",
+    "verificationUnavailable": "Nie udało się zweryfikować statusu rozliczeń. Konto nie zostało usunięte. Spróbuj ponownie później.",
+    "failed": "Nie udało się usunąć konta. Spróbuj ponownie.",
+    "manageSubscription": "Zarządzaj subskrypcją"
+  },
   "settings": {
     "title": "Ustawienia",
     "sectionAccount": "Konto",

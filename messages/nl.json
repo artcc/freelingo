@@ -367,6 +367,13 @@
       "backToLogin": "Terug naar inloggen"
     }
   },
+  "accountDeletion": {
+    "cancellationRequired": "Voordat dit account wordt verwijderd, moet de eigenaar de verlenging opzeggen via het abonnementsbeheer. Het verwijderen van het account zegt het abonnement niet op.",
+    "checkoutPending": "Er staat een aankoop open of de status kan nog niet worden bevestigd. Los dit op voordat je dit account verwijdert. Er is geen aankoop automatisch geannuleerd.",
+    "verificationUnavailable": "De factureringsstatus kon niet worden gecontroleerd. Het account is niet verwijderd. Probeer het later opnieuw.",
+    "failed": "Het account kon niet worden verwijderd. Probeer het opnieuw.",
+    "manageSubscription": "Abonnement beheren"
+  },
   "settings": {
     "title": "Instellingen",
     "sectionAccount": "Account",
