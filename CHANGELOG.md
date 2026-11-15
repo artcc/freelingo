@@ -10,11 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Add permanent Premium links to desktop and mobile navigation, plus a dismissible trial-expiration notice on dashboard entry, remembered per account in the browser.
 - Offer contextual Premium continuation after completed learning activities, with a shared three-day cadence for optional invitations and immediate continuation offers when free quotas are exhausted.
+- Add specialized OpenCode reviewers for study plans, practice, conversations, access, and language isolation, with shared review and coordination guidelines.
 
 ### Changed
 
 - Explain Premium benefits, the no-card trial expiration, and subscription payment terms in Plan and subscription settings, prioritizing monthly billing unless the learner selected another plan.
 - Make trial and Premium-only quota labels actionable, and offer upgrades before the last free use with clear daily or weekly renewal information.
+- Require cancellation of subscription renewal before self-service or administrator account deletion; pending checkout or unavailable billing verification blocks deletion without ending the user's session.
 
 ### Fixed
 
@@ -24,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Distinguish exhausted voice and exercise quotas from temporary service failures, with localized user-facing errors instead of technical server messages.
 - Show trial eligibility, annual savings, comparison prices, and Premium usage terms accurately; subscription and checkout-return pages no longer imply an unverified charge.
 - Preserve voice transcripts when the free allowance runs out, and allow post-assessment voice practice to continue when the account still has subscription, trial, or free-quota access.
+- Preserve explicit administrator quota overrides when changing subscription status in the same update.
 
 ## [1.13.0] - 2026-11-14
 
