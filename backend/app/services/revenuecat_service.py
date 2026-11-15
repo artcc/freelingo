@@ -231,3 +231,41 @@ async def get_management_url(user_id: int) -> str | None:
     if not valid:
         raise RevenueCatError("RevenueCat returned an invalid management URL")
     return url
+
+
+async def has_uncanceled_subscription(user: User) -> bool:
+    """Check renewable billing, independently of the Premium access snapshot."""
+    if not settings.REVENUECAT_API_KEY:
+        raise RevenueCatError("RevenueCat configuration is incomplete")
+    info = await get_customer_info(user.id)
+    try:
+        snapshot_at = datetime.fromtimestamp(info.request_date_ms / 1000, UTC).replace(tzinfo=None)
+    except OverflowError, OSError, ValueError:
+        raise RevenueCatError("RevenueCat returned an invalid snapshot timestamp") from None
+    if user.revenuecat_synced_at is not None and snapshot_at < user.revenuecat_synced_at:
+        raise RevenueCatError("RevenueCat returned an obsolete billing snapshot")
+    # Reuse entitlement/environment validation without changing access or quotas.
+    _access_state(info)
+    sandbox = settings.REVENUECAT_ENVIRONMENT == "SANDBOX"
+    now = datetime.now(UTC)
+    for product_id, subscription in info.subscriber.subscriptions.items():
+        if subscription.is_sandbox != sandbox or subscription.unsubscribe_detected_at is not None:
+            continue
+        # Expired access does not end a store's payment recovery or future charges.
+        if subscription.billing_issues_detected_at is not None:
+            return True
+        expiration = subscription.expires_date
+        if expiration is None:
+            entitlement = next(
+                (
+                    value
+                    for value in info.subscriber.entitlements.values()
+                    if value.product_identifier == product_id
+                ),
+                None,
+            )
+            if entitlement is not None:
+                expiration = entitlement.expires_date
+        if expiration is None or expiration > now:
+            return True
+    return False

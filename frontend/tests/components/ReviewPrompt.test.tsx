@@ -132,8 +132,10 @@ describe('ReviewPrompt', () => {
   })
 
   it('does not render prompt when user already has review', async () => {
+    const onClose = vi.fn()
     mockFetchMyReview.mockResolvedValue({ has_review: true, review: { id: 1 } })
-    render(<ReviewPrompt open onClose={() => {}} />)
+    render(<ReviewPrompt open onClose={onClose} />)
+    await waitFor(() => expect(onClose).toHaveBeenCalledOnce())
     await waitFor(() =>
       expect(screen.queryByText('Rating required')).toBeNull()
     )

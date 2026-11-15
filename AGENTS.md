@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.13.0**
+**Current version: 1.13.5**
 
 ## Project
 
@@ -66,6 +66,72 @@ Use the narrowest relevant spec first:
 - Access and community: `subscriptions-freemium.instructions.md`, `feedback.instructions.md`, `reviews.instructions.md`, `whats-new.instructions.md`.
 - Contracts and operations: `database-models.instructions.md`, `services.instructions.md`, `api-endpoints.instructions.md`, `rate-limiting.instructions.md`, `docker.instructions.md`, `umami.instructions.md`.
 - Project maintenance: `testing.instructions.md`, `readme.instructions.md`, `changelog.instructions.md`, `version.md`.
+
+## Specialized OpenCode reviews
+
+Project reviewers live in `.opencode/agents/`. They inherit the parent model and use read-only
+discovery tools; shell commands, edits, external tools, and further delegation are disabled.
+
+- `study-plan-reviewer`: placement, curriculum scheduling, lessons, progression, and completion.
+- `practice-reviewer`: Reading, Listening, games, flashcards, and learning resources.
+- `conversation-reviewer`: Lingu conversations, streaming, voice, speech services, and memories.
+- `access-reviewer`: authentication, authorization, subscriptions, quotas, and rate limits.
+- `language-isolation-reviewer`: cross-language ownership, language switching, and global versus
+  language-scoped state.
+
+### Coordination
+
+- The primary agent owns implementation, review integration, and authorized validation. Delegate
+  substantive domain changes or investigations to the relevant reviewer; skip unrelated reviewers
+  and trivial edits. Use independent reviewers in parallel when multiple domains are affected.
+- Use reviewers during design when a change affects important invariants, and on the resulting
+  implementation when review can expose regressions. Do not repeatedly review unchanged code.
+- Add `access-reviewer` when authorization, entitlements, quota accounting, or rate limiting changes.
+  Add `language-isolation-reviewer` when ownership, language selection, persisted associations, or
+  language-sensitive client state changes. These reviewers cover their cross-cutting concerns;
+  the functional reviewer owns the domain behavior.
+- Give each child the goal and acceptance criteria, review mode (design, implementation, or bug
+  investigation), relevant paths, and known constraints. For change reviews, supply the comparison
+  base and relevant diff, including staged, unstaged, and untracked changes in scope. Reviewers cannot
+  obtain Git diffs themselves. Supply any existing validation results with their exact scope.
+- Child sessions start with fresh context. Do not assume they know the parent conversation, user
+  approvals, or previous findings. If essential context is missing, they must report the blocker.
+- Reviewers may read across frontend, backend, tests, and specifications to trace a complete flow.
+  Their domain is a responsibility boundary, not a restriction to one directory.
+- The primary agent must verify findings against the code, reconcile overlapping reports, and
+  distinguish new regressions from pre-existing defects. Retain responsibility for integration and
+  areas outside these domains, including public-site/SEO, infrastructure, and developer tooling.
+- If a configured reviewer is unavailable, report it and use an available general reviewer with the
+  same instructions and read-only constraints. Do not claim the configured agent ran.
+
+### Shared reviewer protocol
+
+- Read this file, the narrowest relevant domain specs, and the affected implementation and tests.
+  Agent files provide review focus; canonical specs own behavioral contracts. Read related specs
+  only when the traced flow needs them. Report disagreements between code, specs, and requested
+  behavior instead of silently choosing one as correct.
+- Trace realistic success, failure, retry, and boundary scenarios. Check callers and shared
+  consumers when a change crosses domain boundaries. Inspect relevant tests for actual assertions,
+  not just filenames. Avoid unrelated refactoring and speculative findings.
+- Report a defect only when supported by a demonstrable code path or a documented execution result.
+  Verify the triggering conditions, reachable callers, relevant guards, and actual consequence;
+  an isolated suspicious line or a hypothetical input is not sufficient evidence.
+- Distinguish static code evidence from observed runtime behavior. Never claim reproduction,
+  passing/failing tests, production impact, or provider behavior without corresponding evidence.
+  Missing tests alone do not establish a defect. Call a defect a regression only when the supplied
+  comparison establishes that the change introduced it.
+- Investigate hypotheses before reporting them. If verification requires unavailable context or
+  execution, report only the specific evidence gap and the check needed to resolve it under
+  limitations, not as a finding. Do not infer missing contracts or fill gaps with assumptions.
+- Do not edit files, execute tests or other validation, contact providers, or delegate work.
+  Recommend the smallest useful existing checks to the primary agent, using
+  `specs/testing.instructions.md`; execution still requires user authorization.
+- Respond in Spanish. Order actionable findings by severity (high, medium, low). For each, include
+  `path:line`, the failing scenario, impact, evidence, and a focused correction recommendation.
+  Include only verified defects in findings; keep missing evidence and pending checks in limitations.
+- Finish with the scope inspected, relevant test coverage read, checks recommended but not run,
+  blockers, and any cross-domain handoff. Explicitly state when no actionable findings were found;
+  a read-only review does not establish runtime correctness or passing tests.
 
 ## Pull requests and issues
 

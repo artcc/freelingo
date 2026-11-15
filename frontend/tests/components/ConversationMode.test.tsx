@@ -27,6 +27,7 @@ const mocks = vi.hoisted(() => ({
   onAudioIdle: null as (() => void) | null,
   starters: [] as string[],
   push: vi.fn(),
+  vadError: false as false | string,
 }))
 
 vi.mock('@ricky0123/vad-react', () => ({
@@ -34,7 +35,7 @@ vi.mock('@ricky0123/vad-react', () => ({
     mocks.options = options
     return {
       loading: false,
-      errored: false,
+      errored: mocks.vadError,
       start: mocks.start,
       pause: mocks.pause,
     }
@@ -77,6 +78,9 @@ vi.mock('@/components/reviews/ReviewPrompt', () => ({
   ReviewPrompt: () => null,
   getReviewPromptDismissal: () => null,
 }))
+vi.mock('@/components/billing/PaywallBanner', () => ({
+  PaywallBanner: () => <div data-testid="voice-paywall" />,
+}))
 vi.mock('@/lib/review-prompt-triggers', () => ({
   shouldShowVoiceReviewPrompt: () => false,
 }))
@@ -98,6 +102,7 @@ vi.mock('@/components/conversation/StatusIndicator', async (importOriginal) => {
 import ConversationMode from '@/components/conversation/ConversationMode'
 import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
+import { useFreemiumStore } from '@/store/freemium'
 import { mapUser } from '@/lib/mappers'
 import { float32ToWav } from '@/lib/audio'
 
@@ -196,6 +201,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   MockWebSocket.instances = []
   mocks.starters = []
+  mocks.vadError = false
   mocks.onAudioIdle = null
   mocks.getUserMedia.mockReset().mockResolvedValue(microphone().stream)
   mocks.start.mockImplementation(async () => {
@@ -218,6 +224,7 @@ beforeEach(() => {
   })
   Element.prototype.scrollIntoView = vi.fn()
   useAuthStore.setState({ accessToken: 'token', user: null })
+  useFreemiumStore.setState({ status: null, loaded: false, lastFetch: 0 })
 })
 
 afterEach(() => {
@@ -227,7 +234,538 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+describe('ConversationMode freemium reconciliation', () => {
+  const status = {
+    trial_active: false,
+    trial_ends_at: null,
+    chat_remaining: 5,
+    chat_limit: 5,
+    lessons_remaining: 3,
+    lessons_limit: 3,
+    listening_remaining: 3,
+    listening_limit: 3,
+    reading_remaining: 3,
+    reading_limit: 3,
+    games_remaining: 3,
+    games_limit: 3,
+    voice_remaining_seconds: 120,
+    voice_limit_seconds: 300,
+  }
+
+  beforeEach(() => useConfigStore.setState({ stripeEnabled: true }))
+
+  it.each([
+    { ending: 'manual', consumed: false },
+    { ending: 'server', consumed: false },
+    { ending: 'manual', consumed: true },
+    { ending: 'server', consumed: true },
+  ])(
+    'uses confirmed demo consumption after $ending closure and ordinary quota exhaustion (consumed: $consumed)',
+    async ({ ending, consumed }) => {
+      const profile = {
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: 'none',
+        assessment_voice_trial_used: false,
+      }
+      useAuthStore.getState().setUser(mapUser(profile))
+      useFreemiumStore.setState({ status, loaded: true, lastFetch: Date.now() })
+      const confirmation = deferred<unknown>()
+      mocks.apiFetch.mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () => url === '/api/auth/me' ? confirmation.promise : null,
+      }))
+      render(<ConversationMode trialMode voiceTrialToken="unused-demo" />)
+      const ws = await start()
+      act(() => {
+        useFreemiumStore.setState({
+          status: { ...status, voice_remaining_seconds: 0 },
+          lastFetch: Date.now(),
+        })
+        if (ending === 'manual') fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+        else ws.message({ type: 'session_end', reason: 'max_duration' })
+      })
+      expect(screen.queryByText('trialCtaDesc')).not.toBeInTheDocument()
+      await act(async () => confirmation.resolve({
+        ...profile, assessment_voice_trial_used: consumed,
+      }))
+      if (consumed) {
+        expect(screen.getByText('trialCtaDesc')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'startNew' })).not.toBeInTheDocument()
+      } else {
+        expect(screen.queryByText('trialCtaDesc')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('voice-paywall')).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
+        await start('startNew')
+        const warmups = mocks.apiFetch.mock.calls.filter(([url]) => url === '/api/conversation/warmup')
+        expect(warmups).toHaveLength(2)
+        expect(JSON.parse(warmups[1][1].body)).toEqual({ trial_token: 'unused-demo' })
+      }
+    }
+  )
+
+  it.each(['no-card-trial', 'subscription', 'voice-quota'] as const)(
+    'allows restarting a completed demo with %s access',
+    async (access) => {
+      const trialEndsAt = new Date(Date.now() + 86_400_000).toISOString()
+      const profile = {
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: access === 'subscription' ? 'active' : 'none',
+        freemium_trial_ends_at:
+          access === 'no-card-trial' ? trialEndsAt : null,
+      }
+      const quota = {
+        ...status,
+        trial_active: access === 'no-card-trial',
+        trial_ends_at: profile.freemium_trial_ends_at,
+        voice_remaining_seconds: access === 'voice-quota' ? 120 : 0,
+      }
+      useConfigStore.setState({ freemiumTrialEnabled: true })
+      useAuthStore.getState().setUser(mapUser(profile))
+      const sessionVersion = useAuthStore.getState().sessionVersion
+      useFreemiumStore.setState({
+        status: quota,
+        loaded: true,
+        lastFetch: Date.now(),
+      })
+      mocks.apiFetch.mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () =>
+          url === '/api/auth/me'
+            ? profile
+            : url === '/api/freemium/status'
+              ? quota
+              : null,
+      }))
+      render(<ConversationMode trialMode voiceTrialToken="demo-token" />)
+      const ws = await start()
+      act(() => {
+        ws.message({
+          type: 'transcript',
+          role: 'user',
+          text: 'I would like a cup of tea.',
+          turn_id: 1,
+        })
+        ws.message({
+          type: 'transcript',
+          role: 'assistant',
+          text: 'Of course. Would you like milk?',
+          final: true,
+          turn_id: 1,
+        })
+        ws.message({ type: 'turn_complete', turn_id: 1 })
+      })
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+      )
+      expect(ws.close).toHaveBeenCalledOnce()
+      expect(screen.getByText('I would like a cup of tea.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Of course. Would you like milk?')
+      ).toBeInTheDocument()
+      expect(screen.queryByTestId('voice-paywall')).toBeNull()
+      expect(screen.queryByText('trialCtaDesc')).toBeNull()
+      expect(screen.queryByText('planMonthly')).toBeNull()
+      expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
+
+      const next = await start('startNew')
+      expect(MockWebSocket.instances).toHaveLength(2)
+      expect(next.close).not.toHaveBeenCalled()
+      expect(screen.getByRole('button', { name: 'stop' })).toBeEnabled()
+      expect(screen.queryByText('I would like a cup of tea.')).toBeNull()
+      expect(screen.queryByText('Of course. Would you like milk?')).toBeNull()
+      expect(useAuthStore.getState().sessionVersion).toBe(sessionVersion)
+    }
+  )
+
+  it.each(['manual', 'server'] as const)(
+    'preserves a completed voice result when quota is exhausted after %s closure',
+    async (ending) => {
+      const user = mapUser({
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: 'none',
+      })
+      useAuthStore.getState().setUser(user)
+      useFreemiumStore.setState({
+        status,
+        loaded: true,
+        lastFetch: Date.now(),
+      })
+      render(<ConversationMode />)
+      const ws = await start()
+      act(() => {
+        ws.message({
+          type: 'transcript',
+          role: 'user',
+          text: 'I would like a cup of tea.',
+          turn_id: 1,
+        })
+        ws.message({
+          type: 'transcript',
+          role: 'assistant',
+          text: 'Of course. Would you like milk?',
+          final: true,
+          turn_id: 1,
+        })
+        ws.message({ type: 'turn_complete', turn_id: 1 })
+        useFreemiumStore.setState({
+          status: { ...status, voice_remaining_seconds: 0 },
+          lastFetch: Date.now(),
+        })
+      })
+      expect(ws.close).not.toHaveBeenCalled()
+      expect(screen.getByRole('button', { name: 'stop' })).toBeEnabled()
+      expect(
+        screen.queryByRole('complementary', { name: 'resultTitle' })
+      ).toBeNull()
+
+      act(() => {
+        if (ending === 'manual') {
+          fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+        } else {
+          ws.message({ type: 'session_end', reason: 'max_duration' })
+        }
+      })
+      expect(ws.close).toHaveBeenCalledOnce()
+      expect(screen.getByText('I would like a cup of tea.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Of course. Would you like milk?')
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('complementary', { name: 'resultTitle' })
+      ).toHaveTextContent('exhaustedTitle')
+      const transcriptScroller = screen.getByText('I would like a cup of tea.').closest('.overflow-y-auto')
+      expect(transcriptScroller).not.toBeNull()
+      expect(transcriptScroller).toContainElement(
+        screen.getByRole('complementary', { name: 'resultTitle' })
+      )
+      expect(
+        screen.getByRole('link', { name: 'continuePremium' })
+      ).toHaveAttribute('href', '/settings#plan')
+      expect(screen.queryByTestId('voice-paywall')).toBeNull()
+      expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
+
+      act(() => {
+        useAuthStore.getState().startSession('replacement-token')
+        useAuthStore.getState().setUser(user)
+      })
+      expect(screen.queryByText('I would like a cup of tea.')).toBeNull()
+      expect(screen.queryByText('Of course. Would you like milk?')).toBeNull()
+      expect(
+        screen.queryByRole('complementary', { name: 'resultTitle' })
+      ).toBeNull()
+    }
+  )
+
+  it.each(['manual', 'server', 'transport'] as const)(
+    'reconciles delayed persisted usage after %s closure without polling indefinitely',
+    async (ending) => {
+      let persisted = false
+      const activity = vi.fn()
+      mocks.apiFetch.mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () =>
+          url === '/api/freemium/status'
+            ? { ...status, voice_remaining_seconds: persisted ? 0 : 120 }
+            : null,
+      }))
+      render(<ConversationMode onSessionActiveChange={activity} />)
+      const ws = await start()
+      expect(activity).toHaveBeenLastCalledWith(true)
+      vi.useFakeTimers()
+      mocks.apiFetch.mockClear()
+      act(() => {
+        if (ending === 'manual')
+          fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+        else if (ending === 'server')
+          ws.message({ type: 'session_end', reason: 'max_duration' })
+        else ws.onclose?.({ code: 1006, reason: '' })
+      })
+      expect(activity).toHaveBeenLastCalledWith(false)
+      expect(mocks.apiFetch).not.toHaveBeenCalled()
+      await act(async () => vi.advanceTimersByTimeAsync(1500))
+      expect(useFreemiumStore.getState().status?.voice_remaining_seconds).toBe(
+        120
+      )
+      persisted = true
+      await act(async () => vi.advanceTimersByTimeAsync(3500))
+      expect(useFreemiumStore.getState().status?.voice_remaining_seconds).toBe(
+        0
+      )
+      await act(async () => vi.advanceTimersByTimeAsync(60_000))
+      expect(
+        mocks.apiFetch.mock.calls.filter(
+          ([url]) => url === '/api/freemium/status'
+        )
+      ).toHaveLength(2)
+      expect(
+        mocks.apiFetch.mock.calls.filter(([url]) => url === '/api/auth/quota')
+      ).toHaveLength(2)
+    }
+  )
+
+  it.each(['unmount', 'session', 'restart'] as const)(
+    'discards pending reconciliation after %s',
+    async (change) => {
+      const view = render(<ConversationMode />)
+      await start()
+      vi.useFakeTimers()
+      fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+      if (change === 'unmount') view.unmount()
+      else if (change === 'session')
+        act(() => useAuthStore.getState().startSession('new-session'))
+      else {
+        await act(async () =>
+          fireEvent.click(screen.getByRole('button', { name: 'startNew' }))
+        )
+      }
+      await act(async () => vi.advanceTimersByTimeAsync(10_000))
+      expect(
+        mocks.apiFetch.mock.calls.filter(
+          ([url]) => url === '/api/freemium/status'
+        )
+      ).toHaveLength(0)
+    }
+  )
+
+  it.each([
+    ['freemium_exhausted', undefined, false],
+    ['freemium_exhausted', 7, false],
+    ['freemium_exhausted', undefined, true],
+    ['freemium_unavailable', undefined, false],
+    ['freemium_unavailable', 7, false],
+    ['freemium_unavailable', undefined, true],
+    ['subscription_required', undefined, false],
+  ] as const)(
+    'handles %s in warmup (lesson: %s, demo: %s) without mislabelling access as a connection failure',
+    async (reason, lessonId, trialMode) => {
+      vi.spyOn(console, 'error').mockImplementation(() => {})
+      const mic = microphone()
+      mocks.getUserMedia.mockResolvedValue(mic.stream)
+      mocks.apiFetch.mockImplementation(async (url: string) =>
+        url === '/api/conversation/warmup'
+          ? new Response(
+              JSON.stringify({
+                detail: 'subscription_required',
+                message: 'Untranslated access failure',
+                ...(reason === 'subscription_required'
+                  ? {}
+                  : { reason, feature: 'voice', remaining: 0, limit: 300 }),
+              }),
+              { status: 402 }
+            )
+          : { ok: false }
+      )
+      render(
+        <ConversationMode
+          lessonId={lessonId}
+          trialMode={trialMode}
+          voiceTrialToken={trialMode ? 'demo-token' : undefined}
+          freemiumVoiceRemaining={2}
+          freemiumVoiceLimit={5}
+        />
+      )
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'start' }))
+      )
+      expect(MockWebSocket.instances).toHaveLength(0)
+      expect(mic.stop).toHaveBeenCalledOnce()
+      expect(screen.queryByText(/errorConnection/)).toBeNull()
+      expect(screen.queryByText(/Untranslated access failure/)).toBeNull()
+      expect(mocks.apiFetch).toHaveBeenCalledWith('/api/freemium/status')
+      if (reason === 'freemium_exhausted') {
+        expect(screen.getByTestId('voice-paywall')).toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
+      } else {
+        expect(screen.queryByTestId('voice-paywall')).toBeNull()
+        expect(screen.getByText('✕ errorMessage')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: 'startNew' })
+        ).toBeInTheDocument()
+      }
+    }
+  )
+
+  it('ignores an old 402 body after the next attempt starts', async () => {
+    const body = deferred<unknown>()
+    const decode = vi.fn(() => body.promise)
+    mocks.apiFetch.mockImplementation(async (url: string) =>
+      url === '/api/conversation/warmup'
+        ? { ok: false, status: 402, json: decode }
+        : { ok: true, json: async () => null }
+    )
+    render(<ConversationMode />)
+    await act(async () =>
+      fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    )
+    expect(decode).toHaveBeenCalledOnce()
+    fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+    mocks.apiFetch.mockResolvedValue({ ok: true, json: async () => null })
+    const ws = await start('startNew')
+    await act(async () =>
+      body.resolve({
+        detail: 'subscription_required',
+        reason: 'freemium_exhausted',
+        feature: 'voice',
+      })
+    )
+    expect(ws.close).not.toHaveBeenCalled()
+    expect(screen.queryByTestId('voice-paywall')).toBeNull()
+    expect(
+      mocks.apiFetch.mock.calls.filter(
+        ([url]) => url === '/api/freemium/status'
+      )
+    ).toHaveLength(0)
+  })
+
+  it('does not infer exhaustion from a bare legacy string response', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    mocks.apiFetch.mockImplementation(async (url: string) =>
+      url === '/api/conversation/warmup'
+        ? new Response(JSON.stringify('subscription_required'), { status: 402 })
+        : { ok: false }
+    )
+    render(<ConversationMode />)
+    await act(async () =>
+      fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    )
+    expect(screen.getByText('✕ errorMessage')).toBeInTheDocument()
+    expect(screen.queryByTestId('voice-paywall')).toBeNull()
+    expect(screen.queryByText(/subscription_required/)).toBeNull()
+  })
+
+  it.each([undefined, 'freemium_exhausted', 'freemium_unavailable'] as const)(
+    'handles subscription_required WebSocket denial with reason %s',
+    async (reason) => {
+      render(<ConversationMode />)
+      const ws = await start()
+      await act(async () =>
+        ws.message({
+          type: 'error',
+          code: 'subscription_required',
+          message: 'Untranslated access failure',
+          ...(reason ? { reason, feature: 'voice' } : {}),
+        })
+      )
+      expect(mocks.apiFetch).toHaveBeenCalledWith('/api/freemium/status')
+      expect(screen.queryByText(/Untranslated access failure/)).toBeNull()
+      if (reason === 'freemium_exhausted') {
+        expect(screen.getByTestId('voice-paywall')).toBeInTheDocument()
+        expect(screen.queryByText('✕ errorMessage')).toBeNull()
+      } else {
+        expect(screen.getByText('✕ errorMessage')).toBeInTheDocument()
+        expect(screen.queryByTestId('voice-paywall')).toBeNull()
+      }
+      expect(ws.close).toHaveBeenCalledOnce()
+    }
+  )
+
+  it.each(['balance', 'upgrade', 'stripe-disabled'] as const)(
+    'recovers a confirmed denial after %s in the same mounted component',
+    async (recovery) => {
+      vi.spyOn(console, 'error').mockImplementation(() => {})
+      const user = mapUser({
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: 'none',
+      })
+      useAuthStore.setState({ user })
+      useFreemiumStore.setState({
+        status,
+        loaded: true,
+        lastFetch: Date.now(),
+      })
+      mocks.apiFetch.mockImplementation(async (url: string) =>
+        url === '/api/conversation/warmup'
+          ? new Response(
+              JSON.stringify({
+                detail: 'subscription_required',
+                reason: 'freemium_exhausted',
+                feature: 'voice',
+                remaining: 0,
+                limit: 300,
+              }),
+              { status: 402 }
+            )
+          : { ok: false }
+      )
+      render(<ConversationMode />)
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'start' }))
+      )
+      expect(screen.getByTestId('voice-paywall')).toBeInTheDocument()
+      act(() => useAuthStore.getState().setUser({ ...user, displayName: 'New' }))
+      expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
+      act(() => {
+        if (recovery === 'balance') {
+          useFreemiumStore.setState({
+            status: { ...status },
+            lastFetch: Date.now(),
+          })
+        } else if (recovery === 'upgrade') {
+          useAuthStore.getState().setUser({
+            ...user,
+            subscription_status: 'active',
+          })
+        } else {
+          useConfigStore.setState({ stripeEnabled: false })
+        }
+      })
+      expect(screen.queryByTestId('voice-paywall')).toBeNull()
+      mocks.apiFetch.mockResolvedValue({ ok: true, json: async () => null })
+      const ws = await start('startNew')
+      act(() =>
+        useFreemiumStore.setState({
+          status: { ...status, voice_remaining_seconds: 0 },
+          lastFetch: Date.now(),
+        })
+      )
+      expect(screen.getByRole('button', { name: 'stop' })).toBeInTheDocument()
+      expect(ws.close).not.toHaveBeenCalled()
+    }
+  )
+
+  it.each(['session', 'unmount'] as const)(
+    'discards a delayed general-quota body after %s',
+    async (change) => {
+      const body = deferred<unknown>()
+      const decode = vi.fn(() => body.promise)
+      mocks.apiFetch.mockResolvedValueOnce({ ok: true, json: decode })
+      const view = render(<ConversationMode />)
+      await waitFor(() => expect(decode).toHaveBeenCalledOnce())
+      const signal = mocks.apiFetch.mock.calls[0][1].signal as AbortSignal
+      if (change === 'unmount') view.unmount()
+      else act(() => useAuthStore.getState().startSession('new-session'))
+      expect(signal.aborted).toBe(true)
+      await act(async () =>
+        body.resolve({
+          sessions_unlimited: true,
+          time_unlimited: true,
+          tokens_unlimited: true,
+        })
+      )
+      expect(screen.queryByText('● ∞')).toBeNull()
+    }
+  )
+})
+
 describe('ConversationMode session lifecycle', () => {
+  it.each([
+    ['ONNX runtime initialization failed: internal path /vad/model', 'errorVadInit'],
+    ['NotAllowedError: Permission denied by browser', 'errorMic'],
+  ])('localizes VAD initialization failure %s', (failure, key) => {
+    mocks.vadError = failure
+    render(<ConversationMode />)
+    expect(screen.getByText(`✕ ${key}`)).toBeInTheDocument()
+    expect(screen.queryByText(new RegExp(failure))).toBeNull()
+  })
+
   describe('authentication ownership', () => {
     const originalUser = mapUser({
       id: 1,
@@ -726,16 +1264,30 @@ describe('ConversationMode session lifecycle', () => {
         display_name: 'Learner',
         role: 'user',
         subscription_status: 'none',
+        assessment_voice_trial_used: true,
       }
+      useConfigStore.setState({ stripeEnabled: true })
+      useAuthStore.getState().setUser(mapUser({
+        ...profile, assessment_voice_trial_used: false,
+      }))
       mocks.apiFetch.mockImplementation(async (url: string) => ({
         ok: true,
         json: async () => (url === '/api/auth/me' ? profile : null),
       }))
       const view = render(<ConversationMode trialMode />)
-      await start()
+      const ws = await start()
+      act(() => {
+        ws.message({ type: 'transcript', role: 'user', text: 'My practice' })
+        ws.message({
+          type: 'transcript',
+          role: 'assistant',
+          text: 'Your feedback',
+          final: true,
+        })
+      })
       fireEvent.click(screen.getByRole('button', { name: 'stop' }))
       await waitFor(() =>
-        expect(useAuthStore.getState().user?.username).toBe('learner')
+        expect(useAuthStore.getState().user?.assessment_voice_trial_used).toBe(true)
       )
       let finish!: (body: unknown) => void
       const body = new Promise((resolve) => {
@@ -759,7 +1311,10 @@ describe('ConversationMode session lifecycle', () => {
       )
       if (action === 'current') {
         expect(useAuthStore.getState().user?.subscription_status).toBe('active')
-        expect(mocks.push).toHaveBeenCalledWith('/dashboard')
+        expect(mocks.push).not.toHaveBeenCalled()
+        expect(screen.getByText('Your feedback')).toBeInTheDocument()
+        expect(screen.queryByText('planMonthly')).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
       } else {
         expect(useAuthStore.getState().user?.subscription_status).not.toBe(
           'active'
@@ -1269,7 +1824,11 @@ describe('ConversationMode session lifecycle', () => {
           pending.reject(new TypeError('Failed to fetch'))
         else pending.resolve({ ok: false, status: failure as number })
       })
-      expect(screen.getByText('✕ errorConnection')).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          failure === 402 ? '✕ errorMessage' : '✕ errorConnection'
+        )
+      ).toBeInTheDocument()
       expect(log).toHaveBeenCalledWith(
         expect.stringContaining(
           failure === 'network' ? 'Failed to fetch' : `"status":${failure}`
@@ -1437,6 +1996,7 @@ describe('ConversationMode session lifecycle', () => {
     ['tts_failed', 'errorSpeech'],
     ['auth_failed', 'errorUnauthorized'],
     ['services_disabled', 'errorServicesDisabled'],
+    ['maintenance_mode', 'description'],
     ['quota_exceeded_sessions', 'quotaExceededSessions'],
     ['quota_exceeded_time', 'quotaExceededTime'],
     ['quota_exceeded_tokens', 'quotaExceededTokens'],

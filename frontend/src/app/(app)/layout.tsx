@@ -9,6 +9,8 @@ import { useConfigStore } from '@/store/config'
 import { apiFetch, requestAccessToken } from '@/lib/api'
 import { mapUser } from '@/lib/mappers'
 import { useLogout } from '@/hooks/useLogout'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
+import { useFreemiumStatusRefresh } from '@/hooks/useFreemiumStatusRefresh'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { ContactFormModal } from '@/components/ui/contact-form-modal'
 import { LoadingBar } from '@/components/ui/loading-bar'
@@ -32,6 +34,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   const tNav = useTranslations('nav')
   const tCommon = useTranslations('common')
   const tBilling = useTranslations('billing')
+  const tPremium = useTranslations('premiumOffer')
   const pathname = usePathname()
 
   const mainNavItems = [
@@ -82,8 +85,11 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     '/conversation',
   ])
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
+  const configLoaded = useConfigStore((s) => s.loaded)
   const showPremiumBadge = stripeEnabled && !isSubscribed(user, stripeEnabled)
-  const [trialDaysLeft, setTrialDaysLeft] = useState(0)
+  const showPremiumAction = configLoaded && !!user && showPremiumBadge
+  const { trialDaysLeft } = useTrialStatus()
+  useFreemiumStatusRefresh(!initializing)
 
   async function handleResendVerification() {
     const res = await apiFetch('/api/auth/resend-verification', {
@@ -144,48 +150,6 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    // Stripe trial countdown
-    if (
-      user?.subscription_status === 'trialing' &&
-      user?.subscription_ends_at &&
-      stripeEnabled
-    ) {
-      const days = Math.max(
-        1,
-        Math.ceil(
-          (new Date(user.subscription_ends_at).getTime() - Date.now()) /
-            (1000 * 60 * 60 * 24)
-        )
-      )
-      setTrialDaysLeft(days)
-      return
-    }
-    // Freemium trial countdown
-    if (
-      user?.freemium_trial_ends_at &&
-      stripeEnabled &&
-      user?.subscription_status !== 'active' &&
-      user?.subscription_status !== 'trialing'
-    ) {
-      const end = new Date(user.freemium_trial_ends_at)
-      if (end > new Date()) {
-        const days = Math.max(
-          1,
-          Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-        )
-        setTrialDaysLeft(days)
-        return
-      }
-    }
-    setTrialDaysLeft(0)
-  }, [
-    user?.subscription_status,
-    user?.subscription_ends_at,
-    user?.freemium_trial_ends_at,
-    stripeEnabled,
-  ])
-
-  useEffect(() => {
     if (initializing) return
 
     async function loadFeedbackUnreadCount() {
@@ -240,6 +204,15 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         <div className="border-fl-border border-b">
           <LanguageSwitcher />
         </div>
+
+        {showPremiumAction && (
+          <Link
+            href="/settings#plan"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 focus-visible:outline-fl-accent mx-4 mt-4 px-3 py-2 text-center font-sans text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {tPremium('viewPremium')}
+          </Link>
+        )}
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-4">
@@ -389,14 +362,17 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 @{user?.username?.toLowerCase()}
               </p>
               {trialDaysLeft > 0 && (
-                <p className="text-fl-label text-fl-accent truncate font-mono text-xs">
+                <Link
+                  href="/settings#plan"
+                  className="text-fl-label text-fl-accent focus-visible:outline-fl-accent block truncate font-mono text-xs underline-offset-4 hover:underline focus-visible:outline-2"
+                >
                   ★ {tBilling('trialDays', { days: trialDaysLeft })}
-                </p>
+                </Link>
               )}
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.13.0
+            v1.13.5
           </p>
           <button
             onClick={() => setContactOpen(true)}
@@ -415,10 +391,20 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
 
       {/* Mobile top bar */}
       <div className="border-fl-border bg-fl-bg fixed top-0 right-0 left-0 z-50 border-b md:hidden">
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
           <span className="text-fl-fg font-code text-xs font-bold tracking-widest uppercase">
             FreeLingo
           </span>
+          {showPremiumAction && (
+            <Link
+              href="/settings#plan"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label={tPremium('viewPremium')}
+              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 focus-visible:outline-fl-accent ml-auto px-3 py-1 font-sans text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {tPremium('navLabel')}
+            </Link>
+          )}
           <button
             onClick={() => setMobileMenuOpen((o) => !o)}
             className="text-fl-muted-2 hover:text-fl-fg p-1 font-mono transition-colors"
@@ -587,12 +573,16 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
               {trialDaysLeft > 0 && (
-                <p className="text-fl-label text-fl-accent mb-2 font-mono text-xs">
+                <Link
+                  href="/settings#plan"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-fl-label text-fl-accent focus-visible:outline-fl-accent mb-2 block font-mono text-xs underline-offset-4 hover:underline focus-visible:outline-2"
+                >
                   ★ {tBilling('trialDays', { days: trialDaysLeft })}
-                </p>
+                </Link>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.13.0
+                v1.13.5
               </p>
               <button
                 onClick={() => {

@@ -151,6 +151,30 @@ describe('exercise generation recovery', () => {
     }
   )
 
+  it.each(['reading', 'listening'] as const)(
+    'distinguishes quota exhaustion from outages without retrying %s generation',
+    async (feature) => {
+      for (const [reason, code] of [
+        ['freemium_exhausted', 'exhausted'],
+        ['freemium_unavailable', 'unavailable'],
+      ]) {
+        api.mockReset()
+        api
+          .mockResolvedValueOnce(response(idle))
+          .mockResolvedValueOnce(response({ detail: { reason, feature } }, 402))
+        await expect(start(true, feature)).rejects.toMatchObject({ code })
+        expect(api).toHaveBeenCalledTimes(2)
+        expect(api.mock.calls[1][1]?.method).toBe('POST')
+      }
+    }
+  )
+
+  it('reports Premium-only read access as exhaustion without starting generation', async () => {
+    api.mockResolvedValueOnce(response({ detail: 'subscription_required' }, 402))
+    await expect(start(true)).rejects.toMatchObject({ code: 'exhausted' })
+    expect(api).toHaveBeenCalledTimes(1)
+  })
+
   it('makes a final lookup before declaring a deadline exceeded', async () => {
     api
       .mockResolvedValueOnce(

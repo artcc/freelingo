@@ -11,49 +11,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
   apiFetch: vi.fn(),
-  fetchFreemium: vi.fn(),
-  decrementFreemium: vi.fn(),
   dismissTooltip: vi.fn(),
   handleTextSelection: vi.fn(),
   audioPlayer: vi.fn(),
-  sessionVersion: 0,
-  languageCode: 'en-GB',
 }))
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
-vi.mock('@/store/auth', () => ({
-  useAuthStore: (selector: (state: object) => unknown) =>
-    selector({
-      sessionVersion: mocks.sessionVersion,
-      user: {
-        username: 'learner',
-        displayName: 'Learner',
-        avatarUrl: null,
-        subscription_status: 'active',
-      },
-    }),
-  isSubscribed: () => true,
-  isFreemiumTrialActive: () => false,
-}))
-vi.mock('@/store/language', () => ({
-  useLanguageStore: (selector: (state: object) => unknown) =>
-    selector({ activeLanguage: { code: mocks.languageCode } }),
-}))
-vi.mock('@/store/config', () => ({
-  useConfigStore: (selector: (state: object) => unknown) =>
-    selector({ stripeEnabled: false }),
-}))
-vi.mock('@/store/freemium', () => ({
-  useFreemiumStore: (selector: (state: object) => unknown) =>
-    selector({
-      status: null,
-      fetchStatus: mocks.fetchFreemium,
-      decrement: mocks.decrementFreemium,
-    }),
-}))
 vi.mock('@/components/billing/MaintenanceBanner', () => ({
   MaintenanceGate: ({ children }: { children: ReactNode }) => children,
 }))
@@ -113,6 +79,25 @@ vi.mock('@/components/AuthAvatarImage', () => ({
 }))
 
 import ChatPage from '@/app/(app)/chat/page'
+import { getLanguageByCode } from '@/lib/target-languages'
+import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
+import { useFreemiumStore } from '@/store/freemium'
+import { useLanguageStore } from '@/store/language'
+
+function startSession(id: number) {
+  useAuthStore.getState().startSession(`test-session-${id}`)
+  useAuthStore.getState().setUser({
+    id,
+    username: 'learner',
+    displayName: 'Learner',
+    role: 'user',
+    avatar: null,
+    subscription_status: 'active',
+    conversation_max_duration: 300,
+    conversation_inactivity_timeout: 30,
+  })
+}
 
 function jsonResponse(data: unknown) {
   return new Response(JSON.stringify(data), {
@@ -187,11 +172,18 @@ describe('chat memory stream', () => {
   let chatEvents: Array<Record<string, unknown>>
 
   beforeEach(() => {
-    mocks.sessionVersion = 0
-    mocks.languageCode = 'en-GB'
+    useAuthStore.setState(useAuthStore.getInitialState(), true)
+    useConfigStore.setState(useConfigStore.getInitialState(), true)
+    useFreemiumStore.setState(useFreemiumStore.getInitialState(), true)
+    useLanguageStore.setState(
+      {
+        ...useLanguageStore.getInitialState(),
+        activeLanguage: getLanguageByCode('en-GB') ?? null,
+      },
+      true
+    )
+    startSession(1)
     mocks.apiFetch.mockReset()
-    mocks.fetchFreemium.mockReset()
-    mocks.decrementFreemium.mockReset()
     mocks.dismissTooltip.mockReset()
     mocks.handleTextSelection.mockReset()
     mocks.audioPlayer.mockReset()
@@ -380,16 +372,22 @@ describe('chat memory stream', () => {
           ? Promise.resolve(jsonResponse(conversations))
           : old.promise
       )
-      const view = render(<ChatPage />)
+      render(<ChatPage />)
       await screen.findByText('Conversation B')
       const oldSignal = mocks.apiFetch.mock.calls.find(([path]) =>
         path.includes('/7/')
       )![1].signal as AbortSignal
       const current = deferred<Response>()
       mocks.apiFetch.mockReturnValue(current.promise)
-      if (scope === 'language') mocks.languageCode = 'de-DE'
-      else mocks.sessionVersion += 1
-      view.rerender(<ChatPage />)
+      act(() => {
+        if (scope === 'language') {
+          useLanguageStore.setState({
+            activeLanguage: getLanguageByCode('de-DE') ?? null,
+          })
+        } else {
+          startSession(2)
+        }
+      })
       expect(oldSignal.aborted).toBe(true)
       expect(screen.queryByText('Conversation B')).not.toBeInTheDocument()
       await act(async () => {
@@ -457,7 +455,7 @@ describe('chat memory stream', () => {
     mocks.apiFetch.mockImplementation((path: string) =>
       Promise.resolve(path === '/api/chat' ? stream.response : jsonResponse([]))
     )
-    const view = render(<ChatPage />)
+    render(<ChatPage />)
     const input = screen.getByPlaceholderText('placeholder')
     await waitFor(() => expect(input).not.toBeDisabled())
     fireEvent.change(input, { target: { value: 'Hello' } })
@@ -471,8 +469,7 @@ describe('chat memory stream', () => {
     const signal = mocks.apiFetch.mock.calls.find(
       ([path]) => path === '/api/chat'
     )![1].signal as AbortSignal
-    mocks.sessionVersion += 1
-    view.rerender(<ChatPage />)
+    act(() => startSession(2))
     expect(signal.aborted).toBe(true)
     await act(async () => {
       stream.enqueue({

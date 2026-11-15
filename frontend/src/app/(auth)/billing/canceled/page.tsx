@@ -27,7 +27,7 @@ export default function BillingCanceledPage() {
             {t('canceledCtaDashboard')}
           </Link>
           <Link
-            href="/settings"
+            href="/settings#plan"
             className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 block border py-3 font-mono text-xs tracking-widest uppercase transition-colors"
           >
             {t('canceledCtaSettings')}

@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useFreemiumStore } from '@/store/freemium'
-import { useAuthStore, isSubscribed, isFreemiumTrialActive } from '@/store/auth'
+import { useAuthStore, isSubscribed } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 
 interface FreemiumQuotaBannerProps {
   feature: 'chat' | 'lessons' | 'listening' | 'reading' | 'voice' | 'games'
@@ -16,23 +17,12 @@ export function FreemiumQuotaBanner({
   className = '',
 }: FreemiumQuotaBannerProps) {
   const t = useTranslations('freemium')
+  const tPremium = useTranslations('premiumOffer')
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const status = useFreemiumStore((s) => s.status)
-  const [trialDaysLeft, setTrialDaysLeft] = useState(0)
-
-  const trial = isFreemiumTrialActive(user, stripeEnabled)
-
-  useEffect(() => {
-    if (trial && user?.freemium_trial_ends_at) {
-      const endsAt = new Date(user.freemium_trial_ends_at)
-      const days = Math.max(
-        1,
-        Math.ceil((endsAt.getTime() - Date.now()) / 86400000)
-      )
-      setTrialDaysLeft(days)
-    }
-  }, [trial, user?.freemium_trial_ends_at])
+  const { freemiumTrialActive: trial, freemiumTrialDaysLeft: trialDaysLeft } =
+    useTrialStatus()
 
   if (!stripeEnabled) return null
   if (isSubscribed(user, stripeEnabled)) return null
@@ -45,9 +35,12 @@ export function FreemiumQuotaBanner({
         <span className="text-fl-muted-2">
           ★ {t('trialDaysLeft', { days: trialDaysLeft })}
         </span>
-        <span className="text-fl-accent tracking-widest uppercase">
+        <Link
+          href="/settings#plan"
+          className="text-fl-accent focus-visible:outline-fl-accent tracking-widest uppercase underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {t('trialUnlimited')}
-        </span>
+        </Link>
       </div>
     )
   }
@@ -100,19 +93,22 @@ export function FreemiumQuotaBanner({
         className={`border-fl-border bg-fl-surface flex items-center justify-between border px-3 py-2 font-mono text-xs ${className}`}
       >
         <span className="text-fl-muted-2">{info.label}</span>
-        <span className="text-fl-accent tracking-widest uppercase">
+        <Link
+          href="/settings#plan"
+          className="text-fl-accent focus-visible:outline-fl-accent tracking-widest uppercase underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {t('requiresSubscription')}
-        </span>
+        </Link>
       </div>
     )
   }
 
   const pct = info.limit > 0 ? (info.remaining / info.limit) * 100 : 100
-  const low = pct <= 25
+  const low = info.remaining <= 1 || pct <= 25
 
   return (
     <div
-      className={`border-fl-border bg-fl-surface flex items-center justify-between border px-3 py-2 font-mono text-xs ${className}`}
+      className={`border-fl-border bg-fl-surface flex flex-wrap items-center justify-between gap-2 border px-3 py-2 font-mono text-xs ${className}`}
     >
       <span className="text-fl-muted-2">
         {info.label}:{' '}
@@ -121,8 +117,22 @@ export function FreemiumQuotaBanner({
         </span>
       </span>
       {low && (
-        <span className="text-fl-accent tracking-widest uppercase">
+        <Link
+          href="/settings#plan"
+          className="text-fl-accent focus-visible:outline-fl-accent tracking-widest uppercase underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {t('freeLimit')}
+        </Link>
+      )}
+      {low && (
+        <span className="text-fl-muted-2 w-full font-sans text-xs leading-relaxed">
+          {tPremium(
+            feature === 'voice' ||
+              feature === 'listening' ||
+              feature === 'reading'
+              ? 'weeklyReset'
+              : 'dailyReset'
+          )}
         </span>
       )}
     </div>

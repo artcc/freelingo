@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const apiFetchMock = vi.fn()
 
@@ -28,6 +28,7 @@ const status = {
 }
 
 describe('freemium store', () => {
+  afterEach(() => vi.useRealTimers())
   beforeEach(() => {
     apiFetchMock.mockReset()
     useAuthStore.getState().startSession('account-a')
@@ -39,6 +40,50 @@ describe('freemium store', () => {
 
     await useFreemiumStore.getState().fetchStatus()
 
+    expect(apiFetchMock).not.toHaveBeenCalled()
+  })
+
+  it('bypasses the TTL after UTC midnight', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime('2026-11-16T00:00:00Z')
+    useFreemiumStore.setState({
+      status, loaded: true, lastFetch: Date.now() - 1_000,
+    })
+    apiFetchMock.mockResolvedValue({ ok: true, json: async () => status })
+    await useFreemiumStore.getState().fetchStatus()
+    expect(apiFetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('bypasses the TTL when a cached trial expires', async () => {
+    useFreemiumStore.setState({
+      status: {
+        ...status,
+        trial_active: true,
+        trial_ends_at: new Date(Date.now() - 500).toISOString(),
+      },
+      loaded: true,
+      lastFetch: Date.now() - 1_000,
+    })
+    apiFetchMock.mockResolvedValue({ ok: true, json: async () => status })
+    await useFreemiumStore.getState().fetchStatus()
+    expect(apiFetchMock).toHaveBeenCalledTimes(1)
+    expect(useFreemiumStore.getState().status?.trial_active).toBe(false)
+  })
+
+  it('shares non-forced requests from concurrent mounts and focus events', async () => {
+    let finish!: (response: unknown) => void
+    apiFetchMock.mockReturnValue(new Promise((resolve) => { finish = resolve }))
+    const first = useFreemiumStore.getState().fetchStatus()
+    const second = useFreemiumStore.getState().fetchStatus()
+    expect(apiFetchMock).toHaveBeenCalledTimes(1)
+    finish({ ok: true, json: async () => status })
+    await Promise.all([first, second])
+    expect(useFreemiumStore.getState().status).toEqual(status)
+  })
+
+  it('does not start a quota request after logout', async () => {
+    useAuthStore.getState().logout()
+    await useFreemiumStore.getState().fetchStatus(true)
     expect(apiFetchMock).not.toHaveBeenCalled()
   })
 

@@ -147,6 +147,10 @@ items and the pipeline starts with the last 10 accepted messages.
 - `session_end`: maximum-duration or inactivity termination.
 - `error`: code, optional message, and optional turn ID.
 
+Voice-access errors retain `code=subscription_required` and carry additive reason/feature metadata;
+quota balance fields are present only when the check returned them. Warmup preserves its legacy
+HTTP detail string. Exact envelopes and units belong to `api-endpoints.instructions.md`.
+
 All backend sends share one lock so pipeline work, timeout watchers, and close operations do not write
 concurrently.
 
@@ -333,9 +337,16 @@ durable demo right is unused. Redis stores it for 24 hours and the configured du
 300 seconds. It can be regenerated while unused.
 
 Because ordinary freemium access precedes the demo, a supplied token is not consumed while a
-freemium trial or voice balance still grants access. When the demo path is selected, its token is
-deleted and `assessment_voice_trial_used` is committed as the WebSocket starts. The token payload's
-plan and language are not currently authoritative for session resolution.
+freemium trial or voice balance still grants access. The atomic account-wide claim, credential
+consumption, and rollback rules are owned by `subscriptions-freemium.instructions.md`
+(Post-assessment voice demo). Startup cannot create a conversation after a failed claim; its error
+frame and close code are defined in `api-endpoints.instructions.md`. The token payload's plan and
+language are not currently authoritative for session resolution.
+
+The demo UI derives consumption from the refreshed profile's `assessment_voice_trial_used`, not
+merely from ending a session entered through the assessment route. An earlier subscription/trial/quota
+access path therefore leaves the unused demo available. Ordinary access can still permit restarting
+after the demo has been consumed.
 
 General user token, daily/weekly minute, and weekly session quotas still apply to all voice access
 modes. Zero means unlimited for these general quotas. The effective maximum duration is reduced by
@@ -345,6 +356,15 @@ than on every turn.
 Weekly session usage is recorded during authorization. Elapsed voice seconds are recorded once
 during pipeline cleanup; freemium voice seconds are added only when freemium quota was the effective
 access path. Recording failures do not surface to the user.
+
+The browser refreshes general quotas and, when billing is enabled, freemium status after socket-backed
+session cleanup, with bounded delayed reads at 1.5 and 5 seconds to allow backend elapsed-time
+recording to finish.
+Restart, unmount, or authentication-session replacement cancels delayed refresh work, and obsolete
+responses cannot publish another session's quota. An advisory trial expiry or zero-balance update
+does not unmount an active conversation; backend session limits remain authoritative.
+Result and invitation placement follows `architecture-frontend.instructions.md` (Shared access
+presentation).
 
 Maintenance is checked when warmup and WebSocket access begin. Non-admin WebSockets close with 1013;
 administrators bypass maintenance. Redis failure during this check is fail-open, and enabling
@@ -387,6 +407,14 @@ the visible error after the next WAV is sent successfully.
 
 Other server errors, startup failures, transport failures, and unexpected socket closures finalize
 the session. There is no automatic reconnection.
+
+Warmup and WebSocket access failures show an inline paywall only when additive metadata confirms
+`freemium_exhausted` for `voice`. `freemium_unavailable`, malformed responses, or a legacy
+`subscription_required` without a reason show a localized error and refresh advisory status without
+inferring exhaustion. Cleanup still releases microphone, VAD, socket, and playback resources.
+Confirmed denials suppress idle starters and restart controls until the shared access-recovery hook
+retires them; recovery does not start recording automatically. The shared recovery contract is owned
+by `architecture-frontend.instructions.md`.
 
 Frontend cleanup is idempotent: it invalidates attempt/socket identities, detaches callbacks, requests
 session close when possible, stops microphone tracks, serializes VAD pause, cancels audio, closes the

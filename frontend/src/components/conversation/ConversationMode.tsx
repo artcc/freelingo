@@ -5,16 +5,23 @@ import { useMicVAD } from '@ricky0123/vad-react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
-import { useAuthStore } from '@/store/auth'
+import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
+import { useFreemiumStore } from '@/store/freemium'
+import { PaywallBanner } from '@/components/billing/PaywallBanner'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
+import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { apiFetch } from '@/lib/api'
+import {
+  getFreemiumAccessFailure,
+  useFreemiumAccessRecovery,
+} from '@/lib/freemium-access'
 import { resolveConfiguredTtsVoice } from '@/lib/tts-voice'
-import { createCheckout } from '@/lib/billing'
 import { float32ToWav, createAudioQueue, type AudioQueue } from '@/lib/audio'
 import { getLogger, silentLogger } from '@/lib/logger'
 import { mapUser } from '@/lib/mappers'
-import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
 import {
   buildConversationWsUrl,
   type WsMessage,
@@ -173,42 +180,11 @@ function QuotaPill({
 function TrialPremiumCta() {
   const t = useTranslations('billing')
   const tConversation = useTranslations('conversation')
-  const locale = useLocale()
   const router = useRouter()
-  const priceMonthly = useConfigStore((s) => s.priceMonthly)
-  const priceYearly = useConfigStore((s) => s.priceYearly)
-  const [loading, setLoading] = useState<BillingInterval | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const checkoutRequest = useRef<AbortController | null>(null)
-  useEffect(() => () => checkoutRequest.current?.abort(), [])
-  const yearlyCta = splitYearlyCta(
-    t('planYearly', {
-      price: new Intl.NumberFormat(locale).format(priceYearly),
-    })
-  )
+  const user = useAuthStore((s) => s.user)
 
-  async function handleCheckout(interval: BillingInterval) {
-    if (loading) return
-    const controller = new AbortController()
-    checkoutRequest.current = controller
-    const { sessionVersion } = useAuthStore.getState()
-    const obsolete = () =>
-      controller.signal.aborted ||
-      useAuthStore.getState().sessionVersion !== sessionVersion
-    setLoading(interval)
-    setError(null)
-    try {
-      const url = await createCheckout(interval, controller.signal)
-      if (obsolete()) return
-      if (url) window.location.assign(url)
-      else router.push('/dashboard')
-    } catch {
-      if (obsolete()) return
-      setError(t('checkoutError'))
-    } finally {
-      if (!obsolete()) setLoading(null)
-    }
-  }
+  if (needsPaymentRecovery(user))
+    return <PaywallBanner feature="voice" compact />
 
   return (
     <div className="border-fl-border bg-fl-surface mb-4 border p-5 text-center">
@@ -221,40 +197,7 @@ function TrialPremiumCta() {
       <p className="text-fl-muted-1 mb-5 font-mono text-sm leading-relaxed">
         {tConversation('trialCtaDesc')}
       </p>
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={() => handleCheckout('yearly')}
-          disabled={loading !== null}
-          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
-        >
-          {loading === 'yearly' ? (
-            '...'
-          ) : (
-            <span className="flex flex-col items-center gap-0.5 leading-relaxed">
-              <span>{yearlyCta.main}</span>
-              {yearlyCta.savings && (
-                <span className="text-fl-accent-fg text-xs">
-                  {yearlyCta.savings}
-                </span>
-              )}
-            </span>
-          )}
-        </button>
-        <button
-          onClick={() => handleCheckout('monthly')}
-          disabled={loading !== null}
-          className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
-        >
-          {loading === 'monthly'
-            ? '...'
-            : t('planMonthly', {
-                price: new Intl.NumberFormat(locale).format(priceMonthly),
-              })}
-        </button>
-      </div>
-      {error && (
-        <p className="text-fl-hint mt-4 font-mono text-red-500">{error}</p>
-      )}
+      <SubscriptionPlanButtons showPlanDetails />
       <button
         onClick={() => router.push('/plan')}
         className="text-fl-muted-4 hover:text-fl-muted-2 mt-5 w-full font-mono text-xs tracking-widest uppercase transition-colors"
@@ -276,6 +219,9 @@ const VAD_MAX_RMS = 0.25
 const VAD_POSITIVE_SPEECH_THRESHOLD = 0.3
 // Allow the backend's 60-second provider budget plus transport/auth overhead.
 const WARMUP_TIMEOUT_MS = 75_000
+// Socket closure precedes backend usage recording; reconcile again if the first
+// delayed read still overlaps cleanup. Keep retries bounded.
+const QUOTA_REFRESH_DELAYS_MS = [1500, 5000]
 const warmupLogger = getLogger('conversation-warmup')
 const convLogger = ENABLE_CONVERSATION_AUDIO_DEBUG_LOGS
   ? getLogger('conversation-audio')
@@ -293,6 +239,7 @@ export default function ConversationMode({
   trialMode,
   freemiumVoiceRemaining,
   freemiumVoiceLimit,
+  onSessionActiveChange,
   onClose,
 }: {
   initialContext?: ChatContextItem[]
@@ -306,20 +253,51 @@ export default function ConversationMode({
   trialMode?: boolean
   freemiumVoiceRemaining?: number
   freemiumVoiceLimit?: number
+  onSessionActiveChange?: (active: boolean) => void
   onClose?: () => void
 }) {
   const t = useTranslations('conversation')
   const tCommon = useTranslations('common')
   const tPractice = useTranslations('lessonPractice')
+  const tMaintenance = useTranslations('maintenance')
   const locale = useLocale()
   const accessToken = useAuthStore((s) => s.accessToken)
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
+  const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
+  const freemiumStatus = useFreemiumStore((s) => s.status)
+  const { freemiumTrialActive } = useTrialStatus()
+  const { accessDenied, reportAccessDenied } =
+    useFreemiumAccessRecovery('voice')
 
   // ─── UI State ────────────────────────────────────────────────────────────
   const [status, setStatus] = useState<ConvStatus>('loading')
   const [sessionActive, setSessionActive] = useState(false)
+  const demoConsumed = user?.assessment_voice_trial_used === true
+  const [resultOwner, setResultOwner] = useState<SessionOwner | null>(null)
+  const regularAccessAvailable =
+    !accessDenied &&
+    (isSubscribed(user, stripeEnabled) ||
+      freemiumTrialActive ||
+      (!!freemiumStatus && freemiumStatus.voice_remaining_seconds > 0))
+  const demoAccessEnded =
+    trialMode && demoConsumed && !sessionActive && !regularAccessAvailable
+  const accessExhausted =
+    stripeEnabled &&
+    !sessionActive &&
+    !regularAccessAvailable &&
+    (accessDenied ||
+      (!!freemiumStatus &&
+        freemiumStatus.voice_remaining_seconds <= 0 &&
+        !(trialMode && !demoConsumed)))
+  const hasCompletedResult =
+    status === 'ended' &&
+    resultOwner?.sessionVersion === sessionVersion &&
+    resultOwner?.userId === user?.id
+  useEffect(() => {
+    onSessionActiveChange?.(sessionActive)
+  }, [onSessionActiveChange, sessionActive])
   const [transcript, setTranscript] = useState<TranscriptEntry[]>([])
   const [streamingText, setStreamingText] = useState<string | null>(null)
   const [warningDeadlines, setWarningDeadlines] = useState<
@@ -360,18 +338,6 @@ export default function ConversationMode({
     []
   )
 
-  // ─── Fetch quota on mount ─────────────────────────────────────────────────
-  const refreshQuota = useCallback(() => {
-    apiFetch('/api/auth/quota')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: QuotaStatus | null) => data && setQuota(data))
-      .catch(() => {})
-  }, [])
-
-  useEffect(() => {
-    refreshQuota()
-  }, [refreshQuota])
-
   // ─── Refs ─────────────────────────────────────────────────────────────────
   const wsRef = useRef<WebSocket | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
@@ -401,6 +367,56 @@ export default function ConversationMode({
     'unknown'
   )
   const sessionStartedAtRef = useRef<number | null>(null)
+  const sessionPracticeRef = useRef({ userSpoke: false, completed: false })
+  const quotaRequestRef = useRef<AbortController | null>(null)
+  const quotaRefreshTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
+
+  const cancelQuotaRefresh = useCallback(() => {
+    quotaRefreshTimersRef.current.forEach(clearTimeout)
+    quotaRefreshTimersRef.current = []
+    quotaRequestRef.current?.abort()
+  }, [])
+
+  const refreshQuota = useCallback(async () => {
+    quotaRequestRef.current?.abort()
+    const controller = new AbortController()
+    quotaRequestRef.current = controller
+    const owner = useAuthStore.getState()
+    try {
+      const response = await apiFetch('/api/auth/quota', {
+        signal: controller.signal,
+      })
+      if (!response.ok) return
+      const data: QuotaStatus | null = await response.json()
+      const auth = useAuthStore.getState()
+      if (
+        data &&
+        mountedRef.current &&
+        !controller.signal.aborted &&
+        auth.sessionVersion === owner.sessionVersion &&
+        auth.user?.id === owner.user?.id
+      ) {
+        setQuota(data)
+      }
+    } catch {
+      // Non-fatal; access checks remain authoritative.
+    } finally {
+      if (quotaRequestRef.current === controller) {
+        quotaRequestRef.current = null
+      }
+    }
+  }, [])
+
+  const refreshFreemium = useCallback(() => {
+    if (useConfigStore.getState().stripeEnabled) {
+      void useFreemiumStore.getState().fetchStatus(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    void refreshQuota()
+    return cancelQuotaRefresh
+  }, [refreshQuota, cancelQuotaRefresh, sessionVersion, user?.id])
 
   const isCurrentSession = useCallback((owner: SessionOwner | null) => {
     const auth = useAuthStore.getState()
@@ -656,11 +672,7 @@ export default function ConversationMode({
       const isPermission =
         errMsg.includes('NotAllowedError') ||
         errMsg.includes('PermissionDeniedError')
-      setErrorMsg(
-        isPermission
-          ? t('errorMic')
-          : `${t('errorVadInit')}${errMsg ? ` — ${errMsg}` : ''}`
-      )
+      setErrorMsg(isPermission ? t('errorMic') : t('errorVadInit'))
       setStatus('error')
       return
     }
@@ -678,8 +690,12 @@ export default function ConversationMode({
         !warmupRef.current
       )
         return
+      const owner = sessionOwnerRef.current
+      const hadSocket = wsRef.current !== null
+      cancelQuotaRefresh()
       closeReasonRef.current = reason
       startAttemptRef.current++
+      const closedAttempt = startAttemptRef.current
       sessionOwnerRef.current = null
       if (warmupRef.current) {
         clearTimeout(warmupRef.current.timeout)
@@ -735,8 +751,32 @@ export default function ConversationMode({
         setSessionActive(false)
         dismissTooltip()
       }
+      const auth = useAuthStore.getState()
+      if (
+        mountedRef.current &&
+        hadSocket &&
+        owner &&
+        reason !== 'route_unload' &&
+        auth.sessionVersion === owner.sessionVersion &&
+        auth.user?.id === owner.userId
+      ) {
+        quotaRefreshTimersRef.current = QUOTA_REFRESH_DELAYS_MS.map((delay) =>
+          setTimeout(() => {
+            const auth = useAuthStore.getState()
+            if (
+              !mountedRef.current ||
+              startAttemptRef.current !== closedAttempt ||
+              auth.sessionVersion !== owner.sessionVersion ||
+              auth.user?.id !== owner.userId
+            )
+              return
+            void refreshQuota()
+            refreshFreemium()
+          }, delay)
+        )
+      }
     },
-    [dismissTooltip]
+    [dismissTooltip, cancelQuotaRefresh, refreshQuota, refreshFreemium]
   )
 
   // Auto-scroll transcript to bottom. Any transcript mutation moves the bubbles,
@@ -757,21 +797,26 @@ export default function ConversationMode({
           auth.user?.id === previous.user?.id
         )
           return
+        cancelQuotaRefresh()
         pendingAutoStartRef.current = false
+        setQuota(null)
         const owner = sessionOwnerRef.current
-        if (!owner || isCurrentSession(owner)) return
-        cleanEndRef.current = true
-        finalizeSession()
+        if (owner && !isCurrentSession(owner)) {
+          cleanEndRef.current = true
+          finalizeSession()
+        }
         sessionStartedAtRef.current = null
+        sessionPracticeRef.current = { userSpoke: false, completed: false }
         if (mountedRef.current) {
           setTranscript([])
           setErrorMsg(null)
           setQuota(null)
           setReviewPromptOpen(false)
+          setResultOwner(null)
           setStatus('ready')
         }
       }),
-    [finalizeSession, isCurrentSession]
+    [finalizeSession, isCurrentSession, cancelQuotaRefresh]
   )
 
   useEffect(() => {
@@ -884,6 +929,7 @@ export default function ConversationMode({
           switch (msg.type) {
             case 'transcript':
               if (msg.role === 'user') {
+                if (msg.text.trim()) sessionPracticeRef.current.userSpoke = true
                 // STT result — always final
                 setAssistantThinking(true)
                 setTranscript((prev) => [
@@ -899,6 +945,8 @@ export default function ConversationMode({
                 setAssistantThinking(true)
                 // LLM token stream
                 if (msg.final) {
+                  if (sessionPracticeRef.current.userSpoke && msg.text.trim())
+                    sessionPracticeRef.current.completed = true
                   setStreamingText(null)
                   setTranscript((prev) => [
                     ...prev,
@@ -970,6 +1018,7 @@ export default function ConversationMode({
             case 'session_end':
               cleanEndRef.current = true
               assistantTurnActiveRef.current = false
+              if (sessionPracticeRef.current.completed) setResultOwner(owner)
               finalizeSession()
               convLogger.info('session end received', { reason: msg.reason })
               setStatus('ended')
@@ -984,6 +1033,7 @@ export default function ConversationMode({
               const errorMessages: Record<string, string> = {
                 auth_failed: t('errorUnauthorized'),
                 services_disabled: t('errorServicesDisabled'),
+                maintenance_mode: tMaintenance('description'),
                 quota_exceeded_sessions: t('quotaExceededSessions'),
                 quota_exceeded_time: t('quotaExceededTime'),
                 quota_exceeded_tokens: t('quotaExceededTokens'),
@@ -993,7 +1043,19 @@ export default function ConversationMode({
                 llm_failed: t('errorResponse'),
                 tts_failed: t('errorSpeech'),
               }
-              setErrorMsg(errorMessages[msg.code] ?? tCommon('errorMessage'))
+              const accessFailure =
+                msg.code === 'subscription_required'
+                  ? getFreemiumAccessFailure(402, { detail: msg }, 'voice')
+                  : null
+              if (msg.code === 'subscription_required') {
+                if (accessFailure === 'exhausted') reportAccessDenied()
+                else refreshFreemium()
+              }
+              setErrorMsg(
+                accessFailure === 'exhausted'
+                  ? null
+                  : (errorMessages[msg.code] ?? tCommon('errorMessage'))
+              )
               setStatus('error')
               assistantTurnActiveRef.current = false
               if (
@@ -1050,6 +1112,7 @@ export default function ConversationMode({
       t,
       tCommon,
       tPractice,
+      tMaintenance,
       targetLanguage,
       lessonId,
       voiceTrialToken,
@@ -1058,6 +1121,8 @@ export default function ConversationMode({
       finalizeSession,
       isCurrentSession,
       showMemoryToast,
+      refreshFreemium,
+      reportAccessDenied,
     ]
   )
 
@@ -1074,16 +1139,22 @@ export default function ConversationMode({
       sessionActive ||
       status === 'warming' ||
       status === 'connecting' ||
-      status === 'live'
+      status === 'live' ||
+      accessExhausted ||
+      demoAccessEnded
     )
       return
 
+    cancelQuotaRefresh()
     const owner: SessionOwner = {
       attempt: ++startAttemptRef.current,
       sessionVersion: auth.sessionVersion,
       userId: auth.user?.id,
     }
     sessionOwnerRef.current = owner
+    sessionPracticeRef.current = { userSpoke: false, completed: false }
+    setResultOwner(null)
+    setReviewPromptOpen(false)
     const isCurrent = () => isCurrentSession(owner)
     sessionActiveRef.current = true
 
@@ -1172,6 +1243,7 @@ export default function ConversationMode({
     let timeout: ReturnType<typeof setTimeout> | undefined
     warmupRef.current = { controller }
     let warmupResponse: Response
+    let warmupExhausted = false
     let voice: string | undefined
     try {
       voice = await resolveConfiguredTtsVoice(controller.signal)
@@ -1192,6 +1264,21 @@ export default function ConversationMode({
             }
           : {}),
       })
+      if (warmupResponse.status === 402) {
+        let body: unknown = null
+        try {
+          body = await warmupResponse.json()
+        } catch {
+          // Legacy/unstructured denials do not establish quota exhaustion.
+        }
+        if (controller.signal.aborted) throw controller.signal.reason
+        // Keep legacy detail ambiguous; only the additive reason confirms exhaustion.
+        warmupExhausted =
+          body !== null &&
+          typeof body === 'object' &&
+          getFreemiumAccessFailure(402, { detail: body }, 'voice') ===
+            'exhausted'
+      }
     } catch (error) {
       if (!isCurrent()) return
       setErrorMsg(t('errorConnection'))
@@ -1214,10 +1301,20 @@ export default function ConversationMode({
 
     if (!isCurrent()) return
     if (!warmupResponse.ok) {
-      setErrorMsg(t('errorConnection'))
+      setErrorMsg(
+        warmupResponse.status === 402
+          ? warmupExhausted
+            ? null
+            : tCommon('errorMessage')
+          : t('errorConnection')
+      )
       warmupLogger.error('warmup bad status', { status: warmupResponse.status })
       setStatus('error')
       finalizeSession()
+      if (warmupResponse.status === 402) {
+        if (warmupExhausted) reportAccessDenied()
+        else refreshFreemium()
+      }
       return
     }
 
@@ -1239,9 +1336,13 @@ export default function ConversationMode({
   }
 
   function handleStop() {
+    const owner = sessionOwnerRef.current
+    const completedPractice =
+      isCurrentSession(owner) && sessionPracticeRef.current.completed
     const sessionDurationMs = sessionStartedAtRef.current
       ? Date.now() - sessionStartedAtRef.current
       : 0
+    if (completedPractice) setResultOwner(owner)
     startAttemptRef.current++
     cleanEndRef.current = true
     finalizeSession('manual')
@@ -1249,12 +1350,11 @@ export default function ConversationMode({
     setStatus('ended')
     if (trialMode) void refreshCurrentUser()
     if (
+      completedPractice &&
       shouldShowVoiceReviewPrompt(getReviewPromptDismissal(), sessionDurationMs)
     ) {
       setReviewPromptOpen(true)
     }
-    // Allow a moment for the backend to record session seconds, then refresh
-    setTimeout(() => refreshQuota(), 1500)
   }
 
   // Cleanup on unmount
@@ -1263,6 +1363,7 @@ export default function ConversationMode({
     mountedRef.current = true
     return () => {
       mountedRef.current = false
+      cancelQuotaRefresh()
       profileRequestRef.current?.abort()
       cleanEndRef.current = true
       finalizeSession('route_unload')
@@ -1315,7 +1416,7 @@ export default function ConversationMode({
         )}
       </div>
 
-      {trialMode && (
+      {trialMode && !regularAccessAvailable && !demoConsumed && (
         <div className="border-fl-accent/40 bg-fl-surface text-fl-muted-1 mb-4 border px-4 py-3 text-center font-mono text-xs tracking-widest uppercase">
           {t('trialBanner', {
             minutes: Math.round((voiceTrialDurationSeconds ?? 300) / 60),
@@ -1369,6 +1470,23 @@ export default function ConversationMode({
           />
         )}
         <div ref={transcriptEndRef} />
+        {status === 'ended' && (
+          <div className="border-fl-border bg-fl-surface text-fl-muted-2 mb-4 border px-4 py-3 font-mono text-xs">
+            {t('sessionEnded')}
+          </div>
+        )}
+        {demoAccessEnded && status === 'ended' ? (
+          !reviewPromptOpen && <TrialPremiumCta />
+        ) : hasCompletedResult ? (
+          <PremiumResultOffer
+            feature="voice"
+            blocked={reviewPromptOpen}
+            accessExhausted={accessExhausted}
+            className="mb-4"
+          />
+        ) : accessExhausted ? (
+          <PaywallBanner feature="voice" compact />
+        ) : null}
       </div>
 
       {/* Status message */}
@@ -1377,15 +1495,10 @@ export default function ConversationMode({
           ✕ {errorMsg}
         </div>
       )}
-      {status === 'ended' && (
-        <div className="border-fl-border bg-fl-surface text-fl-muted-2 mb-4 border px-4 py-3 font-mono text-xs">
-          {t('sessionEnded')}
-        </div>
-      )}
-      {trialMode && status === 'ended' && <TrialPremiumCta />}
 
       {/* Conversation starters — shown when idle, hidden as soon as session starts */}
       {!trialMode &&
+        !accessExhausted &&
         lessonId === undefined &&
         !sessionActive &&
         (status === 'ready' || status === 'ended' || status === 'error') && (
@@ -1439,10 +1552,10 @@ export default function ConversationMode({
         {/* Quota pill — freemium gets a simplified voice counter, premium gets full quota bars */}
         {freemiumVoiceRemaining != null && freemiumVoiceLimit != null ? (
           <span
-            className={`text-fl-label font-mono tracking-widest uppercase ${freemiumVoiceRemaining <= 0 ? 'text-red-500' : 'text-fl-muted-2'}`}
+            className={`text-fl-label font-mono tracking-widest uppercase ${accessExhausted || freemiumVoiceRemaining <= 0 ? 'text-red-500' : 'text-fl-muted-2'}`}
           >
             {t('freemiumVoiceRemaining', {
-              remaining: freemiumVoiceRemaining,
+              remaining: accessExhausted ? 0 : freemiumVoiceRemaining,
               limit: freemiumVoiceLimit,
             })}
           </span>
@@ -1455,7 +1568,7 @@ export default function ConversationMode({
           assistantSpeaking={assistantSpeaking}
           assistantThinking={assistantThinking}
         />
-        {!(trialMode && status === 'ended') && (
+        {!accessExhausted && !demoAccessEnded && (
           <MicButton
             status={status}
             sessionActive={sessionActive}

@@ -27,6 +27,7 @@ import {
   useFlashcardScope,
 } from '@/components/flashcards/FlashcardBoundary'
 import { FlashcardActions } from '@/components/flashcards/FlashcardActions'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 import {
   BackPreference,
   useBackPreference,
@@ -675,6 +676,7 @@ function FlashcardsContent({
             <RotateCcw className="size-4" aria-hidden="true" />
             {t('sessionReturn')}
           </button>
+          {completed.length > 0 && <PremiumResultOffer feature="flashcards" />}
         </section>
       )}
 

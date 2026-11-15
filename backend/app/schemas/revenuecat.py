@@ -29,6 +29,7 @@ class RevenueCatEntitlement(BaseModel):
 class RevenueCatSubscription(BaseModel):
     is_sandbox: StrictBool
     period_type: str = "normal"
+    expires_date: AwareDatetime | None = None
     unsubscribe_detected_at: AwareDatetime | None = None
     billing_issues_detected_at: AwareDatetime | None = None
     refunded_at: AwareDatetime | None = None

@@ -33,6 +33,7 @@ vi.mock('@/lib/api', async (importOriginal) => ({
 }))
 
 import BillingSuccessPage from '@/app/(auth)/billing/success/page'
+import BillingCanceledPage from '@/app/(auth)/billing/canceled/page'
 import { useAuthStore } from '@/store/auth'
 
 function jsonResponse(data: unknown, status = 200) {
@@ -151,5 +152,31 @@ describe('BillingSuccessPage', () => {
     expect(screen.getByText('successPendingTitle')).toBeDefined()
     expect(screen.queryByText('successTitle')).toBeNull()
     expect(screen.queryByText('successRedirect:5')).toBeNull()
+  })
+
+  it('stops the confirmed redirect and hides stale success after session replacement', async () => {
+    vi.useFakeTimers()
+    mockApiFetch.mockResolvedValueOnce(jsonResponse(me('active')))
+    render(<BillingSuccessPage />)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(screen.getByText('successTitle')).toBeInTheDocument()
+    act(() => useAuthStore.getState().startSession('replacement-session'))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(6000)
+    })
+    expect(mockPush).not.toHaveBeenCalled()
+    expect(screen.queryByText('successTitle')).not.toBeInTheDocument()
+    expect(screen.getByText('successErrorTitle')).toBeInTheDocument()
+  })
+
+  it('returns canceled checkout directly to the plan section without starting checkout', () => {
+    render(<BillingCanceledPage />)
+    expect(
+      screen.getByRole('link', { name: 'canceledCtaSettings' })
+    ).toHaveAttribute('href', '/settings#plan')
+    expect(mockApiFetch).not.toHaveBeenCalled()
+    expect(mockPush).not.toHaveBeenCalled()
   })
 })

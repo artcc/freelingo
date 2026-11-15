@@ -90,6 +90,7 @@ export default function AdminUsersPage() {
   const tBilling = useTranslations('billing')
   const tLang = useTranslations('languages')
   const tTarget = useTranslations('targetLanguages')
+  const tDeletion = useTranslations('accountDeletion')
   const searchParams = useSearchParams()
   const [users, setUsers] = useState<AdminUserItem[]>([])
   const [total, setTotal] = useState(0)
@@ -142,6 +143,8 @@ export default function AdminUsersPage() {
   const [createSaving, setCreateSaving] = useState(false)
   const [actionBusy, setActionBusy] = useState<string | null>(null)
   const [deletePending, setDeletePending] = useState<AdminUserItem | null>(null)
+  const [deleteError, setDeleteError] = useState('')
+  const deleteRequest = useRef<AbortController | null>(null)
   const [activePending, setActivePending] = useState<AdminUserItem | null>(null)
   const loadRequestId = useRef(0)
   const currentUserId = useAuthStore((s) => s.user?.id)
@@ -149,6 +152,29 @@ export default function AdminUsersPage() {
   const availableLanguageCodes = useLanguageStore(
     (s) => s.availableLanguageCodes
   )
+
+  useEffect(() => {
+    function cancelRequests() {
+      ++loadRequestId.current
+      deleteRequest.current?.abort()
+      deleteRequest.current = null
+    }
+    const unsubscribe = useAuthStore.subscribe((state, previous) => {
+      if (
+        state.sessionVersion !== previous.sessionVersion ||
+        state.user?.id !== previous.user?.id
+      ) {
+        cancelRequests()
+        setActionBusy(null)
+        setDeletePending(null)
+        setDeleteError('')
+      }
+    })
+    return () => {
+      unsubscribe()
+      cancelRequests()
+    }
+  }, [])
 
   useEffect(() => {
     if (window.location.search.includes('create=1')) {
@@ -392,15 +418,39 @@ export default function AdminUsersPage() {
   }
 
   async function deleteUser(user: AdminUserItem) {
+    if (deleteRequest.current) return
+    const controller = new AbortController()
+    deleteRequest.current = controller
+    const { sessionVersion, user: owner } = useAuthStore.getState()
+    const isCurrent = () =>
+      !controller.signal.aborted &&
+      useAuthStore.getState().sessionVersion === sessionVersion &&
+      useAuthStore.getState().user?.id === owner?.id
     setActionBusy(`delete-${user.id}`)
-    const res = await apiFetch(`/api/admin/users/${user.id}`, {
-      method: 'DELETE',
-    })
-    setDeletePending(null)
-    setActionBusy(null)
-    if (!res.ok) {
-      setError(t('deleteUserError'))
-    } else {
+    setDeleteError('')
+    try {
+      const res = await apiFetch(`/api/admin/users/${user.id}`, {
+        method: 'DELETE',
+        signal: controller.signal,
+      })
+      if (!isCurrent()) return
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        if (!isCurrent()) return
+        setDeleteError(
+          res.status === 409 &&
+            data?.detail === 'subscription_cancellation_required'
+            ? 'cancellationRequired'
+            : res.status === 409 && data?.detail === 'billing_checkout_pending'
+              ? 'checkoutPending'
+              : res.status === 503 &&
+                  data?.detail === 'billing_verification_unavailable'
+                ? 'verificationUnavailable'
+                : 'failed'
+        )
+        return
+      }
+      setDeletePending(null)
       const newTotal = total - 1
       const maxPage = Math.max(0, Math.ceil(newTotal / PAGE_SIZE) - 1)
       const targetPage = Math.min(page, maxPage)
@@ -415,6 +465,11 @@ export default function AdminUsersPage() {
           activeFilter
         )
       }
+    } catch {
+      if (isCurrent()) setDeleteError('failed')
+    } finally {
+      if (isCurrent()) setActionBusy(null)
+      if (deleteRequest.current === controller) deleteRequest.current = null
     }
   }
 
@@ -1101,9 +1156,14 @@ export default function AdminUsersPage() {
         title={t('deleteUser')}
         message={t('deleteUserMessage')}
         confirmLabel={t('deleteConfirm')}
+        confirming={actionBusy === `delete-${deletePending?.id}`}
+        error={deleteError ? tDeletion(deleteError) : undefined}
         danger
         onConfirm={() => deletePending && deleteUser(deletePending)}
-        onCancel={() => setDeletePending(null)}
+        onCancel={() => {
+          setDeletePending(null)
+          setDeleteError('')
+        }}
       />
     </div>
   )

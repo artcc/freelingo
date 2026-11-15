@@ -38,6 +38,8 @@ When false, public signup actions lead to Login or are hidden, and `/register` w
 `invite` query parameter shows the localized closed-registration message and a Login action. Any
 supplied invite opens the existing form; only the backend validates and consumes the token. Legal
 page links preserve the supplied invite so reading the terms or privacy policy does not lose it.
+Registration, Login, and registration-origin legal navigation also preserve an explicitly selected
+`monthly` or `yearly` plan. Other plan values are discarded; destinations are fixed internal routes.
 When true, the existing public signup journey and pricing plan selection remain available.
 Authenticated dashboard and checkout actions do not depend on this flag.
 
@@ -98,8 +100,9 @@ the pending-request reference of a newer session.
 Account-scoped consumers must not publish state from an earlier authentication session. The freemium
 cache and quota reconciliation contract is defined in `subscriptions-freemium.instructions.md`.
 
-Avatar recovery, landing subscription checks, onboarding checkout, pricing checkout, and billing-return
-restoration use the same refresh HTTP coordination. `restoreAccessToken` fills a missing access token
+Avatar recovery, landing subscription checks, onboarding language/profile/checkout operations,
+pricing checkout, and billing-return restoration use the same refresh HTTP coordination.
+`restoreAccessToken` fills a missing access token
 only if its session is unchanged and its caller has not been cancelled; it preserves any token already
 published by another consumer. Ordinary restoration failures are handled by the caller; account
 conflicts always follow the shared session-invalidation rule.
@@ -125,20 +128,40 @@ loads the user, and requires the account to remain active.
 
 Email verification and password reset use independent Redis-backed tokens with their own expirations.
 
+Account deletion requires explicit confirmation and a successful backend response before local logout
+or navigation. Billing conflicts and provider-verification failures leave the session and confirmation
+available for recovery. Self-deletion is forbidden for administrators. The shared self/admin billing
+precondition is owned by `subscriptions-freemium.instructions.md` (Account deletion and billing);
+`api-endpoints.instructions.md` owns its error codes.
+
 ## Account onboarding
 
 Onboarding is distinct from CEFR assessment.
 
 - The language selector is filtered by operator-enabled languages returned by the backend.
+- On a fresh page, onboarding restores the access token before reading authenticated languages.
+  Failed restoration or language lookup exposes Retry; progression requires a successful lookup and a
+  selected enabled language. Retry runs the same restoration and lookup sequence.
 - Personal learning goals are optional.
 - `PATCH /api/auth/me` persists `target_language` and `learning_goals`, creating or activating the
   corresponding `UserLanguage`.
 - `learning_goals=null` means onboarding remains pending; an empty list is a completed choice.
 - Depending on runtime billing settings, onboarding may include freemium confirmation or Stripe
-  plan selection.
+  plan selection. An explicitly selected paid plan retains the plan-selection step even while the
+  initial freemium trial is active. Checkout requires a separate button click, and learners may
+  still continue to Dashboard without subscribing.
 - Completion navigates to Dashboard, not directly to assessment.
 
+Before saving the profile, onboarding restores a missing token and requires successfully loaded
+runtime configuration. A failed configuration read leaves the profile unsaved and offers Retry.
+The post-save destination uses the current loaded configuration rather than captured defaults.
+Unmounted or replaced-session operations cannot publish readiness, profile changes, or navigation.
+If checkout restoration requires returning to Login, the chosen monthly/yearly interval is preserved.
+
 The authenticated shell redirects users with null learning goals back to onboarding.
+After Login, a selected plan leads to onboarding for an unfinished account or the subscription section
+of Settings for an onboarded account. The destination is chosen only after a successful, valid profile
+read; a failed profile lookup shows a localized retryable error without inferring unfinished onboarding.
 
 ## Placement and plan boundary
 

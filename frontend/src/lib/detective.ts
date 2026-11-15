@@ -1,4 +1,5 @@
 import { apiFetch } from '@/lib/api'
+import { getFreemiumAccessFailure } from '@/lib/freemium-access'
 
 export type GameMode = 'review' | 'prepare' | 'free'
 export interface Challenge {
@@ -63,7 +64,12 @@ export async function gameRequest<T>(
     headers: { 'Content-Type': 'application/json', ...options.headers },
   })
   if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
+    const body: unknown = await res.json().catch(() => null)
+    const access = getFreemiumAccessFailure(res.status, body, 'games')
+    const detail =
+      body && typeof body === 'object'
+        ? (body as { detail?: unknown }).detail
+        : undefined
     const retry = res.headers.get('Retry-After')
     const seconds = retry
       ? /^\d+$/.test(retry)
@@ -72,7 +78,13 @@ export async function gameRequest<T>(
       : 0
     throw new GameRequestError(
       res.status,
-      typeof body.detail === 'string' ? body.detail : 'unavailable',
+      access === 'exhausted'
+        ? 'freemium_exhausted'
+        : access === 'unavailable'
+          ? 'freemium_unavailable'
+          : res.status !== 402 && typeof detail === 'string'
+            ? detail
+            : 'unavailable',
       Number.isFinite(seconds) ? seconds : 0
     )
   }

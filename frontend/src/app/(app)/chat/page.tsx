@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
+import {
+  getFreemiumAccessFailure,
+  useFreemiumAccessRecovery,
+} from '@/lib/freemium-access'
 import { useAuthStore } from '@/store/auth'
 import { useLanguageStore } from '@/store/language'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
@@ -22,6 +26,7 @@ import { ChatMarkdown } from '@/components/chat/ChatMarkdown'
 import { AuthAvatarImage } from '@/components/AuthAvatarImage'
 import { MemorySavedToast } from '@/components/memory/MemorySavedToast'
 import { useTransientToast } from '@/hooks/useTransientToast'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { readSseData } from '@/lib/sse'
 import LinguAvatar from '@/components/lingu/LinguAvatar'
 
@@ -106,12 +111,15 @@ function ChatContent() {
   const freemiumStatus = useFreemiumStore((s) => s.status)
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const decrementFreemium = useFreemiumStore((s) => s.decrement)
+  const { accessDenied, reportAccessDenied } = useFreemiumAccessRecovery('chat')
+  const { freemiumTrialActive } = useTrialStatus()
   const freemiumExhausted =
-    stripeEnabled &&
-    !isSubscribed(user, stripeEnabled) &&
-    !isFreemiumTrialActive(user, stripeEnabled) &&
-    freemiumStatus &&
-    freemiumStatus.chat_remaining <= 0
+    accessDenied ||
+    (stripeEnabled &&
+      !isSubscribed(user, stripeEnabled) &&
+      !freemiumTrialActive &&
+      freemiumStatus &&
+      freemiumStatus.chat_remaining <= 0)
 
   useEffect(() => {
     if (stripeEnabled && !isSubscribed(user, stripeEnabled)) {
@@ -341,6 +349,10 @@ function ChatContent() {
     if (!input.trim() || streamController.current || historyUnavailable) return
     const controller = new AbortController()
     streamController.current = controller
+    const current = () =>
+      streamController.current === controller &&
+      useAuthStore.getState().sessionVersion === sessionVersion &&
+      useLanguageStore.getState().activeLanguage?.code === activeLanguage?.code
     ++selectionVersion.current
     const text = input.trim()
     setInput('')
@@ -355,13 +367,25 @@ function ChatContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, conversation_id: activeId }),
       })
-      if (streamController.current !== controller) return
+      if (!current()) return
 
       if (!res.ok) {
         let message = t('errorMessage')
-        if (res.status === 429) {
+        if (res.status === 402) {
+          const body: unknown = await res.json().catch(() => null)
+          if (!current()) return
+          const access = getFreemiumAccessFailure(res.status, body, 'chat')
+          // Admission failed before persistence. Retain the draft, not a phantom turn.
+          setMessages((previous) => previous.slice(0, -1))
+          setInput(text)
+          if (access === 'exhausted') {
+            reportAccessDenied()
+            return
+          }
+          if (access === 'unavailable') message = tCommon('errorMessage')
+        } else if (res.status === 429) {
           const data = await res.json().catch(() => ({}))
-          if (streamController.current !== controller) return
+          if (!current()) return
           if (
             typeof data.detail === 'string' &&
             data.detail.startsWith('Monthly token limit reached')

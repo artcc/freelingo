@@ -12,7 +12,11 @@ import {
 } from 'lucide-react'
 import { useBillingPortal } from '@/hooks/useBillingPortal'
 import { createCheckout } from '@/lib/billing'
-import { splitYearlyCta, type BillingInterval } from '@/lib/billing-copy'
+import {
+  hasTwoMonthsFree,
+  splitYearlyCta,
+  type BillingInterval,
+} from '@/lib/billing-copy'
 import { useConfigStore } from '@/store/config'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 
@@ -66,6 +70,7 @@ export function PaywallBanner({
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const trialDays = useConfigStore((s) => s.stripeTrialDays)
+  const configLoaded = useConfigStore((s) => s.loaded)
   const priceMonthly = useConfigStore((s) => s.priceMonthly)
   const priceYearly = useConfigStore((s) => s.priceYearly)
   const [loading, setLoading] = useState<BillingInterval | null>(null)
@@ -81,14 +86,19 @@ export function PaywallBanner({
   const yearlyCta = splitYearlyCta(
     t('planYearly', {
       price: new Intl.NumberFormat(locale).format(priceYearly),
-    })
+    }),
+    hasTwoMonthsFree(priceMonthly, priceYearly)
   )
 
   if (!stripeEnabled || isSubscribed(user, stripeEnabled)) return null
 
   const context = PAYWALL_CONTEXT[feature] ?? PAYWALL_CONTEXT.chat
   const Icon = context.icon
-  const trialEligible = trialDays > 0 && !user?.trial_used
+  const trialEligible =
+    configLoaded &&
+    Number.isInteger(trialDays) &&
+    trialDays > 0 &&
+    user?.trial_used === false
 
   async function handleCheckout(interval: BillingInterval) {
     if (loading) return
@@ -113,13 +123,13 @@ export function PaywallBanner({
   }
 
   const containerClass = compact
-    ? 'border-fl-border bg-fl-surface w-full border p-5 text-center'
+    ? 'border-fl-border bg-fl-surface w-full min-w-0 border p-4 text-center sm:p-5'
     : 'flex min-h-[60vh] flex-col items-center justify-center px-6 py-16 text-center'
 
   return (
     <div className={containerClass}>
       {compact ? (
-        <div className="border-fl-border bg-fl-surface mx-auto w-full max-w-md border p-8">
+        <div className="mx-auto w-full max-w-md">
           <PaywallContent />
         </div>
       ) : (

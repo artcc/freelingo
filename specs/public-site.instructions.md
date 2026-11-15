@@ -77,6 +77,10 @@ from an obsolete session or an unmounted pricing section cannot update its prese
 continues to use the session-restoration and billing contracts owned by the platform and subscription
 specifications.
 
+A failed subscription lookup or a missing trial-eligibility field does not advertise a subscription
+trial to a visitor with a session. Pricing keeps ordinary plan selection available while eligibility
+is unknown. Billing copy and price-comparison rules belong to `subscriptions-freemium.instructions.md`.
+
 ## FAQ, localization, and accessibility
 
 `LandingFAQ` uses `landing.faq`, separately from the authenticated `faq` catalog. Its six questions
@@ -90,6 +94,8 @@ The study-language answer interpolates the shared localized language list define
 Landing copy uses `next-intl` in all interface catalogs. The learning-journey and deployment-comparison
 content renders without reveal gating; CTA transitions respect reduced motion and retain visible
 keyboard focus. Metadata must remain consistent with the visible content under the SEO contract.
+The contact modal reports failed submissions with the localized `contact.errorGeneric` message,
+never raw server error details.
 
 ## Static project overview
 

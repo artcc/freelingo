@@ -23,28 +23,6 @@ vi.mock('next-intl', () => ({
   useLocale: () => 'en',
 }))
 vi.mock('@/lib/api', () => ({ apiFetch: mocks.apiFetch }))
-vi.mock('@/store/auth', () => ({
-  useAuthStore: (selector: (state: object) => unknown) =>
-    selector({ user: { username: 'learner', native_language: 'en' } }),
-  isSubscribed: () => true,
-  isFreemiumTrialActive: () => false,
-}))
-vi.mock('@/store/language', () => ({
-  useLanguageStore: (selector: (state: object) => unknown) =>
-    selector({ activeLanguage: { code: 'de-DE' } }),
-}))
-vi.mock('@/store/config', () => ({
-  useConfigStore: (selector: (state: object) => unknown) =>
-    selector({ stripeEnabled: false }),
-}))
-vi.mock('@/store/freemium', () => ({
-  useFreemiumStore: (selector: (state: object) => unknown) =>
-    selector({ status: null, fetchStatus: vi.fn() }),
-}))
-vi.mock('@/store/progress', () => ({
-  useProgressStore: (selector: (state: object) => unknown) =>
-    selector({ completeLesson: vi.fn() }),
-}))
 vi.mock('@/data/grammar', () => ({
   getGrammarTopics: () => Promise.resolve([]),
 }))
@@ -102,6 +80,12 @@ vi.mock('@/components/TargetLanguageText', () => ({
 }))
 
 import LessonPage from '@/app/(app)/lesson/[id]/page'
+import { getLanguageByCode } from '@/lib/target-languages'
+import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
+import { useFreemiumStore } from '@/store/freemium'
+import { useLanguageStore } from '@/store/language'
+import { useProgressStore } from '@/store/progress'
 
 const ANSWER = 'Ich habe viele abenteuer gehabt. Ich bin mit auto gefahren.'
 
@@ -218,6 +202,28 @@ function scoreBadge(label: string): HTMLElement {
 describe('LessonPage free-write corrections', () => {
   beforeEach(() => {
     mocks.apiFetch.mockReset()
+    useAuthStore.setState(useAuthStore.getInitialState(), true)
+    useConfigStore.setState(useConfigStore.getInitialState(), true)
+    useFreemiumStore.setState(useFreemiumStore.getInitialState(), true)
+    useLanguageStore.setState(
+      {
+        ...useLanguageStore.getInitialState(),
+        activeLanguage: getLanguageByCode('de-DE') ?? null,
+      },
+      true
+    )
+    useProgressStore.setState(useProgressStore.getInitialState(), true)
+    useAuthStore.getState().startSession('test-session')
+    useAuthStore.getState().setUser({
+      id: 1,
+      username: 'learner',
+      displayName: 'Learner',
+      native_language: 'en',
+      role: 'user',
+      subscription_status: 'active',
+      conversation_max_duration: 300,
+      conversation_inactivity_timeout: 30,
+    })
   })
 
   it('offers voice practice when reviewing a completed lesson', async () => {
@@ -251,6 +257,7 @@ describe('LessonPage free-write corrections', () => {
       await screen.findByRole('button', { name: 'completeLesson' })
     )
     await screen.findByText('lessonDone')
+    expect(useProgressStore.getState().completedToday).toEqual([1])
     expect(screen.getByRole('button', { name: 'action' })).toBeInTheDocument()
   })
 

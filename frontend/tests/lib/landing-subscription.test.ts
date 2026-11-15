@@ -85,7 +85,7 @@ describe('landing subscription authentication', () => {
           .mockResolvedValueOnce(json({}, failure === 'me-401' ? 401 : 503))
       expect(await getLandingSubscriptionState()).toEqual({
         subscribed: false,
-        trialUsed: false,
+        trialUsed: null,
       })
       expect(useAuthStore.getState()).toMatchObject({
         sessionVersion,
@@ -123,7 +123,7 @@ describe('landing subscription authentication', () => {
       .mockResolvedValueOnce(json({ subscription_status: 'active' }))
     expect(await hasActiveLandingSubscription()).toBe(true)
     finish({ subscription_status: 'none' })
-    expect(await old).toEqual({ subscribed: false, trialUsed: false })
+    expect(await old).toEqual({ subscribed: false, trialUsed: null })
     expect(await hasActiveLandingSubscription()).toBe(true)
     expect(fetch).toHaveBeenCalledTimes(4)
     expect(useAuthStore.getState().accessToken).toBe('second-token')
@@ -144,5 +144,16 @@ describe('landing subscription authentication', () => {
       trialUsed: true,
     })
     expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps missing trial eligibility unknown instead of promising a free trial', async () => {
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(json({ access_token: 'fresh-token' }))
+      .mockResolvedValueOnce(json({ subscription_status: 'none' }))
+
+    expect(await getLandingSubscriptionState()).toEqual({
+      subscribed: false,
+      trialUsed: null,
+    })
   })
 })

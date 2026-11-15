@@ -64,8 +64,7 @@ export function ContactFormModal({ open, onClose }: ContactFormModalProps) {
       if (res.status === 204) {
         setStatus('success')
       } else {
-        const data = await res.json().catch(() => ({}))
-        setErrorMsg(data?.detail ?? t('errorGeneric'))
+        setErrorMsg(t('errorGeneric'))
         setStatus('error')
       }
     } catch {

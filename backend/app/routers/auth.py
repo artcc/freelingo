@@ -45,6 +45,7 @@ from app.schemas.auth import (
     UserUpdateRequest,
 )
 from app.services import email_service, revenuecat_service
+from app.services.account_deletion_service import require_canceled_billing
 
 logger = get_logger(__name__)
 
@@ -526,6 +527,7 @@ async def delete_me(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin accounts cannot be self-deleted",
         )
+    current_user = await require_canceled_billing(db, current_user.id)
     token = request.cookies.get("refresh_token")
     if token:
         await redis.delete(f"refresh:{token}")

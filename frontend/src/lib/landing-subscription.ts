@@ -3,7 +3,7 @@ import { useAuthStore } from '@/store/auth'
 
 interface LandingSubscriptionState {
   subscribed: boolean
-  trialUsed: boolean
+  trialUsed: boolean | null
 }
 
 let subscriptionStatusPromise: Promise<LandingSubscriptionState> | null = null
@@ -34,12 +34,12 @@ export async function getLandingSubscriptionState(): Promise<LandingSubscription
     const status: string = me.subscription_status ?? 'none'
     return {
       subscribed: status === 'active' || status === 'trialing',
-      trialUsed: Boolean(me.trial_used),
+      trialUsed: typeof me.trial_used === 'boolean' ? me.trial_used : null,
     }
   })().catch(() => {
     // A failed lookup is a temporary fallback, not a cached subscription state.
     if (subscriptionStatusPromise === promise) subscriptionStatusPromise = null
-    return { subscribed: false, trialUsed: false }
+    return { subscribed: false, trialUsed: null }
   })
   subscriptionStatusPromise = promise
 

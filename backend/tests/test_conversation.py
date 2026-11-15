@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import UTC, datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -13,6 +14,78 @@ from app.core.config import settings
 from app.core.security import create_access_token
 from app.main import app
 from app.routers import conversation as conversation_router
+
+
+@pytest.mark.parametrize(
+    "failure", ["used", "inactive", "missing", "missing-token", "redis-error", "commit-error"]
+)
+async def test_demo_admission_rechecks_durable_right_after_quotas_and_fails_closed(
+    test_user, db_session, mock_redis, voice_runtime, monkeypatch, failure
+):
+    from app.models.user import User
+    from tests.test_assessment_voice_trial import issue_token
+
+    user, _ = test_user
+    user_id = user.id
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", False)
+    monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 0)
+    token = await issue_token(mock_redis, user_id)
+    key = f"assessment_voice_trial:{user_id}:{token}"
+
+    async def quotas(*args):
+        if failure == "used":
+            user.assessment_voice_trial_used = True
+            await db_session.commit()
+        elif failure == "inactive":
+            user.is_active = False
+            await db_session.commit()
+        elif failure == "missing":
+            await db_session.delete(user)
+            await db_session.commit()
+        elif failure == "missing-token":
+            await mock_redis.delete(key)
+        elif failure == "redis-error":
+            monkeypatch.setattr(
+                mock_redis, "delete", AsyncMock(side_effect=ConnectionError("offline"))
+            )
+        else:
+            monkeypatch.setattr(
+                db_session, "commit", AsyncMock(side_effect=RuntimeError("commit failed"))
+            )
+        return args[-1], None, None, None
+
+    voice_runtime.quotas.side_effect = quotas
+    ws = await voice_runtime.start(voice_trial_token=token)
+    assert ws.send_json.await_args.args[0]["code"] == "internal_error"
+    ws.close.assert_awaited_once_with(code=1011)
+    voice_runtime.factory.assert_not_called()
+    persisted = await db_session.get(User, user_id)
+    if failure == "missing":
+        assert persisted is None
+    else:
+        assert persisted.assessment_voice_trial_used is (failure == "used")
+    assert (await mock_redis.get(key) is None) is (failure in {"missing-token", "commit-error"})
+
+
+async def test_demo_right_is_not_claimed_when_general_quotas_deny_start(
+    test_user, mock_redis, voice_runtime, monkeypatch
+):
+    from tests.test_assessment_voice_trial import issue_token
+
+    user, _ = test_user
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", False)
+    monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 0)
+    token = await issue_token(mock_redis, user.id)
+    voice_runtime.quotas.side_effect = None
+    voice_runtime.quotas.return_value = (300, "quota_exceeded_sessions", "Limit reached", 1008)
+    ws = await voice_runtime.start(voice_trial_token=token)
+    assert ws.send_json.await_args.args[0]["code"] == "quota_exceeded_sessions"
+    voice_runtime.factory.assert_not_called()
+    assert not user.assessment_voice_trial_used
+    assert await mock_redis.get(f"assessment_voice_trial:{user.id}:{token}") is not None
+
 
 # ---------------------------------------------------------------------------
 # Helper: create a real user and return a valid JWT
@@ -301,7 +374,158 @@ async def test_warmup_rejects_invalid_assessment_voice_trial(client, test_user) 
         )
 
     assert response.status_code == 402
-    assert response.json()["detail"] == "subscription_required"
+    assert response.json() == {
+        "detail": "subscription_required",
+        "reason": "freemium_exhausted",
+        "feature": "voice",
+        "remaining": 0,
+        "limit": 0,
+    }
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("transport", ["http", "ws"])
+@pytest.mark.parametrize(
+    "failure",
+    ["exhausted", "zero-limit", "invalid-demo", "quota-unavailable", "demo-unavailable"],
+)
+async def test_voice_access_denial_preserves_legacy_code_and_reports_real_cause(
+    client, test_user, mock_redis, voice_runtime, monkeypatch, transport, failure
+) -> None:
+    from app.services.freemium_service import _voice_week_key
+
+    user, headers = test_user
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", False)
+    monkeypatch.setattr(
+        settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 0 if failure == "zero-limit" else 5
+    )
+    await mock_redis.set(_voice_week_key(user.id), 300)
+    original_get = mock_redis.get
+
+    async def get(key):
+        if (
+            failure == "quota-unavailable"
+            and key.startswith("freemium:voice:")
+            or failure == "demo-unavailable"
+            and key.startswith("assessment_voice_trial:")
+        ):
+            raise ConnectionError("Redis unavailable")
+        return await original_get(key)
+
+    monkeypatch.setattr(mock_redis, "get", get)
+    trial_token = "invalid-demo" if failure in {"invalid-demo", "demo-unavailable"} else None
+    expected = {
+        "reason": (
+            "freemium_unavailable"
+            if failure in {"quota-unavailable", "demo-unavailable"}
+            else "freemium_exhausted"
+        ),
+        "feature": "voice",
+    }
+    if failure != "quota-unavailable":
+        expected.update(remaining=0, limit=0 if failure == "zero-limit" else 300)
+
+    if transport == "http":
+        tts = MagicMock(synthesize=AsyncMock(), health=AsyncMock())
+        stt = MagicMock(transcribe=AsyncMock())
+        monkeypatch.setattr(app.state, "tts_service", tts, raising=False)
+        monkeypatch.setattr(app.state, "stt_service", stt, raising=False)
+        response = await client.post(
+            "/api/conversation/warmup", headers=headers, json={"trial_token": trial_token}
+        )
+        assert response.status_code == 402
+        assert response.json() == {"detail": "subscription_required", **expected}
+        tts.synthesize.assert_not_awaited()
+        tts.health.assert_not_awaited()
+        stt.transcribe.assert_not_awaited()
+    else:
+        ws = await voice_runtime.start(voice_trial_token=trial_token)
+        ws.send_json.assert_awaited_once_with(
+            {
+                "type": "error",
+                "code": "subscription_required",
+                "message": "Voice conversation is not available on your current plan.",
+                **expected,
+            }
+        )
+        ws.close.assert_awaited_once_with(code=1008)
+        voice_runtime.factory.assert_not_called()
+        voice_runtime.quotas.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("transport", ["http", "ws"])
+@pytest.mark.parametrize("access", ["subscription", "trial", "quota", "demo", "demo-after-outage"])
+async def test_voice_access_precedence_and_demo_fallback_remain_unchanged(
+    client, test_user, mock_redis, db_session, voice_runtime, monkeypatch, transport, access
+) -> None:
+    from app.services.assessment_voice_trial import create_assessment_voice_trial_token
+    from app.services.freemium_service import _voice_week_key
+
+    user, headers = test_user
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 5)
+    credential = await create_assessment_voice_trial_token(
+        mock_redis,
+        user_id=user.id,
+        subscription_status="none",
+        assessment_voice_trial_used=False,
+        stripe_enabled=True,
+        plan_id=1,
+        target_language="en-US",
+        cefr_level="A2",
+    )
+    token = credential["token"]
+    await mock_redis.set(_voice_week_key(user.id), 120 if access == "quota" else 300)
+    if access == "subscription":
+        user.subscription_status = "active"
+    elif access == "trial":
+        user.freemium_trial_ends_at = (datetime.now(UTC) + timedelta(days=1)).replace(tzinfo=None)
+    await db_session.commit()
+    original_get = mock_redis.get
+
+    async def get(key):
+        if access in {"subscription", "trial", "demo-after-outage"} and key.startswith(
+            "freemium:voice:"
+        ):
+            raise ConnectionError("Redis unavailable")
+        return await original_get(key)
+
+    redis_get = AsyncMock(side_effect=get)
+    monkeypatch.setattr(mock_redis, "get", redis_get)
+    if transport == "http":
+        monkeypatch.setattr(app.state, "tts_service", None, raising=False)
+        monkeypatch.setattr(app.state, "stt_service", None, raising=False)
+        response = await client.post(
+            "/api/conversation/warmup", headers=headers, json={"trial_token": token}
+        )
+        assert response.status_code == 200
+        assert response.json() == {"status": "ready"}
+        assert not user.assessment_voice_trial_used
+        assert await original_get(f"assessment_voice_trial:{user.id}:{token}") is not None
+    else:
+        ws = await voice_runtime.start(voice_trial_token=token)
+        ws.send_json.assert_not_awaited()
+        voice_runtime.pipeline.run.assert_awaited_once_with(ws)
+        voice_runtime.pipeline.cleanup.assert_awaited_once()
+        assert voice_runtime.pipeline._freemium_voice is (access == "quota")
+        if access == "quota":
+            assert voice_runtime.factory.call_args.kwargs["max_duration"] == 180
+        assert bool(user.assessment_voice_trial_used) is access.startswith("demo")
+        assert (await original_get(f"assessment_voice_trial:{user.id}:{token}") is None) is (
+            access.startswith("demo")
+        )
+    if access in {"subscription", "trial"}:
+        assert not any(
+            call.args[0].startswith(("freemium:voice:", "assessment_voice_trial:"))
+            for call in redis_get.await_args_list
+        )
+    elif access == "quota":
+        assert not any(
+            call.args[0].startswith("assessment_voice_trial:") for call in redis_get.await_args_list
+        )
 
 
 # ---------------------------------------------------------------------------
