@@ -389,9 +389,12 @@ describe('Lesson practice entry', () => {
           act(() =>
             mocks.voice.mock.lastCall?.[0].onSessionActiveChange(false)
           )
+          expect(screen.getByTestId('voice')).toBeInTheDocument()
+          expect(screen.queryByTestId('paywall')).toBeNull()
+        } else {
+          expect(screen.getByTestId('paywall')).toBeInTheDocument()
+          expect(screen.queryByTestId('voice')).toBeNull()
         }
-        expect(screen.getByTestId('paywall')).toBeInTheDocument()
-        expect(screen.queryByTestId('voice')).toBeNull()
       } finally {
         vi.useRealTimers()
       }

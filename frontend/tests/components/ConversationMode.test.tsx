@@ -254,6 +254,158 @@ describe('ConversationMode freemium reconciliation', () => {
 
   beforeEach(() => useConfigStore.setState({ stripeEnabled: true }))
 
+  it.each(['no-card-trial', 'subscription', 'voice-quota'] as const)(
+    'allows restarting a completed demo with %s access',
+    async (access) => {
+      const trialEndsAt = new Date(Date.now() + 86_400_000).toISOString()
+      const profile = {
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: access === 'subscription' ? 'active' : 'none',
+        freemium_trial_ends_at:
+          access === 'no-card-trial' ? trialEndsAt : null,
+      }
+      const quota = {
+        ...status,
+        trial_active: access === 'no-card-trial',
+        trial_ends_at: profile.freemium_trial_ends_at,
+        voice_remaining_seconds: access === 'voice-quota' ? 120 : 0,
+      }
+      useConfigStore.setState({ freemiumTrialEnabled: true })
+      useAuthStore.getState().setUser(mapUser(profile))
+      const sessionVersion = useAuthStore.getState().sessionVersion
+      useFreemiumStore.setState({
+        status: quota,
+        loaded: true,
+        lastFetch: Date.now(),
+      })
+      mocks.apiFetch.mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () =>
+          url === '/api/auth/me'
+            ? profile
+            : url === '/api/freemium/status'
+              ? quota
+              : null,
+      }))
+      render(<ConversationMode trialMode voiceTrialToken="demo-token" />)
+      const ws = await start()
+      act(() => {
+        ws.message({
+          type: 'transcript',
+          role: 'user',
+          text: 'I would like a cup of tea.',
+          turn_id: 1,
+        })
+        ws.message({
+          type: 'transcript',
+          role: 'assistant',
+          text: 'Of course. Would you like milk?',
+          final: true,
+          turn_id: 1,
+        })
+        ws.message({ type: 'turn_complete', turn_id: 1 })
+      })
+      await act(async () =>
+        fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+      )
+      expect(ws.close).toHaveBeenCalledOnce()
+      expect(screen.getByText('I would like a cup of tea.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Of course. Would you like milk?')
+      ).toBeInTheDocument()
+      expect(screen.queryByTestId('voice-paywall')).toBeNull()
+      expect(screen.queryByText('trialCtaDesc')).toBeNull()
+      expect(screen.queryByText('planMonthly')).toBeNull()
+      expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
+
+      const next = await start('startNew')
+      expect(MockWebSocket.instances).toHaveLength(2)
+      expect(next.close).not.toHaveBeenCalled()
+      expect(screen.getByRole('button', { name: 'stop' })).toBeEnabled()
+      expect(screen.queryByText('I would like a cup of tea.')).toBeNull()
+      expect(screen.queryByText('Of course. Would you like milk?')).toBeNull()
+      expect(useAuthStore.getState().sessionVersion).toBe(sessionVersion)
+    }
+  )
+
+  it.each(['manual', 'server'] as const)(
+    'preserves a completed voice result when quota is exhausted after %s closure',
+    async (ending) => {
+      const user = mapUser({
+        id: 1,
+        username: 'learner',
+        role: 'user',
+        subscription_status: 'none',
+      })
+      useAuthStore.getState().setUser(user)
+      useFreemiumStore.setState({
+        status,
+        loaded: true,
+        lastFetch: Date.now(),
+      })
+      render(<ConversationMode />)
+      const ws = await start()
+      act(() => {
+        ws.message({
+          type: 'transcript',
+          role: 'user',
+          text: 'I would like a cup of tea.',
+          turn_id: 1,
+        })
+        ws.message({
+          type: 'transcript',
+          role: 'assistant',
+          text: 'Of course. Would you like milk?',
+          final: true,
+          turn_id: 1,
+        })
+        ws.message({ type: 'turn_complete', turn_id: 1 })
+        useFreemiumStore.setState({
+          status: { ...status, voice_remaining_seconds: 0 },
+          lastFetch: Date.now(),
+        })
+      })
+      expect(ws.close).not.toHaveBeenCalled()
+      expect(screen.getByRole('button', { name: 'stop' })).toBeEnabled()
+      expect(
+        screen.queryByRole('complementary', { name: 'resultTitle' })
+      ).toBeNull()
+
+      act(() => {
+        if (ending === 'manual') {
+          fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+        } else {
+          ws.message({ type: 'session_end', reason: 'max_duration' })
+        }
+      })
+      expect(ws.close).toHaveBeenCalledOnce()
+      expect(screen.getByText('I would like a cup of tea.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Of course. Would you like milk?')
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('complementary', { name: 'resultTitle' })
+      ).toHaveTextContent('exhaustedTitle')
+      expect(
+        screen.getByRole('link', { name: 'continuePremium' })
+      ).toHaveAttribute('href', '/settings#plan')
+      expect(screen.queryByTestId('voice-paywall')).toBeNull()
+      expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
+
+      act(() => {
+        useAuthStore.getState().startSession('replacement-token')
+        useAuthStore.getState().setUser(user)
+      })
+      expect(screen.queryByText('I would like a cup of tea.')).toBeNull()
+      expect(screen.queryByText('Of course. Would you like milk?')).toBeNull()
+      expect(
+        screen.queryByRole('complementary', { name: 'resultTitle' })
+      ).toBeNull()
+    }
+  )
+
   it.each(['manual', 'server', 'transport'] as const)(
     'reconciles delayed persisted usage after %s closure without polling indefinitely',
     async (ending) => {
@@ -1057,12 +1209,23 @@ describe('ConversationMode session lifecycle', () => {
         role: 'user',
         subscription_status: 'none',
       }
+      useConfigStore.setState({ stripeEnabled: true })
+      useAuthStore.getState().setUser(mapUser(profile))
       mocks.apiFetch.mockImplementation(async (url: string) => ({
         ok: true,
         json: async () => (url === '/api/auth/me' ? profile : null),
       }))
       const view = render(<ConversationMode trialMode />)
-      await start()
+      const ws = await start()
+      act(() => {
+        ws.message({ type: 'transcript', role: 'user', text: 'My practice' })
+        ws.message({
+          type: 'transcript',
+          role: 'assistant',
+          text: 'Your feedback',
+          final: true,
+        })
+      })
       fireEvent.click(screen.getByRole('button', { name: 'stop' }))
       await waitFor(() =>
         expect(useAuthStore.getState().user?.username).toBe('learner')
@@ -1089,7 +1252,10 @@ describe('ConversationMode session lifecycle', () => {
       )
       if (action === 'current') {
         expect(useAuthStore.getState().user?.subscription_status).toBe('active')
-        expect(mocks.push).toHaveBeenCalledWith('/dashboard')
+        expect(mocks.push).not.toHaveBeenCalled()
+        expect(screen.getByText('Your feedback')).toBeInTheDocument()
+        expect(screen.queryByText('planMonthly')).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
       } else {
         expect(useAuthStore.getState().user?.subscription_status).not.toBe(
           'active'

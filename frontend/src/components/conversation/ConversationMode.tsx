@@ -5,26 +5,23 @@ import { useMicVAD } from '@ricky0123/vad-react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
-import { useAuthStore } from '@/store/auth'
+import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
 import { useFreemiumStore } from '@/store/freemium'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
+import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
+import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { apiFetch } from '@/lib/api'
 import {
   getFreemiumAccessFailure,
   useFreemiumAccessRecovery,
 } from '@/lib/freemium-access'
 import { resolveConfiguredTtsVoice } from '@/lib/tts-voice'
-import { createCheckout } from '@/lib/billing'
 import { float32ToWav, createAudioQueue, type AudioQueue } from '@/lib/audio'
 import { getLogger, silentLogger } from '@/lib/logger'
 import { mapUser } from '@/lib/mappers'
-import {
-  hasTwoMonthsFree,
-  splitYearlyCta,
-  type BillingInterval,
-} from '@/lib/billing-copy'
 import {
   buildConversationWsUrl,
   type WsMessage,
@@ -183,43 +180,11 @@ function QuotaPill({
 function TrialPremiumCta() {
   const t = useTranslations('billing')
   const tConversation = useTranslations('conversation')
-  const locale = useLocale()
   const router = useRouter()
-  const priceMonthly = useConfigStore((s) => s.priceMonthly)
-  const priceYearly = useConfigStore((s) => s.priceYearly)
-  const [loading, setLoading] = useState<BillingInterval | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const checkoutRequest = useRef<AbortController | null>(null)
-  useEffect(() => () => checkoutRequest.current?.abort(), [])
-  const yearlyCta = splitYearlyCta(
-    t('planYearly', {
-      price: new Intl.NumberFormat(locale).format(priceYearly),
-    }),
-    hasTwoMonthsFree(priceMonthly, priceYearly)
-  )
+  const user = useAuthStore((s) => s.user)
 
-  async function handleCheckout(interval: BillingInterval) {
-    if (loading) return
-    const controller = new AbortController()
-    checkoutRequest.current = controller
-    const { sessionVersion } = useAuthStore.getState()
-    const obsolete = () =>
-      controller.signal.aborted ||
-      useAuthStore.getState().sessionVersion !== sessionVersion
-    setLoading(interval)
-    setError(null)
-    try {
-      const url = await createCheckout(interval, controller.signal)
-      if (obsolete()) return
-      if (url) window.location.assign(url)
-      else router.push('/dashboard')
-    } catch {
-      if (obsolete()) return
-      setError(t('checkoutError'))
-    } finally {
-      if (!obsolete()) setLoading(null)
-    }
-  }
+  if (needsPaymentRecovery(user))
+    return <PaywallBanner feature="voice" compact />
 
   return (
     <div className="border-fl-border bg-fl-surface mb-4 border p-5 text-center">
@@ -232,40 +197,7 @@ function TrialPremiumCta() {
       <p className="text-fl-muted-1 mb-5 font-mono text-sm leading-relaxed">
         {tConversation('trialCtaDesc')}
       </p>
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={() => handleCheckout('yearly')}
-          disabled={loading !== null}
-          className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
-        >
-          {loading === 'yearly' ? (
-            '...'
-          ) : (
-            <span className="flex flex-col items-center gap-0.5 leading-relaxed">
-              <span>{yearlyCta.main}</span>
-              {yearlyCta.savings && (
-                <span className="text-fl-accent-fg text-xs">
-                  {yearlyCta.savings}
-                </span>
-              )}
-            </span>
-          )}
-        </button>
-        <button
-          onClick={() => handleCheckout('monthly')}
-          disabled={loading !== null}
-          className="border-fl-border text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 w-full border px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:opacity-50"
-        >
-          {loading === 'monthly'
-            ? '...'
-            : t('planMonthly', {
-                price: new Intl.NumberFormat(locale).format(priceMonthly),
-              })}
-        </button>
-      </div>
-      {error && (
-        <p className="text-fl-hint mt-4 font-mono text-red-500">{error}</p>
-      )}
+      <SubscriptionPlanButtons showPlanDetails />
       <button
         onClick={() => router.push('/plan')}
         className="text-fl-muted-4 hover:text-fl-muted-2 mt-5 w-full font-mono text-xs tracking-widest uppercase transition-colors"
@@ -334,13 +266,35 @@ export default function ConversationMode({
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
+  const freemiumStatus = useFreemiumStore((s) => s.status)
+  const { freemiumTrialActive } = useTrialStatus()
   const { accessDenied, reportAccessDenied } =
     useFreemiumAccessRecovery('voice')
 
   // ─── UI State ────────────────────────────────────────────────────────────
   const [status, setStatus] = useState<ConvStatus>('loading')
   const [sessionActive, setSessionActive] = useState(false)
-  const accessExhausted = stripeEnabled && accessDenied && !sessionActive
+  const [demoFinished, setDemoFinished] = useState(false)
+  const [resultOwner, setResultOwner] = useState<SessionOwner | null>(null)
+  const regularAccessAvailable =
+    !accessDenied &&
+    (isSubscribed(user, stripeEnabled) ||
+      freemiumTrialActive ||
+      (!!freemiumStatus && freemiumStatus.voice_remaining_seconds > 0))
+  const demoAccessEnded =
+    trialMode && demoFinished && !sessionActive && !regularAccessAvailable
+  const accessExhausted =
+    stripeEnabled &&
+    !sessionActive &&
+    !regularAccessAvailable &&
+    (accessDenied ||
+      (!!freemiumStatus &&
+        freemiumStatus.voice_remaining_seconds <= 0 &&
+        !(trialMode && !demoFinished)))
+  const hasCompletedResult =
+    status === 'ended' &&
+    resultOwner?.sessionVersion === sessionVersion &&
+    resultOwner?.userId === user?.id
   useEffect(() => {
     onSessionActiveChange?.(sessionActive)
   }, [onSessionActiveChange, sessionActive])
@@ -413,6 +367,7 @@ export default function ConversationMode({
     'unknown'
   )
   const sessionStartedAtRef = useRef<number | null>(null)
+  const sessionPracticeRef = useRef({ userSpoke: false, completed: false })
   const quotaRequestRef = useRef<AbortController | null>(null)
   const quotaRefreshTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
@@ -846,15 +801,19 @@ export default function ConversationMode({
         pendingAutoStartRef.current = false
         setQuota(null)
         const owner = sessionOwnerRef.current
-        if (!owner || isCurrentSession(owner)) return
-        cleanEndRef.current = true
-        finalizeSession()
+        if (owner && !isCurrentSession(owner)) {
+          cleanEndRef.current = true
+          finalizeSession()
+        }
         sessionStartedAtRef.current = null
+        sessionPracticeRef.current = { userSpoke: false, completed: false }
         if (mountedRef.current) {
           setTranscript([])
           setErrorMsg(null)
           setQuota(null)
           setReviewPromptOpen(false)
+          setResultOwner(null)
+          setDemoFinished(false)
           setStatus('ready')
         }
       }),
@@ -971,6 +930,7 @@ export default function ConversationMode({
           switch (msg.type) {
             case 'transcript':
               if (msg.role === 'user') {
+                if (msg.text.trim()) sessionPracticeRef.current.userSpoke = true
                 // STT result — always final
                 setAssistantThinking(true)
                 setTranscript((prev) => [
@@ -986,6 +946,8 @@ export default function ConversationMode({
                 setAssistantThinking(true)
                 // LLM token stream
                 if (msg.final) {
+                  if (sessionPracticeRef.current.userSpoke && msg.text.trim())
+                    sessionPracticeRef.current.completed = true
                   setStreamingText(null)
                   setTranscript((prev) => [
                     ...prev,
@@ -1057,6 +1019,8 @@ export default function ConversationMode({
             case 'session_end':
               cleanEndRef.current = true
               assistantTurnActiveRef.current = false
+              if (sessionPracticeRef.current.completed) setResultOwner(owner)
+              if (trialMode) setDemoFinished(true)
               finalizeSession()
               convLogger.info('session end received', { reason: msg.reason })
               setStatus('ended')
@@ -1178,7 +1142,8 @@ export default function ConversationMode({
       status === 'warming' ||
       status === 'connecting' ||
       status === 'live' ||
-      accessExhausted
+      accessExhausted ||
+      demoAccessEnded
     )
       return
 
@@ -1189,6 +1154,9 @@ export default function ConversationMode({
       userId: auth.user?.id,
     }
     sessionOwnerRef.current = owner
+    sessionPracticeRef.current = { userSpoke: false, completed: false }
+    setResultOwner(null)
+    setReviewPromptOpen(false)
     const isCurrent = () => isCurrentSession(owner)
     sessionActiveRef.current = true
 
@@ -1370,9 +1338,14 @@ export default function ConversationMode({
   }
 
   function handleStop() {
+    const owner = sessionOwnerRef.current
+    const completedPractice =
+      isCurrentSession(owner) && sessionPracticeRef.current.completed
     const sessionDurationMs = sessionStartedAtRef.current
       ? Date.now() - sessionStartedAtRef.current
       : 0
+    if (completedPractice) setResultOwner(owner)
+    if (trialMode && sessionStartedAtRef.current !== null) setDemoFinished(true)
     startAttemptRef.current++
     cleanEndRef.current = true
     finalizeSession('manual')
@@ -1380,6 +1353,7 @@ export default function ConversationMode({
     setStatus('ended')
     if (trialMode) void refreshCurrentUser()
     if (
+      completedPractice &&
       shouldShowVoiceReviewPrompt(getReviewPromptDismissal(), sessionDurationMs)
     ) {
       setReviewPromptOpen(true)
@@ -1445,7 +1419,7 @@ export default function ConversationMode({
         )}
       </div>
 
-      {trialMode && (
+      {trialMode && !regularAccessAvailable && !demoFinished && (
         <div className="border-fl-accent/40 bg-fl-surface text-fl-muted-1 mb-4 border px-4 py-3 text-center font-mono text-xs tracking-widest uppercase">
           {t('trialBanner', {
             minutes: Math.round((voiceTrialDurationSeconds ?? 300) / 60),
@@ -1512,10 +1486,17 @@ export default function ConversationMode({
           {t('sessionEnded')}
         </div>
       )}
-      {accessExhausted ? (
+      {demoAccessEnded && status === 'ended' ? (
+        !reviewPromptOpen && <TrialPremiumCta />
+      ) : hasCompletedResult ? (
+        <PremiumResultOffer
+          feature="voice"
+          blocked={reviewPromptOpen}
+          accessExhausted={accessExhausted}
+          className="mb-4 shrink-0"
+        />
+      ) : accessExhausted ? (
         <PaywallBanner feature="voice" compact />
-      ) : trialMode && status === 'ended' ? (
-        <TrialPremiumCta />
       ) : null}
 
       {/* Conversation starters — shown when idle, hidden as soon as session starts */}
@@ -1590,7 +1571,7 @@ export default function ConversationMode({
           assistantSpeaking={assistantSpeaking}
           assistantThinking={assistantThinking}
         />
-        {!accessExhausted && !(trialMode && status === 'ended') && (
+        {!accessExhausted && !demoAccessEnded && (
           <MicButton
             status={status}
             sessionActive={sessionActive}

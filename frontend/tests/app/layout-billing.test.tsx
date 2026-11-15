@@ -63,6 +63,21 @@ afterEach(() => {
 })
 
 describe('layout trial presentation', () => {
+  it('exposes plans in desktop and mobile navigation and makes trial days clickable', async () => {
+    await act(async () => {
+      render(<AppLayout><div>content</div></AppLayout>)
+    })
+    expect(screen.getAllByRole('link', { name: 'viewPremium' })).toHaveLength(2)
+    for (const link of screen.getAllByRole('link', { name: 'viewPremium' })) {
+      expect(link).toHaveAttribute('href', '/settings#plan')
+    }
+    expect(screen.getByRole('link', { name: '★ trialDays:1' })).toHaveAttribute(
+      'href', '/settings#plan'
+    )
+    act(() => useConfigStore.setState({ stripeEnabled: false }))
+    expect(screen.queryByRole('link', { name: 'viewPremium' })).not.toBeInTheDocument()
+  })
+
   it('reacts to the runtime toggle in both desktop and mobile navigation', async () => {
     await act(async () => {
       render(<AppLayout><div>content</div></AppLayout>)

@@ -46,9 +46,9 @@ describe('settings plan selection', () => {
   it.each([
     ['plan=monthly', 'monthly'],
     ['plan=yearly', 'yearly'],
-    ['', 'yearly'],
-    ['plan=invalid', 'yearly'],
-    ['plan=https%3A%2F%2Fexample.com', 'yearly'],
+    ['', 'monthly'],
+    ['plan=invalid', 'monthly'],
+    ['plan=https%3A%2F%2Fexample.com', 'monthly'],
   ])('preserves a whitelisted selection from %s without automatic checkout', async (
     query,
     selected

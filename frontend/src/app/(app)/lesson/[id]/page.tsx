@@ -38,6 +38,7 @@ import {
   ReviewPrompt,
   getReviewPromptDismissal,
 } from '@/components/reviews/ReviewPrompt'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 import {
   isPlanPositionComplete,
   shouldShowUnitReviewPrompt,
@@ -654,6 +655,11 @@ function LessonContent() {
                 {tCommon('backToDashboard')}
               </Link>
             </div>
+            <PremiumResultOffer
+              feature="lessons"
+              blocked={reviewPromptOpen}
+              className="mt-6"
+            />
           </div>
         </div>
         <ReviewPrompt

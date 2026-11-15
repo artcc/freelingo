@@ -7,7 +7,7 @@
  */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -162,6 +162,11 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
   const fetchFreemium = useFreemiumStore((s) => s.fetchStatus)
   const freemiumStatus = useFreemiumStore((s) => s.status)
   const [sessionActive, setSessionActive] = useState(false)
+  const [sessionStarted, setSessionStarted] = useState(false)
+  const handleSessionActiveChange = useCallback((active: boolean) => {
+    setSessionActive(active)
+    if (active) setSessionStarted(true)
+  }, [])
   const freemiumExhausted =
     stripeEnabled &&
     !isSubscribed(user, stripeEnabled) &&
@@ -207,6 +212,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
   useEffect(() => {
     if (practice) return
     setSessionActive(false)
+    setSessionStarted(false)
     const controller = new AbortController()
     const raw = sessionStorage.getItem('voice_context')
     if (raw) {
@@ -307,7 +313,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           voiceTrialDurationSeconds={voiceTrial.durationSeconds}
           trialMode
         />
-      ) : freemiumExhausted && !sessionActive ? (
+      ) : freemiumExhausted && !sessionActive && !sessionStarted ? (
         <>
           <FreemiumQuotaBanner feature="voice" className="mb-4" />
           <PaywallBanner feature="voice" compact />
@@ -320,7 +326,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           targetLanguage={practice?.targetLanguage ?? activeLanguage?.code}
           lessonId={practice?.id}
           lessonTitle={practice?.title}
-          onSessionActiveChange={setSessionActive}
+          onSessionActiveChange={handleSessionActiveChange}
           freemiumVoiceRemaining={
             showFreemiumVoicePill ? freemiumVoiceRemaining : undefined
           }

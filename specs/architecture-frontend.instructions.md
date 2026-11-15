@@ -319,6 +319,21 @@ Do not promote local state into a global store without a cross-route requirement
 focus/visibility quota refreshes. Cache lifetime, trial eligibility, and access policy are canonical in
 `subscriptions-freemium.instructions.md`.
 
+`components/billing/PremiumResultOffer.tsx` owns inline post-completion invitations. Learning pages
+mount it only for new successful results and pass whether their review prompt blocks presentation.
+The component consumes the existing auth, config, trial, and freemium stores; it does not make quota
+requests or authorize access. Its soft-offer lifecycle is scoped to account, authentication session,
+and feature. Intersection visibility and document visibility determine when it claims an invitation.
+
+`components/billing/TrialExpiredNotice.tsx` belongs to dashboard entry and reuses `ConfirmDialog`.
+It defers to existing tour/news browser preferences without changing those components.
+`lib/premium-prompts.ts` stores account-scoped browser presentation preferences under
+`fl_premium_prompts_<userId>`: the last offer timestamp and the acknowledged trial-expiration timestamp.
+These local preferences contain no credentials, are not analytics identifiers, and are never sent to
+the server. They intentionally survive logout in the same browser; another account uses a separate key.
+Billing eligibility, cadence, and storage limitations are owned by
+`subscriptions-freemium.instructions.md`.
+
 `lib/freemium-access.ts` maps confirmed feature denials separately from temporary unavailability.
 Its `useFreemiumAccessRecovery` hook retains a server denial even when the follow-up status read
 fails or the advisory snapshot still predates that denial. A new successful quota snapshot with

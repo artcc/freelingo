@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Loader2, Star, X } from 'lucide-react'
 import { createReview, fetchMyReview } from '@/lib/reviews'
@@ -174,6 +174,7 @@ export function ReviewPrompt({
   const [hasReview, setHasReview] = useState(false)
   const [error, setError] = useState('')
   const [statusCheckFailed, setStatusCheckFailed] = useState(false)
+  const closeExistingReview = useEffectEvent(() => onClose())
 
   useEffect(() => {
     if (!open) {
@@ -189,6 +190,7 @@ export function ReviewPrompt({
       .then((data) => {
         if (cancelled) return
         setHasReview(data.has_review)
+        if (data.has_review) closeExistingReview()
       })
       .catch(() => {
         if (cancelled) return

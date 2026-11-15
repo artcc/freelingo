@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
+import { useConfigStore } from '@/store/config'
 import { useRouter } from 'next/navigation'
 import {
   Bot,
@@ -33,6 +34,11 @@ import {
 export default function SettingsPage() {
   const t = useTranslations('settings')
   const tCommon = useTranslations('common')
+  const tPremium = useTranslations('premiumOffer')
+  const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
+  const planTitle = stripeEnabled
+    ? tPremium('planSection')
+    : t('sectionUsageLimits')
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
   const router = useRouter()
@@ -46,7 +52,7 @@ export default function SettingsPage() {
     { href: '#account', label: t('sectionAccount'), icon: User },
     { href: '#preferences', label: t('sectionAppearance'), icon: Palette },
     { href: '#voice', label: t('sectionConversation'), icon: Volume2 },
-    { href: '#plan', label: t('sectionUsageLimits'), icon: CreditCard },
+    { href: '#plan', label: planTitle, icon: CreditCard },
     { href: '#community', label: t('sectionReview'), icon: MessageSquareText },
     { href: '#legal', label: t('sectionLegal'), icon: Globe2 },
   ]
@@ -129,7 +135,7 @@ export default function SettingsPage() {
           </div>
         </SettingsPanel>
 
-        <SettingsPanel id="plan" title={t('sectionUsageLimits')}>
+        <SettingsPanel id="plan" title={planTitle}>
           <div className="space-y-4">
             <BillingSection />
             <UsageLimitsSection title={t('cardCurrentUsage')} />

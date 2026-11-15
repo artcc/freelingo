@@ -16,6 +16,7 @@ import { useExerciseAnalytics } from '@/hooks/useExerciseAnalytics'
 import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
+import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { type ListeningExercise } from '@/types/api'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
@@ -580,7 +581,8 @@ function ListeningPage() {
         <div className="flex gap-3 pt-1">
           <button
             onClick={loadNext}
-            className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 flex-1 border py-3 font-mono text-sm tracking-widest uppercase transition-colors"
+            disabled={!!freemiumExhausted}
+            className="border-fl-border bg-fl-surface text-fl-fg hover:bg-fl-surface-2 flex-1 border py-3 font-mono text-sm tracking-widest uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t('nextExercise')}
           </button>
@@ -607,6 +609,16 @@ function ListeningPage() {
               wordSaveError: tCommon('wordSaveError'),
             }}
           />
+        )}
+        {!isReplay && result.sessionVersion === sessionVersion && (
+          <PremiumResultOffer
+            feature="listening"
+            blocked={reviewPromptOpen}
+            accessExhausted={!!freemiumExhausted}
+          />
+        )}
+        {isReplay && freemiumExhausted && (
+          <PaywallBanner feature="listening" compact />
         )}
         <ReviewPrompt
           open={reviewPromptOpen}

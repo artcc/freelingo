@@ -17,6 +17,7 @@ export function FreemiumQuotaBanner({
   className = '',
 }: FreemiumQuotaBannerProps) {
   const t = useTranslations('freemium')
+  const tPremium = useTranslations('premiumOffer')
   const user = useAuthStore((s) => s.user)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const status = useFreemiumStore((s) => s.status)
@@ -34,9 +35,12 @@ export function FreemiumQuotaBanner({
         <span className="text-fl-muted-2">
           ★ {t('trialDaysLeft', { days: trialDaysLeft })}
         </span>
-        <span className="text-fl-accent tracking-widest uppercase">
+        <Link
+          href="/settings#plan"
+          className="text-fl-accent focus-visible:outline-fl-accent tracking-widest uppercase underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {t('trialUnlimited')}
-        </span>
+        </Link>
       </div>
     )
   }
@@ -89,19 +93,22 @@ export function FreemiumQuotaBanner({
         className={`border-fl-border bg-fl-surface flex items-center justify-between border px-3 py-2 font-mono text-xs ${className}`}
       >
         <span className="text-fl-muted-2">{info.label}</span>
-        <span className="text-fl-accent tracking-widest uppercase">
+        <Link
+          href="/settings#plan"
+          className="text-fl-accent focus-visible:outline-fl-accent tracking-widest uppercase underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {t('requiresSubscription')}
-        </span>
+        </Link>
       </div>
     )
   }
 
   const pct = info.limit > 0 ? (info.remaining / info.limit) * 100 : 100
-  const low = pct <= 25
+  const low = info.remaining <= 1 || pct <= 25
 
   return (
     <div
-      className={`border-fl-border bg-fl-surface flex items-center justify-between border px-3 py-2 font-mono text-xs ${className}`}
+      className={`border-fl-border bg-fl-surface flex flex-wrap items-center justify-between gap-2 border px-3 py-2 font-mono text-xs ${className}`}
     >
       <span className="text-fl-muted-2">
         {info.label}:{' '}
@@ -116,6 +123,17 @@ export function FreemiumQuotaBanner({
         >
           {t('freeLimit')}
         </Link>
+      )}
+      {low && (
+        <span className="text-fl-muted-2 w-full font-sans text-xs leading-relaxed">
+          {tPremium(
+            feature === 'voice' ||
+              feature === 'listening' ||
+              feature === 'reading'
+              ? 'weeklyReset'
+              : 'dailyReset'
+          )}
+        </span>
       )}
     </div>
   )

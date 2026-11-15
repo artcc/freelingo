@@ -83,12 +83,45 @@ const durationKeys = [
 
 const english = createTranslator({ locale: 'en', messages: en })
 
+function messageKeys(value: Record<string, unknown>, prefix = ''): string[] {
+  return Object.entries(value).flatMap(([key, child]) => {
+    const path = prefix ? `${prefix}.${key}` : key
+    return typeof child === 'string'
+      ? [path]
+      : messageKeys(child as Record<string, unknown>, path)
+  })
+}
+
 function placeholders(message: string) {
   const names = [...message.matchAll(/\{(\w+)(?:,|\})/g)].map((match) => match[1])
   return [...new Set(names)].sort()
 }
 
 describe.each(SUPPORTED_LOCALES)('billing and access messages in %s', (locale) => {
+  it('localizes every Premium invitation and keeps its billing placeholders', async () => {
+    const messages = (await import(`../../../messages/${locale}.json`)).default
+    expect(messageKeys(messages.premiumOffer).sort()).toEqual(
+      messageKeys(en.premiumOffer).sort()
+    )
+    const t = createTranslator({
+      locale,
+      messages,
+      onError: (error) => { throw error },
+    })
+    const keys = messageKeys(en.premiumOffer, 'premiumOffer') as Array<
+      Extract<Parameters<typeof english>[0], `premiumOffer.${string}`>
+    >
+    for (const key of keys) {
+      expect(placeholders(t.raw(key)), key).toEqual(placeholders(english.raw(key)))
+      const text = t(key, { days: 7, date: '15/11/2026' })
+      expect(text.trim(), key).not.toBe('')
+      expect(text, key).not.toMatch(/[{}]/)
+      if (locale !== 'en' && english.raw(key).split(/\s+/).length >= 4) {
+        expect(text, key).not.toBe(english(key, { days: 7, date: '15/11/2026' }))
+      }
+    }
+  })
+
   it('has localized messages with matching placeholders and valid ICU', async () => {
     const messages = (await import(`../../../messages/${locale}.json`)).default
     const t = createTranslator({

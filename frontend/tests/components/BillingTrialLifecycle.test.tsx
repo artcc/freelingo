@@ -77,6 +77,38 @@ describe('billing trial lifecycle', () => {
     )
   })
 
+  it('warns on the last of three free uses, before exhaustion', () => {
+    useFreemiumStore.setState({
+      status: { ...status, lessons_remaining: 1, lessons_limit: 3 },
+    })
+    render(<FreemiumQuotaBanner feature="lessons" />)
+    expect(screen.getByRole('link', { name: 'freeLimit' })).toHaveAttribute(
+      'href', '/settings#plan'
+    )
+    expect(screen.getByText('dailyReset')).toBeInTheDocument()
+    act(() => useFreemiumStore.setState({
+      status: { ...status, lessons_remaining: 2, lessons_limit: 3 },
+    }))
+    expect(screen.queryByRole('link', { name: 'freeLimit' })).not.toBeInTheDocument()
+  })
+
+  it('makes trial and Premium-only labels actionable without inventing a reset', () => {
+    useFreemiumStore.setState({
+      status: { ...status, lessons_limit: 0 },
+    })
+    render(<FreemiumQuotaBanner feature="lessons" />)
+    expect(screen.getByRole('link', { name: 'requiresSubscription' })).toHaveAttribute(
+      'href', '/settings#plan'
+    )
+    expect(screen.queryByText('dailyReset')).not.toBeInTheDocument()
+    act(() => useAuthStore.getState().setUser({
+      ...user, freemium_trial_ends_at: '2026-11-20T12:00:00Z',
+    }))
+    expect(screen.getByRole('link', { name: 'trialUnlimited' })).toHaveAttribute(
+      'href', '/settings#plan'
+    )
+  })
+
   it('updates remaining days and removes trial access exactly at expiry', () => {
     useAuthStore.getState().setUser({
       ...user,

@@ -16,6 +16,7 @@ import OnboardingTour from '@/components/tour/OnboardingTour'
 import WhatsNew from '@/components/whats-new/WhatsNew'
 import { PageLoading } from '@/components/ui/page-loading'
 import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
+import { TrialExpiredNotice } from '@/components/billing/TrialExpiredNotice'
 import { DashboardAnnouncement } from '@/components/dashboard/DashboardAnnouncement'
 import {
   ProgressOverview,
@@ -257,6 +258,7 @@ export default function DashboardPage() {
     <>
       <OnboardingTour />
       <WhatsNew />
+      <TrialExpiredNotice />
       <div
         className="mx-auto max-w-4xl p-6"
         onClick={(event) => {

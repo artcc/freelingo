@@ -502,7 +502,10 @@ completion; voice refreshes after session end. Quota GETs reject superseded requ
 responses, including delayed body decoding; reads overlapping confirmed consumption reconcile again.
 
 `FreemiumQuotaBanner` shows active-trial time, remaining/limit values, Premium-only state for zero
-limits, and low-balance emphasis. `PaywallBanner` renders inline upgrade or payment-recovery actions.
+limits, and low-balance emphasis. Trial and Premium-only labels link to `/settings#plan`.
+The upgrade action appears with at most one remaining use or at most 25% of the balance; low-balance
+copy identifies daily or Monday weekly replenishment at 00:00 UTC. Zero-limit features never promise
+replenishment. `PaywallBanner` renders inline upgrade or payment-recovery actions.
 There is no `PaywallGate`; each feature page adapts only the consuming controls while preserving
 readable history where backend policy permits.
 
@@ -536,6 +539,45 @@ onboarding presents explicit plan buttons even during the no-card trial when a p
 Login routes an onboarded learner with a selected plan to Settings' plan section; shared buttons
 prioritize that plan. Dashboard purchase/payment-recovery actions remain available during the
 no-card trial. Navigation details belong to `platform.instructions.md`.
+
+### Upgrade invitations
+
+With loaded billing configuration and a known unsubscribed account, desktop navigation and the closed
+mobile header expose a permanent Premium link to `/settings#plan`. Navigation trial countdowns also
+link there. The Settings section is named Plan and subscription while billing is enabled; deployments
+without billing retain the usage-limits label. The dashboard's existing Premium banner retains its
+position and purchase actions.
+
+Settings explains Premium's voice, chat, comprehension, lesson, game, and multi-language benefits
+alongside the general account limits. An active no-card trial shows its localized expiration date and
+explains the absence of automatic charging. Settings prioritizes monthly billing when no valid plan
+was selected; explicit monthly/yearly purchase intent takes precedence. Other shared button consumers
+retain their existing default order. Detailed plan terms distinguish monthly and annual commitment,
+immediate paid subscription from an eligible card trial, and the independence of that trial from any
+remaining no-card days.
+
+A known expired no-card trial can show a dismissible notice on dashboard entry. It explains that
+progress is preserved and free access remains limited, and offers plans or continued free use.
+It is suppressed for subscribers, payment-recovery states, disabled trial/billing configuration,
+unknown expiration, and visits reserved for the onboarding tour or unseen release news. Such visits
+defer the notice until a later dashboard entry. It never mounts inside an exercise or conversation.
+Showing the notice records the account's trial expiration in browser-local preferences, so revisiting
+or logging in again in that browser does not repeat it. This preference is not synchronized between
+devices; clearing browser storage can permit another notice. Unavailable storage suppresses the notice.
+
+Newly completed activities can show an inline, contextual Premium invitation without replacing their
+result, corrections, or transcript. Saved history and read-only reviews are not new completion
+opportunities. Subscribers, payment-recovery states, unknown accounts, and pending/disabled billing
+configuration suppress soft invitations. Exhausted access for a payment-recovery state uses the
+existing portal paywall instead of new purchase actions. Review dialogs defer their presentation.
+
+Soft result invitations share a three-day frequency limit per account in the browser, recorded when
+their position becomes visible, and can be dismissed. The trial-expiration notice also starts this
+cooldown. Browser storage failures retain a page-session fallback. A confirmed exhausted feature
+balance can still show a continuation offer regardless of this soft-invitation cooldown; active
+no-card trials and unknown balances never imply exhaustion. Positive limits explain replenishment,
+while zero-limit features do not. Flashcard invitations promote additional Lingu practice without
+presenting flashcards as a paid feature. No invitation adds analytics events or changes access quotas.
 
 Billing success restores authentication if needed and polls the persisted profile up to five times,
 1.5 seconds apart. Only `active` or `trialing` confirms Premium and starts the five-second dashboard
