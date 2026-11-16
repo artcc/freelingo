@@ -12,6 +12,7 @@ import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { Pagination } from '@/components/ui/pagination'
 import { PageLoading } from '@/components/ui/page-loading'
+import NoPlanBanner from '@/components/plan/NoPlanBanner'
 import {
   gameRequest,
   GameRequestError,
@@ -293,6 +294,9 @@ export function GameCatalog({
     }
   }
 
+  if (switching) return <PageLoading />
+  if (noPlan) return <NoPlanBanner />
+
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-6 font-sans">
       <Link href="/games" className="text-fl-muted-2 text-sm">
@@ -320,15 +324,7 @@ export function GameCatalog({
           </button>
         </div>
       )}
-      {noPlan && (
-        <div className="border-fl-border space-y-4 border p-6">
-          <p>{common('noActivePlan')}</p>
-          <Link href="/assessment" className={button}>
-            {t('assessment')}
-          </Link>
-        </div>
-      )}
-      {!catalog && !noPlan && !error && (
+      {!catalog && !error && (
         <PageLoading fullScreen={false} label={common('loading')} />
       )}
       {catalog && (
