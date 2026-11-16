@@ -27,13 +27,14 @@ export function useExerciseGeneration<T>({
   studyPlanId?: number
   level?: string | null
   onExercise: (exercise: T, context: ExerciseContext) => void
-  setPageState: (state: 'loading' | 'generating' | 'idle' | 'exercise') => void
+  setPageState: (
+    state: 'loading' | 'generating' | 'idle' | 'exercise' | 'no-plan'
+  ) => void
   setError: (error: string) => void
   dismissTooltip: () => void
   onAccessDenied?: () => void
 }) {
   const t = useTranslations('exerciseGeneration')
-  const tCommon = useTranslations('common')
   const active = useRef<AbortController | null>(null)
   const lastAutomaticLoad = useRef<(() => Promise<void>) | null>(null)
   const needsRefresh = useLanguageStore((s) => s.needsRefresh)
@@ -134,10 +135,14 @@ export function useExerciseGeneration<T>({
         if (!current()) return
         const code =
           error instanceof ExerciseGenerationError ? error.code : 'unavailable'
+        if (code === 'noActivePlan') {
+          setPageState('no-plan')
+          return
+        }
         if (code === 'exhausted') {
           onAccessDenied?.()
         } else {
-          setError(code === 'noActivePlan' ? tCommon('noActivePlan') : t(code))
+          setError(t(code))
         }
         setPageState('idle')
       } finally {
@@ -156,7 +161,6 @@ export function useExerciseGeneration<T>({
       setPageState,
       onExercise,
       t,
-      tCommon,
       sessionVersion,
       onAccessDenied,
     ]

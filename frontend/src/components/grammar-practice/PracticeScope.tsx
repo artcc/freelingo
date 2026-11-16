@@ -7,7 +7,7 @@ import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { PageLoading } from '@/components/ui/page-loading'
 
 export const practiceButton =
-  'border-fl-border text-fl-fg hover:bg-fl-surface-2 border px-4 py-2 text-sm disabled:opacity-40'
+  'border-fl-border bg-fl-surface text-fl-fg hover:border-fl-border-2 hover:bg-fl-surface-2 focus-visible:outline-fl-fg inline-flex items-center justify-center gap-2 border px-4 py-2 text-center text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40'
 
 export function practiceScope() {
   const auth = useAuthStore.getState()

@@ -106,6 +106,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     '/listening',
     '/reading',
     '/conversation',
+    '/grammar-practice',
   ])
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const configLoaded = useConfigStore((s) => s.loaded)

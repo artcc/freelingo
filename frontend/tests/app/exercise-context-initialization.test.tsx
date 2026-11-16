@@ -807,6 +807,69 @@ describe.each([
   { feature: 'reading', Page: ReadingPage },
   { feature: 'listening', Page: ListeningPage },
 ])('$feature context initialization', ({ feature, Page }) => {
+  it('shows the shared no-plan view only after confirmation and resumes when a plan is added', async () => {
+    const lookup = deferred<Response>()
+    let reads = 0
+    vi.mocked(fetch).mockImplementation(async (input) => {
+      const url = String(input)
+      if (url === '/api/languages') {
+        return json({
+          ...languages(),
+          languages: [{ ...languages().languages[0], plan: null }],
+        })
+      }
+      if (url.startsWith(`/api/${feature}/next?`)) {
+        reads += 1
+        return reads === 1 ? lookup.promise : ready()
+      }
+      return json({}, 404)
+    })
+
+    render(<Page />)
+    await waitFor(() => expect(reads).toBe(1))
+    expect(screen.queryByText('noPlanTitle')).not.toBeInTheDocument()
+    await act(async () => {
+      lookup.resolve(json({ detail: 'No active study plan found' }, 404))
+    })
+    expect(
+      await screen.findByRole('heading', { name: 'noPlanTitle' })
+    ).toBeVisible()
+    expect(screen.queryByText('noExercises')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'generate' })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'history' })
+    ).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'startAssessment' }))
+    expect(push).toHaveBeenCalledWith('/assessment')
+
+    act(() =>
+      useLanguageStore.setState({ userLanguages: languages().languages })
+    )
+    expect(await screen.findByText(/Fresh exercise/)).toBeVisible()
+    expect(screen.queryByText('noPlanTitle')).not.toBeInTheDocument()
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(([, options]) => options?.method === 'POST')
+    ).toBe(false)
+  })
+
+  it('does not treat an unrelated lookup failure as a missing plan', async () => {
+    useLanguageStore.setState({
+      activeLanguage: getLanguageByCode('en-GB') ?? null,
+      userLanguages: languages().languages,
+    })
+    vi.mocked(fetch).mockResolvedValue(
+      json({ detail: 'exercise_not_found' }, 404)
+    )
+    render(<Page />)
+    expect(await screen.findByText('failed')).toBeVisible()
+    expect(screen.queryByText('noPlanTitle')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'generate' })).toBeVisible()
+  })
+
   it.each(['freemium_unavailable', 'subscription_required', 'server', 'network'])(
     'recovers a history %s failure manually without presenting an empty history',
     async (failure) => {

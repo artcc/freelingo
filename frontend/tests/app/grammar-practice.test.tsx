@@ -382,6 +382,66 @@ describe('grammar library and captured resource context', () => {
     ).toBe(true)
   })
 
+  it('shows the shared no-plan state for an empty library and opens assessment', async () => {
+    vi.mocked(practiceRequest).mockResolvedValue({
+      study_plan_id: null,
+      target_language: 'en-GB',
+      quota: history.quota,
+      limited: true,
+      topics: [],
+      total: 0,
+    })
+    render(<PracticeCatalog />)
+    expect(
+      await screen.findByRole('heading', { name: 'noPlanTitle' })
+    ).toBeVisible()
+    fireEvent.click(screen.getByRole('button', { name: 'startAssessment' }))
+    expect(push).toHaveBeenCalledWith('/assessment')
+    expect(screen.queryByText('empty')).not.toBeInTheDocument()
+  })
+
+  it('keeps saved library topics accessible without a plan', async () => {
+    vi.mocked(practiceRequest).mockResolvedValue({
+      study_plan_id: null,
+      target_language: 'en-GB',
+      quota: history.quota,
+      limited: true,
+      topics: [history.topic],
+      total: 1,
+    })
+    render(<PracticeCatalog />)
+    expect(
+      await screen.findByRole('link', { name: /Present simple/ })
+    ).toHaveAttribute('href', '/grammar-practice/7')
+    expect(screen.getByRole('link', { name: 'assessment' })).toHaveAttribute(
+      'href',
+      '/assessment'
+    )
+    expect(
+      screen.queryByRole('heading', { name: 'noPlanTitle' })
+    ).not.toBeInTheDocument()
+  })
+
+  it('offers grammar resources when the library is empty but a plan exists', async () => {
+    vi.mocked(practiceRequest).mockResolvedValue({
+      study_plan_id: 4,
+      target_language: 'en-GB',
+      quota: history.quota,
+      limited: true,
+      topics: [],
+      total: 0,
+    })
+    render(<PracticeCatalog />)
+    expect(await screen.findByText('empty')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'explore' })).toHaveAttribute(
+      'href',
+      '/grammar'
+    )
+    expect(
+      screen.queryByRole('heading', { name: 'noPlanTitle' })
+    ).not.toBeInTheDocument()
+  })
+
   it('keeps history and saved sessions usable with no plan and exhausted quota', async () => {
     vi.mocked(practiceRequest).mockResolvedValue({
       ...history,
@@ -901,11 +961,11 @@ describe('grammar saved sessions', () => {
   it('does not display future questions or solutions before answering', async () => {
     vi.mocked(practiceRequest).mockResolvedValue(initial)
     render(<PracticeSession sessionId={id} />)
-    expect(await screen.findByText('She ___ home.')).toHaveAttribute(
+    expect(await screen.findByText(/She ___ home\./)).toHaveAttribute(
       'lang',
       'en-GB'
     )
-    expect(screen.queryByText('I ___ tea.')).not.toBeInTheDocument()
+    expect(screen.queryByText(/I ___ tea\./)).not.toBeInTheDocument()
     expect(screen.queryByText('solution')).not.toBeInTheDocument()
   })
 

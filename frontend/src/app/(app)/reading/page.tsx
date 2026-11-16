@@ -21,6 +21,7 @@ import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { type ReadingExercise } from '@/types/api'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
+import NoPlanBanner from '@/components/plan/NoPlanBanner'
 import { ExerciseGenerationLoading } from '@/components/ui/exercise-generation-loading'
 import { Pagination } from '@/components/ui/pagination'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
@@ -65,7 +66,13 @@ interface AttemptItem {
 }
 
 type PageState =
-  'loading' | 'idle' | 'generating' | 'exercise' | 'results' | 'history'
+  | 'loading'
+  | 'idle'
+  | 'generating'
+  | 'exercise'
+  | 'results'
+  | 'history'
+  | 'no-plan'
 
 const HISTORY_PAGE_SIZE = 10
 
@@ -394,6 +401,8 @@ function ReadingPage() {
   if (pageState === 'loading') {
     return <PageLoading />
   }
+
+  if (pageState === 'no-plan') return <NoPlanBanner />
 
   // ── Generating (long-poll) ────────────────────────────────────────────────
   if (pageState === 'generating') {

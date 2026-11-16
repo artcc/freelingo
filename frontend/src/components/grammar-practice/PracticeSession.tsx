@@ -233,20 +233,20 @@ function SessionContent({ sessionId }: { sessionId: string }) {
     (item) => item.index === session.answered
   )
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-6 font-sans">
+    <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 font-sans md:px-8">
       <Link
         href={
           session
             ? `/grammar-practice/${session.topic_id}`
             : '/grammar-practice'
         }
-        className="text-fl-muted-2 text-sm"
+        className="text-fl-muted-2 hover:text-fl-fg inline-flex text-sm transition-colors"
       >
         ← {t('back')}
       </Link>
       {error && (
         <div role="alert" className="space-y-3">
-          <p>{error}</p>
+          <p className="text-fl-error-fg text-sm">{error}</p>
           <button
             className={practiceButton}
             disabled={busy || clock < retryAt}
@@ -267,7 +267,7 @@ function SessionContent({ sessionId }: { sessionId: string }) {
       {!session && !error && <PageLoading fullScreen={false} />}
       {session && (
         <>
-          <header className="border-fl-border bg-fl-surface space-y-3 border p-6">
+          <header className="space-y-2">
             <h1 className="text-fl-fg text-xl font-semibold">
               <TargetLanguageText languageCode={session.target_language}>
                 {session.title}
@@ -276,7 +276,7 @@ function SessionContent({ sessionId }: { sessionId: string }) {
             <p className="text-fl-muted-2 text-sm">
               {target(session.target_language)} · {session.topic_level}
             </p>
-            <p role="status">
+            <p role="status" className="text-fl-muted-2 text-sm">
               {t(session.status)} ·{' '}
               {t('score', {
                 correct: session.correct,
@@ -298,16 +298,26 @@ function SessionContent({ sessionId }: { sessionId: string }) {
           {answered.map((item) => (
             <section
               key={item.index}
-              className="border-fl-border bg-fl-surface space-y-3 border p-5"
+              className={`space-y-3 border p-5 ${
+                item.correct
+                  ? 'border-fl-success/50 bg-fl-success/5'
+                  : 'border-fl-error-fg/50 bg-fl-error-fg/5'
+              }`}
             >
               <TargetLanguageText
                 as="h2"
                 languageCode={session.target_language}
-                className="text-lg"
+                className="text-fl-fg text-lg"
               >
-                {item.question}
+                {item.index + 1}. {item.question}
               </TargetLanguageText>
-              <p>{t(item.correct ? 'correct' : 'incorrect')}</p>
+              <p
+                className={`text-sm font-semibold ${
+                  item.correct ? 'text-fl-success' : 'text-fl-error-fg'
+                }`}
+              >
+                {t(item.correct ? 'correct' : 'incorrect')}
+              </p>
               <p>
                 {t('yourAnswer')}:{' '}
                 <TargetLanguageText languageCode={session.target_language}>
@@ -327,7 +337,7 @@ function SessionContent({ sessionId }: { sessionId: string }) {
               {item.explanation && (
                 <p
                   lang={session.native_language}
-                  className="text-fl-muted-2 text-sm"
+                  className="text-fl-muted-2 text-sm leading-relaxed"
                 >
                   {item.explanation}
                 </p>
@@ -355,9 +365,11 @@ function SessionContent({ sessionId }: { sessionId: string }) {
             </button>
           )}
           {session.status === 'completed' && (
-            <section className="space-y-4">
-              <h2 className="text-lg font-semibold">{t('completed')}</h2>
-              <p>
+            <section className="border-fl-border bg-fl-surface space-y-4 border p-6">
+              <h2 className="text-fl-fg text-sm font-bold tracking-widest uppercase">
+                {t('completed')}
+              </h2>
+              <p className="text-fl-fg text-2xl font-bold">
                 {t('accuracy', {
                   percent: session.answered
                     ? Math.round((session.correct / session.answered) * 100)
@@ -410,7 +422,7 @@ function ChallengeForm({
   const [value, setValue] = useState<number | string>('')
   return (
     <form
-      className="border-fl-border bg-fl-surface space-y-4 border p-6"
+      className="border-fl-border bg-fl-surface space-y-4 border p-4 sm:p-6"
       onSubmit={(event) => {
         event.preventDefault()
         if (
@@ -421,8 +433,12 @@ function ChallengeForm({
           onAnswer(value)
       }}
     >
-      <TargetLanguageText as="h2" languageCode={language} className="text-lg">
-        {challenge.question}
+      <TargetLanguageText
+        as="h2"
+        languageCode={language}
+        className="text-fl-fg text-lg"
+      >
+        {challenge.index + 1}. {challenge.question}
       </TargetLanguageText>
       {challenge.type === 'multiple_choice' ? (
         <fieldset disabled={disabled} className="grid gap-3">
@@ -430,13 +446,18 @@ function ChallengeForm({
           {challenge.options?.map((option, index) => (
             <label
               key={index}
-              className="border-fl-border flex cursor-pointer items-center gap-3 border p-3"
+              className={`flex items-center gap-3 border p-3 transition-colors ${
+                value === index
+                  ? 'border-fl-accent text-fl-fg bg-fl-surface-2'
+                  : 'border-fl-border text-fl-muted-1 hover:border-fl-muted-2 hover:text-fl-fg'
+              } ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}
             >
               <input
                 type="radio"
                 name={`challenge-${challenge.index}`}
                 value={index}
                 checked={value === index}
+                className="accent-fl-fg shrink-0"
                 onChange={() => setValue(index)}
               />
               <TargetLanguageText languageCode={language}>
@@ -447,7 +468,7 @@ function ChallengeForm({
         </fieldset>
       ) : (
         <label className="block space-y-2">
-          <span>{t('fillBlank')}</span>
+          <span className="text-fl-muted-2 text-sm">{t('fillBlank')}</span>
           <TargetLanguageText
             as="span"
             languageCode={language}
@@ -455,7 +476,7 @@ function ChallengeForm({
           >
             <input
               lang={language}
-              className="border-fl-border bg-fl-bg text-fl-fg w-full border p-3 font-[inherit]"
+              className="border-fl-border bg-fl-bg text-fl-fg focus:border-fl-border-2 w-full border p-3 font-[inherit] transition-colors focus:outline-none disabled:opacity-40"
               value={value}
               maxLength={500}
               disabled={disabled}
@@ -466,7 +487,7 @@ function ChallengeForm({
         </label>
       )}
       <button
-        className={practiceButton}
+        className="border-fl-border bg-fl-fg text-fl-bg hover:bg-fl-fg/90 focus-visible:outline-fl-fg w-full border py-3 text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
         disabled={
           disabled ||
           value === '' ||

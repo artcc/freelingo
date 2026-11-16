@@ -27,6 +27,20 @@ sessions across plans within the exact owning language. Removing a plan removes 
 not the language's library; removing the language removes its library and sessions. Global admission
 records survive both operations. Persistence details belong to `database-models.instructions.md`.
 
+## Client presentation
+
+The catalog uses the shared `NoPlanBanner` when the loaded library has no current study plan and no
+saved topics. A library with saved topics remains visible without a plan, with an inline assessment
+action. Topic history and saved-session routes remain accessible in that state, including recovery
+actions; the full-page no-plan state does not replace them.
+
+An empty library with a current plan links to the grammar resources. Catalog loading uses
+`PageLoading`, while pending creation recovery keeps its actions visible during a history reload.
+Cards, empty states, controls, and exercise feedback follow the existing Grammar and Reading
+presentation patterns. Learned-language content retains `TargetLanguageText`; interface text uses
+Geist Sans. Exercises show their sequence number and the selected option, and answered exercises
+include both a textual correctness label and the established success/error styling.
+
 ## Generation and lifecycle
 
 Sessions have `generating`, `ready`, `completed`, `failed`, or `abandoned` status. The creation UUID

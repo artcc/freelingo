@@ -12,6 +12,7 @@ import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
+import NoPlanBanner from '@/components/plan/NoPlanBanner'
 import { Pagination } from '@/components/ui/pagination'
 import { PageLoading } from '@/components/ui/page-loading'
 import { useFreemiumAccessRecovery } from '@/lib/freemium-access'
@@ -260,15 +261,29 @@ function Catalog({ topicId }: { topicId?: string }) {
   const blocked =
     accessDenied ||
     (!unlimited && !!(data?.limited && data.quota.remaining <= 0))
+
+  if (!data && !error && !pending) return <PageLoading />
+  if (library && !library.study_plan_id && library.total === 0)
+    return <NoPlanBanner />
+
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-6 font-sans">
+    <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 font-sans md:px-8">
       {topicId && (
-        <Link href="/grammar-practice" className="text-fl-muted-2 text-sm">
+        <Link
+          href="/grammar-practice"
+          className="text-fl-muted-2 hover:text-fl-fg inline-flex text-sm transition-colors"
+        >
           ← {t('back')}
         </Link>
       )}
-      <header className="border-fl-border bg-fl-surface space-y-3 border p-6">
-        <h1 className="text-fl-fg text-xl font-semibold">
+      <header className="space-y-2">
+        <h1
+          className={
+            history
+              ? 'text-fl-fg text-xl font-semibold'
+              : 'text-fl-fg text-sm font-bold tracking-widest uppercase'
+          }
+        >
           {history ? (
             <TargetLanguageText languageCode={history.target_language}>
               {history.topic.title}
@@ -279,14 +294,14 @@ function Catalog({ topicId }: { topicId?: string }) {
         </h1>
         <p className="text-fl-muted-2 text-sm">{t('description')}</p>
         {data && (
-          <p className="text-fl-muted-2 text-sm">
+          <p className="text-fl-muted-3 text-xs">
             {target(data.target_language)}
           </p>
         )}
       </header>
       {error && (
         <div role="alert" className="space-y-3">
-          <p>{error}</p>
+          <p className="text-fl-error-fg text-sm">{error}</p>
           <button
             disabled={clock < retryAt || busy}
             className={practiceButton}
@@ -298,8 +313,8 @@ function Catalog({ topicId }: { topicId?: string }) {
       )}
       {!data && !error && <PageLoading fullScreen={false} />}
       {pending && (
-        <section className="border-fl-border space-y-3 border p-4">
-          <p>{t('recoveryError')}</p>
+        <section className="border-fl-border bg-fl-surface space-y-3 border p-4">
+          <p className="text-fl-muted-2 text-sm">{t('recoveryError')}</p>
           <div className="flex flex-wrap gap-3">
             <Link
               className={practiceButton}
@@ -322,29 +337,35 @@ function Catalog({ topicId }: { topicId?: string }) {
           <FreemiumQuotaBanner feature="grammar_practice" />
           {blocked && <PaywallBanner feature="grammar_practice" compact />}
           {!data.study_plan_id && (
-            <p className="text-fl-muted-2 text-sm">
-              {t('noPlan')}{' '}
-              <Link href="/assessment" className="underline">
+            <div className="border-fl-border bg-fl-surface flex flex-wrap items-center justify-between gap-4 border p-4">
+              <p className="text-fl-muted-2 text-sm">{t('noPlan')}</p>
+              <Link href="/assessment" className={practiceButton}>
                 {t('assessment')}
               </Link>
-            </p>
+            </div>
           )}
           {library && (
             <>
-              <Link href="/grammar" className={practiceButton}>
-                {t('explore')}
-              </Link>
-              {library.topics.length === 0 && (
-                <p className="text-fl-muted-2">{t('empty')}</p>
+              {library.total === 0 ? (
+                <div className="border-fl-border bg-fl-surface space-y-4 border px-6 py-10 text-center">
+                  <p className="text-fl-muted-2 text-sm">{t('empty')}</p>
+                  <Link href="/grammar" className={practiceButton}>
+                    {t('explore')}
+                  </Link>
+                </div>
+              ) : (
+                <Link href="/grammar" className={practiceButton}>
+                  {t('explore')}
+                </Link>
               )}
               <div className="grid gap-3 sm:grid-cols-2">
                 {library.topics.map((topic) => (
                   <Link
                     key={topic.id}
                     href={`/grammar-practice/${topic.id}`}
-                    className="border-fl-border bg-fl-surface hover:border-fl-border-2 space-y-3 border p-5"
+                    className="border-fl-border bg-fl-surface hover:border-fl-border-2 hover:bg-fl-surface-2 block min-w-0 space-y-3 border p-5 transition-colors"
                   >
-                    <h2 className="font-semibold">
+                    <h2 className="text-fl-fg font-semibold">
                       <TargetLanguageText languageCode={data.target_language}>
                         {topic.title}
                       </TargetLanguageText>
@@ -400,15 +421,19 @@ function Catalog({ topicId }: { topicId?: string }) {
                 <p className="text-fl-muted-2 text-sm">{t('contextChanged')}</p>
               )}
               <section className="space-y-3">
-                <h2 className="font-semibold">{t('history')}</h2>
+                <h2 className="text-fl-fg text-sm font-bold tracking-widest uppercase">
+                  {t('history')}
+                </h2>
                 {history.sessions.length === 0 && (
-                  <p className="text-fl-muted-2">{t('noHistory')}</p>
+                  <div className="border-fl-border bg-fl-surface border p-6 text-center">
+                    <p className="text-fl-muted-2 text-sm">{t('noHistory')}</p>
+                  </div>
                 )}
                 {history.sessions.map((session) => (
                   <Link
                     key={session.id}
                     href={`/grammar-practice/sessions/${session.id}`}
-                    className="border-fl-border bg-fl-surface flex flex-wrap justify-between gap-3 border p-4 text-sm"
+                    className="border-fl-border bg-fl-surface hover:border-fl-border-2 hover:bg-fl-surface-2 text-fl-fg flex flex-wrap items-center justify-between gap-3 border p-4 text-sm transition-colors"
                   >
                     <time dateTime={session.created_at}>
                       {session.created_at.slice(0, 10)}

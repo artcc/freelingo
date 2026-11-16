@@ -104,7 +104,10 @@ The hook loads missing or invalidated language context before querying exercises
 is cancellable and bounded to 20 seconds; failure exits the loading screen with a localized error
 and a Retry action. Successful recovery starts a read-only exercise lookup with the refreshed context.
 A successful language lookup without an active language is also an error; an active language without
-a plan reaches the backend's no-active-plan response.
+a plan reaches the backend's no-active-plan response. That confirmed response sets the page to
+`no-plan`, which renders the shared `NoPlanBanner` and its assessment action instead of the empty
+exercise, generation, history, or quota controls. Missing local context and unrelated lookup failures
+do not imply a missing plan. A subsequent plan/context change restarts the read-only lookup.
 
 The resolver always checks `/next` before requesting generation and issues at most one generation POST
 per operation. It resumes active work or retrieves a saved result on page entry. An uncertain POST is
