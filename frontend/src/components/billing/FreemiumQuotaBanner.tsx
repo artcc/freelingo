@@ -8,7 +8,14 @@ import { useConfigStore } from '@/store/config'
 import { useTrialStatus } from '@/hooks/useTrialStatus'
 
 interface FreemiumQuotaBannerProps {
-  feature: 'chat' | 'lessons' | 'listening' | 'reading' | 'voice' | 'games'
+  feature:
+    | 'chat'
+    | 'lessons'
+    | 'listening'
+    | 'reading'
+    | 'voice'
+    | 'games'
+    | 'grammar_practice'
   className?: string
 }
 
@@ -46,11 +53,22 @@ export function FreemiumQuotaBanner({
   }
 
   if (!status) return null
+  if (
+    feature === 'grammar_practice' &&
+    (status.grammar_practice_remaining === undefined ||
+      status.grammar_practice_limit === undefined)
+  )
+    return null
 
   const limits: Record<
     string,
     { remaining: number; limit: number; label: string }
   > = {
+    grammar_practice: {
+      remaining: status.grammar_practice_remaining ?? 0,
+      limit: status.grammar_practice_limit ?? 0,
+      label: t('grammarPracticeLabel'),
+    },
     games: {
       remaining: status.games_remaining,
       limit: status.games_limit,

@@ -14,11 +14,20 @@ const { api, help, missing } = vi.hoisted(() => ({
   }),
 }))
 vi.mock('@/lib/api', () => ({ apiFetch: api }))
-vi.mock('next-intl', () => ({
-  useTranslations: (namespace: string) => (key: string) =>
-    `${namespace}.${key}`,
+vi.mock('next-intl', () => {
+  const translators = new Map<string, (key: string) => string>()
+  return {
+    useTranslations: (namespace: string) => {
+      if (!translators.has(namespace))
+        translators.set(namespace, (key) => `${namespace}.${key}`)
+      return translators.get(namespace)!
+    },
+  }
+})
+vi.mock('next/navigation', () => ({
+  notFound: missing,
+  useRouter: () => ({ push: vi.fn() }),
 }))
-vi.mock('next/navigation', () => ({ notFound: missing }))
 vi.mock('@/hooks/useAnalyticsView', () => ({
   useAnalyticsView: () => undefined,
 }))
@@ -93,6 +102,8 @@ beforeEach(() => {
     invalidationVersion: 0,
   })
   api.mockImplementation((url: string, options: RequestInit) => {
+    if (url === '/api/study-plan/current')
+      return Promise.resolve(Response.json(null))
     if (url.includes('/native-help')) return help(url, options)
     return Promise.resolve(Response.json({ topics }))
   })
@@ -193,7 +204,7 @@ describe('grammar native help lifecycle', () => {
           screen.getByRole('button', { name: 'common.retry' })
         ).toBeVisible()
       expect(help).toHaveBeenCalledTimes(1)
-      expect(api).toHaveBeenCalledTimes(2)
+      expect(api).toHaveBeenCalledTimes(3)
     }
   )
 
@@ -204,7 +215,7 @@ describe('grammar native help lifecycle', () => {
     expect(api).not.toHaveBeenCalled()
     act(() => useLanguageStore.setState({ isSwitching: false }))
     await screen.findByText('Native help')
-    expect(api).toHaveBeenCalledTimes(2)
+    expect(api).toHaveBeenCalledTimes(3)
     expect(help).toHaveBeenCalledTimes(1)
   })
 
@@ -222,7 +233,7 @@ describe('grammar native help lifecycle', () => {
     ).not.toBeInTheDocument()
     act(() => useLanguageStore.setState({ isSwitching: false }))
     await screen.findByText('Native help')
-    expect(api).toHaveBeenCalledTimes(2)
+    expect(api).toHaveBeenCalledTimes(3)
   })
 
   it.each(['a1', 'a2'])(

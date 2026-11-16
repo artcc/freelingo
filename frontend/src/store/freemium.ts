@@ -15,6 +15,8 @@ interface FreemiumStatus {
   reading_limit: number
   games_remaining: number
   games_limit: number
+  grammar_practice_remaining?: number
+  grammar_practice_limit?: number
   voice_remaining_seconds: number
   voice_limit_seconds: number
 }

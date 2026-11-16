@@ -39,6 +39,7 @@ from app.routers import (
     freemium,
     games,
     grammar,
+    grammar_practice,
     languages,
     lessons,
     listening,
@@ -171,6 +172,7 @@ app.include_router(dashboard_banner.router)
 app.include_router(feedback.router)
 app.include_router(freemium.router)
 app.include_router(games.router)
+app.include_router(grammar_practice.router)
 app.include_router(memories.router)
 app.include_router(phrasebook.router)
 app.include_router(languages.router)

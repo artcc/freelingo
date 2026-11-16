@@ -8,8 +8,12 @@ import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { useLanguageStore } from '@/store/language'
 
-vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
+vi.mock('next-intl', () => {
+  const translate = (key: string) => key
+  return { useTranslations: () => translate }
+})
 vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
   notFound: () => {
     throw new Error('missing-topic')
   },
@@ -80,6 +84,7 @@ beforeEach(() => {
   vi.stubGlobal(
     'fetch',
     vi.fn(async (url) => {
+      if (url === '/api/study-plan/current') return Response.json(null)
       if (String(url).startsWith('/api/grammar?'))
         return Response.json({ topics })
       return new Response(null, { status: 204 })
@@ -149,6 +154,7 @@ describe('real grammar detail consumption', () => {
       finish = resolve
     })
     vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current') return Response.json(null)
       if (String(url).includes('/api/grammar?language=fr-FR')) return french
       if (String(url).startsWith('/api/grammar?'))
         return Response.json({ topics })

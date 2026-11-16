@@ -37,6 +37,7 @@ from app.services.flashcard_sm2 import (
     sm2_update,
     translate_flashcards,
 )
+from app.services.grammar_voice_practice import get_grammar_practice_source
 from app.services.lesson_voice_practice import get_lesson_practice_source
 from app.services.llm_adapter import (
     LLMError,
@@ -463,6 +464,14 @@ async def create_flashcard_from_word(
             raise HTTPException(status_code=404, detail="Lesson not found")
         _, plan = source
         cefr_level = plan.cefr_level
+    elif data.grammar_practice_session_id is not None:
+        grammar_source = await get_grammar_practice_source(
+            db, current_user.id, str(data.grammar_practice_session_id)
+        )
+        if grammar_source is None:
+            raise HTTPException(status_code=404, detail="Grammar practice not found")
+        practice, plan = grammar_source
+        cefr_level = practice.learner_level
     else:
         plan = await _get_active_plan_or_404(db, current_user.id)
         cefr_level = data.cefr_level

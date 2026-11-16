@@ -5,7 +5,14 @@ import { isFreemiumTrialActive, isSubscribed, useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { useFreemiumStore } from '@/store/freemium'
 
-type Feature = 'chat' | 'lessons' | 'listening' | 'reading' | 'games' | 'voice'
+type Feature =
+  | 'chat'
+  | 'lessons'
+  | 'listening'
+  | 'reading'
+  | 'games'
+  | 'voice'
+  | 'grammar_practice'
 
 export function getFreemiumAccessFailure(
   status: number,

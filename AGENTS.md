@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.13.5**
+**Current version: 1.14.0**
 
 ## Project
 
@@ -61,7 +61,7 @@ Use the narrowest relevant spec first:
 - Public landing and static project site: `public-site.instructions.md`.
 - Technical SEO and Search Console: `seo.instructions.md`.
 - Platform and languages: `platform.instructions.md`, `target-language.instructions.md`, `multi-language.instructions.md`, `add-target-language.instructions.md`, `add-ui-native-language.instructions.md`.
-- Learning: `study-plan.instructions.md`, `learning-resources.instructions.md`, `listening.instructions.md`, `reading.instructions.md`, `games.instructions.md`.
+- Learning: `study-plan.instructions.md`, `learning-resources.instructions.md`, `grammar-practice.instructions.md`, `listening.instructions.md`, `reading.instructions.md`, `games.instructions.md`.
 - Speech and AI: `speech-services.instructions.md`, `voice-conversation.instructions.md`, `memories.instructions.md`, `prompts.instructions.md`, `llm-error-handling.instructions.md`.
 - Access and community: `subscriptions-freemium.instructions.md`, `feedback.instructions.md`, `reviews.instructions.md`, `whats-new.instructions.md`.
 - Contracts and operations: `database-models.instructions.md`, `services.instructions.md`, `api-endpoints.instructions.md`, `rate-limiting.instructions.md`, `docker.instructions.md`, `umami.instructions.md`.

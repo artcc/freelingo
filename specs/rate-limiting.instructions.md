@@ -86,6 +86,18 @@ memories, feedback reads/mutations, and review reads/deletes.
 Generation polling is non-overlapping, normally every five seconds, with bounded transport recovery.
 Rate limiting is independent of the global per-user daily game admission quota.
 
+## Grammar Practice
+
+- `GET /api/grammar-practice/topics`, `GET /api/grammar-practice/topics/{id}`, and
+  `GET /api/grammar-practice/sessions/{uuid}`: `60/minute`.
+- `POST /api/grammar-practice/topics`: `10/minute`.
+- `POST /api/grammar-practice/topics/{id}/sessions`: `5/minute`.
+- `POST /api/grammar-practice/sessions/{uuid}/answers`: `60/minute`.
+- `POST /api/grammar-practice/sessions/{uuid}/abandon`: `10/minute`.
+
+These transport limits are independent of the global UTC daily grammar-generation admission quota,
+which is separate from Games. Saved reads and answers do not consume generation allowance.
+
 ## Listening and Reading
 
 Both domains use:

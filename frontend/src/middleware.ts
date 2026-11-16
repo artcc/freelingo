@@ -16,6 +16,7 @@ const PROTECTED_ROUTES = [
   '/flashcards',
   '/games',
   '/grammar',
+  '/grammar-practice',
   '/lesson',
   '/listening',
   '/onboarding',

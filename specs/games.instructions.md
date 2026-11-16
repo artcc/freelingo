@@ -22,6 +22,16 @@ The catalog links to Error Detective at `/games/error-detective`, Sentence Order
 All use the shared catalog component. If no definitions are registered,
 the existing localized empty state links to `/plan`. Navigation metadata is presentation only.
 
+The `/games` index shows the shared `NoPlanBanner` and assessment action when the active language
+snapshot has no plan. Entry and authentication-session replacement first confirm the current
+session's language snapshot. Missing or invalidated context is also loaded first; provisional switches
+show `PageLoading`, and failed or incomplete context loads offer Retry rather than a no-plan state.
+The index updates when the active language or its plan changes.
+
+Direct entry to each game's catalog also uses `NoPlanBanner` when its existing backend lookup
+confirms the no-plan state. This presentation replaces the catalog header and controls.
+Saved-session routes remain independent of these catalog views and retain their plan-owned recovery.
+
 ## Error Detective
 
 A game contains five short sentences, each with one error repaired by replacing one existing

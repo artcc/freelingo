@@ -183,15 +183,20 @@ describe('ConversationMode word tooltip dismissal', () => {
     vi.unstubAllGlobals()
   })
 
-  it.each([undefined, 7])(
-    'saves words with the lesson owner only in practice mode (%s)',
-    async (lessonId) => {
+  it.each([
+    [undefined, undefined],
+    [7, undefined],
+    [undefined, '4b8fa402-fb9c-4bba-b658-583824dd1bb1'],
+  ] as const)(
+    'saves words with the practice owner (%s, %s)',
+    async (lessonId, grammarPracticeSessionId) => {
       useLanguageStore.setState({
         activeLanguage: getLanguageByCode('fr-FR') ?? null,
       })
       render(
         <ConversationMode
           lessonId={lessonId}
+          grammarPracticeSessionId={grammarPracticeSessionId}
           targetLanguage="fr-FR"
           cefrLevel="B1"
         />
@@ -219,6 +224,9 @@ describe('ConversationMode word tooltip dismissal', () => {
         context: 'Bon voyage',
         cefr_level: 'B1',
         ...(lessonId !== undefined ? { lesson_id: lessonId } : {}),
+        ...(grammarPracticeSessionId !== undefined
+          ? { grammar_practice_session_id: grammarPracticeSessionId }
+          : {}),
       })
     }
   )

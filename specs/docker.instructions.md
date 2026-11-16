@@ -108,6 +108,12 @@ Zero prevents new free games; subscriptions, active trials and Stripe-disabled d
 Game sessions, creation-request identities, and global admission reservations are persisted in
 PostgreSQL. Games needs no extra service or volume.
 
+Grammar Practice also uses `EXERCISE_GENERATION_TIMEOUT_SECONDS`. Both Compose files forward
+`FREEMIUM_GRAMMAR_PRACTICE_DAILY` (default 3), documented in `.env.example`, independently of Games.
+Zero blocks new free generation; Premium, active trials, and Stripe-disabled deployments bypass it.
+Its library, sessions, and global request/admission records use PostgreSQL. Generation uses in-process
+FastAPI background tasks with persisted deadlines, not an additional worker service or durable queue.
+
 Operators must review database/data path, Redis password, JWT secret, CORS/cookie security,
 registration, email, available languages, LLM/speech providers, quotas, Stripe/freemium, and logging.
 

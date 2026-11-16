@@ -108,6 +108,7 @@ Currently gated operations are:
 - generating and submitting Listening attempts;
 - generating and submitting Reading attempts;
 - creating new Error Detective, Sentence Order, or Vocabulary Pairs games (durable reservation policy below);
+- generating new Grammar Practice sessions (independent durable reservation policy below);
 - voice-conversation warmup and WebSocket connection.
 
 Read-only policy protects chat history, Listening next/audio/history, and Reading next/history.
@@ -115,6 +116,8 @@ Read-only policy protects chat history, Listening next/audio/history, and Readin
 Profile, Settings, assessment, plan generation, lesson viewing and answers, flashcards, progress,
 grammar, vocabulary, phrasebook, direct TTS/STT, and manual memory management are not subscription
 gated. Memory management is also not blocked by maintenance mode.
+Grammar Practice library reads/additions and saved-session reads/answers are also ungated; only new
+session generation consumes its allowance.
 
 ## Stripe Checkout
 
@@ -383,6 +386,7 @@ Defaults are:
 - Reading: 3 successful attempts per ISO week.
 - Voice: 5 elapsed conversation minutes per ISO week, stored as seconds.
 - Games: 3 new games per UTC day, configured by `FREEMIUM_GAMES_DAILY`.
+- Grammar Practice: 3 new sessions per UTC day, configured by `FREEMIUM_GRAMMAR_PRACTICE_DAILY`.
 
 Freemium counters are global per user, not per learning language. Zero means blocked for that feature.
 Daily keys expire at the next UTC midnight; weekly keys expire at the next Monday UTC.
@@ -410,8 +414,18 @@ Session reads, answers and abandonment require ownership but no additional quota
 remain playable after exhaustion or subscription expiry. Games creation is maintenance-gated;
 saved games remain accessible. `GET /api/freemium/status` includes `games_remaining` and `games_limit`.
 
+Grammar Practice uses its own PostgreSQL request/admission records and daily allowance, independent
+of Games. A user-row lock protects reservation; only publication of five validated, semantically
+reviewed challenges consumes it, while failure releases it. Unexpired reservations count against
+availability. The admission UTC day owns consumption, and records survive plan/language deletion.
+Premium, active trial, and Stripe-disabled deployments bypass this free allowance. Maintenance
+blocks new generation; saved reads, resumption, answers, and abandonment remain quota-free.
+`GET /api/freemium/status` includes `grammar_practice_remaining` and `grammar_practice_limit`.
+Voice continuation from a completed session still requires normal voice access and voice quota.
+See `grammar-practice.instructions.md`.
+
 `GET /api/freemium/status` requires authentication, is limited to `60/minute`, and returns trial
-state plus remaining and configured limits for all six features. The route exists when Stripe is
+state plus remaining and configured limits for all seven features. The route exists when Stripe is
 disabled, although the policy is inactive and the frontend normally does not request it.
 
 ## General quotas and subscription activation

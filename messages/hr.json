@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Ponovi izvorni zahtjev",
+    "voiceAction": "Vježbaj ovu gramatičku temu glasom",
+    "voiceDescription": "Započni glasovni razgovor s Linguom o ovoj temi i svojim završenim vježbama. Potreban je pristup mikrofonu i primjenjuju se ograničenja glasovne upotrebe.",
+    "title": "Vježbanje gramatike",
+    "description": "Spremi teme iz Resursa i vježbaj u skupovima od pet zadataka: tri pitanja s višestrukim izborom i dvije dopune praznina. Napredak se sprema; XP se ne dodjeljuje.",
+    "add": "Vježbaj",
+    "back": "Natrag na vježbanje gramatike",
+    "voiceUnavailable": "Ova gramatička vježba nije dostupna.",
+    "noPlan": "Za dodavanje tema ili stvaranje vježbi potreban je aktivan plan učenja na ovom jeziku. Spremljene sesije ostaju dostupne.",
+    "assessment": "Izradi plan učenja",
+    "contextChanged": "Kontekst učenja se promijenio. Osvježi i izričito pokušaj ponovno.",
+    "explore": "Istraži gramatiku",
+    "empty": "Tvoja biblioteka vježbi je prazna. Odaberi temu u gramatičkim resursima.",
+    "answered": "{count} odgovorenih",
+    "accuracy": "{percent}% točnih",
+    "lastPracticed": "Posljednje vježbanje",
+    "never": "Još ne",
+    "theory": "Pogledaj teoriju",
+    "continue": "Nastavi sesiju",
+    "recover": "Oporavi sesiju",
+    "generate": "Stvori pet vježbi",
+    "history": "Povijest sesija",
+    "noHistory": "Još nema sesija.",
+    "score": "{correct}/{answered} točnih",
+    "generating": "Priprema vježbi…",
+    "ready": "Spremna za nastavak",
+    "completed": "Vježba završena",
+    "failed": "Stvaranje nije uspjelo",
+    "abandoned": "Sesija napuštena",
+    "recoveryError": "Nije moguće potvrditi spremljeno stanje. Pokušaj ga ponovno dohvatiti bez ponovnog slanja odgovora.",
+    "another": "Još jedan skup",
+    "correct": "Točno",
+    "incorrect": "Ne sasvim",
+    "yourAnswer": "Tvoj odgovor",
+    "solution": "Točan odgovor",
+    "abandon": "Napusti sesiju",
+    "abandonDescription": "Zatvoriti ovu sesiju? Spremljeni odgovori ostaju u povijesti. Kvota za stvaranje vježbi ne vraća se.",
+    "choose": "Odaberi odgovor",
+    "fillBlank": "Popuni prazninu",
+    "check": "Provjeri odgovor"
+  },
   "questionExplanation": {
     "show": "Zašto ovaj odgovor",
     "hide": "Sakrij objašnjenje",
@@ -260,13 +302,17 @@
     "goToPlan": "Idi na moj plan"
   },
   "nav": {
+    "practiceGrammar": "Vježbanje gramatike",
+    "learning": "Moje učenje",
+    "practice": "Vježbaj",
+    "help": "Pomoć",
     "games": "Igre",
     "home": "Početna",
     "myPlan": "Moj plan",
     "progress": "Napredak",
     "flashcards": "Kartice",
-    "tutor": "Razgovaraj s učiteljem",
-    "assessment": "Procjena",
+    "tutor": "Chat s Linguom",
+    "assessment": "Procjena razine",
     "resources": "Materijali",
     "grammar": "Gramatika",
     "vocabulary": "Rječnik",
@@ -274,7 +320,7 @@
     "settings": "Postavke",
     "faq": "Česta pitanja",
     "admin": "Administracija",
-    "conversation": "Razgovor",
+    "conversation": "Glasovni razgovor",
     "listening": "Slušanje",
     "reading": "Čitanje",
     "contact": "Kontakt",
@@ -1658,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Nastavi vježbati gramatiku",
+    "paywallGrammarPracticeDesc": "Iskoristili ste današnje besplatne skupove. Uz Premium možete stvoriti još; spremljene sesije ostaju dostupne.",
     "planFreeTrialDesc": "Isprobaj Premium pri registraciji, bez kartice ili pretplate. Nakon toga nastavi besplatno uz ograničenja korištenja.",
     "paywallGamesTitle": "Nastavi vježbati uz igre",
     "paywallGamesDesc": "Besplatna kvota je potrošena ili igre zahtijevaju Premium. Možeš nastaviti postojeće igre.",
@@ -1803,6 +1851,7 @@
     "paidTerms": "Potrebna je kartica. Tvoja plaćena pretplata počinje kupnjom. Obnavlja se u odabranim intervalima, osim ako je otkažeš."
   },
   "freemium": {
+    "grammarPracticeLabel": "Današnji skupovi gramatike",
     "gamesLabel": "Današnje igre",
     "chatLabel": "Chat",
     "lessonsLabel": "Lekcije",
@@ -1863,25 +1912,29 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.13.5",
+    "version": "v1.14.0",
     "cta": "Razumijem",
     "entry1": {
+      "label": "Vježbaj gramatiku svojim tempom",
+      "desc": "Dodaj teme iz gramatičkih materijala u svoju osobnu biblioteku i vježbaj uz skupove od pet zadataka s ispravcima i objašnjenjima. Pregledaj rezultate, a nakon završetka nastavi vježbati u glasovnom razgovoru s Linguom na temelju teme i svojih odgovora."
+    },
+    "entry2": {
       "label": "Novi jezici: hrvatski, češki, danski, finski i rumunjski",
       "desc": "Dodali smo hrvatski, češki, danski, finski i rumunjski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
     },
-    "entry2": {
+    "entry3": {
       "label": "Bolje razumij svaki odgovor",
       "desc": "Pogledaj prijevod zadataka na svoj materinski jezik dok izvorno pitanje ostaje vidljivo. Nakon što završiš Reading ili Listening, zatraži objašnjenje na svom materinskom jeziku uz ulomak iz teksta koji obrazlaže odgovor. Tijekom ponavljanja možeš ponovno pročitati tekst ili poslušati zvučni zapis."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu ti pomaže kad ti zatreba",
       "desc": "Ako nešto ne razumiješ tijekom glasovnog razgovora, zatraži pomoć od Lingua. Može ti to ukratko objasniti na tvom materinskom jeziku, a zatim nastaviti vježbu na jeziku koji učiš."
     },
-    "entry4": {
+    "entry5": {
       "label": "Prirodniji i izražajniji glasovi",
       "desc": "Uživaj u prirodnijim i izražajnijim glasovima u vježbama slušanja i razgovorima s Linguom, za jasnije i ugodnije iskustvo slušanja."
     },
-    "entry5": {
+    "entry6": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

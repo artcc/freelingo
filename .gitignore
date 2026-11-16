@@ -1,12 +1,41 @@
-# Ignore environment variables
-.env
-.env.local
-.env.*.local
+# Frontend debug logs
+/frontend/**/npm-debug.log*
+/frontend/**/yarn-debug.log*
+/frontend/**/yarn-error.log*
+/frontend/**/.pnpm-debug.log*
+
+# Frontend dependencies
+/frontend/node_modules
+/frontend/.pnp
+/frontend/**/.pnp.*
+/frontend/.yarn/*
+!/frontend/.yarn/patches
+!/frontend/.yarn/plugins
+!/frontend/.yarn/releases
+!/frontend/.yarn/versions
+
+# Frontend local configuration
+/frontend/**/.env*
+/frontend/**/*.pem
+/frontend/**/.vercel
+
+# Frontend testing and builds
+/frontend/coverage
+/frontend/.next/
+/frontend/out/
+/frontend/build
+/frontend/**/*.tsbuildinfo
+/frontend/**/next-env.d.ts
 
 # IDE
 .idea/
 .vscode/
 *.swp
+
+# Ignore environment variables
+.env
+.env.local
+.env.*.local
 
 # Local development files
 /data/
@@ -17,6 +46,8 @@
 
 # Python
 __pycache__/
+.pytest_cache/
+.ruff_cache/
 *.py[cod]
 *.egg-info/
 .venv/

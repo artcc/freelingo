@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import struct
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
@@ -36,6 +37,7 @@ from app.services.freemium_service import (
     is_freemium_trial_active,
 )
 from app.services.gemini_tts_service import GEMINI_VOICES
+from app.services.grammar_voice_practice import load_grammar_voice_practice
 from app.services.language_helpers import lesson_practice_title, voice_session_title
 from app.services.lesson_voice_practice import load_lesson_voice_practice
 from app.services.llm_adapter import llm_adapter
@@ -223,6 +225,8 @@ async def conversation_ws(
         target_language_from_client: str | None = auth_msg.get("target_language")
         lesson_id_raw = auth_msg.get("lesson_id")
         has_lesson_practice = "lesson_id" in auth_msg
+        grammar_practice_id_raw = auth_msg.get("grammar_practice_session_id")
+        has_grammar_practice = "grammar_practice_session_id" in auth_msg
         client_conversation_id_raw = auth_msg.get(
             "conversation_id"
         )  # optional: reserved for future API use
@@ -347,6 +351,22 @@ async def conversation_ws(
         from app.services.user_language_service import get_active_language
 
         lesson_practice = None
+        grammar_practice = None
+        if has_grammar_practice:
+            grammar_practice_id = None
+            if isinstance(grammar_practice_id_raw, str) and not has_lesson_practice:
+                try:
+                    grammar_practice_id = str(UUID(grammar_practice_id_raw))
+                except ValueError:
+                    pass
+            if grammar_practice_id is not None:
+                grammar_practice = await load_grammar_voice_practice(
+                    db, user_id, grammar_practice_id
+                )
+            if grammar_practice is None:
+                await websocket.send_json({"type": "error", "code": "grammar_practice_unavailable"})
+                await websocket.close(code=1008)
+                return
         if has_lesson_practice:
             if type(lesson_id_raw) is int and 1 <= lesson_id_raw <= 2_147_483_647:
                 lesson_practice = await load_lesson_voice_practice(db, user_id, lesson_id_raw)
@@ -358,6 +378,8 @@ async def conversation_ws(
         plan: StudyPlan | None = None
         if lesson_practice:
             plan = lesson_practice.plan
+        elif grammar_practice:
+            plan = grammar_practice.plan
         else:
             if target_language_from_client is not None:
                 target_language = target_language_from_client
@@ -392,6 +414,8 @@ async def conversation_ws(
         if plan:
             target_language = plan.target_language
         cefr_level = plan.cefr_level if plan else "A2"
+        if grammar_practice:
+            cefr_level = grammar_practice.session.learner_level
         study_plan_id_for_conv = plan.id if plan else None
 
         # Read user settings before session closes to avoid DetachedInstanceError
@@ -412,7 +436,7 @@ async def conversation_ws(
 
     # Validate and sanitize optional chat context passed from the tutor chat
     valid_context: list[dict] | None = None
-    if not lesson_practice and isinstance(initial_context_raw, list):
+    if not (lesson_practice or grammar_practice) and isinstance(initial_context_raw, list):
         sanitized = [
             {"role": m["role"], "content": m["content"]}
             for m in initial_context_raw[:20]
@@ -497,7 +521,7 @@ async def conversation_ws(
                 # Reuse path: if a caller explicitly passes a valid conversation_id
                 # that belongs to this user, append to that conversation.
                 if (
-                    not lesson_practice
+                    not (lesson_practice or grammar_practice)
                     and isinstance(client_conversation_id_raw, (int, float))
                     and int(client_conversation_id_raw) > 0
                 ):
@@ -517,7 +541,13 @@ async def conversation_ws(
                         title=(
                             lesson_practice_title(native_language, lesson_practice.lesson.title)
                             if lesson_practice
-                            else voice_session_title(native_language)
+                            else (
+                                lesson_practice_title(
+                                    native_language, grammar_practice.session.title
+                                )
+                                if grammar_practice
+                                else voice_session_title(native_language)
+                            )
                         ),
                         source="voice",
                         study_plan_id=study_plan_id_for_conv,
@@ -565,7 +595,11 @@ async def conversation_ws(
             memories=memories,
             voice=voice_pref,
             study_plan_id=study_plan_id_for_conv,
-            lesson_practice_context=lesson_practice.context if lesson_practice else "",
+            lesson_practice_context=(
+                lesson_practice.context
+                if lesson_practice
+                else grammar_practice.context if grammar_practice else ""
+            ),
             user_agent=websocket.headers.get("user-agent", ""),
         )
         pipeline._redis = redis

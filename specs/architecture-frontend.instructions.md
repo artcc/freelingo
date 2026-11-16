@@ -46,6 +46,13 @@ to check application and test code together.
   outside the authenticated shell and its loading provider. Onboarding and billing returns are
   included in middleware's protected list.
 - `(app)`: authenticated shell and learning, resources, account, community, and administration pages.
+- `/grammar-practice`, `/grammar-practice/[topicId]`, and `/grammar-practice/sessions/[uuid]`:
+  personal grammar library, topic history/statistics, and saved practice. Grammar resource detail
+  supplies the add action; `lib/grammar-practice.ts` owns the typed backend client and
+  `components/grammar-practice/` the domain presentation. New work captures language and plan,
+  while saved sessions render their persisted language independently of active selection.
+  Completed sessions enter existing voice conversation through `?grammarPractice={uuid}`.
+  See `grammar-practice.instructions.md` for lifecycle, quota, answer, and source-context contracts.
 - `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
   Presentation metadata lives in `lib/games.ts`; see `games.instructions.md` for catalog behavior.
   Each card uses `public/game/{id}.jpeg` above its title and description.
@@ -97,7 +104,10 @@ The hook loads missing or invalidated language context before querying exercises
 is cancellable and bounded to 20 seconds; failure exits the loading screen with a localized error
 and a Retry action. Successful recovery starts a read-only exercise lookup with the refreshed context.
 A successful language lookup without an active language is also an error; an active language without
-a plan reaches the backend's no-active-plan response.
+a plan reaches the backend's no-active-plan response. That confirmed response sets the page to
+`no-plan`, which renders the shared `NoPlanBanner` and its assessment action instead of the empty
+exercise, generation, history, or quota controls. Missing local context and unrelated lookup failures
+do not imply a missing plan. A subsequent plan/context change restarts the read-only lookup.
 
 The resolver always checks `/next` before requesting generation and issues at most one generation POST
 per operation. It resumes active work or retrieves a saved result on page entry. An uncertain POST is
@@ -495,6 +505,35 @@ owns registration, invitations, and session restoration.
 The app layout resolves the session, loads the current profile, enforces onboarding completion,
 provides desktop/mobile navigation, initializes language/config state, and owns global notices,
 loading, theme, contact, Settings, logout, and admin navigation.
+
+Desktop and mobile share the same navigation order:
+
+- Home.
+- My learning: My Plan, Progress, Level assessment.
+- Practice: Chat with Lingu, Flashcards, Games, Listening, Reading, Voice conversation.
+- Resources: Grammar, Phrasebook, Vocabulary.
+- Help: Contact (opens the contact modal), Feedback, Frequently asked questions.
+- A separate block after Help: Settings for everyone and Admin only for administrators.
+- Account area: profile, version, and logout.
+
+Practice, Resources, Help (including Contact), and the Settings/Admin block sort their visible entries
+alphabetically by translated label using the interface locale's collation rules. My learning retains
+the listed order.
+
+The learning, practice, resources, and help groups can be independently collapsed. All start expanded
+when the app layout mounts. Their shared desktop/mobile state stays in component memory only and is
+not persisted; reloading resets all groups to expanded. Group buttons expose `aria-expanded` and
+`aria-controls`. When Help is collapsed, its heading shows the Feedback unread badge.
+A collapsed group containing the current route shows the active link's left accent border on its
+heading. Expanded groups show that indicator only on the active link, including nested routes.
+
+Navigation labels are localized and use Geist Sans. Active links include nested routes and expose
+`aria-current="page"`. Premium links, trial indicators, and Feedback unread badges retain their
+existing visibility rules. The desktop navigation scrolls independently of the account area; the
+mobile menu scrolls within the viewport and closes when a destination or Contact is selected.
+While the mobile menu is open, a lightly tinted, blurred backdrop covers the page below the menu.
+The page content is inert and isolated beneath that backdrop; tapping the backdrop does not dismiss
+the menu. Switching to the desktop breakpoint closes the mobile menu and restores page interaction.
 
 Frontend route guards and visibility flags do not grant access. Any protected action must still rely on
 backend authorization.
