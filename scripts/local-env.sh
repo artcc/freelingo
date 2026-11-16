@@ -54,6 +54,7 @@ export NPM_CONFIG_FUND=false
 export NPM_CONFIG_UPDATE_NOTIFIER=false
 export BLACK_CACHE_DIR="${XDG_CACHE_HOME}/black"
 export RUFF_CACHE_DIR="${XDG_CACHE_HOME}/ruff"
+export PYTEST_ADDOPTS="-o cache_dir=\"${XDG_CACHE_HOME}/pytest\""
 export NEXT_TELEMETRY_DISABLED=1
 
 mkdir -p "${HOME}" "${XDG_CACHE_HOME}" "${XDG_CONFIG_HOME}" "${XDG_DATA_HOME}" \
