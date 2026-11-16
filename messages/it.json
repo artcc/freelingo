@@ -1915,22 +1915,26 @@
     "version": "v1.13.10",
     "cta": "Capito",
     "entry1": {
+      "label": "Esercitati con la grammatica al tuo ritmo",
+      "desc": "Aggiungi argomenti dalle risorse di Grammatica alla tua biblioteca personale ed esercitati con serie di cinque esercizi, con correzioni e spiegazioni. Consulta i tuoi risultati e, quando hai finito, continua a esercitarti a voce con Lingu sull'argomento e sulle tue risposte."
+    },
+    "entry2": {
       "label": "Nuove lingue: croato, ceco, danese, finlandese e rumeno",
       "desc": "Il croato, il ceco, il danese, il finlandese e il rumeno sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
     },
-    "entry2": {
+    "entry3": {
       "label": "Comprendi meglio ogni risposta",
       "desc": "Consulta la traduzione delle domande nella tua lingua madre mantenendo visibile la domanda originale. Dopo aver completato Reading o Listening, chiedi una spiegazione nella tua lingua madre con un estratto del testo che giustifica la risposta. Puoi anche rileggere il brano o riascoltare l'audio mentre ripassi."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu ti aiuta quando ne hai bisogno",
       "desc": "Se non capisci qualcosa durante una conversazione vocale, chiedi aiuto a Lingu. Può spiegartelo brevemente nella tua lingua madre e poi riprendere la pratica nella lingua che stai imparando."
     },
-    "entry4": {
+    "entry5": {
       "label": "Voci più naturali ed espressive",
       "desc": "Scopri voci più naturali ed espressive nei tuoi esercizi di ascolto e nelle conversazioni con Lingu, per un'esperienza di ascolto più chiara e piacevole."
     },
-    "entry5": {
+    "entry6": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

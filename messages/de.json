@@ -1915,22 +1915,26 @@
     "version": "v1.13.10",
     "cta": "Verstanden",
     "entry1": {
+      "label": "Übe Grammatik in deinem eigenen Tempo",
+      "desc": "Füge Themen aus den Grammatikressourcen zu deiner persönlichen Bibliothek hinzu und übe mit jeweils fünf Aufgaben samt Korrekturen und Erklärungen. Sieh dir deine Ergebnisse an und übe anschließend im Sprachgespräch mit Lingu weiter – auf Grundlage des Themas und deiner Antworten."
+    },
+    "entry2": {
       "label": "Neue Sprachen: Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch",
       "desc": "Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
-    "entry2": {
+    "entry3": {
       "label": "Verstehe jede Antwort besser",
       "desc": "Lass dir Aufgabenstellungen in deiner Muttersprache anzeigen, während die ursprüngliche Frage sichtbar bleibt. Nach einer Reading- oder Listening-Übung kannst du eine Erklärung in deiner Muttersprache mit einer Textstelle anfordern, die die Antwort begründet. Beim Wiederholen kannst du den Text erneut lesen oder das Audio noch einmal anhören."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu hilft dir, wenn du es brauchst",
       "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
     },
-    "entry4": {
+    "entry5": {
       "label": "Natürlichere und ausdrucksstärkere Stimmen",
       "desc": "Genieße natürlichere und ausdrucksstärkere Stimmen in deinen Hörübungen und Gesprächen mit Lingu – für ein klareres und angenehmeres Hörerlebnis."
     },
-    "entry5": {
+    "entry6": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }
