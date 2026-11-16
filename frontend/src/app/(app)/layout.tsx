@@ -195,6 +195,15 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, [initializing])
 
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 48rem)')
+    function closeMenuOnDesktop(event: MediaQueryListEvent) {
+      if (event.matches) setMobileMenuOpen(false)
+    }
+    desktop.addEventListener('change', closeMenuOnDesktop)
+    return () => desktop.removeEventListener('change', closeMenuOnDesktop)
+  }, [])
+
   if (initializing) {
     return (
       <PageLoadingViewport className="h-dvh">
@@ -414,6 +423,13 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
+      {mobileMenuOpen && (
+        <div
+          aria-hidden="true"
+          className="bg-fl-bg/40 fixed inset-0 z-40 touch-none backdrop-blur-[3px] md:hidden"
+        />
+      )}
+
       {/* Mobile top bar */}
       <div className="border-fl-border bg-fl-bg fixed top-0 right-0 left-0 z-50 border-b md:hidden">
         <div className="flex items-center justify-between gap-3 px-4 py-3">
@@ -521,7 +537,10 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Main */}
-      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pt-14 md:pt-0">
+      <main
+        inert={mobileMenuOpen}
+        className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pt-14 md:pt-0 ${mobileMenuOpen ? 'isolate' : ''}`}
+      >
         {/* Email verification banner */}
         {user && user.is_verified === false && (
           <div className="border-fl-border bg-fl-surface flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 border-b px-4 py-2">

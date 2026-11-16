@@ -521,6 +521,9 @@ Navigation labels are localized and use Geist Sans. Active links include nested 
 `aria-current="page"`. Premium links, trial indicators, and Feedback unread badges retain their
 existing visibility rules. The desktop navigation scrolls independently of the account area; the
 mobile menu scrolls within the viewport and closes when a destination or Contact is selected.
+While the mobile menu is open, a lightly tinted, blurred backdrop covers the page below the menu.
+The page content is inert and isolated beneath that backdrop; tapping the backdrop does not dismiss
+the menu. Switching to the desktop breakpoint closes the mobile menu and restores page interaction.
 
 Frontend route guards and visibility flags do not grant access. Any protected action must still rely on
 backend authorization.
