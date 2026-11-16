@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Literal, Optional
+from typing import Literal, Optional, Self
 from uuid import UUID
 
-from pydantic import BaseModel, Field, field_serializer, field_validator
+from pydantic import BaseModel, Field, field_serializer, field_validator, model_validator
 
 FLASHCARD_BULK_MAX_CARDS = 100
 
@@ -67,6 +67,13 @@ class FlashcardFromWordRequest(BaseModel):
     context: str = ""
     cefr_level: str = "B1"
     lesson_id: int | None = Field(default=None, strict=True, ge=1, le=2_147_483_647)
+    grammar_practice_session_id: UUID | None = None
+
+    @model_validator(mode="after")
+    def exclusive_practice_source(self) -> Self:
+        if self.lesson_id is not None and self.grammar_practice_session_id is not None:
+            raise ValueError("Only one practice source is allowed")
+        return self
 
 
 class FlashcardGenerateRequest(BaseModel):

@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Riprova la richiesta originale",
+    "voiceAction": "Esercita questo argomento di grammatica a voce",
+    "voiceDescription": "Avvia una conversazione vocale con Lingu su questo argomento e sui tuoi esercizi completati. Sono necessari l’accesso al microfono e il rispetto dei limiti d’uso vocale.",
+    "title": "Pratica di grammatica",
+    "description": "Salva argomenti dalle Risorse ed esercitati in serie da cinque: tre domande a scelta multipla e due frasi da completare. I progressi vengono salvati, senza assegnare XP.",
+    "add": "Esercitati",
+    "back": "Torna alla pratica di grammatica",
+    "voiceUnavailable": "Questa pratica di grammatica non è disponibile.",
+    "noPlan": "Serve un piano attivo in questa lingua per aggiungere argomenti o generare esercizi. Le sessioni salvate restano disponibili.",
+    "assessment": "Crea un piano di studio",
+    "contextChanged": "Il contesto di studio è cambiato. Aggiorna e riprova esplicitamente.",
+    "explore": "Esplora la grammatica",
+    "empty": "La tua raccolta di pratica è vuota. Scegli un argomento nelle risorse di grammatica.",
+    "answered": "{count} risposte",
+    "accuracy": "{percent}% corrette",
+    "lastPracticed": "Ultima pratica",
+    "never": "Non ancora",
+    "theory": "Vedi la teoria",
+    "continue": "Continua la sessione",
+    "recover": "Recupera la sessione",
+    "generate": "Genera cinque esercizi",
+    "history": "Cronologia delle sessioni",
+    "noHistory": "Ancora nessuna sessione.",
+    "score": "{correct}/{answered} corrette",
+    "generating": "Preparazione degli esercizi…",
+    "ready": "Pronta per continuare",
+    "completed": "Pratica completata",
+    "failed": "Generazione non riuscita",
+    "abandoned": "Sessione abbandonata",
+    "recoveryError": "Impossibile confermare lo stato salvato. Riprova per recuperarlo senza inviare nuovamente la risposta.",
+    "another": "Un’altra serie",
+    "correct": "Corretto",
+    "incorrect": "Non proprio",
+    "yourAnswer": "La tua risposta",
+    "solution": "Risposta corretta",
+    "abandon": "Abbandona la sessione",
+    "abandonDescription": "Chiudere questa sessione? Le risposte salvate restano nella cronologia. La quota di generazione non viene restituita.",
+    "choose": "Scegli una risposta",
+    "fillBlank": "Completa lo spazio",
+    "check": "Verifica la risposta"
+  },
   "questionExplanation": {
     "show": "Perché questa risposta",
     "hide": "Nascondi spiegazione",
@@ -260,6 +302,7 @@
     "goToPlan": "Vai al mio piano"
   },
   "nav": {
+    "practiceGrammar": "Pratica di grammatica",
     "learning": "Il mio apprendimento",
     "practice": "Esercitati",
     "help": "Aiuto",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Continua a esercitare la grammatica",
+    "paywallGrammarPracticeDesc": "Hai esaurito le serie gratuite di oggi. Con Premium puoi generarne altre; le sessioni salvate restano disponibili.",
     "planFreeTrialDesc": "Prova l'accesso Premium alla registrazione, senza carta né abbonamento. Poi continua gratis con limiti di utilizzo.",
     "paywallGamesTitle": "Continua a esercitarti con i giochi",
     "paywallGamesDesc": "Hai esaurito le partite gratuite oppure i giochi richiedono Premium. Puoi riprendere le partite esistenti.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "È richiesta una carta. Il tuo abbonamento a pagamento inizia al momento dell'acquisto. Si rinnova con la periodicità scelta, salvo disdetta."
   },
   "freemium": {
+    "grammarPracticeLabel": "Serie di grammatica di oggi",
     "gamesLabel": "Partite di oggi",
     "chatLabel": "Chat",
     "lessonsLabel": "Lezioni",

@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Retry the original request",
+    "voiceAction": "Practise this grammar topic by voice",
+    "voiceDescription": "Start a voice conversation with Lingu using this topic and your completed exercises. Microphone access and voice usage limits apply.",
+    "title": "Grammar practice",
+    "description": "Save topics from Resources and practise in sets of five: three multiple-choice questions and two gap fills. Progress is saved; no XP is awarded.",
+    "add": "Practise",
+    "back": "Back to grammar practice",
+    "voiceUnavailable": "This grammar practice is unavailable.",
+    "noPlan": "An active study plan in this language is needed to add topics or generate exercises. Saved sessions remain available.",
+    "assessment": "Create a study plan",
+    "contextChanged": "Your study context changed. Refresh and explicitly try again.",
+    "explore": "Explore grammar",
+    "empty": "Your practice library is empty. Choose a topic from Grammar resources.",
+    "answered": "{count} answered",
+    "accuracy": "{percent}% correct",
+    "lastPracticed": "Last practised",
+    "never": "Not yet",
+    "theory": "View theory",
+    "continue": "Continue session",
+    "recover": "Recover session",
+    "generate": "Generate five exercises",
+    "history": "Session history",
+    "noHistory": "No sessions yet.",
+    "score": "{correct}/{answered} correct",
+    "generating": "Preparing exercises…",
+    "ready": "Ready to continue",
+    "completed": "Practice completed",
+    "failed": "Generation failed",
+    "abandoned": "Session abandoned",
+    "recoveryError": "We could not confirm the saved state. Retry to retrieve it without resubmitting.",
+    "another": "Another set",
+    "correct": "Correct",
+    "incorrect": "Not quite",
+    "yourAnswer": "Your answer",
+    "solution": "Correct answer",
+    "abandon": "Abandon session",
+    "abandonDescription": "Close this session? Saved answers remain in your history. This does not refund the generation quota.",
+    "choose": "Choose an answer",
+    "fillBlank": "Fill in the gap",
+    "check": "Check answer"
+  },
   "questionExplanation": {
     "show": "Why this answer",
     "hide": "Hide explanation",
@@ -260,6 +302,7 @@
     "goToPlan": "Go to my plan"
   },
   "nav": {
+    "practiceGrammar": "Grammar practice",
     "learning": "My learning",
     "practice": "Practice",
     "help": "Help",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Keep practising grammar",
+    "paywallGrammarPracticeDesc": "You have used today's free grammar sets. Premium lets you generate more; saved sessions remain available.",
     "planFreeTrialDesc": "Try Premium access at signup, without a card or subscription. Afterwards, continue free with usage limits.",
     "paywallGamesTitle": "Keep practising with games",
     "paywallGamesDesc": "Your free game allowance is used up or games require Premium. Existing games remain available to resume.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Card required. Your paid subscription starts on purchase. It renews at the selected interval unless you cancel."
   },
   "freemium": {
+    "grammarPracticeLabel": "Grammar sets today",
     "gamesLabel": "Games today",
     "chatLabel": "Chat",
     "lessonsLabel": "Lessons",

@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Oorspronkelijk verzoek opnieuw proberen",
+    "voiceAction": "Dit grammaticaonderwerp mondeling oefenen",
+    "voiceDescription": "Start een spraakgesprek met Lingu over dit onderwerp en je voltooide oefeningen. Microfoontoegang en limieten voor spraakgebruik zijn van toepassing.",
+    "title": "Grammatica oefenen",
+    "description": "Bewaar onderwerpen uit Bronnen en oefen in sets van vijf: drie meerkeuzevragen en twee invuloefeningen. Je voortgang wordt opgeslagen; je krijgt geen XP.",
+    "add": "Oefenen",
+    "back": "Terug naar grammatica oefenen",
+    "voiceUnavailable": "Deze grammaticaoefening is niet beschikbaar.",
+    "noPlan": "Je hebt een actief studieplan in deze taal nodig om onderwerpen toe te voegen of oefeningen te maken. Opgeslagen sessies blijven beschikbaar.",
+    "assessment": "Studieplan maken",
+    "contextChanged": "Je studiecontext is gewijzigd. Vernieuw en probeer het bewust opnieuw.",
+    "explore": "Grammatica ontdekken",
+    "empty": "Je oefenbibliotheek is leeg. Kies een onderwerp in de grammaticabronnen.",
+    "answered": "{count} beantwoord",
+    "accuracy": "{percent}% goed",
+    "lastPracticed": "Laatst geoefend",
+    "never": "Nog niet",
+    "theory": "Theorie bekijken",
+    "continue": "Sessie voortzetten",
+    "recover": "Sessie herstellen",
+    "generate": "Vijf oefeningen maken",
+    "history": "Sessiegeschiedenis",
+    "noHistory": "Nog geen sessies.",
+    "score": "{correct}/{answered} goed",
+    "generating": "Oefeningen voorbereiden…",
+    "ready": "Klaar om verder te gaan",
+    "completed": "Oefening voltooid",
+    "failed": "Genereren mislukt",
+    "abandoned": "Sessie afgebroken",
+    "recoveryError": "De opgeslagen status kon niet worden bevestigd. Probeer opnieuw om deze op te halen zonder opnieuw in te dienen.",
+    "another": "Nog een set",
+    "correct": "Goed",
+    "incorrect": "Niet helemaal",
+    "yourAnswer": "Jouw antwoord",
+    "solution": "Juiste antwoord",
+    "abandon": "Sessie afbreken",
+    "abandonDescription": "Deze sessie sluiten? Opgeslagen antwoorden blijven in je geschiedenis. Het generatiequotum wordt niet teruggegeven.",
+    "choose": "Kies een antwoord",
+    "fillBlank": "Vul de leegte in",
+    "check": "Antwoord controleren"
+  },
   "questionExplanation": {
     "show": "Waarom dit antwoord",
     "hide": "Uitleg verbergen",
@@ -260,6 +302,7 @@
     "goToPlan": "Naar mijn plan"
   },
   "nav": {
+    "practiceGrammar": "Grammatica oefenen",
     "learning": "Mijn leertraject",
     "practice": "Oefenen",
     "help": "Hulp",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Blijf grammatica oefenen",
+    "paywallGrammarPracticeDesc": "Je gratis grammaticasets voor vandaag zijn op. Met Premium kun je meer maken; opgeslagen sessies blijven beschikbaar.",
     "planFreeTrialDesc": "Probeer Premium bij registratie, zonder betaalkaart of abonnement. Ga daarna gratis verder met gebruikslimieten.",
     "paywallGamesTitle": "Blijf oefenen met spellen",
     "paywallGamesDesc": "Je gratis speltegoed is op of spellen vereisen Premium. Bestaande spellen kun je hervatten.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Een betaalkaart is vereist. Je betaalde abonnement gaat in bij aankoop. Het wordt met de gekozen frequentie verlengd, tenzij je opzegt."
   },
   "freemium": {
+    "grammarPracticeLabel": "Grammaticasets vandaag",
     "gamesLabel": "Spellen vandaag",
     "chatLabel": "Chat",
     "lessonsLabel": "Lessen",

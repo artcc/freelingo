@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Ponów pierwotne żądanie",
+    "voiceAction": "Ćwicz ten temat gramatyczny głosowo",
+    "voiceDescription": "Rozpocznij rozmowę głosową z Lingu o tym temacie i ukończonych ćwiczeniach. Wymagany jest dostęp do mikrofonu i obowiązują limity rozmów głosowych.",
+    "title": "Praktyka gramatyki",
+    "description": "Zapisuj tematy z Zasobów i ćwicz w zestawach po pięć: trzy pytania wyboru i dwa uzupełnienia luk. Postęp jest zapisywany; nie przyznajemy XP.",
+    "add": "Ćwicz",
+    "back": "Wróć do praktyki gramatyki",
+    "voiceUnavailable": "Ta praktyka gramatyki jest niedostępna.",
+    "noPlan": "Do dodawania tematów i generowania ćwiczeń potrzebny jest aktywny plan nauki tego języka. Zapisane sesje pozostają dostępne.",
+    "assessment": "Utwórz plan nauki",
+    "contextChanged": "Kontekst nauki się zmienił. Odśwież i ponownie wybierz działanie.",
+    "explore": "Przeglądaj gramatykę",
+    "empty": "Twoja biblioteka ćwiczeń jest pusta. Wybierz temat w zasobach gramatycznych.",
+    "answered": "{count} odpowiedzi",
+    "accuracy": "{percent}% poprawnych",
+    "lastPracticed": "Ostatnia praktyka",
+    "never": "Jeszcze nie",
+    "theory": "Zobacz teorię",
+    "continue": "Kontynuuj sesję",
+    "recover": "Odzyskaj sesję",
+    "generate": "Wygeneruj pięć ćwiczeń",
+    "history": "Historia sesji",
+    "noHistory": "Nie ma jeszcze sesji.",
+    "score": "{correct}/{answered} poprawnych",
+    "generating": "Przygotowywanie ćwiczeń…",
+    "ready": "Gotowa do kontynuacji",
+    "completed": "Praktyka ukończona",
+    "failed": "Generowanie nie powiodło się",
+    "abandoned": "Sesja przerwana",
+    "recoveryError": "Nie udało się potwierdzić zapisanego stanu. Spróbuj ponownie, aby go odczytać bez ponownego wysyłania odpowiedzi.",
+    "another": "Kolejny zestaw",
+    "correct": "Poprawnie",
+    "incorrect": "Nie do końca",
+    "yourAnswer": "Twoja odpowiedź",
+    "solution": "Poprawna odpowiedź",
+    "abandon": "Przerwij sesję",
+    "abandonDescription": "Zamknąć tę sesję? Zapisane odpowiedzi pozostaną w historii. Limit generowania nie zostanie zwrócony.",
+    "choose": "Wybierz odpowiedź",
+    "fillBlank": "Uzupełnij lukę",
+    "check": "Sprawdź odpowiedź"
+  },
   "questionExplanation": {
     "show": "Dlaczego ta odpowiedź",
     "hide": "Ukryj wyjaśnienie",
@@ -260,6 +302,7 @@
     "goToPlan": "Przejdź do mojego planu"
   },
   "nav": {
+    "practiceGrammar": "Praktyka gramatyki",
     "learning": "Moja nauka",
     "practice": "Ćwicz",
     "help": "Pomoc",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Ćwicz dalej gramatykę",
+    "paywallGrammarPracticeDesc": "Dzisiejsze bezpłatne zestawy zostały wykorzystane. Premium pozwala generować kolejne; zapisane sesje pozostają dostępne.",
     "planFreeTrialDesc": "Wypróbuj Premium po rejestracji, bez karty i subskrypcji. Potem korzystaj bezpłatnie z limitami użytkowania.",
     "paywallGamesTitle": "Ćwicz dalej z grami",
     "paywallGamesDesc": "Darmowy limit został wyczerpany lub gry wymagają Premium. Możesz wznowić istniejące rozgrywki.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Wymagana jest karta. Płatna subskrypcja rozpoczyna się w momencie zakupu. Odnawia się z wybraną częstotliwością, chyba że ją anulujesz."
   },
   "freemium": {
+    "grammarPracticeLabel": "Dzisiejsze zestawy gramatyczne",
     "gamesLabel": "Dzisiejsze gry",
     "chatLabel": "Chat",
     "lessonsLabel": "Lekcje",

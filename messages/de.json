@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Ursprüngliche Anfrage erneut senden",
+    "voiceAction": "Dieses Grammatikthema mündlich üben",
+    "voiceDescription": "Starte ein Sprachgespräch mit Lingu zu diesem Thema und deinen abgeschlossenen Übungen. Mikrofonzugriff und die Nutzungslimits für Sprachgespräche gelten.",
+    "title": "Grammatik üben",
+    "description": "Speichere Themen aus den Ressourcen und übe in Fünfer-Sets: drei Auswahlfragen und zwei Lückentexte. Dein Fortschritt wird gespeichert; es gibt keine XP.",
+    "add": "Üben",
+    "back": "Zurück zur Grammatikpraxis",
+    "voiceUnavailable": "Diese Grammatikübung ist nicht verfügbar.",
+    "noPlan": "Zum Hinzufügen von Themen oder Erstellen von Übungen brauchst du einen aktiven Lernplan in dieser Sprache. Gespeicherte Sitzungen bleiben verfügbar.",
+    "assessment": "Lernplan erstellen",
+    "contextChanged": "Dein Lernkontext hat sich geändert. Aktualisiere die Ansicht und versuche es ausdrücklich erneut.",
+    "explore": "Grammatik entdecken",
+    "empty": "Deine Übungsbibliothek ist leer. Wähle ein Thema aus den Grammatikressourcen.",
+    "answered": "{count} beantwortet",
+    "accuracy": "{percent}% richtig",
+    "lastPracticed": "Zuletzt geübt",
+    "never": "Noch nicht",
+    "theory": "Theorie ansehen",
+    "continue": "Sitzung fortsetzen",
+    "recover": "Sitzung wiederherstellen",
+    "generate": "Fünf Übungen erstellen",
+    "history": "Sitzungsverlauf",
+    "noHistory": "Noch keine Sitzungen.",
+    "score": "{correct}/{answered} richtig",
+    "generating": "Übungen werden vorbereitet…",
+    "ready": "Bereit zum Fortsetzen",
+    "completed": "Übung abgeschlossen",
+    "failed": "Erstellung fehlgeschlagen",
+    "abandoned": "Sitzung abgebrochen",
+    "recoveryError": "Der gespeicherte Stand konnte nicht bestätigt werden. Versuche es erneut, um ihn ohne erneutes Absenden abzurufen.",
+    "another": "Noch ein Set",
+    "correct": "Richtig",
+    "incorrect": "Nicht ganz",
+    "yourAnswer": "Deine Antwort",
+    "solution": "Richtige Antwort",
+    "abandon": "Sitzung abbrechen",
+    "abandonDescription": "Diese Sitzung schließen? Gespeicherte Antworten bleiben im Verlauf. Das Erstellungskontingent wird nicht erstattet.",
+    "choose": "Wähle eine Antwort",
+    "fillBlank": "Fülle die Lücke",
+    "check": "Antwort prüfen"
+  },
   "questionExplanation": {
     "show": "Warum diese Antwort",
     "hide": "Erklärung ausblenden",
@@ -260,6 +302,7 @@
     "goToPlan": "Zu meinem Plan"
   },
   "nav": {
+    "practiceGrammar": "Grammatik üben",
     "learning": "Mein Lernen",
     "practice": "Üben",
     "help": "Hilfe",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Übe weiter Grammatik",
+    "paywallGrammarPracticeDesc": "Deine kostenlosen Grammatik-Sets für heute sind aufgebraucht. Mit Premium kannst du weitere erstellen; gespeicherte Sitzungen bleiben verfügbar.",
     "planFreeTrialDesc": "Teste Premium bei der Registrierung ohne Karte oder Abo. Danach weiterhin kostenlos mit Nutzungslimits.",
     "paywallGamesTitle": "Mit Spielen weiterlernen",
     "paywallGamesDesc": "Dein kostenloses Kontingent ist aufgebraucht oder Spiele erfordern Premium. Vorhandene Spiele kannst du fortsetzen.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Eine Karte ist erforderlich. Dein kostenpflichtiges Abonnement beginnt mit dem Kauf. Es verlängert sich im gewählten Abrechnungsintervall, sofern du nicht kündigst."
   },
   "freemium": {
+    "grammarPracticeLabel": "Grammatik-Sets heute",
     "gamesLabel": "Heutige Spiele",
     "chatLabel": "Chat",
     "lessonsLabel": "Lektionen",

@@ -61,6 +61,22 @@ Pairs' term/meaning matches. It credits the progress/reward ledger under plan/se
 Saved content and native language are stable across active-language/profile changes. See
 `games.instructions.md`.
 
+## Grammar Practice
+
+`grammar_practice.py` owns topic selection, captured-context validation, saved sessions, deterministic
+answer evaluation, historical statistics, and durable global admission. It reuses the existing LLM
+adapter for structured generation and semantic review, with at most two candidate batches under
+`EXERCISE_GENERATION_TIMEOUT_SECONDS`. FastAPI `BackgroundTasks` runs the job in process; publication
+checks its saved deadline and atomically consumes or releases the reservation. Answer and activity
+persistence share the original plan transaction and award no XP or proficiency updates.
+
+`grammar_practice_context.py` serializes the full escaped reference, challenges, and answers, enforcing
+a 65,536-character ceiling and 20,480-character answer reserve at generation. It rejects oversized
+content rather than truncating it. `grammar_voice_practice.py` loads only completed sessions through
+their owned historical plan and language track. It supplies the existing `lesson_practice_context`
+pipeline input; the same ownership resolver binds selected-word flashcard saves to that plan.
+`grammar-practice.instructions.md` owns the complete domain contract.
+
 ## Assessment
 
 `assessment.py` evaluates adaptive quiz records deterministically and provides LLM-backed free-write

@@ -60,6 +60,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         { href: '/reading', label: tNav('reading') },
         { href: '/flashcards', label: tNav('flashcards') },
         { href: '/games', label: tNav('games') },
+        { href: '/grammar-practice', label: tNav('practiceGrammar') },
       ].sort((a, b) => collator.compare(a.label, b.label)),
     },
     {

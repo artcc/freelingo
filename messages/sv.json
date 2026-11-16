@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Försök med den ursprungliga begäran igen",
+    "voiceAction": "Öva det här grammatikämnet muntligt",
+    "voiceDescription": "Starta ett röstsamtal med Lingu om det här ämnet och dina slutförda övningar. Mikrofonåtkomst krävs och gränserna för röstanvändning gäller.",
+    "title": "Grammatikövningar",
+    "description": "Spara ämnen från Resurser och öva i omgångar om fem: tre flervalsfrågor och två lucktexter. Framstegen sparas; inga XP delas ut.",
+    "add": "Öva",
+    "back": "Tillbaka till grammatikövningar",
+    "voiceUnavailable": "Den här grammatikövningen är inte tillgänglig.",
+    "noPlan": "Du behöver en aktiv studieplan på det här språket för att lägga till ämnen eller skapa övningar. Sparade sessioner är fortfarande tillgängliga.",
+    "assessment": "Skapa en studieplan",
+    "contextChanged": "Ditt studiesammanhang har ändrats. Uppdatera och försök sedan igen manuellt.",
+    "explore": "Utforska grammatik",
+    "empty": "Ditt övningsbibliotek är tomt. Välj ett ämne bland grammatikresurserna.",
+    "answered": "{count} besvarade",
+    "accuracy": "{percent}% rätt",
+    "lastPracticed": "Senast övat",
+    "never": "Inte ännu",
+    "theory": "Visa teori",
+    "continue": "Fortsätt sessionen",
+    "recover": "Återställ sessionen",
+    "generate": "Skapa fem övningar",
+    "history": "Sessionshistorik",
+    "noHistory": "Inga sessioner ännu.",
+    "score": "{correct}/{answered} rätt",
+    "generating": "Förbereder övningar…",
+    "ready": "Redo att fortsätta",
+    "completed": "Övningen är klar",
+    "failed": "Det gick inte att skapa övningarna",
+    "abandoned": "Sessionen avbruten",
+    "recoveryError": "Det sparade läget kunde inte bekräftas. Försök igen för att hämta det utan att skicka svaret på nytt.",
+    "another": "En omgång till",
+    "correct": "Rätt",
+    "incorrect": "Inte riktigt",
+    "yourAnswer": "Ditt svar",
+    "solution": "Rätt svar",
+    "abandon": "Avbryt sessionen",
+    "abandonDescription": "Stänga den här sessionen? Sparade svar finns kvar i historiken. Kvoten för att skapa övningar återbetalas inte.",
+    "choose": "Välj ett svar",
+    "fillBlank": "Fyll i luckan",
+    "check": "Kontrollera svaret"
+  },
   "questionExplanation": {
     "show": "Varför det här svaret",
     "hide": "Dölj förklaringen",
@@ -260,6 +302,7 @@
     "goToPlan": "Gå till min plan"
   },
   "nav": {
+    "practiceGrammar": "Grammatikövningar",
     "learning": "Mitt lärande",
     "practice": "Öva",
     "help": "Hjälp",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Fortsätt öva grammatik",
+    "paywallGrammarPracticeDesc": "Du har använt dagens kostnadsfria omgångar. Med Premium kan du skapa fler; sparade sessioner är fortfarande tillgängliga.",
     "planFreeTrialDesc": "Prova Premium vid registrering utan kort eller abonnemang. Fortsätt sedan gratis med användningsgränser.",
     "paywallGamesTitle": "Fortsätt öva med spel",
     "paywallGamesDesc": "Din gratis spelkvot är slut eller spelen kräver Premium. Du kan fortsätta befintliga spel.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Kort krävs. Din betalda prenumeration börjar vid köpet. Den förnyas med det valda intervallet om du inte säger upp den."
   },
   "freemium": {
+    "grammarPracticeLabel": "Dagens grammatikomgångar",
     "gamesLabel": "Dagens spel",
     "chatLabel": "Chatt",
     "lessonsLabel": "Lektioner",

@@ -46,7 +46,8 @@ DOM event argument, preserving supplied chat context in the next authentication 
 
 After accepting the WebSocket handshake, the backend waits up to ten seconds for the first JSON
 frame. The payload can contain token, initial context, TTS voice, target language, post-assessment
-demo token, and conversation ID. A missing or invalid token produces `auth_failed` and close code
+demo token, conversation ID, and one optional practice source (`lesson_id` or
+`grammar_practice_session_id`). A missing or invalid token produces `auth_failed` and close code
 1008. The backend does not currently require the payload's `type` field to equal `auth`.
 
 The session fixes user, plan, target language, CEFR level, native language, voice, limits, and access
@@ -120,7 +121,32 @@ Saving a selected transcript word sends `lesson_id` through the existing `/api/f
 endpoint. The backend rechecks ownership and completion and derives lookup language, level,
 deduplication, and storage from that lesson's plan. This also applies to historical plans and when
 the active language changes elsewhere. Missing or inaccessible lessons fail without active-plan
-fallback. Voice sessions without a lesson retain the existing word-save contract.
+fallback. Voice sessions without either practice source retain the existing word-save contract.
+
+### Grammar Practice context
+
+The completed-session entry `/conversation?grammarPractice={uuid}` loads the saved practice before
+using the existing voice startup flow. Authentication sends optional `grammar_practice_session_id`
+as a UUID string, mutually exclusive with `lesson_id`. Invalid or null IDs, simultaneous source
+fields, missing/foreign/incomplete sessions, and context-budget failures produce
+`grammar_practice_unavailable` and close 1008 before general session quota consumption.
+
+`grammar_voice_practice.py` resolves the completed session through its original owned plan and
+language track. The persisted language, learner-level snapshot, and plan provenance win over active
+selection; client context and conversation ID cannot replace the source. Every start creates a
+separate voice conversation using `lesson_practice_title` with the saved topic title.
+
+The full escaped topic snapshot, all five private exercises, and all learner answers enter the
+existing `lesson_practice_context` pipeline input without changing `ConversationPipeline`. The
+context is bounded by rejection, never truncation; its generation-time budget and answer reserve
+belong to `grammar-practice.instructions.md`. It remains available in greetings, normal turns,
+memory refreshes, and fallbacks through the existing lesson-practice mechanism.
+
+This is another source for existing voice conversation: access, maintenance, voice quota, microphone
+startup/cleanup, warmup, STT language, TTS, playback, timeouts, stopping, and transcript persistence
+retain their contracts. A completed grammar practice does not grant independent voice access.
+Selected-word saves send `grammar_practice_session_id`; the backend rechecks the same source ownership
+and stores/deduplicates in its original plan, without active-plan fallback.
 
 ## Client-to-server protocol
 
@@ -274,11 +300,13 @@ so normal voice starts create a new `source="voice"` conversation.
 Voice conversation titles use a native-language label and date. German, Danish, Finnish, and Croatian
 dates place an ordinal dot after the day; Croatian dates also end with a dot after the year.
 
-Lesson practice titles instead use the native-language equivalent of `Practice: {lesson title}`,
+Lesson and Grammar Practice titles instead use the native-language equivalent of `Practice: {topic title}`,
 bounded to the existing 200-character title column. The existing voice transcript persistence and
 text-chat history display apply; subsequent practice sessions have separate rows with the same topic
-title and their own timestamps. The lesson reference/context is session-local, not a new database
-association or a separately persisted report. Text chat retains its existing transcript-based flow.
+title and their own timestamps. The practice reference/context is session-local, not a new database
+association or a separately persisted report. Grammar Practice adds no session FK or saved source
+context to the conversation. Text chat retains its existing transcript-based flow; reopening history
+does not rehydrate either practice source or create a separate text-practice mode.
 
 `ChatHistory` rows store role, content, target language, optional plan provenance, conversation, and
 the actual turn modality. Normal assistant replies link to their learner message through `reply_to_id`;
@@ -300,7 +328,7 @@ A conversation can remain empty when a session ends before a persistible turn.
 
 Persisted answered contributions count as plan-owned daily activity. Three distinct answered learner
 contributions on the same UTC day grant 20 XP once per conversation/day, capped at 60 XP per plan/day.
-Lesson practice uses this same reward without an extra bonus. Greetings, failed/cancelled turns, and
+Lesson and Grammar Practice voice use this same reward without an extra bonus. Greetings, failed/cancelled turns, and
 planless conversations do not earn rewards. Successful processing captures the response completion
 timestamp before scheduling the background transcript task, after response delivery and before the
 final `turn_complete` notification. The timestamp fixes the activity day even if the task starts or

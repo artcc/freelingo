@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.13.10] - Unreleased
 
+### Added
+
+- Add a personal Grammar Practice library from grammar resources, with saved five-question practices, deterministic feedback, language-specific history and statistics across plans, and a configurable free allowance of three new practices per account/UTC day independent of Games.
+- Continue completed grammar practices in voice with Lingu using the full topic, exercises, and saved answers, with existing voice limits, transcript history, and word saves tied to the original study plan.
+
 ### Changed
 
 - Blur and lightly dim the page behind the open mobile menu, blocking background interaction without dismissing the menu when the backdrop is tapped.

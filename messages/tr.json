@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "İlk isteği yeniden dene",
+    "voiceAction": "Bu dil bilgisi konusunu sesli çalış",
+    "voiceDescription": "Bu konu ve tamamladığın alıştırmalar hakkında Lingu ile sesli sohbet başlat. Mikrofon erişimi gerekir ve sesli kullanım sınırları geçerlidir.",
+    "title": "Dil bilgisi pratiği",
+    "description": "Kaynaklardan konular kaydedip beşli setlerle çalış: üç çoktan seçmeli soru ve iki boşluk doldurma. İlerleme kaydedilir; XP verilmez.",
+    "add": "Pratik yap",
+    "back": "Dil bilgisi pratiğine dön",
+    "voiceUnavailable": "Bu dil bilgisi pratiği kullanılamıyor.",
+    "noPlan": "Konu eklemek veya alıştırma oluşturmak için bu dilde etkin bir çalışma planı gerekir. Kayıtlı oturumlar kullanılabilir.",
+    "assessment": "Çalışma planı oluştur",
+    "contextChanged": "Çalışma bağlamın değişti. Yenile ve işlemi yeniden seç.",
+    "explore": "Dil bilgisini keşfet",
+    "empty": "Pratik kitaplığın boş. Dil bilgisi kaynaklarından bir konu seç.",
+    "answered": "{count} yanıtlandı",
+    "accuracy": "%{percent} doğru",
+    "lastPracticed": "Son pratik",
+    "never": "Henüz yok",
+    "theory": "Teoriyi görüntüle",
+    "continue": "Oturuma devam et",
+    "recover": "Oturumu kurtar",
+    "generate": "Beş alıştırma oluştur",
+    "history": "Oturum geçmişi",
+    "noHistory": "Henüz oturum yok.",
+    "score": "{correct}/{answered} doğru",
+    "generating": "Alıştırmalar hazırlanıyor…",
+    "ready": "Devam etmeye hazır",
+    "completed": "Pratik tamamlandı",
+    "failed": "Oluşturma başarısız",
+    "abandoned": "Oturum bırakıldı",
+    "recoveryError": "Kayıtlı durum doğrulanamadı. Yanıtı yeniden göndermeden durumu almak için tekrar dene.",
+    "another": "Başka bir set",
+    "correct": "Doğru",
+    "incorrect": "Tam değil",
+    "yourAnswer": "Yanıtın",
+    "solution": "Doğru yanıt",
+    "abandon": "Oturumu bırak",
+    "abandonDescription": "Bu oturum kapatılsın mı? Kayıtlı yanıtlar geçmişte kalır. Oluşturma kotası iade edilmez.",
+    "choose": "Bir yanıt seç",
+    "fillBlank": "Boşluğu doldur",
+    "check": "Yanıtı kontrol et"
+  },
   "questionExplanation": {
     "show": "Neden bu cevap",
     "hide": "Açıklamayı gizle",
@@ -260,6 +302,7 @@
     "goToPlan": "Planıma git"
   },
   "nav": {
+    "practiceGrammar": "Dil bilgisi pratiği",
     "learning": "Öğrenimim",
     "practice": "Pratik yap",
     "help": "Yardım",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Dil bilgisi pratiğine devam et",
+    "paywallGrammarPracticeDesc": "Bugünkü ücretsiz setlerini kullandın. Premium ile daha fazlasını oluşturabilirsin; kayıtlı oturumlar kullanılabilir.",
     "planFreeTrialDesc": "Kayıt sırasında kart veya abonelik olmadan Premium erişimini deneyin. Ardından kullanım sınırlarıyla ücretsiz devam edin.",
     "paywallGamesTitle": "Oyunlarla pratiğe devam et",
     "paywallGamesDesc": "Ücretsiz oyun kotan bitti veya oyunlar Premium gerektiriyor. Mevcut oyunlara devam edebilirsin.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Kart gerekir. Ücretli aboneliğiniz satın aldığınızda başlar. İptal etmediğiniz sürece seçtiğiniz ödeme döneminde yenilenir."
   },
   "freemium": {
+    "grammarPracticeLabel": "Bugünkü dil bilgisi setleri",
     "gamesLabel": "Bugünkü oyunlar",
     "chatLabel": "Sohbet",
     "lessonsLabel": "Dersler",

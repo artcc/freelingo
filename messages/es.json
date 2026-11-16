@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Reintentar la solicitud original",
+    "voiceAction": "Practicar este tema de gramática por voz",
+    "voiceDescription": "Inicia una conversación de voz con Lingu sobre este tema y tus ejercicios completados. Se requiere acceso al micrófono y se aplican los límites de uso de voz.",
+    "title": "Gramática práctica",
+    "description": "Guarda temas de Recursos y practica en tandas de cinco: tres preguntas de opción múltiple y dos de completar huecos. El progreso se guarda; no se otorgan XP.",
+    "add": "Practicar",
+    "back": "Volver a gramática práctica",
+    "voiceUnavailable": "Esta práctica de gramática no está disponible.",
+    "noPlan": "Necesitas un plan activo de este idioma para añadir temas o generar ejercicios. Las sesiones guardadas siguen disponibles.",
+    "assessment": "Crear un plan de estudio",
+    "contextChanged": "Tu contexto de estudio ha cambiado. Actualiza y vuelve a intentarlo expresamente.",
+    "explore": "Explorar gramática",
+    "empty": "Tu biblioteca de práctica está vacía. Elige un tema en los recursos de Gramática.",
+    "answered": "{count} respondidas",
+    "accuracy": "{percent}% de acierto",
+    "lastPracticed": "Última práctica",
+    "never": "Todavía no",
+    "theory": "Ver teoría",
+    "continue": "Continuar sesión",
+    "recover": "Recuperar sesión",
+    "generate": "Generar cinco ejercicios",
+    "history": "Historial de sesiones",
+    "noHistory": "Todavía no hay sesiones.",
+    "score": "{correct}/{answered} correctas",
+    "generating": "Preparando ejercicios…",
+    "ready": "Lista para continuar",
+    "completed": "Práctica completada",
+    "failed": "La generación ha fallado",
+    "abandoned": "Sesión abandonada",
+    "recoveryError": "No hemos podido confirmar el estado guardado. Reintenta para recuperarlo sin volver a enviar la respuesta.",
+    "another": "Otra tanda",
+    "correct": "Correcto",
+    "incorrect": "No del todo",
+    "yourAnswer": "Tu respuesta",
+    "solution": "Respuesta correcta",
+    "abandon": "Abandonar sesión",
+    "abandonDescription": "¿Cerrar esta sesión? Las respuestas guardadas permanecen en el historial. No se devuelve la cuota de generación.",
+    "choose": "Elige una respuesta",
+    "fillBlank": "Completa el hueco",
+    "check": "Comprobar respuesta"
+  },
   "questionExplanation": {
     "show": "Por qué esta respuesta",
     "hide": "Ocultar explicación",
@@ -260,6 +302,7 @@
     "goToPlan": "Ir a mi plan"
   },
   "nav": {
+    "practiceGrammar": "Gramática práctica",
     "learning": "Mi aprendizaje",
     "practice": "Practicar",
     "help": "Ayuda",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Sigue practicando gramática",
+    "paywallGrammarPracticeDesc": "Has agotado las tandas gratuitas de hoy. Con Premium puedes generar más; las sesiones guardadas siguen disponibles.",
     "planFreeTrialDesc": "Prueba el acceso Premium al registrarte, sin tarjeta ni suscripción. Después, continúa gratis con límites de uso.",
     "paywallGamesTitle": "Sigue practicando con juegos",
     "paywallGamesDesc": "Has agotado las partidas gratuitas o los juegos requieren Premium. Puedes continuar las partidas que ya tienes.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Requiere tarjeta. Tu suscripción de pago comienza al contratarla. Se renueva con la periodicidad elegida, salvo que canceles."
   },
   "freemium": {
+    "grammarPracticeLabel": "Tandas de gramática de hoy",
     "gamesLabel": "Partidas de hoy",
     "chatLabel": "Chat",
     "lessonsLabel": "Lecciones",

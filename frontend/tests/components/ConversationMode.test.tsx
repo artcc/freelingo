@@ -1883,6 +1883,43 @@ describe('ConversationMode session lifecycle', () => {
     await waitFor(() => expect(ws.close).toHaveBeenCalledTimes(1))
   })
 
+  it('passes a grammar session through the same warmup and voice handshake', async () => {
+    const id = '4b8fa402-fb9c-4bba-b658-583824dd1bb1'
+    render(
+      <ConversationMode
+        grammarPracticeSessionId={id}
+        lessonTitle="Passé composé"
+        targetLanguage="fr-FR"
+      />
+    )
+    expect(screen.queryByText('startersHint')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+      type: 'auth',
+      token: 'token',
+      grammar_practice_session_id: id,
+      target_language: 'fr-FR',
+    })
+    expect(mocks.apiFetch).toHaveBeenCalledWith(
+      '/api/conversation/warmup',
+      expect.any(Object)
+    )
+    act(() =>
+      ws.message({
+        type: 'transcript',
+        role: 'assistant',
+        final: true,
+        text: 'Très bien.',
+      })
+    )
+    expect(ws.close).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+    await waitFor(() => expect(ws.close).toHaveBeenCalledTimes(1))
+  })
+
   it('does not add lesson context to ordinary voice sessions', async () => {
     render(<ConversationMode />)
     fireEvent.click(screen.getByRole('button', { name: 'start' }))
