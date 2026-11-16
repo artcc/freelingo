@@ -260,12 +260,15 @@
     "goToPlan": "Siirry omaan suunnitelmaan"
   },
   "nav": {
+    "learning": "Oma oppiminen",
+    "practice": "Harjoittele",
+    "help": "Ohjeet",
     "games": "Pelit",
     "home": "Etusivu",
     "myPlan": "Oma suunnitelma",
     "progress": "Edistyminen",
     "flashcards": "Muistikortit",
-    "tutor": "Keskustele opettajan kanssa",
+    "tutor": "Keskustele Lingun kanssa",
     "assessment": "Tasoarvio",
     "resources": "Materiaalit",
     "grammar": "Kielioppi",
@@ -274,7 +277,7 @@
     "settings": "Asetukset",
     "faq": "Usein kysytyt kysymykset",
     "admin": "Ylläpito",
-    "conversation": "Keskustelu",
+    "conversation": "Äänikeskustelu",
     "listening": "Kuuntelu",
     "reading": "Lukeminen",
     "contact": "Yhteystiedot",
@@ -1863,7 +1866,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.13.5",
+    "version": "v1.13.10",
     "cta": "Selvä",
     "entry1": {
       "label": "Uudet kielet: kroatia, tšekki, tanska, suomi ja romania",

@@ -260,13 +260,16 @@
     "goToPlan": "Idi na moj plan"
   },
   "nav": {
+    "learning": "Moje učenje",
+    "practice": "Vježbaj",
+    "help": "Pomoć",
     "games": "Igre",
     "home": "Početna",
     "myPlan": "Moj plan",
     "progress": "Napredak",
     "flashcards": "Kartice",
-    "tutor": "Razgovaraj s učiteljem",
-    "assessment": "Procjena",
+    "tutor": "Chat s Linguom",
+    "assessment": "Procjena razine",
     "resources": "Materijali",
     "grammar": "Gramatika",
     "vocabulary": "Rječnik",
@@ -274,7 +277,7 @@
     "settings": "Postavke",
     "faq": "Česta pitanja",
     "admin": "Administracija",
-    "conversation": "Razgovor",
+    "conversation": "Glasovni razgovor",
     "listening": "Slušanje",
     "reading": "Čitanje",
     "contact": "Kontakt",
@@ -1863,7 +1866,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.13.5",
+    "version": "v1.13.10",
     "cta": "Razumijem",
     "entry1": {
       "label": "Novi jezici: hrvatski, češki, danski, finski i rumunjski",

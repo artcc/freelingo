@@ -8,6 +8,7 @@ vi.mock('@/lib/api', () => ({
   requestAccessToken: vi.fn(),
 }))
 vi.mock('next-intl', () => ({
+  useLocale: () => 'en',
   useTranslations: () => (key: string, values?: { days?: number }) =>
     values?.days === undefined ? key : `${key}:${values.days}`,
 }))

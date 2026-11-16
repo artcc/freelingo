@@ -260,12 +260,15 @@
     "goToPlan": "Gå til min plan"
   },
   "nav": {
+    "learning": "Min læring",
+    "practice": "Øv dig",
+    "help": "Hjælp",
     "games": "Spil",
     "home": "Hjem",
     "myPlan": "Min plan",
     "progress": "Fremskridt",
     "flashcards": "Flashcards",
-    "tutor": "Chat med læreren",
+    "tutor": "Chat med Lingu",
     "assessment": "Niveauvurdering",
     "resources": "Ressourcer",
     "grammar": "Grammatik",
@@ -274,7 +277,7 @@
     "settings": "Indstillinger",
     "faq": "Ofte stillede spørgsmål",
     "admin": "Administration",
-    "conversation": "Samtale",
+    "conversation": "Stemmesamtale",
     "listening": "Lytning",
     "reading": "Læsning",
     "contact": "Kontakt",
@@ -1863,7 +1866,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.13.5",
+    "version": "v1.13.10",
     "cta": "Forstået",
     "entry1": {
       "label": "Nye sprog: kroatisk, tjekkisk, dansk, finsk og rumænsk",

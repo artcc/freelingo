@@ -496,6 +496,32 @@ The app layout resolves the session, loads the current profile, enforces onboard
 provides desktop/mobile navigation, initializes language/config state, and owns global notices,
 loading, theme, contact, Settings, logout, and admin navigation.
 
+Desktop and mobile share the same navigation order:
+
+- Home.
+- My learning: My Plan, Progress, Level assessment.
+- Practice: Chat with Lingu, Flashcards, Games, Listening, Reading, Voice conversation.
+- Resources: Grammar, Phrasebook, Vocabulary.
+- Help: Contact (opens the contact modal), Feedback, Frequently asked questions.
+- A separate block after Help: Settings for everyone and Admin only for administrators.
+- Account area: profile, version, and logout.
+
+Practice, Resources, Help (including Contact), and the Settings/Admin block sort their visible entries
+alphabetically by translated label using the interface locale's collation rules. My learning retains
+the listed order.
+
+The learning, practice, resources, and help groups can be independently collapsed. All start expanded
+when the app layout mounts. Their shared desktop/mobile state stays in component memory only and is
+not persisted; reloading resets all groups to expanded. Group buttons expose `aria-expanded` and
+`aria-controls`. When Help is collapsed, its heading shows the Feedback unread badge.
+A collapsed group containing the current route shows the active link's left accent border on its
+heading. Expanded groups show that indicator only on the active link, including nested routes.
+
+Navigation labels are localized and use Geist Sans. Active links include nested routes and expose
+`aria-current="page"`. Premium links, trial indicators, and Feedback unread badges retain their
+existing visibility rules. The desktop navigation scrolls independently of the account area; the
+mobile menu scrolls within the viewport and closes when a destination or Contact is selected.
+
 Frontend route guards and visibility flags do not grant access. Any protected action must still rely on
 backend authorization.
 

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.13.10] - Unreleased
+
+### Changed
+
+- Organize desktop and mobile navigation into collapsible learning, practice, resources, and help groups, expanded by default without persisting their state, with clearer localized labels and a separate final block containing Settings and an administrator-only Admin link. Sort Practice, Resources, Help, and Settings/Admin alphabetically by their translated labels using the interface language. Keep the Feedback unread badge visible when Help is collapsed, and mark a collapsed group containing the current page with the active link's left accent border.
+
 ## [1.13.5] - 2026-11-15
 
 ### Added

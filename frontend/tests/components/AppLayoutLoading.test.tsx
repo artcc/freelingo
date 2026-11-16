@@ -11,7 +11,10 @@ vi.mock('next/navigation', () => ({
   useRouter: () => navigation,
   usePathname: () => '/dashboard',
 }))
-vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
+}))
 vi.mock('@/components/LanguageSwitcher', () => ({ default: () => null }))
 vi.mock('@/components/AuthAvatarImage', () => ({ AuthAvatarImage: () => null }))
 vi.mock('@/components/ui/confirm-dialog', () => ({ ConfirmDialog: () => null }))
