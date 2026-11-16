@@ -78,8 +78,11 @@ function AddButton({
         const plan: { id: number; target_language: string } | null =
           await response.json()
         if (!(await settlePractice(scope, request.signal))) return
-        if (plan && plan.target_language !== targetLanguage)
-          throw new Error('context')
+        if (plan && plan.target_language !== targetLanguage) {
+          setContextChanged(true)
+          setError(t('contextChanged'))
+          return
+        }
         setPlanId(plan?.id ?? null)
         setLoaded(true)
       } catch {
@@ -88,7 +91,7 @@ function AddButton({
       }
     })()
     return () => request.abort()
-  }, [scope, targetLanguage, retry, common])
+  }, [scope, targetLanguage, retry, common, t])
 
   async function add() {
     const request = controller.current

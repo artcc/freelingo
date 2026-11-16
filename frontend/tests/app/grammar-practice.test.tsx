@@ -146,6 +146,149 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers())
 
 describe('grammar library and captured resource context', () => {
+  it.each(['study_context_changed', 'language_not_found', 'response_language'])(
+    'reconciles a stale library read on explicit retry (%s) without generating',
+    async (failure) => {
+      const library = {
+        study_plan_id: 9,
+        target_language: 'ja-JP',
+        quota: history.quota,
+        limited: true,
+        topics: [{ ...history.topic, title: 'Japanese topic' }],
+        total: 1,
+      }
+      if (failure === 'response_language') {
+        vi.mocked(practiceRequest).mockResolvedValueOnce(library)
+      } else {
+        vi.mocked(practiceRequest).mockRejectedValueOnce(
+          new PracticeRequestError(
+            failure === 'language_not_found' ? 404 : 409,
+            failure
+          )
+        )
+      }
+      vi.mocked(practiceRequest).mockResolvedValue(library)
+      vi.mocked(apiFetch).mockImplementation(
+        async () =>
+          new Response(
+            JSON.stringify({
+              languages: [
+                { target_language: 'en-GB', is_active: false, plan: null },
+                {
+                  target_language: 'ja-JP',
+                  is_active: true,
+                  plan: { id: 9, cefr_level: 'A1' },
+                },
+              ],
+            })
+          )
+      )
+      render(<PracticeCatalog />)
+      expect(await screen.findByRole('alert')).toHaveTextContent(
+        'contextChanged'
+      )
+      expect(apiFetch).not.toHaveBeenCalled()
+      expect(screen.queryByText('Japanese topic')).not.toBeInTheDocument()
+
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      expect(await screen.findByText('Japanese topic')).toBeVisible()
+      expect(apiFetch).toHaveBeenCalledWith('/api/languages', expect.anything())
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('ja-JP')
+      expect(
+        vi.mocked(practiceRequest).mock.calls.map(([path]) => path)
+      ).toEqual([
+        '/topics?target_language=en-GB&skip=0&limit=20',
+        '/topics?target_language=ja-JP&skip=0&limit=20',
+      ])
+      expect(
+        vi
+          .mocked(practiceRequest)
+          .mock.calls.every(([, options]) => !options?.method)
+      ).toBe(true)
+    }
+  )
+
+  it.each([false, true])(
+    'reconciles a current-plan language mismatch before allowing an explicit add (refresh failure: %s)',
+    async (refreshFails) => {
+      let languageReads = 0
+      vi.mocked(apiFetch).mockImplementation(async (path) => {
+        if (path === '/api/languages') {
+          languageReads += 1
+          if (refreshFails && languageReads === 1)
+            return new Response('{}', { status: 503 })
+          return new Response(
+            JSON.stringify({
+              languages: [
+                {
+                  target_language: 'ja-JP',
+                  is_active: true,
+                  plan: { id: 9, cefr_level: 'A1' },
+                },
+              ],
+            })
+          )
+        }
+        return new Response(JSON.stringify({ id: 9, target_language: 'ja-JP' }))
+      })
+      vi.mocked(practiceRequest).mockResolvedValue(history.topic)
+      function Resource() {
+        const language = useLanguageStore((state) => state.activeLanguage?.code)
+        return (
+          <AddPracticeButton slug="present-simple" targetLanguage={language!} />
+        )
+      }
+      render(<Resource />)
+      expect(await screen.findByRole('alert')).toHaveTextContent(
+        'contextChanged'
+      )
+      expect(screen.getByRole('button', { name: 'add' })).toBeDisabled()
+      expect(languageReads).toBe(0)
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      if (refreshFails) {
+        expect(await screen.findByRole('alert')).toHaveTextContent(
+          'errorMessage'
+        )
+        expect(practiceRequest).not.toHaveBeenCalled()
+        fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      }
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'add' })).toBeEnabled()
+      )
+      expect(useLanguageStore.getState().activeLanguage?.code).toBe('ja-JP')
+      expect(languageReads).toBe(refreshFails ? 2 : 1)
+      expect(practiceRequest).not.toHaveBeenCalled()
+      fireEvent.click(screen.getByRole('button', { name: 'add' }))
+      await waitFor(() => expect(push).toHaveBeenCalled())
+      expect(
+        JSON.parse(String(vi.mocked(practiceRequest).mock.calls[0][1]?.body))
+      ).toEqual({
+        slug: 'present-simple',
+        study_plan_id: 9,
+        target_language: 'ja-JP',
+      })
+    }
+  )
+
+  it('retries an unrelated library error without invalidating the language context', async () => {
+    vi.mocked(practiceRequest)
+      .mockRejectedValueOnce(new PracticeRequestError(503, 'unavailable'))
+      .mockResolvedValueOnce({
+        study_plan_id: 4,
+        target_language: 'en-GB',
+        quota: history.quota,
+        limited: true,
+        topics: [history.topic],
+        total: 1,
+      })
+    render(<PracticeCatalog />)
+    expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
+    fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+    expect(await screen.findByText('Present simple')).toBeVisible()
+    expect(apiFetch).not.toHaveBeenCalled()
+    expect(useLanguageStore.getState().needsRefresh).toBe(false)
+  })
+
   it('reconciles a cross-tab language change before allowing an explicit add in the new resource context', async () => {
     let changedInOtherTab = false
     vi.mocked(apiFetch).mockImplementation(
@@ -564,6 +707,19 @@ describe('grammar creation recovery', () => {
   it.each(['request_conflict', 'study_context_changed'])(
     'retires a definitively rejected recovery marker: %s',
     async (code) => {
+      vi.mocked(apiFetch).mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            languages: [
+              {
+                target_language: 'en-GB',
+                is_active: true,
+                plan: { id: 4, cefr_level: 'A2' },
+              },
+            ],
+          })
+        )
+      )
       const pending: PendingPractice = {
         topic_id: 7,
         payload: { request_id: id, study_plan_id: 4, target_language: 'en-GB' },
@@ -592,6 +748,86 @@ describe('grammar creation recovery', () => {
           .mocked(practiceRequest)
           .mock.calls.filter(([, options]) => options?.method === 'POST')
       ).toHaveLength(1)
+      expect(apiFetch).toHaveBeenCalledTimes(
+        code === 'study_context_changed' ? 1 : 0
+      )
+    }
+  )
+
+  it.each(['success', 'refresh_failure', 'no_active_language'])(
+    'reconciles a generation conflict while preserving the saved topic (%s)',
+    async (scenario) => {
+      let changed = false
+      let languageReads = 0
+      vi.mocked(practiceRequest).mockImplementation(async (_path, options) => {
+        if (options?.method === 'POST') {
+          changed = true
+          throw new PracticeRequestError(409, 'study_context_changed')
+        }
+        return { ...history, study_plan_id: changed ? null : 4 }
+      })
+      vi.mocked(apiFetch).mockImplementation(async () => {
+        languageReads += 1
+        if (scenario === 'refresh_failure' && languageReads === 1)
+          return new Response('{}', { status: 503 })
+        return new Response(
+          JSON.stringify({
+            languages: [
+              { target_language: 'en-GB', is_active: false, plan: null },
+              ...(scenario === 'no_active_language'
+                ? []
+                : [
+                    {
+                      target_language: 'ja-JP',
+                      is_active: true,
+                      plan: { id: 9, cefr_level: 'A1' },
+                    },
+                  ]),
+            ],
+          })
+        )
+      })
+      render(<PracticeCatalog topicId="7" />)
+      fireEvent.click(await screen.findByRole('button', { name: 'generate' }))
+      expect(await screen.findByRole('alert')).toHaveTextContent(
+        'contextChanged'
+      )
+      expect(apiFetch).not.toHaveBeenCalled()
+      fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      if (scenario === 'refresh_failure') {
+        expect(await screen.findByRole('alert')).toHaveTextContent(
+          'errorMessage'
+        )
+        expect(useLanguageStore.getState().needsRefresh).toBe(true)
+        expect(practiceRequest).toHaveBeenCalledTimes(2)
+        fireEvent.click(screen.getByRole('button', { name: 'retry' }))
+      }
+      expect(
+        await screen.findByRole('heading', { name: 'Present simple' })
+      ).toBeVisible()
+      expect(screen.getByRole('button', { name: 'generate' })).toBeDisabled()
+      expect(screen.getByRole('link', { name: /ready/ })).toHaveAttribute(
+        'href',
+        `/grammar-practice/sessions/${id}`
+      )
+      expect(useLanguageStore.getState().needsRefresh).toBe(false)
+      expect(useLanguageStore.getState().activeLanguage?.code ?? null).toBe(
+        scenario === 'no_active_language' ? null : 'ja-JP'
+      )
+      expect(apiFetch).toHaveBeenCalledWith('/api/languages', expect.anything())
+      expect(
+        vi.mocked(practiceRequest).mock.calls.map(([path]) => path)
+      ).toEqual([
+        '/topics/7?skip=0&limit=10',
+        '/topics/7/sessions',
+        '/topics/7?skip=0&limit=10',
+      ])
+      expect(
+        vi
+          .mocked(practiceRequest)
+          .mock.calls.filter(([, options]) => options?.method === 'POST')
+      ).toHaveLength(1)
+      expect(push).not.toHaveBeenCalled()
     }
   )
 

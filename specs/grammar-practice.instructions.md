@@ -41,6 +41,17 @@ presentation patterns. Learned-language content retains `TargetLanguageText`; in
 Geist Sans. Exercises show their sequence number and the selected option, and answered exercises
 include both a textual correctness label and the established success/error styling.
 
+If a library read reports a changed or removed active language, or returns a different language,
+the client shows the context-change message. The add action does the same when its current-plan
+lookup returns a plan in another language. Explicit Retry invalidates and reloads the language
+snapshot before reloading the library or the resource's plan. A failed reconciliation remains
+retryable; unrelated read failures retry the read without invalidating the language snapshot.
+Reconciliation never adds a topic or generates a session automatically.
+The same explicit reconciliation applies when session creation reports a study-context conflict
+from a saved topic. It refreshes the global language snapshot before reloading that topic's original
+history, including when no active language remains. Resource-specific conflicts only reload the
+resource; unrelated historical reads do not require the active language snapshot.
+
 ## Generation and lifecycle
 
 Sessions have `generating`, `ready`, `completed`, `failed`, or `abandoned` status. The creation UUID

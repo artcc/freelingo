@@ -37,14 +37,68 @@ import {
 } from './PracticeScope'
 
 export function PracticeCatalog({ topicId }: { topicId?: string }) {
+  const common = useTranslations('common')
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const [recoveryAttempt, setRecoveryAttempt] = useState(0)
+  const [recoveryError, setRecoveryError] = useState(false)
+
+  useEffect(() => {
+    if (!recoveryAttempt) return
+    const controller = new AbortController()
+    setRecoveryError(false)
+    void useLanguageStore
+      .getState()
+      .fetchLanguages(controller.signal)
+      .then((ok) => {
+        if (
+          controller.signal.aborted ||
+          useAuthStore.getState().sessionVersion !== sessionVersion
+        )
+          return
+        if (ok) setRecoveryAttempt(0)
+        else setRecoveryError(true)
+      })
+    return () => controller.abort()
+  }, [recoveryAttempt, sessionVersion])
+
+  function reconcileContext() {
+    useLanguageStore.getState().invalidateLanguages()
+    if (topicId) setRecoveryAttempt((n) => n + 1)
+  }
+
+  if (recoveryAttempt) {
+    if (!recoveryError) return <PageLoading />
+    return (
+      <div role="alert" className="space-y-3 p-6">
+        <p>{common('errorMessage')}</p>
+        <button
+          className={practiceButton}
+          onClick={() => setRecoveryAttempt((n) => n + 1)}
+        >
+          {common('retry')}
+        </button>
+      </div>
+    )
+  }
+
   return (
     <PracticeScope saved={!!topicId}>
-      <Catalog key={topicId ?? 'library'} topicId={topicId} />
+      <Catalog
+        key={topicId ?? 'library'}
+        topicId={topicId}
+        reconcileContext={reconcileContext}
+      />
     </PracticeScope>
   )
 }
 
-function Catalog({ topicId }: { topicId?: string }) {
+function Catalog({
+  topicId,
+  reconcileContext,
+}: {
+  topicId?: string
+  reconcileContext: () => void
+}) {
   const t = useTranslations('grammarPractice')
   const common = useTranslations('common')
   const target = useTranslations('targetLanguages')
@@ -71,6 +125,7 @@ function Catalog({ topicId }: { topicId?: string }) {
   const [retryAt, setRetryAt] = useState(0)
   const [clock, setClock] = useState(Date.now)
   const [contextChanged, setContextChanged] = useState(false)
+  const [needsReconciliation, setNeedsReconciliation] = useState(false)
   const operation = useRef<AbortController | null>(null)
   const creating = useRef(false)
   const { accessDenied, reportAccessDenied } =
@@ -118,6 +173,7 @@ function Catalog({ topicId }: { topicId?: string }) {
     setData(null)
     setError('')
     setContextChanged(false)
+    setNeedsReconciliation(false)
     if (topicId) {
       try {
         setPending(readPendingPractice(topicId))
@@ -134,18 +190,25 @@ function Catalog({ topicId }: { topicId?: string }) {
       .then(async (result) => {
         if (!(await settlePractice(scope, controller.signal))) return
         if (!topicId && result.target_language !== language)
-          throw new Error('context')
+          throw new PracticeRequestError(409, 'study_context_changed')
         setData(result)
         void useFreemiumStore.getState().fetchStatus(true)
       })
       .catch(async (e: unknown) => {
         if (!(await settlePractice(scope, controller.signal))) return
-        setError(common('errorMessage'))
+        const changed =
+          !topicId &&
+          e instanceof PracticeRequestError &&
+          (e.code === 'study_context_changed' ||
+            e.code === 'language_not_found')
+        setContextChanged(changed)
+        setNeedsReconciliation(changed)
+        setError(changed ? t('contextChanged') : common('errorMessage'))
         if (e instanceof PracticeRequestError && e.retryAfter)
           setRetryAt(Date.now() + e.retryAfter * 1000)
       })
     return () => controller.abort()
-  }, [topicId, language, scope, page, retry, common])
+  }, [topicId, language, scope, page, retry, common, t])
 
   async function start(recovery?: PendingPractice) {
     if (
@@ -242,6 +305,10 @@ function Catalog({ topicId }: { topicId?: string }) {
         else {
           const changed = e.status === 409 || e.status === 404
           setContextChanged(changed)
+          setNeedsReconciliation(
+            e.code === 'study_context_changed' ||
+              e.code === 'language_not_found'
+          )
           setError(changed ? t('contextChanged') : common('errorMessage'))
           if (e.retryAfter) setRetryAt(Date.now() + e.retryAfter * 1000)
         }
@@ -305,7 +372,11 @@ function Catalog({ topicId }: { topicId?: string }) {
           <button
             disabled={clock < retryAt || busy}
             className={practiceButton}
-            onClick={() => setRetry((n) => n + 1)}
+            onClick={() => {
+              if (!canActInPractice(scope)) return
+              if (needsReconciliation) reconcileContext()
+              else setRetry((n) => n + 1)
+            }}
           >
             {common('retry')}
           </button>
