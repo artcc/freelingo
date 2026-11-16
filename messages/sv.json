@@ -260,12 +260,15 @@
     "goToPlan": "Gå till min plan"
   },
   "nav": {
+    "learning": "Mitt lärande",
+    "practice": "Öva",
+    "help": "Hjälp",
     "games": "Spel",
     "home": "Hem",
     "myPlan": "Min plan",
     "progress": "Framsteg",
     "flashcards": "Gloskort",
-    "tutor": "Chatta med handledaren",
+    "tutor": "Chatta med Lingu",
     "assessment": "Nivåbedömning",
     "resources": "Resurser",
     "grammar": "Grammatik",
@@ -274,7 +277,7 @@
     "settings": "Inställningar",
     "faq": "Vanliga frågor",
     "admin": "Administration",
-    "conversation": "Samtal",
+    "conversation": "Röstsamtal",
     "listening": "Hörförståelse",
     "reading": "Läsning",
     "contact": "Kontakt",
@@ -1863,7 +1866,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.13.5",
+    "version": "v1.13.10",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Nya språk: kroatiska, tjeckiska, danska, finska och rumänska",

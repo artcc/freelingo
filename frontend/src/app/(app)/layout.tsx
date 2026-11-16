@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { ChevronDown } from 'lucide-react'
 import { useAuthStore, isSubscribed } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { apiFetch, requestAccessToken } from '@/lib/api'
@@ -36,30 +37,49 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   const tBilling = useTranslations('billing')
   const tPremium = useTranslations('premiumOffer')
   const pathname = usePathname()
+  const locale = useLocale()
+  const collator = new Intl.Collator(locale)
 
-  const mainNavItems = [
-    { href: '/dashboard', label: tNav('home') },
-    { href: '/plan', label: tNav('myPlan') },
-    { href: '/progress', label: tNav('progress') },
-    { href: '/flashcards', label: tNav('flashcards') },
-    { href: '/chat', label: tNav('tutor') },
-    { href: '/listening', label: tNav('listening') },
-    { href: '/reading', label: tNav('reading') },
-    { href: '/conversation', label: tNav('conversation') },
-    { href: '/games', label: tNav('games') },
-    { href: '/assessment', label: tNav('assessment') },
-  ]
-
-  const resourceNavItems = [
-    { href: '/grammar', label: tNav('grammar') },
-    { href: '/vocabulary', label: tNav('vocabulary') },
-    { href: '/phrasebook', label: tNav('phrasebook') },
-  ]
-
-  const bottomNavItems = [
-    { href: '/settings', label: tNav('settings') },
-    { href: '/faq', label: tNav('faq') },
-    { href: '/feedback', label: tNav('feedback') },
+  const navGroups = [
+    {
+      key: 'learning',
+      label: tNav('learning'),
+      items: [
+        { href: '/plan', label: tNav('myPlan') },
+        { href: '/progress', label: tNav('progress') },
+        { href: '/assessment', label: tNav('assessment') },
+      ],
+    },
+    {
+      key: 'practice',
+      label: tNav('practice'),
+      items: [
+        { href: '/chat', label: tNav('tutor') },
+        { href: '/conversation', label: tNav('conversation') },
+        { href: '/listening', label: tNav('listening') },
+        { href: '/reading', label: tNav('reading') },
+        { href: '/flashcards', label: tNav('flashcards') },
+        { href: '/games', label: tNav('games') },
+      ].sort((a, b) => collator.compare(a.label, b.label)),
+    },
+    {
+      key: 'resources',
+      label: tNav('resources'),
+      items: [
+        { href: '/grammar', label: tNav('grammar') },
+        { href: '/vocabulary', label: tNav('vocabulary') },
+        { href: '/phrasebook', label: tNav('phrasebook') },
+      ].sort((a, b) => collator.compare(a.label, b.label)),
+    },
+    {
+      key: 'help',
+      label: tNav('help'),
+      items: [
+        { href: '/faq', label: tNav('faq') },
+        { href: '/feedback', label: tNav('feedback') },
+        { href: null, label: tNav('contact') },
+      ].sort((a, b) => collator.compare(a.label, b.label)),
+    },
   ]
 
   const router = useRouter()
@@ -73,7 +93,9 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   const loadConfig = useConfigStore((s) => s.load)
   const [logoutConfirm, setLogoutConfirm] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [resourcesOpen, setResourcesOpen] = useState(false)
+  const [collapsedGroups, setCollapsedGroups] = useState<
+    Record<string, boolean>
+  >({})
   const [contactOpen, setContactOpen] = useState(false)
   const [resendSent, setResendSent] = useState(false)
   const [feedbackUnreadCount, setFeedbackUnreadCount] = useState(0)
@@ -173,6 +195,15 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, [initializing])
 
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 48rem)')
+    function closeMenuOnDesktop(event: MediaQueryListEvent) {
+      if (event.matches) setMobileMenuOpen(false)
+    }
+    desktop.addEventListener('change', closeMenuOnDesktop)
+    return () => desktop.removeEventListener('change', closeMenuOnDesktop)
+  }, [])
+
   if (initializing) {
     return (
       <PageLoadingViewport className="h-dvh">
@@ -188,12 +219,125 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         ? String(feedbackUnreadCount)
         : ''
 
+  function isActiveNavHref(href: string) {
+    return pathname === href || pathname.startsWith(href + '/')
+  }
+
+  function renderNavLink(
+    item: { href: string; label: string },
+    mobile: boolean
+  ) {
+    const active = isActiveNavHref(item.href)
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
+        aria-current={active ? 'page' : undefined}
+        className={`flex min-h-11 items-center gap-3 border-l-2 px-5 py-2.5 font-sans text-sm wrap-anywhere transition-colors ${
+          active
+            ? 'text-fl-fg bg-fl-surface-2 border-fl-accent font-medium'
+            : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-transparent'
+        }`}
+      >
+        <span>{item.label}</span>
+        {showPremiumBadge && PREMIUM_HREFS.has(item.href) && (
+          <span className="text-fl-accent ml-auto shrink-0 text-xs">★</span>
+        )}
+        {item.href === '/feedback' && feedbackBadgeText && (
+          <span className="text-fl-label ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-600 leading-none font-bold text-white">
+            {feedbackBadgeText}
+          </span>
+        )}
+      </Link>
+    )
+  }
+
+  function renderNavigation(mobile: boolean) {
+    const utilityItems = [{ href: '/settings', label: tNav('settings') }]
+    if (user?.role === 'admin') {
+      utilityItems.push({ href: '/admin', label: tNav('admin') })
+    }
+    utilityItems.sort((a, b) => collator.compare(a.label, b.label))
+
+    return (
+      <>
+        {renderNavLink({ href: '/dashboard', label: tNav('home') }, mobile)}
+        {navGroups.map((group) => {
+          const expanded = !collapsedGroups[group.key]
+          const collapsedActive =
+            !expanded &&
+            group.items.some(
+              (item) => item.href !== null && isActiveNavHref(item.href)
+            )
+          const panelId = `${mobile ? 'mobile' : 'desktop'}-nav-${group.key}`
+          return (
+            <div key={group.key} className="mt-4">
+              <h2>
+                <button
+                  type="button"
+                  aria-expanded={expanded}
+                  aria-controls={panelId}
+                  onClick={() =>
+                    setCollapsedGroups((previous) => ({
+                      ...previous,
+                      [group.key]: !previous[group.key],
+                    }))
+                  }
+                  className={`text-fl-muted-1 hover:text-fl-fg hover:bg-fl-surface flex min-h-11 w-full items-center gap-3 border-l-2 px-5 py-2 text-left font-sans text-xs font-semibold tracking-wider uppercase transition-colors ${
+                    collapsedActive ? 'border-fl-accent' : 'border-transparent'
+                  }`}
+                >
+                  <span className="flex-1">{group.label}</span>
+                  {group.key === 'help' && !expanded && feedbackBadgeText && (
+                    <span className="text-fl-label flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-600 leading-none font-bold tracking-normal text-white">
+                      {feedbackBadgeText}
+                    </span>
+                  )}
+                  <ChevronDown
+                    aria-hidden="true"
+                    className={`size-3.5 shrink-0 ${expanded ? '' : '-rotate-90'}`}
+                  />
+                </button>
+              </h2>
+              <div id={panelId} hidden={!expanded}>
+                {group.items.map((item) =>
+                  item.href === null ? (
+                    <button
+                      key="contact"
+                      type="button"
+                      onClick={() => {
+                        if (mobile) setMobileMenuOpen(false)
+                        setContactOpen(true)
+                      }}
+                      className="text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface min-h-11 w-full border-l-2 border-transparent px-5 py-2.5 text-left font-sans text-sm wrap-anywhere transition-colors"
+                    >
+                      {item.label}
+                    </button>
+                  ) : (
+                    renderNavLink(
+                      { href: item.href, label: item.label },
+                      mobile
+                    )
+                  )
+                )}
+              </div>
+            </div>
+          )
+        })}
+        <div className="border-fl-border mt-4 border-t pt-2">
+          {utilityItems.map((item) => renderNavLink(item, mobile))}
+        </div>
+      </>
+    )
+  }
+
   return (
     <div className="bg-fl-bg flex h-dvh overflow-hidden">
       {/* Sidebar */}
-      <aside className="border-fl-border bg-fl-bg hidden w-52 shrink-0 flex-col border-r px-0 py-0 md:flex">
+      <aside className="border-fl-border bg-fl-bg hidden w-60 shrink-0 flex-col border-r px-0 py-0 md:flex">
         {/* Logo area */}
-        <div className="border-fl-border flex items-center gap-2 border-b px-5 py-5">
+        <div className="border-fl-border flex shrink-0 items-center gap-2 border-b px-5 py-5">
           <span className="text-fl-label text-fl-muted-2">●</span>
           <span className="text-fl-fg font-code text-sm font-bold tracking-widest uppercase">
             FreeLingo
@@ -201,130 +345,26 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Language switcher */}
-        <div className="border-fl-border border-b">
+        <div className="border-fl-border shrink-0 border-b">
           <LanguageSwitcher />
         </div>
 
         {showPremiumAction && (
           <Link
             href="/settings#plan"
-            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 focus-visible:outline-fl-accent mx-4 mt-4 px-3 py-2 text-center font-sans text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 focus-visible:outline-fl-accent mx-4 mt-4 shrink-0 px-3 py-2 text-center font-sans text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             {tPremium('viewPremium')}
           </Link>
         )}
 
         {/* Nav */}
-        <nav className="flex-1 overflow-y-auto py-4">
-          {/* Main items */}
-          {mainNavItems.map((item) => {
-            const active =
-              pathname === item.href || pathname.startsWith(item.href + '/')
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
-                  active
-                    ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                    : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                }`}
-              >
-                <span
-                  className={`text-fl-label ${active ? 'text-fl-accent' : 'text-fl-muted-4'}`}
-                >
-                  ●
-                </span>
-                {item.label}
-                {showPremiumBadge && PREMIUM_HREFS.has(item.href) && (
-                  <span className="text-fl-accent ml-auto text-xs">★</span>
-                )}
-              </Link>
-            )
-          })}
-
-          {/* Resources group */}
-          <div className="mt-2">
-            <button
-              onClick={() => setResourcesOpen((o) => !o)}
-              className="text-fl-muted-4 hover:text-fl-muted-2 flex w-full items-center justify-between border-l-2 border-transparent px-5 py-2 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors"
-            >
-              <span>{tNav('resources')}</span>
-              <span className="text-fl-label">{resourcesOpen ? '▴' : '▾'}</span>
-            </button>
-            {resourcesOpen &&
-              resourceNavItems.map((item) => {
-                const active =
-                  pathname === item.href || pathname.startsWith(item.href + '/')
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 py-2.5 pr-5 pl-8 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
-                      active
-                        ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                        : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                    }`}
-                  >
-                    <span
-                      className={`text-fl-label ${active ? 'text-fl-accent' : 'text-fl-muted-4'}`}
-                    >
-                      ·
-                    </span>
-                    {item.label}
-                  </Link>
-                )
-              })}
-          </div>
-
-          {/* Bottom items */}
-          <div className="border-fl-border mt-2 border-t pt-2">
-            {bottomNavItems.map((item) => {
-              const active =
-                pathname === item.href || pathname.startsWith(item.href + '/')
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
-                    active
-                      ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                      : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                  }`}
-                >
-                  <span
-                    className={`text-fl-label ${active ? 'text-fl-fg' : 'text-fl-muted-4'}`}
-                  >
-                    ●
-                  </span>
-                  {item.label}
-                  {item.href === '/feedback' && feedbackBadgeText && (
-                    <span className="text-fl-label ml-auto flex h-6 w-6 shrink-0 -translate-y-0.5 items-center justify-center rounded-full bg-red-600 leading-none font-bold tracking-normal text-white">
-                      {feedbackBadgeText}
-                    </span>
-                  )}
-                </Link>
-              )
-            })}
-          </div>
-
-          {user?.role === 'admin' && (
-            <Link
-              href="/admin"
-              className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere transition-colors ${
-                pathname.startsWith('/admin')
-                  ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                  : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-              }`}
-            >
-              <span className="text-fl-label text-fl-muted-4">●</span>
-              {tNav('admin')}
-            </Link>
-          )}
+        <nav className="min-h-0 flex-1 overflow-y-auto py-3">
+          {renderNavigation(false)}
         </nav>
 
         {/* User + logout */}
-        <div className="border-fl-border border-t px-5 py-4">
+        <div className="border-fl-border shrink-0 border-t px-5 py-3">
           <div className="mb-3 flex items-center gap-3">
             <div className="border-fl-border h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border">
               {user?.avatar ? (
@@ -355,10 +395,10 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
               )}
             </div>
             <div className="min-w-0">
-              <p className="text-fl-caption text-fl-muted-2 truncate font-mono tracking-widest uppercase">
+              <p className="text-fl-caption text-fl-muted-2 truncate font-sans">
                 {user?.displayName || user?.username}
               </p>
-              <p className="text-fl-label text-fl-muted-4 truncate font-mono">
+              <p className="text-fl-label text-fl-muted-4 truncate font-sans">
                 @{user?.username?.toLowerCase()}
               </p>
               {trialDaysLeft > 0 && (
@@ -372,22 +412,23 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.13.5
+            v1.13.10
           </p>
           <button
-            onClick={() => setContactOpen(true)}
-            className="text-fl-muted-2 hover:text-fl-fg mb-1 w-full text-left font-mono text-xs tracking-widest uppercase transition-colors"
-          >
-            {tNav('contact')}
-          </button>
-          <button
             onClick={() => setLogoutConfirm(true)}
-            className="text-fl-muted-2 hover:text-fl-fg w-full text-left font-mono text-xs tracking-widest uppercase transition-colors"
+            className="text-fl-muted-2 hover:text-fl-fg w-full text-left font-sans text-sm transition-colors"
           >
             {tCommon('logout')}
           </button>
         </div>
       </aside>
+
+      {mobileMenuOpen && (
+        <div
+          aria-hidden="true"
+          className="bg-fl-bg/40 fixed inset-0 z-40 touch-none backdrop-blur-[3px] md:hidden"
+        />
+      )}
 
       {/* Mobile top bar */}
       <div className="border-fl-border bg-fl-bg fixed top-0 right-0 left-0 z-50 border-b md:hidden">
@@ -411,6 +452,8 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
             aria-label={
               mobileMenuOpen ? tCommon('closeMenu') : tCommon('openMenu')
             }
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             <span className="text-base leading-none">
               {mobileMenuOpen ? '✕' : '☰'}
@@ -420,119 +463,14 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
 
         {/* Dropdown */}
         {mobileMenuOpen && (
-          <nav className="border-fl-border bg-fl-bg max-h-[calc(100svh-3.5rem)] overflow-y-auto overscroll-contain border-t pb-2">
+          <nav
+            id="mobile-navigation"
+            className="border-fl-border bg-fl-bg max-h-[calc(100svh-3.5rem)] overflow-y-auto overscroll-contain border-t pb-2"
+          >
             <div className="border-fl-border border-b">
               <LanguageSwitcher />
             </div>
-            {mainNavItems.map((item) => {
-              const active =
-                pathname === item.href || pathname.startsWith(item.href + '/')
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
-                    active
-                      ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                      : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                  }`}
-                >
-                  <span
-                    className={`text-fl-label ${active ? 'text-fl-fg' : 'text-fl-muted-4'}`}
-                  >
-                    ●
-                  </span>
-                  {item.label}
-                  {showPremiumBadge && PREMIUM_HREFS.has(item.href) && (
-                    <span className="text-fl-accent ml-auto text-xs">★</span>
-                  )}
-                </Link>
-              )
-            })}
-
-            {/* Resources group (mobile) */}
-            <div>
-              <button
-                onClick={() => setResourcesOpen((o) => !o)}
-                className="text-fl-muted-4 hover:text-fl-muted-2 flex w-full items-center justify-between border-l-2 border-transparent px-5 py-2 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors"
-              >
-                <span>{tNav('resources')}</span>
-                <span className="text-fl-label">
-                  {resourcesOpen ? '▴' : '▾'}
-                </span>
-              </button>
-              {resourcesOpen &&
-                resourceNavItems.map((item) => {
-                  const active =
-                    pathname === item.href ||
-                    pathname.startsWith(item.href + '/')
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 py-2.5 pr-5 pl-8 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
-                        active
-                          ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                          : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                      }`}
-                    >
-                      <span
-                        className={`text-fl-label ${active ? 'text-fl-fg' : 'text-fl-muted-4'}`}
-                      >
-                        ·
-                      </span>
-                      {item.label}
-                    </Link>
-                  )
-                })}
-            </div>
-
-            {/* Bottom items (mobile) */}
-            {bottomNavItems.map((item) => {
-              const active =
-                pathname === item.href || pathname.startsWith(item.href + '/')
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
-                    active
-                      ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                      : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                  }`}
-                >
-                  <span
-                    className={`text-fl-label ${active ? 'text-fl-fg' : 'text-fl-muted-4'}`}
-                  >
-                    ●
-                  </span>
-                  {item.label}
-                  {item.href === '/feedback' && feedbackBadgeText && (
-                    <span className="text-fl-label ml-auto flex h-6 w-6 shrink-0 -translate-y-0.5 items-center justify-center rounded-full bg-red-600 leading-none font-bold tracking-normal text-white">
-                      {feedbackBadgeText}
-                    </span>
-                  )}
-                </Link>
-              )
-            })}
-
-            {user?.role === 'admin' && (
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-5 py-3 font-mono text-sm tracking-wide wrap-anywhere uppercase transition-colors ${
-                  pathname.startsWith('/admin')
-                    ? 'text-fl-fg bg-fl-surface-2 border-fl-accent border-l-2'
-                    : 'text-fl-muted-2 hover:text-fl-fg hover:bg-fl-surface border-l-2 border-transparent'
-                }`}
-              >
-                <span className="text-fl-label text-fl-muted-4">●</span>
-                {tNav('admin')}
-              </Link>
-            )}
+            <div className="py-3">{renderNavigation(true)}</div>
             <div className="border-fl-border mx-5 mt-2 border-t pt-3">
               <div className="mb-2 flex items-center gap-3">
                 <div className="border-fl-border h-7 w-7 flex-shrink-0 overflow-hidden rounded-full border">
@@ -564,10 +502,10 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-fl-caption text-fl-muted-2 truncate font-mono tracking-widest uppercase">
+                  <p className="text-fl-caption text-fl-muted-2 truncate font-sans">
                     {user?.displayName || user?.username}
                   </p>
-                  <p className="text-fl-label text-fl-muted-4 truncate font-mono">
+                  <p className="text-fl-label text-fl-muted-4 truncate font-sans">
                     @{user?.username?.toLowerCase()}
                   </p>
                 </div>
@@ -582,23 +520,14 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 </Link>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.13.5
+                v1.13.10
               </p>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  setContactOpen(true)
-                }}
-                className="text-fl-muted-2 hover:text-fl-fg mb-1 block font-mono text-xs tracking-widest uppercase transition-colors"
-              >
-                {tNav('contact')}
-              </button>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false)
                   setLogoutConfirm(true)
                 }}
-                className="text-fl-muted-2 hover:text-fl-fg font-mono text-xs tracking-widest uppercase transition-colors"
+                className="text-fl-muted-2 hover:text-fl-fg font-sans text-sm transition-colors"
               >
                 {tCommon('logout')}
               </button>
@@ -608,7 +537,10 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Main */}
-      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pt-14 md:pt-0">
+      <main
+        inert={mobileMenuOpen}
+        className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pt-14 md:pt-0 ${mobileMenuOpen ? 'isolate' : ''}`}
+      >
         {/* Email verification banner */}
         {user && user.is_verified === false && (
           <div className="border-fl-border bg-fl-surface flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 border-b px-4 py-2">
