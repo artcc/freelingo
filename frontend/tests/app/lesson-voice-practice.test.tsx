@@ -432,6 +432,112 @@ describe('Lesson practice entry', () => {
   })
 })
 
+describe('Grammar voice practice entry', () => {
+  const id = '4b8fa402-fb9c-4bba-b658-583824dd1bb1'
+  const grammarDetail = {
+    id,
+    title: 'Passé composé',
+    target_language: 'fr-FR',
+    learner_level: 'B1',
+    topic_level: 'A2',
+    status: 'completed',
+  }
+
+  it('starts voice with the completed session reference and its persisted context', async () => {
+    mocks.params = `grammarPractice=${id}`
+    sessionStorage.setItem(
+      'voice_context',
+      JSON.stringify([{ role: 'user', content: 'Old chat' }])
+    )
+    sessionStorage.setItem(
+      'assessment_voice_trial',
+      JSON.stringify({ token: 'old-demo' })
+    )
+    mocks.apiFetch.mockResolvedValue(response(grammarDetail))
+    render(<ConversationPage />)
+    await screen.findByTestId('voice')
+    expect(mocks.apiFetch.mock.calls.map(([url]) => url)).toEqual([
+      `/api/grammar-practice/sessions/${id}`,
+    ])
+    expect(mocks.voice.mock.lastCall?.[0]).toEqual(
+      expect.objectContaining({
+        grammarPracticeSessionId: id,
+        lessonId: undefined,
+        lessonTitle: 'Passé composé',
+        targetLanguage: 'fr-FR',
+        cefrLevel: 'B1',
+        autoStart: true,
+        initialContext: undefined,
+      })
+    )
+    expect(mocks.voice.mock.lastCall?.[0].voiceTrialToken).toBeUndefined()
+    act(() =>
+      useLanguageStore.setState({
+        activeLanguage: getLanguageByCode('de-DE') ?? null,
+      })
+    )
+    expect(mocks.voice.mock.lastCall?.[0].targetLanguage).toBe('fr-FR')
+  })
+
+  it.each(['', 'not-a-uuid', `${id}&lesson=7`])(
+    'rejects invalid or conflicting grammar entry %s',
+    async (query) => {
+      mocks.params = `grammarPractice=${query}`
+      render(<ConversationPage />)
+      await screen.findByRole('alert')
+      expect(mocks.apiFetch).not.toHaveBeenCalled()
+      expect(mocks.voice).not.toHaveBeenCalled()
+    }
+  )
+
+  it.each(['generating', 'ready', 'failed', 'abandoned'])(
+    'rejects a %s practice without opening generic voice',
+    async (status) => {
+      mocks.params = `grammarPractice=${id}`
+      mocks.apiFetch.mockResolvedValue(response({ ...grammarDetail, status }))
+      render(<ConversationPage />)
+      await screen.findByRole('alert')
+      expect(mocks.voice).not.toHaveBeenCalled()
+    }
+  )
+
+  it('retries metadata without changing source or bypassing voice access', async () => {
+    mocks.params = `grammarPractice=${id}`
+    mocks.apiFetch
+      .mockRejectedValueOnce(new Error('Network'))
+      .mockResolvedValue(response(grammarDetail))
+    useConfigStore.setState({ stripeEnabled: true })
+    setVoiceQuota(0)
+    render(<ConversationPage />)
+    await screen.findByRole('alert')
+    fireEvent.click(screen.getByRole('button', { name: 'common.retry' }))
+    await screen.findByTestId('paywall')
+    expect(mocks.voice).not.toHaveBeenCalled()
+  })
+
+  it('discards a pending grammar context when authentication is replaced', async () => {
+    mocks.params = `grammarPractice=${id}`
+    let resolve!: (value: unknown) => void
+    mocks.apiFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          new Promise((done) => {
+            resolve = done
+          }),
+      })
+      .mockResolvedValueOnce(response({}, 404))
+    render(<ConversationPage />)
+    await act(async () => Promise.resolve())
+    const signal = mocks.apiFetch.mock.calls[0][1].signal as AbortSignal
+    act(() => useAuthStore.getState().startSession('new-grammar-owner'))
+    await screen.findByRole('alert')
+    expect(signal.aborted).toBe(true)
+    await act(async () => resolve(grammarDetail))
+    expect(mocks.voice).not.toHaveBeenCalled()
+  })
+})
+
 describe('Ordinary conversation loading', () => {
   it('reloads ordinary voice context when the plan changes in the same language', async () => {
     mocks.params = ''

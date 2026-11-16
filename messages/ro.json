@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Reîncearcă solicitarea inițială",
+    "voiceAction": "Exersează vocal această temă de gramatică",
+    "voiceDescription": "Începe o conversație vocală cu Lingu despre această temă și exercițiile finalizate. Este necesar accesul la microfon și se aplică limitele de utilizare vocală.",
+    "title": "Practică de gramatică",
+    "description": "Salvează teme din Resurse și exersează în seturi de cinci: trei întrebări cu variante și două completări de spații. Progresul este salvat; nu se acordă XP.",
+    "add": "Exersează",
+    "back": "Înapoi la practica de gramatică",
+    "voiceUnavailable": "Această practică de gramatică nu este disponibilă.",
+    "noPlan": "Ai nevoie de un plan activ în această limbă pentru a adăuga teme sau a genera exerciții. Sesiunile salvate rămân disponibile.",
+    "assessment": "Creează un plan de studiu",
+    "contextChanged": "Contextul de studiu s-a schimbat. Actualizează și încearcă din nou în mod explicit.",
+    "explore": "Explorează gramatica",
+    "empty": "Biblioteca ta de practică este goală. Alege o temă din resursele de gramatică.",
+    "answered": "{count} răspunsuri",
+    "accuracy": "{percent}% corecte",
+    "lastPracticed": "Ultima practică",
+    "never": "Încă nu",
+    "theory": "Vezi teoria",
+    "continue": "Continuă sesiunea",
+    "recover": "Recuperează sesiunea",
+    "generate": "Generează cinci exerciții",
+    "history": "Istoricul sesiunilor",
+    "noHistory": "Nu există încă sesiuni.",
+    "score": "{correct}/{answered} corecte",
+    "generating": "Se pregătesc exercițiile…",
+    "ready": "Gata de continuare",
+    "completed": "Practică finalizată",
+    "failed": "Generarea a eșuat",
+    "abandoned": "Sesiune abandonată",
+    "recoveryError": "Nu am putut confirma starea salvată. Reîncearcă pentru a o recupera fără a retrimite răspunsul.",
+    "another": "Încă un set",
+    "correct": "Corect",
+    "incorrect": "Nu chiar",
+    "yourAnswer": "Răspunsul tău",
+    "solution": "Răspuns corect",
+    "abandon": "Abandonează sesiunea",
+    "abandonDescription": "Închizi această sesiune? Răspunsurile salvate rămân în istoric. Cota de generare nu se restituie.",
+    "choose": "Alege un răspuns",
+    "fillBlank": "Completează spațiul",
+    "check": "Verifică răspunsul"
+  },
   "questionExplanation": {
     "show": "De ce acest răspuns",
     "hide": "Ascunde explicația",
@@ -260,6 +302,7 @@
     "goToPlan": "Mergi la planul meu"
   },
   "nav": {
+    "practiceGrammar": "Practică de gramatică",
     "learning": "Învățarea mea",
     "practice": "Exersează",
     "help": "Ajutor",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Continuă să exersezi gramatica",
+    "paywallGrammarPracticeDesc": "Ai folosit seturile gratuite de azi. Cu Premium poți genera mai multe; sesiunile salvate rămân disponibile.",
     "planFreeTrialDesc": "Încearcă accesul Premium la înregistrare, fără card sau abonament. Apoi continuă gratuit cu limite de utilizare.",
     "paywallGamesTitle": "Continuă să exersezi prin jocuri",
     "paywallGamesDesc": "Ai epuizat cota gratuită sau jocurile necesită Premium. Poți relua jocurile existente.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Este necesar un card. Abonamentul tău plătit începe la achiziție. Se reînnoiește la intervalul ales, dacă nu îl anulezi."
   },
   "freemium": {
+    "grammarPracticeLabel": "Seturi de gramatică azi",
     "gamesLabel": "Jocurile de azi",
     "chatLabel": "Chat",
     "lessonsLabel": "Lecții",
@@ -1866,25 +1912,29 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.13.10",
+    "version": "v1.14.0",
     "cta": "Am înțeles",
     "entry1": {
+      "label": "Exersează gramatica în ritmul tău",
+      "desc": "Adaugă teme din resursele de Gramatică în biblioteca personală și exersează cu seturi de câte cinci exerciții, cu corecturi și explicații. Consultă rezultatele și, după ce termini, continuă practica prin conversații vocale cu Lingu pe baza temei și a răspunsurilor tale."
+    },
+    "entry2": {
       "label": "Limbi noi: croată, cehă, daneză, finlandeză și română",
       "desc": "Am adăugat croata, ceha, daneza, finlandeza și româna ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
-    "entry2": {
+    "entry3": {
       "label": "Înțelege mai bine fiecare răspuns",
       "desc": "Consultă traducerea enunțurilor în limba ta maternă, păstrând întrebarea originală vizibilă. După ce termini Reading sau Listening, cere o explicație în limba ta maternă cu un fragment din text care justifică răspunsul. De asemenea, poți reciti textul sau reasculta înregistrarea în timp ce recapitulezi."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu te ajută când ai nevoie",
       "desc": "Dacă nu înțelegi ceva în timpul unei conversații vocale, cere-i ajutor lui Lingu. Îți poate explica pe scurt în limba ta maternă, apoi poate relua practica în limba pe care o înveți."
     },
-    "entry4": {
+    "entry5": {
       "label": "Voci mai naturale și mai expresive",
       "desc": "Bucură-te de voci mai naturale și mai expresive în exercițiile de ascultare și în conversațiile cu Lingu, pentru o experiență de ascultare mai clară și mai plăcută."
     },
-    "entry5": {
+    "entry6": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

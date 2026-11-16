@@ -215,12 +215,14 @@ Maintenance mode blocks Reading for non-admin users with HTTP `503`.
 ## Frontend
 
 The Reading page keeps transient state locally. Its states are `loading`, `idle`, `generating`,
-`exercise`, `results`, and `history`.
+`exercise`, `results`, `history`, and `no-plan`.
 
 - Exercise lookup, generation, and answer submission use the shared client contracts in
   `architecture-frontend.instructions.md` (Shared comprehension client). Language-switch recovery
   belongs to `multi-language.instructions.md`.
 - Idle state offers generation, history, quota information, or an inline paywall.
+- No-plan presentation uses the shared banner and confirmation rules in
+  `architecture-frontend.instructions.md` (Shared comprehension client).
 - Generating state adds a delay warning after 15 seconds.
 - Exercise state shows the passage and questions together; there is no audio or readiness gate.
 - Submission becomes available when every received question index has an answer.

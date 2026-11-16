@@ -233,6 +233,7 @@ export default function ConversationMode({
   cefrLevel,
   targetLanguage,
   lessonId,
+  grammarPracticeSessionId,
   lessonTitle,
   voiceTrialToken,
   voiceTrialDurationSeconds,
@@ -247,6 +248,7 @@ export default function ConversationMode({
   cefrLevel?: string | null
   targetLanguage?: string
   lessonId?: number
+  grammarPracticeSessionId?: string
   lessonTitle?: string
   voiceTrialToken?: string
   voiceTrialDurationSeconds?: number
@@ -259,6 +261,7 @@ export default function ConversationMode({
   const t = useTranslations('conversation')
   const tCommon = useTranslations('common')
   const tPractice = useTranslations('lessonPractice')
+  const tGrammarPractice = useTranslations('grammarPractice')
   const tMaintenance = useTranslations('maintenance')
   const locale = useLocale()
   const accessToken = useAuthStore((s) => s.accessToken)
@@ -325,7 +328,7 @@ export default function ConversationMode({
     handleTextSelection,
     handleSaveWord,
     dismissTooltip,
-  } = useWordSave(lessonId)
+  } = useWordSave(lessonId, grammarPracticeSessionId)
 
   // 6 random starters picked once per component mount, shown alphabetically
   const visibleStarters = useMemo(
@@ -860,6 +863,8 @@ export default function ConversationMode({
         if (targetLanguage) authPayload.target_language = targetLanguage
         if (voiceTrialToken) authPayload.voice_trial_token = voiceTrialToken
         if (lessonId !== undefined) authPayload.lesson_id = lessonId
+        if (grammarPracticeSessionId !== undefined)
+          authPayload.grammar_practice_session_id = grammarPracticeSessionId
         try {
           ws.send(JSON.stringify(authPayload))
         } catch {
@@ -1039,6 +1044,8 @@ export default function ConversationMode({
                 quota_exceeded_tokens: t('quotaExceededTokens'),
                 no_active_plan: tCommon('noActivePlan'),
                 lesson_practice_unavailable: tPractice('unavailable'),
+                grammar_practice_unavailable:
+                  tGrammarPractice('voiceUnavailable'),
                 stt_failed: t('errorTranscription'),
                 llm_failed: t('errorResponse'),
                 tts_failed: t('errorSpeech'),
@@ -1112,9 +1119,11 @@ export default function ConversationMode({
       t,
       tCommon,
       tPractice,
+      tGrammarPractice,
       tMaintenance,
       targetLanguage,
       lessonId,
+      grammarPracticeSessionId,
       voiceTrialToken,
       trialMode,
       refreshCurrentUser,
@@ -1500,6 +1509,7 @@ export default function ConversationMode({
       {!trialMode &&
         !accessExhausted &&
         lessonId === undefined &&
+        grammarPracticeSessionId === undefined &&
         !sessionActive &&
         (status === 'ready' || status === 'ended' || status === 'error') && (
           <div className="mb-4">

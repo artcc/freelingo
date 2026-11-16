@@ -37,7 +37,8 @@ const ConversationMode = dynamic(
 )
 
 interface LessonPractice {
-  id: number
+  id?: number
+  grammarPracticeSessionId?: string
   title: string
   cefrLevel: string
   targetLanguage: string
@@ -48,7 +49,17 @@ export default function ConversationPage() {
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
   const userId = useAuthStore((s) => s.user?.id)
   const lessonId = searchParams.get('lesson')
+  const grammarPracticeId = searchParams.get('grammarPractice')
   const ownerKey = `${sessionVersion}:${userId}`
+  if (grammarPracticeId !== null) {
+    return (
+      <GrammarConversationPage
+        key={`${ownerKey}:grammar:${grammarPracticeId}:${lessonId}`}
+        sessionId={grammarPracticeId}
+        conflictingSource={lessonId !== null}
+      />
+    )
+  }
   return lessonId !== null ? (
     <LessonConversationPage
       key={`${ownerKey}:${lessonId}`}
@@ -57,6 +68,97 @@ export default function ConversationPage() {
   ) : (
     <ConversationPageContent key={ownerKey} />
   )
+}
+
+function GrammarConversationPage({
+  sessionId,
+  conflictingSource,
+}: {
+  sessionId: string
+  conflictingSource: boolean
+}) {
+  const t = useTranslations('grammarPractice')
+  const tCommon = useTranslations('common')
+  const [practice, setPractice] = useState<LessonPractice | null>(null)
+  const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 20_000)
+    let cancelled = false
+    async function load() {
+      try {
+        if (
+          conflictingSource ||
+          !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+            sessionId
+          )
+        )
+          throw new Error('Invalid grammar practice')
+        const res = await apiFetch(
+          `/api/grammar-practice/sessions/${sessionId}`,
+          { signal: controller.signal }
+        )
+        if (!res.ok) throw new Error('Grammar practice unavailable')
+        const data = await res.json()
+        if (
+          controller.signal.aborted ||
+          data.id !== sessionId.toLowerCase() ||
+          data.status !== 'completed' ||
+          typeof data.title !== 'string' ||
+          typeof data.learner_level !== 'string' ||
+          typeof data.target_language !== 'string' ||
+          !data.target_language
+        )
+          throw new Error('Invalid grammar practice context')
+        if (!cancelled)
+          setPractice({
+            grammarPracticeSessionId: data.id,
+            title: data.title,
+            cefrLevel: data.learner_level,
+            targetLanguage: data.target_language,
+          })
+      } catch {
+        if (!cancelled) setFailed(true)
+      } finally {
+        clearTimeout(timeout)
+      }
+    }
+    void load()
+    return () => {
+      cancelled = true
+      clearTimeout(timeout)
+      controller.abort()
+    }
+  }, [sessionId, conflictingSource, attempt])
+
+  if (failed)
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 p-6">
+        <p role="alert" className="text-fl-muted-1 font-sans text-sm">
+          {t('voiceUnavailable')}
+        </p>
+        <button
+          type="button"
+          className="text-fl-accent font-sans text-sm underline"
+          onClick={() => {
+            setFailed(false)
+            setAttempt((value) => value + 1)
+          }}
+        >
+          {tCommon('retry')}
+        </button>
+        <Link
+          href="/grammar-practice"
+          className="text-fl-muted-1 font-sans text-sm underline"
+        >
+          {t('back')}
+        </Link>
+      </div>
+    )
+  if (!practice) return <ConversationLoading />
+  return <ConversationPageContent practice={practice} />
 }
 
 function LessonConversationPage({ lessonId }: { lessonId: string }) {
@@ -325,6 +427,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           cefrLevel={cefrLevel}
           targetLanguage={practice?.targetLanguage ?? activeLanguage?.code}
           lessonId={practice?.id}
+          grammarPracticeSessionId={practice?.grammarPracticeSessionId}
           lessonTitle={practice?.title}
           onSessionActiveChange={handleSessionActiveChange}
           freemiumVoiceRemaining={

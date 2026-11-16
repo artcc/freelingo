@@ -111,6 +111,13 @@ commit are separate boundaries; a pre-save ownership check is not transactional 
 their persisted attempt ownership and the existing native-help cache. Its bounded generation and
 cache contract lives in `services.instructions.md` (Comprehension review help).
 
+Grammar Practice has dedicated models, schemas, router, service, and prompts. Its library is owned
+by `UserLanguage`; sessions own immutable source context and retain plan provenance. PostgreSQL
+request/admission records serialize a separate global quota, surviving learning-data deletion.
+Generation runs in FastAPI `BackgroundTasks` under the existing exercise deadline, not a durable
+queue. `grammar_voice_practice.py` resolves completed-session ownership and passes full escaped
+source context through the existing conversation pipeline input. See `grammar-practice.instructions.md`.
+
 Domain writes that must succeed together share a database transaction. Progress/reward serialization
 uses plan-row locks compatible with foreign-key inserts. Flashcard review acquires the plan progress
 lock before the card lock; receipt lookup follows card locking. Preserve this lock order when changing

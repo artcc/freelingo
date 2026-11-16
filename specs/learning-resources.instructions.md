@@ -190,6 +190,11 @@ translations returned by the API are not displayed. A1/A2 native help opens and 
 B1-C2 generates when opened. Grammar pages do not provide TTS, flashcard creation, or automatic
 current-slug chat context. Lesson `grammar_refs` provide the implemented cross-link.
 
+The detail's Practice action adds the topic to the language-owned Grammar Practice library, requiring
+the captured language and active plan. Generated five-question sessions, historical statistics,
+independent admission quota, and completed-session voice continuation are owned by
+`grammar-practice.instructions.md`; reference browsing and native help remain separate.
+
 Native help automatically starts at most once per open resource context until it succeeds or fails.
 Failure leaves a manual retry action instead of starting another automatic request. Help belongs to
 its topic, target/native languages, and authentication session; replacing that context cancels and
@@ -290,6 +295,9 @@ and recent skill performance remain separate from participation rewards.
 Activity days use UTC. Submitted Reading/Listening attempts count even with zero correct answers
 or zero replay XP; conversations count after a distinct learner contribution receives a persisted
 nonempty tutor response. Greetings, unanswered contributions, and planless conversations do not count.
+Each first Grammar Practice answer also records activity in its saved plan, transactionally with
+the answer, without XP, lesson/exercise counters, skills, or competencies. Abandonment preserves
+that activity; identical retries do not add it.
 The current streak is the latest stored streak only if its date is today or yesterday; otherwise it is
 zero. New daily rows carry forward the previous row's skill snapshot before applying scored updates.
 Daily rows also retain ordered scores per skill in `skill_updates`. Under the same plan lock and
@@ -434,11 +442,13 @@ repeat a plan.
 Grammar, Vocabulary, and Phrasebook appear in the Resources group on desktop and mobile. Progress
 and Assessment remain learning pages. Middleware checks refresh-cookie presence and every resource
 endpoint independently requires backend authentication.
+Grammar Practice appears in the Practice group and is also reachable from grammar reference detail.
 
 ## Related specifications
 
 - `platform.instructions.md` — onboarding and placement journey.
 - `study-plan.instructions.md` — curriculum distribution and lesson lifecycle.
+- `grammar-practice.instructions.md` — personal grammar library, saved practice, and voice continuation.
 - `target-language.instructions.md` and `add-target-language.instructions.md` — language data rules.
 - `speech-services.instructions.md` — phrase audio.
 - `database-models.instructions.md` and `api-endpoints.instructions.md` — complete contracts.

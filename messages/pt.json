@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Repetir o pedido original",
+    "voiceAction": "Praticar este tema de gramática por voz",
+    "voiceDescription": "Inicia uma conversa por voz com Lingu sobre este tema e os teus exercícios concluídos. É necessário acesso ao microfone e aplicam-se os limites de utilização de voz.",
+    "title": "Prática de gramática",
+    "description": "Guarda temas dos Recursos e pratica em séries de cinco: três perguntas de escolha múltipla e duas de preencher espaços. O progresso é guardado; não são atribuídos XP.",
+    "add": "Praticar",
+    "back": "Voltar à prática de gramática",
+    "voiceUnavailable": "Esta prática de gramática não está disponível.",
+    "noPlan": "Precisas de um plano ativo neste idioma para adicionar temas ou gerar exercícios. As sessões guardadas continuam disponíveis.",
+    "assessment": "Criar um plano de estudo",
+    "contextChanged": "O teu contexto de estudo mudou. Atualiza e tenta novamente de forma explícita.",
+    "explore": "Explorar gramática",
+    "empty": "A tua biblioteca de prática está vazia. Escolhe um tema nos recursos de Gramática.",
+    "answered": "{count} respondidas",
+    "accuracy": "{percent}% de acerto",
+    "lastPracticed": "Última prática",
+    "never": "Ainda não",
+    "theory": "Ver teoria",
+    "continue": "Continuar sessão",
+    "recover": "Recuperar sessão",
+    "generate": "Gerar cinco exercícios",
+    "history": "Histórico de sessões",
+    "noHistory": "Ainda não há sessões.",
+    "score": "{correct}/{answered} corretas",
+    "generating": "A preparar exercícios…",
+    "ready": "Pronta para continuar",
+    "completed": "Prática concluída",
+    "failed": "A geração falhou",
+    "abandoned": "Sessão abandonada",
+    "recoveryError": "Não foi possível confirmar o estado guardado. Tenta novamente para o recuperar sem reenviar a resposta.",
+    "another": "Outra série",
+    "correct": "Correto",
+    "incorrect": "Não exatamente",
+    "yourAnswer": "A tua resposta",
+    "solution": "Resposta correta",
+    "abandon": "Abandonar sessão",
+    "abandonDescription": "Fechar esta sessão? As respostas guardadas ficam no histórico. A quota de geração não é devolvida.",
+    "choose": "Escolhe uma resposta",
+    "fillBlank": "Preenche o espaço",
+    "check": "Verificar resposta"
+  },
   "questionExplanation": {
     "show": "Porquê esta resposta",
     "hide": "Ocultar explicação",
@@ -260,6 +302,7 @@
     "goToPlan": "Ir para o meu plano"
   },
   "nav": {
+    "practiceGrammar": "Prática de gramática",
     "learning": "Meu aprendizado",
     "practice": "Praticar",
     "help": "Ajuda",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Continua a praticar gramática",
+    "paywallGrammarPracticeDesc": "Esgotaste as séries gratuitas de hoje. Com Premium podes gerar mais; as sessões guardadas continuam disponíveis.",
     "planFreeTrialDesc": "Experimente o acesso Premium ao se cadastrar, sem cartão nem assinatura. Depois, continue grátis com limites de uso.",
     "paywallGamesTitle": "Continua a praticar com jogos",
     "paywallGamesDesc": "Esgotaste as partidas gratuitas ou os jogos requerem Premium. Podes retomar as partidas existentes.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "É necessário cartão. A tua subscrição paga começa no momento da compra. Renova-se com a periodicidade escolhida, a menos que canceles."
   },
   "freemium": {
+    "grammarPracticeLabel": "Séries de gramática de hoje",
     "gamesLabel": "Partidas de hoje",
     "chatLabel": "Chat",
     "lessonsLabel": "Lições",
@@ -1866,25 +1912,29 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.13.10",
+    "version": "v1.14.0",
     "cta": "Entendido",
     "entry1": {
+      "label": "Pratica gramática ao teu ritmo",
+      "desc": "Adiciona temas dos recursos de Gramática à tua biblioteca pessoal e pratica com séries de cinco exercícios, com correções e explicações. Consulta os teus resultados e, quando terminares, continua a praticar por voz com o Lingu sobre o tema e as tuas respostas."
+    },
+    "entry2": {
       "label": "Novos idiomas: croata, checo, dinamarquês, finlandês e romeno",
       "desc": "Adicionámos o croata, o checo, o dinamarquês, o finlandês e o romeno como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
-    "entry2": {
+    "entry3": {
       "label": "Compreende melhor cada resposta",
       "desc": "Consulta a tradução dos enunciados para a tua língua materna mantendo a pergunta original visível. Depois de completares Reading ou Listening, pede uma explicação na tua língua materna com um excerto do texto que justifica a resposta. Também podes reler o texto ou voltar a ouvir o áudio enquanto revês."
     },
-    "entry3": {
+    "entry4": {
       "label": "O Lingu ajuda-te quando precisas",
       "desc": "Se não perceberes algo durante uma conversa de voz, pede ajuda ao Lingu. Pode explicar-te brevemente na tua língua materna e depois retomar a prática no idioma que estás a aprender."
     },
-    "entry4": {
+    "entry5": {
       "label": "Vozes mais naturais e expressivas",
       "desc": "Desfruta de vozes mais naturais e expressivas nos teus exercícios de compreensão oral e conversas com o Lingu, para uma experiência de escuta mais clara e agradável."
     },
-    "entry5": {
+    "entry6": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }

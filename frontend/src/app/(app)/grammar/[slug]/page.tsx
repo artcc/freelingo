@@ -16,6 +16,7 @@ import { useAuthStore } from '@/store/auth'
 import { useAnalyticsView } from '@/hooks/useAnalyticsView'
 import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { PageLoading } from '@/components/ui/page-loading'
+import { AddPracticeButton } from '@/components/grammar-practice/AddPracticeButton'
 
 function renderExplanation(text: string) {
   const lines = text.split('\n')
@@ -360,6 +361,10 @@ function GrammarTopicContent({
           <p className="text-fl-muted-1 max-w-[70ch] font-sans text-sm leading-relaxed">
             {topic.summary}
           </p>
+          <AddPracticeButton
+            slug={topic.slug}
+            targetLanguage={targetLanguageCode}
+          />
           {topic.structure && (
             <div className="border-fl-border bg-fl-bg border px-4 py-3">
               <p className="text-fl-label text-fl-muted-3 mb-1 font-mono tracking-widest uppercase">

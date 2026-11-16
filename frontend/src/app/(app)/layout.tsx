@@ -60,6 +60,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         { href: '/reading', label: tNav('reading') },
         { href: '/flashcards', label: tNav('flashcards') },
         { href: '/games', label: tNav('games') },
+        { href: '/grammar-practice', label: tNav('practiceGrammar') },
       ].sort((a, b) => collator.compare(a.label, b.label)),
     },
     {
@@ -105,6 +106,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     '/listening',
     '/reading',
     '/conversation',
+    '/grammar-practice',
   ])
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const configLoaded = useConfigStore((s) => s.loaded)
@@ -412,7 +414,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.13.10
+            v1.14.0
           </p>
           <button
             onClick={() => setLogoutConfirm(true)}
@@ -520,7 +522,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 </Link>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.13.10
+                v1.14.0
               </p>
               <button
                 onClick={() => {

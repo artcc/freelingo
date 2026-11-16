@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Yritä alkuperäistä pyyntöä uudelleen",
+    "voiceAction": "Harjoittele tätä kielioppiaihetta puhumalla",
+    "voiceDescription": "Aloita äänikeskustelu Lingun kanssa tästä aiheesta ja suorittamistasi harjoituksista. Mikrofonin käyttöoikeus vaaditaan ja äänen käytön rajoitukset ovat voimassa.",
+    "title": "Kielioppiharjoittelu",
+    "description": "Tallenna aiheita materiaaleista ja harjoittele viiden tehtävän sarjoissa: kolme monivalintakysymystä ja kaksi aukkotehtävää. Edistyminen tallennetaan; XP-pisteitä ei anneta.",
+    "add": "Harjoittele",
+    "back": "Takaisin kielioppiharjoitteluun",
+    "voiceUnavailable": "Tämä kielioppiharjoitus ei ole käytettävissä.",
+    "noPlan": "Aiheiden lisääminen ja harjoitusten luominen vaativat aktiivisen opintosuunnitelman tällä kielellä. Tallennetut harjoituskerrat pysyvät käytettävissä.",
+    "assessment": "Luo opintosuunnitelma",
+    "contextChanged": "Opiskelukontekstisi muuttui. Päivitä ja yritä sitten uudelleen itse.",
+    "explore": "Tutustu kielioppiin",
+    "empty": "Harjoittelukirjastosi on tyhjä. Valitse aihe kielioppimateriaaleista.",
+    "answered": "{count} vastattu",
+    "accuracy": "{percent}% oikein",
+    "lastPracticed": "Viimeksi harjoiteltu",
+    "never": "Ei vielä",
+    "theory": "Näytä teoria",
+    "continue": "Jatka harjoitusta",
+    "recover": "Palauta harjoitus",
+    "generate": "Luo viisi harjoitusta",
+    "history": "Harjoitteluhistoria",
+    "noHistory": "Ei vielä harjoituskertoja.",
+    "score": "{correct}/{answered} oikein",
+    "generating": "Valmistellaan harjoituksia…",
+    "ready": "Valmis jatkettavaksi",
+    "completed": "Harjoitus valmis",
+    "failed": "Luominen epäonnistui",
+    "abandoned": "Harjoitus keskeytetty",
+    "recoveryError": "Tallennettua tilaa ei voitu vahvistaa. Yritä hakea se uudelleen lähettämättä vastausta toistamiseen.",
+    "another": "Uusi sarja",
+    "correct": "Oikein",
+    "incorrect": "Ei aivan",
+    "yourAnswer": "Vastauksesi",
+    "solution": "Oikea vastaus",
+    "abandon": "Keskeytä harjoitus",
+    "abandonDescription": "Suljetaanko tämä harjoitus? Tallennetut vastaukset jäävät historiaan. Luomiskiintiötä ei palauteta.",
+    "choose": "Valitse vastaus",
+    "fillBlank": "Täytä aukko",
+    "check": "Tarkista vastaus"
+  },
   "questionExplanation": {
     "show": "Miksi tämä vastaus",
     "hide": "Piilota selitys",
@@ -260,6 +302,7 @@
     "goToPlan": "Siirry omaan suunnitelmaan"
   },
   "nav": {
+    "practiceGrammar": "Kielioppiharjoittelu",
     "learning": "Oma oppiminen",
     "practice": "Harjoittele",
     "help": "Ohjeet",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Jatka kielioppiharjoittelua",
+    "paywallGrammarPracticeDesc": "Olet käyttänyt tämän päivän maksuttomat sarjat. Premiumilla voit luoda lisää; tallennetut harjoituskerrat pysyvät käytettävissä.",
     "planFreeTrialDesc": "Kokeile Premiumia rekisteröityessä ilman korttia tai tilausta. Jatka sitten maksutta käyttörajojen puitteissa.",
     "paywallGamesTitle": "Jatka harjoittelua peleillä",
     "paywallGamesDesc": "Ilmainen pelikiintiösi on käytetty tai pelit vaativat Premiumin. Voit jatkaa olemassa olevia pelejä.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Kortti vaaditaan. Maksullinen tilauksesi alkaa ostohetkellä. Se uusiutuu valitsemasi laskutusvälin mukaisesti, ellet peru tilausta."
   },
   "freemium": {
+    "grammarPracticeLabel": "Kielioppisarjat tänään",
     "gamesLabel": "Pelit tänään",
     "chatLabel": "Chatti",
     "lessonsLabel": "Oppitunnit",
@@ -1866,25 +1912,29 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.13.10",
+    "version": "v1.14.0",
     "cta": "Selvä",
     "entry1": {
+      "label": "Harjoittele kielioppia omaan tahtiisi",
+      "desc": "Lisää aiheita kielioppimateriaaleista omaan kirjastoosi ja harjoittele viiden tehtävän sarjoilla, joihin saat korjaukset ja selitykset. Tarkastele tuloksiasi ja jatka lopuksi suullista harjoittelua Lingun kanssa aiheen ja vastaustesi pohjalta."
+    },
+    "entry2": {
       "label": "Uudet kielet: kroatia, tšekki, tanska, suomi ja romania",
       "desc": "Kroatia, tšekki, tanska, suomi ja romania ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
     },
-    "entry2": {
+    "entry3": {
       "label": "Ymmärrä jokainen vastaus paremmin",
       "desc": "Katso tehtävänantojen käännökset äidinkielelläsi alkuperäisen kysymyksen pysyessä näkyvissä. Reading- tai Listening-harjoituksen jälkeen voit pyytää selityksen äidinkielelläsi sekä vastausta tukevan lainauksen tekstistä. Voit myös lukea tekstin tai kuunnella äänitteen uudelleen kerratessasi."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu auttaa, kun tarvitset apua",
       "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
     },
-    "entry4": {
+    "entry5": {
       "label": "Luonnollisemmat ja ilmeikkäämmät äänet",
       "desc": "Nauti luonnollisemmista ja ilmeikkäämmistä äänistä kuunteluharjoituksissa ja keskusteluissa Lingun kanssa. Ne tekevät kuuntelukokemuksesta selkeämmän ja miellyttävämmän."
     },
-    "entry5": {
+    "entry6": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

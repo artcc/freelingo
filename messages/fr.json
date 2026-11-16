@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Réessayer la demande initiale",
+    "voiceAction": "Pratiquer ce thème de grammaire à l’oral",
+    "voiceDescription": "Démarrez une conversation vocale avec Lingu sur ce thème et vos exercices terminés. L’accès au microphone et les limites d’utilisation vocale s’appliquent.",
+    "title": "Pratique de la grammaire",
+    "description": "Enregistrez des thèmes depuis les Ressources et pratiquez par séries de cinq : trois QCM et deux textes à trous. La progression est sauvegardée, sans gain d’XP.",
+    "add": "Pratiquer",
+    "back": "Retour à la pratique de la grammaire",
+    "voiceUnavailable": "Cette pratique de grammaire est indisponible.",
+    "noPlan": "Un plan actif dans cette langue est nécessaire pour ajouter des thèmes ou générer des exercices. Les sessions sauvegardées restent accessibles.",
+    "assessment": "Créer un plan d’étude",
+    "contextChanged": "Votre contexte d’étude a changé. Actualisez puis réessayez explicitement.",
+    "explore": "Explorer la grammaire",
+    "empty": "Votre bibliothèque de pratique est vide. Choisissez un thème dans les ressources de grammaire.",
+    "answered": "{count} réponses",
+    "accuracy": "{percent}% de réussite",
+    "lastPracticed": "Dernière pratique",
+    "never": "Pas encore",
+    "theory": "Voir la théorie",
+    "continue": "Continuer la session",
+    "recover": "Récupérer la session",
+    "generate": "Générer cinq exercices",
+    "history": "Historique des sessions",
+    "noHistory": "Aucune session pour le moment.",
+    "score": "{correct}/{answered} réponses correctes",
+    "generating": "Préparation des exercices…",
+    "ready": "Prête à continuer",
+    "completed": "Pratique terminée",
+    "failed": "Échec de la génération",
+    "abandoned": "Session abandonnée",
+    "recoveryError": "Impossible de confirmer l’état sauvegardé. Réessayez pour le récupérer sans renvoyer la réponse.",
+    "another": "Une autre série",
+    "correct": "Correct",
+    "incorrect": "Pas tout à fait",
+    "yourAnswer": "Votre réponse",
+    "solution": "Bonne réponse",
+    "abandon": "Abandonner la session",
+    "abandonDescription": "Fermer cette session ? Les réponses sauvegardées restent dans l’historique. Le quota de génération n’est pas remboursé.",
+    "choose": "Choisissez une réponse",
+    "fillBlank": "Complétez le trou",
+    "check": "Vérifier la réponse"
+  },
   "questionExplanation": {
     "show": "Pourquoi cette réponse",
     "hide": "Masquer l’explication",
@@ -260,6 +302,7 @@
     "goToPlan": "Aller à mon plan"
   },
   "nav": {
+    "practiceGrammar": "Pratique de la grammaire",
     "learning": "Mon apprentissage",
     "practice": "Pratiquer",
     "help": "Aide",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Continuez à pratiquer la grammaire",
+    "paywallGrammarPracticeDesc": "Vous avez utilisé les séries gratuites du jour. Premium permet d’en générer davantage ; les sessions sauvegardées restent accessibles.",
     "planFreeTrialDesc": "Essayez l'accès Premium à l'inscription, sans carte ni abonnement. Ensuite, continuez gratuitement avec des limites d'utilisation.",
     "paywallGamesTitle": "Continue à pratiquer avec les jeux",
     "paywallGamesDesc": "Ton quota gratuit est épuisé ou les jeux nécessitent Premium. Tu peux reprendre les parties existantes.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Une carte est requise. Votre abonnement payant commence dès la souscription. Il se renouvelle à la fréquence choisie, sauf si vous résiliez."
   },
   "freemium": {
+    "grammarPracticeLabel": "Séries de grammaire du jour",
     "gamesLabel": "Parties du jour",
     "chatLabel": "Chat",
     "lessonsLabel": "Leçons",
@@ -1866,25 +1912,29 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.13.10",
+    "version": "v1.14.0",
     "cta": "Compris",
     "entry1": {
+      "label": "Pratique la grammaire à ton rythme",
+      "desc": "Ajoute des thèmes depuis les ressources de Grammaire à ta bibliothèque personnelle et entraîne-toi avec des séries de cinq exercices, accompagnés de corrections et d'explications. Consulte tes résultats puis, une fois la série terminée, poursuis la pratique à l'oral avec Lingu autour du thème et de tes réponses."
+    },
+    "entry2": {
       "label": "Nouvelles langues : croate, tchèque, danois, finnois et roumain",
       "desc": "Le croate, le tchèque, le danois, le finnois et le roumain sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
     },
-    "entry2": {
+    "entry3": {
       "label": "Comprends mieux chaque réponse",
       "desc": "Consulte la traduction des énoncés dans ta langue maternelle tout en gardant la question originale visible. Après un exercice de Reading ou de Listening, demande une explication dans ta langue maternelle avec un extrait du texte qui justifie la réponse. Tu peux aussi relire le passage ou réécouter l'audio pendant tes révisions."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu t'aide quand tu en as besoin",
       "desc": "Si tu ne comprends pas quelque chose pendant une conversation vocale, demande de l'aide à Lingu. Lingu peut te l'expliquer brièvement dans ta langue maternelle, puis reprendre la pratique dans la langue que tu apprends."
     },
-    "entry4": {
+    "entry5": {
       "label": "Des voix plus naturelles et expressives",
       "desc": "Profite de voix plus naturelles et expressives dans tes exercices de compréhension orale et tes conversations avec Lingu, pour une écoute plus claire et agréable."
     },
-    "entry5": {
+    "entry6": {
       "label": "Une expérience plus fluide",
       "desc": "Nous avons aussi corrigé de petits bugs et peaufiné quelques détails pour rendre ton apprentissage quotidien avec FreeLingo encore plus agréable."
     }

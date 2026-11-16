@@ -1,11 +1,94 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { availableGames } from '@/lib/games'
+import { useLanguageStore } from '@/store/language'
+import { useAuthStore } from '@/store/auth'
+import NoPlanBanner from '@/components/plan/NoPlanBanner'
+import { PageLoading } from '@/components/ui/page-loading'
 
 export default function GamesPage() {
+  const language = useLanguageStore((s) => s.activeLanguage)
+  const activeTrack = useLanguageStore((s) =>
+    s.userLanguages.find(
+      (item) => item.is_active && item.target_language === language?.code
+    )
+  )
+  const needsRefresh = useLanguageStore((s) => s.needsRefresh)
+  const switching = useLanguageStore((s) => s.isSwitching)
+  const version = useLanguageStore((s) => s.invalidationVersion)
+  const sessionVersion = useAuthStore((s) => s.sessionVersion)
+  const [verifiedSession, setVerifiedSession] = useState<number | null>(null)
+
+  if (switching) return <PageLoading />
+  if (verifiedSession !== sessionVersion || needsRefresh || !activeTrack)
+    return (
+      <GamesContextRecovery
+        key={`${sessionVersion}:${version}`}
+        sessionVersion={sessionVersion}
+        onReady={setVerifiedSession}
+      />
+    )
+  if (!activeTrack.plan) return <NoPlanBanner />
+
+  return <GamesContent />
+}
+
+function GamesContextRecovery({
+  sessionVersion,
+  onReady,
+}: {
+  sessionVersion: number
+  onReady: (sessionVersion: number) => void
+}) {
+  const common = useTranslations('common')
+  const fetchLanguages = useLanguageStore((s) => s.fetchLanguages)
+  const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    void fetchLanguages(controller.signal).then((ok) => {
+      if (
+        controller.signal.aborted ||
+        useAuthStore.getState().sessionVersion !== sessionVersion
+      )
+        return
+      const context = useLanguageStore.getState()
+      const activeTrack = context.userLanguages.find(
+        (item) =>
+          item.is_active &&
+          item.target_language === context.activeLanguage?.code
+      )
+      if (ok && !context.needsRefresh && activeTrack) onReady(sessionVersion)
+      else setFailed(true)
+    })
+    return () => controller.abort()
+  }, [fetchLanguages, attempt, sessionVersion, onReady])
+
+  if (!failed) return <PageLoading />
+  return (
+    <div className="space-y-3 p-6 text-center">
+      <p role="alert" className="text-fl-error-fg">
+        {common('errorMessage')}
+      </p>
+      <button
+        className="border-fl-border text-fl-fg border px-4 py-2 text-sm"
+        onClick={() => {
+          setFailed(false)
+          setAttempt((value) => value + 1)
+        }}
+      >
+        {common('retry')}
+      </button>
+    </div>
+  )
+}
+
+function GamesContent() {
   const t = useTranslations('games')
 
   return (

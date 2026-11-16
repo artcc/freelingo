@@ -21,6 +21,7 @@ import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { type ListeningExercise } from '@/types/api'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { PageLoading } from '@/components/ui/page-loading'
+import NoPlanBanner from '@/components/plan/NoPlanBanner'
 import { ExerciseGenerationLoading } from '@/components/ui/exercise-generation-loading'
 import { useFreemiumStore } from '@/store/freemium'
 import {
@@ -67,7 +68,13 @@ interface AttemptItem {
 }
 
 type PageState =
-  'loading' | 'idle' | 'generating' | 'exercise' | 'results' | 'history'
+  | 'loading'
+  | 'idle'
+  | 'generating'
+  | 'exercise'
+  | 'results'
+  | 'history'
+  | 'no-plan'
 
 const HISTORY_PAGE_SIZE = 10
 
@@ -396,6 +403,8 @@ function ListeningPage() {
   if (pageState === 'loading') {
     return <PageLoading />
   }
+
+  if (pageState === 'no-plan') return <NoPlanBanner />
 
   // ── Generating (poll) ─────────────────────────────────────────────────────
   if (pageState === 'generating') {

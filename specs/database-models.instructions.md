@@ -47,6 +47,32 @@ indexed. The submitted plan ID has no FK so the identity survives learning-data 
 check the stored request parameters, not the mode of a reused session. A null session prevents
 reusing that UUID for a different result. These records do not consume admission quota.
 
+## Grammar Practice (`grammar_practice_topics`, `grammar_practice_sessions`, `grammar_practice_requests`)
+
+`GrammarPracticeTopic` has an integer primary key, indexed required `user_language_id` FK with
+`ON DELETE CASCADE`, `grammar_slug` (`String(200)`), and creation timestamp. The unique
+`(user_language_id, grammar_slug)` constraint preserves one selection across plans in that language.
+
+`GrammarPracticeSession` has a UUID string primary key, equal to its creation request UUID. Required
+topic, user, and study-plan FKs cascade on deletion and are indexed. It stores target/native language,
+separate `topic_level` and `learner_level`, title, full `topic_snapshot` JSON, private `challenges` JSON,
+and submitted `answers` JSON. Counters include `answered_count` and `correct_count`; timestamps include
+`created_at`, generation `deadline`, nullable `last_answered_at`, and nullable `completed_at`. Status
+is `generating`, `ready`, `completed`, `failed`, or `abandoned`, with nullable error code. The partial
+unique `uq_grammar_practice_active` index permits only one generating/ready session per
+`(study_plan_id, topic_id)`.
+
+`GrammarPracticeRequest` combines durable request identity and optional free admission. It stores
+the UUID primary key, user FK with account cascade, nullable indexed session FK with `ON DELETE
+SET NULL`, submitted topic/plan IDs and target language, UTC admission date, deadline, and status
+(`bypassed`, `reserved`, `consumed`, `released`). Topic and plan IDs deliberately have no FKs, so
+learning-data deletion preserves the request identity and consumed allowance. A `(user_id, date)`
+index supports global daily quota lookup. New admissions serialize on the user row.
+
+Responses project private challenges rather than exposing model JSON directly. Answer/activity writes
+share the original plan's transaction. Lifecycle, scoring, and deletion implications are defined in
+`grammar-practice.instructions.md`; conversations do not add a grammar-session foreign key.
+
 ## User (`users`)
 
 Registration, authentication, and user preferences.

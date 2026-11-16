@@ -78,6 +78,7 @@ The following data is scoped to a study plan and therefore isolated between targ
 - Listening attempts;
 - Reading attempts;
 - Error Detective, Sentence Order, and Vocabulary Pairs sessions, source content, answers, and game XP.
+- Grammar Practice sessions, immutable topic snapshots, challenges, answers, and answer activity.
 
 `progress`, `flashcards`, `user_competencies`, `listening_attempts`, and `reading_attempts` have a
 required `study_plan_id` with `ON DELETE CASCADE`. Lessons also cascade with their plan.
@@ -128,6 +129,20 @@ survives plan deletion. Game XP limits remain per plan. A game's target language
 its owning plan, while generated explanations capture the profile's native language at creation.
 UI locale is independent. Session reads/answers retain resource ownership after switching languages;
 catalog creation checks the active plan, and history is filtered by target language.
+
+Grammar Practice selections belong to `UserLanguage`, uniquely by grammar slug, and survive plan
+replacement. Its retained historical sessions and statistics stay within that exact language,
+including regional variants. Add/generate requests carry the captured plan and language and reject
+changed active context; saved session operations use their original plan. Topic and learner levels
+are separate snapshots. Generation admissions are global per user/UTC day, independent of Games,
+and survive plan or language deletion.
+
+Completed grammar-session voice practice and selected-word saves carry
+`grammar_practice_session_id`, mutually exclusive with `lesson_id`, and resolve the source's owned
+historical plan. Neither a language switch nor a newer plan changes their language, level, or
+flashcard destination. Unavailable sources fail rather than using the active plan. The source is not
+rehydrated when reopening the resulting conversation from text history. See
+`grammar-practice.instructions.md`.
 
 ## Language lifecycle
 

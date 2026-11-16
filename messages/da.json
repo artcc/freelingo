@@ -1,4 +1,46 @@
 {
+  "grammarPractice": {
+    "retryCreation": "Prøv den oprindelige anmodning igen",
+    "voiceAction": "Øv dette grammatikemne mundtligt",
+    "voiceDescription": "Start en stemmesamtale med Lingu om dette emne og dine gennemførte øvelser. Der kræves mikrofonadgang, og grænserne for stemmebrug gælder.",
+    "title": "Grammatikøvelser",
+    "description": "Gem emner fra Ressourcer, og øv i sæt med fem: tre spørgsmål med svarmuligheder og to udfyldningsopgaver. Fremskridt gemmes; der gives ingen XP.",
+    "add": "Øv",
+    "back": "Tilbage til grammatikøvelser",
+    "voiceUnavailable": "Denne grammatikøvelse er ikke tilgængelig.",
+    "noPlan": "Du skal have en aktiv studieplan på dette sprog for at tilføje emner eller oprette øvelser. Gemte sessioner er stadig tilgængelige.",
+    "assessment": "Opret en studieplan",
+    "contextChanged": "Din studiekontekst er ændret. Opdater, og prøv derefter igen manuelt.",
+    "explore": "Udforsk grammatik",
+    "empty": "Dit øvelsesbibliotek er tomt. Vælg et emne i grammatikressourcerne.",
+    "answered": "{count} besvaret",
+    "accuracy": "{percent}% korrekte",
+    "lastPracticed": "Sidst øvet",
+    "never": "Ikke endnu",
+    "theory": "Se teori",
+    "continue": "Fortsæt session",
+    "recover": "Gendan session",
+    "generate": "Opret fem øvelser",
+    "history": "Sessionshistorik",
+    "noHistory": "Ingen sessioner endnu.",
+    "score": "{correct}/{answered} korrekte",
+    "generating": "Forbereder øvelser…",
+    "ready": "Klar til at fortsætte",
+    "completed": "Øvelsen er gennemført",
+    "failed": "Oprettelsen mislykkedes",
+    "abandoned": "Session afbrudt",
+    "recoveryError": "Den gemte status kunne ikke bekræftes. Prøv igen for at hente den uden at indsende svaret igen.",
+    "another": "Et sæt mere",
+    "correct": "Korrekt",
+    "incorrect": "Ikke helt",
+    "yourAnswer": "Dit svar",
+    "solution": "Korrekt svar",
+    "abandon": "Afbryd session",
+    "abandonDescription": "Luk denne session? Gemte svar bliver i historikken. Oprettelseskvoten tilbagebetales ikke.",
+    "choose": "Vælg et svar",
+    "fillBlank": "Udfyld det tomme felt",
+    "check": "Kontrollér svar"
+  },
   "questionExplanation": {
     "show": "Hvorfor dette svar",
     "hide": "Skjul forklaringen",
@@ -260,6 +302,7 @@
     "goToPlan": "Gå til min plan"
   },
   "nav": {
+    "practiceGrammar": "Grammatikøvelser",
     "learning": "Min læring",
     "practice": "Øv dig",
     "help": "Hjælp",
@@ -1661,6 +1704,8 @@
     }
   },
   "billing": {
+    "paywallGrammarPracticeTitle": "Fortsæt med at øve grammatik",
+    "paywallGrammarPracticeDesc": "Du har brugt dagens gratis sæt. Med Premium kan du oprette flere; gemte sessioner er stadig tilgængelige.",
     "planFreeTrialDesc": "Prøv Premium ved tilmelding uden kort eller abonnement. Fortsæt derefter gratis med forbrugsgrænser.",
     "paywallGamesTitle": "Fortsæt med at øve gennem spil",
     "paywallGamesDesc": "Din gratis spilkvote er opbrugt, eller spil kræver Premium. Du kan fortsætte eksisterende spil.",
@@ -1806,6 +1851,7 @@
     "paidTerms": "Kort er påkrævet. Dit betalte abonnement starter ved købet. Det fornyes med det valgte interval, medmindre du opsiger det."
   },
   "freemium": {
+    "grammarPracticeLabel": "Grammatiksæt i dag",
     "gamesLabel": "Spil i dag",
     "chatLabel": "Chat",
     "lessonsLabel": "Lektioner",
@@ -1866,25 +1912,29 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.13.10",
+    "version": "v1.14.0",
     "cta": "Forstået",
     "entry1": {
+      "label": "Øv grammatik i dit eget tempo",
+      "desc": "Tilføj emner fra grammatikressourcerne til dit personlige bibliotek, og øv dig med sæt på fem øvelser med rettelser og forklaringer. Se dine resultater, og fortsæt derefter med at øve dig mundtligt med Lingu med udgangspunkt i emnet og dine svar."
+    },
+    "entry2": {
       "label": "Nye sprog: kroatisk, tjekkisk, dansk, finsk og rumænsk",
       "desc": "Kroatisk, tjekkisk, dansk, finsk og rumænsk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
     },
-    "entry2": {
+    "entry3": {
       "label": "Forstå hvert svar bedre",
       "desc": "Se øvelsesspørgsmålene oversat til dit modersmål, mens det oprindelige spørgsmål stadig vises. Efter Reading eller Listening kan du bede om en forklaring på dit modersmål med et tekstuddrag, der underbygger svaret. Du kan også læse teksten eller lytte til lyden igen, mens du repeterer."
     },
-    "entry3": {
+    "entry4": {
       "label": "Lingu hjælper, når du har brug for det",
       "desc": "Hvis du ikke forstår noget under en stemmesamtale, kan du bede Lingu om hjælp. Lingu kan forklare det kort på dit modersmål og derefter fortsætte øvelsen på det sprog, du lærer."
     },
-    "entry4": {
+    "entry5": {
       "label": "Mere naturlige og udtryksfulde stemmer",
       "desc": "Nyd mere naturlige og udtryksfulde stemmer i dine lytteøvelser og samtaler med Lingu, så du får en tydeligere og mere behagelig lytteoplevelse."
     },
-    "entry5": {
+    "entry6": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

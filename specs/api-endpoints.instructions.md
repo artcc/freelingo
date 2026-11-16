@@ -59,7 +59,7 @@ of truth.
 
 ## Freemium — `/api/freemium`
 
-- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games uses durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `grammar_practice_remaining`, `grammar_practice_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games and Grammar Practice use separate durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
 
 Shared consuming-feature dependencies return HTTP 402 with
 `detail: {reason: "freemium_exhausted", feature, remaining, limit}` for a confirmed exhausted quota.
@@ -379,7 +379,8 @@ path. `/generate` retains its `skipped_empty` behavior for empty normalized batc
 - **POST `/{card_id}/review`** — Rate limit: 60/min. Requires a strict integer `quality` in 0–5 and a UUID `review_id` (422 otherwise). Identity is scoped to the owned card. Records an SM-2 review, credits vocabulary progress to its persisted `study_plan_id`, and stores the response receipt in one transaction. Repeating the same ID and quality returns the original `FlashcardReviewResponse` without applying scheduling or XP again, including after subsequent reviews or suspension. Reusing the ID with another quality returns 409 `flashcard_review_conflict`. Response fields include the card snapshot and `xp_earned` granted by that original attempt (currently 2); replay does not grant additional XP. New attempts on suspended cards return 409. Missing or foreign cards return 404 before receipt access. Receipt lifetime follows the card.
 - **POST `/generate`** — Rate limit: 20/min. Requests N flashcards via LLM with native-language translations. The backend derives the target language from the authenticated user's active study plan; the request body has no client-supplied `target_language`. Returns `FlashcardGenerationResult`: `flashcards`, `created`, `skipped_duplicates` and `skipped_empty`. Counters describe actual model output after normalization and active-plan deduplication, including duplicates within the generated batch and suspended existing cards. Fewer model results than requested are not counted as duplicates. Empty normalized words have a separate counter. Counters are server-computed, not part of the LLM structured-output schema. Persisted cards and `FlashcardResponse` include the owning plan's `study_plan_id`.
 - **POST `/from-word`** — Rate limit: 30/min. Saves a word as a flashcard: body `{word, context, cefr_level}`. Best-effort deduplication is scoped to the user's active plan, with the oldest matching card winning. Comparison is case-insensitive, collapses Unicode whitespace runs, and trims boundary spaces without changing the persisted word's capitalization. An input match skips the AI; otherwise the AI's canonical word is checked before insertion. Concurrent first-time saves can still both insert. Returns `FlashcardFromWordResponse` (`FlashcardResponse` plus `already_saved: bool`): `true` means the card is already in My Vocabulary (`source="from_text"`). Generated/imported cards are promoted in place with `UPDATE RETURNING` and return `false`, preserving review progress. If a card disappears before promotion, the request continues as a miss; response data is captured before commit without a subsequent refresh.
-  Optional `lesson_id` binds saves from lesson-linked voice practice to an owned completed lesson. When non-null, it must be a strict JSON integer in `1..2147483647` (otherwise HTTP 422). The backend verifies lesson, plan, and language-track ownership; unavailable or incomplete lessons return HTTP 404 without falling back to the active plan. Lookup language and CEFR level, deduplication, and storage use the lesson's persisted plan, including historical plans. Omitted or null `lesson_id` preserves active-plan behavior.
+  Optional `lesson_id` binds saves from lesson-linked voice practice to an owned completed lesson. When non-null, it must be a strict JSON integer in `1..2147483647` (otherwise HTTP 422). The backend verifies lesson, plan, and language-track ownership; unavailable or incomplete lessons return HTTP 404 without falling back to the active plan. Lookup language and CEFR level, deduplication, and storage use the lesson's persisted plan, including historical plans.
+  Optional UUID `grammar_practice_session_id` instead binds saves to an owned completed Grammar Practice session and its historical plan. The same source ownership resolution used by voice determines language, level, deduplication, and destination; unavailable or incomplete sessions return 404 without active-plan fallback. Supplying both non-null source fields returns 422. Omitting or nulling both retains active-plan behavior.
 - **GET `/vocabulary`** — Rate limit: 60/min. Query params: `page`, `limit`, and optional `search`. Returns active-plan saved vocabulary ordered case-insensitively by word as `{items,total,page,pages}`.
 - **GET `/library`** — Rate limit: 60/min. Same paginated response, including every card in the active plan. Accepts `source=all|from_text` (default `all`), `status=all|due|new|suspended` (default `all`), `page`, `limit` (1–100), and literal case-insensitive `search` across word and translation. Due and new filters exclude suspended cards; new means `interval=0` and `repetitions=0`. Ordering is normalized word then ID; pages beyond the last page are clamped. Responses include `is_suspended` and `next_review`.
 - **PUT `/{card_id}`** — Rate limit: 60/min. Replaces word, definition, example_sentence and translation on an owned card, including cards from historical plans. Trims boundary whitespace; word (1–100 characters) and definition (1–10000) are required; example (0–10000) and translation (0–255) may be empty. Unknown fields are rejected. A renamed word matching another card in its persisted plan returns 409 `flashcard_duplicate`; this is best-effort deduplication. Existing duplicate names do not prevent editing other content. Ownership, source, suspension and SM-2 progress are preserved.
@@ -401,6 +402,51 @@ All endpoints require `get_current_user`.
 - **POST `/{slug}/native-help`** — Rate limit: 10/min. Auth: get_current_user. Query param: `language` (BCP-47, default `en-GB`). Generates or returns cached native-language study help for a static grammar topic, keyed globally by grammar slug, target language, and native language; the source hash determines cache freshness. Response: `{native_help: {summary, explanation, key_points, examples, common_traps, mini_glossary}}`. Returns 404 if the topic does not exist and 503 if generation is unavailable or already in progress.
 
 ---
+
+## Grammar Practice — `/api/grammar-practice`
+
+All endpoints require `get_current_user`. Missing or foreign topics/sessions return 404; malformed
+UUIDs and invalid request schemas return 422. Session operations use persisted ownership, independent
+of active selection. Generation allowance is separate from Games.
+
+- **GET `/topics`** — 60/min. Requires exact `target_language` matching the active owned language;
+  a changed selection returns 409. Pagination: `skip >= 0`, `limit=20` (1–50). Returns nullable
+  `study_plan_id`, `target_language`, global `quota: {remaining, limit}`, `limited`, `topics`, and
+  `total`. A language without an active plan can still list its library. Topic summaries include
+  `id`, `slug`, `title`, `level`, `answered`, `correct`, `completed_sessions`, `last_practiced`,
+  and nullable `active_session_id`, aggregating retained sessions across that language's plans.
+- **POST `/topics`** — 10/min. Body: `{slug, study_plan_id, target_language}`. Requires a matching
+  active plan and exact language; stale context returns 409. Adds or returns the existing
+  language-owned selection without generation or quota consumption. Unknown grammar slugs return 404.
+- **GET `/topics/{id}`** — 60/min. Pagination: `skip >= 0`, `limit=10` (1–50). Returns `topic`,
+  nullable currently usable `study_plan_id`, saved `target_language`, `quota`, `limited`, `sessions`,
+  and `total`. History spans retained plans in the topic's language, newest first.
+- **POST `/topics/{id}/sessions`** — 5/min, returns 202. Body:
+  `{request_id: UUID, study_plan_id, target_language}`. New work requires matching active context and
+  passes maintenance/access checks. Exact accepted-UUID retries return their original session before
+  requiring current context or a new allowance. Changed parameters or a deleted result return 409
+  `request_conflict`; a UUID owned by another user returns 404. A different UUID while that plan/topic
+  has generating/ready work returns 409 with `{code: "practice_in_progress", session_id}`; no alias is
+  created. Exhaustion returns 402 with `{reason: "freemium_exhausted", feature: "grammar_practice",
+  remaining, limit}`. Newly admitted work starts an in-process background task.
+- **GET `/sessions/{uuid}`** — 60/min. Returns saved state and remaining generation seconds.
+  Expired generating sessions become failed and release their free reservation.
+- **POST `/sessions/{uuid}/answers`** — 60/min. Body: `{index, value}`, with strict integer index
+  0–4 and a strict integer option index 0–3 or nonempty cloze string of at most 500 characters.
+  Requires the next unanswered item in a ready session. Exact retries return stored state; changed
+  submissions, skipped indices, or unavailable state return 409. Invalid answer types/options or
+  whitespace-only cloze values return 422. Submission and original-plan activity commit together,
+  without XP, lesson/exercise counters, skills, or competencies.
+- **POST `/sessions/{uuid}/abandon`** — 10/min. A ready session becomes abandoned, retaining its
+  answers and consumed admission; terminal retries return saved state. Generating sessions return 409.
+
+Session responses include `id`, `topic_id`, `title`, `study_plan_id`, target/native languages,
+`topic_level`, `learner_level`, status/error, creation/completion timestamps, `remaining_seconds`,
+`answered`, `correct`, and `challenges`. Challenges expose `index`, `type`, `question`, and options
+for multiple choice. Answered items additionally expose `answer`, `correct`, `correct_answer`, and
+`explanation`. Private answer indices, accepted alternatives, and unrevealed solutions stay on the
+server. The full topic snapshot is not returned as a replacement for the public grammar catalog.
+See `grammar-practice.instructions.md` for scoring, generation, statistics, and voice continuation.
 
 ## Chat — `/api/chat`
 
@@ -482,10 +528,20 @@ detail/code as proof of exhaustion.
 
 **Client → Server message types:**
 
-- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id`. It authenticates and can reuse an owned conversation outside lesson practice. Trial sessions require the atomic demo claim when that access path is selected; claim/credential/commit failure emits `type: "error", code: "internal_error"` and closes with 1011 before conversation creation. Invalid OpenAI or Gemini voice choices fall back to the configured provider default; Gemini choices are `female` and `male`.
+- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id` or UUID string `grammar_practice_session_id`. The two practice-source fields are mutually exclusive. It authenticates and can reuse an owned conversation outside practice. Trial sessions require the atomic demo claim when that access path is selected; claim/credential/commit failure emits `type: "error", code: "internal_error"` and closes with 1011 before conversation creation. Invalid OpenAI or Gemini voice choices fall back to the configured provider default; Gemini choices are `female` and `male`.
 - **Free-conversation language** — An explicit `target_language` must be an exact supported code. Omission or null resolves the active language, then `en-GB`; the resolved value is also validated. Invalid values emit `error` with `code=invalid_target_language` and close 1008 before general session quota consumption or conversation creation. Only an owned active plan in the resolved language supplies the level and plan reference; without one, the session uses A2 and a null plan reference. Full resolution policy is defined in `voice-conversation.instructions.md`.
 - **Lesson practice** — When `lesson_id` is present, the server requires a completed lesson belonging to the authenticated user. Its persisted plan determines language, level, and provenance; client `context`, `target_language`, and `conversation_id` do not override them. Invalid IDs (including null, booleans, strings, and fractional numbers), missing, foreign, or incomplete lessons emit `error` with `code=lesson_practice_unavailable` and close 1008 before consuming general session quota. Each start creates a voice conversation titled with a localized `Practice: {lesson title}`. Lesson context remains in the voice system prompt throughout the session. Existing access, maintenance, quota, timeout, and transcript rules apply; a verbal completion suggestion never emits a new control event.
   IDs must be in `1..2147483647`, matching the lesson's database column. The WebSocket rejects out-of-range IDs before lesson SQL lookup, and the frontend applies the same range before loading lesson metadata.
+- **Grammar Practice** — When `grammar_practice_session_id` is present, the server requires a UUID
+  string identifying an owned completed session through its original plan and language track.
+  Invalid/null IDs, unavailable/incomplete sources, an oversized full context, or simultaneous
+  `lesson_id` emit `error` with `code=grammar_practice_unavailable` and close 1008 before general
+  session quota consumption. The saved source determines language, learner level, and plan;
+  client context, target language, and conversation ID cannot override it. Each start creates a voice
+  conversation titled through the existing localized practice-title helper. Full topic, exercises,
+  and answers enter the existing pipeline's `lesson_practice_context`; all voice access, speech,
+  quotas, limits, and transcript rules apply. No source FK/context is stored on the conversation or
+  rehydrated from text history.
 - **binary frame** — Payload: raw audio bytes. Description: WAV audio chunk from VAD
 - **`interrupt`** — Payload: `{"type":"interrupt"}`. Description: Optional manual interruption; cancels current generation
 
