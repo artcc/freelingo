@@ -413,7 +413,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-            v1.13.10
+            v1.14.0
           </p>
           <button
             onClick={() => setLogoutConfirm(true)}
@@ -521,7 +521,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 </Link>
               )}
               <p className="text-fl-label text-fl-muted-4 font-code mb-2 tracking-wider">
-                v1.13.10
+                v1.14.0
               </p>
               <button
                 onClick={() => {
