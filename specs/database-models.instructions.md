@@ -91,13 +91,13 @@ Registration, authentication, and user preferences.
 - `flashcard_back_content` — varchar(20), non-null, default `definition` (ORM and database). Account-wide standard flashcard reverse-side preference: `definition` or `translation`, validated by the preferences API.
 - `is_active` — boolean; `false` means the account is disabled by an admin.
 - `is_verified` — boolean email-verification flag; ORM default `false`.
-- `conversation_max_duration` — integer max voice session duration in seconds. Default comes from `DEFAULT_CONVERSATION_MAX_DURATION` (`1800`).
-- `conversation_inactivity_timeout` — integer seconds of silence before disconnect. Default comes from `DEFAULT_CONVERSATION_INACTIVITY_TIMEOUT` (`180`).
+- `conversation_max_duration` — integer max voice session duration in seconds. Default comes from `DEFAULT_CONVERSATION_MAX_DURATION`.
+- `conversation_inactivity_timeout` — integer seconds of silence before disconnect. Default comes from `DEFAULT_CONVERSATION_INACTIVITY_TIMEOUT`.
 - `conversation_speech_pause` — integer milliseconds of silence that end a spoken turn in voice conversation. Allowed values are `0`, `1000`, `2000`, and `3000`; `0` (the default) means the window is derived from the learner's CEFR level.
-- `conversation_weekly_sessions` — integer weekly session counter. Default comes from `DEFAULT_CONVERSATION_WEEKLY_SESSIONS` (`0`, unlimited).
-- `conversation_daily_minutes` — integer daily voice limit in minutes. Default comes from `DEFAULT_CONVERSATION_DAILY_MINUTES` (`30`).
-- `conversation_weekly_minutes` — integer weekly voice limit in minutes. Default comes from `DEFAULT_CONVERSATION_WEEKLY_MINUTES` (`90`).
-- `monthly_tokens_limit` — integer max LLM tokens per billing period. Default comes from `DEFAULT_MONTHLY_TOKENS_LIMIT` (`1 000 000`; `0` means unlimited).
+- `conversation_weekly_sessions` — integer weekly session limit. Default comes from `DEFAULT_CONVERSATION_WEEKLY_SESSIONS`; `0` means unlimited.
+- `conversation_daily_minutes` — integer daily voice limit in minutes. Default comes from `DEFAULT_CONVERSATION_DAILY_MINUTES`; `0` means unlimited.
+- `conversation_weekly_minutes` — integer weekly voice limit in minutes. Default comes from `DEFAULT_CONVERSATION_WEEKLY_MINUTES`; `0` means unlimited.
+- `monthly_tokens_limit` — integer max LLM tokens per billing period. Default comes from `DEFAULT_MONTHLY_TOKENS_LIMIT`; `0` means unlimited.
 - `stripe_customer_id` — nullable string Stripe customer ID, set when a subscription is created.
 - `stripe_subscription_id` — nullable string current Stripe subscription ID. Used to ignore stale webhook events from older subscriptions for the same customer.
 - `subscription_status` — string shared subscription snapshot: `none` by default, plus Stripe-compatible states `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, and `paused`. RevenueCat synchronization uses this same field rather than a per-store subscription model.
@@ -106,7 +106,7 @@ Registration, authentication, and user preferences.
 - `revenuecat_synced_at` — nullable naive-UTC datetime derived from RevenueCat's `request_date_ms`; null until first synchronization. Older provider snapshots cannot replace newer ones. Stripe-only state updates clear this marker.
 - `trial_used` — boolean; `true` once the user has started or completed a trial, preventing repeated free trials. Default: `false`.
 - `assessment_voice_trial_used` — boolean; `true` once the one-time post-assessment voice conversation demo has been consumed. Default: `false`.
-- `freemium_trial_ends_at` — nullable datetime; when the freemium 7-day trial expires. Set on registration when `STRIPE_ENABLED=true` and `FREEMIUM_TRIAL_ENABLED=true`.
+- `freemium_trial_ends_at` — nullable datetime; when the freemium trial expires. Grant conditions and configurable duration are defined in `subscriptions-freemium.instructions.md`.
 - `freemium_trial_used` — boolean; `true` once the user has ever used a freemium trial, preventing repeated trials. Default: `false`.
 - `avatar` — nullable text cache-busted internal avatar reference, for example `/api/avatars/{uuid}.{ext}?v={ms}`. Files are stored under `/app/avatars` and retrieved through authenticated profile endpoints with private no-store responses, not public static serving. Legacy base64 data URLs may still exist until replaced.
 - `bio` — nullable text profile bio.
@@ -114,6 +114,10 @@ Registration, authentication, and user preferences.
 - `dismissed_dashboard_banner_revision` — nullable integer storing the last global dashboard-banner revision dismissed by this account. A new content revision differs from this marker and becomes visible again.
 - `created_at` — datetime set automatically on creation.
 - `last_login` — nullable datetime updated on each successful login.
+
+The `DEFAULT_*` values above come from backend `Settings` in `backend/app/core/config.py`, with
+environment overrides, and initialize ORM fields in `backend/app/models/user.py`. Persisted user
+values can differ through profile/admin updates and subscription activation rules.
 
 Registration, session, billing, and Redis quota behavior is defined in `platform.instructions.md` and
 `subscriptions-freemium.instructions.md`; this document defines only their persisted fields.

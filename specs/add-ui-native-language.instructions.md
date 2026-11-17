@@ -266,8 +266,10 @@ Check support for the configured provider/model and intended pronunciation using
 documentation. Also consider native-language support spoken during voice tutoring when adding a
 native language. A voice-selection preview in English does not verify either capability.
 
-The current Kokoro voice configuration is English-only. Do not claim that registering a locale makes
-all providers support its speech, or silently switch deployment providers. Follow
+Kokoro language support depends on the deployed `TTS_VOICE`, defined in `backend/app/core/config.py`
+and overridden by environment/Compose; an English-only voice cannot narrate a non-English locale.
+Do not claim that registering a locale makes all providers support its speech, or silently switch
+deployment providers. Follow
 `speech-services.instructions.md` for capability limits, caching, and recoverable failures.
 Native/UI additions do not change resource-owned STT: recognition still derives from the owned study
 plan and uses its explicit language.

@@ -80,8 +80,9 @@ new canonical code resolves explicitly so this fallback cannot hide missing regi
 ## Allow-lists and operator configuration
 
 Add the canonical BCP-47 code to `SUPPORTED_TARGET_LANGUAGES` only after dispatcher/data completion.
-Add it to default `AVAILABLE_TARGET_LANGUAGES`, `.env.example`, and `.env.dev` only when it should be
-operator-visible by default.
+Add it to `AVAILABLE_TARGET_LANGUAGES` in `backend/app/core/config.py`, `.env.example`, and
+`.env.dev` only when it should be operator-visible by default. Review overrides in
+`docker-compose.yml` and `docker-compose.dev.yml`; deployment configuration determines the enabled subset.
 
 Selectable frontend options are the intersection of backend-supported, operator-enabled, and frontend
 catalog entries. Frontend metadata alone must not activate a language.
@@ -105,8 +106,11 @@ Verify Listening/Reading length guidance, especially for character-based writing
 
 ## Speech compatibility
 
-Verify TTS and STT provider support. Kokoro's configured voices are English-only, so a non-English
-target normally requires another TTS provider under the current architecture.
+Verify support for the deployed TTS and STT providers, models, and voices. Provider selection and
+`TTS_VOICE` are settings in `backend/app/core/config.py`, overridden by environment/Compose.
+Kokoro derives language support from its configured voice rather than the requested target-language
+argument; an English-only voice cannot serve a non-English target. Follow
+`speech-services.instructions.md` for the provider contract.
 
 Add/verify the BCP-47-to-ISO recognition mapping. Resource STT must continue to derive language from an
 owned study plan and must never gain a provider-level English fallback.

@@ -19,7 +19,10 @@ their service boundary; detailed workflows and eligibility rules belong to the l
 `llm_adapter.py` provides provider-neutral access to Ollama, OpenAI, Anthropic, and DeepSeek.
 
 OpenAI uses the Responses API for every LLM request; Ollama and DeepSeek use Chat Completions and
-Anthropic uses its native API. The OpenAI model defaults to `gpt-6-luna`. Optional
+Anthropic uses its native API. `LLM_PROVIDER` selects the adapter; `OLLAMA_MODEL`, `OPENAI_MODEL`,
+`ANTHROPIC_MODEL`, and `DEEPSEEK_MODEL` select its model. Backend defaults live in
+`backend/app/core/config.py`; forwarded values and deployment fallbacks live in `docker-compose.yml`
+and `docker-compose.dev.yml`, with `.env.example` as the operator template. Optional
 `OPENAI_REASONING_EFFORT` is sent as `reasoning.effort` on chat, structured generation, tool
 continuations, and fallbacks. An empty value omits it. Supported values depend on the model; the
 adapter does not infer reasoning settings from model names or force `none` for tools.
@@ -217,8 +220,8 @@ Gemini uses native WAV. OpenAI supplies shared native-pronunciation instructions
 and its snapshots, using the supplied language/region when available and requesting language inference otherwise.
 Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
 Voice selection remains independent of language. OpenAI and Gemini expose logical `female`/`male`
-choices and resolve actual configured voices only in the backend. OpenAI defaults to `gpt-4o-mini-tts`
-with the voice mappings and configuration validation owned by `speech-services.instructions.md`.
+choices and resolve actual configured voices only in the backend. Model selection, voice mappings,
+and configuration validation are owned by `speech-services.instructions.md`.
 OpenAI synthesis cache keys include the resolved actual voice for every model and instructions
 only when supported. Previews and Phrasebook use hashed keys even with legacy OpenAI models;
 Phrasebook uses the configured backend default rather than a browser preference.
@@ -283,7 +286,8 @@ reading shared cached content. It does not depend on the currently active langua
   task cannot release a replacement lease or overwrite its status.
 - FastAPI background tasks open independent database and Redis resources. Closing a browser page or
   losing the generation response does not cancel accepted work. This is not a durable job queue.
-- `EXERCISE_GENERATION_TIMEOUT_SECONDS` (default 600, positive integer) sets the deadline at acquisition.
+- `EXERCISE_GENERATION_TIMEOUT_SECONDS` (positive integer, configured through the sources above) sets
+  the deadline at acquisition.
   The job budget includes structured generation, one possible JSON correction, persistence, and TTS
   for Listening. Provider-specific TTS timeouts also apply.
 - Domain services receive a monotonic `deadline` and an async `before_save` ownership guard. The LLM

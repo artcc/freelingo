@@ -124,7 +124,8 @@ Loading or filtering the catalog and voice warmup do not consume an attempt. Sta
 feature allowance as well as ordinary voice access and general conversation limits.
 The Situations allowance is global across study languages and is recorded once per normal session
 admission, not per turn or completed objective. Admission does not guarantee a successful greeting or
-first audio. Its configured default, reset, exemptions, and status fields are defined in
+first audio. `FREEMIUM_SITUATIONS_WEEKLY` in `backend/app/core/config.py` sets the weekly
+start allowance; reset, exemptions, and status fields are defined in
 `subscriptions-freemium.instructions.md`.
 
 Voice duration, session/minute/token limits, maintenance, transcript persistence, and rewards follow

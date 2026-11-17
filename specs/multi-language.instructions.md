@@ -21,8 +21,9 @@ study-plan mechanics, and language-addition procedures remain authoritative in t
 The lifecycle and isolation rules here apply equally to every supported code, including regional
 variants and future languages. `en-GB` remains the canonical default.
 
-`SUPPORTED_TARGET_LANGUAGES` defines the codes understood by the application.
-`AVAILABLE_TARGET_LANGUAGES` defines the operator-enabled subset exposed by the language-management
+`SUPPORTED_TARGET_LANGUAGES` in `backend/app/schemas/auth.py` defines the codes understood by the application.
+`AVAILABLE_TARGET_LANGUAGES` in `backend/app/core/config.py`, with deployment overrides supplied
+through the environment/Compose, defines the operator-enabled subset exposed by the language-management
 API. Selectable authenticated surfaces use the backend-provided available codes to filter the
 frontend catalog.
 

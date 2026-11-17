@@ -25,8 +25,9 @@ Backend `SUPPORTED_TARGET_LANGUAGES` and the frontend catalog must represent the
 Validated account flows compare exact canonical strings; there is no general backend BCP-47 parser or
 canonicalizer.
 
-`AVAILABLE_TARGET_LANGUAGES` is the operator-enabled subset. Language-management and onboarding
-surfaces expose the intersection of configured available codes and supported implementation.
+`AVAILABLE_TARGET_LANGUAGES` in `backend/app/core/config.py`, overridden by environment/Compose,
+is the operator-enabled subset. Language-management and onboarding surfaces expose the intersection
+of configured available codes and supported implementation.
 Registration schema validation uses the supported set, while authenticated add/switch operations use
 the available set. Assessment completion and explicit study-plan generation also validate their
 resolved language against the available set before curriculum dispatch or persistence, including
@@ -139,8 +140,7 @@ flag. Its curriculum introduces pronunciation and vowel-consonant length, en/ett
 definiteness before subordinate word order, tense perspective and advanced discourse. Generated
 content preserves V2, negation scope, reflexive reference and register without rejecting valid regional
 or conversational alternatives. Shared speech guidance requests Swedish vowel quality, length
-contrasts, pitch accents and natural phrasing. OpenAI speech and Whisper support Swedish; the
-English-only Kokoro voice configuration is not suitable for this target language.
+contrasts, pitch accents and natural phrasing. OpenAI speech and Whisper support Swedish.
 
 `da-DK` resolves to the independent `backend/app/data/da/` package; `da` is its internal dispatcher,
 capability and prompt alias, not an accepted account target code. Danish uses Latin text with æ, ø
@@ -149,8 +149,7 @@ flag. Its curriculum introduces pronunciation, en/et gender and definiteness bef
 order and advanced discourse. Generated content distinguishes Danish definiteness from Swedish double
 definiteness and preserves V2, negation scope, reflexive reference and register. Shared speech guidance
 requests Danish vowels, soft d, natural reductions and stød where appropriate without treating regional
-pronunciation as an error. OpenAI TTS, Gemini TTS and Whisper support Danish; the English-only Kokoro
-voice configuration is not suitable for this target language.
+pronunciation as an error. OpenAI TTS, Gemini TTS and Whisper support Danish.
 
 `cs-CZ` resolves to the independent `backend/app/data/cs/` package; `cs` is its internal dispatcher,
 capability and prompt alias, not an accepted account target code. Czech uses Latin text with Czech
@@ -160,7 +159,7 @@ cases, aspect, motion verbs, clitics and advanced discourse. Generated content p
 diacritics and distinguishes standard, common spoken and regional usage without substituting Slovak
 or Polish. Shared speech guidance requests vowel length independently of stress, ř, palatal
 consonants, syllabic r/l and natural voicing assimilation. OpenAI TTS, Gemini TTS and Whisper support
-Czech; the English-only Kokoro voice configuration is not suitable for this target language.
+Czech.
 
 `hr-HR` resolves to the independent `backend/app/data/hr/` package; `hr` is its internal dispatcher,
 capability and prompt alias, not an accepted account target code. Croatian uses Latin text with
@@ -170,8 +169,7 @@ spelling and pronunciation before gender, animacy, cases, aspect, clitics and ad
 Generated content distinguishes standard, regional and conversational usage, preserves participants
 and certainty in reformulations, and does not substitute neighbouring language conventions. Shared
 speech guidance requests Croatian consonant contrasts, syllabic r, natural lexical accent, vowel
-length and ijekavian pronunciation. OpenAI TTS, Gemini TTS and Whisper support Croatian; the
-English-only Kokoro voice configuration is not suitable for this target language.
+length and ijekavian pronunciation. OpenAI TTS, Gemini TTS and Whisper support Croatian.
 
 `fi-FI` resolves to the independent `backend/app/data/fi/` package; `fi` is its internal dispatcher,
 capability and prompt alias, not an accepted account target code. Finnish uses Latin text with ä and ö,
@@ -182,7 +180,7 @@ spoken and regional Finnish, preserves participants and scope, and teaches parti
 objects through context rather than English tense equivalents. Shared speech guidance requests native
 vowel quality, meaningful vowel and consonant length and initial word stress. OpenAI TTS, Gemini
 `gemini-3.8-flash-tts` and Whisper support Finnish; Gemini `gemini-3.8-flash-lite-tts` does not list
-Finnish support, and the English-only Kokoro voice configuration is not suitable for this target.
+Finnish support.
 
 `ro-RO` resolves to the independent `backend/app/data/ro/` package; `ro` is its internal dispatcher,
 capability and prompt alias, not an accepted account target code. Romanian uses Latin text with
@@ -193,8 +191,7 @@ contrasts, then advanced interaction and discourse. Generated content uses conte
 from Romania, distinguishes standard, regional and conversational usage, and preserves participants,
 scope and certainty in reformulations. Shared speech guidance requests Romanian vowel distinctions,
 native r and lexical stress. OpenAI TTS, Gemini `gemini-3.8-flash-tts` and
-`gemini-3.8-flash-lite-tts`, and Whisper list Romanian support; the English-only Kokoro voice
-configuration is not suitable for this target.
+`gemini-3.8-flash-lite-tts`, and Whisper list Romanian support.
 
 Comprehension length guidance uses characters for Japanese and Mainland Chinese and words for the
 other current languages, including Croatian, Czech, Danish, Finnish, Polish, Romanian, Russian and Swedish.
@@ -213,6 +210,11 @@ native regional pronunciation instructions; without context, instructions reques
 without imposing a regional accent. Legacy/unknown OpenAI models and Kokoro ignore this argument.
 Model and voice selection remain configured independently of the target language. Provider and
 resource-owned language contracts are defined in `speech-services.instructions.md`.
+The deployed provider/model/voice settings come from `backend/app/core/config.py` with
+environment/Compose overrides. Kokoro language support depends on `TTS_VOICE`, not the BCP-47
+argument; an English-only voice cannot serve a non-English language. Verify compatibility for the
+deployed `OPENAI_TTS_MODEL` or `GEMINI_TTS_MODEL` and voice selection rather than assuming a model
+mentioned in a capability rule is the configured model.
 
 ## Validation boundaries
 

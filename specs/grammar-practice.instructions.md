@@ -75,8 +75,9 @@ obsolete callbacks.
 
 FastAPI `BackgroundTasks` runs generation in process with an independent database session. This is
 not a durable queue: restarting the process does not resume provider work. The persisted deadline,
-using `EXERCISE_GENERATION_TIMEOUT_SECONDS`, bounds generation, structured-output repair, semantic
-review, and publication. Expired generation becomes failed and releases its free reservation.
+using `EXERCISE_GENERATION_TIMEOUT_SECONDS` (seconds) from `backend/app/core/config.py`,
+bounds generation, structured-output repair, semantic review, and publication. Expired generation
+becomes failed and releases its free reservation.
 
 The existing LLM adapter generates exactly five distinct challenges: three multiple-choice items
 with four distinct options each, and two fill-blank items with exactly one `___` placeholder each.
@@ -120,8 +121,9 @@ cannot be abandoned.
 
 ## Access and quota
 
-`FREEMIUM_GRAMMAR_PRACTICE_DAILY` defaults to three new practices per user/UTC day, independently of
-Games and shared across all learning languages. Zero blocks new free generation. Premium, active
+`FREEMIUM_GRAMMAR_PRACTICE_DAILY` in `backend/app/core/config.py` controls new practices
+per user/UTC day, independently of Games and shared across all learning languages.
+Zero blocks new free generation. Premium, active
 trial, and Stripe-disabled access bypass this allowance under the existing subscription policy.
 
 Under a user-row lock, a durable request record reserves one available slot. It becomes consumed

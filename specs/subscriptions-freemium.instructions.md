@@ -8,9 +8,9 @@ applyTo: "backend/app/core/{config,deps}.py, backend/app/models/{user,billing_we
 ## Purpose and runtime toggle
 
 FreeLingo optionally combines Stripe subscriptions with limited freemium access. `STRIPE_ENABLED`
-defaults to `false` and is the principal runtime switch.
+is the principal runtime switch, configured through backend `Settings` and the deployment environment.
 
-`REVENUECAT_ENABLED` defaults to `false` and only applies when Stripe is enabled. When enabled,
+`REVENUECAT_ENABLED` is configured through the same source and only applies when Stripe is enabled. When enabled,
 RevenueCat is the authority for the shared Premium entitlement; Stripe still handles web Checkout,
 Customer identities, and its Customer Portal. No store-specific subscription model is required for
 access authorization. Both providers use the same global FreeLingo account identity.
@@ -54,13 +54,16 @@ Administrators do not bypass subscription policy, although they do bypass mainte
 
 ## Configuration
 
+Backend `Settings` in `backend/app/core/config.py` defines these variables; environment overrides
+select deployment values. `.env.example` and `docker-compose*.yml` document their deployment wiring.
 Stripe configuration includes:
 
-- secret and webhook keys;
-- monthly and yearly Price IDs;
-- Stripe trial days;
+- `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`;
+- `STRIPE_PRICE_MONTHLY` and `STRIPE_PRICE_YEARLY` for provider Price IDs;
+- `STRIPE_TRIAL_DAYS` for card-trial duration in days;
 - `STRIPE_BASE_URL` for checkout and portal returns;
-- current and original display prices for monthly and yearly plans.
+- `PRICE_MONTHLY` and `PRICE_YEARLY` for current display prices, and
+  `TOTAL_PRICE_MONTHLY` and `TOTAL_PRICE_YEARLY` for original display prices.
 
 The public config endpoint exposes presentation-safe toggles, trial length, display prices, TTS
 metadata, and maintenance state. It never exposes Stripe secrets or Price IDs.
@@ -72,8 +75,8 @@ RevenueCat configuration, required only when both billing flags are enabled:
 
 - `REVENUECAT_API_KEY`: backend-only secret key for API v1 customer reads;
 - `REVENUECAT_WEBHOOK_AUTHORIZATION`: exact, high-entropy Authorization header configured at RevenueCat;
-- `REVENUECAT_ENTITLEMENT_ID`: entitlement identifier, default `premium`;
-- `REVENUECAT_ENVIRONMENT`: `PRODUCTION` (default) or `SANDBOX`;
+- `REVENUECAT_ENTITLEMENT_ID`: configured entitlement identifier;
+- `REVENUECAT_ENVIRONMENT`: selected provider environment, `PRODUCTION` or `SANDBOX`;
 - `REVENUECAT_STRIPE_PUBLIC_API_KEY`: optional RevenueCat Stripe-app public key for explicit receipt imports.
 
 Startup rejects missing required RevenueCat values. Keys and webhook credentials are never returned
@@ -364,6 +367,7 @@ subscription precedence and does not consume freemium counters.
 When Stripe and `FREEMIUM_TRIAL_ENABLED` are active, eligible registration creates a no-card trial
 ending after `FREEMIUM_TRIAL_DAYS` and marks it granted. Eligible older or admin-created users can
 receive it best-effort when their profile is first loaded.
+Changing the configured duration affects new grants, not already-persisted trial expirations.
 If that optional write fails, the profile endpoint rolls back the transaction and reloads the
 persisted user before responding. A later profile read can retry the ungranted trial. Database
 failures that also prevent reloading the user still fail the request.
@@ -379,16 +383,18 @@ Freemium trial access bypasses feature counters but not global token or voice co
 
 ## Freemium quotas
 
-Defaults are:
+Backend `Settings`, both Compose files, and `.env.example` share the configured defaults; their values
+belong to those configuration files. Explicit environment overrides take precedence.
+Each variable controls the following unit and period:
 
-- Chat: 5 successful messages per UTC day.
-- Lessons: 3 successful completions per UTC day.
-- Listening: 3 successful attempts per ISO week.
-- Reading: 3 successful attempts per ISO week.
-- Voice: 5 elapsed conversation minutes per ISO week, stored as seconds.
-- Games: 3 new games per UTC day, configured by `FREEMIUM_GAMES_DAILY`.
-- Grammar Practice: 3 new sessions per UTC day, configured by `FREEMIUM_GRAMMAR_PRACTICE_DAILY`.
-- Situations: 1 successful role-play start per ISO week, configured by `FREEMIUM_SITUATIONS_WEEKLY`.
+- Chat: successful messages per UTC day, configured by `FREEMIUM_CHAT_DAILY_MESSAGES`.
+- Lessons: successful completions per UTC day, configured by `FREEMIUM_LESSONS_DAILY`.
+- Listening: successful attempts per ISO week, configured by `FREEMIUM_LISTENING_WEEKLY`.
+- Reading: successful attempts per ISO week, configured by `FREEMIUM_READING_WEEKLY`.
+- Voice: elapsed conversation minutes per ISO week, stored as seconds, configured by `FREEMIUM_VOICE_WEEKLY_MINUTES`.
+- Games: new games per UTC day, configured by `FREEMIUM_GAMES_DAILY`.
+- Grammar Practice: new sessions per UTC day, configured by `FREEMIUM_GRAMMAR_PRACTICE_DAILY`.
+- Situations: successful role-play starts per ISO week, configured by `FREEMIUM_SITUATIONS_WEEKLY`.
 
 Freemium counters are global per user, not per learning language. Zero means blocked for that feature.
 Daily keys expire at the next UTC midnight; weekly keys expire at the next Monday UTC.
@@ -452,13 +458,15 @@ disabled, although the policy is inactive and the frontend normally does not req
 
 ## General quotas and subscription activation
 
-General conversation and LLM quotas apply independently of freemium:
+General conversation and LLM quotas apply independently of freemium. The effective limits are
+persisted on each user; defaults come from backend `Settings` and environment overrides:
 
-- weekly sessions;
-- daily and weekly minutes;
-- monthly tokens;
-- maximum conversation duration;
-- inactivity timeout.
+- `conversation_weekly_sessions`: weekly sessions, initialized from `DEFAULT_CONVERSATION_WEEKLY_SESSIONS`;
+- `conversation_daily_minutes` and `conversation_weekly_minutes`: daily and weekly minutes,
+  initialized from `DEFAULT_CONVERSATION_DAILY_MINUTES` and `DEFAULT_CONVERSATION_WEEKLY_MINUTES`;
+- `monthly_tokens_limit`: monthly tokens, initialized from `DEFAULT_MONTHLY_TOKENS_LIMIT`;
+- `conversation_max_duration`: maximum conversation seconds, initialized from `DEFAULT_CONVERSATION_MAX_DURATION`;
+- `conversation_inactivity_timeout`: inactivity seconds, initialized from `DEFAULT_CONVERSATION_INACTIVITY_TIMEOUT`.
 
 Zero means unlimited for weekly sessions, daily/weekly minutes, and monthly tokens. Maximum duration
 and inactivity are bounded settings instead: configuration and profile updates accept 900 or 1800
@@ -469,8 +477,9 @@ defaults. Administrators may override them regardless of Stripe state.
 ## Post-assessment voice demo
 
 The one-time voice demo is available only with Stripe enabled to an unsubscribed user whose durable
-demo right is unused. Its Redis credential lasts 24 hours, can be regenerated while unused, and
-defaults to a five-minute session duration.
+demo right is unused. Its Redis credential lasts 24 hours and can be regenerated while unused.
+Session duration in seconds comes from `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS` in backend
+`Settings` and the deployment environment.
 
 Voice access gives precedence to subscription, freemium trial, and remaining freemium voice balance
 before considering the demo. Consequently, a supplied demo token is not consumed while an earlier

@@ -16,41 +16,43 @@ objects are created during FastAPI startup and stored in `app.state.tts_service`
 
 ## Provider configuration
 
+`backend/app/core/config.py` owns backend `Settings` defaults and validation. `docker-compose.yml`
+and `docker-compose.dev.yml` own forwarded values and Compose fallbacks; `.env.example` is the
+operator template. Read those sources for current provider, endpoint, model, voice, speed, and timeout
+values rather than treating deployment choices as speech contracts.
+
 TTS configuration:
 
-- `TTS_PROVIDER=local` selects Kokoro by default; `openai` selects OpenAI TTS and `gemini` selects Gemini TTS.
-- `TTS_BASE_URL` defaults to `http://kokoro:8880`.
-- `TTS_VOICE` defaults to `af_heart` for Kokoro.
-- `OPENAI_TTS_MODEL` defaults to `gpt-4o-mini-tts` in backend `Settings` and both Compose files;
-  this model is used when `TTS_PROVIDER=openai`.
-- `OPENAI_TTS_VOICE` defaults to `female` and accepts `female` or `male`.
+- `TTS_PROVIDER` selects Kokoro (`local`), OpenAI TTS (`openai`), or Gemini TTS (`gemini`).
+- `TTS_BASE_URL` selects the Kokoro endpoint and `TTS_VOICE` its voice.
+- `OPENAI_TTS_MODEL` selects the model used when `TTS_PROVIDER=openai`.
+- `OPENAI_TTS_VOICE` selects the logical default and accepts `female` or `male`.
   When OpenAI is not the selected TTS provider, an incompatible value is normalized to `female`
   so unused legacy configuration cannot block local/Gemini startup.
-- `OPENAI_TTS_FEMALE_VOICE` defaults to `marin` and `OPENAI_TTS_MALE_VOICE` to `cedar`.
-  These backend-only mappings resolve the public choices to actual OpenAI voices.
+- `OPENAI_TTS_FEMALE_VOICE` and `OPENAI_TTS_MALE_VOICE` are backend-only mappings from public choices
+  to actual OpenAI voices.
   Configuration validates both mapped voices, including the one not selected as the default.
   `tts-1` and `tts-1-hd` remain supported with compatible voice mappings; configuration rejects
   incompatible mappings, including `marin` and `cedar`, for those models.
-- `OPENAI_TTS_SPEED` defaults to `1.0`.
-- `GEMINI_TTS_MODEL` defaults to `gemini-3.8-flash-tts`; configured models must support the Gemini
+- `OPENAI_TTS_SPEED` controls synthesis speed.
+- `GEMINI_TTS_MODEL` selects the Gemini model; configured models must support the Gemini
   3.8 TTS Interactions contract below. Older preview-model contracts are not supported.
-- `GEMINI_TTS_VOICE` defaults to `female` and accepts `female` or `male`.
-- `GEMINI_TTS_FEMALE_VOICE` defaults to `Kore` and `GEMINI_TTS_MALE_VOICE` to `Puck` in backend
-  `Settings`. Both Compose files instead supply `Sulafat` and `Achird` when the operator omits
-  these variables, matching `.env.example` and `.env.dev`. These operator-configurable names
-  map the public voice choices to actual provider voices.
-- `GEMINI_TTS_TIMEOUT_SECONDS` defaults to `50`.
+- `GEMINI_TTS_VOICE` selects the logical default and accepts `female` or `male`.
+- `GEMINI_TTS_FEMALE_VOICE` and `GEMINI_TTS_MALE_VOICE` map public choices to actual provider voices.
+  Their backend `Settings` defaults differ from the fallbacks supplied by both Compose files.
+  The effective mappings therefore depend on the deployment configuration.
+- `GEMINI_TTS_TIMEOUT_SECONDS` sets a positive, finite synthesis timeout in seconds.
 
 STT configuration:
 
 - `STT_PROVIDER=local` selects the local Whisper service; `openai` selects OpenAI transcription.
-- `STT_BASE_URL` defaults to `http://whisper:9000`.
-- `OPENAI_STT_MODEL` defaults to `whisper-1`.
+- `STT_BASE_URL` selects the local Whisper endpoint.
+- `OPENAI_STT_MODEL` selects the OpenAI transcription model.
 - `STT_MODEL` and `STT_ENGINE` configure the local Whisper container as `ASR_MODEL` and
-  `ASR_ENGINE`; they are not backend `Settings` fields.
+  `ASR_ENGINE` in `docker-compose.yml`; they are not backend `Settings` fields.
 
 `OPENAI_API_KEY` is required at startup when either selected speech provider is OpenAI.
-`GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`. Local defaults remain independent of
+`GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`. Local providers remain independent of
 cloud credentials. `TTS_PROVIDER` rejects values outside `local`, `openai`, and `gemini`.
 
 The public configuration exposes the selected TTS provider and the logical defaults `openai_tts_voice`

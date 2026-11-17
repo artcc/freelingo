@@ -396,8 +396,9 @@ Voice access is resolved in this order:
 4. Valid one-time post-assessment demo token.
 
 The post-assessment credential is available only with Stripe enabled, for an unsubscribed user whose
-durable demo right is unused. Redis stores it for 24 hours and the configured duration defaults to
-300 seconds. It can be regenerated while unused.
+durable demo right is unused. Redis stores it for 24 hours; `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS`
+sets the demo duration. Its default and validation live in `backend/app/core/config.py`, with deployment
+fallbacks in `docker-compose.yml` and `docker-compose.dev.yml`. It can be regenerated while unused.
 
 Because ordinary freemium access precedes the demo, a supplied token is not consumed while a
 freemium trial or voice balance still grants access. The atomic account-wide claim, credential

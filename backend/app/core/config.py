@@ -61,15 +61,15 @@ class Settings(BaseSettings):
     # Freemium quotas for unsubscribed users when STRIPE_ENABLED=true.
     # A quota value of 0 means the feature is entirely blocked for free users.
     FREEMIUM_CHAT_DAILY_MESSAGES: int = 5
-    FREEMIUM_LESSONS_DAILY: int = 3
-    FREEMIUM_LISTENING_WEEKLY: int = 3
-    FREEMIUM_READING_WEEKLY: int = 3
-    FREEMIUM_GAMES_DAILY: int = 3
-    FREEMIUM_GRAMMAR_PRACTICE_DAILY: int = 3
+    FREEMIUM_LESSONS_DAILY: int = 1
+    FREEMIUM_LISTENING_WEEKLY: int = 1
+    FREEMIUM_READING_WEEKLY: int = 1
+    FREEMIUM_GAMES_DAILY: int = 1
+    FREEMIUM_GRAMMAR_PRACTICE_DAILY: int = 1
     FREEMIUM_SITUATIONS_WEEKLY: int = 1
-    FREEMIUM_VOICE_WEEKLY_MINUTES: int = 5
+    FREEMIUM_VOICE_WEEKLY_MINUTES: int = 3
     FREEMIUM_TRIAL_ENABLED: bool = True
-    FREEMIUM_TRIAL_DAYS: int = 7
+    FREEMIUM_TRIAL_DAYS: int = 3
 
     # Stripe (for paid plans and billing management)
     STRIPE_ENABLED: bool = False

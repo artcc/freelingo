@@ -36,8 +36,10 @@ responsibilities. Their state machines, quotas, and scoring rules belong to thei
 
 ### Core
 
-`app/core/config.py` is the authoritative `Settings` schema. `.env.example` documents deployable
-values, while Docker determines which values are passed into containers. Provider configuration
+`backend/app/core/config.py` is the authoritative `Settings` schema, including backend defaults and
+validation. `.env.example` is the operator template; `docker-compose.yml` and `docker-compose.dev.yml`
+define forwarded values and deployment fallbacks. Concrete operator-configurable values belong in
+those sources rather than copies in specifications. Provider configuration
 contracts belong to `services.instructions.md` and `speech-services.instructions.md`;
 environment propagation belongs to `docker.instructions.md`.
 

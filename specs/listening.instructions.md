@@ -93,8 +93,9 @@ membership. Those prompt requirements are not database invariants.
 
 Listening uses `listening:generating:{level}:{target_language}` and the shared generation coordinator
 in `services.instructions.md` (Shared generation coordinator). Its total budget includes TTS and audio
-persistence; provider-specific speech timeouts also apply. Audio compensation follows the Generation
-section above. The shared contract defines leases, status expiry, cancellation, and the
+persistence and is set in seconds by `EXERCISE_GENERATION_TIMEOUT_SECONDS` in
+`backend/app/core/config.py`; provider-specific speech timeouts also apply. Audio compensation
+follows the Generation section above. The shared contract defines leases, status expiry, cancellation, and the
 Redis/PostgreSQL transaction boundary.
 
 ## API
@@ -231,7 +232,8 @@ When Stripe is disabled, Listening is unrestricted by subscription or freemium q
 enabled:
 
 - active/trialing subscribers and users in the no-card freemium trial have unrestricted access;
-- other users share one weekly Listening quota across all target languages and study plans;
+- other users share the weekly Listening quota configured by `FREEMIUM_LISTENING_WEEKLY` in
+  `backend/app/core/config.py` across all target languages and study plans;
 - generation and attempt endpoints require remaining quota;
 - next, audio, and history remain readable after quota exhaustion when the configured quota is
   greater than zero;
