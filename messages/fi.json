@@ -1936,26 +1936,22 @@
     "version": "v1.14.5",
     "cta": "Selvä",
     "entry1": {
+      "label": "Suunnitelmasi, askel askeleelta",
+      "desc": "Oma suunnitelma näyttää oppimisesi nyt polkuna: seuraa edistymistäsi, löydä nykyinen opintokokonaisuutesi ja tutustu seuraaviin vaiheisiin. Avaa kukin kokonaisuus nähdäksesi sen oppitunnit, jatkaaksesi oppimista tai kerrataksesi jo suorittamasi asiat."
+    },
+    "entry2": {
       "label": "Harjoittele kielioppia omaan tahtiisi",
       "desc": "Lisää aiheita kielioppimateriaaleista omaan kirjastoosi ja harjoittele viiden tehtävän sarjoilla, joihin saat korjaukset ja selitykset. Tarkastele tuloksiasi ja jatka lopuksi suullista harjoittelua Lingun kanssa aiheen ja vastaustesi pohjalta."
     },
-    "entry2": {
+    "entry3": {
       "label": "Uudet kielet: kroatia, tšekki, tanska, suomi ja romania",
       "desc": "Kroatia, tšekki, tanska, suomi ja romania ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
-    },
-    "entry3": {
-      "label": "Ymmärrä jokainen vastaus paremmin",
-      "desc": "Katso tehtävänantojen käännökset äidinkielelläsi alkuperäisen kysymyksen pysyessä näkyvissä. Reading- tai Listening-harjoituksen jälkeen voit pyytää selityksen äidinkielelläsi sekä vastausta tukevan lainauksen tekstistä. Voit myös lukea tekstin tai kuunnella äänitteen uudelleen kerratessasi."
     },
     "entry4": {
       "label": "Lingu auttaa, kun tarvitset apua",
       "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
     },
     "entry5": {
-      "label": "Luonnollisemmat ja ilmeikkäämmät äänet",
-      "desc": "Nauti luonnollisemmista ja ilmeikkäämmistä äänistä kuunteluharjoituksissa ja keskusteluissa Lingun kanssa. Ne tekevät kuuntelukokemuksesta selkeämmän ja miellyttävämmän."
-    },
-    "entry6": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

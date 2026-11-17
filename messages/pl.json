@@ -1936,26 +1936,22 @@
     "version": "v1.14.5",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Twój plan, krok po kroku",
+      "desc": "Mój plan pokazuje teraz Twoją naukę jako trasę: sprawdzaj postępy, znajdź bieżący rozdział i odkrywaj kolejne etapy. Otwórz każdy rozdział, aby zobaczyć jego lekcje, kontynuować naukę lub powtórzyć ukończony materiał."
+    },
+    "entry2": {
       "label": "Ćwicz gramatykę we własnym tempie",
       "desc": "Dodawaj tematy z materiałów do gramatyki do swojej biblioteki i ćwicz w zestawach po pięć zadań, z poprawkami i wyjaśnieniami. Sprawdzaj wyniki, a po zakończeniu kontynuuj ćwiczenia w rozmowie głosowej z Lingu na podstawie tematu i Twoich odpowiedzi."
     },
-    "entry2": {
+    "entry3": {
       "label": "Nowe języki: chorwacki, czeski, duński, fiński i rumuński",
       "desc": "Dodaliśmy chorwacki, czeski, duński, fiński i rumuński jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
-    },
-    "entry3": {
-      "label": "Lepiej zrozum każdą odpowiedź",
-      "desc": "Zobacz tłumaczenie treści zadań na swój język ojczysty, zachowując widoczne oryginalne pytanie. Po ukończeniu Reading lub Listening poproś o wyjaśnienie w swoim języku ojczystym wraz z fragmentem tekstu uzasadniającym odpowiedź. Podczas powtórki możesz też ponownie przeczytać tekst lub odsłuchać nagranie."
     },
     "entry4": {
       "label": "Lingu pomaga, gdy tego potrzebujesz",
       "desc": "Jeśli nie rozumiesz czegoś podczas rozmowy głosowej, poproś Lingu o pomoc. Może krótko wyjaśnić to w Twoim języku ojczystym, a potem wrócić do ćwiczeń w języku, którego się uczysz."
     },
     "entry5": {
-      "label": "Bardziej naturalne i ekspresyjne głosy",
-      "desc": "Ciesz się bardziej naturalnymi i ekspresyjnymi głosami w ćwiczeniach ze słuchania i rozmowach z Lingu, dzięki którym słuchanie staje się wyraźniejsze i przyjemniejsze."
-    },
-    "entry6": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

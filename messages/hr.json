@@ -1936,26 +1936,22 @@
     "version": "v1.14.5",
     "cta": "Razumijem",
     "entry1": {
+      "label": "Tvoj plan, korak po korak",
+      "desc": "Moj plan sada prikazuje tvoje učenje kao put: prati napredak, pronađi trenutačnu cjelinu i otkrij sljedeće etape. Otvori svaku cjelinu da vidiš njezine lekcije, nastaviš učiti ili ponoviš ono što si već završio."
+    },
+    "entry2": {
       "label": "Vježbaj gramatiku svojim tempom",
       "desc": "Dodaj teme iz gramatičkih materijala u svoju osobnu biblioteku i vježbaj uz skupove od pet zadataka s ispravcima i objašnjenjima. Pregledaj rezultate, a nakon završetka nastavi vježbati u glasovnom razgovoru s Linguom na temelju teme i svojih odgovora."
     },
-    "entry2": {
+    "entry3": {
       "label": "Novi jezici: hrvatski, češki, danski, finski i rumunjski",
       "desc": "Dodali smo hrvatski, češki, danski, finski i rumunjski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
-    },
-    "entry3": {
-      "label": "Bolje razumij svaki odgovor",
-      "desc": "Pogledaj prijevod zadataka na svoj materinski jezik dok izvorno pitanje ostaje vidljivo. Nakon što završiš Reading ili Listening, zatraži objašnjenje na svom materinskom jeziku uz ulomak iz teksta koji obrazlaže odgovor. Tijekom ponavljanja možeš ponovno pročitati tekst ili poslušati zvučni zapis."
     },
     "entry4": {
       "label": "Lingu ti pomaže kad ti zatreba",
       "desc": "Ako nešto ne razumiješ tijekom glasovnog razgovora, zatraži pomoć od Lingua. Može ti to ukratko objasniti na tvom materinskom jeziku, a zatim nastaviti vježbu na jeziku koji učiš."
     },
     "entry5": {
-      "label": "Prirodniji i izražajniji glasovi",
-      "desc": "Uživaj u prirodnijim i izražajnijim glasovima u vježbama slušanja i razgovorima s Linguom, za jasnije i ugodnije iskustvo slušanja."
-    },
-    "entry6": {
       "label": "Ugodnije iskustvo",
       "desc": "Ispravili smo i manje pogreške te doradili pojedinosti kako bi svakodnevno učenje uz FreeLingo bilo ugodnije."
     }

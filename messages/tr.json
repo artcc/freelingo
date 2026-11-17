@@ -1936,26 +1936,22 @@
     "version": "v1.14.5",
     "cta": "Anladım",
     "entry1": {
+      "label": "Planın, adım adım",
+      "desc": "Planım artık öğrenme sürecini bir rota olarak gösteriyor: ilerlemeni takip et, mevcut üniteni bul ve sıradaki aşamaları keşfet. Dersleri görmek, öğrenmeye devam etmek veya tamamladıklarını tekrar etmek için her üniteyi açabilirsin."
+    },
+    "entry2": {
       "label": "Kendi hızında dil bilgisi pratiği yap",
       "desc": "Dil bilgisi kaynaklarından konuları kişisel kitaplığına ekle ve düzeltmeler ile açıklamalar içeren beşer alıştırmalık setlerle pratik yap. Sonuçlarını incele ve bitirdiğinde konu ile yanıtların üzerinden Lingu ile sesli pratiğe devam et."
     },
-    "entry2": {
+    "entry3": {
       "label": "Yeni diller: Hırvatça, Çekçe, Danca, Fince ve Rumence",
       "desc": "A1'den C2'ye kadar içeriklerle Hırvatçayı, Çekçeyi, Dancayı, Finceyi ve Rumenceyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
-    },
-    "entry3": {
-      "label": "Her yanıtı daha iyi anla",
-      "desc": "Orijinal soru görünür kalırken alıştırma sorularının ana dilindeki çevirisini gör. Reading veya Listening'i tamamladıktan sonra, yanıtı destekleyen bir metin alıntısıyla birlikte ana dilinde bir açıklama iste. Tekrar yaparken metni yeniden okuyabilir veya ses kaydını tekrar dinleyebilirsin."
     },
     "entry4": {
       "label": "Lingu, ihtiyaç duyduğunda yanında",
       "desc": "Sesli bir konuşma sırasında bir şeyi anlamazsan Lingu'dan yardım iste. Sana ana dilinde kısaca açıklayabilir, ardından öğrendiğin dilde pratiğe devam edebilir."
     },
     "entry5": {
-      "label": "Daha doğal ve etkileyici sesler",
-      "desc": "Dinleme alıştırmalarında ve Lingu ile konuşmalarında daha doğal ve etkileyici seslerle daha net ve keyifli bir dinleme deneyiminin tadını çıkar."
-    },
-    "entry6": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

@@ -1936,26 +1936,22 @@
     "version": "v1.14.5",
     "cta": "Compris",
     "entry1": {
+      "label": "Ton plan, étape par étape",
+      "desc": "Mon plan présente désormais ton apprentissage comme un parcours : suis ta progression, repère ton unité actuelle et découvre les prochaines étapes. Ouvre chaque unité pour voir ses leçons, continuer à apprendre ou réviser ce que tu as terminé."
+    },
+    "entry2": {
       "label": "Pratique la grammaire à ton rythme",
       "desc": "Ajoute des thèmes depuis les ressources de Grammaire à ta bibliothèque personnelle et entraîne-toi avec des séries de cinq exercices, accompagnés de corrections et d'explications. Consulte tes résultats puis, une fois la série terminée, poursuis la pratique à l'oral avec Lingu autour du thème et de tes réponses."
     },
-    "entry2": {
+    "entry3": {
       "label": "Nouvelles langues : croate, tchèque, danois, finnois et roumain",
       "desc": "Le croate, le tchèque, le danois, le finnois et le roumain sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
-    },
-    "entry3": {
-      "label": "Comprends mieux chaque réponse",
-      "desc": "Consulte la traduction des énoncés dans ta langue maternelle tout en gardant la question originale visible. Après un exercice de Reading ou de Listening, demande une explication dans ta langue maternelle avec un extrait du texte qui justifie la réponse. Tu peux aussi relire le passage ou réécouter l'audio pendant tes révisions."
     },
     "entry4": {
       "label": "Lingu t'aide quand tu en as besoin",
       "desc": "Si tu ne comprends pas quelque chose pendant une conversation vocale, demande de l'aide à Lingu. Lingu peut te l'expliquer brièvement dans ta langue maternelle, puis reprendre la pratique dans la langue que tu apprends."
     },
     "entry5": {
-      "label": "Des voix plus naturelles et expressives",
-      "desc": "Profite de voix plus naturelles et expressives dans tes exercices de compréhension orale et tes conversations avec Lingu, pour une écoute plus claire et agréable."
-    },
-    "entry6": {
       "label": "Une expérience plus fluide",
       "desc": "Nous avons aussi corrigé de petits bugs et peaufiné quelques détails pour rendre ton apprentissage quotidien avec FreeLingo encore plus agréable."
     }
