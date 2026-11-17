@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Increase Feedback filter and action text to 12 px and metadata and counters to 11 px for improved readability.
 - Increase authenticated FAQ questions and answers to 14 px, matching the public FAQ.
+- Group the authenticated FAQ by topic and add guidance on multiple languages, grammar practice, games, memories, plans, quotas, and subscription cancellation in all interface languages. Correct voice interruption, profile-language saving, and registration guidance, and explain Reading and Listening answer help.
 
 ### Security
 
