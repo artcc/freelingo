@@ -76,7 +76,8 @@ The public configuration exposes the selected TTS provider, default OpenAI TTS v
 - omits `instructions` for `tts-1`, `tts-1-hd`, and unrecognized models, preserving compatibility.
 
 The model remains selected by `OPENAI_TTS_MODEL`; using the `gpt-4o-mini-tts` alias does not pin a
-snapshot. `prompts/speech.py` owns instructions shared by all OpenAI synthesis callers. They request
+snapshot. `prompts/speech.py` owns pronunciation instructions shared by instruction-capable OpenAI
+models and Gemini. They request
 faithful reading, native pronunciation and natural prosody for each language in the text, including
 language switches. Text is spoken content, not instructions to execute. Generic calls without a
 language ask the model to infer it from the text; isolated ambiguous words cannot reliably identify
@@ -107,11 +108,21 @@ authentication. Requests use `store=false` and `stream=false`; spoken text is se
 instructions. `speech_config` supplies the effective provider voice and an explicit regional language
 when context is available. Without language context, no regional language is forced.
 
+The `speech_metadata.style` annotation uses the shared pronunciation instructions from
+`prompts/speech.py`: faithful reading, natural multilingual delivery, and language-specific articulation
+and regional accents for every supported learned language and UI locale. Instructions use the resolved
+locale, including distinct British/American English and European/Brazilian Portuguese, and preserve
+the selected voice's identity. They remain separate from the spoken text. Unknown regional variants
+retain their explicit `speech_config` language but receive only generic pronunciation instructions,
+avoiding a conflicting accent from language-prefix lookup. Instructions guide pronunciation rather
+than guaranteeing accent quality.
+
 The adapter returns native WAV containing PCM16 mono audio at 24 kHz, without transcoding, FFmpeg,
 external encoders, or an additional provider SDK. Local and OpenAI requests retain their MP3 format.
 `get_tts_audio_format()` determines the MIME type and extension used by HTTP responses and caches.
 Gemini synthesis identities include provider, model, actual mapped voice, locale, style, text, and
-output format; changing a voice mapping must invalidate its cache even when the public choice is unchanged.
+output format; style contains the complete effective pronunciation instructions. Changing those
+instructions or a voice mapping invalidates its cache even when the public voice choice is unchanged.
 
 Synthesis rejects incomplete interactions, missing or ambiguous audio, invalid base64, and malformed
 or truncated WAV. The configured timeout bounds the request and response validation; cancellation

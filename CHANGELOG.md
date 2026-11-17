@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Add Everyday situations to Practice with 50 voice role-plays across five personal and work themes, including straightforward everyday exchanges, translated titles and descriptions, search, category filtering, and locale-aware ordering. Each situation gives Lingu a concrete role and objective adapted to the learner's study plan, with concise interaction and a natural conclusion after meaningful practice.
 - Add a configurable Situations allowance of one start per account/ISO week through `FREEMIUM_SITUATIONS_WEEKLY`, preserving existing voice access and limits. Situations use the current voice conversation, transcript history, and plan-owned vocabulary saves.
 
+### Changed
+
+- Give Gemini TTS explicit pronunciation and regional-accent guidance for every supported language, sharing OpenAI's instructions while preserving the selected voice and multilingual text. Refresh on-demand audio caches when those instructions change.
+
 ## [1.14.5] - 2026-11-17
 
 ### Changed
