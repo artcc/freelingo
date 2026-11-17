@@ -831,6 +831,7 @@
     "generatingError": "Nie udało się wygenerować lekcji",
     "loading": "Ładowanie planu...",
     "learningRoadmap": "Plan nauki",
+    "progressSummary": "Ukończone lekcje: {completed} z {total}",
     "level": "Poziom",
     "duration": "Czas trwania",
     "durationDetail": "{weeks} tygodnie · {days} dni/tydzień",
@@ -1358,6 +1359,12 @@
   "faq": {
     "title": "FAQ",
     "subtitle": "Często zadawane pytania",
+    "sectionGettingStarted": "Pierwsze kroki i języki",
+    "sectionPractice": "Zasoby i ćwiczenia",
+    "sectionLingu": "Rozmowy z Lingu",
+    "sectionSubscription": "Plany i limity użytkowania",
+    "sectionAccount": "Konto i pomoc",
+    "sectionAdmin": "Administracja",
     "q_start": "Od czego zacząć?",
     "a_start": "Wybierz język nauki i otwórz <strong>Ocenę poziomu</strong>, aby oszacować swoje umiejętności. Początkujący mogą wybrać A1 bez testu. Potwierdź poziom i czas trwania, aby utworzyć <strong>Plan nauki</strong> dla tego języka.",
     "q_workflow": "Jaki jest pełny przebieg pracy?",
@@ -1382,11 +1389,11 @@
     "q_tutor": "Jak mogę ćwiczyć z Lingu?",
     "a_tutor": "Lingu dostosowuje odpowiedzi do aktywnego języka nauki i kontekstu planu. Zadawaj pytania gramatyczne, proś o wyjaśnienia, ćwicz pisanie w tym języku lub rozmawiaj. Rozmowy są zapisywane osobno dla każdego języka i można je wznowić z historii.",
     "q_voice": "Jak działa rozmowa głosowa?",
-    "a_voice": "Tryb <strong>Rozmowy głosowej</strong> umożliwia rozmowę z Lingu w czasie rzeczywistym. Naciśnij Start, aby rozpocząć — aplikacja automatycznie wykrywa Twój głos za pomocą detekcji aktywności głosowej (VAD), a tutor odpowiada syntezą mowy. Możesz przerwać tutorowi w dowolnym momencie (barge-in). Sesja kończy się po osiągnięciu limitu czasu lub naciśnięciu Zatrzymaj. Upewnij się, że przeglądarka ma uprawnienia do mikrofonu.",
+    "a_voice": "W trybie <strong>Rozmowy głosowej</strong> naciśnij Rozpocznij sesję i zezwól na dostęp do mikrofonu. Aplikacja wykrywa, kiedy mówisz, a Lingu odpowiada głosowo. Poczekaj, aż Lingu skończy, zanim znów zaczniesz mówić: mówienie w trakcie odpowiedzi tutora jej nie przerywa. W <settingsLink>Ustawieniach</settingsLink> możesz dostosować długość pauzy przed wysłaniem Twojej wypowiedzi, czas trwania sesji i limit bezczynności. Sesja kończy się po naciśnięciu Zatrzymaj lub osiągnięciu jednego z obowiązujących limitów.",
     "q_listening": "Jak działają ćwiczenia ze słuchu?",
-    "a_listening": "W sekcji <strong>Listening</strong> Lingu przygotowuje ćwiczenia ze słuchu dopasowane do Twojego poziomu CEFR. Odsłuchaj nagranie i odpowiedz na 5 pytań sprawdzających rozumienie. Po przesłaniu otrzymujesz wynik (0–5), XP, poprawne odpowiedzi i pełną transkrypcję. Możesz generować nowe ćwiczenia na żądanie.",
+    "a_listening": "W sekcji <strong>Słuchanie</strong> Lingu przygotowuje ćwiczenia ze słuchu dopasowane do Twojego poziomu CEFR. Odsłuchaj nagranie i odpowiedz na 5 pytań sprawdzających rozumienie. Po przesłaniu odpowiedzi możesz sprawdzić wynik (0–5), zdobyte XP, poprawne odpowiedzi i pełną transkrypcję. Wybierz <strong>Dlaczego ta odpowiedź</strong>, aby poprosić o wyjaśnienie w Twoim języku ojczystym wraz z fragmentem transkrypcji uzasadniającym odpowiedź. Możesz prosić o nowe ćwiczenia w ramach limitów użytkowania swojego konta.",
     "q_reading": "Jak działają ćwiczenia z czytania?",
-    "a_reading": "Sekcja <strong>Reading</strong> generuje teksty na Twoim poziomie CEFR — ogłoszenia, e-maile, artykuły, wpisy na blogu i więcej. Przeczytaj tekst i odpowiedz na 5 pytań wielokrotnego wyboru. Po przesłaniu otrzymujesz wynik (0–5) i XP. Nowe ćwiczenia mogą być generowane na żądanie.",
+    "a_reading": "W sekcji <strong>Czytanie</strong> Lingu przygotowuje teksty na Twoim poziomie CEFR, takie jak ogłoszenia, e-maile i artykuły. Przeczytaj tekst i odpowiedz na 5 pytań z wyborem odpowiedzi. Po przesłaniu odpowiedzi możesz sprawdzić wynik (0–5), zdobyte XP i poprawne odpowiedzi. Wybierz <strong>Dlaczego ta odpowiedź</strong>, aby poprosić o wyjaśnienie w Twoim języku ojczystym wraz z fragmentem tekstu uzasadniającym odpowiedź. Możesz prosić o nowe ćwiczenia w ramach limitów użytkowania swojego konta.",
     "q_providers": "Jakich dostawców AI obsługuje FreeLingo?",
     "a_providers_intro": "Konfigurowane w <code>.env</code> przez <code>LLM_PROVIDER</code>:",
     "provider_ollama": "Lokalny, bezpłatny. Wymaga Ollama działającego na hoście. Zalecany model: gemma4:e4b.",
@@ -1394,11 +1401,25 @@
     "provider_anthropic": "Anthropic Claude. Wymaga ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Wymaga DEEPSEEK_API_KEY.",
     "q_invite": "Czy mogę zapraszać innych?",
-    "a_invite": "Tak. Z <adminLink>Admin → Użytkownicy</adminLink> administrator może tworzyć użytkowników bezpośrednio lub generować jednorazowe linki zaproszenia wygasające po 48 godzinach. Rejestracja publiczna jest domyślnie wyłączona (<code>ALLOW_REGISTRATION=false</code>).",
+    "a_invite": "Tak. W sekcji <adminLink>Admin → Użytkownicy</adminLink> administratorzy mogą tworzyć użytkowników bezpośrednio lub generować jednorazowe linki zaproszenia wygasające po 48 godzinach. Rejestracja publiczna zależy od ustawienia <code>ALLOW_REGISTRATION</code> na serwerze.",
     "q_password": "Jak zmienić hasło lub język ojczysty?",
     "a_password": "Przejdź do <settingsLink>Ustawień</settingsLink>. Możesz tam zaktualizować wyświetlaną nazwę, język ojczysty i hasło.",
     "q_uiLanguage": "Jak zmienić język platformy?",
-    "a_uiLanguage": "Przejdź do <settingsLink>Ustawień</settingsLink> i znajdź menu rozwijane <strong>Język platformy</strong> w sekcji Profil. Wybierz preferowany język, a cały interfejs zmieni się natychmiast.",
+    "a_uiLanguage": "Przejdź do <settingsLink>Ustawień</settingsLink> i znajdź listę rozwijaną <strong>Język interfejsu</strong> w swoim profilu. Wybierz preferowany język i naciśnij <strong>Zapisz zmiany</strong>. Po zapisaniu strona załaduje się ponownie w wybranym języku. Nie zmienia to języka, którego się uczysz.",
+    "q_multiLanguage": "Czy mogę uczyć się kilku języków bez utraty postępów?",
+    "a_multiLanguage": "Tak. Dodaj język w sekcji <languagesLink>Ustawienia → Moje języki</languagesLink> i przełączaj się między językami za pomocą selektora. Każdy język zachowuje własny plan, postępy, fiszki i historię rozmów. Zmiana języka nie usuwa zapisanych postępów. Ustawienia konta, subskrypcja, limity użytkowania i wspomnienia Lingu są wspólne dla wszystkich języków.",
+    "q_grammarPractice": "Jak ćwiczyć konkretny temat gramatyczny?",
+    "a_grammarPractice": "Otwórz temat w sekcji <grammarLink>Zasoby → Gramatyka</grammarLink> i wybierz <strong>Ćwicz</strong>, aby dodać go do swojej biblioteki ćwiczeń gramatycznych. Z aktywnym planem możesz generować zestawy pięciu ćwiczeń: trzy pytania z wyborem odpowiedzi i dwa zadania z uzupełnianiem luk. Twoje odpowiedzi i wyniki są zapisywane, dzięki czemu możesz śledzić przebieg ćwiczeń. Ta aktywność nie przyznaje XP.",
+    "q_games": "Jakie gry są dostępne i który tryb wybrać?",
+    "a_games": "W sekcji <gamesLink>Gry</gamesLink> możesz wyszukiwać i poprawiać błędy w grze Detektyw błędów, porządkować fragmenty w grze Ułóż zdanie lub łączyć słowa ze znaczeniami w grze Pary słówek. Wybierz tryb powtórki, aby wrócić do ukończonych lekcji, tryb przygotowania, aby utrwalić znany materiał związany z następną lekcją, lub swobodną praktykę, aby ćwiczyć na poziomie swojego planu. Tryby, dla których brakuje materiału źródłowego, są wyłączone i opatrzone wyjaśnieniem.",
+    "q_plans": "Czym różnią się plan bezpłatny, Premium i okres próbny?",
+    "a_plans": "Plan bezpłatny umożliwia naukę z limitami użytkowania. Premium znosi te limity planu bezpłatnego, ale ogólne limity konta nadal obowiązują. Jeśli Twoje konto obejmuje początkowy okres próbny bez karty, po jego zakończeniu możesz kontynuować naukę w planie bezpłatnym bez automatycznego naliczenia opłaty. Okres próbny oferowany przy wykupieniu subskrypcji jest odrębną ofertą i może wymagać karty. Sprawdź swój status i aktualne warunki subskrypcji w sekcji <billingLink>Ustawienia → Plan i subskrypcja</billingLink>.",
+    "q_quotas": "Dlaczego osiągnięto limit i kiedy się on odnawia?",
+    "a_quotas": "Limity użytkowania dotyczą Twojego konta i są wspólne dla wszystkich języków nauki. Dzienne limity planu bezpłatnego odnawiają się o 00:00 UTC, a tygodniowe — w poniedziałki o 00:00 UTC. Sprawdź pozostały limit w danej aktywności, a ogólne limity konta w <billingLink>Ustawieniach</billingLink>. Funkcje dostępne wyłącznie w Premium nie odblokują się po odnowieniu limitu, a ogólne limity konta obowiązują również w Premium i w okresach próbnych.",
+    "q_cancelSubscription": "Jak anulować odnowienie subskrypcji?",
+    "a_cancelSubscription": "Przejdź do sekcji <billingLink>Ustawienia → Plan i subskrypcja</billingLink>, wybierz <strong>Zarządzaj subskrypcją</strong> i dokończ anulowanie w portalu, który się otworzy. Jeśli anulujesz odnowienie ze skutkiem na koniec bieżącego okresu, zachowasz dostęp do jego zakończenia. Usunięcie konta nie anuluje naliczania opłat: najpierw musisz anulować odnowienie.",
+    "q_memories": "Co Lingu zapamiętuje o mnie i jak mogę to usunąć?",
+    "a_memories": "Lingu może zapisywać przydatne informacje osobiste z rozmów tekstowych i głosowych, aby personalizować przyszłe odpowiedzi. Te wspomnienia są wspólne dla wszystkich języków nauki. W sekcji <memoriesLink>Ustawienia → Pamięć</memoriesLink> możesz je przeglądać, dodawać własne, usuwać pojedyncze wspomnienia lub wyczyścić je wszystkie.",
     "q_feedback": "Jak mogę zaproponować nową funkcję lub zgłosić błąd?",
     "a_feedback": "Skorzystaj z sekcji <feedbackLink>Feedback</feedbackLink> na pasku bocznym. Możesz zgłaszać pomysły na nowe funkcje lub błędy. Głosuj na pomysły innych użytkowników, zostawiaj komentarze i śledź status każdego zgłoszenia. Wszystkie zgłoszenia są publiczne i sprawdzane przez administratora."
   },
@@ -1912,29 +1933,25 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.14.0",
+    "version": "v1.14.5",
     "cta": "Rozumiem",
     "entry1": {
+      "label": "Twój plan, krok po kroku",
+      "desc": "Mój plan pokazuje teraz Twoją naukę jako trasę: sprawdzaj postępy, znajdź bieżący rozdział i odkrywaj kolejne etapy. Otwórz każdy rozdział, aby zobaczyć jego lekcje, kontynuować naukę lub powtórzyć ukończony materiał."
+    },
+    "entry2": {
       "label": "Ćwicz gramatykę we własnym tempie",
       "desc": "Dodawaj tematy z materiałów do gramatyki do swojej biblioteki i ćwicz w zestawach po pięć zadań, z poprawkami i wyjaśnieniami. Sprawdzaj wyniki, a po zakończeniu kontynuuj ćwiczenia w rozmowie głosowej z Lingu na podstawie tematu i Twoich odpowiedzi."
     },
-    "entry2": {
+    "entry3": {
       "label": "Nowe języki: chorwacki, czeski, duński, fiński i rumuński",
       "desc": "Dodaliśmy chorwacki, czeski, duński, fiński i rumuński jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
-    },
-    "entry3": {
-      "label": "Lepiej zrozum każdą odpowiedź",
-      "desc": "Zobacz tłumaczenie treści zadań na swój język ojczysty, zachowując widoczne oryginalne pytanie. Po ukończeniu Reading lub Listening poproś o wyjaśnienie w swoim języku ojczystym wraz z fragmentem tekstu uzasadniającym odpowiedź. Podczas powtórki możesz też ponownie przeczytać tekst lub odsłuchać nagranie."
     },
     "entry4": {
       "label": "Lingu pomaga, gdy tego potrzebujesz",
       "desc": "Jeśli nie rozumiesz czegoś podczas rozmowy głosowej, poproś Lingu o pomoc. Może krótko wyjaśnić to w Twoim języku ojczystym, a potem wrócić do ćwiczeń w języku, którego się uczysz."
     },
     "entry5": {
-      "label": "Bardziej naturalne i ekspresyjne głosy",
-      "desc": "Ciesz się bardziej naturalnymi i ekspresyjnymi głosami w ćwiczeniach ze słuchania i rozmowach z Lingu, dzięki którym słuchanie staje się wyraźniejsze i przyjemniejsze."
-    },
-    "entry6": {
       "label": "Płynniejsze korzystanie",
       "desc": "Poprawiliśmy też drobne błędy i dopracowaliśmy kilka szczegółów, aby codzienna nauka z FreeLingo była jeszcze przyjemniejsza."
     }

@@ -831,6 +831,7 @@
     "generatingError": "Oppituntia ei voitu luoda",
     "loading": "Ladataan suunnitelmaa...",
     "learningRoadmap": "Oppimispolku",
+    "progressSummary": "{completed}/{total} oppituntia suoritettu",
     "level": "Taso",
     "duration": "Kesto",
     "durationDetail": "{weeks} viikkoa · {days} päivää viikossa",
@@ -1358,6 +1359,12 @@
   "faq": {
     "title": "Usein kysytyt kysymykset",
     "subtitle": "Kysymyksiä ja vastauksia",
+    "sectionGettingStarted": "Aloittaminen ja kielet",
+    "sectionPractice": "Materiaalit ja harjoittelu",
+    "sectionLingu": "Keskustelut Lingun kanssa",
+    "sectionSubscription": "Paketit ja käyttörajat",
+    "sectionAccount": "Tili ja ohjeet",
+    "sectionAdmin": "Ylläpito",
     "q_start": "Mistä aloitan?",
     "a_start": "Valitse opiskelukieli ja avaa <strong>tasoarvio</strong> taitotasosi arvioimiseksi. Aloittelija voi valita A1:n ilman testiä. Vahvista taso ja kesto luodaksesi kielelle oman <strong>opintosuunnitelman</strong>.",
     "q_workflow": "Miten opiskelu etenee alusta loppuun?",
@@ -1382,11 +1389,11 @@
     "q_tutor": "Miten voin harjoitella Lingun kanssa?",
     "a_tutor": "Lingu mukauttaa vastaukset aktiiviseen opiskelukieleesi ja suunnitelmasi sisältöön. Kysy kieliopista, pyydä selityksiä, harjoittele kirjoittamista kyseisellä kielellä tai keskustele. Keskustelut tallennetaan kielittäin, ja niitä voi jatkaa historiasta.",
     "q_voice": "Miten äänikeskustelu toimii?",
-    "a_voice": "<strong>Äänikeskustelussa</strong> voit puhua Lingun kanssa reaaliajassa. Aloita painamalla Aloita – sovellus kuuntelee automaattisesti puheentunnistuksen (VAD) avulla, ja opettaja vastaa puhesynteesillä. Voit keskeyttää opettajan milloin tahansa. Keskustelu päättyy aikarajaan tai kun painat Pysäytä. Varmista, että selaimella on mikrofonin käyttöoikeus.",
+    "a_voice": "Paina <strong>Äänikeskustelussa</strong> Aloita ja salli mikrofonin käyttö. Sovellus tunnistaa, milloin puhut, ja Lingu vastaa puheella. Odota, että Lingu lopettaa, ennen kuin puhut uudelleen: opettajan päälle puhuminen ei keskeytä vastausta. <settingsLink>Asetuksissa</settingsLink> voit säätää taukoa ennen puheenvuorosi lähettämistä, istunnon kestoa ja toimettomuuden aikarajaa. Istunto päättyy, kun painat Pysäytä tai jokin sovellettava raja täyttyy.",
     "q_listening": "Miten kuunteluharjoitukset toimivat?",
-    "a_listening": "<strong>Kuuntelu</strong>-osiossa Lingu valmistelee taitotasoosi sopivia kuunteluharjoituksia. Kuuntele ja vastaa viiteen ymmärtämiskysymykseen. Saat lähetettyäsi pistemäärän (0–5), XP-pisteet, oikeat vastaukset ja koko litteroinnin. Voit luoda uusia harjoituksia halutessasi.",
+    "a_listening": "<strong>Kuuntelu</strong>-osiossa Lingu valmistelee CEFR-tasoosi sopivia kuunteluharjoituksia. Kuuntele äänite ja vastaa sitten viiteen ymmärtämiskysymykseen. Lähetettyäsi vastaukset voit tarkastella pistemäärääsi (0–5), ansaittuja XP-pisteitä, oikeita vastauksia ja koko litterointia. Valitse <strong>Miksi tämä vastaus</strong> pyytääksesi äidinkielelläsi selityksen, jota tukee ote litteroinnista. Voit pyytää uusia harjoituksia tilisi käyttörajojen puitteissa.",
     "q_reading": "Miten lukuharjoitukset toimivat?",
-    "a_reading": "<strong>Lukeminen</strong> sisältää tasosi mukaisia tekstejä – ilmoituksia, sähköposteja, artikkeleita, blogikirjoituksia ja muuta. Lue teksti ja vastaa viiteen monivalintakysymykseen. Saat lähetettyäsi pistemäärän (0–5) ja XP-pisteet. Voit luoda uusia harjoituksia halutessasi.",
+    "a_reading": "<strong>Lukeminen</strong>-osiossa Lingu valmistelee CEFR-tasoosi sopivia tekstejä, kuten ilmoituksia, sähköposteja ja artikkeleita. Lue teksti ja vastaa viiteen monivalintakysymykseen. Lähetettyäsi vastaukset voit tarkastella pistemäärääsi (0–5), ansaittuja XP-pisteitä ja oikeita vastauksia. Valitse <strong>Miksi tämä vastaus</strong> pyytääksesi äidinkielelläsi selityksen, jota tukee ote tekstistä. Voit pyytää uusia harjoituksia tilisi käyttörajojen puitteissa.",
     "q_providers": "Mitä tekoälypalveluita FreeLingo tukee?",
     "a_providers_intro": "Määritä tiedostossa <code>.env</code> asetuksella <code>LLM_PROVIDER</code>:",
     "provider_ollama": "Paikallinen ja maksuton. Ollaman on oltava käynnissä palvelimella. Suositeltu malli: gemma4:e4b. Ilman GPU:ta toiminta voi olla hidasta.",
@@ -1394,11 +1401,25 @@
     "provider_anthropic": "Anthropic Claude. Vaatii ANTHROPIC_API_KEY-avaimen.",
     "provider_deepseek": "DeepSeek API. Vaatii DEEPSEEK_API_KEY-avaimen.",
     "q_invite": "Voinko kutsua muita?",
-    "a_invite": "Kyllä. <adminLink>Ylläpito → Käyttäjät</adminLink> -osiossa ylläpitäjä voi luoda käyttäjiä suoraan tai tehdä kertakäyttöisiä kutsulinkkejä, jotka vanhenevat 48 tunnissa. Julkinen rekisteröityminen on oletuksena pois käytöstä (<code>ALLOW_REGISTRATION=false</code>).",
+    "a_invite": "Kyllä. <adminLink>Ylläpito → Käyttäjät</adminLink> -osiossa ylläpitäjät voivat luoda käyttäjiä suoraan tai tehdä kertakäyttöisiä kutsulinkkejä, jotka vanhenevat 48 tunnissa. Julkinen rekisteröityminen riippuu palvelimen <code>ALLOW_REGISTRATION</code>-asetuksesta.",
     "q_password": "Miten vaihdan salasanani tai äidinkieleni?",
     "a_password": "Siirry <settingsLink>Asetuksiin</settingsLink>. Voit päivittää näyttönimesi, äidinkielesi ja salasanasi siellä.",
     "q_uiLanguage": "Miten vaihdan palvelun kielen?",
-    "a_uiLanguage": "Siirry <settingsLink>Asetuksiin</settingsLink> ja etsi Profiili-osiosta <strong>Käyttöliittymän kieli</strong>. Valitse kieli, niin koko käyttöliittymä vaihtuu heti.",
+    "a_uiLanguage": "Siirry <settingsLink>Asetuksiin</settingsLink> ja etsi profiilistasi <strong>Käyttöliittymän kieli</strong> -pudotusvalikko. Valitse haluamasi kieli ja paina <strong>Tallenna muutokset</strong>. Tallennuksen jälkeen sivu latautuu uudelleen valitulla kielellä. Tämä ei muuta opiskelemaasi kieltä.",
+    "q_multiLanguage": "Voinko opiskella useita kieliä menettämättä edistymistäni?",
+    "a_multiLanguage": "Kyllä. Lisää kieli kohdassa <languagesLink>Asetukset → Omat kielet</languagesLink> ja vaihda kielten välillä kielivalitsimella. Jokaisella kielellä säilyvät oma suunnitelma, edistyminen, muistikortit ja keskusteluhistoria. Kielen vaihtaminen ei poista tallennettua edistymistäsi. Tilin asetukset, tilaus, käyttökiintiöt ja Lingun muistot ovat yhteisiä kaikille kielille.",
+    "q_grammarPractice": "Miten harjoittelen tiettyä kielioppiaihetta?",
+    "a_grammarPractice": "Avaa aihe kohdassa <grammarLink>Materiaalit → Kielioppi</grammarLink> ja lisää se omaan kielioppiharjoittelukirjastoosi valitsemalla <strong>Harjoittele</strong>. Kun sinulla on aktiivinen suunnitelma, voit luoda viiden harjoituksen sarjoja: kolme monivalintakysymystä ja kaksi aukkotehtävää. Vastauksesi ja tuloksesi tallennetaan, jotta voit seurata harjoitteluasi. Tästä toiminnasta ei saa XP-pisteitä.",
+    "q_games": "Mitä pelejä on saatavilla ja mikä pelitila kannattaa valita?",
+    "a_games": "<gamesLink>Pelit</gamesLink>-osiossa voit etsiä ja korjata virheitä Virhe-etsivä-pelissä, järjestää osia Järjestä lause -pelissä tai yhdistää sanoja ja merkityksiä Sanaparit-pelissä. Valitse kertaus palataksesi suoritettuihin oppitunteihin, valmistautuminen vahvistaaksesi seuraavaan oppituntiin liittyvää tuttua sisältöä tai vapaa harjoittelu harjoitellaksesi suunnitelmasi tasolla. Pelitilat, joihin ei ole riittävästi lähdemateriaalia, eivät ole käytettävissä, ja syy kerrotaan.",
+    "q_plans": "Miten ilmainen paketti, Premium ja kokeilujakso eroavat toisistaan?",
+    "a_plans": "Ilmaisella paketilla voit opiskella käyttökiintiöiden puitteissa. Premium poistaa ilmaisen paketin kiintiöt, mutta tilin yleiset rajat ovat edelleen voimassa. Jos tiliisi kuuluu aluksi kokeilujakso ilman maksukorttia, voit sen päätyttyä jatkaa ilmaisella paketilla ilman automaattista veloitusta. Tilauksen yhteydessä mahdollisesti tarjottava kokeilujakso on erillinen ja voi vaatia maksukortin. Tarkista tilasi ja voimassa olevat tilausehdot kohdasta <billingLink>Asetukset → Paketti ja tilaus</billingLink>.",
+    "q_quotas": "Miksi käyttöraja tuli vastaan ja milloin kiintiö uusiutuu?",
+    "a_quotas": "Käyttökiintiöt kuuluvat tilillesi ja ovat yhteisiä kaikille opiskelukielillesi. Ilmaisen paketin päiväkiintiöt uusiutuvat klo 00:00 UTC ja viikkokiintiöt maanantaisin klo 00:00 UTC. Näet jäljellä olevan kiintiön kussakin toiminnossa ja tilisi yleiset rajat kohdassa <billingLink>Asetukset</billingLink>. Vain Premiumiin kuuluvat ominaisuudet eivät avaudu odottamalla kiintiön uusiutumista, ja tilin yleiset rajat koskevat myös Premiumia ja kokeilujaksoja.",
+    "q_cancelSubscription": "Miten peruutan tilaukseni uusiutumisen?",
+    "a_cancelSubscription": "Siirry kohtaan <billingLink>Asetukset → Paketti ja tilaus</billingLink>, valitse <strong>Hallitse tilausta</strong> ja viimeistele peruutus avautuvassa portaalissa. Jos peruutat uusiutumisen nykyisen kauden loppuun, käyttöoikeutesi säilyy kauden päättymiseen asti. Tilin poistaminen ei peruuta laskutusta: sinun on ensin peruutettava uusiutuminen.",
+    "q_memories": "Mitä Lingu muistaa minusta ja miten voin poistaa muistot?",
+    "a_memories": "Lingu voi tallentaa hyödyllisiä henkilökohtaisia tietoja teksti- ja äänikeskusteluista mukauttaakseen tulevia vastauksia. Nämä muistot ovat yhteisiä kaikille opiskelukielillesi. Kohdassa <memoriesLink>Asetukset → Muistot</memoriesLink> voit tarkastella niitä, lisätä omia sekä poistaa yksittäisiä muistoja tai ne kaikki.",
     "q_feedback": "Miten ehdotan uutta ominaisuutta tai ilmoitan virheestä?",
     "a_feedback": "Käytä sivupalkin <feedbackLink>Palaute</feedbackLink>-osiota. Voit ehdottaa uusia ominaisuuksia tai raportoida virheistä. Äänestä muiden ideoita, jätä kommentteja ja seuraa pyyntöjen tilaa. Kaikki ilmoitukset ovat julkisia ja ylläpitäjä tarkistaa ne."
   },
@@ -1912,29 +1933,25 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.14.0",
+    "version": "v1.14.5",
     "cta": "Selvä",
     "entry1": {
+      "label": "Suunnitelmasi, askel askeleelta",
+      "desc": "Oma suunnitelma näyttää oppimisesi nyt polkuna: seuraa edistymistäsi, löydä nykyinen opintokokonaisuutesi ja tutustu seuraaviin vaiheisiin. Avaa kukin kokonaisuus nähdäksesi sen oppitunnit, jatkaaksesi oppimista tai kerrataksesi jo suorittamasi asiat."
+    },
+    "entry2": {
       "label": "Harjoittele kielioppia omaan tahtiisi",
       "desc": "Lisää aiheita kielioppimateriaaleista omaan kirjastoosi ja harjoittele viiden tehtävän sarjoilla, joihin saat korjaukset ja selitykset. Tarkastele tuloksiasi ja jatka lopuksi suullista harjoittelua Lingun kanssa aiheen ja vastaustesi pohjalta."
     },
-    "entry2": {
+    "entry3": {
       "label": "Uudet kielet: kroatia, tšekki, tanska, suomi ja romania",
       "desc": "Kroatia, tšekki, tanska, suomi ja romania ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
-    },
-    "entry3": {
-      "label": "Ymmärrä jokainen vastaus paremmin",
-      "desc": "Katso tehtävänantojen käännökset äidinkielelläsi alkuperäisen kysymyksen pysyessä näkyvissä. Reading- tai Listening-harjoituksen jälkeen voit pyytää selityksen äidinkielelläsi sekä vastausta tukevan lainauksen tekstistä. Voit myös lukea tekstin tai kuunnella äänitteen uudelleen kerratessasi."
     },
     "entry4": {
       "label": "Lingu auttaa, kun tarvitset apua",
       "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
     },
     "entry5": {
-      "label": "Luonnollisemmat ja ilmeikkäämmät äänet",
-      "desc": "Nauti luonnollisemmista ja ilmeikkäämmistä äänistä kuunteluharjoituksissa ja keskusteluissa Lingun kanssa. Ne tekevät kuuntelukokemuksesta selkeämmän ja miellyttävämmän."
-    },
-    "entry6": {
       "label": "Sujuvampi käyttökokemus",
       "desc": "Korjasimme myös pieniä virheitä ja hioimme yksityiskohtia, jotta FreeLingolla oppiminen olisi joka päivä entistä mukavampaa."
     }

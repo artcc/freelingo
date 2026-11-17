@@ -371,7 +371,7 @@ function DetailView({
             {entry.description}
           </p>
           <div className="flex flex-wrap items-center gap-3 pt-1">
-            <span className="text-fl-hint text-fl-muted-4 inline-flex flex-wrap items-center gap-x-1 font-mono">
+            <span className="text-fl-label text-fl-muted-4 inline-flex flex-wrap items-center gap-x-1 font-mono">
               <span>
                 {t('by')} {entry.author.display_name}
               </span>
@@ -383,7 +383,7 @@ function DetailView({
               <button
                 onClick={handleVote}
                 disabled={voting}
-                className={`text-fl-hint border px-3 py-1 font-mono tracking-widest uppercase transition-colors disabled:opacity-50 ${
+                className={`border px-3 py-1 font-mono text-xs tracking-widest uppercase transition-colors disabled:opacity-50 ${
                   entry.voted_by_me
                     ? 'border-fl-accent/60 text-fl-accent bg-fl-accent/10'
                     : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg'
@@ -396,7 +396,7 @@ function DetailView({
             {(currentUserId === entry.author.id || isAdmin) && (
               <button
                 onClick={() => setDeleteEntryPending(true)}
-                className="text-fl-hint border-fl-error/30 text-fl-error-fg hover:border-fl-error ml-auto border px-3 py-1 font-mono tracking-widest uppercase transition-colors"
+                className="border-fl-error/30 text-fl-error-fg hover:border-fl-error ml-auto border px-3 py-1 font-mono text-xs tracking-widest uppercase transition-colors"
               >
                 {t('deleteEntry')}
               </button>
@@ -414,7 +414,7 @@ function DetailView({
             comments.map((c) => (
               <div key={c.id} className="space-y-1 px-6 py-4">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-fl-hint text-fl-muted-2 inline-flex flex-wrap items-center gap-x-1 font-mono">
+                  <span className="text-fl-label text-fl-muted-2 inline-flex flex-wrap items-center gap-x-1 font-mono">
                     <span>{c.author.display_name}</span>
                     <AdminAuthorBadge role={c.author.role} />
                     <span>· {formatDate(c.created_at, locale)}</span>
@@ -422,7 +422,7 @@ function DetailView({
                   {currentUserId === c.author.id && (
                     <button
                       onClick={() => setDeletePendingComment(c)}
-                      className="text-fl-hint text-fl-muted-4 hover:text-fl-error-fg font-mono tracking-widest uppercase transition-colors"
+                      className="text-fl-muted-4 hover:text-fl-error-fg font-mono text-xs tracking-widest uppercase transition-colors"
                     >
                       {t('deleteComment')}
                     </button>
@@ -724,7 +724,7 @@ function FeedbackContent() {
 
       {/* Filters + sort row */}
       <div className="flex flex-wrap items-center gap-3">
-        <span className="text-fl-hint text-fl-muted-4 font-mono tracking-widest uppercase">
+        <span className="text-fl-muted-4 font-mono text-xs tracking-widest uppercase">
           {t('sortBy')}
         </span>
         {(['votes', 'date'] as SortOption[]).map((s) => (
@@ -734,7 +734,7 @@ function FeedbackContent() {
               setPage(0)
               setSort(s)
             }}
-            className={`text-fl-hint border px-3 py-1 font-mono tracking-widest uppercase transition-colors ${
+            className={`border px-3 py-1 font-mono text-xs tracking-widest uppercase transition-colors ${
               sort === s
                 ? 'border-fl-fg/40 text-fl-fg'
                 : 'border-fl-border text-fl-muted-2 hover:border-fl-border-2 hover:text-fl-fg'
@@ -744,7 +744,7 @@ function FeedbackContent() {
           </button>
         ))}
 
-        <span className="text-fl-hint text-fl-muted-4 ml-2 font-mono tracking-widest uppercase">
+        <span className="text-fl-muted-4 ml-2 font-mono text-xs tracking-widest uppercase">
           {t('filterStatus')}
         </span>
         <select
@@ -753,7 +753,7 @@ function FeedbackContent() {
             setPage(0)
             setStatusFilter(e.target.value)
           }}
-          className="bg-fl-bg border-fl-border text-fl-hint text-fl-muted-1 focus:border-fl-border-2 appearance-none border px-3 py-1 font-mono transition-colors focus:outline-none"
+          className="bg-fl-bg border-fl-border text-fl-muted-1 focus:border-fl-border-2 appearance-none border px-3 py-1 font-mono text-xs transition-colors focus:outline-none"
         >
           {statusOptions.map((o) => (
             <option key={o.value} value={o.value}>
@@ -864,7 +864,7 @@ function FeedbackContent() {
                       >
                         ▲
                       </button>
-                      <span className="text-fl-hint text-fl-muted-2 font-mono tabular-nums">
+                      <span className="text-fl-label text-fl-muted-2 font-mono tabular-nums">
                         {entry.vote_count}
                       </span>
                     </div>
@@ -892,7 +892,7 @@ function FeedbackContent() {
                       {entry.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className="text-fl-hint text-fl-muted-4 inline-flex flex-wrap items-center gap-x-1 font-mono">
+                      <span className="text-fl-label text-fl-muted-4 inline-flex flex-wrap items-center gap-x-1 font-mono">
                         <span>
                           {t('by')} {entry.author.display_name}
                         </span>
@@ -900,7 +900,7 @@ function FeedbackContent() {
                         <span>· {formatDate(entry.created_at, locale)}</span>
                       </span>
                       {entry.comment_count > 0 && (
-                        <span className="text-fl-hint text-fl-muted-4 font-mono">
+                        <span className="text-fl-label text-fl-muted-4 font-mono">
                           ◌{' '}
                           {entry.comment_count === 1
                             ? t('comment')
@@ -914,7 +914,7 @@ function FeedbackContent() {
                             e.stopPropagation()
                             setDeletePending(entry)
                           }}
-                          className="text-fl-hint text-fl-muted-4 hover:text-fl-error-fg ml-auto font-mono tracking-widest uppercase transition-colors"
+                          className="text-fl-muted-4 hover:text-fl-error-fg ml-auto font-mono text-xs tracking-widest uppercase transition-colors"
                         >
                           {t('deleteEntry')}
                         </button>

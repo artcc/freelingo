@@ -831,6 +831,7 @@
     "generatingError": "Generazione lezione non riuscita",
     "loading": "Caricamento piano...",
     "learningRoadmap": "Percorso di apprendimento",
+    "progressSummary": "{completed} lezioni completate su {total}",
     "level": "Livello",
     "duration": "Durata",
     "durationDetail": "{weeks} settimane · {days} giorni/settimana",
@@ -1358,6 +1359,12 @@
   "faq": {
     "title": "FAQ",
     "subtitle": "Domande frequenti",
+    "sectionGettingStarted": "Primi passi e lingue",
+    "sectionPractice": "Risorse e pratica",
+    "sectionLingu": "Conversazioni con Lingu",
+    "sectionSubscription": "Piani e limiti di utilizzo",
+    "sectionAccount": "Account e assistenza",
+    "sectionAdmin": "Amministrazione",
     "q_start": "Da dove inizio?",
     "a_start": "Scegli la lingua da imparare e apri la <strong>Valutazione</strong> per stimare il tuo livello. Se parti da zero, puoi scegliere A1 senza fare il test. Conferma livello e durata per creare il tuo <strong>Piano di Studio</strong> per quella lingua.",
     "q_workflow": "Qual è il flusso di lavoro completo?",
@@ -1382,11 +1389,11 @@
     "q_tutor": "Come posso esercitarmi con Lingu?",
     "a_tutor": "Lingu adatta le risposte alla lingua di studio attiva e al contesto del tuo piano. Fai domande di grammatica, chiedi spiegazioni, esercitati a scrivere in quella lingua o conversa. Le conversazioni vengono salvate per lingua e puoi riprenderle dalla cronologia.",
     "q_voice": "Come funziona la conversazione vocale?",
-    "a_voice": "La modalità <strong>Conversazione vocale</strong> ti consente di parlare con Lingu in tempo reale. Premi Start per iniziare — l'app rileva automaticamente la tua voce tramite rilevamento dell'attività vocale (VAD) e il tutor risponde con la sintesi vocale. Puoi interrompere il tutor in qualsiasi momento (barge-in). La sessione termina quando si raggiunge il limite di tempo o si preme Stop. Assicurati che il browser abbia il permesso di accedere al microfono.",
+    "a_voice": "In <strong>Conversazione vocale</strong>, premi Avvia sessione e consenti l'accesso al microfono. L'app rileva quando parli e Lingu risponde a voce. Aspetta che Lingu finisca prima di parlare di nuovo: parlare mentre il tutor sta rispondendo non interrompe la sua risposta. In <settingsLink>Impostazioni</settingsLink>, puoi regolare la pausa prima dell'invio del tuo intervento, la durata della sessione e il tempo di inattività. La sessione termina quando premi Ferma o raggiungi uno dei limiti applicabili.",
     "q_listening": "Come funzionano gli esercizi di ascolto?",
-    "a_listening": "In <strong>Listening</strong>, Lingu prepara esercizi di ascolto adatti al tuo livello QCER. Ascolta l'audio e rispondi a 5 domande di comprensione. Dopo l'invio, ottieni il tuo punteggio (0–5), XP, le risposte corrette e la trascrizione completa. Puoi generare nuovi esercizi su richiesta.",
+    "a_listening": "In <strong>Comprensione orale</strong>, Lingu prepara esercizi di ascolto adatti al tuo livello QCER. Ascolta l'audio e rispondi a 5 domande di comprensione. Dopo l'invio, puoi consultare il tuo punteggio (0–5), gli XP ottenuti, le risposte corrette e la trascrizione completa. Seleziona <strong>Perché questa risposta</strong> per richiedere una spiegazione nella tua lingua madre con un estratto della trascrizione che la giustifica. Puoi richiedere nuovi esercizi nel rispetto dei limiti di utilizzo del tuo account.",
     "q_reading": "Come funzionano gli esercizi di lettura?",
-    "a_reading": "La sezione <strong>Reading</strong> genera testi al tuo livello CEFR: avvisi, email, articoli, post di blog e altro. Leggi il testo e rispondi a 5 domande a scelta multipla. Dopo l'invio, ottieni il tuo punteggio (0–5) e XP. Nuovi esercizi possono essere generati su richiesta.",
+    "a_reading": "In <strong>Lettura</strong>, Lingu prepara testi adatti al tuo livello QCER, come avvisi, email e articoli. Leggi il testo e rispondi a 5 domande a scelta multipla. Dopo l'invio, puoi consultare il tuo punteggio (0–5), gli XP ottenuti e le risposte corrette. Seleziona <strong>Perché questa risposta</strong> per richiedere una spiegazione nella tua lingua madre con un estratto del testo che la giustifica. Puoi richiedere nuovi esercizi nel rispetto dei limiti di utilizzo del tuo account.",
     "q_providers": "Quali provider di IA supporta FreeLingo?",
     "a_providers_intro": "Configurabile in <code>.env</code> tramite <code>LLM_PROVIDER</code>:",
     "provider_ollama": "Locale, gratuito. Richiede Ollama in esecuzione sull'host. Modello consigliato: gemma4:e4b. Può essere lento senza GPU.",
@@ -1394,11 +1401,25 @@
     "provider_anthropic": "Anthropic Claude. Richiede ANTHROPIC_API_KEY.",
     "provider_deepseek": "API DeepSeek. Richiede DEEPSEEK_API_KEY.",
     "q_invite": "Posso invitare altre persone?",
-    "a_invite": "Sì. Da <adminLink>Admin → Utenti</adminLink> l'amministratore può creare utenti direttamente o generare link di invito monouso che scadono in 48 ore. La registrazione pubblica è disabilitata per impostazione predefinita (<code>ALLOW_REGISTRATION=false</code>).",
+    "a_invite": "Sì. Da <adminLink>Admin → Utenti</adminLink>, gli amministratori possono creare utenti direttamente o generare link di invito monouso che scadono dopo 48 ore. La registrazione pubblica dipende dall'impostazione <code>ALLOW_REGISTRATION</code> del server.",
     "q_password": "Come cambio la mia password o lingua madre?",
     "a_password": "Vai su <settingsLink>Impostazioni</settingsLink>. Da lì puoi aggiornare il tuo nome visualizzato, la lingua madre e la password.",
     "q_uiLanguage": "Come cambio la lingua della piattaforma?",
-    "a_uiLanguage": "Vai su <settingsLink>Impostazioni</settingsLink> e trova il menu a discesa <strong>Lingua della piattaforma</strong> nella sezione Profilo. Seleziona la tua lingua preferita e l'intera interfaccia cambierà immediatamente.",
+    "a_uiLanguage": "Vai su <settingsLink>Impostazioni</settingsLink> e cerca il menu a discesa <strong>Lingua dell'interfaccia</strong> nel tuo profilo. Seleziona la lingua che preferisci e premi <strong>Salva modifiche</strong>. Dopo il salvataggio, la pagina si ricarica nella lingua selezionata. Questo non cambia la lingua che stai imparando.",
+    "q_multiLanguage": "Posso imparare più lingue senza perdere i miei progressi?",
+    "a_multiLanguage": "Sì. Aggiungi una lingua in <languagesLink>Impostazioni → Le mie lingue</languagesLink> e usa il selettore della lingua per passare da una all'altra. Ogni lingua mantiene il proprio piano, i progressi, le schede e la cronologia delle conversazioni. Cambiare lingua non elimina i progressi salvati. Le impostazioni dell'account, l'abbonamento, le quote di utilizzo e i ricordi di Lingu sono condivisi tra le lingue.",
+    "q_grammarPractice": "Come posso esercitarmi su un argomento specifico di grammatica?",
+    "a_grammarPractice": "Apri un argomento in <grammarLink>Risorse → Grammatica</grammarLink> e seleziona <strong>Esercitati</strong> per aggiungerlo alla tua raccolta personale di pratica di grammatica. Con un piano attivo, puoi generare serie di cinque esercizi: tre domande a scelta multipla e due da completare inserendo le parole mancanti. Le tue risposte e i risultati vengono salvati per permetterti di tenere traccia della pratica. Questa attività non assegna XP.",
+    "q_games": "Quali giochi sono disponibili e quale modalità devo scegliere?",
+    "a_games": "In <gamesLink>Giochi</gamesLink>, puoi individuare e correggere errori in Detective degli errori, ordinare frammenti in Riordina la frase o abbinare parole e significati in Coppie di vocaboli. Scegli la modalità ripasso per rivedere le lezioni completate, la modalità preparazione per consolidare nozioni già conosciute legate alla prossima lezione o la pratica libera per lavorare al livello del tuo piano. Le modalità prive di contenuti sufficienti sono disabilitate con una spiegazione.",
+    "q_plans": "Qual è la differenza tra il piano gratuito, Premium e la prova?",
+    "a_plans": "Il piano gratuito ti permette di imparare con quote di utilizzo. Premium elimina queste quote del piano gratuito, ma restano validi i limiti generali dell'account. Se il tuo account include una prova iniziale senza carta, al termine puoi continuare con il piano gratuito senza addebiti automatici. Qualsiasi prova offerta al momento della sottoscrizione è separata e può richiedere una carta. Consulta il tuo stato e le condizioni di abbonamento attuali in <billingLink>Impostazioni → Piano e abbonamento</billingLink>.",
+    "q_quotas": "Perché ho raggiunto un limite e quando si rinnova?",
+    "a_quotas": "Le quote di utilizzo appartengono al tuo account e sono condivise tra le lingue che studi. Le quote gratuite giornaliere si rinnovano alle 00:00 UTC; quelle settimanali si rinnovano il lunedì alle 00:00 UTC. Consulta la disponibilità residua in ogni attività e i limiti generali del tuo account in <billingLink>Impostazioni</billingLink>. Le funzionalità esclusive di Premium non si sbloccano aspettando il rinnovo di una quota, e i limiti generali dell'account si applicano anche a Premium e alle prove.",
+    "q_cancelSubscription": "Come annullo il rinnovo del mio abbonamento?",
+    "a_cancelSubscription": "Vai su <billingLink>Impostazioni → Piano e abbonamento</billingLink>, seleziona <strong>Gestisci abbonamento</strong> e completa la disdetta nel portale che si apre. Se annulli il rinnovo alla fine del periodo corrente, mantieni l'accesso fino al termine di quel periodo. Eliminare l'account non interrompe la fatturazione: devi prima annullare il rinnovo.",
+    "q_memories": "Cosa ricorda Lingu di me e come posso eliminarlo?",
+    "a_memories": "Lingu può salvare dettagli personali utili dalle conversazioni di testo e vocali per personalizzare le risposte future. Questi ricordi sono condivisi tra tutte le lingue che studi. In <memoriesLink>Impostazioni → Memoria</memoriesLink>, puoi consultarli, aggiungere i tuoi, eliminare singoli ricordi o cancellarli tutti.",
     "q_feedback": "Come posso suggerire una nuova funzionalità o segnalare un bug?",
     "a_feedback": "Usa la sezione <feedbackLink>Feedback</feedbackLink> nella barra laterale. Puoi creare suggerimenti per nuove funzionalità o segnalare bug. Vota le idee degli altri utenti, lascia commenti e segui lo stato di ogni richiesta. Tutti gli invii sono pubblici e vengono esaminati dall'amministratore."
   },
@@ -1912,29 +1933,25 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.14.0",
+    "version": "v1.14.5",
     "cta": "Capito",
     "entry1": {
+      "label": "Il tuo piano, passo dopo passo",
+      "desc": "Il mio piano ora mostra il tuo apprendimento come un percorso: controlla i tuoi progressi, individua l'unità attuale e scopri le prossime tappe. Apri ogni unità per vedere le sue lezioni, continuare a imparare o ripassare ciò che hai completato."
+    },
+    "entry2": {
       "label": "Esercitati con la grammatica al tuo ritmo",
       "desc": "Aggiungi argomenti dalle risorse di Grammatica alla tua biblioteca personale ed esercitati con serie di cinque esercizi, con correzioni e spiegazioni. Consulta i tuoi risultati e, quando hai finito, continua a esercitarti a voce con Lingu sull'argomento e sulle tue risposte."
     },
-    "entry2": {
+    "entry3": {
       "label": "Nuove lingue: croato, ceco, danese, finlandese e rumeno",
       "desc": "Il croato, il ceco, il danese, il finlandese e il rumeno sono ora disponibili come lingue da imparare, con contenuti da A1 a C2. Sceglili quando inizi oppure aggiungili da Impostazioni → Le mie lingue."
-    },
-    "entry3": {
-      "label": "Comprendi meglio ogni risposta",
-      "desc": "Consulta la traduzione delle domande nella tua lingua madre mantenendo visibile la domanda originale. Dopo aver completato Reading o Listening, chiedi una spiegazione nella tua lingua madre con un estratto del testo che giustifica la risposta. Puoi anche rileggere il brano o riascoltare l'audio mentre ripassi."
     },
     "entry4": {
       "label": "Lingu ti aiuta quando ne hai bisogno",
       "desc": "Se non capisci qualcosa durante una conversazione vocale, chiedi aiuto a Lingu. Può spiegartelo brevemente nella tua lingua madre e poi riprendere la pratica nella lingua che stai imparando."
     },
     "entry5": {
-      "label": "Voci più naturali ed espressive",
-      "desc": "Scopri voci più naturali ed espressive nei tuoi esercizi di ascolto e nelle conversazioni con Lingu, per un'esperienza di ascolto più chiara e piacevole."
-    },
-    "entry6": {
       "label": "Un'esperienza più fluida",
       "desc": "Abbiamo anche corretto piccoli errori e curato alcuni dettagli per rendere ancora più piacevole imparare ogni giorno con FreeLingo."
     }

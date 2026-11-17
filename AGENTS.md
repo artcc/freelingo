@@ -1,6 +1,6 @@
 # AGENTS.md — FreeLingo
 
-**Current version: 1.14.0**
+**Current version: 1.14.5**
 
 ## Project
 
@@ -65,7 +65,7 @@ Use the narrowest relevant spec first:
 - Speech and AI: `speech-services.instructions.md`, `voice-conversation.instructions.md`, `memories.instructions.md`, `prompts.instructions.md`, `llm-error-handling.instructions.md`.
 - Access and community: `subscriptions-freemium.instructions.md`, `feedback.instructions.md`, `reviews.instructions.md`, `whats-new.instructions.md`.
 - Contracts and operations: `database-models.instructions.md`, `services.instructions.md`, `api-endpoints.instructions.md`, `rate-limiting.instructions.md`, `docker.instructions.md`, `umami.instructions.md`.
-- Project maintenance: `testing.instructions.md`, `readme.instructions.md`, `changelog.instructions.md`, `version.md`.
+- Project maintenance: `dependency-updates.instructions.md`, `testing.instructions.md`, `readme.instructions.md`, `changelog.instructions.md`, `version.md`.
 
 ## Specialized OpenCode reviews
 

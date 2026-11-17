@@ -831,6 +831,7 @@
     "generatingError": "Lektionen kunne ikke oprettes",
     "loading": "Indlæser plan...",
     "learningRoadmap": "Læringsforløb",
+    "progressSummary": "{completed} af {total} lektioner gennemført",
     "level": "Niveau",
     "duration": "Varighed",
     "durationDetail": "{weeks} uger · {days} dage/uge",
@@ -1358,6 +1359,12 @@
   "faq": {
     "title": "Ofte stillede spørgsmål",
     "subtitle": "Ofte stillede spørgsmål og svar",
+    "sectionGettingStarted": "Kom godt i gang og vælg sprog",
+    "sectionPractice": "Ressourcer og øvelser",
+    "sectionLingu": "Samtaler med Lingu",
+    "sectionSubscription": "Planer og forbrugsgrænser",
+    "sectionAccount": "Konto og hjælp",
+    "sectionAdmin": "Administration",
     "q_start": "Hvor skal jeg starte?",
     "a_start": "Vælg det sprog, du vil lære, og åbn <strong>niveauvurderingen</strong> for at vurdere dit niveau. Begyndere kan vælge A1 uden testen. Bekræft niveau og varighed for at oprette en <strong>læringsplan</strong> for sproget.",
     "q_workflow": "Hvordan fungerer hele forløbet?",
@@ -1382,11 +1389,11 @@
     "q_tutor": "Hvordan kan jeg øve mig med Lingu?",
     "a_tutor": "Lingu tilpasser svarene til dit aktive studiesprog og din plans kontekst. Stil grammatikspørgsmål, bed om forklaringer, øv dig i at skrive på sproget, eller tal sammen. Samtaler gemmes efter sprog og kan genoptages fra historikken.",
     "q_voice": "Hvordan fungerer stemmesamtaler?",
-    "a_voice": "Med <strong>Stemmesamtale</strong> kan du tale med Lingu i realtid. Tryk på Start – appen lytter automatisk med stemmeaktivitetsregistrering (VAD), og læreren svarer med syntetisk tale. Du kan afbryde læreren når som helst. Samtalen slutter, når tidsgrænsen nås, eller når du trykker på Stop. Sørg for, at din browser har adgang til mikrofonen.",
+    "a_voice": "I <strong>Stemmesamtale</strong> skal du trykke på Start og give adgang til mikrofonen. Appen registrerer, når du taler, og Lingu svarer med lyd. Vent, til Lingu er færdig, før du taler igen: at tale samtidig med læreren afbryder ikke svaret. Under <settingsLink>Indstillinger</settingsLink> kan du justere pausen, før din tur sendes, sessionens varighed og tidsgrænsen for inaktivitet. Sessionen slutter, når du trykker på Stop eller når en gældende grænse.",
     "q_listening": "Hvordan fungerer lytteøvelser?",
-    "a_listening": "Under <strong>Lytning</strong> forbereder Lingu lytteøvelser, der passer til dit CEFR-niveau. Lyt, og svar derefter på fem forståelsesspørgsmål. Når du sender dine svar, får du din score (0–5), XP, de rigtige svar og hele transskriptionen. Du kan oprette nye øvelser, når du vil.",
+    "a_listening": "Under <strong>Lytning</strong> forbereder Lingu lytteøvelser, der passer til dit CEFR-niveau. Lyt til lyden, og besvar derefter fem forståelsesspørgsmål. Når du har sendt dine svar, kan du gennemgå din score (0–5), optjente XP, de rigtige svar og hele transskriptionen. Vælg <strong>Hvorfor dette svar</strong> for at bede om en forklaring på dit modersmål med et underbyggende uddrag fra transskriptionen. Du kan anmode om nye øvelser inden for din kontos forbrugsgrænser.",
     "q_reading": "Hvordan fungerer læseøvelser?",
-    "a_reading": "Under <strong>Læsning</strong> oprettes tekster på dit CEFR-niveau – beskeder, e-mails, artikler, blogindlæg og mere. Læs teksten, og besvar fem multiple choice-spørgsmål. Når du sender dine svar, får du din score (0–5) og XP. Du kan oprette nye øvelser, når du vil.",
+    "a_reading": "Under <strong>Læsning</strong> forbereder Lingu tekster på dit CEFR-niveau, for eksempel beskeder, e-mails og artikler. Læs teksten, og besvar fem spørgsmål med svarmuligheder. Når du har sendt dine svar, kan du gennemgå din score (0–5), optjente XP og de rigtige svar. Vælg <strong>Hvorfor dette svar</strong> for at bede om en forklaring på dit modersmål med et underbyggende uddrag fra teksten. Du kan anmode om nye øvelser inden for din kontos forbrugsgrænser.",
     "q_providers": "Hvilke AI-udbydere understøtter FreeLingo?",
     "a_providers_intro": "Konfigureres i <code>.env</code> med <code>LLM_PROVIDER</code>:",
     "provider_ollama": "Lokal og gratis. Kræver, at Ollama kører på værtsmaskinen. Anbefalet model: gemma4:e4b. Kan være langsom uden GPU.",
@@ -1394,11 +1401,25 @@
     "provider_anthropic": "Anthropic Claude. Kræver ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Kræver DEEPSEEK_API_KEY.",
     "q_invite": "Kan jeg invitere andre?",
-    "a_invite": "Ja. Under <adminLink>Administration → Brugere</adminLink> kan administratoren oprette brugere direkte eller generere engangslinks, der udløber efter 48 timer. Offentlig registrering er som standard slået fra (<code>ALLOW_REGISTRATION=false</code>).",
+    "a_invite": "Ja. Under <adminLink>Administration → Brugere</adminLink> kan administratorer oprette brugere direkte eller generere invitationslinks til engangsbrug, der udløber efter 48 timer. Offentlig registrering afhænger af serverens indstilling <code>ALLOW_REGISTRATION</code>.",
     "q_password": "Hvordan ændrer jeg min adgangskode eller mit modersmål?",
     "a_password": "Gå til <settingsLink>Indstillinger</settingsLink>. Der kan du ændre visningsnavn, modersmål og adgangskode.",
     "q_uiLanguage": "Hvordan ændrer jeg platformens sprog?",
-    "a_uiLanguage": "Gå til <settingsLink>Indstillinger</settingsLink>, og find menuen <strong>Grænsefladesprog</strong> under Profil. Vælg det ønskede sprog, så skifter hele brugerfladen med det samme.",
+    "a_uiLanguage": "Gå til <settingsLink>Indstillinger</settingsLink>, og find rullemenuen <strong>Grænsefladesprog</strong> i din profil. Vælg dit foretrukne sprog, og tryk på <strong>Gem ændringer</strong>. Når ændringerne er gemt, genindlæses siden på det valgte sprog. Det ændrer ikke det sprog, du lærer.",
+    "q_multiLanguage": "Kan jeg lære flere sprog uden at miste min fremgang?",
+    "a_multiLanguage": "Ja. Tilføj et sprog under <languagesLink>Indstillinger → Mine sprog</languagesLink>, og brug sprogvælgeren til at skifte mellem dem. Hvert sprog beholder sin egen plan, fremgang, flashcards og samtalehistorik. Et sprogskift sletter ikke din gemte fremgang. Kontoindstillinger, abonnement, forbrugskvoter og Lingus hukommelser deles på tværs af sprogene.",
+    "q_grammarPractice": "Hvordan øver jeg et bestemt grammatikemne?",
+    "a_grammarPractice": "Åbn et emne under <grammarLink>Ressourcer → Grammatik</grammarLink>, og vælg <strong>Øv</strong> for at føje det til dit personlige bibliotek med grammatikøvelser. Med en aktiv plan kan du oprette sæt med fem øvelser: tre spørgsmål med svarmuligheder og to udfyldningsopgaver. Dine svar og resultater gemmes, så du kan følge din træning. Denne aktivitet giver ingen XP.",
+    "q_games": "Hvilke spil findes der, og hvilken tilstand skal jeg vælge?",
+    "a_games": "Under <gamesLink>Spil</gamesLink> kan du finde og rette fejl i Fejldetektiv, sætte dele i rækkefølge i Sæt sætningen i orden eller forbinde ord og betydninger i Ordpar. Vælg gentagelse for at vende tilbage til gennemførte lektioner, forberedelse for at styrke kendt stof, der er relevant for din næste lektion, eller fri øvelse for at arbejde på din plans niveau. Tilstande uden tilstrækkeligt grundmateriale er deaktiveret med en forklaring.",
+    "q_plans": "Hvad er forskellen på den gratis plan, Premium og prøveperioden?",
+    "a_plans": "Den gratis plan giver dig mulighed for at lære med forbrugskvoter. Premium fjerner den gratis plans kvoter, men kontoens generelle grænser gælder stadig. Hvis din konto inkluderer en indledende prøveperiode uden kort, kan du fortsætte med den gratis plan, når den slutter, uden automatisk betaling. En eventuel prøveperiode, der tilbydes, når du tegner abonnement, er separat og kan kræve et kort. Se din status og de aktuelle abonnementsvilkår under <billingLink>Indstillinger → Plan og abonnement</billingLink>.",
+    "q_quotas": "Hvorfor har jeg nået en grænse, og hvornår nulstilles den?",
+    "a_quotas": "Forbrugskvoterne tilhører din konto og deles på tværs af studiesprogene. Den gratis plans daglige kvoter nulstilles kl. 00:00 UTC, og de ugentlige kvoter nulstilles mandag kl. 00:00 UTC. Se den resterende kvote i hver aktivitet og kontoens generelle grænser under <billingLink>Indstillinger</billingLink>. Funktioner, der kræver Premium, låses ikke op ved at vente på, at en kvote nulstilles, og kontoens generelle grænser gælder også for Premium og prøveperioder.",
+    "q_cancelSubscription": "Hvordan annullerer jeg fornyelsen af mit abonnement?",
+    "a_cancelSubscription": "Gå til <billingLink>Indstillinger → Plan og abonnement</billingLink>, vælg <strong>Administrer abonnement</strong>, og gennemfør opsigelsen i den portal, der åbnes. Hvis du annullerer fornyelsen ved udgangen af den aktuelle periode, beholder du adgangen, indtil perioden slutter. At slette din konto stopper ikke opkrævningerne: du skal først annullere fornyelsen.",
+    "q_memories": "Hvad husker Lingu om mig, og hvordan sletter jeg det?",
+    "a_memories": "Lingu kan gemme nyttige personlige oplysninger fra tekst- og stemmesamtaler for at tilpasse fremtidige svar. Disse hukommelser deles på tværs af alle dine studiesprog. Under <memoriesLink>Indstillinger → Hukommelse</memoriesLink> kan du se dem, tilføje dine egne, slette enkelte hukommelser eller rydde dem alle.",
     "q_feedback": "Hvordan foreslår jeg en ny funktion eller rapporterer en fejl?",
     "a_feedback": "Brug <feedbackLink>Feedback</feedbackLink> i sidepanelet. Du kan foreslå nye funktioner eller rapportere fejl. Stem på andres idéer, skriv kommentarer, og følg status for hvert indlæg. Alle indlæg er offentlige og gennemgås af administratoren."
   },
@@ -1912,29 +1933,25 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.14.0",
+    "version": "v1.14.5",
     "cta": "Forstået",
     "entry1": {
+      "label": "Din plan, trin for trin",
+      "desc": "Min plan viser nu din læring som et forløb: følg dine fremskridt, find din aktuelle enhed, og se de næste etaper. Åbn hver enhed for at se lektionerne, fortsætte med at lære eller repetere det, du har gennemført."
+    },
+    "entry2": {
       "label": "Øv grammatik i dit eget tempo",
       "desc": "Tilføj emner fra grammatikressourcerne til dit personlige bibliotek, og øv dig med sæt på fem øvelser med rettelser og forklaringer. Se dine resultater, og fortsæt derefter med at øve dig mundtligt med Lingu med udgangspunkt i emnet og dine svar."
     },
-    "entry2": {
+    "entry3": {
       "label": "Nye sprog: kroatisk, tjekkisk, dansk, finsk og rumænsk",
       "desc": "Kroatisk, tjekkisk, dansk, finsk og rumænsk er nu tilgængelige som læringssprog med indhold fra A1 til C2. Vælg dem, når du starter, eller tilføj dem under Indstillinger → Mine sprog."
-    },
-    "entry3": {
-      "label": "Forstå hvert svar bedre",
-      "desc": "Se øvelsesspørgsmålene oversat til dit modersmål, mens det oprindelige spørgsmål stadig vises. Efter Reading eller Listening kan du bede om en forklaring på dit modersmål med et tekstuddrag, der underbygger svaret. Du kan også læse teksten eller lytte til lyden igen, mens du repeterer."
     },
     "entry4": {
       "label": "Lingu hjælper, når du har brug for det",
       "desc": "Hvis du ikke forstår noget under en stemmesamtale, kan du bede Lingu om hjælp. Lingu kan forklare det kort på dit modersmål og derefter fortsætte øvelsen på det sprog, du lærer."
     },
     "entry5": {
-      "label": "Mere naturlige og udtryksfulde stemmer",
-      "desc": "Nyd mere naturlige og udtryksfulde stemmer i dine lytteøvelser og samtaler med Lingu, så du får en tydeligere og mere behagelig lytteoplevelse."
-    },
-    "entry6": {
       "label": "En mere smidig oplevelse",
       "desc": "Vi har også rettet mindre fejl og forbedret nogle detaljer, så du får endnu mere glæde af din daglige læring med FreeLingo."
     }

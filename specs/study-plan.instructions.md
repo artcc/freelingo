@@ -298,6 +298,20 @@ same transaction as completion; missing future lesson rows cannot qualify as com
 
 ## Frontend integration
 
+My Plan presents units as a vertical itinerary with connected status markers and a distinct final
+assessment milestone. The current teaching unit displays its scheduled lessons inline and retains the
+Start action for the persisted current lesson; unit headers open the existing lesson detail panel.
+Completed units remain compact and available for review; locked units remain readable but disabled.
+The header summarizes completed teaching lessons against all scheduled teaching lessons, excluding both
+reserved assessment IDs. Skipped positions never count as completed lessons. Pending generated lessons
+are available in an expandable section immediately below the header. Learned-language titles use the
+target-language typography, and the itinerary uses the same vertical layout on mobile and desktop.
+The unit detail dialog shows completed-lesson progress, highlights the available current lesson, and
+keeps grammar references in a secondary expandable section. Its header and close controls remain outside
+the scrollable lesson list. The modal uses the existing Base UI dialog primitive for focus containment,
+focus restoration, background scroll locking, and Escape/outside-click dismissal. Scheduled lesson rows
+are keyed by their persisted calendar identity (week, day, title), independently of lazy lesson IDs.
+
 Dashboard loads progress and `/today` in parallel. It prioritizes the end-of-plan `completion` state:
 `taken` shows the persisted result with the next-level or My Plan action, `ready` directs to the real
 level test, and otherwise it chooses the first returned incomplete lesson as the next action. It

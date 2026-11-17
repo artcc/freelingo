@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import {
+  render,
+  screen,
+  fireEvent,
+  within,
+  waitFor,
+} from '@testing-library/react'
 import React from 'react'
 import UnitCard from '@/components/plan/UnitCard'
 import UnitDrawer from '@/components/plan/UnitDrawer'
@@ -91,31 +97,33 @@ describe('UnitCard', () => {
     expect(dot.querySelector('svg')).toHaveClass('animate-pulse')
     expect(dot.querySelector('svg')).toHaveClass('motion-reduce:animate-none')
     expect(dot.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
-    expect(screen.getByRole('button', { name: 'unitAriaLabel' })).toHaveAttribute(
-      'aria-describedby',
-      dot.id
-    )
+    expect(
+      screen.getByRole('button', { name: 'unitAriaLabel' })
+    ).toHaveAttribute('aria-describedby', dot.id)
     expect(screen.getByText('currentUnit')).toBeInTheDocument()
   })
 
-  it('renders locked unit with empty circle icon and opacity', () => {
-    const { container } = renderUnitCard({ status: { locked: true } })
+  it('keeps locked unit titles readable while disabling access', () => {
+    renderUnitCard({ status: { locked: true } })
     expect(screen.getByRole('img', { name: 'unitLocked' })).toBeInTheDocument()
-    // outer wrapper should have opacity-40
-    const outer = container.firstChild as HTMLElement
-    expect(outer.className).toContain('opacity-40')
+    expect(screen.getByText('Basic Greetings')).toBeVisible()
+    expect(screen.getByRole('button', { name: 'unitAriaLabel' })).toBeDisabled()
   })
 
   it('renders level-test unit with special icon and badge', () => {
     renderUnitCard({ status: { isLevelTest: true, active: true } })
-    expect(screen.getByRole('img', { name: 'levelTestLabel' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('img', { name: 'levelTestLabel' })
+    ).toBeInTheDocument()
     expect(screen.getByText('levelTestLabel')).toBeInTheDocument()
     expect(screen.queryByText('currentUnit')).not.toBeInTheDocument()
   })
 
   it('renders default state (none of the flags) with hollow dot', () => {
     renderUnitCard()
-    expect(screen.getByRole('img', { name: 'unitAvailable' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('img', { name: 'unitAvailable' })
+    ).toBeInTheDocument()
   })
 
   // ── Card content ───────────────────────────────────────────────────────
@@ -162,14 +170,13 @@ describe('UnitCard', () => {
     expect(bar.style.width).toBe('0%')
   })
 
-  it('renders 100% progress bar when progress is 1', () => {
+  it('shows completed progress compactly without a redundant bar', () => {
     const { container } = renderUnitCard({
       progress: 1,
       status: { completed: true },
     })
     expect(screen.getByText('100%')).toBeInTheDocument()
-    const bar = container.querySelector('.bg-fl-fg.h-full') as HTMLElement
-    expect(bar.style.width).toBe('100%')
+    expect(container.querySelector('.bg-fl-fg.h-full')).toBeNull()
   })
 
   it('does not render progress bar for locked units', () => {
@@ -342,11 +349,30 @@ describe('UnitDrawer', () => {
     expect(screen.getByText('Greetings & Introductions')).toBeInTheDocument()
   })
 
+  it('opens a labelled modal with its real lesson progress', async () => {
+    renderUnitDrawer()
+    const dialog = screen.getByRole('dialog', { name: mockUnit.title })
+    const heading = within(dialog).getByRole('heading', {
+      name: mockUnit.title,
+    })
+    await waitFor(() => expect(heading).toHaveFocus())
+    expect(dialog).toHaveAttribute('aria-describedby')
+    expect(within(dialog).getByRole('progressbar')).toHaveAttribute(
+      'aria-valuenow',
+      '1'
+    )
+    expect(within(dialog).getByRole('progressbar')).toHaveAttribute(
+      'aria-valuemax',
+      '3'
+    )
+  })
+
   // ── Grammar points ─────────────────────────────────────────────────────
 
   it('renders grammar points section when grammar_points is non-empty', () => {
     renderUnitDrawer()
     expect(screen.getByText('grammarCovered')).toBeInTheDocument()
+    fireEvent.click(screen.getByText('grammarCovered'))
     expect(screen.getByText('presente de indicativo')).toBeInTheDocument()
     expect(screen.getByText('verbos ser/estar')).toBeInTheDocument()
   })
@@ -366,22 +392,23 @@ describe('UnitDrawer', () => {
     expect(screen.getByText('Reading Comprehension')).toBeInTheDocument()
   })
 
-  it('shows completed lessons with checkmark and strikethrough', () => {
+  it('marks completed lessons while keeping their titles readable for review', () => {
     renderUnitDrawer()
-    // completed lesson
-    expect(screen.getByText('Verb Conjugation').className).toContain(
-      'line-through'
-    )
-    // the completed status icon next to it
-    const checkmarks = screen.getAllByRole('img', { name: 'completed' })
-    expect(checkmarks.length).toBeGreaterThanOrEqual(1)
+    const row = screen.getByText('Verb Conjugation').closest('li')!
+    expect(
+      within(row).getByRole('img', { name: 'completed' })
+    ).toBeInTheDocument()
+    expect(
+      within(row).getByRole('button', { name: 'reviewLesson' })
+    ).toBeInTheDocument()
   })
 
-  it('shows incomplete lessons with empty circle', () => {
+  it('distinguishes the current lesson from other incomplete lessons', () => {
     renderUnitDrawer()
     const circles = screen.getAllByRole('img', { name: 'lessonPending' })
-    // 2 incomplete lessons (id:2 and id:3)
-    expect(circles.length).toBe(2)
+    expect(circles.length).toBe(1)
+    const current = screen.getByRole('img', { name: 'currentLesson' })
+    expect(current.closest('li')).toHaveAttribute('aria-current', 'step')
   })
 
   it('renders lesson type label for each lesson', () => {
@@ -416,6 +443,30 @@ describe('UnitDrawer', () => {
     expect(screen.getAllByText('start →')).toHaveLength(1)
   })
 
+  it('keeps scheduled lesson identities stable when numeric IDs collide with list positions', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const lessons = [
+      mockLessons[0],
+      { ...mockLessonsWithNullId[0], week: 1, day: 2 },
+    ]
+    const { rerender, props } = renderUnitDrawer({ lessons })
+    const scheduledRow = screen.getByText('Pending Content').closest('li')
+    expect(screen.getAllByText('Verb Conjugation')).toHaveLength(1)
+    expect(screen.getAllByText('Pending Content')).toHaveLength(1)
+    expect(consoleError).not.toHaveBeenCalled()
+
+    rerender(
+      <UnitDrawer
+        {...props}
+        lessons={[lessons[0], { ...lessons[1], id: 9, action: 'start' }]}
+      />
+    )
+    expect(screen.getByText('Pending Content').closest('li')).toBe(scheduledRow)
+    fireEvent.click(screen.getByRole('button', { name: 'start →' }))
+    expect(props.onStartLesson).toHaveBeenCalledWith(9)
+    expect(consoleError).not.toHaveBeenCalled()
+  })
+
   it('calls onStartLesson with correct lesson id when start is clicked', () => {
     const onStartLesson = vi.fn()
     renderUnitDrawer({ onStartLesson })
@@ -436,16 +487,14 @@ describe('UnitDrawer', () => {
   it('closes on X button click', () => {
     const onClose = vi.fn()
     renderUnitDrawer({ onClose })
-    fireEvent.click(screen.getByText('✕'))
+    fireEvent.click(screen.getAllByRole('button', { name: 'close' })[0])
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
   it('closes on bottom close button click', () => {
     const onClose = vi.fn()
     renderUnitDrawer({ onClose })
-    // There are 2 elements with text 'close': X button's aria-label and bottom button
     const closeButtons = screen.getAllByText('close')
-    // The bottom button is the one that is a visible button (the X is ✕)
     const bottomButton = closeButtons.find((btn) => btn.tagName === 'BUTTON')
     fireEvent.click(bottomButton!)
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -465,12 +514,15 @@ describe('UnitDrawer', () => {
     expect(onClose).not.toHaveBeenCalled()
   })
 
-  it('closes on outside click (mousedown on backdrop)', () => {
+  it('closes on an outside click on the portal backdrop', () => {
     const onClose = vi.fn()
-    const { container } = renderUnitDrawer({ onClose })
-    // Click the backdrop (parent of the drawer content)
-    const backdrop = container.firstChild as HTMLElement
+    renderUnitDrawer({ onClose })
+    const backdrop = document.querySelector(
+      '[data-slot="unit-dialog-backdrop"]'
+    )!
     fireEvent.mouseDown(backdrop)
+    fireEvent.mouseUp(backdrop)
+    fireEvent.click(backdrop)
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
@@ -480,5 +532,33 @@ describe('UnitDrawer', () => {
     // Click inside the drawer (e.g., on a lesson title)
     fireEvent.mouseDown(screen.getByText('Verb Conjugation'))
     expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it('restores focus to the opener after closing', async () => {
+    function Harness() {
+      const [open, setOpen] = React.useState(false)
+      return (
+        <>
+          <button onClick={() => setOpen(true)}>Open unit</button>
+          {open && (
+            <UnitDrawer
+              unit={mockUnit}
+              lessons={mockLessons}
+              onClose={() => setOpen(false)}
+              onStartLesson={vi.fn()}
+            />
+          )}
+        </>
+      )
+    }
+    render(<Harness />)
+    const opener = screen.getByRole('button', { name: 'Open unit' })
+    opener.focus()
+    fireEvent.click(opener)
+    const heading = screen.getByRole('heading', { name: mockUnit.title })
+    await waitFor(() => expect(heading).toHaveFocus())
+    fireEvent.click(screen.getAllByRole('button', { name: 'close' })[0])
+    await waitFor(() => expect(opener).toHaveFocus())
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })
