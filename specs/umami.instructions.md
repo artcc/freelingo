@@ -50,9 +50,11 @@ The backend reuses the existing environment variables:
 - `APP_BASE_URL`: application URL whose hostname is attached to backend events; this is not the
   Umami server URL.
 
-Both Compose files forward the same script URL and website ID to the backend and frontend, with empty
-defaults. `.env.example` documents this shared configuration. There are no separate backend Umami URL
-or website-ID variables, provider credentials, or required dependency additions.
+Both Compose files forward the same script URL and website ID to the backend and frontend.
+`backend/app/core/config.py` defines backend defaults; `docker-compose.yml` and `docker-compose.dev.yml`
+define forwarded values and deployment fallbacks, with `.env.example` as the operator template.
+There are no separate backend Umami URL or website-ID variables, provider credentials, or required
+dependency additions.
 
 The frontend server reads these values through dynamic environment lookup in `umami-config.ts`, so
 published images use container runtime values. Tracker loading requires both valid settings.

@@ -19,7 +19,10 @@ their service boundary; detailed workflows and eligibility rules belong to the l
 `llm_adapter.py` provides provider-neutral access to Ollama, OpenAI, Anthropic, and DeepSeek.
 
 OpenAI uses the Responses API for every LLM request; Ollama and DeepSeek use Chat Completions and
-Anthropic uses its native API. The OpenAI model defaults to `gpt-6-luna`. Optional
+Anthropic uses its native API. `LLM_PROVIDER` selects the adapter; `OLLAMA_MODEL`, `OPENAI_MODEL`,
+`ANTHROPIC_MODEL`, and `DEEPSEEK_MODEL` select its model. Backend defaults live in
+`backend/app/core/config.py`; forwarded values and deployment fallbacks live in `docker-compose.yml`
+and `docker-compose.dev.yml`, with `.env.example` as the operator template. Optional
 `OPENAI_REASONING_EFFORT` is sent as `reasoning.effort` on chat, structured generation, tool
 continuations, and fallbacks. An empty value omits it. Supported values depend on the model; the
 adapter does not infer reasoning settings from model names or force `none` for tools.
@@ -76,6 +79,24 @@ content rather than truncating it. `grammar_voice_practice.py` loads only comple
 their owned historical plan and language track. It supplies the existing `lesson_practice_context`
 pipeline input; the same ownership resolver binds selected-word flashcard saves to that plan.
 `grammar-practice.instructions.md` owns the complete domain contract.
+
+## Situations
+
+The server-owned catalog in `data/situations.py` supplies stable category/situation IDs and canonical
+role-play source data. `situations.py` resolves both plan and language-track ownership, their matching
+supported target language, and active-plan status for catalog/start. The currently selected track is
+not authoritative. It builds an escaped JSON scenario reference with that plan's language and level
+before quota consumption. The voice router
+passes the result through the existing `lesson_practice_context` pipeline input; clients cannot
+replace the scenario with their own prompt or select another language through free-form context.
+The prompt builder selects a Situations-specific branch from a server-generated marker, leaving the
+lesson/Grammar Practice wrapper and `ConversationPipeline` unchanged.
+Selected-word saves reuse `get_situation_plan(..., require_active=False)` so historical owned plans
+retain lookup language, level, deduplication, and storage without active-plan fallback.
+
+`situations.instructions.md` owns the catalog, roles, objectives, and learning flow.
+`voice-conversation.instructions.md` owns the shared pipeline and session lifecycle;
+`subscriptions-freemium.instructions.md` owns the additional weekly allowance and its accounting.
 
 ## Assessment
 
@@ -198,8 +219,12 @@ the selected adapter's output MIME type and extension: local/OpenAI use MP3;
 Gemini uses native WAV. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts`
 and its snapshots, using the supplied language/region when available and requesting language inference otherwise.
 Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
-Voice selection remains independent of language. OpenAI synthesis cache keys include instructions
-only when supported by the configured model.
+Voice selection remains independent of language. OpenAI and Gemini expose logical `female`/`male`
+choices and resolve actual configured voices only in the backend. Model selection, voice mappings,
+and configuration validation are owned by `speech-services.instructions.md`.
+OpenAI synthesis cache keys include the resolved actual voice for every model and instructions
+only when supported. Previews and Phrasebook use hashed keys even with legacy OpenAI models;
+Phrasebook uses the configured backend default rather than a browser preference.
 
 Gemini uses HTTPX REST Interactions with separate spoken text and style, mapped female/male voices,
 and explicit regional language when supplied. Its cache identity includes the actual voice mapping
@@ -261,7 +286,8 @@ reading shared cached content. It does not depend on the currently active langua
   task cannot release a replacement lease or overwrite its status.
 - FastAPI background tasks open independent database and Redis resources. Closing a browser page or
   losing the generation response does not cancel accepted work. This is not a durable job queue.
-- `EXERCISE_GENERATION_TIMEOUT_SECONDS` (default 600, positive integer) sets the deadline at acquisition.
+- `EXERCISE_GENERATION_TIMEOUT_SECONDS` (positive integer, configured through the sources above) sets
+  the deadline at acquisition.
   The job budget includes structured generation, one possible JSON correction, persistence, and TTS
   for Listening. Provider-specific TTS timeouts also apply.
 - Domain services receive a monotonic `deadline` and an async `before_save` ownership guard. The LLM

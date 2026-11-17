@@ -184,12 +184,18 @@ describe('ConversationMode word tooltip dismissal', () => {
   })
 
   it.each([
-    [undefined, undefined],
-    [7, undefined],
-    [undefined, '4b8fa402-fb9c-4bba-b658-583824dd1bb1'],
+    [undefined, undefined, undefined, undefined],
+    [7, undefined, undefined, undefined],
+    [undefined, '4b8fa402-fb9c-4bba-b658-583824dd1bb1', undefined, undefined],
+    [undefined, undefined, 'hotel_problem', 12],
   ] as const)(
-    'saves words with the practice owner (%s, %s)',
-    async (lessonId, grammarPracticeSessionId) => {
+    'saves words with the practice owner (%s, %s, %s, %s)',
+    async (
+      lessonId,
+      grammarPracticeSessionId,
+      situationId,
+      situationStudyPlanId
+    ) => {
       useLanguageStore.setState({
         activeLanguage: getLanguageByCode('fr-FR') ?? null,
       })
@@ -197,6 +203,8 @@ describe('ConversationMode word tooltip dismissal', () => {
         <ConversationMode
           lessonId={lessonId}
           grammarPracticeSessionId={grammarPracticeSessionId}
+          situationId={situationId}
+          situationStudyPlanId={situationStudyPlanId}
           targetLanguage="fr-FR"
           cefrLevel="B1"
         />
@@ -226,6 +234,12 @@ describe('ConversationMode word tooltip dismissal', () => {
         ...(lessonId !== undefined ? { lesson_id: lessonId } : {}),
         ...(grammarPracticeSessionId !== undefined
           ? { grammar_practice_session_id: grammarPracticeSessionId }
+          : {}),
+        ...(situationId !== undefined
+          ? {
+              situation_id: situationId,
+              situation_study_plan_id: situationStudyPlanId,
+            }
           : {}),
       })
     }

@@ -48,6 +48,7 @@ from app.routers import (
     progress,
     reading,
     reviews,
+    situations,
     stt,
     study_plan,
     tts,
@@ -92,6 +93,8 @@ async def lifespan(app: FastAPI):  # noqa: ANN201
             api_key=settings.OPENAI_API_KEY,
             model=settings.OPENAI_TTS_MODEL,
             voice=settings.OPENAI_TTS_VOICE,
+            female_voice=settings.OPENAI_TTS_FEMALE_VOICE,
+            male_voice=settings.OPENAI_TTS_MALE_VOICE,
             speed=settings.OPENAI_TTS_SPEED,
         )
     elif settings.TTS_PROVIDER == "gemini":
@@ -173,6 +176,7 @@ app.include_router(feedback.router)
 app.include_router(freemium.router)
 app.include_router(games.router)
 app.include_router(grammar_practice.router)
+app.include_router(situations.router)
 app.include_router(memories.router)
 app.include_router(phrasebook.router)
 app.include_router(languages.router)

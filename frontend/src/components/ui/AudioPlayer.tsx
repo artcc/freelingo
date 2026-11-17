@@ -56,7 +56,7 @@ export function AudioPlayer({
   const t = useTranslations('audioPlayer')
 
   const voicePreferences = JSON.stringify([
-    resolveTtsVoice('local', voice),
+    resolveTtsVoice('openai', voice),
     resolveTtsVoice('gemini', voice),
   ])
 

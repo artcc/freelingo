@@ -59,11 +59,13 @@ The password-reset form displays these requirements in the interface language an
 character length before submitting, counting Unicode code points consistently with the backend.
 Backend validation enforces password strength; validation errors use localized interface messages.
 
-The access token is an HS256 JWT containing user ID, role, and expiration. Its default lifetime is 15
-minutes and the frontend stores it in Zustand memory only.
+The access token is an HS256 JWT containing user ID, role, and expiration. Its lifetime in minutes
+comes from `ACCESS_TOKEN_EXPIRE_MINUTES` in backend `Settings`
+(`backend/app/core/config.py`, with environment overrides). The frontend stores it in Zustand memory only.
 
 The refresh token is an opaque `secrets.token_urlsafe(64)` value stored in an `httpOnly` cookie and
-under `refresh:{token}` in Redis for the configured 30-day default. Refresh rotation deletes the old
+under `refresh:{token}` in Redis. Cookie lifetime and Redis TTL derive from
+`REFRESH_TOKEN_EXPIRE_DAYS` in the same settings, measured in days. Refresh rotation deletes the old
 Redis token before issuing a replacement. Logout deletes the current token and clears the cookie.
 
 `apiFetch` adds the bearer token. When a request that had an access token returns 401 within the same

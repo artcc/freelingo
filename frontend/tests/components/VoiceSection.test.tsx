@@ -79,53 +79,91 @@ describe('VoiceSection', () => {
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
     expect(apiFetch).not.toHaveBeenCalled()
   })
-  it('offers only translated female and male options for Gemini', () => {
-    localStorage.setItem('tts_voice', 'coral')
-    show()
-    expect(
-      screen.getAllByRole('option').map((option) => option.textContent)
-    ).toEqual([es.settings.voiceFemale, es.settings.voiceMale])
-    expect(
-      screen.getByRole('combobox', { name: es.settings.sectionVoice })
-    ).toHaveValue('female')
-    expect(localStorage.getItem('tts_voice')).toBe('coral')
-  })
+  it.each(['openai', 'gemini'])(
+    'offers only translated female and male options for %s',
+    (provider) => {
+      useConfigStore.setState({ ttsProvider: provider })
+      show()
+      expect(
+        screen.getAllByRole('option').map((option) => option.textContent)
+      ).toEqual([es.settings.voiceFemale, es.settings.voiceMale])
+      expect(
+        screen
+          .getAllByRole('option')
+          .map((option) => option.getAttribute('value'))
+      ).toEqual(['female', 'male'])
+      expect(
+        screen.getByRole('combobox', { name: es.settings.sectionVoice })
+      ).toHaveValue('female')
+      expect(screen.getByRole('combobox')).toHaveAccessibleDescription(
+        es.settings.voiceCharacter
+      )
+    }
+  )
 
-  it('uses the configured Gemini default when storage contains an incompatible voice', () => {
-    useConfigStore.setState({ geminiTtsVoice: 'male' })
-    localStorage.setItem('gemini_tts_voice', 'nova')
-    show()
-    expect(screen.getByRole('combobox')).toHaveValue('male')
-  })
+  it.each([
+    ['openai', 'tts_voice'],
+    ['gemini', 'gemini_tts_voice'],
+  ])(
+    'uses the configured %s default when storage contains an incompatible voice',
+    async (provider, key) => {
+      useConfigStore.setState({
+        ttsProvider: provider,
+        openaiTtsVoice: 'male',
+        geminiTtsVoice: 'male',
+      })
+      localStorage.setItem(key, 'nova')
+      show()
+      expect(screen.getByRole('combobox')).toHaveValue('male')
+      expect(localStorage.getItem(key)).toBe('nova')
+      await clickPreview()
+      expect(apiFetch).toHaveBeenCalledWith(
+        '/api/tts/preview/male',
+        expect.objectContaining({ cache: 'no-store' })
+      )
+    }
+  )
 
   it('preserves independent preferences through provider switches', () => {
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     show()
     fireEvent.change(screen.getByRole('combobox'), {
       target: { value: 'male' },
     })
     expect(localStorage.getItem('gemini_tts_voice')).toBe('male')
-    expect(localStorage.getItem('tts_voice')).toBe('coral')
+    expect(localStorage.getItem('tts_voice')).toBe('female')
 
     act(() => useConfigStore.setState({ ttsProvider: 'openai' }))
-    expect(screen.getByRole('combobox')).toHaveValue('coral')
-    expect(screen.getAllByRole('option')).toHaveLength(9)
+    expect(screen.getByRole('combobox')).toHaveValue('female')
+    expect(screen.getAllByRole('option')).toHaveLength(2)
     fireEvent.change(screen.getByRole('combobox'), {
-      target: { value: 'nova' },
+      target: { value: 'male' },
     })
-    expect(localStorage.getItem('tts_voice')).toBe('nova')
+    expect(localStorage.getItem('tts_voice')).toBe('male')
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'female' },
+    })
 
     act(() => useConfigStore.setState({ ttsProvider: 'local' }))
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
     act(() => useConfigStore.setState({ ttsProvider: 'gemini' }))
     expect(screen.getByRole('combobox')).toHaveValue('male')
     act(() => useConfigStore.setState({ ttsProvider: 'openai' }))
-    expect(screen.getByRole('combobox')).toHaveValue('nova')
+    expect(screen.getByRole('combobox')).toHaveValue('female')
   })
 
-  it.each(['female', 'male'])(
-    'previews %s using the existing endpoint',
-    async (voice) => {
+  it.each([
+    ['openai', 'female', 'audio/mpeg'],
+    ['openai', 'male', 'audio/mpeg'],
+    ['gemini', 'female', 'audio/wav'],
+    ['gemini', 'male', 'audio/wav'],
+  ])(
+    'previews %s %s using the existing endpoint',
+    async (provider, voice, contentType) => {
+      useConfigStore.setState({ ttsProvider: provider })
+      apiFetch.mockResolvedValueOnce(
+        new Response('audio', { headers: { 'Content-Type': contentType } })
+      )
       show()
       fireEvent.change(screen.getByRole('combobox'), {
         target: { value: voice },
@@ -137,7 +175,7 @@ describe('VoiceSection', () => {
         signal: expect.any(AbortSignal),
       })
       expect(URL.createObjectURL).toHaveBeenCalledWith(
-        expect.objectContaining({ type: 'audio/wav' })
+        expect.objectContaining({ type: contentType })
       )
       expect(audios[0].play).toHaveBeenCalledTimes(1)
       expect(
@@ -214,7 +252,7 @@ describe('VoiceSection', () => {
           expect(audios).toHaveLength(0)
         }
         if (change === 'provider') {
-          expect(screen.getByRole('combobox')).toHaveValue('nova')
+          expect(screen.getByRole('combobox')).toHaveValue('female')
           expect(
             screen.getByRole('button', { name: es.settings.voicePlay })
           ).toBeEnabled()

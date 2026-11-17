@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -30,8 +30,10 @@ class Settings(BaseSettings):
     TTS_PROVIDER: Literal["local", "openai", "gemini"] = "local"
     TTS_BASE_URL: str = "http://kokoro:8880"
     TTS_VOICE: str = "af_heart"
-    OPENAI_TTS_MODEL: str = "tts-1"
-    OPENAI_TTS_VOICE: str = "nova"
+    OPENAI_TTS_MODEL: str = "gpt-4o-mini-tts"
+    OPENAI_TTS_VOICE: Literal["female", "male"] = "female"
+    OPENAI_TTS_FEMALE_VOICE: str = "marin"
+    OPENAI_TTS_MALE_VOICE: str = "cedar"
     OPENAI_TTS_SPEED: float = 1.0
     GEMINI_API_KEY: str = ""
     GEMINI_TTS_MODEL: str = "gemini-3.8-flash-tts"
@@ -59,14 +61,15 @@ class Settings(BaseSettings):
     # Freemium quotas for unsubscribed users when STRIPE_ENABLED=true.
     # A quota value of 0 means the feature is entirely blocked for free users.
     FREEMIUM_CHAT_DAILY_MESSAGES: int = 5
-    FREEMIUM_LESSONS_DAILY: int = 3
-    FREEMIUM_LISTENING_WEEKLY: int = 3
-    FREEMIUM_READING_WEEKLY: int = 3
-    FREEMIUM_GAMES_DAILY: int = 3
-    FREEMIUM_GRAMMAR_PRACTICE_DAILY: int = 3
-    FREEMIUM_VOICE_WEEKLY_MINUTES: int = 5
+    FREEMIUM_LESSONS_DAILY: int = 1
+    FREEMIUM_LISTENING_WEEKLY: int = 1
+    FREEMIUM_READING_WEEKLY: int = 1
+    FREEMIUM_GAMES_DAILY: int = 1
+    FREEMIUM_GRAMMAR_PRACTICE_DAILY: int = 1
+    FREEMIUM_SITUATIONS_WEEKLY: int = 1
+    FREEMIUM_VOICE_WEEKLY_MINUTES: int = 3
     FREEMIUM_TRIAL_ENABLED: bool = True
-    FREEMIUM_TRIAL_DAYS: int = 7
+    FREEMIUM_TRIAL_DAYS: int = 3
 
     # Stripe (for paid plans and billing management)
     STRIPE_ENABLED: bool = False
@@ -146,6 +149,14 @@ class Settings(BaseSettings):
         "zh-CN",
     ]
 
+    @field_validator("OPENAI_TTS_VOICE", mode="before")
+    @classmethod
+    def validate_openai_tts_voice(cls, value: object, info: ValidationInfo) -> object:
+        # Unused legacy OpenAI settings must not prevent local/Gemini startup.
+        if info.data.get("TTS_PROVIDER") != "openai" and value not in ("female", "male"):
+            return "female"
+        return value
+
     @field_validator(
         "DEFAULT_CONVERSATION_WEEKLY_SESSIONS",
         "DEFAULT_CONVERSATION_DAILY_MINUTES",
@@ -179,6 +190,7 @@ class Settings(BaseSettings):
         "FREEMIUM_READING_WEEKLY",
         "FREEMIUM_GAMES_DAILY",
         "FREEMIUM_GRAMMAR_PRACTICE_DAILY",
+        "FREEMIUM_SITUATIONS_WEEKLY",
         "FREEMIUM_VOICE_WEEKLY_MINUTES",
         "FREEMIUM_TRIAL_DAYS",
     )

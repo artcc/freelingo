@@ -1,4 +1,226 @@
 {
+  "situations": {
+    "title": "Practise real-life situations",
+    "description": "Choose a scenario and practise speaking with Lingu, who will play the person you need to talk to.",
+    "search": "Search situations",
+    "allCategories": "All categories",
+    "noResults": "No situations match your search.",
+    "loadError": "Could not load the situations.",
+    "retry": "Try again",
+    "start": "Start practice",
+    "unavailable": "This situation is unavailable. Please try again.",
+    "back": "Back to situations",
+    "contextChanged": "Your study context has changed. Refresh the page and start the practice again.",
+    "categories": {
+      "daily_life": "Everyday life",
+      "travel": "Travel",
+      "shopping_services": "Shopping and services",
+      "social": "Social life",
+      "work": "Work"
+    },
+    "items": {
+      "bakery_purchase": {
+        "title": "Buy something at a bakery",
+        "description": "Lingu will be the shop assistant. Ask for bread or something for breakfast, say how much you want and ask the price."
+      },
+      "clothes_shopping": {
+        "title": "Shop for clothes",
+        "description": "Talk to Lingu as a shop assistant. Ask for your size and preferred colour, and try something on."
+      },
+      "cafe_order": {
+        "title": "Order at a café",
+        "description": "Lingu will be your waiter. Order a drink and something to eat."
+      },
+      "haircut_appointment": {
+        "title": "Go to the hairdresser",
+        "description": "Lingu will be your hairdresser. Ask for a simple haircut and explain how you would like it."
+      },
+      "supermarket_help": {
+        "title": "Ask for help at the supermarket",
+        "description": "Ask Lingu, who will be a supermarket employee, where to find the products you need."
+      },
+      "buy_ticket": {
+        "title": "Buy a ticket",
+        "description": "Lingu will work at the ticket office. Say where you want to go and ask about departure times and the price."
+      },
+      "hotel_check_in": {
+        "title": "Check in at a hotel",
+        "description": "Lingu will be the receptionist. Confirm your booking and ask for basic information about your stay."
+      },
+      "taxi_ride": {
+        "title": "Book a taxi",
+        "description": "Call Lingu as a taxi operator. Arrange your pick-up, say where you are going and ask when the taxi will arrive."
+      },
+      "collect_key": {
+        "title": "Collect a key",
+        "description": "Collect the key to your holiday flat from Lingu as your host. Ask how to get in."
+      },
+      "local_recommendations": {
+        "title": "Ask what to visit",
+        "description": "Lingu will be a local resident. Explain what you enjoy and ask for places to visit."
+      },
+      "congratulate_friend": {
+        "title": "Congratulate someone",
+        "description": "Lingu will play a friend. Wish them a happy birthday or congratulate them on some good news, then have a short chat."
+      },
+      "hobbies_chat": {
+        "title": "Talk about hobbies",
+        "description": "Chat with Lingu as a friend about what you enjoy doing and find interests you share."
+      },
+      "family_chat": {
+        "title": "Talk about your family",
+        "description": "Tell Lingu, who will play an acquaintance, a little about your family and ask about theirs."
+      },
+      "invite_friend": {
+        "title": "Invite a friend out",
+        "description": "Invite Lingu as a friend for a meal or a drink and agree on a time."
+      },
+      "choose_gift": {
+        "title": "Choose a gift",
+        "description": "Choose a joint gift with Lingu as a friend. Discuss what the recipient likes and decide what to buy."
+      },
+      "late_arrival": {
+        "title": "Say you are running late",
+        "description": "Let Lingu, who will be a colleague, know you are running late and say roughly when you will arrive."
+      },
+      "work_update": {
+        "title": "Talk about what you are working on",
+        "description": "Tell Lingu as a colleague about a regular work task and how it is going."
+      },
+      "arrange_meeting": {
+        "title": "Arrange a meeting",
+        "description": "Lingu will be a colleague. Find a day and time that work for you both."
+      },
+      "colleague_help": {
+        "title": "Ask a colleague for help",
+        "description": "Ask Lingu as a colleague for help. Explain what you need and ask for some guidance."
+      },
+      "break_chat": {
+        "title": "Chat during a break",
+        "description": "Have a light conversation with Lingu as a colleague during a break at work."
+      },
+      "recount_day": {
+        "title": "Talk about your day",
+        "description": "Tell Lingu as a friend what you have done today and something that happened."
+      },
+      "weather_chat": {
+        "title": "Talk about the weather",
+        "description": "Chat with Lingu as a neighbour about the weather and your plans."
+      },
+      "daily_routine": {
+        "title": "Talk about your routine",
+        "description": "Lingu will play an acquaintance. Describe a typical day and ask about their routine."
+      },
+      "household_chores": {
+        "title": "Organise household chores",
+        "description": "Lingu will be your housemate. Divide up the chores and agree on when to do them."
+      },
+      "plan_dinner": {
+        "title": "Prepare dinner",
+        "description": "Decide what to cook with Lingu as your housemate. Talk about the ingredients you have and what you need to buy."
+      },
+      "medical_appointment": {
+        "title": "Book a medical appointment",
+        "description": "Call a medical practice. Lingu will be the receptionist: explain why you need an appointment and arrange a date."
+      },
+      "neighbour_problem": {
+        "title": "Talk to a neighbour",
+        "description": "Lingu will play your neighbour. Explain a disturbance at home and work out a considerate solution together."
+      },
+      "flat_viewing": {
+        "title": "View a flat",
+        "description": "View a flat with Lingu as the estate agent. Ask about the rent, bills and tenancy conditions."
+      },
+      "school_meeting": {
+        "title": "Meet the teacher",
+        "description": "Lingu will be your child's teacher. Discuss school arrangements and agree on ways to support your child's learning."
+      },
+      "household_repair": {
+        "title": "Arrange a repair",
+        "description": "Describe a fault at home to Lingu, who will play a repair technician. Ask about the cost and arrange a visit."
+      },
+      "change_reservation": {
+        "title": "Change a booking",
+        "description": "Talk to Lingu as a booking agent. Explain the changes you need and confirm the new terms."
+      },
+      "hotel_problem": {
+        "title": "A problem at the hotel",
+        "description": "Lingu will be at reception. Explain a problem with your room and ask for a suitable solution."
+      },
+      "ask_directions": {
+        "title": "Ask for directions",
+        "description": "Ask Lingu, who will play a local resident, how to reach your destination and check you have understood the route."
+      },
+      "missed_connection": {
+        "title": "Miss a connection",
+        "description": "You have missed a connection. Talk to Lingu as a transport agent to find another way to reach your destination."
+      },
+      "lost_luggage": {
+        "title": "Lost luggage",
+        "description": "Your suitcase has not arrived. Describe it to Lingu at the baggage desk and ask how to get it back."
+      },
+      "return_purchase": {
+        "title": "Return a purchase",
+        "description": "Explain to Lingu, who will play a shop assistant, why you want to return an item and ask about a refund."
+      },
+      "restaurant_order": {
+        "title": "Order at a restaurant",
+        "description": "Lingu will be your waiter. Ask about the dishes, explain your preferences and place your order."
+      },
+      "phone_contract": {
+        "title": "Choose a mobile plan",
+        "description": "Talk to Lingu as a mobile phone adviser. Compare plans and clarify costs and conditions before deciding."
+      },
+      "bank_appointment": {
+        "title": "An appointment at the bank",
+        "description": "Lingu will be a bank employee. Explain what you need to arrange and ask about the documents and next steps."
+      },
+      "delivery_problem": {
+        "title": "A delivery problem",
+        "description": "Contact Lingu as a customer service agent. Explain the problem with your parcel and agree on a solution."
+      },
+      "meet_someone": {
+        "title": "Meet someone new",
+        "description": "Lingu will play someone you have just met at a gathering. Introduce yourself and find interests you share."
+      },
+      "make_plans": {
+        "title": "Make plans",
+        "description": "Arrange an outing with Lingu as a friend. Suggest activities and agree on where and when to meet."
+      },
+      "decline_invitation": {
+        "title": "Decline an invitation",
+        "description": "Lingu will play a friend inviting you out. Decline kindly and suggest meeting another time."
+      },
+      "resolve_misunderstanding": {
+        "title": "Clear up a misunderstanding",
+        "description": "Talk to Lingu as a friend about a message that was misunderstood and get the conversation back on friendly terms."
+      },
+      "host_visitors": {
+        "title": "Welcome visitors",
+        "description": "Lingu will play a guest in your home. Welcome them, offer a drink and explain what you have planned."
+      },
+      "introduce_yourself": {
+        "title": "Introduce yourself at work",
+        "description": "Lingu will be a new colleague. Introduce yourself, explain your role and ask about the team."
+      },
+      "explain_task": {
+        "title": "Explain a task",
+        "description": "Explain a task to Lingu as a colleague. Describe the steps and check that your explanation is clear."
+      },
+      "clarify_instructions": {
+        "title": "Clarify instructions",
+        "description": "Lingu will be your manager. Ask about unclear instructions and confirm what you need to do."
+      },
+      "negotiate_deadline": {
+        "title": "Negotiate a deadline",
+        "description": "Talk to Lingu as a project manager. Explain a difficulty and agree on a realistic deadline."
+      },
+      "share_proposal": {
+        "title": "Present a proposal",
+        "description": "Present an idea for improvement to Lingu as a teammate. Explain its benefits and answer their questions."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Retry the original request",
     "voiceAction": "Practise this grammar topic by voice",
@@ -302,6 +524,7 @@
     "goToPlan": "Go to my plan"
   },
   "nav": {
+    "situations": "Everyday situations",
     "practiceGrammar": "Grammar practice",
     "learning": "My learning",
     "practice": "Practice",
@@ -1725,6 +1948,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Keep practising real-life situations",
+    "paywallSituationsDesc": "You have used this week's free situation practices, or this feature requires Premium. Premium lets you practise more; general voice limits still apply.",
     "paywallGrammarPracticeTitle": "Keep practising grammar",
     "paywallGrammarPracticeDesc": "You have used today's free grammar sets. Premium lets you generate more; saved sessions remain available.",
     "planFreeTrialDesc": "Try Premium access at signup, without a card or subscription. Afterwards, continue free with usage limits.",
@@ -1770,6 +1995,7 @@
     "ctaRegister": "Start free trial",
     "ctaRegisterTrialUsed": "Choose plan",
     "freeFeature": {
+      "situations": "Voice situations",
       "f1": "Level test & assessment",
       "f2": "Personalised study plan",
       "lessons": "Lesson completion",
@@ -1849,6 +2075,7 @@
     "weeklyReset": "Your free allowance renews on Mondays at 00:00 UTC.",
     "trialResultNote": "Your free trial is still active. Explore the plans for when it ends.",
     "result": {
+      "situations": "Keep practising real-life situations by voice with Lingu with Premium.",
       "voice": "Build on this conversation with more speaking practice and feedback from Lingu with Premium.",
       "lessons": "Keep completing lessons and putting what you learn into practice with Lingu with Premium.",
       "listening": "Keep training your ear with more listening exercises at your level with Premium.",
@@ -1872,6 +2099,7 @@
     "paidTerms": "Card required. Your paid subscription starts on purchase. It renews at the selected interval unless you cancel."
   },
   "freemium": {
+    "situationsLabel": "Situations this week",
     "grammarPracticeLabel": "Grammar sets today",
     "gamesLabel": "Games today",
     "chatLabel": "Chat",
@@ -1933,25 +2161,29 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Got it",
     "entry1": {
+      "label": "Practise everyday conversations",
+      "desc": "Get ready for real-life situations with 50 scenarios covering everyday life, travel, shopping, social life, and work. Practise speaking with Lingu, who will play the role of your conversation partner and adapt the conversation to your level."
+    },
+    "entry2": {
       "label": "Your plan, step by step",
       "desc": "My Plan now shows your learning as an itinerary: check your progress, find your current unit, and discover the stages ahead. Open each unit to see its lessons, keep learning, or review what you've completed."
     },
-    "entry2": {
+    "entry3": {
       "label": "Practise grammar at your own pace",
       "desc": "Add topics from the Grammar resources to your personal library and practise with sets of five exercises, with corrections and explanations. Check your results and, when you finish, keep practising by voice with Lingu using the topic and your answers."
     },
-    "entry3": {
+    "entry4": {
       "label": "New languages: Croatian, Czech, Danish, Finnish, and Romanian",
       "desc": "Croatian, Czech, Danish, Finnish, and Romanian are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu helps when you need it",
       "desc": "If you don't understand something during a voice conversation, ask Lingu for help. Lingu can briefly explain it in your native language, then return to practising the language you're learning."
     },
-    "entry5": {
+    "entry6": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

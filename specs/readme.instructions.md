@@ -39,6 +39,10 @@ Keep these sections in this order:
 - Keep required deployment variables and host prerequisites explicit.
 - Delegate CI, dependency installation, provider contracts, model matrices, voice catalogs, and full
   environment-variable reference to their dedicated files and specs.
+- Keep configurable values in their configuration sources, not in the README or specifications.
+  Reference variables and their owning files; document units, scope, constraints, and behavior.
+  Do not duplicate default quotas, trial durations, model names, voice mappings, or operational settings.
+  Preserve protocol values, supported enums, invariants, and clearly identified setup examples.
 - Do not add phase/completion matrices, test counts, release history, or session-specific status.
 - Do not add a separate Features section; the overview owns concise feature coverage.
 - Avoid Markdown tables; use short lists that remain readable on narrow screens.

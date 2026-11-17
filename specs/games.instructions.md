@@ -132,7 +132,8 @@ Context lookup does not call `/study-plan/today`, generate lessons, or advance t
 session and returns 202. FastAPI background work
 uses an independent database session and the shared structured-output adapter. No provider call
 holds an open database transaction. The inference deadline comes from
-`EXERCISE_GENERATION_TIMEOUT_SECONDS`; the adapter receives the remaining monotonic budget.
+`EXERCISE_GENERATION_TIMEOUT_SECONDS` (seconds), defined in `backend/app/core/config.py`;
+the adapter receives the remaining monotonic budget.
 
 For Detective, Pydantic requires five distinct sentences, three distinct options, valid indices and exact fragment
 reconstruction/replacement. Fragments retain spaces and punctuation and support CJK without inserting
@@ -161,8 +162,9 @@ Leaving preserves progress. Explicit abandonment closes a ready game without XP 
 
 ## Admission, activity and XP
 
-`FREEMIUM_GAMES_DAILY` defaults to three new games per user/UTC day across languages and game types. Zero blocks
-new free games. Active/trialing subscriptions, active freemium trials and Stripe-disabled deployments
+`FREEMIUM_GAMES_DAILY` in `backend/app/core/config.py` controls new games per user/UTC day
+across languages and game types. Zero blocks new free games. Active/trialing subscriptions,
+active freemium trials and Stripe-disabled deployments
 bypass this quota. Normal maintenance blocks new generation for non-admins; saved games remain usable.
 
 Admission uses PostgreSQL, not the best-effort Redis counters of other features. Under a user-row
@@ -189,8 +191,10 @@ Vocabulary Pairs plays only the resolved target-language term or expression, nev
 
 ## Presentation and languages
 
-The page uses the resource pages' `max-w-4xl` container, bordered header and surface panels,
-responsive card grid, `fl-*` tokens, and existing light/dark themes. Interface text uses Geist Sans.
+The catalog uses a `max-w-4xl` container with responsive horizontal padding and an open header,
+matching Everyday situations: a bold 14 px title and description below, without a surrounding panel.
+Cards retain surface panels, a responsive grid, `fl-*` tokens, and existing light/dark themes.
+Interface text uses Geist Sans.
 The title is an `h1`; the empty state and game cards use `h2` headings. Game pages reuse the shared
 quota/paywall banners, confirmation dialog and pagination; choices are keyboard-operable buttons.
 

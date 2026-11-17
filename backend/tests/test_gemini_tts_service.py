@@ -10,8 +10,10 @@ from unittest.mock import Mock
 import httpx
 import pytest
 
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services import gemini_tts_service as gemini
-from app.services.gemini_tts_service import GEMINI_VOICES, GeminiTTSService
+from app.services.gemini_tts_service import GeminiTTSService
+from app.services.prompts.speech import build_speech_instructions
 
 
 def make_wav(channels=1, sample_width=2, sample_rate=24000, frames=b"\x00\x00" * 24):
@@ -80,7 +82,7 @@ async def test_request_contract_returns_original_wav(service, mock_http, voice, 
                             "annotations": [
                                 {
                                     "type": "speech_metadata",
-                                    "style": "Warm, clear delivery with natural pronunciation.",
+                                    "style": build_speech_instructions("en-US"),
                                 }
                             ],
                         }
@@ -151,6 +153,76 @@ async def test_language_context_preserves_regions(service, mock_http, language, 
     await service.synthesize("Text", language=language)
 
 
+@pytest.mark.parametrize(
+    "locale,spoken_language,articulation",
+    [
+        ("cs-CZ", "Czech from Czechia", "Czech vowel length"),
+        ("en-GB", "British English", "British vowel sounds"),
+        ("en-US", "American English", "rhotic r"),
+        ("es-ES", "Spanish from Spain", "distinguish s from z"),
+        ("fr-FR", "French from France", "rounded and nasal vowels"),
+        ("pt-PT", "European Portuguese from Portugal", "unstressed-vowel reduction"),
+        ("pt-BR", "Brazilian Portuguese from Brazil", "consistent Brazilian accent"),
+        ("de-DE", "Standard German from Germany", "final devoicing"),
+        ("it-IT", "Standard Italian from Italy", "double-consonant length"),
+        ("ja-JP", "Standard Japanese from Japan", "mora timing and pitch accent"),
+        ("ko-KR", "Standard Korean from South Korea", "lax-tense-aspirated"),
+        ("zh-CN", "Standard Mandarin Chinese from Mainland China", "contextual tone sandhi"),
+        ("pl-PL", "Polish from Poland", "sibilant distinctions"),
+        ("nl-NL", "Dutch from the Netherlands", "including ui and eu"),
+        ("ro-RO", "Romanian from Romania", "ă, and â/î"),
+        ("ru-RU", "Russian from Russia", "hard-soft consonant contrasts"),
+        ("tr-TR", "Turkish from Turkey", "Turkish i and ı"),
+        ("sv-SE", "Swedish from Sweden", "natural pitch accents"),
+        ("da-DK", "Danish from Denmark", "stød"),
+        ("fi-FI", "Finnish from Finland", "vowel and consonant length"),
+        ("hr-HR", "Croatian from Croatia", "ijekavian pronunciation"),
+    ],
+)
+@pytest.mark.parametrize("voice", ["female", "male"])
+async def test_regional_pronunciation_is_style_not_spoken_text(
+    service, mock_http, locale, spoken_language, articulation, voice
+):
+    text = "Hola. Hello. Bonjour."
+
+    def handler(request):
+        payload = json.loads(request.content)
+        content = payload["input"][0]["content"]
+        assert len(content) == 1
+        assert content[0]["text"] == text
+        style = content[0]["annotations"][0]["style"]
+        assert f"The primary language is {spoken_language};" in style
+        assert articulation in style
+        assert "do not translate" in style
+        assert "When the text switches languages, switch pronunciation naturally" in style
+        assert "Keep the selected voice's vocal identity" in style
+        assert payload["generation_config"]["speech_config"] == [
+            {"voice": "Kore" if voice == "female" else "Puck", "language": locale}
+        ]
+        return httpx.Response(200, json=make_response())
+
+    mock_http(handler)
+    await service.synthesize(text, voice, locale)
+
+
+@pytest.mark.parametrize("language", [None, "fr-CA", "zh-TW"])
+async def test_unspecified_or_unknown_region_does_not_impose_another_accent(
+    service, mock_http, language
+):
+    def handler(request):
+        payload = json.loads(request.content)
+        style = payload["input"][0]["content"][0]["annotations"][0]["style"]
+        assert "The primary language is" not in style
+        assert "do not impose a different regional accent" in style
+        assert payload["generation_config"]["speech_config"] == [
+            {"voice": "Kore", **({"language": language} if language else {})}
+        ]
+        return httpx.Response(200, json=make_response())
+
+    mock_http(handler)
+    await service.synthesize("Text", language=language)
+
+
 @pytest.mark.parametrize("voice", ["nova", "Kore", "", "Female"])
 async def test_invalid_voice_rejected_before_http(service, monkeypatch, voice):
     client = Mock()
@@ -197,7 +269,7 @@ async def test_configurable_default_and_provider_voice_ids(mock_http, voice, exp
 
     mock_http(handler)
     await service.synthesize("Text", voice)
-    assert GEMINI_VOICES == frozenset({"female", "male"})
+    assert CLOUD_TTS_VOICES == frozenset({"female", "male"})
 
 
 def test_cache_tracks_effective_configuration_and_language(service, monkeypatch):
@@ -219,8 +291,28 @@ def test_cache_tracks_effective_configuration_and_language(service, monkeypatch)
         with monkeypatch.context() as context:
             context.setattr(service, attribute, value)
             assert key != service.get_cache_key("Text", language="en-GB")
-    monkeypatch.setattr(gemini, "_SPEECH_STYLE", "Updated style")
+    monkeypatch.setattr(gemini, "build_speech_instructions", lambda language: "Updated style")
     assert key != service.get_cache_key("Text", language="en-GB")
+
+
+async def test_instruction_changes_update_request_and_cache_together(
+    service, mock_http, monkeypatch
+):
+    key = service.get_cache_key("Hola.", language="es")
+    updated_style = build_speech_instructions("es-ES") + " Revised delivery."
+    monkeypatch.setattr(gemini, "build_speech_instructions", lambda language: updated_style)
+
+    def handler(request):
+        payload = json.loads(request.content)
+        assert payload["input"][0]["content"][0]["annotations"][0]["style"] == updated_style
+        return httpx.Response(200, json=make_response())
+
+    mock_http(handler)
+    await service.synthesize("Hola.", language="es")
+    assert key != service.get_cache_key("Hola.", language="es")
+    assert service.get_cache_key("Hola.", language="es") == service.get_cache_key(
+        "Hola.", language="es-ES"
+    )
 
 
 def test_cache_uses_real_voice_not_display_label(service):

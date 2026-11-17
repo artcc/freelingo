@@ -29,6 +29,7 @@ from app.services import listening_service
 from app.services.conversation_pipeline import ConversationPipeline
 from app.services.gemini_tts_service import GeminiTTSService
 from app.services.tour_audio import get_tour_audio
+from app.services.tts_service import OpenAITTSService
 from tests.conftest import make_study_plan
 from tests.exercise_redis import GenerationRedis
 
@@ -275,7 +276,8 @@ async def test_listening_generation_persists_wav_with_plan_language_and_requeste
         ("local", "coral", ""),
         ("local", "female", ""),
         ("local", "", ""),
-        ("openai", "coral", "coral"),
+        ("openai", "female", "female"),
+        ("openai", "male", "male"),
         ("gemini", "male", "male"),
     ],
 )
@@ -299,9 +301,11 @@ async def test_listening_uses_configured_local_voice_and_preserves_cloud_prefere
     assert background.await_args.args[-1] == expected_voice
 
 
+@pytest.mark.parametrize("provider", ["openai", "gemini"])
 async def test_listening_rejects_legacy_voice_before_generation(
-    client, test_user_with_plan, gemini_service, monkeypatch
+    client, test_user_with_plan, gemini_service, monkeypatch, provider
 ):
+    monkeypatch.setattr(settings, "TTS_PROVIDER", provider)
     _, headers = test_user_with_plan
     background = AsyncMock()
     monkeypatch.setattr(listening_router, "_background_generate", background)
@@ -328,9 +332,11 @@ async def test_listening_rejects_legacy_voice_before_generation(
         ({"voice": "male"}, ""),
     ],
 )
+@pytest.mark.parametrize("provider", ["openai", "gemini"])
 async def test_conversation_keeps_public_voices_and_defaults_stale_or_malformed_values(
-    voice_runtime, gemini_service, voice, expected
+    voice_runtime, gemini_service, monkeypatch, voice, expected, provider
 ):
+    monkeypatch.setattr(settings, "TTS_PROVIDER", provider)
     websocket = await voice_runtime.start(voice=voice)
 
     websocket.close.assert_not_awaited()
@@ -402,6 +408,41 @@ async def test_startup_selects_gemini_with_operator_configuration(startup_stubs,
     startup_stubs.migrations.assert_called_once_with()
     assert startup_stubs.directories.call_count == 2
     startup_stubs.stt.assert_called_once_with(settings.STT_BASE_URL)
+
+
+async def test_startup_selects_openai_with_operator_voice_mappings(startup_stubs, monkeypatch):
+    monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
+    monkeypatch.setattr(settings, "OPENAI_API_KEY", "test-openai-key")
+    monkeypatch.setattr(settings, "OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
+    monkeypatch.setattr(settings, "OPENAI_TTS_VOICE", "male")
+    monkeypatch.setattr(settings, "OPENAI_TTS_FEMALE_VOICE", "coral")
+    monkeypatch.setattr(settings, "OPENAI_TTS_MALE_VOICE", "ash")
+    monkeypatch.setattr(settings, "OPENAI_TTS_SPEED", 0.9)
+    monkeypatch.setattr("app.services.tts_service.openai.AsyncOpenAI", Mock())
+    application = FastAPI()
+
+    async with main_module.lifespan(application):
+        service = application.state.tts_service
+        assert isinstance(service, OpenAITTSService)
+        assert service.model == "gpt-4o-mini-tts"
+        assert service.voice == "male"
+        assert service.female_voice == "coral"
+        assert service.male_voice == "ash"
+        assert service.speed == 0.9
+
+
+@pytest.mark.parametrize("voice", ["female", "male"])
+async def test_public_config_exposes_openai_logical_default(client, monkeypatch, voice):
+    monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
+    monkeypatch.setattr(settings, "OPENAI_TTS_VOICE", voice)
+    monkeypatch.setattr(settings, "OPENAI_TTS_FEMALE_VOICE", "marin")
+    monkeypatch.setattr(settings, "OPENAI_TTS_MALE_VOICE", "cedar")
+    response = await client.get("/api/config")
+    assert response.status_code == 200
+    assert response.json()["openai_tts_voice"] == voice
+    assert response.json()["tts_provider"] == "openai"
+    assert "openai_tts_female_voice" not in response.json()
+    assert "openai_tts_male_voice" not in response.json()
 
 
 @pytest.mark.parametrize("api_key", ["", "   "])

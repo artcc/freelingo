@@ -16,38 +16,48 @@ objects are created during FastAPI startup and stored in `app.state.tts_service`
 
 ## Provider configuration
 
+`backend/app/core/config.py` owns backend `Settings` defaults and validation. `docker-compose.yml`
+and `docker-compose.dev.yml` own forwarded values and Compose fallbacks; `.env.example` is the
+operator template. Read those sources for current provider, endpoint, model, voice, speed, and timeout
+values rather than treating deployment choices as speech contracts.
+
 TTS configuration:
 
-- `TTS_PROVIDER=local` selects Kokoro by default; `openai` selects OpenAI TTS and `gemini` selects Gemini TTS.
-- `TTS_BASE_URL` defaults to `http://kokoro:8880`.
-- `TTS_VOICE` defaults to `af_heart` for Kokoro.
-- `OPENAI_TTS_MODEL` defaults to `tts-1` in backend `Settings`. Both Compose files instead supply
-  `gpt-4o-mini-tts` when the operator omits the variable; this model is used when `TTS_PROVIDER=openai`.
-- `OPENAI_TTS_VOICE` defaults to `nova`.
-- `OPENAI_TTS_SPEED` defaults to `1.0`.
-- `GEMINI_TTS_MODEL` defaults to `gemini-3.8-flash-tts`; configured models must support the Gemini
+- `TTS_PROVIDER` selects Kokoro (`local`), OpenAI TTS (`openai`), or Gemini TTS (`gemini`).
+- `TTS_BASE_URL` selects the Kokoro endpoint and `TTS_VOICE` its voice.
+- `OPENAI_TTS_MODEL` selects the model used when `TTS_PROVIDER=openai`.
+- `OPENAI_TTS_VOICE` selects the logical default and accepts `female` or `male`.
+  When OpenAI is not the selected TTS provider, an incompatible value is normalized to `female`
+  so unused legacy configuration cannot block local/Gemini startup.
+- `OPENAI_TTS_FEMALE_VOICE` and `OPENAI_TTS_MALE_VOICE` are backend-only mappings from public choices
+  to actual OpenAI voices.
+  Configuration validates both mapped voices, including the one not selected as the default.
+  `tts-1` and `tts-1-hd` remain supported with compatible voice mappings; configuration rejects
+  incompatible mappings, including `marin` and `cedar`, for those models.
+- `OPENAI_TTS_SPEED` controls synthesis speed.
+- `GEMINI_TTS_MODEL` selects the Gemini model; configured models must support the Gemini
   3.8 TTS Interactions contract below. Older preview-model contracts are not supported.
-- `GEMINI_TTS_VOICE` defaults to `female` and accepts `female` or `male`.
-- `GEMINI_TTS_FEMALE_VOICE` defaults to `Kore` and `GEMINI_TTS_MALE_VOICE` to `Puck` in backend
-  `Settings`. Both Compose files instead supply `Sulafat` and `Achird` when the operator omits
-  these variables, matching `.env.example` and `.env.dev`. These operator-configurable names
-  map the public voice choices to actual provider voices.
-- `GEMINI_TTS_TIMEOUT_SECONDS` defaults to `50`.
+- `GEMINI_TTS_VOICE` selects the logical default and accepts `female` or `male`.
+- `GEMINI_TTS_FEMALE_VOICE` and `GEMINI_TTS_MALE_VOICE` map public choices to actual provider voices.
+  Their backend `Settings` defaults differ from the fallbacks supplied by both Compose files.
+  The effective mappings therefore depend on the deployment configuration.
+- `GEMINI_TTS_TIMEOUT_SECONDS` sets a positive, finite synthesis timeout in seconds.
 
 STT configuration:
 
 - `STT_PROVIDER=local` selects the local Whisper service; `openai` selects OpenAI transcription.
-- `STT_BASE_URL` defaults to `http://whisper:9000`.
-- `OPENAI_STT_MODEL` defaults to `whisper-1`.
+- `STT_BASE_URL` selects the local Whisper endpoint.
+- `OPENAI_STT_MODEL` selects the OpenAI transcription model.
 - `STT_MODEL` and `STT_ENGINE` configure the local Whisper container as `ASR_MODEL` and
-  `ASR_ENGINE`; they are not backend `Settings` fields.
+  `ASR_ENGINE` in `docker-compose.yml`; they are not backend `Settings` fields.
 
 `OPENAI_API_KEY` is required at startup when either selected speech provider is OpenAI.
-`GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`. Local defaults remain independent of
+`GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`. Local providers remain independent of
 cloud credentials. `TTS_PROVIDER` rejects values outside `local`, `openai`, and `gemini`.
 
-The public configuration exposes the selected TTS provider, default OpenAI TTS voice, and
-`gemini_tts_voice` (`female` or `male`). It does not expose provider credentials or the selected STT provider.
+The public configuration exposes the selected TTS provider and the logical defaults `openai_tts_voice`
+and `gemini_tts_voice` (`female` or `male`). Actual cloud voice names are resolved only by the backend.
+It does not expose provider credentials or the selected STT provider.
 
 ## TTS adapters
 
@@ -68,7 +78,8 @@ The public configuration exposes the selected TTS provider, default OpenAI TTS v
 `OpenAITTSService`:
 
 - checks health by listing models;
-- sends configured model, requested or default voice, text, MP3 format, and speed;
+- resolves the requested logical `female`/`male` choice, or configured default, to its configured
+  actual OpenAI voice and sends that voice with the model, text, MP3 format, and speed;
 - trims input and returns empty bytes for empty trimmed text;
 - rejects an empty provider audio response;
 - records request metadata and latency without logging credentials;
@@ -76,7 +87,8 @@ The public configuration exposes the selected TTS provider, default OpenAI TTS v
 - omits `instructions` for `tts-1`, `tts-1-hd`, and unrecognized models, preserving compatibility.
 
 The model remains selected by `OPENAI_TTS_MODEL`; using the `gpt-4o-mini-tts` alias does not pin a
-snapshot. `prompts/speech.py` owns instructions shared by all OpenAI synthesis callers. They request
+snapshot. `prompts/speech.py` owns pronunciation instructions shared by instruction-capable OpenAI
+models and Gemini. They request
 faithful reading, native pronunciation and natural prosody for each language in the text, including
 language switches. Text is spoken content, not instructions to execute. Generic calls without a
 language ask the model to infer it from the text; isolated ambiguous words cannot reliably identify
@@ -95,9 +107,14 @@ a different voice.
 Each supported language has focused pronunciation guidance for vowel and consonant quality, rhythm,
 stress, and relevant tonal/pitch distinctions. It asks for everyday native articulation without
 exaggeration, applying those details only to passages in the indicated language. The guidance applies
-to any selected voice, preserving its vocal identity. `nova` is the configured default, not a forced
-voice; user preferences continue to take precedence. These instructions guide the model rather than
-guaranteeing accent quality for every voice or text.
+to any selected voice, preserving its vocal identity. User preferences take precedence over the
+configured logical default. These instructions guide the model rather than guaranteeing accent
+quality for every voice or text.
+
+OpenAI synthesis cache identities include the resolved actual voice, model, text, language, speed,
+and output format, plus pronunciation instructions when supported. Voice-map changes invalidate
+on-demand audio even when the logical choice remains unchanged. Legacy models also use hashed
+synthesis identities for previews and Phrasebook.
 
 ### Gemini
 
@@ -107,11 +124,21 @@ authentication. Requests use `store=false` and `stream=false`; spoken text is se
 instructions. `speech_config` supplies the effective provider voice and an explicit regional language
 when context is available. Without language context, no regional language is forced.
 
+The `speech_metadata.style` annotation uses the shared pronunciation instructions from
+`prompts/speech.py`: faithful reading, natural multilingual delivery, and language-specific articulation
+and regional accents for every supported learned language and UI locale. Instructions use the resolved
+locale, including distinct British/American English and European/Brazilian Portuguese, and preserve
+the selected voice's identity. They remain separate from the spoken text. Unknown regional variants
+retain their explicit `speech_config` language but receive only generic pronunciation instructions,
+avoiding a conflicting accent from language-prefix lookup. Instructions guide pronunciation rather
+than guaranteeing accent quality.
+
 The adapter returns native WAV containing PCM16 mono audio at 24 kHz, without transcoding, FFmpeg,
 external encoders, or an additional provider SDK. Local and OpenAI requests retain their MP3 format.
 `get_tts_audio_format()` determines the MIME type and extension used by HTTP responses and caches.
 Gemini synthesis identities include provider, model, actual mapped voice, locale, style, text, and
-output format; changing a voice mapping must invalidate its cache even when the public choice is unchanged.
+output format; style contains the complete effective pronunciation instructions. Changing those
+instructions or a voice mapping invalidates its cache even when the public voice choice is unchanged.
 
 Synthesis rejects incomplete interactions, missing or ambiguous audio, invalid base64, and malformed
 or truncated WAV. The configured timeout bounds the request and response validation; cancellation
@@ -157,7 +184,8 @@ There is no implicit English fallback.
   is never used to resolve supplied context. Without context, synthesis infers language from the text.
 - Ignores the client voice when the configured provider is local, preventing stale OpenAI voice
   preferences from reaching Kokoro.
-- Gemini accepts `female` or `male`; an invalid supplied Gemini voice returns `400`.
+- OpenAI and Gemini accept only logical `female` or `male` choices; an invalid supplied voice,
+  including an actual provider voice name, returns `400`. Omission uses the provider's configured default.
 - With `conversation_id`, converts the supplied Markdown to spoken text through
   `chat_markdown_to_speech()` after ownership and language resolution. Bold/italic markers and list
   numbering/bullets are omitted; words, literal punctuation and paragraph/list boundaries are kept.
@@ -176,12 +204,11 @@ There is no implicit English fallback.
 - Requires authentication.
 - Rate limit: `60/minute`.
 - Supports OpenAI and Gemini TTS; local-provider requests return `404`.
-- OpenAI accepts `alloy`, `ash`, `coral`, `echo`, `fable`, `nova`, `onyx`, `sage`, or `shimmer`;
-  Gemini accepts `female` or `male`.
+- Both providers accept only logical `female` or `male` choices.
 - Invalid voices return `400`; a missing service object returns `503`.
 - Generates the Lingu preview and atomically caches it under `/app/tts_previews/`.
-  Instruction-capable OpenAI models use `{voice}-{sha256}.mp3`, with text, model, voice, speed, format,
-  language context, and instructions in the identity; other models retain `{voice}.mp3`.
+  All OpenAI models use `{voice}-{sha256}.mp3`, with text, model, resolved actual voice, speed, format,
+  language context, and instructions when supported in the identity.
 - Gemini previews use separate hashed `.wav` files with the Gemini synthesis identity above.
   Responses use the adapter's MIME type.
 - Returns `Cache-Control: no-store`; Settings requests previews with `cache: 'no-store'` so browser
@@ -195,7 +222,7 @@ There is no implicit English fallback.
 - `messages/*.json` owns tour copy. The frontend resolves the displayed paragraph through i18n and
   sends it as `text` in the JSON request body. The backend validates text length (1–5000 characters;
   invalid or missing text returns `422`) and synthesizes that supplied text.
-- An optional JSON `voice` selects a supported OpenAI voice or Gemini `female`/`male`
+- An optional JSON `voice` selects logical `female`/`male` for OpenAI or Gemini
   (`400` for an invalid selection).
   Omission uses the configured default. Kokoro always uses its configured default, ignoring client voice preferences.
   Locale follows the interface, not the learned language, and supplies pronunciation guidance when
@@ -263,8 +290,11 @@ Voice conversation uses its own capture pipeline and WebSocket contract, describ
 
 `AudioPlayer` requests TTS, creates a Blob URL, and plays it with the browser Audio API. Voice
 precedence is explicit prop, the selected provider's stored preference, then backend default.
-OpenAI uses `tts_voice`; Gemini uses the separate `gemini_tts_voice` key with `female`/`male` choices.
-Settings exposes the selected provider's selector and previews; local TTS uses its configured voice.
+OpenAI uses `tts_voice`; Gemini uses the separate `gemini_tts_voice` key. Both store only logical
+`female`/`male` choices and retain their preferences independently across provider changes.
+Stored OpenAI provider voice names are ignored; the backend default applies until the user chooses
+a logical option. Settings exposes the same localized female/male selector and previews for either
+cloud provider; local TTS uses its configured voice.
 Shared voice resolution applies to the tour, lesson audio, Listening generation, and conversation too.
 Synthesis waits for public provider configuration before resolving a preference. The wait shares the
 config load, respects the consumer's cancellation/deadline, and reports failure instead of using an
@@ -338,20 +368,21 @@ Persistent audio uses include:
 
 - Listening: `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.wav` for Gemini or `.mp3` for local/OpenAI.
 - Phrasebook: hashed files below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`.
-- OpenAI previews: `/app/tts_previews/{voice}.mp3` or `{voice}-{sha256}.mp3`, depending on model support
-  for pronunciation instructions.
+- OpenAI previews: `/app/tts_previews/{voice}-{sha256}.mp3` for every configured OpenAI model.
 - Gemini previews: separate hashed `.wav` files below `/app/tts_previews/`.
 - Dashboard tour: `{AUDIO_STORAGE_PATH}/tour/{locale}/{sha256}.{extension}`.
 
-For instruction-capable OpenAI models, Phrasebook uses a synthesis hash covering text, language,
-model, voice, speed, format, and instructions. Gemini uses its synthesis identity and separate `.wav`
-files; local and legacy OpenAI models retain the category/phrase/text cache identity and `.mp3` files.
+For every OpenAI model, Phrasebook uses a synthesis hash covering text, language, model, resolved
+actual voice, speed, format, and instructions when supported. Gemini uses its synthesis identity and
+separate `.wav` files; local TTS retains the category/phrase/text cache identity and `.mp3` files.
+Phrasebook always uses the backend's configured default voice, not the browser preference.
 Phrasebook responses use `Cache-Control: no-store` because their public URL does not
 identify the synthesis settings. Phrasebook validates its target-language query before deriving a
 cache directory; its request and error contract belongs to `api-endpoints.instructions.md` (Phrasebook).
 Tour, Phrasebook, and voice-preview audio is generated on demand for a new key, leaving
 previous files intact. Listening recordings remain attached to their exercises and are not regenerated
-by model or prompt changes. A provider-side update behind a model alias does not change cache keys.
+by provider, model, prompt, voice-mapping, or preference changes. A provider-side update behind a model
+alias does not change cache keys.
 
 Listening playback uses the persisted allowed extension, not the current provider. Paths are rebuilt
 from configured storage, the integer exercise ID, and an allowlisted `.mp3` or `.wav` extension;

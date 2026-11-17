@@ -296,6 +296,7 @@ async def test_types_have_separate_sessions_history_and_immutable_request_identi
     mocked = AsyncMock()
     monkeypatch.setattr("app.routers.games.generate_game", mocked)
     monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_GAMES_DAILY", 3)
     body = {"request_id": str(uuid4()), "study_plan_id": plan.id, "mode": "free"}
     detective = await client.post("/api/games/detective", headers=headers, json=body)
     assert detective.status_code == 202

@@ -13,6 +13,7 @@ type Feature =
   | 'games'
   | 'voice'
   | 'grammar_practice'
+  | 'situations'
 
 export function getFreemiumAccessFailure(
   status: number,

@@ -92,7 +92,7 @@ afterEach(() => {
 describe('ExerciseAudioPlayer lifecycle', () => {
   it('waits for config and plays the first TTS request with the Gemini preference', async () => {
     useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
     const pending = deferred<Response>()
     const configFetch = vi.fn().mockReturnValueOnce(pending.promise)
@@ -153,10 +153,10 @@ describe('ExerciseAudioPlayer lifecycle', () => {
   )
   it.each([
     ['gemini', 'male'],
-    ['openai', 'nova'],
+    ['openai', 'female'],
   ])('uses the %s preference for plan-owned TTS', async (provider, voice) => {
     useConfigStore.setState({ ttsProvider: provider })
-    localStorage.setItem('tts_voice', 'nova')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
     render(
       <ExerciseAudioPlayer
@@ -521,8 +521,49 @@ describe('ExerciseAudioPlayer lesson TTS', () => {
     })
   }
 
-  it('uses the persisted plan and voice, supports keyboard seek and reuses synthesis after ending', async () => {
+  it('reuses backend-default audio when ignored legacy OpenAI preferences change', async () => {
+    useConfigStore.setState({ ttsProvider: 'openai', openaiTtsVoice: 'male' })
     localStorage.setItem('tts_voice', 'nova')
+    const { rerender } = render(
+      <ExerciseAudioPlayer exerciseId={42} tts={tts} />
+    )
+    await listen()
+    expect(JSON.parse(apiFetch.mock.calls[0][1].body)).toEqual({
+      text: tts.text,
+      study_plan_id: 7,
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
+    localStorage.setItem('tts_voice', 'coral')
+    rerender(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
+    await listen()
+
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+    expect(audios).toHaveLength(1)
+    expect(audios[0].play).toHaveBeenCalledTimes(2)
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled()
+  })
+
+  it('discards reusable OpenAI audio when the logical preference changes', async () => {
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    localStorage.setItem('tts_voice', 'female')
+    const { rerender } = render(
+      <ExerciseAudioPlayer exerciseId={42} tts={tts} />
+    )
+    await listen()
+    fireEvent.click(screen.getByRole('button', { name: 'ariaPause' }))
+    localStorage.setItem('tts_voice', 'male')
+    rerender(<ExerciseAudioPlayer exerciseId={42} tts={tts} />)
+    expectReleased(audios[0], 'blob:1')
+    await listen()
+
+    expect(apiFetch).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(apiFetch.mock.calls[1][1].body).voice).toBe('male')
+    expect(audios).toHaveLength(2)
+  })
+
+  it('uses the persisted plan and voice, supports keyboard seek and reuses synthesis after ending', async () => {
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    localStorage.setItem('tts_voice', 'female')
     const onFirstPlay = vi.fn()
     const { rerender, unmount } = render(
       <ExerciseAudioPlayer
@@ -535,7 +576,11 @@ describe('ExerciseAudioPlayer lesson TTS', () => {
     expect(apiFetch).toHaveBeenCalledExactlyOnceWith('/api/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: tts.text, study_plan_id: 7, voice: 'nova' }),
+      body: JSON.stringify({
+        text: tts.text,
+        study_plan_id: 7,
+        voice: 'female',
+      }),
       signal: expect.any(AbortSignal),
     })
     const audio = audios[0]
@@ -578,6 +623,7 @@ describe('ExerciseAudioPlayer lesson TTS', () => {
       it.each(['text', 'plan', 'voice', 'session', 'unmount'] as const)(
         'cancels on %s replacement and ignores late work',
         async (change) => {
+          useConfigStore.setState({ ttsProvider: 'openai' })
           const fetchResult = deferred<Response>()
           const blobResult = deferred<Blob>()
           const playResult = deferred<void>()
@@ -605,7 +651,7 @@ describe('ExerciseAudioPlayer lesson TTS', () => {
           else if (change === 'session') {
             act(() => useAuthStore.getState().startSession('new-session'))
           } else {
-            if (change === 'voice') localStorage.setItem('tts_voice', 'nova')
+            if (change === 'voice') localStorage.setItem('tts_voice', 'male')
             rerender(
               <ExerciseAudioPlayer
                 exerciseId={42}

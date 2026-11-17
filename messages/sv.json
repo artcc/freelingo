@@ -1,4 +1,226 @@
 {
+  "situations": {
+    "title": "Öva på verkliga situationer",
+    "description": "Välj ett scenario och öva muntligt med Lingu, som spelar personen du behöver prata med.",
+    "search": "Sök situationer",
+    "allCategories": "Alla kategorier",
+    "noResults": "Inga situationer matchar din sökning.",
+    "loadError": "Det gick inte att ladda situationerna.",
+    "retry": "Försök igen",
+    "start": "Börja öva",
+    "unavailable": "Den här situationen är inte tillgänglig. Försök igen.",
+    "back": "Tillbaka till situationer",
+    "contextChanged": "Ditt studiesammanhang har ändrats. Uppdatera sidan och starta övningen igen.",
+    "categories": {
+      "daily_life": "Vardag",
+      "travel": "Resor",
+      "shopping_services": "Inköp och tjänster",
+      "social": "Socialt liv",
+      "work": "Arbete"
+    },
+    "items": {
+      "bakery_purchase": {
+        "title": "Handla på ett bageri",
+        "description": "Lingu spelar butiksbiträdet på ett bageri. Be om bröd eller något till frukost, säg hur mycket du vill ha och fråga om priset."
+      },
+      "clothes_shopping": {
+        "title": "Handla kläder",
+        "description": "Prata med Lingu som butiksbiträde om storlek och färg och fråga om du kan prova kläderna."
+      },
+      "cafe_order": {
+        "title": "Beställ på ett kafé",
+        "description": "Lingu spelar servitören på ett kafé. Beställ något att dricka och lite att äta."
+      },
+      "haircut_appointment": {
+        "title": "Gå till frisören",
+        "description": "Lingu spelar din frisör. Be om en enkel klippning och beskriv hur du vill ha håret."
+      },
+      "supermarket_help": {
+        "title": "Fråga om hjälp i mataffären",
+        "description": "Fråga Lingu som anställd i mataffären var du hittar varorna du letar efter."
+      },
+      "buy_ticket": {
+        "title": "Köp en biljett",
+        "description": "Lingu arbetar i biljettkassan. Berätta vart du ska resa, fråga om avgångstider och priser och köp en biljett."
+      },
+      "hotel_check_in": {
+        "title": "Checka in på ett hotell",
+        "description": "Lingu spelar receptionisten. Bekräfta din bokning och fråga om det viktigaste inför din vistelse."
+      },
+      "taxi_ride": {
+        "title": "Beställ en taxi",
+        "description": "Ring Lingu på taxibeställningen. Säg var du vill bli hämtad och vart du ska och fråga när taxin kommer."
+      },
+      "collect_key": {
+        "title": "Hämta nyckeln",
+        "description": "Hämta nyckeln till din semesterlägenhet hos Lingu som värd och fråga hur du kommer in."
+      },
+      "local_recommendations": {
+        "title": "Fråga vad som är värt att besöka",
+        "description": "Lingu spelar en person från trakten. Berätta om dina intressen och be om tips på platser att besöka."
+      },
+      "congratulate_friend": {
+        "title": "Gratulera en vän",
+        "description": "Lingu spelar en vän som fyller år eller har en glad nyhet. Gratulera och småprata en stund."
+      },
+      "hobbies_chat": {
+        "title": "Prata om fritidsintressen",
+        "description": "Prata med Lingu som vän om vad ni gillar att göra på fritiden och hitta gemensamma intressen."
+      },
+      "family_chat": {
+        "title": "Prata om familjen",
+        "description": "Lingu spelar en bekant. Berätta lite om din familj och fråga om Lingus familj."
+      },
+      "invite_friend": {
+        "title": "Bjud med en vän",
+        "description": "Fråga Lingu som vän om ni ska äta eller dricka något tillsammans och bestäm en tid."
+      },
+      "choose_gift": {
+        "title": "Välj en present",
+        "description": "Välj en gemensam present med Lingu som vän. Prata om vad mottagaren gillar och bestäm er tillsammans."
+      },
+      "late_arrival": {
+        "title": "Meddela att du blir sen",
+        "description": "Berätta för Lingu som kollega att du blir försenad och säg ungefär när du kommer fram."
+      },
+      "work_update": {
+        "title": "Berätta vad du jobbar med",
+        "description": "Prata med Lingu som kollega om en vanlig arbetsuppgift och berätta hur arbetet går."
+      },
+      "arrange_meeting": {
+        "title": "Boka ett möte",
+        "description": "Planera ett möte med Lingu som kollega och hitta en dag och tid som passar er båda."
+      },
+      "colleague_help": {
+        "title": "Be en kollega om hjälp",
+        "description": "Lingu spelar din kollega. Förklara vad du behöver hjälp med och be om vägledning."
+      },
+      "break_chat": {
+        "title": "Småprata på rasten",
+        "description": "Lingu spelar din kollega. Prata avslappnat om vardagliga saker under en rast på jobbet."
+      },
+      "recount_day": {
+        "title": "Berätta om din dag",
+        "description": "Berätta för Lingu som vän vad du har gjort idag och om något som har hänt."
+      },
+      "weather_chat": {
+        "title": "Prata om vädret",
+        "description": "Lingu spelar din granne. Prata om vädret och vad ni har för planer."
+      },
+      "daily_routine": {
+        "title": "Prata om vardagsrutiner",
+        "description": "Lingu spelar en bekant. Beskriv hur en vanlig dag ser ut för dig och fråga om Lingus rutiner."
+      },
+      "household_chores": {
+        "title": "Dela upp hushållssysslorna",
+        "description": "Lingu spelar någon du bor med. Bestäm vem som gör vad hemma och när ni ska göra det."
+      },
+      "plan_dinner": {
+        "title": "Planera middagen",
+        "description": "Lingu spelar någon du bor med. Bestäm vad ni ska laga och prata om vilka ingredienser ni har och vilka som saknas."
+      },
+      "medical_appointment": {
+        "title": "Boka ett läkarbesök",
+        "description": "Ring en mottagning. Lingu arbetar i receptionen: förklara varför du vill boka ett besök och kom överens om en tid."
+      },
+      "neighbour_problem": {
+        "title": "Prata med en granne",
+        "description": "Lingu spelar din granne. Beskriv störningar du upplever hemma och hitta en hänsynsfull lösning tillsammans."
+      },
+      "flat_viewing": {
+        "title": "Gå på lägenhetsvisning",
+        "description": "Titta på en lägenhet med Lingu som mäklare. Fråga om hyran, övriga kostnader och villkoren."
+      },
+      "school_meeting": {
+        "title": "Ett möte i skolan",
+        "description": "Lingu spelar ditt barns lärare. Prata om skolans rutiner och kom överens om hur ni kan stödja barnets lärande."
+      },
+      "household_repair": {
+        "title": "Boka en reparation",
+        "description": "Beskriv ett fel hemma för Lingu, som spelar reparatör. Fråga om kostnaden och boka ett besök."
+      },
+      "change_reservation": {
+        "title": "Ändra en bokning",
+        "description": "Prata med Lingu på bokningsavdelningen. Förklara vad du behöver ändra och bekräfta de nya villkoren."
+      },
+      "hotel_problem": {
+        "title": "Ett problem på hotellet",
+        "description": "Lingu arbetar i receptionen. Förklara ett problem med ditt rum och be om en lämplig lösning."
+      },
+      "ask_directions": {
+        "title": "Fråga efter vägen",
+        "description": "Fråga Lingu, som spelar en person från trakten, hur du når ditt mål och kontrollera att du förstått vägen."
+      },
+      "missed_connection": {
+        "title": "Missa en anslutning",
+        "description": "Du har missat en anslutning. Prata med Lingu vid trafikbolagets servicedisk för att hitta en annan resväg."
+      },
+      "lost_luggage": {
+        "title": "Försvunnet bagage",
+        "description": "Din väska har inte kommit fram. Beskriv den för Lingu vid bagagedisken och fråga hur du får tillbaka den."
+      },
+      "return_purchase": {
+        "title": "Lämna tillbaka en vara",
+        "description": "Förklara för Lingu som butiksbiträde varför du vill lämna tillbaka en vara och fråga om återbetalning."
+      },
+      "restaurant_order": {
+        "title": "Beställa på restaurang",
+        "description": "Lingu spelar servitör. Fråga om rätterna, berätta vad du föredrar och gör din beställning."
+      },
+      "phone_contract": {
+        "title": "Välja mobilabonnemang",
+        "description": "Prata med Lingu som mobilrådgivare. Jämför abonnemang och red ut kostnader och villkor innan du bestämmer dig."
+      },
+      "bank_appointment": {
+        "title": "Ett möte på banken",
+        "description": "Lingu spelar en bankanställd. Förklara ditt ärende och fråga vilka handlingar som behövs och vad nästa steg är."
+      },
+      "delivery_problem": {
+        "title": "Ett leveransproblem",
+        "description": "Kontakta Lingu på kundtjänst. Förklara problemet med ditt paket och kom överens om en lösning."
+      },
+      "meet_someone": {
+        "title": "Lära känna någon",
+        "description": "Lingu spelar någon du just träffat på en sammankomst. Presentera dig och hitta gemensamma intressen."
+      },
+      "make_plans": {
+        "title": "Göra planer tillsammans",
+        "description": "Planera en utflykt med Lingu som vän. Föreslå aktiviteter och bestäm var och när ni ska ses."
+      },
+      "decline_invitation": {
+        "title": "Tacka nej till en inbjudan",
+        "description": "Lingu spelar en vän som bjuder med dig på något. Tacka nej på ett vänligt sätt och föreslå en annan gång."
+      },
+      "resolve_misunderstanding": {
+        "title": "Reda ut ett missförstånd",
+        "description": "Prata med Lingu som vän om ett missförstått meddelande och hitta tillbaka till en vänlig samtalston."
+      },
+      "host_visitors": {
+        "title": "Ta emot gäster",
+        "description": "Lingu spelar en gäst hemma hos dig. Hälsa välkommen, erbjud något att dricka och berätta vad du har planerat."
+      },
+      "introduce_yourself": {
+        "title": "Presentera dig på jobbet",
+        "description": "Lingu spelar en ny kollega. Presentera dig, förklara din roll och ställ frågor om teamet."
+      },
+      "explain_task": {
+        "title": "Förklara en uppgift",
+        "description": "Förklara en uppgift för Lingu som kollega. Beskriv stegen och kontrollera att din förklaring är tydlig."
+      },
+      "clarify_instructions": {
+        "title": "Förtydliga instruktioner",
+        "description": "Lingu spelar din chef. Ställ frågor om otydliga instruktioner och bekräfta vad du ska göra."
+      },
+      "negotiate_deadline": {
+        "title": "Förhandla om en tidsfrist",
+        "description": "Prata med Lingu som projektledare. Förklara en svårighet och kom överens om en realistisk tidsfrist."
+      },
+      "share_proposal": {
+        "title": "Presentera ett förslag",
+        "description": "Presentera en förbättringsidé för Lingu som kollega. Förklara fördelarna och svara på frågor."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Försök med den ursprungliga begäran igen",
     "voiceAction": "Öva det här grammatikämnet muntligt",
@@ -302,6 +524,7 @@
     "goToPlan": "Gå till min plan"
   },
   "nav": {
+    "situations": "Vardagssituationer",
     "practiceGrammar": "Grammatikövningar",
     "learning": "Mitt lärande",
     "practice": "Öva",
@@ -1725,6 +1948,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Fortsätt öva på verkliga situationer",
+    "paywallSituationsDesc": "Du har använt veckans kostnadsfria situationsövningar, eller så kräver funktionen Premium. Med Premium kan du öva mer; de allmänna gränserna för röstanvändning gäller fortfarande.",
     "paywallGrammarPracticeTitle": "Fortsätt öva grammatik",
     "paywallGrammarPracticeDesc": "Du har använt dagens kostnadsfria omgångar. Med Premium kan du skapa fler; sparade sessioner är fortfarande tillgängliga.",
     "planFreeTrialDesc": "Prova Premium vid registrering utan kort eller abonnemang. Fortsätt sedan gratis med användningsgränser.",
@@ -1770,6 +1995,7 @@
     "ctaRegister": "Starta gratis provperiod",
     "ctaRegisterTrialUsed": "Välj plan",
     "freeFeature": {
+      "situations": "Muntliga situationsövningar",
       "f1": "Nivåtest och nivåbedömning",
       "f2": "Personlig studieplan",
       "lessons": "Slutföra lektioner",
@@ -1849,6 +2075,7 @@
     "weeklyReset": "Din gratiskvot förnyas på måndagar kl. 00:00 UTC.",
     "trialResultNote": "Din gratis provperiod pågår fortfarande. Utforska planerna inför att den tar slut.",
     "result": {
+      "situations": "Fortsätt öva muntligt på verkliga situationer med Lingu med Premium.",
       "voice": "Bygg vidare på det här samtalet med mer talträning och återkoppling från Lingu med Premium.",
       "lessons": "Fortsätt slutföra lektioner och använda det du lär dig i praktiken med Lingu med Premium.",
       "listening": "Fortsätt träna din hörförståelse med fler lyssningsövningar på din nivå med Premium.",
@@ -1872,6 +2099,7 @@
     "paidTerms": "Kort krävs. Din betalda prenumeration börjar vid köpet. Den förnyas med det valda intervallet om du inte säger upp den."
   },
   "freemium": {
+    "situationsLabel": "Situationer den här veckan",
     "grammarPracticeLabel": "Dagens grammatikomgångar",
     "gamesLabel": "Dagens spel",
     "chatLabel": "Chatt",
@@ -1933,25 +2161,29 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Jag förstår",
     "entry1": {
+      "label": "Öva på vardagliga samtal",
+      "desc": "Förbered dig för verkliga situationer med 50 scenarier om vardagsliv, resor, shopping, socialt liv och arbete. Öva muntligt med Lingu, som spelar rollen som din samtalspartner och anpassar samtalet till din nivå."
+    },
+    "entry2": {
       "label": "Din plan, steg för steg",
       "desc": "Min plan visar nu ditt lärande som en väg framåt: följ dina framsteg, hitta ditt aktuella avsnitt och upptäck nästa etapper. Öppna varje avsnitt för att se lektionerna, fortsätta lära dig eller repetera det du har slutfört."
     },
-    "entry2": {
+    "entry3": {
       "label": "Öva grammatik i din egen takt",
       "desc": "Lägg till ämnen från grammatikresurserna i ditt personliga bibliotek och öva med fem övningar åt gången, med rättningar och förklaringar. Se dina resultat och fortsätt sedan att öva muntligt med Lingu utifrån ämnet och dina svar."
     },
-    "entry3": {
+    "entry4": {
       "label": "Nya språk: kroatiska, tjeckiska, danska, finska och rumänska",
       "desc": "Kroatiska, tjeckiska, danska, finska och rumänska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu hjälper dig när du behöver det",
       "desc": "Om du inte förstår något under ett röstsamtal kan du be Lingu om hjälp. Lingu kan förklara det kort på ditt modersmål och sedan återgå till att öva på språket du lär dig."
     },
-    "entry5": {
+    "entry6": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }

@@ -52,6 +52,12 @@ def _voice_week_key(user_id: int) -> str:
     return f"freemium:voice:{user_id}:{year}-W{week:02d}"
 
 
+def _situations_week_key(user_id: int) -> str:
+    now = datetime.now(UTC)
+    year, week, _ = now.isocalendar()
+    return f"freemium:situations:{user_id}:{year}-W{week:02d}"
+
+
 def _seconds_until_midnight() -> int:
     now = datetime.now(UTC)
     tomorrow = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -156,6 +162,12 @@ async def check_voice_quota(redis: Redis, user_id: int) -> QuotaResult:
     )
 
 
+async def check_situations_quota(redis: Redis, user_id: int) -> QuotaResult:
+    return await _check_weekly_quota(
+        redis, _situations_week_key, user_id, settings.FREEMIUM_SITUATIONS_WEEKLY
+    )
+
+
 # ── Record usage ───────────────────────────────────────────────────────────────
 
 
@@ -197,6 +209,10 @@ async def record_reading_usage(redis: Redis, user_id: int) -> int:
 
 async def record_voice_usage(redis: Redis, user_id: int, seconds: int) -> int:
     return await _incr_with_ttl(redis, _voice_week_key(user_id), seconds, _seconds_until_monday())
+
+
+async def record_situation_usage(redis: Redis, user_id: int) -> int:
+    return await _incr_with_ttl(redis, _situations_week_key(user_id), 1, _seconds_until_monday())
 
 
 # ── Unified freemium recording helper ──────────────────────────────────────────
@@ -253,6 +269,8 @@ class FreemiumStatus:
     reading_limit: int
     voice_remaining_seconds: int
     voice_limit_seconds: int
+    situations_remaining: int
+    situations_limit: int
 
 
 async def get_freemium_status(
@@ -267,6 +285,7 @@ async def get_freemium_status(
     listening = await check_listening_quota(redis, user_id)
     reading = await check_reading_quota(redis, user_id)
     voice = await check_voice_quota(redis, user_id)
+    situations = await check_situations_quota(redis, user_id)
 
     trial_ends_str = None
     if freemium_trial_ends_at:
@@ -285,4 +304,6 @@ async def get_freemium_status(
         reading_limit=reading.limit,
         voice_remaining_seconds=voice.remaining,
         voice_limit_seconds=voice.limit,
+        situations_remaining=situations.remaining,
+        situations_limit=situations.limit,
     )

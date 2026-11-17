@@ -295,6 +295,7 @@ async def test_third_game_separates_history_shares_quota_and_recovers_identity(
     user, headers = test_user_with_plan
     plan = await db_session.scalar(select(StudyPlan))
     monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_GAMES_DAILY", 3)
     monkeypatch.setattr("app.routers.games.generate_game", AsyncMock())
     requests = {}
     for kind in ("detective", "sentence-order", "vocabulary-pairs"):

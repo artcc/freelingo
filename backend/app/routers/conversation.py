@@ -26,6 +26,7 @@ from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.models.user_language import UserLanguage
 from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services.assessment_voice_trial import (
     AssessmentVoiceTrial,
     consume_assessment_voice_trial_token,
@@ -33,16 +34,18 @@ from app.services.assessment_voice_trial import (
 )
 from app.services.conversation_pipeline import ConversationPipeline
 from app.services.freemium_service import (
+    check_situations_quota,
     check_voice_quota,
     is_freemium_trial_active,
+    record_situation_usage,
 )
-from app.services.gemini_tts_service import GEMINI_VOICES
 from app.services.grammar_voice_practice import load_grammar_voice_practice
 from app.services.language_helpers import lesson_practice_title, voice_session_title
 from app.services.lesson_voice_practice import load_lesson_voice_practice
 from app.services.llm_adapter import llm_adapter
 from app.services.memory_service import get_user_memories
 from app.services.quota_service import check_all_quotas
+from app.services.situations import load_situation_practice
 from app.services.subscription_service import is_subscribed
 from app.utils.db import db_session
 from app.utils.redis import redis_client as _redis_client
@@ -227,27 +230,12 @@ async def conversation_ws(
         has_lesson_practice = "lesson_id" in auth_msg
         grammar_practice_id_raw = auth_msg.get("grammar_practice_session_id")
         has_grammar_practice = "grammar_practice_session_id" in auth_msg
+        has_situation_practice = "situation_id" in auth_msg or "situation_study_plan_id" in auth_msg
         client_conversation_id_raw = auth_msg.get(
             "conversation_id"
         )  # optional: reserved for future API use
-        if settings.TTS_PROVIDER == "openai":
-            _VALID_VOICES = frozenset(
-                {
-                    "alloy",
-                    "ash",
-                    "coral",
-                    "echo",
-                    "fable",
-                    "nova",
-                    "onyx",
-                    "sage",
-                    "shimmer",
-                }
-            )
-            if voice_pref not in _VALID_VOICES:
-                voice_pref = ""
-        elif settings.TTS_PROVIDER == "gemini":
-            if not isinstance(voice_pref, str) or voice_pref not in GEMINI_VOICES:
+        if settings.TTS_PROVIDER in {"openai", "gemini"}:
+            if not isinstance(voice_pref, str) or voice_pref not in CLOUD_TTS_VOICES:
                 voice_pref = ""
         else:
             voice_pref = ""  # local TTS ignores voice param
@@ -291,6 +279,52 @@ async def conversation_ws(
                 return
         except Exception:
             pass  # Redis failure → allow through
+
+        # Situations are server-selected sources, validated before any quota or demo claim.
+        situation_practice = None
+        if has_situation_practice:
+            if not (has_lesson_practice or has_grammar_practice or "voice_trial_token" in auth_msg):
+                situation_practice = await load_situation_practice(
+                    db,
+                    user_id,
+                    auth_msg.get("situation_id"),
+                    auth_msg.get("situation_study_plan_id"),
+                )
+            if situation_practice is None:
+                await websocket.send_json({"type": "error", "code": "situation_unavailable"})
+                await websocket.close(code=1008)
+                return
+
+        freemium_situation = bool(
+            situation_practice
+            and not is_subscribed(user, settings.STRIPE_ENABLED)
+            and not is_freemium_trial_active(user.freemium_trial_ends_at)
+        )
+        if freemium_situation:
+            situation_failure: dict[str, str | int] | None = None
+            try:
+                async with _redis_client() as redis_situation:
+                    quota = await check_situations_quota(redis_situation, user_id)
+                if not quota.allowed:
+                    situation_failure = {
+                        "reason": "freemium_exhausted",
+                        "remaining": quota.remaining,
+                        "limit": quota.limit,
+                    }
+            except Exception:
+                logger.exception("[conversation] Situation quota unavailable — blocking")
+                situation_failure = {"reason": "freemium_unavailable"}
+            if situation_failure is not None:
+                await websocket.send_json(
+                    {
+                        "type": "error",
+                        "code": "subscription_required",
+                        "feature": "situations",
+                        **situation_failure,
+                    }
+                )
+                await websocket.close(code=1008)
+                return
 
         # Check subscription, freemium trial, freemium voice quota, or assessment voice trial.
         allowed = False
@@ -380,6 +414,8 @@ async def conversation_ws(
             plan = lesson_practice.plan
         elif grammar_practice:
             plan = grammar_practice.plan
+        elif situation_practice:
+            plan = situation_practice.plan
         else:
             if target_language_from_client is not None:
                 target_language = target_language_from_client
@@ -436,7 +472,9 @@ async def conversation_ws(
 
     # Validate and sanitize optional chat context passed from the tutor chat
     valid_context: list[dict] | None = None
-    if not (lesson_practice or grammar_practice) and isinstance(initial_context_raw, list):
+    if not (lesson_practice or grammar_practice or situation_practice) and isinstance(
+        initial_context_raw, list
+    ):
         sanitized = [
             {"role": m["role"], "content": m["content"]}
             for m in initial_context_raw[:20]
@@ -521,7 +559,7 @@ async def conversation_ws(
                 # Reuse path: if a caller explicitly passes a valid conversation_id
                 # that belongs to this user, append to that conversation.
                 if (
-                    not (lesson_practice or grammar_practice)
+                    not (lesson_practice or grammar_practice or situation_practice)
                     and isinstance(client_conversation_id_raw, (int, float))
                     and int(client_conversation_id_raw) > 0
                 ):
@@ -546,7 +584,13 @@ async def conversation_ws(
                                     native_language, grammar_practice.session.title
                                 )
                                 if grammar_practice
-                                else voice_session_title(native_language)
+                                else (
+                                    lesson_practice_title(
+                                        native_language, situation_practice.situation.title
+                                    )
+                                    if situation_practice
+                                    else voice_session_title(native_language)
+                                )
                             )
                         ),
                         source="voice",
@@ -598,7 +642,11 @@ async def conversation_ws(
             lesson_practice_context=(
                 lesson_practice.context
                 if lesson_practice
-                else grammar_practice.context if grammar_practice else ""
+                else (
+                    grammar_practice.context
+                    if grammar_practice
+                    else situation_practice.context if situation_practice else ""
+                )
             ),
             user_agent=websocket.headers.get("user-agent", ""),
         )
@@ -606,6 +654,15 @@ async def conversation_ws(
         pipeline._freemium_voice = freemium_ok
 
         try:
+            if situation_practice:
+                await websocket.send_json({"type": "situation_started"})
+            if freemium_situation:
+                # The source was admitted and its startup acknowledgement was sent successfully.
+                # Like other Redis freemium counters, successful work is recorded best-effort.
+                try:
+                    await record_situation_usage(redis, user_id)
+                except Exception:
+                    logger.exception("[conversation] Failed to record situation usage")
             await pipeline.run(websocket)
         except WebSocketDisconnect:
             logger.info("[conversation] WebSocketDisconnect — user=%s", user_id)

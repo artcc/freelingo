@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.10] - 2026-11-17
+
+### Added
+
+- Add Everyday situations to Practice with 50 voice role-plays across five personal and work themes, including straightforward everyday exchanges, translated titles and descriptions, search, category filtering, and locale-aware ordering. Each situation gives Lingu a concrete role and objective adapted to the learner's study plan, with concise interaction and a natural conclusion after meaningful practice.
+- Add a configurable Situations allowance of one start per account/ISO week through `FREEMIUM_SITUATIONS_WEEKLY`, preserving existing voice access and limits. Situations use the current voice conversation, transcript history, and plan-owned vocabulary saves.
+
+### Changed
+
+- Align the Games catalog header with Everyday situations, using an open title and description layout with matching typography and responsive spacing.
+- Give OpenAI TTS the same female/male selector as Gemini, with independent provider preferences and backend-configurable voices. Default to `gpt-4o-mini-tts` with `female` mapped to `marin` and `male` to `cedar`; ignore saved provider-name preferences until a new choice is selected. Validate voice/model compatibility and refresh on-demand audio caches when mapped voices change, including with legacy OpenAI models.
+- Give Gemini TTS explicit pronunciation and regional-accent guidance for every supported language, sharing OpenAI's instructions while preserving the selected voice and multilingual text. Refresh on-demand audio caches when those instructions change.
+
+### Fixed
+
+- Prevent daily lessons from returning a server error after a generation or persistence rollback. Reuse concurrent lesson inserts safely and continue remaining slots without losing committed lessons or progress.
+
 ## [1.14.5] - 2026-11-17
 
 ### Changed

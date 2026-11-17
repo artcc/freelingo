@@ -93,8 +93,9 @@ membership. Those prompt requirements are not database invariants.
 
 Listening uses `listening:generating:{level}:{target_language}` and the shared generation coordinator
 in `services.instructions.md` (Shared generation coordinator). Its total budget includes TTS and audio
-persistence; provider-specific speech timeouts also apply. Audio compensation follows the Generation
-section above. The shared contract defines leases, status expiry, cancellation, and the
+persistence and is set in seconds by `EXERCISE_GENERATION_TIMEOUT_SECONDS` in
+`backend/app/core/config.py`; provider-specific speech timeouts also apply. Audio compensation
+follows the Generation section above. The shared contract defines leases, status expiry, cancellation, and the
 Redis/PostgreSQL transaction boundary.
 
 ## API
@@ -131,8 +132,11 @@ Changing the active context in another tab stops the stale operation and prompts
 
 - Rate limit: `5/minute`.
 - Access: freemium consuming-feature policy, without consuming quota at generation time.
-- Optional `voice` query parameter is passed to cloud TTS; local Kokoro ignores it and uses its configured voice.
-- Gemini accepts only `female` or `male`; an invalid supplied voice returns `400` before background generation.
+- Optional `voice` query parameter selects a logical cloud voice; local Kokoro ignores it and uses its configured voice.
+- OpenAI and Gemini accept only `female` or `male`; an invalid supplied voice, including an actual
+  provider voice name, returns `400` before background generation. Omission uses the backend default.
+  The backend resolves the logical choice to its configured provider voice.
+- Voice preferences or provider configuration changes do not regenerate persisted exercise audio.
 - Returns HTTP `202` with `status: "generating"`, whether this request acquired the lease or found
   generation already in progress; returns `status: "available"` when an exercise can already be used.
 
@@ -228,7 +232,8 @@ When Stripe is disabled, Listening is unrestricted by subscription or freemium q
 enabled:
 
 - active/trialing subscribers and users in the no-card freemium trial have unrestricted access;
-- other users share one weekly Listening quota across all target languages and study plans;
+- other users share the weekly Listening quota configured by `FREEMIUM_LISTENING_WEEKLY` in
+  `backend/app/core/config.py` across all target languages and study plans;
 - generation and attempt endpoints require remaining quota;
 - next, audio, and history remain readable after quota exhaustion when the configured quota is
   greater than zero;

@@ -84,6 +84,8 @@ membership. Those prompt requirements are not database invariants.
 Reading uses `reading:generating:{level}:{target_language}` and the shared generation coordinator in
 `services.instructions.md` (Shared generation coordinator). That contract defines leases, deadlines,
 status expiry, cancellation, and the Redis/PostgreSQL transaction boundary. Reading has no TTS stage.
+The total generation budget is set in seconds by `EXERCISE_GENERATION_TIMEOUT_SECONDS` in
+`backend/app/core/config.py`.
 
 ## API
 
@@ -203,7 +205,8 @@ When Stripe is disabled, Reading is unrestricted by subscription or freemium quo
 enabled:
 
 - active/trialing subscribers and users in the no-card freemium trial have unrestricted access;
-- other users share one weekly Reading quota across all target languages and study plans;
+- other users share the weekly Reading quota configured by `FREEMIUM_READING_WEEKLY` in
+  `backend/app/core/config.py` across all target languages and study plans;
 - generation and attempt endpoints require remaining quota;
 - next and history remain readable after quota exhaustion when the configured quota is greater than
   zero;

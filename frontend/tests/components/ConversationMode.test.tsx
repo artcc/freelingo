@@ -54,8 +54,13 @@ vi.mock('next-intl', async (importOriginal) => {
     useLocale: () => 'en',
     useTranslations: () =>
       Object.assign(
-        (key: string, values?: { seconds?: number }) => {
+        (
+          key: string,
+          values?: { seconds?: number; remaining?: number; limit?: number }
+        ) => {
           if (key === 'warningTimeout') return `${key}:${values?.seconds}`
+          if (key === 'freemiumVoiceRemaining')
+            return `${key}:${values?.remaining}/${values?.limit}`
           return key
         },
         {
@@ -79,7 +84,9 @@ vi.mock('@/components/reviews/ReviewPrompt', () => ({
   getReviewPromptDismissal: () => null,
 }))
 vi.mock('@/components/billing/PaywallBanner', () => ({
-  PaywallBanner: () => <div data-testid="voice-paywall" />,
+  PaywallBanner: ({ feature }: { feature: string }) => (
+    <div data-testid="voice-paywall" data-feature={feature} />
+  ),
 }))
 vi.mock('@/lib/review-prompt-triggers', () => ({
   shouldShowVoiceReviewPrompt: () => false,
@@ -224,7 +231,7 @@ beforeEach(() => {
   })
   Element.prototype.scrollIntoView = vi.fn()
   useAuthStore.setState({ accessToken: 'token', user: null })
-  useFreemiumStore.setState({ status: null, loaded: false, lastFetch: 0 })
+  useFreemiumStore.setState(useFreemiumStore.getInitialState(), true)
 })
 
 afterEach(() => {
@@ -253,6 +260,105 @@ describe('ConversationMode freemium reconciliation', () => {
   }
 
   beforeEach(() => useConfigStore.setState({ stripeEnabled: true }))
+
+  it('refreshes situation usage after admission and first pipeline activity without ending the last allowed session', async () => {
+    const fetchStatus = vi
+      .spyOn(useFreemiumStore.getState(), 'fetchStatus')
+      .mockResolvedValue(undefined)
+    useFreemiumStore.setState({
+      status: { ...status, situations_remaining: 1, situations_limit: 3 },
+      loaded: true,
+      lastFetch: Date.now(),
+    })
+    render(
+      <ConversationMode
+        situationId="hotel_problem"
+        situationStudyPlanId={7}
+        freemiumVoiceRemaining={2}
+        freemiumVoiceLimit={5}
+      />
+    )
+    const ws = await start()
+    expect(fetchStatus).not.toHaveBeenCalled()
+    act(() => ws.message({ type: 'situation_started' }))
+    expect(fetchStatus).not.toHaveBeenCalled()
+    act(() =>
+      ws.message({
+        type: 'transcript',
+        role: 'assistant',
+        final: true,
+        text: 'Welcome to the hotel.',
+      })
+    )
+    expect(fetchStatus).toHaveBeenCalledTimes(1)
+    expect(fetchStatus).toHaveBeenCalledWith(true)
+    act(() => {
+      ws.message({ type: 'situation_started' })
+      ws.message({ type: 'status', value: 'listening' })
+      useFreemiumStore.setState({
+        status: { ...status, situations_remaining: 0, situations_limit: 3 },
+        lastFetch: Date.now(),
+      })
+    })
+    expect(fetchStatus).toHaveBeenCalledTimes(1)
+    expect(ws.close).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'stop' })).toBeEnabled()
+    expect(screen.queryByTestId('voice-paywall')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+    expect(screen.getByTestId('voice-paywall')).toHaveAttribute(
+      'data-feature',
+      'situations'
+    )
+    expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
+    expect(screen.getByText('Welcome to the hotel.')).toBeInTheDocument()
+    expect(screen.getByText('freemiumVoiceRemaining:2/5')).not.toHaveClass(
+      'text-red-500'
+    )
+  })
+
+  it.each(['freemium_exhausted', 'freemium_unavailable'] as const)(
+    'handles a situation-specific %s denial without inferring voice exhaustion',
+    async (reason) => {
+      vi.spyOn(useFreemiumStore.getState(), 'fetchStatus').mockResolvedValue(
+        undefined
+      )
+      render(
+        <ConversationMode
+          situationId="hotel_problem"
+          situationStudyPlanId={7}
+        />
+      )
+      const ws = await start()
+      act(() =>
+        ws.message({
+          type: 'error',
+          code: 'subscription_required',
+          feature: 'situations',
+          reason,
+        })
+      )
+      expect(ws.close).toHaveBeenCalledOnce()
+      if (reason === 'freemium_exhausted') {
+        expect(screen.getByTestId('voice-paywall')).toHaveAttribute(
+          'data-feature',
+          'situations'
+        )
+        expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
+        act(() =>
+          useFreemiumStore.setState({
+            status: { ...status, situations_remaining: 2, situations_limit: 3 },
+            lastFetch: Date.now(),
+          })
+        )
+        expect(screen.queryByTestId('voice-paywall')).toBeNull()
+        expect(screen.getByRole('button', { name: 'startNew' })).toBeEnabled()
+        expect(mocks.getUserMedia).toHaveBeenCalledTimes(1)
+      } else {
+        expect(screen.queryByTestId('voice-paywall')).toBeNull()
+        expect(screen.getByText('✕ errorMessage')).toBeInTheDocument()
+      }
+    }
+  )
 
   it.each([
     { ending: 'manual', consumed: false },
@@ -1100,7 +1206,7 @@ describe('ConversationMode session lifecycle', () => {
 
   it('resolves delayed provider configuration before opening the trial WebSocket', async () => {
     useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
     let finish!: (response: Response) => void
     vi.stubGlobal(
@@ -1222,13 +1328,13 @@ describe('ConversationMode session lifecycle', () => {
   it.each([
     ['gemini', 'male', false],
     ['gemini', 'male', true],
-    ['openai', 'coral', false],
-    ['openai', 'coral', true],
+    ['openai', 'female', false],
+    ['openai', 'female', true],
   ] as const)(
     'authenticates %s with voice %s (trial: %s) and accepts WAV frames',
     async (provider, voice, trial) => {
       useConfigStore.setState({ ttsProvider: provider })
-      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('tts_voice', 'female')
       localStorage.setItem('gemini_tts_voice', 'male')
       render(
         <ConversationMode
@@ -1930,6 +2036,43 @@ describe('ConversationMode session lifecycle', () => {
       type: 'auth',
       token: 'token',
     })
+  })
+
+  it('sends only the captured situation source through the existing voice handshake', async () => {
+    render(
+      <ConversationMode
+        situationId="hotel_problem"
+        situationStudyPlanId={7}
+        lessonTitle="A hotel problem"
+        targetLanguage="fr-FR"
+        initialContext={[{ role: 'user', content: 'Unrelated chat context' }]}
+      />
+    )
+    expect(screen.getByText('A hotel problem')).toHaveAttribute('lang', 'en')
+    expect(screen.queryByText('startersHint')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'start' }))
+    await waitFor(() => expect(MockWebSocket.instances).toHaveLength(1))
+    const ws = MockWebSocket.instances[0]
+    act(() => ws.onopen?.())
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({
+      type: 'auth',
+      token: 'token',
+      situation_id: 'hotel_problem',
+      situation_study_plan_id: 7,
+      target_language: 'fr-FR',
+    })
+    expect(mocks.apiFetch).toHaveBeenCalledWith(
+      '/api/conversation/warmup',
+      expect.any(Object)
+    )
+    act(() =>
+      ws.message({
+        type: 'error',
+        code: 'situation_unavailable',
+      })
+    )
+    expect(screen.getByText('✕ unavailable')).toBeInTheDocument()
+    expect(ws.close).toHaveBeenCalledOnce()
   })
 
   it('retries denied permission without poisoning VAD', async () => {

@@ -131,7 +131,7 @@ function answerExercise() {
 describe('Listening voice preference', () => {
   it('resumes a read-only lookup when config settles before a rejected switch effect', async () => {
     useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
     useLanguageStore.setState({
       activeLanguage: getLanguageByCode('en-GB') ?? null,
@@ -231,7 +231,8 @@ describe('Listening voice preference', () => {
 
   it.each([
     ['gemini', 'male', false],
-    ['openai', 'coral', false],
+    ['openai', 'female', false],
+    ['openai', 'female', true],
     ['gemini', 'male', true],
   ] as const)(
     'generates audio with the %s preference %s (config pending: %s)',
@@ -241,7 +242,7 @@ describe('Listening voice preference', () => {
         loaded: !pendingConfig,
       })
       const config = deferred<Response>()
-      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('tts_voice', 'female')
       localStorage.setItem('gemini_tts_voice', 'male')
       useLanguageStore.setState({
         activeLanguage: getLanguageByCode('en-GB') ?? null,
@@ -299,7 +300,7 @@ describe('Listening voice preference', () => {
     'does not generate after config %s',
     async (outcome) => {
       useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
-      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('tts_voice', 'female')
       useLanguageStore.setState({
         activeLanguage: getLanguageByCode('en-GB') ?? null,
         userLanguages: languages().languages,

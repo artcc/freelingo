@@ -23,6 +23,11 @@ import { useConfigStore } from '@/store/config'
 import { useAuthStore, isSubscribed } from '@/store/auth'
 import { useFreemiumStore } from '@/store/freemium'
 import { useTrialStatus } from '@/hooks/useTrialStatus'
+import {
+  fetchSituationCatalog,
+  parseSituationSource,
+  type SituationId,
+} from '@/lib/situations'
 
 function ConversationLoading() {
   return <PageLoading />
@@ -39,7 +44,9 @@ const ConversationMode = dynamic(
 interface LessonPractice {
   id?: number
   grammarPracticeSessionId?: string
-  title: string
+  situationId?: SituationId
+  situationStudyPlanId?: number
+  title?: string
   cefrLevel: string
   targetLanguage: string
 }
@@ -51,6 +58,15 @@ export default function ConversationPage() {
   const lessonId = searchParams.get('lesson')
   const grammarPracticeId = searchParams.get('grammarPractice')
   const ownerKey = `${sessionVersion}:${userId}`
+  if (searchParams.has('situation') || searchParams.has('plan')) {
+    const source = parseSituationSource(searchParams)
+    return (
+      <SituationConversationPage
+        key={`${ownerKey}:situation:${searchParams.toString()}`}
+        source={source}
+      />
+    )
+  }
   if (grammarPracticeId !== null) {
     return (
       <GrammarConversationPage
@@ -68,6 +84,81 @@ export default function ConversationPage() {
   ) : (
     <ConversationPageContent key={ownerKey} />
   )
+}
+
+function SituationConversationPage({
+  source,
+}: {
+  source: ReturnType<typeof parseSituationSource>
+}) {
+  const t = useTranslations('situations')
+  const [practice, setPractice] = useState<LessonPractice | null>(null)
+  const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
+  const id = source?.id
+  const studyPlanId = source?.studyPlanId
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const owner = useAuthStore.getState()
+    const current = () => {
+      const auth = useAuthStore.getState()
+      return (
+        !controller.signal.aborted &&
+        auth.sessionVersion === owner.sessionVersion &&
+        auth.user?.id === owner.user?.id
+      )
+    }
+    async function load() {
+      try {
+        if (!id || !studyPlanId) throw new Error('Invalid situation source')
+        const catalog = await fetchSituationCatalog(
+          studyPlanId,
+          controller.signal
+        )
+        if (!current()) return
+        if (!catalog.situations.some((item) => item.id === id))
+          throw new Error('Situation unavailable')
+        setPractice({
+          situationId: id,
+          situationStudyPlanId: studyPlanId,
+          cefrLevel: catalog.cefr_level,
+          targetLanguage: catalog.target_language,
+        })
+      } catch {
+        if (current()) setFailed(true)
+      }
+    }
+    void load()
+    return () => controller.abort()
+  }, [id, studyPlanId, attempt])
+
+  if (failed)
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 p-6">
+        <p role="alert" className="text-fl-muted-1 font-sans text-sm">
+          {t('unavailable')}
+        </p>
+        <button
+          type="button"
+          className="text-fl-accent font-sans text-sm underline"
+          onClick={() => {
+            setFailed(false)
+            setAttempt((value) => value + 1)
+          }}
+        >
+          {t('retry')}
+        </button>
+        <Link
+          href="/situations"
+          className="text-fl-muted-1 font-sans text-sm underline"
+        >
+          {t('back')}
+        </Link>
+      </div>
+    )
+  if (!practice) return <ConversationLoading />
+  return <ConversationPageContent practice={practice} />
 }
 
 function GrammarConversationPage({
@@ -250,6 +341,7 @@ function LessonConversationPage({ lessonId }: { lessonId: string }) {
 }
 
 function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
+  const tSituations = useTranslations('situations')
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
   const activePlanId = useLanguageStore(
     (s) =>
@@ -275,6 +367,14 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
     !freemiumTrialActive &&
     freemiumStatus &&
     freemiumStatus.voice_remaining_seconds <= 0
+  const situationsExhausted =
+    !!practice?.situationId &&
+    stripeEnabled &&
+    !isSubscribed(user, stripeEnabled) &&
+    !freemiumTrialActive &&
+    freemiumStatus?.situations_remaining !== undefined &&
+    freemiumStatus.situations_remaining <= 0
+  const exhaustedFeature = situationsExhausted ? 'situations' : 'voice'
 
   const freemiumVoiceRemaining = freemiumStatus
     ? Math.ceil(freemiumStatus.voice_remaining_seconds / 60)
@@ -304,6 +404,21 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
     cefrLevel?: string
     targetLanguage?: string
   } | null>(null)
+
+  useEffect(() => {
+    if (
+      practice?.situationId &&
+      !sessionStarted &&
+      (situationsExhausted || freemiumExhausted)
+    ) {
+      setAutoStart(false)
+    }
+  }, [
+    practice?.situationId,
+    sessionStarted,
+    situationsExhausted,
+    freemiumExhausted,
+  ])
 
   useEffect(() => {
     if (stripeEnabled && !isSubscribed(user, stripeEnabled)) {
@@ -415,10 +530,12 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           voiceTrialDurationSeconds={voiceTrial.durationSeconds}
           trialMode
         />
-      ) : freemiumExhausted && !sessionActive && !sessionStarted ? (
+      ) : (freemiumExhausted || situationsExhausted) &&
+        !sessionActive &&
+        !sessionStarted ? (
         <>
-          <FreemiumQuotaBanner feature="voice" className="mb-4" />
-          <PaywallBanner feature="voice" compact />
+          <FreemiumQuotaBanner feature={exhaustedFeature} className="mb-4" />
+          <PaywallBanner feature={exhaustedFeature} compact />
         </>
       ) : (
         <ConversationMode
@@ -428,7 +545,13 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           targetLanguage={practice?.targetLanguage ?? activeLanguage?.code}
           lessonId={practice?.id}
           grammarPracticeSessionId={practice?.grammarPracticeSessionId}
-          lessonTitle={practice?.title}
+          situationId={practice?.situationId}
+          situationStudyPlanId={practice?.situationStudyPlanId}
+          lessonTitle={
+            practice?.situationId
+              ? tSituations(`items.${practice.situationId}.title`)
+              : practice?.title
+          }
           onSessionActiveChange={handleSessionActiveChange}
           freemiumVoiceRemaining={
             showFreemiumVoicePill ? freemiumVoiceRemaining : undefined

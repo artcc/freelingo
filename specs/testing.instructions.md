@@ -98,19 +98,20 @@ mirror CI: CI does not autoformat or modify the worktree.
 
 `.github/workflows/pr-develop-checks.yml` runs quality checks for pull requests targeting `develop`.
 Pushes to `develop` and `main` trigger image-publication workflows, not this quality workflow.
-Both quality-check jobs use GitHub-hosted `ubuntu-24.04` runners. This fixes the Ubuntu LTS series,
-while GitHub continues updating the runner image and its preinstalled tools.
+Both quality-check jobs use the GitHub-hosted Ubuntu runner pinned in that workflow. This fixes the
+Ubuntu LTS series, while GitHub continues updating the runner image and its preinstalled tools.
 
-Backend CI uses Python 3.14.9, pip 26.2.2, pinned requirements/constraints, SQLite tests, and configured
-coverage enforcement. The existing backend job also starts an ephemeral PostgreSQL 16 service with a
+Backend CI uses pinned Python and pip versions, requirements/constraints, SQLite tests, and configured
+coverage enforcement. The existing backend job also starts an ephemeral PostgreSQL service with a
 health check. Before pytest, it applies `alembic upgrade head` to its empty database, overriding only
 the CI Alembic script location to the repository's `backend/alembic` directory. Migration failure
 fails the job. This checks the fresh-install migration chain, not upgrades with existing user data.
 
 The same pytest invocation receives `TEST_POSTGRES_URL` for the PostgreSQL concurrency tests; ordinary
 tests retain their SQLite fixture. PostgreSQL schemas created by tests are separate from the migrated
-public schema. Frontend CI uses Node 26.13.0 LTS, installs npm 11.20.0, runs `npm ci`, then lint, typecheck,
-and Vitest. Exact runtime and package-manager versions match the local toolchain and container images.
+public schema. Frontend CI uses pinned Node and npm versions, runs `npm ci`, then lint, typecheck,
+and Vitest. Exact runtime and package-manager versions match `scripts/toolchain.env` and container images;
+the CI workflow owns its runner and PostgreSQL service image selections.
 
 ## Rules
 

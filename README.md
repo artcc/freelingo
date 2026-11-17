@@ -7,7 +7,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)](#quick-start)
-![Version](https://img.shields.io/badge/version-1.14.5-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.14.10-brightgreen?style=flat-square)
 
 <img src="assets/logo_large.png" alt="FreeLingo — language learning with Lingu, your voice conversation partner" width="900" />
 
@@ -40,6 +40,9 @@ Alongside the plan:
 - **Practise grammar topics:** add references to a [personal grammar library](specs/grammar-practice.instructions.md),
   complete saved five-question practices, and track results across plans in the same language.
   Completed practices can continue in voice with Lingu, informed by the topic and your answers.
+- **Rehearse everyday situations:** choose from 50 [voice role-plays](specs/situations.instructions.md)
+  across daily life, travel, shopping and services, social life, and work. Practise a concrete objective
+  with Lingu at your study plan's language and level.
 - **Learn through games:** [Error Detective, Sentence Order, and Vocabulary Pairs](specs/games.instructions.md).
   Review completed lessons, prepare familiar foundations for the next lesson, or practise at your
   plan's level. Sessions are saved for later, with language-specific history and plan-owned XP;
@@ -165,11 +168,7 @@ speech providers. Review the remaining settings in [.env.example](.env.example).
 
 **2. Prepare the model — only when using Ollama**
 
-Run on the Ollama host:
-
-```bash
-ollama pull gemma4:e4b
-```
+On the Ollama host, run `ollama pull` with the model configured in `OLLAMA_MODEL`.
 
 **3. Start the stack**
 
@@ -178,11 +177,12 @@ docker compose up -d
 ```
 
 Pending database migrations run automatically each time the backend starts.
-Open `http://localhost:3000` (or `http://<server-ip>:3000` for HTTP access from another machine).
+Open the frontend on localhost or your server's address using the host port published in
+`docker-compose.yml`.
 Production microphone access requires the HTTPS setup described below.
 
-By default, the first registered user becomes an administrator; set `FIRST_USER_IS_ADMIN=false` to
-disable this behavior.
+`FIRST_USER_IS_ADMIN` controls whether the first registered user becomes an administrator.
+Review it in `.env` before opening registration.
 
 ### Option B — Portainer (Stack)
 
@@ -191,9 +191,11 @@ disable this behavior.
 3. Add the variables from `.env.example`. At minimum, configure `DATA_PATH`, the `POSTGRES_*` values,
    `REDIS_PASSWORD`, `SECRET_KEY`, and the selected LLM and speech providers and credentials.
 4. Click **Deploy the stack**.
-5. Access the app at `http://<server-ip>:3000`. Database migrations run automatically when the backend starts.
+5. Access the app at your server's address and the frontend host port published in the stack.
+   Database migrations run automatically when the backend starts.
 
-> **Ollama on the same host:** use `OLLAMA_BASE_URL=http://host.docker.internal:11434`.
+> **Ollama on the same host:** point `OLLAMA_BASE_URL` to the host's Ollama listener, using
+> `host.docker.internal` and its configured port.
 > On Linux, if that hostname does not already resolve, add `host.docker.internal:host-gateway`
 > under the backend's `extra_hosts`. Production Compose does not include this mapping.
 
@@ -202,21 +204,21 @@ disable this behavior.
 ### AI providers
 
 - **Language model:** `LLM_PROVIDER` selects `ollama`, `openai`, `anthropic`, or `deepseek`.
-  The recommended Ollama model is `gemma4:e4b`; configure another through `.env`.
+  Configure the selected provider's model and credentials through `.env`; see [.env.example](.env.example).
 - **Speech:** `TTS_PROVIDER` selects `local` (Kokoro), `openai`, or `gemini`; `STT_PROVIDER`
   independently selects `local` (faster-whisper) or `openai`. See [speech setup](#configuring-tts--stt).
 
 <details>
 <summary><strong>OpenAI and Anthropic model settings</strong></summary>
 
-- OpenAI LLM requests use the **Responses API**, with `OPENAI_MODEL=gpt-6-luna` in `.env.example`.
+- OpenAI LLM requests use the **Responses API**, with the model selected by `OPENAI_MODEL`.
   The selected model and endpoint must support Responses; a Chat Completions-only gateway is
   insufficient. FreeLingo manages conversation context and sends `store=false`.
 - Optional `OPENAI_REASONING_EFFORT` applies to OpenAI chat, memory-tool turns, and content generation.
   Leave it empty for the model default. Values are `none`, `minimal`, `low`, `medium`, `high`, `xhigh`,
   and `max`, subject to model support; there are no model-specific overrides.
 - Ollama and DeepSeek use Chat Completions; Anthropic uses its native API.
-- `ANTHROPIC_MAX_TOKENS` defaults to `8192` and must fit the selected model's output limit.
+- `ANTHROPIC_MAX_TOKENS` must fit the selected model's output limit.
 
 See the [service contracts](specs/services.instructions.md) for provider behavior.
 
@@ -225,13 +227,8 @@ See the [service contracts](specs/services.instructions.md) for provider behavio
 ### Limits and access
 
 Conversation, token, freemium, and trial limits are configurable in [.env.example](.env.example).
-For session-count, minute, and token quotas, `0` means unlimited; for freemium feature quotas,
-`0` blocks the feature. Conversation duration and inactivity settings have their own bounds.
-See [subscriptions and quotas](specs/subscriptions-freemium.instructions.md).
-
-`FREEMIUM_GRAMMAR_PRACTICE_DAILY` defaults to three new practices per account/UTC day, shared across
-study languages and independent of Games. Saved sessions remain available after exhaustion;
-Premium, active trials, and Stripe-disabled deployments bypass this free generation allowance.
+See [subscriptions and quotas](specs/subscriptions-freemium.instructions.md) for scope
+and access rules.
 
 Web subscriptions use Stripe Checkout. Optional `REVENUECAT_ENABLED=true` synchronizes a shared
 Premium entitlement through RevenueCat while retaining Stripe payments and the existing web interface.
@@ -297,15 +294,14 @@ host-level setting and cannot be applied from within the container without eleva
 > Production voice conversation needs **HTTPS** for microphone access and **WebSocket routing** to
 > the backend. Next.js HTTP rewrites do not forward WebSocket upgrades.
 
-Route `/ws/*` to `backend:8000`, including the `/ws/conversation` connection. The production frontend
-derives its WebSocket URL from `window.location`.
+Route `/ws/*` to the backend listener configured in Compose, including `/ws/conversation`. The production frontend derives its WebSocket URL from `window.location`.
 
 Browser microphone access requires a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts)
 such as HTTPS or localhost; ordinary HTTP access through a server IP does not provide it.
 
 ## Configuring TTS & STT
 
-TTS and STT are required services, selected independently via `.env`. Both default to local providers.
+TTS and STT are required services, selected independently via `.env`.
 
 - `TTS_PROVIDER=local` uses Kokoro-FastAPI; `openai` uses OpenAI TTS; `gemini` uses Gemini TTS.
 - `STT_PROVIDER=local` uses faster-whisper; `STT_PROVIDER=openai` uses OpenAI Whisper.
@@ -321,7 +317,7 @@ TTS_PROVIDER=local
 STT_PROVIDER=local
 ```
 
-The default Kokoro voice is `af_heart`. FreeLingo does not automatically select a Kokoro voice from
+`TTS_VOICE` selects the Kokoro voice. FreeLingo does not automatically select a Kokoro voice from
 the study language. OpenAI TTS supports the language-aware pronunciation guidance described in the
 [speech specification](specs/speech-services.instructions.md).
 
@@ -338,12 +334,19 @@ STT_PROVIDER=openai
 OPENAI_API_KEY=sk-...
 ```
 
+`OPENAI_TTS_MODEL` selects the OpenAI TTS model. Settings offers female/male choices for both cloud TTS
+providers, with independent preferences. Operators configure the OpenAI mappings through
+`OPENAI_TTS_FEMALE_VOICE` and `OPENAI_TTS_MALE_VOICE`.
+`OPENAI_TTS_VOICE` selects the default logical choice. Existing provider-name preferences
+are ignored until a new choice is saved. Legacy `tts-1`/`tts-1-hd` models require compatible voice
+mappings; see the [speech specification](specs/speech-services.instructions.md).
+
 Remove the corresponding `kokoro` and/or `whisper` service blocks from your deployment Compose file
 when using cloud providers for those services; changing the provider variables alone does not remove their
 GPU reservations.
 
-For Gemini TTS, select `TTS_PROVIDER=gemini` and set `GEMINI_API_KEY` on the backend. The default model
-is `gemini-3.8-flash-tts`; configurable female/male voices produce native WAV audio. STT remains an
+For Gemini TTS, select `TTS_PROVIDER=gemini` and set `GEMINI_API_KEY` on the backend.
+`GEMINI_TTS_MODEL` selects the model; configurable female/male voices produce native WAV audio. STT remains an
 independent local or OpenAI choice. Settings stores the Gemini voice preference separately from OpenAI.
 
 OpenAI speech services reuse `OPENAI_API_KEY` when OpenAI is also the LLM provider. See [.env.example](.env.example) for
