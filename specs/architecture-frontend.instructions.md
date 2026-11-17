@@ -591,6 +591,21 @@ the adaptive static-bank placement quiz and plan creation on level/duration conf
 belong to their language's study plan even though review does not require advancing lessons. Tutor
 guidance follows the active language and plan context; provider copy refers to operator configuration
 rather than a fixed model name. The public FAQ has its own catalog and scope in `public-site.instructions.md`.
+The authenticated page groups questions into getting started and languages, resources and practice,
+conversations with Lingu, plans and usage limits, account and help, and administration. The plans
+section appears only after configuration confirms billing is enabled; administration remains visible
+only to administrators. Stable question IDs preserve the open answer when conditional sections change.
+One answer is expanded at a time across all sections, with semantic headings, labeled answer regions,
+and keyboard-accessible buttons exposing `aria-expanded` and `aria-controls`.
+
+All fifteen catalogs include guidance on multiple languages, grammar practice, games, memories,
+free/Premium access and trials, quota renewal, and subscription cancellation. Contextual links lead
+to the relevant feature or Settings panel. Commercial copy distinguishes no-card and subscription
+trials, shared quotas and general account limits without hardcoding configurable prices or allowances.
+Voice guidance reflects disabled automatic interruption and configurable turn pauses; Reading and
+Listening explain the optional native-language answer explanations. Profile-language changes require
+saving, and public registration depends on server configuration.
+
 Both FAQs interpolate `{languages}` from `useTargetLanguageList`: every supported target language
 uses its regional `targetLanguages` label, sorted with `Intl.Collator` for the active interface
 locale and joined with `Intl.ListFormat` for that same locale. Translation catalogs retain the

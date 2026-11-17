@@ -831,6 +831,7 @@
     "generatingError": "Failed to generate lesson",
     "loading": "Loading plan...",
     "learningRoadmap": "Learning Roadmap",
+    "progressSummary": "{completed} of {total} lessons completed",
     "level": "Level",
     "duration": "Duration",
     "durationDetail": "{weeks} weeks · {days} days/week",
@@ -1358,6 +1359,12 @@
   "faq": {
     "title": "FAQ",
     "subtitle": "Frequently Asked Questions",
+    "sectionGettingStarted": "Getting started and languages",
+    "sectionPractice": "Resources and practice",
+    "sectionLingu": "Conversations with Lingu",
+    "sectionSubscription": "Plans and usage limits",
+    "sectionAccount": "Account and help",
+    "sectionAdmin": "Administration",
     "q_start": "Where do I start?",
     "a_start": "Select the language you want to learn and open the <strong>Assessment</strong> to estimate your level. Complete beginners can choose A1 without taking the quiz. Confirm your level and duration to create a <strong>Study Plan</strong> for that language.",
     "q_workflow": "What is the full workflow?",
@@ -1382,11 +1389,11 @@
     "q_tutor": "How can I practice with Lingu?",
     "a_tutor": "Lingu tailors its replies to your active study language and plan context. Ask grammar questions, request explanations, practise writing in that language or have a conversation. Conversations are saved by language and can be resumed from your history.",
     "q_voice": "How does the voice conversation work?",
-    "a_voice": "The <strong>Voice Conversation</strong> mode lets you speak with Lingu in real time. Press Start to begin — the app listens for your voice automatically using voice activity detection (VAD) and the tutor replies with synthesised speech. You can interrupt the tutor at any moment (barge-in). The session ends when you reach the time limit or press Stop. Make sure your browser has microphone permission enabled.",
+    "a_voice": "In <strong>Voice Conversation</strong>, press Start and allow microphone access. The app detects when you speak and Lingu replies with audio. Wait until Lingu finishes before speaking again: speaking over the tutor does not interrupt its reply. In <settingsLink>Settings</settingsLink>, you can adjust the pause before your turn is sent, the session duration and the inactivity timeout. The session ends when you press Stop or reach an applicable limit.",
     "q_listening": "How do listening exercises work?",
-    "a_listening": "In <strong>Listening</strong>, Lingu prepares listening exercises tailored to your CEFR level. Listen to the audio, then answer 5 comprehension questions. After submitting, you get your score (0–5), XP, correct answers, and the full transcript. You can generate new exercises on demand.",
+    "a_listening": "In <strong>Listening</strong>, Lingu prepares listening exercises tailored to your CEFR level. Listen to the audio, then answer 5 comprehension questions. After submitting, you can review your score (0–5), earned XP, correct answers and the full transcript. Select <strong>Why this answer</strong> to request an explanation in your native language with a supporting excerpt from the transcript. You can request new exercises subject to your account's usage limits.",
     "q_reading": "How do reading exercises work?",
-    "a_reading": "The <strong>Reading</strong> section generates texts at your CEFR level — notices, emails, articles, blog posts, and more. Read the passage and answer 5 multiple-choice questions. After submitting, you get your score (0–5) and XP. New exercises can be generated on demand.",
+    "a_reading": "In <strong>Reading</strong>, Lingu prepares texts at your CEFR level, such as notices, emails and articles. Read the passage and answer 5 multiple-choice questions. After submitting, you can review your score (0–5), earned XP and the correct answers. Select <strong>Why this answer</strong> to request an explanation in your native language with a supporting excerpt from the text. You can request new exercises subject to your account's usage limits.",
     "q_providers": "Which AI providers does FreeLingo support?",
     "a_providers_intro": "Configurable in <code>.env</code> via <code>LLM_PROVIDER</code>:",
     "provider_ollama": "Local, free. Requires Ollama running on the host. Recommended model: gemma4:e4b. May be slow without a GPU.",
@@ -1394,11 +1401,25 @@
     "provider_anthropic": "Anthropic Claude. Requires ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Requires DEEPSEEK_API_KEY.",
     "q_invite": "Can I invite other people?",
-    "a_invite": "Yes. From <adminLink>Admin → Users</adminLink> the admin can create users directly or generate single-use invite links that expire in 48 hours. Public registration is disabled by default (<code>ALLOW_REGISTRATION=false</code>).",
+    "a_invite": "Yes. From <adminLink>Admin → Users</adminLink>, administrators can create users directly or generate single-use invite links that expire in 48 hours. Public registration depends on the server's <code>ALLOW_REGISTRATION</code> setting.",
     "q_password": "How do I change my password or native language?",
     "a_password": "Go to <settingsLink>Settings</settingsLink>. You can update your display name, native language, and password from there.",
     "q_uiLanguage": "How do I change the platform language?",
-    "a_uiLanguage": "Go to <settingsLink>Settings</settingsLink> and find the <strong>Platform language</strong> dropdown in the Profile section. Select your preferred language and the entire interface will switch immediately.",
+    "a_uiLanguage": "Go to <settingsLink>Settings</settingsLink> and find the <strong>Platform language</strong> dropdown in your profile. Select your preferred language and press <strong>Save changes</strong>. After saving, the page reloads in the selected language. This does not change the language you are learning.",
+    "q_multiLanguage": "Can I learn several languages without losing my progress?",
+    "a_multiLanguage": "Yes. Add a language in <languagesLink>Settings → My Languages</languagesLink> and use the language selector to switch between them. Each language keeps its own plan, progress, flashcards and conversation history. Switching does not delete your saved progress. Account settings, subscription, usage quotas and Lingu's memories are shared across languages.",
+    "q_grammarPractice": "How do I practise a specific grammar topic?",
+    "a_grammarPractice": "Open a topic in <grammarLink>Resources → Grammar</grammarLink> and select <strong>Practise</strong> to add it to your personal grammar practice library. With an active plan, you can generate sets of five exercises: three multiple-choice questions and two gap-fill questions. Your answers and results are saved so you can track your practice. This activity does not award XP.",
+    "q_games": "Which games are available and which mode should I choose?",
+    "a_games": "In <gamesLink>Games</gamesLink>, you can spot and correct mistakes in Error Detective, arrange fragments in Sentence Order, or match words and meanings in Vocabulary Pairs. Choose review mode to revisit completed lessons, preparation mode to reinforce familiar material related to your next lesson, or free practice to work at your plan's level. Modes without enough source material are disabled with an explanation.",
+    "q_plans": "How do the free plan, Premium and the trial differ?",
+    "a_plans": "The free plan lets you learn with usage quotas. Premium removes those free-plan quotas, but general account limits still apply. If your account includes an initial trial without a card, you can continue on the free plan when it ends, without an automatic charge. Any trial offered when subscribing is separate and may require a card. Check your status and the current subscription terms in <billingLink>Settings → Plan and subscription</billingLink>.",
+    "q_quotas": "Why have I reached a limit, and when does it reset?",
+    "a_quotas": "Usage quotas belong to your account and are shared across study languages. Free daily quotas reset at 00:00 UTC; free weekly quotas reset on Monday at 00:00 UTC. Check the remaining allowance in each activity and your general account limits in <billingLink>Settings</billingLink>. Premium-only features are not unlocked by waiting for a quota reset, and general account limits also apply to Premium and trials.",
+    "q_cancelSubscription": "How do I cancel my subscription renewal?",
+    "a_cancelSubscription": "Go to <billingLink>Settings → Plan and subscription</billingLink>, select <strong>Manage subscription</strong> and complete the cancellation in the portal that opens. If you cancel renewal at the end of the current period, you keep access until that period ends. Deleting your account is not a way to cancel billing: you must cancel renewal first.",
+    "q_memories": "What does Lingu remember about me, and how can I delete it?",
+    "a_memories": "Lingu can save useful personal details from text and voice conversations to personalise future replies. These memories are shared across all your study languages. In <memoriesLink>Settings → Memory</memoriesLink>, you can view them, add your own, delete individual memories or clear them all.",
     "q_feedback": "How do I suggest a new feature or report a bug?",
     "a_feedback": "Use the <feedbackLink>Feedback</feedbackLink> section in the sidebar. You can create suggestions for new features or report bugs. Vote on other users' ideas, leave comments, and track the status of each request. All submissions are public and are reviewed by the admin."
   },
@@ -1912,29 +1933,25 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.14.0",
+    "version": "v1.14.5",
     "cta": "Got it",
     "entry1": {
+      "label": "Your plan, step by step",
+      "desc": "My Plan now shows your learning as an itinerary: check your progress, find your current unit, and discover the stages ahead. Open each unit to see its lessons, keep learning, or review what you've completed."
+    },
+    "entry2": {
       "label": "Practise grammar at your own pace",
       "desc": "Add topics from the Grammar resources to your personal library and practise with sets of five exercises, with corrections and explanations. Check your results and, when you finish, keep practising by voice with Lingu using the topic and your answers."
     },
-    "entry2": {
+    "entry3": {
       "label": "New languages: Croatian, Czech, Danish, Finnish, and Romanian",
       "desc": "Croatian, Czech, Danish, Finnish, and Romanian are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
-    },
-    "entry3": {
-      "label": "Understand every answer better",
-      "desc": "View exercise questions translated into your native language while keeping the original visible. After completing Reading or Listening, ask for an explanation in your native language with a passage that supports the answer. You can also reread the passage or listen to the audio again as you review."
     },
     "entry4": {
       "label": "Lingu helps when you need it",
       "desc": "If you don't understand something during a voice conversation, ask Lingu for help. Lingu can briefly explain it in your native language, then return to practising the language you're learning."
     },
     "entry5": {
-      "label": "More natural and expressive voices",
-      "desc": "Enjoy more natural and expressive voices in your Listening exercises and conversations with Lingu, for a clearer and more enjoyable listening experience."
-    },
-    "entry6": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

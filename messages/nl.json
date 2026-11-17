@@ -831,6 +831,7 @@
     "generatingError": "Genereren van les mislukt",
     "loading": "Plan laden...",
     "learningRoadmap": "Leertraject",
+    "progressSummary": "{completed} van {total} lessen voltooid",
     "level": "Niveau",
     "duration": "Duur",
     "durationDetail": "{weeks} weken · {days} dagen/week",
@@ -1358,6 +1359,12 @@
   "faq": {
     "title": "FAQ",
     "subtitle": "Veelgestelde vragen",
+    "sectionGettingStarted": "Aan de slag en talen",
+    "sectionPractice": "Bronnen en oefeningen",
+    "sectionLingu": "Gesprekken met Lingu",
+    "sectionSubscription": "Abonnementen en gebruikslimieten",
+    "sectionAccount": "Account en hulp",
+    "sectionAdmin": "Beheer",
     "q_start": "Waar begin ik?",
     "a_start": "Kies je leertaal en open de <strong>Beoordeling</strong> om je niveau in te schatten. Beginners kunnen A1 kiezen zonder de quiz te maken. Bevestig je niveau en de duur om een <strong>Studieplan</strong> voor die taal te maken.",
     "q_workflow": "Wat is de volledige workflow?",
@@ -1382,11 +1389,11 @@
     "q_tutor": "Hoe kan ik oefenen met Lingu?",
     "a_tutor": "Lingu stemt antwoorden af op je actieve leertaal en de context van je plan. Stel grammaticavragen, vraag uitleg, oefen schrijven in die taal of voer een gesprek. Gesprekken worden per taal opgeslagen en kunnen vanuit je geschiedenis worden hervat.",
     "q_voice": "Hoe werkt de spraakconversatie?",
-    "a_voice": "De modus <strong>Spraakconversatie</strong> laat je in realtime praten met Lingu. Druk op Start om te beginnen — de app herkent je stem automatisch via spraakactiviteitsdetectie (VAD) en de tutor antwoordt met spraaksynthese. Je kunt de tutor op elk moment onderbreken (barge-in). De sessie eindigt wanneer de tijdslimiet is bereikt of je op Stoppen drukt. Zorg ervoor dat je browser toestemming heeft voor de microfoon.",
+    "a_voice": "Druk in <strong>Spraakconversatie</strong> op Sessie starten en geef toestemming voor toegang tot de microfoon. De app detecteert wanneer je praat en Lingu antwoordt met audio. Wacht tot Lingu klaar is voordat je weer praat: door de tutor heen praten onderbreekt het antwoord niet. In <settingsLink>Instellingen</settingsLink> kun je de pauze voordat je bijdrage wordt verstuurd, de sessieduur en de time-out bij inactiviteit aanpassen. De sessie eindigt wanneer je op Stoppen drukt of een toepasselijke limiet bereikt.",
     "q_listening": "Hoe werken de luisteroefeningen?",
-    "a_listening": "In <strong>Listening</strong> bereidt Lingu luisteroefeningen voor die passen bij jouw CEFR-niveau. Luister naar de audio en beantwoord 5 begripsvragen. Na het insturen krijg je je score (0–5), XP, de juiste antwoorden en de volledige transcriptie. Je kunt op aanvraag nieuwe oefeningen genereren.",
+    "a_listening": "In <strong>Luisteren</strong> maakt Lingu luisteroefeningen die passen bij je CEFR-niveau. Luister naar de audio en beantwoord daarna 5 begripsvragen. Na het versturen kun je je score (0–5), de verdiende XP, de juiste antwoorden en de volledige transcriptie bekijken. Selecteer <strong>Waarom dit antwoord</strong> om uitleg in je moedertaal aan te vragen, met een onderbouwend fragment uit de transcriptie. Je kunt nieuwe oefeningen aanvragen binnen de gebruikslimieten van je account.",
     "q_reading": "Hoe werken de leesoefeningen?",
-    "a_reading": "De <strong>Reading</strong>-sectie genereert teksten op jouw CEFR-niveau — mededelingen, e-mails, artikelen, blogposts en meer. Lees de tekst en beantwoord 5 multiple-choice vragen. Na het insturen krijg je je score (0–5) en XP. Nieuwe oefeningen kunnen op aanvraag worden gegenereerd.",
+    "a_reading": "In <strong>Lezen</strong> maakt Lingu teksten op je CEFR-niveau, zoals mededelingen, e-mails en artikelen. Lees de tekst en beantwoord 5 meerkeuzevragen. Na het versturen kun je je score (0–5), de verdiende XP en de juiste antwoorden bekijken. Selecteer <strong>Waarom dit antwoord</strong> om uitleg in je moedertaal aan te vragen, met een onderbouwend fragment uit de tekst. Je kunt nieuwe oefeningen aanvragen binnen de gebruikslimieten van je account.",
     "q_providers": "Welke AI-providers ondersteunt FreeLingo?",
     "a_providers_intro": "Configureerbaar in <code>.env</code> via <code>LLM_PROVIDER</code>:",
     "provider_ollama": "Lokaal, gratis. Vereist Ollama op de host. Aanbevolen model: gemma4:e4b.",
@@ -1394,11 +1401,25 @@
     "provider_anthropic": "Anthropic Claude. Vereist ANTHROPIC_API_KEY.",
     "provider_deepseek": "DeepSeek API. Vereist DEEPSEEK_API_KEY.",
     "q_invite": "Kan ik anderen uitnodigen?",
-    "a_invite": "Ja. Via <adminLink>Admin → Gebruikers</adminLink> kan de beheerder gebruikers direct aanmaken of eenmalige uitnodigingslinks genereren die na 48 uur verlopen. Openbare registratie is standaard uitgeschakeld (<code>ALLOW_REGISTRATION=false</code>).",
+    "a_invite": "Ja. Via <adminLink>Admin → Gebruikers</adminLink> kunnen beheerders direct gebruikers aanmaken of eenmalige uitnodigingslinks genereren die na 48 uur verlopen. Openbare registratie hangt af van de serverinstelling <code>ALLOW_REGISTRATION</code>.",
     "q_password": "Hoe verander ik mijn wachtwoord of moedertaal?",
     "a_password": "Ga naar <settingsLink>Instellingen</settingsLink>. Daar kun je je weergavenaam, moedertaal en wachtwoord bijwerken.",
     "q_uiLanguage": "Hoe verander ik de taal van het platform?",
-    "a_uiLanguage": "Ga naar <settingsLink>Instellingen</settingsLink> en zoek de <strong>Platformtaal</strong> dropdown in het Profielgedeelte. Selecteer je voorkeurstaal en de hele interface schakelt direct om.",
+    "a_uiLanguage": "Ga naar <settingsLink>Instellingen</settingsLink> en zoek het keuzemenu <strong>Interfacetaal</strong> in je profiel. Selecteer je voorkeurstaal en druk op <strong>Wijzigingen opslaan</strong>. Na het opslaan wordt de pagina opnieuw geladen in de geselecteerde taal. Dit verandert niet de taal die je leert.",
+    "q_multiLanguage": "Kan ik meerdere talen leren zonder mijn voortgang te verliezen?",
+    "a_multiLanguage": "Ja. Voeg een taal toe via <languagesLink>Instellingen → Mijn talen</languagesLink> en gebruik de taalkiezer om tussen talen te wisselen. Elke taal behoudt een eigen plan, voortgang, flashcards en gespreksgeschiedenis. Wisselen verwijdert je opgeslagen voortgang niet. Accountinstellingen, je abonnement, gebruiksquota en de herinneringen van Lingu worden gedeeld tussen talen.",
+    "q_grammarPractice": "Hoe oefen ik een specifiek grammaticaonderwerp?",
+    "a_grammarPractice": "Open een onderwerp in <grammarLink>Bronnen → Grammaticareferentie</grammarLink> en selecteer <strong>Oefenen</strong> om het toe te voegen aan je persoonlijke bibliotheek voor grammaticaoefeningen. Met een actief plan kun je reeksen van vijf oefeningen genereren: drie meerkeuzevragen en twee invulvragen. Je antwoorden en resultaten worden opgeslagen, zodat je je oefeningen kunt bijhouden. Deze activiteit levert geen XP op.",
+    "q_games": "Welke spellen zijn er en welke modus moet ik kiezen?",
+    "a_games": "In <gamesLink>Spellen</gamesLink> kun je fouten opsporen en corrigeren in Foutendetective, fragmenten ordenen in Zet de zin in volgorde of woorden aan betekenissen koppelen in Woordparen. Kies de herhaalmodus om afgeronde lessen te herhalen, de voorbereidingsmodus om bekende stof voor je volgende les te versterken of vrij oefenen om op het niveau van je plan te oefenen. Modi waarvoor onvoldoende bronmateriaal beschikbaar is, zijn uitgeschakeld met een toelichting.",
+    "q_plans": "Wat is het verschil tussen het gratis plan, Premium en de proefperiode?",
+    "a_plans": "Met het gratis plan kun je leren binnen gebruiksquota. Premium heft deze quota van het gratis plan op, maar de algemene accountlimieten blijven gelden. Als je account een eerste proefperiode zonder betaalkaart bevat, kun je daarna doorgaan met het gratis plan, zonder automatische afschrijving. Een proefperiode die bij het afsluiten van een abonnement wordt aangeboden, staat hier los van en kan een betaalkaart vereisen. Bekijk je status en de huidige abonnementsvoorwaarden in <billingLink>Instellingen → Plan en abonnement</billingLink>.",
+    "q_quotas": "Waarom heb ik een limiet bereikt en wanneer wordt die gereset?",
+    "a_quotas": "Gebruiksquota horen bij je account en worden gedeeld tussen de talen die je leert. Gratis dagelijkse quota worden om 00:00 UTC gereset; gratis wekelijkse quota op maandag om 00:00 UTC. Bekijk je resterende tegoed bij elke activiteit en de algemene accountlimieten in <billingLink>Instellingen</billingLink>. Functies die alleen met Premium beschikbaar zijn, worden niet ontgrendeld door te wachten op een quotareset. De algemene accountlimieten gelden ook voor Premium en proefperiodes.",
+    "q_cancelSubscription": "Hoe zeg ik de verlenging van mijn abonnement op?",
+    "a_cancelSubscription": "Ga naar <billingLink>Instellingen → Plan en abonnement</billingLink>, selecteer <strong>Abonnement beheren</strong> en rond de opzegging af in het portaal dat wordt geopend. Als je de verlenging aan het einde van de huidige periode opzegt, behoud je toegang tot die periode afloopt. Je account verwijderen stopt de facturering niet: je moet eerst de verlenging opzeggen.",
+    "q_memories": "Wat onthoudt Lingu over mij en hoe kan ik dat verwijderen?",
+    "a_memories": "Lingu kan nuttige persoonlijke gegevens uit tekst- en spraakgesprekken opslaan om toekomstige antwoorden te personaliseren. Deze herinneringen worden gedeeld tussen alle talen die je leert. In <memoriesLink>Instellingen → Geheugen</memoriesLink> kun je ze bekijken, eigen herinneringen toevoegen, afzonderlijke herinneringen verwijderen of ze allemaal wissen.",
     "q_feedback": "Hoe kan ik een nieuwe functie voorstellen of een bug melden?",
     "a_feedback": "Gebruik de <feedbackLink>Feedback</feedbackLink> sectie in de zijbalk. Je kunt suggesties voor nieuwe functies indienen of bugs melden. Stem op ideeën van andere gebruikers, laat reacties achter en volg de status van elk verzoek. Alle inzendingen zijn openbaar en worden beoordeeld door de beheerder."
   },
@@ -1912,29 +1933,25 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.14.0",
+    "version": "v1.14.5",
     "cta": "Begrepen",
     "entry1": {
+      "label": "Je plan, stap voor stap",
+      "desc": "Mijn plan toont je leerproces nu als een route: bekijk je voortgang, vind je huidige onderdeel en ontdek de volgende stappen. Open elk onderdeel om de lessen te bekijken, verder te leren of te herhalen wat je hebt afgerond."
+    },
+    "entry2": {
       "label": "Oefen grammatica in je eigen tempo",
       "desc": "Voeg onderwerpen uit de grammaticabronnen toe aan je persoonlijke bibliotheek en oefen met reeksen van vijf oefeningen, met correcties en uitleg. Bekijk je resultaten en oefen daarna verder in een spraakgesprek met Lingu over het onderwerp en je antwoorden."
     },
-    "entry2": {
+    "entry3": {
       "label": "Nieuwe talen: Kroatisch, Tsjechisch, Deens, Fins en Roemeens",
       "desc": "Kroatisch, Tsjechisch, Deens, Fins en Roemeens zijn nu beschikbaar als leertalen, met inhoud van A1 tot C2. Kies ze wanneer je begint of voeg ze toe via Instellingen → Mijn talen."
-    },
-    "entry3": {
-      "label": "Begrijp elk antwoord beter",
-      "desc": "Bekijk oefenvragen vertaald naar je moedertaal terwijl de oorspronkelijke vraag zichtbaar blijft. Vraag na Reading of Listening om uitleg in je moedertaal met een tekstfragment dat het antwoord onderbouwt. Tijdens het herhalen kun je de tekst ook opnieuw lezen of de audio nog eens beluisteren."
     },
     "entry4": {
       "label": "Lingu helpt wanneer je het nodig hebt",
       "desc": "Begrijp je iets niet tijdens een spraakgesprek? Vraag Lingu om hulp. Lingu kan het kort in je moedertaal uitleggen en daarna verdergaan met oefenen in de taal die je leert."
     },
     "entry5": {
-      "label": "Natuurlijkere en expressievere stemmen",
-      "desc": "Geniet van natuurlijkere en expressievere stemmen in je luisteroefeningen en gesprekken met Lingu, voor een duidelijkere en prettigere luisterervaring."
-    },
-    "entry6": {
       "label": "Een soepelere ervaring",
       "desc": "We hebben ook kleine fouten opgelost en een paar details verbeterd, zodat je elke dag met nog meer plezier leert met FreeLingo."
     }

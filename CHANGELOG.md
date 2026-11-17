@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.5] - 2026-11-17
+
+### Changed
+
+- Present My Plan as a vertical learning itinerary with an expanded current unit, overall lesson progress, readable upcoming stages, a distinct final assessment milestone, and pending lessons near the header. Redesign unit details with lesson progress, clearer actions, expandable grammar references, and accessible modal navigation.
+- Increase Feedback filter and action text to 12 px and metadata and counters to 11 px for improved readability.
+- Increase authenticated FAQ questions and answers to 14 px, matching the public FAQ.
+- Group the authenticated FAQ by topic and add guidance on multiple languages, grammar practice, games, memories, plans, quotas, and subscription cancellation in all interface languages. Correct voice interruption, profile-language saving, and registration guidance, and explain Reading and Listening answer help.
+
+### Fixed
+
+- Prevent duplicate lesson keys in My Plan unit details when generated lessons and future scheduled lessons appear together.
+
+### Security
+
+- Update Next.js and its ESLint configuration to 16.4.6 to fix cached data disclosure across root parameters (GHSA-mfr8-8qww-v76h).
+- Update the transitive typescript-eslint packages to 8.73.0, adopting the patched minimatch dependency for glob-pattern denial of service (GHSA-g3hv-75wg-m249). The separate shadcn dependency chain remains affected pending an upstream update.
+
 ## [1.14.0] - 2026-11-16
 
 ### Added
