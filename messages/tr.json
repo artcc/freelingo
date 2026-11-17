@@ -831,6 +831,7 @@
     "generatingError": "Ders oluşturulamadı",
     "loading": "Plan yükleniyor...",
     "learningRoadmap": "Öğrenme Yol Haritası",
+    "progressSummary": "{total} dersin {completed} tanesi tamamlandı",
     "level": "Seviye",
     "duration": "Süre",
     "durationDetail": "{weeks} hafta · haftada {days} gün",

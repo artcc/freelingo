@@ -831,6 +831,7 @@
     "generatingError": "Det gick inte att skapa lektionen",
     "loading": "Laddar plan...",
     "learningRoadmap": "Lärandeplan",
+    "progressSummary": "{completed} av {total} lektioner slutförda",
     "level": "Nivå",
     "duration": "Längd",
     "durationDetail": "{weeks} veckor · {days} dagar/vecka",

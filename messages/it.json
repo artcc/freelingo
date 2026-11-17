@@ -831,6 +831,7 @@
     "generatingError": "Generazione lezione non riuscita",
     "loading": "Caricamento piano...",
     "learningRoadmap": "Percorso di apprendimento",
+    "progressSummary": "{completed} lezioni completate su {total}",
     "level": "Livello",
     "duration": "Durata",
     "durationDetail": "{weeks} settimane · {days} giorni/settimana",

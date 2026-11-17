@@ -831,6 +831,7 @@
     "generatingError": "Lektion konnte nicht generiert werden",
     "loading": "Plan wird geladen...",
     "learningRoadmap": "Lernfahrplan",
+    "progressSummary": "{completed} von {total} Lektionen abgeschlossen",
     "level": "Niveau",
     "duration": "Dauer",
     "durationDetail": "{weeks} Wochen · {days} Tage/Woche",

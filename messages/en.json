@@ -831,6 +831,7 @@
     "generatingError": "Failed to generate lesson",
     "loading": "Loading plan...",
     "learningRoadmap": "Learning Roadmap",
+    "progressSummary": "{completed} of {total} lessons completed",
     "level": "Level",
     "duration": "Duration",
     "durationDetail": "{weeks} weeks · {days} days/week",

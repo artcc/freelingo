@@ -831,6 +831,7 @@
     "generatingError": "Error al generar la lección",
     "loading": "Cargando plan...",
     "learningRoadmap": "Hoja de ruta",
+    "progressSummary": "{completed} de {total} lecciones completadas",
     "level": "Nivel",
     "duration": "Duración",
     "durationDetail": "{weeks} semanas · {days} días/semana",

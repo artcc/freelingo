@@ -831,6 +831,7 @@
     "generatingError": "Generarea lecției a eșuat",
     "loading": "Se încarcă planul...",
     "learningRoadmap": "Foaia de parcurs",
+    "progressSummary": "{completed} din {total} lecții finalizate",
     "level": "Nivel",
     "duration": "Durată",
     "durationDetail": "{weeks} săptămâni · {days} zile/săptămână",

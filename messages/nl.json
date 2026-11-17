@@ -831,6 +831,7 @@
     "generatingError": "Genereren van les mislukt",
     "loading": "Plan laden...",
     "learningRoadmap": "Leertraject",
+    "progressSummary": "{completed} van {total} lessen voltooid",
     "level": "Niveau",
     "duration": "Duur",
     "durationDetail": "{weeks} weken · {days} dagen/week",

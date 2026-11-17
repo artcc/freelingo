@@ -831,6 +831,7 @@
     "generatingError": "Не удалось сгенерировать урок",
     "loading": "Загрузка плана...",
     "learningRoadmap": "Дорожная карта",
+    "progressSummary": "Завершено уроков: {completed} из {total}",
     "level": "Уровень",
     "duration": "Продолжительность",
     "durationDetail": "{weeks} нед. · {days} дн./нед.",

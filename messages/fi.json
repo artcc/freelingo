@@ -831,6 +831,7 @@
     "generatingError": "Oppituntia ei voitu luoda",
     "loading": "Ladataan suunnitelmaa...",
     "learningRoadmap": "Oppimispolku",
+    "progressSummary": "{completed}/{total} oppituntia suoritettu",
     "level": "Taso",
     "duration": "Kesto",
     "durationDetail": "{weeks} viikkoa · {days} päivää viikossa",

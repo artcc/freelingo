@@ -831,6 +831,7 @@
     "generatingError": "Échec de la génération de la leçon",
     "loading": "Chargement du plan...",
     "learningRoadmap": "Feuille de route",
+    "progressSummary": "{completed} leçons terminées sur {total}",
     "level": "Niveau",
     "duration": "Durée",
     "durationDetail": "{weeks} semaines · {days} jours/semaine",

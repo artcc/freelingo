@@ -831,6 +831,7 @@
     "generatingError": "Lektionen kunne ikke oprettes",
     "loading": "Indlæser plan...",
     "learningRoadmap": "Læringsforløb",
+    "progressSummary": "{completed} af {total} lektioner gennemført",
     "level": "Niveau",
     "duration": "Varighed",
     "durationDetail": "{weeks} uger · {days} dage/uge",

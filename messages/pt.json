@@ -831,6 +831,7 @@
     "generatingError": "Falha ao gerar aula",
     "loading": "Carregando plano...",
     "learningRoadmap": "Roteiro de aprendizado",
+    "progressSummary": "{completed} de {total} lições concluídas",
     "level": "Nível",
     "duration": "Duração",
     "durationDetail": "{weeks} semanas · {days} dias/semana",

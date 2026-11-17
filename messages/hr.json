@@ -831,6 +831,7 @@
     "generatingError": "Lekciju nije bilo moguće stvoriti",
     "loading": "Učitavanje plana...",
     "learningRoadmap": "Put učenja",
+    "progressSummary": "Dovršeno lekcija: {completed} od {total}",
     "level": "Razina",
     "duration": "Trajanje",
     "durationDetail": "{weeks, plural, one {# tjedan} few {# tjedna} other {# tjedana}} · {days, plural, one {# dan/tjedan} few {# dana/tjedan} other {# dana/tjedan}}",
