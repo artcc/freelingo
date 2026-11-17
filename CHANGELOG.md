@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
+- Give OpenAI TTS the same female/male selector as Gemini, with independent provider preferences and backend-configurable voices. Default to `gpt-4o-mini-tts` with `female` mapped to `marin` and `male` to `cedar`; ignore saved provider-name preferences until a new choice is selected. Validate voice/model compatibility and refresh on-demand audio caches when mapped voices change, including with legacy OpenAI models.
 - Give Gemini TTS explicit pronunciation and regional-accent guidance for every supported language, sharing OpenAI's instructions while preserving the selected voice and multilingual text. Refresh on-demand audio caches when those instructions change.
 
 ## [1.14.5] - 2026-11-17

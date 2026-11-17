@@ -8,8 +8,7 @@ import { trackBrowserEvent } from '@/lib/analytics'
 import { useAuthStore } from '@/store/auth'
 import { getLogger } from '@/lib/logger'
 import {
-  GEMINI_VOICES,
-  OPENAI_VOICES,
+  TTS_VOICES,
   resolveTtsVoice,
   ttsVoiceStorageKey,
 } from '@/lib/tts-voice'
@@ -24,8 +23,6 @@ export function VoiceSection({ title }: { title?: string } = {}) {
   const geminiTtsVoice = useConfigStore((s) => s.geminiTtsVoice)
   const configLoaded = useConfigStore((s) => s.loaded)
   const sessionVersion = useAuthStore((s) => s.sessionVersion)
-  const voices: readonly string[] =
-    ttsProvider === 'gemini' ? GEMINI_VOICES : OPENAI_VOICES
 
   const [selectedVoice, setSelectedVoice] = useState<string>('')
   const [playingVoice, setPlayingVoice] = useState<string | null>(null)
@@ -52,11 +49,8 @@ export function VoiceSection({ title }: { title?: string } = {}) {
       ttsProvider === 'gemini' ? geminiTtsVoice : openaiTtsVoice
     setSelectedVoice(
       resolveTtsVoice(ttsProvider) ??
-        (voices.includes(defaultVoice)
-          ? defaultVoice
-          : ttsProvider === 'gemini'
-            ? 'female'
-            : 'nova')
+        TTS_VOICES.find((voice) => voice === defaultVoice) ??
+        'female'
     )
     setPlayingVoice(null)
     setLoadingVoice(null)
@@ -66,7 +60,6 @@ export function VoiceSection({ title }: { title?: string } = {}) {
     openaiTtsVoice,
     geminiTtsVoice,
     configLoaded,
-    voices,
     cleanupPreview,
   ])
 
@@ -174,16 +167,14 @@ export function VoiceSection({ title }: { title?: string } = {}) {
       <div className="flex items-center gap-3">
         <select
           aria-label={title ?? t('sectionVoice')}
-          aria-describedby={ttsProvider === 'gemini' ? characterId : undefined}
+          aria-describedby={characterId}
           value={selectedVoice}
           onChange={(e) => selectVoice(e.target.value)}
           className="bg-fl-bg border-fl-border text-fl-fg focus:border-fl-border-2 flex-1 appearance-none border px-4 py-3 font-mono text-sm tracking-widest uppercase transition-colors focus:outline-none"
         >
-          {voices.map((voice) => (
+          {TTS_VOICES.map((voice) => (
             <option key={voice} value={voice}>
-              {ttsProvider === 'gemini'
-                ? t(voice === 'female' ? 'voiceFemale' : 'voiceMale')
-                : voice}
+              {t(voice === 'female' ? 'voiceFemale' : 'voiceMale')}
             </option>
           ))}
         </select>
@@ -200,14 +191,12 @@ export function VoiceSection({ title }: { title?: string } = {}) {
               : t('voicePlay')}
         </button>
       </div>
-      {ttsProvider === 'gemini' && (
-        <p
-          id={characterId}
-          className="text-fl-hint text-fl-muted-3 mt-2 font-sans"
-        >
-          {t('voiceCharacter')}
-        </p>
-      )}
+      <p
+        id={characterId}
+        className="text-fl-hint text-fl-muted-3 mt-2 font-sans"
+      >
+        {t('voiceCharacter')}
+      </p>
     </div>
   )
 }

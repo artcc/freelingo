@@ -10,8 +10,9 @@ from unittest.mock import Mock
 import httpx
 import pytest
 
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services import gemini_tts_service as gemini
-from app.services.gemini_tts_service import GEMINI_VOICES, GeminiTTSService
+from app.services.gemini_tts_service import GeminiTTSService
 from app.services.prompts.speech import build_speech_instructions
 
 
@@ -268,7 +269,7 @@ async def test_configurable_default_and_provider_voice_ids(mock_http, voice, exp
 
     mock_http(handler)
     await service.synthesize("Text", voice)
-    assert GEMINI_VOICES == frozenset({"female", "male"})
+    assert CLOUD_TTS_VOICES == frozenset({"female", "male"})
 
 
 def test_cache_tracks_effective_configuration_and_language(service, monkeypatch):

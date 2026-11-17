@@ -2,6 +2,8 @@ from typing import Self
 
 from pydantic import BaseModel, Field, model_validator
 
+CLOUD_TTS_VOICES = frozenset({"female", "male"})
+
 
 class TTSRequest(BaseModel):
     text: str = Field(min_length=1, max_length=5000)

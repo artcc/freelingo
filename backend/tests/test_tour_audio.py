@@ -15,7 +15,9 @@ TEXT = "Texto del tour enviado desde la interfaz."
 def tour_service(monkeypatch, tmp_path):
     service = object.__new__(OpenAITTSService)
     service.model = "tts-1"
-    service.voice = "nova"
+    service.voice = "female"
+    service.female_voice = "nova"
+    service.male_voice = "onyx"
     service.speed = 1.0
     service.synthesize = AsyncMock(return_value=b"ID3tour-audio")
     monkeypatch.setattr(settings, "AUDIO_STORAGE_PATH", str(tmp_path))
@@ -33,14 +35,14 @@ async def test_narration_requires_authentication(client, tour_service):
 async def test_client_text_interface_language_and_voice_are_cached(client, test_user, tour_service):
     _, headers = test_user
     url = "/api/tts/tour/fr/step6"
-    body = {"text": "Pratiquez avec Lingu.", "voice": "coral"}
+    body = {"text": "Pratiquez avec Lingu.", "voice": "male"}
     first = await client.post(url, headers=headers, json=body)
     second = await client.post(url, headers=headers, json=body)
     assert first.status_code == second.status_code == 200
     assert first.content == second.content == b"ID3tour-audio"
     assert first.headers["content-type"] == "audio/mpeg"
     assert first.headers["cache-control"] == "no-store"
-    tour_service.synthesize.assert_awaited_once_with(body["text"], "coral", language="fr")
+    tour_service.synthesize.assert_awaited_once_with(body["text"], "male", language="fr")
 
 
 @pytest.mark.parametrize(
@@ -71,15 +73,17 @@ async def test_cache_identity_covers_effective_settings_and_text(tour_service):
         return await get_tour_audio(tour_service, locale=locale, text=text, voice=voice)
 
     original = await audio()
-    assert await audio("nova") == original
-    paths = {original, await audio("coral"), await audio(locale="en")}
+    assert await audio("female") == original
+    paths = {original, await audio("male"), await audio(locale="en")}
     tour_service.model = "another-configured-model"
     paths.add(await audio())
     tour_service.speed = 0.9
     paths.add(await audio())
     paths.add(await audio(text="Texto revisado"))
-    assert len(paths) == 6
-    assert tour_service.synthesize.await_count == 6
+    tour_service.female_voice = "coral"
+    paths.add(await audio())
+    assert len(paths) == 7
+    assert tour_service.synthesize.await_count == 7
 
 
 async def test_tour_regenerates_when_pronunciation_changes(tour_service, monkeypatch):

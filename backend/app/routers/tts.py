@@ -17,20 +17,17 @@ from app.models.conversation import Conversation
 from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.schemas.auth import SUPPORTED_UI_LOCALES
-from app.schemas.tts_stt import ContextualTTSRequest, TTSRequest
+from app.schemas.tts_stt import CLOUD_TTS_VOICES, ContextualTTSRequest, TTSRequest
 from app.services.chat_markdown import chat_markdown_to_speech
-from app.services.gemini_tts_service import GEMINI_VOICES, GeminiTTSService
+from app.services.gemini_tts_service import GeminiTTSService
 from app.services.prompts.common import TUTOR_DISPLAY_NAME
-from app.services.tour_audio import OPENAI_VOICES, get_tour_audio
+from app.services.tour_audio import get_tour_audio
 from app.services.tts_service import OpenAITTSService, get_tts_audio_format
 
 router = APIRouter(prefix="/api", tags=["tts"])
 logger = get_logger(__name__)
 
 _PREVIEW_DIR = "/app/tts_previews"
-_OPENAI_VOICES = frozenset(
-    {"alloy", "ash", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"}
-)
 _PREVIEW_TEXT = (
     f"Hello! I'm {TUTOR_DISPLAY_NAME}, your tutor. This is how I sound — warm, clear, "
     "and ready to help you practise every day. Let's get started!"
@@ -49,9 +46,11 @@ async def tour_narration(
     """Speak frontend-localized tour text, reusing persistent audio across users."""
     if locale not in SUPPORTED_UI_LOCALES or step not in {f"step{i}" for i in range(1, 8)}:
         raise HTTPException(status_code=404, detail="Unknown tour narration")
-    if settings.TTS_PROVIDER == "openai" and body.voice and body.voice not in OPENAI_VOICES:
-        raise HTTPException(status_code=400, detail="Invalid voice name")
-    if settings.TTS_PROVIDER == "gemini" and body.voice and body.voice not in GEMINI_VOICES:
+    if (
+        settings.TTS_PROVIDER in {"openai", "gemini"}
+        and body.voice
+        and body.voice not in CLOUD_TTS_VOICES
+    ):
         raise HTTPException(status_code=400, detail="Invalid voice name")
     service = getattr(request.app.state, "tts_service", None)
     if service is None:
@@ -119,10 +118,8 @@ async def text_to_speech(
 
     synth_t0 = time.perf_counter()
     # Kokoro keeps its configured voice, including after a provider switch.
-    voice = body.voice if settings.TTS_PROVIDER != "local" else None
-    if settings.TTS_PROVIDER == "gemini":
-        voice = voice or None
-    if settings.TTS_PROVIDER == "gemini" and voice and voice not in GEMINI_VOICES:
+    voice = (body.voice or None) if settings.TTS_PROVIDER != "local" else None
+    if voice and voice not in CLOUD_TTS_VOICES:
         raise HTTPException(status_code=400, detail="Invalid voice name")
     audio = await tts_service.synthesize(text, voice, language=language)
     _, media_type = get_tts_audio_format(tts_service)
@@ -165,8 +162,7 @@ async def voice_preview(
             detail="Voice preview is only available with cloud TTS",
         )
 
-    voices = GEMINI_VOICES if settings.TTS_PROVIDER == "gemini" else _OPENAI_VOICES
-    if voice not in voices:
+    if voice not in CLOUD_TTS_VOICES:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid voice name")
 
     tts_service = getattr(request.app.state, "tts_service", None)
@@ -181,7 +177,7 @@ async def voice_preview(
     if isinstance(tts_service, GeminiTTSService):
         key = tts_service.get_cache_key(_PREVIEW_TEXT, voice, "en-GB")
         cache_path = os.path.join(_PREVIEW_DIR, f"gemini-{voice}-{key}.wav")
-    if isinstance(tts_service, OpenAITTSService) and tts_service.get_instructions():
+    if isinstance(tts_service, OpenAITTSService):
         key = tts_service.get_cache_key(_PREVIEW_TEXT, voice)
         cache_path = os.path.join(_PREVIEW_DIR, f"{voice}-{key}.mp3")
 

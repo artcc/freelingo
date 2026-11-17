@@ -93,6 +93,8 @@ async def lifespan(app: FastAPI):  # noqa: ANN201
             api_key=settings.OPENAI_API_KEY,
             model=settings.OPENAI_TTS_MODEL,
             voice=settings.OPENAI_TTS_VOICE,
+            female_voice=settings.OPENAI_TTS_FEMALE_VOICE,
+            male_voice=settings.OPENAI_TTS_MALE_VOICE,
             speed=settings.OPENAI_TTS_SPEED,
         )
     elif settings.TTS_PROVIDER == "gemini":

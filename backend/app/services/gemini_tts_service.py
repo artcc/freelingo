@@ -11,11 +11,10 @@ import wave
 import httpx
 
 from app.core.app_logger import get_logger
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services.prompts.speech import build_speech_instructions
 
 logger = get_logger(__name__)
-
-GEMINI_VOICES = frozenset({"female", "male"})
 
 _BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 _SAMPLE_RATE = 24000
@@ -63,7 +62,7 @@ class GeminiTTSService:
         ):
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"Gemini TTS requires {name}")
-        if not isinstance(voice, str) or voice not in GEMINI_VOICES:
+        if not isinstance(voice, str) or voice not in CLOUD_TTS_VOICES:
             raise ValueError("Gemini TTS voice must be female or male")
         if (
             not isinstance(timeout, (int, float))
@@ -81,7 +80,7 @@ class GeminiTTSService:
 
     def _resolve_voice(self, voice: str | None) -> str:
         selected = self.voice if voice is None else voice
-        if not isinstance(selected, str) or selected not in GEMINI_VOICES:
+        if not isinstance(selected, str) or selected not in CLOUD_TTS_VOICES:
             raise ValueError("Gemini TTS voice must be female or male")
         return self.female_voice if selected == "female" else self.male_voice
 

@@ -55,9 +55,13 @@ The session fixes user, plan, target language, CEFR level, native language, voic
 mode at connection time. They are not refreshed globally during the session, except memories and
 native language before each normal user turn.
 
-The frontend resolves voice preferences for the selected provider: `tts_voice` for OpenAI and
-`gemini_tts_voice` (`female`/`male`) for Gemini. Invalid WebSocket voice choices fall back to the
-configured provider default for both OpenAI and Gemini; local TTS uses its configured voice.
+The frontend resolves independent voice preferences for the selected provider: `tts_voice` for
+OpenAI and `gemini_tts_voice` for Gemini, both accepting only logical `female`/`male` choices.
+Stored OpenAI provider voice names are ignored; the backend default applies until a logical
+preference is selected. The backend maps the logical choice to its configured actual provider voice.
+Invalid WebSocket voice choices fall back to the configured provider default for both OpenAI and
+Gemini; local TTS uses its configured voice. HTTP voice validation is stricter, as defined in
+`speech-services.instructions.md`.
 
 Changing the authenticated user or authentication session invalidates pending startup and ends an
 active browser voice session: microphone tracks, warmup requests, WebSocket, and playback are released.

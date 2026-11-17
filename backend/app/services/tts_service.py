@@ -6,10 +6,16 @@ import httpx
 import openai
 
 from app.core.app_logger import get_logger
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services.gemini_tts_service import GeminiTTSService
 from app.services.prompts.speech import build_speech_instructions
 
 logger = get_logger(__name__)
+
+_OPENAI_LEGACY_VOICES = frozenset(
+    {"alloy", "ash", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"}
+)
+_OPENAI_PROVIDER_VOICES = _OPENAI_LEGACY_VOICES | {"ballad", "verse", "marin", "cedar"}
 
 
 def get_tts_audio_format(service: object) -> tuple[str, str]:
@@ -58,12 +64,34 @@ class OpenAITTSService:
         voice: str,
         speed: float = 1.0,
         timeout: float | None = None,
+        *,
+        female_voice: str = "marin",
+        male_voice: str = "cedar",
     ) -> None:
+        if not isinstance(model, str) or not model.strip():
+            raise ValueError("OpenAI TTS requires model")
+        model = model.strip()
+        if not isinstance(voice, str) or voice not in CLOUD_TTS_VOICES:
+            raise ValueError("OpenAI TTS voice must be female or male")
+        supported_voices = (
+            _OPENAI_LEGACY_VOICES if model in {"tts-1", "tts-1-hd"} else _OPENAI_PROVIDER_VOICES
+        )
+        for name, value in (("female_voice", female_voice), ("male_voice", male_voice)):
+            if not isinstance(value, str) or value.strip() not in supported_voices:
+                raise ValueError(f"OpenAI TTS {name} is not supported by {model}")
         self._client = openai.AsyncOpenAI(api_key=api_key)
         self.model = model
         self.voice = voice
+        self.female_voice = female_voice.strip()
+        self.male_voice = male_voice.strip()
         self.speed = speed
         self.timeout = timeout
+
+    def _resolve_voice(self, voice: str | None) -> str:
+        selected = self.voice if voice is None else voice
+        if not isinstance(selected, str) or selected not in CLOUD_TTS_VOICES:
+            raise ValueError("OpenAI TTS voice must be female or male")
+        return self.female_voice if selected == "female" else self.male_voice
 
     async def health(self) -> None:
         """Raise if OpenAI TTS is unreachable (lightweight models list call)."""
@@ -82,7 +110,7 @@ class OpenAITTSService:
             "locale": language,
             "provider": "openai",
             "model": self.model,
-            "voice": voice or self.voice,
+            "voice": self._resolve_voice(voice),
             "speed": self.speed,
             "format": "mp3",
         }
@@ -100,7 +128,7 @@ class OpenAITTSService:
             logger.warning("[tts-openai] Empty text received for synthesis")
             return b""
 
-        req_voice = (voice or self.voice).strip()
+        req_voice = self._resolve_voice(voice)
         input_len = len(text)
         start_t = time.perf_counter()
         logger.info(

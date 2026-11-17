@@ -12,10 +12,6 @@ from app.core.config import settings
 from app.services.gemini_tts_service import GeminiTTSService
 from app.services.tts_service import KokoroTTSService, OpenAITTSService, get_tts_audio_format
 
-OPENAI_VOICES = frozenset(
-    {"alloy", "ash", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"}
-)
-
 
 async def get_tour_audio(
     service: KokoroTTSService | OpenAITTSService | GeminiTTSService,

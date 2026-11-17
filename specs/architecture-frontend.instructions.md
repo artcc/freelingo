@@ -387,15 +387,18 @@ restoring a stale blocked state. Catalog loads and creation responses reject obs
 ordering, and trial/payment terms. `lib/billing-copy.ts` owns the price comparison behind the
 conditional annual savings label. Low-quota notices link to `/settings#plan`.
 
-Public configuration includes the selected TTS provider and `gemini_tts_voice` default. Shared
+Public configuration includes the selected TTS provider and logical `openai_tts_voice` and
+`gemini_tts_voice` defaults. Shared
 `lib/tts-voice.ts` resolves provider-specific voice preferences: OpenAI uses browser storage key
-`tts_voice`; Gemini uses `gemini_tts_voice` with `female`/`male` choices. Settings shows the active
+`tts_voice`; Gemini uses `gemini_tts_voice`, both with only `female`/`male` choices. Settings shows the active
 provider's selector and previews under the localized “Lingu's voice” heading, with an invitation to
-choose how Lingu sounds and a “Listen” preview action. Gemini options use localized “Female voice”
+choose how Lingu sounds and a “Listen” preview action. Both cloud providers use localized “Female voice”
 and “Male voice” labels, with a shared “Warm and friendly” description associated with the selector
 for assistive technology. Audio players, tour, Listening generation, and conversation reuse
 that resolution; local TTS uses its configured backend voice. The preference keys remain separate
-when the operator changes provider.
+when the operator changes provider. Stored OpenAI provider voice names are ignored rather than
+mapped to a logical option; the backend default applies until the user chooses `female` or `male`.
+The client sends only logical choices; actual provider voice mappings remain backend-owned.
 
 The config store shares concurrent loads with a 20-second deadline covering headers and body;
 failure releases the shared operation for retry, and late responses cannot overwrite new config.

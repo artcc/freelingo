@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -30,8 +30,10 @@ class Settings(BaseSettings):
     TTS_PROVIDER: Literal["local", "openai", "gemini"] = "local"
     TTS_BASE_URL: str = "http://kokoro:8880"
     TTS_VOICE: str = "af_heart"
-    OPENAI_TTS_MODEL: str = "tts-1"
-    OPENAI_TTS_VOICE: str = "nova"
+    OPENAI_TTS_MODEL: str = "gpt-4o-mini-tts"
+    OPENAI_TTS_VOICE: Literal["female", "male"] = "female"
+    OPENAI_TTS_FEMALE_VOICE: str = "marin"
+    OPENAI_TTS_MALE_VOICE: str = "cedar"
     OPENAI_TTS_SPEED: float = 1.0
     GEMINI_API_KEY: str = ""
     GEMINI_TTS_MODEL: str = "gemini-3.8-flash-tts"
@@ -146,6 +148,14 @@ class Settings(BaseSettings):
         "sv-SE",
         "zh-CN",
     ]
+
+    @field_validator("OPENAI_TTS_VOICE", mode="before")
+    @classmethod
+    def validate_openai_tts_voice(cls, value: object, info: ValidationInfo) -> object:
+        # Unused legacy OpenAI settings must not prevent local/Gemini startup.
+        if info.data.get("TTS_PROVIDER") != "openai" and value not in ("female", "male"):
+            return "female"
+        return value
 
     @field_validator(
         "DEFAULT_CONVERSATION_WEEKLY_SESSIONS",

@@ -37,7 +37,7 @@ export function ExerciseAudioPlayer({
     exerciseId,
     tts?.text,
     tts?.studyPlanId,
-    tts ? resolveTtsVoice('local') : undefined,
+    tts ? resolveTtsVoice('openai') : undefined,
     tts ? resolveTtsVoice('gemini') : undefined,
   ])
   const [state, setState] = useState<

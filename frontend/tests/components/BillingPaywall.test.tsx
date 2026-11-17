@@ -94,7 +94,7 @@ function resetStores() {
     stripeTrialDays: 7,
     freemiumTrialEnabled: true,
     ttsProvider: 'local',
-    openaiTtsVoice: 'nova',
+    openaiTtsVoice: 'female',
     maintenanceMode: false,
     priceMonthly: 9.99,
     priceYearly: 99.99,
