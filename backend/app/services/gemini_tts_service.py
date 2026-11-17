@@ -11,13 +11,13 @@ import wave
 import httpx
 
 from app.core.app_logger import get_logger
+from app.services.prompts.speech import build_speech_instructions
 
 logger = get_logger(__name__)
 
 GEMINI_VOICES = frozenset({"female", "male"})
 
 _BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
-_SPEECH_STYLE = "Warm, clear delivery with natural pronunciation."
 _SAMPLE_RATE = 24000
 _UI_LOCALES = {
     "cs": "cs-CZ",
@@ -94,6 +94,12 @@ class GeminiTTSService:
             raise ValueError("Gemini TTS language must not be empty")
         return _UI_LOCALES.get(language, language)
 
+    @staticmethod
+    def _speech_style(locale: str | None) -> str:
+        # Unknown regions must not inherit a conflicting accent through prefix lookup.
+        known_locale = locale in _UI_LOCALES.values() or locale in {"en-US", "pt-BR"}
+        return build_speech_instructions(locale if known_locale else None)
+
     async def health(self) -> None:
         """Check authentication without generating paid audio."""
         timeout = min(self.timeout, 5.0)
@@ -109,13 +115,14 @@ class GeminiTTSService:
     def get_cache_key(
         self, text: str, voice: str | None = None, language: str | None = None
     ) -> str:
+        locale = self._resolve_language(language)
         identity = {
             "provider": "gemini",
             "model": self.model,
             "text": text,
             "voice": self._resolve_voice(voice),
-            "locale": self._resolve_language(language),
-            "style": _SPEECH_STYLE,
+            "locale": locale,
+            "style": self._speech_style(locale),
             "format": self.audio_extension,
             "mime_type": self.media_type,
             "sample_rate": _SAMPLE_RATE,
@@ -224,7 +231,9 @@ class GeminiTTSService:
                         {
                             "type": "text",
                             "text": text,
-                            "annotations": [{"type": "speech_metadata", "style": _SPEECH_STYLE}],
+                            "annotations": [
+                                {"type": "speech_metadata", "style": self._speech_style(locale)}
+                            ],
                         }
                     ],
                 }

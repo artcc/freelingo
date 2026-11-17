@@ -7,7 +7,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)](#quick-start)
-![Version](https://img.shields.io/badge/version-1.14.5-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.14.10-brightgreen?style=flat-square)
 
 <img src="assets/logo_large.png" alt="FreeLingo — language learning with Lingu, your voice conversation partner" width="900" />
 
@@ -40,6 +40,9 @@ Alongside the plan:
 - **Practise grammar topics:** add references to a [personal grammar library](specs/grammar-practice.instructions.md),
   complete saved five-question practices, and track results across plans in the same language.
   Completed practices can continue in voice with Lingu, informed by the topic and your answers.
+- **Rehearse everyday situations:** choose from 50 [voice role-plays](specs/situations.instructions.md)
+  across daily life, travel, shopping and services, social life, and work. Practise a concrete objective
+  with Lingu at your study plan's language and level.
 - **Learn through games:** [Error Detective, Sentence Order, and Vocabulary Pairs](specs/games.instructions.md).
   Review completed lessons, prepare familiar foundations for the next lesson, or practise at your
   plan's level. Sessions are saved for later, with language-specific history and plan-owned XP;
@@ -232,6 +235,10 @@ See [subscriptions and quotas](specs/subscriptions-freemium.instructions.md).
 `FREEMIUM_GRAMMAR_PRACTICE_DAILY` defaults to three new practices per account/UTC day, shared across
 study languages and independent of Games. Saved sessions remain available after exhaustion;
 Premium, active trials, and Stripe-disabled deployments bypass this free generation allowance.
+
+`FREEMIUM_SITUATIONS_WEEKLY` defaults to one successful situation start per account/ISO week, shared
+across study languages. Premium, active trials, and Stripe-disabled deployments bypass this feature
+allowance; ordinary voice access and conversation limits still apply.
 
 Web subscriptions use Stripe Checkout. Optional `REVENUECAT_ENABLED=true` synchronizes a shared
 Premium entitlement through RevenueCat while retaining Stripe payments and the existing web interface.

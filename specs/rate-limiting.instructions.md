@@ -98,6 +98,14 @@ Rate limiting is independent of the global per-user daily game admission quota.
 These transport limits are independent of the global UTC daily grammar-generation admission quota,
 which is separate from Games. Saved reads and answers do not consume generation allowance.
 
+## Situations
+
+- `GET /api/situations`: `60/minute`.
+
+Catalog reads do not consume the weekly per-user Situations allowance. Starts use
+`/ws/conversation` and its existing protections below, with the additional feature quota defined in
+`subscriptions-freemium.instructions.md`.
+
 ## Listening and Reading
 
 Both domains use:

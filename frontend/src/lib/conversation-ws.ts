@@ -68,7 +68,7 @@ export interface ErrorMessage {
   code: string
   message?: string
   reason?: 'freemium_exhausted' | 'freemium_unavailable'
-  feature?: 'voice'
+  feature?: 'voice' | 'situations'
   remaining?: number
   limit?: number
   turn_id?: number
@@ -84,6 +84,10 @@ export interface TurnCompleteMessage {
   turn_id?: number
 }
 
+export interface SituationStartedMessage {
+  type: 'situation_started'
+}
+
 export type WsMessage =
   | TranscriptMessage
   | BargeInMessage
@@ -93,6 +97,7 @@ export type WsMessage =
   | ErrorMessage
   | MemoryUpdatedMessage
   | TurnCompleteMessage
+  | SituationStartedMessage
 
 // ─── Chat context passed from tutor chat to voice session ────────────────────
 

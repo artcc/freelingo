@@ -10,6 +10,7 @@ import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
 import { useConfigStore } from '@/store/config'
 import { useFreemiumStore } from '@/store/freemium'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
+import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
 import { PremiumResultOffer } from '@/components/billing/PremiumResultOffer'
 import { SubscriptionPlanButtons } from '@/components/billing/SubscriptionPlanButtons'
 import { useTrialStatus } from '@/hooks/useTrialStatus'
@@ -234,6 +235,8 @@ export default function ConversationMode({
   targetLanguage,
   lessonId,
   grammarPracticeSessionId,
+  situationId,
+  situationStudyPlanId,
   lessonTitle,
   voiceTrialToken,
   voiceTrialDurationSeconds,
@@ -249,6 +252,8 @@ export default function ConversationMode({
   targetLanguage?: string
   lessonId?: number
   grammarPracticeSessionId?: string
+  situationId?: string
+  situationStudyPlanId?: number
   lessonTitle?: string
   voiceTrialToken?: string
   voiceTrialDurationSeconds?: number
@@ -262,6 +267,7 @@ export default function ConversationMode({
   const tCommon = useTranslations('common')
   const tPractice = useTranslations('lessonPractice')
   const tGrammarPractice = useTranslations('grammarPractice')
+  const tSituations = useTranslations('situations')
   const tMaintenance = useTranslations('maintenance')
   const locale = useLocale()
   const accessToken = useAuthStore((s) => s.accessToken)
@@ -273,6 +279,10 @@ export default function ConversationMode({
   const { freemiumTrialActive } = useTrialStatus()
   const { accessDenied, reportAccessDenied } =
     useFreemiumAccessRecovery('voice')
+  const {
+    accessDenied: situationAccessDenied,
+    reportAccessDenied: reportSituationAccessDenied,
+  } = useFreemiumAccessRecovery('situations')
 
   // ─── UI State ────────────────────────────────────────────────────────────
   const [status, setStatus] = useState<ConvStatus>('loading')
@@ -286,7 +296,7 @@ export default function ConversationMode({
       (!!freemiumStatus && freemiumStatus.voice_remaining_seconds > 0))
   const demoAccessEnded =
     trialMode && demoConsumed && !sessionActive && !regularAccessAvailable
-  const accessExhausted =
+  const voiceAccessExhausted =
     stripeEnabled &&
     !sessionActive &&
     !regularAccessAvailable &&
@@ -294,6 +304,16 @@ export default function ConversationMode({
       (!!freemiumStatus &&
         freemiumStatus.voice_remaining_seconds <= 0 &&
         !(trialMode && !demoConsumed)))
+  const situationsExhausted =
+    situationId !== undefined &&
+    stripeEnabled &&
+    !sessionActive &&
+    (situationAccessDenied ||
+      (!isSubscribed(user, stripeEnabled) &&
+        !freemiumTrialActive &&
+        freemiumStatus?.situations_remaining !== undefined &&
+        freemiumStatus.situations_remaining <= 0))
+  const accessExhausted = voiceAccessExhausted || situationsExhausted
   const hasCompletedResult =
     status === 'ended' &&
     resultOwner?.sessionVersion === sessionVersion &&
@@ -328,7 +348,12 @@ export default function ConversationMode({
     handleTextSelection,
     handleSaveWord,
     dismissTooltip,
-  } = useWordSave(lessonId, grammarPracticeSessionId)
+  } = useWordSave(
+    lessonId,
+    grammarPracticeSessionId,
+    situationId,
+    situationStudyPlanId
+  )
 
   // 6 random starters picked once per component mount, shown alphabetically
   const visibleStarters = useMemo(
@@ -854,17 +879,24 @@ export default function ConversationMode({
       ws.binaryType = 'arraybuffer'
       wsRef.current = ws
       const isCurrent = () => isCurrentSession(owner) && wsRef.current === ws
+      let situationStarted = false
+      let situationUsageRefreshed = false
 
       ws.onopen = () => {
         if (!isCurrent()) return
         const authPayload: Record<string, unknown> = { type: 'auth', token }
         if (voice) authPayload.voice = voice
-        if (context?.length) authPayload.context = context
+        if (context?.length && situationId === undefined)
+          authPayload.context = context
         if (targetLanguage) authPayload.target_language = targetLanguage
         if (voiceTrialToken) authPayload.voice_trial_token = voiceTrialToken
         if (lessonId !== undefined) authPayload.lesson_id = lessonId
         if (grammarPracticeSessionId !== undefined)
           authPayload.grammar_practice_session_id = grammarPracticeSessionId
+        if (situationId !== undefined && situationStudyPlanId !== undefined) {
+          authPayload.situation_id = situationId
+          authPayload.situation_study_plan_id = situationStudyPlanId
+        }
         try {
           ws.send(JSON.stringify(authPayload))
         } catch {
@@ -926,12 +958,25 @@ export default function ConversationMode({
         // Text → JSON control message
         try {
           const msg = JSON.parse(event.data as string) as WsMessage
+          // Admission precedes quota recording. The next pipeline frame arrives
+          // after recording, so an immediate read on admission would race it.
+          if (
+            situationStarted &&
+            !situationUsageRefreshed &&
+            (msg.type === 'status' || msg.type === 'transcript')
+          ) {
+            situationUsageRefreshed = true
+            refreshFreemium()
+          }
           convLogger.debug('ws text message', { type: msg.type })
-          if (msg.turn_id !== undefined) {
+          if ('turn_id' in msg && msg.turn_id !== undefined) {
             activeTurnIdRef.current = msg.turn_id
           }
 
           switch (msg.type) {
+            case 'situation_started':
+              if (situationId !== undefined) situationStarted = true
+              break
             case 'transcript':
               if (msg.role === 'user') {
                 if (msg.text.trim()) sessionPracticeRef.current.userSpoke = true
@@ -1046,17 +1091,30 @@ export default function ConversationMode({
                 lesson_practice_unavailable: tPractice('unavailable'),
                 grammar_practice_unavailable:
                   tGrammarPractice('voiceUnavailable'),
+                situation_unavailable: tSituations('unavailable'),
+                study_context_changed: tSituations('contextChanged'),
                 stt_failed: t('errorTranscription'),
                 llm_failed: t('errorResponse'),
                 tts_failed: t('errorSpeech'),
               }
+              const accessFeature =
+                situationId !== undefined && msg.feature === 'situations'
+                  ? 'situations'
+                  : 'voice'
               const accessFailure =
                 msg.code === 'subscription_required'
-                  ? getFreemiumAccessFailure(402, { detail: msg }, 'voice')
+                  ? getFreemiumAccessFailure(
+                      402,
+                      { detail: msg },
+                      accessFeature
+                    )
                   : null
               if (msg.code === 'subscription_required') {
-                if (accessFailure === 'exhausted') reportAccessDenied()
-                else refreshFreemium()
+                if (accessFailure === 'exhausted') {
+                  if (accessFeature === 'situations')
+                    reportSituationAccessDenied()
+                  else reportAccessDenied()
+                } else refreshFreemium()
               }
               setErrorMsg(
                 accessFailure === 'exhausted'
@@ -1120,10 +1178,13 @@ export default function ConversationMode({
       tCommon,
       tPractice,
       tGrammarPractice,
+      tSituations,
       tMaintenance,
       targetLanguage,
       lessonId,
       grammarPracticeSessionId,
+      situationId,
+      situationStudyPlanId,
       voiceTrialToken,
       trialMode,
       refreshCurrentUser,
@@ -1132,6 +1193,7 @@ export default function ConversationMode({
       showMemoryToast,
       refreshFreemium,
       reportAccessDenied,
+      reportSituationAccessDenied,
     ]
   )
 
@@ -1399,7 +1461,11 @@ export default function ConversationMode({
             {t('subtitle')}
           </p>
           <h1 className="text-fl-fg font-mono text-2xl font-bold tracking-tight">
-            {lessonTitle ? (
+            {situationId !== undefined ? (
+              <span lang={locale} className="font-sans">
+                {lessonTitle}
+              </span>
+            ) : lessonTitle ? (
               <span lang={locale}>
                 {tPractice.rich('title', {
                   title: lessonTitle,
@@ -1424,6 +1490,10 @@ export default function ConversationMode({
           </button>
         )}
       </div>
+
+      {situationId !== undefined && (
+        <FreemiumQuotaBanner feature="situations" className="mb-4" />
+      )}
 
       {trialMode && !regularAccessAvailable && !demoConsumed && (
         <div className="border-fl-accent/40 bg-fl-surface text-fl-muted-1 mb-4 border px-4 py-3 text-center font-mono text-xs tracking-widest uppercase">
@@ -1486,6 +1556,8 @@ export default function ConversationMode({
         )}
         {demoAccessEnded && status === 'ended' ? (
           !reviewPromptOpen && <TrialPremiumCta />
+        ) : situationsExhausted ? (
+          <PaywallBanner feature="situations" compact />
         ) : hasCompletedResult ? (
           <PremiumResultOffer
             feature="voice"
@@ -1510,6 +1582,7 @@ export default function ConversationMode({
         !accessExhausted &&
         lessonId === undefined &&
         grammarPracticeSessionId === undefined &&
+        situationId === undefined &&
         !sessionActive &&
         (status === 'ready' || status === 'ended' || status === 'error') && (
           <div className="mb-4">
@@ -1562,10 +1635,10 @@ export default function ConversationMode({
         {/* Quota pill — freemium gets a simplified voice counter, premium gets full quota bars */}
         {freemiumVoiceRemaining != null && freemiumVoiceLimit != null ? (
           <span
-            className={`text-fl-label font-mono tracking-widest uppercase ${accessExhausted || freemiumVoiceRemaining <= 0 ? 'text-red-500' : 'text-fl-muted-2'}`}
+            className={`text-fl-label font-mono tracking-widest uppercase ${voiceAccessExhausted || freemiumVoiceRemaining <= 0 ? 'text-red-500' : 'text-fl-muted-2'}`}
           >
             {t('freemiumVoiceRemaining', {
-              remaining: accessExhausted ? 0 : freemiumVoiceRemaining,
+              remaining: voiceAccessExhausted ? 0 : freemiumVoiceRemaining,
               limit: freemiumVoiceLimit,
             })}
           </span>

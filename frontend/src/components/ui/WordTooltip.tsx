@@ -95,7 +95,9 @@ export function WordTooltip({
 
 export function useWordSave(
   lessonId?: number,
-  grammarPracticeSessionId?: string
+  grammarPracticeSessionId?: string,
+  situationId?: string,
+  situationStudyPlanId?: number
 ) {
   const [selectedWord, setSelectedWord] = useState<string | null>(null)
   const [selectedContext, setSelectedContext] = useState('')
@@ -182,6 +184,12 @@ export function useWordSave(
           ...(lessonId !== undefined ? { lesson_id: lessonId } : {}),
           ...(grammarPracticeSessionId !== undefined
             ? { grammar_practice_session_id: grammarPracticeSessionId }
+            : {}),
+          ...(situationId !== undefined && situationStudyPlanId !== undefined
+            ? {
+                situation_id: situationId,
+                situation_study_plan_id: situationStudyPlanId,
+              }
             : {}),
         }),
       })

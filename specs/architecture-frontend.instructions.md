@@ -56,6 +56,12 @@ to check application and test code together.
 - `/games`: authenticated Games catalog, linked from the shared desktop/mobile main navigation.
   Presentation metadata lives in `lib/games.ts`; see `games.instructions.md` for catalog behavior.
   Each card uses `public/game/{id}.jpeg` above its title and description.
+- `/situations`: authenticated role-play catalog in Practice. The backend supplies canonical IDs,
+  category membership, and owned plan context; the `situations` translation namespace supplies
+  interface-localized titles and descriptions. Category filters, title/description search, and
+  locale-aware category/card ordering lead into the existing voice conversation page with a captured
+  situation and plan. A confirmed missing plan uses `NoPlanBanner`. See `situations.instructions.md`
+  for catalog, context, and role-play behavior.
 - `/games/error-detective`, `/games/sentence-order` and `/games/vocabulary-pairs` use `components/games/GameCatalog.tsx` for
   shared catalog presentation. `lib/detective.ts` supplies bounded authenticated requests;
   `lib/sentence-order.ts` and `lib/vocabulary-pairs.ts` define their game-specific contracts.
@@ -510,7 +516,7 @@ Desktop and mobile share the same navigation order:
 
 - Home.
 - My learning: My Plan, Progress, Level assessment.
-- Practice: Chat with Lingu, Flashcards, Games, Listening, Reading, Voice conversation.
+- Practice: Chat with Lingu, Flashcards, Games, Listening, Reading, Situations, Voice conversation.
 - Resources: Grammar, Phrasebook, Vocabulary.
 - Help: Contact (opens the contact modal), Feedback, Frequently asked questions.
 - A separate block after Help: Settings for everyone and Admin only for administrators.

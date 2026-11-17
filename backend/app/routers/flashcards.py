@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.core.limiter import limiter
+from app.data.situations import SITUATIONS_BY_ID
 from app.models.flashcard import Flashcard, FlashcardReviewReceipt
 from app.models.study_plan import StudyPlan
 from app.models.user import User
@@ -49,6 +50,7 @@ from app.services.progress_service import (
     lock_progress_plan,
     update_daily_progress,
 )
+from app.services.situations import get_situation_plan
 from app.services.user_language_service import get_active_language
 
 router = APIRouter(prefix="/api/flashcards", tags=["flashcards"])
@@ -472,6 +474,15 @@ async def create_flashcard_from_word(
             raise HTTPException(status_code=404, detail="Grammar practice not found")
         practice, plan = grammar_source
         cefr_level = practice.learner_level
+    elif data.situation_id is not None:
+        if data.situation_id not in SITUATIONS_BY_ID:
+            raise HTTPException(status_code=404, detail="situation_unavailable")
+        plan = await get_situation_plan(
+            db, current_user.id, data.situation_study_plan_id, require_active=False
+        )
+        if plan is None:
+            raise HTTPException(status_code=404, detail="situation_unavailable")
+        cefr_level = plan.cefr_level
     else:
         plan = await _get_active_plan_or_404(db, current_user.id)
         cefr_level = data.cefr_level

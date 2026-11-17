@@ -48,6 +48,7 @@ from app.routers import (
     progress,
     reading,
     reviews,
+    situations,
     stt,
     study_plan,
     tts,
@@ -173,6 +174,7 @@ app.include_router(feedback.router)
 app.include_router(freemium.router)
 app.include_router(games.router)
 app.include_router(grammar_practice.router)
+app.include_router(situations.router)
 app.include_router(memories.router)
 app.include_router(phrasebook.router)
 app.include_router(languages.router)

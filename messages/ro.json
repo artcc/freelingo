@@ -1,4 +1,226 @@
 {
+  "situations": {
+    "title": "Exersează situații reale",
+    "description": "Alege un scenariu și exersează vorbirea cu Lingu, care va juca rolul persoanei cu care trebuie să discuți.",
+    "search": "Caută situații",
+    "allCategories": "Toate categoriile",
+    "noResults": "Nicio situație nu corespunde căutării tale.",
+    "loadError": "Situațiile nu au putut fi încărcate.",
+    "retry": "Încearcă din nou",
+    "start": "Începe exercițiul",
+    "unavailable": "Această situație nu este disponibilă. Încearcă din nou.",
+    "back": "Înapoi la situații",
+    "contextChanged": "Contextul tău de studiu s-a schimbat. Reîncarcă pagina și începe din nou exercițiul.",
+    "categories": {
+      "daily_life": "Viața de zi cu zi",
+      "travel": "Călătorii",
+      "shopping_services": "Cumpărături și servicii",
+      "social": "Viața socială",
+      "work": "Muncă"
+    },
+    "items": {
+      "bakery_purchase": {
+        "title": "Cumpără de la brutărie",
+        "description": "Lingu va fi vânzătorul de la brutărie. Cere pâine sau ceva pentru micul dejun, precizează cantitatea și întreabă prețul."
+      },
+      "clothes_shopping": {
+        "title": "Cumpără haine",
+        "description": "Discută cu Lingu în rol de vânzător despre mărime și culoare și întreabă dacă poți proba hainele."
+      },
+      "cafe_order": {
+        "title": "Comandă la cafenea",
+        "description": "Lingu va fi ospătarul de la cafenea. Comandă o băutură și ceva de mâncare."
+      },
+      "haircut_appointment": {
+        "title": "Mergi la frizer",
+        "description": "Lingu va fi frizerul tău. Cere o tunsoare simplă și explică cum ai vrea să îți stea părul."
+      },
+      "supermarket_help": {
+        "title": "Cere ajutor la supermarket",
+        "description": "Întreabă-l pe Lingu, în rol de angajat al supermarketului, unde poți găsi produsele pe care le cauți."
+      },
+      "buy_ticket": {
+        "title": "Cumpără un bilet",
+        "description": "Lingu va lucra la casa de bilete. Spune destinația, întreabă despre ora plecării și preț și cumpără un bilet."
+      },
+      "hotel_check_in": {
+        "title": "Cazează-te la hotel",
+        "description": "Lingu va fi recepționerul. Confirmă rezervarea și cere informațiile de bază despre ședere."
+      },
+      "taxi_ride": {
+        "title": "Comandă un taxi",
+        "description": "Sună-l pe Lingu în rol de dispecer de taxi. Spune de unde să te preia și unde mergi și întreabă când ajunge mașina."
+      },
+      "collect_key": {
+        "title": "Ridică cheia",
+        "description": "Ridică cheia apartamentului de vacanță de la Lingu în rol de gazdă și întreabă cum se intră în locuință."
+      },
+      "local_recommendations": {
+        "title": "Întreabă ce poți vizita",
+        "description": "Lingu va fi un localnic. Spune ce te interesează și cere recomandări de locuri de vizitat."
+      },
+      "congratulate_friend": {
+        "title": "Felicită un prieten",
+        "description": "Lingu va fi un prieten care își sărbătorește ziua de naștere sau are o veste bună. Felicită-l și stați puțin de vorbă."
+      },
+      "hobbies_chat": {
+        "title": "Vorbește despre hobby-uri",
+        "description": "Discută cu Lingu în rol de prieten despre ce vă place să faceți în timpul liber și descoperiți interese comune."
+      },
+      "family_chat": {
+        "title": "Vorbește despre familie",
+        "description": "Lingu va fi o cunoștință. Povestește despre familia ta și întreabă despre familia lui."
+      },
+      "invite_friend": {
+        "title": "Invită un prieten în oraș",
+        "description": "Invită-l pe Lingu în rol de prieten să mâncați sau să beți ceva împreună și stabiliți o oră."
+      },
+      "choose_gift": {
+        "title": "Alege un cadou",
+        "description": "Alege un cadou comun cu Lingu în rol de prieten. Discutați despre gusturile persoanei care îl va primi și decideți împreună."
+      },
+      "late_arrival": {
+        "title": "Anunță că întârzii",
+        "description": "Spune-i lui Lingu în rol de coleg că întârzii și precizează aproximativ când vei ajunge."
+      },
+      "work_update": {
+        "title": "Povestește la ce lucrezi",
+        "description": "Discută cu Lingu în rol de coleg despre o sarcină obișnuită de lucru și spune cum avansezi."
+      },
+      "arrange_meeting": {
+        "title": "Organizează o ședință",
+        "description": "Planifică o ședință cu Lingu în rol de coleg și stabiliți o zi și o oră potrivite pentru amândoi."
+      },
+      "colleague_help": {
+        "title": "Cere ajutor unui coleg",
+        "description": "Lingu va fi colegul tău. Explică la ce ai nevoie de ajutor și cere îndrumări."
+      },
+      "break_chat": {
+        "title": "Stai de vorbă în pauză",
+        "description": "Lingu va fi colegul tău. Purtați o conversație relaxată despre lucruri de zi cu zi în pauza de la muncă."
+      },
+      "recount_day": {
+        "title": "Povestește cum ți-a fost ziua",
+        "description": "Povestește-i lui Lingu în rol de prieten ce ai făcut astăzi și ceva ce ți s-a întâmplat."
+      },
+      "weather_chat": {
+        "title": "Vorbește despre vreme",
+        "description": "Lingu va fi vecinul tău. Discutați despre vreme și despre planurile voastre."
+      },
+      "daily_routine": {
+        "title": "Vorbește despre rutina zilnică",
+        "description": "Lingu va fi o cunoștință. Descrie o zi obișnuită din viața ta și întreabă despre rutina lui."
+      },
+      "household_chores": {
+        "title": "Împărțiți treburile casnice",
+        "description": "Lingu va fi colegul tău de apartament. Stabiliți cine se ocupă de fiecare treabă casnică și când."
+      },
+      "plan_dinner": {
+        "title": "Planificați cina",
+        "description": "Lingu va fi colegul tău de apartament. Decideți ce veți găti și discutați despre ingredientele pe care le aveți și cele care vă lipsesc."
+      },
+      "medical_appointment": {
+        "title": "O programare la medic",
+        "description": "Sună la un cabinet medical. Lingu va fi la recepție: explică motivul vizitei și stabilește o dată."
+      },
+      "neighbour_problem": {
+        "title": "O discuție cu un vecin",
+        "description": "Lingu va fi vecinul tău. Explică ce te deranjează acasă și găsiți împreună o soluție cu respect reciproc."
+      },
+      "flat_viewing": {
+        "title": "Vizionarea unui apartament",
+        "description": "Vizitează un apartament cu Lingu în rol de agent imobiliar. Întreabă despre chirie, cheltuieli și condiții."
+      },
+      "school_meeting": {
+        "title": "O întâlnire la școală",
+        "description": "Lingu va fi profesorul copilului tău. Discutați despre organizarea școlară și stabiliți cum să îi sprijiniți învățarea."
+      },
+      "household_repair": {
+        "title": "Programarea unei reparații",
+        "description": "Descrie o defecțiune din casă lui Lingu, care va fi tehnicianul. Întreabă despre cost și stabilește o vizită."
+      },
+      "change_reservation": {
+        "title": "Modificarea unei rezervări",
+        "description": "Discută cu Lingu de la serviciul de rezervări. Explică ce vrei să modifici și confirmă noile condiții."
+      },
+      "hotel_problem": {
+        "title": "O problemă la hotel",
+        "description": "Lingu va fi la recepție. Explică o problemă cu camera ta și cere o soluție potrivită."
+      },
+      "ask_directions": {
+        "title": "Cere indicații",
+        "description": "Întreabă-l pe Lingu, care va fi un localnic, cum să ajungi la destinație și verifică traseul."
+      },
+      "missed_connection": {
+        "title": "Pierderea unei legături",
+        "description": "Ai pierdut o legătură de transport. Discută cu Lingu de la ghișeu pentru a găsi o altă cale spre destinație."
+      },
+      "lost_luggage": {
+        "title": "Bagaj pierdut",
+        "description": "Valiza ta nu a sosit. Descrie-o lui Lingu de la biroul de bagaje și întreabă cum o poți recupera."
+      },
+      "return_purchase": {
+        "title": "Returnarea unui produs",
+        "description": "Explică-i lui Lingu, în rol de vânzător, de ce vrei să returnezi un produs și întreabă despre rambursare."
+      },
+      "restaurant_order": {
+        "title": "Comandă la restaurant",
+        "description": "Lingu va fi ospătarul tău. Întreabă despre preparate, explică preferințele tale și plasează comanda."
+      },
+      "phone_contract": {
+        "title": "Alege un abonament mobil",
+        "description": "Discută cu Lingu în rol de consultant de telefonie. Compară abonamentele și clarifică prețurile și condițiile înainte de a decide."
+      },
+      "bank_appointment": {
+        "title": "O întâlnire la bancă",
+        "description": "Lingu va fi un angajat al băncii. Explică ce ai de rezolvat și întreabă despre documentele necesare și pașii următori."
+      },
+      "delivery_problem": {
+        "title": "O problemă cu livrarea",
+        "description": "Contactează-l pe Lingu de la relații cu clienții. Explică problema cu coletul tău și stabiliți o soluție."
+      },
+      "meet_someone": {
+        "title": "Cunoaște pe cineva",
+        "description": "Lingu va fi o persoană pe care tocmai ai cunoscut-o la o întâlnire. Prezintă-te și descoperiți interese comune."
+      },
+      "make_plans": {
+        "title": "Faceți planuri",
+        "description": "Organizează o ieșire cu Lingu în rol de prieten. Propune activități și stabiliți unde și când vă întâlniți."
+      },
+      "decline_invitation": {
+        "title": "Refuză o invitație",
+        "description": "Lingu va fi un prieten care te invită în oraș. Refuză politicos și propune să vă vedeți cu altă ocazie."
+      },
+      "resolve_misunderstanding": {
+        "title": "Clarifică o neînțelegere",
+        "description": "Clarifică un mesaj înțeles greșit cu Lingu în rol de prieten și reveniți la o discuție prietenoasă."
+      },
+      "host_visitors": {
+        "title": "Primește musafiri",
+        "description": "Lingu va fi un musafir la tine acasă. Urează-i bun venit, oferă-i ceva de băut și explică planurile."
+      },
+      "introduce_yourself": {
+        "title": "Prezintă-te echipei",
+        "description": "Lingu va fi un coleg nou. Prezintă-te, explică rolul tău și pune întrebări despre echipă."
+      },
+      "explain_task": {
+        "title": "Explică o sarcină",
+        "description": "Explică o sarcină lui Lingu în rol de coleg. Descrie pașii și verifică dacă explicația este clară."
+      },
+      "clarify_instructions": {
+        "title": "Clarifică instrucțiunile",
+        "description": "Lingu va fi managerul tău. Pune întrebări despre instrucțiuni neclare și confirmă ce trebuie să faci."
+      },
+      "negotiate_deadline": {
+        "title": "Negociază un termen",
+        "description": "Discută cu Lingu în rol de manager de proiect. Explică o dificultate și stabiliți un termen realist."
+      },
+      "share_proposal": {
+        "title": "Prezintă o propunere",
+        "description": "Prezintă o idee de îmbunătățire lui Lingu în rol de coleg. Explică avantajele și răspunde la întrebări."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Reîncearcă solicitarea inițială",
     "voiceAction": "Exersează vocal această temă de gramatică",
@@ -302,6 +524,7 @@
     "goToPlan": "Mergi la planul meu"
   },
   "nav": {
+    "situations": "Situații cotidiene",
     "practiceGrammar": "Practică de gramatică",
     "learning": "Învățarea mea",
     "practice": "Exersează",
@@ -1725,6 +1948,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Continuă să exersezi situații reale",
+    "paywallSituationsDesc": "Ai folosit exercițiile gratuite de situații din această săptămână sau această funcție necesită Premium. Cu Premium poți exersa mai mult; limitele generale pentru voce se aplică în continuare.",
     "paywallGrammarPracticeTitle": "Continuă să exersezi gramatica",
     "paywallGrammarPracticeDesc": "Ai folosit seturile gratuite de azi. Cu Premium poți genera mai multe; sesiunile salvate rămân disponibile.",
     "planFreeTrialDesc": "Încearcă accesul Premium la înregistrare, fără card sau abonament. Apoi continuă gratuit cu limite de utilizare.",
@@ -1770,6 +1995,7 @@
     "ctaRegister": "Începe proba gratuită",
     "ctaRegisterTrialUsed": "Alege planul",
     "freeFeature": {
+      "situations": "Situații exersate prin voce",
       "f1": "Test de nivel & evaluare",
       "f2": "Plan de studiu personalizat",
       "lessons": "Finalizarea lecțiilor",
@@ -1849,6 +2075,7 @@
     "weeklyReset": "Cota ta gratuită se reînnoiește lunea la 00:00 UTC.",
     "trialResultNote": "Perioada ta de probă gratuită este încă activă. Consultă planurile pentru când se va încheia.",
     "result": {
+      "situations": "Continuă să exersezi situații reale prin voce cu Lingu, cu Premium.",
       "voice": "Pornind de la această conversație, exersează mai mult exprimarea orală și primește feedback de la Lingu cu Premium.",
       "lessons": "Cu Premium, continuă să finalizezi lecții și să pui în practică alături de Lingu ceea ce ai învățat.",
       "listening": "Cu Premium, continuă să-ți antrenezi auzul cu mai multe exerciții de ascultare adaptate nivelului tău.",
@@ -1872,6 +2099,7 @@
     "paidTerms": "Este necesar un card. Abonamentul tău plătit începe la achiziție. Se reînnoiește la intervalul ales, dacă nu îl anulezi."
   },
   "freemium": {
+    "situationsLabel": "Situații în această săptămână",
     "grammarPracticeLabel": "Seturi de gramatică azi",
     "gamesLabel": "Jocurile de azi",
     "chatLabel": "Chat",
@@ -1933,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Planul tău, pas cu pas",
