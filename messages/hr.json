@@ -19,6 +19,106 @@
       "work": "Posao"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Kupi nešto u pekarnici",
+        "description": "Lingu će glumiti prodavača u pekarnici. Zatraži kruh ili nešto za doručak, reci koliko želiš i pitaj za cijenu."
+      },
+      "clothes_shopping": {
+        "title": "Kupi odjeću",
+        "description": "Razgovaraj s Linguom kao prodavačem o veličini i boji te pitaj možeš li isprobati odjeću."
+      },
+      "cafe_order": {
+        "title": "Naruči u kafiću",
+        "description": "Lingu će glumiti konobara u kafiću. Naruči piće i nešto za jelo."
+      },
+      "haircut_appointment": {
+        "title": "Otiđi frizeru",
+        "description": "Lingu će glumiti frizera. Zatraži jednostavno šišanje i objasni kakvu frizuru želiš."
+      },
+      "supermarket_help": {
+        "title": "Pitaj za pomoć u supermarketu",
+        "description": "Pitaj Lingua kao zaposlenika supermarketa gdje možeš pronaći proizvode koje tražiš."
+      },
+      "buy_ticket": {
+        "title": "Kupi kartu",
+        "description": "Lingu će raditi na blagajni za prodaju karata. Reci kamo putuješ, pitaj za vrijeme polaska i cijenu te kupi kartu."
+      },
+      "hotel_check_in": {
+        "title": "Prijavi se u hotel",
+        "description": "Lingu će glumiti recepcionara. Potvrdi rezervaciju i pitaj za osnovne informacije o boravku."
+      },
+      "taxi_ride": {
+        "title": "Naruči taksi",
+        "description": "Nazovi Lingua u ulozi dispečera taksi službe. Reci gdje te treba pokupiti i kamo ideš te pitaj kada taksi stiže."
+      },
+      "collect_key": {
+        "title": "Preuzmi ključ",
+        "description": "Preuzmi ključ apartmana za odmor od Lingua kao domaćina i pitaj kako ući u smještaj."
+      },
+      "local_recommendations": {
+        "title": "Pitaj što posjetiti",
+        "description": "Lingu će glumiti lokalnog stanovnika. Reci što te zanima i zatraži preporuke za mjesta koja možeš posjetiti."
+      },
+      "congratulate_friend": {
+        "title": "Čestitaj prijatelju",
+        "description": "Lingu će glumiti prijatelja koji slavi rođendan ili ima lijepe vijesti. Čestitaj mu i kratko porazgovarajte."
+      },
+      "hobbies_chat": {
+        "title": "Razgovaraj o hobijima",
+        "description": "Razgovaraj s Linguom kao prijateljem o tome što volite raditi u slobodno vrijeme i pronađite zajedničke interese."
+      },
+      "family_chat": {
+        "title": "Razgovaraj o obitelji",
+        "description": "Lingu će glumiti poznanika. Reci nešto o svojoj obitelji i pitaj za njegovu."
+      },
+      "invite_friend": {
+        "title": "Pozovi prijatelja na druženje",
+        "description": "Pozovi Lingua kao prijatelja na jelo ili piće i dogovorite vrijeme susreta."
+      },
+      "choose_gift": {
+        "title": "Odaberi poklon",
+        "description": "Odaberi zajednički poklon s Linguom kao prijateljem. Razgovarajte o tome što primatelj voli i odlučite zajedno."
+      },
+      "late_arrival": {
+        "title": "Javi da kasniš",
+        "description": "Javi Linguu kao kolegi da kasniš i reci otprilike kada ćeš stići."
+      },
+      "work_update": {
+        "title": "Ispričaj na čemu radiš",
+        "description": "Razgovaraj s Linguom kao kolegom o svom uobičajenom zadatku i reci kako napreduješ."
+      },
+      "arrange_meeting": {
+        "title": "Dogovori sastanak",
+        "description": "Organiziraj sastanak s Linguom kao kolegom i dogovorite dan i vrijeme koji vam oboma odgovaraju."
+      },
+      "colleague_help": {
+        "title": "Zamoli kolegu za pomoć",
+        "description": "Lingu će glumiti tvog kolegu. Objasni u čemu trebaš pomoć i zatraži savjet."
+      },
+      "break_chat": {
+        "title": "Razgovaraj tijekom stanke",
+        "description": "Lingu će glumiti tvog kolegu. Opušteno razgovarajte o svakodnevnim temama tijekom stanke na poslu."
+      },
+      "recount_day": {
+        "title": "Ispričaj kako ti je prošao dan",
+        "description": "Ispričaj Linguu kao prijatelju čime si se danas bavio i što ti se dogodilo."
+      },
+      "weather_chat": {
+        "title": "Razgovaraj o vremenu",
+        "description": "Lingu će glumiti tvog susjeda. Razgovarajte o vremenu i svojim planovima."
+      },
+      "daily_routine": {
+        "title": "Razgovaraj o dnevnoj rutini",
+        "description": "Lingu će glumiti poznanika. Opiši svoj uobičajeni dan i pitaj ga o njegovoj rutini."
+      },
+      "household_chores": {
+        "title": "Podijeli kućanske poslove",
+        "description": "Lingu će glumiti tvog sustanara. Dogovorite tko će obaviti koje kućanske poslove i kada."
+      },
+      "plan_dinner": {
+        "title": "Isplaniraj večeru",
+        "description": "Lingu će glumiti tvog sustanara. Odlučite što ćete kuhati i razgovarajte o sastojcima koje imate i koji vam nedostaju."
+      },
       "medical_appointment": {
         "title": "Dogovori liječnički pregled",
         "description": "Nazovi ordinaciju. Lingu će raditi na prijemu: objasni razlog dolaska i dogovori termin."
@@ -424,7 +524,7 @@
     "goToPlan": "Idi na moj plan"
   },
   "nav": {
-    "situations": "Situacije",
+    "situations": "Svakodnevne situacije",
     "practiceGrammar": "Vježbanje gramatike",
     "learning": "Moje učenje",
     "practice": "Vježbaj",

@@ -19,6 +19,106 @@
       "work": "İş"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Fırından alışveriş yap",
+        "description": "Lingu fırındaki satış görevlisi olacak. Ekmek veya kahvaltılık bir şey iste, ne kadar istediğini belirt ve fiyatını sor."
+      },
+      "clothes_shopping": {
+        "title": "Kıyafet alışverişi yap",
+        "description": "Mağaza görevlisini canlandıran Lingu ile beden ve renk hakkında konuş ve kıyafeti deneyip deneyemeyeceğini sor."
+      },
+      "cafe_order": {
+        "title": "Kafede sipariş ver",
+        "description": "Lingu kafedeki garson olacak. Bir içecek ve yiyecek bir şey sipariş et."
+      },
+      "haircut_appointment": {
+        "title": "Kuaföre git",
+        "description": "Lingu kuaförün olacak. Basit bir saç kesimi iste ve saçını nasıl istediğini anlat."
+      },
+      "supermarket_help": {
+        "title": "Markette yardım iste",
+        "description": "Market çalışanını canlandıran Lingu'ya aradığın ürünleri nerede bulabileceğini sor."
+      },
+      "buy_ticket": {
+        "title": "Bilet al",
+        "description": "Lingu gişe görevlisi olacak. Gideceğin yeri söyle, kalkış saatini ve fiyatı sor ve bir bilet al."
+      },
+      "hotel_check_in": {
+        "title": "Otele giriş yap",
+        "description": "Lingu resepsiyon görevlisi olacak. Rezervasyonunu teyit et ve konaklamanla ilgili temel bilgileri sor."
+      },
+      "taxi_ride": {
+        "title": "Taksi çağır",
+        "description": "Taksi çağrı merkezi görevlisini canlandıran Lingu'yu ara. Alınacağın yeri ve varış noktanı söyle ve taksinin ne zaman geleceğini sor."
+      },
+      "collect_key": {
+        "title": "Anahtarı teslim al",
+        "description": "Tatil için kiraladığın dairenin anahtarını ev sahibini canlandıran Lingu'dan al ve daireye nasıl gireceğini sor."
+      },
+      "local_recommendations": {
+        "title": "Gezilecek yerleri sor",
+        "description": "Lingu bölge sakinini canlandıracak. İlgi alanlarını anlat ve ziyaret edebileceğin yerler için öneri iste."
+      },
+      "congratulate_friend": {
+        "title": "Arkadaşını kutla",
+        "description": "Lingu doğum günü olan veya güzel bir haber paylaşan arkadaşın olacak. Onu kutla ve biraz sohbet edin."
+      },
+      "hobbies_chat": {
+        "title": "Hobiler hakkında konuş",
+        "description": "Arkadaşını canlandıran Lingu ile boş zamanlarınızda neler yapmayı sevdiğinizi konuşun ve ortak ilgi alanları bulun."
+      },
+      "family_chat": {
+        "title": "Aile hakkında konuş",
+        "description": "Lingu bir tanıdığını canlandıracak. Ailenden bahset ve onun ailesini sor."
+      },
+      "invite_friend": {
+        "title": "Arkadaşını davet et",
+        "description": "Arkadaşını canlandıran Lingu'yu birlikte bir şeyler yemeye veya içmeye davet et ve bir saat belirleyin."
+      },
+      "choose_gift": {
+        "title": "Hediye seç",
+        "description": "Arkadaşını canlandıran Lingu ile ortak bir hediye seç. Hediye alacağınız kişinin neleri sevdiğini konuşun ve birlikte karar verin."
+      },
+      "late_arrival": {
+        "title": "Geç kalacağını haber ver",
+        "description": "İş arkadaşını canlandıran Lingu'ya geç kalacağını haber ver ve yaklaşık ne zaman varacağını söyle."
+      },
+      "work_update": {
+        "title": "Ne üzerinde çalıştığını anlat",
+        "description": "İş arkadaşını canlandıran Lingu'ya günlük bir iş görevini ve ne kadar ilerlediğini anlat."
+      },
+      "arrange_meeting": {
+        "title": "Toplantı ayarla",
+        "description": "İş arkadaşını canlandıran Lingu ile bir toplantı planla ve ikinize de uyan bir gün ve saat belirleyin."
+      },
+      "colleague_help": {
+        "title": "İş arkadaşından yardım iste",
+        "description": "Lingu iş arkadaşın olacak. Hangi konuda yardıma ihtiyacın olduğunu açıkla ve yol göstermesini iste."
+      },
+      "break_chat": {
+        "title": "Molada sohbet et",
+        "description": "Lingu iş arkadaşın olacak. İş molasında günlük konular üzerine rahatça sohbet edin."
+      },
+      "recount_day": {
+        "title": "Gününün nasıl geçtiğini anlat",
+        "description": "Arkadaşını canlandıran Lingu'ya bugün neler yaptığını ve gün içinde yaşadığın bir olayı anlat."
+      },
+      "weather_chat": {
+        "title": "Hava hakkında konuş",
+        "description": "Lingu komşun olacak. Hava ve planlarınız hakkında konuşun."
+      },
+      "daily_routine": {
+        "title": "Günlük rutinini anlat",
+        "description": "Lingu bir tanıdığını canlandıracak. Sıradan bir gününün nasıl geçtiğini anlat ve onun rutinini sor."
+      },
+      "household_chores": {
+        "title": "Ev işlerini paylaş",
+        "description": "Lingu ev arkadaşın olacak. Hangi ev işini kimin yapacağını ve ne zaman yapacağınızı kararlaştırın."
+      },
+      "plan_dinner": {
+        "title": "Akşam yemeğini planla",
+        "description": "Lingu ev arkadaşın olacak. Ne pişireceğinize karar verin ve elinizdeki malzemelerle eksik olanları konuşun."
+      },
       "medical_appointment": {
         "title": "Doktor randevusu al",
         "description": "Bir kliniği ara. Lingu danışma görevlisi olacak: ziyaret nedenini açıkla ve uygun bir tarih belirle."
@@ -424,7 +524,7 @@
     "goToPlan": "Planıma git"
   },
   "nav": {
-    "situations": "Durumlar",
+    "situations": "Günlük yaşam durumları",
     "practiceGrammar": "Dil bilgisi pratiği",
     "learning": "Öğrenimim",
     "practice": "Pratik yap",

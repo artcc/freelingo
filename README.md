@@ -40,7 +40,7 @@ Alongside the plan:
 - **Practise grammar topics:** add references to a [personal grammar library](specs/grammar-practice.instructions.md),
   complete saved five-question practices, and track results across plans in the same language.
   Completed practices can continue in voice with Lingu, informed by the topic and your answers.
-- **Rehearse everyday situations:** choose from 25 [voice role-plays](specs/situations.instructions.md)
+- **Rehearse everyday situations:** choose from 50 [voice role-plays](specs/situations.instructions.md)
   across daily life, travel, shopping and services, social life, and work. Practise a concrete objective
   with Lingu at your study plan's language and level.
 - **Learn through games:** [Error Detective, Sentence Order, and Vocabulary Pairs](specs/games.instructions.md).

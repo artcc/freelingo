@@ -19,6 +19,106 @@
       "work": "Trabajo"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Comprar en una panadería",
+        "description": "Lingu será el dependiente. Pide pan o algo para desayunar, indica la cantidad y pregunta el precio."
+      },
+      "clothes_shopping": {
+        "title": "Comprar ropa",
+        "description": "Habla con Lingu como dependiente. Pide tu talla y el color que prefieras, y pregunta si puedes probarte una prenda."
+      },
+      "cafe_order": {
+        "title": "Pedir en una cafetería",
+        "description": "Lingu será tu camarero. Pide una bebida y algo para comer."
+      },
+      "haircut_appointment": {
+        "title": "Ir a la peluquería",
+        "description": "Lingu será tu peluquero. Pide un corte sencillo y explica cómo te gustaría llevar el pelo."
+      },
+      "supermarket_help": {
+        "title": "Preguntar en el supermercado",
+        "description": "Pregunta a Lingu, que será un empleado del supermercado, dónde encontrar los productos que necesitas."
+      },
+      "buy_ticket": {
+        "title": "Comprar un billete",
+        "description": "Lingu atenderá la taquilla. Indica tu destino y pregunta por los horarios y el precio del billete."
+      },
+      "hotel_check_in": {
+        "title": "Llegar al hotel",
+        "description": "Lingu será el recepcionista. Confirma tu reserva y pide información básica para tu estancia."
+      },
+      "taxi_ride": {
+        "title": "Pedir un taxi",
+        "description": "Llama a Lingu como operador de taxis. Indica dónde recogerte y tu destino, y pregunta cuánto tardará el taxi."
+      },
+      "collect_key": {
+        "title": "Recoger una llave",
+        "description": "Recoge la llave de tu apartamento vacacional con Lingu como anfitrión. Pregunta cómo acceder al alojamiento."
+      },
+      "local_recommendations": {
+        "title": "Preguntar qué visitar",
+        "description": "Lingu será una persona de la zona. Cuéntale tus gustos y pide recomendaciones de lugares que visitar."
+      },
+      "congratulate_friend": {
+        "title": "Felicitar a alguien",
+        "description": "Lingu será un amigo. Felicítale por su cumpleaños o por una buena noticia y charlad un rato."
+      },
+      "hobbies_chat": {
+        "title": "Hablar de aficiones",
+        "description": "Habla con Lingu como amigo sobre lo que os gusta hacer y descubrid intereses en común."
+      },
+      "family_chat": {
+        "title": "Hablar de tu familia",
+        "description": "Cuéntale a Lingu, que será un conocido, cómo es tu familia y pregunta por la suya."
+      },
+      "invite_friend": {
+        "title": "Invitar a un amigo",
+        "description": "Invita a Lingu como amigo a comer o tomar algo y acordad una hora."
+      },
+      "choose_gift": {
+        "title": "Elegir un regalo",
+        "description": "Elige un regalo compartido con Lingu como amigo. Hablad de los gustos de quien lo recibirá y decidid qué comprar."
+      },
+      "late_arrival": {
+        "title": "Avisar de que llegas tarde",
+        "description": "Avisa a Lingu, que será un compañero de trabajo, de tu retraso e indica a qué hora llegarás aproximadamente."
+      },
+      "work_update": {
+        "title": "Contar en qué estás trabajando",
+        "description": "Cuéntale a Lingu como compañero de trabajo qué tarea habitual estás haciendo y cómo va."
+      },
+      "arrange_meeting": {
+        "title": "Organizar una reunión",
+        "description": "Lingu será un compañero de trabajo. Acordad un día y una hora que os vengan bien para reuniros."
+      },
+      "colleague_help": {
+        "title": "Pedir ayuda a un compañero",
+        "description": "Pide ayuda a Lingu como compañero de trabajo. Explica qué necesitas y solicita orientación."
+      },
+      "break_chat": {
+        "title": "Hablar durante un descanso",
+        "description": "Charla de temas ligeros con Lingu como compañero de trabajo durante una pausa."
+      },
+      "recount_day": {
+        "title": "Contar cómo ha ido tu día",
+        "description": "Cuéntale a Lingu como amigo qué has hecho hoy y algo que te haya pasado."
+      },
+      "weather_chat": {
+        "title": "Hablar del tiempo",
+        "description": "Charla con Lingu como vecino sobre el tiempo que hace y vuestros planes."
+      },
+      "daily_routine": {
+        "title": "Hablar de tu rutina",
+        "description": "Lingu será un conocido. Describe cómo es un día habitual para ti y pregunta por su rutina."
+      },
+      "household_chores": {
+        "title": "Organizar las tareas de casa",
+        "description": "Lingu será una persona con la que convives. Repartid las tareas de casa y acordad cuándo hacerlas."
+      },
+      "plan_dinner": {
+        "title": "Preparar una cena",
+        "description": "Decide qué cocinar con Lingu como conviviente. Hablad de los ingredientes que tenéis y de los que faltan."
+      },
       "medical_appointment": {
         "title": "Pedir cita médica",
         "description": "Llama a una consulta. Lingu hará de recepcionista: explica el motivo de la visita y acuerda una fecha."
@@ -424,7 +524,7 @@
     "goToPlan": "Ir a mi plan"
   },
   "nav": {
-    "situations": "Situaciones",
+    "situations": "Situaciones cotidianas",
     "practiceGrammar": "Gramática práctica",
     "learning": "Mi aprendizaje",
     "practice": "Practicar",

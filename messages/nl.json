@@ -19,6 +19,106 @@
       "work": "Werk"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Iets kopen bij de bakker",
+        "description": "Lingu speelt de winkelmedewerker. Vraag om brood of iets voor het ontbijt, geef de hoeveelheid aan en vraag naar de prijs."
+      },
+      "clothes_shopping": {
+        "title": "Kleding kopen",
+        "description": "Praat met Lingu als winkelmedewerker. Vraag naar je maat en favoriete kleur en pas een kledingstuk."
+      },
+      "cafe_order": {
+        "title": "Bestellen in een café",
+        "description": "Lingu speelt de ober. Bestel een drankje en iets te eten."
+      },
+      "haircut_appointment": {
+        "title": "Naar de kapper gaan",
+        "description": "Lingu speelt je kapper. Vraag om een eenvoudig kapsel en leg uit hoe je je haar wilt laten knippen."
+      },
+      "supermarket_help": {
+        "title": "Hulp vragen in de supermarkt",
+        "description": "Vraag Lingu als supermarktmedewerker waar je de producten kunt vinden die je nodig hebt."
+      },
+      "buy_ticket": {
+        "title": "Een kaartje kopen",
+        "description": "Lingu werkt aan het loket. Vertel waar je naartoe wilt en vraag naar de vertrektijden en de prijs van het kaartje."
+      },
+      "hotel_check_in": {
+        "title": "Inchecken in een hotel",
+        "description": "Lingu werkt bij de receptie. Bevestig je reservering en vraag om praktische informatie voor je verblijf."
+      },
+      "taxi_ride": {
+        "title": "Een taxi bestellen",
+        "description": "Bel Lingu bij de taxicentrale. Geef je ophaalplek en bestemming door en vraag wanneer de taxi komt."
+      },
+      "collect_key": {
+        "title": "Een sleutel ophalen",
+        "description": "Haal de sleutel van je vakantieappartement op bij Lingu als gastheer. Vraag hoe je de accommodatie binnenkomt."
+      },
+      "local_recommendations": {
+        "title": "Vragen wat er te bezoeken is",
+        "description": "Lingu speelt een buurtbewoner. Vertel wat je leuk vindt en vraag om tips voor plekken om te bezoeken."
+      },
+      "congratulate_friend": {
+        "title": "Iemand feliciteren",
+        "description": "Lingu speelt een vriend. Feliciteer hem met zijn verjaardag of met goed nieuws en maak een kort praatje."
+      },
+      "hobbies_chat": {
+        "title": "Over hobby's praten",
+        "description": "Praat met Lingu als vriend over wat jullie graag doen en ontdek gedeelde interesses."
+      },
+      "family_chat": {
+        "title": "Over je familie praten",
+        "description": "Vertel Lingu als kennis iets over je familie en vraag naar die van Lingu."
+      },
+      "invite_friend": {
+        "title": "Een vriend uitnodigen",
+        "description": "Nodig Lingu als vriend uit om iets te eten of te drinken en spreek een tijd af."
+      },
+      "choose_gift": {
+        "title": "Een cadeau kiezen",
+        "description": "Kies samen met Lingu als vriend een gezamenlijk cadeau. Bespreek wat de ontvanger leuk vindt en besluit wat jullie kopen."
+      },
+      "late_arrival": {
+        "title": "Laten weten dat je te laat komt",
+        "description": "Laat Lingu als collega weten dat je te laat komt en geef aan hoe laat je ongeveer aankomt."
+      },
+      "work_update": {
+        "title": "Vertellen waar je aan werkt",
+        "description": "Vertel Lingu als collega over een gewone werktaak en hoe het ermee gaat."
+      },
+      "arrange_meeting": {
+        "title": "Een vergadering plannen",
+        "description": "Lingu speelt een collega. Zoek een dag en tijd die jullie beiden uitkomen voor een vergadering."
+      },
+      "colleague_help": {
+        "title": "Een collega om hulp vragen",
+        "description": "Vraag Lingu als collega om hulp. Leg uit wat je nodig hebt en vraag hoe je verder kunt."
+      },
+      "break_chat": {
+        "title": "Praten tijdens een pauze",
+        "description": "Maak een ontspannen praatje met Lingu als collega tijdens een werkpauze."
+      },
+      "recount_day": {
+        "title": "Vertellen over je dag",
+        "description": "Vertel Lingu als vriend wat je vandaag hebt gedaan en wat je hebt meegemaakt."
+      },
+      "weather_chat": {
+        "title": "Over het weer praten",
+        "description": "Praat met Lingu als buur over het weer en jullie plannen."
+      },
+      "daily_routine": {
+        "title": "Over je dagelijkse routine praten",
+        "description": "Lingu speelt een kennis. Beschrijf hoe een gewone dag er voor jou uitziet en vraag naar zijn routine."
+      },
+      "household_chores": {
+        "title": "Huishoudelijke taken verdelen",
+        "description": "Lingu speelt je huisgenoot. Verdeel de huishoudelijke taken en spreek af wanneer jullie ze doen."
+      },
+      "plan_dinner": {
+        "title": "Een avondmaaltijd voorbereiden",
+        "description": "Beslis met Lingu als huisgenoot wat jullie gaan koken. Bespreek welke ingrediënten jullie hebben en wat er nog nodig is."
+      },
       "medical_appointment": {
         "title": "Een doktersafspraak maken",
         "description": "Bel een dokterspraktijk. Lingu neemt de telefoon op: leg uit waarom je een afspraak wilt en spreek een datum af."
@@ -424,7 +524,7 @@
     "goToPlan": "Naar mijn plan"
   },
   "nav": {
-    "situations": "Situaties",
+    "situations": "Alledaagse situaties",
     "practiceGrammar": "Grammatica oefenen",
     "learning": "Mijn leertraject",
     "practice": "Oefenen",

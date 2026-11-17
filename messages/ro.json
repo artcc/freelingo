@@ -19,6 +19,106 @@
       "work": "Muncă"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Cumpără de la brutărie",
+        "description": "Lingu va fi vânzătorul de la brutărie. Cere pâine sau ceva pentru micul dejun, precizează cantitatea și întreabă prețul."
+      },
+      "clothes_shopping": {
+        "title": "Cumpără haine",
+        "description": "Discută cu Lingu în rol de vânzător despre mărime și culoare și întreabă dacă poți proba hainele."
+      },
+      "cafe_order": {
+        "title": "Comandă la cafenea",
+        "description": "Lingu va fi ospătarul de la cafenea. Comandă o băutură și ceva de mâncare."
+      },
+      "haircut_appointment": {
+        "title": "Mergi la frizer",
+        "description": "Lingu va fi frizerul tău. Cere o tunsoare simplă și explică cum ai vrea să îți stea părul."
+      },
+      "supermarket_help": {
+        "title": "Cere ajutor la supermarket",
+        "description": "Întreabă-l pe Lingu, în rol de angajat al supermarketului, unde poți găsi produsele pe care le cauți."
+      },
+      "buy_ticket": {
+        "title": "Cumpără un bilet",
+        "description": "Lingu va lucra la casa de bilete. Spune destinația, întreabă despre ora plecării și preț și cumpără un bilet."
+      },
+      "hotel_check_in": {
+        "title": "Cazează-te la hotel",
+        "description": "Lingu va fi recepționerul. Confirmă rezervarea și cere informațiile de bază despre ședere."
+      },
+      "taxi_ride": {
+        "title": "Comandă un taxi",
+        "description": "Sună-l pe Lingu în rol de dispecer de taxi. Spune de unde să te preia și unde mergi și întreabă când ajunge mașina."
+      },
+      "collect_key": {
+        "title": "Ridică cheia",
+        "description": "Ridică cheia apartamentului de vacanță de la Lingu în rol de gazdă și întreabă cum se intră în locuință."
+      },
+      "local_recommendations": {
+        "title": "Întreabă ce poți vizita",
+        "description": "Lingu va fi un localnic. Spune ce te interesează și cere recomandări de locuri de vizitat."
+      },
+      "congratulate_friend": {
+        "title": "Felicită un prieten",
+        "description": "Lingu va fi un prieten care își sărbătorește ziua de naștere sau are o veste bună. Felicită-l și stați puțin de vorbă."
+      },
+      "hobbies_chat": {
+        "title": "Vorbește despre hobby-uri",
+        "description": "Discută cu Lingu în rol de prieten despre ce vă place să faceți în timpul liber și descoperiți interese comune."
+      },
+      "family_chat": {
+        "title": "Vorbește despre familie",
+        "description": "Lingu va fi o cunoștință. Povestește despre familia ta și întreabă despre familia lui."
+      },
+      "invite_friend": {
+        "title": "Invită un prieten în oraș",
+        "description": "Invită-l pe Lingu în rol de prieten să mâncați sau să beți ceva împreună și stabiliți o oră."
+      },
+      "choose_gift": {
+        "title": "Alege un cadou",
+        "description": "Alege un cadou comun cu Lingu în rol de prieten. Discutați despre gusturile persoanei care îl va primi și decideți împreună."
+      },
+      "late_arrival": {
+        "title": "Anunță că întârzii",
+        "description": "Spune-i lui Lingu în rol de coleg că întârzii și precizează aproximativ când vei ajunge."
+      },
+      "work_update": {
+        "title": "Povestește la ce lucrezi",
+        "description": "Discută cu Lingu în rol de coleg despre o sarcină obișnuită de lucru și spune cum avansezi."
+      },
+      "arrange_meeting": {
+        "title": "Organizează o ședință",
+        "description": "Planifică o ședință cu Lingu în rol de coleg și stabiliți o zi și o oră potrivite pentru amândoi."
+      },
+      "colleague_help": {
+        "title": "Cere ajutor unui coleg",
+        "description": "Lingu va fi colegul tău. Explică la ce ai nevoie de ajutor și cere îndrumări."
+      },
+      "break_chat": {
+        "title": "Stai de vorbă în pauză",
+        "description": "Lingu va fi colegul tău. Purtați o conversație relaxată despre lucruri de zi cu zi în pauza de la muncă."
+      },
+      "recount_day": {
+        "title": "Povestește cum ți-a fost ziua",
+        "description": "Povestește-i lui Lingu în rol de prieten ce ai făcut astăzi și ceva ce ți s-a întâmplat."
+      },
+      "weather_chat": {
+        "title": "Vorbește despre vreme",
+        "description": "Lingu va fi vecinul tău. Discutați despre vreme și despre planurile voastre."
+      },
+      "daily_routine": {
+        "title": "Vorbește despre rutina zilnică",
+        "description": "Lingu va fi o cunoștință. Descrie o zi obișnuită din viața ta și întreabă despre rutina lui."
+      },
+      "household_chores": {
+        "title": "Împărțiți treburile casnice",
+        "description": "Lingu va fi colegul tău de apartament. Stabiliți cine se ocupă de fiecare treabă casnică și când."
+      },
+      "plan_dinner": {
+        "title": "Planificați cina",
+        "description": "Lingu va fi colegul tău de apartament. Decideți ce veți găti și discutați despre ingredientele pe care le aveți și cele care vă lipsesc."
+      },
       "medical_appointment": {
         "title": "O programare la medic",
         "description": "Sună la un cabinet medical. Lingu va fi la recepție: explică motivul vizitei și stabilește o dată."
@@ -424,7 +524,7 @@
     "goToPlan": "Mergi la planul meu"
   },
   "nav": {
-    "situations": "Situații",
+    "situations": "Situații cotidiene",
     "practiceGrammar": "Practică de gramatică",
     "learning": "Învățarea mea",
     "practice": "Exersează",

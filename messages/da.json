@@ -19,6 +19,106 @@
       "work": "Arbejde"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Køb ind hos bageren",
+        "description": "Lingu spiller ekspedienten hos bageren. Bed om brød eller noget til morgenmad, fortæl hvor meget du vil have, og spørg om prisen."
+      },
+      "clothes_shopping": {
+        "title": "Køb tøj",
+        "description": "Tal med Lingu som butiksassistent om størrelse og farve, og spørg, om du kan prøve tøjet."
+      },
+      "cafe_order": {
+        "title": "Bestil på en café",
+        "description": "Lingu spiller tjeneren på en café. Bestil noget at drikke og lidt at spise."
+      },
+      "haircut_appointment": {
+        "title": "Gå til frisøren",
+        "description": "Lingu spiller din frisør. Bed om en enkel klipning, og forklar, hvordan du gerne vil have håret."
+      },
+      "supermarket_help": {
+        "title": "Spørg om hjælp i supermarkedet",
+        "description": "Spørg Lingu som medarbejder i supermarkedet, hvor du kan finde de varer, du leder efter."
+      },
+      "buy_ticket": {
+        "title": "Køb en billet",
+        "description": "Lingu arbejder i billetsalget. Fortæl, hvor du skal hen, spørg om afgangstider og priser, og køb en billet."
+      },
+      "hotel_check_in": {
+        "title": "Tjek ind på et hotel",
+        "description": "Lingu spiller receptionisten. Bekræft din reservation, og spørg om de vigtigste oplysninger om opholdet."
+      },
+      "taxi_ride": {
+        "title": "Bestil en taxa",
+        "description": "Ring til Lingu på taxacentralen. Fortæl, hvor du skal hentes og køres hen, og spørg, hvornår taxaen kommer."
+      },
+      "collect_key": {
+        "title": "Hent nøglen",
+        "description": "Hent nøglen til din ferielejlighed hos Lingu som vært, og spørg, hvordan du kommer ind."
+      },
+      "local_recommendations": {
+        "title": "Spørg, hvad der er værd at besøge",
+        "description": "Lingu spiller en lokal beboer. Fortæl om dine interesser, og bed om forslag til steder at besøge."
+      },
+      "congratulate_friend": {
+        "title": "Ønsk en ven tillykke",
+        "description": "Lingu spiller en ven, der har fødselsdag eller en god nyhed. Ønsk tillykke, og tag en lille snak."
+      },
+      "hobbies_chat": {
+        "title": "Tal om fritidsinteresser",
+        "description": "Tal med Lingu som ven om, hvad I kan lide at lave i fritiden, og find fælles interesser."
+      },
+      "family_chat": {
+        "title": "Tal om familien",
+        "description": "Lingu spiller en bekendt. Fortæl lidt om din familie, og spørg til Lingus familie."
+      },
+      "invite_friend": {
+        "title": "Inviter en ven",
+        "description": "Inviter Lingu som ven ud at spise eller til noget at drikke, og aftal et tidspunkt."
+      },
+      "choose_gift": {
+        "title": "Vælg en gave",
+        "description": "Vælg en fælles gave med Lingu som ven. Tal om, hvad modtageren kan lide, og find på noget sammen."
+      },
+      "late_arrival": {
+        "title": "Giv besked om forsinkelse",
+        "description": "Fortæl Lingu som kollega, at du bliver forsinket, og sig, hvornår du regner med at være fremme."
+      },
+      "work_update": {
+        "title": "Fortæl, hvad du arbejder på",
+        "description": "Tal med Lingu som kollega om en almindelig arbejdsopgave, og fortæl, hvor langt du er nået."
+      },
+      "arrange_meeting": {
+        "title": "Aftal et møde",
+        "description": "Planlæg et møde med Lingu som kollega, og find en dag og et tidspunkt, der passer jer begge."
+      },
+      "colleague_help": {
+        "title": "Bed en kollega om hjælp",
+        "description": "Lingu spiller din kollega. Forklar, hvad du har brug for hjælp til, og bed om vejledning."
+      },
+      "break_chat": {
+        "title": "Tag en snak i pausen",
+        "description": "Lingu spiller din kollega. Tag en afslappet snak om hverdagsting i en pause på arbejdet."
+      },
+      "recount_day": {
+        "title": "Fortæl om din dag",
+        "description": "Fortæl Lingu som ven, hvad du har lavet i dag, og om noget, der er sket."
+      },
+      "weather_chat": {
+        "title": "Tal om vejret",
+        "description": "Lingu spiller din nabo. Tal om vejret, og hvad I har planer om at lave."
+      },
+      "daily_routine": {
+        "title": "Tal om din hverdag",
+        "description": "Lingu spiller en bekendt. Fortæl, hvordan en almindelig dag ser ud for dig, og spørg til Lingus rutiner."
+      },
+      "household_chores": {
+        "title": "Fordel de huslige opgaver",
+        "description": "Lingu spiller en, du bor sammen med. Aftal, hvem der gør hvad derhjemme, og hvornår I gør det."
+      },
+      "plan_dinner": {
+        "title": "Planlæg aftensmaden",
+        "description": "Lingu spiller en, du bor sammen med. Beslut, hvad I skal lave til aftensmad, og tal om, hvilke ingredienser I har og mangler."
+      },
       "medical_appointment": {
         "title": "Bestil en lægetid",
         "description": "Ring til en lægeklinik. Lingu sidder i receptionen: forklar grunden til besøget, og aftal en tid."
@@ -424,7 +524,7 @@
     "goToPlan": "Gå til min plan"
   },
   "nav": {
-    "situations": "Situationer",
+    "situations": "Hverdagssituationer",
     "practiceGrammar": "Grammatikøvelser",
     "learning": "Min læring",
     "practice": "Øv dig",

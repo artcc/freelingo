@@ -19,6 +19,106 @@
       "work": "Työ"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Asioi leipomossa",
+        "description": "Lingu esittää leipomon myyjää. Pyydä leipää tai aamupalaa, kerro haluamasi määrä ja kysy hintaa."
+      },
+      "clothes_shopping": {
+        "title": "Osta vaatteita",
+        "description": "Keskustele myyjää esittävän Lingun kanssa koosta ja väristä ja kysy, voitko sovittaa vaatetta."
+      },
+      "cafe_order": {
+        "title": "Tilaa kahvilassa",
+        "description": "Lingu esittää kahvilan tarjoilijaa. Tilaa juoma ja jotain syötävää."
+      },
+      "haircut_appointment": {
+        "title": "Käy parturissa tai kampaajalla",
+        "description": "Lingu esittää parturi-kampaajaa. Pyydä yksinkertaista hiustenleikkausta ja kerro toiveistasi."
+      },
+      "supermarket_help": {
+        "title": "Kysy apua ruokakaupassa",
+        "description": "Kysy kaupan työntekijää esittävältä Lingulta, mistä löydät etsimäsi tuotteet."
+      },
+      "buy_ticket": {
+        "title": "Osta matkalippu",
+        "description": "Lingu työskentelee lipunmyynnissä. Kerro määränpääsi, kysy lähtöaikoja ja hintaa ja osta lippu."
+      },
+      "hotel_check_in": {
+        "title": "Kirjaudu hotelliin",
+        "description": "Lingu esittää vastaanottovirkailijaa. Vahvista varauksesi ja kysy majoittumisen perustietoja."
+      },
+      "taxi_ride": {
+        "title": "Tilaa taksi",
+        "description": "Soita taksikeskuksen työntekijää esittävälle Lingulle. Kerro noutopaikka ja määränpää ja kysy, milloin taksi saapuu."
+      },
+      "collect_key": {
+        "title": "Nouda avain",
+        "description": "Nouda loma-asunnon avain majoittajaa esittävältä Lingulta ja kysy, miten pääset asuntoon sisään."
+      },
+      "local_recommendations": {
+        "title": "Kysy käyntikohteista",
+        "description": "Lingu esittää paikallista asukasta. Kerro kiinnostuksenkohteistasi ja pyydä vinkkejä sopivista käyntikohteista."
+      },
+      "congratulate_friend": {
+        "title": "Onnittele ystävää",
+        "description": "Lingu esittää ystävää, jolla on syntymäpäivä tai iloisia uutisia. Onnittele ja juttele hetki."
+      },
+      "hobbies_chat": {
+        "title": "Puhu harrastuksista",
+        "description": "Juttele ystävää esittävän Lingun kanssa vapaa-ajan tekemisistä ja löytäkää yhteisiä kiinnostuksenkohteita."
+      },
+      "family_chat": {
+        "title": "Puhu perheestä",
+        "description": "Lingu esittää tuttavaa. Kerro perheestäsi ja kysy Lingun perheestä."
+      },
+      "invite_friend": {
+        "title": "Kutsu ystävä mukaan",
+        "description": "Kutsu ystävää esittävä Lingu syömään tai juomaan jotain ja sopikaa tapaamisaika."
+      },
+      "choose_gift": {
+        "title": "Valitse lahja",
+        "description": "Valitse yhteinen lahja ystävää esittävän Lingun kanssa. Miettikää, mistä lahjan saaja pitää, ja päättäkää yhdessä."
+      },
+      "late_arrival": {
+        "title": "Ilmoita myöhästymisestä",
+        "description": "Kerro työkaveria esittävälle Lingulle, että myöhästyt, ja arvioi, milloin saavut."
+      },
+      "work_update": {
+        "title": "Kerro työsi etenemisestä",
+        "description": "Kerro työkaveria esittävälle Lingulle tavallisesta työtehtävästäsi ja siitä, miten se etenee."
+      },
+      "arrange_meeting": {
+        "title": "Sovi palaveri",
+        "description": "Sovi palaverista työkaveria esittävän Lingun kanssa ja etsikää molemmille sopiva päivä ja kellonaika."
+      },
+      "colleague_help": {
+        "title": "Pyydä työkaverilta apua",
+        "description": "Lingu esittää työkaveriasi. Kerro, mihin tarvitset apua, ja pyydä neuvoja."
+      },
+      "break_chat": {
+        "title": "Juttele tauolla",
+        "description": "Lingu esittää työkaveriasi. Juttele rennosti arkisista asioista työtauolla."
+      },
+      "recount_day": {
+        "title": "Kerro päivästäsi",
+        "description": "Kerro ystävää esittävälle Lingulle, mitä olet tänään tehnyt ja mitä päivän aikana on tapahtunut."
+      },
+      "weather_chat": {
+        "title": "Puhu säästä",
+        "description": "Lingu esittää naapuriasi. Jutelkaa säästä ja siitä, mitä aiotte tehdä."
+      },
+      "daily_routine": {
+        "title": "Puhu arkirutiineista",
+        "description": "Lingu esittää tuttavaa. Kuvaile tavallista päivääsi ja kysy Lingun arkirutiineista."
+      },
+      "household_chores": {
+        "title": "Sovi kotitöistä",
+        "description": "Lingu esittää kämppäkaveriasi. Jakakaa kotityöt ja sopikaa, milloin teette ne."
+      },
+      "plan_dinner": {
+        "title": "Suunnittele päivällinen",
+        "description": "Lingu esittää kämppäkaveriasi. Päättäkää, mitä kokkaatte, ja käykää läpi, mitä aineksia on valmiina ja mitä puuttuu."
+      },
       "medical_appointment": {
         "title": "Varaa lääkäriaika",
         "description": "Soita lääkäriasemalle. Lingu hoitaa ajanvarauksen: kerro käynnin syy ja sovi sopiva aika."
@@ -424,7 +524,7 @@
     "goToPlan": "Siirry omaan suunnitelmaan"
   },
   "nav": {
-    "situations": "Tilanteet",
+    "situations": "Arjen tilanteet",
     "practiceGrammar": "Kielioppiharjoittelu",
     "learning": "Oma oppiminen",
     "practice": "Harjoittele",

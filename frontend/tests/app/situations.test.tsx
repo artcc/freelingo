@@ -151,10 +151,12 @@ beforeEach(() => {
 afterEach(cleanup)
 
 describe('Situations catalog', () => {
-  it('lists 25 cards in translated category/title order and searches descriptions', async () => {
+  it('lists 50 cards in translated category/title order and searches descriptions', async () => {
     render(<SituationsCatalog />)
     await waitFor(() =>
-      expect(screen.getAllByRole('button', { name: /^start:/ })).toHaveLength(25)
+      expect(screen.getAllByRole('button', { name: /^start:/ })).toHaveLength(
+        50
+      )
     )
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((el) => el.textContent)
@@ -167,7 +169,7 @@ describe('Situations catalog', () => {
       .map((el) => el.textContent)
     expect(titles[0]).toBe('A hotel problem')
     expect(titles[1]).toBe('Finding your way')
-    expect(screen.getAllByRole('button', { name: /^start:/ })).toHaveLength(5)
+    expect(screen.getAllByRole('button', { name: /^start:/ })).toHaveLength(10)
     fireEvent.change(screen.getByRole('searchbox'), {
       target: { value: 'NOISY' },
     })

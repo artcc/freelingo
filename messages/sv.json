@@ -19,6 +19,106 @@
       "work": "Arbete"
     },
     "items": {
+      "bakery_purchase": {
+        "title": "Handla på ett bageri",
+        "description": "Lingu spelar butiksbiträdet på ett bageri. Be om bröd eller något till frukost, säg hur mycket du vill ha och fråga om priset."
+      },
+      "clothes_shopping": {
+        "title": "Handla kläder",
+        "description": "Prata med Lingu som butiksbiträde om storlek och färg och fråga om du kan prova kläderna."
+      },
+      "cafe_order": {
+        "title": "Beställ på ett kafé",
+        "description": "Lingu spelar servitören på ett kafé. Beställ något att dricka och lite att äta."
+      },
+      "haircut_appointment": {
+        "title": "Gå till frisören",
+        "description": "Lingu spelar din frisör. Be om en enkel klippning och beskriv hur du vill ha håret."
+      },
+      "supermarket_help": {
+        "title": "Fråga om hjälp i mataffären",
+        "description": "Fråga Lingu som anställd i mataffären var du hittar varorna du letar efter."
+      },
+      "buy_ticket": {
+        "title": "Köp en biljett",
+        "description": "Lingu arbetar i biljettkassan. Berätta vart du ska resa, fråga om avgångstider och priser och köp en biljett."
+      },
+      "hotel_check_in": {
+        "title": "Checka in på ett hotell",
+        "description": "Lingu spelar receptionisten. Bekräfta din bokning och fråga om det viktigaste inför din vistelse."
+      },
+      "taxi_ride": {
+        "title": "Beställ en taxi",
+        "description": "Ring Lingu på taxibeställningen. Säg var du vill bli hämtad och vart du ska och fråga när taxin kommer."
+      },
+      "collect_key": {
+        "title": "Hämta nyckeln",
+        "description": "Hämta nyckeln till din semesterlägenhet hos Lingu som värd och fråga hur du kommer in."
+      },
+      "local_recommendations": {
+        "title": "Fråga vad som är värt att besöka",
+        "description": "Lingu spelar en person från trakten. Berätta om dina intressen och be om tips på platser att besöka."
+      },
+      "congratulate_friend": {
+        "title": "Gratulera en vän",
+        "description": "Lingu spelar en vän som fyller år eller har en glad nyhet. Gratulera och småprata en stund."
+      },
+      "hobbies_chat": {
+        "title": "Prata om fritidsintressen",
+        "description": "Prata med Lingu som vän om vad ni gillar att göra på fritiden och hitta gemensamma intressen."
+      },
+      "family_chat": {
+        "title": "Prata om familjen",
+        "description": "Lingu spelar en bekant. Berätta lite om din familj och fråga om Lingus familj."
+      },
+      "invite_friend": {
+        "title": "Bjud med en vän",
+        "description": "Fråga Lingu som vän om ni ska äta eller dricka något tillsammans och bestäm en tid."
+      },
+      "choose_gift": {
+        "title": "Välj en present",
+        "description": "Välj en gemensam present med Lingu som vän. Prata om vad mottagaren gillar och bestäm er tillsammans."
+      },
+      "late_arrival": {
+        "title": "Meddela att du blir sen",
+        "description": "Berätta för Lingu som kollega att du blir försenad och säg ungefär när du kommer fram."
+      },
+      "work_update": {
+        "title": "Berätta vad du jobbar med",
+        "description": "Prata med Lingu som kollega om en vanlig arbetsuppgift och berätta hur arbetet går."
+      },
+      "arrange_meeting": {
+        "title": "Boka ett möte",
+        "description": "Planera ett möte med Lingu som kollega och hitta en dag och tid som passar er båda."
+      },
+      "colleague_help": {
+        "title": "Be en kollega om hjälp",
+        "description": "Lingu spelar din kollega. Förklara vad du behöver hjälp med och be om vägledning."
+      },
+      "break_chat": {
+        "title": "Småprata på rasten",
+        "description": "Lingu spelar din kollega. Prata avslappnat om vardagliga saker under en rast på jobbet."
+      },
+      "recount_day": {
+        "title": "Berätta om din dag",
+        "description": "Berätta för Lingu som vän vad du har gjort idag och om något som har hänt."
+      },
+      "weather_chat": {
+        "title": "Prata om vädret",
+        "description": "Lingu spelar din granne. Prata om vädret och vad ni har för planer."
+      },
+      "daily_routine": {
+        "title": "Prata om vardagsrutiner",
+        "description": "Lingu spelar en bekant. Beskriv hur en vanlig dag ser ut för dig och fråga om Lingus rutiner."
+      },
+      "household_chores": {
+        "title": "Dela upp hushållssysslorna",
+        "description": "Lingu spelar någon du bor med. Bestäm vem som gör vad hemma och när ni ska göra det."
+      },
+      "plan_dinner": {
+        "title": "Planera middagen",
+        "description": "Lingu spelar någon du bor med. Bestäm vad ni ska laga och prata om vilka ingredienser ni har och vilka som saknas."
+      },
       "medical_appointment": {
         "title": "Boka ett läkarbesök",
         "description": "Ring en mottagning. Lingu arbetar i receptionen: förklara varför du vill boka ett besök och kom överens om en tid."
@@ -424,7 +524,7 @@
     "goToPlan": "Gå till min plan"
   },
   "nav": {
-    "situations": "Situationer",
+    "situations": "Vardagssituationer",
     "practiceGrammar": "Grammatikövningar",
     "learning": "Mitt lärande",
     "practice": "Öva",

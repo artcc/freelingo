@@ -8,7 +8,8 @@ applyTo: "backend/app/{data,routers,schemas,services}/situations.py, backend/app
 ## Purpose and ownership
 
 Situations offers everyday role-play with Lingu through the existing voice conversation flow.
-The authenticated `/situations` catalog belongs to Practice in the shared desktop/mobile navigation.
+The authenticated `/situations` catalog appears as Everyday situations (localized through
+`nav.situations`) under Practice in the shared desktop/mobile navigation.
 It requires an owned active study plan; the plan supplies the target language and CEFR level.
 
 This specification owns the catalog, discovery interface, scenario context, and learning flow.
@@ -19,18 +20,21 @@ session lifecycle. `subscriptions-freemium.instructions.md` owns access and quot
 ## Canonical catalog
 
 `backend/app/data/situations.py` owns the stable situation IDs, category membership, roles, scenario,
-and learner objective. The catalog contains five categories with five situations each:
+and learner objective. The catalog contains five categories with ten situations each, combining
+straightforward everyday exchanges with scenarios for resolving practical problems:
 
 - `daily_life`: `medical_appointment`, `neighbour_problem`, `flat_viewing`, `school_meeting`,
-  `household_repair`.
+  `household_repair`, `recount_day`, `weather_chat`, `daily_routine`, `household_chores`,
+  `plan_dinner`.
 - `travel`: `change_reservation`, `hotel_problem`, `ask_directions`, `missed_connection`,
-  `lost_luggage`.
+  `lost_luggage`, `buy_ticket`, `hotel_check_in`, `taxi_ride`, `collect_key`, `local_recommendations`.
 - `shopping_services`: `return_purchase`, `restaurant_order`, `phone_contract`, `bank_appointment`,
-  `delivery_problem`.
+  `delivery_problem`, `bakery_purchase`, `clothes_shopping`, `cafe_order`, `haircut_appointment`,
+  `supermarket_help`.
 - `social`: `meet_someone`, `make_plans`, `decline_invitation`, `resolve_misunderstanding`,
-  `host_visitors`.
+  `host_visitors`, `congratulate_friend`, `hobbies_chat`, `family_chat`, `invite_friend`, `choose_gift`.
 - `work`: `introduce_yourself`, `explain_task`, `clarify_instructions`, `negotiate_deadline`,
-  `share_proposal`.
+  `share_proposal`, `late_arrival`, `work_update`, `arrange_meeting`, `colleague_help`, `break_chat`.
 
 The authenticated catalog response supplies IDs/category membership and the resolved plan, language,
 and level. It does not accept caller-authored role-play instructions. Interface category labels,
