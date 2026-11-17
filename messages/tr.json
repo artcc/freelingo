@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Anladım",
     "entry1": {
+      "label": "Günlük konuşmalar için pratik yap",
+      "desc": "Günlük yaşam, seyahat, alışveriş, sosyal yaşam ve iş konularındaki 50 senaryoyla gerçek durumlara hazırlan. Konuştuğun kişinin rolünü üstlenip konuşmayı seviyene uyarlayacak Lingu ile sesli pratik yap."
+    },
+    "entry2": {
       "label": "Planın, adım adım",
       "desc": "Planım artık öğrenme sürecini bir rota olarak gösteriyor: ilerlemeni takip et, mevcut üniteni bul ve sıradaki aşamaları keşfet. Dersleri görmek, öğrenmeye devam etmek veya tamamladıklarını tekrar etmek için her üniteyi açabilirsin."
     },
-    "entry2": {
+    "entry3": {
       "label": "Kendi hızında dil bilgisi pratiği yap",
       "desc": "Dil bilgisi kaynaklarından konuları kişisel kitaplığına ekle ve düzeltmeler ile açıklamalar içeren beşer alıştırmalık setlerle pratik yap. Sonuçlarını incele ve bitirdiğinde konu ile yanıtların üzerinden Lingu ile sesli pratiğe devam et."
     },
-    "entry3": {
+    "entry4": {
       "label": "Yeni diller: Hırvatça, Çekçe, Danca, Fince ve Rumence",
       "desc": "A1'den C2'ye kadar içeriklerle Hırvatçayı, Çekçeyi, Dancayı, Finceyi ve Rumenceyi öğrenebileceğin diller arasına ekledik. Başlarken seçebilir veya Ayarlar → Dillerim bölümünden ekleyebilirsin."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu, ihtiyaç duyduğunda yanında",
       "desc": "Sesli bir konuşma sırasında bir şeyi anlamazsan Lingu'dan yardım iste. Sana ana dilinde kısaca açıklayabilir, ardından öğrendiğin dilde pratiğe devam edebilir."
     },
-    "entry5": {
+    "entry6": {
       "label": "Daha akıcı bir deneyim",
       "desc": "FreeLingo ile günlük öğreniminizi daha keyifli hâle getirmek için küçük hataları da düzelttik ve bazı ayrıntıları iyileştirdik."
     }

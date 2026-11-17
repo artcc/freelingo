@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Verstanden",
     "entry1": {
+      "label": "Übe Gespräche für den Alltag",
+      "desc": "Bereite dich mit 50 Szenarien rund um Alltag, Reisen, Einkaufen, soziale Kontakte und Arbeit auf reale Situationen vor. Übe das Sprechen mit Lingu, der die Rolle deines Gesprächspartners übernimmt und das Gespräch an dein Niveau anpasst."
+    },
+    "entry2": {
       "label": "Dein Plan, Schritt für Schritt",
       "desc": "Mein Plan zeigt deinen Lernweg jetzt als Route: Verfolge deinen Fortschritt, finde deine aktuelle Einheit und entdecke die nächsten Etappen. Öffne jede Einheit, um ihre Lektionen anzusehen, weiterzulernen oder bereits Abgeschlossenes zu wiederholen."
     },
-    "entry2": {
+    "entry3": {
       "label": "Übe Grammatik in deinem eigenen Tempo",
       "desc": "Füge Themen aus den Grammatikressourcen zu deiner persönlichen Bibliothek hinzu und übe mit jeweils fünf Aufgaben samt Korrekturen und Erklärungen. Sieh dir deine Ergebnisse an und übe anschließend im Sprachgespräch mit Lingu weiter – auf Grundlage des Themas und deiner Antworten."
     },
-    "entry3": {
+    "entry4": {
       "label": "Neue Sprachen: Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch",
       "desc": "Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu hilft dir, wenn du es brauchst",
       "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
     },
-    "entry5": {
+    "entry6": {
       "label": "Ein flüssigeres Erlebnis",
       "desc": "Außerdem haben wir kleine Fehler behoben und an einigen Details gefeilt, damit dir das tägliche Lernen mit FreeLingo noch mehr Freude macht."
     }

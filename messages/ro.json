@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Am înțeles",
     "entry1": {
+      "label": "Exersează conversații de zi cu zi",
+      "desc": "Pregătește-te pentru situații reale cu 50 de scenarii din viața cotidiană, călătorii, cumpărături, viața socială și muncă. Exersează prin conversații vocale cu Lingu, care va juca rolul interlocutorului tău și va adapta conversația la nivelul tău."
+    },
+    "entry2": {
       "label": "Planul tău, pas cu pas",
       "desc": "Planul meu îți prezintă acum învățarea ca pe un traseu: urmărește-ți progresul, identifică unitatea curentă și descoperă etapele următoare. Deschide fiecare unitate pentru a vedea lecțiile, a continua să înveți sau a recapitula ce ai finalizat."
     },
-    "entry2": {
+    "entry3": {
       "label": "Exersează gramatica în ritmul tău",
       "desc": "Adaugă teme din resursele de Gramatică în biblioteca personală și exersează cu seturi de câte cinci exerciții, cu corecturi și explicații. Consultă rezultatele și, după ce termini, continuă practica prin conversații vocale cu Lingu pe baza temei și a răspunsurilor tale."
     },
-    "entry3": {
+    "entry4": {
       "label": "Limbi noi: croată, cehă, daneză, finlandeză și română",
       "desc": "Am adăugat croata, ceha, daneza, finlandeza și româna ca limbi de studiu, cu conținut de la A1 la C2. Alege-le la început sau adaugă-le din Setări → Limbile mele."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu te ajută când ai nevoie",
       "desc": "Dacă nu înțelegi ceva în timpul unei conversații vocale, cere-i ajutor lui Lingu. Îți poate explica pe scurt în limba ta maternă, apoi poate relua practica în limba pe care o înveți."
     },
-    "entry5": {
+    "entry6": {
       "label": "O experiență mai fluidă",
       "desc": "Am corectat și mici erori și am finisat câteva detalii, ca învățarea de zi cu zi cu FreeLingo să fie și mai plăcută."
     }

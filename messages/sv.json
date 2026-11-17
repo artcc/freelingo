@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Jag förstår",
     "entry1": {
+      "label": "Öva på vardagliga samtal",
+      "desc": "Förbered dig för verkliga situationer med 50 scenarier om vardagsliv, resor, shopping, socialt liv och arbete. Öva muntligt med Lingu, som spelar rollen som din samtalspartner och anpassar samtalet till din nivå."
+    },
+    "entry2": {
       "label": "Din plan, steg för steg",
       "desc": "Min plan visar nu ditt lärande som en väg framåt: följ dina framsteg, hitta ditt aktuella avsnitt och upptäck nästa etapper. Öppna varje avsnitt för att se lektionerna, fortsätta lära dig eller repetera det du har slutfört."
     },
-    "entry2": {
+    "entry3": {
       "label": "Öva grammatik i din egen takt",
       "desc": "Lägg till ämnen från grammatikresurserna i ditt personliga bibliotek och öva med fem övningar åt gången, med rättningar och förklaringar. Se dina resultat och fortsätt sedan att öva muntligt med Lingu utifrån ämnet och dina svar."
     },
-    "entry3": {
+    "entry4": {
       "label": "Nya språk: kroatiska, tjeckiska, danska, finska och rumänska",
       "desc": "Kroatiska, tjeckiska, danska, finska och rumänska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu hjälper dig när du behöver det",
       "desc": "Om du inte förstår något under ett röstsamtal kan du be Lingu om hjälp. Lingu kan förklara det kort på ditt modersmål och sedan återgå till att öva på språket du lär dig."
     },
-    "entry5": {
+    "entry6": {
       "label": "En smidigare upplevelse",
       "desc": "Vi har också rättat mindre fel och förbättrat några detaljer så att det blir ännu roligare att lära sig med FreeLingo varje dag."
     }
