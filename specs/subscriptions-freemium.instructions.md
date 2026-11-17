@@ -109,6 +109,7 @@ Currently gated operations are:
 - generating and submitting Reading attempts;
 - creating new Error Detective, Sentence Order, or Vocabulary Pairs games (durable reservation policy below);
 - generating new Grammar Practice sessions (independent durable reservation policy below);
+- starting a Situations role-play (weekly feature allowance plus ordinary voice access);
 - voice-conversation warmup and WebSocket connection.
 
 Read-only policy protects chat history, Listening next/audio/history, and Reading next/history.
@@ -387,6 +388,7 @@ Defaults are:
 - Voice: 5 elapsed conversation minutes per ISO week, stored as seconds.
 - Games: 3 new games per UTC day, configured by `FREEMIUM_GAMES_DAILY`.
 - Grammar Practice: 3 new sessions per UTC day, configured by `FREEMIUM_GRAMMAR_PRACTICE_DAILY`.
+- Situations: 1 successful role-play start per ISO week, configured by `FREEMIUM_SITUATIONS_WEEKLY`.
 
 Freemium counters are global per user, not per learning language. Zero means blocked for that feature.
 Daily keys expire at the next UTC midnight; weekly keys expire at the next Monday UTC.
@@ -397,6 +399,7 @@ Usage is recorded after successful work:
 - Lessons after atomic completion/progress/competency commit.
 - Listening and Reading after persisted attempts, including replay.
 - Voice from elapsed session seconds during cleanup when freemium quota was the effective access path.
+- Situations once per normal successful session admission; loading the catalog does not count.
 
 Already-completed lesson retries return before quota checking or consumption. Generating or loading a
 Listening/Reading exercise does not consume quota.
@@ -424,8 +427,27 @@ blocks new generation; saved reads, resumption, answers, and abandonment remain 
 Voice continuation from a completed session still requires normal voice access and voice quota.
 See `grammar-practice.instructions.md`.
 
+Situations uses an independent global weekly Redis counter. Premium, active no-card trials, and
+Stripe-disabled deployments bypass this feature allowance; zero blocks new free starts. The counter
+resets on Monday at 00:00 UTC under the shared weekly-key policy. The backend validates the canonical
+scenario and owned active plan before consuming quota. Its allowance does not replace voice access,
+freemium voice seconds, or general session/minute/token limits, and cannot use the post-assessment demo.
+Admission means the conversation has been persisted, the pipeline constructed, and the server's
+`situation_started` send completed successfully. Usage is then recorded before `pipeline.run`.
+Catalog reads and voice warmup do not consume starts. Failures before admission, including a failed
+startup send, do not record a Situations start; subsequent greeting, LLM, or speech-provider failures
+still count. A successful server send guarantees neither client receipt nor first audio.
+Recording follows the existing separate
+check/increment and best-effort Redis policy, without cross-retry deduplication or strict concurrent
+admission guarantees; recording failure does not cancel the admitted session. The Redis key is
+`freemium:situations:{user_id}:{ISO-year}-W{ISO-week}`, with usage assigned at recording time.
+General voice session accounting retains its earlier authorization boundary and can therefore
+consume a general session before conversation persistence.
+`GET /api/freemium/status` includes `situations_remaining` and `situations_limit`, measured in starts.
+Catalog and context behavior belong to `situations.instructions.md`.
+
 `GET /api/freemium/status` requires authentication, is limited to `60/minute`, and returns trial
-state plus remaining and configured limits for all seven features. The route exists when Stripe is
+state plus remaining and configured limits for all eight features. The route exists when Stripe is
 disabled, although the policy is inactive and the frontend normally does not request it.
 
 ## General quotas and subscription activation
@@ -659,6 +681,7 @@ independently of whether the cached profile already reflects that subscription.
 ## Related specifications
 
 - `voice-conversation.instructions.md` — voice access and demo consumption.
+- `situations.instructions.md` — role-play catalog and voice source context.
 - `listening.instructions.md` — Listening quota-consumption behavior.
 - `reading.instructions.md` — Reading quota-consumption behavior.
 - `api-endpoints.instructions.md` — endpoint request and response details.

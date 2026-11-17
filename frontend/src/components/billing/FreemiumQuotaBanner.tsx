@@ -16,6 +16,7 @@ interface FreemiumQuotaBannerProps {
     | 'voice'
     | 'games'
     | 'grammar_practice'
+    | 'situations'
   className?: string
 }
 
@@ -54,6 +55,12 @@ export function FreemiumQuotaBanner({
 
   if (!status) return null
   if (
+    feature === 'situations' &&
+    (status.situations_remaining === undefined ||
+      status.situations_limit === undefined)
+  )
+    return null
+  if (
     feature === 'grammar_practice' &&
     (status.grammar_practice_remaining === undefined ||
       status.grammar_practice_limit === undefined)
@@ -64,6 +71,11 @@ export function FreemiumQuotaBanner({
     string,
     { remaining: number; limit: number; label: string }
   > = {
+    situations: {
+      remaining: status.situations_remaining ?? 0,
+      limit: status.situations_limit ?? 0,
+      label: t('situationsLabel'),
+    },
     grammar_practice: {
       remaining: status.grammar_practice_remaining ?? 0,
       limit: status.grammar_practice_limit ?? 0,
@@ -146,6 +158,7 @@ export function FreemiumQuotaBanner({
         <span className="text-fl-muted-2 w-full font-sans text-xs leading-relaxed">
           {tPremium(
             feature === 'voice' ||
+              feature === 'situations' ||
               feature === 'listening' ||
               feature === 'reading'
               ? 'weeklyReset'

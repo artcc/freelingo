@@ -1,4 +1,126 @@
 {
+  "situations": {
+    "title": "Oefen situaties uit het echte leven",
+    "description": "Kies een scenario en oefen hardop met Lingu, die de rol van je gesprekspartner speelt.",
+    "search": "Situaties zoeken",
+    "allCategories": "Alle categorieën",
+    "noResults": "Er zijn geen situaties die bij je zoekopdracht passen.",
+    "loadError": "De situaties konden niet worden geladen.",
+    "retry": "Opnieuw proberen",
+    "start": "Oefening starten",
+    "unavailable": "Deze situatie is niet beschikbaar. Probeer het opnieuw.",
+    "back": "Terug naar situaties",
+    "contextChanged": "Je leercontext is gewijzigd. Vernieuw de pagina en start de oefening opnieuw.",
+    "categories": {
+      "daily_life": "Dagelijks leven",
+      "travel": "Reizen",
+      "shopping_services": "Winkelen en diensten",
+      "social": "Sociaal leven",
+      "work": "Werk"
+    },
+    "items": {
+      "medical_appointment": {
+        "title": "Een doktersafspraak maken",
+        "description": "Bel een dokterspraktijk. Lingu neemt de telefoon op: leg uit waarom je een afspraak wilt en spreek een datum af."
+      },
+      "neighbour_problem": {
+        "title": "Met een buur praten",
+        "description": "Lingu speelt je buur. Leg uit welke overlast je thuis ervaart en zoek samen een respectvolle oplossing."
+      },
+      "flat_viewing": {
+        "title": "Een woning bezichtigen",
+        "description": "Bezichtig een woning met Lingu als makelaar. Vraag naar de huur, bijkomende kosten en voorwaarden."
+      },
+      "school_meeting": {
+        "title": "Een gesprek op school",
+        "description": "Lingu speelt de leerkracht van je kind. Bespreek schoolafspraken en spreek af hoe jullie je kind bij het leren ondersteunen."
+      },
+      "household_repair": {
+        "title": "Een reparatie regelen",
+        "description": "Beschrijf een defect in huis aan Lingu als monteur. Vraag naar de kosten en maak een afspraak."
+      },
+      "change_reservation": {
+        "title": "Een reservering wijzigen",
+        "description": "Praat met Lingu van de reserveringsafdeling. Leg uit wat je wilt wijzigen en bevestig de nieuwe voorwaarden."
+      },
+      "hotel_problem": {
+        "title": "Een probleem in het hotel",
+        "description": "Lingu werkt bij de receptie. Leg een probleem met je kamer uit en vraag om een passende oplossing."
+      },
+      "ask_directions": {
+        "title": "De weg vragen",
+        "description": "Vraag Lingu als buurtbewoner hoe je op je bestemming komt en controleer of je de route goed hebt begrepen."
+      },
+      "missed_connection": {
+        "title": "Een aansluiting missen",
+        "description": "Je hebt een aansluiting gemist. Praat met Lingu aan het vervoersloket om een andere verbinding naar je bestemming te vinden."
+      },
+      "lost_luggage": {
+        "title": "Verloren bagage",
+        "description": "Je koffer is niet aangekomen. Beschrijf hem aan Lingu bij de bagagebalie en vraag hoe je hem terugkrijgt."
+      },
+      "return_purchase": {
+        "title": "Een aankoop terugbrengen",
+        "description": "Leg aan Lingu als winkelmedewerker uit waarom je een artikel wilt terugbrengen en vraag naar de terugbetaling."
+      },
+      "restaurant_order": {
+        "title": "Bestellen in een restaurant",
+        "description": "Lingu speelt de ober. Vraag naar de gerechten, leg je voorkeuren uit en plaats je bestelling."
+      },
+      "phone_contract": {
+        "title": "Een mobiel abonnement kiezen",
+        "description": "Praat met Lingu als telecomadviseur. Vergelijk abonnementen en vraag naar kosten en voorwaarden voordat je kiest."
+      },
+      "bank_appointment": {
+        "title": "Een afspraak bij de bank",
+        "description": "Lingu speelt een bankmedewerker. Leg uit wat je wilt regelen en vraag welke documenten nodig zijn en wat de volgende stappen zijn."
+      },
+      "delivery_problem": {
+        "title": "Een bezorgprobleem",
+        "description": "Neem contact op met Lingu van de klantenservice. Leg het probleem met je pakket uit en spreek een oplossing af."
+      },
+      "meet_someone": {
+        "title": "Iemand leren kennen",
+        "description": "Lingu speelt iemand die je net op een bijeenkomst ontmoet. Stel jezelf voor en ontdek gedeelde interesses."
+      },
+      "make_plans": {
+        "title": "Samen plannen maken",
+        "description": "Plan een uitstapje met Lingu als vriend. Stel activiteiten voor en spreek af waar en wanneer jullie elkaar ontmoeten."
+      },
+      "decline_invitation": {
+        "title": "Een uitnodiging afslaan",
+        "description": "Lingu speelt een vriend die je uitnodigt. Sla de uitnodiging vriendelijk af en stel voor om een andere keer af te spreken."
+      },
+      "resolve_misunderstanding": {
+        "title": "Een misverstand ophelderen",
+        "description": "Bespreek met Lingu als vriend een verkeerd begrepen bericht en zorg dat jullie weer op goede voet verder kunnen."
+      },
+      "host_visitors": {
+        "title": "Bezoek ontvangen",
+        "description": "Lingu komt bij je op bezoek. Heet je gast welkom, bied iets te drinken aan en vertel wat je hebt gepland."
+      },
+      "introduce_yourself": {
+        "title": "Jezelf aan het team voorstellen",
+        "description": "Lingu speelt een nieuwe collega. Stel jezelf voor, leg je functie uit en vraag naar het team."
+      },
+      "explain_task": {
+        "title": "Een taak uitleggen",
+        "description": "Leg een taak uit aan Lingu als collega. Beschrijf de stappen en controleer of je uitleg duidelijk is."
+      },
+      "clarify_instructions": {
+        "title": "Instructies verduidelijken",
+        "description": "Lingu speelt je leidinggevende. Stel vragen over onduidelijke instructies en bevestig wat je moet doen."
+      },
+      "negotiate_deadline": {
+        "title": "Een deadline bespreken",
+        "description": "Praat met Lingu als projectleider. Leg een probleem uit en spreek een haalbare deadline af."
+      },
+      "share_proposal": {
+        "title": "Een voorstel presenteren",
+        "description": "Presenteer een verbeteridee aan Lingu als teamgenoot. Leg de voordelen uit en beantwoord de vragen."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Oorspronkelijk verzoek opnieuw proberen",
     "voiceAction": "Dit grammaticaonderwerp mondeling oefenen",
@@ -302,6 +424,7 @@
     "goToPlan": "Naar mijn plan"
   },
   "nav": {
+    "situations": "Situaties",
     "practiceGrammar": "Grammatica oefenen",
     "learning": "Mijn leertraject",
     "practice": "Oefenen",
@@ -1725,6 +1848,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Blijf situaties uit het echte leven oefenen",
+    "paywallSituationsDesc": "Je hebt de gratis situatieoefeningen van deze week gebruikt, of deze functie vereist Premium. Met Premium kun je meer oefenen; de algemene limieten voor spraak blijven gelden.",
     "paywallGrammarPracticeTitle": "Blijf grammatica oefenen",
     "paywallGrammarPracticeDesc": "Je gratis grammaticasets voor vandaag zijn op. Met Premium kun je meer maken; opgeslagen sessies blijven beschikbaar.",
     "planFreeTrialDesc": "Probeer Premium bij registratie, zonder betaalkaart of abonnement. Ga daarna gratis verder met gebruikslimieten.",
@@ -1770,6 +1895,7 @@
     "ctaRegister": "Gratis proefperiode starten",
     "ctaRegisterTrialUsed": "Kies plan",
     "freeFeature": {
+      "situations": "Situaties hardop oefenen",
       "f1": "Niveautest & beoordeling",
       "f2": "Persoonlijk leerplan",
       "lessons": "Lessen afronden",
@@ -1849,6 +1975,7 @@
     "weeklyReset": "Je gratis tegoed wordt op maandag om 00:00 UTC vernieuwd.",
     "trialResultNote": "Je gratis proefperiode loopt nog. Bekijk alvast de abonnementen voor wanneer deze afloopt.",
     "result": {
+      "situations": "Blijf met Premium situaties uit het echte leven hardop oefenen met Lingu.",
       "voice": "Bouw voort op dit gesprek met meer spreekoefening en feedback van Lingu met Premium.",
       "lessons": "Blijf met Premium lessen afronden en pas samen met Lingu toe wat je hebt geleerd.",
       "listening": "Blijf met Premium je luistervaardigheid trainen met meer luisteroefeningen op jouw niveau.",
@@ -1872,6 +1999,7 @@
     "paidTerms": "Een betaalkaart is vereist. Je betaalde abonnement gaat in bij aankoop. Het wordt met de gekozen frequentie verlengd, tenzij je opzegt."
   },
   "freemium": {
+    "situationsLabel": "Situaties deze week",
     "grammarPracticeLabel": "Grammaticasets vandaag",
     "gamesLabel": "Spellen vandaag",
     "chatLabel": "Chat",
@@ -1933,7 +2061,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Begrepen",
     "entry1": {
       "label": "Je plan, stap voor stap",

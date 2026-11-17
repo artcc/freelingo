@@ -77,6 +77,24 @@ their owned historical plan and language track. It supplies the existing `lesson
 pipeline input; the same ownership resolver binds selected-word flashcard saves to that plan.
 `grammar-practice.instructions.md` owns the complete domain contract.
 
+## Situations
+
+The server-owned catalog in `data/situations.py` supplies stable category/situation IDs and canonical
+role-play source data. `situations.py` resolves both plan and language-track ownership, their matching
+supported target language, and active-plan status for catalog/start. The currently selected track is
+not authoritative. It builds an escaped JSON scenario reference with that plan's language and level
+before quota consumption. The voice router
+passes the result through the existing `lesson_practice_context` pipeline input; clients cannot
+replace the scenario with their own prompt or select another language through free-form context.
+The prompt builder selects a Situations-specific branch from a server-generated marker, leaving the
+lesson/Grammar Practice wrapper and `ConversationPipeline` unchanged.
+Selected-word saves reuse `get_situation_plan(..., require_active=False)` so historical owned plans
+retain lookup language, level, deduplication, and storage without active-plan fallback.
+
+`situations.instructions.md` owns the catalog, roles, objectives, and learning flow.
+`voice-conversation.instructions.md` owns the shared pipeline and session lifecycle;
+`subscriptions-freemium.instructions.md` owns the additional weekly allowance and its accounting.
+
 ## Assessment
 
 `assessment.py` evaluates adaptive quiz records deterministically and provides LLM-backed free-write

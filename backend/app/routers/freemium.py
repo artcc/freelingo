@@ -50,4 +50,6 @@ async def freemium_status(
         "reading_limit": status.reading_limit,
         "voice_remaining_seconds": status.voice_remaining_seconds,
         "voice_limit_seconds": status.voice_limit_seconds,
+        "situations_remaining": status.situations_remaining,
+        "situations_limit": status.situations_limit,
     }

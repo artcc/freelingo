@@ -1,4 +1,126 @@
 {
+  "situations": {
+    "title": "Vježbaj stvarne situacije",
+    "description": "Odaberi scenarij i vježbaj govor s Linguom, koji će glumiti osobu s kojom trebaš razgovarati.",
+    "search": "Pretraži situacije",
+    "allCategories": "Sve kategorije",
+    "noResults": "Nema situacija koje odgovaraju tvojoj pretrazi.",
+    "loadError": "Situacije nije bilo moguće učitati.",
+    "retry": "Pokušaj ponovno",
+    "start": "Započni vježbu",
+    "unavailable": "Ova situacija nije dostupna. Pokušaj ponovno.",
+    "back": "Natrag na situacije",
+    "contextChanged": "Tvoj se kontekst učenja promijenio. Osvježi stranicu i ponovno pokreni vježbu.",
+    "categories": {
+      "daily_life": "Svakodnevni život",
+      "travel": "Putovanja",
+      "shopping_services": "Kupnja i usluge",
+      "social": "Društveni život",
+      "work": "Posao"
+    },
+    "items": {
+      "medical_appointment": {
+        "title": "Dogovori liječnički pregled",
+        "description": "Nazovi ordinaciju. Lingu će raditi na prijemu: objasni razlog dolaska i dogovori termin."
+      },
+      "neighbour_problem": {
+        "title": "Razgovaraj sa susjedom",
+        "description": "Lingu će glumiti tvog susjeda. Objasni što te ometa kod kuće i zajedno pronađite obzirno rješenje."
+      },
+      "flat_viewing": {
+        "title": "Razgledaj stan",
+        "description": "Razgledaj stan s Linguom kao agentom za nekretnine. Pitaj za najamninu, režije i uvjete najma."
+      },
+      "school_meeting": {
+        "title": "Sastanak u školi",
+        "description": "Lingu će glumiti učitelja tvog djeteta. Razgovarajte o organizaciji škole i dogovorite kako podržati djetetovo učenje."
+      },
+      "household_repair": {
+        "title": "Dogovori popravak",
+        "description": "Razgovaraj s Linguom u ulozi servisera o kvaru u kući. Pitaj za cijenu i dogovori dolazak."
+      },
+      "change_reservation": {
+        "title": "Promijeni rezervaciju",
+        "description": "Razgovaraj s Linguom u službi za rezervacije. Objasni što želiš promijeniti i potvrdi nove uvjete."
+      },
+      "hotel_problem": {
+        "title": "Problem u hotelu",
+        "description": "Lingu će raditi na recepciji. Objasni problem sa svojom sobom i zatraži odgovarajuće rješenje."
+      },
+      "ask_directions": {
+        "title": "Pitaj za smjer",
+        "description": "Lingu će glumiti lokalnog stanovnika. Pitaj kako doći do odredišta i provjeri put."
+      },
+      "missed_connection": {
+        "title": "Propuštena veza",
+        "description": "Zbog kašnjenja ne možeš nastaviti put prema planu. Razgovaraj s Linguom na šalteru prijevoznika i pronađi drugu vezu."
+      },
+      "lost_luggage": {
+        "title": "Izgubljena prtljaga",
+        "description": "Lingu će raditi na šalteru za prtljagu. Opiši kovčeg koji nije stigao i pitaj kako ga možeš dobiti natrag."
+      },
+      "return_purchase": {
+        "title": "Vrati kupljeni proizvod",
+        "description": "Lingu će glumiti prodavača. Objasni zašto želiš vratiti proizvod i pitaj za povrat novca."
+      },
+      "restaurant_order": {
+        "title": "Naruči u restoranu",
+        "description": "Lingu će glumiti tvog konobara. Pitaj za jela, objasni svoje želje i naruči."
+      },
+      "phone_contract": {
+        "title": "Odaberi mobilnu tarifu",
+        "description": "Razgovaraj s Linguom kao savjetnikom za mobilne usluge. Usporedi tarife i razjasni troškove i uvjete prije odluke."
+      },
+      "bank_appointment": {
+        "title": "Sastanak u banci",
+        "description": "Lingu će glumiti bankovnog službenika. Objasni što trebaš obaviti i pitaj za dokumente i sljedeće korake."
+      },
+      "delivery_problem": {
+        "title": "Problem s dostavom",
+        "description": "Razgovaraj s Linguom u korisničkoj podršci. Objasni problem sa svojim paketom i dogovorite rješenje."
+      },
+      "meet_someone": {
+        "title": "Upoznaj novu osobu",
+        "description": "Lingu će glumiti osobu koju tek upoznaješ na druženju. Predstavi se i pronađite zajedničke interese."
+      },
+      "make_plans": {
+        "title": "Dogovorite izlazak",
+        "description": "Organiziraj izlazak s Linguom kao prijateljem. Predloži aktivnosti i dogovorite gdje i kada ćete se naći."
+      },
+      "decline_invitation": {
+        "title": "Odbij poziv",
+        "description": "Lingu će glumiti prijatelja koji te poziva na druženje. Ljubazno odbij poziv i predloži drugu priliku."
+      },
+      "resolve_misunderstanding": {
+        "title": "Razjasni nesporazum",
+        "description": "Razjasni pogrešno shvaćenu poruku s Linguom kao prijateljem i vratite razgovor u prijateljski ton."
+      },
+      "host_visitors": {
+        "title": "Dočekaj goste",
+        "description": "Lingu će glumiti gosta u tvom domu. Poželi mu dobrodošlicu, ponudi piće i objasni planove."
+      },
+      "introduce_yourself": {
+        "title": "Predstavi se timu",
+        "description": "Lingu će glumiti novog kolegu. Predstavi se, objasni svoju ulogu i pitaj o timu."
+      },
+      "explain_task": {
+        "title": "Objasni zadatak",
+        "description": "Lingu će glumiti kolegu. Objasni zadatak, opiši korake i provjeri je li sve jasno."
+      },
+      "clarify_instructions": {
+        "title": "Razjasni upute",
+        "description": "Lingu će glumiti tvog nadređenog. Pitaj o nejasnim uputama i potvrdi što trebaš učiniti."
+      },
+      "negotiate_deadline": {
+        "title": "Dogovori rok",
+        "description": "Razgovaraj s Linguom kao voditeljem projekta. Objasni poteškoću i dogovorite realan rok."
+      },
+      "share_proposal": {
+        "title": "Predstavi prijedlog",
+        "description": "Lingu će glumiti člana tima. Predstavi ideju za poboljšanje, objasni prednosti i odgovori na pitanja."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Ponovi izvorni zahtjev",
     "voiceAction": "Vježbaj ovu gramatičku temu glasom",
@@ -302,6 +424,7 @@
     "goToPlan": "Idi na moj plan"
   },
   "nav": {
+    "situations": "Situacije",
     "practiceGrammar": "Vježbanje gramatike",
     "learning": "Moje učenje",
     "practice": "Vježbaj",
@@ -1725,6 +1848,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Nastavi vježbati stvarne situacije",
+    "paywallSituationsDesc": "Besplatne vježbe situacija za ovaj tjedan su iskorištene ili ova značajka zahtijeva Premium. Uz Premium možeš vježbati više; opća ograničenja glasovne upotrebe i dalje vrijede.",
     "paywallGrammarPracticeTitle": "Nastavi vježbati gramatiku",
     "paywallGrammarPracticeDesc": "Iskoristili ste današnje besplatne skupove. Uz Premium možete stvoriti još; spremljene sesije ostaju dostupne.",
     "planFreeTrialDesc": "Isprobaj Premium pri registraciji, bez kartice ili pretplate. Nakon toga nastavi besplatno uz ograničenja korištenja.",
@@ -1770,6 +1895,7 @@
     "ctaRegister": "Započni besplatno probno razdoblje",
     "ctaRegisterTrialUsed": "Odaberi plan",
     "freeFeature": {
+      "situations": "Glasovne vježbe situacija",
       "f1": "Test i procjena razine",
       "f2": "Personalizirani plan učenja",
       "lessons": "Dovršavanje lekcija",
@@ -1849,6 +1975,7 @@
     "weeklyReset": "Tvoja besplatna kvota obnavlja se ponedjeljkom u 00:00 UTC.",
     "trialResultNote": "Tvoje besplatno probno razdoblje još traje. Pogledaj planove za nastavak nakon njegova završetka.",
     "result": {
+      "situations": "Nastavi vježbati stvarne situacije glasom s Linguom uz Premium.",
       "voice": "Nadogradi ovaj razgovor dodatnim vježbanjem govora i povratnim informacijama od Lingua uz Premium.",
       "lessons": "Nastavi dovršavati lekcije i primjenjivati naučeno s Linguom uz Premium.",
       "listening": "Uz Premium nastavi razvijati razumijevanje slušanjem kroz dodatne vježbe na svojoj razini.",
@@ -1872,6 +1999,7 @@
     "paidTerms": "Potrebna je kartica. Tvoja plaćena pretplata počinje kupnjom. Obnavlja se u odabranim intervalima, osim ako je otkažeš."
   },
   "freemium": {
+    "situationsLabel": "Situacije ovaj tjedan",
     "grammarPracticeLabel": "Današnji skupovi gramatike",
     "gamesLabel": "Današnje igre",
     "chatLabel": "Chat",
@@ -1933,7 +2061,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Razumijem",
     "entry1": {
       "label": "Tvoj plan, korak po korak",

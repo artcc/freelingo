@@ -1,4 +1,126 @@
 {
+  "situations": {
+    "title": "Gerçek yaşam durumlarını çalış",
+    "description": "Bir senaryo seç ve konuşman gereken kişiyi canlandıracak Lingu ile sesli pratik yap.",
+    "search": "Durum ara",
+    "allCategories": "Tüm kategoriler",
+    "noResults": "Aramana uygun durum bulunamadı.",
+    "loadError": "Durumlar yüklenemedi.",
+    "retry": "Tekrar dene",
+    "start": "Pratiğe başla",
+    "unavailable": "Bu durum şu anda kullanılamıyor. Tekrar dene.",
+    "back": "Durumlara dön",
+    "contextChanged": "Çalışma bağlamın değişti. Sayfayı yenile ve pratiği yeniden başlat.",
+    "categories": {
+      "daily_life": "Günlük yaşam",
+      "travel": "Seyahat",
+      "shopping_services": "Alışveriş ve hizmetler",
+      "social": "Sosyal yaşam",
+      "work": "İş"
+    },
+    "items": {
+      "medical_appointment": {
+        "title": "Doktor randevusu al",
+        "description": "Bir kliniği ara. Lingu danışma görevlisi olacak: ziyaret nedenini açıkla ve uygun bir tarih belirle."
+      },
+      "neighbour_problem": {
+        "title": "Bir komşuyla konuş",
+        "description": "Lingu komşunu canlandıracak. Evde yaşadığın rahatsızlığı açıkla ve karşılıklı saygıyla bir çözüm bulun."
+      },
+      "flat_viewing": {
+        "title": "Bir daireyi gez",
+        "description": "Emlak danışmanını canlandıran Lingu ile bir daireyi gez. Kira, masraflar ve koşullar hakkında sorular sor."
+      },
+      "school_meeting": {
+        "title": "Okulda bir görüşme",
+        "description": "Lingu çocuğunun öğretmeni olacak. Okul düzenini konuşun ve çocuğunun öğrenmesini nasıl destekleyeceğinizi kararlaştırın."
+      },
+      "household_repair": {
+        "title": "Tamir randevusu ayarla",
+        "description": "Evdeki bir arızayı teknisyeni canlandıran Lingu'ya anlat. Ücreti sor ve ziyaret için bir zaman belirle."
+      },
+      "change_reservation": {
+        "title": "Rezervasyonu değiştir",
+        "description": "Rezervasyon görevlisi olan Lingu ile konuş. Neyi değiştirmek istediğini açıkla ve yeni koşulları teyit et."
+      },
+      "hotel_problem": {
+        "title": "Otelde bir sorun",
+        "description": "Lingu resepsiyon görevlisi olacak. Odanla ilgili bir sorunu açıkla ve uygun bir çözüm iste."
+      },
+      "ask_directions": {
+        "title": "Yol tarifi iste",
+        "description": "Bölge sakinini canlandıran Lingu'ya gideceğin yere nasıl ulaşacağını sor ve güzergâhı doğru anladığından emin ol."
+      },
+      "missed_connection": {
+        "title": "Aktarmayı kaçır",
+        "description": "Aktarmanı kaçırdın. Ulaşım görevlisini canlandıran Lingu ile konuşarak gideceğin yere ulaşmanın başka bir yolunu bul."
+      },
+      "lost_luggage": {
+        "title": "Kayıp bagaj",
+        "description": "Bavulun gelmedi. Bagaj masasındaki Lingu'ya bavulunu tarif et ve nasıl geri alabileceğini sor."
+      },
+      "return_purchase": {
+        "title": "Bir ürünü iade et",
+        "description": "Mağaza görevlisini canlandıran Lingu'ya ürünü neden iade etmek istediğini açıkla ve para iadesini sor."
+      },
+      "restaurant_order": {
+        "title": "Restoranda sipariş ver",
+        "description": "Lingu garsonun olacak. Yemekler hakkında sorular sor, tercihlerini açıkla ve siparişini ver."
+      },
+      "phone_contract": {
+        "title": "Bir mobil tarife seç",
+        "description": "Telefon operatörü danışmanını canlandıran Lingu ile konuş. Tarifeleri karşılaştır ve karar vermeden önce ücretleri ve koşulları netleştir."
+      },
+      "bank_appointment": {
+        "title": "Bankada bir randevu",
+        "description": "Lingu banka görevlisi olacak. Yapmak istediğin işlemi açıkla, gerekli belgeleri ve sonraki adımları sor."
+      },
+      "delivery_problem": {
+        "title": "Bir teslimat sorunu",
+        "description": "Müşteri hizmetleri görevlisi olan Lingu ile iletişime geç. Paketinle ilgili sorunu açıkla ve bir çözüm üzerinde anlaşın."
+      },
+      "meet_someone": {
+        "title": "Yeni biriyle tanış",
+        "description": "Lingu bir buluşmada yeni tanıştığın kişiyi canlandıracak. Kendini tanıt ve ortak ilgi alanlarınızı keşfedin."
+      },
+      "make_plans": {
+        "title": "Birlikte plan yapın",
+        "description": "Arkadaşını canlandıran Lingu ile bir gezi planla. Etkinlikler öner, nerede ve ne zaman buluşacağınızı kararlaştırın."
+      },
+      "decline_invitation": {
+        "title": "Bir daveti reddet",
+        "description": "Lingu seni dışarı davet eden bir arkadaşın olacak. Daveti nazikçe reddet ve başka bir zaman buluşmayı öner."
+      },
+      "resolve_misunderstanding": {
+        "title": "Yanlış anlaşılmayı gider",
+        "description": "Yanlış anlaşılan bir mesajı arkadaşını canlandıran Lingu ile açıklığa kavuştur ve yeniden samimi bir sohbet kur."
+      },
+      "host_visitors": {
+        "title": "Misafir ağırla",
+        "description": "Lingu evine gelen bir misafir olacak. Onu karşıla, içecek ikram et ve planlarını anlat."
+      },
+      "introduce_yourself": {
+        "title": "Ekibe kendini tanıt",
+        "description": "Lingu yeni bir iş arkadaşın olacak. Kendini tanıt, görevini açıkla ve ekip hakkında sorular sor."
+      },
+      "explain_task": {
+        "title": "Bir görevi açıkla",
+        "description": "İş arkadaşını canlandıran Lingu'ya bir görevi açıkla. Adımları anlat ve açıklamanın anlaşıldığından emin ol."
+      },
+      "clarify_instructions": {
+        "title": "Talimatları netleştir",
+        "description": "Lingu yöneticin olacak. Belirsiz talimatlar hakkında sorular sor ve ne yapman gerektiğini teyit et."
+      },
+      "negotiate_deadline": {
+        "title": "Teslim tarihini görüş",
+        "description": "Proje yöneticisini canlandıran Lingu ile konuş. Bir zorluğu açıkla ve gerçekçi bir teslim tarihi üzerinde anlaşın."
+      },
+      "share_proposal": {
+        "title": "Bir öneri sun",
+        "description": "Ekip arkadaşını canlandıran Lingu'ya bir iyileştirme fikri sun. Faydalarını açıkla ve sorularını yanıtla."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "İlk isteği yeniden dene",
     "voiceAction": "Bu dil bilgisi konusunu sesli çalış",
@@ -302,6 +424,7 @@
     "goToPlan": "Planıma git"
   },
   "nav": {
+    "situations": "Durumlar",
     "practiceGrammar": "Dil bilgisi pratiği",
     "learning": "Öğrenimim",
     "practice": "Pratik yap",
@@ -1725,6 +1848,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Gerçek yaşam durumlarını çalışmaya devam et",
+    "paywallSituationsDesc": "Bu haftanın ücretsiz durum pratiklerini kullandın veya bu özellik Premium gerektiriyor. Premium ile daha fazla pratik yapabilirsin; genel ses kullanım sınırları geçerli olmaya devam eder.",
     "paywallGrammarPracticeTitle": "Dil bilgisi pratiğine devam et",
     "paywallGrammarPracticeDesc": "Bugünkü ücretsiz setlerini kullandın. Premium ile daha fazlasını oluşturabilirsin; kayıtlı oturumlar kullanılabilir.",
     "planFreeTrialDesc": "Kayıt sırasında kart veya abonelik olmadan Premium erişimini deneyin. Ardından kullanım sınırlarıyla ücretsiz devam edin.",
@@ -1770,6 +1895,7 @@
     "ctaRegister": "Ücretsiz denemeyi başlat",
     "ctaRegisterTrialUsed": "Plan seç",
     "freeFeature": {
+      "situations": "Sesli durum pratiği",
       "f1": "Seviye testi ve seviye tespiti",
       "f2": "Kişiselleştirilmiş çalışma planı",
       "lessons": "Ders tamamlama",
@@ -1849,6 +1975,7 @@
     "weeklyReset": "Ücretsiz kullanım hakkınız pazartesi günleri 00:00 UTC'de yenilenir.",
     "trialResultNote": "Ücretsiz deneme süreniz devam ediyor. Sona erdiğinde kullanabileceğiniz planları inceleyin.",
     "result": {
+      "situations": "Premium ile Lingu'yla gerçek yaşam durumlarını sesli olarak çalışmaya devam et.",
       "voice": "Premium ile bu konuşmayı temel alarak daha fazla konuşma pratiği yapın ve Lingu'dan geri bildirim alın.",
       "lessons": "Premium ile dersleri tamamlamaya ve öğrendiklerinizi Lingu ile uygulamaya devam edin.",
       "listening": "Premium ile seviyenize uygun daha fazla dinleme alıştırması yaparak dinleme becerinizi geliştirmeye devam edin.",
@@ -1872,6 +1999,7 @@
     "paidTerms": "Kart gerekir. Ücretli aboneliğiniz satın aldığınızda başlar. İptal etmediğiniz sürece seçtiğiniz ödeme döneminde yenilenir."
   },
   "freemium": {
+    "situationsLabel": "Bu haftaki durumlar",
     "grammarPracticeLabel": "Bugünkü dil bilgisi setleri",
     "gamesLabel": "Bugünkü oyunlar",
     "chatLabel": "Sohbet",
@@ -1933,7 +2061,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Anladım",
     "entry1": {
       "label": "Planın, adım adım",

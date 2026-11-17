@@ -1,4 +1,126 @@
 {
+  "situations": {
+    "title": "Pratica situações reais",
+    "description": "Escolhe um cenário e pratica por voz com Lingu, que fará o papel da pessoa com quem precisas de falar.",
+    "search": "Pesquisar situações",
+    "allCategories": "Todas as categorias",
+    "noResults": "Nenhuma situação corresponde à tua pesquisa.",
+    "loadError": "Não foi possível carregar as situações.",
+    "retry": "Tentar novamente",
+    "start": "Começar a prática",
+    "unavailable": "Esta situação não está disponível. Tenta novamente.",
+    "back": "Voltar às situações",
+    "contextChanged": "O teu contexto de estudo mudou. Atualiza a página e volta a iniciar a prática.",
+    "categories": {
+      "daily_life": "Vida quotidiana",
+      "travel": "Viagens",
+      "shopping_services": "Compras e serviços",
+      "social": "Vida social",
+      "work": "Trabalho"
+    },
+    "items": {
+      "medical_appointment": {
+        "title": "Marcar uma consulta",
+        "description": "Telefona para uma clínica. Lingu estará na receção: explica o motivo da consulta e combina uma data."
+      },
+      "neighbour_problem": {
+        "title": "Falar com um vizinho",
+        "description": "Lingu será o teu vizinho. Explica um incómodo que sentes em casa e procurem uma solução com respeito mútuo."
+      },
+      "flat_viewing": {
+        "title": "Visitar um apartamento",
+        "description": "Visita um apartamento com Lingu como agente imobiliário. Pergunta pela renda, pelas despesas e pelas condições."
+      },
+      "school_meeting": {
+        "title": "Uma reunião na escola",
+        "description": "Lingu será o professor do teu filho. Conversem sobre a organização escolar e combinem formas de apoiar a aprendizagem."
+      },
+      "household_repair": {
+        "title": "Marcar uma reparação",
+        "description": "Descreve uma avaria em casa a Lingu, que será o técnico. Pergunta pelo custo e combina uma visita."
+      },
+      "change_reservation": {
+        "title": "Alterar uma reserva",
+        "description": "Fala com Lingu no serviço de reservas. Explica o que precisas de alterar e confirma as novas condições."
+      },
+      "hotel_problem": {
+        "title": "Um problema no hotel",
+        "description": "Lingu estará na receção. Explica um problema com o teu quarto e pede uma solução adequada."
+      },
+      "ask_directions": {
+        "title": "Pedir indicações",
+        "description": "Pergunta a Lingu, que será uma pessoa da zona, como chegar ao teu destino e confirma o percurso."
+      },
+      "missed_connection": {
+        "title": "Perder uma ligação",
+        "description": "Perdeste uma ligação. Fala com Lingu no balcão de transportes para encontrar outra forma de chegar ao destino."
+      },
+      "lost_luggage": {
+        "title": "Bagagem perdida",
+        "description": "A tua mala não chegou. Descreve-a a Lingu no balcão de bagagens e pergunta como a podes recuperar."
+      },
+      "return_purchase": {
+        "title": "Devolver uma compra",
+        "description": "Explica a Lingu, que será funcionário da loja, por que queres devolver um produto e pergunta pelo reembolso."
+      },
+      "restaurant_order": {
+        "title": "Pedir num restaurante",
+        "description": "Lingu será o empregado de mesa. Pergunta pelos pratos, explica as tuas preferências e faz o pedido."
+      },
+      "phone_contract": {
+        "title": "Escolher um tarifário móvel",
+        "description": "Fala com Lingu como assistente de uma operadora. Compara tarifários e esclarece custos e condições antes de decidir."
+      },
+      "bank_appointment": {
+        "title": "Uma reunião no banco",
+        "description": "Lingu será um funcionário do banco. Explica o que precisas de tratar e pergunta pelos documentos e pelos próximos passos."
+      },
+      "delivery_problem": {
+        "title": "Um problema com uma entrega",
+        "description": "Contacta Lingu no apoio ao cliente. Explica o problema com a tua encomenda e combinem uma solução."
+      },
+      "meet_someone": {
+        "title": "Conhecer alguém",
+        "description": "Lingu será alguém que acabaste de conhecer num encontro. Apresenta-te e descubram interesses em comum."
+      },
+      "make_plans": {
+        "title": "Combinar uma saída",
+        "description": "Organiza uma saída com Lingu como amigo. Sugere atividades e combinem onde e quando se encontrar."
+      },
+      "decline_invitation": {
+        "title": "Recusar um convite",
+        "description": "Lingu será um amigo que te convida para sair. Recusa com simpatia e sugere outra ocasião."
+      },
+      "resolve_misunderstanding": {
+        "title": "Esclarecer um mal-entendido",
+        "description": "Esclarece com Lingu, que será um amigo, uma mensagem mal interpretada e retomem uma conversa tranquila."
+      },
+      "host_visitors": {
+        "title": "Receber visitas",
+        "description": "Lingu será uma visita em tua casa. Dá-lhe as boas-vindas, oferece uma bebida e explica os planos."
+      },
+      "introduce_yourself": {
+        "title": "Apresentar-te à equipa",
+        "description": "Lingu será um novo colega de trabalho. Apresenta-te, explica a tua função e faz perguntas sobre a equipa."
+      },
+      "explain_task": {
+        "title": "Explicar uma tarefa",
+        "description": "Explica uma tarefa a Lingu como colega de trabalho. Descreve os passos e confirma que ficou tudo claro."
+      },
+      "clarify_instructions": {
+        "title": "Esclarecer instruções",
+        "description": "Lingu será o teu responsável. Faz perguntas sobre instruções pouco claras e confirma o que deves fazer."
+      },
+      "negotiate_deadline": {
+        "title": "Negociar um prazo",
+        "description": "Fala com Lingu como responsável de projeto. Explica uma dificuldade e combinem um prazo realista."
+      },
+      "share_proposal": {
+        "title": "Apresentar uma proposta",
+        "description": "Apresenta uma ideia de melhoria a Lingu como colega de equipa. Explica as vantagens e responde às perguntas."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Repetir o pedido original",
     "voiceAction": "Praticar este tema de gramática por voz",
@@ -302,6 +424,7 @@
     "goToPlan": "Ir para o meu plano"
   },
   "nav": {
+    "situations": "Situações",
     "practiceGrammar": "Prática de gramática",
     "learning": "Meu aprendizado",
     "practice": "Praticar",
@@ -1725,6 +1848,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Continua a praticar situações reais",
+    "paywallSituationsDesc": "Esgotaste as práticas gratuitas de situações desta semana ou esta funcionalidade requer Premium. Com Premium podes praticar mais; mantêm-se os limites gerais de voz.",
     "paywallGrammarPracticeTitle": "Continua a praticar gramática",
     "paywallGrammarPracticeDesc": "Esgotaste as séries gratuitas de hoje. Com Premium podes gerar mais; as sessões guardadas continuam disponíveis.",
     "planFreeTrialDesc": "Experimente o acesso Premium ao se cadastrar, sem cartão nem assinatura. Depois, continue grátis com limites de uso.",
@@ -1770,6 +1895,7 @@
     "ctaRegister": "Começar teste grátis",
     "ctaRegisterTrialUsed": "Escolher plano",
     "freeFeature": {
+      "situations": "Situações por voz",
       "f1": "Teste de nível & avaliação",
       "f2": "Plano de estudo personalizado",
       "lessons": "Conclusão de lições",
@@ -1849,6 +1975,7 @@
     "weeklyReset": "A tua quota gratuita renova-se às segundas-feiras às 00:00 UTC.",
     "trialResultNote": "O teu período de teste gratuito ainda está ativo. Consulta os planos para quando terminar.",
     "result": {
+      "situations": "Continua a praticar situações reais por voz com Lingu com Premium.",
       "voice": "Aproveita esta conversa para continuares a praticar a expressão oral e a receber feedback do Lingu com o Premium.",
       "lessons": "Com o Premium, continua a concluir lições e a pôr em prática o que aprendeste com o Lingu.",
       "listening": "Continua a treinar o ouvido com mais exercícios de compreensão oral adequados ao teu nível com o Premium.",
@@ -1872,6 +1999,7 @@
     "paidTerms": "É necessário cartão. A tua subscrição paga começa no momento da compra. Renova-se com a periodicidade escolhida, a menos que canceles."
   },
   "freemium": {
+    "situationsLabel": "Situações desta semana",
     "grammarPracticeLabel": "Séries de gramática de hoje",
     "gamesLabel": "Partidas de hoje",
     "chatLabel": "Chat",
@@ -1933,7 +2061,7 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Entendido",
     "entry1": {
       "label": "O teu plano, passo a passo",

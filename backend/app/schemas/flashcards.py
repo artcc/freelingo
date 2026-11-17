@@ -68,10 +68,24 @@ class FlashcardFromWordRequest(BaseModel):
     cefr_level: str = "B1"
     lesson_id: int | None = Field(default=None, strict=True, ge=1, le=2_147_483_647)
     grammar_practice_session_id: UUID | None = None
+    situation_id: str | None = Field(default=None, min_length=1, max_length=64)
+    situation_study_plan_id: int | None = Field(default=None, strict=True, ge=1, le=2_147_483_647)
 
     @model_validator(mode="after")
     def exclusive_practice_source(self) -> Self:
-        if self.lesson_id is not None and self.grammar_practice_session_id is not None:
+        has_situation = bool(self.model_fields_set & {"situation_id", "situation_study_plan_id"})
+        if has_situation and (self.situation_id is None or self.situation_study_plan_id is None):
+            raise ValueError("Both situation source fields are required")
+        if (
+            sum(
+                (
+                    self.lesson_id is not None,
+                    self.grammar_practice_session_id is not None,
+                    has_situation,
+                )
+            )
+            > 1
+        ):
             raise ValueError("Only one practice source is allowed")
         return self
 

@@ -59,7 +59,7 @@ of truth.
 
 ## Freemium — `/api/freemium`
 
-- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `grammar_practice_remaining`, `grammar_practice_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games and Grammar Practice use separate durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
+- **GET `/status`** — Rate limit: 60/min. Auth: get_current_user. Returns a flat response with `trial_active`, `trial_ends_at`, `chat_remaining`, `chat_limit`, `lessons_remaining`, `lessons_limit`, `listening_remaining`, `listening_limit`, `reading_remaining`, `reading_limit`, `games_remaining`, `games_limit`, `grammar_practice_remaining`, `grammar_practice_limit`, `situations_remaining`, `situations_limit`, `voice_remaining_seconds`, and `voice_limit_seconds`. Games and Grammar Practice use separate durable PostgreSQL admissions; other counters use Redis. A configured freemium feature limit of `0` blocks new free usage. The endpoint still reports configured values when Stripe is disabled; subscription enforcement decides whether they apply.
 
 Shared consuming-feature dependencies return HTTP 402 with
 `detail: {reason: "freemium_exhausted", feature, remaining, limit}` for a confirmed exhausted quota.
@@ -131,6 +131,21 @@ Vocabulary Pairs exposes `challenges: [{index, term, matched}]`, an independentl
 Solved challenges additionally expose `choice` and `assisted`. Only completed games expose each
 challenge's `sentence` and `translation`. Unmatched correspondence indices, assistance flags and
 source IDs remain private; failed attempts never reveal the solution.
+
+---
+
+## Situations — `/api/situations`
+
+- **GET `/api/situations`** — Rate limit: 60/min. Auth: get_current_user. Required query parameter:
+  `study_plan_id`, an integer in `1..2147483647` identifying an owned active study plan. Returns
+  `{study_plan_id, target_language, cefr_level, situations: [{id, category}]}`. The plan determines
+  language and level; titles and descriptions are translated by the frontend. Reading the catalog
+  consumes no Situations allowance, including with a zero configured allowance. Missing or invalid
+  parameters return 422. A missing, foreign, inactive, or mismatched plan/language track returns
+  404 `situation_unavailable`. The track need not be the currently selected language; plan and track
+  must belong to the caller and share a supported target language.
+  Canonical catalog and role-play behavior belong to
+  `situations.instructions.md`; starting practice uses `/ws/conversation`, not a separate REST start.
 
 ---
 
@@ -380,7 +395,15 @@ path. `/generate` retains its `skipped_empty` behavior for empty normalized batc
 - **POST `/generate`** — Rate limit: 20/min. Requests N flashcards via LLM with native-language translations. The backend derives the target language from the authenticated user's active study plan; the request body has no client-supplied `target_language`. Returns `FlashcardGenerationResult`: `flashcards`, `created`, `skipped_duplicates` and `skipped_empty`. Counters describe actual model output after normalization and active-plan deduplication, including duplicates within the generated batch and suspended existing cards. Fewer model results than requested are not counted as duplicates. Empty normalized words have a separate counter. Counters are server-computed, not part of the LLM structured-output schema. Persisted cards and `FlashcardResponse` include the owning plan's `study_plan_id`.
 - **POST `/from-word`** — Rate limit: 30/min. Saves a word as a flashcard: body `{word, context, cefr_level}`. Best-effort deduplication is scoped to the user's active plan, with the oldest matching card winning. Comparison is case-insensitive, collapses Unicode whitespace runs, and trims boundary spaces without changing the persisted word's capitalization. An input match skips the AI; otherwise the AI's canonical word is checked before insertion. Concurrent first-time saves can still both insert. Returns `FlashcardFromWordResponse` (`FlashcardResponse` plus `already_saved: bool`): `true` means the card is already in My Vocabulary (`source="from_text"`). Generated/imported cards are promoted in place with `UPDATE RETURNING` and return `false`, preserving review progress. If a card disappears before promotion, the request continues as a miss; response data is captured before commit without a subsequent refresh.
   Optional `lesson_id` binds saves from lesson-linked voice practice to an owned completed lesson. When non-null, it must be a strict JSON integer in `1..2147483647` (otherwise HTTP 422). The backend verifies lesson, plan, and language-track ownership; unavailable or incomplete lessons return HTTP 404 without falling back to the active plan. Lookup language and CEFR level, deduplication, and storage use the lesson's persisted plan, including historical plans.
-  Optional UUID `grammar_practice_session_id` instead binds saves to an owned completed Grammar Practice session and its historical plan. The same source ownership resolution used by voice determines language, level, deduplication, and destination; unavailable or incomplete sessions return 404 without active-plan fallback. Supplying both non-null source fields returns 422. Omitting or nulling both retains active-plan behavior.
+  Optional UUID `grammar_practice_session_id` instead binds saves to an owned completed Grammar Practice session and its historical plan. The same source ownership resolution used by voice determines language, level, deduplication, and destination; unavailable or incomplete sessions return 404 without active-plan fallback.
+  Optional paired `situation_id` (string, 1–64 characters) and `situation_study_plan_id` (strict JSON
+  integer in `1..2147483647`) bind saves to a canonical situation and an owned plan, including historical
+  plans. Their persisted language/level determine lookup, deduplication, and destination. Unknown
+  situations or missing/foreign/mismatched plans return 404 `situation_unavailable` without fallback.
+  Supplying either situation field requires both non-null fields; malformed, partial, or null pairs
+  return 422. A situation pair cannot accompany non-null `lesson_id` or `grammar_practice_session_id`;
+  those two sources are also mutually exclusive (422). Omitting situation fields and omitting or
+  nulling both other source fields retains active-plan behavior.
 - **GET `/vocabulary`** — Rate limit: 60/min. Query params: `page`, `limit`, and optional `search`. Returns active-plan saved vocabulary ordered case-insensitively by word as `{items,total,page,pages}`.
 - **GET `/library`** — Rate limit: 60/min. Same paginated response, including every card in the active plan. Accepts `source=all|from_text` (default `all`), `status=all|due|new|suspended` (default `all`), `page`, `limit` (1–100), and literal case-insensitive `search` across word and translation. Due and new filters exclude suspended cards; new means `interval=0` and `repetitions=0`. Ordering is normalized word then ID; pages beyond the last page are clamped. Responses include `is_suspended` and `next_review`.
 - **PUT `/{card_id}`** — Rate limit: 60/min. Replaces word, definition, example_sentence and translation on an owned card, including cards from historical plans. Trims boundary whitespace; word (1–100 characters) and definition (1–10000) are required; example (0–10000) and translation (0–255) may be empty. Unknown fields are rejected. A renamed word matching another card in its persisted plan returns 409 `flashcard_duplicate`; this is best-effort deduplication. Existing duplicate names do not prevent editing other content. Ownership, source, suspension and SM-2 progress are preserved.
@@ -522,13 +545,19 @@ failure never fabricates a zero balance. A later demo-validation failure can rep
 alongside a known quota balance. Clients must inspect the reason rather than treating the legacy
 detail/code as proof of exhaustion.
 
+Situations additionally checks its own allowance on the WebSocket after source validation and before
+ordinary voice access. Denial emits `{type: "error", code: "subscription_required",
+feature: "situations", reason: "freemium_exhausted" | "freemium_unavailable"}` and closes with 1008.
+Exhaustion includes `remaining` and `limit` measured in starts; an unavailable check omits them.
+Warmup retains its ordinary voice-only access contract and does not consume a Situations start.
+
 **Authentication**: After the handshake, the client must send a JSON object containing a valid `token` within 10 seconds. The backend reads the token but does not require the `type` field to equal `auth`. Missing, malformed, or invalid authentication closes with code 1008.
 
 **Message flow**: Client sends audio chunks → STT transcription → LLM generates full response → sentence-level TTS → binary audio chunks returned (Gemini WAV or local/OpenAI MP3). The server starts the greeting as a cancellable task and immediately enters the receive loop; backend barge-in protocol remains available, while the current frontend ignores user speech during active tutor turns for stability.
 
 **Client → Server message types:**
 
-- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and optional positive integer `lesson_id` or UUID string `grammar_practice_session_id`. The two practice-source fields are mutually exclusive. It authenticates and can reuse an owned conversation outside practice. Trial sessions require the atomic demo claim when that access path is selected; claim/credential/commit failure emits `type: "error", code: "internal_error"` and closes with 1011 before conversation creation. Invalid OpenAI or Gemini voice choices fall back to the configured provider default; Gemini choices are `female` and `male`.
+- **authentication JSON** — Payload may contain `type`, required `token`, `voice`, `target_language`, `context`, `voice_trial_token`, numeric `conversation_id`, and one optional practice source: positive integer `lesson_id`, UUID string `grammar_practice_session_id`, or the pair `situation_id` and `situation_study_plan_id`. Practice sources are mutually exclusive; Situations also excludes `voice_trial_token`. It authenticates and can reuse an owned conversation outside practice. Trial sessions require the atomic demo claim when that access path is selected; claim/credential/commit failure emits `type: "error", code: "internal_error"` and closes with 1011 before conversation creation. Invalid OpenAI or Gemini voice choices fall back to the configured provider default; Gemini choices are `female` and `male`.
 - **Free-conversation language** — An explicit `target_language` must be an exact supported code. Omission or null resolves the active language, then `en-GB`; the resolved value is also validated. Invalid values emit `error` with `code=invalid_target_language` and close 1008 before general session quota consumption or conversation creation. Only an owned active plan in the resolved language supplies the level and plan reference; without one, the session uses A2 and a null plan reference. Full resolution policy is defined in `voice-conversation.instructions.md`.
 - **Lesson practice** — When `lesson_id` is present, the server requires a completed lesson belonging to the authenticated user. Its persisted plan determines language, level, and provenance; client `context`, `target_language`, and `conversation_id` do not override them. Invalid IDs (including null, booleans, strings, and fractional numbers), missing, foreign, or incomplete lessons emit `error` with `code=lesson_practice_unavailable` and close 1008 before consuming general session quota. Each start creates a voice conversation titled with a localized `Practice: {lesson title}`. Lesson context remains in the voice system prompt throughout the session. Existing access, maintenance, quota, timeout, and transcript rules apply; a verbal completion suggestion never emits a new control event.
   IDs must be in `1..2147483647`, matching the lesson's database column. The WebSocket rejects out-of-range IDs before lesson SQL lookup, and the frontend applies the same range before loading lesson metadata.
@@ -542,12 +571,29 @@ detail/code as proof of exhaustion.
   and answers enter the existing pipeline's `lesson_practice_context`; all voice access, speech,
   quotas, limits, and transcript rules apply. No source FK/context is stored on the conversation or
   rehydrated from text history.
+- **Situations** — `situation_id` selects a canonical server-owned scenario and
+  `situation_study_plan_id` selects an owned active plan as a strict JSON integer in `1..2147483647`.
+  Both fields are required together and exclude the presence of `lesson_id`,
+  `grammar_practice_session_id`, or `voice_trial_token`, even when those fields are null.
+  Invalid/null/unknown IDs, partial pairs, conflicting sources, and unavailable plans emit
+  `{type: "error", code: "situation_unavailable"}` and close 1008. Source validation precedes
+  quota consumption. The plan determines language, CEFR level, and provenance; client context,
+  target language, and conversation ID cannot override it. The source enters the existing
+  `lesson_practice_context` pipeline input. Normal session admission records the applicable Situations
+  allowance once, independently of whether the subsequent greeting or first audio succeeds.
+  Ordinary voice accounting still applies. Role-play closure is conversational text,
+  not a new control event. See `situations.instructions.md`.
 - **binary frame** — Payload: raw audio bytes. Description: WAV audio chunk from VAD
 - **`interrupt`** — Payload: `{"type":"interrupt"}`. Description: Optional manual interruption; cancels current generation
 
 **Server → Client message types:**
 
 - **`status`** — Pipeline state hint; turn-associated frames can include `turn_id`.
+- **`situation_started`** — Exactly `{type: "situation_started"}`, sent only for Situations after
+  conversation persistence and pipeline construction, before feature-usage recording and
+  `pipeline.run`. A successful server send marks admission, not confirmed client receipt or successful
+  provider output. It is also emitted for subscription/trial/Stripe-disabled access. Accounting and
+  failure semantics belong to `subscriptions-freemium.instructions.md`.
 - **`transcript`** — User STT result and assistant streaming/final text; turn-associated frames can include `turn_id`.
 - **binary frame** — Payload: native WAV bytes for Gemini or MP3 bytes for local/OpenAI. One synthesized TTS fragment, without additional metadata or control frames.
 - **`barge_in`** — Payload: `{}`. Description: Current greeting/response was cancelled by new audio; client cancels playback
@@ -562,7 +608,7 @@ detail/code as proof of exhaustion.
 
 - **Barge-in protocol**: explicit interrupts or new audio input can cancel the initial greeting or any ongoing LLM/TTS response server-side; the current frontend disables automatic interruption during active tutor turns
 - **Empty STT guard**: empty/whitespace transcriptions are ignored and do not trigger an assistant reply
-- **Serialized server sends**: JSON frames, binary audio chunks, timeout warnings, and close frames are written through one send lock to avoid concurrent WebSocket writes
+- **Serialized pipeline sends**: pipeline JSON frames, binary audio chunks, timeout warnings, and close frames are written through one send lock to avoid concurrent WebSocket writes. Startup admission is sent before the pipeline runs.
 - **VAD**: browser-level voice activity detection with `@ricky0123/vad-react`, Silero VAD v5, and ONNX WASM configured with one thread. Installation and lifecycle rules live in `voice-conversation.instructions.md`.
 - **Gapless playback**: `AudioQueue` schedules consecutive `AudioBufferSourceNode`s
 - **Session timeouts**: max duration (default 30 min) and inactivity (default 3 min), each with 60 s warning

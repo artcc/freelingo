@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.10] - Unreleased
+
+### Added
+
+- Add Situations to Practice with 25 voice role-plays across five personal and work themes, translated titles and descriptions, search, category filtering, and locale-aware ordering. Each situation gives Lingu a concrete role and objective adapted to the learner's study plan, with concise interaction and a natural conclusion after meaningful practice.
+- Add a configurable Situations allowance of one start per account/ISO week through `FREEMIUM_SITUATIONS_WEEKLY`, preserving existing voice access and limits. Situations use the current voice conversation, transcript history, and plan-owned vocabulary saves.
+
 ## [1.14.5] - 2026-11-17
 
 ### Changed

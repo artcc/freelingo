@@ -46,8 +46,9 @@ DOM event argument, preserving supplied chat context in the next authentication 
 
 After accepting the WebSocket handshake, the backend waits up to ten seconds for the first JSON
 frame. The payload can contain token, initial context, TTS voice, target language, post-assessment
-demo token, conversation ID, and one optional practice source (`lesson_id` or
-`grammar_practice_session_id`). A missing or invalid token produces `auth_failed` and close code
+demo token, conversation ID, and one optional practice source (`lesson_id`,
+`grammar_practice_session_id`, or paired `situation_id` and `situation_study_plan_id`). Situations
+excludes the post-assessment demo token. A missing or invalid token produces `auth_failed` and close code
 1008. The backend does not currently require the payload's `type` field to equal `auth`.
 
 The session fixes user, plan, target language, CEFR level, native language, voice, limits, and access
@@ -121,7 +122,7 @@ Saving a selected transcript word sends `lesson_id` through the existing `/api/f
 endpoint. The backend rechecks ownership and completion and derives lookup language, level,
 deduplication, and storage from that lesson's plan. This also applies to historical plans and when
 the active language changes elsewhere. Missing or inaccessible lessons fail without active-plan
-fallback. Voice sessions without either practice source retain the existing word-save contract.
+fallback. Voice sessions without a practice source retain the existing word-save contract.
 
 ### Grammar Practice context
 
@@ -148,6 +149,30 @@ retain their contracts. A completed grammar practice does not grant independent 
 Selected-word saves send `grammar_practice_session_id`; the backend rechecks the same source ownership
 and stores/deduplicates in its original plan, without active-plan fallback.
 
+### Situations context
+
+Situations enters the same voice startup and session flow from its authenticated catalog. The paired
+`situation_id` and `situation_study_plan_id` identify a canonical server-owned scenario and an owned
+active plan. Source validation precedes quota consumption; the persisted plan supplies language,
+level, and provenance instead of client language or free-form context. Each start creates a separate
+conversation and cannot combine with lesson, Grammar Practice, or post-assessment demo sources.
+
+The role-play reference uses the existing `lesson_practice_context` input throughout greeting,
+normal turns, memory refreshes, and fallbacks. The prompt builder recognizes its server-generated
+Situations marker while preserving the lesson/Grammar Practice wrapper and existing pipeline.
+`situations.instructions.md` owns catalog discovery,
+role/objective composition, and pedagogical guidance. A natural role-play conclusion is ordinary
+speech and does not close the socket. Microphone, STT/TTS, controls, persistence, and session limits
+retain the contracts below.
+
+Starting practice additionally checks and records the Situations feature allowance under
+`subscriptions-freemium.instructions.md`; admission is not a guarantee of successful greeting or
+speech output. It does not replace ordinary voice access or accounting.
+
+Selected-word saves carry the situation/plan pair and retain the original owned plan even after it
+becomes historical. The source-aware save and its ownership checks are defined in
+`situations.instructions.md` and `api-endpoints.instructions.md`.
+
 ## Client-to-server protocol
 
 - Initial JSON: authentication and optional session context.
@@ -162,6 +187,9 @@ items and the pipeline starts with the last 10 accepted messages.
 
 - `status`: `transcribing`, `thinking`, `speaking`, or `listening`, with `turn_id`; the current
   pipeline does not emit `speaking`.
+- `situation_started`: Situations-only admission notification, sent after conversation persistence
+  and pipeline construction, before feature-usage recording and `pipeline.run`. Its successful server
+  send does not establish client receipt, provider readiness, or successful audio output.
 - `transcript`: final user or assistant text with `turn_id`.
 - Binary: one synthesized assistant audio fragment, without turn metadata; native WAV for Gemini
   or MP3 for local/OpenAI. Provider selection does not add protocol frames or alter turn sequencing.
@@ -177,8 +205,8 @@ Voice-access errors retain `code=subscription_required` and carry additive reaso
 quota balance fields are present only when the check returned them. Warmup preserves its legacy
 HTTP detail string. Exact envelopes and units belong to `api-endpoints.instructions.md`.
 
-All backend sends share one lock so pipeline work, timeout watchers, and close operations do not write
-concurrently.
+Pipeline sends share one lock so turn work, timeout watchers, and close operations do not write
+concurrently. Startup admission is sent before the pipeline runs.
 
 ## Turn pipeline
 
@@ -300,13 +328,16 @@ so normal voice starts create a new `source="voice"` conversation.
 Voice conversation titles use a native-language label and date. German, Danish, Finnish, and Croatian
 dates place an ordinal dot after the day; Croatian dates also end with a dot after the year.
 
-Lesson and Grammar Practice titles instead use the native-language equivalent of `Practice: {topic title}`,
-bounded to the existing 200-character title column. The existing voice transcript persistence and
+Lesson, Grammar Practice, and Situations titles instead use the native-language equivalent of
+`Practice: {topic title}`, bounded to the existing 200-character title column. For Situations, the
+topic is the server catalog's canonical English title, not the translated interface title or a
+target-language translation; for example, a Spanish native-language prefix can produce
+`Práctica: Booking a medical appointment`. The existing voice transcript persistence and
 text-chat history display apply; subsequent practice sessions have separate rows with the same topic
 title and their own timestamps. The practice reference/context is session-local, not a new database
-association or a separately persisted report. Grammar Practice adds no session FK or saved source
+association or a separately persisted report. Grammar Practice and Situations add no source FK or saved source
 context to the conversation. Text chat retains its existing transcript-based flow; reopening history
-does not rehydrate either practice source or create a separate text-practice mode.
+does not rehydrate a practice source or create a separate text-practice mode.
 
 `ChatHistory` rows store role, content, target language, optional plan provenance, conversation, and
 the actual turn modality. Normal assistant replies link to their learner message through `reply_to_id`;
@@ -328,7 +359,7 @@ A conversation can remain empty when a session ends before a persistible turn.
 
 Persisted answered contributions count as plan-owned daily activity. Three distinct answered learner
 contributions on the same UTC day grant 20 XP once per conversation/day, capped at 60 XP per plan/day.
-Lesson and Grammar Practice voice use this same reward without an extra bonus. Greetings, failed/cancelled turns, and
+Lesson, Grammar Practice, and Situations voice use this same reward without an extra bonus. Greetings, failed/cancelled turns, and
 planless conversations do not earn rewards. Successful processing captures the response completion
 timestamp before scheduling the background transcript task, after response delivery and before the
 final `turn_complete` notification. The timestamp fixes the activity day even if the task starts or
@@ -456,5 +487,6 @@ transcript replacement invalidate pending selections and saves.
 
 - `speech-services.instructions.md` — TTS and STT adapters and HTTP gateways.
 - `subscriptions-freemium.instructions.md` — access and quota policy.
+- `situations.instructions.md` — role-play catalog, context, and learning flow.
 - `multi-language.instructions.md` — active-language and plan provenance rules.
 - `memories.instructions.md` — global memory behavior and native tool contract.

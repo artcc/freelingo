@@ -1,4 +1,126 @@
 {
+  "situations": {
+    "title": "Übe Situationen aus dem Alltag",
+    "description": "Wähle ein Szenario und übe mündlich mit Lingu, der die Rolle deines Gesprächspartners übernimmt.",
+    "search": "Situationen suchen",
+    "allCategories": "Alle Kategorien",
+    "noResults": "Keine Situationen passen zu deiner Suche.",
+    "loadError": "Die Situationen konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "start": "Übung starten",
+    "unavailable": "Diese Situation ist nicht verfügbar. Versuche es erneut.",
+    "back": "Zurück zu den Situationen",
+    "contextChanged": "Dein Lernkontext hat sich geändert. Lade die Seite neu und starte die Übung erneut.",
+    "categories": {
+      "daily_life": "Alltag",
+      "travel": "Reisen",
+      "shopping_services": "Einkaufen und Dienstleistungen",
+      "social": "Soziale Kontakte",
+      "work": "Arbeit"
+    },
+    "items": {
+      "medical_appointment": {
+        "title": "Einen Arzttermin vereinbaren",
+        "description": "Rufe in einer Arztpraxis an. Lingu übernimmt die Anmeldung: Erkläre den Anlass deines Besuchs und vereinbare einen Termin."
+      },
+      "neighbour_problem": {
+        "title": "Mit einem Nachbarn sprechen",
+        "description": "Lingu spielt deinen Nachbarn. Beschreibe eine Störung bei dir zu Hause und findet gemeinsam eine rücksichtsvolle Lösung."
+      },
+      "flat_viewing": {
+        "title": "Eine Wohnung besichtigen",
+        "description": "Besichtige eine Wohnung mit Lingu als Immobilienmakler. Frage nach Miete, Nebenkosten und Vertragsbedingungen."
+      },
+      "school_meeting": {
+        "title": "Ein Gespräch in der Schule",
+        "description": "Lingu spielt die Lehrkraft deines Kindes. Besprecht schulische Abläufe und vereinbart, wie ihr dein Kind beim Lernen unterstützen könnt."
+      },
+      "household_repair": {
+        "title": "Eine Reparatur vereinbaren",
+        "description": "Beschreibe Lingu als Handwerker einen Defekt bei dir zu Hause. Frage nach den Kosten und vereinbare einen Besuch."
+      },
+      "change_reservation": {
+        "title": "Eine Buchung ändern",
+        "description": "Sprich mit Lingu im Buchungsservice. Erkläre deine Änderungswünsche und bestätige die neuen Bedingungen."
+      },
+      "hotel_problem": {
+        "title": "Ein Problem im Hotel",
+        "description": "Lingu arbeitet an der Rezeption. Beschreibe ein Problem mit deinem Zimmer und bitte um eine passende Lösung."
+      },
+      "ask_directions": {
+        "title": "Nach dem Weg fragen",
+        "description": "Frage Lingu als Ortskundigen nach dem Weg zu deinem Ziel und vergewissere dich, dass du die Route verstanden hast."
+      },
+      "missed_connection": {
+        "title": "Einen Anschluss verpassen",
+        "description": "Du hast einen Anschluss verpasst. Sprich mit Lingu am Serviceschalter und finde eine andere Verbindung zu deinem Ziel."
+      },
+      "lost_luggage": {
+        "title": "Verlorenes Gepäck",
+        "description": "Dein Koffer ist nicht angekommen. Beschreibe ihn Lingu am Gepäckschalter und frage, wie du ihn zurückbekommst."
+      },
+      "return_purchase": {
+        "title": "Einen Einkauf zurückgeben",
+        "description": "Erkläre Lingu als Verkäufer, warum du einen Artikel zurückgeben möchtest, und frage nach der Erstattung."
+      },
+      "restaurant_order": {
+        "title": "Im Restaurant bestellen",
+        "description": "Lingu spielt deinen Kellner. Frage nach den Gerichten, erkläre deine Wünsche und gib deine Bestellung auf."
+      },
+      "phone_contract": {
+        "title": "Einen Mobilfunktarif wählen",
+        "description": "Sprich mit Lingu als Mobilfunkberater. Vergleiche Tarife und kläre Kosten und Bedingungen, bevor du dich entscheidest."
+      },
+      "bank_appointment": {
+        "title": "Ein Termin bei der Bank",
+        "description": "Lingu spielt einen Bankmitarbeiter. Erkläre dein Anliegen und frage nach den benötigten Unterlagen und den nächsten Schritten."
+      },
+      "delivery_problem": {
+        "title": "Ein Problem mit der Lieferung",
+        "description": "Wende dich an Lingu im Kundenservice. Erkläre das Problem mit deinem Paket und vereinbart eine Lösung."
+      },
+      "meet_someone": {
+        "title": "Jemanden kennenlernen",
+        "description": "Lingu spielt eine Person, die du gerade bei einem Treffen kennenlernst. Stelle dich vor und entdeckt gemeinsame Interessen."
+      },
+      "make_plans": {
+        "title": "Etwas zusammen unternehmen",
+        "description": "Plane mit Lingu als Freund einen Ausflug. Schlage Aktivitäten vor und vereinbart, wann und wo ihr euch trefft."
+      },
+      "decline_invitation": {
+        "title": "Eine Einladung ablehnen",
+        "description": "Lingu spielt einen Freund, der dich einlädt. Sage freundlich ab und schlage ein Treffen zu einem anderen Zeitpunkt vor."
+      },
+      "resolve_misunderstanding": {
+        "title": "Ein Missverständnis klären",
+        "description": "Kläre mit Lingu als Freund eine missverstandene Nachricht und findet zu einem freundlichen Gespräch zurück."
+      },
+      "host_visitors": {
+        "title": "Besuch empfangen",
+        "description": "Lingu ist bei dir zu Gast. Begrüße deinen Besuch, biete etwas zu trinken an und erkläre, was du geplant hast."
+      },
+      "introduce_yourself": {
+        "title": "Dich im Team vorstellen",
+        "description": "Lingu spielt einen neuen Kollegen. Stelle dich vor, erkläre deine Aufgabe und frage nach dem Team."
+      },
+      "explain_task": {
+        "title": "Eine Aufgabe erklären",
+        "description": "Erkläre Lingu als Kollegen eine Aufgabe. Beschreibe die Schritte und prüfe, ob deine Erklärung verständlich ist."
+      },
+      "clarify_instructions": {
+        "title": "Anweisungen klären",
+        "description": "Lingu übernimmt die Rolle deiner Führungskraft. Frage bei unklaren Anweisungen nach und bestätige, was du tun sollst."
+      },
+      "negotiate_deadline": {
+        "title": "Eine Frist aushandeln",
+        "description": "Sprich mit Lingu als Projektleiter. Erkläre eine Schwierigkeit und vereinbart eine realistische Frist."
+      },
+      "share_proposal": {
+        "title": "Einen Vorschlag vorstellen",
+        "description": "Stelle Lingu als Teamkollegen eine Verbesserungsidee vor. Erkläre ihre Vorteile und beantworte seine Fragen."
+      }
+    }
+  },
   "grammarPractice": {
     "retryCreation": "Ursprüngliche Anfrage erneut senden",
     "voiceAction": "Dieses Grammatikthema mündlich üben",
@@ -302,6 +424,7 @@
     "goToPlan": "Zu meinem Plan"
   },
   "nav": {
+    "situations": "Situationen",
     "practiceGrammar": "Grammatik üben",
     "learning": "Mein Lernen",
     "practice": "Üben",
@@ -1725,6 +1848,8 @@
     }
   },
   "billing": {
+    "paywallSituationsTitle": "Übe weiter Situationen aus dem Alltag",
+    "paywallSituationsDesc": "Du hast die kostenlosen Situationsübungen dieser Woche aufgebraucht oder diese Funktion erfordert Premium. Mit Premium kannst du mehr üben; die allgemeinen Limits für die Sprachnutzung gelten weiterhin.",
     "paywallGrammarPracticeTitle": "Übe weiter Grammatik",
     "paywallGrammarPracticeDesc": "Deine kostenlosen Grammatik-Sets für heute sind aufgebraucht. Mit Premium kannst du weitere erstellen; gespeicherte Sitzungen bleiben verfügbar.",
     "planFreeTrialDesc": "Teste Premium bei der Registrierung ohne Karte oder Abo. Danach weiterhin kostenlos mit Nutzungslimits.",
@@ -1770,6 +1895,7 @@
     "ctaRegister": "Kostenlose Testphase starten",
     "ctaRegisterTrialUsed": "Plan wählen",
     "freeFeature": {
+      "situations": "Mündliche Situationsübungen",
       "f1": "Einstufungstest & Bewertung",
       "f2": "Persönlicher Lernplan",
       "lessons": "Lektionen abschließen",
@@ -1849,6 +1975,7 @@
     "weeklyReset": "Dein kostenloses Kontingent wird montags um 00:00 UTC erneuert.",
     "trialResultNote": "Deine kostenlose Testphase läuft noch. Sieh dir die Tarife für die Zeit danach an.",
     "result": {
+      "situations": "Übe mit Premium weitere Situationen aus dem Alltag im Sprachgespräch mit Lingu.",
       "voice": "Knüpfe an dieses Gespräch an und sammle mit Premium mehr Sprechpraxis mit Feedback von Lingu.",
       "lessons": "Schließe mit Premium weitere Lektionen ab und wende das Gelernte mit Lingu an.",
       "listening": "Trainiere mit Premium dein Hörverständnis mit weiteren Übungen auf deinem Niveau.",
@@ -1872,6 +1999,7 @@
     "paidTerms": "Eine Karte ist erforderlich. Dein kostenpflichtiges Abonnement beginnt mit dem Kauf. Es verlängert sich im gewählten Abrechnungsintervall, sofern du nicht kündigst."
   },
   "freemium": {
+    "situationsLabel": "Situationen diese Woche",
     "grammarPracticeLabel": "Grammatik-Sets heute",
     "gamesLabel": "Heutige Spiele",
     "chatLabel": "Chat",
@@ -1933,7 +2061,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.14.5",
+    "version": "v1.14.10",
     "cta": "Verstanden",
     "entry1": {
       "label": "Dein Plan, Schritt für Schritt",
