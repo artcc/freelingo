@@ -189,8 +189,10 @@ Vocabulary Pairs plays only the resolved target-language term or expression, nev
 
 ## Presentation and languages
 
-The page uses the resource pages' `max-w-4xl` container, bordered header and surface panels,
-responsive card grid, `fl-*` tokens, and existing light/dark themes. Interface text uses Geist Sans.
+The catalog uses a `max-w-4xl` container with responsive horizontal padding and an open header,
+matching Everyday situations: a bold 14 px title and description below, without a surrounding panel.
+Cards retain surface panels, a responsive grid, `fl-*` tokens, and existing light/dark themes.
+Interface text uses Geist Sans.
 The title is an `h1`; the empty state and game cards use `h2` headings. Game pages reuse the shared
 quota/paywall banners, confirmation dialog and pagination; choices are keyboard-operable buttons.
 

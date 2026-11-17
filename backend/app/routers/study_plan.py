@@ -259,6 +259,14 @@ async def get_today_lessons(
 
     days = week["days"] if isinstance(week, dict) else week.days
 
+    # Rollback expires all ORM instances, even with expire_on_commit=False.
+    # Keep this request's plan and generation context usable after a failed slot.
+    plan_id = plan.id
+    cefr_level = plan.cefr_level
+    target_language = plan.target_language
+    progress_day = plan.progress_day
+    native_language = current_user.native_language
+
     # Build title→(id, is_completed) lookup from already-loaded lessons
     lesson_by_title: dict[str, tuple[int, bool]] = {
         row.title: (row.id, row.is_completed)
@@ -267,10 +275,12 @@ async def get_today_lessons(
 
     # Sibling lessons already generated for each unit, ordered as the student worked through them.
     # Passed to the generator so a new lesson does not repeat what the unit already covered.
-    lessons_by_unit: dict[str, list] = defaultdict(list)
+    lessons_by_unit: dict[str, list[dict]] = defaultdict(list)
     for lsn in sorted(all_lessons, key=lambda item: (item.week_number, item.day_number, item.id)):
         if lsn.unit_id:
-            lessons_by_unit[lsn.unit_id].append(lsn)
+            lessons_by_unit[lsn.unit_id].append(
+                {"title": lsn.title, "lesson_type": lsn.lesson_type, "content": lsn.content}
+            )
 
     today_lessons = []
     for d in days:
@@ -291,7 +301,7 @@ async def get_today_lessons(
         grammar_points: list[str] = []
         vocabulary_set_ids: list[str] = []
         if d_unit_id:
-            for cu in get_curriculum_units(plan.cefr_level, plan.target_language):
+            for cu in get_curriculum_units(cefr_level, target_language):
                 if cu.id == d_unit_id:
                     grammar_points = cu.grammar_points
                     vocabulary_set_ids = cu.vocabulary_set_ids
@@ -299,20 +309,15 @@ async def get_today_lessons(
 
         # Auto-generate the lesson if it doesn't exist yet. The reserved final
         # slot is the real assessment: it never generates a substitute lesson.
-        plan_id = plan.id  # cache before any rollback that would expire the ORM object
         if lesson_id is None and d_unit_id not in COMPLETION_UNIT_IDS:
             previous_lessons = [
-                {
-                    "title": sibling.title,
-                    "lesson_type": sibling.lesson_type,
-                    "content": sibling.content,
-                }
+                sibling
                 for sibling in lessons_by_unit.get(d_unit_id, [])
-                if sibling.title != d_title
+                if sibling["title"] != d_title
             ]
             try:
                 content = await generate_lesson(
-                    cefr_level=plan.cefr_level,
+                    cefr_level=cefr_level,
                     lesson_type=d_type,
                     topic=d_title,
                     week=current_week,
@@ -320,20 +325,23 @@ async def get_today_lessons(
                     unit_id=d_unit_id,
                     grammar_points=grammar_points,
                     vocabulary_set_ids=vocabulary_set_ids,
-                    target_language=plan.target_language,
-                    native_language=current_user.native_language,
+                    target_language=target_language,
+                    native_language=native_language,
                     previous_lessons=previous_lessons,
                 )
                 content_dict = content.model_dump() if hasattr(content, "model_dump") else content
 
-                for item in content_dict.get("exercises") or []:
-                    stamp_question_translation(item, current_user.native_language)
+                exercises_data = content_dict.get("exercises") or []
+                if not exercises_data:
+                    raise ValueError("Lesson generated with no exercises")
+                for item in exercises_data:
+                    stamp_question_translation(item, native_language)
 
                 lesson = Lesson(
-                    study_plan_id=plan.id,
+                    study_plan_id=plan_id,
                     title=d_title,
                     lesson_type=d_type,
-                    cefr_level=plan.cefr_level,
+                    cefr_level=cefr_level,
                     week_number=current_week,
                     day_number=current_day,
                     unit_id=d_unit_id,
@@ -342,7 +350,6 @@ async def get_today_lessons(
                 db.add(lesson)
                 await db.flush()
 
-                exercises_data = content_dict.get("exercises") or []
                 for ex in exercises_data:
                     exercise = Exercise(
                         lesson_id=lesson.id,
@@ -354,15 +361,8 @@ async def get_today_lessons(
                     )
                     db.add(exercise)
 
-                if not exercises_data:
-                    await db.rollback()
-                    raise ValueError("Lesson generated with no exercises")
-
                 await db.commit()
                 await db.refresh(lesson)
-                lesson_id = lesson.id
-                if d_unit_id:
-                    lessons_by_unit[d_unit_id].append(lesson)
             except IntegrityError:
                 await db.rollback()
                 dup = await db.execute(
@@ -373,12 +373,26 @@ async def get_today_lessons(
                         Lesson.title == d_title,
                     )
                 )
-                existing = dup.scalar_one_or_none()
-                if existing:
-                    lesson_id = existing.id
-                    lesson_completed = existing.is_completed
+                lesson = dup.scalar_one_or_none()
+                if lesson is None:
+                    logger.exception("Failed to persist lesson for plan %s", plan_id)
+                    continue
             except Exception:
+                await db.rollback()
                 logger.exception("Failed to generate or persist lesson for plan %s", plan_id)
+                continue
+
+            lesson_id = lesson.id
+            lesson_completed = lesson.is_completed
+            lesson_by_title[d_title] = (lesson_id, lesson_completed)
+            if d_unit_id:
+                lessons_by_unit[d_unit_id].append(
+                    {
+                        "title": lesson.title,
+                        "lesson_type": lesson.lesson_type,
+                        "content": lesson.content,
+                    }
+                )
 
         # A legacy synthetic lesson for the final slot stays reachable while the
         # assessment is pending; once a result exists, the slot is only the result.
@@ -401,10 +415,10 @@ async def get_today_lessons(
             )
 
     return TodayResponse(
-        plan_id=plan.id,
-        cefr_level=plan.cefr_level,
+        plan_id=plan_id,
+        cefr_level=cefr_level,
         lessons=today_lessons,
-        progress_day=plan.progress_day,
+        progress_day=progress_day,
         total_days=total_days,
         pending_count=pending_count,
         completion=completion,

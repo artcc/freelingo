@@ -13,7 +13,7 @@ describe('useConfigStore', () => {
       stripeTrialDays: 0,
       freemiumTrialEnabled: true,
       ttsProvider: 'local',
-      openaiTtsVoice: 'nova',
+      openaiTtsVoice: 'female',
       geminiTtsVoice: 'female',
       maintenanceMode: false,
       dashboardBanner: null,
@@ -37,7 +37,7 @@ describe('useConfigStore', () => {
           stripe_enabled: true,
           stripe_trial_days: 14,
           tts_provider: 'openai',
-          openai_tts_voice: 'alloy',
+          openai_tts_voice: 'male',
           maintenance_mode: true,
           freemium_trial_enabled: false,
           dashboard_banner: {
@@ -58,7 +58,7 @@ describe('useConfigStore', () => {
     expect(useConfigStore.getState().stripeEnabled).toBe(true)
     expect(useConfigStore.getState().stripeTrialDays).toBe(14)
     expect(useConfigStore.getState().ttsProvider).toBe('openai')
-    expect(useConfigStore.getState().openaiTtsVoice).toBe('alloy')
+    expect(useConfigStore.getState().openaiTtsVoice).toBe('male')
     expect(useConfigStore.getState().maintenanceMode).toBe(true)
     expect(useConfigStore.getState().freemiumTrialEnabled).toBe(false)
     expect(useConfigStore.getState().dashboardBanner?.revision).toBe(3)
@@ -85,7 +85,7 @@ describe('useConfigStore', () => {
         JSON.stringify({
           tts_provider: 'gemini',
           gemini_tts_voice: 'male',
-          openai_tts_voice: 'coral',
+          openai_tts_voice: 'female',
         })
       )
     )
@@ -94,7 +94,7 @@ describe('useConfigStore', () => {
 
     expect(useConfigStore.getState().ttsProvider).toBe('gemini')
     expect(useConfigStore.getState().geminiTtsVoice).toBe('male')
-    expect(useConfigStore.getState().openaiTtsVoice).toBe('coral')
+    expect(useConfigStore.getState().openaiTtsVoice).toBe('female')
   })
 
   it('loads closed registration even if the previous state allowed it', async () => {
@@ -286,7 +286,7 @@ describe('useConfigStore', () => {
     expect(useConfigStore.getState().stripeEnabled).toBe(false)
     expect(useConfigStore.getState().stripeTrialDays).toBe(0)
     expect(useConfigStore.getState().ttsProvider).toBe('local')
-    expect(useConfigStore.getState().openaiTtsVoice).toBe('nova')
+    expect(useConfigStore.getState().openaiTtsVoice).toBe('female')
     expect(useConfigStore.getState().geminiTtsVoice).toBe('female')
     expect(useConfigStore.getState().maintenanceMode).toBe(false)
     expect(useConfigStore.getState().freemiumTrialEnabled).toBe(true)

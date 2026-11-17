@@ -216,8 +216,12 @@ the selected adapter's output MIME type and extension: local/OpenAI use MP3;
 Gemini uses native WAV. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts`
 and its snapshots, using the supplied language/region when available and requesting language inference otherwise.
 Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
-Voice selection remains independent of language. OpenAI synthesis cache keys include instructions
-only when supported by the configured model.
+Voice selection remains independent of language. OpenAI and Gemini expose logical `female`/`male`
+choices and resolve actual configured voices only in the backend. OpenAI defaults to `gpt-4o-mini-tts`
+with the voice mappings and configuration validation owned by `speech-services.instructions.md`.
+OpenAI synthesis cache keys include the resolved actual voice for every model and instructions
+only when supported. Previews and Phrasebook use hashed keys even with legacy OpenAI models;
+Phrasebook uses the configured backend default rather than a browser preference.
 
 Gemini uses HTTPX REST Interactions with separate spoken text and style, mapped female/male voices,
 and explicit regional language when supplied. Its cache identity includes the actual voice mapping

@@ -1206,7 +1206,7 @@ describe('ConversationMode session lifecycle', () => {
 
   it('resolves delayed provider configuration before opening the trial WebSocket', async () => {
     useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
     let finish!: (response: Response) => void
     vi.stubGlobal(
@@ -1328,13 +1328,13 @@ describe('ConversationMode session lifecycle', () => {
   it.each([
     ['gemini', 'male', false],
     ['gemini', 'male', true],
-    ['openai', 'coral', false],
-    ['openai', 'coral', true],
+    ['openai', 'female', false],
+    ['openai', 'female', true],
   ] as const)(
     'authenticates %s with voice %s (trial: %s) and accepts WAV frames',
     async (provider, voice, trial) => {
       useConfigStore.setState({ ttsProvider: provider })
-      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('tts_voice', 'female')
       localStorage.setItem('gemini_tts_voice', 'male')
       render(
         <ConversationMode

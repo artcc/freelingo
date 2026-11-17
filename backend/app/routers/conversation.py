@@ -26,6 +26,7 @@ from app.models.study_plan import StudyPlan
 from app.models.user import User
 from app.models.user_language import UserLanguage
 from app.schemas.auth import SUPPORTED_TARGET_LANGUAGES
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services.assessment_voice_trial import (
     AssessmentVoiceTrial,
     consume_assessment_voice_trial_token,
@@ -38,7 +39,6 @@ from app.services.freemium_service import (
     is_freemium_trial_active,
     record_situation_usage,
 )
-from app.services.gemini_tts_service import GEMINI_VOICES
 from app.services.grammar_voice_practice import load_grammar_voice_practice
 from app.services.language_helpers import lesson_practice_title, voice_session_title
 from app.services.lesson_voice_practice import load_lesson_voice_practice
@@ -234,24 +234,8 @@ async def conversation_ws(
         client_conversation_id_raw = auth_msg.get(
             "conversation_id"
         )  # optional: reserved for future API use
-        if settings.TTS_PROVIDER == "openai":
-            _VALID_VOICES = frozenset(
-                {
-                    "alloy",
-                    "ash",
-                    "coral",
-                    "echo",
-                    "fable",
-                    "nova",
-                    "onyx",
-                    "sage",
-                    "shimmer",
-                }
-            )
-            if voice_pref not in _VALID_VOICES:
-                voice_pref = ""
-        elif settings.TTS_PROVIDER == "gemini":
-            if not isinstance(voice_pref, str) or voice_pref not in GEMINI_VOICES:
+        if settings.TTS_PROVIDER in {"openai", "gemini"}:
+            if not isinstance(voice_pref, str) or voice_pref not in CLOUD_TTS_VOICES:
                 voice_pref = ""
         else:
             voice_pref = ""  # local TTS ignores voice param

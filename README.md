@@ -345,6 +345,13 @@ STT_PROVIDER=openai
 OPENAI_API_KEY=sk-...
 ```
 
+OpenAI TTS defaults to `gpt-4o-mini-tts`. Settings offers female/male choices for both cloud TTS
+providers, with independent preferences. OpenAI maps them to `marin`/`cedar` by default; operators
+configure these backend mappings through `OPENAI_TTS_FEMALE_VOICE` and `OPENAI_TTS_MALE_VOICE`.
+`OPENAI_TTS_VOICE=female` selects the default logical choice. Existing provider-name preferences
+are ignored until a new choice is saved. Legacy `tts-1`/`tts-1-hd` models require compatible voice
+mappings; see the [speech specification](specs/speech-services.instructions.md).
+
 Remove the corresponding `kokoro` and/or `whisper` service blocks from your deployment Compose file
 when using cloud providers for those services; changing the provider variables alone does not remove their
 GPU reservations.

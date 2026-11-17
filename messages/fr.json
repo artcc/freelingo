@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Compris",
     "entry1": {
+      "label": "Entraîne-toi aux conversations du quotidien",
+      "desc": "Prépare-toi à des situations réelles avec 50 scénarios autour de la vie quotidienne, des voyages, des achats, de la vie sociale et du travail. Pratique à l'oral avec Lingu, qui jouera le rôle de ton interlocuteur et adaptera la conversation à ton niveau."
+    },
+    "entry2": {
       "label": "Ton plan, étape par étape",
       "desc": "Mon plan présente désormais ton apprentissage comme un parcours : suis ta progression, repère ton unité actuelle et découvre les prochaines étapes. Ouvre chaque unité pour voir ses leçons, continuer à apprendre ou réviser ce que tu as terminé."
     },
-    "entry2": {
+    "entry3": {
       "label": "Pratique la grammaire à ton rythme",
       "desc": "Ajoute des thèmes depuis les ressources de Grammaire à ta bibliothèque personnelle et entraîne-toi avec des séries de cinq exercices, accompagnés de corrections et d'explications. Consulte tes résultats puis, une fois la série terminée, poursuis la pratique à l'oral avec Lingu autour du thème et de tes réponses."
     },
-    "entry3": {
+    "entry4": {
       "label": "Nouvelles langues : croate, tchèque, danois, finnois et roumain",
       "desc": "Le croate, le tchèque, le danois, le finnois et le roumain sont désormais disponibles comme langues d'apprentissage, avec des contenus de A1 à C2. Choisis-les au démarrage ou ajoute-les depuis Paramètres → Mes langues."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu t'aide quand tu en as besoin",
       "desc": "Si tu ne comprends pas quelque chose pendant une conversation vocale, demande de l'aide à Lingu. Lingu peut te l'expliquer brièvement dans ta langue maternelle, puis reprendre la pratique dans la langue que tu apprends."
     },
-    "entry5": {
+    "entry6": {
       "label": "Une expérience plus fluide",
       "desc": "Nous avons aussi corrigé de petits bugs et peaufiné quelques détails pour rendre ton apprentissage quotidien avec FreeLingo encore plus agréable."
     }

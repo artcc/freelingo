@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Entendido",
     "entry1": {
+      "label": "Pratica conversas do dia a dia",
+      "desc": "Prepara-te para situações reais com 50 cenários de vida quotidiana, viagens, compras, vida social e trabalho. Pratica por voz com o Lingu, que interpretará o teu interlocutor e adaptará a conversa ao teu nível."
+    },
+    "entry2": {
       "label": "O teu plano, passo a passo",
       "desc": "Meu plano mostra agora a tua aprendizagem como um percurso: consulta o teu progresso, identifica a unidade atual e descobre as próximas etapas. Abre cada unidade para veres as lições, continuares a aprender ou reveres o que já concluíste."
     },
-    "entry2": {
+    "entry3": {
       "label": "Pratica gramática ao teu ritmo",
       "desc": "Adiciona temas dos recursos de Gramática à tua biblioteca pessoal e pratica com séries de cinco exercícios, com correções e explicações. Consulta os teus resultados e, quando terminares, continua a praticar por voz com o Lingu sobre o tema e as tuas respostas."
     },
-    "entry3": {
+    "entry4": {
       "label": "Novos idiomas: croata, checo, dinamarquês, finlandês e romeno",
       "desc": "Adicionámos o croata, o checo, o dinamarquês, o finlandês e o romeno como idiomas de aprendizagem, com conteúdos de A1 a C2. Escolhe-os ao começar ou adiciona-os em Definições → Meus idiomas."
     },
-    "entry4": {
+    "entry5": {
       "label": "O Lingu ajuda-te quando precisas",
       "desc": "Se não perceberes algo durante uma conversa de voz, pede ajuda ao Lingu. Pode explicar-te brevemente na tua língua materna e depois retomar a prática no idioma que estás a aprender."
     },
-    "entry5": {
+    "entry6": {
       "label": "Uma experiência mais fluida",
       "desc": "Também corrigimos pequenos erros e afinámos alguns detalhes para tornar a tua aprendizagem diária com o FreeLingo ainda mais agradável."
     }
@@ -2198,7 +2202,7 @@
     "errorGeneric": "Falha ao enviar. Por favor, tente novamente."
   },
   "listening": {
-    "title": "Audição",
+    "title": "Compreensão oral",
     "topic": "Tópico",
     "listenLabel": "Ouvir",
     "questionsLabel": "Perguntas",

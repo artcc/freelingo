@@ -84,6 +84,14 @@ Both Compose files forward optional `OPENAI_REASONING_EFFORT` with an empty defa
 model. An empty value leaves reasoning to the provider. `LLM_PROVIDER=openai` requires a model and
 endpoint supporting Responses, not only Chat Completions.
 
+Both Compose files forward OpenAI TTS configuration exclusively to the backend:
+`OPENAI_TTS_MODEL` (default `gpt-4o-mini-tts`), `OPENAI_TTS_VOICE` (logical default `female`),
+`OPENAI_TTS_FEMALE_VOICE` (default `marin`), `OPENAI_TTS_MALE_VOICE` (default `cedar`), and
+`OPENAI_TTS_SPEED` (default `1.0`). These defaults match backend `Settings`.
+Both configured voice mappings must be valid for the selected model; operators selecting `tts-1`
+or `tts-1-hd` must supply compatible mappings instead of `marin`/`cedar`.
+Actual voice names remain backend configuration; clients use only `female`/`male`.
+
 Both Compose files forward optional Gemini TTS configuration exclusively to the backend:
 `GEMINI_API_KEY`, `GEMINI_TTS_MODEL` (default `gemini-3.8-flash-tts`), `GEMINI_TTS_VOICE`
 (default `female`), `GEMINI_TTS_FEMALE_VOICE` (default `Sulafat`), `GEMINI_TTS_MALE_VOICE`

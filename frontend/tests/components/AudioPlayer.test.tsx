@@ -507,23 +507,25 @@ describe('AudioPlayer', () => {
   // ───────────── VOICE RESOLUTION ─────────────
 
   it('sends explicit voice prop in request body', async () => {
+    useConfigStore.setState({ ttsProvider: 'openai' })
     fetchMock.mockResolvedValueOnce(makeOkResponse())
 
-    render(<AudioPlayer text="Hello" voice="nova" />)
+    render(<AudioPlayer text="Hello" voice="male" />)
     fireEvent.click(screen.getByRole('button'))
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
         '/api/tts',
         expect.objectContaining({
-          body: JSON.stringify({ text: 'Hello', voice: 'nova' }),
+          body: JSON.stringify({ text: 'Hello', voice: 'male' }),
         })
       )
     })
   })
 
   it('resolves voice from localStorage when no voice prop', async () => {
-    localStorage.setItem('tts_voice', 'alloy')
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    localStorage.setItem('tts_voice', 'female')
     fetchMock.mockResolvedValueOnce(makeOkResponse())
 
     render(<AudioPlayer text="Hello" />)
@@ -533,24 +535,25 @@ describe('AudioPlayer', () => {
       expect(fetchMock).toHaveBeenCalledWith(
         '/api/tts',
         expect.objectContaining({
-          body: JSON.stringify({ text: 'Hello', voice: 'alloy' }),
+          body: JSON.stringify({ text: 'Hello', voice: 'female' }),
         })
       )
     })
   })
 
   it('prioritizes voice prop over localStorage', async () => {
-    localStorage.setItem('tts_voice', 'alloy')
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    localStorage.setItem('tts_voice', 'female')
     fetchMock.mockResolvedValueOnce(makeOkResponse())
 
-    render(<AudioPlayer text="Hello" voice="nova" />)
+    render(<AudioPlayer text="Hello" voice="male" />)
     fireEvent.click(screen.getByRole('button'))
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
         '/api/tts',
         expect.objectContaining({
-          body: JSON.stringify({ text: 'Hello', voice: 'nova' }),
+          body: JSON.stringify({ text: 'Hello', voice: 'male' }),
         })
       )
     })
@@ -568,11 +571,76 @@ describe('AudioPlayer', () => {
     })
   })
 
+  it('omits legacy OpenAI voices so synthesis uses the backend default', async () => {
+    useConfigStore.setState({ ttsProvider: 'openai', openaiTtsVoice: 'male' })
+    localStorage.setItem('tts_voice', 'nova')
+    fetchMock.mockResolvedValueOnce(makeOkResponse())
+    render(<AudioPlayer text="Hello" voice="coral" />)
+
+    await act(async () => fireEvent.click(screen.getByRole('button')))
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({
+      text: 'Hello',
+    })
+    expect(localStorage.getItem('tts_voice')).toBe('nova')
+    expect(screen.getByText(PAUSE)).toBeDefined()
+  })
+
+  it.each(['stored', 'explicit'])(
+    'cancels pending OpenAI audio when the %s logical voice changes',
+    async (source) => {
+      useConfigStore.setState({ ttsProvider: 'openai' })
+      localStorage.setItem('tts_voice', 'female')
+      let finish!: (response: ReturnType<typeof makeOkResponse>) => void
+      fetchMock.mockReturnValueOnce(
+        new Promise((resolve) => {
+          finish = resolve
+        })
+      )
+      const { rerender } = render(
+        <AudioPlayer
+          text="Hello"
+          voice={source === 'explicit' ? 'female' : undefined}
+        />
+      )
+      fireEvent.click(screen.getByRole('button'))
+      const signal = fetchMock.mock.calls[0][1].signal as AbortSignal
+      if (source === 'stored') localStorage.setItem('tts_voice', 'male')
+      rerender(
+        <AudioPlayer
+          text="Hello"
+          voice={source === 'explicit' ? 'male' : undefined}
+        />
+      )
+      await act(async () => finish(makeOkResponse()))
+
+      expect(signal.aborted).toBe(true)
+      expect(URL.createObjectURL).not.toHaveBeenCalled()
+      expect(screen.getByText(PLAY)).toBeDefined()
+    }
+  )
+
+  it('does not invalidate default OpenAI playback when ignored legacy preferences change', async () => {
+    useConfigStore.setState({ ttsProvider: 'openai' })
+    localStorage.setItem('tts_voice', 'nova')
+    fetchMock.mockResolvedValueOnce(makeOkResponse())
+    const { rerender } = render(<AudioPlayer text="Hello" />)
+    await act(async () => fireEvent.click(screen.getByRole('button')))
+    const signal = fetchMock.mock.calls[0][1].signal as AbortSignal
+    localStorage.setItem('tts_voice', 'coral')
+    rerender(<AudioPlayer text="Hello" />)
+
+    expect(signal.aborted).toBe(false)
+    expect(currentAudioMock!.pause).not.toHaveBeenCalled()
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled()
+    expect(screen.getByText(PAUSE)).toBeDefined()
+  })
+
   // ───────────── AUDIO ENDED ─────────────
 
   it('waits for the shared config load and plays the first request with the Gemini preference', async () => {
     useConfigStore.setState({ loaded: false, ttsProvider: 'local' })
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
     let finish!: (response: Response) => void
     fetchMock.mockReturnValueOnce(
@@ -688,7 +756,7 @@ describe('AudioPlayer', () => {
     'does not synthesize after config %s',
     async (outcome) => {
       useConfigStore.setState({ loaded: false })
-      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('tts_voice', 'female')
       let finish!: (response: Response) => void
       fetchMock.mockReturnValueOnce(
         new Promise((resolve) => {
@@ -715,12 +783,12 @@ describe('AudioPlayer', () => {
 
   it.each([
     ['gemini', 'nova', 'male'],
-    ['openai', 'male', 'coral'],
+    ['openai', 'nova', 'female'],
   ])(
     'uses only a compatible preference for %s',
     async (provider, explicit, expected) => {
       useConfigStore.setState({ ttsProvider: provider })
-      localStorage.setItem('tts_voice', 'coral')
+      localStorage.setItem('tts_voice', 'female')
       localStorage.setItem('gemini_tts_voice', 'male')
       fetchMock.mockResolvedValueOnce(makeOkResponse())
       render(<AudioPlayer text="Hello" voice={explicit} />)

@@ -92,22 +92,13 @@ function GamesContent() {
   const t = useTranslations('games')
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 p-6">
-      <div className="border-fl-border bg-fl-surface border">
-        <div className="border-fl-border flex items-center gap-2 border-b px-6 py-4">
-          <span aria-hidden="true" className="text-fl-label text-fl-muted-3">
-            ●
-          </span>
-          <h1 className="text-fl-label text-fl-muted-2 font-sans tracking-widest uppercase">
-            {t('title')}
-          </h1>
-        </div>
-        <div className="px-6 py-5">
-          <p className="text-fl-muted-2 font-sans text-sm leading-relaxed">
-            {t('description')}
-          </p>
-        </div>
-      </div>
+    <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 font-sans md:px-8">
+      <header className="space-y-2">
+        <h1 className="text-fl-fg text-sm font-bold tracking-widest uppercase">
+          {t('title')}
+        </h1>
+        <p className="text-fl-muted-2 text-sm">{t('description')}</p>
+      </header>
 
       {availableGames.length === 0 ? (
         <section

@@ -2164,22 +2164,26 @@
     "version": "v1.14.10",
     "cta": "Got it",
     "entry1": {
+      "label": "Practise everyday conversations",
+      "desc": "Get ready for real-life situations with 50 scenarios covering everyday life, travel, shopping, social life, and work. Practise speaking with Lingu, who will play the role of your conversation partner and adapt the conversation to your level."
+    },
+    "entry2": {
       "label": "Your plan, step by step",
       "desc": "My Plan now shows your learning as an itinerary: check your progress, find your current unit, and discover the stages ahead. Open each unit to see its lessons, keep learning, or review what you've completed."
     },
-    "entry2": {
+    "entry3": {
       "label": "Practise grammar at your own pace",
       "desc": "Add topics from the Grammar resources to your personal library and practise with sets of five exercises, with corrections and explanations. Check your results and, when you finish, keep practising by voice with Lingu using the topic and your answers."
     },
-    "entry3": {
+    "entry4": {
       "label": "New languages: Croatian, Czech, Danish, Finnish, and Romanian",
       "desc": "Croatian, Czech, Danish, Finnish, and Romanian are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
     },
-    "entry4": {
+    "entry5": {
       "label": "Lingu helps when you need it",
       "desc": "If you don't understand something during a voice conversation, ask Lingu for help. Lingu can briefly explain it in your native language, then return to practising the language you're learning."
     },
-    "entry5": {
+    "entry6": {
       "label": "A smoother experience",
       "desc": "We've also fixed minor bugs and polished a few details to make your everyday learning with FreeLingo more enjoyable."
     }

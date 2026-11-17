@@ -144,8 +144,17 @@ mutates it to fabricate completion.
 8. Otherwise generate lesson content through the LLM and persist the lesson and exercises, except for
    the reserved final slot (`completion-test`, or the legacy `level-test` id), which never generates a
    substitute lesson.
-9. On uniqueness race, roll back and load the row created by the competing request.
-10. On other generation failure, log and exclude that slot from the response.
+9. On uniqueness race, roll back and load the row created by the competing request using the exact
+   plan/week/day/title identity. Reuse its completion state and content for subsequent unit context.
+   An integrity error without a matching row is logged and that slot is excluded.
+10. On other generation or persistence failure, roll back, log and exclude that slot from the response.
+
+Before generating current slots, the request captures the persisted plan's ID, level, target language
+and progress, the user's native language, and plain-data summaries of existing unit lessons. Recovery
+never reads expired ORM attributes or re-resolves the active language after rollback.
+Content without exercises is rejected before any lesson write. Each lesson and its exercises commit
+atomically; a failed slot cannot roll back earlier committed lessons or the already-committed
+auto-advance. Subsequent slots can still be generated with the captured context.
 
 The response contains `plan_id`, `cefr_level`, `progress_day`, `total_days`, `pending_count`,
 `completion`, and `lessons`. Every returned lesson contains ID, schedule metadata, objectives, unit ID, and

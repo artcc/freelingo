@@ -5,18 +5,26 @@ beforeEach(() => localStorage.clear())
 
 describe('provider-aware TTS voice preferences', () => {
   it('keeps both preferences when switching providers', () => {
-    localStorage.setItem('tts_voice', 'coral')
+    localStorage.setItem('tts_voice', 'female')
     localStorage.setItem('gemini_tts_voice', 'male')
 
-    expect(resolveTtsVoice('openai')).toBe('coral')
+    expect(resolveTtsVoice('openai')).toBe('female')
     expect(resolveTtsVoice('gemini')).toBe('male')
-    expect(resolveTtsVoice('openai')).toBe('coral')
+    expect(resolveTtsVoice('openai')).toBe('female')
     expect(localStorage.getItem('gemini_tts_voice')).toBe('male')
-    expect(localStorage.getItem('tts_voice')).toBe('coral')
+    expect(localStorage.getItem('tts_voice')).toBe('female')
   })
 
   it.each([
-    ['openai', 'tts_voice', 'female'],
+    ['openai', 'tts_voice', 'alloy'],
+    ['openai', 'tts_voice', 'ash'],
+    ['openai', 'tts_voice', 'coral'],
+    ['openai', 'tts_voice', 'echo'],
+    ['openai', 'tts_voice', 'fable'],
+    ['openai', 'tts_voice', 'nova'],
+    ['openai', 'tts_voice', 'onyx'],
+    ['openai', 'tts_voice', 'sage'],
+    ['openai', 'tts_voice', 'shimmer'],
     ['gemini', 'gemini_tts_voice', 'nova'],
     ['gemini', 'gemini_tts_voice', 'Kore'],
   ])(
@@ -29,7 +37,7 @@ describe('provider-aware TTS voice preferences', () => {
   )
 
   it.each([
-    ['openai', 'tts_voice', 'alloy', 'nova'],
+    ['openai', 'tts_voice', 'female', 'male'],
     ['gemini', 'gemini_tts_voice', 'male', 'female'],
   ])(
     'prefers a compatible explicit voice for %s',
@@ -43,7 +51,7 @@ describe('provider-aware TTS voice preferences', () => {
   it('leaves default selection to the backend without a user preference', () => {
     expect(resolveTtsVoice('gemini')).toBeUndefined()
     expect(resolveTtsVoice('openai')).toBeUndefined()
-    localStorage.setItem('tts_voice', 'nova')
+    localStorage.setItem('tts_voice', 'female')
     expect(resolveTtsVoice('gemini')).toBeUndefined()
   })
 

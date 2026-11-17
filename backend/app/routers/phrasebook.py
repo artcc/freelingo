@@ -256,9 +256,7 @@ async def get_phrase_audio(
         f"{language}:{category_id}:{phrase_index}:{phrase.text}".encode()
     ).hexdigest()[:16]
     tts_service = getattr(request.app.state, "tts_service", None)
-    if isinstance(tts_service, GeminiTTSService) or (
-        isinstance(tts_service, OpenAITTSService) and tts_service.get_instructions(language)
-    ):
+    if isinstance(tts_service, (GeminiTTSService, OpenAITTSService)):
         cache_key = tts_service.get_cache_key(phrase.text, language=language)
     audio_dir = os.path.join(settings.AUDIO_STORAGE_PATH, "phrasebook", iso)
     extension, media_type = get_tts_audio_format(tts_service)

@@ -48,9 +48,9 @@ from app.schemas.listening import (
     ListeningSubmitResponse,
     QuestionOut,
 )
+from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services.comprehension_help import explain_question
 from app.services.exercise_generation import GenerationLease, get_generation_state
-from app.services.gemini_tts_service import GEMINI_VOICES
 from app.services.learning_analytics import (
     LearningEvent,
     record_exercise_completed,
@@ -180,7 +180,7 @@ async def generate_exercise(
     """Reuse available work or start one generation for this level and language."""
     if settings.TTS_PROVIDER == "local":
         voice = ""
-    if settings.TTS_PROVIDER == "gemini" and voice and voice not in GEMINI_VOICES:
+    if settings.TTS_PROVIDER in {"openai", "gemini"} and voice and voice not in CLOUD_TTS_VOICES:
         raise HTTPException(status_code=400, detail="Invalid voice name")
     level, target_language = plan.cefr_level, plan.target_language
     if await get_available_exercise(level, target_language, current_user.id, db) is not None:

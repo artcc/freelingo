@@ -1,18 +1,6 @@
 import { useConfigStore } from '@/store/config'
 
-export const OPENAI_VOICES = [
-  'alloy',
-  'ash',
-  'coral',
-  'echo',
-  'fable',
-  'nova',
-  'onyx',
-  'sage',
-  'shimmer',
-] as const
-
-export const GEMINI_VOICES = ['female', 'male'] as const
+export const TTS_VOICES = ['female', 'male'] as const
 
 export function ttsVoiceStorageKey(provider: string): string {
   return provider === 'gemini' ? 'gemini_tts_voice' : 'tts_voice'
@@ -24,11 +12,7 @@ export function resolveTtsVoice(
   explicitVoice?: string
 ): string | undefined {
   const voices: readonly string[] | undefined =
-    provider === 'gemini'
-      ? GEMINI_VOICES
-      : provider === 'openai'
-        ? OPENAI_VOICES
-        : undefined
+    provider === 'gemini' || provider === 'openai' ? TTS_VOICES : undefined
   const valid = (voice: string | null | undefined): voice is string =>
     !!voice && (!voices || voices.includes(voice))
 
