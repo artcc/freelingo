@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Feature-Wünsche und Fehlerberichte von Lernenden triagieren.",
     "reviewReviews": "Bewertungen prüfen",
     "reviewReviewsDesc": "Genehmige verifizierte Bewertungen von Lernenden für die Landingpage.",
-    "maintenanceOnDesc": "Der Wartungsmodus ist für Lernwerkzeuge mit Abonnement aktiv.",
-    "maintenanceOffDesc": "Der Wartungsmodus ist deaktiviert. Lernwerkzeuge mit Abonnement sind verfügbar.",
-    "openSystemControls": "Systemsteuerung",
+    "maintenanceOnDesc": "Lernwerkzeuge, die ein Abonnement erfordern, sind vorübergehend nicht verfügbar.",
+    "manageSystem": "System verwalten",
+    "manageSystemDesc": "Allgemeine Plattformeinstellungen konfigurieren.",
     "adminRequired": "Admin-Zugriff erforderlich",
     "usersLoadError": "Benutzer konnten nicht geladen werden",
     "createUserError": "Benutzer konnte nicht erstellt werden",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Verstanden",
     "entry1": {
       "label": "Übe Gespräche für den Alltag",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Übe Grammatik in deinem eigenen Tempo",
       "desc": "Füge Themen aus den Grammatikressourcen zu deiner persönlichen Bibliothek hinzu und übe mit jeweils fünf Aufgaben samt Korrekturen und Erklärungen. Sieh dir deine Ergebnisse an und übe anschließend im Sprachgespräch mit Lingu weiter – auf Grundlage des Themas und deiner Antworten."
-    },
-    "entry4": {
-      "label": "Neue Sprachen: Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch",
-      "desc": "Kroatisch, Tschechisch, Dänisch, Finnisch und Rumänisch sind jetzt als Lernsprachen verfügbar, mit Inhalten von A1 bis C2. Wähle sie beim Einstieg aus oder füge sie unter Einstellungen → Meine Sprachen hinzu."
-    },
-    "entry5": {
-      "label": "Lingu hilft dir, wenn du es brauchst",
-      "desc": "Wenn du während eines Sprachgesprächs etwas nicht verstehst, bitte Lingu um Hilfe. Lingu kann es dir kurz in deiner Muttersprache erklären und anschließend das Üben in der Sprache fortsetzen, die du lernst."
     },
     "entry6": {
       "label": "Ein flüssigeres Erlebnis",

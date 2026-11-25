@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Triage feature requests and bug reports from learners.",
     "reviewReviews": "Review reviews",
     "reviewReviewsDesc": "Approve verified learner reviews for display on the landing page.",
-    "maintenanceOnDesc": "Maintenance mode is active for subscription-gated learning tools.",
-    "maintenanceOffDesc": "Maintenance mode is off. Subscription-gated learning tools are available.",
-    "openSystemControls": "System controls",
+    "maintenanceOnDesc": "Learning tools that require a subscription are temporarily unavailable.",
+    "manageSystem": "Manage system",
+    "manageSystemDesc": "Configure general platform settings.",
     "adminRequired": "Admin access required",
     "usersLoadError": "Failed to load users",
     "createUserError": "Failed to create user",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Got it",
     "entry1": {
       "label": "Practise everyday conversations",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Practise grammar at your own pace",
       "desc": "Add topics from the Grammar resources to your personal library and practise with sets of five exercises, with corrections and explanations. Check your results and, when you finish, keep practising by voice with Lingu using the topic and your answers."
-    },
-    "entry4": {
-      "label": "New languages: Croatian, Czech, Danish, Finnish, and Romanian",
-      "desc": "Croatian, Czech, Danish, Finnish, and Romanian are now available as learning languages, with content from A1 to C2. Choose them when you get started or add them from Settings → My Languages."
-    },
-    "entry5": {
-      "label": "Lingu helps when you need it",
-      "desc": "If you don't understand something during a voice conversation, ask Lingu for help. Lingu can briefly explain it in your native language, then return to practising the language you're learning."
     },
     "entry6": {
       "label": "A smoother experience",

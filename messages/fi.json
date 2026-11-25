@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Käsittele oppijoiden ominaisuusehdotukset ja virheraportit.",
     "reviewReviews": "Tarkastele arvosteluja",
     "reviewReviewsDesc": "Hyväksy vahvistetut käyttäjäarvostelut etusivulla näytettäviksi.",
-    "maintenanceOnDesc": "Huoltotila on käytössä tilausrajoitteisissa oppimistyökaluissa.",
-    "maintenanceOffDesc": "Huoltotila on pois käytöstä. Tilausrajoitteiset oppimistyökalut ovat saatavilla.",
-    "openSystemControls": "Järjestelmäasetukset",
+    "maintenanceOnDesc": "Tilausta edellyttävät oppimistyökalut ovat tilapäisesti poissa käytöstä.",
+    "manageSystem": "Hallitse järjestelmää",
+    "manageSystemDesc": "Muokkaa alustan yleisiä asetuksia.",
     "adminRequired": "Ylläpitäjän oikeudet vaaditaan",
     "usersLoadError": "Käyttäjiä ei voitu ladata",
     "createUserError": "Käyttäjää ei voitu luoda",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Selvä",
     "entry1": {
       "label": "Harjoittele arjen keskusteluja",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Harjoittele kielioppia omaan tahtiisi",
       "desc": "Lisää aiheita kielioppimateriaaleista omaan kirjastoosi ja harjoittele viiden tehtävän sarjoilla, joihin saat korjaukset ja selitykset. Tarkastele tuloksiasi ja jatka lopuksi suullista harjoittelua Lingun kanssa aiheen ja vastaustesi pohjalta."
-    },
-    "entry4": {
-      "label": "Uudet kielet: kroatia, tšekki, tanska, suomi ja romania",
-      "desc": "Kroatia, tšekki, tanska, suomi ja romania ovat nyt saatavilla opiskeltavina kielinä, ja sisältöä on tasoilta A1–C2. Valitse ne aloittaessasi tai lisää ne kohdasta Asetukset → Omat kielet."
-    },
-    "entry5": {
-      "label": "Lingu auttaa, kun tarvitset apua",
-      "desc": "Jos et ymmärrä jotakin puhekeskustelun aikana, pyydä Lingulta apua. Lingu voi selittää asian lyhyesti äidinkielelläsi ja palata sitten harjoittelemaan opiskelemaasi kieltä."
     },
     "entry6": {
       "label": "Sujuvampi käyttökokemus",

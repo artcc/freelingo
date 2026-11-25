@@ -6,10 +6,11 @@ import { useTranslations } from 'next-intl'
 import {
   AlertTriangle,
   Bug,
+  Crown,
   MessageSquareText,
+  Settings,
   ShieldAlert,
   Star,
-  Ticket,
   UserPlus,
   Users,
 } from 'lucide-react'
@@ -60,6 +61,12 @@ const actions = [
     key: 'reviewReviews',
     descriptionKey: 'reviewReviewsDesc',
     icon: Star,
+  },
+  {
+    href: '/admin/system',
+    key: 'manageSystem',
+    descriptionKey: 'manageSystemDesc',
+    icon: Settings,
   },
 ] as const
 
@@ -123,7 +130,7 @@ export default function AdminOverviewPage() {
                 ? t('loading')
                 : `${stats?.subscriptions_active ?? 0} / ${stats?.subscriptions_trialing ?? 0}`
             }
-            icon={Ticket}
+            icon={Crown}
           />
         )}
         <AdminMetric
@@ -144,41 +151,28 @@ export default function AdminOverviewPage() {
         </div>
       )}
 
-      <div
-        className={`border px-5 py-4 ${
-          maintenanceMode
-            ? 'border-yellow-500/40 bg-yellow-500/5'
-            : 'border-fl-border bg-fl-surface'
-        }`}
-      >
-        <div className="flex flex-wrap items-center gap-3">
-          <ShieldAlert
-            className={`size-5 ${
-              maintenanceMode ? 'text-yellow-500' : 'text-fl-muted-3'
-            }`}
-            aria-hidden="true"
-          />
-          <div className="min-w-0">
-            <p className="text-fl-muted-1 font-mono text-xs tracking-widest uppercase">
-              {t('maintenanceTitle')}
-            </p>
-            <p className="text-fl-hint text-fl-muted-3 mt-1 font-mono">
-              {maintenanceMode
-                ? t('maintenanceOnDesc')
-                : t('maintenanceOffDesc')}
-            </p>
-          </div>
-          <Link
-            href="/admin/system"
-            className="border-fl-border text-fl-label text-fl-muted-1 hover:text-fl-fg hover:border-fl-border-2 ml-auto border px-3 py-2 font-mono tracking-widest uppercase transition-colors"
-          >
-            {t('openSystemControls')}
-          </Link>
-        </div>
-      </div>
-
       <AdminPanel title={t('operationalAlerts')}>
         <div className="divide-fl-border divide-y">
+          {maintenanceMode && (
+            <Link
+              href="/admin/system"
+              className="flex flex-wrap items-center gap-3 bg-yellow-500/5 px-5 py-4 transition-colors hover:bg-yellow-500/10"
+            >
+              <ShieldAlert
+                className="size-5 text-yellow-500"
+                aria-hidden="true"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-fl-fg font-mono text-sm">
+                  {t('maintenanceTitle')}
+                </p>
+                <p className="text-fl-muted-3 mt-1 font-mono text-xs">
+                  {t('maintenanceOnDesc')}
+                </p>
+              </div>
+              <AdminBadge tone="warning">{t('maintenanceOn')}</AdminBadge>
+            </Link>
+          )}
           <Link
             href="/admin/feedback?status=pending&type=bug"
             className="hover:bg-fl-bg/60 flex flex-wrap items-center gap-3 px-5 py-4 transition-colors"
@@ -228,7 +222,7 @@ export default function AdminOverviewPage() {
         </div>
       </AdminPanel>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
         {actions.map((action) => {
           const Icon = action.icon
           return (
@@ -237,16 +231,10 @@ export default function AdminOverviewPage() {
               href={action.href}
               className="border-fl-border bg-fl-surface hover:border-fl-border-2 group border p-5 transition-colors"
             >
-              <div className="mb-5 flex items-center justify-between">
-                <Icon
-                  className="text-fl-muted-2 group-hover:text-fl-fg size-5 transition-colors"
-                  aria-hidden="true"
-                />
-                <Ticket
-                  className="text-fl-muted-4 group-hover:text-fl-muted-2 size-4 transition-colors"
-                  aria-hidden="true"
-                />
-              </div>
+              <Icon
+                className="text-fl-muted-2 group-hover:text-fl-fg mb-5 size-5 transition-colors"
+                aria-hidden="true"
+              />
               <p className="text-fl-fg font-mono text-sm tracking-widest uppercase">
                 {t(action.key)}
               </p>

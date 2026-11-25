@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Hantera elevers funktionsförslag och felrapporter.",
     "reviewReviews": "Granska omdömen",
     "reviewReviewsDesc": "Godkänn verifierade omdömen för visning på startsidan.",
-    "maintenanceOnDesc": "Underhållsläget är aktivt för prenumerationsstyrda inlärningsverktyg.",
-    "maintenanceOffDesc": "Underhållsläget är avstängt. Prenumerationsstyrda inlärningsverktyg är tillgängliga.",
-    "openSystemControls": "Systeminställningar",
+    "maintenanceOnDesc": "Inlärningsverktyg som kräver prenumeration är tillfälligt otillgängliga.",
+    "manageSystem": "Hantera systemet",
+    "manageSystemDesc": "Anpassa plattformens allmänna inställningar.",
     "adminRequired": "Administratörsåtkomst krävs",
     "usersLoadError": "Det gick inte att ladda användare",
     "createUserError": "Det gick inte att skapa användaren",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Öva på vardagliga samtal",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Öva grammatik i din egen takt",
       "desc": "Lägg till ämnen från grammatikresurserna i ditt personliga bibliotek och öva med fem övningar åt gången, med rättningar och förklaringar. Se dina resultat och fortsätt sedan att öva muntligt med Lingu utifrån ämnet och dina svar."
-    },
-    "entry4": {
-      "label": "Nya språk: kroatiska, tjeckiska, danska, finska och rumänska",
-      "desc": "Kroatiska, tjeckiska, danska, finska och rumänska finns nu som språk att lära sig, med innehåll från A1 till C2. Välj dem när du börjar eller lägg till dem under Inställningar → Mina språk."
-    },
-    "entry5": {
-      "label": "Lingu hjälper dig när du behöver det",
-      "desc": "Om du inte förstår något under ett röstsamtal kan du be Lingu om hjälp. Lingu kan förklara det kort på ditt modersmål och sedan återgå till att öva på språket du lär dig."
     },
     "entry6": {
       "label": "En smidigare upplevelse",

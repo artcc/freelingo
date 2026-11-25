@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Prioriza solicitudes de funciones y reportes de errores de estudiantes.",
     "reviewReviews": "Revisar reseñas",
     "reviewReviewsDesc": "Aprueba reseñas verificadas de estudiantes para mostrarlas en la landing.",
-    "maintenanceOnDesc": "El modo mantenimiento está activo para las herramientas de aprendizaje con suscripción.",
-    "maintenanceOffDesc": "El modo mantenimiento está desactivado. Las herramientas con suscripción están disponibles.",
-    "openSystemControls": "Controles del sistema",
+    "maintenanceOnDesc": "Las herramientas de aprendizaje con suscripción están temporalmente bloqueadas.",
+    "manageSystem": "Gestionar sistema",
+    "manageSystemDesc": "Configura los ajustes generales de la plataforma.",
     "adminRequired": "Se requiere acceso de administrador",
     "usersLoadError": "Error al cargar usuarios",
     "createUserError": "Error al crear usuario",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Entendido",
     "entry1": {
       "label": "Practica conversaciones del día a día",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Practica gramática a tu ritmo",
       "desc": "Añade temas desde los recursos de Gramática a tu biblioteca personal y practica con tandas de cinco ejercicios, con correcciones y explicaciones. Consulta tus resultados y, al terminar, sigue practicando por voz con Lingu sobre el tema y tus respuestas."
-    },
-    "entry4": {
-      "label": "Nuevos idiomas: croata, checo, danés, finés y rumano",
-      "desc": "Añadimos el croata, el checo, el danés, el finés y el rumano como idiomas de aprendizaje, con contenidos de A1 a C2. Elígelos al empezar o añádelos desde Ajustes → Mis idiomas."
-    },
-    "entry5": {
-      "label": "Lingu te ayuda cuando lo necesitas",
-      "desc": "Si no entiendes algo durante una conversación de voz, pide ayuda a Lingu. Puede explicártelo brevemente en tu idioma nativo y después retomar la práctica en el idioma que estás aprendiendo."
     },
     "entry6": {
       "label": "Una experiencia más fluida",

@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Obradi prijedloge značajki i prijave pogrešaka korisnika.",
     "reviewReviews": "Pregledaj recenzije",
     "reviewReviewsDesc": "Odobri provjerene recenzije korisnika za prikaz na početnoj stranici.",
-    "maintenanceOnDesc": "Način održavanja uključen je za alate za učenje koji zahtijevaju pretplatu.",
-    "maintenanceOffDesc": "Način održavanja je isključen. Alati za učenje koji zahtijevaju pretplatu dostupni su.",
-    "openSystemControls": "Postavke sustava",
+    "maintenanceOnDesc": "Alati za učenje koji zahtijevaju pretplatu privremeno nisu dostupni.",
+    "manageSystem": "Upravljanje sustavom",
+    "manageSystemDesc": "Prilagodi opće postavke platforme.",
     "adminRequired": "Potreban je administratorski pristup",
     "usersLoadError": "Korisnike nije bilo moguće učitati",
     "createUserError": "Korisnika nije bilo moguće stvoriti",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Razumijem",
     "entry1": {
       "label": "Vježbaj svakodnevne razgovore",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Vježbaj gramatiku svojim tempom",
       "desc": "Dodaj teme iz gramatičkih materijala u svoju osobnu biblioteku i vježbaj uz skupove od pet zadataka s ispravcima i objašnjenjima. Pregledaj rezultate, a nakon završetka nastavi vježbati u glasovnom razgovoru s Linguom na temelju teme i svojih odgovora."
-    },
-    "entry4": {
-      "label": "Novi jezici: hrvatski, češki, danski, finski i rumunjski",
-      "desc": "Dodali smo hrvatski, češki, danski, finski i rumunjski kao jezike za učenje, sa sadržajem od A1 do C2. Odaberi ih na početku ili ih dodaj putem Postavke → Moji jezici."
-    },
-    "entry5": {
-      "label": "Lingu ti pomaže kad ti zatreba",
-      "desc": "Ako nešto ne razumiješ tijekom glasovnog razgovora, zatraži pomoć od Lingua. Može ti to ukratko objasniti na tvom materinskom jeziku, a zatim nastaviti vježbu na jeziku koji učiš."
     },
     "entry6": {
       "label": "Ugodnije iskustvo",

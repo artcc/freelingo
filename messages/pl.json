@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Triage próśb o funkcje i zgłoszeń błędów od uczących się.",
     "reviewReviews": "Przejrzyj recenzje",
     "reviewReviewsDesc": "Zatwierdzaj zweryfikowane recenzje uczących się do wyświetlenia na stronie głównej.",
-    "maintenanceOnDesc": "Tryb konserwacji jest aktywny dla narzędzi edukacyjnych wymagających subskrypcji.",
-    "maintenanceOffDesc": "Tryb konserwacji jest wyłączony. Narzędzia wymagające subskrypcji są dostępne.",
-    "openSystemControls": "Kontrola systemu",
+    "maintenanceOnDesc": "Narzędzia edukacyjne wymagające subskrypcji są tymczasowo niedostępne.",
+    "manageSystem": "Zarządzaj systemem",
+    "manageSystemDesc": "Skonfiguruj ogólne ustawienia platformy.",
     "adminRequired": "Wymagany dostęp administratora",
     "usersLoadError": "Nie udało się wczytać użytkowników",
     "createUserError": "Nie udało się utworzyć użytkownika",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Rozumiem",
     "entry1": {
       "label": "Ćwicz codzienne rozmowy",
@@ -2174,14 +2174,6 @@
     "entry3": {
       "label": "Ćwicz gramatykę we własnym tempie",
       "desc": "Dodawaj tematy z materiałów do gramatyki do swojej biblioteki i ćwicz w zestawach po pięć zadań, z poprawkami i wyjaśnieniami. Sprawdzaj wyniki, a po zakończeniu kontynuuj ćwiczenia w rozmowie głosowej z Lingu na podstawie tematu i Twoich odpowiedzi."
-    },
-    "entry4": {
-      "label": "Nowe języki: chorwacki, czeski, duński, fiński i rumuński",
-      "desc": "Dodaliśmy chorwacki, czeski, duński, fiński i rumuński jako języki do nauki, z materiałami od A1 do C2. Wybierz je na początku lub dodaj w Ustawieniach → Moje języki."
-    },
-    "entry5": {
-      "label": "Lingu pomaga, gdy tego potrzebujesz",
-      "desc": "Jeśli nie rozumiesz czegoś podczas rozmowy głosowej, poproś Lingu o pomoc. Może krótko wyjaśnić to w Twoim języku ojczystym, a potem wrócić do ćwiczeń w języku, którego się uczysz."
     },
     "entry6": {
       "label": "Płynniejsze korzystanie",
