@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Feature-Wünsche und Fehlerberichte von Lernenden triagieren.",
     "reviewReviews": "Bewertungen prüfen",
     "reviewReviewsDesc": "Genehmige verifizierte Bewertungen von Lernenden für die Landingpage.",
-    "maintenanceOnDesc": "Der Wartungsmodus ist für Lernwerkzeuge mit Abonnement aktiv.",
-    "maintenanceOffDesc": "Der Wartungsmodus ist deaktiviert. Lernwerkzeuge mit Abonnement sind verfügbar.",
-    "openSystemControls": "Systemsteuerung",
+    "maintenanceOnDesc": "Lernwerkzeuge, die ein Abonnement erfordern, sind vorübergehend nicht verfügbar.",
+    "manageSystem": "System verwalten",
+    "manageSystemDesc": "Allgemeine Plattformeinstellungen konfigurieren.",
     "adminRequired": "Admin-Zugriff erforderlich",
     "usersLoadError": "Benutzer konnten nicht geladen werden",
     "createUserError": "Benutzer konnte nicht erstellt werden",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Neuigkeiten",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Verstanden",
     "entry1": {
       "label": "Übe Gespräche für den Alltag",

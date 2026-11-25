@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Triage feature requests and bug reports from learners.",
     "reviewReviews": "Review reviews",
     "reviewReviewsDesc": "Approve verified learner reviews for display on the landing page.",
-    "maintenanceOnDesc": "Maintenance mode is active for subscription-gated learning tools.",
-    "maintenanceOffDesc": "Maintenance mode is off. Subscription-gated learning tools are available.",
-    "openSystemControls": "System controls",
+    "maintenanceOnDesc": "Learning tools that require a subscription are temporarily unavailable.",
+    "manageSystem": "Manage system",
+    "manageSystemDesc": "Configure general platform settings.",
     "adminRequired": "Admin access required",
     "usersLoadError": "Failed to load users",
     "createUserError": "Failed to create user",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Got it",
     "entry1": {
       "label": "Practise everyday conversations",

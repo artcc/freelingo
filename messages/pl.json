@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Triage próśb o funkcje i zgłoszeń błędów od uczących się.",
     "reviewReviews": "Przejrzyj recenzje",
     "reviewReviewsDesc": "Zatwierdzaj zweryfikowane recenzje uczących się do wyświetlenia na stronie głównej.",
-    "maintenanceOnDesc": "Tryb konserwacji jest aktywny dla narzędzi edukacyjnych wymagających subskrypcji.",
-    "maintenanceOffDesc": "Tryb konserwacji jest wyłączony. Narzędzia wymagające subskrypcji są dostępne.",
-    "openSystemControls": "Kontrola systemu",
+    "maintenanceOnDesc": "Narzędzia edukacyjne wymagające subskrypcji są tymczasowo niedostępne.",
+    "manageSystem": "Zarządzaj systemem",
+    "manageSystemDesc": "Skonfiguruj ogólne ustawienia platformy.",
     "adminRequired": "Wymagany dostęp administratora",
     "usersLoadError": "Nie udało się wczytać użytkowników",
     "createUserError": "Nie udało się utworzyć użytkownika",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Co nowego",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Rozumiem",
     "entry1": {
       "label": "Ćwicz codzienne rozmowy",

@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Beoordeel functieverzoeken en bugrapporten van leerlingen.",
     "reviewReviews": "Reviews beoordelen",
     "reviewReviewsDesc": "Keur geverifieerde reviews van leerlingen goed voor weergave op de landingspagina.",
-    "maintenanceOnDesc": "Onderhoudsmodus is actief voor leerhulpmiddelen waarvoor een abonnement nodig is.",
-    "maintenanceOffDesc": "Onderhoudsmodus is uitgeschakeld. Leerhulpmiddelen waarvoor een abonnement nodig is, zijn beschikbaar.",
-    "openSystemControls": "Systeeminstellingen",
+    "maintenanceOnDesc": "Leerhulpmiddelen waarvoor een abonnement nodig is, zijn tijdelijk niet beschikbaar.",
+    "manageSystem": "Systeem beheren",
+    "manageSystemDesc": "Pas de algemene instellingen van het platform aan.",
     "adminRequired": "Admin-toegang vereist",
     "usersLoadError": "Kan gebruikers niet laden",
     "createUserError": "Kan gebruiker niet aanmaken",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Nieuw",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Begrepen",
     "entry1": {
       "label": "Oefen alledaagse gesprekken",

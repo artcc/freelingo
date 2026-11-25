@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Håndter funktionsforslag og fejlrapporter fra brugerne.",
     "reviewReviews": "Gennemgå anmeldelser",
     "reviewReviewsDesc": "Godkend verificerede anmeldelser til visning på forsiden.",
-    "maintenanceOnDesc": "Vedligeholdelsestilstand er aktiv for læringsværktøjer, der kræver abonnement.",
-    "maintenanceOffDesc": "Vedligeholdelsestilstand er deaktiveret. Læringsværktøjer, der kræver abonnement, er tilgængelige.",
-    "openSystemControls": "Systemindstillinger",
+    "maintenanceOnDesc": "Læringsværktøjer, der kræver abonnement, er midlertidigt utilgængelige.",
+    "manageSystem": "Administrer systemet",
+    "manageSystemDesc": "Tilpas platformens generelle indstillinger.",
     "adminRequired": "Administratoradgang påkrævet",
     "usersLoadError": "Brugerne kunne ikke indlæses",
     "createUserError": "Brugeren kunne ikke oprettes",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Forstået",
     "entry1": {
       "label": "Øv hverdagens samtaler",

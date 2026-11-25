@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Obradi prijedloge značajki i prijave pogrešaka korisnika.",
     "reviewReviews": "Pregledaj recenzije",
     "reviewReviewsDesc": "Odobri provjerene recenzije korisnika za prikaz na početnoj stranici.",
-    "maintenanceOnDesc": "Način održavanja uključen je za alate za učenje koji zahtijevaju pretplatu.",
-    "maintenanceOffDesc": "Način održavanja je isključen. Alati za učenje koji zahtijevaju pretplatu dostupni su.",
-    "openSystemControls": "Postavke sustava",
+    "maintenanceOnDesc": "Alati za učenje koji zahtijevaju pretplatu privremeno nisu dostupni.",
+    "manageSystem": "Upravljanje sustavom",
+    "manageSystemDesc": "Prilagodi opće postavke platforme.",
     "adminRequired": "Potreban je administratorski pristup",
     "usersLoadError": "Korisnike nije bilo moguće učitati",
     "createUserError": "Korisnika nije bilo moguće stvoriti",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Razumijem",
     "entry1": {
       "label": "Vježbaj svakodnevne razgovore",

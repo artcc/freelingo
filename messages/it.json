@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Valuta richieste di funzionalità e segnalazioni di bug dagli studenti.",
     "reviewReviews": "Rivedi recensioni",
     "reviewReviewsDesc": "Approva recensioni verificate degli studenti da mostrare nella landing page.",
-    "maintenanceOnDesc": "La modalità manutenzione è attiva per gli strumenti di apprendimento con abbonamento.",
-    "maintenanceOffDesc": "La modalità manutenzione è disattivata. Gli strumenti con abbonamento sono disponibili.",
-    "openSystemControls": "Controlli di sistema",
+    "maintenanceOnDesc": "Gli strumenti di apprendimento che richiedono un abbonamento sono temporaneamente indisponibili.",
+    "manageSystem": "Gestisci sistema",
+    "manageSystemDesc": "Configura le impostazioni generali della piattaforma.",
     "adminRequired": "Accesso amministratore richiesto",
     "usersLoadError": "Impossibile caricare gli utenti",
     "createUserError": "Impossibile creare l’utente",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Novità",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Capito",
     "entry1": {
       "label": "Esercitati nelle conversazioni di ogni giorno",

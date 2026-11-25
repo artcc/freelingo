@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Triază cererile de funcționalități și rapoartele de erori de la cursanți.",
     "reviewReviews": "Revizuiește recenziile",
     "reviewReviewsDesc": "Aprobă recenziile verificate ale cursanților pentru afișare pe pagina principală.",
-    "maintenanceOnDesc": "Modul de mentenanță este activ pentru instrumentele de învățare care necesită abonament.",
-    "maintenanceOffDesc": "Modul de mentenanță este dezactivat. Instrumentele care necesită abonament sunt disponibile.",
-    "openSystemControls": "Controale de sistem",
+    "maintenanceOnDesc": "Instrumentele de învățare care necesită abonament sunt temporar indisponibile.",
+    "manageSystem": "Gestionează sistemul",
+    "manageSystemDesc": "Configurează setările generale ale platformei.",
     "adminRequired": "Este necesar acces de administrator",
     "usersLoadError": "Nu s-au putut încărca utilizatorii",
     "createUserError": "Nu s-a putut crea utilizatorul",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Noutăți",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Am înțeles",
     "entry1": {
       "label": "Exersează conversații de zi cu zi",
