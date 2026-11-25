@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Käsittele oppijoiden ominaisuusehdotukset ja virheraportit.",
     "reviewReviews": "Tarkastele arvosteluja",
     "reviewReviewsDesc": "Hyväksy vahvistetut käyttäjäarvostelut etusivulla näytettäviksi.",
-    "maintenanceOnDesc": "Huoltotila on käytössä tilausrajoitteisissa oppimistyökaluissa.",
-    "maintenanceOffDesc": "Huoltotila on pois käytöstä. Tilausrajoitteiset oppimistyökalut ovat saatavilla.",
-    "openSystemControls": "Järjestelmäasetukset",
+    "maintenanceOnDesc": "Tilausta edellyttävät oppimistyökalut ovat tilapäisesti poissa käytöstä.",
+    "manageSystem": "Hallitse järjestelmää",
+    "manageSystemDesc": "Muokkaa alustan yleisiä asetuksia.",
     "adminRequired": "Ylläpitäjän oikeudet vaaditaan",
     "usersLoadError": "Käyttäjiä ei voitu ladata",
     "createUserError": "Käyttäjää ei voitu luoda",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Selvä",
     "entry1": {
       "label": "Harjoittele arjen keskusteluja",

@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Trier les demandes de fonctionnalités et les rapports de bugs des apprenants.",
     "reviewReviews": "Examiner les avis",
     "reviewReviewsDesc": "Approuvez les avis vérifiés des apprenants pour les afficher sur la page d’accueil.",
-    "maintenanceOnDesc": "Le mode maintenance est actif pour les outils d’apprentissage soumis à abonnement.",
-    "maintenanceOffDesc": "Le mode maintenance est désactivé. Les outils soumis à abonnement sont disponibles.",
-    "openSystemControls": "Contrôles système",
+    "maintenanceOnDesc": "Les outils d’apprentissage nécessitant un abonnement sont temporairement indisponibles.",
+    "manageSystem": "Gérer le système",
+    "manageSystemDesc": "Configurez les paramètres généraux de la plateforme.",
     "adminRequired": "Accès administrateur requis",
     "usersLoadError": "Impossible de charger les utilisateurs",
     "createUserError": "Impossible de créer l’utilisateur",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Compris",
     "entry1": {
       "label": "Entraîne-toi aux conversations du quotidien",

@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Hantera elevers funktionsförslag och felrapporter.",
     "reviewReviews": "Granska omdömen",
     "reviewReviewsDesc": "Godkänn verifierade omdömen för visning på startsidan.",
-    "maintenanceOnDesc": "Underhållsläget är aktivt för prenumerationsstyrda inlärningsverktyg.",
-    "maintenanceOffDesc": "Underhållsläget är avstängt. Prenumerationsstyrda inlärningsverktyg är tillgängliga.",
-    "openSystemControls": "Systeminställningar",
+    "maintenanceOnDesc": "Inlärningsverktyg som kräver prenumeration är tillfälligt otillgängliga.",
+    "manageSystem": "Hantera systemet",
+    "manageSystemDesc": "Anpassa plattformens allmänna inställningar.",
     "adminRequired": "Administratörsåtkomst krävs",
     "usersLoadError": "Det gick inte att ladda användare",
     "createUserError": "Det gick inte att skapa användaren",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Nyheter",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Jag förstår",
     "entry1": {
       "label": "Öva på vardagliga samtal",

@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.15] - Unreleased
+
+### Changed
+
+- Move Manage system into the admin overview’s quick actions and show a maintenance notice under Operational alerts only while maintenance mode is active.
+- Update SQLAlchemy to 2.1.9, pydantic-settings to 2.16.3, and regex to 2026.11.24 for upstream fixes to ORM relationship loading, settings-file handling, and regex memory safety.
+- Update coverage to 7.17.5 for Python 3.14, Ruff to 0.17.6, and the Node.js and React type definitions to 26.6.8 and 19.3.1 respectively.
+
+### Security
+
+- Update FastAPI to prevent excessive request-parameter processing from blocking a worker (GHSA-f56c-v883-vx8r), Pydantic to fix validation of extra fields, and websockets to limit memory use when receiving fragmented messages.
+- Update Python and the Stripe SDK to distrust compromised certificate authorities, refresh certifi’s trusted roots, and update Node.js to address HTTP/2 and TLS vulnerabilities.
+
 ## [1.14.10] - 2026-11-17
 
 ### Added

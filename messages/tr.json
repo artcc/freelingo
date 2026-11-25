@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Öğrencilerden gelen özellik isteklerini ve hata bildirimlerini önceliklendirin.",
     "reviewReviews": "Yorumları incele",
     "reviewReviewsDesc": "Doğrulanmış öğrenci yorumlarını açılış sayfasında gösterilmek üzere onaylayın.",
-    "maintenanceOnDesc": "Aboneliğe bağlı öğrenme araçları için bakım modu etkin.",
-    "maintenanceOffDesc": "Bakım modu kapalı. Aboneliğe bağlı öğrenme araçları kullanılabilir.",
-    "openSystemControls": "Sistem denetimleri",
+    "maintenanceOnDesc": "Abonelik gerektiren öğrenme araçları geçici olarak kullanılamıyor.",
+    "manageSystem": "Sistemi yönet",
+    "manageSystemDesc": "Platformun genel ayarlarını yapılandırın.",
     "adminRequired": "Yönetici erişimi gerekli",
     "usersLoadError": "Kullanıcılar yüklenemedi",
     "createUserError": "Kullanıcı oluşturulamadı",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Anladım",
     "entry1": {
       "label": "Günlük konuşmalar için pratik yap",

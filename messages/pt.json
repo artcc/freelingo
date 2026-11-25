@@ -1464,9 +1464,9 @@
     "reviewFeedbackDesc": "Triar pedidos de funcionalidades e relatórios de erros dos alunos.",
     "reviewReviews": "Rever avaliações",
     "reviewReviewsDesc": "Aprova avaliações verificadas dos alunos para mostrar na página inicial.",
-    "maintenanceOnDesc": "O modo de manutenção está ativo para as ferramentas de aprendizagem com assinatura.",
-    "maintenanceOffDesc": "O modo de manutenção está desativado. As ferramentas com assinatura estão disponíveis.",
-    "openSystemControls": "Controlos do sistema",
+    "maintenanceOnDesc": "As ferramentas de aprendizagem que exigem assinatura estão temporariamente indisponíveis.",
+    "manageSystem": "Gerir sistema",
+    "manageSystemDesc": "Configure as definições gerais da plataforma.",
     "adminRequired": "Acesso de administrador necessário",
     "usersLoadError": "Falha ao carregar utilizadores",
     "createUserError": "Falha ao criar utilizador",
@@ -2161,7 +2161,7 @@
   },
   "whatsNew": {
     "title": "Novidades",
-    "version": "v1.14.10",
+    "version": "v1.14.15",
     "cta": "Entendido",
     "entry1": {
       "label": "Pratica conversas do dia a dia",
