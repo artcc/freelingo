@@ -2,5 +2,5 @@
 # Runtime dependencies are constrained by constraints.txt via requirements.txt.
 mypy_extensions==1.1.0
 pathspec==1.1.1
-platformdirs==4.13.5
+platformdirs==4.14.8
 pytokens==0.4.1
