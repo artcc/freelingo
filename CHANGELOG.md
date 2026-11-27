@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.20] - 2026-11-27
+
+### Added
+
+- Add on-demand admin analytics for daily practice, time since last practice, weekly arrivals and returns, 28-day study frequency, repeat use by feature, activation, and retention. The admin overview shows the last 30 complete days of practice alongside the enabled-account count.
+- Add a date-and-learner index on daily progress for reporting (`0062_progress_date_user`).
+
 ## [1.14.15] - 2026-11-25
 
 ### Changed

@@ -188,7 +188,12 @@ and cancellation policy belong to `subscriptions-freemium.instructions.md` (Acco
 
 Requires `role="admin"`. All endpoints return 403 for non-admin users.
 
-- **GET `/stats`** — Rate limit: 60/min. Aggregated admin overview metrics: total/active/inactive users, active/trialing/past_due subscriptions, total feedback, pending feedback, pending bug reports, and reviews pending approval.
+- **GET `/stats`** — Rate limit: 60/min. Aggregated admin overview metrics: total/enabled/disabled accounts (`users_active` means enabled), active/trialing/past_due subscriptions, total feedback, pending feedback, pending bug reports, and reviews pending approval.
+- **GET `/analytics/activity`** — Returns `{days: [{date, learners}]}` for the last 30 complete UTC days in chronological order.
+- **GET `/analytics`** — Optional `days=7|30|90` (default `30`, unsupported values return 422) selects the feature window. Returns:
+  - `days` (the fixed 30-day daily series), `weekly`, `monthly`, and `repeat_weekly` (each comparison is `{current, previous}`).
+  - `population` (`{last_7, days_8_30, over_30, never}`), `frequency` (`{one, two_three, four_seven, eight_thirteen, fourteen_plus}`), and `movement` (eight `{week, new, continuing, reactivated, not_returned}` rows).
+  - `features` (`{feature, learners, repeat_learners, volume}`), `activation` (`{week, registered, planned, practised}`), and `retention` (`{week, started, returned}`; `returned` is null for an immature cohort). See [Admin analytics](admin-analytics.instructions.md) for definitions, sources, and coverage.
 - **GET `/health`** — Rate limit: 60/min. Private admin diagnostic health check. Returns DB, Redis, TTS, and STT dependency status as `{"status":"ok"|"degraded","checks":{...}}`; returns HTTP 503 when any dependency check fails.
 - **GET `/users`** — Rate limit: 60/min. Lists users (paginated). Query params: `skip` (default 0), `limit` (default 10, max 100), `q` (search by username or email), `subscription` (`none`, `trialing`, `active`, `past_due`, `canceled`, `incomplete`, `incomplete_expired`, `unpaid`, `paused`), `role` (`user`, `admin`), and `is_active` (`true`, `false`). Returns `{items, total, skip, limit}`.
 - **POST `/users`** — Rate limit: 60/min. Creates user directly (bypasses `ALLOW_REGISTRATION`). Body requires `username`, `email`, `password`, `display_name`, `native_language`, `target_language`, and optional `role`; sends verification email if `EMAIL_ENABLED=true`.

@@ -34,8 +34,8 @@ different buckets.
 
 Unless listed below as an exception, current REST endpoints use an explicit `60/minute` decorator.
 This includes ordinary reads, profile changes, language management, progress, resource retrieval,
-flashcard CRUD/review, library reads, suspension and reverse-side preferences, admin operations,
-memories, feedback reads/mutations, and review reads/deletes.
+flashcard CRUD/review, library reads, suspension and reverse-side preferences, admin operations
+(including both admin analytics reads), memories, feedback reads/mutations, and review reads/deletes.
 
 ## Authentication and destructive operations
 

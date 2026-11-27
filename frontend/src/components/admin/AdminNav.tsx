@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
+  ChartNoAxesColumn,
   LayoutDashboard,
   MessageSquareText,
   Settings,
@@ -13,6 +14,7 @@ import {
 
 const items = [
   { href: '/admin', key: 'overview', icon: LayoutDashboard },
+  { href: '/admin/analytics', key: 'analytics', icon: ChartNoAxesColumn },
   { href: '/admin/users', key: 'users', icon: Users },
   { href: '/admin/feedback', key: 'feedback', icon: MessageSquareText },
   { href: '/admin/reviews', key: 'reviews', icon: Star },
@@ -34,6 +36,8 @@ export function AdminNav() {
           <Link
             key={item.href}
             href={item.href}
+            prefetch={item.href === '/admin/analytics' ? false : undefined}
+            aria-current={active ? 'page' : undefined}
             className={`flex min-h-9 items-center gap-2 px-3 py-2 font-mono text-xs tracking-widest uppercase transition-colors ${
               active
                 ? 'bg-fl-bg text-fl-fg border-fl-accent border-l-2'
