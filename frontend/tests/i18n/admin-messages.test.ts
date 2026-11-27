@@ -16,16 +16,35 @@ import ru from '../../../messages/ru.json'
 import sv from '../../../messages/sv.json'
 import tr from '../../../messages/tr.json'
 
-const locales = { da, de, es, fi, fr, hr, it: itMessages, nl, pl, pt, ro, ru, sv, tr }
+const locales = {
+  da,
+  de,
+  es,
+  fi,
+  fr,
+  hr,
+  it: itMessages,
+  nl,
+  pl,
+  pt,
+  ro,
+  ru,
+  sv,
+  tr,
+}
 
 describe('admin i18n messages', () => {
-  it('keeps admin namespace keys in sync across locales', () => {
-    const expectedKeys = Object.keys(en.admin).sort()
-
-    for (const [locale, messages] of Object.entries(locales)) {
-      expect(Object.keys(messages.admin).sort(), locale).toEqual(expectedKeys)
+  it.each(['admin', 'adminAnalytics'] as const)(
+    'keeps the %s namespace in sync across locales',
+    (namespace) => {
+      const expectedKeys = Object.keys(en[namespace]).sort()
+      for (const [locale, messages] of Object.entries(locales)) {
+        expect(Object.keys(messages[namespace]).sort(), locale).toEqual(
+          expectedKeys
+        )
+      }
     }
-  })
+  )
 })
 
 describe('shared interface messages', () => {
@@ -43,6 +62,11 @@ describe('shared interface messages', () => {
       expect(t('billing.pastDueDesc'), locale).not.toBe('billing.pastDueDesc')
       expect(t('vocabulary.sets', { count: 1 }), locale).toContain('1')
       expect(t('vocabulary.sets', { count: 2 }), locale).toContain('2')
+      expect(t('adminAnalytics.days', { days: 90 }), locale).toContain('90')
+      expect(t('adminAnalytics.dayBand', { range: '14–28' }), locale).toContain(
+        '14–28'
+      )
+      expect(t('adminAnalytics.previous', { count: 3 }), locale).toContain('3')
       expect(errors, locale).toEqual([])
     }
   })

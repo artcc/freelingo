@@ -315,6 +315,7 @@ Daily progress record, one row per user per day per plan.
   `{"grammar": [1.0, 0.5]}`. Progress service initializes new rows to `{}`; legacy rows remain null.
 
 **Constraint:** `UNIQUE(user_id, study_plan_id, date)` — one progress row per user per plan per day.
+The `(date, user_id)` index supports bounded activity counts across plans.
 
 Late activity reconciles subsequent streaks and replays their recorded skill updates against the
 corrected preceding snapshot, with rounding after each EMA step. Null histories are opaque skill

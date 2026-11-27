@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from sqlalchemy import Date, ForeignKey, Integer, UniqueConstraint
+from sqlalchemy import Date, ForeignKey, Index, Integer, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -14,6 +14,7 @@ class Progress(Base):
 
     __table_args__ = (
         UniqueConstraint("user_id", "study_plan_id", "date", name="uq_progress_user_plan_date"),
+        Index("ix_progress_date_user", "date", "user_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)

@@ -7,7 +7,7 @@
 ![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)](#quick-start)
-![Version](https://img.shields.io/badge/version-1.14.15-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.14.20-brightgreen?style=flat-square)
 
 <img src="assets/logo_large.png" alt="FreeLingo — language learning with Lingu, your voice conversation partner" width="900" />
 
@@ -90,6 +90,9 @@ The monorepo combines a **Next.js frontend** and a **FastAPI backend**, deployed
 - **Storage:** PostgreSQL 16 for durable application data; Redis 7 for sessions and operational state.
 
 The frontend never calls AI or speech providers directly.
+
+Administrators can inspect [learning activity, feature usage, activation, and retention](specs/admin-analytics.instructions.md)
+from the admin panel using their installation's retained study records.
 
 See [the architecture specification](specs/architecture.instructions.md) for system structure and
 [the Docker specification](specs/docker.instructions.md) for runtime and image details.

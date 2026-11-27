@@ -25,6 +25,7 @@ _AVATARS_DIR = "/app/avatars"
 _TTS_PREVIEWS_DIR = "/app/tts_previews"
 from app.routers import (
     admin,
+    admin_analytics,
     admin_dashboard_banner,
     analytics,
     assessment,
@@ -154,6 +155,7 @@ app.add_middleware(AnalyticsMiddleware)
 app.include_router(auth.router)
 app.include_router(analytics.router)
 app.include_router(admin.router)
+app.include_router(admin_analytics.router)
 app.include_router(admin_dashboard_banner.router)
 app.include_router(assessment.router)
 app.include_router(study_plan.router)

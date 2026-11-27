@@ -25,15 +25,17 @@ async def get_redis():
         await redis.aclose()
 
 
-async def get_current_user(
-    token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
-) -> User:
+async def get_access_token_subject(token: str = Depends(oauth2_scheme)) -> int:
     try:
         payload = decode_access_token(token)
-        user_id = int(payload["sub"])
+        return int(payload["sub"])
     except JWTError, KeyError, ValueError:
         raise HTTPException(status_code=401, detail="Invalid token") from None
 
+
+async def get_current_user(
+    user_id: int = Depends(get_access_token_subject), db: AsyncSession = Depends(get_db)
+) -> User:
     user = await db.get(User, user_id)
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="User not found or inactive")

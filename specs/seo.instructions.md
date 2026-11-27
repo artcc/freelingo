@@ -52,7 +52,7 @@ Authenticated route families and their descendants also inherit `noindex`:
 - `/grammar` and `/grammar/[slug]`, `/vocabulary` and `/vocabulary/[setId]`, and `/phrasebook`.
 - `/settings`, `/settings/languages`, `/settings/memories`, `/faq`, and `/feedback`.
 - `/billing/success` and `/billing/canceled`.
-- `/admin`, `/admin/users` and user detail, `/admin/reviews`, `/admin/feedback`, and `/admin/system`.
+- `/admin`, `/admin/analytics`, `/admin/users` and user detail, `/admin/reviews`, `/admin/feedback`, and `/admin/system`.
 
 API, WebSocket, Umami proxy, manifest, and static-resource URLs are not content pages and do not
 belong in the sitemap. Unknown pages use the existing Next.js not-found handling.
