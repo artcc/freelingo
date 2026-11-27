@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import {
   AlertTriangle,
   Bug,
+  ChartNoAxesColumn,
   Crown,
   MessageSquareText,
   Settings,
@@ -15,6 +16,7 @@ import {
   Users,
 } from 'lucide-react'
 import { AdminNav } from '@/components/admin/AdminNav'
+import { OverviewActivityPanel } from '@/components/admin/DailyActivityPanel'
 import {
   AdminBadge,
   AdminMetric,
@@ -38,6 +40,12 @@ interface AdminOverviewStats {
 }
 
 const actions = [
+  {
+    href: '/admin/analytics',
+    key: 'viewAnalytics',
+    descriptionKey: 'viewAnalyticsDesc',
+    icon: ChartNoAxesColumn,
+  },
   {
     href: '/admin/users',
     key: 'manageUsers',
@@ -128,7 +136,7 @@ export default function AdminOverviewPage() {
             value={
               loadingStats
                 ? t('loading')
-                : `${stats?.subscriptions_active ?? 0} / ${stats?.subscriptions_trialing ?? 0}`
+                : `${stats?.subscriptions_active ?? '—'} / ${stats?.subscriptions_trialing ?? '—'}`
             }
             icon={Crown}
           />
@@ -150,6 +158,8 @@ export default function AdminOverviewPage() {
           {statsError}
         </div>
       )}
+
+      <OverviewActivityPanel />
 
       <AdminPanel title={t('operationalAlerts')}>
         <div className="divide-fl-border divide-y">
@@ -190,7 +200,9 @@ export default function AdminOverviewPage() {
             <AdminBadge
               tone={stats?.feedback_bug_pending ? 'danger' : 'neutral'}
             >
-              {loadingStats ? t('loading') : (stats?.feedback_bug_pending ?? 0)}
+              {loadingStats
+                ? t('loading')
+                : (stats?.feedback_bug_pending ?? '—')}
             </AdminBadge>
           </Link>
           {stripeEnabled && (
@@ -215,20 +227,21 @@ export default function AdminOverviewPage() {
               >
                 {loadingStats
                   ? t('loading')
-                  : (stats?.subscriptions_past_due ?? 0)}
+                  : (stats?.subscriptions_past_due ?? '—')}
               </AdminBadge>
             </Link>
           )}
         </div>
       </AdminPanel>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {actions.map((action) => {
           const Icon = action.icon
           return (
             <Link
               key={action.href}
               href={action.href}
+              prefetch={action.href === '/admin/analytics' ? false : undefined}
               className="border-fl-border bg-fl-surface hover:border-fl-border-2 group border p-5 transition-colors"
             >
               <Icon

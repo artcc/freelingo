@@ -61,8 +61,11 @@ language codes, or access flags supplied by the frontend without verifying persi
 FastAPI and the Anthropic SDK require `opentelemetry-api`, pinned in `backend/constraints.txt`. The
 project does not install or configure an OpenTelemetry SDK or exporters. FastAPI's automatic exporter
 configuration is opt-in; Anthropic can use an externally registered global tracer provider and
-propagator. The API dependency alone does not enable telemetry export. Product analytics remains
-owned by the Umami integration described in `umami.instructions.md`.
+propagator. The API dependency alone does not enable telemetry export. Anonymous event delivery
+is described in `umami.instructions.md`.
+
+Internal [admin analytics](admin-analytics.instructions.md) query retained operational data on
+demand; their aggregate cache is independent of the learner request path.
 
 ### Models
 

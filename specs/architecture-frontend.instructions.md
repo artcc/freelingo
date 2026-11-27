@@ -562,6 +562,12 @@ backend authorization.
 - Reuse established shadcn/ui primitives and domain components before introducing a new abstraction.
 - Preserve responsive desktop/mobile navigation and page behavior.
 
+## Admin analytics
+
+The admin overview loads the daily practice chart independently of operational stats.
+`/admin/analytics` owns detailed usage and cohort requests. Neither the admin navigation
+nor the shared app layout loads these aggregates. See [Admin analytics](admin-analytics.instructions.md).
+
 ## Internationalization
 
 `next-intl` resolves request locale from middleware-provided state. Supported UI locales are declared

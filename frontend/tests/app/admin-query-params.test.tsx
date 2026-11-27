@@ -92,6 +92,11 @@ describe('admin page query params', () => {
     expect(url).toContain('type=bug')
     expect(url).toContain('status=pending')
     expect(url).toContain('sort=votes')
+    expect(
+      mockApiFetch.mock.calls.some(([path]) =>
+        String(path).startsWith('/api/admin/analytics')
+      )
+    ).toBe(false)
   })
 
   it('initializes admin users filters from URL search params', async () => {

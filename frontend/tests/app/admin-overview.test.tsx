@@ -1,10 +1,17 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import React from 'react'
 
 const translate = vi.hoisted(() => (key: string) => key)
 
 vi.mock('next-intl', () => ({
+  useLocale: () => 'en-GB',
   useTranslations: () => translate,
 }))
 
@@ -12,9 +19,14 @@ vi.mock('next/link', () => ({
   default: ({
     href,
     children,
+    prefetch,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) =>
-    React.createElement('a', { href: String(href), ...props }, children),
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { prefetch?: boolean }) =>
+    React.createElement(
+      'a',
+      { href, 'data-prefetch': prefetch, ...props },
+      children
+    ),
 }))
 
 vi.mock('next/navigation', () => ({
@@ -39,6 +51,14 @@ function jsonResponse(data: unknown, status = 200) {
   })
 }
 
+function serveOverview(stats: Response, activity = jsonResponse({ days: [] })) {
+  mockApiFetch.mockImplementation(async (url: string) => {
+    if (url === '/api/admin/stats') return stats
+    if (url === '/api/admin/analytics/activity') return activity
+    throw new Error(`Unexpected request: ${url}`)
+  })
+}
+
 describe('AdminOverviewPage', () => {
   beforeEach(() => {
     mockApiFetch.mockReset()
@@ -46,7 +66,7 @@ describe('AdminOverviewPage', () => {
   })
 
   it('loads and renders admin overview stats', async () => {
-    mockApiFetch.mockResolvedValueOnce(
+    serveOverview(
       jsonResponse({
         users_total: 12,
         users_active: 10,
@@ -57,7 +77,8 @@ describe('AdminOverviewPage', () => {
         feedback_total: 9,
         feedback_pending: 5,
         feedback_bug_pending: 2,
-      })
+      }),
+      jsonResponse({ days: [{ date: '2026-11-01', learners: 0 }] })
     )
 
     render(<AdminOverviewPage />)
@@ -69,21 +90,38 @@ describe('AdminOverviewPage', () => {
     expect(screen.getByText('5')).toBeDefined()
     expect(screen.getByText('pendingBugs')).toBeDefined()
     expect(screen.getByText('pastDueSubscriptions')).toBeDefined()
+    fireEvent.click(await screen.findByText('dailyValues'))
+    const table = screen.getByRole('table', { name: 'daily' })
+    expect(within(table).getByText('0')).toBeDefined()
+    expect(within(table).getByRole('rowheader').textContent).toBe('1 Nov 2026')
+    expect(mockApiFetch.mock.calls.map(([url]) => url).sort()).toEqual([
+      '/api/admin/analytics/activity',
+      '/api/admin/stats',
+    ])
+    const links = screen
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href') === '/admin/analytics')
+    expect(links).toHaveLength(2)
+    for (const link of links) {
+      expect(link.getAttribute('data-prefetch')).toBe('false')
+    }
   })
 
   it('shows a translated error when stats fail to load', async () => {
-    mockApiFetch.mockResolvedValueOnce(jsonResponse({}, 500))
+    serveOverview(jsonResponse({}, 500))
 
     render(<AdminOverviewPage />)
 
     await waitFor(() =>
       expect(screen.getByText('adminStatsError')).toBeDefined()
     )
+    expect(screen.queryByText('0 / 0')).toBeNull()
+    expect(await screen.findByText('empty')).toBeDefined()
   })
 
   it('hides subscription metrics and alerts when Stripe is disabled', async () => {
     useConfigStore.setState({ stripeEnabled: false })
-    mockApiFetch.mockResolvedValueOnce(
+    serveOverview(
       jsonResponse({
         users_total: 12,
         users_active: 10,
