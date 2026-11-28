@@ -700,8 +700,8 @@ Voice conversation owns microphone/VAD and playback lifecycle with cancellation 
 guards. Resource audio components fetch authenticated blobs and release object URLs on replacement or
 unmount.
 
-HTTP audio playback and TTS proxies preserve the backend MIME type (`audio/wav` for Gemini,
-`audio/mpeg` for local/OpenAI). Voice playback decodes either binary format with `decodeAudioData`
+HTTP audio playback and TTS proxies preserve the backend MIME type (`audio/wav` or `audio/mpeg`)
+without selecting a codec by provider. Voice playback decodes either binary format with `decodeAudioData`
 and supplies the matching MIME type to its HTML audio fallback. The WebSocket framing and turn
 pipeline remain provider-independent; persisted Listening recordings retain their own format.
 Player request budgets and the TTS proxy's cancellation/deadline behavior are defined in

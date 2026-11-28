@@ -910,6 +910,8 @@
     "announcementDismissError": "Could not dismiss the announcement. Try again."
   },
   "assessment": {
+    "voiceDemoCheck": "Open your one-time voice demo to check availability.",
+    "voiceLimitReached": "You have reached a usage limit for voice conversations.",
     "title": "Assessment",
     "subtitle": "CEFR Placement",
     "intro": "We'll ask you a few questions to determine your English level.",
@@ -1034,6 +1036,12 @@
     "voiceTrialLabel": "Voice trial",
     "voiceTrialTitle": "Try a real conversation now",
     "voiceTrialDesc": "Talk with Lingu for {minutes} minutes, free. Your tutor will adapt to the level you just unlocked.",
+    "voiceFreeAction": "Use my {duration}",
+    "voiceFreeDemoSaved": "Your free voice time is used first. Your one-time demo stays available.",
+    "voiceIncludedDemoSaved": "Voice is included in your current access. Your one-time demo stays available.",
+    "voiceDemoOffer": "Talk to Lingu for up to {duration} in your one-time demo.",
+    "voiceOfferCheck": "Check how much voice time is available before you start.",
+    "voiceOpen": "Open voice conversation",
     "voiceTrialStart": "Start free conversation",
     "voiceTrialSkip": "Skip for now"
   },
@@ -1745,6 +1753,17 @@
     "errorVadInit": "We could not start the voice conversation. Reload the page or try an up-to-date browser.",
     "warningTimeout": "Session ending in {seconds}s",
     "sessionEnded": "Session ended",
+    "dailyBalance": "Today: {duration} left",
+    "weeklyBalance": "This week: {duration} left",
+    "dailyReset": "Renews at 00:00 UTC.",
+    "weeklyReset": "Renews on Monday at 00:00 UTC.",
+    "sessionEndedInactive": "Session ended due to inactivity.",
+    "sessionEndedDuration": "Session time is up.",
+    "sessionEndedBalance": "The session ended after using the voice time available when it started.",
+    "demoDuration": "One-time demo: up to {duration}.",
+    "freeBalance": "Free voice time remaining: {duration}.",
+    "demoSaved": "Your one-time demo stays available.",
+    "quotaExceededWeekly": "You have used your weekly voice allowance.",
     "tapToStart": "Speak when ready",
     "you": "You",
     "assistant": "Lingu",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "What's New",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Got it",
     "entry1": {
       "label": "Practise everyday conversations",

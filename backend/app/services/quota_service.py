@@ -13,7 +13,9 @@ A limit of 0 means unlimited.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from typing import Literal
 
 # ── Key helpers ──────────────────────────────────────────────────────────────
 
@@ -53,6 +55,25 @@ def _seconds_until_midnight() -> int:
 # ── Public API ────────────────────────────────────────────────────────────────
 
 
+type VoiceTimeLimit = Literal["daily", "weekly", "freemium"]
+
+
+@dataclass(frozen=True)
+class QuotaDecision:
+    max_duration: int
+    error_code: str | None = None
+    error_message: str | None = None
+    close_code: int | None = None
+    limit: VoiceTimeLimit | None = None
+
+
+async def _time_balance(redis: object, key: str, minutes_limit: int) -> tuple[int, int | None]:
+    """Read one counter, returning whole minutes used and exact seconds remaining."""
+    seconds_used = int(await redis.get(key) or 0)  # type: ignore[attr-defined]
+    remaining = max(0, minutes_limit * 60 - seconds_used) if minutes_limit else None
+    return seconds_used // 60, remaining
+
+
 async def get_quota_status(
     redis: object,
     user_id: int,
@@ -62,10 +83,12 @@ async def get_quota_status(
 ) -> dict:
     """Return current usage without modifying any counter."""
     sessions_used = int(await redis.get(_week_key(user_id)) or 0)  # type: ignore[attr-defined]
-    seconds_used = int(await redis.get(_day_key(user_id)) or 0)  # type: ignore[attr-defined]
-    weekly_seconds_used = int(await redis.get(_weekly_seconds_key(user_id)) or 0)  # type: ignore[attr-defined]
-    minutes_used = seconds_used // 60
-    weekly_minutes_used = weekly_seconds_used // 60
+    minutes_used, daily_remaining = await _time_balance(
+        redis, _day_key(user_id), daily_minutes_limit
+    )
+    weekly_minutes_used, weekly_remaining = await _time_balance(
+        redis, _weekly_seconds_key(user_id), weekly_minutes_limit
+    )
 
     return {
         "sessions_this_week": sessions_used,
@@ -74,9 +97,11 @@ async def get_quota_status(
         "minutes_today": minutes_used,
         "minutes_limit": daily_minutes_limit,
         "time_unlimited": daily_minutes_limit == 0,
+        "daily_remaining_seconds": daily_remaining,
         "minutes_this_week": weekly_minutes_used,
         "weekly_minutes_limit": weekly_minutes_limit,
         "weekly_minutes_unlimited": weekly_minutes_limit == 0,
+        "weekly_remaining_seconds": weekly_remaining,
     }
 
 
@@ -131,13 +156,8 @@ async def check_daily_minutes(
     Returns (allowed, minutes_used, limit).
     When limit == 0, always returns (True, current_minutes, 0).
     """
-    seconds_used = int(await redis.get(_day_key(user_id)) or 0)  # type: ignore[attr-defined]
-    minutes_used = seconds_used // 60
-
-    if daily_minutes_limit == 0:
-        return True, minutes_used, 0
-
-    return minutes_used < daily_minutes_limit, minutes_used, daily_minutes_limit
+    minutes_used, remaining = await _time_balance(redis, _day_key(user_id), daily_minutes_limit)
+    return remaining != 0, minutes_used, daily_minutes_limit
 
 
 async def check_weekly_minutes(
@@ -150,17 +170,10 @@ async def check_weekly_minutes(
     Returns (allowed, minutes_used_this_week, limit).
     When limit == 0, always returns (True, current_minutes, 0).
     """
-    weekly_seconds = int(await redis.get(_weekly_seconds_key(user_id)) or 0)  # type: ignore[attr-defined]
-    weekly_minutes_used = weekly_seconds // 60
-
-    if weekly_minutes_limit == 0:
-        return True, weekly_minutes_used, 0
-
-    return (
-        weekly_minutes_used < weekly_minutes_limit,
-        weekly_minutes_used,
-        weekly_minutes_limit,
+    minutes_used, remaining = await _time_balance(
+        redis, _weekly_seconds_key(user_id), weekly_minutes_limit
     )
+    return remaining != 0, minutes_used, weekly_minutes_limit
 
 
 async def record_session_seconds(redis: object, user_id: int, seconds: int) -> None:
@@ -223,13 +236,8 @@ async def check_all_quotas(
     weekly_minutes_limit: int,
     weekly_sessions_limit: int,
     max_duration: int,
-) -> tuple[int, str | None, str | None, int | None]:
-    """Run all conversation quota checks in order.
-
-    Always returns (capped_max_duration, error_code, error_message, close_code).
-    On success: error_code, error_message, and close_code are all None.
-    On failure: max_duration is the original (uncapped) value.
-    """
+) -> QuotaDecision:
+    """Check admission in order, capping admitted sessions to their exact balance."""
     if monthly_tokens_limit > 0:
         from app.utils.db import db_session  # noqa: PLC0415
 
@@ -239,34 +247,32 @@ async def check_all_quotas(
             )
         if not tokens_ok:
             msg = f"Monthly token limit reached ({tokens_used}/{tokens_limit} tokens). Voice is unavailable until next month."
-            return (max_duration, "quota_exceeded_tokens", msg, 1008)
+            return QuotaDecision(max_duration, "quota_exceeded_tokens", msg, 1008)
 
-    daily_ok, minutes_used, minutes_limit = await check_daily_minutes(
-        redis, user_id, daily_minutes_limit
+    minutes_used, daily_remaining = await _time_balance(
+        redis, _day_key(user_id), daily_minutes_limit
     )
-    if not daily_ok:
-        msg = f"Daily time limit reached ({minutes_used}/{minutes_limit} min)."
-        return (max_duration, "quota_exceeded_time", msg, 1008)
+    if daily_remaining == 0:
+        msg = f"Daily time limit reached ({minutes_used}/{daily_minutes_limit} min)."
+        return QuotaDecision(max_duration, "quota_exceeded_time", msg, 1008)
 
-    weekly_min_ok, weekly_min_used, weekly_min_limit = await check_weekly_minutes(
-        redis, user_id, weekly_minutes_limit
+    weekly_min_used, weekly_remaining = await _time_balance(
+        redis, _weekly_seconds_key(user_id), weekly_minutes_limit
     )
-    if not weekly_min_ok:
-        msg = f"Weekly time limit reached ({weekly_min_used}/{weekly_min_limit} min)."
-        return (max_duration, "quota_exceeded_weekly_minutes", msg, 1008)
+    if weekly_remaining == 0:
+        msg = f"Weekly time limit reached ({weekly_min_used}/{weekly_minutes_limit} min)."
+        return QuotaDecision(max_duration, "quota_exceeded_weekly_minutes", msg, 1008)
 
     sessions_ok, sessions_used, sessions_limit = await check_and_increment_sessions(
         redis, user_id, weekly_sessions_limit
     )
     if not sessions_ok:
         msg = f"Weekly session limit reached ({sessions_used}/{sessions_limit})."
-        return (max_duration, "quota_exceeded_sessions", msg, 1008)
+        return QuotaDecision(max_duration, "quota_exceeded_sessions", msg, 1008)
 
-    if daily_minutes_limit > 0:
-        remaining = (daily_minutes_limit - minutes_used) * 60
-        max_duration = min(max_duration, remaining)
-    if weekly_minutes_limit > 0:
-        remaining = (weekly_minutes_limit - weekly_min_used) * 60
-        max_duration = min(max_duration, remaining)
-
-    return (max_duration, None, None, None)
+    limit: VoiceTimeLimit | None = None
+    if weekly_remaining is not None and weekly_remaining <= max_duration:
+        max_duration, limit = weekly_remaining, "weekly"
+    if daily_remaining is not None and daily_remaining <= max_duration:
+        max_duration, limit = daily_remaining, "daily"
+    return QuotaDecision(max_duration, limit=limit)

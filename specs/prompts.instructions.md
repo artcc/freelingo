@@ -21,9 +21,9 @@ considered when changing prompt-safety assumptions.
   Lingu name, memory-tool policy, and language overlays.
 - `tutor.py`: text and voice tutor system prompts, the context-aware voice session-start trigger,
   and the written-chat formatting policy.
-- `speech.py`: native-pronunciation instructions shared by Gemini and `gpt-4o-mini-tts` synthesis,
-  including OpenAI snapshots. The OpenAI adapter gates support; legacy/unknown OpenAI models receive
-  no instructions. Provider transmission and cache rules belong to `speech-services.instructions.md`. Supplied
+- `speech.py`: native-pronunciation instructions shared by Gemini, OpenAI Realtime synthesis and
+  `gpt-4o-mini-tts` (including its snapshots). Adapters send instructions separately from the spoken
+  text. Provider transmission and cache rules belong to `speech-services.instructions.md`. Supplied
   language codes add regional guidance; absent context requests per-passage language inference.
   Known languages also receive focused articulation guidance for native vowel/consonant quality,
   timing, stress, and tonal or pitch distinctions where relevant. These details apply only to passages

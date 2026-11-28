@@ -910,6 +910,8 @@
     "announcementDismissError": "No se pudo cerrar el anuncio. Inténtalo de nuevo."
   },
   "assessment": {
+    "voiceDemoCheck": "Abre tu demo de voz de un solo uso para comprobar si está disponible.",
+    "voiceLimitReached": "Has alcanzado un límite de uso para las conversaciones de voz.",
     "title": "Evaluación",
     "subtitle": "Nivel MCER",
     "intro": "Te haremos algunas preguntas para determinar tu nivel de inglés.",
@@ -1034,6 +1036,12 @@
     "voiceTrialLabel": "Prueba de voz",
     "voiceTrialTitle": "Prueba una conversación real ahora",
     "voiceTrialDesc": "Habla con Lingu durante {minutes} minutos gratis. Tu tutor se adaptará al nivel que acabas de desbloquear.",
+    "voiceFreeAction": "Usar mis {duration}",
+    "voiceFreeDemoSaved": "Primero se usa tu saldo de voz gratis. Conservas tu demo para más adelante.",
+    "voiceIncludedDemoSaved": "Ya tienes acceso a la conversación de voz. Conservas tu demo para más adelante.",
+    "voiceDemoOffer": "Habla con Lingu hasta {duration} en esta demo de un solo uso.",
+    "voiceOfferCheck": "Consulta cuánto tiempo de voz tienes disponible antes de empezar.",
+    "voiceOpen": "Abrir conversación de voz",
     "voiceTrialStart": "Empezar conversación gratis",
     "voiceTrialSkip": "Saltar por ahora"
   },
@@ -1745,6 +1753,17 @@
     "errorVadInit": "No hemos podido iniciar la conversación por voz. Recarga la página o prueba con un navegador actualizado.",
     "warningTimeout": "La sesión termina en {seconds}s",
     "sessionEnded": "Sesión finalizada",
+    "dailyBalance": "Hoy: te quedan {duration}",
+    "weeklyBalance": "Esta semana: te quedan {duration}",
+    "dailyReset": "El saldo se renueva a las 00:00 UTC.",
+    "weeklyReset": "El saldo se renueva el lunes a las 00:00 UTC.",
+    "sessionEndedInactive": "La sesión ha terminado por inactividad.",
+    "sessionEndedDuration": "Ha terminado el tiempo de esta sesión.",
+    "sessionEndedBalance": "La sesión ha terminado porque se ha consumido el saldo de voz disponible al iniciarla.",
+    "demoDuration": "Demo de un solo uso: hasta {duration}.",
+    "freeBalance": "Saldo de voz gratis: {duration}.",
+    "demoSaved": "Conservas tu demo para más adelante.",
+    "quotaExceededWeekly": "Has agotado tu saldo semanal de voz.",
     "tapToStart": "Habla cuando estés listo",
     "you": "Tú",
     "assistant": "Lingu",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "Novedades",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Entendido",
     "entry1": {
       "label": "Practica conversaciones del día a día",

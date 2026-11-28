@@ -15,6 +15,7 @@ import dynamic from 'next/dynamic'
 import type { ChatContextItem } from '@/lib/conversation-ws'
 import { PageLoading } from '@/components/ui/page-loading'
 import { FreemiumQuotaBanner } from '@/components/billing/FreemiumQuotaBanner'
+import FreeVoiceBalance from '@/components/conversation/FreeVoiceBalance'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
 import { MaintenanceGate } from '@/components/billing/MaintenanceBanner'
 import { apiFetch } from '@/lib/api'
@@ -376,19 +377,6 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
     freemiumStatus.situations_remaining <= 0
   const exhaustedFeature = situationsExhausted ? 'situations' : 'voice'
 
-  const freemiumVoiceRemaining = freemiumStatus
-    ? Math.ceil(freemiumStatus.voice_remaining_seconds / 60)
-    : undefined
-  const freemiumVoiceLimit = freemiumStatus
-    ? Math.ceil(freemiumStatus.voice_limit_seconds / 60)
-    : undefined
-  const showFreemiumVoicePill =
-    stripeEnabled &&
-    !isSubscribed(user, stripeEnabled) &&
-    !freemiumTrialActive &&
-    freemiumStatus &&
-    freemiumStatus.voice_limit_seconds > 0
-
   const [initialContext, setInitialContext] = useState<
     ChatContextItem[] | undefined
   >(undefined)
@@ -400,7 +388,7 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
   const [readyPlanKey, setReadyPlanKey] = useState<string>()
   const [voiceTrial, setVoiceTrial] = useState<{
     token: string
-    durationSeconds: number
+    durationSeconds?: number
     cefrLevel?: string
     targetLanguage?: string
   } | null>(null)
@@ -468,9 +456,11 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
           setVoiceTrial({
             token: parsed.token,
             durationSeconds:
-              typeof parsed.durationSeconds === 'number'
+              typeof parsed.durationSeconds === 'number' &&
+              Number.isSafeInteger(parsed.durationSeconds) &&
+              parsed.durationSeconds > 0
                 ? parsed.durationSeconds
-                : 300,
+                : undefined,
             cefrLevel:
               typeof parsed.cefrLevel === 'string'
                 ? parsed.cefrLevel
@@ -534,7 +524,17 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
         !sessionActive &&
         !sessionStarted ? (
         <>
-          <FreemiumQuotaBanner feature={exhaustedFeature} className="mb-4" />
+          {exhaustedFeature === 'voice' &&
+          freemiumStatus &&
+          freemiumStatus.voice_limit_seconds > 0 ? (
+            <div className="mb-4">
+              <FreeVoiceBalance
+                seconds={freemiumStatus.voice_remaining_seconds}
+              />
+            </div>
+          ) : (
+            <FreemiumQuotaBanner feature={exhaustedFeature} className="mb-4" />
+          )}
           <PaywallBanner feature={exhaustedFeature} compact />
         </>
       ) : (
@@ -553,12 +553,6 @@ function ConversationPageContent({ practice }: { practice?: LessonPractice }) {
               : practice?.title
           }
           onSessionActiveChange={handleSessionActiveChange}
-          freemiumVoiceRemaining={
-            showFreemiumVoicePill ? freemiumVoiceRemaining : undefined
-          }
-          freemiumVoiceLimit={
-            showFreemiumVoicePill ? freemiumVoiceLimit : undefined
-          }
         />
       )}
     </MaintenanceGate>

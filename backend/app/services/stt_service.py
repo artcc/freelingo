@@ -70,13 +70,16 @@ class OpenAISTTService:
         *,
         language: str,
     ) -> str:
-        """Transcribe audio using OpenAI Whisper API."""
+        """Transcribe a completed recording in the owning plan's language."""
         audio_file = (filename, io.BytesIO(audio_bytes), mime_type)
+        language_hint = (
+            {"languages": [language]} if self.model == "gpt-transcribe" else {"language": language}
+        )
         response = await self._client.audio.transcriptions.create(
             model=self.model,
             file=audio_file,
-            language=language,
             timeout=60.0,
+            **language_hint,
         )
         text = response.text.strip()
         logger.info(

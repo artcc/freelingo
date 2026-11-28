@@ -463,7 +463,9 @@ persisted on each user; defaults come from backend `Settings` and environment ov
 
 - `conversation_weekly_sessions`: weekly sessions, initialized from `DEFAULT_CONVERSATION_WEEKLY_SESSIONS`;
 - `conversation_daily_minutes` and `conversation_weekly_minutes`: daily and weekly minutes,
-  initialized from `DEFAULT_CONVERSATION_DAILY_MINUTES` and `DEFAULT_CONVERSATION_WEEKLY_MINUTES`;
+  initialized from `DEFAULT_CONVERSATION_DAILY_MINUTES` and `DEFAULT_CONVERSATION_WEEKLY_MINUTES`
+  (defaults: 30 minutes per UTC day and 60 per ISO week, starting Monday at 00:00 UTC).
+  Admission uses remaining seconds from recorded usage, even when less than a minute remains;
 - `monthly_tokens_limit`: monthly tokens, initialized from `DEFAULT_MONTHLY_TOKENS_LIMIT`;
 - `conversation_max_duration`: maximum conversation seconds, initialized from `DEFAULT_CONVERSATION_MAX_DURATION`;
 - `conversation_inactivity_timeout`: inactivity seconds, initialized from `DEFAULT_CONVERSATION_INACTIVITY_TIMEOUT`.
@@ -482,7 +484,9 @@ Session duration in seconds comes from `ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS`
 `Settings` and the deployment environment.
 
 Voice access gives precedence to subscription, freemium trial, and remaining freemium voice balance
-before considering the demo. Consequently, a supplied demo token is not consumed while an earlier
+before considering the demo. The offer identifies the allowance available for the next session
+without promising the demo duration when ordinary access takes precedence. A supplied demo token
+is not consumed while an earlier
 access path succeeds. When selected, the WebSocket atomically claims the active account's unused
 durable right with a conditional database update, then requires deletion of exactly one Redis
 credential before committing. Concurrent connections cannot both claim the right, whether they

@@ -910,6 +910,8 @@
     "announcementDismissError": "Duyuru kapatılamadı. Tekrar deneyin."
   },
   "assessment": {
+    "voiceDemoCheck": "Kullanılabilirliğini kontrol etmek için tek kullanımlık sesli demonu aç.",
+    "voiceLimitReached": "Sesli konuşma kullanım sınırına ulaştın.",
     "title": "Seviye Tespiti",
     "subtitle": "CEFR Seviye Belirleme",
     "intro": "İngilizce seviyenizi belirlemek için size birkaç soru soracağız.",
@@ -1035,6 +1037,12 @@
     "voiceTrialTitle": "Hemen gerçek bir konuşma deneyin",
     "voiceTrialDesc": "Lingu ile {minutes} dakika ücretsiz konuşun. Eğitmeniniz yeni açtığınız seviyeye uyum sağlayacak.",
     "voiceTrialStart": "Ücretsiz konuşmayı başlat",
+    "voiceFreeAction": "Ücretsiz süremi kullan: {duration}",
+    "voiceFreeDemoSaved": "Önce ücretsiz sesli konuşma süreniz kullanılır. Tek seferlik deneme hakkınız saklı kalır.",
+    "voiceIncludedDemoSaved": "Mevcut erişiminize sesli konuşmalar da dahildir. Tek seferlik deneme hakkınız saklı kalır.",
+    "voiceDemoOffer": "Tek seferlik denemenizde Lingu ile en fazla {duration} konuşabilirsiniz.",
+    "voiceOfferCheck": "Başlamadan önce sesli konuşma için ne kadar süreniz olduğunu kontrol edin.",
+    "voiceOpen": "Sesli konuşmayı aç",
     "voiceTrialSkip": "Şimdilik atla"
   },
   "plan": {
@@ -1752,6 +1760,17 @@
     "quotaMinutes": "Bugünkü dakikalar",
     "quotaUnlimited": "Sınırsız",
     "quotaExceededSessions": "Bu haftaki tüm oturumlarınızı kullandınız.",
+    "dailyBalance": "Bugün kalan süre: {duration}",
+    "weeklyBalance": "Bu hafta kalan süre: {duration}",
+    "dailyReset": "Her gün UTC 00:00'da yenilenir.",
+    "weeklyReset": "Her pazartesi UTC 00:00'da yenilenir.",
+    "sessionEndedInactive": "Oturum, işlem yapılmadığı için sona erdi.",
+    "sessionEndedDuration": "Oturum süresi doldu.",
+    "sessionEndedBalance": "Oturum başlarken kullanılabilir olan sesli konuşma süresi dolduğu için oturum sona erdi.",
+    "demoDuration": "Tek seferlik deneme: en fazla {duration}.",
+    "freeBalance": "Kalan ücretsiz sesli konuşma süresi: {duration}.",
+    "demoSaved": "Tek seferlik deneme hakkınız saklı kalır.",
+    "quotaExceededWeekly": "Bu haftaki sesli konuşma sürenizin tamamını kullandınız.",
     "quotaExceededTime": "Günlük pratik sürenizin tamamını kullandınız.",
     "quotaExceededTokens": "Aylık yapay zekâ kullanım sınırınıza ulaştınız. Sınır yenilendiğinde devam edebilirsiniz.",
     "freemiumVoiceRemaining": "Ücretsiz sesli konuşma: bu hafta {remaining}/{limit} dk",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "Yenilikler",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Anladım",
     "entry1": {
       "label": "Günlük konuşmalar için pratik yap",

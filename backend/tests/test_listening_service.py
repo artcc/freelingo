@@ -87,6 +87,33 @@ class TestGetAvailableExercise:
 
 
 class TestGenerateAndSaveExercise:
+    @pytest.mark.parametrize(
+        ("text", "expected_error", "message"),
+        [(" \n", ValueError, "no text to synthesize"), ("Hello.", RuntimeError, "no audio")],
+    )
+    async def test_empty_source_or_audio_is_not_published(
+        self, db_session, tmp_path, text, expected_error, message
+    ):
+        from app.schemas.listening import ListeningGenerationResponse
+        from app.services.listening_service import generate_and_save_exercise
+
+        parsed = ListeningGenerationResponse(topic="Test", text=text, questions=_QUESTIONS)
+        tts = _FakeTTS()
+        tts.synthesize.return_value = b""
+        with (
+            patch(
+                "app.services.listening_service.llm_adapter.structured_output", return_value=parsed
+            ),
+            pytest.raises(expected_error, match=message),
+        ):
+            await generate_and_save_exercise("B1", "en-GB", db_session, tts, str(tmp_path))
+        if text.strip():
+            tts.synthesize.assert_awaited_once_with(text, None, language="en-GB")
+        else:
+            tts.synthesize.assert_not_awaited()
+        assert not list(tmp_path.iterdir())
+        assert (await db_session.execute(select(ListeningExercise))).scalars().all() == []
+
     @pytest.mark.parametrize("failure", [RuntimeError("lease lost"), asyncio.CancelledError()])
     async def test_audio_is_removed_when_second_guard_fails(self, db_session, tmp_path, failure):
         from app.schemas.listening import ListeningGenerationResponse

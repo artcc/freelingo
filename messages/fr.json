@@ -910,6 +910,8 @@
     "announcementDismissError": "Impossible de fermer l'annonce. Réessayez."
   },
   "assessment": {
+    "voiceDemoCheck": "Ouvrez votre démo vocale à usage unique pour vérifier sa disponibilité.",
+    "voiceLimitReached": "Vous avez atteint une limite d’utilisation des conversations vocales.",
     "title": "Évaluation",
     "subtitle": "Niveau CECR",
     "intro": "Nous allons vous poser quelques questions pour déterminer votre niveau d'anglais.",
@@ -1035,6 +1037,12 @@
     "voiceTrialTitle": "Essayez une vraie conversation maintenant",
     "voiceTrialDesc": "Parlez gratuitement avec Lingu pendant {minutes} minutes. Votre tuteur s'adaptera au niveau que vous venez de débloquer.",
     "voiceTrialStart": "Commencer la conversation gratuite",
+    "voiceFreeAction": "Utiliser mon temps gratuit ({duration})",
+    "voiceFreeDemoSaved": "Votre temps gratuit de conversation est utilisé en priorité. Votre essai unique reste disponible.",
+    "voiceIncludedDemoSaved": "Votre accès actuel inclut les conversations vocales. Votre essai unique reste disponible.",
+    "voiceDemoOffer": "Profitez de votre essai unique pour parler avec Lingu pendant {duration} maximum.",
+    "voiceOfferCheck": "Avant de commencer, vérifiez de combien de temps vous disposez pour parler avec Lingu.",
+    "voiceOpen": "Ouvrir la conversation vocale",
     "voiceTrialSkip": "Passer pour le moment"
   },
   "plan": {
@@ -1745,6 +1753,17 @@
     "errorVadInit": "Nous n'avons pas pu démarrer la conversation vocale. Rechargez la page ou essayez un navigateur à jour.",
     "warningTimeout": "La session se termine dans {seconds}s",
     "sessionEnded": "Session terminée",
+    "dailyBalance": "Temps restant aujourd’hui : {duration}",
+    "weeklyBalance": "Temps restant cette semaine : {duration}",
+    "dailyReset": "Renouvellement à 00:00 UTC.",
+    "weeklyReset": "Renouvellement le lundi à 00:00 UTC.",
+    "sessionEndedInactive": "La session a pris fin pour cause d’inactivité.",
+    "sessionEndedDuration": "Le temps prévu pour cette session est écoulé.",
+    "sessionEndedBalance": "La session s’est terminée lorsque le temps de conversation disponible au départ a été écoulé.",
+    "demoDuration": "Essai unique : {duration} maximum.",
+    "freeBalance": "Temps de conversation gratuit restant : {duration}.",
+    "demoSaved": "Votre essai unique reste disponible.",
+    "quotaExceededWeekly": "Vous avez épuisé votre temps de conversation vocale pour cette semaine.",
     "tapToStart": "Parlez quand vous êtes prêt",
     "you": "Vous",
     "assistant": "Lingu",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "Nouveautés",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Compris",
     "entry1": {
       "label": "Entraîne-toi aux conversations du quotidien",

@@ -910,6 +910,8 @@
     "announcementDismissError": "Ilmoitusta ei voitu sulkea. Yritä uudelleen."
   },
   "assessment": {
+    "voiceDemoCheck": "Tarkista saatavuus avaamalla kertakäyttöinen äänikeskusteludemo.",
+    "voiceLimitReached": "Olet saavuttanut äänikeskustelujen käyttörajan.",
     "title": "Tasoarvio",
     "subtitle": "CEFR-tason määritys",
     "intro": "Esitämme muutaman kysymyksen englannin taitotasosi selvittämiseksi.",
@@ -1035,6 +1037,12 @@
     "voiceTrialTitle": "Kokeile oikeaa keskustelua nyt",
     "voiceTrialDesc": "Puhu Lingun kanssa {minutes} minuuttia ilmaiseksi. Opettajasi mukautuu juuri saavuttamaasi tasoon.",
     "voiceTrialStart": "Aloita ilmainen keskustelu",
+    "voiceFreeAction": "Käytä puheaikaani ({duration})",
+    "voiceFreeDemoSaved": "Maksuton puheaikasi käytetään ensin. Kertakokeilusi säilyy myöhemmäksi.",
+    "voiceIncludedDemoSaved": "Äänikeskustelut sisältyvät nykyiseen käyttöoikeuteesi. Kertakokeilusi säilyy myöhemmäksi.",
+    "voiceDemoOffer": "Kertakokeilussa voit jutella Lingun kanssa enintään {duration}.",
+    "voiceOfferCheck": "Tarkista ennen aloitusta, paljonko puheaikaa sinulla on.",
+    "voiceOpen": "Avaa äänikeskustelu",
     "voiceTrialSkip": "Ohita toistaiseksi"
   },
   "plan": {
@@ -1745,6 +1753,17 @@
     "errorVadInit": "Emme voineet aloittaa äänikeskustelua. Lataa sivu uudelleen tai kokeile ajan tasalla olevaa selainta.",
     "warningTimeout": "Keskustelu päättyy {seconds} sekunnin kuluttua",
     "sessionEnded": "Keskustelu päättynyt",
+    "dailyBalance": "Tänään jäljellä: {duration}",
+    "weeklyBalance": "Tällä viikolla jäljellä: {duration}",
+    "dailyReset": "Puheaikasi uusiutuu klo 00.00 UTC.",
+    "weeklyReset": "Puheaikasi uusiutuu maanantaisin klo 00.00 UTC.",
+    "sessionEndedInactive": "Keskustelu päättyi, koska se oli käyttämättä.",
+    "sessionEndedDuration": "Tämän keskustelun aika päättyi.",
+    "sessionEndedBalance": "Keskustelu päättyi, kun sen alussa käytettävissä ollut puheaika loppui.",
+    "demoDuration": "Kertakokeilu: enintään {duration}.",
+    "freeBalance": "Maksutonta puheaikaa jäljellä: {duration}.",
+    "demoSaved": "Kertakokeilusi säilyy myöhemmäksi.",
+    "quotaExceededWeekly": "Olet käyttänyt kaiken tämän viikon puheaikasi.",
     "tapToStart": "Puhu, kun olet valmis",
     "you": "Sinä",
     "assistant": "Lingu",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "Uutta",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Selvä",
     "entry1": {
       "label": "Harjoittele arjen keskusteluja",

@@ -172,14 +172,14 @@ async def voice_preview(
             detail="TTS service is not enabled",
         )
 
-    cache_path = os.path.join(_PREVIEW_DIR, f"{voice}.mp3")
-    _, media_type = get_tts_audio_format(tts_service)
+    extension, media_type = get_tts_audio_format(tts_service)
+    cache_path = os.path.join(_PREVIEW_DIR, f"{voice}.{extension}")
     if isinstance(tts_service, GeminiTTSService):
         key = tts_service.get_cache_key(_PREVIEW_TEXT, voice, "en-GB")
-        cache_path = os.path.join(_PREVIEW_DIR, f"gemini-{voice}-{key}.wav")
+        cache_path = os.path.join(_PREVIEW_DIR, f"gemini-{voice}-{key}.{extension}")
     if isinstance(tts_service, OpenAITTSService):
         key = tts_service.get_cache_key(_PREVIEW_TEXT, voice)
-        cache_path = os.path.join(_PREVIEW_DIR, f"{voice}-{key}.mp3")
+        cache_path = os.path.join(_PREVIEW_DIR, f"{voice}-{key}.{extension}")
 
     if not os.path.exists(cache_path):
         os.makedirs(_PREVIEW_DIR, exist_ok=True)

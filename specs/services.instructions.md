@@ -215,10 +215,8 @@ and the voice pipeline continue supplying their existing text.
 
 `tts_service.py` implements local Kokoro and OpenAI; `gemini_tts_service.py` implements Gemini.
 All expose `synthesize(text, voice=None, language=None) -> bytes`. `get_tts_audio_format()` supplies
-the selected adapter's output MIME type and extension: local/OpenAI use MP3;
-Gemini uses native WAV. OpenAI supplies shared native-pronunciation instructions for `gpt-4o-mini-tts`
-and its snapshots, using the supplied language/region when available and requesting language inference otherwise.
-Legacy/unknown OpenAI models and Kokoro ignore `language` and receive no pronunciation instructions.
+the selected adapter's output MIME type and extension. OpenAI Realtime delegates each synthesis to
+`openai_realtime_tts.py` and returns WAV, as does Gemini. Kokoro and the OpenAI Speech API return MP3.
 Voice selection remains independent of language. OpenAI and Gemini expose logical `female`/`male`
 choices and resolve actual configured voices only in the backend. Model selection, voice mappings,
 and configuration validation are owned by `speech-services.instructions.md`.

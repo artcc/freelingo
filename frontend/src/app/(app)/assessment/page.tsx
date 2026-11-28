@@ -8,6 +8,7 @@ import { useLanguageStore, waitForLanguageSwitch } from '@/store/language'
 import { isSubscribed, useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import BeginnerGate from '@/components/assessment/BeginnerGate'
+import AssessmentVoiceOffer from '@/components/assessment/AssessmentVoiceOffer'
 import AdaptiveQuizCard from '@/components/assessment/AdaptiveQuizCard'
 import DurationSelector, {
   DURATION_OPTIONS,
@@ -113,6 +114,7 @@ function adjustLevel(current: CEFRLevel, direction: 'up' | 'down'): CEFRLevel {
 export default function AssessmentPage() {
   const t = useTranslations('assessment')
   const tCommon = useTranslations('common')
+  const tConversation = useTranslations('conversation')
   const locale = useLocale()
   const router = useRouter()
   const activeLanguage = useLanguageStore((s) => s.activeLanguage)
@@ -537,20 +539,37 @@ export default function AssessmentPage() {
     }
   }
 
-  function startVoiceTrial() {
+  function openVoiceConversation(useDemo: boolean) {
     if (!voiceTrial?.token) return
     const flow = flowRef.current
     if (!isCurrentFlow(flow)) return
-    sessionStorage.setItem(
-      'assessment_voice_trial',
-      JSON.stringify({
-        token: voiceTrial.token,
-        durationSeconds: voiceTrial.duration_seconds ?? 300,
-        cefrLevel: selectedLevel,
-        planId: createdPlanId,
-        targetLanguage: flow.language,
-      })
-    )
+    if (useDemo) {
+      sessionStorage.setItem(
+        'assessment_voice_trial',
+        JSON.stringify({
+          token: voiceTrial.token,
+          durationSeconds: voiceTrial.duration_seconds,
+          cefrLevel: selectedLevel,
+          planId: createdPlanId,
+          targetLanguage: flow.language,
+        })
+      )
+    } else {
+      // A change in ordinary access before startup must not silently spend the demo.
+      sessionStorage.removeItem('assessment_voice_trial')
+      sessionStorage.setItem(
+        'voice_context',
+        JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content:
+                'Please start a short voice conversation adapted to my assessed level.',
+            },
+          ],
+        })
+      )
+    }
     router.push('/conversation')
   }
 
@@ -693,14 +712,14 @@ export default function AssessmentPage() {
                   {t('voiceTrialTitle')}
                 </p>
                 <p className="text-fl-muted-1 font-mono text-xs leading-relaxed">
-                  {t('voiceTrialDesc', { minutes: 5 })}
+                  {t('voiceOfferCheck')}
                 </p>
                 <button
                   onClick={requestVoiceTrial}
                   disabled={trialLoading}
                   className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors disabled:opacity-50"
                 >
-                  {trialLoading ? '...' : `${t('voiceTrialStart')} →`}
+                  {trialLoading ? '...' : `${t('voiceOpen')} →`}
                 </button>
               </div>
             )}
@@ -913,14 +932,13 @@ export default function AssessmentPage() {
 
   // ── Voice trial offer ─────────────────────────────────────────────────────
   if (step === 'voice-trial-offer') {
-    const minutes = Math.round((voiceTrial?.duration_seconds ?? 300) / 60)
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-6">
         <div className="border-fl-border bg-fl-surface w-full max-w-md border">
           <div className="border-fl-border flex items-center gap-2 border-b px-6 py-4">
             <span className="text-fl-label text-fl-muted-3">●</span>
             <span className="text-fl-label text-fl-muted-2 font-mono tracking-widest uppercase">
-              {t('voiceTrialLabel')}
+              {tConversation('title')}
             </span>
           </div>
           <div className="space-y-6 p-8 text-center">
@@ -932,20 +950,11 @@ export default function AssessmentPage() {
                 {selectedLevel}
               </p>
             </div>
-            <div className="border-fl-border bg-fl-surface-2 border px-4 py-5">
-              <p className="text-fl-fg mb-2 font-mono text-base font-bold">
-                {t('voiceTrialTitle')}
-              </p>
-              <p className="text-fl-muted-1 font-mono text-xs leading-relaxed">
-                {t('voiceTrialDesc', { minutes })}
-              </p>
-            </div>
-            <button
-              onClick={startVoiceTrial}
-              className="bg-fl-accent text-fl-accent-fg hover:bg-fl-accent/90 w-full py-3 font-mono text-sm font-bold tracking-widest uppercase transition-colors"
-            >
-              {t('voiceTrialStart')} →
-            </button>
+            <AssessmentVoiceOffer
+              key={`${sessionVersion}:${user?.id}`}
+              demoSeconds={voiceTrial?.duration_seconds}
+              onOpen={openVoiceConversation}
+            />
             <button
               onClick={() => router.push('/plan')}
               className="text-fl-hint text-fl-muted-4 hover:text-fl-muted-2 w-full font-mono tracking-widest uppercase transition-colors"

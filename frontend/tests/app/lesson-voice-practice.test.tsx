@@ -294,6 +294,9 @@ describe('Lesson practice entry', () => {
     setVoiceQuota(0)
     render(<ConversationPage />)
     await screen.findByTestId('paywall')
+    expect(
+      screen.getByText('conversation.freeBalance conversation.weeklyReset')
+    ).toBeVisible()
     expect(mocks.voice).not.toHaveBeenCalled()
   })
 
@@ -314,6 +317,9 @@ describe('Lesson practice entry', () => {
       act(() => setVoiceQuota(0))
       if (mode === 'demo') {
         expect(screen.getByTestId('voice')).toBeInTheDocument()
+        expect(
+          mocks.voice.mock.lastCall?.[0].voiceTrialDurationSeconds
+        ).toBeUndefined()
         expect(screen.queryByTestId('paywall')).toBeNull()
         expect(mocks.voice.mock.lastCall?.[0].voiceTrialToken).toBe('demo-token')
       } else {

@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     TTS_PROVIDER: Literal["local", "openai", "gemini"] = "local"
     TTS_BASE_URL: str = "http://kokoro:8880"
     TTS_VOICE: str = "af_heart"
-    OPENAI_TTS_MODEL: str = "gpt-4o-mini-tts"
+    OPENAI_TTS_MODEL: str = "gpt-realtime-2.1-mini"
     OPENAI_TTS_VOICE: Literal["female", "male"] = "female"
     OPENAI_TTS_FEMALE_VOICE: str = "marin"
     OPENAI_TTS_MALE_VOICE: str = "cedar"
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     GEMINI_TTS_TIMEOUT_SECONDS: float = Field(default=50.0, gt=0, allow_inf_nan=False)
     STT_PROVIDER: str = "local"  # local | openai
     STT_BASE_URL: str = "http://whisper:9000"
-    OPENAI_STT_MODEL: str = "whisper-1"
+    OPENAI_STT_MODEL: str = "gpt-transcribe"
     RATE_LIMIT_ENABLED: bool = True
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     COOKIE_SECURE: bool = False
@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     DEFAULT_CONVERSATION_INACTIVITY_TIMEOUT: int = 180
     DEFAULT_CONVERSATION_WEEKLY_SESSIONS: int = 0
     DEFAULT_CONVERSATION_DAILY_MINUTES: int = 30
-    DEFAULT_CONVERSATION_WEEKLY_MINUTES: int = 90
+    DEFAULT_CONVERSATION_WEEKLY_MINUTES: int = 60
     DEFAULT_MONTHLY_TOKENS_LIMIT: int = 1_000_000
     ASSESSMENT_VOICE_TRIAL_DURATION_SECONDS: int = 300
 

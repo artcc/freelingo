@@ -910,6 +910,8 @@
     "announcementDismissError": "Meddelelsen kunne ikke lukkes. Prøv igen."
   },
   "assessment": {
+    "voiceDemoCheck": "Åbn din engangsdemo med tale for at se, om den er tilgængelig.",
+    "voiceLimitReached": "Du har nået en grænse for brug af stemmesamtaler.",
     "title": "Niveauvurdering",
     "subtitle": "Placering efter CEFR",
     "intro": "Vi stiller dig nogle spørgsmål for at vurdere dit engelskniveau.",
@@ -1035,6 +1037,12 @@
     "voiceTrialTitle": "Prøv en rigtig samtale nu",
     "voiceTrialDesc": "Tal med Lingu i {minutes} minutter gratis. Din lærer tilpasser sig det niveau, du lige har opnået.",
     "voiceTrialStart": "Start gratis samtale",
+    "voiceFreeAction": "Brug min taletid ({duration})",
+    "voiceFreeDemoSaved": "Din gratis taletid bruges først. Du kan stadig bruge din engangsdemo senere.",
+    "voiceIncludedDemoSaved": "Stemmesamtaler er inkluderet i din nuværende adgang. Du kan stadig bruge din engangsdemo senere.",
+    "voiceDemoOffer": "Tal med Lingu i op til {duration} i din engangsdemo.",
+    "voiceOfferCheck": "Se, hvor meget taletid du har, før du starter.",
+    "voiceOpen": "Åbn stemmesamtalen",
     "voiceTrialSkip": "Spring over indtil videre"
   },
   "plan": {
@@ -1745,6 +1753,17 @@
     "errorVadInit": "Vi kunne ikke starte stemmesamtalen. Genindlæs siden, eller prøv en opdateret browser.",
     "warningTimeout": "Samtalen slutter om {seconds} sekunder",
     "sessionEnded": "Samtalen er afsluttet",
+    "dailyBalance": "I dag: {duration} tilbage",
+    "weeklyBalance": "Denne uge: {duration} tilbage",
+    "dailyReset": "Din taletid fornyes kl. 00.00 UTC.",
+    "weeklyReset": "Din taletid fornyes mandag kl. 00.00 UTC.",
+    "sessionEndedInactive": "Samtalen blev afsluttet på grund af inaktivitet.",
+    "sessionEndedDuration": "Tiden til samtalen er udløbet.",
+    "sessionEndedBalance": "Samtalen sluttede, da den taletid, du havde ved start, var brugt op.",
+    "demoDuration": "Engangsdemo: op til {duration}.",
+    "freeBalance": "Gratis taletid tilbage: {duration}.",
+    "demoSaved": "Du kan stadig bruge din engangsdemo senere.",
+    "quotaExceededWeekly": "Du har brugt al din taletid for denne uge.",
     "tapToStart": "Tal, når du er klar",
     "you": "Dig",
     "assistant": "Lingu",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "Nyheder",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Forstået",
     "entry1": {
       "label": "Øv hverdagens samtaler",

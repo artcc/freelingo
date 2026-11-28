@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { TargetLanguageText } from '@/components/TargetLanguageText'
 import { useAuthStore, isSubscribed, needsPaymentRecovery } from '@/store/auth'
 import { resolveVadRedemptionMs } from '@/lib/conversation-vad'
+import { formatVoiceDuration } from '@/lib/voice-duration'
 import { useConfigStore } from '@/store/config'
 import { useFreemiumStore } from '@/store/freemium'
 import { PaywallBanner } from '@/components/billing/PaywallBanner'
@@ -27,11 +28,13 @@ import {
   buildConversationWsUrl,
   type WsMessage,
   type ChatContextItem,
+  type SessionEndMessage,
   type SessionWarningMessage,
 } from '@/lib/conversation-ws'
 import StatusIndicator, { type ConvStatus } from './StatusIndicator'
 import TranscriptBubble from './TranscriptBubble'
 import SessionTimeoutBanner from './SessionTimeoutBanner'
+import FreeVoiceBalance from './FreeVoiceBalance'
 import MicButton from './MicButton'
 import { WordTooltip, useWordSave } from '@/components/ui/WordTooltip'
 import { type QuotaStatus } from '@/types/api'
@@ -54,6 +57,18 @@ interface SessionOwner {
   attempt: number
   sessionVersion: number
   userId: number | undefined
+}
+
+function sessionEndMessageKey(message: SessionEndMessage | null) {
+  if (message?.reason === 'inactivity') return 'sessionEndedInactive'
+  if (message?.reason !== 'max_duration') return 'sessionEnded'
+  if (
+    message.limit === 'daily' ||
+    message.limit === 'weekly' ||
+    message.limit === 'freemium'
+  )
+    return 'sessionEndedBalance'
+  return 'sessionEndedDuration'
 }
 
 function QuotaBar({
@@ -98,19 +113,41 @@ function QuotaBar({
   )
 }
 
-function quotaPillSummary(quota: QuotaStatus): {
-  text: string
-  alert: boolean
-} {
+function QuotaPill({ quota }: { quota: QuotaStatus }) {
+  const [open, setOpen] = useState(false)
+  const t = useTranslations('conversation')
+  const locale = useLocale()
   const parts: string[] = []
-  let alert = false
+  const daily = quota.daily_remaining_seconds
+  const weekly = quota.weekly_remaining_seconds
+  let alert = daily === 0 || weekly === 0
+  if (daily !== undefined) {
+    parts.push(
+      t('dailyBalance', {
+        duration:
+          daily === null
+            ? t('quotaUnlimited')
+            : formatVoiceDuration(daily, locale),
+      })
+    )
+  }
+  if (weekly !== undefined) {
+    parts.push(
+      t('weeklyBalance', {
+        duration:
+          weekly === null
+            ? t('quotaUnlimited')
+            : formatVoiceDuration(weekly, locale),
+      })
+    )
+  }
 
   if (!quota.sessions_unlimited) {
     parts.push(`${quota.sessions_this_week}/${quota.sessions_limit} ses`)
     if (quota.sessions_this_week >= quota.sessions_limit) alert = true
   }
 
-  if (!quota.time_unlimited) {
+  if (daily === undefined && !quota.time_unlimited) {
     parts.push(`${quota.minutes_today}/${quota.minutes_limit} min`)
     if (quota.minutes_today >= quota.minutes_limit) alert = true
   }
@@ -123,22 +160,10 @@ function quotaPillSummary(quota: QuotaStatus): {
       alert = true
   }
 
-  return { text: parts.length ? parts.join(' · ') : '∞', alert }
-}
-
-function QuotaPill({
-  quota,
-  t,
-}: {
-  quota: QuotaStatus
-  t: (k: string) => string
-}) {
-  const [open, setOpen] = useState(false)
-  const { text, alert } = quotaPillSummary(quota)
-
   return (
     <div className="w-full">
       <button
+        aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={`text-fl-hint flex w-full items-center justify-between border px-3 py-1.5 font-mono tracking-widest uppercase transition-colors ${
           alert
@@ -146,9 +171,15 @@ function QuotaPill({
             : 'border-fl-border text-fl-muted-3 hover:border-fl-border-2 hover:text-fl-muted-1'
         }`}
       >
-        <span>● {text}</span>
+        <span>● {parts.length ? parts.join(' · ') : '∞'}</span>
         <span className="text-fl-muted-4">{open ? '▴' : '▾'}</span>
       </button>
+      {daily === 0 && (
+        <p className="text-fl-muted-2 mt-1 text-xs">{t('dailyReset')}</p>
+      )}
+      {weekly === 0 && (
+        <p className="text-fl-muted-2 mt-1 text-xs">{t('weeklyReset')}</p>
+      )}
 
       {open && (
         <div className="border-fl-border bg-fl-surface space-y-1.5 border border-t-0 px-4 py-3">
@@ -158,12 +189,14 @@ function QuotaPill({
             limit={quota.sessions_limit}
             unlimited={quota.sessions_unlimited}
           />
-          <QuotaBar
-            label={t('quotaMinutes')}
-            used={quota.minutes_today}
-            limit={quota.minutes_limit}
-            unlimited={quota.time_unlimited}
-          />
+          {daily === undefined && (
+            <QuotaBar
+              label={t('quotaMinutes')}
+              used={quota.minutes_today}
+              limit={quota.minutes_limit}
+              unlimited={quota.time_unlimited}
+            />
+          )}
           {!quota.tokens_unlimited && (
             <QuotaBar
               label={t('quotaTokens')}
@@ -241,8 +274,6 @@ export default function ConversationMode({
   voiceTrialToken,
   voiceTrialDurationSeconds,
   trialMode,
-  freemiumVoiceRemaining,
-  freemiumVoiceLimit,
   onSessionActiveChange,
   onClose,
 }: {
@@ -258,8 +289,6 @@ export default function ConversationMode({
   voiceTrialToken?: string
   voiceTrialDurationSeconds?: number
   trialMode?: boolean
-  freemiumVoiceRemaining?: number
-  freemiumVoiceLimit?: number
   onSessionActiveChange?: (active: boolean) => void
   onClose?: () => void
 }) {
@@ -276,6 +305,7 @@ export default function ConversationMode({
   const setUser = useAuthStore((s) => s.setUser)
   const stripeEnabled = useConfigStore((s) => s.stripeEnabled)
   const freemiumStatus = useFreemiumStore((s) => s.status)
+  const hasFreemiumSnapshot = useFreemiumStore((s) => s.lastFetch > 0)
   const { freemiumTrialActive } = useTrialStatus()
   const { accessDenied, reportAccessDenied } =
     useFreemiumAccessRecovery('voice')
@@ -287,6 +317,7 @@ export default function ConversationMode({
   // ─── UI State ────────────────────────────────────────────────────────────
   const [status, setStatus] = useState<ConvStatus>('loading')
   const [sessionActive, setSessionActive] = useState(false)
+  const [sessionEnd, setSessionEnd] = useState<SessionEndMessage | null>(null)
   const demoConsumed = user?.assessment_voice_trial_used === true
   const [resultOwner, setResultOwner] = useState<SessionOwner | null>(null)
   const regularAccessAvailable =
@@ -340,6 +371,45 @@ export default function ConversationMode({
     show: showMemoryToast,
   } = useTransientToast()
   const [quota, setQuota] = useState<QuotaStatus | null>(null)
+  const freeVoice =
+    !isSubscribed(user, stripeEnabled) && !freemiumTrialActive
+      ? freemiumStatus
+      : null
+  const demoOffered =
+    !sessionActive &&
+    trialMode &&
+    !!voiceTrialToken &&
+    !demoConsumed &&
+    !accessDenied
+  let assessmentBanner: string | null = null
+  if (
+    demoOffered &&
+    regularAccessAvailable &&
+    (!freeVoice || hasFreemiumSnapshot)
+  )
+    assessmentBanner = t('demoSaved')
+  if (
+    demoOffered &&
+    hasFreemiumSnapshot &&
+    freeVoice?.voice_remaining_seconds === 0 &&
+    voiceTrialDurationSeconds !== undefined &&
+    quota?.daily_remaining_seconds !== undefined &&
+    quota.weekly_remaining_seconds !== undefined &&
+    (quota.sessions_unlimited ||
+      quota.sessions_this_week < quota.sessions_limit) &&
+    (quota.tokens_unlimited ||
+      (quota.tokens_this_month ?? 0) < (quota.tokens_monthly_limit ?? 0))
+  ) {
+    const seconds = Math.min(
+      voiceTrialDurationSeconds,
+      quota.daily_remaining_seconds ?? Infinity,
+      quota.weekly_remaining_seconds ?? Infinity
+    )
+    if (seconds > 0)
+      assessmentBanner = t('demoDuration', {
+        duration: formatVoiceDuration(seconds, locale),
+      })
+  }
   const [reviewPromptOpen, setReviewPromptOpen] = useState(false)
   const {
     selectedWord,
@@ -841,6 +911,7 @@ export default function ConversationMode({
           setQuota(null)
           setReviewPromptOpen(false)
           setResultOwner(null)
+          setSessionEnd(null)
           setStatus('ready')
         }
       }),
@@ -1066,6 +1137,8 @@ export default function ConversationMode({
               break
 
             case 'session_end':
+              setSessionEnd(msg)
+              setErrorMsg(null)
               cleanEndRef.current = true
               assistantTurnActiveRef.current = false
               if (sessionPracticeRef.current.completed) setResultOwner(owner)
@@ -1085,7 +1158,8 @@ export default function ConversationMode({
                 services_disabled: t('errorServicesDisabled'),
                 maintenance_mode: tMaintenance('description'),
                 quota_exceeded_sessions: t('quotaExceededSessions'),
-                quota_exceeded_time: t('quotaExceededTime'),
+                quota_exceeded_time: `${t('quotaExceededTime')} ${t('dailyReset')}`,
+                quota_exceeded_weekly_minutes: `${t('quotaExceededWeekly')} ${t('weeklyReset')}`,
                 quota_exceeded_tokens: t('quotaExceededTokens'),
                 no_active_plan: tCommon('noActivePlan'),
                 lesson_practice_unavailable: tPractice('unavailable'),
@@ -1225,6 +1299,7 @@ export default function ConversationMode({
     sessionOwnerRef.current = owner
     sessionPracticeRef.current = { userSpoke: false, completed: false }
     setResultOwner(null)
+    setSessionEnd(null)
     setReviewPromptOpen(false)
     const isCurrent = () => isCurrentSession(owner)
     sessionActiveRef.current = true
@@ -1416,6 +1491,7 @@ export default function ConversationMode({
     if (completedPractice) setResultOwner(owner)
     startAttemptRef.current++
     cleanEndRef.current = true
+    setErrorMsg(null)
     finalizeSession('manual')
     sessionStartedAtRef.current = null
     setStatus('ended')
@@ -1495,11 +1571,9 @@ export default function ConversationMode({
         <FreemiumQuotaBanner feature="situations" className="mb-4" />
       )}
 
-      {trialMode && !regularAccessAvailable && !demoConsumed && (
+      {assessmentBanner && status !== 'ended' && status !== 'error' && (
         <div className="border-fl-accent/40 bg-fl-surface text-fl-muted-1 mb-4 border px-4 py-3 text-center font-mono text-xs tracking-widest uppercase">
-          {t('trialBanner', {
-            minutes: Math.round((voiceTrialDurationSeconds ?? 300) / 60),
-          })}
+          {assessmentBanner}
         </div>
       )}
 
@@ -1550,8 +1624,11 @@ export default function ConversationMode({
         )}
         <div ref={transcriptEndRef} />
         {status === 'ended' && (
-          <div className="border-fl-border bg-fl-surface text-fl-muted-2 mb-4 border px-4 py-3 font-mono text-xs">
-            {t('sessionEnded')}
+          <div
+            role="status"
+            className="border-fl-border bg-fl-surface text-fl-muted-2 mb-4 border px-4 py-3 font-mono text-xs"
+          >
+            {t(sessionEndMessageKey(sessionEnd))}
           </div>
         )}
         {demoAccessEnded && status === 'ended' ? (
@@ -1632,19 +1709,14 @@ export default function ConversationMode({
             <SessionTimeoutBanner deadline={warningDeadline} />
           </div>
         )}
-        {/* Quota pill — freemium gets a simplified voice counter, premium gets full quota bars */}
-        {freemiumVoiceRemaining != null && freemiumVoiceLimit != null ? (
-          <span
-            className={`text-fl-label font-mono tracking-widest uppercase ${voiceAccessExhausted || freemiumVoiceRemaining <= 0 ? 'text-red-500' : 'text-fl-muted-2'}`}
-          >
-            {t('freemiumVoiceRemaining', {
-              remaining: voiceAccessExhausted ? 0 : freemiumVoiceRemaining,
-              limit: freemiumVoiceLimit,
-            })}
-          </span>
-        ) : quota && !trialMode ? (
-          <QuotaPill quota={quota} t={t} />
-        ) : null}
+        {freeVoice && freeVoice.voice_limit_seconds > 0 && (
+          <FreeVoiceBalance
+            seconds={
+              voiceAccessExhausted ? 0 : freeVoice.voice_remaining_seconds
+            }
+          />
+        )}
+        {quota && <QuotaPill quota={quota} />}
         <StatusIndicator
           status={status}
           userSpeaking={userSpeaking}

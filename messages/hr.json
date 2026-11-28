@@ -910,6 +910,8 @@
     "announcementDismissError": "Obavijest nije bilo moguće zatvoriti. Pokušaj ponovno."
   },
   "assessment": {
+    "voiceDemoCheck": "Otvori jednokratnu probu glasovnog razgovora i provjeri je li dostupna.",
+    "voiceLimitReached": "Dosegnuto je ograničenje za glasovne razgovore.",
     "title": "Procjena razine",
     "subtitle": "Određivanje razine prema CEFR-u",
     "intro": "Postavit ćemo nekoliko pitanja kako bismo odredili tvoju razinu engleskog.",
@@ -1035,6 +1037,12 @@
     "voiceTrialTitle": "Isprobaj pravi razgovor sada",
     "voiceTrialDesc": "Razgovaraj s Linguom {minutes} minuta besplatno. Tvoj učitelj prilagodit će se razini koju si upravo otključao.",
     "voiceTrialStart": "Započni besplatan razgovor",
+    "voiceFreeAction": "Iskoristi besplatno vrijeme: {duration}",
+    "voiceFreeDemoSaved": "Prvo se koristi tvoje besplatno vrijeme za glasovne razgovore. Jednokratni probni razgovor i dalje ti je dostupan.",
+    "voiceIncludedDemoSaved": "Tvoj trenutačni pristup uključuje glasovne razgovore. Jednokratni probni razgovor i dalje ti je dostupan.",
+    "voiceDemoOffer": "Isprobaj jednokratni razgovor s Linguom u trajanju do {duration}.",
+    "voiceOfferCheck": "Prije početka provjeri koliko vremena imaš za glasovni razgovor.",
+    "voiceOpen": "Otvori glasovni razgovor",
     "voiceTrialSkip": "Preskoči zasad"
   },
   "plan": {
@@ -1752,6 +1760,17 @@
     "quotaMinutes": "Minute danas",
     "quotaUnlimited": "Neograničeno",
     "quotaExceededSessions": "Iskoristio si sve razgovore za ovaj tjedan.",
+    "dailyBalance": "Danas preostaje: {duration}",
+    "weeklyBalance": "Ovaj tjedan preostaje: {duration}",
+    "dailyReset": "Vrijeme se obnavlja u 00:00 UTC.",
+    "weeklyReset": "Vrijeme se obnavlja ponedjeljkom u 00:00 UTC.",
+    "sessionEndedInactive": "Razgovor je završen zbog neaktivnosti.",
+    "sessionEndedDuration": "Vrijeme za ovaj razgovor je isteklo.",
+    "sessionEndedBalance": "Razgovor je završio jer je potrošeno vrijeme koje je bilo dostupno na početku.",
+    "demoDuration": "Jednokratni probni razgovor: do {duration}.",
+    "freeBalance": "Preostalo besplatno vrijeme za glasovne razgovore: {duration}.",
+    "demoSaved": "Jednokratni probni razgovor i dalje ti je dostupan.",
+    "quotaExceededWeekly": "Više nemaš vremena za glasovne razgovore ovaj tjedan.",
     "quotaExceededTime": "Iskoristio si sve dnevno vrijeme za vježbu.",
     "quotaExceededTokens": "Dosegnuo si mjesečno ograničenje upotrebe umjetne inteligencije. Možeš nastaviti kada se ono obnovi.",
     "freemiumVoiceRemaining": "Besplatni glasovni razgovori: {remaining}/{limit} min ovaj tjedan",
@@ -2210,7 +2229,7 @@
   },
   "whatsNew": {
     "title": "Novosti",
-    "version": "v1.14.20",
+    "version": "v1.14.25",
     "cta": "Razumijem",
     "entry1": {
       "label": "Vježbaj svakodnevne razgovore",

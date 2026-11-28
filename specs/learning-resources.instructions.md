@@ -253,15 +253,15 @@ romanization. The current page does not display romanization when supplied.
 - `GET /api/phrasebook/{category_id}`: authenticated, `60/minute`; unknown category returns `404`.
 - `POST /api/phrasebook/{category_id}/native-help`: authenticated, `10/minute`; uses shared cache.
 - `GET /api/phrasebook/audio/{category_id}/{phrase_index}`: authenticated, `30/minute`; returns
-  cached WAV (`audio/wav`) for Gemini or MP3 (`audio/mpeg`) for local/OpenAI, `404` for invalid
+  cached audio with the adapter's MIME type (`audio/wav` or `audio/mpeg`), `404` for invalid
   category/index, or `503` without TTS. The `language` parameter defaults to `en-GB` and must be
   an exact supported target-language code; invalid values return `400` before catalog lookup,
   filesystem access, or synthesis.
 
 Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`. All OpenAI models and Gemini
 use the synthesis identities defined in `speech-services.instructions.md`, including the resolved
-actual voice and pronunciation instructions when supported. OpenAI files use `.mp3`; Gemini files
-use `.wav`. Local TTS retains `.mp3` files with a hash of language, category, index, and text.
+actual voice and pronunciation instructions when supported. OpenAI Realtime and Gemini cache `.wav`;
+the OpenAI Speech API caches `.mp3`. Local TTS uses `.mp3` with a hash of language, category, index, and text.
 The endpoint uses the backend's configured default voice, not the browser preference.
 Generation writes a temporary file and replaces atomically.
 Responses use `Cache-Control: no-store`, and browser playback

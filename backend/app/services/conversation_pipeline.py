@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 import time
 import uuid
 from datetime import UTC, datetime
@@ -31,7 +32,7 @@ from app.services.memory_service import (
 )
 from app.services.prompts.common import get_language_prompt_overlay
 from app.services.prompts.tutor import CONVERSATION_START_PROMPT, build_conversation_system_prompt
-from app.services.quota_service import record_session_seconds
+from app.services.quota_service import VoiceTimeLimit, record_session_seconds
 from app.utils.db import db_session
 
 if TYPE_CHECKING:
@@ -98,6 +99,7 @@ class ConversationPipeline:
         study_plan_id: int | None = None,
         lesson_practice_context: str = "",
         user_agent: str = "",
+        duration_limit: VoiceTimeLimit | None = None,
     ) -> None:
         self.llm = llm
         self.tts = tts
@@ -145,6 +147,7 @@ class ConversationPipeline:
             memory_context=self._memory_context,
         )
         self.max_duration = max_duration
+        self._duration_limit = duration_limit
         self.inactivity_timeout = inactivity_timeout
         self._redis: object | None = None  # injected after construction
         self._recorded = False
@@ -982,26 +985,36 @@ class ConversationPipeline:
 
     async def _max_duration_watcher(self, ws: WebSocket) -> None:
         """Closes session after max_duration seconds, with a 60s warning."""
-        warn_at = self.max_duration - WARNING_ADVANCE_SECONDS
-        if warn_at > 0:
-            await asyncio.sleep(warn_at)
-            logger.info(
-                "[pipeline] Max duration warning — %ss remaining",
-                WARNING_ADVANCE_SECONDS,
-            )
-            await self._send_json(
-                ws,
-                {
-                    "type": "session_warning",
-                    "reason": "max_duration",
-                    "remaining_seconds": WARNING_ADVANCE_SECONDS,
-                },
-            )
-            await asyncio.sleep(WARNING_ADVANCE_SECONDS)
-        else:
-            await asyncio.sleep(self.max_duration)
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + self.max_duration
+        warning_window = min(self.max_duration, WARNING_ADVANCE_SECONDS)
+        warning_delay = self.max_duration - warning_window
+        if warning_delay > 0:
+            await asyncio.sleep(warning_delay)
+        remaining = deadline - loop.time()
+        if remaining > 0:
+            warning_seconds = min(warning_window, math.ceil(remaining))
+            logger.info("[pipeline] Max duration warning — %ss remaining", warning_seconds)
+            try:
+                async with asyncio.timeout_at(deadline):
+                    await self._send_json(
+                        ws,
+                        {
+                            "type": "session_warning",
+                            "reason": "max_duration",
+                            "remaining_seconds": warning_seconds,
+                        },
+                    )
+            except TimeoutError:
+                logger.debug("[pipeline] Max duration warning timed out")
+        remaining = deadline - loop.time()
+        if remaining > 0:
+            await asyncio.sleep(remaining)
         logger.info("[pipeline] Session ended by max_duration")
-        await self._send_json(ws, {"type": "session_end", "reason": "max_duration"})
+        end_event = {"type": "session_end", "reason": "max_duration"}
+        if self._duration_limit is not None:
+            end_event["limit"] = self._duration_limit
+        await self._send_json(ws, end_event)
         await self._close_ws(ws, code=1000)
 
     async def _inactivity_watcher(self, ws: WebSocket) -> None:

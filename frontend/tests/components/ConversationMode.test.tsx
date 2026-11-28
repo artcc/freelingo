@@ -56,11 +56,10 @@ vi.mock('next-intl', async (importOriginal) => {
       Object.assign(
         (
           key: string,
-          values?: { seconds?: number; remaining?: number; limit?: number }
+          values?: { seconds?: number; duration?: string }
         ) => {
           if (key === 'warningTimeout') return `${key}:${values?.seconds}`
-          if (key === 'freemiumVoiceRemaining')
-            return `${key}:${values?.remaining}/${values?.limit}`
+          if (values?.duration !== undefined) return `${key}:${values.duration}`
           return key
         },
         {
@@ -112,6 +111,7 @@ import { useConfigStore } from '@/store/config'
 import { useFreemiumStore } from '@/store/freemium'
 import { mapUser } from '@/lib/mappers'
 import { float32ToWav } from '@/lib/audio'
+import { formatVoiceDuration } from '@/lib/voice-duration'
 
 class MockWebSocket {
   static OPEN = 1
@@ -261,6 +261,67 @@ describe('ConversationMode freemium reconciliation', () => {
 
   beforeEach(() => useConfigStore.setState({ stripeEnabled: true }))
 
+  it('shows exact general and Free balances independently, including unlimited and exhausted periods', async () => {
+    useFreemiumStore.setState({
+      status: { ...status, voice_remaining_seconds: 59 },
+      loaded: true,
+      lastFetch: Date.now(),
+    })
+    mocks.apiFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        daily_remaining_seconds: null,
+        weekly_remaining_seconds: 0,
+        sessions_unlimited: true,
+        tokens_unlimited: true,
+      }),
+    })
+    render(<ConversationMode />)
+    const summary = await screen.findByRole('button', { name: /weeklyBalance/ })
+    expect(summary).toHaveTextContent('dailyBalance:quotaUnlimited')
+    expect(summary).toHaveTextContent(
+      `weeklyBalance:${formatVoiceDuration(0, 'en')}`
+    )
+    expect(screen.getByText('weeklyReset')).toBeVisible()
+    expect(screen.queryByText('dailyReset')).toBeNull()
+    expect(
+      screen.getByText(`freeBalance:${formatVoiceDuration(59, 'en')}`)
+    ).toBeVisible()
+  })
+
+  it('limits the demo estimate to the known daily and weekly balance and omits unknown duration', async () => {
+    useFreemiumStore.setState({
+      status: { ...status, voice_remaining_seconds: 0 },
+      loaded: true,
+      lastFetch: Date.now(),
+    })
+    mocks.apiFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        daily_remaining_seconds: 95,
+        weekly_remaining_seconds: 31,
+        sessions_unlimited: true,
+        tokens_unlimited: true,
+      }),
+    })
+    const view = render(<ConversationMode trialMode voiceTrialToken="demo" />)
+    await screen.findByRole('button', { name: /weeklyBalance/ })
+    expect(screen.queryByText(/demoDuration/)).toBeNull()
+    view.rerender(
+      <ConversationMode
+        trialMode
+        voiceTrialToken="demo"
+        voiceTrialDurationSeconds={120}
+      />
+    )
+    expect(
+      screen.getByText(`demoDuration:${formatVoiceDuration(31, 'en')}`)
+    ).toBeVisible()
+    expect(screen.queryByText('demoSaved')).toBeNull()
+    await start()
+    expect(screen.queryByText(/demoDuration/)).toBeNull()
+  })
+
   it('refreshes situation usage after admission and first pipeline activity without ending the last allowed session', async () => {
     const fetchStatus = vi
       .spyOn(useFreemiumStore.getState(), 'fetchStatus')
@@ -271,12 +332,7 @@ describe('ConversationMode freemium reconciliation', () => {
       lastFetch: Date.now(),
     })
     render(
-      <ConversationMode
-        situationId="hotel_problem"
-        situationStudyPlanId={7}
-        freemiumVoiceRemaining={2}
-        freemiumVoiceLimit={5}
-      />
+      <ConversationMode situationId="hotel_problem" situationStudyPlanId={7} />
     )
     const ws = await start()
     expect(fetchStatus).not.toHaveBeenCalled()
@@ -311,9 +367,9 @@ describe('ConversationMode freemium reconciliation', () => {
     )
     expect(screen.queryByRole('button', { name: 'startNew' })).toBeNull()
     expect(screen.getByText('Welcome to the hotel.')).toBeInTheDocument()
-    expect(screen.getByText('freemiumVoiceRemaining:2/5')).not.toHaveClass(
-      'text-red-500'
-    )
+    expect(
+      screen.getByText(`freeBalance:${formatVoiceDuration(120, 'en')}`)
+    ).not.toHaveClass('text-fl-error')
   })
 
   it.each(['freemium_exhausted', 'freemium_unavailable'] as const)(
@@ -447,7 +503,10 @@ describe('ConversationMode freemium reconciliation', () => {
               : null,
       }))
       render(<ConversationMode trialMode voiceTrialToken="demo-token" />)
+      expect(screen.getByText('demoSaved')).toBeVisible()
+      expect(screen.queryByText(/demoDuration/)).toBeNull()
       const ws = await start()
+      expect(screen.queryByText('demoSaved')).toBeNull()
       act(() => {
         ws.message({
           type: 'transcript',
@@ -672,8 +731,6 @@ describe('ConversationMode freemium reconciliation', () => {
           lessonId={lessonId}
           trialMode={trialMode}
           voiceTrialToken={trialMode ? 'demo-token' : undefined}
-          freemiumVoiceRemaining={2}
-          freemiumVoiceLimit={5}
         />
       )
       await act(async () =>
@@ -862,6 +919,31 @@ describe('ConversationMode freemium reconciliation', () => {
 })
 
 describe('ConversationMode session lifecycle', () => {
+  it.each([
+    ['inactivity', undefined, 'sessionEndedInactive'],
+    ['max_duration', undefined, 'sessionEndedDuration'],
+    ['max_duration', 'daily', 'sessionEndedBalance'],
+    ['max_duration', 'weekly', 'sessionEndedBalance'],
+    ['max_duration', 'freemium', 'sessionEndedBalance'],
+  ] as const)(
+    'explains %s (%s) and clears the cause on restart',
+    async (reason, limit, message) => {
+      render(<ConversationMode />)
+      const ws = await start()
+      act(() => ws.message({ type: 'error', code: 'stt_failed' }))
+      expect(screen.getByText('✕ errorTranscription')).toBeVisible()
+      act(() => ws.message({ type: 'session_end', reason, limit }))
+      expect(screen.queryByText('✕ errorTranscription')).toBeNull()
+      expect(screen.getByText(message)).toBeVisible()
+      await start('startNew')
+      expect(screen.queryByText(message)).toBeNull()
+      fireEvent.click(screen.getByRole('button', { name: 'stop' }))
+      expect(
+        screen.getByText('sessionEnded', { selector: '[role="status"]' })
+      ).toBeVisible()
+    }
+  )
+
   it.each([
     ['ONNX runtime initialization failed: internal path /vad/model', 'errorVadInit'],
     ['NotAllowedError: Permission denied by browser', 'errorMic'],
@@ -2179,6 +2261,7 @@ describe('ConversationMode session lifecycle', () => {
     ['maintenance_mode', 'description'],
     ['quota_exceeded_sessions', 'quotaExceededSessions'],
     ['quota_exceeded_time', 'quotaExceededTime'],
+    ['quota_exceeded_weekly_minutes', 'quotaExceededWeekly weeklyReset'],
     ['quota_exceeded_tokens', 'quotaExceededTokens'],
     ['no_active_plan', 'noActivePlan'],
     ['lesson_practice_unavailable', 'unavailable'],

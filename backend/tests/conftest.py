@@ -322,6 +322,7 @@ async def admin_user(db_session):
 def voice_runtime(monkeypatch, db_session, mock_redis, test_user):
     from app.core.config import settings
     from app.routers import conversation as router
+    from app.services.quota_service import QuotaDecision
 
     user, headers = test_user
 
@@ -335,7 +336,7 @@ def voice_runtime(monkeypatch, db_session, mock_redis, test_user):
 
     pipeline = MagicMock(run=AsyncMock(), cleanup=AsyncMock())
     factory = MagicMock(return_value=pipeline)
-    quotas = AsyncMock(side_effect=lambda *args: (args[-1], None, None, 1000))
+    quotas = AsyncMock(side_effect=lambda *args: QuotaDecision(args[-1]))
     monkeypatch.setattr(router, "db_session", db_context)
     monkeypatch.setattr(router, "_redis_client", redis_context)
     monkeypatch.setattr(router, "ConversationPipeline", factory)

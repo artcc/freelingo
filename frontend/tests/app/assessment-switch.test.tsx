@@ -13,11 +13,13 @@ import { useAuthStore } from '@/store/auth'
 import { useConfigStore } from '@/store/config'
 import { useLoadingStore } from '@/store/loading'
 import { getLanguageByCode } from '@/lib/target-languages'
+import { formatVoiceDuration } from '@/lib/voice-duration'
 
 const { push } = vi.hoisted(() => ({ push: vi.fn() }))
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }))
 vi.mock('next-intl', () => {
-  const translate = (key: string) => key
+  const translate = (key: string, values?: { duration?: string }) =>
+    values?.duration ? `${key}: ${values.duration}` : key
   return { useTranslations: () => translate, useLocale: () => 'en' }
 })
 
@@ -32,6 +34,14 @@ function deferred<T>() {
 }
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status })
+const unlimitedQuota = {
+  daily_remaining_seconds: null,
+  weekly_remaining_seconds: null,
+  sessions_this_week: 0,
+  sessions_limit: 0,
+  tokens_this_month: 0,
+  tokens_monthly_limit: 0,
+}
 const bank = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].flatMap((difficulty) =>
   Array.from({ length: 15 }, (_, i) => ({
     id: `${difficulty}-${i}`,
@@ -116,6 +126,195 @@ async function answerQuestions(count: number, finish = true) {
     }
   }
 }
+
+describe('Assessment voice offer', () => {
+  const free = { trial_active: false, voice_remaining_seconds: 120 }
+  const noBalance = { ...free, voice_remaining_seconds: 0 }
+  const learner = {
+    id: 1,
+    username: 'learner',
+    displayName: 'Learner',
+    role: 'user' as const,
+    conversation_max_duration: 900,
+    conversation_inactivity_timeout: 60,
+  }
+
+  const scenarios: {
+    status: {
+      trial_active: boolean
+      trial_ends_at?: string
+      voice_remaining_seconds: number
+    } | null
+    quota: Record<string, number | undefined>
+    actionSeconds?: number
+    sessionLimit?: number
+    demoSeconds?: number
+    missingTokenDuration?: boolean
+    blocked?: boolean
+  }[] = [
+    { status: free, quota: {}, actionSeconds: 120 },
+    { status: free, quota: { daily_remaining_seconds: 35 }, actionSeconds: 35 },
+    {
+      status: free,
+      quota: { weekly_remaining_seconds: 14 },
+      actionSeconds: 14,
+    },
+    { status: free, quota: {}, sessionLimit: 63, actionSeconds: 63 },
+    { status: free, quota: { daily_remaining_seconds: undefined } },
+    { status: noBalance, quota: {}, demoSeconds: 83 },
+    {
+      status: noBalance,
+      quota: { weekly_remaining_seconds: 29 },
+      demoSeconds: 29,
+    },
+    { status: noBalance, quota: {}, missingTokenDuration: true },
+    { status: noBalance, quota: { weekly_remaining_seconds: undefined } },
+    { status: null, quota: {} },
+    { status: free, quota: { weekly_remaining_seconds: 0 }, blocked: true },
+    {
+      status: noBalance,
+      quota: { sessions_this_week: 3, sessions_limit: 3 },
+      blocked: true,
+    },
+    {
+      status: free,
+      quota: { tokens_this_month: 50, tokens_monthly_limit: 50 },
+      blocked: true,
+    },
+    {
+      status: {
+        ...free,
+        trial_active: true,
+        trial_ends_at: '2099-01-01T00:00:00Z',
+      },
+      quota: {},
+    },
+  ]
+  it.each(scenarios)('resolves the voice offer: %j', async (scenario) => {
+    const { status, quota } = scenario
+    useConfigStore.setState({ stripeEnabled: true })
+    useAuthStore.getState().setUser({
+      ...learner,
+      conversation_max_duration:
+        scenario.sessionLimit ?? learner.conversation_max_duration,
+    })
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current')
+        return json({ cefr_level: 'B1', created_at: '2026-01-01' })
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      if (url === '/api/assessment/voice-trial')
+        return json({
+          plan_id: 8,
+          cefr_level: 'B1',
+          voice_trial: {
+            available: true,
+            token: 'offer',
+            duration_seconds: scenario.missingTokenDuration ? undefined : 83,
+          },
+        })
+      if (url === '/api/freemium/status')
+        return status ? json(status) : json({}, 503)
+      if (url === '/api/auth/quota')
+        return json({ ...unlimitedQuota, ...quota })
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    expect(await screen.findByText('voiceOfferCheck')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /voiceOpen/ }))
+    await screen.findByText('voiceTrialSkip')
+    await waitFor(() => expect(useLoadingStore.getState().count).toBe(0))
+
+    if (scenario.blocked) {
+      expect(await screen.findByText('voiceLimitReached')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /voiceOpen/ })).toBeEnabled()
+    }
+    const demo = scenario.demoSeconds
+    if (status?.trial_active) {
+      expect(
+        await screen.findByText('voiceIncludedDemoSaved')
+      ).toBeInTheDocument()
+    } else if (status?.voice_remaining_seconds) {
+      expect(await screen.findByText(/freeBalance/)).toHaveTextContent(
+        `freeBalance: ${formatVoiceDuration(120, 'en')} voiceFreeDemoSaved`
+      )
+    } else if (demo) {
+      expect(
+        await screen.findByText(
+          `voiceDemoOffer: ${formatVoiceDuration(demo, 'en')}`
+        )
+      ).toBeInTheDocument()
+    } else if (status?.voice_remaining_seconds === 0) {
+      expect(await screen.findByText('voiceDemoCheck')).toBeInTheDocument()
+    } else {
+      expect(screen.getByText('voiceOfferCheck')).toBeInTheDocument()
+    }
+    const action = scenario.actionSeconds
+      ? `voiceFreeAction: ${formatVoiceDuration(scenario.actionSeconds, 'en')}`
+      : 'voiceOpen'
+    fireEvent.click(await screen.findByRole('button', { name: `${action} →` }))
+    expect(push).toHaveBeenCalledWith('/conversation')
+    const handoff = sessionStorage.getItem('assessment_voice_trial')
+    if (!status || status.voice_remaining_seconds === 0) {
+      const payload = JSON.parse(handoff!)
+      expect(payload).toMatchObject({
+        token: 'offer',
+        planId: 8,
+        targetLanguage: 'en-GB',
+      })
+      expect(payload.durationSeconds).toBe(
+        scenario.missingTokenDuration ? undefined : 83
+      )
+    } else {
+      expect(handoff).toBeNull()
+      expect(JSON.parse(sessionStorage.getItem('voice_context')!)).toEqual({
+        messages: [{ role: 'user', content: expect.stringContaining('level') }],
+      })
+    }
+  })
+
+  it('ignores a previous session’s pending voice balance and quota', async () => {
+    const oldQuota = deferred<Response>()
+    const oldStatus = deferred<Response>()
+    useConfigStore.setState({ stripeEnabled: true })
+    useAuthStore.getState().setUser(learner)
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === '/api/study-plan/current')
+        return json({ cefr_level: 'B1', created_at: '2026-01-01' })
+      if (String(url).startsWith('/api/assessment/bank'))
+        return json({ questions: bank })
+      if (url === '/api/assessment/voice-trial')
+        return json({
+          plan_id: 8,
+          cefr_level: 'B1',
+          voice_trial: { available: true, token: 'offer', duration_seconds: 83 },
+        })
+      const firstUser = useAuthStore.getState().user?.id === learner.id
+      if (url === '/api/freemium/status')
+        return firstUser ? oldStatus.promise : json(free)
+      if (url === '/api/auth/quota')
+        return firstUser ? oldQuota.promise : json(unlimitedQuota)
+      return json({}, 404)
+    })
+    render(<AssessmentPage />)
+    fireEvent.click(await screen.findByRole('button', { name: /voiceOpen/ }))
+    await screen.findByText('voiceTrialSkip')
+    act(() => {
+      useAuthStore.getState().startSession('new-session')
+      useAuthStore.getState().setUser({ ...learner, id: 2 })
+    })
+    await screen.findByRole('button', { name: 'retake' })
+    fireEvent.click(screen.getByRole('button', { name: /voiceOpen/ }))
+    const action = `voiceFreeAction: ${formatVoiceDuration(120, 'en')} →`
+    await screen.findByRole('button', { name: action })
+    await act(async () => {
+      oldQuota.resolve(json({ ...unlimitedQuota, daily_remaining_seconds: 0 }))
+      oldStatus.resolve(json(noBalance))
+    })
+    fireEvent.click(screen.getByRole('button', { name: action }))
+    expect(sessionStorage.getItem('assessment_voice_trial')).toBeNull()
+  })
+})
 
 describe('Assessment evaluation recovery', () => {
   const shortBank = bank.filter((q) => q.difficulty === 'A2').slice(0, 2)
@@ -894,7 +1093,7 @@ describe('Assessment provisional language switches', () => {
         await act(async () => oldSummary.resolve(json(summary())))
       expect(screen.queryByText('voiceTrialTitle')).not.toBeInTheDocument()
       expect(
-        screen.queryByRole('button', { name: /voiceTrialStart/ })
+        screen.queryByRole('button', { name: /voiceOpen/ })
       ).not.toBeInTheDocument()
       expect(push).not.toHaveBeenCalled()
       expect(sessionStorage.getItem('assessment_voice_trial')).toBeNull()
@@ -927,6 +1126,9 @@ describe('Assessment provisional language switches', () => {
         return json({ questions: bank })
       if (url === '/api/languages')
         return recover ? json(summary()) : json({}, 503)
+      if (url === '/api/auth/quota') return json(unlimitedQuota)
+      if (url === '/api/freemium/status')
+        return json({ trial_active: false, voice_remaining_seconds: 0 })
       if (url === '/api/assessment/complete')
         return json({
           plan_id: 8,
@@ -946,13 +1148,12 @@ describe('Assessment provisional language switches', () => {
     fireEvent.click(screen.getByRole('button', { name: /startMyPlan/ }))
     expect(await screen.findByRole('alert')).toHaveTextContent('errorMessage')
     expect(
-      screen.queryByRole('button', { name: /voiceTrialStart/ })
+      screen.queryByRole('button', { name: /voiceOpen/ })
     ).not.toBeInTheDocument()
     recover = true
     fireEvent.click(screen.getByRole('button', { name: 'retry' }))
-    fireEvent.click(
-      await screen.findByRole('button', { name: /voiceTrialStart/ })
-    )
+    await screen.findByText(/^voiceDemoOffer:/)
+    fireEvent.click(screen.getByRole('button', { name: /voiceOpen/ }))
     expect(push).toHaveBeenCalledWith('/conversation')
     expect(
       JSON.parse(sessionStorage.getItem('assessment_voice_trial')!)
