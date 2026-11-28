@@ -80,6 +80,7 @@ async def lifespan(app: FastAPI):  # noqa: ANN201
         )
 
     settings.validate_revenuecat()
+    settings.require_llm_model()
     await asyncio.to_thread(_run_migrations)
 
     # Ensure the avatars directory exists on startup (persisted via Docker volume)

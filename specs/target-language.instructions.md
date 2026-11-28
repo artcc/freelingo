@@ -205,10 +205,9 @@ Generic `POST /api/stt` requires a user-owned `study_plan_id`, derives language 
 always passes ISO explicitly. Voice conversation passes the resolved session language. There is no
 implicit English default inside either STT adapter.
 
-TTS accepts a full BCP-47 language argument. OpenAI Realtime and `gpt-4o-mini-tts` (including its
-snapshots) use it for native regional pronunciation instructions; without context, instructions
-request language inference without imposing a regional accent. Other OpenAI TTS models and Kokoro
-ignore this argument.
+TTS accepts a full BCP-47 language argument. OpenAI Realtime uses it for regional pronunciation
+guidance; without context, its instructions request language inference without imposing a regional
+accent. Kokoro ignores this argument.
 Model and voice selection remain configured independently of the target language. Provider and
 resource-owned language contracts are defined in `speech-services.instructions.md`.
 The deployed provider/model/voice settings come from `backend/app/core/config.py` with

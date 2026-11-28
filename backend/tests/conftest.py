@@ -8,6 +8,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-ci-32b"
+os.environ["LLM_PROVIDER"] = "ollama"
+os.environ["OLLAMA_MODEL"] = "test-llm"
+os.environ["TTS_PROVIDER"] = "local"
+os.environ["STT_PROVIDER"] = "local"
 os.environ["RATE_LIMIT_ENABLED"] = "false"
 os.environ["REVENUECAT_ENABLED"] = "false"
 

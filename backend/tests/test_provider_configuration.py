@@ -1,0 +1,115 @@
+import subprocess
+import sys
+from pathlib import Path
+from textwrap import dedent
+from unittest.mock import Mock
+
+import pytest
+from fastapi import FastAPI
+from pydantic import BaseModel, ValidationError
+
+from app import main
+from app.core.config import Settings, settings
+from app.services import llm_adapter
+
+
+def test_openapi_generation_without_model_or_provider_access(tmp_path):
+    script = dedent(
+        """
+        from unittest.mock import patch
+
+        with (
+            patch("socket.socket.connect", side_effect=AssertionError("unexpected connection")),
+            patch("openai.AsyncOpenAI") as openai,
+            patch("anthropic.AsyncAnthropic") as anthropic,
+        ):
+            from app.main import app
+
+            assert "/api/config" in app.openapi()["paths"]
+            openai.assert_not_called()
+            anthropic.assert_not_called()
+        """
+    )
+    subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=tmp_path,
+        env={
+            "PYTHONPATH": str(Path(__file__).resolve().parents[1]),
+            "DATABASE_URL": "sqlite+aiosqlite:///:memory:",
+            "SECRET_KEY": "test-secret-key-for-openapi-generation",
+            "LLM_PROVIDER": "ollama",
+        },
+        check=True,
+        timeout=60,
+    )
+
+
+def test_operational_settings_load_without_model_defaults(monkeypatch):
+    model_fields = (
+        "OLLAMA_MODEL",
+        "OPENAI_MODEL",
+        "ANTHROPIC_MODEL",
+        "DEEPSEEK_MODEL",
+        "GEMINI_TTS_MODEL",
+        "OPENAI_TTS_MODEL",
+        "OPENAI_STT_MODEL",
+    )
+    for field in model_fields:
+        monkeypatch.delenv(field, raising=False)
+
+    config = Settings(_env_file=None)
+    for field in model_fields:
+        assert getattr(config, field) == ""
+
+
+@pytest.mark.parametrize("selector", ["LLM_PROVIDER", "STT_PROVIDER"])
+def test_unknown_provider_rejected_when_loading_settings(monkeypatch, selector):
+    monkeypatch.setenv(selector, "unknown")
+    with pytest.raises(ValidationError, match=selector):
+        Settings(_env_file=None)
+
+
+@pytest.mark.parametrize("provider", ["ollama", "openai", "anthropic", "deepseek"])
+@pytest.mark.parametrize("model", ["", "   "])
+async def test_missing_selected_model_prevents_client_creation(monkeypatch, provider, model):
+    field = f"{provider.upper()}_MODEL"
+    monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
+    monkeypatch.setattr(settings, field, model)
+    client_factory = Mock()
+    monkeypatch.setattr(llm_adapter, "AsyncOpenAI", client_factory)
+    monkeypatch.setattr(llm_adapter._anthropic, "AsyncAnthropic", client_factory)
+
+    adapter = llm_adapter.LLMAdapter()
+    with pytest.raises(ValueError, match=f"LLM_PROVIDER={provider} requires {field}"):
+        await adapter.chat([{"role": "user", "content": "Hello"}])
+    with pytest.raises(ValueError, match=f"LLM_PROVIDER={provider} requires {field}"):
+        await adapter.structured_output([], BaseModel)
+    client_factory.assert_not_called()
+
+
+async def test_missing_llm_model_stops_lifespan_before_migrations(monkeypatch):
+    migrations = Mock()
+    monkeypatch.setattr(main, "_run_migrations", migrations)
+    monkeypatch.setattr(settings, "OLLAMA_MODEL", "")
+    with pytest.raises(ValueError, match="OLLAMA_MODEL"):
+        async with main.lifespan(FastAPI()):
+            pytest.fail("Startup must reject the missing model")
+    migrations.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    ("field", "default"), [("ACCESS_TOKEN_EXPIRE_MINUTES", 15), ("REFRESH_TOKEN_EXPIRE_DAYS", 30)]
+)
+def test_token_lifetimes_accept_positive_values(monkeypatch, field, default):
+    monkeypatch.delenv(field, raising=False)
+    assert getattr(Settings(_env_file=None), field) == default
+    monkeypatch.setenv(field, "1")
+    assert getattr(Settings(_env_file=None), field) == 1
+
+
+@pytest.mark.parametrize("field", ["ACCESS_TOKEN_EXPIRE_MINUTES", "REFRESH_TOKEN_EXPIRE_DAYS"])
+@pytest.mark.parametrize("value", ["0", "-1"])
+def test_token_lifetimes_reject_nonpositive_values(monkeypatch, field, value):
+    monkeypatch.setenv(field, value)
+    with pytest.raises(ValidationError, match=field):
+        Settings(_env_file=None)

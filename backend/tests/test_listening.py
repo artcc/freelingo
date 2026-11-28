@@ -447,7 +447,11 @@ async def test_audio_serves_file(user_with_plan, tmp_path) -> None:
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("extension", "provider", "media_type"),
-    [("mp3", "gemini", "audio/mpeg"), ("wav", "openai", "audio/wav")],
+    [
+        ("mp3", "gemini", "audio/mpeg"),
+        ("mp3", "openai", "audio/mpeg"),
+        ("wav", "openai", "audio/wav"),
+    ],
 )
 async def test_audio_preserves_persisted_format_after_provider_switch(
     user_with_plan, tmp_path, monkeypatch, extension, provider, media_type

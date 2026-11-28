@@ -48,7 +48,7 @@ class GeminiTTSService:
     def __init__(
         self,
         api_key: str,
-        model: str = "gemini-3.8-flash-tts",
+        model: str,
         voice: str = "female",
         female_voice: str = "Kore",
         male_voice: str = "Puck",

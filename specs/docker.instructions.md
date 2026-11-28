@@ -66,8 +66,9 @@ remain defined by the Dockerfiles.
 The Compose files use bind mounts below `DATA_PATH`; they do not declare named volumes.
 The `volumes` entries in `docker-compose.yml` and `docker-compose.dev.yml` define the host subpaths
 and container destinations for PostgreSQL, Redis, avatars, generated audio, and TTS previews.
-Keep audio mounts aligned with backend `AUDIO_STORAGE_PATH` and preview mounts with the preview
-directory in `backend/app/routers/tts.py`.
+`AUDIO_STORAGE_PATH` sets both the audio mount's absolute destination inside the container and the
+backend's storage directory. Changing it does not move the files on the host (`${DATA_PATH}/audio`).
+The preview mount uses the directory in `backend/app/routers/tts.py`.
 
 Avatar and media access remains controlled by backend endpoints; a host mount does not make files
 public.
@@ -79,6 +80,9 @@ values; a field present in backend `Settings` but absent from Compose is not con
 placing it in `.env`.
 `backend/app/core/config.py` owns backend defaults and validation; each Compose file owns its
 forwarded values and interpolation fallbacks. Consult those files for concrete deployment values.
+Set the active LLM provider's model in the deployment environment. The backend does not choose
+model names. For cloud speech, Compose passes the explicit environment value or the model named
+in the Compose file if the variable is unset or empty.
 
 Both Compose files forward optional `OPENAI_REASONING_EFFORT`. It controls
 `reasoning.effort` on OpenAI Responses requests only; nonempty values must be supported by the selected
@@ -92,8 +96,7 @@ contract belong to `speech-services.instructions.md`.
 
 Both Compose files forward optional Gemini TTS configuration exclusively to the backend:
 `GEMINI_API_KEY`, `GEMINI_TTS_MODEL`, `GEMINI_TTS_VOICE`, `GEMINI_TTS_FEMALE_VOICE`,
-`GEMINI_TTS_MALE_VOICE`, and `GEMINI_TTS_TIMEOUT_SECONDS`. Compose supplies different voice-mapping
-fallbacks from backend `Settings` alone; the canonical configuration and startup requirements are
+`GEMINI_TTS_MALE_VOICE`, and `GEMINI_TTS_TIMEOUT_SECONDS`. The canonical configuration and startup requirements are
 defined in `speech-services.instructions.md`, along with the supported model/voice and REST contracts.
 Gemini uses native WAV with no extra service, encoder, or dependency. Existing audio and preview
 mounts store its persistent files; PCM16 mono at 24 kHz uses about 2.88 MB per minute of audio.
@@ -139,13 +142,13 @@ specified in `subscriptions-freemium.instructions.md`.
 
 `BACKEND_URL` is the frontend's private backend-connectivity variable.
 
-The production and development Compose files inject an `AVAILABLE_TARGET_LANGUAGES` fallback
-that differs from backend `Settings` and `.env.example`. Inspect the lists in those sources and set
-the intended enabled subset explicitly; the injected Compose value takes precedence.
+Both Compose files use the same deployment fallbacks for `AVAILABLE_TARGET_LANGUAGES`, public
+display prices and Gemini voice mappings. Explicit values in `.env` override them. An unset or
+empty variable preserves the existing Compose deployment defaults; the backend receives that
+resolved value. Direct backend launches should supply their intended values in the environment.
 
-`ACCESS_TOKEN_EXPIRE_MINUTES`, `REFRESH_TOKEN_EXPIRE_DAYS`, `RATE_LIMIT_ENABLED`, and
-`AUDIO_STORAGE_PATH` exist in backend Settings but are not forwarded by the current Compose contract.
-Their in-code defaults therefore apply unless the container configuration is extended to supply them.
+Both Compose files forward `ACCESS_TOKEN_EXPIRE_MINUTES`, `REFRESH_TOKEN_EXPIRE_DAYS`,
+`RATE_LIMIT_ENABLED`, and `AUDIO_STORAGE_PATH` to the backend. Token lifetimes must be positive.
 
 ## Startup and migrations
 

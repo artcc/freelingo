@@ -153,8 +153,8 @@ describe('VoiceSection', () => {
   })
 
   it.each([
-    ['openai', 'female', 'audio/mpeg'],
-    ['openai', 'male', 'audio/mpeg'],
+    ['openai', 'female', 'audio/wav'],
+    ['openai', 'male', 'audio/wav'],
     ['gemini', 'female', 'audio/wav'],
     ['gemini', 'male', 'audio/wav'],
   ])(

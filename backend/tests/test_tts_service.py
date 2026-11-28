@@ -1,5 +1,6 @@
 import hashlib
-from types import SimpleNamespace
+import io
+import wave
 from unittest.mock import AsyncMock, Mock
 
 import pytest
@@ -10,41 +11,42 @@ from app.data.phrasebook import get_phrasebook_categories
 from app.main import app
 from app.models.conversation import Conversation
 from app.routers import tts as tts_router
-from app.services.tts_service import OpenAITTSService
+from app.services.prompts.speech import build_realtime_reading_instructions
+from app.services.tts_service import KokoroTTSService, OpenAITTSService
 from tests.conftest import make_study_plan
+
+MODEL = "gpt-realtime-2.1-mini"
 
 
 @pytest.fixture
-def service():
-    service = object.__new__(OpenAITTSService)
-    service.model = "gpt-4o-mini-tts"
-    service.voice = "female"
-    service.female_voice = "marin"
-    service.male_voice = "cedar"
-    service.speed = 1.0
-    service.timeout = None
-    service._client = SimpleNamespace(
-        audio=SimpleNamespace(
-            speech=SimpleNamespace(
-                create=AsyncMock(return_value=SimpleNamespace(content=b"ID3new-audio"))
-            )
-        )
-    )
-    return service
+def wav_audio():
+    output = io.BytesIO()
+    with wave.open(output, "wb") as wav:
+        wav.setnchannels(1)
+        wav.setsampwidth(2)
+        wav.setframerate(24000)
+        wav.writeframes(b"\x00\x00")
+    return output.getvalue()
 
 
-@pytest.mark.parametrize("model", ["tts-1", "tts-1-hd", "custom-tts"])
-async def test_other_models_keep_the_original_request(service, model):
-    service.model = model
-    service.female_voice = "coral"
-    service.male_voice = "onyx"
-    assert await service.synthesize("Bonjour.", "female", language="fr-FR") == b"ID3new-audio"
-    service._client.audio.speech.create.assert_awaited_once_with(
-        model=model, voice="coral", input="Bonjour.", response_format="mp3", speed=1.0
-    )
+@pytest.fixture
+def realtime(monkeypatch, wav_audio):
+    synthesize = AsyncMock(return_value=(wav_audio, "resp_test"))
+    monkeypatch.setattr("app.services.tts_service.synthesize_realtime", synthesize)
+    return synthesize
 
 
-@pytest.mark.parametrize("model", ["gpt-4o-mini-tts", "gpt-4o-mini-tts-2025-12-15"])
+@pytest.fixture
+def service(monkeypatch):
+    monkeypatch.setattr("app.services.tts_service.openai.AsyncOpenAI", Mock())
+    return OpenAITTSService("test-key", MODEL, "female")
+
+
+async def test_realtime_skips_blank_text(service, realtime):
+    assert await service.synthesize(" \n ") == b""
+    realtime.assert_not_awaited()
+
+
 @pytest.mark.parametrize(
     ("language", "expected"),
     [
@@ -81,18 +83,23 @@ async def test_other_models_keep_the_original_request(service, model):
         ("hr-HR", "Croatian from Croatia"),
     ],
 )
-async def test_capable_models_receive_the_requested_language(service, model, language, expected):
-    service.model = model
-    await service.synthesize("Text to read.", language=language)
-    payload = service._client.audio.speech.create.await_args.kwargs
-    assert payload["model"] == model
-    assert payload["input"] == "Text to read."
-    assert f"The primary language is {expected};" in payload["instructions"]
+async def test_realtime_receives_the_requested_language(service, realtime, language, expected):
+    await service.synthesize(" Text to read. ", language=language)
+    instructions = build_realtime_reading_instructions("Text to read.", language)
+    assert f"The primary language is {expected};" in instructions
+    realtime.assert_awaited_once_with(
+        client=service._client,
+        model=MODEL,
+        voice="marin",
+        speed=1.0,
+        instructions=instructions,
+        timeout=None,
+    )
 
 
-async def test_generic_tts_also_receives_multilingual_instructions(service):
+async def test_generic_tts_also_receives_multilingual_instructions(service, realtime):
     await service.synthesize("Bonjour. Hola. Hello.")
-    instructions = service._client.audio.speech.create.await_args.kwargs["instructions"]
+    instructions = realtime.await_args.kwargs["instructions"]
     assert "Identify the language of each passage" in instructions
     assert "do not translate" in instructions
     assert "When the text switches languages, switch pronunciation naturally" in instructions
@@ -101,55 +108,43 @@ async def test_generic_tts_also_receives_multilingual_instructions(service):
     assert "Portuguese from Portugal" not in instructions
 
 
-def test_cache_key_changes_with_instructions_only_for_capable_models(service, monkeypatch):
-    modern = service.get_cache_key("Bonjour.", language="fr")
-    service.model = "tts-1"
-    legacy = service.get_cache_key("Bonjour.", language="fr")
+def test_cache_key_changes_with_reading_instructions(service, monkeypatch):
+    original = service.get_cache_key("Bonjour.", language="fr")
     monkeypatch.setattr(
-        "app.services.tts_service.build_speech_instructions",
-        lambda language: "Revised pronunciation",
+        "app.services.tts_service.build_realtime_reading_instructions",
+        lambda text, language: f"Revised instructions for {language}: {text}",
     )
-    assert service.get_cache_key("Bonjour.", language="fr") == legacy
-    service.model = "gpt-4o-mini-tts"
-    assert service.get_cache_key("Bonjour.", language="fr") != modern
+    assert service.get_cache_key("Bonjour.", language="fr") != original
 
 
-@pytest.mark.parametrize("model", ["tts-1", "gpt-4o-mini-tts"])
-async def test_previews_cache_resolved_voice_for_all_models(
-    client, test_user, service, monkeypatch, tmp_path, model
+async def test_previews_cache_wav_by_resolved_voice(
+    client, test_user, service, realtime, wav_audio, monkeypatch, tmp_path
 ):
-    service.model = model
-    service.female_voice = "nova"
-    service.male_voice = "onyx"
     monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
     monkeypatch.setattr(tts_router, "_PREVIEW_DIR", str(tmp_path))
-    (tmp_path / "nova.mp3").write_bytes(b"ID3legacy")
+    (tmp_path / "marin.mp3").write_bytes(b"ID3legacy")
     _, headers = test_user
 
     first = await client.get("/api/tts/preview/female", headers=headers)
     second = await client.get("/api/tts/preview/female", headers=headers)
 
     assert first.status_code == second.status_code == 200
-    assert first.content == second.content
-    assert first.content == b"ID3new-audio"
-    assert service._client.audio.speech.create.await_count == 1
+    assert first.content == second.content == wav_audio
+    assert first.headers["content-type"] == second.headers["content-type"] == "audio/wav"
+    realtime.assert_awaited_once()
     service.female_voice = "coral"
     revised = await client.get("/api/tts/preview/female", headers=headers)
     assert revised.status_code == 200
-    assert service._client.audio.speech.create.await_count == 2
-    assert service._client.audio.speech.create.await_args.kwargs["voice"] == "coral"
-    assert len(list(tmp_path.glob("female-*.mp3"))) == 2
-    assert (tmp_path / "nova.mp3").read_bytes() == b"ID3legacy"
+    assert realtime.await_count == 2
+    assert realtime.await_args.kwargs["voice"] == "coral"
+    assert len(list(tmp_path.glob("female-*.wav"))) == 2
+    assert (tmp_path / "marin.mp3").read_bytes() == b"ID3legacy"
 
 
-@pytest.mark.parametrize("model", ["tts-1", "gpt-4o-mini-tts"])
-async def test_phrasebook_caches_resolved_voice_for_all_models_and_preserves_language(
-    client, test_user, service, monkeypatch, tmp_path, model
+async def test_phrasebook_caches_wav_by_resolved_voice_and_preserves_language(
+    client, test_user, service, realtime, wav_audio, monkeypatch, tmp_path
 ):
-    service.model = model
-    service.female_voice = "nova"
-    service.male_voice = "onyx"
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
     monkeypatch.setattr(settings, "AUDIO_STORAGE_PATH", str(tmp_path))
     category = get_phrasebook_categories("es-ES")[0]
@@ -165,20 +160,19 @@ async def test_phrasebook_caches_resolved_voice_for_all_models_and_preserves_lan
     second = await client.get(url, headers=headers)
 
     assert first.status_code == second.status_code == 200
-    assert first.content == second.content
-    assert first.content == b"ID3new-audio"
-    service._client.audio.speech.create.assert_awaited_once()
-    payload = service._client.audio.speech.create.await_args.kwargs
-    if model == "gpt-4o-mini-tts":
-        assert "The primary language is Spanish from Spain;" in payload["instructions"]
-    else:
-        assert "instructions" not in payload
+    assert first.content == second.content == wav_audio
+    assert first.headers["content-type"] == second.headers["content-type"] == "audio/wav"
+    realtime.assert_awaited_once()
+    assert realtime.await_args.kwargs["instructions"] == build_realtime_reading_instructions(
+        text, "es-ES"
+    )
     assert first.headers["cache-control"] == second.headers["cache-control"] == "no-store"
     service.female_voice = "coral"
     revised = await client.get(url, headers=headers)
     assert revised.status_code == 200
-    assert service._client.audio.speech.create.await_count == 2
-    assert service._client.audio.speech.create.await_args.kwargs["voice"] == "coral"
+    assert realtime.await_count == 2
+    assert realtime.await_args.kwargs["voice"] == "coral"
+    assert len(list(directory.glob("*.wav"))) == 2
     assert (directory / f"{key}.mp3").read_bytes() == b"ID3legacy"
 
 
@@ -187,7 +181,7 @@ async def test_phrasebook_caches_resolved_voice_for_all_models_and_preserves_lan
     [("en-US", "American English"), ("en-GB", "British English"), ("es-ES", "Spanish from Spain")],
 )
 async def test_tts_endpoint_uses_the_owned_plan_instead_of_active_language(
-    client, test_user, db_session, service, monkeypatch, language, expected
+    client, test_user, db_session, service, realtime, monkeypatch, language, expected
 ):
     user, headers = test_user
     user.target_language = "fr-FR"
@@ -203,13 +197,13 @@ async def test_tts_endpoint_uses_the_owned_plan_instead_of_active_language(
     )
 
     assert response.status_code == 200
-    instructions = service._client.audio.speech.create.await_args.kwargs["instructions"]
+    instructions = realtime.await_args.kwargs["instructions"]
     assert f"The primary language is {expected};" in instructions
 
 
 @pytest.mark.parametrize("with_plan", [False, True])
 async def test_tts_endpoint_uses_conversation_context(
-    client, test_user, db_session, service, monkeypatch, with_plan
+    client, test_user, db_session, service, realtime, monkeypatch, with_plan
 ):
     user, headers = test_user
     plan = None
@@ -232,14 +226,14 @@ async def test_tts_endpoint_uses_conversation_context(
     )
 
     assert response.status_code == 200
-    instructions = service._client.audio.speech.create.await_args.kwargs["instructions"]
+    instructions = realtime.await_args.kwargs["instructions"]
     assert "The primary language is American English;" in instructions
 
 
 @pytest.mark.parametrize("context", ["study_plan_id", "conversation_id"])
 @pytest.mark.parametrize("foreign", [False, True])
 async def test_tts_rejects_missing_or_foreign_context(
-    client, test_user, admin_user, db_session, service, monkeypatch, context, foreign
+    client, test_user, admin_user, db_session, service, realtime, monkeypatch, context, foreign
 ):
     _, headers = test_user
     other_user, _ = admin_user
@@ -259,7 +253,7 @@ async def test_tts_rejects_missing_or_foreign_context(
     )
 
     assert response.status_code == 404
-    service._client.audio.speech.create.assert_not_awaited()
+    realtime.assert_not_awaited()
 
 
 @pytest.mark.parametrize(
@@ -273,7 +267,7 @@ async def test_tts_rejects_missing_or_foreign_context(
     ],
 )
 async def test_tts_rejects_invalid_or_ambiguous_context(
-    client, test_user, service, monkeypatch, context
+    client, test_user, service, realtime, monkeypatch, context
 ):
     _, headers = test_user
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
@@ -281,11 +275,11 @@ async def test_tts_rejects_invalid_or_ambiguous_context(
     response = await client.post("/api/tts", headers=headers, json={"text": "Hello.", **context})
 
     assert response.status_code == 422
-    service._client.audio.speech.create.assert_not_awaited()
+    realtime.assert_not_awaited()
 
 
 async def test_tts_without_context_does_not_impose_a_regional_accent(
-    client, test_user, service, monkeypatch
+    client, test_user, service, realtime, monkeypatch
 ):
     _, headers = test_user
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
@@ -293,7 +287,7 @@ async def test_tts_without_context_does_not_impose_a_regional_accent(
     response = await client.post("/api/tts", headers=headers, json={"text": "Hello."})
 
     assert response.status_code == 200
-    instructions = service._client.audio.speech.create.await_args.kwargs["instructions"]
+    instructions = realtime.await_args.kwargs["instructions"]
     assert "British" not in instructions
     assert "primary language" not in instructions
 
@@ -301,13 +295,15 @@ async def test_tts_without_context_does_not_impose_a_regional_accent(
 @pytest.mark.parametrize("source", ["chat", "voice"])
 @pytest.mark.parametrize("provider", ["openai", "local"])
 async def test_chat_playback_converts_markdown_before_synthesis(
-    client, test_user, db_session, monkeypatch, source, provider
+    client, test_user, db_session, monkeypatch, wav_audio, source, provider
 ):
     user, headers = test_user
     conversation = Conversation(user_id=user.id, target_language="en-US", source=source)
     db_session.add(conversation)
     await db_session.commit()
-    service = SimpleNamespace(synthesize=AsyncMock(return_value=b"ID3audio"))
+    service = Mock(spec=OpenAITTSService if provider == "openai" else KokoroTTSService)
+    audio = wav_audio if provider == "openai" else b"ID3audio"
+    service.synthesize.return_value = audio
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
     monkeypatch.setattr(settings, "TTS_PROVIDER", provider)
 
@@ -322,7 +318,7 @@ async def test_chat_playback_converts_markdown_before_synthesis(
     )
 
     assert response.status_code == 200
-    assert response.content == b"ID3audio"
+    assert response.content == audio
     service.synthesize.assert_awaited_once_with(
         "Use went, not goed.\n\nI went home.\nShe went shopping.",
         "male" if provider == "openai" else None,
@@ -332,12 +328,15 @@ async def test_chat_playback_converts_markdown_before_synthesis(
 
 @pytest.mark.parametrize("with_plan", [False, True])
 async def test_tts_preserves_literal_text_outside_chat(
-    client, test_user, db_session, service, monkeypatch, with_plan
+    client, test_user, db_session, service, realtime, monkeypatch, with_plan
 ):
     user, headers = test_user
     body = {"text": "Keep **this**, ___ and 1. intact."}
+    language = "en-GB" if with_plan else None
     if with_plan:
-        plan = await make_study_plan(db_session, user_id=user.id, cefr_level="A1")
+        plan = await make_study_plan(
+            db_session, user_id=user.id, cefr_level="A1", target_language=language
+        )
         await db_session.commit()
         body["study_plan_id"] = plan.id
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
@@ -345,11 +344,13 @@ async def test_tts_preserves_literal_text_outside_chat(
     response = await client.post("/api/tts", headers=headers, json=body)
 
     assert response.status_code == 200
-    assert service._client.audio.speech.create.await_args.kwargs["input"] == body["text"]
+    assert realtime.await_args.kwargs["instructions"] == build_realtime_reading_instructions(
+        body["text"], language
+    )
 
 
 async def test_chat_tts_rejects_content_without_speakable_text(
-    client, test_user, db_session, service, monkeypatch
+    client, test_user, db_session, service, realtime, monkeypatch
 ):
     user, headers = test_user
     conversation = Conversation(user_id=user.id, target_language="en-GB")
@@ -362,15 +363,17 @@ async def test_chat_tts_rejects_content_without_speakable_text(
     )
 
     assert response.status_code == 422
-    service._client.audio.speech.create.assert_not_awaited()
+    realtime.assert_not_awaited()
 
 
 @pytest.mark.parametrize(
     ("voice", "actual"), [(None, "marin"), ("female", "marin"), ("male", "cedar")]
 )
-async def test_openai_resolves_public_voice_for_synthesis_and_cache(service, voice, actual):
+async def test_openai_resolves_public_voice_for_synthesis_and_cache(
+    service, realtime, voice, actual
+):
     await service.synthesize("Hello.", voice)
-    assert service._client.audio.speech.create.await_args.kwargs["voice"] == actual
+    assert realtime.await_args.kwargs["voice"] == actual
     key = service.get_cache_key("Hello.", voice)
     assert key == service.get_cache_key("Hello.", voice or "female")
     setattr(service, f"{voice or 'female'}_voice", "coral")
@@ -378,18 +381,18 @@ async def test_openai_resolves_public_voice_for_synthesis_and_cache(service, voi
 
 
 @pytest.mark.parametrize("voice", ["nova", "marin", "unknown", "Female", "", 42, ["female"]])
-async def test_openai_adapter_rejects_non_public_voices(service, voice):
+async def test_openai_adapter_rejects_non_public_voices(service, realtime, voice):
     with pytest.raises(ValueError, match="female or male"):
         await service.synthesize("Hello.", voice)
     with pytest.raises(ValueError, match="female or male"):
         service.get_cache_key("Hello.", voice)
-    service._client.audio.speech.create.assert_not_awaited()
+    realtime.assert_not_awaited()
 
 
 @pytest.mark.parametrize("endpoint", ["tts", "preview", "tour"])
 @pytest.mark.parametrize("voice", ["nova", "marin", "cedar", "unknown"])
 async def test_openai_routes_reject_provider_names(
-    client, test_user, service, monkeypatch, endpoint, voice
+    client, test_user, service, realtime, monkeypatch, endpoint, voice
 ):
     monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
@@ -400,12 +403,12 @@ async def test_openai_routes_reject_provider_names(
         url = "/api/tts" if endpoint == "tts" else "/api/tts/tour/es/step1"
         response = await client.post(url, headers=headers, json={"text": "Hello.", "voice": voice})
     assert response.status_code == 400
-    service._client.audio.speech.create.assert_not_awaited()
+    realtime.assert_not_awaited()
 
 
 @pytest.mark.parametrize("voice", ["female", "male", None, ""])
 async def test_openai_endpoint_uses_mapping_and_configured_default(
-    client, test_user, service, monkeypatch, voice
+    client, test_user, service, realtime, monkeypatch, voice
 ):
     service.voice = "male"
     monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
@@ -415,10 +418,8 @@ async def test_openai_endpoint_uses_mapping_and_configured_default(
         "/api/tts", headers=headers, json={"text": "Hello.", "voice": voice}
     )
     assert response.status_code == 200
-    assert response.headers["content-type"] == "audio/mpeg"
-    assert service._client.audio.speech.create.await_args.kwargs["voice"] == (
-        "marin" if voice == "female" else "cedar"
-    )
+    assert response.headers["content-type"] == "audio/wav"
+    assert realtime.await_args.kwargs["voice"] == ("marin" if voice == "female" else "cedar")
 
 
 @pytest.mark.parametrize(
@@ -426,28 +427,37 @@ async def test_openai_endpoint_uses_mapping_and_configured_default(
     [
         {"voice": "nova"},
         {"female_voice": ""},
+        {"female_voice": "nova"},
         {"male_voice": "unknown"},
-        {"model": "tts-1"},
-        {"model": "tts-1-hd", "female_voice": "nova"},
-        {"model": "tts-1", "male_voice": "onyx"},
+        {"male_voice": "onyx"},
+        {"model": ""},
+        {"model": "   "},
+        {"speed": 0.24},
+        {"speed": 1.51},
+        {"speed": True},
     ],
 )
 def test_openai_rejects_invalid_configuration_before_creating_client(monkeypatch, overrides):
     client_factory = Mock()
     monkeypatch.setattr("app.services.tts_service.openai.AsyncOpenAI", client_factory)
-    with pytest.raises(ValueError, match="OpenAI TTS"):
-        OpenAITTSService(
-            **{"api_key": "test-key", "model": "gpt-4o-mini-tts", "voice": "female", **overrides}
-        )
+    expected_error = "OPENAI_TTS_MODEL" if "model" in overrides else "OpenAI TTS"
+    with pytest.raises(ValueError, match=expected_error):
+        OpenAITTSService(**{"api_key": "test-key", "model": MODEL, "voice": "female", **overrides})
     client_factory.assert_not_called()
 
 
-@pytest.mark.parametrize("model", ["tts-1", "tts-1-hd", "gpt-4o-mini-tts"])
-def test_openai_accepts_compatible_operator_mappings(monkeypatch, model):
+@pytest.mark.parametrize("speed", [0.25, 1.5])
+async def test_openai_accepts_realtime_voice_mappings_and_speed_limits(
+    monkeypatch, realtime, speed
+):
     monkeypatch.setattr("app.services.tts_service.openai.AsyncOpenAI", Mock())
-    service = OpenAITTSService("test-key", model, "male", female_voice="nova", male_voice="onyx")
-    assert service._resolve_voice(None) == "onyx"
-    assert service._resolve_voice("female") == "nova"
+    service = OpenAITTSService(
+        "test-key", MODEL, "male", speed=speed, female_voice="verse", male_voice="ash"
+    )
+    await service.synthesize("Hello.")
+    await service.synthesize("Hello.", "female")
+    assert [call.kwargs["voice"] for call in realtime.await_args_list] == ["ash", "verse"]
+    assert realtime.await_args.kwargs["speed"] == speed
 
 
 @pytest.mark.parametrize("provider", ["local", "gemini"])
@@ -461,3 +471,19 @@ def test_unused_openai_settings_do_not_block_other_providers(provider, voice, ex
 def test_selected_openai_provider_requires_a_logical_default():
     with pytest.raises(ValidationError, match="OPENAI_TTS_VOICE"):
         Settings(_env_file=None, TTS_PROVIDER="openai", OPENAI_TTS_VOICE="nova")
+
+
+def test_openai_speech_models_come_from_dotenv_without_fallback(tmp_path, monkeypatch):
+    monkeypatch.delenv("OPENAI_TTS_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_STT_MODEL", raising=False)
+    env_file = tmp_path / ".env"
+    env_file.write_text(
+        "OPENAI_TTS_MODEL=configured-realtime\nOPENAI_STT_MODEL=configured-transcription\n"
+    )
+    configured = Settings(_env_file=env_file)
+    assert configured.OPENAI_TTS_MODEL == "configured-realtime"
+    assert configured.OPENAI_STT_MODEL == "configured-transcription"
+
+    missing = Settings(_env_file=None)
+    assert not missing.OPENAI_TTS_MODEL
+    assert not missing.OPENAI_STT_MODEL

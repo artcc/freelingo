@@ -67,6 +67,8 @@ The refresh token is an opaque `secrets.token_urlsafe(64)` value stored in an `h
 under `refresh:{token}` in Redis. Cookie lifetime and Redis TTL derive from
 `REFRESH_TOKEN_EXPIRE_DAYS` in the same settings, measured in days. Refresh rotation deletes the old
 Redis token before issuing a replacement. Logout deletes the current token and clears the cookie.
+Both lifetimes must be positive integers. Changes apply to newly issued tokens, including rotated
+refresh tokens; they do not alter the expiration of tokens already issued.
 
 `apiFetch` adds the bearer token. When a request that had an access token returns 401 within the same
 authentication session, it shares one refresh request, stores the new access token, and retries. A

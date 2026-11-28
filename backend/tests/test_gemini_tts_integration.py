@@ -47,7 +47,7 @@ def wav_audio():
 
 @pytest.fixture
 def gemini_service(monkeypatch, tmp_path, wav_audio):
-    service = GeminiTTSService(api_key="test-gemini-key")
+    service = GeminiTTSService(api_key="test-gemini-key", model="configured-model")
     monkeypatch.setattr(service, "synthesize", AsyncMock(return_value=wav_audio))
     monkeypatch.setattr(settings, "TTS_PROVIDER", "gemini")
     monkeypatch.setattr(settings, "AUDIO_STORAGE_PATH", str(tmp_path))
@@ -377,6 +377,8 @@ def startup_stubs(monkeypatch):
 
 
 async def test_startup_selects_gemini_with_operator_configuration(startup_stubs, monkeypatch):
+    monkeypatch.setattr(settings, "OPENAI_TTS_MODEL", "unused-model")
+    monkeypatch.setattr(settings, "OPENAI_STT_MODEL", "unused-model")
     monkeypatch.setattr(settings, "GEMINI_API_KEY", "test-startup-gemini-key")
     monkeypatch.setattr(settings, "GEMINI_TTS_MODEL", "configured-gemini-model")
     monkeypatch.setattr(settings, "GEMINI_TTS_VOICE", "male")
@@ -413,7 +415,7 @@ async def test_startup_selects_gemini_with_operator_configuration(startup_stubs,
 async def test_startup_selects_openai_with_operator_voice_mappings(startup_stubs, monkeypatch):
     monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
     monkeypatch.setattr(settings, "OPENAI_API_KEY", "test-openai-key")
-    monkeypatch.setattr(settings, "OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
+    monkeypatch.setattr(settings, "OPENAI_TTS_MODEL", "gpt-realtime-2.1-mini")
     monkeypatch.setattr(settings, "OPENAI_TTS_VOICE", "male")
     monkeypatch.setattr(settings, "OPENAI_TTS_FEMALE_VOICE", "coral")
     monkeypatch.setattr(settings, "OPENAI_TTS_MALE_VOICE", "ash")
@@ -424,7 +426,7 @@ async def test_startup_selects_openai_with_operator_voice_mappings(startup_stubs
     async with main_module.lifespan(application):
         service = application.state.tts_service
         assert isinstance(service, OpenAITTSService)
-        assert service.model == "gpt-4o-mini-tts"
+        assert service.model == "gpt-realtime-2.1-mini"
         assert service.voice == "male"
         assert service.female_voice == "coral"
         assert service.male_voice == "ash"
@@ -447,6 +449,7 @@ async def test_public_config_exposes_openai_logical_default(client, monkeypatch,
 
 @pytest.mark.parametrize("api_key", ["", "   "])
 async def test_startup_rejects_missing_gemini_key(startup_stubs, monkeypatch, api_key):
+    monkeypatch.setattr(settings, "GEMINI_TTS_MODEL", "configured-gemini-model")
     monkeypatch.setattr(settings, "GEMINI_API_KEY", api_key)
     application = FastAPI()
 
@@ -455,6 +458,16 @@ async def test_startup_rejects_missing_gemini_key(startup_stubs, monkeypatch, ap
             pytest.fail("Startup must reject an unconfigured Gemini key")
 
     assert not hasattr(application.state, "tts_service")
+    startup_stubs.stt.assert_not_called()
+
+
+@pytest.mark.parametrize("model", ["", "   "])
+async def test_startup_rejects_missing_gemini_model(startup_stubs, monkeypatch, model):
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(settings, "GEMINI_TTS_MODEL", model)
+    with pytest.raises(ValueError, match=r"(?i)model"):
+        async with main_module.lifespan(FastAPI()):
+            pytest.fail("Startup must reject an unconfigured Gemini model")
     startup_stubs.stt.assert_not_called()
 
 
@@ -493,7 +506,7 @@ async def test_conversation_sends_native_wav_per_sentence_without_protocol_chang
     )
     pipeline = ConversationPipeline(
         llm=AsyncMock(),
-        tts=GeminiTTSService("test-key"),
+        tts=GeminiTTSService("test-key", "configured-model"),
         stt=AsyncMock(),
         cefr_level="B1",
         target_language="pt-PT",
