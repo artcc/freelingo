@@ -4,6 +4,7 @@ from pathlib import Path
 from textwrap import dedent
 from unittest.mock import Mock
 
+import httpx2
 import pytest
 from fastapi import FastAPI
 from openai import OpenAIError
@@ -134,6 +135,10 @@ async def test_missing_chat_credentials_stop_startup(monkeypatch, provider, erro
 def test_initialize_reuses_only_selected_client(monkeypatch, provider):
     openai_factory = Mock()
     anthropic_factory = Mock()
+    for factory in (openai_factory, anthropic_factory):
+        factory.return_value.auth_headers = {"Authorization": "Bearer test-key"}
+        factory.return_value.default_headers = {}
+        factory.return_value.credentials = None
     monkeypatch.setattr(llm_adapter, "AsyncOpenAI", openai_factory)
     monkeypatch.setattr(llm_adapter._anthropic, "AsyncAnthropic", anthropic_factory)
     monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
@@ -150,6 +155,59 @@ def test_initialize_reuses_only_selected_client(monkeypatch, provider):
         assert adapter.client is openai_factory.return_value
         openai_factory.assert_called_once()
         anthropic_factory.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    ("provider", "key", "environment"),
+    [
+        ("openai", "   ", {}),
+        ("anthropic", "   ", {}),
+        ("openai", "", {"OPENAI_ADMIN_KEY": "test-admin-key"}),
+        ("openai", "test-key", {"OPENAI_CUSTOM_HEADERS": "Authorization: Bearer "}),
+        ("anthropic", "test-key", {"ANTHROPIC_CUSTOM_HEADERS": "authorization: Bearer "}),
+    ],
+)
+def test_initialize_rejects_missing_effective_chat_credentials(
+    monkeypatch, provider, key, environment
+):
+    for name in ("OPENAI_ADMIN_KEY", "OPENAI_CUSTOM_HEADERS", "ANTHROPIC_CUSTOM_HEADERS"):
+        monkeypatch.delenv(name, raising=False)
+    for name, value in environment.items():
+        monkeypatch.setenv(name, value)
+    monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
+    monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
+    monkeypatch.setattr(settings, f"{provider.upper()}_API_KEY", key)
+
+    with pytest.raises(ValueError, match=f"{provider.upper()}_API_KEY"):
+        llm_adapter.LLMAdapter().initialize()
+
+
+@pytest.mark.parametrize("provider", ["anthropic", "deepseek"])
+async def test_custom_authorization_is_accepted_and_sent_by_chat(monkeypatch, provider):
+    if provider == "anthropic":
+        variable = "ANTHROPIC_CUSTOM_HEADERS"
+        response = {"content": [{"type": "text", "text": "ok"}], "stop_reason": "end_turn"}
+    else:
+        variable = "OPENAI_CUSTOM_HEADERS"
+        monkeypatch.setenv("OPENAI_ADMIN_KEY", "test-admin-key")
+        response = {"choices": [{"message": {"role": "assistant", "content": "ok"}}]}
+    monkeypatch.setenv(variable, "authorization: Bearer test-custom-key")
+    monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
+    monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
+    monkeypatch.setattr(settings, f"{provider.upper()}_API_KEY", "")
+    requests = []
+
+    async def send(_transport, request):
+        requests.append(request)
+        return httpx2.Response(200, json=response, request=request)
+
+    monkeypatch.setattr(httpx2.AsyncHTTPTransport, "handle_async_request", send)
+    adapter = llm_adapter.LLMAdapter()
+    adapter.initialize()
+    assert not requests
+    assert await adapter.chat([{"role": "user", "content": "Hello"}]) == "ok"
+    assert len(requests) == 1
+    assert requests[0].headers["Authorization"] == "Bearer test-custom-key"
 
 
 @pytest.mark.parametrize(

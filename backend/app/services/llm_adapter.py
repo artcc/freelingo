@@ -9,7 +9,7 @@ from functools import cached_property
 
 import anthropic as _anthropic
 import httpx2
-from openai import APITimeoutError, AsyncOpenAI
+from openai import APITimeoutError, AsyncOpenAI, OpenAIError
 from pydantic import BaseModel
 
 from app.core.app_logger import get_logger
@@ -627,14 +627,36 @@ class LLMAdapter:
     def initialize(self) -> None:
         """Prepare the selected client at application startup without sending a request."""
         _ = self.model
-        if self.provider == "deepseek" and not self._settings.DEEPSEEK_API_KEY.strip():
-            raise ValueError("LLM_PROVIDER=deepseek requires DEEPSEEK_API_KEY to be set")
         if self.provider == "anthropic":
             client = self._anthropic
-            if not (client.api_key or client.auth_token or client.credentials):
-                raise ValueError("LLM_PROVIDER=anthropic requires ANTHROPIC_API_KEY to be set")
+            if client.credentials is not None:
+                return
         else:
-            _ = self.client
+            try:
+                client = self.client
+            except OpenAIError as exc:
+                if self.provider == "deepseek" and not self._settings.DEEPSEEK_API_KEY.strip():
+                    raise ValueError("LLM_PROVIDER=deepseek requires DEEPSEEK_API_KEY") from exc
+                raise
+            if self.provider == "ollama":
+                return
+
+        # SDK defaults include operator headers, which override the generated authorization.
+        headers = {
+            name.lower(): value
+            for source in (client.auth_headers, client.default_headers)
+            for name, value in source.items()
+            if isinstance(value, str)
+        }
+        authorization = headers.get("authorization", "").strip()
+        if authorization and authorization.lower() != "bearer":
+            return
+        if self.provider == "anthropic" and headers.get("x-api-key", "").strip():
+            return
+        raise ValueError(
+            f"LLM_PROVIDER={self.provider} requires {self.provider.upper()}_API_KEY "
+            "or an authorization header for chat"
+        )
 
     @cached_property
     def model(self) -> str:
