@@ -1,9 +1,11 @@
+import json
 import subprocess
 import sys
 from pathlib import Path
 from textwrap import dedent
 from unittest.mock import Mock
 
+import httpcore2
 import httpx2
 import pytest
 from fastapi import FastAPI
@@ -139,6 +141,8 @@ def test_initialize_reuses_only_selected_client(monkeypatch, provider):
         factory.return_value.auth_headers = {"Authorization": "Bearer test-key"}
         factory.return_value.default_headers = {}
         factory.return_value.credentials = None
+    anthropic_factory.return_value.default_headers = {"Authorization": "Bearer test-key"}
+    anthropic_factory.return_value._custom_headers = {}
     monkeypatch.setattr(llm_adapter, "AsyncOpenAI", openai_factory)
     monkeypatch.setattr(llm_adapter._anthropic, "AsyncAnthropic", anthropic_factory)
     monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
@@ -165,6 +169,11 @@ def test_initialize_reuses_only_selected_client(monkeypatch, provider):
         ("openai", "", {"OPENAI_ADMIN_KEY": "test-admin-key"}),
         ("openai", "test-key", {"OPENAI_CUSTOM_HEADERS": "Authorization: Bearer "}),
         ("anthropic", "test-key", {"ANTHROPIC_CUSTOM_HEADERS": "authorization: Bearer "}),
+        (
+            "anthropic",
+            "test-key",
+            {"ANTHROPIC_CUSTOM_HEADERS": "authorization: Bearer test-custom-key\nAuthorization:"},
+        ),
     ],
 )
 def test_initialize_rejects_missing_effective_chat_credentials(
@@ -182,8 +191,23 @@ def test_initialize_rejects_missing_effective_chat_credentials(
         llm_adapter.LLMAdapter().initialize()
 
 
-@pytest.mark.parametrize("provider", ["anthropic", "deepseek"])
-async def test_custom_authorization_is_accepted_and_sent_by_chat(monkeypatch, provider):
+@pytest.mark.parametrize(
+    ("provider", "api_key", "custom_headers", "expected_authorization"),
+    [
+        ("anthropic", "", "authorization: Bearer test-custom-key", "Bearer test-custom-key"),
+        ("deepseek", "", "authorization: Bearer test-custom-key", "Bearer test-custom-key"),
+        ("anthropic", "", "X-Api-Key: test-custom-key", None),
+        (
+            "anthropic",
+            "test-key",
+            "authorization:\nAuthorization: Bearer test-custom-key",
+            "Bearer test-custom-key",
+        ),
+    ],
+)
+async def test_custom_authorization_is_accepted_and_sent_by_chat(
+    monkeypatch, provider, api_key, custom_headers, expected_authorization
+):
     if provider == "anthropic":
         variable = "ANTHROPIC_CUSTOM_HEADERS"
         response = {"content": [{"type": "text", "text": "ok"}], "stop_reason": "end_turn"}
@@ -191,15 +215,24 @@ async def test_custom_authorization_is_accepted_and_sent_by_chat(monkeypatch, pr
         variable = "OPENAI_CUSTOM_HEADERS"
         monkeypatch.setenv("OPENAI_ADMIN_KEY", "test-admin-key")
         response = {"choices": [{"message": {"role": "assistant", "content": "ok"}}]}
-    monkeypatch.setenv(variable, "authorization: Bearer test-custom-key")
+    monkeypatch.setenv(variable, custom_headers)
     monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
     monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
-    monkeypatch.setattr(settings, f"{provider.upper()}_API_KEY", "")
+    monkeypatch.setattr(settings, f"{provider.upper()}_API_KEY", api_key)
     requests = []
+    payload = json.dumps(response).encode()
+    wire_response = (
+        b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n"
+        + f"Content-Length: {len(payload)}\r\n\r\n".encode()
+        + payload
+    )
+    http_send = httpx2.AsyncHTTPTransport.handle_async_request
 
-    async def send(_transport, request):
+    async def send(transport, request):
         requests.append(request)
-        return httpx2.Response(200, json=response, request=request)
+        # Keep HTTP/1.1 serialization, including its validation of header values.
+        transport._pool._network_backend = httpcore2.AsyncMockBackend([wire_response])
+        return await http_send(transport, request)
 
     monkeypatch.setattr(httpx2.AsyncHTTPTransport, "handle_async_request", send)
     adapter = llm_adapter.LLMAdapter()
@@ -207,7 +240,9 @@ async def test_custom_authorization_is_accepted_and_sent_by_chat(monkeypatch, pr
     assert not requests
     assert await adapter.chat([{"role": "user", "content": "Hello"}]) == "ok"
     assert len(requests) == 1
-    assert requests[0].headers["Authorization"] == "Bearer test-custom-key"
+    assert requests[0].headers.get("Authorization") == expected_authorization
+    if expected_authorization is None:
+        assert requests[0].headers["X-Api-Key"] == "test-custom-key"
 
 
 @pytest.mark.parametrize(

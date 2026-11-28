@@ -9,6 +9,7 @@ from functools import cached_property
 
 import anthropic as _anthropic
 import httpx2
+from anthropic._base_client import build_headers as build_anthropic_headers
 from openai import APITimeoutError, AsyncOpenAI, OpenAIError
 from pydantic import BaseModel
 
@@ -631,6 +632,8 @@ class LLMAdapter:
             client = self._anthropic
             if client.credentials is not None:
                 return
+            # Messages reapplies the operator's headers last, regardless of their casing.
+            headers, _ = build_anthropic_headers(client.default_headers, client._custom_headers)
         else:
             try:
                 client = self.client
@@ -640,14 +643,12 @@ class LLMAdapter:
                 raise
             if self.provider == "ollama":
                 return
-
-        # SDK defaults include operator headers, which override the generated authorization.
-        headers = {
-            name.lower(): value
-            for source in (client.auth_headers, client.default_headers)
-            for name, value in source.items()
-            if isinstance(value, str)
-        }
+            headers = {
+                name.lower(): value
+                for source in (client.auth_headers, client.default_headers)
+                for name, value in source.items()
+                if isinstance(value, str)
+            }
         authorization = headers.get("authorization", "").strip()
         if authorization and authorization.lower() != "bearer":
             return
@@ -681,7 +682,13 @@ class LLMAdapter:
     @cached_property
     def _anthropic(self) -> _anthropic.AsyncAnthropic:
         # _call_with_retry owns retries; don't stack them with SDK retries.
-        return _anthropic.AsyncAnthropic(api_key=self._settings.ANTHROPIC_API_KEY, max_retries=0)
+        api_key = self._settings.ANTHROPIC_API_KEY
+        client = _anthropic.AsyncAnthropic(api_key=api_key, max_retries=0)
+        if not api_key.strip():
+            # Passing None to the constructor would discover ambient credentials. Clear the
+            # explicitly empty key afterwards so the SDK does not emit an empty Bearer header.
+            client.api_key = None
+        return client
 
     async def _call_with_retry(
         self, fn, *args, tools_requested: bool = False, max_retries: int = MAX_RETRIES, **kwargs
