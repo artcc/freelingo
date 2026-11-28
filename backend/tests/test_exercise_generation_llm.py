@@ -32,7 +32,7 @@ async def test_sdk_timeout_is_typed_and_not_retried_for_exercise_generation():
             [], Payload, deadline=asyncio.get_running_loop().time() + 600
         )
     assert create.await_count == 1
-    adapter.client.with_options.assert_called_once_with(max_retries=0)
+    adapter.client.with_options.assert_called_once_with(max_retries=0, _enforce_credentials=False)
     assert create.await_args.kwargs["timeout"] > 120
 
 

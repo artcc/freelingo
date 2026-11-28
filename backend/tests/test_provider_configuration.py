@@ -1,3 +1,4 @@
+import asyncio
 import json
 import subprocess
 import sys
@@ -9,7 +10,6 @@ import httpcore2
 import httpx2
 import pytest
 from fastapi import FastAPI
-from openai import OpenAIError
 from pydantic import BaseModel, ValidationError
 
 from app import main
@@ -102,18 +102,14 @@ async def test_missing_llm_model_stops_lifespan_before_migrations(monkeypatch):
     migrations.assert_not_called()
 
 
-@pytest.mark.parametrize(
-    ("provider", "error", "field"),
-    [
-        ("openai", OpenAIError, "OPENAI_API_KEY"),
-        ("deepseek", ValueError, "DEEPSEEK_API_KEY"),
-        ("anthropic", ValueError, "ANTHROPIC_API_KEY"),
-    ],
-)
-async def test_missing_chat_credentials_stop_startup(monkeypatch, provider, error, field):
+@pytest.mark.parametrize("provider", ["openai", "deepseek", "anthropic"])
+async def test_missing_chat_credentials_stop_startup(monkeypatch, provider):
+    field = f"{provider.upper()}_API_KEY"
     migrations = Mock()
     monkeypatch.setattr(main, "_run_migrations", migrations)
     monkeypatch.delenv("OPENAI_ADMIN_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_CUSTOM_HEADERS", raising=False)
+    monkeypatch.delenv("ANTHROPIC_CUSTOM_HEADERS", raising=False)
     monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
     monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
     monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
@@ -127,7 +123,7 @@ async def test_missing_chat_credentials_stop_startup(monkeypatch, provider, erro
         monkeypatch.setattr(settings, "OPENAI_STT_MODEL", "test-transcription-model")
     monkeypatch.setattr(main, "llm_adapter", llm_adapter.LLMAdapter())
 
-    with pytest.raises(error, match=field):
+    with pytest.raises(ValueError, match=field):
         async with main.lifespan(FastAPI()):
             pytest.fail("Startup must reject missing chat credentials")
     migrations.assert_not_called()
@@ -195,6 +191,7 @@ def test_initialize_rejects_missing_effective_chat_credentials(
     ("provider", "api_key", "custom_headers", "expected_authorization"),
     [
         ("anthropic", "", "authorization: Bearer test-custom-key", "Bearer test-custom-key"),
+        ("openai", "", "authorization: Bearer test-custom-key", "Bearer test-custom-key"),
         ("deepseek", "", "authorization: Bearer test-custom-key", "Bearer test-custom-key"),
         ("anthropic", "", "X-Api-Key: test-custom-key", None),
         (
@@ -208,13 +205,23 @@ def test_initialize_rejects_missing_effective_chat_credentials(
 async def test_custom_authorization_is_accepted_and_sent_by_chat(
     monkeypatch, provider, api_key, custom_headers, expected_authorization
 ):
+    class Reply(BaseModel):
+        text: str
+
+    reply = '{"text":"ok"}'
+    monkeypatch.delenv("OPENAI_ADMIN_KEY", raising=False)
     if provider == "anthropic":
         variable = "ANTHROPIC_CUSTOM_HEADERS"
-        response = {"content": [{"type": "text", "text": "ok"}], "stop_reason": "end_turn"}
+        response = {"content": [{"type": "text", "text": reply}], "stop_reason": "end_turn"}
+    elif provider == "openai":
+        variable = "OPENAI_CUSTOM_HEADERS"
+        response = {
+            "status": "completed",
+            "output": [{"type": "message", "content": [{"type": "output_text", "text": reply}]}],
+        }
     else:
         variable = "OPENAI_CUSTOM_HEADERS"
-        monkeypatch.setenv("OPENAI_ADMIN_KEY", "test-admin-key")
-        response = {"choices": [{"message": {"role": "assistant", "content": "ok"}}]}
+        response = {"choices": [{"message": {"role": "assistant", "content": reply}}]}
     monkeypatch.setenv(variable, custom_headers)
     monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
     monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
@@ -231,18 +238,25 @@ async def test_custom_authorization_is_accepted_and_sent_by_chat(
     async def send(transport, request):
         requests.append(request)
         # Keep HTTP/1.1 serialization, including its validation of header values.
-        transport._pool._network_backend = httpcore2.AsyncMockBackend([wire_response])
+        transport._pool._network_backend = httpcore2.AsyncMockBackend(
+            [wire_response, wire_response]
+        )
         return await http_send(transport, request)
 
     monkeypatch.setattr(httpx2.AsyncHTTPTransport, "handle_async_request", send)
     adapter = llm_adapter.LLMAdapter()
     adapter.initialize()
     assert not requests
-    assert await adapter.chat([{"role": "user", "content": "Hello"}]) == "ok"
-    assert len(requests) == 1
-    assert requests[0].headers.get("Authorization") == expected_authorization
-    if expected_authorization is None:
-        assert requests[0].headers["X-Api-Key"] == "test-custom-key"
+    messages = [{"role": "user", "content": "Hello"}]
+    assert await adapter.chat(messages) == reply
+    deadline = asyncio.get_running_loop().time() + 60
+    result = await adapter.structured_output(messages, Reply, deadline=deadline)
+    assert result.text == "ok"
+    assert len(requests) == 2
+    for request in requests:
+        assert request.headers.get("Authorization") == expected_authorization
+        if expected_authorization is None:
+            assert request.headers["X-Api-Key"] == "test-custom-key"
 
 
 @pytest.mark.parametrize(

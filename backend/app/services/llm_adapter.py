@@ -10,7 +10,7 @@ from functools import cached_property
 import anthropic as _anthropic
 import httpx2
 from anthropic._base_client import build_headers as build_anthropic_headers
-from openai import APITimeoutError, AsyncOpenAI, OpenAIError
+from openai import APITimeoutError, AsyncOpenAI
 from pydantic import BaseModel
 
 from app.core.app_logger import get_logger
@@ -635,12 +635,7 @@ class LLMAdapter:
             # Messages reapplies the operator's headers last, regardless of their casing.
             headers, _ = build_anthropic_headers(client.default_headers, client._custom_headers)
         else:
-            try:
-                client = self.client
-            except OpenAIError as exc:
-                if self.provider == "deepseek" and not self._settings.DEEPSEEK_API_KEY.strip():
-                    raise ValueError("LLM_PROVIDER=deepseek requires DEEPSEEK_API_KEY") from exc
-                raise
+            client = self.client
             if self.provider == "ollama":
                 return
             headers = {
@@ -671,11 +666,14 @@ class LLMAdapter:
                 api_key="ollama",
             )
         if self.provider == "openai":
-            return AsyncOpenAI(api_key=self._settings.OPENAI_API_KEY)
+            # The SDK checks static keys before loading OPENAI_CUSTOM_HEADERS.
+            # initialize() checks the resulting inference headers instead.
+            return AsyncOpenAI(api_key=self._settings.OPENAI_API_KEY, _enforce_credentials=False)
         if self.provider == "deepseek":
             return AsyncOpenAI(
                 base_url="https://api.deepseek.com/v1",
                 api_key=self._settings.DEEPSEEK_API_KEY,
+                _enforce_credentials=False,
             )
         return None
 
@@ -845,7 +843,7 @@ class LLMAdapter:
             ]
         client = self.client
         if sdk_max_retries is not None:
-            client = client.with_options(max_retries=sdk_max_retries)
+            client = client.with_options(max_retries=sdk_max_retries, _enforce_credentials=False)
         response = await client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -899,7 +897,7 @@ class LLMAdapter:
 
         client = self.client
         if sdk_max_retries is not None:
-            client = client.with_options(max_retries=sdk_max_retries)
+            client = client.with_options(max_retries=sdk_max_retries, _enforce_credentials=False)
         response = await client.responses.create(
             model=self.model,
             input=messages,
