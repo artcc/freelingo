@@ -19,12 +19,12 @@ FREEMIUM_LIMITS = (
 )
 
 
-@pytest.mark.parametrize("filename", [".env.example", "docker-compose.yml", "docker-compose.dev.yml"])
+@pytest.mark.parametrize(
+    "filename", [".env.example", "docker-compose.yml", "docker-compose.dev.yml"]
+)
 def test_freemium_defaults_match_deployment_configuration(filename):
     pattern = (
-        r"^([A-Z_]+)=(\d+)$"
-        if filename == ".env.example"
-        else r"^\s+([A-Z_]+): \$\{\1:-(\d+)\}$"
+        r"^([A-Z_]+)=(\d+)$" if filename == ".env.example" else r"^\s+([A-Z_]+): \$\{\1:-(\d+)\}$"
     )
     configured = dict(re.findall(pattern, (ROOT / filename).read_text(), re.MULTILINE))
 

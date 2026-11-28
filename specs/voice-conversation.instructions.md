@@ -88,9 +88,8 @@ reference, even when another language has an active plan. It does not create a l
 
 The pipeline converts the resolved target language to ISO 639-1 and declares it in every STT call.
 TTS receives the full resolved BCP-47 target language so regional distinctions such as `en-GB` and
-`en-US` remain available. Gemini supplies explicit regional language in `speech_config`; OpenAI uses
-it in pronunciation instructions for `gpt-4o-mini-tts` and its snapshots. Legacy/unknown OpenAI
-models and Kokoro ignore it.
+`en-US` remain available. Gemini supplies explicit regional language in `speech_config`; OpenAI
+Realtime and instruction-capable Speech API models use it for pronunciation guidance.
 
 ### Lesson practice context
 
@@ -195,8 +194,9 @@ items and the pipeline starts with the last 10 accepted messages.
   and pipeline construction, before feature-usage recording and `pipeline.run`. Its successful server
   send does not establish client receipt, provider readiness, or successful audio output.
 - `transcript`: final user or assistant text with `turn_id`.
-- Binary: one synthesized assistant audio fragment, without turn metadata; native WAV for Gemini
-  or MP3 for local/OpenAI. Provider selection does not add protocol frames or alter turn sequencing.
+- Binary: one complete synthesized assistant audio fragment, without turn metadata: WAV for OpenAI
+  Realtime or Gemini, MP3 for the OpenAI Speech API or Kokoro. Provider WebSocket events are never
+  forwarded to the client; the same public frames and turn sequencing apply to all adapters.
 - `barge_in`: active generation was cancelled by new binary input.
 - `interrupted`: acknowledgement of an explicit interrupt; current frontend ignores it.
 - `turn_complete`: backend work finished; browser playback may still be draining.

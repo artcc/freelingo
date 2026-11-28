@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.25] - Unreleased
+
+### Changed
+
+- Use `gpt-transcribe` for OpenAI speech recognition and `gpt-realtime-2.1-mini` for speech synthesis. New Realtime audio uses WAV; existing Listening recordings remain playable.
+- Update the OpenAI and Anthropic Python SDKs to 3.60.0 and 2.14.0 respectively, together with their HTTP, WebSocket and JSON parsing dependencies.
+
+### Fixed
+
+- Prevent Listening from publishing exercises with a blank transcript or an empty audio file.
+
 ## [1.14.20] - 2026-11-27
 
 ### Added

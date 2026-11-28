@@ -65,12 +65,13 @@ The service:
 1. Selects an exercise type allowed for the CEFR level.
 2. Builds a language-aware prompt with level-specific length guidance.
 3. Requests structured output through `llm_adapter.structured_output()`.
-4. Synthesizes the generated text with the configured TTS service, optional requested voice, and full
+4. Rejects blank text before synthesis and empty audio before creating any row or file.
+   Synthesizes the generated text with the configured TTS service, optional requested voice, and full
    BCP-47 target language. Gemini and instruction-capable OpenAI models use that language for native
    regional pronunciation, as described in `speech-services.instructions.md`.
 5. Inserts the exercise to obtain its database ID.
 6. Writes `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.{extension}` using the adapter's format:
-   `.wav` for Gemini or `.mp3` for local/OpenAI.
+   `.wav` for OpenAI Realtime or Gemini; `.mp3` for the OpenAI Speech API or Kokoro.
 7. Stores the path and commits the exercise.
 
 If writing audio or the pre-commit ownership guard fails or is cancelled, the service removes the
@@ -148,7 +149,8 @@ Changing the active context in another tab stops the stale operation and prompts
 - Reconstructs the path from configured storage, the integer exercise ID, and the allowlisted `.mp3`
   or `.wav` extension recorded in `audio_path`; it never uses the database value as an arbitrary path.
 - Returns `audio/mpeg` for MP3 or `audio/wav` for WAV, with `Accept-Ranges: bytes`. The persisted
-  format determines playback, not the currently configured provider; existing MP3 needs no schema migration.
+  extension determines playback even after the configured provider or model changes. Existing WAV
+  and MP3 recordings require neither regeneration nor a schema migration.
 - Returns `404 exercise_not_found` for an absent or different-language exercise.
 - Returns `404 audio_not_found` when the audio file is missing.
 

@@ -123,10 +123,14 @@ async def generate_and_save_exercise(
 
     topic = parsed.topic
     text = parsed.text
+    if not text.strip():
+        raise ValueError("Listening exercise has no text to synthesize")
     questions = [question.model_dump() for question in parsed.questions]
 
     # TTS synthesis — use the voice of the user who triggered generation
     audio_bytes: bytes = await tts_service.synthesize(text, voice or None, language=target_language)
+    if not audio_bytes:
+        raise RuntimeError("Listening TTS returned no audio")
 
     if before_save is not None:
         await before_save()

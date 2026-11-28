@@ -162,7 +162,8 @@ async def test_stt_rejects_study_plan_owned_by_another_user(
 
 
 @pytest.mark.asyncio
-async def test_openai_stt_forwards_required_language(monkeypatch) -> None:
+@pytest.mark.parametrize("model", ["gpt-transcribe", "whisper-1"])
+async def test_openai_stt_forwards_required_language(monkeypatch, model) -> None:
     create = AsyncMock(return_value=SimpleNamespace(text=" Credo che abbiano poco tempo. "))
     client = SimpleNamespace(
         audio=SimpleNamespace(
@@ -173,7 +174,7 @@ async def test_openai_stt_forwards_required_language(monkeypatch) -> None:
         "app.services.stt_service.openai.AsyncOpenAI",
         lambda api_key: client,
     )
-    service = OpenAISTTService(api_key="test-key", model="whisper-1")
+    service = OpenAISTTService(api_key="test-key", model=model)
 
     text = await service.transcribe(
         b"wav-bytes",
@@ -184,8 +185,13 @@ async def test_openai_stt_forwards_required_language(monkeypatch) -> None:
 
     assert text == "Credo che abbiano poco tempo."
     kwargs = create.await_args.kwargs
-    assert kwargs["model"] == "whisper-1"
-    assert kwargs["language"] == "it"
+    assert kwargs["model"] == model
+    if model == "gpt-transcribe":
+        assert kwargs["languages"] == ["it"]
+        assert "language" not in kwargs
+    else:
+        assert kwargs["language"] == "it"
+        assert "languages" not in kwargs
     assert kwargs["timeout"] == 60.0
     filename, audio_file, mime_type = kwargs["file"]
     assert filename == "recording.wav"

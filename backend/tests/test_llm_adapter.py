@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import json
+from functools import partial
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import httpx2
 import pytest
+from anthropic import AsyncAnthropic
 from pydantic import BaseModel
 
 # ---------------------------------------------------------------------------
@@ -511,25 +514,45 @@ def _make_anthropic_settings(monkeypatch):
 
 class TestAnthropicChat:
     @pytest.mark.asyncio
-    async def test_non_streaming_returns_content(self, monkeypatch):
+    async def test_non_streaming_messages_contract_with_installed_sdk(self, monkeypatch):
         _make_anthropic_settings(monkeypatch)
 
         from app.services.llm_adapter import LLMAdapter
 
-        adapter = LLMAdapter()
-        content_block = MagicMock()
-        content_block.text = "Bonjour!"
-        resp = MagicMock()
-        resp.content = [content_block]
+        def messages(request):
+            assert request.url.path == "/v1/messages"
+            assert request.headers["anthropic-version"] == "2026-10-21"
+            body = json.loads(request.content)
+            assert body["system"] == "Reply in French."
+            assert body["messages"] == [{"role": "user", "content": "Hi"}]
+            assert body["max_tokens"] == 8192
+            assert not {"temperature", "top_p", "top_k"}.intersection(body)
+            return httpx2.Response(
+                200,
+                json={
+                    "id": "msg_test",
+                    "type": "message",
+                    "role": "assistant",
+                    "model": body["model"],
+                    "content": [{"type": "text", "text": "Bonjour!"}],
+                    "stop_reason": "end_turn",
+                    "stop_sequence": None,
+                    "usage": {"input_tokens": 8, "output_tokens": 3},
+                },
+            )
 
-        with patch.object(
-            adapter._anthropic.messages,
-            "create",
-            new_callable=AsyncMock,
-            return_value=resp,
-        ):
-            result = await adapter.chat([{"role": "user", "content": "Hi"}])
-            assert result == "Bonjour!"
+        async with httpx2.AsyncClient(transport=httpx2.MockTransport(messages)) as client:
+            monkeypatch.setattr(
+                "app.services.llm_adapter._anthropic.AsyncAnthropic",
+                partial(AsyncAnthropic, http_client=client),
+            )
+            result = await LLMAdapter().chat(
+                [
+                    {"role": "system", "content": "Reply in French."},
+                    {"role": "user", "content": "Hi"},
+                ]
+            )
+        assert result == "Bonjour!"
 
     @pytest.mark.asyncio
     async def test_empty_response_raises(self, monkeypatch):
