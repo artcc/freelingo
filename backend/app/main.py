@@ -58,6 +58,7 @@ from app.routers import (
 from app.routers import config as config_router
 from app.routers import health as health_router
 from app.services.gemini_tts_service import GeminiTTSService
+from app.services.llm_adapter import llm_adapter
 from app.services.stt_service import OpenAISTTService, WhisperSTTService
 from app.services.tts_service import KokoroTTSService, OpenAITTSService
 
@@ -80,6 +81,7 @@ async def lifespan(app: FastAPI):  # noqa: ANN201
         )
 
     settings.validate_revenuecat()
+    llm_adapter.initialize()
     await asyncio.to_thread(_run_migrations)
 
     # Ensure the avatars directory exists on startup (persisted via Docker volume)

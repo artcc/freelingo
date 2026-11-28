@@ -5,9 +5,11 @@ import json
 from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import aclosing
 from dataclasses import dataclass
+from functools import cached_property
 
 import anthropic as _anthropic
 import httpx2
+from anthropic._base_client import build_headers as build_anthropic_headers
 from openai import APITimeoutError, AsyncOpenAI
 from pydantic import BaseModel
 
@@ -618,37 +620,79 @@ class LLMToolStream(LLMStream):
 
 
 class LLMAdapter:
-    def __init__(self):
-        self.provider = settings.LLM_PROVIDER
+    def __init__(self) -> None:
+        self._settings = settings.model_copy()
+        self.provider = self._settings.LLM_PROVIDER
         self._native_tools_available_logged = False
+
+    def initialize(self) -> None:
+        """Prepare the selected client at application startup without sending a request."""
+        _ = self.model
+        if self.provider == "anthropic":
+            client = self._anthropic
+            if client.credentials is not None:
+                return
+            # Messages reapplies the operator's headers last, regardless of their casing.
+            headers, _ = build_anthropic_headers(client.default_headers, client._custom_headers)
+        else:
+            client = self.client
+            if self.provider == "ollama":
+                return
+            headers = {
+                name.lower(): value
+                for source in (client.auth_headers, client.default_headers)
+                for name, value in source.items()
+                if isinstance(value, str)
+            }
+        authorization = headers.get("authorization", "").strip()
+        if authorization and authorization.lower() != "bearer":
+            return
+        if self.provider == "anthropic" and headers.get("x-api-key", "").strip():
+            return
+        raise ValueError(
+            f"LLM_PROVIDER={self.provider} requires {self.provider.upper()}_API_KEY "
+            "or an authorization header for chat"
+        )
+
+    @cached_property
+    def model(self) -> str:
+        return self._settings.require_llm_model()
+
+    @cached_property
+    def client(self) -> AsyncOpenAI | None:
         if self.provider == "ollama":
-            self.client = AsyncOpenAI(
-                base_url=f"{settings.OLLAMA_BASE_URL}/v1",
+            return AsyncOpenAI(
+                base_url=f"{self._settings.OLLAMA_BASE_URL}/v1",
                 api_key="ollama",
             )
-            self.model = settings.OLLAMA_MODEL
-        elif self.provider == "openai":
-            self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-            self.model = settings.OPENAI_MODEL
-        elif self.provider == "deepseek":
-            self.client = AsyncOpenAI(
+        if self.provider == "openai":
+            # The SDK checks static keys before loading OPENAI_CUSTOM_HEADERS.
+            # initialize() checks the resulting inference headers instead.
+            return AsyncOpenAI(api_key=self._settings.OPENAI_API_KEY, _enforce_credentials=False)
+        if self.provider == "deepseek":
+            return AsyncOpenAI(
                 base_url="https://api.deepseek.com/v1",
-                api_key=settings.DEEPSEEK_API_KEY,
+                api_key=self._settings.DEEPSEEK_API_KEY,
+                _enforce_credentials=False,
             )
-            self.model = settings.DEEPSEEK_MODEL
-        elif self.provider == "anthropic":
-            self._anthropic = _anthropic.AsyncAnthropic(
-                api_key=settings.ANTHROPIC_API_KEY,
-                # Retries are handled by _call_with_retry; disable the SDK's
-                # built-in retry logic to avoid exponential back-off stacking.
-                max_retries=0,
-            )
-            self.client = None
-            self.model = settings.ANTHROPIC_MODEL
+        return None
+
+    @cached_property
+    def _anthropic(self) -> _anthropic.AsyncAnthropic:
+        # _call_with_retry owns retries; don't stack them with SDK retries.
+        api_key = self._settings.ANTHROPIC_API_KEY
+        client = _anthropic.AsyncAnthropic(api_key=api_key, max_retries=0)
+        if not api_key.strip():
+            # Passing None to the constructor would discover ambient credentials. Clear the
+            # explicitly empty key afterwards so the SDK does not emit an empty Bearer header.
+            client.api_key = None
+        return client
 
     async def _call_with_retry(
         self, fn, *args, tools_requested: bool = False, max_retries: int = MAX_RETRIES, **kwargs
     ):
+        # Fail before creating a client or retrying a configuration error.
+        _ = self.model
         last_error = None
         for attempt in range(max_retries + 1):
             try:
@@ -799,7 +843,7 @@ class LLMAdapter:
             ]
         client = self.client
         if sdk_max_retries is not None:
-            client = client.with_options(max_retries=sdk_max_retries)
+            client = client.with_options(max_retries=sdk_max_retries, _enforce_credentials=False)
         response = await client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -853,7 +897,7 @@ class LLMAdapter:
 
         client = self.client
         if sdk_max_retries is not None:
-            client = client.with_options(max_retries=sdk_max_retries)
+            client = client.with_options(max_retries=sdk_max_retries, _enforce_credentials=False)
         response = await client.responses.create(
             model=self.model,
             input=messages,

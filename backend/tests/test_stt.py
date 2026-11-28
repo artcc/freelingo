@@ -55,7 +55,7 @@ def mock_stt_service():
     missing = object()
     previous_service = getattr(app.state, "stt_service", missing)
     service = SimpleNamespace(
-        model="whisper-1",
+        model="gpt-transcribe",
         transcribe=AsyncMock(return_value="transcribed text"),
     )
     app.state.stt_service = service
@@ -162,8 +162,7 @@ async def test_stt_rejects_study_plan_owned_by_another_user(
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("model", ["gpt-transcribe", "whisper-1"])
-async def test_openai_stt_forwards_required_language(monkeypatch, model) -> None:
+async def test_openai_stt_forwards_required_language(monkeypatch) -> None:
     create = AsyncMock(return_value=SimpleNamespace(text=" Credo che abbiano poco tempo. "))
     client = SimpleNamespace(
         audio=SimpleNamespace(
@@ -174,7 +173,7 @@ async def test_openai_stt_forwards_required_language(monkeypatch, model) -> None
         "app.services.stt_service.openai.AsyncOpenAI",
         lambda api_key: client,
     )
-    service = OpenAISTTService(api_key="test-key", model=model)
+    service = OpenAISTTService(api_key="test-key", model="operator-selected-transcription-model")
 
     text = await service.transcribe(
         b"wav-bytes",
@@ -185,13 +184,9 @@ async def test_openai_stt_forwards_required_language(monkeypatch, model) -> None
 
     assert text == "Credo che abbiano poco tempo."
     kwargs = create.await_args.kwargs
-    assert kwargs["model"] == model
-    if model == "gpt-transcribe":
-        assert kwargs["languages"] == ["it"]
-        assert "language" not in kwargs
-    else:
-        assert kwargs["language"] == "it"
-        assert "languages" not in kwargs
+    assert kwargs["model"] == "operator-selected-transcription-model"
+    assert kwargs["languages"] == ["it"]
+    assert "language" not in kwargs
     assert kwargs["timeout"] == 60.0
     filename, audio_file, mime_type = kwargs["file"]
     assert filename == "recording.wav"
@@ -201,6 +196,12 @@ async def test_openai_stt_forwards_required_language(monkeypatch, model) -> None
     language_parameter = signature(OpenAISTTService.transcribe).parameters["language"]
     assert language_parameter.kind is Parameter.KEYWORD_ONLY
     assert language_parameter.default is Parameter.empty
+
+
+@pytest.mark.parametrize("model", ["", "   "])
+def test_openai_stt_requires_a_configured_model(model):
+    with pytest.raises(ValueError, match="OPENAI_STT_MODEL"):
+        OpenAISTTService(api_key="test-key", model=model)
 
 
 @pytest.mark.asyncio

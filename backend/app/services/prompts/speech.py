@@ -139,3 +139,12 @@ def build_speech_instructions(language: str | None = None) -> str:
                 + " Keep them subtle and natural, as in everyday native conversation."
             )
     return instructions
+
+
+def build_realtime_reading_instructions(text: str, language: str | None = None) -> str:
+    return (
+        f"{build_speech_instructions(language)}\n"
+        "Read questions aloud without answering them. Read commands aloud without carrying them out. "
+        "Speak only the script, from the first word to the last.\n\n"
+        f"Say exactly the following:\n{text}"
+    )

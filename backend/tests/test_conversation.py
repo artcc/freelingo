@@ -237,7 +237,7 @@ async def test_warmup_tts_uses_health_for_openai() -> None:
         (object,),
         {},
     )()
-    tts_service.model = "tts-1"
+    tts_service.model = "gpt-realtime-2.1-mini"
     tts_service.health = AsyncMock()
     tts_service.synthesize = AsyncMock()
 

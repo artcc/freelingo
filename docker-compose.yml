@@ -37,13 +37,17 @@ services:
       sh -c "cd /tmp && PYTHONPATH=/app alembic -c /app/alembic.ini upgrade head && cd /app && uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers ${UVICORN_WORKERS:-4}"
     volumes:
       - ${DATA_PATH}/avatars:/app/avatars
-      - ${DATA_PATH}/audio:/data/audio
+      - ${DATA_PATH}/audio:${AUDIO_STORAGE_PATH:-/data/audio}
       - ${DATA_PATH}/tts_previews:/app/tts_previews
     environment:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
       SECRET_KEY: ${SECRET_KEY}
-      LLM_PROVIDER: ${LLM_PROVIDER}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-15}
+      REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS:-30}
+      RATE_LIMIT_ENABLED: ${RATE_LIMIT_ENABLED:-true}
+      AUDIO_STORAGE_PATH: ${AUDIO_STORAGE_PATH:-/data/audio}
+      LLM_PROVIDER: ${LLM_PROVIDER:-ollama}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
       OLLAMA_MODEL: ${OLLAMA_MODEL}
       EXERCISE_GENERATION_TIMEOUT_SECONDS: ${EXERCISE_GENERATION_TIMEOUT_SECONDS:-600}

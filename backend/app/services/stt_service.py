@@ -55,8 +55,10 @@ class WhisperSTTService:
 
 class OpenAISTTService:
     def __init__(self, api_key: str, model: str) -> None:
+        if not isinstance(model, str) or not model.strip():
+            raise ValueError("STT_PROVIDER=openai requires OPENAI_STT_MODEL to be set")
         self._client = openai.AsyncOpenAI(api_key=api_key)
-        self.model = model
+        self.model = model.strip()
 
     async def health(self) -> None:
         """Raise if OpenAI STT is unreachable (lightweight models list call)."""
@@ -72,14 +74,11 @@ class OpenAISTTService:
     ) -> str:
         """Transcribe a completed recording in the owning plan's language."""
         audio_file = (filename, io.BytesIO(audio_bytes), mime_type)
-        language_hint = (
-            {"languages": [language]} if self.model == "gpt-transcribe" else {"language": language}
-        )
         response = await self._client.audio.transcriptions.create(
             model=self.model,
             file=audio_file,
             timeout=60.0,
-            **language_hint,
+            languages=[language],
         )
         text = response.text.strip()
         logger.info(

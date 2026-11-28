@@ -82,7 +82,6 @@ async def synthesize_realtime(
     voice: str,
     speed: float,
     instructions: str,
-    text: str,
     timeout: float | None = None,
 ) -> tuple[bytes, str | None]:
     timeout = _MAX_TIMEOUT if timeout is None else min(_MAX_TIMEOUT, timeout)
@@ -108,7 +107,6 @@ async def synthesize_realtime(
                     "type": "session.update",
                     "session": {
                         "type": "realtime",
-                        "instructions": instructions,
                         "output_modalities": ["audio"],
                         "audio": {
                             "input": {"turn_detection": None},
@@ -132,13 +130,9 @@ async def synthesize_realtime(
                     "type": "response.create",
                     "response": {
                         "conversation": "none",
-                        "input": [
-                            {
-                                "type": "message",
-                                "role": "user",
-                                "content": [{"type": "input_text", "text": text}],
-                            }
-                        ],
+                        "input": [],
+                        "output_modalities": ["audio"],
+                        "instructions": instructions,
                     },
                 }
             )

@@ -8,42 +8,42 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     REDIS_URL: str = "redis://localhost:6379/0"
     SECRET_KEY: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=15, ge=1)
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=30, ge=1)
     ALLOW_REGISTRATION: bool = True
     FIRST_USER_IS_ADMIN: bool = True
     BLOCKED_EMAIL_DOMAINS: list[str] = []
-    LLM_PROVIDER: str = "ollama"
+    LLM_PROVIDER: Literal["ollama", "openai", "anthropic", "deepseek"] = "ollama"
     OLLAMA_BASE_URL: str = "http://host.docker.internal:11434"
-    OLLAMA_MODEL: str = "gemma4:e4b"
+    OLLAMA_MODEL: str = ""
     EXERCISE_GENERATION_TIMEOUT_SECONDS: int = Field(default=600, ge=1)
     OPENAI_API_KEY: str = ""
-    OPENAI_MODEL: str = "gpt-6-luna"
+    OPENAI_MODEL: str = ""
     OPENAI_REASONING_EFFORT: Literal[
         "", "none", "minimal", "low", "medium", "high", "xhigh", "max"
     ] = ""
     ANTHROPIC_API_KEY: str = ""
-    ANTHROPIC_MODEL: str = "claude-3-5-haiku-latest"
+    ANTHROPIC_MODEL: str = ""
     ANTHROPIC_MAX_TOKENS: int = 8192
     DEEPSEEK_API_KEY: str = ""
-    DEEPSEEK_MODEL: str = "deepseek-chat"
+    DEEPSEEK_MODEL: str = ""
     TTS_PROVIDER: Literal["local", "openai", "gemini"] = "local"
     TTS_BASE_URL: str = "http://kokoro:8880"
     TTS_VOICE: str = "af_heart"
-    OPENAI_TTS_MODEL: str = "gpt-realtime-2.1-mini"
+    OPENAI_TTS_MODEL: str = ""
     OPENAI_TTS_VOICE: Literal["female", "male"] = "female"
     OPENAI_TTS_FEMALE_VOICE: str = "marin"
     OPENAI_TTS_MALE_VOICE: str = "cedar"
     OPENAI_TTS_SPEED: float = 1.0
     GEMINI_API_KEY: str = ""
-    GEMINI_TTS_MODEL: str = "gemini-3.8-flash-tts"
+    GEMINI_TTS_MODEL: str = ""
     GEMINI_TTS_VOICE: Literal["female", "male"] = "female"
     GEMINI_TTS_FEMALE_VOICE: str = "Kore"
     GEMINI_TTS_MALE_VOICE: str = "Puck"
     GEMINI_TTS_TIMEOUT_SECONDS: float = Field(default=50.0, gt=0, allow_inf_nan=False)
-    STT_PROVIDER: str = "local"  # local | openai
+    STT_PROVIDER: Literal["local", "openai"] = "local"
     STT_BASE_URL: str = "http://whisper:9000"
-    OPENAI_STT_MODEL: str = "gpt-transcribe"
+    OPENAI_STT_MODEL: str = ""
     RATE_LIMIT_ENABLED: bool = True
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     COOKIE_SECURE: bool = False
@@ -100,6 +100,13 @@ class Settings(BaseSettings):
         if missing:
             raise ValueError(f"RevenueCat requires: {', '.join(missing)}")
 
+    def require_llm_model(self) -> str:
+        model_setting = f"{self.LLM_PROVIDER.upper()}_MODEL"
+        model = getattr(self, model_setting).strip()
+        if not model:
+            raise ValueError(f"LLM_PROVIDER={self.LLM_PROVIDER} requires {model_setting} to be set")
+        return model
+
     # Display prices (shown on landing page and paywall banner)
     PRICE_MONTHLY: float = 0.0
     PRICE_YEARLY: float = 0.0
@@ -122,7 +129,7 @@ class Settings(BaseSettings):
     SMTP_SSL: bool = False
     APP_BASE_URL: str = "http://localhost:3000"
 
-    # Listening — path where generated MP3 files are stored (Docker volume)
+    # Listening — path where generated audio files are stored (Docker volume)
     AUDIO_STORAGE_PATH: str = "/data/audio"
 
     # Multi-language — operator-configured subset of supported target languages.

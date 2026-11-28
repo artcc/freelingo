@@ -67,11 +67,11 @@ The service:
 3. Requests structured output through `llm_adapter.structured_output()`.
 4. Rejects blank text before synthesis and empty audio before creating any row or file.
    Synthesizes the generated text with the configured TTS service, optional requested voice, and full
-   BCP-47 target language. Gemini and instruction-capable OpenAI models use that language for native
+   BCP-47 target language. Gemini and OpenAI Realtime use that language for native
    regional pronunciation, as described in `speech-services.instructions.md`.
 5. Inserts the exercise to obtain its database ID.
 6. Writes `{AUDIO_STORAGE_PATH}/listening/{exercise_id}.{extension}` using the adapter's format:
-   `.wav` for OpenAI Realtime or Gemini; `.mp3` for the OpenAI Speech API or Kokoro.
+   `.wav` for OpenAI Realtime or Gemini; `.mp3` for Kokoro.
 7. Stores the path and commits the exercise.
 
 If writing audio or the pre-commit ownership guard fails or is cancelled, the service removes the

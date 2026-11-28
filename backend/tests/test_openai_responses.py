@@ -481,11 +481,9 @@ async def test_interleaved_turns_on_shared_adapter_keep_reasoning_and_calls_isol
     assert a_input[-1]["call_id"] == "call_a"
 
 
-def test_settings_default_model_and_reasoning_validation(monkeypatch):
-    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+def test_settings_reasoning_validation(monkeypatch):
     monkeypatch.delenv("OPENAI_REASONING_EFFORT", raising=False)
     config = Settings(_env_file=None, DATABASE_URL="sqlite://", SECRET_KEY="test")
-    assert config.OPENAI_MODEL == "gpt-6-luna"
     assert config.OPENAI_REASONING_EFFORT == ""
     with pytest.raises(ValidationError):
         Settings(
@@ -499,11 +497,13 @@ def test_settings_default_model_and_reasoning_validation(monkeypatch):
 @pytest.mark.parametrize("provider", ["ollama", "deepseek"])
 async def test_other_compatible_providers_keep_chat_completions(openai_http, monkeypatch, provider):
     monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
+    monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "compatible-test-model")
     monkeypatch.setattr(settings, "OPENAI_REASONING_EFFORT", "high")
     openai_http.json({"choices": [{"message": {"role": "assistant", "content": "Hello"}}]})
     assert await llm.LLMAdapter().chat(MESSAGES) == "Hello"
     assert openai_http.requests[0].url.path == "/v1/chat/completions"
     payload = openai_http.payloads[0]
+    assert payload["model"] == "compatible-test-model"
     assert payload["messages"] == MESSAGES
     assert "reasoning" not in payload and "reasoning_effort" not in payload
     assert "store" not in payload

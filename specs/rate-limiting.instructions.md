@@ -8,7 +8,8 @@ applyTo: "backend/app/main.py, backend/app/core/{config,limiter}.py, backend/app
 ## Integration
 
 FreeLingo uses SlowAPI with Redis storage from `REDIS_URL`. `RATE_LIMIT_ENABLED` enables or disables
-enforcement. The limiter object and standard SlowAPI exception handler are registered on the FastAPI
+enforcement and is forwarded by both Compose files. It defaults to enabled and does not control
+subscription quotas. The limiter object and standard SlowAPI exception handler are registered on the FastAPI
 application.
 
 The limiter configures `60/minute` as its default, but the application does not install

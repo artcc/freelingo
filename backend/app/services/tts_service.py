@@ -9,22 +9,18 @@ from app.core.app_logger import get_logger
 from app.schemas.tts_stt import CLOUD_TTS_VOICES
 from app.services.gemini_tts_service import GeminiTTSService
 from app.services.openai_realtime_tts import synthesize_realtime
-from app.services.prompts.speech import build_speech_instructions
+from app.services.prompts.speech import build_realtime_reading_instructions
 
 logger = get_logger(__name__)
 
-_OPENAI_LEGACY_VOICES = frozenset(
-    {"alloy", "ash", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"}
+_OPENAI_REALTIME_VOICES = frozenset(
+    {"alloy", "ash", "ballad", "cedar", "coral", "echo", "marin", "sage", "shimmer", "verse"}
 )
-_OPENAI_PROVIDER_VOICES = _OPENAI_LEGACY_VOICES | {"ballad", "verse", "marin", "cedar"}
-_OPENAI_REALTIME_VOICES = _OPENAI_PROVIDER_VOICES - {"fable", "nova", "onyx"}
 
 
 def get_tts_audio_format(service: object) -> tuple[str, str]:
     """Return the file extension and MIME type of the selected adapter's output."""
-    if isinstance(service, GeminiTTSService) or (
-        isinstance(service, OpenAITTSService) and service.uses_realtime
-    ):
+    if isinstance(service, (GeminiTTSService, OpenAITTSService)):
         return "wav", "audio/wav"
     return "mp3", "audio/mpeg"
 
@@ -73,23 +69,18 @@ class OpenAITTSService:
         male_voice: str = "cedar",
     ) -> None:
         if not isinstance(model, str) or not model.strip():
-            raise ValueError("OpenAI TTS requires model")
+            raise ValueError("TTS_PROVIDER=openai requires OPENAI_TTS_MODEL to be set")
         self.model = model.strip()
         if not isinstance(voice, str) or voice not in CLOUD_TTS_VOICES:
             raise ValueError("OpenAI TTS voice must be female or male")
-        supported_voices = _OPENAI_PROVIDER_VOICES
-        if self.uses_realtime:
-            supported_voices = _OPENAI_REALTIME_VOICES
-            if (
-                isinstance(speed, bool)
-                or not isinstance(speed, (float, int))
-                or not 0.25 <= speed <= 1.5
-            ):
-                raise ValueError("OpenAI TTS Realtime speed must be between 0.25 and 1.5")
-        elif self.model in {"tts-1", "tts-1-hd"}:
-            supported_voices = _OPENAI_LEGACY_VOICES
+        if (
+            isinstance(speed, bool)
+            or not isinstance(speed, (float, int))
+            or not 0.25 <= speed <= 1.5
+        ):
+            raise ValueError("OpenAI TTS Realtime speed must be between 0.25 and 1.5")
         for name, value in (("female_voice", female_voice), ("male_voice", male_voice)):
-            if not isinstance(value, str) or value.strip() not in supported_voices:
+            if not isinstance(value, str) or value.strip() not in _OPENAI_REALTIME_VOICES:
                 raise ValueError(f"OpenAI TTS {name} is not supported by {self.model}")
         self._client = openai.AsyncOpenAI(api_key=api_key)
         self.voice = voice
@@ -97,10 +88,6 @@ class OpenAITTSService:
         self.male_voice = male_voice.strip()
         self.speed = speed
         self.timeout = timeout
-
-    @property
-    def uses_realtime(self) -> bool:
-        return self.model == "gpt-realtime-2.1-mini"
 
     def _resolve_voice(self, voice: str | None) -> str:
         selected = self.voice if voice is None else voice
@@ -111,15 +98,6 @@ class OpenAITTSService:
     async def health(self) -> None:
         """Raise if OpenAI TTS is unreachable (lightweight models list call)."""
         await self._client.models.list()
-
-    def get_instructions(self, language: str | None = None) -> str | None:
-        if (
-            self.uses_realtime
-            or self.model == "gpt-4o-mini-tts"
-            or self.model.startswith("gpt-4o-mini-tts-")
-        ):
-            return build_speech_instructions(language)
-        return None
 
     def get_cache_key(
         self, text: str, voice: str | None = None, language: str | None = None
@@ -132,16 +110,14 @@ class OpenAITTSService:
             "voice": self._resolve_voice(voice),
             "speed": self.speed,
             "format": get_tts_audio_format(self)[0],
+            "instructions": build_realtime_reading_instructions(text.strip(), language),
         }
-        instructions = self.get_instructions(language)
-        if instructions:
-            identity["instructions"] = instructions
         return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
 
     async def synthesize(
         self, text: str, voice: str | None = None, language: str | None = None
     ) -> bytes:
-        """Synthesize complete WAV (Realtime) or MP3 (Speech API) audio."""
+        """Read the supplied script over Realtime and return complete WAV audio."""
         text = text.strip()
         if not text:
             logger.warning("[tts-openai] Empty text received for synthesis")
@@ -156,18 +132,14 @@ class OpenAITTSService:
             req_voice,
             input_len,
         )
-        if self.uses_realtime:
-            audio, request_id = await synthesize_realtime(
-                client=self._client,
-                model=self.model,
-                voice=req_voice,
-                speed=self.speed,
-                instructions=build_speech_instructions(language),
-                text=text,
-                timeout=self.timeout,
-            )
-        else:
-            audio, request_id = await self._synthesize_mp3(text, req_voice, language)
+        audio, request_id = await synthesize_realtime(
+            client=self._client,
+            model=self.model,
+            voice=req_voice,
+            speed=self.speed,
+            instructions=build_realtime_reading_instructions(text, language),
+            timeout=self.timeout,
+        )
         elapsed_ms = (time.perf_counter() - start_t) * 1000
         logger.info(
             "[tts-openai] request_ok model=%s voice=%s chars=%d bytes=%d ms=%.1f request_id=%s",
@@ -179,30 +151,3 @@ class OpenAITTSService:
             request_id,
         )
         return audio
-
-    async def _synthesize_mp3(
-        self, text: str, voice: str, language: str | None
-    ) -> tuple[bytes, str | None]:
-        request_payload = {
-            "model": self.model,
-            "voice": voice,
-            "input": text,
-            "response_format": "mp3",
-            "speed": self.speed,
-        }
-        instructions = self.get_instructions(language)
-        if instructions:
-            request_payload["instructions"] = instructions
-        if self.timeout is not None:
-            request_payload["timeout"] = self.timeout
-
-        response = await self._client.audio.speech.create(**request_payload)
-        audio = response.content
-        if not audio:
-            raise RuntimeError("OpenAI TTS returned empty audio payload")
-        request_id = getattr(response, "request_id", None)
-        if request_id is None:
-            headers = getattr(response, "headers", None)
-            if headers is not None:
-                request_id = headers.get("x-request-id")
-        return audio, request_id

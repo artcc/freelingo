@@ -13,13 +13,8 @@ TEXT = "Texto del tour enviado desde la interfaz."
 
 @pytest.fixture
 def tour_service(monkeypatch, tmp_path):
-    service = object.__new__(OpenAITTSService)
-    service.model = "tts-1"
-    service.voice = "female"
-    service.female_voice = "nova"
-    service.male_voice = "onyx"
-    service.speed = 1.0
-    service.synthesize = AsyncMock(return_value=b"ID3tour-audio")
+    service = OpenAITTSService("test-key", "gpt-realtime-2.1-mini", "female")
+    service.synthesize = AsyncMock(return_value=b"RIFFtour-audio")
     monkeypatch.setattr(settings, "AUDIO_STORAGE_PATH", str(tmp_path))
     monkeypatch.setattr(settings, "TTS_PROVIDER", "openai")
     monkeypatch.setattr(app.state, "tts_service", service, raising=False)
@@ -39,8 +34,8 @@ async def test_client_text_interface_language_and_voice_are_cached(client, test_
     first = await client.post(url, headers=headers, json=body)
     second = await client.post(url, headers=headers, json=body)
     assert first.status_code == second.status_code == 200
-    assert first.content == second.content == b"ID3tour-audio"
-    assert first.headers["content-type"] == "audio/mpeg"
+    assert first.content == second.content == b"RIFFtour-audio"
+    assert first.headers["content-type"] == "audio/wav"
     assert first.headers["cache-control"] == "no-store"
     tour_service.synthesize.assert_awaited_once_with(body["text"], "male", language="fr")
 
@@ -75,22 +70,19 @@ async def test_cache_identity_covers_effective_settings_and_text(tour_service):
     original = await audio()
     assert await audio("female") == original
     paths = {original, await audio("male"), await audio(locale="en")}
-    tour_service.model = "another-configured-model"
-    paths.add(await audio())
     tour_service.speed = 0.9
     paths.add(await audio())
     paths.add(await audio(text="Texto revisado"))
     tour_service.female_voice = "coral"
     paths.add(await audio())
-    assert len(paths) == 7
-    assert tour_service.synthesize.await_count == 7
+    assert len(paths) == 6
+    assert tour_service.synthesize.await_count == 6
 
 
 async def test_tour_regenerates_when_pronunciation_changes(tour_service, monkeypatch):
-    tour_service.model = "gpt-4o-mini-tts"
     original = await get_tour_audio(tour_service, locale="es", text=TEXT, voice=None)
     monkeypatch.setattr(
-        "app.services.tts_service.build_speech_instructions",
+        "app.services.prompts.speech.build_speech_instructions",
         lambda language: "Revised pronunciation",
     )
     revised = await get_tour_audio(tour_service, locale="es", text=TEXT, voice=None)
@@ -122,7 +114,7 @@ async def test_concurrent_requests_generate_only_once(tour_service):
     async def synthesize(*args, **kwargs):
         started.set()
         await finish.wait()
-        return b"ID3shared"
+        return b"RIFFshared"
 
     tour_service.synthesize.side_effect = synthesize
     first = asyncio.create_task(get_tour_audio(tour_service, locale="es", text=TEXT, voice=None))
@@ -132,7 +124,7 @@ async def test_concurrent_requests_generate_only_once(tour_service):
     finish.set()
     paths = await asyncio.gather(first, second)
     assert paths[0] == paths[1]
-    assert paths[0].read_bytes() == b"ID3shared"
+    assert paths[0].read_bytes() == b"RIFFshared"
     assert tour_service.synthesize.await_count == 1
 
 
@@ -152,7 +144,7 @@ async def test_cancelled_generation_releases_lock(tour_service):
     tour_service.synthesize.side_effect = None
     async with asyncio.timeout(1):
         path = await get_tour_audio(tour_service, locale="es", text=TEXT, voice=None)
-    assert path.read_bytes() == b"ID3tour-audio"
+    assert path.read_bytes() == b"RIFFtour-audio"
 
 
 async def test_empty_audio_is_not_cached_and_can_be_retried(
@@ -162,11 +154,11 @@ async def test_empty_audio_is_not_cached_and_can_be_retried(
     tour_service.synthesize.return_value = b""
     response = await client.post("/api/tts/tour/es/step1", headers=headers, json={"text": TEXT})
     assert response.status_code == 503
-    assert not list(tmp_path.rglob("*.mp3"))
-    tour_service.synthesize.return_value = b"ID3retry"
+    assert not list(tmp_path.rglob("*.wav"))
+    tour_service.synthesize.return_value = b"RIFFretry"
     response = await client.post("/api/tts/tour/es/step1", headers=headers, json={"text": TEXT})
     assert response.status_code == 200
-    assert response.content == b"ID3retry"
+    assert response.content == b"RIFFretry"
 
 
 async def test_synthesis_timeout_returns_gateway_timeout(client, test_user, tour_service):

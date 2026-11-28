@@ -258,15 +258,15 @@ romanization. The current page does not display romanization when supplied.
   an exact supported target-language code; invalid values return `400` before catalog lookup,
   filesystem access, or synthesis.
 
-Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`. All OpenAI models and Gemini
-use the synthesis identities defined in `speech-services.instructions.md`, including the resolved
-actual voice and pronunciation instructions when supported. OpenAI Realtime and Gemini cache `.wav`;
-the OpenAI Speech API caches `.mp3`. Local TTS uses `.mp3` with a hash of language, category, index, and text.
+Phrase audio is stored below `{AUDIO_STORAGE_PATH}/phrasebook/{iso}/`. OpenAI Realtime and Gemini
+cache `.wav` using the synthesis identities defined in `speech-services.instructions.md`, including
+the resolved voice and pronunciation instructions. Local TTS uses `.mp3` with a hash of language,
+category, index, and text.
 The endpoint uses the backend's configured default voice, not the browser preference.
 Generation writes a temporary file and replaces atomically.
 Responses use `Cache-Control: no-store`, and browser playback
 bypasses its HTTP cache while retaining the backend disk cache. The endpoint passes the full target
-language to TTS for pronunciation guidance when supported by the configured model.
+language to TTS for pronunciation guidance with OpenAI or Gemini.
 
 The page filters A1-C2, register, and target text. It searches phrase text but not context. Categories
 display phrases directly rather than through expansion controls. Each phrase has explicit audio and

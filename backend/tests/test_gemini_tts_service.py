@@ -46,7 +46,7 @@ def make_response(audio=None):
 
 @pytest.fixture
 def service():
-    return GeminiTTSService(api_key="test-key")
+    return GeminiTTSService(api_key="test-key", model="configured-model")
 
 
 @pytest.fixture
@@ -71,7 +71,7 @@ async def test_request_contract_returns_original_wav(service, mock_http, voice, 
         assert request.headers["x-goog-api-key"] == "test-key"
         assert request.extensions["timeout"]["read"] == 50.0
         assert json.loads(request.content) == {
-            "model": "gemini-3.8-flash-tts",
+            "model": "configured-model",
             "input": [
                 {
                     "type": "user_input",
@@ -232,7 +232,7 @@ async def test_invalid_voice_rejected_before_http(service, monkeypatch, voice):
     with pytest.raises(ValueError, match="voice"):
         service.get_cache_key("Text", voice)
     with pytest.raises(ValueError, match="voice"):
-        GeminiTTSService("test-key", voice=voice)
+        GeminiTTSService("test-key", "configured-model", voice=voice)
     client.assert_not_called()
 
 
@@ -255,12 +255,14 @@ async def test_invalid_voice_rejected_before_http(service, monkeypatch, voice):
 )
 def test_required_configuration_is_validated(config):
     with pytest.raises(ValueError):
-        GeminiTTSService(**{"api_key": "test-key", **config})
+        GeminiTTSService(**{"api_key": "test-key", "model": "configured-model", **config})
 
 
 @pytest.mark.parametrize("voice,expected", [(None, "Charon"), ("female", "Aoede")])
 async def test_configurable_default_and_provider_voice_ids(mock_http, voice, expected):
-    service = GeminiTTSService("test-key", voice="male", female_voice="Aoede", male_voice="Charon")
+    service = GeminiTTSService(
+        "test-key", "configured-model", voice="male", female_voice="Aoede", male_voice="Charon"
+    )
 
     def handler(request):
         config = json.loads(request.content)["generation_config"]["speech_config"]

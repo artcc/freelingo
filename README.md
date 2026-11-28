@@ -211,7 +211,8 @@ Production microphone access requires the HTTPS setup described below.
 ### AI providers
 
 - **Language model:** `LLM_PROVIDER` selects `ollama`, `openai`, `anthropic`, or `deepseek`.
-  Configure the selected provider's model and credentials through `.env`; see [.env.example](.env.example).
+  Set the selected provider's model in `.env` and supply credentials if required.
+  There is no fallback model; see [.env.example](.env.example).
 - **Speech:** `TTS_PROVIDER` selects `local` (Kokoro), `openai`, or `gemini`; `STT_PROVIDER`
   independently selects `local` (faster-whisper) or `openai`. See [speech setup](#configuring-tts--stt).
 
@@ -318,8 +319,7 @@ such as HTTPS or localhost; ordinary HTTP access through a server IP does not pr
 TTS and STT are required services, selected independently via `.env`.
 
 - `TTS_PROVIDER=local` uses Kokoro-FastAPI; `openai` uses OpenAI TTS; `gemini` uses Gemini TTS.
-- `STT_PROVIDER=local` uses faster-whisper. `STT_PROVIDER=openai` uses the OpenAI transcription API
-  with the model selected by `OPENAI_STT_MODEL`.
+- `STT_PROVIDER=local` uses faster-whisper; `openai` uses the OpenAI transcription API.
 - `OPENAI_API_KEY` is required when either service uses OpenAI.
 - `GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`.
 
@@ -350,7 +350,14 @@ STT_PROVIDER=openai
 OPENAI_API_KEY=sk-...
 ```
 
-`OPENAI_TTS_MODEL` selects the OpenAI synthesis model. The default configuration uses Realtime: the backend opens an outbound WebSocket to the provider's `/realtime` endpoint. Any outbound proxy or API gateway must support that upgrade; the browser's `/ws/conversation` route serves a separate connection.
+Set `OPENAI_TTS_MODEL` for OpenAI synthesis and `OPENAI_STT_MODEL` for OpenAI transcription in
+your `.env` to override the speech models supplied by Compose; [.env.example](.env.example) shows
+the deployment settings. When upgrading, replace older overrides with models compatible with the
+respective API. The backend uses the model it receives without substituting another one.
+
+OpenAI TTS generates WAV audio. The backend opens an outbound WebSocket to the provider's
+`/realtime` endpoint. Any outbound proxy or API gateway must support that upgrade;
+the browser's `/ws/conversation` route serves a separate connection.
 
 Settings offers female/male choices for both cloud TTS
 providers, with independent preferences. Operators configure the OpenAI mappings through
@@ -358,8 +365,8 @@ providers, with independent preferences. Operators configure the OpenAI mappings
 `OPENAI_TTS_VOICE` selects the default logical choice. Existing provider-name preferences
 are ignored until a new choice is saved.
 
-For Gemini TTS, select `TTS_PROVIDER=gemini` and set `GEMINI_API_KEY` on the backend.
-`GEMINI_TTS_MODEL` selects the model; configurable female/male voices produce native WAV audio. STT remains an
+For Gemini TTS, select `TTS_PROVIDER=gemini` and set both `GEMINI_API_KEY` and `GEMINI_TTS_MODEL`
+on the backend. Configurable female/male voices produce native WAV audio. STT remains an
 independent local or OpenAI choice. Settings stores the Gemini voice preference separately from OpenAI.
 
 OpenAI speech services reuse `OPENAI_API_KEY` when OpenAI is also the LLM provider. See [.env.example](.env.example) for

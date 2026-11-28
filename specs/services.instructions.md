@@ -20,9 +20,15 @@ their service boundary; detailed workflows and eligibility rules belong to the l
 
 OpenAI uses the Responses API for every LLM request; Ollama and DeepSeek use Chat Completions and
 Anthropic uses its native API. `LLM_PROVIDER` selects the adapter; `OLLAMA_MODEL`, `OPENAI_MODEL`,
-`ANTHROPIC_MODEL`, and `DEEPSEEK_MODEL` select its model. Backend defaults live in
-`backend/app/core/config.py`; forwarded values and deployment fallbacks live in `docker-compose.yml`
-and `docker-compose.dev.yml`, with `.env.example` as the operator template. Optional
+`ANTHROPIC_MODEL`, and `DEEPSEEK_MODEL` select its model. Configure a nonempty model identifier
+for the active provider in the deployment environment; there is no built-in fallback model.
+At application startup, the adapter validates the model and initializes only the selected LLM
+client before the lifespan's migrations. Cloud chat requires credentials for the inference endpoint:
+a blank key or an OpenAI admin key alone is insufficient. The check respects the SDK's effective
+authorization headers, including operator overrides. It is independent of the speech providers.
+The client is reused for requests; startup does not contact the provider to
+verify the key or model. Importing the app to generate OpenAPI does not initialize the client.
+Unknown provider names are rejected. `.env.example` is the operator template. Optional
 `OPENAI_REASONING_EFFORT` is sent as `reasoning.effort` on chat, structured generation, tool
 continuations, and fallbacks. An empty value omits it. Supported values depend on the model; the
 adapter does not infer reasoning settings from model names or force `none` for tools.
@@ -216,13 +222,13 @@ and the voice pipeline continue supplying their existing text.
 `tts_service.py` implements local Kokoro and OpenAI; `gemini_tts_service.py` implements Gemini.
 All expose `synthesize(text, voice=None, language=None) -> bytes`. `get_tts_audio_format()` supplies
 the selected adapter's output MIME type and extension. OpenAI Realtime delegates each synthesis to
-`openai_realtime_tts.py` and returns WAV, as does Gemini. Kokoro and the OpenAI Speech API return MP3.
+`openai_realtime_tts.py` and returns WAV, as does Gemini. Kokoro returns MP3.
 Voice selection remains independent of language. OpenAI and Gemini expose logical `female`/`male`
 choices and resolve actual configured voices only in the backend. Model selection, voice mappings,
 and configuration validation are owned by `speech-services.instructions.md`.
-OpenAI synthesis cache keys include the resolved actual voice for every model and instructions
-only when supported. Previews and Phrasebook use hashed keys even with legacy OpenAI models;
-Phrasebook uses the configured backend default rather than a browser preference.
+OpenAI previews and Phrasebook use hashed synthesis keys that include the resolved voice and
+the full reading prompt. Phrasebook uses the configured backend default rather than
+a browser preference.
 
 Gemini uses HTTPX REST Interactions with separate spoken text and style, mapped female/male voices,
 and explicit regional language when supplied. Its cache identity includes the actual voice mapping
