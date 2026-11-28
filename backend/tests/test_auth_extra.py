@@ -86,6 +86,39 @@ async def test_get_quota_returns_expected_fields(client, test_user):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("daily_limit", "weekly_limit", "daily_remaining", "weekly_remaining"),
+    [(2, 4, 1, 29), (1, 3, 0, 0), (0, 0, None, None)],
+)
+async def test_get_quota_reports_exact_time_balances(
+    client,
+    test_user,
+    mock_redis,
+    db_session,
+    daily_limit,
+    weekly_limit,
+    daily_remaining,
+    weekly_remaining,
+):
+    from app.services.quota_service import _day_key, _weekly_seconds_key
+
+    user, headers = test_user
+    user.conversation_daily_minutes = daily_limit
+    user.conversation_weekly_minutes = weekly_limit
+    await db_session.commit()
+    await mock_redis.set(_day_key(user.id), 119)
+    await mock_redis.set(_weekly_seconds_key(user.id), 211)
+
+    response = await client.get("/api/auth/quota", headers=headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["minutes_today"] == 1
+    assert data["minutes_this_week"] == 3
+    assert data["daily_remaining_seconds"] == daily_remaining
+    assert data["weekly_remaining_seconds"] == weekly_remaining
+
+
+@pytest.mark.asyncio
 async def test_get_quota_initial_values(client, test_user):
     """Fresh user has zero usage in all quota counters."""
     _, headers = test_user

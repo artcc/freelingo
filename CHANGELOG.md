@@ -10,10 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Use `gpt-transcribe` for OpenAI speech recognition and `gpt-realtime-2.1-mini` for speech synthesis. New Realtime audio uses WAV; existing Listening recordings remain playable.
 - Update the OpenAI and Anthropic Python SDKs to 3.60.0 and 2.14.0 respectively, together with their HTTP, WebSocket and JSON parsing dependencies.
+- Lower the default weekly voice allowance from 90 to 60 minutes. Existing accounts with a 90-minute limit move to 60 without resetting usage or changing other limits.
 
 ### Fixed
 
 - Prevent Listening from publishing exercises with a blank transcript or an empty audio file.
+- Show which voice allowance a post-assessment conversation will use and when the one-time demo is still available.
+- Apply daily and weekly voice balances to the second and show the remaining time and reset schedule in conversation.
+- Warn immediately when a voice session starts with a minute or less and explain whether it ended due to inactivity, the session duration, or an exhausted allowance.
 
 ## [1.14.20] - 2026-11-27
 

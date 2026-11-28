@@ -18,6 +18,7 @@ from app.schemas.flashcards import GeneratedFlashcard
 from app.services.conversation_pipeline import ConversationPipeline
 from app.services.language_helpers import lesson_practice_title
 from app.services.lesson_voice_practice import load_lesson_voice_practice
+from app.services.quota_service import QuotaDecision
 from tests.conftest import make_study_plan
 
 
@@ -412,7 +413,9 @@ async def test_lesson_practice_cannot_bypass_voice_access(
 async def test_lesson_practice_cannot_bypass_general_quotas(practice_lesson, voice_runtime):
     lesson, _ = practice_lesson
     voice_runtime.quotas.side_effect = None
-    voice_runtime.quotas.return_value = (0, "quota_exceeded_time", "Limit reached", 1008)
+    voice_runtime.quotas.return_value = QuotaDecision(
+        0, "quota_exceeded_time", "Limit reached", 1008
+    )
     ws = await voice_runtime.start(lesson_id=lesson.id)
     assert ws.send_json.await_args.args[0]["code"] == "quota_exceeded_time"
     voice_runtime.factory.assert_not_called()

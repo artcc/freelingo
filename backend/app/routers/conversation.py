@@ -458,8 +458,6 @@ async def conversation_ws(
         max_duration = (
             voice_trial.duration_seconds if voice_trial else user.conversation_max_duration
         )
-        if freemium_ok and freemium_remaining_seconds > 0:
-            max_duration = min(max_duration, freemium_remaining_seconds)
         inactivity_timeout = user.conversation_inactivity_timeout
         native_language = user.native_language
         student_name = user.display_name
@@ -486,20 +484,10 @@ async def conversation_ws(
         if sanitized:
             valid_context = sanitized
 
-    logger.info(
-        "[conversation] Session started — user=%s cefr=%s max_duration=%ss inactivity=%ss context_turns=%s",
-        user_id,
-        cefr_level,
-        max_duration,
-        inactivity_timeout,
-        len(valid_context) if valid_context else 0,
-    )
-    # (already accepted at the top)
-
     # --- Quota checks ---
     async with _redis_client() as redis:
         try:
-            max_duration, err_code, err_msg, close_code = await check_all_quotas(
+            quota = await check_all_quotas(
                 redis,
                 user_id,
                 monthly_tokens_limit,
@@ -508,15 +496,17 @@ async def conversation_ws(
                 weekly_sessions_limit,
                 max_duration,
             )
-            if err_code is not None:
+            if quota.error_code is not None:
                 logger.info(
                     "[conversation] Quota exceeded — user=%s code=%s msg=%s",
                     user_id,
-                    err_code,
-                    err_msg,
+                    quota.error_code,
+                    quota.error_message,
                 )
-                await websocket.send_json({"type": "error", "code": err_code, "message": err_msg})
-                await websocket.close(code=close_code)  # type: ignore[arg-type]
+                await websocket.send_json(
+                    {"type": "error", "code": quota.error_code, "message": quota.error_message}
+                )
+                await websocket.close(code=quota.close_code)  # type: ignore[arg-type]
                 return
         except Exception as exc:
             logger.error("[conversation] Quota check failed: %s", exc)
@@ -621,6 +611,19 @@ async def conversation_ws(
         except Exception:
             pass
 
+        max_duration = quota.max_duration
+        duration_limit = quota.limit
+        if freemium_ok and freemium_remaining_seconds <= max_duration:
+            max_duration = freemium_remaining_seconds
+            duration_limit = "freemium"
+        logger.info(
+            "[conversation] Session started — user=%s cefr=%s max_duration=%ss inactivity=%ss context_turns=%s",
+            user_id,
+            cefr_level,
+            max_duration,
+            inactivity_timeout,
+            len(valid_context) if valid_context else 0,
+        )
         pipeline = ConversationPipeline(
             llm=llm_adapter,
             tts=tts_service,
@@ -630,6 +633,7 @@ async def conversation_ws(
             target_language=target_language,
             student_name=student_name,
             max_duration=max_duration,
+            duration_limit=duration_limit,
             inactivity_timeout=inactivity_timeout,
             initial_context=valid_context,
             user_id=user_id,

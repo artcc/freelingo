@@ -24,6 +24,7 @@ from app.schemas.flashcards import GeneratedFlashcard
 from app.services import freemium_service
 from app.services.conversation_pipeline import ConversationPipeline
 from app.services.prompts.tutor import build_conversation_system_prompt
+from app.services.quota_service import QuotaDecision
 from app.services.situations import load_situation_practice
 from tests.conftest import make_study_plan
 
@@ -370,7 +371,7 @@ async def test_failed_startup_does_not_consume_situation(
         )
     elif failure == "general_quota":
         voice_runtime.quotas.side_effect = None
-        voice_runtime.quotas.return_value = (0, "quota_exceeded_time", "Limit", 1008)
+        voice_runtime.quotas.return_value = QuotaDecision(0, "quota_exceeded_time", "Limit", 1008)
     else:
         monkeypatch.setattr(
             router, "ConversationModel", MagicMock(side_effect=RuntimeError("database unavailable"))

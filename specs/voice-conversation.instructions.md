@@ -414,7 +414,7 @@ after the demo has been consumed.
 
 General user token, daily/weekly minute, and weekly session quotas still apply to all voice access
 modes. Zero means unlimited for these general quotas. The effective maximum duration is reduced by
-the selected access mode and remaining minute balances. Quotas are checked at connection rather
+the selected access mode and the exact remaining daily and weekly seconds. Quotas are checked at connection rather
 than on every turn.
 
 Weekly session usage is recorded during authorization. Elapsed voice seconds are recorded once
@@ -437,7 +437,9 @@ maintenance does not disconnect existing sessions.
 ## Timeouts and settings
 
 The backend runs maximum-duration and inactivity watchers. Each sends one warning in its final 60
-seconds, then emits `session_end` and closes normally. Inactivity is checked every five seconds and
+seconds, then emits `session_end` and closes normally. If a session starts with 60 seconds or less,
+its duration warning is immediate. The final message distinguishes an inactivity timeout, a session
+duration limit and an exhausted allowance. Inactivity is checked every five seconds and
 resets on any received audio frame before transcription confirms speech. The inactivity watcher
 does not warn or close while a greeting or normal backend turn is pending. Finishing, failing, or
 cancelling backend work starts a fresh inactivity interval. Maximum duration continues to apply

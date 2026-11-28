@@ -57,6 +57,7 @@ class User(Base):
         Integer,
         nullable=False,
         default=settings.DEFAULT_CONVERSATION_WEEKLY_MINUTES,
+        server_default="60",
     )
     monthly_tokens_limit: Mapped[int] = mapped_column(
         Integer,

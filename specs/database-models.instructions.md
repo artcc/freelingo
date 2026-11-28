@@ -96,7 +96,7 @@ Registration, authentication, and user preferences.
 - `conversation_speech_pause` — integer milliseconds of silence that end a spoken turn in voice conversation. Allowed values are `0`, `1000`, `2000`, and `3000`; `0` (the default) means the window is derived from the learner's CEFR level.
 - `conversation_weekly_sessions` — integer weekly session limit. Default comes from `DEFAULT_CONVERSATION_WEEKLY_SESSIONS`; `0` means unlimited.
 - `conversation_daily_minutes` — integer daily voice limit in minutes. Default comes from `DEFAULT_CONVERSATION_DAILY_MINUTES`; `0` means unlimited.
-- `conversation_weekly_minutes` — integer weekly voice limit in minutes. Default comes from `DEFAULT_CONVERSATION_WEEKLY_MINUTES`; `0` means unlimited.
+- `conversation_weekly_minutes` — integer weekly voice limit in minutes. The application takes its default from `DEFAULT_CONVERSATION_WEEKLY_MINUTES` (60); inserts that omit the column also default to 60 in the database. `0` means unlimited.
 - `monthly_tokens_limit` — integer max LLM tokens per billing period. Default comes from `DEFAULT_MONTHLY_TOKENS_LIMIT`; `0` means unlimited.
 - `stripe_customer_id` — nullable string Stripe customer ID, set when a subscription is created.
 - `stripe_subscription_id` — nullable string current Stripe subscription ID. Used to ignore stale webhook events from older subscriptions for the same customer.

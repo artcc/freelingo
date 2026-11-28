@@ -14,6 +14,12 @@ from app.core.config import settings
 from app.core.security import create_access_token
 from app.main import app
 from app.routers import conversation as conversation_router
+from app.services.quota_service import (
+    QuotaDecision,
+    _day_key,
+    _weekly_seconds_key,
+    check_all_quotas,
+)
 
 
 @pytest.mark.parametrize(
@@ -53,7 +59,7 @@ async def test_demo_admission_rechecks_durable_right_after_quotas_and_fails_clos
             monkeypatch.setattr(
                 db_session, "commit", AsyncMock(side_effect=RuntimeError("commit failed"))
             )
-        return args[-1], None, None, None
+        return QuotaDecision(args[-1])
 
     voice_runtime.quotas.side_effect = quotas
     ws = await voice_runtime.start(voice_trial_token=token)
@@ -79,12 +85,53 @@ async def test_demo_right_is_not_claimed_when_general_quotas_deny_start(
     monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 0)
     token = await issue_token(mock_redis, user.id)
     voice_runtime.quotas.side_effect = None
-    voice_runtime.quotas.return_value = (300, "quota_exceeded_sessions", "Limit reached", 1008)
+    voice_runtime.quotas.return_value = QuotaDecision(
+        300, "quota_exceeded_sessions", "Limit reached", 1008
+    )
     ws = await voice_runtime.start(voice_trial_token=token)
     assert ws.send_json.await_args.args[0]["code"] == "quota_exceeded_sessions"
     voice_runtime.factory.assert_not_called()
     assert not user.assessment_voice_trial_used
     assert await mock_redis.get(f"assessment_voice_trial:{user.id}:{token}") is not None
+
+
+@pytest.mark.parametrize(
+    ("daily", "weekly", "free", "duration", "limit"),
+    [
+        (901, 901, 901, 900, None),
+        (900, 901, 901, 900, "daily"),
+        (901, 900, 901, 900, "weekly"),
+        (901, 901, 900, 900, "freemium"),
+        (55, 55, 56, 55, "daily"),
+        (59, 1, 30, 1, "weekly"),
+        (10, 10, 10, 10, "freemium"),
+    ],
+)
+async def test_voice_admission_passes_exact_duration_and_limiting_quota(
+    voice_runtime, db_session, mock_redis, monkeypatch, daily, weekly, free, duration, limit
+):
+    from app.services.freemium_service import _voice_week_key
+
+    user = voice_runtime.user
+    user.conversation_max_duration = 900
+    user.conversation_daily_minutes = 20
+    user.conversation_weekly_minutes = 20
+    user.conversation_weekly_sessions = 0
+    user.monthly_tokens_limit = 0
+    await db_session.commit()
+    monkeypatch.setattr(settings, "STRIPE_ENABLED", True)
+    monkeypatch.setattr(settings, "FREEMIUM_TRIAL_ENABLED", False)
+    monkeypatch.setattr(settings, "FREEMIUM_VOICE_WEEKLY_MINUTES", 20)
+    await mock_redis.set(_day_key(user.id), 1200 - daily)
+    await mock_redis.set(_weekly_seconds_key(user.id), 1200 - weekly)
+    await mock_redis.set(_voice_week_key(user.id), 1200 - free)
+    voice_runtime.quotas.side_effect = check_all_quotas
+
+    ws = await voice_runtime.start()
+    voice_runtime.pipeline.run.assert_awaited_once_with(ws)
+    args = voice_runtime.factory.call_args.kwargs
+    assert args["max_duration"] == duration
+    assert args["duration_limit"] == limit
 
 
 # ---------------------------------------------------------------------------
@@ -513,6 +560,9 @@ async def test_voice_access_precedence_and_demo_fallback_remain_unchanged(
         assert voice_runtime.pipeline._freemium_voice is (access == "quota")
         if access == "quota":
             assert voice_runtime.factory.call_args.kwargs["max_duration"] == 180
+            assert voice_runtime.factory.call_args.kwargs["duration_limit"] == "freemium"
+        else:
+            assert voice_runtime.factory.call_args.kwargs["duration_limit"] is None
         assert bool(user.assessment_voice_trial_used) is access.startswith("demo")
         assert (await original_get(f"assessment_voice_trial:{user.id}:{token}") is None) is (
             access.startswith("demo")

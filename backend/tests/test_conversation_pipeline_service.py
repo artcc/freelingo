@@ -1719,58 +1719,80 @@ async def test_cleanup_cancels_timer_tasks() -> None:
 
 
 @pytest.mark.asyncio
-async def test_max_duration_watcher_sends_warning_and_end() -> None:
-    pipeline = _make_pipeline(max_duration=120)
-
+@pytest.mark.parametrize(
+    ("duration", "limit", "warning_latency"),
+    [(120, None, 2.5), (60, "freemium", 0), (30, "weekly", 7.5), (1, "daily", 1)],
+)
+async def test_max_duration_watcher_warns_and_closes_at_effective_duration(
+    duration, limit, warning_latency
+) -> None:
+    pipeline = _make_pipeline(max_duration=duration, duration_limit=limit)
     ws = FakeWS()
+    elapsed = 0
+    events = []
+    loop = asyncio.get_running_loop()
+    start = loop.time()
 
-    _real_sleep = asyncio.sleep
+    async def sleep(seconds):
+        nonlocal elapsed
+        assert seconds > 0
+        elapsed += seconds
 
-    async def fast_sleep(seconds):
-        await _real_sleep(0)
+    async def record(message):
+        nonlocal elapsed
+        events.append((elapsed, message))
+        if message["type"] == "session_warning":
+            elapsed += warning_latency
 
-    with patch("asyncio.sleep", side_effect=fast_sleep):
-        task = asyncio.create_task(pipeline._max_duration_watcher(ws))
-        await _real_sleep(0.05)
-
-        if not task.done():
-            task.cancel()
-            try:
-                await task
-            except asyncio.CancelledError:
-                pass
-
-    json_msgs = ws.json_messages()
-    types = [m.get("type") for m in json_msgs]
-    assert "session_warning" in types or "session_end" in types
+    ws.send_json = record
+    with (
+        patch.object(loop, "time", new=lambda: start + elapsed),
+        patch("app.services.conversation_pipeline.asyncio.sleep", new=sleep),
+    ):
+        await pipeline._max_duration_watcher(ws)
+    remaining = min(duration, 60)
+    end = {"type": "session_end", "reason": "max_duration"}
+    if limit is not None:
+        end["limit"] = limit
+    assert events == [
+        (
+            duration - remaining,
+            {"type": "session_warning", "reason": "max_duration", "remaining_seconds": remaining},
+        ),
+        (duration, end),
+    ]
+    assert ("close", 1000) in ws.sent
 
 
 @pytest.mark.asyncio
-async def test_max_duration_watcher_short_duration_no_warning() -> None:
-    """When max_duration <= WARNING_ADVANCE_SECONDS, no warning is sent."""
-    pipeline = _make_pipeline(max_duration=30)
-
+async def test_max_duration_cancels_blocked_warning_and_releases_send_lock() -> None:
+    pipeline = _make_pipeline(max_duration=1, duration_limit="daily")
     ws = FakeWS()
+    send_json = ws.send_json
+    loop = asyncio.get_running_loop()
+    real_time = loop.time
+    elapsed = 0
+    warning_cancelled = False
 
-    _real_sleep = asyncio.sleep
-
-    async def fast_sleep(seconds):
-        await _real_sleep(0)
-
-    with patch("asyncio.sleep", side_effect=fast_sleep):
-        task = asyncio.create_task(pipeline._max_duration_watcher(ws))
-        await _real_sleep(0.05)
-
-        if not task.done():
-            task.cancel()
+    async def send(message):
+        nonlocal elapsed, warning_cancelled
+        if message["type"] == "session_warning":
+            elapsed += 1
             try:
-                await task
+                await asyncio.Event().wait()
             except asyncio.CancelledError:
-                pass
+                warning_cancelled = True
+                raise
+        await send_json(message)
 
-    json_msgs = ws.json_messages()
-    warnings = [m for m in json_msgs if m.get("type") == "session_warning"]
-    assert len(warnings) == 0
+    ws.send_json = send
+    with patch.object(loop, "time", new=lambda: real_time() + elapsed):
+        await asyncio.wait_for(pipeline._max_duration_watcher(ws), timeout=2)
+    assert warning_cancelled
+    assert ws.sent == [
+        ("json", {"type": "session_end", "reason": "max_duration", "limit": "daily"}),
+        ("close", 1000),
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -1783,7 +1805,7 @@ async def test_max_duration_watcher_short_duration_no_warning() -> None:
 async def test_inactivity_distinguishes_silence_from_a_pending_response(response_pending) -> None:
     with patch("app.services.conversation_pipeline.time", wraps=time) as clock:
         clock.monotonic.return_value = 1000.0
-        pipeline = _make_pipeline(inactivity_timeout=60)
+        pipeline = _make_pipeline(inactivity_timeout=60, duration_limit="weekly")
         pipeline.stt.transcribe = AsyncMock(return_value="Tell me about your city.")
         response_started = asyncio.Event()
         release_response = asyncio.Event()

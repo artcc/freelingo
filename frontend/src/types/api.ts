@@ -41,10 +41,8 @@ export interface ListeningExercise {
 /**
  * Superset of all quota fields returned by the API.
  *
- * - `/api/auth/quota` (user-facing) returns all 12 fields including tokens.
- * - `/api/admin/users/:id/quota` returns 9 fields — token fields are absent.
- *
- * Token fields are therefore optional so both endpoints can use this type.
+ * Token usage is available on `/api/auth/quota`. Remaining seconds are null for
+ * unlimited balances; older responses may omit them.
  */
 export interface QuotaStatus {
   sessions_this_week: number
@@ -56,6 +54,8 @@ export interface QuotaStatus {
   minutes_this_week: number
   weekly_minutes_limit: number
   weekly_minutes_unlimited: boolean
+  daily_remaining_seconds?: number | null
+  weekly_remaining_seconds?: number | null
   tokens_this_month?: number
   tokens_monthly_limit?: number
   tokens_unlimited?: boolean

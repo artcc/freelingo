@@ -54,6 +54,7 @@ export interface SessionWarningMessage {
 export interface SessionEndMessage {
   type: 'session_end'
   reason: 'max_duration' | 'inactivity'
+  limit?: 'daily' | 'weekly' | 'freemium'
   turn_id?: number
 }
 

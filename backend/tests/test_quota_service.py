@@ -878,7 +878,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, err_msg, close_code = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -887,24 +887,23 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code is None
-        assert err_msg is None
-        assert close_code is None
-        assert max_dur == 1800  # capped to daily limit (30 min = 1800 s)
+        assert decision.error_code is None
+        assert decision.error_message is None
+        assert decision.close_code is None
+        assert decision.max_duration == 1800  # capped to daily limit (30 min = 1800 s)
 
     @pytest.mark.asyncio
     async def test_caps_max_duration_to_daily_remaining(self, redis_mock, db_session):
         """max_duration is capped to remaining daily minutes when limit > 0."""
         user_id = 2
-        # Pre-set daily usage: 25 minutes = 1500 seconds
-        await redis_mock.set(_day_key(user_id), "1500")
+        await redis_mock.set(_day_key(user_id), "1799")
 
         with patch("app.utils.db.db_session", return_value=AsyncMock()) as mock_sf:
             cm = AsyncMock()
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, _, _ = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -913,23 +912,22 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code is None
-        # 30 - 25 = 5 minutes remaining = 300 seconds
-        assert max_dur == 300
+        assert decision.error_code is None
+        assert decision.max_duration == 1
+        assert decision.limit == "daily"
 
     @pytest.mark.asyncio
     async def test_caps_max_duration_to_weekly_remaining(self, redis_mock, db_session):
         """max_duration is capped to remaining weekly minutes."""
         user_id = 3
-        # Pre-set weekly usage: 100 minutes = 6000 seconds
-        await redis_mock.set(_weekly_seconds_key(user_id), "6000")
+        await redis_mock.set(_weekly_seconds_key(user_id), "7199")
 
         with patch("app.utils.db.db_session", return_value=AsyncMock()) as mock_sf:
             cm = AsyncMock()
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, _, _ = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -938,10 +936,9 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code is None
-        # 120 - 100 = 20 minutes = 1200 seconds
-        # Daily is 30 min remaining = 1800s; weekly is tighter
-        assert max_dur == 1200
+        assert decision.error_code is None
+        assert decision.max_duration == 1
+        assert decision.limit == "weekly"
 
     @pytest.mark.asyncio
     async def test_both_limits_cap_to_tighter(self, redis_mock, db_session):
@@ -957,7 +954,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, _, _ = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -966,8 +963,9 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code is None
-        assert max_dur == 300  # 5 min * 60
+        assert decision.error_code is None
+        assert decision.max_duration == 300  # 5 min * 60
+        assert decision.limit == "daily"
 
     @pytest.mark.asyncio
     async def test_daily_minutes_exceeded(self, redis_mock, db_session):
@@ -980,7 +978,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, err_msg, close_code = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -989,10 +987,10 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code == "quota_exceeded_time"
-        assert "30/30 min" in err_msg
-        assert close_code == 1008
-        assert max_dur == 3600  # original uncapped
+        assert decision.error_code == "quota_exceeded_time"
+        assert "30/30 min" in decision.error_message
+        assert decision.close_code == 1008
+        assert decision.max_duration == 3600  # original uncapped
 
     @pytest.mark.asyncio
     async def test_weekly_minutes_exceeded(self, redis_mock, db_session):
@@ -1005,7 +1003,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, err_msg, close_code = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -1014,9 +1012,9 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code == "quota_exceeded_weekly_minutes"
-        assert "200/120 min" in err_msg
-        assert close_code == 1008
+        assert decision.error_code == "quota_exceeded_weekly_minutes"
+        assert "200/120 min" in decision.error_message
+        assert decision.close_code == 1008
 
     @pytest.mark.asyncio
     async def test_sessions_exceeded(self, redis_mock, db_session):
@@ -1029,7 +1027,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, err_msg, close_code = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=100000,
@@ -1038,9 +1036,9 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=5,
                 max_duration=3600,
             )
-        assert err_code == "quota_exceeded_sessions"
-        assert "5/5" in err_msg
-        assert close_code == 1008
+        assert decision.error_code == "quota_exceeded_sessions"
+        assert "5/5" in decision.error_message
+        assert decision.close_code == 1008
 
     @pytest.mark.asyncio
     async def test_tokens_exceeded(self, redis_mock, db_session, test_user):
@@ -1065,7 +1063,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, err_msg, close_code = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user.id,
                 monthly_tokens_limit=10000,
@@ -1074,9 +1072,9 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=3600,
             )
-        assert err_code == "quota_exceeded_tokens"
-        assert "50000/10000 tokens" in err_msg
-        assert close_code == 1008
+        assert decision.error_code == "quota_exceeded_tokens"
+        assert "50000/10000 tokens" in decision.error_message
+        assert decision.close_code == 1008
 
     @pytest.mark.asyncio
     async def test_all_unlimited_passes(self, redis_mock, db_session):
@@ -1087,7 +1085,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, err_msg, close_code = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=0,
@@ -1096,10 +1094,11 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=0,
                 max_duration=7200,
             )
-        assert err_code is None
-        assert err_msg is None
-        assert close_code is None
-        assert max_dur == 7200
+        assert decision.error_code is None
+        assert decision.error_message is None
+        assert decision.close_code is None
+        assert decision.max_duration == 7200
+        assert decision.limit is None
 
     @pytest.mark.asyncio
     async def test_token_check_skipped_when_limit_zero(self, redis_mock, db_session):
@@ -1113,7 +1112,7 @@ class TestCheckAllQuotas:
             cm.__aenter__.return_value = db_session
             mock_sf.return_value = cm
 
-            max_dur, err_code, _, _ = await check_all_quotas(
+            decision = await check_all_quotas(
                 redis_mock,
                 user_id,
                 monthly_tokens_limit=0,  # skip DB
@@ -1122,7 +1121,7 @@ class TestCheckAllQuotas:
                 weekly_sessions_limit=10,
                 max_duration=1800,
             )
-        assert err_code is None
+        assert decision.error_code is None
 
 
 # ── Integration / workflow tests ──────────────────────────────────────────────

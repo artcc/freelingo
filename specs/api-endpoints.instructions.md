@@ -161,7 +161,7 @@ source IDs remain private; failed attempts never reveal the solution.
 - **GET `/me/avatar-file`** — Rate limit: 60/min. Authenticated current-user avatar retrieval endpoint. Returns only the authenticated user's own avatar file; this is the supported image retrieval path used by the frontend. Responses are marked `Cache-Control: private, no-store`; client-side avatar reuse is handled by the frontend blob cache keyed by the stored avatar reference.
 - **DELETE `/me/avatar`** — Rate limit: 60/min. Removes profile avatar (sets to null)
 - **DELETE `/me`** — Rate limit: 5/min. Deletes own account and all associated data (CASCADE), returning 204. Forbidden for admin accounts. Requires the shared billing precondition below; it never cancels provider billing automatically.
-- **GET `/quota`** — Rate limit: 60/min. Returns live conversation quota status for the authenticated user (sessions this week, minutes today, minutes this week)
+- **GET `/quota`** — Rate limit: 60/min. Returns the authenticated user's conversation usage, limits and token usage. `daily_remaining_seconds` and `weekly_remaining_seconds` are exact relative to recorded usage: `null` for unlimited, `0` for exhausted. Reading the balance does not reserve or consume time.
 - **GET `/verify-email`** — Rate limit: 60/min. Verifies email via one-time token (query param `token`, TTL 24h in Redis)
 - **POST `/resend-verification`** — Rate limit: 3/min. Sends a new verification email to the authenticated user
 - **POST `/forgot-password`** — Rate limit: 5/min. Sends password reset link to the given email. Always returns 200 (anti-enumeration).
@@ -201,7 +201,7 @@ Requires `role="admin"`. All endpoints return 403 for non-admin users.
 - **PATCH `/users/{id}`** — Rate limit: 60/min. Edits role, activity, verification, display name, conversation/token quotas, `subscription_status`, and `subscription_ends_at`. Subscription status accepts the states exposed by the user schema. Activation defaults precede explicit quota overrides in the same locked transaction; see `subscriptions-freemium.instructions.md` (Administration).
 - **DELETE `/users/{id}`** — Rate limit: 5/min. Deletes account and all associated data (CASCADE), returning `{"detail":"User deleted"}`. Self-deletion through this route returns 400. Shares the account-deletion billing errors above and never cancels provider billing automatically.
 - **GET `/users/{id}/stats`** — Rate limit: 60/min. Returns plan summary, active days, XP, streak, lessons, exercises, chat messages, chat/conversation token breakdown, completion-test data, and per-language usage.
-- **GET `/users/{id}/quota`** — Rate limit: 60/min. Live quota status from Redis (sessions this week, minutes today, minutes this week)
+- **GET `/users/{id}/quota`** — Rate limit: 60/min. Reports the user's daily and weekly conversation balances and weekly session usage, including the same remaining-seconds fields as `GET /api/auth/quota`. Omits monthly token usage.
 - **POST `/invite`** — Rate limit: 60/min. Generates single-use invite link (48h Redis TTL)
 - **GET `/maintenance`** — Rate limit: 60/min. Returns `{"maintenance_mode": bool}` — current maintenance mode state
 - **PATCH `/maintenance`** — Rate limit: 60/min. Toggles maintenance mode on/off in Redis. Returns `{"maintenance_mode": bool}`
@@ -605,8 +605,8 @@ Warmup retains its ordinary voice-only access contract and does not consume a Si
 - **`interrupted`** — Indicates interruption/cancellation of the active turn.
 - **`memory_updated`** — Confirms a memory save committed during the turn.
 - **`turn_complete`** — Assistant turn fully processed; includes the associated turn ID when available.
-- **`session_warning`** — Payload: `{"remaining_seconds": N, "reason": "inactivity" | "max_duration"}`. Description: Timeout warning at 60 s
-- **`session_end`** — Payload: `{"reason": "..."}`. Description: Session closed by server
+- **`session_warning`** — `remaining_seconds` and `reason` (`inactivity` or `max_duration`). For a maximum duration of 60 seconds or less the server warns immediately with the full remaining duration.
+- **`session_end`** — `reason` is `inactivity` or `max_duration`. When an allowance limits the session, `reason` remains `max_duration` and `limit` identifies the balance used at admission (`daily`, `weekly` or `freemium`), not necessarily the current balance after a UTC reset. Ties favor `freemium`, then `daily`, then `weekly`, over the session duration.
 - **`error`** — Payload: `{"code":"...","message":"..."}`. Description: Pipeline or policy error
 
 **Features:**
