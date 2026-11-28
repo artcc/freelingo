@@ -987,12 +987,13 @@ class ConversationPipeline:
         """Closes session after max_duration seconds, with a 60s warning."""
         loop = asyncio.get_running_loop()
         deadline = loop.time() + self.max_duration
-        warning_delay = self.max_duration - WARNING_ADVANCE_SECONDS
+        warning_window = min(self.max_duration, WARNING_ADVANCE_SECONDS)
+        warning_delay = self.max_duration - warning_window
         if warning_delay > 0:
             await asyncio.sleep(warning_delay)
         remaining = deadline - loop.time()
         if remaining > 0:
-            warning_seconds = min(WARNING_ADVANCE_SECONDS, math.ceil(remaining))
+            warning_seconds = min(warning_window, math.ceil(remaining))
             logger.info("[pipeline] Max duration warning — %ss remaining", warning_seconds)
             try:
                 async with asyncio.timeout_at(deadline):

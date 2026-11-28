@@ -8,6 +8,7 @@ cancel_current, cleanup, _save_usage, and _save_message.
 from __future__ import annotations
 
 import asyncio
+import math
 import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -1731,7 +1732,8 @@ async def test_max_duration_watcher_warns_and_closes_at_effective_duration(
     elapsed = 0
     events = []
     loop = asyncio.get_running_loop()
-    start = loop.time()
+    # At this clock origin, (start + 30) - start is slightly greater than 30.
+    start = math.nextafter(500.0, 0.0)
 
     async def sleep(seconds):
         nonlocal elapsed
@@ -1756,10 +1758,10 @@ async def test_max_duration_watcher_warns_and_closes_at_effective_duration(
         end["limit"] = limit
     assert events == [
         (
-            duration - remaining,
+            pytest.approx(duration - remaining, abs=1e-9),
             {"type": "session_warning", "reason": "max_duration", "remaining_seconds": remaining},
         ),
-        (duration, end),
+        (pytest.approx(duration, abs=1e-9), end),
     ]
     assert ("close", 1000) in ws.sent
 

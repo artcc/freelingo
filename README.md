@@ -135,8 +135,8 @@ freelingo/
 - **Backend:** FastAPI, SQLAlchemy async, Alembic, Pydantic v2
 - **Data:** PostgreSQL 16 and Redis 7
 - **LLM:** Ollama, OpenAI, Anthropic, or DeepSeek
-- **Speech:** Kokoro-FastAPI, OpenAI, or Gemini TTS; faster-whisper or OpenAI Whisper
-- **Auth:** JWT access and refresh tokens with admin/user roles
+- **Speech:** Kokoro-FastAPI, OpenAI, or Gemini TTS; faster-whisper or the OpenAI transcription API for STT
+- **Auth:** JWT access tokens and opaque refresh tokens for admin and user accounts. The refresh token is held in an `HttpOnly` cookie and rotated using Redis.
 - **Deployment:** Docker Compose
 
 ## Quick start
@@ -148,13 +148,18 @@ Choose **[Docker Compose](#option-a--git-clone--docker-compose)** for a command-
 
 - Docker and Docker Compose; Git for the clone-based setup.
 - A supported cloud LLM API or [Ollama](https://ollama.com).
-- An NVIDIA GPU for the default local speech containers, or cloud speech credentials (OpenAI for STT; OpenAI or Gemini for TTS).
+- An NVIDIA GPU for the default local speech containers. On a CPU-only host, adapt the local services
+  for [CPU inference](#local-speech) or use [cloud speech](#cloud-speech).
 - For production voice: HTTPS and reverse-proxy routing for `/ws/*`, as explained
   [below](#reverse-proxy-requirement-real-time-conversation).
 
-Choose your [speech providers](#configuring-tts--stt) before starting the stack. The default Compose
-file includes GPU containers for both local speech services; selecting a cloud provider in `.env` does not
-disable those containers automatically.
+**Before deploying with Compose or Portainer:**
+
+- Review `ALLOW_REGISTRATION` and `FIRST_USER_IS_ADMIN`. If the first registered user should become
+  the administrator, keep the installation private until you have registered that account.
+- Choose your [speech providers](#configuring-tts--stt). If you use cloud TTS, remove `kokoro` from
+  your deployment Compose file; if you use cloud STT, remove `whisper`. Provider variables alone
+  do not disable either service or its GPU reservation.
 
 ### Option A — Git clone + Docker Compose
 
@@ -184,13 +189,12 @@ Open the frontend on localhost or your server's address using the host port publ
 `docker-compose.yml`.
 Production microphone access requires the HTTPS setup described below.
 
-`FIRST_USER_IS_ADMIN` controls whether the first registered user becomes an administrator.
-Review it in `.env` before opening registration.
-
 ### Option B — Portainer (Stack)
 
 1. Open Portainer → **Stacks** → **Add stack**.
-2. Choose **Repository** and enter the repo URL, or paste the contents of `docker-compose.yml` directly into the Web editor.
+2. Choose **Repository** if the repository contains the Compose file you intend to deploy. If you
+   need to adapt it for cloud speech or CPU inference, paste `docker-compose.yml` into the **Web editor**
+   and make those changes before deploying.
 3. Add the variables from `.env.example`. At minimum, configure `DATA_PATH`, the `POSTGRES_*` values,
    `REDIS_PASSWORD`, `SECRET_KEY`, and the selected LLM and speech providers and credentials.
 4. Click **Deploy the stack**.
@@ -241,9 +245,9 @@ and [.env.example](.env.example).
 
 ### Study languages
 
-Choose from 20 study languages, counting each regional variant separately, and learn one or several
-side by side. Each has its own A1–C2 curriculum, placement test, grammar reference, vocabulary and
-phrasebook.
+FreeLingo includes 20 study-language variants. You can learn one or several of the languages enabled
+on your installation. Each has its own A1–C2 curriculum, placement test, grammar reference, vocabulary
+and phrasebook.
 
 - **Chinese:** Mainland Mandarin, in simplified characters (`zh-CN`).
 - **Croatian:** Croatia (`hr-HR`).
@@ -297,7 +301,14 @@ host-level setting and cannot be applied from within the container without eleva
 > Production voice conversation needs **HTTPS** for microphone access and **WebSocket routing** to
 > the backend. Next.js HTTP rewrites do not forward WebSocket upgrades.
 
-Route `/ws/*` to the backend listener configured in Compose, including `/ws/conversation`. The production frontend derives its WebSocket URL from `window.location`.
+Route `/ws/*`, including `/ws/conversation`, to the backend and all other requests to the frontend.
+Production Compose publishes only the frontend port. A proxy on the Compose network can forward
+WebSocket upgrades to `backend:8000`. For a proxy running on the host, add `127.0.0.1:8000:8000`
+under the backend service's `ports` and forward upgrades to `127.0.0.1:8000`.
+
+When serving the site over HTTPS, set `COOKIE_SECURE=true` so the browser sends the refresh cookie
+only over HTTPS. If email is enabled, set `APP_BASE_URL` to the public HTTPS origin so verification
+and password-reset links point to your installation.
 
 Browser microphone access requires a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts)
 such as HTTPS or localhost; ordinary HTTP access through a server IP does not provide it.
@@ -307,7 +318,8 @@ such as HTTPS or localhost; ordinary HTTP access through a server IP does not pr
 TTS and STT are required services, selected independently via `.env`.
 
 - `TTS_PROVIDER=local` uses Kokoro-FastAPI; `openai` uses OpenAI TTS; `gemini` uses Gemini TTS.
-- `STT_PROVIDER=local` uses faster-whisper; `STT_PROVIDER=openai` uses OpenAI Whisper.
+- `STT_PROVIDER=local` uses faster-whisper. `STT_PROVIDER=openai` uses the OpenAI transcription API
+  with the model selected by `OPENAI_STT_MODEL`.
 - `OPENAI_API_KEY` is required when either service uses OpenAI.
 - `GEMINI_API_KEY` is required only when `TTS_PROVIDER=gemini`.
 
@@ -324,8 +336,9 @@ STT_PROVIDER=local
 the study language. OpenAI TTS supports the language-aware pronunciation guidance described in the
 [speech specification](specs/speech-services.instructions.md).
 
-For CPU-only local deployment, select CPU images, remove GPU reservations, and use a smaller Whisper
-model as documented in [the Docker specification](specs/docker.instructions.md).
+For CPU inference, use CPU images and remove the GPU reservations from the local speech services.
+The `kokoro` and `whisper` comments in [docker-compose.yml](docker-compose.yml) describe the changes,
+including how to select a smaller Whisper model.
 
 ### Cloud speech
 
@@ -337,16 +350,13 @@ STT_PROVIDER=openai
 OPENAI_API_KEY=sk-...
 ```
 
-`OPENAI_TTS_MODEL` selects the OpenAI TTS model. Settings offers female/male choices for both cloud TTS
+`OPENAI_TTS_MODEL` selects the OpenAI synthesis model. The default configuration uses Realtime: the backend opens an outbound WebSocket to the provider's `/realtime` endpoint. Any outbound proxy or API gateway must support that upgrade; the browser's `/ws/conversation` route serves a separate connection.
+
+Settings offers female/male choices for both cloud TTS
 providers, with independent preferences. Operators configure the OpenAI mappings through
 `OPENAI_TTS_FEMALE_VOICE` and `OPENAI_TTS_MALE_VOICE`.
 `OPENAI_TTS_VOICE` selects the default logical choice. Existing provider-name preferences
-are ignored until a new choice is saved. Legacy `tts-1`/`tts-1-hd` models require compatible voice
-mappings; see the [speech specification](specs/speech-services.instructions.md).
-
-Remove the corresponding `kokoro` and/or `whisper` service blocks from your deployment Compose file
-when using cloud providers for those services; changing the provider variables alone does not remove their
-GPU reservations.
+are ignored until a new choice is saved.
 
 For Gemini TTS, select `TTS_PROVIDER=gemini` and set `GEMINI_API_KEY` on the backend.
 `GEMINI_TTS_MODEL` selects the model; configurable female/male voices produce native WAV audio. STT remains an
@@ -380,4 +390,4 @@ Organisations that need to deploy FreeLingo without the AGPL's copyleft obligati
 
 ## Author
 
-**Arturo Carretero Calvo** — [@artcc](https://github.com/artcc)
+© 2026 **Arturo Carretero Calvo** · [@artcc](https://github.com/artcc)
