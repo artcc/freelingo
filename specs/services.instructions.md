@@ -22,6 +22,10 @@ OpenAI uses the Responses API for every LLM request; Ollama and DeepSeek use Cha
 Anthropic uses its native API. `LLM_PROVIDER` selects the adapter; `OLLAMA_MODEL`, `OPENAI_MODEL`,
 `ANTHROPIC_MODEL`, and `DEEPSEEK_MODEL` select its model. Configure a nonempty model identifier
 for the active provider in the deployment environment; there is no built-in fallback model.
+At application startup, the adapter validates the model and initializes only the selected LLM
+client before the lifespan's migrations. Missing cloud credentials prevent startup regardless of
+the speech providers. The client is reused for requests; startup does not contact the provider to
+verify the key or model. Importing the app to generate OpenAPI does not initialize the client.
 Unknown provider names are rejected. `.env.example` is the operator template. Optional
 `OPENAI_REASONING_EFFORT` is sent as `reasoning.effort` on chat, structured generation, tool
 continuations, and fallbacks. An empty value omits it. Supported values depend on the model; the

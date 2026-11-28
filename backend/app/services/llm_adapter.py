@@ -624,6 +624,18 @@ class LLMAdapter:
         self.provider = self._settings.LLM_PROVIDER
         self._native_tools_available_logged = False
 
+    def initialize(self) -> None:
+        """Prepare the selected client at application startup without sending a request."""
+        _ = self.model
+        if self.provider == "deepseek" and not self._settings.DEEPSEEK_API_KEY.strip():
+            raise ValueError("LLM_PROVIDER=deepseek requires DEEPSEEK_API_KEY to be set")
+        if self.provider == "anthropic":
+            client = self._anthropic
+            if not (client.api_key or client.auth_token or client.credentials):
+                raise ValueError("LLM_PROVIDER=anthropic requires ANTHROPIC_API_KEY to be set")
+        else:
+            _ = self.client
+
     @cached_property
     def model(self) -> str:
         return self._settings.require_llm_model()

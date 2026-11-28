@@ -6,6 +6,7 @@ from unittest.mock import Mock
 
 import pytest
 from fastapi import FastAPI
+from openai import OpenAIError
 from pydantic import BaseModel, ValidationError
 
 from app import main
@@ -91,10 +92,64 @@ async def test_missing_llm_model_stops_lifespan_before_migrations(monkeypatch):
     migrations = Mock()
     monkeypatch.setattr(main, "_run_migrations", migrations)
     monkeypatch.setattr(settings, "OLLAMA_MODEL", "")
+    monkeypatch.setattr(main, "llm_adapter", llm_adapter.LLMAdapter())
     with pytest.raises(ValueError, match="OLLAMA_MODEL"):
         async with main.lifespan(FastAPI()):
             pytest.fail("Startup must reject the missing model")
     migrations.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    ("provider", "error", "field"),
+    [
+        ("openai", OpenAIError, "OPENAI_API_KEY"),
+        ("deepseek", ValueError, "DEEPSEEK_API_KEY"),
+        ("anthropic", ValueError, "ANTHROPIC_API_KEY"),
+    ],
+)
+async def test_missing_chat_credentials_stop_startup(monkeypatch, provider, error, field):
+    migrations = Mock()
+    monkeypatch.setattr(main, "_run_migrations", migrations)
+    monkeypatch.delenv("OPENAI_ADMIN_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
+    monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
+    monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
+    monkeypatch.setattr(settings, field, "")
+    if provider == "deepseek":
+        monkeypatch.setattr(settings, "TTS_PROVIDER", "gemini")
+        monkeypatch.setattr(settings, "GEMINI_API_KEY", "test-gemini-key")
+        monkeypatch.setattr(settings, "GEMINI_TTS_MODEL", "test-speech-model")
+        monkeypatch.setattr(settings, "STT_PROVIDER", "openai")
+        monkeypatch.setattr(settings, "OPENAI_API_KEY", "test-transcription-key")
+        monkeypatch.setattr(settings, "OPENAI_STT_MODEL", "test-transcription-model")
+    monkeypatch.setattr(main, "llm_adapter", llm_adapter.LLMAdapter())
+
+    with pytest.raises(error, match=field):
+        async with main.lifespan(FastAPI()):
+            pytest.fail("Startup must reject missing chat credentials")
+    migrations.assert_not_called()
+
+
+@pytest.mark.parametrize("provider", ["ollama", "openai", "deepseek", "anthropic"])
+def test_initialize_reuses_only_selected_client(monkeypatch, provider):
+    openai_factory = Mock()
+    anthropic_factory = Mock()
+    monkeypatch.setattr(llm_adapter, "AsyncOpenAI", openai_factory)
+    monkeypatch.setattr(llm_adapter._anthropic, "AsyncAnthropic", anthropic_factory)
+    monkeypatch.setattr(settings, "LLM_PROVIDER", provider)
+    monkeypatch.setattr(settings, f"{provider.upper()}_MODEL", "configured-model")
+    if provider != "ollama":
+        monkeypatch.setattr(settings, f"{provider.upper()}_API_KEY", "test-key")
+    adapter = llm_adapter.LLMAdapter()
+    adapter.initialize()
+    if provider == "anthropic":
+        assert adapter._anthropic is anthropic_factory.return_value
+        anthropic_factory.assert_called_once()
+        openai_factory.assert_not_called()
+    else:
+        assert adapter.client is openai_factory.return_value
+        openai_factory.assert_called_once()
+        anthropic_factory.assert_not_called()
 
 
 @pytest.mark.parametrize(
